@@ -19,11 +19,11 @@ Preferred communication style: Simple, everyday language.
 ### Technical Implementations
 - **Frontend Framework**: Next.js 14 (App Router) with React 18 and TypeScript.
 - **Instant Estimate Calculator**: Client component (`EstimateCalculator.tsx`) — project type cards + finish level cards + size preset → animated price range, typically-included list, ROI, and disclaimer. Saves estimate to sessionStorage for form pre-fill.
-- **Consultation Form**: Client component (`ConsultationForm.tsx`) — reads sessionStorage estimate, collects name/phone/email/zip/project/message, posts to `/api/consultation`, sends admin notification + customer confirmation via Gmail.
+- **Consultation Form**: Client component (`ConsultationForm.tsx`) — reads sessionStorage estimate, collects name/phone/email/zip/project/message, posts to `/api/consultation`, sends admin notification + customer confirmation via Resend.
 - **FAQ Section**: Client component (`FAQSection.tsx`) — Radix Accordion with 9 Q&As.
 - **Lead Distribution System**: B2B lead marketplace with admin dashboard, subcontractor portal, privacy protection, automated lead pricing, legal agreement flow, and in-app notifications. Integrates with Stripe for payments and supports an account credits system.
 - **Blog System**: Infrastructure kept but no posts yet — `shared/blogContent.ts` has empty `BLOG_POSTS` array.
-- **Email**: Gmail (Google Workspace) integration via the `google-mail` connector. Sends through `hello@p5homeco.com`, From/Reply-To = `hello@boiseremodeling.co` (verified send-as alias). Transport: `server/services/gmailTransport.ts` (Gmail API, base64url MIME). Resend connector left in place but unused.
+- **Email**: Resend. From/Reply-To = `hello@boiseremodeling.co` (must be a verified domain/sender in the Resend account). Transport: `server/services/emailTransport.ts` — `getUncachableEmailClient()` returns a Resend client; API key from `RESEND_API_KEY` secret, falling back to the `resend` connector. Dev without a key returns a no-op client. Gmail/Google Workspace approach was abandoned (the connected Google account could not send from the alias).
 - **Service Areas**: Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton (Ada + Canyon County).
 - **Services**: Kitchen Remodel, Bathroom Remodel, Whole-Home Remodel, Room Addition.
 
@@ -42,6 +42,6 @@ Preferred communication style: Simple, everyday language.
 - **@neondatabase/serverless** + **drizzle-orm**: Database ORM.
 - **date-fns**: Date manipulation.
 - **nanoid**: Unique ID generation.
-- **Gmail (Google Workspace)**: Transactional email via the `google-mail` connector / Gmail API. Resend connector remains configured but unused.
+- **Resend**: Transactional email via the Resend SDK (`RESEND_API_KEY` secret or `resend` connector).
 - **Stripe**: Payments for the lead marketplace.
 - **Playfair Display** + **Montserrat**: Google Fonts (loaded via `next/font/google`).

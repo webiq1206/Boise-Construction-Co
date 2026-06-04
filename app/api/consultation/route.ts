@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { consultationRequests } from "@/shared/schema";
-import { getUncachableEmailClient } from "@/server/services/gmailTransport";
+import { getUncachableEmailClient } from "@/server/services/emailTransport";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import {
   escapeHtml,

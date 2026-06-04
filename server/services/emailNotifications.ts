@@ -1,4 +1,4 @@
-import { getUncachableEmailClient } from './gmailTransport';
+import { getUncachableEmailClient } from './emailTransport';
 import { formatQuoteForDisplay, calculateQuoteRange } from '../../shared/utils';
 import { storage } from '../storage';
 import {

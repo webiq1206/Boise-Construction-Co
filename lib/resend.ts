@@ -8,7 +8,7 @@ import {
   getReplyToAddress,
   SITE_BASE_URL,
 } from '@/server/services/emailLayout';
-import { getUncachableEmailClient } from '@/server/services/gmailTransport';
+import { getUncachableEmailClient } from '@/server/services/emailTransport';
 
 async function getUncachableResendClient() {
   return getUncachableEmailClient();
