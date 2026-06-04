@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
 
       const adminEmails = await getAdminRecipientEmails(SITE_CONFIG.email);
       for (const adminEmail of adminEmails) {
-        await client.emails.send({
+        const adminResult = await client.emails.send({
           from,
           replyTo: getReplyToAddress(),
           to: adminEmail,
@@ -141,6 +141,12 @@ export async function POST(request: NextRequest) {
           html: adminHtml,
           text: htmlToPlainText(adminHtml),
         });
+        if (adminResult?.error) {
+          console.error(
+            `[consultation] Admin email to ${adminEmail} failed:`,
+            JSON.stringify(adminResult.error)
+          );
+        }
       }
 
       const customerHtml = wrapEmailHtml({
@@ -154,7 +160,7 @@ export async function POST(request: NextRequest) {
         `,
       });
 
-      await client.emails.send({
+      const customerResult = await client.emails.send({
         from,
         replyTo: getReplyToAddress(),
         to: data.email,
@@ -162,6 +168,12 @@ export async function POST(request: NextRequest) {
         html: customerHtml,
         text: htmlToPlainText(customerHtml),
       });
+      if (customerResult?.error) {
+        console.error(
+          `[consultation] Customer email to ${data.email} failed:`,
+          JSON.stringify(customerResult.error)
+        );
+      }
     } catch (emailErr) {
       console.error("[consultation] Email send failed:", emailErr);
     }

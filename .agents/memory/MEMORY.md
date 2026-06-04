@@ -1,0 +1,1 @@
+- [Email provider decision](email-provider.md) — sends via Resend not Gmail; Gmail couldn't send from the boiseremodeling.co alias; always check Resend's `{data,error}`.

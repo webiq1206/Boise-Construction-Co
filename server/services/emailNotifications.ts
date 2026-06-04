@@ -255,7 +255,7 @@ export async function sendEmail(
       return;
     }
 
-    await resend.emails.send({
+    const result = await resend.emails.send({
       from: formatFromAddress(fromEmail),
       replyTo: getReplyToAddress(),
       to,
@@ -263,6 +263,11 @@ export async function sendEmail(
       html: htmlBody,
       text: textBody ?? htmlToPlainText(htmlBody),
     });
+
+    if ((result as any)?.error) {
+      console.error(`Failed to send email to ${to}: ${subject}`, JSON.stringify((result as any).error));
+      throw new Error(`Email send failed: ${(result as any).error?.message ?? 'unknown error'}`);
+    }
 
     console.log(`Email sent successfully to ${to}: ${subject}`);
   } catch (error) {
