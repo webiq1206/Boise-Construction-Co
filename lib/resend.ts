@@ -1,4 +1,3 @@
-import { Resend } from 'resend';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import {
   escapeHtml,
@@ -7,70 +6,12 @@ import {
   getAdminRecipientEmails,
   formatFromAddress,
   getReplyToAddress,
-  PLATFORM_EMAIL,
   SITE_BASE_URL,
 } from '@/server/services/emailLayout';
-
-async function getCredentials() {
-  if (process.env.RESEND_API_KEY) {
-    return {
-      apiKey: process.env.RESEND_API_KEY,
-      fromEmail: PLATFORM_EMAIL
-    };
-  }
-
-  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
-  const xReplitToken = process.env.REPL_IDENTITY 
-    ? 'repl ' + process.env.REPL_IDENTITY 
-    : process.env.WEB_REPL_RENEWAL 
-    ? 'depl ' + process.env.WEB_REPL_RENEWAL 
-    : null;
-
-  if (!xReplitToken) {
-    console.error('[RESEND] No auth token found');
-    throw new Error('X_REPLIT_TOKEN not found');
-  }
-
-  if (!hostname) {
-    console.error('[RESEND] REPLIT_CONNECTORS_HOSTNAME is not set');
-    throw new Error('REPLIT_CONNECTORS_HOSTNAME not found');
-  }
-
-  const response = await fetch(
-    'https://' + hostname + '/api/v2/connection?include_secrets=true&connector_names=resend',
-    {
-      headers: {
-        'Accept': 'application/json',
-        'X_REPLIT_TOKEN': xReplitToken
-      }
-    }
-  );
-  
-  if (!response.ok) {
-    console.error('[RESEND] Connector API error:', response.status);
-    throw new Error(`Resend connector API error: ${response.status}`);
-  }
-
-  const data = await response.json();
-  const connectionSettings = data.items?.[0];
-
-  if (!connectionSettings || !connectionSettings.settings?.api_key) {
-    console.error('[RESEND] No API key in connector response');
-    throw new Error('Resend not connected');
-  }
-  
-  return {
-    apiKey: connectionSettings.settings.api_key,
-    fromEmail: PLATFORM_EMAIL,
-  };
-}
+import { getUncachableEmailClient } from '@/server/services/gmailTransport';
 
 async function getUncachableResendClient() {
-  const { apiKey, fromEmail } = await getCredentials();
-  return {
-    client: new Resend(apiKey),
-    fromEmail
-  };
+  return getUncachableEmailClient();
 }
 
 const BLOCKED_EMAIL_DOMAINS = ['timberandlove.com'];
@@ -92,7 +33,7 @@ function filterBlockedRecipients(to: string | string[]): string[] {
 }
 
 async function sendEmailWithLogging(
-  client: Resend,
+  client: { emails: { send: (args: any) => Promise<any> } },
   from: string,
   to: string | string[],
   subject: string,

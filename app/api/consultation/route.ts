@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { consultationRequests } from "@/shared/schema";
-import { getUncachableResendClient } from "@/server/resend";
+import { getUncachableEmailClient } from "@/server/services/gmailTransport";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import {
   escapeHtml,
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-      const { client, fromEmail } = await getUncachableResendClient();
+      const { client, fromEmail } = await getUncachableEmailClient();
       const from = formatFromAddress(fromEmail);
 
       const estimateBlock = data.estimate

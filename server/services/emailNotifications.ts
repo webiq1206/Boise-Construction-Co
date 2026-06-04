@@ -1,4 +1,4 @@
-import { getUncachableResendClient } from '../resend';
+import { getUncachableEmailClient } from './gmailTransport';
 import { formatQuoteForDisplay, calculateQuoteRange } from '../../shared/utils';
 import { storage } from '../storage';
 import {
@@ -249,7 +249,7 @@ export async function sendEmail(
   }
   
   try {
-    const { client: resend, fromEmail } = await getUncachableResendClient();
+    const { client: resend, fromEmail } = await getUncachableEmailClient();
     if ((resend as any)?.__noop) {
       console.log(`[email] Skipped (noop) → ${to}: ${subject}`);
       return;
@@ -297,7 +297,7 @@ export async function sendLeadPurchasedNotification(leadData: {
   name: string;
   email: string;
 }): Promise<void> {
-  const { fromEmail } = await getUncachableResendClient();
+  const { fromEmail } = await getUncachableEmailClient();
   const dashboardUrl = adminLeadUrl('all', leadData.id);
   
   const purchasePrice = leadData.purchasePrice ? `$${parseFloat(leadData.purchasePrice).toFixed(2)}` : 'N/A';
@@ -507,7 +507,7 @@ export async function sendAdminAutoDeclineNotification(leadData: {
   address?: string;
   hoursPending: number;
 }): Promise<void> {
-  const { fromEmail } = await getUncachableResendClient();
+  const { fromEmail } = await getUncachableEmailClient();
   const dashboardUrl = adminLeadUrl('available', leadData.id);
   
   const leadValue = formatLeadValueRange(leadData.finalQuote);
@@ -775,7 +775,7 @@ export async function sendLeadMergeRefundNotification(
     };
   }
 ): Promise<void> {
-  const { fromEmail } = await getUncachableResendClient();
+  const { fromEmail } = await getUncachableEmailClient();
   const refundAmountNum = parseFloat(data.refundAmount || "0") || 0;
   const refundDisplay = `$${refundAmountNum.toFixed(2)}`;
   const creditsNum = parseFloat(data.creditsRefunded || "0") || 0;
