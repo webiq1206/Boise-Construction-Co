@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     const { placeId, formattedAddress, input } = parsed.data;
     let profile;
     if (input) {
-      // Address data already resolved by the autocomplete provider — no second
+      // Address data already resolved by the autocomplete provider - no second
       // round-trip needed. Always returns a profile.
       profile = await enrichPropertyFromAddress(input);
     } else if (placeId) {
