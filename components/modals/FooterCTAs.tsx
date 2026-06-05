@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useModals } from "./ModalProvider";
+import { useModals } from "./modalsContext";
 import { CTA_PRIMARY, CTA_SECONDARY } from "@/shared/ctaCopy";
 
 const cls =

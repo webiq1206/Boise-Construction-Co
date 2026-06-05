@@ -8,7 +8,7 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CTA_PRIMARY, CTA_PRIMARY_SHORT } from "@/shared/ctaCopy";
 import { SITE_CONFIG } from "@/shared/siteConfig";
-import { useModals } from "@/components/modals/ModalProvider";
+import { useModals } from "@/components/modals/modalsContext";
 import { useAdaptiveGlassTheme } from "@/hooks/useAdaptiveGlassTheme";
 import {
   ADAPTIVE_GLASS_ATTR,

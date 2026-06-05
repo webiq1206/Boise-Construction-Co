@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,24 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { ConsultationForm } from "@/components/ConsultationForm";
 import { EstimateCalculator } from "@/components/EstimateCalculator";
-
-type ModalType = "consult" | "estimate" | null;
-
-interface ModalsContextValue {
-  openConsult: () => void;
-  openEstimate: () => void;
-  close: () => void;
-}
-
-const ModalsContext = createContext<ModalsContextValue>({
-  openConsult: () => {},
-  openEstimate: () => {},
-  close: () => {},
-});
-
-export function useModals() {
-  return useContext(ModalsContext);
-}
+import { ModalsContext, type ModalType } from "./modalsContext";
 
 export function ModalProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState<ModalType>(null);

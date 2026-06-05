@@ -15,6 +15,7 @@ import type { StoredEstimate } from "@/shared/estimateEngine";
 import { FINISH_LABELS, PROJECT_LABELS } from "@/shared/estimateEngine";
 import { DisplayNum } from "@/components/marketing";
 import { AddressAutocomplete } from "@/components/AddressAutocomplete";
+import { EstimateCTA } from "@/components/modals/EstimateCTA";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
   HOUSE_NUMBER_REGEX,
@@ -61,6 +62,7 @@ interface ConsultationFormProps {
 
 export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
   const [estimate, setEstimate] = useState<StoredEstimate | null>(null);
+  const [estimateChecked, setEstimateChecked] = useState(false);
   const [decision, setDecision] = useState<EstimateDecision>("pending");
   const [success, setSuccess] = useState(false);
   const [pendingData, setPendingData] = useState<FormData | null>(null);
@@ -98,6 +100,7 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
 
   useEffect(() => {
     function loadEstimate() {
+      setEstimateChecked(true);
       try {
         const raw = sessionStorage.getItem("brc_estimate");
         if (!raw) return;
@@ -286,6 +289,38 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
         onSubmit={form.handleSubmit((data) => setPendingData(data))}
         className="space-y-5"
       >
+        {estimateChecked && !estimate && (
+          <div
+            className="rounded-sm p-4 text-sm bg-accent/5 border border-accent/20 space-y-2"
+            data-testid="estimate-cta-card"
+          >
+            <p className="font-medium text-foreground">Want a planning range first?</p>
+            <p className="text-muted-foreground">
+              Use our instant estimator to get a ballpark range for your project, and
+              we&apos;ll carry it over to this form automatically.
+            </p>
+            {onRevise ? (
+              <Button
+                type="button"
+                size="sm"
+                variant="brandOutline"
+                onClick={onRevise}
+                data-testid="button-start-estimate"
+              >
+                Get your planning range <ArrowRight className="h-4 w-4" />
+              </Button>
+            ) : (
+              <EstimateCTA
+                size="sm"
+                variant="brandOutline"
+                data-testid="button-start-estimate"
+              >
+                Get your planning range <ArrowRight className="h-4 w-4" />
+              </EstimateCTA>
+            )}
+          </div>
+        )}
+
         {estimate && decision !== "dropped" && (
           <div className="rounded-sm p-4 text-sm bg-accent/5 border border-accent/20 space-y-3">
             <div>

@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import type { ButtonProps } from "@/components/ui/button";
-import { useModals } from "./ModalProvider";
+import { useModals } from "./modalsContext";
 
 interface EstimateCTAProps extends Omit<ButtonProps, "onClick" | "asChild"> {
   onExtraClick?: () => void;
