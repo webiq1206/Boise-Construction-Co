@@ -531,6 +531,12 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     topicTags: ["location","nampa","guide"],
     source: 'areas',
   },
+  'caldwell-remodeling-guide': {
+    hero: '/images/areas/caldwell.png',
+    alt: 'Caldwell homes and Canyon County remodeling context near downtown and the College of Idaho',
+    topicTags: ["location","caldwell","guide"],
+    source: 'areas',
+  },
   'north-end-remodeling-guide': {
     hero: '/images/blog/north-end-remodeling-guide.png',
     alt: 'Historic North End craftsman bungalows and period-appropriate remodels in Boise',

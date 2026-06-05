@@ -49,7 +49,10 @@ export function HeroSection() {
                 Remodel with{" "}
                 <em className="brc-accent text-accent">clarity</em> and confidence.
               </h1>
-              <p className="text-lg md:text-xl leading-relaxed mb-8 max-w-xl text-inverse-foreground/90">
+              <p
+                data-speakable="summary"
+                className="text-lg md:text-xl leading-relaxed mb-8 max-w-xl text-inverse-foreground/90"
+              >
                 {HERO_SUBHEAD}
               </p>
               <div className="flex flex-wrap gap-3 mb-6 md:mb-0">

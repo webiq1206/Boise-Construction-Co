@@ -241,7 +241,7 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
         </dl>
 
         {mutation.isError && (
-          <div className="rounded-sm p-4 text-sm bg-destructive/5 border border-destructive/20 text-destructive">
+          <div role="alert" className="rounded-sm p-4 text-sm bg-destructive/5 border border-destructive/20 text-destructive">
             {(mutation.error as Error).message || "Something went wrong. Please try again."}
           </div>
         )}
@@ -397,7 +397,7 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
         )}
 
         {mutation.isError && (
-          <div className="rounded-sm p-4 text-sm bg-destructive/5 border border-destructive/20 text-destructive">
+          <div role="alert" className="rounded-sm p-4 text-sm bg-destructive/5 border border-destructive/20 text-destructive">
             {(mutation.error as Error).message || "Something went wrong. Please try again."}
           </div>
         )}

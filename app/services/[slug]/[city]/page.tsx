@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { LandingPageTemplate } from '@/components/seo/LandingPageTemplate';
-import { buildPageMetadata } from '@/lib/page-metadata';
+import type { LandingProof } from '@/components/seo/LandingPageTemplate';
+import { buildPageMetadata, isCityServiceNoindex } from '@/lib/page-metadata';
 import {
   landingBreadcrumbs,
   landingFAQSchema,
@@ -18,10 +19,13 @@ import { getCountyLabel } from '@/shared/contentData';
 import {
   getCityServiceFaqs,
   getCityServiceIntro,
+  getCityServiceSections,
   SERVICE_SEO_CONTENT,
 } from '@/shared/seoContent';
 import { generateSpeakableSchema } from '@/lib/schema';
 import { getCityServiceImageSet } from '@/shared/cityServiceImages';
+import { getTestimonialsFor } from '@/shared/testimonialsData';
+import { getGalleryProjectsFor } from '@/shared/galleryData';
 
 export function generateStaticParams() {
   return getAllCityServiceParams();
@@ -42,6 +46,7 @@ export async function generateMetadata({
     cityName: city.name,
     citySlug: city.slug,
     path: cityServicePath(service.slug, city.slug),
+    noindex: isCityServiceNoindex(service.slug, city.slug),
   });
 }
 
@@ -68,6 +73,26 @@ export default function CityServicePage({
   const faqs = getCityServiceFaqs(content, city);
   const localNote = `Permitting for ${content.name.toLowerCase()} projects in ${city.name} runs through ${county}. We build permit timelines into your schedule from day one.`;
   const images = getCityServiceImageSet(service.slug, city.slug);
+  const sections = getCityServiceSections(content, city, seo);
+
+  const matchedTestimonials = getTestimonialsFor(service.slug, city.slug);
+  const matchedProjects = getGalleryProjectsFor(service.slug, city.slug);
+  const proof: LandingProof | undefined =
+    matchedTestimonials.length > 0 || matchedProjects.length > 0
+      ? {
+          testimonials: matchedTestimonials.map((t) => ({
+            name: t.customerName,
+            rating: Number(t.rating) || 5,
+            quote: t.testimonial,
+          })),
+          projects: matchedProjects.map((p) => ({
+            title: p.title,
+            description: p.description,
+            beforeImageUrl: p.beforeImageUrl,
+            afterImageUrl: p.afterImageUrl,
+          })),
+        }
+      : undefined;
 
   const schemas = [
     landingBreadcrumbs([
@@ -102,6 +127,9 @@ export default function CityServicePage({
         timeline={content.timeline}
         processSteps={content.processSteps}
         localNote={localNote}
+        sections={sections}
+        proof={proof}
+        proofHeading={`Recent ${city.name} ${service.name.toLowerCase()} work`}
         faqs={faqs}
         related={{
           variant: 'city-service',

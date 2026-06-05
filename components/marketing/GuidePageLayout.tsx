@@ -190,7 +190,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
 
       <Section spacing="sm" divider>
         <div className="container px-4 max-w-6xl mx-auto">
-          <RelatedPostCards path={guideUrl} />
+          <RelatedPostCards path={guideUrl} limit={8} />
         </div>
       </Section>
 

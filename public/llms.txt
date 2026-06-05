@@ -14,7 +14,7 @@
 - Boise Remodeling Process Guide: /guides/boise-remodeling-process-guide
 - Best Remodeling ROI Boise: /guides/best-remodeling-roi-boise
 - Outdoor Living Remodeling Guide: /guides/outdoor-living-remodeling-guide
-- City guides: /guides/boise-remodeling-guide, /guides/meridian-remodeling-guide, /guides/eagle-remodeling-guide, /guides/kuna-remodeling-guide, /guides/star-remodeling-guide, /guides/middleton-remodeling-guide, /guides/nampa-remodeling-guide
+- City guides: /guides/boise-remodeling-guide, /guides/meridian-remodeling-guide, /guides/eagle-remodeling-guide, /guides/kuna-remodeling-guide, /guides/star-remodeling-guide, /guides/middleton-remodeling-guide, /guides/nampa-remodeling-guide, /guides/caldwell-remodeling-guide
 - Neighborhood guides: /guides/north-end-remodeling-guide, /guides/boise-bench-remodeling-guide, /guides/harris-ranch-remodeling-guide, /guides/east-boise-remodeling-guide, /guides/hidden-springs-remodeling-guide, /guides/eagle-foothills-remodeling-guide
 
 ## Blog category hubs

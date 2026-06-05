@@ -87,9 +87,15 @@ export default function RootLayout({
         </noscript>
         <Providers>
           <ScrollToTop />
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-sm focus:bg-foreground focus:px-4 focus:py-2 focus:text-background focus:shadow-lg"
+          >
+            Skip to content
+          </a>
           <div className="flex flex-col min-h-screen">
             <Navigation />
-            <main className="flex-1">
+            <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
               {children}
             </main>
             <ConditionalFooter />

@@ -7,7 +7,8 @@ import {
   generateFAQSchema,
   generateSpeakableSchema,
 } from "@/lib/schema";
-import { buildCanonical } from "@/lib/page-metadata";
+import { buildCanonical, stripBrandSuffix } from "@/lib/page-metadata";
+import { generateSafePageTitle } from "@/lib/seo";
 import { BlogPostLayout } from "@/components/marketing/BlogPostLayout";
 import {
   getAbsoluteImageUrl,
@@ -33,7 +34,12 @@ export async function generateMetadata({
     return { title: "Post Not Found" };
   }
 
-  const title = post.seoTitle || post.title;
+  // Strip any brand the author baked into seoTitle, then enforce the budget so
+  // the layout template's " | Boise Remodeling Co" keeps the rendered <title>
+  // under ~60 chars. OG/Twitter use the same title (no extra "| ... Blog"
+  // suffix, which previously doubled the brand and diverged from <title>).
+  const rawTitle = post.seoTitle || post.title;
+  const title = generateSafePageTitle(stripBrandSuffix(rawTitle));
   const description =
     post.metaDescription ||
     (post.excerpt.length > 160 ? post.excerpt.substring(0, 157) + "..." : post.excerpt);
@@ -48,7 +54,7 @@ export async function generateMetadata({
       canonical: buildCanonical(`/blog/${post.slug}`),
     },
     openGraph: {
-      title: `${title} | Boise Remodeling Co Blog`,
+      title,
       description,
       url: buildCanonical(`/blog/${post.slug}`),
       type: "article",
@@ -57,7 +63,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} | Boise Remodeling Co Blog`,
+      title,
       description,
       images: [imageUrl],
     },

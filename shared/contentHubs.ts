@@ -233,7 +233,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('adu-guide-boise', 'ADU Guide Boise', 'home-additions'),
   cluster('multigenerational-living-remodels', 'Multigenerational Living Remodels', 'home-additions'),
   cluster('home-addition-timeline-guide', 'Home Addition Timeline Guide', 'home-additions'),
-  cluster('room-addition-guide-treasure-valley', 'Room Addition Guide Treasure Valley', 'home-additions', 'planned', undefined),
+  cluster('room-addition-guide-treasure-valley', 'Room Addition Guide Treasure Valley', 'home-additions'),
 
   // Hub 5 - Whole home
   { slug: 'whole-home-remodeling-guide', title: 'Whole Home Remodeling Guide', ...hubPillar('whole-home-remodeling'), status: PUBLISHED },
@@ -243,7 +243,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('remodel-planning-guide', 'Remodel Planning Guide', 'whole-home-remodeling'),
   cluster('remodeling-mistakes-to-avoid', 'Remodeling Mistakes to Avoid', 'whole-home-remodeling'),
   cluster('design-build-process-guide', 'Design-Build Process Guide', 'whole-home-remodeling'),
-  cluster('whole-home-remodel-planning-checklist', 'Whole-Home Remodel Planning Checklist', 'whole-home-remodeling', 'planned'),
+  cluster('whole-home-remodel-planning-checklist', 'Whole-Home Remodel Planning Checklist', 'whole-home-remodeling'),
 
   // Hub 6 - Contractor
   { slug: 'choose-remodeling-contractor-boise', title: 'How to Choose a Remodeling Contractor in Boise', ...hubPillar('contractor-selection'), status: PUBLISHED },
@@ -255,7 +255,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('why-remodeling-bids-vary', 'Why Remodeling Bids Vary So Much', 'contractor-selection'),
   cluster('what-makes-great-remodeling-contractor', 'What Makes a Great Remodeling Contractor', 'contractor-selection'),
   cluster('consultation-process-remodeling', 'What to Expect During the Consultation Process', 'contractor-selection'),
-  cluster('how-to-choose-design-build-contractor', 'How to Choose a Design-Build Contractor', 'contractor-selection', 'planned'),
+  cluster('how-to-choose-design-build-contractor', 'How to Choose a Design-Build Contractor', 'contractor-selection'),
 
   // Hub 7 - Process
   { slug: 'boise-remodeling-process-guide', title: 'Boise Remodeling Process Guide', ...hubPillar('remodeling-process'), status: PUBLISHED },
@@ -267,7 +267,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('construction-phase-guide', 'Construction Phase Guide', 'remodeling-process'),
   cluster('punch-list-guide', 'Punch List Guide', 'remodeling-process'),
   cluster('warranty-guide-remodeling', 'Warranty Guide', 'remodeling-process'),
-  cluster('ada-vs-canyon-county-permit-timelines', 'Ada vs Canyon County Permit Timelines', 'remodeling-process', 'planned'),
+  cluster('ada-vs-canyon-county-permit-timelines', 'Ada vs Canyon County Permit Timelines', 'remodeling-process'),
 
   // Hub 8 - ROI
   // kitchen-roi-remodeling and bathroom-roi-remodeling were consolidated (301)
@@ -299,6 +299,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   guide('star-remodeling-guide', 'Star Remodeling Guide', 'treasure-valley-locations', 'location'),
   guide('middleton-remodeling-guide', 'Middleton Remodeling Guide', 'treasure-valley-locations', 'location'),
   guide('nampa-remodeling-guide', 'Nampa Remodeling Guide', 'treasure-valley-locations', 'location'),
+  guide('caldwell-remodeling-guide', 'Caldwell Remodeling Guide', 'treasure-valley-locations', 'location'),
   guide('north-end-remodeling-guide', 'North End Remodeling Guide', 'treasure-valley-locations', 'neighborhood'),
   guide('boise-bench-remodeling-guide', 'Boise Bench Remodeling Guide', 'treasure-valley-locations', 'neighborhood'),
   guide('harris-ranch-remodeling-guide', 'Harris Ranch Remodeling Guide', 'treasure-valley-locations', 'neighborhood'),

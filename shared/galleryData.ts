@@ -56,3 +56,21 @@ export const GALLERY_PROJECTS: GalleryProject[] = [
       "Unfinished basement transformed into a family room, home office, and full bath in Boise",
   },
 ];
+
+/**
+ * Return gallery projects that match a specific service + city, used to embed
+ * local before/after proof on city x service landing pages.
+ */
+export function getGalleryProjectsFor(
+  serviceSlug: string,
+  citySlug: string,
+): GalleryProject[] {
+  return GALLERY_PROJECTS.filter(
+    (p) => p.serviceType === serviceSlug && p.city === citySlug,
+  );
+}
+
+/** Return all gallery projects for a city (any service). Used on area pages. */
+export function getGalleryProjectsForCity(citySlug: string): GalleryProject[] {
+  return GALLERY_PROJECTS.filter((p) => p.city === citySlug);
+}

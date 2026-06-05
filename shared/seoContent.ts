@@ -1,9 +1,18 @@
 import type { ServiceData, CityData } from './contentData';
 import { getCountyLabel } from './contentData';
+import type { LandingSection } from '@/components/seo/LandingPageTemplate';
 
 export interface FAQItem {
   question: string;
   answer: string;
+}
+
+/** Minimal shape of a CITY_SEO_DATA entry needed to build local sections. */
+export interface CitySeoFacts {
+  neighborhoods: string[];
+  landmarks: string[];
+  climate: string;
+  population?: string;
 }
 
 export interface ServiceSEOContent {
@@ -272,6 +281,53 @@ export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): 
       answer: `Use our online project estimator for a planning range, then book a free 60 to 90 minute in-home visit. We will leave you with design direction and clear next steps.`,
     },
   ];
+}
+
+/**
+ * Build localized long-form sections for a city x service page. This is the
+ * core doorway-page mitigation: instead of a single keyword-swapped paragraph,
+ * each page gets service-scoped local substance (neighborhoods, landmarks,
+ * climate, and county permit specifics) drawn from CITY_SEO_DATA. See
+ * seo-audit/doorway-page-analysis.md.
+ */
+export function getCityServiceSections(
+  service: ServiceSEOContent,
+  city: CityData,
+  seo: CitySeoFacts | undefined,
+): LandingSection[] {
+  const county = getCountyLabel(city.county);
+  const neighborhoods = seo?.neighborhoods ?? [];
+  const landmarks = seo?.landmarks ?? [];
+  const serviceLC = service.name.toLowerCase();
+
+  const sections: LandingSection[] = [
+    {
+      heading: `${service.name} across ${city.name} neighborhoods`,
+      paragraphs: [
+        neighborhoods.length
+          ? `We design and build ${serviceLC} projects throughout ${city.name}, including ${neighborhoods.join(', ')}. Housing stock varies between these neighborhoods, so we tailor layouts, structural details, and finish selections to the age and style of your specific ${city.name} home.`
+          : `We design and build ${serviceLC} projects throughout ${city.name}, tailoring layouts, structural details, and finishes to the age and style of your specific home.`,
+        landmarks.length
+          ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand the character of the area and plan ${serviceLC} work that fits the neighborhood and protects resale value.`
+          : `As a local team, we plan ${serviceLC} work that fits the neighborhood and protects resale value.`,
+      ],
+    },
+    {
+      heading: `${service.name} permits and planning in ${county}`,
+      paragraphs: [
+        `${service.name} projects in ${city.name} that change layout, structure, plumbing, or electrical require permits through ${county}. We build plan review and inspection timelines into your schedule from day one and handle submissions, fees, and inspections as part of the design-build contract.`,
+        seo?.climate
+          ? `Our ${city.name} ${serviceLC} designs also account for the local ${seo.climate} - from insulation and ventilation choices to materials that hold up to Treasure Valley freeze-thaw cycles.`
+          : `Our ${city.name} ${serviceLC} designs account for the local Treasure Valley climate, including durable materials and proper insulation.`,
+      ],
+      links: [
+        { label: `${city.name} remodeling contractor overview`, href: `/areas/${city.slug}` },
+        { label: 'Ada vs Canyon County permit timelines', href: '/resources/ada-canyon-permit-flow' },
+      ],
+    },
+  ];
+
+  return sections;
 }
 
 export const AREA_PAGE_FAQS: FAQItem[] = [

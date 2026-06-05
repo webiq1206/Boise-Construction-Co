@@ -17,7 +17,7 @@ export interface PageNode {
   serviceSlug?: string;
   citySlug?: string;
   tokens: Set<string>;
-  overrides?: Array<{ url: string; anchor?: string }>;
+  overrides?: Array<{ url: string; anchor?: string; forced?: boolean }>;
 }
 
 export interface LinkEntry {
@@ -111,7 +111,7 @@ export function buildPages(): PageNode[] {
     const pillarPublished = GUIDE_PAGES.some((g) => g.slug === pillarSlug);
     const pillarOverride =
       pillarSlug && pillarPublished
-        ? [{ url: guidePath(pillarSlug), anchor: hub?.title ?? "Guide" }]
+        ? [{ url: guidePath(pillarSlug), anchor: hub?.title ?? "Guide", forced: true }]
         : [];
     const overrides = [...pillarOverride, ...(post.relatedLinks ?? [])];
     pages.push({
@@ -206,6 +206,23 @@ const SHARED_CITY_BONUS = 0.3;
 const SHARED_TAG_BONUS = 0.1;
 const GUIDE_BOOST = 0.12;
 
+/**
+ * Soft cap on how many non-override inbound links any single target may collect.
+ * Prevents authority over-concentration (e.g. the cost guide previously had ~74
+ * incoming, ~10x the site average, diluting link equity). Forced overrides
+ * (hub pillars) bypass this cap so canonical hub relationships stay intact.
+ */
+const MAX_INCOMING = 18;
+
+/**
+ * Extra similarity for targets in hubs that are otherwise under-linked, so weak
+ * clusters (e.g. outdoor-living) earn inbound links organically rather than
+ * relying only on the min-incoming floor. See seo-audit/internal-link-map.md.
+ */
+const UNDERLINKED_HUB_BOOST: Record<string, number> = {
+  'outdoor-living': 0.15,
+};
+
 function jaccard(a: Set<string>, b: Set<string>): number {
   if (a.size === 0 || b.size === 0) return 0;
   let inter = 0;
@@ -233,6 +250,9 @@ function similarity(from: PageNode, to: PageNode): number {
 
   if (to.type === "service") score += SERVICE_BOOST;
   if (to.type === "guide") score += GUIDE_BOOST;
+  if (to.hubSlug && UNDERLINKED_HUB_BOOST[to.hubSlug]) {
+    score += UNDERLINKED_HUB_BOOST[to.hubSlug];
+  }
 
   return score;
 }
@@ -332,6 +352,10 @@ export function buildManifest(pages: PageNode[]): Manifest {
         if (taken.has(ov.url)) continue;
         const target = pageById.get(ov.url);
         if (!target) continue;
+        // Canonical hub-pillar links (forced) are always honored. Manual
+        // related-link overrides respect the soft incoming cap so a single
+        // popular target (e.g. the cost guide) can't over-concentrate equity.
+        if (!ov.forced && (incoming[ov.url] ?? 0) >= MAX_INCOMING) continue;
         top.push({
           url: target.url,
           anchor: ov.anchor ?? target.anchor,
@@ -350,6 +374,7 @@ export function buildManifest(pages: PageNode[]): Manifest {
         if (added >= count) break;
         if (taken.has(cand.url)) continue;
         if (cand.type !== type) continue;
+        if ((incoming[cand.url] ?? 0) >= MAX_INCOMING) continue;
         top.push(cand);
         taken.add(cand.url);
         added++;
@@ -360,6 +385,7 @@ export function buildManifest(pages: PageNode[]): Manifest {
     for (const cand of scored) {
       if (top.length >= limit) break;
       if (taken.has(cand.url)) continue;
+      if ((incoming[cand.url] ?? 0) >= MAX_INCOMING) continue;
       top.push(cand);
       taken.add(cand.url);
     }

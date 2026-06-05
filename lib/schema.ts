@@ -16,12 +16,26 @@ interface SchemaContext {
 const baseUrl = getBaseUrl();
 
 /**
+ * Stable entity identifiers for a connected @graph. Using fragment-based @ids
+ * lets Organization, WebSite, and LocalBusiness reference each other instead of
+ * existing as disconnected nodes, and prevents the previous @id collision where
+ * every per-city LocalBusiness reused `baseUrl` with different coordinates.
+ */
+export const ORG_ID = `${baseUrl}/#organization`;
+export const LOCALBUSINESS_ID = `${baseUrl}/#localbusiness`;
+export const WEBSITE_ID = `${baseUrl}/#website`;
+const LOGO_URL = `${baseUrl}/images/brc-logo.png`;
+
+/**
  * Generate LocalBusiness schema for homepage and location pages
  */
 export function generateLocalBusinessSchema(city?: string): SchemaContext {
-  const cityData = city ? CITY_SEO_DATA[city as keyof typeof CITY_SEO_DATA] : null;
-  const coordinates = cityData?.coordinates || CITY_SEO_DATA.Kuna.coordinates;
-  
+  // A single-location business has ONE set of coordinates (its HQ). Emitting
+  // per-city coordinates under one @id confuses entity disambiguation, so geo
+  // is always the HQ; the service area is expressed via `areaServed`. The
+  // optional `city` only customizes the human-readable description.
+  const coordinates = CITY_SEO_DATA.Kuna.coordinates;
+
   return {
     '@context': 'https://schema.org',
     '@type': ['LocalBusiness', 'HomeAndConstructionBusiness'],
@@ -29,8 +43,10 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     legalName: BUSINESS_INFO.legalName,
     description: `Design-build remodeling contractor serving ${city || 'Boise'} and the Treasure Valley, Idaho. Kitchen remodels, bathrooms, additions & whole-home renovations.`,
     image: `${baseUrl}/images/hero-remodel-interior.png`,
-    '@id': baseUrl,
+    logo: LOGO_URL,
+    '@id': LOCALBUSINESS_ID,
     url: baseUrl,
+    parentOrganization: { '@id': ORG_ID },
     telephone: BUSINESS_INFO.phone,
     email: BUSINESS_INFO.email,
     address: {
@@ -96,19 +112,16 @@ export function generateWebSiteSchema(): SchemaContext {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': WEBSITE_ID,
     name: BUSINESS_INFO.name,
     url: baseUrl,
     description:
       'Design-build remodeling contractor serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and the Treasure Valley, Idaho.',
-    publisher: {
-      '@type': 'Organization',
-      name: BUSINESS_INFO.name,
-    },
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: `${baseUrl}/blog?q={search_term_string}`,
-      'query-input': 'required name=search_term_string',
-    },
+    publisher: { '@id': ORG_ID },
+    // NOTE: SearchAction intentionally omitted. The previous target
+    // (/blog?q={search_term_string}) had no search handler, which advertised a
+    // sitelinks search box that does not work. Re-add only when on-site search
+    // is implemented.
   };
 }
 
@@ -175,11 +188,30 @@ export function generateOrganizationSchema(): SchemaContext {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    '@id': ORG_ID,
     name: BUSINESS_INFO.name,
     legalName: BUSINESS_INFO.legalName,
+    ...(BUSINESS_INFO.alternateName.length
+      ? { alternateName: BUSINESS_INFO.alternateName }
+      : {}),
     url: baseUrl,
+    logo: {
+      '@type': 'ImageObject',
+      url: LOGO_URL,
+    },
     description: 'Design-build remodeling contractor serving the Treasure Valley since 2017. Kitchen remodels, bathrooms, additions, and whole-home renovations. Licensed, insured, and committed to excellence.',
     foundingDate: BUSINESS_INFO.founded,
+    // founder is gated: only emitted once a real named founder is supplied in
+    // BUSINESS_INFO.founderName (see seo-audit/trust-signal-map.md).
+    ...(BUSINESS_INFO.founderName
+      ? {
+          founder: {
+            '@type': 'Person',
+            name: BUSINESS_INFO.founderName,
+            url: `${baseUrl}/about#team`,
+          },
+        }
+      : {}),
     telephone: BUSINESS_INFO.phone,
     email: BUSINESS_INFO.email,
     address: {
@@ -208,28 +240,40 @@ export function generateReviewSchema(reviews: Array<{
   author: string;
   rating: number;
   text: string;
-  date: string;
+  /** Optional ISO date. Omitted from output when not provided. */
+  date?: string;
 }>): SchemaContext {
   return {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
+    '@type': ['LocalBusiness', 'HomeAndConstructionBusiness'],
+    '@id': LOCALBUSINESS_ID,
     name: BUSINESS_INFO.name,
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: BUSINESS_INFO.rating,
-      reviewCount: BUSINESS_INFO.reviewCount,
-    },
+    // AggregateRating is gated on a real, populated review count. Emitting a
+    // zero/empty rating would publish a misleading 0-star signal, so it is only
+    // included once BUSINESS_INFO.rating/reviewCount reflect genuine reviews.
+    ...(BUSINESS_INFO.reviewCount > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: BUSINESS_INFO.rating,
+            reviewCount: BUSINESS_INFO.reviewCount,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        }
+      : {}),
     review: reviews.map(review => ({
       '@type': 'Review',
       author: {
         '@type': 'Person',
         name: review.author,
       },
-      datePublished: review.date,
+      ...(review.date ? { datePublished: review.date } : {}),
       reviewRating: {
         '@type': 'Rating',
         ratingValue: review.rating,
         bestRating: 5,
+        worstRating: 1,
       },
       reviewBody: review.text,
     })),
@@ -261,13 +305,31 @@ export function generateArticleSchema(article: {
   title: string;
   description: string;
   publishedAt: string;
+  /** Last revision date; falls back to publishedAt. */
+  updatedAt?: string;
+  /**
+   * Author name. When this is a real person (not the organization name), the
+   * author is emitted as a Person entity linked to /about#team for E-E-A-T.
+   * When omitted or equal to the org name, the Organization is the author.
+   */
   author?: string;
+  authorUrl?: string;
   image?: string;
   slug: string;
   /** Defaults to /blog/ */
   pathPrefix?: 'blog' | 'guides' | 'resources';
 }): SchemaContext {
   const prefix = article.pathPrefix ?? 'blog';
+  const isPersonAuthor =
+    !!article.author && article.author.trim() !== BUSINESS_INFO.name;
+  const author = isPersonAuthor
+    ? {
+        '@type': 'Person',
+        name: article.author,
+        url: article.authorUrl ?? `${baseUrl}/about#team`,
+      }
+    : { '@type': 'Organization', '@id': ORG_ID, name: BUSINESS_INFO.name };
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -275,14 +337,13 @@ export function generateArticleSchema(article: {
     description: article.description,
     image: article.image,
     datePublished: article.publishedAt,
-    dateModified: article.publishedAt,
-    author: {
-      '@type': 'Organization',
-      name: BUSINESS_INFO.name,
-    },
+    dateModified: article.updatedAt ?? article.publishedAt,
+    author,
     publisher: {
       '@type': 'Organization',
+      '@id': ORG_ID,
       name: BUSINESS_INFO.name,
+      logo: { '@type': 'ImageObject', url: LOGO_URL },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',

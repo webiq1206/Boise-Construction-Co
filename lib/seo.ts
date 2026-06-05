@@ -439,6 +439,12 @@ export const CITY_SEO_DATA: Record<string, {
 export const BUSINESS_INFO = {
   name: SITE_CONFIG.name,
   legalName: SITE_CONFIG.legalName,
+  alternateName: ['Boise Remodeling', 'BRC'],
+  /**
+   * Data-gated: set to the real founder/owner name to emit a `founder` Person
+   * entity on the Organization schema. Empty = omitted (no fabricated people).
+   */
+  founderName: '',
   phone: SITE_CONFIG.phone,
   email: SITE_CONFIG.email,
   address: {

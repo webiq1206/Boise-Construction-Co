@@ -30,6 +30,31 @@ export interface PageMetaInput {
   titleOverride?: string;
   descriptionOverride?: string;
   path: string;
+  /**
+   * When true, emit `robots: { index: false, follow: true }`. Used for
+   * doorway-risk city x service combos that lack defensible local content or
+   * proof (see seo-audit/doorway-page-analysis.md). The page stays crawlable
+   * and keeps its internal-link value but is kept out of the index until it
+   * earns unique local substance.
+   */
+  noindex?: boolean;
+}
+
+/**
+ * City x service combos flagged as doorway risk in the audit. These are the ADU
+ * combos for small cities that share the most generic copy, have no ADU pillar
+ * support, and no local proof. Toggle entries off here once a combo earns
+ * unique local content/proof. Keyed as `${serviceSlug}/${citySlug}`.
+ */
+export const NOINDEX_CITY_SERVICE = new Set<string>([
+  'adu/kuna',
+  'adu/star',
+  'adu/middleton',
+  'adu/caldwell',
+]);
+
+export function isCityServiceNoindex(serviceSlug: string, citySlug: string): boolean {
+  return NOINDEX_CITY_SERVICE.has(`${serviceSlug}/${citySlug}`);
 }
 
 export function buildCanonical(path: string): string {
@@ -138,6 +163,7 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
     title,
     description,
     alternates: { canonical },
+    ...(input.noindex ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       title,
       description,

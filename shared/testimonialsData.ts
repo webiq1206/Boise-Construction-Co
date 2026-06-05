@@ -40,3 +40,22 @@ export const TESTIMONIALS: TestimonialItem[] = [
       "Fantastic craftsmanship and reliable timeline. Our new master suite addition exceeded every expectation.",
   },
 ];
+
+/**
+ * Return testimonials that match a specific service + city, used to embed
+ * local proof on city x service landing pages. City-tagged data only exists
+ * for a subset of cities today (Boise, Meridian, Eagle, Nampa).
+ */
+export function getTestimonialsFor(
+  serviceSlug: string,
+  citySlug: string,
+): TestimonialItem[] {
+  return TESTIMONIALS.filter(
+    (t) => t.serviceType === serviceSlug && t.city === citySlug,
+  );
+}
+
+/** Return all testimonials for a city (any service). Used on area pages. */
+export function getTestimonialsForCity(citySlug: string): TestimonialItem[] {
+  return TESTIMONIALS.filter((t) => t.city === citySlug);
+}

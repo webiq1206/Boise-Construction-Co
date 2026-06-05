@@ -558,6 +558,12 @@ const ENTRIES = {
     topicTags: ["location", "nampa", "guide"],
     source: "areas",
   },
+  "caldwell-remodeling-guide": {
+    hero: area("caldwell"),
+    alt: "Caldwell homes and Canyon County remodeling context near downtown and the College of Idaho",
+    topicTags: ["location", "caldwell", "guide"],
+    source: "areas",
+  },
   "north-end-remodeling-guide": {
     hero: blog("north-end-remodeling-guide"),
     alt: "Historic North End craftsman bungalows and period-appropriate remodels in Boise",
@@ -654,7 +660,7 @@ for (const [slug, entry] of Object.entries(ENTRIES)) {
 
 // Validate count
 const expectedBlog = 71;
-const expectedGuides = 23;
+const expectedGuides = 24;
 const blogSlugs = Object.keys(ENTRIES).filter((s) => !s.includes("-guide") || ENTRIES[s].topicTags.includes("guide") === false);
 // Just check total
 if (Object.keys(ENTRIES).length !== expectedBlog + expectedGuides) {

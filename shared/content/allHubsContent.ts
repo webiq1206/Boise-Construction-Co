@@ -553,6 +553,21 @@ export const LOCATION_GUIDES: GuidePageData[] = [
     takeaways: ['Canyon County review paths differ from Ada.', 'Compare bids with aligned scope.'],
   }),
   buildLocationGuide({
+    slug: 'caldwell-remodeling-guide',
+    title: 'Caldwell Remodeling Guide',
+    cityName: 'Caldwell',
+    citySlug: 'caldwell',
+    county: 'canyon',
+    housingNote:
+      'Caldwell blends historic homes near the College of Idaho and Cleveland Blvd with newer Ustick and Wilson construction - housing era drives electrical, layout, and window scope in Canyon County.',
+    guideType: 'location',
+    seoTitle: 'Caldwell Remodeling Guide',
+    metaDescription: 'Remodeling in Caldwell, Idaho: Canyon County permits, historic and new-build housing context, and design-build kitchen, bath, whole-home, and addition services.',
+    excerpt: 'Caldwell remodeling guide for Canyon County homeowners.',
+    quickAnswer: 'Caldwell remodels route through Canyon County with strong kitchen, bath, and whole-home demand across historic and newer neighborhoods.',
+    takeaways: ['Canyon County permits apply.', 'Housing era drives electrical and layout scope.'],
+  }),
+  buildLocationGuide({
     slug: 'north-end-remodeling-guide',
     title: 'North End Remodeling Guide',
     cityName: 'Boise North End',

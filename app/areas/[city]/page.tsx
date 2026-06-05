@@ -13,7 +13,9 @@ import { getCountyLabel, SERVICES } from '@/shared/contentData';
 import { AREA_PAGE_FAQS, getAreaIntro } from '@/shared/seoContent';
 import { generateSpeakableSchema } from '@/lib/schema';
 import { getAreaImageSet } from '@/shared/cityServiceImages';
-import type { LandingSection } from '@/components/seo/LandingPageTemplate';
+import type { LandingSection, LandingProof } from '@/components/seo/LandingPageTemplate';
+import { getTestimonialsForCity } from '@/shared/testimonialsData';
+import { getGalleryProjectsForCity } from '@/shared/galleryData';
 
 export function generateStaticParams() {
   return CITY_SLUGS.map((city) => ({ city }));
@@ -84,6 +86,25 @@ export default function AreaPage({ params }: { params: { city: string } }) {
     },
   ];
 
+  const cityTestimonials = getTestimonialsForCity(city.slug);
+  const cityProjects = getGalleryProjectsForCity(city.slug);
+  const proof: LandingProof | undefined =
+    cityTestimonials.length > 0 || cityProjects.length > 0
+      ? {
+          testimonials: cityTestimonials.map((t) => ({
+            name: t.customerName,
+            rating: Number(t.rating) || 5,
+            quote: t.testimonial,
+          })),
+          projects: cityProjects.map((p) => ({
+            title: p.title,
+            description: p.description,
+            beforeImageUrl: p.beforeImageUrl,
+            afterImageUrl: p.afterImageUrl,
+          })),
+        }
+      : undefined;
+
   const h1 = `Remodeling Contractor in ${city.name}, Idaho`;
   const faqs = [
     ...AREA_PAGE_FAQS,
@@ -128,6 +149,8 @@ export default function AreaPage({ params }: { params: { city: string } }) {
         ]}
         localNote={localNote}
         sections={sections}
+        proof={proof}
+        proofHeading={`Recent ${city.name} remodeling projects`}
         faqs={faqs}
         related={{ variant: 'area', citySlug: city.slug }}
       />

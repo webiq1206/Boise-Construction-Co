@@ -2,22 +2,25 @@ import { Metadata } from "next";
 import { ObfuscatedEmail } from "@/components/ObfuscatedEmail";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/schema";
+import { buildCanonical } from "@/lib/page-metadata";
+
+const PRIVACY_CANONICAL = buildCanonical("/privacy-policy");
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "Boise Remodeling Co privacy policy. How we protect your data when you request remodeling services in Kuna & Boise, Idaho.",
   alternates: {
-    canonical: "https://boiseremodeling.co/privacy-policy",
+    canonical: PRIVACY_CANONICAL,
   },
   openGraph: {
     title: "Privacy Policy | Boise Remodeling Co",
     description: "How we protect your data when you use Boise Remodeling Co remodeling and renovation services in Idaho.",
-    url: "https://boiseremodeling.co/privacy-policy",
+    url: PRIVACY_CANONICAL,
     type: "website",
     images: [{ url: "/images/hero-remodel-interior.png", width: 1200, height: 630, alt: "Boise Remodeling Co" }],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Privacy Policy | Boise Remodeling Co",
     description: "How we protect your data when you use Boise Remodeling Co remodeling and renovation services in Idaho.",
   },

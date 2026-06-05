@@ -15,7 +15,11 @@ const nextConfig = {
     instrumentationHook: true,
   },
   images: {
-    unoptimized: true,
+    // Optimization runs on the standalone Node server (output: 'standalone'),
+    // so we keep Next's optimizer enabled to serve AVIF/WebP and responsive
+    // sizes (better LCP/CLS). Flip `unoptimized` back to true only if deploying
+    // to a static export target without an image-optimization backend.
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',

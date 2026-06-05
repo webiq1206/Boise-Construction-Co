@@ -12,8 +12,10 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import {
   generateBreadcrumbSchema,
   generateCollectionPageSchema,
+  generateReviewSchema,
 } from '@/lib/schema';
 import { GALLERY_PROJECTS } from '@/shared/galleryData';
+import { TESTIMONIALS } from '@/shared/testimonialsData';
 
 export const metadata = buildPageMetadata({
   kind: 'about',
@@ -23,9 +25,10 @@ export const metadata = buildPageMetadata({
     'See Treasure Valley remodeling transformations and read reviews from Boise Remodeling Co homeowners. Kitchen, bath, whole-home, and addition projects.',
 });
 
-// TODO: Add Review + AggregateRating schema here once genuine homeowner reviews
-// (author, rating, date, body) are available. Tie it to the LocalBusiness entity
-// via generateReviewSchema in lib/schema.ts and set BUSINESS_INFO.rating/reviewCount.
+// Review schema is wired to the LocalBusiness entity below. AggregateRating
+// stays gated inside generateReviewSchema until BUSINESS_INFO.rating/reviewCount
+// reflect genuine, verified reviews (no fabricated ratings). Add ISO `date`
+// values to TESTIMONIALS entries to surface review dates.
 
 export default function TestimonialsPage() {
   const schemas = [
@@ -43,6 +46,13 @@ export default function TestimonialsPage() {
         url: `/services/${p.serviceType}/${p.city}`,
       })),
     }),
+    generateReviewSchema(
+      TESTIMONIALS.map((t) => ({
+        author: t.customerName,
+        rating: Number(t.rating) || 5,
+        text: t.testimonial,
+      })),
+    ),
   ];
 
   return (

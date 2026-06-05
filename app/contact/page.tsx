@@ -9,10 +9,19 @@ import { SITE_IMAGES } from '@/shared/siteImages';
 import { MarketingCard } from '@/components/marketing/MarketingCard';
 import { Reveal } from '@/components/Reveal';
 import { StatementBandSection } from '@/components/sections/StatementBandSection';
+import { ConsultationForm } from '@/components/ConsultationForm';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { buildPageMetadata } from '@/lib/page-metadata';
 import {
   generateBreadcrumbSchema,
+  generateFAQSchema,
   generateLocalBusinessSchema,
+  generateSpeakableSchema,
   generateWebPageSchema,
 } from '@/lib/schema';
 import { BUSINESS_INFO } from '@/lib/seo';
@@ -22,6 +31,33 @@ import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
 import { CONSULT_BULLETS, HERO_STATS } from '@/shared/siteContent';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { EstimateCTA } from '@/components/modals/EstimateCTA';
+
+const CONTACT_FAQS = [
+  {
+    question: 'How quickly will you respond to my inquiry?',
+    answer:
+      'We respond within one business day. Call us during business hours for an immediate conversation, or submit the form and we will reach out to schedule your free in-home visit.',
+  },
+  {
+    question: 'Is the in-home consultation really free?',
+    answer:
+      'Yes. Your 60 to 90 minute in-home visit is free with no obligation. You leave with planning guidance, design direction, and an honest project range - never a high-pressure sales pitch.',
+  },
+  {
+    question: 'What areas do you serve?',
+    answer: `We serve ${TREASURE_VALLEY_CITIES}, and surrounding Treasure Valley communities across Ada and Canyon County.`,
+  },
+  {
+    question: 'Do you handle permits?',
+    answer:
+      'Yes. Permits are included in our design-build scope and handled in-house for both Ada and Canyon County jurisdictions.',
+  },
+  {
+    question: 'How do I get a cost estimate for my project?',
+    answer:
+      'Use our online project estimator for an instant planning range, then book a free in-home visit for a written scope tailored to your home.',
+  },
+];
 
 const GRAIN_URL = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E")`;
 
@@ -157,6 +193,8 @@ export default function ContactPage() {
       { name: 'Home', url: '/' },
       { name: 'Contact', url: '/contact' },
     ]),
+    generateFAQSchema(CONTACT_FAQS),
+    generateSpeakableSchema({ path: '/contact', name: 'Contact Boise Remodeling Co' }),
   ];
 
   return (
@@ -345,6 +383,59 @@ export default function ContactPage() {
                 </div>
               </Reveal>
             </div>
+          </div>
+        </Section>
+
+        {/* ─── Inline consultation form ─── */}
+        <Section id="consult" divider>
+          <div className="container px-4">
+            <div className="max-w-5xl mx-auto grid md:grid-cols-5 gap-12 items-start">
+              <div className="md:col-span-2">
+                <Reveal>
+                  <div className="brc-label mb-5">Request your visit</div>
+                  <h2 className="font-sans font-light text-[2rem] md:text-[2.75rem] leading-[1.08] tracking-tight mb-4 text-foreground">
+                    Tell us about your{' '}
+                    <em className="brc-accent text-accent">home</em>.
+                  </h2>
+                  <p className="text-base leading-relaxed mb-8 text-muted-foreground">
+                    Send a few details and we will reach out within one business day to schedule
+                    your free 60 to 90 minute in-home visit - planning guidance, design direction,
+                    and no obligation.
+                  </p>
+                </Reveal>
+              </div>
+              <MarketingCard className="md:col-span-3" padding="lg">
+                <ConsultationForm />
+              </MarketingCard>
+            </div>
+          </div>
+        </Section>
+
+        {/* ─── Contact FAQ ─── */}
+        <Section variant="greige" divider>
+          <div className="container px-4 max-w-3xl">
+            <Reveal>
+              <div className="brc-label mb-5">Common questions</div>
+              <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
+                Before you <em className="brc-accent text-accent">reach out</em>
+              </h2>
+              <Accordion type="single" collapsible className="w-full">
+                {CONTACT_FAQS.map((faq, i) => (
+                  <AccordionItem
+                    key={i}
+                    value={`faq-${i}`}
+                    className="border-0 border-t border-border"
+                  >
+                    <AccordionTrigger className="text-left py-5 hover:no-underline font-sans font-medium text-sm text-foreground">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm leading-relaxed pb-6 text-muted-foreground">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </Reveal>
           </div>
         </Section>
 

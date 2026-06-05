@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Check, ChevronRight } from 'lucide-react';
+import { ArrowRight, Check, ChevronRight, Star } from 'lucide-react';
 import { DisplayNum, formatStepNumber, Section } from '@/components/marketing';
 import { MarketingCard } from '@/components/marketing/MarketingCard';
 import { Reveal } from '@/components/Reveal';
@@ -44,6 +44,13 @@ interface LandingPageTemplateProps {
    * localized copy and contextual internal links.
    */
   sections?: LandingSection[];
+  /**
+   * Optional embedded local proof (matched testimonials + before/after
+   * projects). Surfacing real, city-specific proof on landing pages is part of
+   * the doorway-page mitigation (see seo-audit/doorway-page-analysis.md).
+   */
+  proof?: LandingProof;
+  proofHeading?: string;
   faqs: FAQItem[];
   related: {
     variant: 'service' | 'area' | 'city-service';
@@ -57,6 +64,16 @@ export interface LandingSection {
   paragraphs?: string[];
   links?: { label: string; href: string }[];
   subsections?: { heading: string; paragraphs: string[] }[];
+}
+
+export interface LandingProof {
+  testimonials?: { name: string; rating: number; quote: string }[];
+  projects?: {
+    title: string;
+    description: string;
+    beforeImageUrl: string;
+    afterImageUrl: string;
+  }[];
 }
 
 function HeroBreadcrumbs({ items }: { items: BreadcrumbItem[] }) {
@@ -127,10 +144,15 @@ export function LandingPageTemplate({
   processSteps,
   localNote,
   sections,
+  proof,
+  proofHeading,
   faqs,
   related,
 }: LandingPageTemplateProps) {
   const eyebrow = breadcrumbs[breadcrumbs.length - 2]?.name;
+  const hasProof =
+    !!proof &&
+    ((proof.testimonials?.length ?? 0) > 0 || (proof.projects?.length ?? 0) > 0);
   const breatherImage = breatherImageUrl ?? heroImageUrl;
   const processImage = processImageUrl ?? heroImageUrl;
 
@@ -409,6 +431,94 @@ export function LandingPageTemplate({
                 </div>
               </Reveal>
             ))}
+          </div>
+        </Section>
+      )}
+
+      {/* ─── Local proof (matched testimonials + projects) ─── */}
+      {hasProof && (
+        <Section divider>
+          <div className="container px-4 max-w-5xl">
+            <Reveal>
+              <div className="brc-label mb-5">Proof of work</div>
+              <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
+                {proofHeading ?? (
+                  <>
+                    Recent <em className="brc-accent text-accent">local work</em>
+                  </>
+                )}
+              </h2>
+            </Reveal>
+
+            {proof?.projects && proof.projects.length > 0 && (
+              <div className="grid gap-6 sm:grid-cols-2 mb-8">
+                {proof.projects.map((project) => (
+                  <Reveal key={project.title}>
+                    <MarketingCard className="overflow-hidden h-full">
+                      <div className="grid grid-cols-2">
+                        <div className="relative aspect-[4/3]">
+                          <Image
+                            src={project.beforeImageUrl}
+                            alt={`${project.title} - before`}
+                            fill
+                            sizes="(max-width: 640px) 50vw, 25vw"
+                            className="object-cover"
+                          />
+                          <span className="absolute bottom-1 left-1 text-[10px] uppercase tracking-wide bg-inverse/70 text-inverse-foreground px-1.5 py-0.5 rounded">
+                            Before
+                          </span>
+                        </div>
+                        <div className="relative aspect-[4/3]">
+                          <Image
+                            src={project.afterImageUrl}
+                            alt={`${project.title} - after`}
+                            fill
+                            sizes="(max-width: 640px) 50vw, 25vw"
+                            className="object-cover"
+                          />
+                          <span className="absolute bottom-1 left-1 text-[10px] uppercase tracking-wide bg-accent text-white px-1.5 py-0.5 rounded">
+                            After
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-5">
+                        <h3 className="font-medium text-base text-foreground mb-1.5">
+                          {project.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {project.description}
+                        </p>
+                      </div>
+                    </MarketingCard>
+                  </Reveal>
+                ))}
+              </div>
+            )}
+
+            {proof?.testimonials && proof.testimonials.length > 0 && (
+              <div className="grid gap-4 sm:grid-cols-2">
+                {proof.testimonials.map((t) => (
+                  <Reveal key={t.name}>
+                    <MarketingCard className="p-6 h-full">
+                      <div
+                        className="flex gap-0.5 mb-3 text-accent"
+                        aria-label={`${t.rating} out of 5 stars`}
+                      >
+                        {Array.from({ length: Math.round(t.rating) }).map((_, i) => (
+                          <Star key={i} className="h-4 w-4 fill-current" />
+                        ))}
+                      </div>
+                      <blockquote className="text-sm text-muted-foreground leading-relaxed mb-3">
+                        &ldquo;{t.quote}&rdquo;
+                      </blockquote>
+                      <cite className="text-sm font-medium text-foreground not-italic">
+                        {t.name}
+                      </cite>
+                    </MarketingCard>
+                  </Reveal>
+                ))}
+              </div>
+            )}
           </div>
         </Section>
       )}

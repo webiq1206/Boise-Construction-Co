@@ -68,6 +68,22 @@ const CITY_SNIPPETS: Record<string, ContentSection[]> = {
       ],
     },
   ],
+  'caldwell-remodeling-guide': [
+    {
+      h2: 'Caldwell housing stock and downtown revival',
+      paragraphs: [
+        'Caldwell ranges from historic homes near Cleveland Blvd and the College of Idaho to newer construction in Ustick and Wilson - older properties often need electrical, layout, and window updates when kitchens or baths open up.',
+        'The downtown revival around Indian Creek Plaza has renewed interest in remodeling established homes rather than relocating, with kitchen, bath, and whole-home refreshes leading inquiries.',
+      ],
+    },
+    {
+      h2: 'Caldwell permits and Canyon County coordination',
+      paragraphs: [
+        'Caldwell remodels route through Canyon County plan review, which uses different portals and inspection cadence than Ada County - confirm jurisdiction early if your address sits near county or city lines.',
+        'We design for the local semi-arid high-desert climate, planning insulation, ventilation, and exterior materials that handle Treasure Valley freeze-thaw cycles.',
+      ],
+    },
+  ],
   'north-end-remodeling-guide': [
     {
       h2: 'North End scale and character',

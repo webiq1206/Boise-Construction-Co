@@ -55,6 +55,7 @@ City guides:
 - /guides/star-remodeling-guide
 - /guides/middleton-remodeling-guide
 - /guides/nampa-remodeling-guide
+- /guides/caldwell-remodeling-guide
 
 Neighborhood guides:
 

@@ -14,6 +14,7 @@ import { buildPageMetadata } from '@/lib/page-metadata';
 import {
   generateBreadcrumbSchema,
   generateOrganizationSchema,
+  generateSpeakableSchema,
   generateWebPageSchema,
 } from '@/lib/schema';
 import { CITIES, TREASURE_VALLEY_CITIES } from '@/shared/contentData';
@@ -94,6 +95,7 @@ export default function AboutPage() {
       { name: 'Home', url: '/' },
       { name: 'About', url: '/about' },
     ]),
+    generateSpeakableSchema({ path: '/about', name: 'About Boise Remodeling Co' }),
   ];
 
   return (
@@ -160,7 +162,7 @@ export default function AboutPage() {
 
         {/* ─── Design-build split ─── */}
         <Section variant="greige" spacing="none" divider className="p-0">
-          <div className="grid md:grid-cols-2 overflow-hidden">
+          <div id="team" className="grid md:grid-cols-2 overflow-hidden scroll-mt-24">
             <div className="relative min-h-[260px] md:min-h-[520px] overflow-hidden bg-inverse">
               <Image
                 src={SITE_IMAGES.process}

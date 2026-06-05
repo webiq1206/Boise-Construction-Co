@@ -7,7 +7,7 @@ import {
   generateFAQSchema,
   generateSpeakableSchema,
 } from '@/lib/schema';
-import { buildCanonical } from '@/lib/page-metadata';
+import { buildCanonical, stripBrandSuffix } from '@/lib/page-metadata';
 import { GuidePageLayout } from '@/components/marketing/GuidePageLayout';
 import { getHubBySlug, guidePath } from '@/shared/contentHubs';
 import {
@@ -15,7 +15,7 @@ import {
   getBlogHeroImage,
   getBlogImageAlt,
 } from '@/shared/blogImages';
-import { getBaseUrl } from '@/lib/seo';
+import { generateSafePageTitle, getBaseUrl } from '@/lib/seo';
 
 export async function generateStaticParams() {
   return GUIDE_PAGES.map((guide) => ({ slug: guide.slug }));
@@ -29,7 +29,8 @@ export async function generateMetadata({
   const guide = getGuideBySlug(params.slug);
   if (!guide) return { title: 'Guide Not Found' };
 
-  const title = guide.seoTitle || guide.title;
+  const rawTitle = guide.seoTitle || guide.title;
+  const title = generateSafePageTitle(stripBrandSuffix(rawTitle));
   const description =
     guide.metaDescription ||
     (guide.excerpt.length > 160 ? guide.excerpt.substring(0, 157) + '...' : guide.excerpt);
@@ -42,7 +43,7 @@ export async function generateMetadata({
     description,
     alternates: { canonical: buildCanonical(guidePath(guide.slug)) },
     openGraph: {
-      title: `${title} | Boise Remodeling Co`,
+      title,
       description,
       url: buildCanonical(guidePath(guide.slug)),
       type: 'article',
@@ -51,7 +52,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} | Boise Remodeling Co`,
+      title,
       description,
       images: [imageUrl],
     },
