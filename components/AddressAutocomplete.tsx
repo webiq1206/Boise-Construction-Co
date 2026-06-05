@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Loader2, MapPin, CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { PropertyProfile } from "@/shared/propertyProfile";
+import type { PropertyProfile, PropertyProfileInput } from "@/shared/propertyProfile";
 import { getPropertyProfileSummary } from "@/shared/propertyProfile";
 import {
   getConfidenceLabel,
@@ -16,6 +16,7 @@ interface AddressSuggestion {
   description: string;
   mainText?: string;
   secondaryText?: string;
+  resolved?: PropertyProfileInput;
 }
 
 interface AddressAutocompleteProps {
@@ -45,7 +46,11 @@ export function AddressAutocomplete({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const enrich = useCallback(
-    async (opts: { placeId?: string; formattedAddress?: string }) => {
+    async (opts: {
+      placeId?: string;
+      formattedAddress?: string;
+      input?: PropertyProfileInput;
+    }) => {
       setEnriching(true);
       setError(null);
       try {
@@ -116,7 +121,13 @@ export function AddressAutocomplete({
   async function selectSuggestion(s: AddressSuggestion) {
     setOpen(false);
     onChange(s.description);
-    await enrich({ placeId: s.placeId });
+    // Prefer the address data already resolved by the provider (Nominatim) to
+    // avoid a flaky second place-id round-trip. Fall back to place id (Google).
+    if (s.resolved) {
+      await enrich({ input: s.resolved });
+    } else {
+      await enrich({ placeId: s.placeId, formattedAddress: s.description });
+    }
   }
 
   async function useTypedAddress() {
