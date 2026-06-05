@@ -118,7 +118,7 @@ export default function TermsOfServicePage() {
             <ul>
               <li>Email: <ObfuscatedEmail user="hello" domain="boiseremodeling.co" className="text-primary hover:underline inline-flex items-center gap-1" showIcon={false} /></li>
               <li>Phone: <a href={SITE_CONFIG.phoneHref} className="text-primary hover:underline">{SITE_CONFIG.phone}</a></li>
-              <li>Address: 2283 N Coopers Hawk Ave, Kuna, ID 83634</li>
+              <li>Address: {SITE_CONFIG.address.full}</li>
             </ul>
           </div>
         </div>
