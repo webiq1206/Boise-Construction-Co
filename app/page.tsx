@@ -20,9 +20,9 @@ import { HomePageSchema } from "@/components/seo/HomePageSchema";
 import { buildCanonical } from "@/lib/page-metadata";
 
 export const metadata: Metadata = {
-  title: "Boise Remodeling Co | Treasure Valley Design-Build",
+  title: { absolute: "Boise Remodeling Co | Treasure Valley Design-Build" },
   description:
-    "Design-build remodeling serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. Clear expectations, budget guidance, and proactive communication from first call to final walkthrough. Schedule a free in-home consultation.",
+    "Design-build remodeling for Boise, Meridian, Eagle, Nampa & the Treasure Valley. Clear expectations and budget guidance. Schedule a free in-home consultation.",
   alternates: {
     canonical: buildCanonical("/"),
   },
@@ -31,6 +31,7 @@ export const metadata: Metadata = {
     description:
       `${SITE_TAGLINE}. Kitchen, bathroom, whole-home, and addition remodeling across the Treasure Valley.`,
     type: "website",
+    images: [{ url: "/images/hero-remodel-interior.png", width: 1200, height: 630, alt: "Boise Remodeling Co" }],
   },
 };
 

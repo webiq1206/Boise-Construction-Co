@@ -1,0 +1,101 @@
+# Boise Remodeling Co - Full Reference
+
+> Design-build remodeling for kitchens, bathrooms, whole-home renovations, room additions, and ADUs in Boise, Idaho and the Treasure Valley. One accountable team handles design, estimating, permits, and construction under a single contract.
+
+## About
+
+Boise Remodeling Co is a residential design-build remodeling company serving the Treasure Valley since 2017. Design-build means design, permitting, and construction are delivered by one team under one contract, which removes the handoffs between a separate designer and general contractor and keeps each project on a single coordinated schedule. Every project includes a written scope before construction, clear allowances for selections, proactive communication throughout the build, and a workmanship guarantee at completion.
+
+- Business type: Design-build remodeling contractor (residential)
+- Founded: 2017
+- Service model: Single accountable team for design, permits, and construction
+- Contact: https://boiseremodeling.co/contact
+- Project estimator: https://boiseremodeling.co/#calculator
+
+## Service area
+
+We serve the following Treasure Valley cities across Ada and Canyon County:
+
+- Ada County: Boise, Meridian, Eagle, Kuna, Star
+- Canyon County: Nampa, Caldwell, Middleton
+
+Permit paths differ between Ada County and Canyon County; we coordinate submissions, fees, and inspections as part of the design-build contract.
+
+## Services
+
+- Kitchen Remodel: /services/kitchen-remodel
+- Bathroom Remodel: /services/bathroom-remodel
+- Whole-Home Remodel: /services/whole-home-remodel
+- Room Addition: /services/room-addition
+- ADU / Guest House: /services/adu
+
+Each service has a dedicated page per city at /services/{service-slug}/{city-slug} for boise, meridian, eagle, nampa, kuna, star, middleton, and caldwell. City service-area hubs live at /areas/{city-slug}.
+
+## Authoritative guides (https://boiseremodeling.co/guides)
+
+Pillar guides (own the head terms):
+
+- Treasure Valley Remodeling Guide: /guides/treasure-valley-remodeling-guide
+- Boise Remodeling Cost Guide (2026 planning ranges): /guides/boise-remodeling-cost-guide
+- Boise Kitchen Remodeling Guide: /guides/boise-kitchen-remodeling-guide
+- Boise Bathroom Remodeling Guide: /guides/boise-bathroom-remodeling-guide
+- Boise Home Addition Guide: /guides/boise-home-addition-guide
+- Whole Home Remodeling Guide: /guides/whole-home-remodeling-guide
+- Choose a Remodeling Contractor Boise: /guides/choose-remodeling-contractor-boise
+- Boise Remodeling Process Guide: /guides/boise-remodeling-process-guide
+- Best Remodeling ROI Boise: /guides/best-remodeling-roi-boise
+- Outdoor Living Remodeling Guide: /guides/outdoor-living-remodeling-guide
+
+City guides:
+
+- /guides/boise-remodeling-guide
+- /guides/meridian-remodeling-guide
+- /guides/eagle-remodeling-guide
+- /guides/kuna-remodeling-guide
+- /guides/star-remodeling-guide
+- /guides/middleton-remodeling-guide
+- /guides/nampa-remodeling-guide
+
+Neighborhood guides:
+
+- /guides/north-end-remodeling-guide
+- /guides/boise-bench-remodeling-guide
+- /guides/harris-ranch-remodeling-guide
+- /guides/east-boise-remodeling-guide
+- /guides/hidden-springs-remodeling-guide
+- /guides/eagle-foothills-remodeling-guide
+
+## Blog category hubs (long-tail questions support the pillars)
+
+- Remodeling costs: /blog/category/remodeling-costs
+- Kitchen remodeling: /blog/category/kitchen-remodeling
+- Bathroom remodeling: /blog/category/bathroom-remodeling
+- Home additions: /blog/category/home-additions
+- Whole-home remodeling: /blog/category/whole-home-remodeling
+- Contractor selection: /blog/category/contractor-selection
+- Remodeling process: /blog/category/remodeling-process
+- ROI & home value: /blog/category/remodeling-roi
+- Outdoor living: /blog/category/outdoor-living
+
+## Planning resources
+
+- Remodel planning resources (free PDFs and visual guides): /resources
+- Ada vs Canyon County permit flow (visual guide): /resources/ada-canyon-permit-flow
+
+## Common questions
+
+- How long does a remodel take? Most projects run several weeks of design and permitting followed by weeks to months of construction, depending on scope and whether layout or structural changes trigger plan review.
+- Do I need permits? Cosmetic updates often do not, but layout, structural, plumbing, or electrical changes require permits through Ada or Canyon County.
+- How do I keep a remodel on budget? Define scope in writing, lock selections before construction, hold a 10-15% contingency for concealed conditions in older homes, and compare bids only when allowances and permits match.
+
+## Key pages
+
+- Home: https://boiseremodeling.co/
+- About: https://boiseremodeling.co/about
+- Service areas: https://boiseremodeling.co/areas
+- Projects & reviews: https://boiseremodeling.co/testimonials
+- Blog: https://boiseremodeling.co/blog
+- Guides: https://boiseremodeling.co/guides
+- Contact: https://boiseremodeling.co/contact
+
+Last updated: 2026-06-05. Full sitemap: https://boiseremodeling.co/sitemap.xml

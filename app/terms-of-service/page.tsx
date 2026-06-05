@@ -4,7 +4,7 @@ import { SITE_CONFIG } from "@/shared/siteConfig";
 import { generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Boise Remodeling Co",
+  title: "Terms of Service",
   description: "Terms of service for Boise Remodeling Co. Your rights when using our remodeling and renovation services in Kuna & Boise, Idaho.",
   alternates: {
     canonical: "https://boiseremodeling.co/terms-of-service",
@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     description: "Your rights when using Boise Remodeling Co remodeling and renovation services in Idaho's Treasure Valley.",
     url: "https://boiseremodeling.co/terms-of-service",
     type: "website",
+    images: [{ url: "/images/hero-remodel-interior.png", width: 1200, height: 630, alt: "Boise Remodeling Co" }],
   },
   twitter: {
     card: "summary",

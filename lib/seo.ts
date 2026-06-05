@@ -166,7 +166,7 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
   }
   
   if (city) {
-    return `Professional remodeling contractor in ${city}, Idaho. Licensed, insured, locally owned. Call ${phone} for your free consultation. Serving all of ${city}!`;
+    return `Remodeling contractor in ${city}, Idaho. Licensed, insured & locally owned. Call ${phone} for a free in-home consultation in ${city}!`;
   }
   
   if (!serviceName) {
@@ -174,7 +174,7 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
   }
   
   const serviceLC = serviceName.toLowerCase();
-  return `Expert ${serviceLC} in Boise & Treasure Valley Idaho. Licensed, insured, satisfaction guaranteed. Call ${phone} for your free consultation today!`;
+  return `Expert ${serviceLC} in Boise & the Treasure Valley. Licensed, insured & satisfaction guaranteed. Call ${phone} for a free consultation!`;
 }
 
 /**
@@ -237,7 +237,31 @@ export function generateSafePageTitle(primary: string, suffix?: string): string 
 
   if (primary.length <= maxLen) return primary;
 
-  return primary.substring(0, maxLen - 3).trim() + "...";
+  // Truncate on a word boundary without a baked-in ellipsis (the ellipsis would
+  // become a literal part of the <title>, not SERP truncation).
+  const words = primary.split(' ');
+  let truncated = '';
+  for (const word of words) {
+    const candidate = truncated ? `${truncated} ${word}` : word;
+    if (candidate.length > maxLen) break;
+    truncated = candidate;
+  }
+  return truncated || primary.substring(0, maxLen).trim();
+}
+
+/**
+ * Default Open Graph / Twitter image path used as a site-wide fallback so every
+ * page emits an og:image. Pages with their own hero (blog posts, guides) override
+ * this with a more specific image.
+ * TODO: Replace with a purpose-built 1200x630 social card asset.
+ */
+export const DEFAULT_OG_IMAGE_PATH = '/images/hero-remodel-interior.png';
+
+/**
+ * Absolute URL for the default Open Graph image.
+ */
+export function getDefaultOgImage(): string {
+  return `${getBaseUrl().replace(/\/$/, '')}${DEFAULT_OG_IMAGE_PATH}`;
 }
 
 /**

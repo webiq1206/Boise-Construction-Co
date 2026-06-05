@@ -8,6 +8,12 @@ import { buildPageMetadata } from '@/lib/page-metadata';
 import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { EstimateCTA } from '@/components/modals/EstimateCTA';
+import { JsonLd } from '@/components/seo/JsonLd';
+import {
+  generateBreadcrumbSchema,
+  generateCollectionPageSchema,
+} from '@/lib/schema';
+import { GALLERY_PROJECTS } from '@/shared/galleryData';
 
 export const metadata = buildPageMetadata({
   kind: 'about',
@@ -17,9 +23,31 @@ export const metadata = buildPageMetadata({
     'See Treasure Valley remodeling transformations and read reviews from Boise Remodeling Co homeowners. Kitchen, bath, whole-home, and addition projects.',
 });
 
+// TODO: Add Review + AggregateRating schema here once genuine homeowner reviews
+// (author, rating, date, body) are available. Tie it to the LocalBusiness entity
+// via generateReviewSchema in lib/schema.ts and set BUSINESS_INFO.rating/reviewCount.
+
 export default function TestimonialsPage() {
+  const schemas = [
+    generateBreadcrumbSchema([
+      { name: 'Home', url: '/' },
+      { name: 'Projects & Reviews', url: '/testimonials' },
+    ]),
+    generateCollectionPageSchema({
+      title: 'Projects & Reviews',
+      description:
+        'Treasure Valley remodeling transformations from Boise Remodeling Co: kitchen, bath, whole-home, and addition projects.',
+      url: '/testimonials',
+      items: GALLERY_PROJECTS.map((p) => ({
+        name: p.title,
+        url: `/services/${p.serviceType}/${p.city}`,
+      })),
+    }),
+  ];
+
   return (
     <div className="flex flex-col pb-20 md:pb-0">
+      <JsonLd data={schemas} />
       <Section spacing="sm" className="pt-8 md:pt-12">
         <div className="container px-4 max-w-3xl">
           <Breadcrumbs

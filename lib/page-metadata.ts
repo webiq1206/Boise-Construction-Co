@@ -7,6 +7,7 @@ import {
   generatePageTitle,
   generateSafePageTitle,
   getBaseUrl,
+  getDefaultOgImage,
 } from './seo';
 
 
@@ -37,6 +38,34 @@ export function buildCanonical(path: string): string {
   return `${base}${normalized}`;
 }
 
+const BRAND_SUFFIX = 'Boise Remodeling Co';
+
+/**
+ * Remove a trailing "| Boise Remodeling Co" (one or more times) from a title.
+ * The root layout template appends the brand exactly once, so child titles
+ * must not carry it themselves or it doubles in the rendered <title>.
+ */
+export function stripBrandSuffix(title: string): string {
+  let result = title.trim();
+  const suffix = `| ${BRAND_SUFFIX}`;
+  while (result.endsWith(suffix)) {
+    result = result.slice(0, -suffix.length).trim();
+  }
+  return result;
+}
+
+/**
+ * Concise, intentional service-parent titles. Each is <= 38 chars so the final
+ * rendered title (after the layout appends " | Boise Remodeling Co") stays <= 60.
+ */
+const SERVICE_TITLE_OVERRIDES: Record<string, string> = {
+  'kitchen-remodel': 'Treasure Valley Kitchen Remodeling',
+  'bathroom-remodel': 'Treasure Valley Bathroom Remodeling',
+  'whole-home-remodel': 'Treasure Valley Whole-Home Remodeling',
+  'room-addition': 'Treasure Valley Home Additions',
+  adu: 'Treasure Valley ADUs & Guest Houses',
+};
+
 export function buildPageMetadata(input: PageMetaInput): Metadata {
   const base = getBaseUrl();
   const canonical = buildCanonical(input.path);
@@ -50,10 +79,11 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
       description = generateMetaDescription({ serviceName: '', serviceSlug: '', isHomePage: true });
       break;
     case 'service':
-      title = generateSafePageTitle(
-        `${input.serviceName} in Boise & Treasure Valley`,
-        'Design-Build',
-      );
+      // Intentional, full titles (no truncation/ellipsis). Each stays <= 60
+      // chars once the layout template appends " | Boise Remodeling Co" (22).
+      title =
+        SERVICE_TITLE_OVERRIDES[input.serviceSlug ?? ''] ??
+        generateSafePageTitle(`${input.serviceName} in the Treasure Valley`);
       description = generateMetaDescription({
         serviceName: input.serviceName!,
         serviceSlug: input.serviceSlug!,
@@ -78,12 +108,12 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
     case 'about':
       title = 'About Us';
       description =
-        'Learn about Boise Remodeling Co, Treasure Valley design-build remodeling. Licensed, insured, and committed to clear communication from consultation to walkthrough.';
+        'Learn about Boise Remodeling Co, a Treasure Valley design-build remodeler. Licensed, insured, and committed to clear communication start to finish.';
       break;
     case 'contact':
       title = 'Contact Us';
       description =
-        `Contact Boise Remodeling Co for a free in-home consultation. Call ${SITE_CONFIG.phone} or schedule online. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and the Treasure Valley.`;
+        `Contact Boise Remodeling Co for a free in-home consultation. Call ${SITE_CONFIG.phone} or schedule online. Serving Boise, Meridian, Eagle & the Treasure Valley.`;
       break;
     case 'blog':
       title = 'Remodeling Insights & Ideas';
@@ -98,6 +128,12 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
   if (input.titleOverride) title = input.titleOverride;
   if (input.descriptionOverride) description = input.descriptionOverride;
 
+  // The root layout template appends "| Boise Remodeling Co"; ensure the child
+  // title never carries the brand itself (prevents duplicated brand in <title>).
+  title = stripBrandSuffix(title);
+
+  const ogImage = getDefaultOgImage();
+
   return {
     title,
     description,
@@ -107,11 +143,13 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
       description,
       url: canonical,
       type: 'website',
+      images: [{ url: ogImage, width: 1200, height: 630, alt: 'Boise Remodeling Co' }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [ogImage],
     },
   };
 }

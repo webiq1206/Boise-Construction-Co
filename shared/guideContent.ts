@@ -123,7 +123,7 @@ export const GUIDE_PAGES: GuidePageData[] = [
     title: 'Boise Remodeling Cost Guide (2026 Planning Ranges)',
     seoTitle: 'Boise Remodeling Cost Guide | Treasure Valley',
     metaDescription:
-      'Definitive 2026 remodeling cost guide for Boise and the Treasure Valley: kitchens, baths, whole-home, additions, luxury, $/SF, budgeting, permits, and timelines.',
+      'Definitive 2026 remodeling cost guide for Boise & the Treasure Valley: kitchens, baths, whole-home, additions, $/SF, budgeting, permits, and timelines.',
     excerpt:
       'The complete planning guide for remodeling costs in Boise, Meridian, Eagle, Nampa, and the Treasure Valley - with ranges, tables, and local permit context.',
     content: expandPillar(BOISE_REMODELING_COST_GUIDE_HTML, 'boise-remodeling-cost-guide', 'remodeling-costs'),

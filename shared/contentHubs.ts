@@ -270,9 +270,9 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('ada-vs-canyon-county-permit-timelines', 'Ada vs Canyon County Permit Timelines', 'remodeling-process', 'planned'),
 
   // Hub 8 - ROI
+  // kitchen-roi-remodeling and bathroom-roi-remodeling were consolidated (301)
+  // into kitchen-remodel-roi / bathroom-remodel-roi to remove ROI cannibalization.
   { slug: 'best-remodeling-roi-boise', title: 'Best Remodeling Projects for ROI in Boise', ...hubPillar('remodeling-roi'), status: PUBLISHED },
-  cluster('kitchen-roi-remodeling', 'Kitchen ROI', 'remodeling-roi'),
-  cluster('bathroom-roi-remodeling', 'Bathroom ROI', 'remodeling-roi'),
   cluster('addition-roi-remodeling', 'Addition ROI', 'remodeling-roi'),
   cluster('outdoor-living-roi', 'Outdoor Living ROI', 'remodeling-roi'),
   cluster('exterior-remodeling-roi', 'Exterior Remodeling ROI', 'remodeling-roi'),

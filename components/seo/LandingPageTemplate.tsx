@@ -38,12 +38,25 @@ interface LandingPageTemplateProps {
   timeline?: string;
   processSteps?: { title: string; description: string }[];
   localNote?: string;
+  /**
+   * Optional long-form content sections rendered as H2 blocks (with optional H3
+   * subsections and link lists). Used to expand thin area/service pages with
+   * localized copy and contextual internal links.
+   */
+  sections?: LandingSection[];
   faqs: FAQItem[];
   related: {
     variant: 'service' | 'area' | 'city-service';
     serviceSlug?: string;
     citySlug?: string;
   };
+}
+
+export interface LandingSection {
+  heading: string;
+  paragraphs?: string[];
+  links?: { label: string; href: string }[];
+  subsections?: { heading: string; paragraphs: string[] }[];
 }
 
 function HeroBreadcrumbs({ items }: { items: BreadcrumbItem[] }) {
@@ -113,6 +126,7 @@ export function LandingPageTemplate({
   timeline,
   processSteps,
   localNote,
+  sections,
   faqs,
   related,
 }: LandingPageTemplateProps) {
@@ -346,6 +360,55 @@ export function LandingPageTemplate({
                 </Reveal>
               )}
             </div>
+          </div>
+        </Section>
+      )}
+
+      {/* ─── Long-form content sections ─── */}
+      {sections && sections.length > 0 && (
+        <Section divider>
+          <div className="container px-4 max-w-3xl space-y-12">
+            {sections.map((section, i) => (
+              <Reveal key={section.heading} delay={Math.min(i, 4) * 60}>
+                <div className="prose-measure">
+                  <h2 className="font-sans font-light text-[1.75rem] md:text-[2rem] leading-tight tracking-tight text-foreground mb-5">
+                    {section.heading}
+                  </h2>
+                  {section.paragraphs?.map((p, j) => (
+                    <p key={j} className="text-sm md:text-base text-muted-foreground leading-relaxed mb-4">
+                      {p}
+                    </p>
+                  ))}
+                  {section.subsections?.map((sub) => (
+                    <div key={sub.heading} className="mt-6">
+                      <h3 className="font-sans font-medium text-base text-foreground mb-2">
+                        {sub.heading}
+                      </h3>
+                      {sub.paragraphs.map((p, k) => (
+                        <p key={k} className="text-sm text-muted-foreground leading-relaxed mb-3">
+                          {p}
+                        </p>
+                      ))}
+                    </div>
+                  ))}
+                  {section.links && section.links.length > 0 && (
+                    <ul className="mt-4 grid sm:grid-cols-2 gap-2">
+                      {section.links.map((link) => (
+                        <li key={link.href} className="list-none">
+                          <Link
+                            href={link.href}
+                            className="inline-flex items-center text-sm text-accent hover:underline font-medium"
+                          >
+                            {link.label}
+                            <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </Reveal>
+            ))}
           </div>
         </Section>
       )}

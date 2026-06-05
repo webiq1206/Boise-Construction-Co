@@ -4,7 +4,7 @@ import { SITE_CONFIG } from "@/shared/siteConfig";
 import { generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Boise Remodeling Co",
+  title: "Privacy Policy",
   description: "Boise Remodeling Co privacy policy. How we protect your data when you request remodeling services in Kuna & Boise, Idaho.",
   alternates: {
     canonical: "https://boiseremodeling.co/privacy-policy",
@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     description: "How we protect your data when you use Boise Remodeling Co remodeling and renovation services in Idaho.",
     url: "https://boiseremodeling.co/privacy-policy",
     type: "website",
+    images: [{ url: "/images/hero-remodel-interior.png", width: 1200, height: 630, alt: "Boise Remodeling Co" }],
   },
   twitter: {
     card: "summary",

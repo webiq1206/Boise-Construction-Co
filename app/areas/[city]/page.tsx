@@ -9,10 +9,11 @@ import {
 } from '@/lib/landing-schema';
 import { CITY_SEO_DATA } from '@/lib/seo';
 import { areaPath, CITY_SLUGS, getCityBySlug } from '@/lib/seo-routes';
-import { getCountyLabel } from '@/shared/contentData';
+import { getCountyLabel, SERVICES } from '@/shared/contentData';
 import { AREA_PAGE_FAQS, getAreaIntro } from '@/shared/seoContent';
 import { generateSpeakableSchema } from '@/lib/schema';
 import { getAreaImageSet } from '@/shared/cityServiceImages';
+import type { LandingSection } from '@/components/seo/LandingPageTemplate';
 
 export function generateStaticParams() {
   return CITY_SLUGS.map((city) => ({ city }));
@@ -45,6 +46,43 @@ export default function AreaPage({ params }: { params: { city: string } }) {
   const localNote = seo
     ? `We serve ${city.name} homeowners across ${seo.neighborhoods.slice(0, 3).join(', ')}, and all of ${county}. Permits are coordinated through ${county} for projects requiring approval.`
     : `We serve ${city.name} and all of ${county} with design-build remodeling.`;
+
+  const neighborhoods = seo?.neighborhoods ?? [];
+  const landmarks = seo?.landmarks ?? [];
+
+  const sections: LandingSection[] = [
+    {
+      heading: `Remodeling services in ${city.name}`,
+      paragraphs: [
+        `Boise Remodeling Co is a full-service design-build remodeler serving ${city.name} and the surrounding ${county} area. Whether you are updating a single room or reimagining your whole home, every project runs through one accountable team - from the first in-home consultation and design, through permits, construction, and the final walkthrough.`,
+        `Explore the specific services we provide for ${city.name} homeowners below. Each links to a dedicated ${city.name} service page with local details, typical scope, and planning guidance.`,
+      ],
+      links: SERVICES.map((s) => ({
+        label: `${s.name} in ${city.name}`,
+        href: `/services/${s.slug}/${city.slug}`,
+      })),
+    },
+    {
+      heading: `Neighborhoods and homes we work on in ${city.name}`,
+      paragraphs: [
+        neighborhoods.length
+          ? `We remodel homes throughout ${city.name}, including ${neighborhoods.join(', ')}. Housing stock varies block by block, so our designers tailor layouts, structural plans, and finish selections to the age and style of your specific home.`
+          : `We remodel homes throughout ${city.name}, tailoring layouts, structural plans, and finish selections to the age and style of your specific home.`,
+        landmarks.length
+          ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand the area's character and how to design remodels that fit the neighborhood and protect resale value.`
+          : `As a local team, we understand the area's character and how to design remodels that fit the neighborhood and protect resale value.`,
+      ],
+    },
+    {
+      heading: `Permits and planning in ${county}`,
+      paragraphs: [
+        `${city.name} projects that change layout, structure, or major systems require permits through ${county}. We build plan review and inspections into the master schedule so timelines stay realistic, and we coordinate submissions, fees, and inspections as part of your design-build contract.`,
+        seo?.climate
+          ? `Our ${city.name} designs also account for the local ${seo.climate} - from insulation and window upgrades to exterior materials that hold up to freeze-thaw cycles.`
+          : `Our designs also account for the local Treasure Valley climate, from insulation and window upgrades to durable exterior materials.`,
+      ],
+    },
+  ];
 
   const h1 = `Remodeling Contractor in ${city.name}, Idaho`;
   const faqs = [
@@ -89,6 +127,7 @@ export default function AreaPage({ params }: { params: { city: string } }) {
           'Written workmanship guarantee',
         ]}
         localNote={localNote}
+        sections={sections}
         faqs={faqs}
         related={{ variant: 'area', citySlug: city.slug }}
       />

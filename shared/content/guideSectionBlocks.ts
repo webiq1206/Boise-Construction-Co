@@ -15,6 +15,25 @@ export function pillarEssentialsSection(topic: string): ContentSection {
       'Lock layout and MEP before finish orders',
       'Match contractor bids with identical scope and permits',
     ],
+    subsections: [
+      {
+        h3: `Common ${t} planning questions`,
+        subAnswers: [
+          {
+            h4: `How long does a ${t} take in the Treasure Valley?`,
+            text: `Most ${t} projects run several weeks of design and permitting followed by weeks to months of construction, depending on scope, selections, and whether layout or structural changes trigger plan review.`,
+          },
+          {
+            h4: `Do I need permits for a ${t}?`,
+            text: `Cosmetic updates often do not, but changes to layout, structure, plumbing, or electrical require permits through Ada or Canyon County. We coordinate submissions and inspections as part of the design-build contract.`,
+          },
+          {
+            h4: `How do I keep a ${t} on budget?`,
+            text: `Define scope in writing, lock selections before construction, hold a 10–15% contingency for concealed conditions in older homes, and compare bids only when allowances and permits match.`,
+          },
+        ],
+      },
+    ],
   };
 }
 

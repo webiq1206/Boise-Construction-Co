@@ -41,7 +41,7 @@ export async function generateMetadata({
 
   const posts = BLOG_POSTS.filter((p) => p.hubSlug === params.hubSlug);
   const indexable = isCategoryHubIndexable(params.hubSlug, posts.length);
-  const title = `${hub.title} Articles | Boise Remodeling Co`;
+  const title = `${hub.title} Articles`;
   const description = `Articles about ${hub.title.toLowerCase()} for Treasure Valley homeowners.`;
   const heroImage = getHubHeroImage(params.hubSlug);
   const imageUrl = getAbsoluteImageUrl(heroImage, getBaseUrl());

@@ -265,7 +265,7 @@ export function generateArticleSchema(article: {
   image?: string;
   slug: string;
   /** Defaults to /blog/ */
-  pathPrefix?: 'blog' | 'guides';
+  pathPrefix?: 'blog' | 'guides' | 'resources';
 }): SchemaContext {
   const prefix = article.pathPrefix ?? 'blog';
   return {
@@ -288,6 +288,30 @@ export function generateArticleSchema(article: {
       '@type': 'WebPage',
       '@id': `${baseUrl}/${prefix}/${article.slug}`,
     },
+  };
+}
+
+/**
+ * Generate HowTo schema for step-by-step process pages
+ */
+export function generateHowToSchema(howTo: {
+  name: string;
+  description: string;
+  url: string;
+  steps: Array<{ name: string; text: string }>;
+}): SchemaContext {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: howTo.name,
+    description: howTo.description,
+    url: `${baseUrl}${howTo.url}`,
+    step: howTo.steps.map((s, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: s.name,
+      text: s.text,
+    })),
   };
 }
 

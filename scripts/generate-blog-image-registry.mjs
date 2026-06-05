@@ -367,19 +367,9 @@ const ENTRIES = {
     source: "blog",
   },
 
-  // -  - ROI (8) -  - 
-  "kitchen-roi-remodeling": {
-    hero: blog("kitchen-roi-remodeling"),
-    alt: "Kitchen remodel delivering strong resale value in Boise",
-    topicTags: ["roi", "kitchen", "boise"],
-    source: "blog",
-  },
-  "bathroom-roi-remodeling": {
-    hero: blog("bathroom-roi-remodeling"),
-    alt: "Bathroom update improving home value in the Treasure Valley",
-    topicTags: ["roi", "bathroom", "boise"],
-    source: "blog",
-  },
+  // -  - ROI -  - 
+  // kitchen-roi-remodeling / bathroom-roi-remodeling consolidated (301) into
+  // kitchen-remodel-roi / bathroom-remodel-roi.
   "addition-roi-remodeling": {
     hero: cs("room-addition", "star"),
     alt: "Room addition increasing livable square footage and home value in Star",

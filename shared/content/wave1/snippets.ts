@@ -11,11 +11,28 @@ export function svc(path: string, label?: string): string {
   return `<a href="${path}">${label ?? path.split('/').pop()?.replace(/-/g, ' ') ?? path}</a>`;
 }
 
+export interface ContentSubAnswer {
+  /** Rendered as an H4 sub-answer heading so answer engines can lift the passage. */
+  h4: string;
+  text: string;
+}
+
+export interface ContentSubsection {
+  /** Rendered as an H3 under the section H2. */
+  h3: string;
+  paragraphs?: string[];
+  list?: string[];
+  /** Optional H4 sub-answers nested under the H3. */
+  subAnswers?: ContentSubAnswer[];
+}
+
 export interface ContentSection {
   h2: string;
   paragraphs: string[];
   list?: string[];
   table?: { headers: string[]; rows: string[][]; className?: string };
+  /** Deeper H3/H4 subheads for AEO sub-answer chunking. */
+  subsections?: ContentSubsection[];
 }
 
 export function buildSectionsHtml(sections: ContentSection[]): string {
@@ -38,6 +55,20 @@ export function buildSectionsHtml(sections: ContentSection[]): string {
               `<tr>${row.map((cell) => `<td>${cell}</td>`).join('')}</tr>`,
           )
           .join('')}</tbody></table>`;
+      }
+      if (s.subsections?.length) {
+        for (const sub of s.subsections) {
+          block += `<h3>${sub.h3}</h3>`;
+          for (const p of sub.paragraphs ?? []) {
+            block += `<p>${p}</p>`;
+          }
+          if (sub.list?.length) {
+            block += `<ul>${sub.list.map((li) => `<li>${li}</li>`).join('')}</ul>`;
+          }
+          for (const sa of sub.subAnswers ?? []) {
+            block += `<h4>${sa.h4}</h4><p>${sa.text}</p>`;
+          }
+        }
       }
       return block;
     })

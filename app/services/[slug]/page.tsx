@@ -12,6 +12,8 @@ import { SERVICE_SLUGS, getServiceBySlug, servicePath } from '@/lib/seo-routes';
 import { SERVICE_SEO_CONTENT } from '@/shared/seoContent';
 import { generateSpeakableSchema } from '@/lib/schema';
 import { getServiceImageSet } from '@/shared/serviceBackgrounds';
+import { CITIES } from '@/shared/contentData';
+import type { LandingSection } from '@/components/seo/LandingPageTemplate';
 
 export function generateStaticParams() {
   return SERVICE_SLUGS.map((slug) => ({ slug }));
@@ -40,6 +42,28 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
   const path = servicePath(service.slug);
   const faqs = content.faqs;
   const images = getServiceImageSet(service.slug);
+  const serviceLC = service.name.toLowerCase();
+
+  const sections: LandingSection[] = [
+    {
+      heading: `${service.name} across the Treasure Valley`,
+      paragraphs: [
+        `We provide ${serviceLC} services throughout the Treasure Valley, with dedicated local pages for each city we serve. Permit paths, housing stock, and HOA requirements differ between Ada and Canyon County communities, so each city page covers the details that matter where you live.`,
+        `Choose your city below to see local ${serviceLC} guidance, or schedule a free in-home consultation to discuss your project directly.`,
+      ],
+      links: CITIES.map((c) => ({
+        label: `${service.name} in ${c.name}`,
+        href: `/services/${service.slug}/${c.slug}`,
+      })),
+    },
+    {
+      heading: `Why design-build for your ${serviceLC}`,
+      paragraphs: [
+        `As a design-build remodeler, we bring design, estimating, permitting, and construction under one contract and one accountable team. That removes the handoffs and finger-pointing that happen when a separate designer and general contractor are involved - and it keeps your ${serviceLC} on a single, coordinated schedule.`,
+        `You get a written scope before construction begins, clear allowances for selections, proactive communication throughout the build, and a workmanship guarantee when the project is complete.`,
+      ],
+    },
+  ];
 
   const schemas = [
     landingBreadcrumbs([
@@ -72,6 +96,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         inclusions={content.inclusions}
         timeline={content.timeline}
         processSteps={content.processSteps}
+        sections={sections}
         faqs={faqs}
         related={{ variant: 'service', serviceSlug: service.slug }}
       />

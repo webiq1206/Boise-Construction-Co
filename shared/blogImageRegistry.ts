@@ -351,18 +351,6 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     topicTags: ["process","permits","ada-county","canyon-county"],
     source: 'blog',
   },
-  'kitchen-roi-remodeling': {
-    hero: '/images/blog/kitchen-roi-remodeling.png',
-    alt: 'Kitchen remodel delivering strong resale value in Boise',
-    topicTags: ["roi","kitchen","boise"],
-    source: 'blog',
-  },
-  'bathroom-roi-remodeling': {
-    hero: '/images/blog/bathroom-roi-remodeling.png',
-    alt: 'Bathroom update improving home value in the Treasure Valley',
-    topicTags: ["roi","bathroom","boise"],
-    source: 'blog',
-  },
   'addition-roi-remodeling': {
     hero: '/images/city-service/room-addition__star.png',
     alt: 'Room addition increasing livable square footage and home value in Star',

@@ -109,7 +109,7 @@ export const LEGACY_BLOG_POSTS: BlogPostData[] = [
     title: 'How to Choose a Design-Build Remodeling Contractor in Boise',
     seoTitle: 'How to Choose a Design-Build Contractor Boise',
     metaDescription:
-      'Checklist for choosing a design-build remodeling contractor in Boise: scope, communication, licenses, and red flags.',
+      'Checklist for choosing a design-build remodeling contractor in Boise: scope, communication, licenses, insurance, and red flags to avoid.',
     excerpt: 'The best fit is not always the lowest bid - look for written scope and one accountable team.',
     hubSlug: 'contractor-selection',
     quickAnswer:
@@ -149,7 +149,7 @@ export const LEGACY_BLOG_POSTS: BlogPostData[] = [
     title: 'Whole-Home Remodel Planning Checklist for Treasure Valley Homeowners',
     seoTitle: 'Whole-Home Remodel Planning Checklist Idaho',
     metaDescription:
-      'Room-by-room checklist for whole-home remodels: sequencing, temporary living, contingency, and design-build.',
+      'Room-by-room checklist for whole-home remodels: sequencing, temporary living, contingency, design-build, and realistic timelines.',
     excerpt: 'Whole-home remodels succeed when sequencing and contingency are decided early.',
     hubSlug: 'whole-home-remodeling',
     quickAnswer:
@@ -190,7 +190,7 @@ export const LEGACY_BLOG_POSTS: BlogPostData[] = [
     title: 'Room Addition Guide: Matching Your Home in the Treasure Valley',
     seoTitle: 'Room Addition Guide Boise Treasure Valley',
     metaDescription:
-      'Room additions in Boise, Eagle, Kuna: setbacks, architecture, foundation, and timelines.',
+      'Room additions in Boise, Eagle, and Kuna: setbacks, architecture, foundation, permits, and timelines that match your existing home.',
     excerpt: 'Additions that look original need early design and realistic permits.',
     hubSlug: 'home-additions',
     quickAnswer:

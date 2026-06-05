@@ -6,18 +6,54 @@ import { Section } from '@/components/marketing/Section';
 import { PermitFlowGraphic } from './PermitFlowGraphic';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { CTA_PRIMARY } from '@/shared/ctaCopy';
+import { JsonLd } from '@/components/seo/JsonLd';
+import {
+  generateArticleSchema,
+  generateBreadcrumbSchema,
+  generateHowToSchema,
+} from '@/lib/schema';
+
+const PERMIT_FLOW_DESCRIPTION =
+  'Visual guide to remodeling permits in Ada and Canyon County - jurisdiction, review steps, and inspections for Treasure Valley homeowners.';
 
 export const metadata: Metadata = buildPageMetadata({
   kind: 'blog',
   path: '/resources/ada-canyon-permit-flow',
   titleOverride: 'Ada vs Canyon County Permit Flow | Boise Remodeling Co',
-  descriptionOverride:
-    'Visual guide to remodeling permits in Ada and Canyon County - jurisdiction, review steps, and inspections for Treasure Valley homeowners.',
+  descriptionOverride: PERMIT_FLOW_DESCRIPTION,
 });
 
 export default function AdaCanyonPermitFlowPage() {
+  const schemas = [
+    generateBreadcrumbSchema([
+      { name: 'Home', url: '/' },
+      { name: 'Resources', url: '/resources' },
+      { name: 'Ada vs Canyon County Permit Flow', url: '/resources/ada-canyon-permit-flow' },
+    ]),
+    generateArticleSchema({
+      title: 'Ada vs Canyon County Permit Flow',
+      description: PERMIT_FLOW_DESCRIPTION,
+      publishedAt: '2026-05-01',
+      slug: 'ada-canyon-permit-flow',
+      pathPrefix: 'resources',
+    }),
+    generateHowToSchema({
+      name: 'How remodeling permits move through Ada and Canyon County',
+      description: PERMIT_FLOW_DESCRIPTION,
+      url: '/resources/ada-canyon-permit-flow',
+      steps: [
+        { name: 'Confirm jurisdiction', text: 'Determine whether your address falls under Ada County, Canyon County, or a specific city building department.' },
+        { name: 'Prepare and submit plans', text: 'Submit construction documents - including structural and MEP sheets for layout changes - through the correct county or city portal.' },
+        { name: 'Plan review', text: 'The building department reviews plans for code compliance; layout and structural remodels often need several weeks of review.' },
+        { name: 'Permit issuance', text: 'Pay fees and receive approved permits before covered construction begins.' },
+        { name: 'Inspections', text: 'Schedule required inspections at framing, rough-in, and final stages as construction progresses.' },
+      ],
+    }),
+  ];
+
   return (
     <div className="flex flex-col pb-20">
+      <JsonLd data={schemas} />
       <Section spacing="lg" className="pt-28 md:pt-32">
         <div className="container px-4 max-w-4xl mx-auto">
           <Link

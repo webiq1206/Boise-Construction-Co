@@ -102,6 +102,9 @@ const nextConfig = {
     const blogRedirects = {
       '/blog/kitchen-remodel-cost-treasure-valley': '/blog/kitchen-remodel-cost-boise',
       '/blog/bathroom-remodel-cost-idaho': '/blog/bathroom-remodel-cost-boise',
+      // ROI near-duplicate consolidation (audit §D)
+      '/blog/kitchen-roi-remodeling': '/blog/kitchen-remodel-roi',
+      '/blog/bathroom-roi-remodeling': '/blog/bathroom-remodel-roi',
     };
     for (const [source, destination] of Object.entries(blogRedirects)) {
       redirects.push(...r(source, destination));
