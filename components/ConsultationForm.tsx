@@ -16,7 +16,12 @@ import { FINISH_LABELS, PROJECT_LABELS } from "@/shared/estimateEngine";
 import { DisplayNum } from "@/components/marketing";
 import { AddressAutocomplete } from "@/components/AddressAutocomplete";
 import type { PropertyProfile } from "@/shared/propertyProfile";
-import { HOUSE_NUMBER_REGEX, HOUSE_NUMBER_ERROR_MESSAGE } from "@/shared/addressValidation";
+import {
+  HOUSE_NUMBER_REGEX,
+  HOUSE_NUMBER_ERROR_MESSAGE,
+  buildCleanAddress,
+  extractZip,
+} from "@/shared/addressValidation";
 
 const formSchema = z.object({
   name: z.string().min(2, "Please enter your full name"),
@@ -26,7 +31,6 @@ const formSchema = z.object({
     .string()
     .min(5, "Please enter your property address")
     .refine((v) => HOUSE_NUMBER_REGEX.test(v.trim()), HOUSE_NUMBER_ERROR_MESSAGE),
-  zip: z.string().min(5, "ZIP code is required"),
   projectType: z.string().min(1, "Please select a project type"),
   message: z.string().optional(),
 });
@@ -71,7 +75,6 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
       phone: "",
       email: "",
       address: "",
-      zip: "",
       projectType: "",
       message: "",
     },
@@ -79,13 +82,19 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
 
   function handleProfileResolved(profile: PropertyProfile | null) {
     setPropertyProfile(profile);
-    if (profile?.zip) {
-      form.setValue("zip", profile.zip.slice(0, 5), { shouldValidate: true });
-    }
-    if (profile?.formattedAddress) {
-      form.setValue("address", profile.formattedAddress, { shouldValidate: true });
+    if (profile) {
+      const clean = buildCleanAddress(profile);
+      if (clean) {
+        setAddressInput(clean);
+        form.setValue("address", clean, { shouldValidate: true });
+      }
     }
   }
+
+  // ZIP is no longer a manual field; derive it from the resolved property
+  // profile, falling back to a 5-digit ZIP parsed from the address text.
+  const deriveZip = (addr: string) =>
+    propertyProfile?.zip?.slice(0, 5) || extractZip(addr) || "";
 
   useEffect(() => {
     function loadEstimate() {
@@ -121,6 +130,7 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
     mutationFn: async (data: FormData) => {
       const payload = {
         ...data,
+        zip: deriveZip(data.address),
         propertyProfile,
         estimate: estimate && decision === "confirmed"
           ? {
@@ -189,7 +199,6 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
       ["Phone", pendingData.phone],
       ["Email", pendingData.email],
       ["Address", pendingData.address],
-      ["ZIP code", pendingData.zip],
       ["Project", pendingProjectLabel],
     ];
     if (pendingData.message) rows.push(["Notes", pendingData.message]);
@@ -458,44 +467,24 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
           )}
         />
 
-        <div className="grid sm:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className={labelClass}>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="jane@example.com"
-                    data-testid="input-email"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="zip"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className={labelClass}>ZIP code</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="83706"
-                    maxLength={5}
-                    data-testid="input-zip"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className={labelClass}>Email</FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder="jane@example.com"
+                  data-testid="input-email"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {(!estimate || decision === "dropped") && (
           <FormField

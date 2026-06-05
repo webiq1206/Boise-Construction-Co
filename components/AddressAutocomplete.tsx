@@ -6,6 +6,7 @@ import { Loader2, MapPin, CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { PropertyProfile, PropertyProfileInput } from "@/shared/propertyProfile";
 import { getPropertyProfileSummary } from "@/shared/propertyProfile";
+import { buildCleanAddress } from "@/shared/addressValidation";
 import {
   getConfidenceLabel,
   getMeasurementSummary,
@@ -65,8 +66,9 @@ export function AddressAutocomplete({
         }
         setProfile(json.profile);
         onProfileResolved(json.profile);
-        if (json.profile?.formattedAddress) {
-          onChange(json.profile.formattedAddress);
+        if (json.profile) {
+          const clean = buildCleanAddress(json.profile);
+          if (clean) onChange(clean);
         }
       } catch (e) {
         setProfile(null);
@@ -120,7 +122,13 @@ export function AddressAutocomplete({
 
   async function selectSuggestion(s: AddressSuggestion) {
     setOpen(false);
-    onChange(s.description);
+    // Optimistically show a clean value (never the verbose "3024, West ..."
+    // description that would trip the house-number validator) until enrich
+    // resolves the canonical address.
+    const preview = s.resolved
+      ? buildCleanAddress(s.resolved)
+      : s.mainText || s.description;
+    onChange(preview || s.description);
     // Prefer the address data already resolved by the provider (Nominatim) to
     // avoid a flaky second place-id round-trip. Fall back to place id (Google).
     if (s.resolved) {
@@ -231,7 +239,7 @@ export function AddressAutocomplete({
             <div>
               <p className="font-medium text-foreground">Property located</p>
               <p className="text-muted-foreground text-xs mt-0.5">
-                {profile.formattedAddress}
+                {buildCleanAddress(profile) || profile.formattedAddress}
               </p>
               {confidence && (
                 <span
@@ -253,9 +261,6 @@ export function AddressAutocomplete({
                 <li key={line}>{line}</li>
               ))}
             </ul>
-          )}
-          {profile.assessorNote && (
-            <p className="text-xs text-muted-foreground italic">{profile.assessorNote}</p>
           )}
         </div>
       )}

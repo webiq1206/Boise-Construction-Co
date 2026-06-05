@@ -140,3 +140,39 @@ export function cleanDisplayAddress(
     missingHouseNumber: !HOUSE_NUMBER_REGEX.test(display),
   };
 }
+
+/**
+ * Build a clean, human-readable single-line address from a resolved property
+ * profile: "<number> <street>, <city>, <state> <zip>". Falls back to
+ * normalizing the verbose formatted address when the structured street is
+ * absent. The street segment passes HOUSE_NUMBER_REGEX when a house number is
+ * present, so the result is safe to store in a form field validated by that
+ * regex (unlike the raw verbose geocoder string "3024, West Fairview Ave, …").
+ */
+export function buildCleanAddress(profile: {
+  formattedAddress?: string | null;
+  streetAddress?: string | null;
+  city?: string | null;
+  state?: string | null;
+  zip?: string | null;
+}): string {
+  const city = profile.city?.trim() || null;
+  const street =
+    profile.streetAddress?.trim() ||
+    normalizeStoredAddress(profile.formattedAddress ?? "", city);
+  const parts: string[] = [];
+  if (street) parts.push(street);
+  if (city) parts.push(city);
+  const stateZip = [profile.state?.trim(), profile.zip?.trim()]
+    .filter(Boolean)
+    .join(" ");
+  if (stateZip) parts.push(stateZip);
+  return parts.join(", ");
+}
+
+/** Extract the first 5-digit ZIP from a string, or "" if none is present. */
+export function extractZip(value: string | null | undefined): string {
+  if (!value) return "";
+  const m = value.match(/\b(\d{5})(?:-\d{4})?\b/);
+  return m ? m[1] : "";
+}

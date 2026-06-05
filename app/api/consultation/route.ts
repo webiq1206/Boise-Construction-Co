@@ -30,7 +30,7 @@ const bodySchema = z.object({
   phone: z.string().min(10),
   email: z.string().email(),
   address: z.string().min(5),
-  zip: z.string().min(5),
+  zip: z.string().optional(),
   projectType: z.string().min(1),
   message: z.string().optional(),
   propertyProfile: propertyProfileSchema,
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
           name: data.name,
           phone: data.phone,
           email: data.email,
-          zip: data.zip,
+          zip: data.zip || "",
           address: data.address,
           city: (profile?.city as string) || null,
           propertyProfile: (data.propertyProfile as PropertyProfile | null) ?? null,
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
             <tr><td class="label">Name:</td><td class="value">${escapeHtml(data.name)}</td></tr>
             <tr><td class="label">Phone:</td><td class="value"><a href="tel:${escapeHtml(data.phone)}">${escapeHtml(data.phone)}</a></td></tr>
             <tr><td class="label">Email:</td><td class="value"><a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a></td></tr>
-            <tr><td class="label">ZIP:</td><td class="value">${escapeHtml(data.zip)}</td></tr>
+            <tr><td class="label">ZIP:</td><td class="value">${escapeHtml(data.zip || "")}</td></tr>
             <tr><td class="label">Project:</td><td class="value">${escapeHtml(data.projectType)}</td></tr>
           </table>
           ${propertyBlock}
