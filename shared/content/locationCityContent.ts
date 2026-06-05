@@ -7,14 +7,14 @@ const CITY_SNIPPETS: Record<string, ContentSection[]> = {
     {
       h2: 'Meridian subdivisions and open-kitchen demand',
       paragraphs: [
-        '1990s–2010s builder-grade kitchens and baths are the most common upgrade path—homeowners want islands, pantry storage, and better connection to family rooms without leaving the subdivision aesthetic.',
+        '1990s–2010s builder-grade kitchens and baths are the most common upgrade path - homeowners want islands, pantry storage, and better connection to family rooms without leaving the subdivision aesthetic.',
         'Rear-entry mudrooms and drop-zone storage are popular where garage traffic meets kitchen clutter.',
       ],
     },
     {
       h2: 'Meridian permits and trade scheduling',
       paragraphs: [
-        'Ada County review applies for structural and MEP changes. Peak summer trade demand can extend construction—book design before spring if you want fall completion.',
+        'Ada County review applies for structural and MEP changes. Peak summer trade demand can extend construction - book design before spring if you want fall completion.',
       ],
     },
   ],
@@ -22,7 +22,7 @@ const CITY_SNIPPETS: Record<string, ContentSection[]> = {
     {
       h2: 'Eagle finish level and HOA design review',
       paragraphs: [
-        'Larger footprints and premium materials are normal here—budget for architectural review time and exterior material boards in Harris Ranch, Hidden Springs, and Foothills communities.',
+        'Larger footprints and premium materials are normal here - budget for architectural review time and exterior material boards in Harris Ranch, Hidden Springs, and Foothills communities.',
         'Roof and stone tie-ins matter when additions must match executive streetscapes.',
       ],
     },
@@ -54,7 +54,7 @@ const CITY_SNIPPETS: Record<string, ContentSection[]> = {
     {
       h2: 'Middleton and Canyon County permitting',
       paragraphs: [
-        'Canyon County portals and review cadence differ from Ada—confirm jurisdiction early if your address is near county lines.',
+        'Canyon County portals and review cadence differ from Ada - confirm jurisdiction early if your address is near county lines.',
         'Cross-county trade coordination can add mobilization time; plan one contract with a team that works both corridors regularly.',
       ],
     },
@@ -64,7 +64,7 @@ const CITY_SNIPPETS: Record<string, ContentSection[]> = {
       h2: 'Nampa housing mix: bungalows to new build',
       paragraphs: [
         'Older bungalows may need electrical and layout creativity; newer sections allow faster cosmetic-to-full-gut paths. Canyon County submission rules apply throughout.',
-        'Kitchen and bath still dominate inquiries—whole-home refreshes are growing in established neighborhoods.',
+        'Kitchen and bath still dominate inquiries - whole-home refreshes are growing in established neighborhoods.',
       ],
     },
   ],
@@ -72,7 +72,7 @@ const CITY_SNIPPETS: Record<string, ContentSection[]> = {
     {
       h2: 'North End scale and character',
       paragraphs: [
-        'Bungalow footprints reward creative storage, respectful additions, and electrical upgrades when walls open. Oversized additions can fight neighborhood rhythm—design for the street.',
+        'Bungalow footprints reward creative storage, respectful additions, and electrical upgrades when walls open. Oversized additions can fight neighborhood rhythm - design for the street.',
         'Galley-to-open plans need beam and permit diligence in Ada County.',
       ],
     },
@@ -90,7 +90,7 @@ const CITY_SNIPPETS: Record<string, ContentSection[]> = {
     {
       h2: 'Harris Ranch builder-grade upgrades',
       paragraphs: [
-        'Islands, mudrooms, and outdoor entertaining upgrades are common. HOAs may review exterior materials—start design before ordering stone or roofing tie-ins.',
+        'Islands, mudrooms, and outdoor entertaining upgrades are common. HOAs may review exterior materials - start design before ordering stone or roofing tie-ins.',
       ],
     },
   ],
@@ -144,7 +144,7 @@ export function buildLocationGuideSections(
       h2: `Remodeling in ${cityName}`,
       paragraphs: [
         housingNote,
-        `This ${guideType === 'neighborhood' ? 'neighborhood' : 'city'} guide links local housing context, permits, and services—start with the <a href="/guides/treasure-valley-remodeling-guide">Treasure Valley hub</a> for valley-wide planning.`,
+        `This ${guideType === 'neighborhood' ? 'neighborhood' : 'city'} guide links local housing context, permits, and services - start with the <a href="/guides/treasure-valley-remodeling-guide">Treasure Valley hub</a> for valley-wide planning.`,
       ],
     },
     ...getCitySpecificSections(slug),
@@ -160,7 +160,7 @@ export function buildLocationGuideSections(
       paragraphs: [
         county === 'ada'
           ? `${cityName} layout and structural work typically routes through Ada County plan review.`
-          : `${cityName} uses Canyon County processes—expect different portals and review cadence than Boise or Meridian.`,
+          : `${cityName} uses Canyon County processes - expect different portals and review cadence than Boise or Meridian.`,
         countyGuide,
       ],
     },

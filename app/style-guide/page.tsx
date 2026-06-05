@@ -20,7 +20,7 @@ export default function StyleGuidePage() {
         <div className="container px-4 max-w-4xl">
           <PageHeader
             eyebrow="Internal reference"
-            title="Boise Remodeling Co — Design System"
+            title="Boise Remodeling Co - Design System"
             description="Tokens, typography, buttons, cards, and article styles for all marketing pages."
             align="left"
           />
@@ -76,7 +76,7 @@ export default function StyleGuidePage() {
         <div className="container px-4 max-w-4xl space-y-6">
           <h2 className="text-section-title font-sans font-light">Cards & chips</h2>
           <MarketingCard>
-            <p className="text-sm text-muted-foreground">Marketing card — rounded-sm, border, shadow-sm.</p>
+            <p className="text-sm text-muted-foreground">Marketing card - rounded-sm, border, shadow-sm.</p>
           </MarketingCard>
           <div className="flex gap-2">
             <Chip>Category</Chip>

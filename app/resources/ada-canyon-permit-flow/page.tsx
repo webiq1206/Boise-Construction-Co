@@ -12,7 +12,7 @@ export const metadata: Metadata = buildPageMetadata({
   path: '/resources/ada-canyon-permit-flow',
   titleOverride: 'Ada vs Canyon County Permit Flow | Boise Remodeling Co',
   descriptionOverride:
-    'Visual guide to remodeling permits in Ada and Canyon County—jurisdiction, review steps, and inspections for Treasure Valley homeowners.',
+    'Visual guide to remodeling permits in Ada and Canyon County - jurisdiction, review steps, and inspections for Treasure Valley homeowners.',
 });
 
 export default function AdaCanyonPermitFlowPage() {

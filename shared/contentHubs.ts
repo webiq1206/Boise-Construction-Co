@@ -1,11 +1,11 @@
 /**
- * Topical authority registry — single source of truth for hubs and content manifest.
+ * Topical authority registry - single source of truth for hubs and content manifest.
  */
 
 export type ContentType = 'pillar' | 'cluster' | 'location' | 'neighborhood' | 'master';
 export type ContentStatus = 'planned' | 'draft' | 'published';
 
-/** Default status for manifest entries — all hubs finalized */
+/** Default status for manifest entries - all hubs finalized */
 const PUBLISHED: ContentStatus = 'published';
 export type ContentRoute = 'guide' | 'blog';
 
@@ -192,7 +192,7 @@ function guide(
 
 /** Full content manifest (~94 pieces) */
 export const CONTENT_MANIFEST: ContentManifestEntry[] = [
-  // Hub 1 — Costs
+  // Hub 1 - Costs
   { slug: 'boise-remodeling-cost-guide', title: 'Boise Remodeling Cost Guide', ...hubPillar('remodeling-costs'), status: 'published' },
   cluster('kitchen-remodel-cost-boise', 'Kitchen Remodel Cost Boise', 'remodeling-costs', 'published', 'kitchen-remodel-cost-treasure-valley'),
   cluster('bathroom-remodel-cost-boise', 'Bathroom Remodel Cost Boise', 'remodeling-costs', 'published', 'bathroom-remodel-cost-idaho'),
@@ -203,7 +203,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('what-impacts-remodeling-costs-boise', 'What Impacts Remodeling Costs in Boise', 'remodeling-costs', 'published'),
   cluster('how-to-budget-remodel-boise', 'How to Budget for a Remodel in Boise', 'remodeling-costs', 'published'),
 
-  // Hub 2 — Kitchen
+  // Hub 2 - Kitchen
   { slug: 'boise-kitchen-remodeling-guide', title: 'Boise Kitchen Remodeling Guide', ...hubPillar('kitchen-remodeling'), status: PUBLISHED },
   cluster('kitchen-remodel-timeline-boise', 'Kitchen Remodel Timeline Boise', 'kitchen-remodeling'),
   cluster('kitchen-layout-ideas-boise-homes', 'Kitchen Layout Ideas for Boise Homes', 'kitchen-remodeling'),
@@ -214,7 +214,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('kitchen-island-design-guide', 'Kitchen Island Design Guide', 'kitchen-remodeling'),
   cluster('walk-in-pantry-design-guide', 'Walk-In Pantry Design Guide', 'kitchen-remodeling'),
 
-  // Hub 3 — Bathroom
+  // Hub 3 - Bathroom
   { slug: 'boise-bathroom-remodeling-guide', title: 'Boise Bathroom Remodeling Guide', ...hubPillar('bathroom-remodeling'), status: PUBLISHED },
   cluster('walk-in-shower-guide', 'Walk-In Shower Guide', 'bathroom-remodeling'),
   cluster('curbless-shower-guide', 'Curbless Shower Guide', 'bathroom-remodeling'),
@@ -224,7 +224,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('bathroom-remodel-roi', 'Bathroom Remodel ROI', 'bathroom-remodeling'),
   cluster('bathroom-layout-planning-guide', 'Bathroom Layout Planning Guide', 'bathroom-remodeling'),
 
-  // Hub 4 — Additions
+  // Hub 4 - Additions
   { slug: 'boise-home-addition-guide', title: 'Boise Home Addition Guide', ...hubPillar('home-additions'), status: PUBLISHED },
   cluster('primary-suite-additions', 'Primary Suite Additions', 'home-additions'),
   cluster('bedroom-additions', 'Bedroom Additions', 'home-additions'),
@@ -235,7 +235,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('home-addition-timeline-guide', 'Home Addition Timeline Guide', 'home-additions'),
   cluster('room-addition-guide-treasure-valley', 'Room Addition Guide Treasure Valley', 'home-additions', 'planned', undefined),
 
-  // Hub 5 — Whole home
+  // Hub 5 - Whole home
   { slug: 'whole-home-remodeling-guide', title: 'Whole Home Remodeling Guide', ...hubPillar('whole-home-remodeling'), status: PUBLISHED },
   cluster('remodeling-vs-moving', 'Remodeling vs Moving', 'whole-home-remodeling'),
   cluster('whole-home-remodel-timeline', 'Whole Home Remodel Timeline', 'whole-home-remodeling'),
@@ -245,7 +245,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('design-build-process-guide', 'Design-Build Process Guide', 'whole-home-remodeling'),
   cluster('whole-home-remodel-planning-checklist', 'Whole-Home Remodel Planning Checklist', 'whole-home-remodeling', 'planned'),
 
-  // Hub 6 — Contractor
+  // Hub 6 - Contractor
   { slug: 'choose-remodeling-contractor-boise', title: 'How to Choose a Remodeling Contractor in Boise', ...hubPillar('contractor-selection'), status: PUBLISHED },
   cluster('questions-to-ask-remodeling-contractor', 'Questions to Ask a Remodeling Contractor', 'contractor-selection'),
   cluster('remodeling-contractor-red-flags', 'Remodeling Contractor Red Flags', 'contractor-selection'),
@@ -257,7 +257,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('consultation-process-remodeling', 'What to Expect During the Consultation Process', 'contractor-selection'),
   cluster('how-to-choose-design-build-contractor', 'How to Choose a Design-Build Contractor', 'contractor-selection', 'planned'),
 
-  // Hub 7 — Process
+  // Hub 7 - Process
   { slug: 'boise-remodeling-process-guide', title: 'Boise Remodeling Process Guide', ...hubPillar('remodeling-process'), status: PUBLISHED },
   cluster('remodeling-timeline-guide', 'Remodeling Timeline Guide', 'remodeling-process'),
   cluster('boise-permit-guide', 'Boise Permit Guide', 'remodeling-process'),
@@ -269,7 +269,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('warranty-guide-remodeling', 'Warranty Guide', 'remodeling-process'),
   cluster('ada-vs-canyon-county-permit-timelines', 'Ada vs Canyon County Permit Timelines', 'remodeling-process', 'planned'),
 
-  // Hub 8 — ROI
+  // Hub 8 - ROI
   { slug: 'best-remodeling-roi-boise', title: 'Best Remodeling Projects for ROI in Boise', ...hubPillar('remodeling-roi'), status: PUBLISHED },
   cluster('kitchen-roi-remodeling', 'Kitchen ROI', 'remodeling-roi'),
   cluster('bathroom-roi-remodeling', 'Bathroom ROI', 'remodeling-roi'),
@@ -280,7 +280,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('remodeling-before-selling', 'Remodeling Before Selling', 'remodeling-roi'),
   cluster('remodeling-long-term-living', 'Remodeling for Long-Term Living', 'remodeling-roi'),
 
-  // Hub 9 — Outdoor
+  // Hub 9 - Outdoor
   { slug: 'outdoor-living-remodeling-guide', title: 'Outdoor Living Remodeling Guide', ...hubPillar('outdoor-living'), status: PUBLISHED },
   cluster('outdoor-kitchens-boise', 'Outdoor Kitchens', 'outdoor-living'),
   cluster('covered-patios-boise', 'Covered Patios', 'outdoor-living'),
@@ -290,7 +290,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('luxury-outdoor-living', 'Luxury Outdoor Living', 'outdoor-living'),
   cluster('backyard-transformations-boise', 'Backyard Transformations', 'outdoor-living'),
 
-  // Hub 10 — Locations
+  // Hub 10 - Locations
   guide('treasure-valley-remodeling-guide', 'Treasure Valley Remodeling Guide', 'treasure-valley-locations', 'master', 'published'),
   guide('boise-remodeling-guide', 'Boise Remodeling Guide', 'treasure-valley-locations', 'location', 'published'),
   guide('meridian-remodeling-guide', 'Meridian Remodeling Guide', 'treasure-valley-locations', 'location'),

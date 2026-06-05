@@ -1,4 +1,4 @@
-/** Hub-specific FAQs — substantive answers, not generic templates. */
+/** Hub-specific FAQs - substantive answers, not generic templates. */
 
 export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; answer: string }> {
   const faqs: Record<string, Array<{ question: string; answer: string }>> = {
@@ -26,7 +26,7 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'Can you open my galley kitchen to the living room?',
         answer:
-          'Often yes, when structure allows. We verify beam sizing and permits before demolition—common on Boise Bench and Meridian ranches.',
+          'Often yes, when structure allows. We verify beam sizing and permits before demolition - common on Boise Bench and Meridian ranches.',
       },
       {
         question: 'What is design-build kitchen remodeling?',
@@ -36,12 +36,12 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'When should I order cabinets?',
         answer:
-          'At design lock, after layout and MEP are confirmed—lead times can exceed eight weeks.',
+          'At design lock, after layout and MEP are confirmed - lead times can exceed eight weeks.',
       },
       {
         question: 'How do I compare kitchen contractor bids?',
         answer:
-          'Match demolition, haul-off, permits, allowances, and appliance rough-in—not just cabinet install price.',
+          'Match demolition, haul-off, permits, allowances, and appliance rough-in - not just cabinet install price.',
       },
     ],
     'bathroom-remodeling': [
@@ -58,7 +58,7 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'Can you add aging-in-place features without a hospital look?',
         answer:
-          'Yes—comfort-height vanities, blocking for grab bars, and wider doorways can be designed with normal finishes.',
+          'Yes - comfort-height vanities, blocking for grab bars, and wider doorways can be designed with normal finishes.',
       },
       {
         question: 'Do bathroom remodels need permits in the Treasure Valley?',
@@ -73,7 +73,7 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'Should guest and master baths share one budget?',
         answer:
-          'No—scope, waterproofing, and fixture level differ too much to combine into one number.',
+          'No - scope, waterproofing, and fixture level differ too much to combine into one number.',
       },
       {
         question: 'What ventilation is required in Idaho bathrooms?',
@@ -95,22 +95,22 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'Do I need a structural engineer for a second story?',
         answer:
-          'Yes—second-story additions in Boise and Eagle require engineering and typically longer Ada County review.',
+          'Yes - second-story additions in Boise and Eagle require engineering and typically longer Ada County review.',
       },
       {
         question: 'Can I build an ADU on my lot?',
         answer:
-          'Feasibility depends on zoning, utilities, fire separation, and parking—not just desired square footage. We study lots during design.',
+          'Feasibility depends on zoning, utilities, fire separation, and parking - not just desired square footage. We study lots during design.',
       },
       {
         question: 'How do setbacks affect addition design in Eagle?',
         answer:
-          'Setbacks and soil conditions can move foundation type and budget early—especially in Foothills neighborhoods.',
+          'Setbacks and soil conditions can move foundation type and budget early - especially in Foothills neighborhoods.',
       },
       {
         question: 'Are permits included for additions?',
         answer:
-          'Yes—our design-build scope includes permit coordination for Ada and Canyon County when structural work is involved.',
+          'Yes - our design-build scope includes permit coordination for Ada and Canyon County when structural work is involved.',
       },
       {
         question: 'How long do additions take to build?',
@@ -120,7 +120,7 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'Can additions match my existing roofline?',
         answer:
-          'That is a design goal—we plan tie-ins, materials, and HOA review where applicable so the addition reads as original architecture.',
+          'That is a design goal - we plan tie-ins, materials, and HOA review where applicable so the addition reads as original architecture.',
       },
       {
         question: 'What is the first step for an addition project?',
@@ -142,7 +142,7 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'Do whole-home remodels require moving out?',
         answer:
-          'Depends on scope—dust, utilities, and kitchen/bath access drive the answer. We plan barriers or temporary kitchens when possible.',
+          'Depends on scope - dust, utilities, and kitchen/bath access drive the answer. We plan barriers or temporary kitchens when possible.',
       },
       {
         question: 'What should be decided before finish selections?',
@@ -162,7 +162,7 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'Can you coordinate flooring and lighting house-wide?',
         answer:
-          'Yes—whole-home programs are where design-build coordination pays off most.',
+          'Yes - whole-home programs are where design-build coordination pays off most.',
       },
       {
         question: 'How do I budget a whole-home remodel?',
@@ -194,17 +194,17 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'Do you provide references and insurance certificates?',
         answer:
-          'Yes—professional remodelers should provide both before you sign.',
+          'Yes - professional remodelers should provide both before you sign.',
       },
       {
         question: 'How many bids should I get?',
         answer:
-          'Two to three aligned proposals are enough if scope is documented—more bids without aligned scope add confusion.',
+          'Two to three aligned proposals are enough if scope is documented - more bids without aligned scope add confusion.',
       },
       {
         question: 'Why do Boise remodeling bids vary so much?',
         answer:
-          'Different allowances, permit assumptions, and finish levels—not always different quality of work.',
+          'Different allowances, permit assumptions, and finish levels - not always different quality of work.',
       },
       {
         question: 'What questions should I ask in the first meeting?',
@@ -221,7 +221,7 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'When should permits be submitted?',
         answer:
-          'After layout and structural decisions are stable—before ordering long-lead items tied to rough-in.',
+          'After layout and structural decisions are stable - before ordering long-lead items tied to rough-in.',
       },
       {
         question: 'Can I live at home during a kitchen remodel?',
@@ -241,7 +241,7 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'How long does Ada County plan review take?',
         answer:
-          'Often 2–8+ weeks depending on project type and comment cycles—see our permit timeline article.',
+          'Often 2–8+ weeks depending on project type and comment cycles - see our permit timeline article.',
       },
       {
         question: 'Who coordinates inspections?',
@@ -251,7 +251,7 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'What happens if hidden damage is found?',
         answer:
-          'Documented in writing with contingency or change order before cover-up—standard in older Treasure Valley homes.',
+          'Documented in writing with contingency or change order before cover-up - standard in older Treasure Valley homes.',
       },
     ],
     'remodeling-roi': [
@@ -263,12 +263,12 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'Should I remodel before selling in Meridian?',
         answer:
-          'Target what buyers expect in your subdivision—agent input and local comps should drive scope.',
+          'Target what buyers expect in your subdivision - agent input and local comps should drive scope.',
       },
       {
         question: 'Does a luxury kitchen always return on resale?',
         answer:
-          'Not always—finish level should match the neighborhood, especially in Eagle and Harris Ranch.',
+          'Not always - finish level should match the neighborhood, especially in Eagle and Harris Ranch.',
       },
       {
         question: 'Is ROI the right metric for a long-term home?',
@@ -300,7 +300,7 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'Do outdoor kitchens need permits in Ada County?',
         answer:
-          'Gas, electric, and structures tied to the home may require permits—plan utilities before hardscape.',
+          'Gas, electric, and structures tied to the home may require permits - plan utilities before hardscape.',
       },
       {
         question: 'When should I build a covered patio in Idaho?',
@@ -308,14 +308,14 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
           'Schedule concrete and structural work in stable weather windows; freeze-thaw affects footings and drainage.',
       },
       {
-        question: 'Deck vs paver patio—which is better in Boise?',
+        question: 'Deck vs paver patio - which is better in Boise?',
         answer:
-          'Depends on grade, drainage, and maintenance preference—see our decks vs patios article.',
+          'Depends on grade, drainage, and maintenance preference - see our decks vs patios article.',
       },
       {
         question: 'Can outdoor work run with an indoor kitchen remodel?',
         answer:
-          'Yes—shared utilities and design cohesion are easier when both are planned together.',
+          'Yes - shared utilities and design cohesion are easier when both are planned together.',
       },
       {
         question: 'How do I plan drainage for outdoor entertaining?',
@@ -335,7 +335,7 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'How do I budget outdoor living?',
         answer:
-          'Scope utilities, structure, and finishes separately—outdoor kitchens and covered patios are not one flat SF price.',
+          'Scope utilities, structure, and finishes separately - outdoor kitchens and covered patios are not one flat SF price.',
       },
     ],
     'remodeling-costs': [],
@@ -354,7 +354,7 @@ export function getLocationFaqs(
   return [
     {
       question: `Do you remodel homes in ${cityName}?`,
-      answer: `Yes—we serve ${cityName} with kitchen, bathroom, whole-home, and addition design-build. See our ${cityName} area page for local services.`,
+      answer: `Yes - we serve ${cityName} with kitchen, bathroom, whole-home, and addition design-build. See our ${cityName} area page for local services.`,
     },
     {
       question: `What permits apply in ${cityName}?`,
@@ -368,17 +368,17 @@ export function getLocationFaqs(
     {
       question: `What remodels are most common in ${cityName}?`,
       answer:
-        'Kitchen updates, primary suite baths, open-layout conversions, and rear additions are frequent—scope depends on housing era in your neighborhood.',
+        'Kitchen updates, primary suite baths, open-layout conversions, and rear additions are frequent - scope depends on housing era in your neighborhood.',
     },
     {
       question: 'How long do local remodels take?',
       answer:
-        'Timelines follow design, selections, and permit review—often several weeks to months before construction completes.',
+        'Timelines follow design, selections, and permit review - often several weeks to months before construction completes.',
     },
     {
       question: 'Do you offer design-build in my neighborhood?',
       answer:
-        'Yes—one team handles design, permits, and construction under a single contract with local permit experience.',
+        'Yes - one team handles design, permits, and construction under a single contract with local permit experience.',
     },
   ];
 }

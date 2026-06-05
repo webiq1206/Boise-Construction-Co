@@ -21,7 +21,7 @@ function clusterFaqs(
     {
       question: 'How long does the project take?',
       answer:
-        'Timelines vary by design, selections, and permit review—typically several weeks of design plus weeks to months of construction.',
+        'Timelines vary by design, selections, and permit review - typically several weeks of design plus weeks to months of construction.',
     },
     {
       question: 'Are appliances included?',
@@ -46,7 +46,7 @@ function clusterFaqs(
     {
       question: 'Should I hold contingency?',
       answer:
-        'Yes—10–15% is prudent for concealed conditions in older Treasure Valley homes.',
+        'Yes - 10–15% is prudent for concealed conditions in older Treasure Valley homes.',
     },
   ];
 }
@@ -100,7 +100,7 @@ export const WAVE1_COST_CLUSTERS: BlogPostData[] = [
     'Bathroom Remodel Cost Boise: Guest vs Master Bath',
     'Bathroom Remodel Cost Boise Idaho',
     'Bathroom remodel cost in Boise and the Treasure Valley: guest baths, master suites, curbless showers, and permit considerations.',
-    'Guest bath and master bath remodels sit on very different budgets—plan with realistic Treasure Valley ranges.',
+    'Guest bath and master bath remodels sit on very different budgets - plan with realistic Treasure Valley ranges.',
     ['bathroom', 'cost', 'boise', 'nampa'],
   ),
   makeCostCluster(
@@ -132,7 +132,7 @@ export const WAVE1_COST_CLUSTERS: BlogPostData[] = [
     'Cost Per Square Foot to Remodel a Home in Boise',
     'Remodel Cost Per Square Foot Boise',
     'When $/SF helps and when it misleads for Boise whole-home, addition, and kitchen remodel planning.',
-    'Remodel cost per square foot varies by project type—use it with defined scope, not as a universal rule.',
+    'Remodel cost per square foot varies by project type - use it with defined scope, not as a universal rule.',
     ['cost', 'per square foot', 'boise'],
   ),
   makeCostCluster(

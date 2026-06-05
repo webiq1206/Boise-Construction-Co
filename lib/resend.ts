@@ -146,7 +146,7 @@ export async function sendAdminNotificationEmail(data: {
 
   const html = wrapEmailHtml({
     title: 'New Quote Request!',
-    subtitle: `${escapeHtml(data.customerName)} — ${escapeHtml(data.city)}`,
+    subtitle: `${escapeHtml(data.customerName)} - ${escapeHtml(data.city)}`,
     tagline: 'Admin Notifications',
     content: `
       <div class="warning-box">

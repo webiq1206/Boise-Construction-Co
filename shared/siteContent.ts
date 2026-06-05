@@ -249,7 +249,7 @@ export const LEADERSHIP_COPY = {
     "We know how most firms are compared: separate designers and contractors, vague scopes, inconsistent updates, and pressure to sign before you have real answers. Our process was designed around what comparison shoppers actually need.",
     "That means one accountable team, written scope before we build, weekly updates while we work, and a team that picks up the phone when you have a question.",
   ],
-  closing: "That is not a marketing promise. Every detail, every decision — handled with intention.",
+  closing: "That is not a marketing promise. Every detail, every decision - handled with intention.",
 };
 
 export const FINANCING_BULLETS = [

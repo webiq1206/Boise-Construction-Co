@@ -108,7 +108,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                       <h2 className="text-base font-medium">Go deeper in this guide</h2>
                     </div>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Topic-specific articles—read these for detail beyond this overview.
+                      Topic-specific articles - read these for detail beyond this overview.
                     </p>
                     <ul className="space-y-2">
                       {publishedClusters.slice(0, 8).map((c) => (

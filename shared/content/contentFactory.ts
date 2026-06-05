@@ -22,7 +22,7 @@ export function expandLocation(html: string, _slug: string): string {
   return html;
 }
 
-/** ~8 focused H2 sections per hub pillar — no repeated template walls. */
+/** ~8 focused H2 sections per hub pillar - no repeated template walls. */
 function buildPillarSections(
   topic: string,
   pillarUrl: string,
@@ -115,7 +115,7 @@ export function buildClusterPost(config: ClusterConfig): BlogPostData {
           },
           {
             question: 'Do you serve Ada and Canyon County?',
-            answer: `Yes—we remodel across ${CITIES_LIST}.`,
+            answer: `Yes - we remodel across ${CITIES_LIST}.`,
           },
           {
             question: 'Are permits included?',

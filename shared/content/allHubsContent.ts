@@ -15,7 +15,7 @@ const a = '/services/room-addition';
 const ab = '/services/room-addition/boise';
 const adu = '/services/adu';
 
-// —— Hub 2 Kitchen ——
+// -  - Hub 2 Kitchen -  - 
 export const KITCHEN_PILLAR = buildPillarGuide({
   slug: 'boise-kitchen-remodeling-guide',
   title: 'Boise Kitchen Remodeling Guide',
@@ -29,7 +29,7 @@ export const KITCHEN_PILLAR = buildPillarGuide({
     'Treasure Valley kitchen remodels typically run 8–16 weeks of construction after design and permits, with budgets often from $45,000 to $120,000+ for full gut renovations with layout changes.',
   takeaways: [
     'Lock layout and MEP before finish selections.',
-    'Cabinet lead times can drive the calendar—order at design lock.',
+    'Cabinet lead times can drive the calendar - order at design lock.',
     'Open concept work may require structural beams and Ada County review.',
     'Appliances are usually client-supplied; plan rough-in early.',
   ],
@@ -52,7 +52,7 @@ const kitchenClusters = [
   ['kitchen-cabinet-trends', 'Kitchen Cabinet Trends', 'Cabinet styles and storage trends popular in Meridian, Eagle, and Boise remodels.'],
   ['quartz-vs-quartzite-kitchen', 'Quartz vs Quartzite for Kitchen Countertops', 'Compare durability, maintenance, and cost for Idaho kitchens.'],
   ['kitchen-remodel-roi', 'Kitchen Remodel ROI in Boise', 'When kitchen updates return value in Treasure Valley resale markets.'],
-  ['open-concept-kitchen-remodeling', 'Open Concept Kitchen Remodeling', 'Removing walls between kitchen and living space—structure, permits, and cost.'],
+  ['open-concept-kitchen-remodeling', 'Open Concept Kitchen Remodeling', 'Removing walls between kitchen and living space - structure, permits, and cost.'],
   ['kitchen-island-design-guide', 'Kitchen Island Design Guide', 'Sizing islands for Boise ranches and newer Meridian floor plans.'],
   ['walk-in-pantry-design-guide', 'Walk-In Pantry Design Guide', 'Pantry layouts, shelving, and traffic flow for Idaho homes.'],
 ] as const;
@@ -73,7 +73,7 @@ export const KITCHEN_CLUSTER_POSTS: BlogPostData[] = kitchenClusters.map(([slug,
   }),
 );
 
-// —— Hub 3 Bathroom ——
+// -  - Hub 3 Bathroom -  - 
 export const BATHROOM_PILLAR = buildPillarGuide({
   slug: 'boise-bathroom-remodeling-guide',
   title: 'Boise Bathroom Remodeling Guide',
@@ -128,7 +128,7 @@ export const BATHROOM_CLUSTER_POSTS: BlogPostData[] = bathSlugs.map(([slug, titl
   }),
 );
 
-// —— Hub 4 Additions ——
+// -  - Hub 4 Additions -  - 
 export const ADDITION_PILLAR = buildPillarGuide({
   slug: 'boise-home-addition-guide',
   title: 'Boise Home Addition Guide',
@@ -138,7 +138,7 @@ export const ADDITION_PILLAR = buildPillarGuide({
   hubSlug: 'home-additions',
   tags: ['addition', 'adu'],
   quickAnswer:
-    'Room additions in the Treasure Valley often plan $80,000–$250,000+ including foundation, structure, MEP, and finish—second stories and ADUs can run higher.',
+    'Room additions in the Treasure Valley often plan $80,000–$250,000+ including foundation, structure, MEP, and finish - second stories and ADUs can run higher.',
   takeaways: [
     'Feasibility starts with setbacks, soil, and HOA rules.',
     'Roof and exterior tie-ins should be resolved in design.',
@@ -183,13 +183,13 @@ export const ADDITION_CLUSTER_POSTS: BlogPostData[] = additionSlugs.map(([slug, 
   }),
 );
 
-// —— Hub 5 Whole home ——
+// -  - Hub 5 Whole home -  - 
 export const WHOLE_HOME_PILLAR = buildPillarGuide({
   slug: 'whole-home-remodeling-guide',
   title: 'Whole Home Remodeling Guide',
   seoTitle: 'Whole Home Remodeling Guide Boise',
   metaDescription: 'Whole-home renovations in Idaho: phasing, remodeling vs moving, living through construction, and design-build.',
-  excerpt: 'Coordinate whole-home remodels as one program—not disconnected mini-projects.',
+  excerpt: 'Coordinate whole-home remodels as one program - not disconnected mini-projects.',
   hubSlug: 'whole-home-remodeling',
   tags: ['whole-home'],
   quickAnswer:
@@ -236,14 +236,14 @@ export const WHOLE_HOME_CLUSTER_POSTS: BlogPostData[] = wholeSlugs.map(([slug, t
   }),
 );
 
-// —— Hub 6 Contractor ——
+// -  - Hub 6 Contractor -  - 
 export const CONTRACTOR_PILLAR = buildPillarGuide({
   slug: 'choose-remodeling-contractor-boise',
   title: 'How to Choose a Remodeling Contractor in Boise',
   seoTitle: 'Choose a Remodeling Contractor Boise',
   metaDescription:
     'Vet remodeling contractors in Boise: design-build vs GC, bids, red flags, consultations, and written scope.',
-  excerpt: 'Choose a Treasure Valley remodeling partner with aligned scope—not just the lowest bid.',
+  excerpt: 'Choose a Treasure Valley remodeling partner with aligned scope - not just the lowest bid.',
   hubSlug: 'contractor-selection',
   tags: ['contractor', 'design-build'],
   quickAnswer:
@@ -294,7 +294,7 @@ export const CONTRACTOR_CLUSTER_POSTS: BlogPostData[] = contractorSlugs.map(([sl
   }),
 );
 
-// —— Hub 7 Process ——
+// -  - Hub 7 Process -  - 
 export const PROCESS_PILLAR = buildPillarGuide({
   slug: 'boise-remodeling-process-guide',
   title: 'Boise Remodeling Process Guide',
@@ -305,9 +305,9 @@ export const PROCESS_PILLAR = buildPillarGuide({
   hubSlug: 'remodeling-process',
   tags: ['process', 'permits'],
   quickAnswer:
-    'A typical Boise remodel moves from consultation and scope, through design and permits, into construction and punch list—with one team accountable at each phase.',
+    'A typical Boise remodel moves from consultation and scope, through design and permits, into construction and punch list - with one team accountable at each phase.',
   takeaways: [
-    'Permits belong in the master schedule—not afterthoughts.',
+    'Permits belong in the master schedule - not afterthoughts.',
     'Selections should be locked before demo when possible.',
     'Punch list and warranty should be defined in contract.',
   ],
@@ -352,7 +352,7 @@ export const PROCESS_CLUSTER_POSTS: BlogPostData[] = processSlugs.map(([slug, ti
   }),
 );
 
-// —— Hub 8 ROI ——
+// -  - Hub 8 ROI -  - 
 export const ROI_PILLAR = buildPillarGuide({
   slug: 'best-remodeling-roi-boise',
   title: 'Best Remodeling Projects for ROI in Boise',
@@ -362,7 +362,7 @@ export const ROI_PILLAR = buildPillarGuide({
   hubSlug: 'remodeling-roi',
   tags: ['roi', 'value'],
   quickAnswer:
-    'Kitchen and bath updates often deliver strong lifestyle value; ROI depends on neighborhood comps—avoid over-improving beyond your street in Boise or Meridian.',
+    'Kitchen and bath updates often deliver strong lifestyle value; ROI depends on neighborhood comps - avoid over-improving beyond your street in Boise or Meridian.',
   takeaways: [
     'Match spend to neighborhood sale prices.',
     'Energy upgrades can improve comfort and operating cost.',
@@ -408,7 +408,7 @@ export const ROI_CLUSTER_POSTS: BlogPostData[] = roiSlugs.map(([slug, title]) =>
   }),
 );
 
-// —— Hub 9 Outdoor ——
+// -  - Hub 9 Outdoor -  - 
 export const OUTDOOR_PILLAR = buildPillarGuide({
   slug: 'outdoor-living-remodeling-guide',
   title: 'Outdoor Living Remodeling Guide',
@@ -419,7 +419,7 @@ export const OUTDOOR_PILLAR = buildPillarGuide({
   hubSlug: 'outdoor-living',
   tags: ['outdoor', 'patio'],
   quickAnswer:
-    'Outdoor living projects should account for Idaho sun, freeze-thaw on hardscape, and integration with indoor kitchen and entertaining flow—often planned with whole-home or kitchen remodel teams.',
+    'Outdoor living projects should account for Idaho sun, freeze-thaw on hardscape, and integration with indoor kitchen and entertaining flow - often planned with whole-home or kitchen remodel teams.',
   takeaways: [
     'Schedule concrete and masonry in weather windows.',
     'Plan utilities for outdoor kitchens early.',
@@ -463,7 +463,7 @@ export const OUTDOOR_CLUSTER_POSTS: BlogPostData[] = outdoorSlugs.map(([slug, ti
   }),
 );
 
-// —— Hub 10 Location guides ——
+// -  - Hub 10 Location guides -  - 
 export const LOCATION_GUIDES: GuidePageData[] = [
   buildLocationGuide({
     slug: 'meridian-remodeling-guide',
@@ -487,7 +487,7 @@ export const LOCATION_GUIDES: GuidePageData[] = [
     citySlug: 'eagle',
     county: 'ada',
     housingNote:
-      'Eagle homes often include larger footprints, three-car garages, and HOA design standards—plan architectural review time.',
+      'Eagle homes often include larger footprints, three-car garages, and HOA design standards - plan architectural review time.',
     guideType: 'location',
     seoTitle: 'Eagle Remodeling Guide',
     metaDescription: 'Remodeling in Eagle, Idaho including Foothills and Hidden Springs.',
@@ -501,7 +501,7 @@ export const LOCATION_GUIDES: GuidePageData[] = [
     cityName: 'Kuna',
     citySlug: 'kuna',
     county: 'ada',
-    housingNote: 'Kuna offers newer construction and growing inventory—great for kitchen refreshes and ADU feasibility studies.',
+    housingNote: 'Kuna offers newer construction and growing inventory - great for kitchen refreshes and ADU feasibility studies.',
     guideType: 'location',
     seoTitle: 'Kuna Remodeling Guide',
     metaDescription: 'Remodeling in Kuna, Idaho.',
@@ -515,7 +515,7 @@ export const LOCATION_GUIDES: GuidePageData[] = [
     cityName: 'Star',
     citySlug: 'star',
     county: 'ada',
-    housingNote: 'Star combines small-town feel with commuter access to Boise—remodels often focus on kitchens and outdoor connection.',
+    housingNote: 'Star combines small-town feel with commuter access to Boise - remodels often focus on kitchens and outdoor connection.',
     guideType: 'location',
     seoTitle: 'Star Remodeling Guide',
     metaDescription: 'Remodeling in Star, Idaho.',
@@ -529,7 +529,7 @@ export const LOCATION_GUIDES: GuidePageData[] = [
     cityName: 'Middleton',
     citySlug: 'middleton',
     county: 'canyon',
-    housingNote: 'Middleton sits in Canyon County—permit portals and review cadence differ from Ada County Boise projects.',
+    housingNote: 'Middleton sits in Canyon County - permit portals and review cadence differ from Ada County Boise projects.',
     guideType: 'location',
     seoTitle: 'Middleton Remodeling Guide',
     metaDescription: 'Remodeling in Middleton, Idaho.',
@@ -544,7 +544,7 @@ export const LOCATION_GUIDES: GuidePageData[] = [
     citySlug: 'nampa',
     county: 'canyon',
     housingNote:
-      'Nampa’s diverse housing stock—from older bungalows to newer builds—requires tailored electrical and layout strategies in Canyon County.',
+      'Nampa’s diverse housing stock - from older bungalows to newer builds - requires tailored electrical and layout strategies in Canyon County.',
     guideType: 'location',
     seoTitle: 'Nampa Remodeling Guide',
     metaDescription: 'Remodeling in Nampa, Idaho.',
@@ -564,7 +564,7 @@ export const LOCATION_GUIDES: GuidePageData[] = [
     seoTitle: 'North End Remodeling Guide',
     metaDescription: 'Remodeling in Boise North End historic neighborhoods.',
     excerpt: 'North End remodeling with older-home considerations.',
-    quickAnswer: 'North End remodels balance historic character with modern kitchen and bath function—often with electrical and structural upgrades.',
+    quickAnswer: 'North End remodels balance historic character with modern kitchen and bath function - often with electrical and structural upgrades.',
     takeaways: ['Respect scale and street rhythm.', 'Plan for older wiring and plumbing.'],
   }),
   buildLocationGuide({
@@ -601,12 +601,12 @@ export const LOCATION_GUIDES: GuidePageData[] = [
     cityName: 'East Boise',
     citySlug: 'boise',
     county: 'ada',
-    housingNote: 'East Boise includes a mix of established homes and infill—feasibility varies block by block for additions.',
+    housingNote: 'East Boise includes a mix of established homes and infill - feasibility varies block by block for additions.',
     guideType: 'neighborhood',
     seoTitle: 'East Boise Remodeling Guide',
     metaDescription: 'Remodeling in East Boise.',
     excerpt: 'East Boise remodeling neighborhoods guide.',
-    quickAnswer: 'East Boise remodeling spans kitchen and bath upgrades to additions—confirm setbacks and zoning early.',
+    quickAnswer: 'East Boise remodeling spans kitchen and bath upgrades to additions - confirm setbacks and zoning early.',
     takeaways: ['Verify lot constraints before design.', 'Use design-build for complex scopes.'],
   }),
   buildLocationGuide({
@@ -615,7 +615,7 @@ export const LOCATION_GUIDES: GuidePageData[] = [
     cityName: 'Hidden Springs',
     citySlug: 'eagle',
     county: 'ada',
-    housingNote: 'Hidden Springs emphasizes architectural harmony—exterior and addition projects need careful design review.',
+    housingNote: 'Hidden Springs emphasizes architectural harmony - exterior and addition projects need careful design review.',
     guideType: 'neighborhood',
     seoTitle: 'Hidden Springs Remodeling Guide',
     metaDescription: 'Remodeling in Hidden Springs Eagle.',
@@ -630,7 +630,7 @@ export const LOCATION_GUIDES: GuidePageData[] = [
     citySlug: 'eagle',
     county: 'ada',
     housingNote:
-      'Foothills properties may involve slopes, views, and custom homes—structural and site costs can exceed valley-floor averages.',
+      'Foothills properties may involve slopes, views, and custom homes - structural and site costs can exceed valley-floor averages.',
     guideType: 'neighborhood',
     seoTitle: 'Eagle Foothills Remodeling Guide',
     metaDescription: 'Remodeling in Eagle Foothills.',

@@ -49,7 +49,7 @@ export default function SubcontractorProjectDetailPage() {
             <CardContent className="text-sm space-y-2">
               <p><span className="text-muted-foreground">Address:</span> {project.address}, {project.city}</p>
               <p><span className="text-muted-foreground">Amount:</span> ${project.contractAmount ? parseFloat(project.contractAmount).toLocaleString() : "TBD"}</p>
-              <p><span className="text-muted-foreground">Payment:</span> {project.paymentTerms ?? "—"}</p>
+              <p><span className="text-muted-foreground">Payment:</span> {project.paymentTerms ?? "-"}</p>
               <Badge variant="outline">{project.status}</Badge>
             </CardContent>
           </Card>

@@ -6,7 +6,7 @@ const tvSections: ContentSection[] = [
     h2: 'Why the Treasure Valley is a distinct remodeling market',
     paragraphs: [
       `We serve ${CITIES_LIST} across Ada and Canyon Counties with design-build kitchen, bathroom, whole-home, addition, and ADU work.`,
-      'Costs, permits, housing stock, and HOA rules vary by city—use this hub to pick your city guide, then the topic guide that matches your project.',
+      'Costs, permits, housing stock, and HOA rules vary by city - use this hub to pick your city guide, then the topic guide that matches your project.',
     ],
   },
   {
@@ -77,7 +77,7 @@ const boiseSections: ContentSection[] = [
   {
     h2: 'North End and Bench',
     paragraphs: [
-      'Smaller footprints and galley kitchens are common—creative storage and panel upgrades matter when walls open.',
+      'Smaller footprints and galley kitchens are common - creative storage and panel upgrades matter when walls open.',
       '<a href="/guides/north-end-remodeling-guide">North End guide</a> · <a href="/guides/boise-bench-remodeling-guide">Bench guide</a>.',
     ],
   },
@@ -120,10 +120,10 @@ export const TREASURE_VALLEY_GUIDE_HTML = expandLocation(
 export const BOISE_GUIDE_HTML = expandLocation(buildSectionsHtml(boiseSections), 'boise-remodeling-guide');
 
 export const TV_QUICK_ANSWER =
-  'The Treasure Valley covers Boise, Meridian, Eagle, Kuna, Star, Middleton, Nampa, and Caldwell—Ada and Canyon Counties use different permit paths. Pick your city guide, then the topic guide for your project.';
+  'The Treasure Valley covers Boise, Meridian, Eagle, Kuna, Star, Middleton, Nampa, and Caldwell - Ada and Canyon Counties use different permit paths. Pick your city guide, then the topic guide for your project.';
 
 export const BOISE_QUICK_ANSWER =
-  'Boise spans North End, Bench, Harris Ranch, and East Boise—each with different layout, electrical, and permit needs. Use neighborhood guides and our cost guide for planning.';
+  'Boise spans North End, Bench, Harris Ranch, and East Boise - each with different layout, electrical, and permit needs. Use neighborhood guides and our cost guide for planning.';
 
 export const TV_TAKEAWAYS = [
   'Ada and Canyon Counties use different permit paths.',

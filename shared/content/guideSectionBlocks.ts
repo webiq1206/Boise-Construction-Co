@@ -1,13 +1,13 @@
 import { CITIES_LIST, PILLAR_COST, type ContentSection } from './wave1/snippets';
 import { getClustersForHub } from '../contentHubs';
 
-/** Compact essentials — link out for valley-wide permit/cost depth. */
+/** Compact essentials - link out for valley-wide permit/cost depth. */
 export function pillarEssentialsSection(topic: string): ContentSection {
   const t = topic.toLowerCase();
   return {
     h2: 'Planning essentials',
     paragraphs: [
-      `Budget, permits, and selections drive ${t} timelines in ${CITIES_LIST}—not a single sticker price.`,
+      `Budget, permits, and selections drive ${t} timelines in ${CITIES_LIST} - not a single sticker price.`,
       `Use the <a href="${PILLAR_COST}">Boise Remodeling Cost Guide</a> for ranges, the <a href="/guides/treasure-valley-remodeling-guide">Treasure Valley guide</a> for Ada vs Canyon context, and the <a href="/guides/boise-remodeling-process-guide">process guide</a> for milestones.`,
     ],
     list: [
@@ -26,14 +26,14 @@ export function hubTopicSections(hubSlug: string, topic: string): ContentSection
         {
           h2: 'Kitchen layouts that work in Boise homes',
           paragraphs: [
-            'Ranches, split-levels, and 1990s subdivisions each have different wall and panel constraints. Opening a kitchen often means beams, Ada County sheets, and revised electrical—not just cabinetry.',
+            'Ranches, split-levels, and 1990s subdivisions each have different wall and panel constraints. Opening a kitchen often means beams, Ada County sheets, and revised electrical - not just cabinetry.',
             '<a href="/blog/kitchen-layout-ideas-boise-homes">Layout ideas</a> · <a href="/blog/open-concept-kitchen-remodeling">Open concept guide</a>.',
           ],
         },
         {
           h2: 'Cabinets, islands, and appliance planning',
           paragraphs: [
-            'Order cabinets at design lock; lead times often exceed eight weeks. Islands need clearance for dishwasher swings and walkways—not just catalog depth.',
+            'Order cabinets at design lock; lead times often exceed eight weeks. Islands need clearance for dishwasher swings and walkways - not just catalog depth.',
             'Appliances are usually client-supplied; we coordinate rough-in. Budget suites separately, often $8,000–$25,000 for a full kitchen.',
           ],
         },
@@ -58,7 +58,7 @@ export function hubTopicSections(hubSlug: string, topic: string): ContentSection
         {
           h2: 'Guest bath vs master bath scope',
           paragraphs: [
-            'Guest refreshes and master suites should not share one budget—waterproofing, layout, and fixture level differ dramatically in Treasure Valley homes.',
+            'Guest refreshes and master suites should not share one budget - waterproofing, layout, and fixture level differ dramatically in Treasure Valley homes.',
           ],
         },
         {
@@ -71,7 +71,7 @@ export function hubTopicSections(hubSlug: string, topic: string): ContentSection
         {
           h2: 'Aging-in-place without institutional design',
           paragraphs: [
-            'Comfort-height vanities, blocking for grab bars, and wider doorways can look residential—common on the Boise Bench and in North End updates.',
+            'Comfort-height vanities, blocking for grab bars, and wider doorways can look residential - common on the Boise Bench and in North End updates.',
             '<a href="/blog/aging-in-place-bathroom-design">Aging-in-place design</a>.',
           ],
         },
@@ -81,7 +81,7 @@ export function hubTopicSections(hubSlug: string, topic: string): ContentSection
         {
           h2: 'Setbacks, soil, and feasibility',
           paragraphs: [
-            'Eagle Foothills and hillside lots may change foundation type early. ADUs need utility, fire separation, and zoning study—not just desired square footage.',
+            'Eagle Foothills and hillside lots may change foundation type early. ADUs need utility, fire separation, and zoning study - not just desired square footage.',
           ],
         },
         {
@@ -110,20 +110,20 @@ export function hubTopicSections(hubSlug: string, topic: string): ContentSection
         {
           h2: 'Whole-home sequencing',
           paragraphs: [
-            'Lock structural, panel, and HVAC decisions before house-wide finish selections. Phasing spreads cost but adds mobilization—use a master finish plan.',
+            'Lock structural, panel, and HVAC decisions before house-wide finish selections. Phasing spreads cost but adds mobilization - use a master finish plan.',
           ],
         },
         {
           h2: 'Living through construction',
           paragraphs: [
-            'Temporary kitchens, dust barriers, and utility shutoffs should be planned before demo—not negotiated mid-project.',
+            'Temporary kitchens, dust barriers, and utility shutoffs should be planned before demo - not negotiated mid-project.',
             '<a href="/blog/whole-home-remodel-cost-boise">Whole-home cost guide</a>.',
           ],
         },
         {
           h2: 'When contingency matters most',
           paragraphs: [
-            '1970s–1990s valley homes often need surprises addressed behind drywall—hold 10–15% until conditions are documented.',
+            '1970s–1990s valley homes often need surprises addressed behind drywall - hold 10–15% until conditions are documented.',
           ],
         },
       ];
@@ -180,7 +180,7 @@ export function hubTopicSections(hubSlug: string, topic: string): ContentSection
         {
           h2: 'Match comps on your street',
           paragraphs: [
-            'Boise and Meridian resale math depends on subdivision comps—not broad regional averages. Avoid finishing above the street.',
+            'Boise and Meridian resale math depends on subdivision comps - not broad regional averages. Avoid finishing above the street.',
           ],
         },
         {
@@ -193,7 +193,7 @@ export function hubTopicSections(hubSlug: string, topic: string): ContentSection
         {
           h2: 'Projects with mixed return',
           paragraphs: [
-            'Energy upgrades and outdoor living return varies by buyer pool—prioritize what you will enjoy if payback is uncertain.',
+            'Energy upgrades and outdoor living return varies by buyer pool - prioritize what you will enjoy if payback is uncertain.',
           ],
         },
       ];

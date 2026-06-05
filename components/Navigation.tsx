@@ -170,7 +170,7 @@ export function Navigation() {
         </nav>
       </header>
 
-      {/* Full-screen mobile nav overlay — md:hidden via pointer-events only on desktop */}
+      {/* Full-screen mobile nav overlay - md:hidden via pointer-events only on desktop */}
       <div
         className={cn(
           "fixed inset-0 z-[200] bg-background flex flex-col md:hidden",

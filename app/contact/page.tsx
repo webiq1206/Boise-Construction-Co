@@ -233,7 +233,7 @@ export default function ContactPage() {
                   <em className="brc-accent text-accent">connect</em>
                 </>
               }
-              description="Call, email, or visit — we respond within one business day and never use high-pressure sales tactics."
+              description="Call, email, or visit - we respond within one business day and never use high-pressure sales tactics."
               className="max-w-3xl"
             />
             <div className="grid sm:grid-cols-2 gap-4">
@@ -323,7 +323,7 @@ export default function ContactPage() {
                       <em className="brc-accent text-accent">Just answers.</em>
                     </>
                   }
-                  description="Your free 60 to 90 minute in-home visit is focused on planning guidance and an honest project range — not a commission-driven pitch."
+                  description="Your free 60 to 90 minute in-home visit is focused on planning guidance and an honest project range - not a commission-driven pitch."
                   className="mb-8 max-w-none"
                 />
                 <ul className="flex flex-col gap-0 mb-8">
@@ -390,7 +390,7 @@ export default function ContactPage() {
                   Prefer to talk first?
                 </h2>
                 <p className="text-base text-inverse-muted mb-2">
-                  Call us directly — no phone tree, no sales scripts.
+                  Call us directly - no phone tree, no sales scripts.
                 </p>
                 <a
                   href={SITE_CONFIG.phoneHref}

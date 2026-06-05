@@ -4,7 +4,7 @@ const sections: ContentSection[] = [
   {
     h2: 'What should Treasure Valley homeowners budget for a remodel in 2026?',
     paragraphs: [
-      `Most residential remodels we scope across ${CITIES_LIST} fall into planning bands—not single sticker prices. A guest bath refresh in Meridian is not priced like a full kitchen gut in the North End. National averages rarely account for Ada County plan review, Canyon County submission portals, Idaho labor markets, or the finish level common in Eagle and Hidden Springs.`,
+      `Most residential remodels we scope across ${CITIES_LIST} fall into planning bands - not single sticker prices. A guest bath refresh in Meridian is not priced like a full kitchen gut in the North End. National averages rarely account for Ada County plan review, Canyon County submission portals, Idaho labor markets, or the finish level common in Eagle and Hidden Springs.`,
       `This guide is the pillar for our <strong>Boise Remodeling Costs</strong> hub. Use it to understand typical ranges, then read the linked articles on kitchen, bathroom, whole-home, addition, and luxury costs for project-specific detail.`,
       `For a rough planning number before design, start with our <a href="/#calculator">project estimator</a>, then schedule an in-home consultation for a written scope.`,
     ],
@@ -31,7 +31,7 @@ const sections: ContentSection[] = [
   {
     h2: 'How much does a kitchen remodel cost in Boise?',
     paragraphs: [
-      'Kitchen remodels are the most common inquiry in Boise and Meridian. Layout changes—moving the sink wall, adding an island, or opening to the family room—drive both design fees and permit time. Cabinetry line (stock, semi-custom, custom), countertop material, and lighting layers compound quickly.',
+      'Kitchen remodels are the most common inquiry in Boise and Meridian. Layout changes - moving the sink wall, adding an island, or opening to the family room - drive both design fees and permit time. Cabinetry line (stock, semi-custom, custom), countertop material, and lighting layers compound quickly.',
       'Appliances are typically client-supplied; we guide selection and coordinate rough-in but do not purchase or install appliances. Budget them separately, often $8,000–$25,000 for a full suite.',
       'Read our dedicated article: <a href="/blog/kitchen-remodel-cost-boise">Kitchen Remodel Cost Boise</a>. Explore <a href="/services/kitchen-remodel">kitchen remodeling services</a> and <a href="/services/kitchen-remodel/boise">kitchen remodels in Boise</a>.',
     ],
@@ -69,7 +69,7 @@ const sections: ContentSection[] = [
     ],
   },
   {
-    h2: 'Remodel cost per square foot in Boise—is it useful?',
+    h2: 'Remodel cost per square foot in Boise - is it useful?',
     paragraphs: [
       'Cost per square foot is a shorthand, not a contract price. It varies wildly by project type: open kitchen/living remodels include expensive MEP and cabinetry; carpet and paint refresh a different metric entirely.',
       'For whole-home or large addition planning, many homeowners ask for a $/SF range after preliminary design. We publish realistic bands in <a href="/blog/remodel-cost-per-square-foot-boise">cost per square foot to remodel in Boise</a>.',
@@ -97,7 +97,7 @@ const sections: ContentSection[] = [
     h2: 'How to budget for a remodel in the Treasure Valley',
     paragraphs: [
       'Start with priorities: which rooms are must-haves vs phased later. Allocate design, permits, construction, finishes, appliances (if kitchen), and contingency separately instead of one opaque number.',
-      'Financing, temporary housing, and storage are often overlooked. If you are comparing bids, ensure scope alignment before price—not all estimates include the same allowances.',
+      'Financing, temporary housing, and storage are often overlooked. If you are comparing bids, ensure scope alignment before price - not all estimates include the same allowances.',
       'Follow the step-by-step framework in <a href="/blog/how-to-budget-remodel-boise">how to budget for a remodel in Boise</a>.',
     ],
     list: [
@@ -111,7 +111,7 @@ const sections: ContentSection[] = [
   {
     h2: 'Remodeling timeline expectations in Boise, Meridian, and Nampa',
     paragraphs: [
-      'Timelines depend on design duration, permit lead time, material lead times, and trade sequencing—not just construction days. Kitchen and bath projects with layout changes in Ada County often need several weeks of plan review.',
+      'Timelines depend on design duration, permit lead time, material lead times, and trade sequencing - not just construction days. Kitchen and bath projects with layout changes in Ada County often need several weeks of plan review.',
     ],
     table: {
       className: 'timeline-table',
@@ -150,7 +150,7 @@ const sections: ContentSection[] = [
     h2: 'Climate and seasonal considerations in Idaho',
     paragraphs: [
       'Dry summers favor exterior work and additions; winter remodels require heat and humidity control for flooring and millwork. Freeze-thaw cycles matter for exterior concrete and drainage near additions.',
-      'Book design early if you want construction complete before holidays or school years—trade schedules tighten in peak months across the valley.',
+      'Book design early if you want construction complete before holidays or school years - trade schedules tighten in peak months across the valley.',
     ],
   },
   {
@@ -184,7 +184,7 @@ const sections: ContentSection[] = [
   {
     h2: 'Boise-specific considerations for 2026 remodel planning',
     paragraphs: [
-      'Interest rates, insurance rebuild costs, and local labor demand all influence 2026 budgets. Material tariffs and supply chains still affect cabinetry and appliance lead times—lock long-lead items early in design.',
+      'Interest rates, insurance rebuild costs, and local labor demand all influence 2026 budgets. Material tariffs and supply chains still affect cabinetry and appliance lead times - lock long-lead items early in design.',
       'If you are in a mapped floodplain or hillside overlay (common near the Bench and Foothills), feasibility studies may be required before addition pricing is firm.',
       'For city-level context, read <a href="${PILLAR_BOISE}">Boise Remodeling Guide</a> and the <a href="${PILLAR_TV}">Treasure Valley Remodeling Guide</a>.',
     ],
@@ -192,7 +192,7 @@ const sections: ContentSection[] = [
   {
     h2: 'Next steps: from planning range to written scope',
     paragraphs: [
-      'Use the cost cluster articles linked from this hub for room-by-room detail. When you are ready, schedule a consultation—we will walk your home, discuss goals, and outline a realistic path from design through construction.',
+      'Use the cost cluster articles linked from this hub for room-by-room detail. When you are ready, schedule a consultation - we will walk your home, discuss goals, and outline a realistic path from design through construction.',
       'Explore services by city: <a href="/areas">service areas</a>, <a href="/services/kitchen-remodel/meridian">Meridian kitchen remodels</a>, <a href="/services/bathroom-remodel/eagle">Eagle bathroom remodels</a>, and <a href="/services/whole-home-remodel/boise">whole-home remodeling in Boise</a>.',
     ],
   },
@@ -206,7 +206,7 @@ sections[sections.length - 1]!.paragraphs[1] = sections[sections.length - 1]!.pa
 export const BOISE_REMODELING_COST_GUIDE_HTML = buildSectionsHtml(sections);
 
 export const BOISE_REMODELING_COST_QUICK_ANSWER =
-  'Treasure Valley remodels in 2026 typically range from about $18,000 for a small bath refresh to $400,000+ for whole-home or luxury programs, with most full kitchens between $45,000 and $120,000 and master baths from $35,000 to $85,000+. Exact cost depends on layout changes, finishes, permits (Ada or Canyon County), and existing home conditions—not national averages.';
+  'Treasure Valley remodels in 2026 typically range from about $18,000 for a small bath refresh to $400,000+ for whole-home or luxury programs, with most full kitchens between $45,000 and $120,000 and master baths from $35,000 to $85,000+. Exact cost depends on layout changes, finishes, permits (Ada or Canyon County), and existing home conditions - not national averages.';
 
 export const BOISE_REMODELING_COST_TAKEAWAYS = [
   'Use planning ranges by project type, not a single $/SF number for every remodel.',

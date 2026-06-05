@@ -1,7 +1,7 @@
 /**
  * Marketing image paths. These point at the real project photography in
  * `public/images/`. Replace with your own photos using the same filenames
- * (or update the paths here) — .jpg or .webp also work.
+ * (or update the paths here) - .jpg or .webp also work.
  */
 
 export const SITE_IMAGES = {

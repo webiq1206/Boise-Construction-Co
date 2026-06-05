@@ -1,5 +1,5 @@
 /**
- * Central site configuration — NAP, URLs, and contact strings.
+ * Central site configuration - NAP, URLs, and contact strings.
  * Override via env for staging; replace placeholder values before launch.
  */
 

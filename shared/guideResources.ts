@@ -26,7 +26,7 @@ export const GUIDE_RESOURCES: Record<string, GuideResource> = {
     id: 'kitchen-bath-checklist',
     title: 'Kitchen & Bath Planning Checklist',
     description:
-      'Room-by-room checklist for layouts, selections, permits, and construction—bring to your consultation.',
+      'Room-by-room checklist for layouts, selections, permits, and construction - bring to your consultation.',
     kind: 'pdf',
     href: '/downloads/kitchen-bath-planning-checklist.pdf',
     fileLabel: 'PDF · 2 pages',

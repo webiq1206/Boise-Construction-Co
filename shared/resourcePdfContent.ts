@@ -10,7 +10,7 @@ export const BUDGET_WORKSHEET_BLOCKS: PdfBlock[] = [
   },
   {
     type: 'subtitle',
-    text: 'Use with our Boise Remodeling Cost Guide. Planning ranges only—firm numbers require written scope.',
+    text: 'Use with our Boise Remodeling Cost Guide. Planning ranges only - firm numbers require written scope.',
   },
   { type: 'heading', text: '1. Project snapshot' },
   {
@@ -76,7 +76,7 @@ export const KITCHEN_BATH_CHECKLIST_BLOCKS: PdfBlock[] = [
   },
   {
     type: 'subtitle',
-    text: 'Treasure Valley design-build — print and bring to your consultation.',
+    text: 'Treasure Valley design-build - print and bring to your consultation.',
   },
   { type: 'heading', text: 'Before design starts' },
   {
@@ -93,7 +93,7 @@ export const KITCHEN_BATH_CHECKLIST_BLOCKS: PdfBlock[] = [
   {
     type: 'checkboxes',
     items: [
-      'Appliance list (or placeholders) — rough-in before drywall',
+      'Appliance list (or placeholders) - rough-in before drywall',
       'Cabinet line: stock / semi-custom / custom',
       'Island size and walkway clearances',
       'Open wall removal? Structural beam needed?',
@@ -104,7 +104,7 @@ export const KITCHEN_BATH_CHECKLIST_BLOCKS: PdfBlock[] = [
   {
     type: 'checkboxes',
     items: [
-      'Guest vs master — separate budgets',
+      'Guest vs master - separate budgets',
       'Shower type: curbless / walk-in / tub-shower',
       'Ventilation and heat planned with layout',
       'Aging-in-place features (height, blocking, width)',
@@ -151,7 +151,7 @@ export const ADA_CANYON_PERMIT_BLOCKS: PdfBlock[] = [
   },
   {
     type: 'subtitle',
-    text: 'Quick reference for Treasure Valley homeowners — timelines are estimates.',
+    text: 'Quick reference for Treasure Valley homeowners - timelines are estimates.',
   },
   { type: 'heading', text: 'Which county am I in?' },
   {

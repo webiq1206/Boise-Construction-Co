@@ -32,7 +32,7 @@ export default function ResourcesIndexPage() {
           <Link href="/guides" className="text-accent hover:underline">
             remodeling guides
           </Link>
-          . These are planning tools—not quotes or contracts.
+          . These are planning tools - not quotes or contracts.
         </p>
 
         <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground mb-4">

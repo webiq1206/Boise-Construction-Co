@@ -42,7 +42,7 @@ async function main() {
     console.log(`Wrote ${outPath} (${bytes.length} bytes)`);
   }
 
-  console.log('\nDone — 3 resource PDFs generated.');
+  console.log('\nDone - 3 resource PDFs generated.');
 }
 
 main().catch((err) => {

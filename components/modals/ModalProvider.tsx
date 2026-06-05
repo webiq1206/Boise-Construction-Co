@@ -47,7 +47,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
               Schedule your free in-home visit
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
-              No obligation — we&apos;ll walk your space and give you an honest planning range.
+              No obligation - we&apos;ll walk your space and give you an honest planning range.
             </DialogDescription>
           </DialogHeader>
           <ConsultationForm onRevise={() => setOpen("estimate")} />

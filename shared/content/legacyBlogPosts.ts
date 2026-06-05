@@ -57,7 +57,7 @@ export const LEGACY_BLOG_POSTS: BlogPostData[] = [
       'Permit timelines vary by county, project type, and whether structural or MEP plans are required.',
     hubSlug: 'remodeling-process',
     quickAnswer:
-      'Ada County and Canyon County use different permit portals and review timelines—layout and structural remodels often need weeks of plan review in both.',
+      'Ada County and Canyon County use different permit portals and review timelines - layout and structural remodels often need weeks of plan review in both.',
     author: 'Boise Remodeling Co',
     category: 'Remodeling Process',
     tags: ['permits', 'ada county', 'canyon county'],
@@ -79,15 +79,15 @@ export const LEGACY_BLOG_POSTS: BlogPostData[] = [
       },
       {
         question: 'Is Canyon County different?',
-        answer: 'Yes—portals and review cadence differ from Ada County.',
+        answer: 'Yes - portals and review cadence differ from Ada County.',
       },
       {
         question: 'Do you serve Nampa and Caldwell?',
-        answer: 'Yes—we coordinate Canyon County permits.',
+        answer: 'Yes - we coordinate Canyon County permits.',
       },
       {
         question: 'Can construction start before permits?',
-        answer: 'No—approved permits are required for covered work.',
+        answer: 'No - approved permits are required for covered work.',
       },
       {
         question: 'What plans are required?',
@@ -110,10 +110,10 @@ export const LEGACY_BLOG_POSTS: BlogPostData[] = [
     seoTitle: 'How to Choose a Design-Build Contractor Boise',
     metaDescription:
       'Checklist for choosing a design-build remodeling contractor in Boise: scope, communication, licenses, and red flags.',
-    excerpt: 'The best fit is not always the lowest bid—look for written scope and one accountable team.',
+    excerpt: 'The best fit is not always the lowest bid - look for written scope and one accountable team.',
     hubSlug: 'contractor-selection',
     quickAnswer:
-      'Choose a Boise design-build remodeler with written scope, local permits experience, clear communication, and aligned bids—not price alone.',
+      'Choose a Boise design-build remodeler with written scope, local permits experience, clear communication, and aligned bids - not price alone.',
     author: 'Boise Remodeling Co',
     category: 'Contractor Selection',
     tags: ['contractor', 'design-build', 'boise'],
@@ -125,7 +125,7 @@ export const LEGACY_BLOG_POSTS: BlogPostData[] = [
     ],
     faqs: [
       { question: 'What is design-build?', answer: 'Design, estimating, and construction under one contract.' },
-      { question: 'Should I get multiple bids?', answer: 'Yes—with aligned scope and allowances.' },
+      { question: 'Should I get multiple bids?', answer: 'Yes - with aligned scope and allowances.' },
       { question: 'What are red flags?', answer: 'Vague scope and large upfront cash demands.' },
       { question: 'Do you handle permits?', answer: 'Yes for Ada and Canyon County scope.' },
       { question: 'How do I start?', answer: 'Schedule a consultation.' },
@@ -194,7 +194,7 @@ export const LEGACY_BLOG_POSTS: BlogPostData[] = [
     excerpt: 'Additions that look original need early design and realistic permits.',
     hubSlug: 'home-additions',
     quickAnswer:
-      'Treasure Valley room additions need feasibility on setbacks and structure, matching architecture, and Ada or Canyon permits—often $80k–$250k+.',
+      'Treasure Valley room additions need feasibility on setbacks and structure, matching architecture, and Ada or Canyon permits - often $80k–$250k+.',
     author: 'Boise Remodeling Co',
     category: 'Home Additions',
     tags: ['addition', 'eagle', 'kuna'],
@@ -205,7 +205,7 @@ export const LEGACY_BLOG_POSTS: BlogPostData[] = [
       { url: '/services/room-addition/eagle' },
     ],
     faqs: [
-      { question: 'How much does an addition cost?', answer: 'Often $80,000–$250,000+ depending on scope—see our cost article.' },
+      { question: 'How much does an addition cost?', answer: 'Often $80,000–$250,000+ depending on scope - see our cost article.' },
       { question: 'Permits required?', answer: 'Yes for structural work in Ada and Canyon County.' },
       { question: 'HOA in Eagle?', answer: 'Many neighborhoods require design review.' },
       { question: 'Timeline?', answer: 'Often 4–9 months including design and permits.' },

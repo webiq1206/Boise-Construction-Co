@@ -26,8 +26,8 @@ function permittingAuthorityForCity(city: string, county: "ada" | "canyon"): str
   const key = city.toUpperCase().trim();
   if (CITY_PERMITTING[key]) return CITY_PERMITTING[key];
   return county === "ada"
-    ? `Ada County — contact ${city} for local permits`
-    : `Canyon County — contact ${city} for local permits`;
+    ? `Ada County - contact ${city} for local permits`
+    : `Canyon County - contact ${city} for local permits`;
 }
 
 function jurisdictionLabel(city: string, county: "ada" | "canyon"): string {

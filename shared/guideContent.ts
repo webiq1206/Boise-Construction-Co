@@ -63,7 +63,7 @@ const costPillarFaqs = [
   {
     question: 'Should I budget contingency for a remodel?',
     answer:
-      'Hold 10–15% contingency for concealed conditions—especially in pre-1990 Boise and Bench homes where framing, plumbing, or wiring surprises are common.',
+      'Hold 10–15% contingency for concealed conditions - especially in pre-1990 Boise and Bench homes where framing, plumbing, or wiring surprises are common.',
   },
   {
     question: 'Are appliances included in kitchen remodel cost?',
@@ -93,7 +93,7 @@ const costPillarFaqs = [
   {
     question: 'What is the cheapest remodel with the best ROI?',
     answer:
-      'Focused bath and kitchen updates often deliver strong lifestyle and resale value when aligned with neighborhood comps—avoid over-improving beyond the street.',
+      'Focused bath and kitchen updates often deliver strong lifestyle and resale value when aligned with neighborhood comps - avoid over-improving beyond the street.',
   },
   {
     question: 'Can I remodel in phases to spread cost?',
@@ -103,7 +103,7 @@ const costPillarFaqs = [
   {
     question: 'Do Canyon County remodels cost less than Ada County?',
     answer:
-      'Labor and materials are similar; differences are usually permit processes, travel, and project scope—not a simple county discount.',
+      'Labor and materials are similar; differences are usually permit processes, travel, and project scope - not a simple county discount.',
   },
   {
     question: 'How do I get a realistic remodeling number for my home?',
@@ -125,7 +125,7 @@ export const GUIDE_PAGES: GuidePageData[] = [
     metaDescription:
       'Definitive 2026 remodeling cost guide for Boise and the Treasure Valley: kitchens, baths, whole-home, additions, luxury, $/SF, budgeting, permits, and timelines.',
     excerpt:
-      'The complete planning guide for remodeling costs in Boise, Meridian, Eagle, Nampa, and the Treasure Valley—with ranges, tables, and local permit context.',
+      'The complete planning guide for remodeling costs in Boise, Meridian, Eagle, Nampa, and the Treasure Valley - with ranges, tables, and local permit context.',
     content: expandPillar(BOISE_REMODELING_COST_GUIDE_HTML, 'boise-remodeling-cost-guide', 'remodeling-costs'),
     author: 'Boise Remodeling Co',
     hubSlug: 'remodeling-costs',
@@ -161,9 +161,9 @@ export const GUIDE_PAGES: GuidePageData[] = [
     title: 'Treasure Valley Remodeling Guide',
     seoTitle: 'Treasure Valley Remodeling Guide | Idaho',
     metaDescription:
-      'Master guide to remodeling in the Treasure Valley: Boise, Meridian, Eagle, Kuna, Star, Middleton, Nampa, Caldwell—permits, housing stock, costs, and services.',
+      'Master guide to remodeling in the Treasure Valley: Boise, Meridian, Eagle, Kuna, Star, Middleton, Nampa, Caldwell - permits, housing stock, costs, and services.',
     excerpt:
-      'Your starting point for remodeling anywhere in the Treasure Valley—city guides, permits, and links to local services.',
+      'Your starting point for remodeling anywhere in the Treasure Valley - city guides, permits, and links to local services.',
     content: TREASURE_VALLEY_GUIDE_HTML,
     author: 'Boise Remodeling Co',
     hubSlug: 'treasure-valley-locations',
@@ -194,7 +194,7 @@ export const GUIDE_PAGES: GuidePageData[] = [
       },
       {
         question: 'Do you work in Eagle and Hidden Springs?',
-        answer: 'Yes—we plan HOA review time for architectural approvals in many Eagle neighborhoods.',
+        answer: 'Yes - we plan HOA review time for architectural approvals in many Eagle neighborhoods.',
       },
       {
         question: 'Is Meridian in Ada County?',
@@ -206,7 +206,7 @@ export const GUIDE_PAGES: GuidePageData[] = [
       },
       {
         question: 'How do I compare remodeling contractors?',
-        answer: 'Use written scope, local permit experience, and aligned allowances—not price alone.',
+        answer: 'Use written scope, local permit experience, and aligned allowances - not price alone.',
       },
       {
         question: 'Can I remodel before selling?',
@@ -251,7 +251,7 @@ export const GUIDE_PAGES: GuidePageData[] = [
     metaDescription:
       'Remodeling in Boise: North End, Bench, Harris Ranch, costs, permits, and design-build services for kitchens, baths, whole-home, and additions.',
     excerpt:
-      'Local guide to remodeling in Boise—neighborhood housing types, costs, and city-specific service links.',
+      'Local guide to remodeling in Boise - neighborhood housing types, costs, and city-specific service links.',
     content: BOISE_GUIDE_HTML,
     author: 'Boise Remodeling Co',
     hubSlug: 'treasure-valley-locations',
@@ -269,7 +269,7 @@ export const GUIDE_PAGES: GuidePageData[] = [
       {
         question: 'How much does a kitchen remodel cost in Boise?',
         answer:
-          'Most full kitchen remodels plan between roughly $45,000 and $120,000+ depending on layout and cabinetry—see our cost guide for detail.',
+          'Most full kitchen remodels plan between roughly $45,000 and $120,000+ depending on layout and cabinetry - see our cost guide for detail.',
       },
       {
         question: 'What Boise neighborhoods do you serve?',
@@ -281,11 +281,11 @@ export const GUIDE_PAGES: GuidePageData[] = [
       },
       {
         question: 'Can you open up a ranch kitchen on the Bench?',
-        answer: 'Yes—when structure allows, we design open kitchen/family layouts with proper beams and permits.',
+        answer: 'Yes - when structure allows, we design open kitchen/family layouts with proper beams and permits.',
       },
       {
         question: 'Do you build primary suite additions in Boise?',
-        answer: 'Yes—room additions and second stories are scoped through our addition design-build team.',
+        answer: 'Yes - room additions and second stories are scoped through our addition design-build team.',
       },
       {
         question: 'How do I budget a Boise remodel?',
@@ -293,7 +293,7 @@ export const GUIDE_PAGES: GuidePageData[] = [
       },
       {
         question: 'Do you coordinate design and construction?',
-        answer: 'Yes—we are a design-build remodeler with in-house permitting support.',
+        answer: 'Yes - we are a design-build remodeler with in-house permitting support.',
       },
     ],
     linkedCities: ['boise'],

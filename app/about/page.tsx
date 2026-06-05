@@ -137,7 +137,7 @@ export default function AboutPage() {
             <p className="text-base md:text-lg text-inverse-foreground/75 max-w-2xl leading-relaxed mb-8">
               Our focus is clarity: written scope before construction, proactive weekly updates,
               permits handled in-house for Ada and Canyon County, and a written workmanship
-              guarantee on our labor. Every detail, every decision — handled with intention.
+              guarantee on our labor. Every detail, every decision - handled with intention.
             </p>
             <div className="flex flex-wrap gap-3 mb-8">
               <ConsultCTA variant="brand">

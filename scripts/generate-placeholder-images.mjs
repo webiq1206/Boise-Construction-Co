@@ -6,8 +6,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..", "public", "images");
 
 const files = [
-  ["hero-remodel-interior.svg", "Hero — replace with project photo"],
-  ["process-design-review.svg", "Design review — replace with project photo"],
+  ["hero-remodel-interior.svg", "Hero - replace with project photo"],
+  ["process-design-review.svg", "Design review - replace with project photo"],
   ["gallery/gallery-kitchen-before.svg", "Kitchen before"],
   ["gallery/gallery-kitchen-after.svg", "Kitchen after"],
   ["gallery/gallery-bathroom-before.svg", "Bathroom before"],
@@ -34,7 +34,7 @@ function svg(label) {
   </defs>
   <rect width="1600" height="1200" fill="url(#g)"/>
   <text x="800" y="580" text-anchor="middle" fill="#5A5F5C" font-family="system-ui,sans-serif" font-size="28" font-weight="300">${safe}</text>
-  <text x="800" y="640" text-anchor="middle" fill="#8A8F88" font-family="system-ui,sans-serif" font-size="16">Boise Remodeling Co — drop your photo here</text>
+  <text x="800" y="640" text-anchor="middle" fill="#8A8F88" font-family="system-ui,sans-serif" font-size="16">Boise Remodeling Co - drop your photo here</text>
 </svg>`;
 }
 

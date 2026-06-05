@@ -77,7 +77,7 @@ export default function GuidesIndexPage() {
             Remodeling Guides
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            In-depth guides for Boise, Meridian, Eagle, Nampa, and the entire Treasure Valley—costs,
+            In-depth guides for Boise, Meridian, Eagle, Nampa, and the entire Treasure Valley - costs,
             process, locations, and planning resources from Boise Remodeling Co.
           </p>
           <p className="mt-4">

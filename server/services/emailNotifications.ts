@@ -1036,10 +1036,10 @@ export async function sendLeadPriceDropEmail(
   }
 ): Promise<void> {
   const url = subcontractorLeadUrl(data.leadId);
-  const subject = `Price drop: ${data.serviceType} in ${data.city} — now $${formatQuoteForDisplay(data.newPrice, true)}`;
+  const subject = `Price drop: ${data.serviceType} in ${data.city} - now $${formatQuoteForDisplay(data.newPrice, true)}`;
   const htmlBody = wrapEmailHtml({
     title: "Lead Price Drop",
-    subtitle: `${data.city} — ${data.serviceType}`,
+    subtitle: `${data.city} - ${data.serviceType}`,
     tagline: "Lead Marketplace",
     content: `
       <p class="greeting">A lead you're watching just dropped in price.</p>

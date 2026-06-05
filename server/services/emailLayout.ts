@@ -1,6 +1,6 @@
 import { SITE_CONFIG } from "@/shared/siteConfig";
 
-/** Site brand tokens — aligned with app/globals.css */
+/** Site brand tokens - aligned with app/globals.css */
 export const EMAIL_BRAND = {
   charcoal: "#3A3E3D",
   charcoalLight: "#5A5F5C",

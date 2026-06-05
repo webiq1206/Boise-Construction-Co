@@ -1,1 +1,2 @@
 - [Email provider decision](email-provider.md) — sends via Resend not Gmail; Gmail couldn't send from the boiseremodeling.co alias; always check Resend's `{data,error}`.
+- [Em-dash build guard](em-dash-guard.md) — prebuild fails on U+2014 in code/content; use hyphens; markdown & .json deliberately out of scope.

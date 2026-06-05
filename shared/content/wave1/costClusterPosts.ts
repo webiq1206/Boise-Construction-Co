@@ -5,7 +5,7 @@ function clusterSections(topic: string, extra: ContentSection[]): ContentSection
     {
       h2: `Quick planning overview for ${topic}`,
       paragraphs: [
-        `Homeowners in ${CITIES_LIST} ask us about ${topic.toLowerCase()} more than almost any other line item on a remodel budget. This article is part of our <a href="${PILLAR_COST}">Boise Remodeling Cost Guide</a>—the definitive hub for Treasure Valley remodeling costs.`,
+        `Homeowners in ${CITIES_LIST} ask us about ${topic.toLowerCase()} more than almost any other line item on a remodel budget. This article is part of our <a href="${PILLAR_COST}">Boise Remodeling Cost Guide</a> - the definitive hub for Treasure Valley remodeling costs.`,
         `Numbers below are planning ranges from design-build consultations, not advertisements. Your home, layout, and finish level will move you within or beyond these bands.`,
         `Use our <a href="/#calculator">project estimator</a> for a rough range, then request an in-home visit for written scope.`,
       ],
@@ -18,7 +18,7 @@ const kitchenExtra: ContentSection[] = [
   {
     h2: 'What is a typical kitchen remodel budget in Boise?',
     paragraphs: [
-      'Most full kitchen remodels we plan in Ada County fall between roughly $45,000 and $120,000+, with layout changes and custom cabinetry at the upper end. Cosmetic refreshes—doors, counters, backsplash—can land lower if plumbing and gas stay put.',
+      'Most full kitchen remodels we plan in Ada County fall between roughly $45,000 and $120,000+, with layout changes and custom cabinetry at the upper end. Cosmetic refreshes - doors, counters, backsplash - can land lower if plumbing and gas stay put.',
       'Meridian and Eagle kitchens often include larger islands, walk-in pantries, and panel-ready appliances. Kuna and Star homes may have builder-grade layouts worth reconfiguring for open concept living.',
     ],
   },
@@ -44,13 +44,13 @@ const kitchenExtra: ContentSection[] = [
     h2: 'When layout changes increase price in the Treasure Valley',
     paragraphs: [
       'Moving the sink, dishwasher, or range requires plumbing and often electrical panel work. Removing a wall may need a beam, engineering, and Ada County plan review.',
-      'Open concept requests from Boise Bench homeowners frequently combine kitchen, dining, and living flooring transitions—another cost layer beyond cabinets.',
+      'Open concept requests from Boise Bench homeowners frequently combine kitchen, dining, and living flooring transitions - another cost layer beyond cabinets.',
     ],
   },
   {
     h2: 'Timeline and how it affects cash flow',
     paragraphs: [
-      'Kitchen remodels typically run 8–16 weeks after permits and materials are released. Long-lead cabinets can add 8–12 weeks to the front of the schedule—order at design lock.',
+      'Kitchen remodels typically run 8–16 weeks after permits and materials are released. Long-lead cabinets can add 8–12 weeks to the front of the schedule - order at design lock.',
     ],
     table: {
       className: 'timeline-table',
@@ -105,7 +105,7 @@ const bathroomExtra: ContentSection[] = [
   {
     h2: 'Ventilation, heat, and electrical',
     paragraphs: [
-      'Proper exhaust prevents mold in Idaho’s dry-but-steamy bath cycles. Radiant floor heat adds electrical load and thermostat zones—popular in Eagle and Boise Foothills master baths.',
+      'Proper exhaust prevents mold in Idaho’s dry-but-steamy bath cycles. Radiant floor heat adds electrical load and thermostat zones - popular in Eagle and Boise Foothills master baths.',
     ],
   },
   {
@@ -144,7 +144,7 @@ const wholeHomeExtra: ContentSection[] = [
   {
     h2: 'Electrical, HVAC, and envelope upgrades',
     paragraphs: [
-      'Older North End and Bench homes may need panel upgrades and insulation when walls are open—budget these early, not as change orders.',
+      'Older North End and Bench homes may need panel upgrades and insulation when walls are open - budget these early, not as change orders.',
     ],
   },
   {
@@ -183,7 +183,7 @@ const additionExtra: ContentSection[] = [
   {
     h2: 'ADU comparison',
     paragraphs: [
-      'ADUs and guest houses overlap addition economics—see <a href="/services/adu">ADU services</a> and <a href="/blog/home-addition-cost-boise">this guide’s companion articles</a>.',
+      'ADUs and guest houses overlap addition economics - see <a href="/services/adu">ADU services</a> and <a href="/blog/home-addition-cost-boise">this guide’s companion articles</a>.',
     ],
   },
   {
@@ -198,7 +198,7 @@ const luxuryExtra: ContentSection[] = [
   {
     h2: 'What counts as a luxury remodel in Boise and Eagle?',
     paragraphs: [
-      'Custom millwork, book-matched stone, integrated lighting scenes, and high-performance windows define luxury programs—often $200,000–$600,000+ for multi-room scope.',
+      'Custom millwork, book-matched stone, integrated lighting scenes, and high-performance windows define luxury programs - often $200,000–$600,000+ for multi-room scope.',
     ],
   },
   {
@@ -216,14 +216,14 @@ const luxuryExtra: ContentSection[] = [
   {
     h2: 'Without a dedicated luxury service page',
     paragraphs: [
-      'We deliver luxury work through our <a href="/services/kitchen-remodel">kitchen</a>, <a href="/services/bathroom-remodel">bathroom</a>, and <a href="/services/whole-home-remodel">whole-home</a> teams—one design-build contract.',
+      'We deliver luxury work through our <a href="/services/kitchen-remodel">kitchen</a>, <a href="/services/bathroom-remodel">bathroom</a>, and <a href="/services/whole-home-remodel">whole-home</a> teams - one design-build contract.',
     ],
   },
 ];
 
 const perSqFtExtra: ContentSection[] = [
   {
-    h2: 'When cost per square foot helps—and when it misleads',
+    h2: 'When cost per square foot helps - and when it misleads',
     paragraphs: [
       '$/SF is useful for whole-home and addition planning after preliminary design. It misleads when comparing a kitchen to a carpet refresh.',
     ],
@@ -244,7 +244,7 @@ const perSqFtExtra: ContentSection[] = [
   {
     h2: 'Boise market factors in 2026',
     paragraphs: [
-      'Labor demand, material lead times, and insurance rebuild costs influence $/SF. Localize numbers—national blogs understate Idaho plumbing and electrical rates.',
+      'Labor demand, material lead times, and insurance rebuild costs influence $/SF. Localize numbers - national blogs understate Idaho plumbing and electrical rates.',
     ],
   },
 ];
@@ -354,7 +354,7 @@ export const COST_CLUSTER_CONTENT: Record<
   'home-addition-cost-boise': {
     html: buildSectionsHtml(clusterSections('home addition cost', additionExtra)),
     quickAnswer:
-      'Room additions in Boise, Eagle, and Meridian commonly plan between $80,000 and $250,000+ including foundation, structure, MEP, and finish—with second stories often higher.',
+      'Room additions in Boise, Eagle, and Meridian commonly plan between $80,000 and $250,000+ including foundation, structure, MEP, and finish - with second stories often higher.',
     takeaways: [
       'Site and foundation conditions move price early.',
       'HOA review adds time in many Eagle neighborhoods.',
@@ -384,7 +384,7 @@ export const COST_CLUSTER_CONTENT: Record<
   'what-impacts-remodeling-costs-boise': {
     html: buildSectionsHtml(clusterSections('remodeling cost drivers', impactsExtra)),
     quickAnswer:
-      'The biggest cost drivers for Treasure Valley remodels are layout/structural changes, cabinetry and tile level, existing home conditions, permits (Ada vs Canyon), and late selections—not just square footage.',
+      'The biggest cost drivers for Treasure Valley remodels are layout/structural changes, cabinetry and tile level, existing home conditions, permits (Ada vs Canyon), and late selections - not just square footage.',
     takeaways: [
       'Scope alignment matters more than a low bid.',
       'Permits and engineering are real schedule and cost items.',

@@ -35,7 +35,7 @@ export async function POST(request: Request, { params }: { params: { leadId: str
       customerStatus = "quote_ready";
     }
   } catch {
-    // No body — default status
+    // No body - default status
   }
 
   try {
