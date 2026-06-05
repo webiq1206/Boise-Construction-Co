@@ -118,7 +118,7 @@ export default function TermsOfServicePage() {
             <ul>
               <li>Email: <ObfuscatedEmail user="hello" domain="boiseremodeling.co" className="text-primary hover:underline inline-flex items-center gap-1" showIcon={false} /></li>
               <li>Phone: <a href={SITE_CONFIG.phoneHref} className="text-primary hover:underline">{SITE_CONFIG.phone}</a></li>
-              <li>Address: {SITE_CONFIG.address.full}</li>
+              <li>Service area: {SITE_CONFIG.address.cityState} · {SITE_CONFIG.address.serviceArea}</li>
             </ul>
           </div>
         </div>

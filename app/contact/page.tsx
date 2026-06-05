@@ -64,8 +64,6 @@ const GRAIN_URL = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/
 const SPEAKABLE_SUMMARY =
   'Contact Boise Remodeling Co for a free consultation. Schedule a free 60 to 90 minute in-home visit, call our team, or use the project estimator to explore a planning range for your remodel.';
 
-const MAPS_URL = `https://maps.google.com/?q=${encodeURIComponent(SITE_CONFIG.address.full)}`;
-
 function HeroBreadcrumbs() {
   const items = [
     { name: 'Home', href: '/' },
@@ -299,16 +297,13 @@ export default function ContactPage() {
               <Reveal delay={120}>
                 <ContactChannel
                   icon={<MapPin className="h-5 w-5" strokeWidth={1.5} />}
-                  label="Visit us"
-                  href={MAPS_URL}
-                  external
-                  subtext="Treasure Valley · Ada and Canyon County"
+                  label="Where we work"
+                  subtext={SITE_CONFIG.address.serviceArea}
                 >
                   <address className="not-italic leading-relaxed">
-                    {BUSINESS_INFO.address.street}
+                    Based in {SITE_CONFIG.address.cityState}
                     <br />
-                    {BUSINESS_INFO.address.city}, {BUSINESS_INFO.address.state}{' '}
-                    {BUSINESS_INFO.address.zip}
+                    Serving the Treasure Valley
                   </address>
                 </ContactChannel>
               </Reveal>

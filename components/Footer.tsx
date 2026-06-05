@@ -41,7 +41,7 @@ export function Footer() {
                 {SITE_CONFIG.email}
               </a>
               <p className="text-sm text-inverse-muted">
-                Boise, Idaho · Treasure Valley
+                {SITE_CONFIG.address.cityState} · {SITE_CONFIG.address.serviceArea}
               </p>
             </div>
           </div>

@@ -16,12 +16,13 @@ export const SITE_CONFIG = {
   phoneHref: `tel:${process.env.NEXT_PUBLIC_PHONE_TEL ?? DEFAULT_PHONE_TEL}`,
   email: process.env.NEXT_PUBLIC_EMAIL ?? DEFAULT_EMAIL,
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL,
+  // Service-area business: no public storefront, so no street address or ZIP is
+  // exposed. Keep city/state for NAP consistency across all surfaces.
   address: {
-    street: "4031 W Wapoot St",
     city: "Meridian",
     state: "ID",
-    zip: "83646",
-    full: "4031 W Wapoot St, Meridian, ID 83646",
+    cityState: "Meridian, ID",
+    serviceArea: "Treasure Valley · Ada and Canyon County",
   },
 } as const;
 
