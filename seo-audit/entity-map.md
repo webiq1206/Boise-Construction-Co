@@ -13,7 +13,7 @@ Complete entity inventory: organization, services, locations, team, projects.
 | Founded | 2017 | `BUSINESS_INFO.founded` | OK |
 | Phone | (208) 555-0100 | siteConfig | **PLACEHOLDER (data-gated)** |
 | Email | hello@boiseremodeling.co | siteConfig | OK |
-| Address (NAP) | 2283 N Coopers Hawk Ave, Kuna, ID 83634 | siteConfig | OK in schema; **footer shows "Boise, Idaho" only — inconsistency** |
+| Address (NAP) | 4031 W Wapoot St, Meridian, ID 83646 | siteConfig | OK in schema; **footer shows "Boise, Idaho" only — inconsistency** |
 | Logo | — | — | **GAP** (no Organization `logo`) |
 | sameAs | Facebook, Instagram | `BUSINESS_INFO.sameAs` | **WEAK** (no Google/GBP, Yelp, Houzz, BBB) |
 | Service area | 8 cities | `BUSINESS_INFO.serviceArea` | OK |

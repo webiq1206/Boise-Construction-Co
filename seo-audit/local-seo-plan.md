@@ -6,7 +6,7 @@ NAP consistency, GBP alignment, citations, local schema, and local proof.
 
 | Source | Value |
 |---|---|
-| Schema / contact | 2283 N Coopers Hawk Ave, Kuna, ID 83634 |
+| Schema / contact | 4031 W Wapoot St, Meridian, ID 83646 |
 | Footer | "Boise, Idaho · Treasure Valley" (no street) |
 | Phone | (208) 555-0100 — **placeholder** |
 
