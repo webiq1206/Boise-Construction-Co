@@ -112,7 +112,6 @@ export async function POST(request: NextRequest) {
       const adminHtml = wrapEmailHtml({
         title: "New Consultation Request",
         subtitle: escapeHtml(data.name),
-        tagline: "Admin Notifications",
         content: `
           <table class="info-table">
             <tr><td class="label">Name:</td><td class="value">${escapeHtml(data.name)}</td></tr>
@@ -152,7 +151,6 @@ export async function POST(request: NextRequest) {
       const customerHtml = wrapEmailHtml({
         title: `Thanks, ${escapeHtml(data.name)}!`,
         subtitle: "We received your consultation request",
-        tagline: "Design & Build",
         content: `
           <p class="greeting">We received your consultation request and will reach out within one business day to schedule your free in-home visit.</p>
           <p>In the meantime, feel free to call us at <a href="${SITE_CONFIG.phoneHref}">${escapeHtml(SITE_CONFIG.phone)}</a> or reply to this email with any questions.</p>

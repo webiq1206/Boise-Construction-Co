@@ -19,7 +19,6 @@ export async function sendComplianceReminderEmail(
   const htmlBody = wrapEmailHtml({
     title: "Compliance Reminder",
     subtitle: "Action required",
-    tagline: "Contractor Portal",
     content: `
       <p class="greeting">Hi ${escapeHtml(contractorName(user))},</p>
       <div class="highlight-box">
@@ -51,7 +50,6 @@ export async function sendContractSentEmail(
   const htmlBody = wrapEmailHtml({
     title: "Contract Ready for Signature",
     subtitle: escapeHtml(contractTitle),
-    tagline: "Contractor Portal",
     content: `
       <p class="greeting">Hi ${escapeHtml(contractorName(user))},</p>
       <p>A new contract is ready for your review and signature: <strong>${escapeHtml(contractTitle)}</strong></p>
@@ -77,7 +75,6 @@ export async function sendProjectAssignedEmail(
   const htmlBody = wrapEmailHtml({
     title: "New Project Assignment",
     subtitle: escapeHtml(projectTitle),
-    tagline: "Contractor Portal",
     content: `
       <p class="greeting">Hi ${escapeHtml(contractorName(user))},</p>
       <p>You have been assigned to project: <strong>${escapeHtml(projectTitle)}</strong></p>

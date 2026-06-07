@@ -95,7 +95,6 @@ export async function sendQuoteConfirmationEmail(data: {
   const html = wrapEmailHtml({
     title: 'Thank You for Your Quote Request!',
     subtitle: `Reference: ${data.quoteId.slice(0, 8)}`,
-    tagline: 'Design & Build',
     content: `
       <p class="greeting">Hi ${escapeHtml(data.customerName)},</p>
       <p>Thank you for requesting a quote from Boise Remodeling Co! We've received your request and will be in touch within one business day to schedule your free consultation.</p>
@@ -147,7 +146,6 @@ export async function sendAdminNotificationEmail(data: {
   const html = wrapEmailHtml({
     title: 'New Quote Request!',
     subtitle: `${escapeHtml(data.customerName)} - ${escapeHtml(data.city)}`,
-    tagline: 'Admin Notifications',
     content: `
       <div class="warning-box">
         <p><strong>New lead received!</strong></p>

@@ -161,17 +161,6 @@ export const emailStyles = `
     text-align: center;
     border-top: 1px solid ${EMAIL_BRAND.border};
   }
-  .footer-brand {
-    font-size: 18px;
-    font-weight: 600;
-    color: ${EMAIL_BRAND.charcoal};
-    margin: 0 0 8px 0;
-  }
-  .footer-tagline {
-    font-size: 13px;
-    color: ${EMAIL_BRAND.charcoalLight};
-    margin: 0 0 15px 0;
-  }
   .footer-contact {
     font-size: 13px;
     color: ${EMAIL_BRAND.charcoalLight};
@@ -198,11 +187,10 @@ export const emailStyles = `
   }
 `;
 
-export function buildEmailFooter(tagline = "Design & Build"): string {
+export function buildEmailFooter(): string {
   return `
     <div class="footer">
       ${buildTextLogo()}
-      <p class="footer-tagline">${escapeHtml(tagline)}</p>
       <p class="footer-contact">${escapeHtml(`${SITE_CONFIG.address.cityState} · ${SITE_CONFIG.address.serviceArea}`)}</p>
       <p class="footer-contact">Phone: <a href="${SITE_CONFIG.phoneHref}">${escapeHtml(SITE_CONFIG.phone)}</a></p>
       <p class="footer-contact">Email: <a href="mailto:${escapeHtml(SITE_CONFIG.email)}">${escapeHtml(SITE_CONFIG.email)}</a></p>
@@ -214,10 +202,9 @@ export function buildEmailFooter(tagline = "Design & Build"): string {
 export function wrapEmailHtml(options: {
   title: string;
   subtitle?: string;
-  tagline?: string;
   content: string;
 }): string {
-  const { title, subtitle, tagline = "Design & Build", content } = options;
+  const { title, subtitle, content } = options;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -235,7 +222,7 @@ export function wrapEmailHtml(options: {
     <div class="content">
       ${content}
     </div>
-    ${buildEmailFooter(tagline)}
+    ${buildEmailFooter()}
   </div>
 </body>
 </html>`;

@@ -391,7 +391,7 @@ export async function sendLeadPurchasedNotification(leadData: {
           </div>
         </div>
 
-        ${buildEmailFooter('Lead Marketplace')}
+        ${buildEmailFooter()}
       </div>
     </body>
     </html>
@@ -492,7 +492,7 @@ export async function sendLeadPurchaseConfirmation(purchaserEmail: string, leadD
           </div>
         </div>
 
-        ${buildEmailFooter('Lead Marketplace')}
+        ${buildEmailFooter()}
       </div>
     </body>
     </html>
@@ -595,7 +595,7 @@ export async function sendAdminAutoDeclineNotification(leadData: {
           </div>
         </div>
 
-        ${buildEmailFooter('Lead Marketplace')}
+        ${buildEmailFooter()}
       </div>
     </body>
     </html>
@@ -645,7 +645,7 @@ export async function sendCustomerStatusUpdate(
           </div>
           <p style="font-size: 14px; color: ${EMAIL_BRAND.charcoalLight};">Questions? Call us at <a href="${SITE_CONFIG.phoneHref}">${escapeHtml(SITE_CONFIG.phone)}</a>.</p>
         </div>
-        ${buildEmailFooter('Customer Updates')}
+        ${buildEmailFooter()}
       </div>
     </body>
     </html>
@@ -753,7 +753,7 @@ export async function sendContractorNewLeadAvailable(
             <a href="${portalUrl}" class="cta-button">View Lead Details</a>
           </div>
         </div>
-        ${buildEmailFooter('Lead Marketplace')}
+        ${buildEmailFooter()}
       </div>
     </body>
     </html>
@@ -854,7 +854,7 @@ export async function sendLeadMergeRefundNotification(
 
           <p style="font-size: 13px; color: #6b7280;">If anything looks off about this refund, just reply to this email and we'll take a look.</p>
         </div>
-        ${buildEmailFooter('Lead Marketplace')}
+        ${buildEmailFooter()}
       </div>
     </body>
     </html>
@@ -904,7 +904,7 @@ export async function sendAdminDailyDigest(
             <a href="${dashboardUrl}" class="cta-button">Open Dashboard →</a>
           </div>
         </div>
-        ${buildEmailFooter('Lead Marketplace')}
+        ${buildEmailFooter()}
       </div>
     </body>
     </html>
@@ -955,7 +955,7 @@ export async function sendAdminReminder(
             <a href="${dashboardUrl}" class="cta-button">Review Now →</a>
           </div>
         </div>
-        ${buildEmailFooter('Lead Marketplace')}
+        ${buildEmailFooter()}
       </div>
     </body>
     </html>
@@ -1010,7 +1010,6 @@ export async function sendWatchedLeadUpdatedEmail(
   const htmlBody = wrapEmailHtml({
     title: "Watched Lead Updated",
     subtitle: data.city,
-    tagline: "Lead Marketplace",
     content: `
       <p class="greeting">A lead you're watching has been updated by the customer.</p>
       <div class="highlight-box">
@@ -1040,7 +1039,6 @@ export async function sendLeadPriceDropEmail(
   const htmlBody = wrapEmailHtml({
     title: "Lead Price Drop",
     subtitle: `${data.city} - ${data.serviceType}`,
-    tagline: "Lead Marketplace",
     content: `
       <p class="greeting">A lead you're watching just dropped in price.</p>
       <div class="highlight-box">
@@ -1067,7 +1065,6 @@ export async function sendContractSignedNotification(
   const htmlBody = wrapEmailHtml({
     title: "Contract Signed",
     subtitle: data.contractTitle,
-    tagline: "Admin Notifications",
     content: `
       <p class="greeting">${escapeHtml(data.signerName)} signed <strong>${escapeHtml(data.contractTitle)}</strong>.</p>
       <div style="text-align:center; margin: 30px 0;">
@@ -1088,7 +1085,6 @@ export async function sendContractSignedConfirmation(
   const htmlBody = wrapEmailHtml({
     title: "Contract Signed",
     subtitle: "Thank you for signing",
-    tagline: "Contractor Portal",
     content: `
       <p class="greeting">We've received your signature for <strong>${escapeHtml(data.contractTitle)}</strong>.</p>
       <p>Our team has been notified and will follow up if anything else is needed.</p>
