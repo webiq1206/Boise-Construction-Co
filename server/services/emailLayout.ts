@@ -202,7 +202,6 @@ export function buildEmailFooter(tagline = "Design & Build"): string {
   return `
     <div class="footer">
       ${buildTextLogo()}
-      <p class="footer-brand">${escapeHtml(SITE_CONFIG.name)}</p>
       <p class="footer-tagline">${escapeHtml(tagline)}</p>
       <p class="footer-contact">${escapeHtml(`${SITE_CONFIG.address.cityState} · ${SITE_CONFIG.address.serviceArea}`)}</p>
       <p class="footer-contact">Phone: <a href="${SITE_CONFIG.phoneHref}">${escapeHtml(SITE_CONFIG.phone)}</a></p>
