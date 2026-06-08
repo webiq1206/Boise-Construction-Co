@@ -1,4 +1,4 @@
-import { ArrowRight, Check, ChevronRight, Mail, MapPin, Phone } from 'lucide-react';
+import { ArrowRight, Check, ChevronRight, Mail, MapPin, MessageSquare, Phone } from 'lucide-react';
 import Link from 'next/link';
 import { JsonLd } from '@/components/seo/JsonLd';
 import Image from 'next/image';
@@ -234,9 +234,16 @@ export default function ContactPage() {
             </p>
             <a
               href={SITE_CONFIG.phoneHref}
-              className="inline-block brc-display-num tabular-nums text-2xl md:text-3xl text-inverse-foreground hover:text-inverse-foreground/75 transition-colors mb-8"
+              className="inline-block brc-display-num tabular-nums text-2xl md:text-3xl text-inverse-foreground hover:text-inverse-foreground/75 transition-colors mb-2"
             >
               {BUSINESS_INFO.phone}
+            </a>
+            <a
+              href={SITE_CONFIG.phoneSmsHref}
+              className="block text-sm text-inverse-foreground/80 hover:text-inverse-foreground transition-colors mb-8"
+              data-testid="link-hero-text"
+            >
+              Prefer to text? Message us instead
             </a>
             <div className="flex flex-wrap gap-3 mb-8">
               <ConsultCTA variant="brand">
@@ -280,6 +287,16 @@ export default function ContactPage() {
                   href={SITE_CONFIG.phoneHref}
                   subtext="Mon – Fri 7 am – 6 pm · Sat 8 am – 4 pm"
                   featured
+                >
+                  <span className="brc-display-num tabular-nums">{BUSINESS_INFO.phone}</span>
+                </ContactChannel>
+              </Reveal>
+              <Reveal delay={30} className="sm:col-span-2">
+                <ContactChannel
+                  icon={<MessageSquare className="h-5 w-5" strokeWidth={1.5} />}
+                  label="Text us"
+                  href={SITE_CONFIG.phoneSmsHref}
+                  subtext="Quick questions? Send us a text"
                 >
                   <span className="brc-display-num tabular-nums">{BUSINESS_INFO.phone}</span>
                 </ContactChannel>
@@ -480,9 +497,16 @@ export default function ContactPage() {
                 </p>
                 <a
                   href={SITE_CONFIG.phoneHref}
-                  className="inline-block brc-display-num tabular-nums text-2xl text-inverse-foreground hover:text-inverse-foreground/75 transition-colors mb-8"
+                  className="inline-block brc-display-num tabular-nums text-2xl text-inverse-foreground hover:text-inverse-foreground/75 transition-colors mb-2"
                 >
                   {BUSINESS_INFO.phone}
+                </a>
+                <a
+                  href={SITE_CONFIG.phoneSmsHref}
+                  className="block text-sm text-inverse-muted hover:text-inverse-foreground transition-colors mb-8"
+                  data-testid="link-closing-text"
+                >
+                  Or send us a text message
                 </a>
                 <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3">
                   <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>

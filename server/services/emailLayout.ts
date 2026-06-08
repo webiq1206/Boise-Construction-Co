@@ -193,6 +193,7 @@ export function buildEmailFooter(): string {
       ${buildTextLogo()}
       <p class="footer-contact">${escapeHtml(`${SITE_CONFIG.address.cityState} · ${SITE_CONFIG.address.serviceArea}`)}</p>
       <p class="footer-contact">Phone: <a href="${SITE_CONFIG.phoneHref}">${escapeHtml(SITE_CONFIG.phone)}</a></p>
+      <p class="footer-contact">Text: <a href="${SITE_CONFIG.phoneSmsHref}">${escapeHtml(SITE_CONFIG.phone)}</a></p>
       <p class="footer-contact">Email: <a href="mailto:${escapeHtml(SITE_CONFIG.email)}">${escapeHtml(SITE_CONFIG.email)}</a></p>
       <p class="footer-contact">Web: <a href="${SITE_BASE_URL}">${escapeHtml(SITE_BASE_URL.replace(/^https?:\/\//, ""))}</a></p>
     </div>

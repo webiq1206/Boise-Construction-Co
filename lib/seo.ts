@@ -148,7 +148,7 @@ const CITY_CTA_VARIANTS: Record<string, string> = {
 /**
  * Generate SEO-optimized meta description
  * 150-160 characters with phone number, CTA, and unique value prop
- * Phone: (208) 555-0100
+ * Phone: (208) 477-1169
  */
 export function generateMetaDescription(params: ServiceSEOParams): string {
   const { serviceName, city } = params;

@@ -24,7 +24,7 @@ export function TextLink({
     </>
   );
 
-  if (external || href.startsWith("http") || href.startsWith("tel:") || href.startsWith("mailto:")) {
+  if (external || href.startsWith("http") || href.startsWith("tel:") || href.startsWith("sms:") || href.startsWith("mailto:")) {
     return (
       <a href={href} className={cn("brc-text-link", className)}>
         {content}

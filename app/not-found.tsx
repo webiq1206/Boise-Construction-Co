@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Home, ArrowRight, Phone, Wrench } from "lucide-react";
+import { Home, ArrowRight, MessageSquare, Phone, Wrench } from "lucide-react";
 import { DisplayNum } from "@/components/marketing";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 
@@ -69,6 +69,12 @@ export default function NotFound() {
             <a href={SITE_CONFIG.phoneHref}>
               <Phone className="h-5 w-5 mr-2" />
               Call {SITE_CONFIG.phone}
+            </a>
+          </Button>
+          <Button variant="brandOutline" size="lg" asChild>
+            <a href={SITE_CONFIG.phoneSmsHref} data-testid="link-404-text">
+              <MessageSquare className="h-5 w-5 mr-2" />
+              Text us
             </a>
           </Button>
         </div>

@@ -1,4 +1,4 @@
-import { ArrowRight, Phone } from "lucide-react";
+import { ArrowRight, MessageSquare, Phone } from "lucide-react";
 import { MarketingCard } from "./MarketingCard";
 import { CTA_PRIMARY } from "@/shared/ctaCopy";
 import { SITE_CONFIG } from "@/shared/siteConfig";
@@ -26,6 +26,14 @@ export function BlogEndCta() {
         >
           <Phone className="h-4 w-4" />
           {SITE_CONFIG.phone}
+        </a>
+        <a
+          href={SITE_CONFIG.phoneSmsHref}
+          data-testid="link-bottom-cta-text"
+          className="inline-flex items-center justify-center gap-2 rounded-sm border border-white/30 bg-white/10 px-4 py-2 text-sm font-medium text-inverse-foreground transition-colors hover-elevate"
+        >
+          <MessageSquare className="h-4 w-4" />
+          Text us
         </a>
       </div>
     </MarketingCard>

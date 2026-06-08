@@ -144,6 +144,16 @@ export function Navigation() {
               </span>
               {SITE_CONFIG.phone}
             </a>
+            <a
+              href={SITE_CONFIG.phoneSmsHref}
+              className={cn(
+                "text-[13px] font-medium transition-colors",
+                isHeroMode ? "text-inverse-muted hover:text-inverse-foreground" : "text-muted-foreground hover:text-foreground"
+              )}
+              data-testid="link-text-desktop"
+            >
+              Text us
+            </a>
             {isHome ? (
               <Button variant="brand" size="sm" asChild>
                 <a href="/#consult">{CTA_PRIMARY_SHORT}</a>
@@ -222,6 +232,13 @@ export function Navigation() {
             </span>
             {SITE_CONFIG.phone}
           </a>
+          <a
+            href={SITE_CONFIG.phoneSmsHref}
+            className="flex items-center gap-3 text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
+            data-testid="link-text-mobile-menu"
+          >
+            Text us instead
+          </a>
           {isHome ? (
             <Button variant="brand" className="w-full" asChild>
               <a href="/#consult" onClick={() => setMobileOpen(false)}>
@@ -250,7 +267,7 @@ export function Navigation() {
           bottomBarClasses.bar
         )}
       >
-        <div className={cn("grid grid-cols-2 divide-x", bottomBarClasses.divide)}>
+        <div className={cn("grid grid-cols-3 divide-x", bottomBarClasses.divide)}>
           <a
             href={SITE_CONFIG.phoneHref}
             className={cn(
@@ -260,6 +277,16 @@ export function Navigation() {
             data-testid="button-call-mobile"
           >
             Call
+          </a>
+          <a
+            href={SITE_CONFIG.phoneSmsHref}
+            className={cn(
+              "flex items-center justify-center gap-2 py-4 text-sm font-medium",
+              bottomBarClasses.text
+            )}
+            data-testid="button-text-mobile"
+          >
+            Text
           </a>
           {isHome ? (
             <a

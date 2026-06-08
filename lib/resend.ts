@@ -106,7 +106,7 @@ export async function sendQuoteConfirmationEmail(data: {
         <p style="margin: 0 0 8px 0;"><strong>Services:</strong></p>
         <ul style="margin: 0; padding-left: 20px;">${servicesHtml}</ul>
       </div>
-      <p>If you have any questions in the meantime, feel free to call us at <strong>${escapeHtml(SITE_CONFIG.phone)}</strong> or reply to this email.</p>
+      <p>If you have any questions in the meantime, feel free to call us at <a href="${SITE_CONFIG.phoneHref}">${escapeHtml(SITE_CONFIG.phone)}</a>, <a href="${SITE_CONFIG.phoneSmsHref}">send us a text</a>, or reply to this email.</p>
       <div style="text-align: center; margin-top: 30px;">
         <a href="${SITE_BASE_URL}" class="cta-button">Visit Our Website</a>
       </div>

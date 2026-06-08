@@ -643,7 +643,7 @@ export async function sendCustomerStatusUpdate(
           <div style="text-align:center; margin: 30px 0;">
             <a href="${statusUrl}" class="cta-button">View Quote Status →</a>
           </div>
-          <p style="font-size: 14px; color: ${EMAIL_BRAND.charcoalLight};">Questions? Call us at <a href="${SITE_CONFIG.phoneHref}">${escapeHtml(SITE_CONFIG.phone)}</a>.</p>
+          <p style="font-size: 14px; color: ${EMAIL_BRAND.charcoalLight};">Questions? Call us at <a href="${SITE_CONFIG.phoneHref}">${escapeHtml(SITE_CONFIG.phone)}</a> or <a href="${SITE_CONFIG.phoneSmsHref}">send us a text</a>.</p>
         </div>
         ${buildEmailFooter()}
       </div>

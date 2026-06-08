@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
         subtitle: "We received your consultation request",
         content: `
           <p class="greeting">We received your consultation request and will reach out within one business day to schedule your free in-home visit.</p>
-          <p>In the meantime, feel free to call us at <a href="${SITE_CONFIG.phoneHref}">${escapeHtml(SITE_CONFIG.phone)}</a> or reply to this email with any questions.</p>
+          <p>In the meantime, feel free to call us at <a href="${SITE_CONFIG.phoneHref}">${escapeHtml(SITE_CONFIG.phone)}</a>, <a href="${SITE_CONFIG.phoneSmsHref}">send us a text</a>, or reply to this email with any questions.</p>
           <p style="margin-top:24px;">The Boise Remodeling Co team</p>
         `,
       });

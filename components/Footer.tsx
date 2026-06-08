@@ -35,6 +35,13 @@ export function Footer() {
                 {SITE_CONFIG.phone}
               </a>
               <a
+                href={SITE_CONFIG.phoneSmsHref}
+                className="block text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
+                data-testid="link-footer-text"
+              >
+                Text us
+              </a>
+              <a
                 href={`mailto:${SITE_CONFIG.email}`}
                 className="block text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
               >
@@ -203,6 +210,7 @@ export function Footer() {
               <FooterCTAs />
               {[
                 { label: SITE_CONFIG.phone, href: SITE_CONFIG.phoneHref },
+                { label: "Text us", href: SITE_CONFIG.phoneSmsHref },
                 { label: SITE_CONFIG.email, href: `mailto:${SITE_CONFIG.email}` },
               ].map((link) => (
                 <li key={link.label}>
