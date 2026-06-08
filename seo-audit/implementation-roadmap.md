@@ -37,7 +37,7 @@ Completion checklist. Items are marked DONE (implemented in this audit pass), or
 
 ## Data-gated (you supply the facts; plumbing is ready)
 
-- [ ] Real business phone (replaces `(208) 555-0100`) — set `NEXT_PUBLIC_PHONE` / `NEXT_PUBLIC_PHONE_TEL`
+- [x] Real business phone `(208) 477-1169` — set in `shared/siteConfig.ts` defaults (env `NEXT_PUBLIC_PHONE` / `NEXT_PUBLIC_PHONE_TEL` optional overrides)
 - [ ] Idaho contractor license number → footer + schema
 - [ ] Google Business Profile URL (+ Houzz/Yelp/BBB) → `BUSINESS_INFO.sameAs`
 - [ ] Genuine rating + review count + dated reviews → `BUSINESS_INFO.rating/reviewCount` + `TESTIMONIALS` dates → activates AggregateRating

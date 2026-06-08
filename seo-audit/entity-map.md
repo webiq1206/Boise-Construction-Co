@@ -11,7 +11,7 @@ Complete entity inventory: organization, services, locations, team, projects.
 | Alternate names | — | — | **GAP** (add "Boise Remodeling", "BRC") |
 | Description | Design-build remodeler, est. 2017 | `lib/schema.ts` | OK |
 | Founded | 2017 | `BUSINESS_INFO.founded` | OK |
-| Phone | (208) 555-0100 | siteConfig | **PLACEHOLDER (data-gated)** |
+| Phone | (208) 477-1169 | siteConfig | OK |
 | Email | hello@boiseremodeling.co | siteConfig | OK |
 | Address (NAP) | 4031 W Wapoot St, Meridian, ID 83646 | siteConfig | OK in schema; **footer shows "Boise, Idaho" only — inconsistency** |
 | Logo | — | — | **GAP** (no Organization `logo`) |

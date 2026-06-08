@@ -8,11 +8,11 @@ NAP consistency, GBP alignment, citations, local schema, and local proof.
 |---|---|
 | Schema / contact | 4031 W Wapoot St, Meridian, ID 83646 |
 | Footer | "Boise, Idaho · Treasure Valley" (no street) |
-| Phone | (208) 555-0100 — **placeholder** |
+| Phone | (208) 477-1169 |
 
 **Actions:**
 - Align footer with the canonical NAP (or intentionally keep address private but ensure schema + GBP match exactly).
-- Replace placeholder phone everywhere (driven by `SITE_CONFIG.phone`/`phoneTel` via env) — **data-gated**.
+- Phone is the real business number `(208) 477-1169`, driven centrally by `SITE_CONFIG.phone`/`phoneTel` (env-overridable) — **done**.
 
 ## Google Business Profile alignment
 

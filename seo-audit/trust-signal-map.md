@@ -39,7 +39,7 @@ Existing / weak / missing trust signals and recommendations.
 | Awards / press | Authority (competitors tout NARI "Remodeler of the Year", Best of Houzz) | **data-gated** |
 | Years/projects-completed stat | Experience proof (`yearlyServicesCompleted: 0`) | **data-gated** |
 | Third-party review badges (Houzz/Google) | Trust | **data-gated** |
-| Real phone (currently `(208) 555-0100`) | Basic trust/NAP | **data-gated** |
+| Real phone (`(208) 477-1169`) | Basic trust/NAP | OK |
 
 ## Competitor trust benchmark (see competitor-gap-analysis.md)
 
