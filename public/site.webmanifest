@@ -5,5 +5,19 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f8f5f0",
-  "theme_color": "#3A3E3D"
+  "theme_color": "#3A3E3D",
+  "icons": [
+    {
+      "src": "/images/brc-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/brc-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
 }
