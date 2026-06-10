@@ -249,10 +249,7 @@ export default function ContactPage() {
               <ConsultCTA variant="brand">
                 {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
               </ConsultCTA>
-              <EstimateCTA
-                variant="outline"
-                className="bg-white/10 backdrop-blur-sm border-white/30 text-white"
-              >
+              <EstimateCTA variant="heroGhost">
                 {CTA_SECONDARY}
               </EstimateCTA>
             </div>
@@ -510,10 +507,7 @@ export default function ContactPage() {
                 </a>
                 <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3">
                   <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
-                  <EstimateCTA
-                    variant="outline"
-                    className="bg-white/10 backdrop-blur-sm border-white/30 text-white"
-                  >
+                  <EstimateCTA variant="heroGhost">
                     {CTA_SECONDARY}
                   </EstimateCTA>
                 </div>

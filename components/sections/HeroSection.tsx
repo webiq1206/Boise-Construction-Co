@@ -59,7 +59,7 @@ export function HeroSection() {
                 <Button variant="brand" asChild>
                   <a href="#consult">{CTA_PRIMARY}</a>
                 </Button>
-                <Button variant="brandOutline" className="border-inverse-foreground/25 bg-inverse-foreground/10 text-inverse-foreground hover:bg-inverse-foreground/15" asChild>
+                <Button variant="heroGhost" asChild>
                   <a href="#calculator">{CTA_SECONDARY}</a>
                 </Button>
               </div>

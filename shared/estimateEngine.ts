@@ -3,6 +3,7 @@ export type FinishLevel = "refresh" | "mid-range" | "high-end" | "luxury";
 export type LayoutChanges = "none" | "moderate" | "major";
 export type PlumbingElectrical = "cosmetic" | "partial" | "full";
 export type CabinetTier = "standard" | "semi-custom" | "custom";
+export type AduConfig = "detached" | "attached";
 export type ConfidenceLevel = "starting" | "refined" | "detailed";
 
 export type UserRefinementKey =
@@ -11,7 +12,8 @@ export type UserRefinementKey =
   | "cabinetTier"
   | "fixtureCount"
   | "roomCount"
-  | "stories";
+  | "stories"
+  | "aduConfig";
 
 export interface PriceData {
   low: number;
@@ -24,23 +26,40 @@ export interface ProjectSizeConfig {
   min: number;
   max: number;
   step: number;
-  defaultSqft: number;
   baselineSqft: number;
 }
 
+/**
+ * All refinements are nullable: null means "the user has not told us yet" and
+ * never affects the price (1.0x multiplier). There are NO implicit defaults.
+ */
 export interface EstimateRefinements {
-  layoutChanges: LayoutChanges;
-  plumbingElectrical: PlumbingElectrical;
+  layoutChanges: LayoutChanges | null;
+  plumbingElectrical: PlumbingElectrical | null;
   cabinetTier: CabinetTier | null;
   fixtureCount: number | null;
   stories: number | null;
   roomCount: number | null;
+  aduConfig: AduConfig | null;
 }
 
+/** A fully-specified estimate input. Required before any range is calculated. */
 export interface EstimateInput {
   project: ProjectType;
   finish: FinishLevel;
   sqft: number;
+  refinements: EstimateRefinements;
+}
+
+/**
+ * In-progress estimator state. Nothing is selected by default; the UI works
+ * with this shape and only calls `calculateEstimate` once the input is
+ * complete (see `isCompleteEstimateInput`).
+ */
+export interface PartialEstimateInput {
+  project: ProjectType | null;
+  finish: FinishLevel | null;
+  sqft: number | null;
   refinements: EstimateRefinements;
 }
 
@@ -62,29 +81,75 @@ export const APPLIANCE_DISCLAIMER =
   "Appliances are client-supplied; we'll guide your selection but do not purchase or install them.";
 
 export const PROJECT_SIZE_CONFIG: Record<ProjectType, ProjectSizeConfig> = {
-  kitchen: { min: 100, max: 600, step: 25, defaultSqft: 250, baselineSqft: 250 },
-  bathroom: { min: 40, max: 200, step: 10, defaultSqft: 80, baselineSqft: 80 },
-  "whole-home": { min: 800, max: 8000, step: 100, defaultSqft: 1800, baselineSqft: 1800 },
-  addition: { min: 200, max: 1200, step: 50, defaultSqft: 400, baselineSqft: 400 },
-  adu: { min: 300, max: 900, step: 50, defaultSqft: 600, baselineSqft: 600 },
+  kitchen: { min: 100, max: 600, step: 25, baselineSqft: 250 },
+  bathroom: { min: 40, max: 200, step: 10, baselineSqft: 80 },
+  "whole-home": { min: 800, max: 8000, step: 100, baselineSqft: 1800 },
+  addition: { min: 200, max: 1200, step: 50, baselineSqft: 400 },
+  adu: { min: 300, max: 900, step: 50, baselineSqft: 600 },
 };
 
-export const DEFAULT_ESTIMATE_INPUT: EstimateInput = {
-  project: "kitchen",
-  finish: "mid-range",
-  sqft: PROJECT_SIZE_CONFIG.kitchen.defaultSqft,
-  refinements: {
-    layoutChanges: "none",
-    plumbingElectrical: "cosmetic",
-    cabinetTier: null,
-    fixtureCount: null,
-    stories: null,
-    roomCount: null,
-  },
+export const EMPTY_REFINEMENTS: EstimateRefinements = {
+  layoutChanges: null,
+  plumbingElectrical: null,
+  cabinetTier: null,
+  fixtureCount: null,
+  stories: null,
+  roomCount: null,
+  aduConfig: null,
 };
+
+/** Estimator starting state: nothing selected, no implicit defaults. */
+export const EMPTY_ESTIMATE_INPUT: PartialEstimateInput = {
+  project: null,
+  finish: null,
+  sqft: null,
+  refinements: { ...EMPTY_REFINEMENTS },
+};
+
+export function isCompleteEstimateInput(
+  input: PartialEstimateInput,
+): input is PartialEstimateInput & EstimateInput {
+  return input.project !== null && input.finish !== null && input.sqft !== null;
+}
 
 export function getProjectSizeConfig(project: ProjectType): ProjectSizeConfig {
   return PROJECT_SIZE_CONFIG[project];
+}
+
+export interface SizePreset {
+  id: "smaller" | "typical" | "larger";
+  label: string;
+  sub: string;
+  sqft: number;
+}
+
+/**
+ * Explicit size starting points so users make an intentional size choice
+ * (no pre-positioned slider). The slider then fine-tunes from the preset.
+ */
+export function getSizePresets(project: ProjectType): SizePreset[] {
+  const c = PROJECT_SIZE_CONFIG[project];
+  const snap = (n: number) => Math.round(n / c.step) * c.step;
+  return [
+    {
+      id: "smaller",
+      label: "Smaller",
+      sub: "Compact space",
+      sqft: snap((c.min + c.baselineSqft) / 2),
+    },
+    {
+      id: "typical",
+      label: "Typical",
+      sub: "Most common",
+      sqft: c.baselineSqft,
+    },
+    {
+      id: "larger",
+      label: "Larger",
+      sub: "Generous space",
+      sqft: snap((c.baselineSqft + c.max) / 2),
+    },
+  ];
 }
 
 export interface RefinementVisibility {
@@ -191,7 +256,12 @@ export const PLANNING_DETAIL_LABELS: Record<ConfidenceLevel, string> = {
 /** @deprecated Use PLANNING_DETAIL_LABELS */
 export const CONFIDENCE_LABELS = PLANNING_DETAIL_LABELS;
 
-const PRICE_MATRIX: Record<ProjectType, Record<FinishLevel, PriceData>> = {
+/**
+ * Base ranges per project x finish at baseline size. Disallowed combinations
+ * (refresh for new construction) are intentionally absent; always resolve
+ * prices through `getPriceData`, which normalizes the finish first.
+ */
+const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>> = {
   kitchen: {
     refresh: {
       low: 15000, high: 35000, roi: 72,
@@ -247,10 +317,6 @@ const PRICE_MATRIX: Record<ProjectType, Record<FinishLevel, PriceData>> = {
     },
   },
   addition: {
-    refresh: {
-      low: 40000, high: 80000, roi: 60,
-      included: ["New room with standard finishes", "Basic electrical and HVAC", "Matching exterior siding and roofline"],
-    },
     "mid-range": {
       low: 80000, high: 180000, roi: 63,
       included: ["Bedroom or family room addition", "Full HVAC integration", "Updated electrical panel", "Mid-range finishes"],
@@ -265,10 +331,6 @@ const PRICE_MATRIX: Record<ProjectType, Record<FinishLevel, PriceData>> = {
     },
   },
   adu: {
-    refresh: {
-      low: 120000, high: 185000, roi: 68,
-      included: ["Foundation and framing", "Self-contained plumbing and electrical", "Standard kitchen and bath package", "Matching exterior siding and roofline"],
-    },
     "mid-range": {
       low: 185000, high: 260000, roi: 70,
       included: ["Full design-build ADU", "Mid-range kitchen and bath finishes", "Separate HVAC system", "Permit coordination through CO"],
@@ -284,6 +346,17 @@ const PRICE_MATRIX: Record<ProjectType, Record<FinishLevel, PriceData>> = {
   },
 };
 
+/** Resolves base price data, normalizing disallowed finish levels first. */
+export function getPriceData(project: ProjectType, finish: FinishLevel): PriceData {
+  const normalized = normalizeFinishLevel(project, finish);
+  const data = PRICE_MATRIX[project][normalized];
+  if (!data) {
+    // Unreachable as long as getAvailableFinishLevels matches PRICE_MATRIX keys.
+    throw new Error(`No price data for ${project}/${normalized}`);
+  }
+  return data;
+}
+
 export function formatPlanningCurrency(n: number): string {
   if (n >= 1000000) return `$${(n / 1000000).toFixed(1)}M`;
   if (n >= 1000) return `$${Math.round(n / 1000)}k`;
@@ -291,8 +364,8 @@ export function formatPlanningCurrency(n: number): string {
 }
 
 export function getFinishPlanningHint(project: ProjectType, finish: FinishLevel): string {
-  const data = PRICE_MATRIX[project][finish];
-  return `Typical band at default size: ${formatPlanningCurrency(data.low)} to ${formatPlanningCurrency(data.high)}`;
+  const data = getPriceData(project, finish);
+  return `${formatPlanningCurrency(data.low)} to ${formatPlanningCurrency(data.high)} at typical size`;
 }
 
 export function buildSelectionSummary(project: ProjectType, finish: FinishLevel, sqft: number): string {
@@ -326,10 +399,18 @@ export function countVisibleUserRefinements(
     else if (key === "cabinetTier" && visibility.cabinetTier) count++;
     else if (key === "fixtureCount" && visibility.fixtureCount) count++;
     else if (key === "roomCount" && visibility.roomCount) count++;
-    else if (key === "stories" && (visibility.stories || visibility.aduConfiguration)) count++;
+    else if (key === "stories" && visibility.stories) count++;
+    else if (key === "aduConfig" && visibility.aduConfiguration) count++;
   }
 
   return count;
+}
+
+/** Derives the user-set refinement keys from refinement values (null = unset). */
+export function getSetRefinementKeys(refinements: EstimateRefinements): UserRefinementKey[] {
+  return (Object.keys(refinements) as UserRefinementKey[]).filter(
+    (key) => refinements[key] !== null,
+  );
 }
 
 function getSizeMultiplier(sqft: number, project: ProjectType): number {
@@ -341,21 +422,27 @@ function getRefinementMultipliers(ref: EstimateRefinements, project: ProjectType
   let low = 1;
   let high = 1;
 
-  const layoutMult: Record<LayoutChanges, { low: number; high: number }> = {
-    none: { low: 1, high: 1 },
-    moderate: { low: 1.08, high: 1.15 },
-    major: { low: 1.18, high: 1.35 },
-  };
-  low *= layoutMult[ref.layoutChanges].low;
-  high *= layoutMult[ref.layoutChanges].high;
+  // Unset (null) refinements never move the price: an estimate only reflects
+  // what the user actually told us.
+  if (ref.layoutChanges !== null) {
+    const layoutMult: Record<LayoutChanges, { low: number; high: number }> = {
+      none: { low: 1, high: 1 },
+      moderate: { low: 1.08, high: 1.15 },
+      major: { low: 1.18, high: 1.35 },
+    };
+    low *= layoutMult[ref.layoutChanges].low;
+    high *= layoutMult[ref.layoutChanges].high;
+  }
 
-  const peMult: Record<PlumbingElectrical, { low: number; high: number }> = {
-    cosmetic: { low: 1, high: 1 },
-    partial: { low: 1.05, high: 1.12 },
-    full: { low: 1.12, high: 1.22 },
-  };
-  low *= peMult[ref.plumbingElectrical].low;
-  high *= peMult[ref.plumbingElectrical].high;
+  if (ref.plumbingElectrical !== null) {
+    const peMult: Record<PlumbingElectrical, { low: number; high: number }> = {
+      cosmetic: { low: 1, high: 1 },
+      partial: { low: 1.05, high: 1.12 },
+      full: { low: 1.12, high: 1.22 },
+    };
+    low *= peMult[ref.plumbingElectrical].low;
+    high *= peMult[ref.plumbingElectrical].high;
+  }
 
   if (project === "kitchen" && ref.cabinetTier) {
     const cabMult: Record<CabinetTier, { low: number; high: number }> = {
@@ -367,21 +454,30 @@ function getRefinementMultipliers(ref: EstimateRefinements, project: ProjectType
     high *= cabMult[ref.cabinetTier].high;
   }
 
+  // Fixture / room counts only ever add cost relative to the base range
+  // (floored at 1.0) so small counts never silently discount the estimate.
   if (project === "bathroom" && ref.fixtureCount !== null) {
-    const fixtureFactor = 1 + (ref.fixtureCount - 2) * 0.04;
-    low *= Math.max(0.9, fixtureFactor);
-    high *= Math.max(0.9, fixtureFactor);
+    const fixtureFactor = Math.max(1, 1 + (ref.fixtureCount - 2) * 0.04);
+    low *= fixtureFactor;
+    high *= fixtureFactor;
   }
 
   if (project === "whole-home" && ref.roomCount !== null) {
-    const roomFactor = 1 + (ref.roomCount - 3) * 0.06;
-    low *= Math.max(0.85, roomFactor);
-    high *= Math.max(0.85, roomFactor);
+    const roomFactor = Math.max(1, 1 + (ref.roomCount - 3) * 0.06);
+    low *= roomFactor;
+    high *= roomFactor;
   }
 
-  if ((project === "addition" || project === "adu") && ref.stories !== null && ref.stories > 1) {
+  if (project === "addition" && ref.stories !== null && ref.stories > 1) {
     low *= 1.12;
     high *= 1.2;
+  }
+
+  // Detached units carry their own foundation, envelope, and utility runs;
+  // attached units share systems with the main home.
+  if (project === "adu" && ref.aduConfig === "detached") {
+    low *= 1.05;
+    high *= 1.12;
   }
 
   return { low, high };
@@ -417,18 +513,17 @@ const CABINET_SCOPE: Record<CabinetTier, string> = {
  * the base scope for the project + finish level.
  */
 export function buildDynamicScope(input: EstimateInput): string[] {
-  const finish = normalizeFinishLevel(input.project, input.finish);
-  const base = PRICE_MATRIX[input.project][finish].included;
+  const base = getPriceData(input.project, input.finish).included;
   const r = input.refinements;
   const visibility = getRefinementVisibility(input.project);
   const extra: string[] = [];
 
-  if (visibility.layoutChanges) {
+  if (visibility.layoutChanges && r.layoutChanges !== null) {
     const layoutItem = LAYOUT_SCOPE[r.layoutChanges];
     if (layoutItem) extra.push(layoutItem);
   }
 
-  if (visibility.plumbingElectrical) {
+  if (visibility.plumbingElectrical && r.plumbingElectrical !== null) {
     const peScope =
       input.project === "addition" || input.project === "adu"
         ? PE_SCOPE_NEW_CONSTRUCTION
@@ -453,8 +548,8 @@ export function buildDynamicScope(input: EstimateInput): string[] {
     extra.push(r.stories > 1 ? "Two-story addition" : "Single-story addition");
   }
 
-  if (input.project === "adu" && r.stories !== null) {
-    extra.push(r.stories > 1 ? "Attached ADU" : "Detached ADU");
+  if (input.project === "adu" && r.aduConfig !== null) {
+    extra.push(r.aduConfig === "attached" ? "Attached ADU" : "Detached ADU");
   }
 
   const seen = new Set<string>();
@@ -468,7 +563,7 @@ export function buildDynamicScope(input: EstimateInput): string[] {
 export function calculateEstimate(input: EstimateInput, userRefinementCount = 0): EstimateResult {
   const finish = normalizeFinishLevel(input.project, input.finish);
   const safeInput: EstimateInput = finish === input.finish ? input : { ...input, finish };
-  const base = PRICE_MATRIX[safeInput.project][safeInput.finish];
+  const base = getPriceData(safeInput.project, safeInput.finish);
   const sizeMult = getSizeMultiplier(input.sqft, input.project);
   const refMult = getRefinementMultipliers(input.refinements, input.project);
   const maxFields = getMaxRefinementFields(input.project);
@@ -486,7 +581,7 @@ export function calculateEstimate(input: EstimateInput, userRefinementCount = 0)
     priceLow,
     priceHigh,
     roi: base.roi,
-    included: buildDynamicScope(input),
+    included: buildDynamicScope(safeInput),
     confidence: level,
     confidenceLabel: PLANNING_DETAIL_LABELS[level],
     confidencePercent: percent,

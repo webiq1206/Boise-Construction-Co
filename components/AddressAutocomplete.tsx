@@ -26,6 +26,9 @@ interface AddressAutocompleteProps {
   onProfileResolved: (profile: PropertyProfile | null) => void;
   disabled?: boolean;
   className?: string;
+  id?: string;
+  "aria-describedby"?: string;
+  "aria-invalid"?: React.AriaAttributes["aria-invalid"];
   "data-testid"?: string;
 }
 
@@ -35,16 +38,24 @@ export function AddressAutocomplete({
   onProfileResolved,
   disabled,
   className,
+  id,
+  "aria-describedby": ariaDescribedBy,
+  "aria-invalid": ariaInvalid,
   "data-testid": testId = "input-address",
 }: AddressAutocompleteProps) {
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   const [open, setOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   const [enriching, setEnriching] = useState(false);
   const [profile, setProfile] = useState<PropertyProfile | null>(null);
   const [error, setError] = useState<string | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const listboxId = `${testId}-listbox`;
+  const errorId = `${testId}-error`;
+  const optionId = (index: number) => `${testId}-option-${index}`;
 
   const enrich = useCallback(
     async (opts: {
@@ -86,6 +97,7 @@ export function AddressAutocomplete({
     const trimmed = value.trim();
     if (trimmed.length < 3) {
       setSuggestions([]);
+      setActiveIndex(-1);
       return;
     }
 
@@ -96,10 +108,13 @@ export function AddressAutocomplete({
           `/api/address/autocomplete?input=${encodeURIComponent(trimmed)}`
         );
         const json = await res.json();
-        setSuggestions(json.suggestions ?? []);
-        setOpen((json.suggestions?.length ?? 0) > 0);
+        const next: AddressSuggestion[] = json.suggestions ?? [];
+        setSuggestions(next);
+        setActiveIndex(-1);
+        setOpen(next.length > 0);
       } catch {
         setSuggestions([]);
+        setActiveIndex(-1);
       } finally {
         setLoadingSuggestions(false);
       }
@@ -122,6 +137,7 @@ export function AddressAutocomplete({
 
   async function selectSuggestion(s: AddressSuggestion) {
     setOpen(false);
+    setActiveIndex(-1);
     // Optimistically show a clean value (never the verbose "3024, West ..."
     // description that would trip the house-number validator) until enrich
     // resolves the canonical address.
@@ -148,16 +164,57 @@ export function AddressAutocomplete({
     await enrich({ formattedAddress: trimmed });
   }
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (!open || suggestions.length === 0) {
+      if (e.key === "ArrowDown" && suggestions.length > 0) {
+        setOpen(true);
+        setActiveIndex(0);
+        e.preventDefault();
+      }
+      return;
+    }
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setActiveIndex((prev) => (prev + 1) % suggestions.length);
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setActiveIndex((prev) => (prev <= 0 ? suggestions.length - 1 : prev - 1));
+        break;
+      case "Enter":
+        if (activeIndex >= 0 && activeIndex < suggestions.length) {
+          e.preventDefault();
+          void selectSuggestion(suggestions[activeIndex]);
+        }
+        break;
+      case "Escape":
+        e.preventDefault();
+        setOpen(false);
+        setActiveIndex(-1);
+        break;
+      case "Tab":
+        setOpen(false);
+        setActiveIndex(-1);
+        break;
+    }
+  }
+
   const confidence = profile ? getConfidenceLabel(profile.confidence) : null;
   const summaryLines = profile ? getPropertyProfileSummary(profile) : [];
   const measurementLines = profile?.measurementBundle
     ? getMeasurementSummary(profile.measurementBundle)
     : [];
 
+  const describedBy =
+    [ariaDescribedBy, error ? errorId : null].filter(Boolean).join(" ") || undefined;
+
   return (
     <div ref={containerRef} className={cn("space-y-3", className)}>
       <div className="relative">
         <Input
+          id={id}
           value={value}
           onChange={(e) => {
             onChange(e.target.value);
@@ -166,9 +223,19 @@ export function AddressAutocomplete({
             setError(null);
           }}
           onFocus={() => suggestions.length > 0 && setOpen(true)}
+          onKeyDown={handleKeyDown}
           placeholder="Start typing your street address…"
           disabled={disabled || enriching}
           autoComplete="street-address"
+          role="combobox"
+          aria-expanded={open && suggestions.length > 0}
+          aria-controls={listboxId}
+          aria-autocomplete="list"
+          aria-activedescendant={
+            open && activeIndex >= 0 ? optionId(activeIndex) : undefined
+          }
+          aria-describedby={describedBy}
+          aria-invalid={ariaInvalid ?? (error ? true : undefined)}
           data-testid={testId}
         />
         {(loadingSuggestions || enriching) && (
@@ -177,35 +244,42 @@ export function AddressAutocomplete({
 
         {open && suggestions.length > 0 && (
           <ul
+            id={listboxId}
             className="absolute z-50 mt-1 w-full rounded-sm border border-border bg-background shadow-md max-h-56 overflow-auto"
             role="listbox"
+            aria-label="Address suggestions"
             data-testid="address-suggestions"
           >
-            {suggestions.map((s) => (
-              <li key={s.placeId}>
-                <button
-                  type="button"
-                  className="w-full text-left px-3 py-2 text-sm hover:bg-muted/60 flex gap-2 items-start"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => selectSuggestion(s)}
-                  data-testid={`address-suggestion-${s.placeId}`}
-                >
-                  <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-muted-foreground" />
-                  <span>
-                    {s.mainText ? (
-                      <>
-                        <span className="font-medium text-foreground">{s.mainText}</span>
-                        {s.secondaryText && (
-                          <span className="block text-xs text-muted-foreground">
-                            {s.secondaryText}
-                          </span>
-                        )}
-                      </>
-                    ) : (
-                      s.description
-                    )}
-                  </span>
-                </button>
+            {suggestions.map((s, i) => (
+              <li
+                key={s.placeId}
+                id={optionId(i)}
+                role="option"
+                aria-selected={i === activeIndex}
+                onMouseDown={(e) => e.preventDefault()}
+                onMouseEnter={() => setActiveIndex(i)}
+                onClick={() => void selectSuggestion(s)}
+                className={cn(
+                  "w-full cursor-pointer text-left px-3 py-2.5 text-sm flex gap-2 items-start",
+                  i === activeIndex && "bg-muted/60"
+                )}
+                data-testid={`address-suggestion-${s.placeId}`}
+              >
+                <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-muted-foreground" />
+                <span>
+                  {s.mainText ? (
+                    <>
+                      <span className="font-medium text-foreground">{s.mainText}</span>
+                      {s.secondaryText && (
+                        <span className="block text-xs text-muted-foreground">
+                          {s.secondaryText}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    s.description
+                  )}
+                </span>
               </li>
             ))}
           </ul>
@@ -214,7 +288,7 @@ export function AddressAutocomplete({
 
       <button
         type="button"
-        className="text-xs text-primary underline-offset-2 hover:underline disabled:opacity-50"
+        className="text-xs text-primary underline-offset-2 hover:underline disabled:opacity-50 min-h-8"
         onClick={useTypedAddress}
         disabled={disabled || enriching || value.trim().length < 5}
         data-testid="button-use-typed-address"
@@ -223,7 +297,12 @@ export function AddressAutocomplete({
       </button>
 
       {error && (
-        <p className="text-xs text-destructive flex items-center gap-1" data-testid="address-error">
+        <p
+          id={errorId}
+          role="alert"
+          className="text-xs text-destructive flex items-center gap-1"
+          data-testid="address-error"
+        >
           <AlertCircle className="h-3.5 w-3.5" />
           {error}
         </p>
@@ -245,8 +324,8 @@ export function AddressAutocomplete({
                 <span
                   className={cn(
                     "inline-block mt-1 text-xs px-2 py-0.5 rounded-sm",
-                    confidence.color === "green" && "bg-green-500/10 text-green-700",
-                    confidence.color === "yellow" && "bg-amber-500/10 text-amber-800",
+                    confidence.color === "green" && "bg-success/10 text-success",
+                    confidence.color === "yellow" && "bg-warning-soft/15 text-warning",
                     confidence.color === "gray" && "bg-muted text-muted-foreground"
                   )}
                 >

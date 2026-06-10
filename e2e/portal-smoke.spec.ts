@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("portal smoke: quote → admin → subcontractor (no Stripe)", async ({ page }) => {
+test("portal smoke: admin → subcontractor (no Stripe)", async ({ page }) => {
   // Dev login + seed
   await page.goto("/__dev__/login");
   await expect(page.getByTestId("page-dev-login")).toBeVisible();
@@ -28,24 +28,9 @@ test("portal smoke: quote → admin → subcontractor (no Stripe)", async ({ pag
   await expect(page.getByTestId("count-available")).toHaveText((availableCountBefore || "").trim());
   await expect(page.getByTestId("count-purchased")).toHaveText((purchasedCountBefore || "").trim());
 
-  // Quote wizard: submit quote and show quote reference
-  await page.goto("/get-quote");
-  await page.getByTestId("city-kuna").click();
-  await page.getByTestId("input-address").fill("123 Test St");
-  await page.getByTestId("button-use-address").click();
-  await page.getByTestId("button-residential").click();
-  await page.getByTestId("button-continue-to-services").click();
-
-  await page.getByTestId("intent-lawn-mowing").click();
-  await page.getByTestId("button-continue-to-review").click();
-
-  await page.getByTestId("input-name").fill("Playwright Test");
-  await page.getByTestId("input-email").fill("playwright@example.com");
-  await page.getByTestId("input-phone").fill("2085550101");
-  await page.getByTestId("button-submit-quote").click();
-
-  await expect(page.getByText(/Quote Submitted!/i)).toBeVisible();
-  await expect(page.getByText(/Quote Reference:/i)).toBeVisible();
+  // Note: the legacy quote wizard was removed (its marketing URLs redirect to
+  // /#consult, and /api/quotes returns 410). Homeowner lead capture is covered
+  // by e2e/calculator.spec.ts.
 
   // Subcontractor portal: loads lead marketplace and shows masked leads (no Stripe required)
   await page.goto("/__dev__/login");

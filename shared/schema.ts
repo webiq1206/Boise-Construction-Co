@@ -412,6 +412,8 @@ export const consultationRequests = pgTable("consultation_requests", {
   estimateFinish: text("estimate_finish"),
   estimateLow: decimal("estimate_low", { precision: 10, scale: 2 }),
   estimateHigh: decimal("estimate_high", { precision: 10, scale: 2 }),
+  estimateSqft: integer("estimate_sqft"),
+  estimateConfidence: text("estimate_confidence"),
   // Status
   status: text("status").notNull().default("new"), // new, contacted, converted, closed
   createdAt: timestamp("created_at").defaultNow().notNull(),

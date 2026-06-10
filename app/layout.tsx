@@ -65,6 +65,9 @@ export const viewport: Viewport = {
   themeColor: '#3A3E3D',
   width: 'device-width',
   initialScale: 1,
+  // Required for env(safe-area-inset-*) to resolve on notched devices, so
+  // sticky bottom bars clear the iPhone home indicator.
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({

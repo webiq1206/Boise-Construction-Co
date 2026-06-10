@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Check, Info } from "lucide-react";
+import { ArrowRight, Check, Circle, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { EstimateResult, ProjectType } from "@/shared/estimateEngine";
@@ -17,7 +17,7 @@ const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
  * it. An interrupting value change picks up smoothly from the live displayed
  * number, and the tween always settles exactly on the target.
  */
-function AnimatedPrice({ value }: { value: number }) {
+export function AnimatedPrice({ value }: { value: number }) {
   const [display, setDisplay] = useState(value);
   const displayRef = useRef(value);
   const rafRef = useRef<number | null>(null);
@@ -72,7 +72,7 @@ function AnimatedPrice({ value }: { value: number }) {
 
 const SCOPE_PREVIEW_COUNT = 5;
 
-function IncludedSection({ included, project }: { included: string[]; project?: ProjectType }) {
+function IncludedSection({ included, project }: { included: string[]; project?: ProjectType | null }) {
   const [showAll, setShowAll] = useState(false);
   const hasMore = included.length > SCOPE_PREVIEW_COUNT;
   const visible = showAll ? included : included.slice(0, SCOPE_PREVIEW_COUNT);
@@ -105,9 +105,9 @@ function IncludedSection({ included, project }: { included: string[]; project?: 
         </button>
       )}
       {!hasMore && <div className="mb-3" />}
-      <p className="text-[10px] leading-relaxed text-inverse-muted">{INCLUDED_SCOPE_NOTE}</p>
+      <p className="text-[11px] leading-relaxed text-inverse-muted">{INCLUDED_SCOPE_NOTE}</p>
       {project === "kitchen" && (
-        <p className="text-[10px] leading-relaxed text-inverse-muted mt-2" data-testid="appliance-disclaimer">
+        <p className="text-[11px] leading-relaxed text-inverse-muted mt-2" data-testid="appliance-disclaimer">
           {APPLIANCE_DISCLAIMER}
         </p>
       )}
@@ -115,12 +115,50 @@ function IncludedSection({ included, project }: { included: string[]; project?: 
   );
 }
 
+export interface EstimateProgress {
+  project: boolean;
+  finish: boolean;
+  size: boolean;
+}
+
+function ProgressChecklist({ progress }: { progress: EstimateProgress }) {
+  const items: { label: string; done: boolean }[] = [
+    { label: "Choose your project", done: progress.project },
+    { label: "Pick a finish level", done: progress.finish },
+    { label: "Set the size", done: progress.size },
+  ];
+
+  return (
+    <div className="space-y-3 mb-6" data-testid="estimate-progress-checklist">
+      {items.map((item) => (
+        <div
+          key={item.label}
+          className={cn(
+            "flex items-center gap-2.5 text-sm",
+            item.done ? "text-inverse-foreground" : "text-inverse-muted/70"
+          )}
+        >
+          {item.done ? (
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent/30 flex-shrink-0">
+              <Check className="h-3 w-3 text-inverse-foreground" />
+            </span>
+          ) : (
+            <Circle className="h-5 w-5 flex-shrink-0 text-inverse-muted/40" strokeWidth={1.25} />
+          )}
+          {item.label}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export interface EstimateResultPanelProps {
-  result: EstimateResult;
+  /** Null until the user has made all required selections. */
+  result: EstimateResult | null;
   selectionSummary: string;
   onBookVisit: () => void;
-  project?: ProjectType;
-  variant?: "full" | "compact";
+  project?: ProjectType | null;
+  progress: EstimateProgress;
   className?: string;
 }
 
@@ -129,100 +167,82 @@ export function EstimateResultPanel({
   selectionSummary,
   onBookVisit,
   project,
-  variant = "full",
+  progress,
   className,
 }: EstimateResultPanelProps) {
-  const isCompact = variant === "compact";
-  const rangeAnnouncement = `${formatPlanningCurrency(result.priceLow)} to ${formatPlanningCurrency(result.priceHigh)} planning range`;
+  const rangeAnnouncement = result
+    ? `${formatPlanningCurrency(result.priceLow)} to ${formatPlanningCurrency(result.priceHigh)} planning range`
+    : "Make your selections to see your planning range";
 
   return (
     <div
-      className={cn(
-        "rounded-sm bg-inverse text-inverse-foreground shadow-xl",
-        isCompact ? "p-4" : "p-8",
-        className
-      )}
-      data-testid={isCompact ? "mobile-estimate-bar-panel" : "estimate-result-panel"}
+      className={cn("rounded-sm bg-inverse text-inverse-foreground shadow-xl p-8", className)}
+      data-testid="estimate-result-panel"
     >
-      <div className={cn("flex items-center justify-between", isCompact ? "mb-2" : "mb-5")}>
+      <div className="flex items-center justify-between mb-5">
         <div className="brc-label text-inverse-muted">Planning range</div>
-        <div className="text-[10px] tracking-wide uppercase px-2 py-1 rounded-sm bg-inverse-foreground/15 text-inverse-foreground/90">
-          {result.confidenceLabel}
-        </div>
+        {result && (
+          <div className="text-[10px] tracking-wide uppercase px-2 py-1 rounded-sm bg-inverse-foreground/15 text-inverse-foreground/90">
+            {result.confidenceLabel}
+          </div>
+        )}
       </div>
 
-      <p
-        className={cn(
-          "text-inverse-muted",
-          isCompact ? "text-[11px] mb-2" : "text-xs mb-3"
-        )}
-      >
-        {selectionSummary}
-      </p>
-
-      <div
-        className={cn(
-          "leading-none text-inverse-foreground",
-          isCompact ? "text-2xl mb-2" : "text-[clamp(28px,3.5vw,44px)] mb-4"
-        )}
-        data-testid="estimate-range"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        <span className="sr-only">{rangeAnnouncement}</span>
-        <AnimatedPrice value={result.priceLow} />
-        <span aria-hidden="true"> to </span>
-        <AnimatedPrice value={result.priceHigh} />
-      </div>
-
-      {!isCompact && (
-        <p className="text-xs text-inverse-muted mb-4">
-          Based on your inputs. Your exact investment is confirmed at your in-home visit.
-        </p>
-      )}
-
-      {!isCompact && (
-        <IncludedSection included={result.included} project={project} />
-      )}
-
-      {!isCompact && (
-        <div className="mb-6">
-          <div className="flex justify-between text-[11px] mb-1.5 text-inverse-muted">
-            <span>Details provided</span>
-            <span>{result.confidencePercent}%</span>
-          </div>
-          <div
-            className="h-1 rounded-full overflow-hidden bg-inverse-foreground/15"
-            role="progressbar"
-            aria-valuenow={result.confidencePercent}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-label="Details provided"
-          >
-            <div
-              className="h-full rounded-full transition-all duration-500 bg-inverse-foreground/50"
-              style={{ width: `${result.confidencePercent}%` }}
-            />
-          </div>
-          <p className="text-[10px] mt-2 text-inverse-muted">
-            More project details help tailor your planning range.
-          </p>
-        </div>
-      )}
-
-      <Button
-        variant="brand"
-        onClick={onBookVisit}
-        className={cn("w-full", isCompact ? "mb-0" : "mb-3")}
-        data-testid="button-book-visit"
-        size={isCompact ? "sm" : "default"}
-      >
-        {CTA_PRIMARY}
-        <ArrowRight className="h-4 w-4" />
-      </Button>
-
-      {!isCompact && (
+      {result ? (
         <>
+          <p className="text-xs mb-3 text-inverse-muted">{selectionSummary}</p>
+
+          <div
+            className="leading-none text-inverse-foreground text-[clamp(28px,3.5vw,44px)] mb-4"
+            data-testid="estimate-range"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <span className="sr-only">{rangeAnnouncement}</span>
+            <AnimatedPrice value={result.priceLow} />
+            <span aria-hidden="true"> to </span>
+            <AnimatedPrice value={result.priceHigh} />
+          </div>
+
+          <p className="text-xs text-inverse-muted mb-4">
+            Based only on your selections. Your exact investment is confirmed at your in-home visit.
+          </p>
+
+          <IncludedSection included={result.included} project={project} />
+
+          <div className="mb-6">
+            <div className="flex justify-between text-[11px] mb-1.5 text-inverse-muted">
+              <span>Details provided</span>
+              <span>{result.confidencePercent}%</span>
+            </div>
+            <div
+              className="h-1 rounded-full overflow-hidden bg-inverse-foreground/15"
+              role="progressbar"
+              aria-valuenow={result.confidencePercent}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label="Details provided"
+            >
+              <div
+                className="h-full rounded-full transition-all duration-500 bg-inverse-foreground/50"
+                style={{ width: `${result.confidencePercent}%` }}
+              />
+            </div>
+            <p className="text-[11px] mt-2 text-inverse-muted">
+              More project details help tailor your planning range.
+            </p>
+          </div>
+
+          <Button
+            variant="brand"
+            onClick={onBookVisit}
+            className="w-full mb-3"
+            data-testid="button-book-visit"
+          >
+            {CTA_PRIMARY}
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+
           <p className="text-[11px] text-center mb-5 mt-3 text-inverse-muted">
             Your in-home visit includes a detailed project evaluation and personalized planning guidance.
           </p>
@@ -236,12 +256,32 @@ export function EstimateResultPanel({
             </p>
           </div>
         </>
-      )}
+      ) : (
+        <>
+          <div
+            className="leading-none text-inverse-muted/50 text-[clamp(28px,3.5vw,44px)] mb-4"
+            data-testid="estimate-range-placeholder"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <span className="sr-only">{rangeAnnouncement}</span>
+            <span aria-hidden="true" className="brc-display-num">
+              $ — to —
+            </span>
+          </div>
 
-      {isCompact && (
-        <p className="text-[10px] leading-snug mt-2 text-inverse-muted">
-          Planning estimate only, not a binding quote.
-        </p>
+          <p className="text-sm leading-relaxed text-inverse-muted mb-6">
+            Nothing is pre-selected. Your planning range appears the moment you finish these
+            three quick choices — it reflects only what you tell us.
+          </p>
+
+          <ProgressChecklist progress={progress} />
+
+          <p className="text-[11px] leading-relaxed text-inverse-muted border-t border-inverse-foreground/10 pt-4">
+            Takes about 60 seconds. Planning estimate only, not a binding quote — final pricing
+            requires an in-home evaluation.
+          </p>
+        </>
       )}
     </div>
   );

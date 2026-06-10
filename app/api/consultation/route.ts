@@ -13,6 +13,14 @@ import {
   getReplyToAddress,
 } from "@/server/services/emailLayout";
 import type { PropertyProfile } from "@/shared/propertyProfile";
+import {
+  EMPTY_REFINEMENTS,
+  calculateEstimate,
+  countVisibleUserRefinements,
+  getProjectSizeConfig,
+  getSetRefinementKeys,
+  type EstimateRefinements,
+} from "@/shared/estimateEngine";
 
 const propertyProfileSchema = z
   .object({
@@ -25,6 +33,33 @@ const propertyProfileSchema = z
   .optional()
   .nullable();
 
+const refinementsSchema = z
+  .object({
+    layoutChanges: z.enum(["none", "moderate", "major"]).nullable().optional(),
+    plumbingElectrical: z.enum(["cosmetic", "partial", "full"]).nullable().optional(),
+    cabinetTier: z.enum(["standard", "semi-custom", "custom"]).nullable().optional(),
+    fixtureCount: z.number().int().min(1).max(8).nullable().optional(),
+    stories: z.number().int().min(1).max(2).nullable().optional(),
+    roomCount: z.number().int().min(1).max(12).nullable().optional(),
+    aduConfig: z.enum(["detached", "attached"]).nullable().optional(),
+  })
+  .optional()
+  .nullable();
+
+const estimateSchema = z
+  .object({
+    project: z.enum(["kitchen", "bathroom", "whole-home", "addition", "adu"]),
+    finish: z.enum(["refresh", "mid-range", "high-end", "luxury"]),
+    sqft: z.number().int().positive(),
+    priceLow: z.number().nonnegative(),
+    priceHigh: z.number().nonnegative(),
+    roi: z.number(),
+    confidence: z.string().max(80).optional(),
+    refinements: refinementsSchema,
+  })
+  .optional()
+  .nullable();
+
 const bodySchema = z.object({
   name: z.string().min(2),
   phone: z.string().min(10),
@@ -34,17 +69,54 @@ const bodySchema = z.object({
   projectType: z.string().min(1),
   message: z.string().optional(),
   propertyProfile: propertyProfileSchema,
-  estimate: z
-    .object({
-      project: z.string(),
-      finish: z.string(),
-      priceLow: z.number(),
-      priceHigh: z.number(),
-      roi: z.number(),
-    })
-    .optional()
-    .nullable(),
+  estimate: estimateSchema,
 });
+
+/**
+ * Recomputes the planning range server-side from the submitted inputs so a
+ * stored lead never carries client-tampered or stale numbers. Returns null
+ * (estimate rejected) if the inputs themselves are out of bounds.
+ */
+function verifyEstimate(estimate: NonNullable<z.infer<typeof estimateSchema>>) {
+  const sizeConfig = getProjectSizeConfig(estimate.project);
+  if (estimate.sqft < sizeConfig.min || estimate.sqft > sizeConfig.max) {
+    return null;
+  }
+
+  const refinements: EstimateRefinements = {
+    ...EMPTY_REFINEMENTS,
+    ...(estimate.refinements ?? {}),
+  } as EstimateRefinements;
+
+  const recomputed = calculateEstimate(
+    {
+      project: estimate.project,
+      finish: estimate.finish,
+      sqft: estimate.sqft,
+      refinements,
+    },
+    countVisibleUserRefinements(estimate.project, getSetRefinementKeys(refinements))
+  );
+
+  if (
+    estimate.priceLow !== recomputed.priceLow ||
+    estimate.priceHigh !== recomputed.priceHigh
+  ) {
+    console.warn(
+      `[consultation] Estimate mismatch (client ${estimate.priceLow}-${estimate.priceHigh}, server ${recomputed.priceLow}-${recomputed.priceHigh}); using server values`
+    );
+  }
+
+  return {
+    project: estimate.project,
+    finish: estimate.finish,
+    sqft: estimate.sqft,
+    priceLow: recomputed.priceLow,
+    priceHigh: recomputed.priceHigh,
+    roi: recomputed.roi,
+    confidence: estimate.confidence || recomputed.confidenceLabel,
+  };
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -60,6 +132,9 @@ export async function POST(request: NextRequest) {
 
     const data = parsed.data;
 
+    // Server-side verification: never trust client-supplied dollar amounts.
+    const estimate = data.estimate ? verifyEstimate(data.estimate) : null;
+
     if (db) {
       try {
         const profile = data.propertyProfile as Record<string, unknown> | null | undefined;
@@ -73,10 +148,12 @@ export async function POST(request: NextRequest) {
           propertyProfile: (data.propertyProfile as PropertyProfile | null) ?? null,
           projectType: data.projectType,
           message: data.message || null,
-          estimateProject: data.estimate?.project || null,
-          estimateFinish: data.estimate?.finish || null,
-          estimateLow: data.estimate?.priceLow?.toString() || null,
-          estimateHigh: data.estimate?.priceHigh?.toString() || null,
+          estimateProject: estimate?.project || null,
+          estimateFinish: estimate?.finish || null,
+          estimateLow: estimate?.priceLow?.toString() || null,
+          estimateHigh: estimate?.priceHigh?.toString() || null,
+          estimateSqft: estimate?.sqft ?? null,
+          estimateConfidence: estimate?.confidence || null,
         });
       } catch (dbErr) {
         console.error("[consultation] DB insert failed:", dbErr);
@@ -87,8 +164,8 @@ export async function POST(request: NextRequest) {
       const { client, fromEmail } = await getUncachableEmailClient();
       const from = formatFromAddress(fromEmail);
 
-      const estimateBlock = data.estimate
-        ? `<p><strong>Calculator estimate:</strong> ${escapeHtml(data.estimate.project)} (${escapeHtml(data.estimate.finish)}): $${Math.round(data.estimate.priceLow / 1000)}k to $${Math.round(data.estimate.priceHigh / 1000)}k</p>`
+      const estimateBlock = estimate
+        ? `<p><strong>Calculator estimate:</strong> ${escapeHtml(estimate.project)} (${escapeHtml(estimate.finish)}, ${estimate.sqft.toLocaleString()} sqft): $${Math.round(estimate.priceLow / 1000)}k to $${Math.round(estimate.priceHigh / 1000)}k${estimate.confidence ? ` — ${escapeHtml(estimate.confidence)}` : ""}</p>`
         : "";
 
       const profile = data.propertyProfile as {

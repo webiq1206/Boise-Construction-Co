@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -8,14 +9,25 @@ import { useMutation } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, ArrowRight } from "lucide-react";
+import { Check, CheckCircle2, ArrowRight, Phone } from "lucide-react";
 import type { StoredEstimate } from "@/shared/estimateEngine";
-import { FINISH_LABELS, PROJECT_LABELS } from "@/shared/estimateEngine";
+import { FINISH_LABELS, PROJECT_LABELS, formatPlanningCurrency } from "@/shared/estimateEngine";
 import { DisplayNum } from "@/components/marketing";
 import { AddressAutocomplete } from "@/components/AddressAutocomplete";
 import { EstimateCTA } from "@/components/modals/EstimateCTA";
+import { CTA_FORM_CONFIRM, CTA_FORM_REVIEW } from "@/shared/ctaCopy";
+import { CONSULT_BULLETS } from "@/shared/siteContent";
+import { SITE_CONFIG } from "@/shared/siteConfig";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
   HOUSE_NUMBER_REGEX,
@@ -43,24 +55,29 @@ const PROJECT_OPTIONS = [
   { value: "bathroom", label: "Bathroom Remodel" },
   { value: "whole-home", label: "Whole-Home Remodel" },
   { value: "addition", label: "Room Addition" },
+  { value: "adu", label: "ADU / Guest House" },
   { value: "other", label: "Other / Not sure yet" },
 ];
 
 const labelClass = "text-xs tracking-wide font-medium uppercase text-muted-foreground";
 
-function formatCurrency(n: number) {
-  if (n >= 1000000) return `$${(n / 1000000).toFixed(1)}M`;
-  if (n >= 1000) return `$${Math.round(n / 1000)}k`;
-  return `$${n.toLocaleString()}`;
+function RequiredMark() {
+  return (
+    <span className="text-destructive" aria-hidden="true">
+      {" "}*
+    </span>
+  );
 }
 
 type EstimateDecision = "pending" | "confirmed" | "deciding" | "dropped";
 
 interface ConsultationFormProps {
   onRevise?: () => void;
+  /** Compact trust bullets above the form (used in the modal variant). */
+  showTrust?: boolean;
 }
 
-export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
+export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFormProps = {}) {
   const [estimate, setEstimate] = useState<StoredEstimate | null>(null);
   const [estimateChecked, setEstimateChecked] = useState(false);
   const [decision, setDecision] = useState<EstimateDecision>("pending");
@@ -69,6 +86,8 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
   const [propertyProfile, setPropertyProfile] = useState<PropertyProfile | null>(null);
   const [addressInput, setAddressInput] = useState("");
   const lastKeyRef = useRef<string | null>(null);
+  const confirmHeadingRef = useRef<HTMLHeadingElement>(null);
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -103,22 +122,39 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
       setEstimateChecked(true);
       try {
         const raw = sessionStorage.getItem("brc_estimate");
-        if (!raw) return;
+        if (!raw) {
+          lastKeyRef.current = null;
+          setEstimate(null);
+          return;
+        }
         const parsed: StoredEstimate = JSON.parse(raw);
+        // Defensive: never surface a range the user did not finish building.
+        if (!parsed.project || !parsed.finish || !parsed.sqft || !parsed.priceLow) return;
         const key = `${parsed.project}|${parsed.finish}|${parsed.sqft}|${parsed.priceLow}|${parsed.priceHigh}|${parsed.confidenceLabel}`;
         if (key === lastKeyRef.current) return;
         lastKeyRef.current = key;
         setEstimate(parsed);
         setDecision("pending");
-        if (parsed.project) {
-          form.setValue("projectType", parsed.project, { shouldValidate: false });
-        }
+        form.setValue("projectType", parsed.project, { shouldValidate: false });
       } catch {}
     }
     loadEstimate();
     window.addEventListener("brc_estimate_updated", loadEstimate);
     return () => window.removeEventListener("brc_estimate_updated", loadEstimate);
   }, [form]);
+
+  // Orient the user when moving between form, review, and success states.
+  useEffect(() => {
+    if (pendingData && !success) {
+      confirmHeadingRef.current?.focus();
+    }
+  }, [pendingData, success]);
+
+  useEffect(() => {
+    if (success) {
+      successHeadingRef.current?.focus();
+    }
+  }, [success]);
 
   function handleRevise() {
     setDecision("deciding");
@@ -144,6 +180,7 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
               roi: estimate.roi,
               confidence: estimate.confidenceLabel,
               sqft: estimate.sqft,
+              refinements: estimate.refinements,
             }
           : null,
       };
@@ -165,17 +202,64 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
   });
 
   if (success) {
+    const submittedProject = pendingData
+      ? PROJECT_OPTIONS.find((o) => o.value === pendingData.projectType)?.label ??
+        pendingData.projectType
+      : null;
+
     return (
-      <div className="flex flex-col items-start py-8 space-y-4">
+      <div className="flex flex-col items-start py-4 space-y-5" data-testid="consultation-success">
         <div className="w-10 h-10 rounded-sm flex items-center justify-center bg-accent/10">
           <CheckCircle2 className="h-5 w-5 text-accent" />
         </div>
-        <h3 className="font-sans font-light text-2xl text-foreground">
-          We&apos;ll be in touch shortly.
-        </h3>
-        <p className="text-sm leading-relaxed text-muted-foreground">
-          Thank you for reaching out. We typically respond within one business day to
-          schedule your free in-home visit.
+        <div>
+          <h3
+            ref={successHeadingRef}
+            tabIndex={-1}
+            className="font-sans font-light text-2xl text-foreground outline-none"
+          >
+            Request received{pendingData ? `, ${pendingData.name.split(" ")[0]}` : ""}.
+          </h3>
+          {submittedProject && (
+            <p className="text-sm text-muted-foreground mt-1">
+              {submittedProject}
+              {pendingData?.address ? ` · ${pendingData.address}` : ""}
+            </p>
+          )}
+        </div>
+
+        <ol className="space-y-3 text-sm text-muted-foreground">
+          <li className="flex gap-3">
+            <span className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full border border-border text-[11px] font-semibold text-foreground">
+              1
+            </span>
+            <span className="pt-0.5">We review your request and any planning range you attached.</span>
+          </li>
+          <li className="flex gap-3">
+            <span className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full border border-border text-[11px] font-semibold text-foreground">
+              2
+            </span>
+            <span className="pt-0.5">We reach out within one business day to find a time that works.</span>
+          </li>
+          <li className="flex gap-3">
+            <span className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full border border-border text-[11px] font-semibold text-foreground">
+              3
+            </span>
+            <span className="pt-0.5">
+              Your free 60 to 90 minute in-home visit: planning guidance, design direction, no obligation.
+            </span>
+          </li>
+        </ol>
+
+        <p className="text-sm text-muted-foreground">
+          Need us sooner?{" "}
+          <a href={SITE_CONFIG.phoneHref} className="inline-flex items-center gap-1.5 font-medium text-foreground underline-offset-2 hover:underline">
+            <Phone className="h-3.5 w-3.5" />
+            {SITE_CONFIG.phone}
+          </a>
+        </p>
+        <p className="text-xs text-muted-foreground">
+          A confirmation email is on its way to your inbox.
         </p>
       </div>
     );
@@ -192,7 +276,7 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
     !estimate || decision === "confirmed" || decision === "dropped";
 
   if (pendingData) {
-    const pendingProjectLabel = estimate?.project
+    const pendingProjectLabel = estimate?.project && decision === "confirmed"
       ? PROJECT_LABELS[estimate.project]?.label
       : PROJECT_OPTIONS.find((o) => o.value === pendingData.projectType)?.label ??
         pendingData.projectType;
@@ -209,7 +293,11 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
     return (
       <div className="space-y-5" data-testid="confirm-consultation">
         <div>
-          <h3 className="font-sans font-light text-2xl text-foreground">
+          <h3
+            ref={confirmHeadingRef}
+            tabIndex={-1}
+            className="font-sans font-light text-2xl text-foreground outline-none scroll-mt-24"
+          >
             Does everything look right?
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
@@ -217,7 +305,7 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
           </p>
         </div>
 
-        {estimate && (
+        {estimate && decision === "confirmed" && (
           <div className="rounded-sm p-4 text-sm bg-accent/5 border border-accent/20">
             <p className="font-medium mb-1 text-foreground">Planning range from estimator:</p>
             <p className="text-muted-foreground">
@@ -232,7 +320,7 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
             </p>
             <p className="mt-1 text-foreground">
               <DisplayNum className="font-medium">
-                {formatCurrency(estimate.priceLow)} to {formatCurrency(estimate.priceHigh)}
+                {formatPlanningCurrency(estimate.priceLow)} to {formatPlanningCurrency(estimate.priceHigh)}
               </DisplayNum>
             </p>
             {estimate.confidenceLabel && (
@@ -266,7 +354,7 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
             onClick={() => mutation.mutate(pendingData)}
             data-testid="button-confirm-consultation"
           >
-            {mutation.isPending ? "Sending…" : "Confirm and send"}
+            {mutation.isPending ? "Sending…" : CTA_FORM_CONFIRM}
             {!mutation.isPending && <ArrowRight className="h-4 w-4" />}
           </Button>
           <Button
@@ -283,12 +371,25 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
     );
   }
 
+  const showProjectSelect = !estimate || decision === "dropped";
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((data) => setPendingData(data))}
         className="space-y-5"
       >
+        {showTrust && (
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5" data-testid="consult-trust-bullets">
+            {CONSULT_BULLETS.map((item) => (
+              <li key={item} className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Check className="h-3.5 w-3.5 flex-shrink-0 text-foreground/60" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        )}
+
         {estimateChecked && !estimate && (
           <div
             className="rounded-sm p-4 text-sm bg-accent/5 border border-accent/20 space-y-2"
@@ -339,7 +440,7 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
               </p>
               <p className="mt-1 text-foreground" data-testid="text-estimate-range">
                 <DisplayNum className="font-medium">
-                  {formatCurrency(estimate.priceLow)} to {formatCurrency(estimate.priceHigh)}
+                  {formatPlanningCurrency(estimate.priceLow)} to {formatPlanningCurrency(estimate.priceHigh)}
                 </DisplayNum>
               </p>
               {estimate.confidenceLabel && (
@@ -446,82 +547,7 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
           </div>
         )}
 
-        <div className="grid sm:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className={labelClass}>Full name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Jane Smith" data-testid="input-name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className={labelClass}>Phone</FormLabel>
-                <FormControl>
-                  <Input
-                    type="tel"
-                    placeholder="(208) 555-0000"
-                    data-testid="input-phone"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <FormField
-          control={form.control}
-          name="address"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className={labelClass}>Property address</FormLabel>
-              <FormControl>
-                <AddressAutocomplete
-                  value={addressInput || field.value}
-                  onChange={(v) => {
-                    setAddressInput(v);
-                    field.onChange(v);
-                  }}
-                  onProfileResolved={handleProfileResolved}
-                  data-testid="input-address"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className={labelClass}>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="jane@example.com"
-                  data-testid="input-email"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {(!estimate || decision === "dropped") && (
+        {showProjectSelect && (
           <FormField
             control={form.control}
             name="projectType"
@@ -529,10 +555,11 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
               <FormItem>
                 <FormLabel className={labelClass}>
                   What are you planning to remodel?
+                  <RequiredMark />
                 </FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <SelectTrigger data-testid="select-project-type">
+                    <SelectTrigger data-testid="select-project-type" aria-required="true">
                       <SelectValue placeholder="Select a project type" />
                     </SelectTrigger>
                   </FormControl>
@@ -549,6 +576,111 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
             )}
           />
         )}
+
+        <div className="grid sm:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className={labelClass}>
+                  Full name
+                  <RequiredMark />
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Jane Smith"
+                    autoComplete="name"
+                    aria-required="true"
+                    data-testid="input-name"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className={labelClass}>
+                  Phone
+                  <RequiredMark />
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="tel"
+                    placeholder="(208) 555-0000"
+                    autoComplete="tel"
+                    aria-required="true"
+                    data-testid="input-phone"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className={labelClass}>
+                Email
+                <RequiredMark />
+              </FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder="jane@example.com"
+                  autoComplete="email"
+                  aria-required="true"
+                  data-testid="input-email"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className={labelClass}>
+                Property address
+                <RequiredMark />
+              </FormLabel>
+              <FormControl>
+                <AddressAutocomplete
+                  value={addressInput || field.value}
+                  onChange={(v) => {
+                    setAddressInput(v);
+                    field.onChange(v);
+                  }}
+                  onProfileResolved={handleProfileResolved}
+                  data-testid="input-address"
+                />
+              </FormControl>
+              <FormDescription className="text-xs text-muted-foreground">
+                We use county property records to prepare for your visit, which makes your
+                planning guidance more accurate. Your information is never shared or sold —{" "}
+                <Link href="/privacy-policy" className="underline underline-offset-2 hover:text-foreground">
+                  privacy policy
+                </Link>
+                .
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -579,13 +711,13 @@ export function ConsultationForm({ onRevise }: ConsultationFormProps = {}) {
             disabled={mutation.isPending || !canSubmit}
             data-testid="button-submit-consultation"
           >
-            {mutation.isPending ? "Sending…" : "Send my request"}
-            {!mutation.isPending && <ArrowRight className="h-4 w-4" />}
+            {CTA_FORM_REVIEW}
+            <ArrowRight className="h-4 w-4" />
           </Button>
           <p className="text-xs text-muted-foreground">
             {canSubmit
-              ? "No spam. Response within one business day."
-              : "Please confirm your planning range above before sending."}
+              ? "Nothing is sent until you confirm on the next screen. No spam, response within one business day."
+              : "Please confirm your planning range above before continuing."}
           </p>
         </div>
       </form>

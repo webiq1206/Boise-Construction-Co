@@ -674,6 +674,37 @@ html, body {
   @apply inline-flex items-center gap-2 text-sm font-medium text-foreground underline-offset-2 hover:underline transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm;
 }
 
+/* ─── Semantic status tokens (badges, confidence labels) ─── */
+:root {
+  --success: 140 35% 32%;
+  --success-soft: 140 35% 32%;
+  --warning: 35 80% 30%;
+  --warning-soft: 38 90% 50%;
+}
+.dark {
+  --success: 140 30% 70%;
+  --warning: 38 80% 70%;
+}
+
+/* ─── iOS / Android safe-area support (requires viewport-fit=cover) ─── */
+@layer utilities {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .mb-safe {
+    margin-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+/* Hide the global mobile Call/Text/Schedule bar whenever a conversion surface
+   (estimator sticky bar or a modal) owns the bottom of the viewport. */
+body[data-hide-mobile-nav-bar="true"] [data-mobile-nav-bar] {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

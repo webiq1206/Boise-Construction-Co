@@ -257,10 +257,11 @@ export function Navigation() {
         </div>
       </div>
 
-      {/* Sticky bottom bar */}
+      {/* Sticky bottom bar (hidden while an estimator bar or modal owns the bottom edge) */}
       <div
         ref={bottomBarRef}
         {...{ [ADAPTIVE_GLASS_ATTR]: "" }}
+        data-mobile-nav-bar=""
         className={cn(
           ADAPTIVE_GLASS_BAR_BASE,
           "bottom-0 z-[100] md:hidden",

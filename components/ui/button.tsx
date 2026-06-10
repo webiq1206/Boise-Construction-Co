@@ -25,6 +25,9 @@ const buttonVariants = cva(
           "rounded-sm bg-primary text-primary-foreground border border-primary-border min-h-11 px-6 py-3.5",
         brandOutline:
           "rounded-sm border border-border bg-transparent text-foreground shadow-xs min-h-11 px-6 py-3.5",
+        /** Ghost CTA for use over dark hero imagery / inverse bands. */
+        heroGhost:
+          "rounded-sm border border-inverse-foreground/30 bg-inverse-foreground/10 text-inverse-foreground backdrop-blur-sm min-h-11 px-6 py-3.5",
         /** @deprecated Marketing uses brand only. Kept for backward compatibility. */
         brandGhost:
           "rounded-sm border border-transparent text-foreground min-h-11 px-6 py-3.5",

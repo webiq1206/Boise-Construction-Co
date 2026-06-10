@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +19,16 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
   const openEstimate = useCallback(() => setOpen("estimate"), []);
   const close = useCallback(() => setOpen(null), []);
 
+  // The global mobile Call/Text bar sits above the dialog overlay; hide it
+  // while a conversion modal is open so it never covers the dialog.
+  useEffect(() => {
+    if (open === null) return;
+    document.body.dataset.hideMobileNavBar = "true";
+    return () => {
+      delete document.body.dataset.hideMobileNavBar;
+    };
+  }, [open]);
+
   return (
     <ModalsContext.Provider value={{ openConsult, openEstimate, close }}>
       {children}
@@ -33,7 +43,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
               No obligation - we&apos;ll walk your space and give you an honest planning range.
             </DialogDescription>
           </DialogHeader>
-          <ConsultationForm onRevise={() => setOpen("estimate")} />
+          <ConsultationForm onRevise={() => setOpen("estimate")} showTrust />
         </DialogContent>
       </Dialog>
 
@@ -44,7 +54,8 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
               Get your planning range
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
-              Select your project type, finish level, and size for an instant estimate.
+              Three quick choices, an instant range. Nothing is pre-selected or submitted
+              until you say so.
             </DialogDescription>
           </DialogHeader>
           <EstimateCalculator inModal onBookVisit={() => setOpen("consult")} />
