@@ -671,7 +671,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
               </FormControl>
               <FormDescription className="text-xs text-muted-foreground">
                 We use county property records to prepare for your visit, which makes your
-                planning guidance more accurate. Your information is never shared or sold —{" "}
+                planning guidance more accurate. Your information is never shared or sold -{" "}
                 <Link href="/privacy-policy" className="underline underline-offset-2 hover:text-foreground">
                   privacy policy
                 </Link>

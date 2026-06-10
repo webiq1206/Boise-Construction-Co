@@ -266,19 +266,19 @@ export function EstimateResultPanel({
           >
             <span className="sr-only">{rangeAnnouncement}</span>
             <span aria-hidden="true" className="brc-display-num">
-              $ — to —
+              $ - to -
             </span>
           </div>
 
           <p className="text-sm leading-relaxed text-inverse-muted mb-6">
             Nothing is pre-selected. Your planning range appears the moment you finish these
-            three quick choices — it reflects only what you tell us.
+            three quick choices - it reflects only what you tell us.
           </p>
 
           <ProgressChecklist progress={progress} />
 
           <p className="text-[11px] leading-relaxed text-inverse-muted border-t border-inverse-foreground/10 pt-4">
-            Takes about 60 seconds. Planning estimate only, not a binding quote — final pricing
+            Takes about 60 seconds. Planning estimate only, not a binding quote - final pricing
             requires an in-home evaluation.
           </p>
         </>

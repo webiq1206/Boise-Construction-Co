@@ -165,7 +165,7 @@ export async function POST(request: NextRequest) {
       const from = formatFromAddress(fromEmail);
 
       const estimateBlock = estimate
-        ? `<p><strong>Calculator estimate:</strong> ${escapeHtml(estimate.project)} (${escapeHtml(estimate.finish)}, ${estimate.sqft.toLocaleString()} sqft): $${Math.round(estimate.priceLow / 1000)}k to $${Math.round(estimate.priceHigh / 1000)}k${estimate.confidence ? ` — ${escapeHtml(estimate.confidence)}` : ""}</p>`
+        ? `<p><strong>Calculator estimate:</strong> ${escapeHtml(estimate.project)} (${escapeHtml(estimate.finish)}, ${estimate.sqft.toLocaleString()} sqft): $${Math.round(estimate.priceLow / 1000)}k to $${Math.round(estimate.priceHigh / 1000)}k${estimate.confidence ? ` - ${escapeHtml(estimate.confidence)}` : ""}</p>`
         : "";
 
       const profile = data.propertyProfile as {
