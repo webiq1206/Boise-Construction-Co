@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { EstimateCalculator } from "@/components/EstimateCalculator";
+import dynamic from "next/dynamic";
 import { FAQSection } from "@/components/FAQSection";
 import { ConsultationForm } from "@/components/ConsultationForm";
 import { Reveal } from "@/components/Reveal";
@@ -18,6 +18,22 @@ import { CONSULT_BULLETS, SITE_TAGLINE } from "@/shared/siteContent";
 import { CTA_PRIMARY } from "@/shared/ctaCopy";
 import { HomePageSchema } from "@/components/seo/HomePageSchema";
 import { buildCanonical } from "@/lib/page-metadata";
+import { SITE_IMAGES } from "@/shared/siteImages";
+
+const EstimateCalculator = dynamic(
+  () =>
+    import("@/components/EstimateCalculator").then((mod) => mod.EstimateCalculator),
+  {
+    loading: () => (
+      <div
+        id="calculator"
+        className="container px-4 py-16 text-center text-sm text-muted-foreground"
+      >
+        Loading estimate calculator...
+      </div>
+    ),
+  },
+);
 
 export const metadata: Metadata = {
   title: { absolute: "Remodeling Contractor in Boise, ID | Boise Remodeling Co" },
@@ -31,7 +47,7 @@ export const metadata: Metadata = {
     description:
       `${SITE_TAGLINE}. Kitchen, bathroom, whole-home, and addition remodeling across the Treasure Valley.`,
     type: "website",
-    images: [{ url: "/images/hero-remodel-interior.png", width: 1200, height: 630, alt: "Boise Remodeling Co" }],
+    images: [{ url: SITE_IMAGES.hero, width: 1200, height: 630, alt: "Boise Remodeling Co" }],
   },
 };
 

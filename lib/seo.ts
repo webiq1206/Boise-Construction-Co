@@ -256,7 +256,7 @@ export function generateSafePageTitle(primary: string, suffix?: string): string 
  * this with a more specific image.
  * TODO: Replace with a purpose-built 1200x630 social card asset.
  */
-export const DEFAULT_OG_IMAGE_PATH = '/images/hero-remodel-interior.png';
+export const DEFAULT_OG_IMAGE_PATH = '/images/hero-remodel-interior.webp';
 
 /**
  * Absolute URL for the default Open Graph image.

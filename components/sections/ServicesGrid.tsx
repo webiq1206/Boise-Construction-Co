@@ -35,6 +35,7 @@ export function ServicesGrid() {
                     alt={`${service.name} project by Boise Remodeling Co`}
                     fill
                     sizes="(max-width: 640px) 100vw, 50vw"
+                    quality={70}
                     className="object-cover img-brand-grade transition-transform duration-300 ease-out group-hover:scale-[1.02]"
                   />
                 </div>

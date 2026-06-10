@@ -15,7 +15,8 @@ export function ProcessSection() {
             src={SITE_IMAGES.process}
             alt="Architectural blueprints and finish material samples for a Treasure Valley remodel"
             fill
-            sizes="(max-width: 768px) 100vw, 50vw"
+            loading="lazy"
+            sizes="50vw"
             className="object-cover img-brand-grade"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-primary/70" />

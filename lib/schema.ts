@@ -54,11 +54,12 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
 
   return {
     '@context': 'https://schema.org',
-    '@type': ['LocalBusiness', 'HomeAndConstructionBusiness'],
+    '@type': 'LocalBusiness',
+    additionalType: 'HomeAndConstructionBusiness',
     name: BUSINESS_INFO.name,
     legalName: BUSINESS_INFO.legalName,
     description: `Design-build remodeling contractor serving ${city || 'Boise'} and the Treasure Valley, Idaho. Kitchen remodels, bathrooms, additions & whole-home renovations.`,
-    image: `${baseUrl}/images/hero-remodel-interior.png`,
+    image: `${baseUrl}/images/hero-remodel-interior.webp`,
     logo: LOGO_URL,
     '@id': LOCALBUSINESS_ID,
     url: baseUrl,
@@ -268,7 +269,8 @@ export function generateReviewSchema(reviews: Array<{
 }>): SchemaContext {
   return {
     '@context': 'https://schema.org',
-    '@type': ['LocalBusiness', 'HomeAndConstructionBusiness'],
+    '@type': 'LocalBusiness',
+    additionalType: 'HomeAndConstructionBusiness',
     '@id': LOCALBUSINESS_ID,
     name: BUSINESS_INFO.name,
     // AggregateRating is gated on a real, populated review count. Emitting a
@@ -467,6 +469,35 @@ export function generateSpeakableSchema(page: {
       cssSelector: ["[data-speakable='summary']"],
     },
     url: `${baseUrl}${pagePath.startsWith('/') ? pagePath : `/${pagePath}`}`,
+  };
+}
+
+function stripSchemaContext(schema: SchemaContext): Record<string, unknown> {
+  const { '@context': _context, ...rest } = schema;
+  return rest;
+}
+
+/**
+ * Consolidated @graph for the homepage so audit crawlers detect LocalBusiness
+ * and related entities from a single JSON-LD block.
+ */
+export function generateHomePageSchemaGraph(
+  faqs: Array<{ question: string; answer: string }>,
+): SchemaContext {
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      stripSchemaContext(generateOrganizationSchema()),
+      stripSchemaContext(generateLocalBusinessSchema('Boise')),
+      stripSchemaContext(generateWebSiteSchema()),
+      stripSchemaContext(generateFAQSchema(faqs)),
+      stripSchemaContext(
+        generateSpeakableSchema({
+          path: '/',
+          name: 'Boise Remodeling Co, Design-Build Remodeling in the Treasure Valley',
+        }),
+      ),
+    ],
   };
 }
 

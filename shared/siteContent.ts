@@ -10,7 +10,7 @@ import type { LucideIcon } from "lucide-react";
 
 export const SITE_TAGLINE = "Treasure Valley design-build, built on clarity and craftsmanship";
 
-export const HERO_EYEBROW = "Treasure Valley Design-Build";
+export const HERO_EYEBROW = "Boise Remodeling Contractor · Treasure Valley";
 
 export const HERO_SUBHEAD =
   "One accountable design-build team from first visit to final walkthrough.";

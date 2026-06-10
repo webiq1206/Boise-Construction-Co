@@ -24,6 +24,7 @@ import {
   generateSpeakableSchema,
   generateWebPageSchema,
 } from '@/lib/schema';
+import { EmailLink } from '@/components/EmailLink';
 import { BUSINESS_INFO } from '@/lib/seo';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { CITIES, TREASURE_VALLEY_CITIES } from '@/shared/contentData';
@@ -302,10 +303,9 @@ export default function ContactPage() {
                 <ContactChannel
                   icon={<Mail className="h-5 w-5" strokeWidth={1.5} />}
                   label="Email us"
-                  href={`mailto:${BUSINESS_INFO.email}`}
                   subtext="Response within one business day"
                 >
-                  {BUSINESS_INFO.email}
+                  <EmailLink className="text-base hover:text-foreground/70 transition-colors" />
                 </ContactChannel>
               </Reveal>
               <Reveal delay={120}>

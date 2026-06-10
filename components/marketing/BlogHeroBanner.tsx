@@ -8,7 +8,7 @@ interface BlogHeroBannerProps {
   priority?: boolean;
 }
 
-export function BlogHeroBanner({ src, alt, priority = true }: BlogHeroBannerProps) {
+export function BlogHeroBanner({ src, alt, priority = false }: BlogHeroBannerProps) {
   return (
     <div className="relative h-56 md:h-72 overflow-hidden bg-inverse">
       <Image
@@ -42,7 +42,7 @@ export function HubHeroBanner({ src, alt }: HubHeroBannerProps) {
         src={src}
         alt={alt}
         fill
-        priority
+        loading="lazy"
         sizes="(max-width: 768px) 100vw, 896px"
         className="object-cover opacity-[0.82] img-brand-grade"
       />

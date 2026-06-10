@@ -30,7 +30,7 @@ export function HeroSection() {
           alt="Modern luxury home interior remodel in Boise Idaho Treasure Valley"
           fill
           priority
-          sizes="100vw"
+          sizes="(max-width: 768px) 100vw, 1400px"
           className="object-cover opacity-[0.72] img-brand-grade"
         />
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/90 via-inverse/55 to-inverse/15" />
@@ -46,7 +46,7 @@ export function HeroSection() {
             <Reveal>
               <div className="brc-label mb-6 text-inverse-muted">{HERO_EYEBROW}</div>
               <h1 className="font-sans font-light text-inverse-foreground text-display tracking-tight mb-6">
-                Remodel with{" "}
+                Boise remodeling with{" "}
                 <em className="brc-accent text-accent">clarity</em> and confidence.
               </h1>
               <p

@@ -5,35 +5,35 @@
  */
 
 export const SITE_IMAGES = {
-  hero: "/images/hero-remodel-interior.png",
-  process: "/images/process-design-review.png",
-  statementBand: "/images/gallery/gallery-whole-home-after.png",
-  leadership: "/images/gallery/gallery-kitchen-after.png",
+  hero: "/images/hero-remodel-interior.webp",
+  process: "/images/process-design-review.webp",
+  statementBand: "/images/gallery/gallery-whole-home-after.webp",
+  leadership: "/images/gallery/gallery-kitchen-after.webp",
 } as const;
 
 export const GALLERY_IMAGES = {
   kitchen: {
-    before: "/images/gallery/gallery-kitchen-before.png",
-    after: "/images/gallery/gallery-kitchen-after.png",
+    before: "/images/gallery/gallery-kitchen-before.webp",
+    after: "/images/gallery/gallery-kitchen-after.webp",
   },
   bathroom: {
-    before: "/images/gallery/gallery-bathroom-before.png",
-    after: "/images/gallery/gallery-bathroom-after.png",
+    before: "/images/gallery/gallery-bathroom-before.webp",
+    after: "/images/gallery/gallery-bathroom-after.webp",
   },
   wholeHome: {
-    before: "/images/gallery/gallery-whole-home-before.png",
-    after: "/images/gallery/gallery-whole-home-after.png",
+    before: "/images/gallery/gallery-whole-home-before.webp",
+    after: "/images/gallery/gallery-whole-home-after.webp",
   },
   addition: {
-    before: "/images/gallery/gallery-addition-before.png",
-    after: "/images/gallery/gallery-addition-after.png",
+    before: "/images/gallery/gallery-addition-before.webp",
+    after: "/images/gallery/gallery-addition-after.webp",
   },
   basement: {
-    before: "/images/gallery/gallery-basement-before.png",
-    after: "/images/gallery/gallery-basement-after.png",
+    before: "/images/gallery/gallery-basement-before.webp",
+    after: "/images/gallery/gallery-basement-after.webp",
   },
   outdoor: {
-    before: "/images/gallery/gallery-outdoor-before.png",
-    after: "/images/gallery/gallery-outdoor-after.png",
+    before: "/images/gallery/gallery-outdoor-before.webp",
+    after: "/images/gallery/gallery-outdoor-after.webp",
   },
 } as const;

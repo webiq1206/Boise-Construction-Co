@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { Providers } from '@/components/Providers'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import { SITE_TAGLINE } from '@/shared/siteContent'
+import { GoogleAnalytics } from '@/components/GoogleAnalytics'
 import './globals.css'
 
 const montserrat = Montserrat({
@@ -40,13 +41,13 @@ export const metadata: Metadata = {
     siteName: 'Boise Remodeling Co',
     title: 'Boise Remodeling Co | Treasure Valley Design-Build',
     description: `${SITE_TAGLINE}. Kitchen, bathroom, whole-home, and addition remodeling across the Treasure Valley.`,
-    images: [{ url: '/images/hero-remodel-interior.png', width: 1200, height: 630, alt: 'Boise Remodeling Co' }],
+    images: [{ url: '/images/hero-remodel-interior.webp', width: 1200, height: 630, alt: 'Boise Remodeling Co' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Boise Remodeling Co | Treasure Valley Design-Build',
     description: `${SITE_TAGLINE}. Design-build remodeling for Boise and the Treasure Valley.`,
-    images: ['/images/hero-remodel-interior.png'],
+    images: ['/images/hero-remodel-interior.webp'],
   },
   robots: {
     index: true,
@@ -105,6 +106,7 @@ export default function RootLayout({
           </div>
           <Toaster />
         </Providers>
+        <GoogleAnalytics />
       </body>
     </html>
   )

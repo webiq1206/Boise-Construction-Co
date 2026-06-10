@@ -7,11 +7,11 @@ export interface ServiceBackgroundConfig {
 const DEFAULT_BACKGROUND = SITE_IMAGES.hero;
 
 export const SERVICE_BACKGROUNDS: ServiceBackgroundConfig = {
-  "kitchen-remodel": "/images/services/kitchen-remodel.png",
-  "bathroom-remodel": "/images/services/bathroom-remodel.png",
-  "whole-home-remodel": "/images/services/whole-home-remodel.png",
-  "room-addition": "/images/services/room-addition.png",
-  "adu": "/images/services/adu.png",
+  "kitchen-remodel": "/images/services/kitchen-remodel.webp",
+  "bathroom-remodel": "/images/services/bathroom-remodel.webp",
+  "whole-home-remodel": "/images/services/whole-home-remodel.webp",
+  "room-addition": "/images/services/room-addition.webp",
+  "adu": "/images/services/adu.webp",
   "basement-finish": GALLERY_IMAGES.basement.after,
   "outdoor-living": GALLERY_IMAGES.outdoor.after,
 };
@@ -39,27 +39,27 @@ export interface LandingImageSet {
  */
 const SERVICE_IMAGE_SETS: Record<string, LandingImageSet> = {
   "kitchen-remodel": {
-    hero: "/images/services/kitchen-remodel.png",
+    hero: "/images/services/kitchen-remodel.webp",
     breather: GALLERY_IMAGES.kitchen.after,
     process: GALLERY_IMAGES.kitchen.before,
   },
   "bathroom-remodel": {
-    hero: "/images/services/bathroom-remodel.png",
+    hero: "/images/services/bathroom-remodel.webp",
     breather: GALLERY_IMAGES.bathroom.after,
     process: GALLERY_IMAGES.bathroom.before,
   },
   "whole-home-remodel": {
-    hero: "/images/services/whole-home-remodel.png",
+    hero: "/images/services/whole-home-remodel.webp",
     breather: GALLERY_IMAGES.wholeHome.after,
     process: GALLERY_IMAGES.wholeHome.before,
   },
   "room-addition": {
-    hero: "/images/services/room-addition.png",
+    hero: "/images/services/room-addition.webp",
     breather: GALLERY_IMAGES.addition.after,
     process: GALLERY_IMAGES.addition.before,
   },
   adu: {
-    hero: "/images/services/adu.png",
+    hero: "/images/services/adu.webp",
     breather: GALLERY_IMAGES.addition.after,
     process: GALLERY_IMAGES.basement.after,
   },

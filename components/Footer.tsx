@@ -3,6 +3,7 @@ import { CITIES, SERVICES } from "@/shared/contentData";
 import { SITE_TAGLINE } from "@/shared/siteContent";
 import { areaPath, servicePath } from "@/lib/seo-routes";
 import { SITE_CONFIG } from "@/shared/siteConfig";
+import { EmailLink } from "@/components/EmailLink";
 import { FooterCTAs } from "@/components/modals/FooterCTAs";
 import { CONTENT_HUBS, categoryHubPath, guidePath } from "@/shared/contentHubs";
 import { BLOG_POSTS } from "@/shared/blogContent";
@@ -41,12 +42,7 @@ export function Footer() {
               >
                 Text us
               </a>
-              <a
-                href={`mailto:${SITE_CONFIG.email}`}
-                className="block text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
-              >
-                {SITE_CONFIG.email}
-              </a>
+              <EmailLink className="block text-sm text-left text-inverse-muted hover:text-inverse-foreground transition-colors" />
               <p className="text-sm text-inverse-muted">
                 {SITE_CONFIG.address.cityState} · {SITE_CONFIG.address.serviceArea}
               </p>
@@ -229,7 +225,6 @@ export function Footer() {
               {[
                 { label: SITE_CONFIG.phone, href: SITE_CONFIG.phoneHref },
                 { label: "Text us", href: SITE_CONFIG.phoneSmsHref },
-                { label: SITE_CONFIG.email, href: `mailto:${SITE_CONFIG.email}` },
               ].map((link) => (
                 <li key={link.label}>
                   <a
@@ -240,6 +235,9 @@ export function Footer() {
                   </a>
                 </li>
               ))}
+              <li>
+                <EmailLink className="text-sm text-left text-inverse-muted hover:text-inverse-foreground transition-colors" />
+              </li>
             </ul>
             <div className="mt-6 pt-6 border-t border-inverse-foreground/10">
               <a

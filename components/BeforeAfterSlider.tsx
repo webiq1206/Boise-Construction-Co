@@ -72,7 +72,8 @@ export function BeforeAfterSlider({
         src={afterSrc}
         alt={afterAlt}
         fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        sizes="(max-width: 768px) 100vw, 1200px"
+        quality={70}
         className="object-cover pointer-events-none"
       />
 
@@ -84,9 +85,11 @@ export function BeforeAfterSlider({
       >
         <Image
           src={beforeSrc}
-          alt=""
+          alt={beforeAlt}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          loading="lazy"
+          sizes="(max-width: 768px) 100vw, 1200px"
+          quality={70}
           className="object-cover"
         />
       </div>
