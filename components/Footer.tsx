@@ -50,6 +50,24 @@ export function Footer() {
               <p className="text-sm text-inverse-muted">
                 {SITE_CONFIG.address.cityState} · {SITE_CONFIG.address.serviceArea}
               </p>
+              <div className="flex gap-4 pt-2">
+                <a
+                  href="https://www.facebook.com/boiseremodeling"
+                  className="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Facebook
+                </a>
+                <a
+                  href="https://www.instagram.com/boiseremodeling"
+                  className="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Instagram
+                </a>
+              </div>
             </div>
           </div>
 

@@ -1,80 +1,157 @@
 # 02 - Google Business Profile Plan
 
-Status: profile created but **unverified/suspended**. This is the single highest-impact item in the entire audit - without a live GBP there is no Local Pack, no Maps, no review collection, and weakened AI-engine entity confidence. Everything below is sequenced: recover first, then optimize.
+Status: profile **created, not yet verified** (Service Area Business). This doc is the operator hub; all copy-paste content lives in code at [shared/gbpProfile.ts](../shared/gbpProfile.ts).
 
-## Part 1 - Verification / suspension recovery
+**Print all GBP fields:** `npx tsx scripts/print-gbp-profile.ts`  
+**Sections:** `nap` | `services` | `products` | `qa` | `posts` | `photos` | `all`
 
-Boise Remodeling Co is a **Service Area Business (SAB)**: address hidden, serves customers at their locations. SABs in home services are the most-suspended GBP category. Follow exactly:
+## Execution order
 
-1. **Audit the profile before resubmitting.** Sign in at business.google.com. Confirm every field matches the canonical NAP below - mismatches between submission attempts are a common suspension trigger:
-   - Name: `Boise Remodeling Co` - exactly. No "LLC", no "| Kitchen & Bath", no city keyword stuffing (instant suspension risk).
-   - Phone: `(208) 477-1169`
-   - Website: `https://boiseremodeling.co`
-   - Address: enter the real physical address (required for verification even when hidden), then **clear the address** / set "I deliver goods and services to my customers" so only the service area shows publicly.
-   - Service area: Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, ID (max 20 areas allowed; these 8 match `BUSINESS_INFO.serviceArea` exactly - keep them in sync forever).
-2. **If suspended**: submit the [reinstatement request form](https://support.google.com/business/troubleshooter/2690129) once - duplicate submissions reset the queue. Attach in one PDF: Idaho business registration for Boise Remodeling Co LLC (Secretary of State certificate), proof of insurance/bond naming the business, a utility bill or lease at the registered address, and vehicle/signage photos if available.
-3. **If unverified**: expect **video verification** (standard for SABs since 2023). Prepare a single continuous video showing: business registration document, branded equipment/vehicle, tools of the trade, and proof of the address (mail or signage). Do the recording at the registered address.
-4. **While waiting** (do not skip - these strengthen the entity Google checks against):
-   - Ensure the Facebook (facebook.com/boiseremodeling) and Instagram pages display the same NAP.
-   - Fix the ProMatcher citation (see 07-nap-citations.md) - a conflicting Lake Fork, ID address on the open web is exactly the kind of signal that keeps a verification in review.
-   - Create Bing Places and Apple Business Connect listings with identical NAP (both verify faster than Google and become corroborating citations).
+| Phase | Doc | Site implementation |
+|-------|-----|---------------------|
+| 0 — Citation cleanup | [gbp-phase0-citation-checklist.md](./gbp-phase0-citation-checklist.md) | Footer social links; `GBP_CITATION_FIXES` in gbpProfile.ts |
+| 1 — Verification | [gbp-verification-kit.md](./gbp-verification-kit.md) | Env slots for GBP URLs in `.env.example` |
+| 2–9 — Full profile | This doc § Profile spec | `GBP_*` constants in gbpProfile.ts |
+| 10 — Q&A seed | `GBP_QA_SEED` | 12 entries with website deep links |
+| 11 — Posts | `GBP_POSTS_STARTER` | 4-week calendar with deep links |
+| 12 — Reviews | [08-review-strategy.md](./08-review-strategy.md) | `/review` redirect; [shared/reviewOutreach.ts](../shared/reviewOutreach.ts); email fns in emailNotifications.ts |
+| 13–14 — Messaging + parallel listings | `GBP_MESSAGING`, `GBP_PARALLEL_LISTINGS` | Appointment link = `/contact` |
+| 15 — Ongoing sync | `GBP_MONTHLY_SYNC`, `GBP_QUARTERLY_SYNC` | `getExternalProfileUrls()` → `BUSINESS_INFO.sameAs` in lib/seo.ts |
 
-## Part 2 - Profile specification (apply immediately on verification)
+---
+
+## Part 1 — Verification (see gbp-verification-kit.md)
+
+SAB model: real address for verification, hidden publicly. Expect video verification. One submission only.
+
+---
+
+## Part 2 — Profile specification (apply on verification)
+
+Run `npx tsx scripts/print-gbp-profile.ts` and paste into business.google.com.
 
 ### Categories
-- **Primary: `Remodeler`** - matches the design-build positioning and the five services better than `General contractor` (which signals new construction + commercial and dilutes Local Pack relevance for "remodeling" queries).
-- Secondary, in this order: `Kitchen remodeler`, `Bathroom remodeler`, `Construction company`, `General contractor`, `Design agency` (only if design-build consultations are sold separately; otherwise omit).
 
-### Business description (750 chars max; first 250 matter most)
-> Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles design, Ada and Canyon County permits, and construction for kitchen remodels, bathroom remodels, whole-home renovations, room additions, and ADUs. Every project includes a written scope before construction, a dedicated project manager, weekly written progress updates, and a written workmanship guarantee. Founded in 2017. Bonded and insured. Schedule a free 60 to 90 minute in-home visit and leave with a planning range and design direction - no pressure, no obligation.
+- **Primary:** Remodeler
+- **Secondary (order):** Kitchen remodeler → Bathroom remodeler → Construction company → General contractor → Home builder
 
-### Services (add each under the matching category; pull descriptions from `shared/contentData.ts`)
-- Kitchen remodeling - "Custom kitchen renovations from cabinet refreshes to full gut-and-rebuild."
-- Bathroom remodeling - "Spa-quality bathroom transformations designed around how you actually live."
-- Whole-home remodeling - "Cohesive whole-home renovations with a single project manager start to finish."
-- Room additions - "Thoughtfully designed additions that feel like they were always part of your home."
-- ADU construction - "Detached or attached accessory dwelling units designed to maximize property value."
-- Also add as services (free-text): Design-build services, Remodeling permit management, Home renovation consultation, Primary suite additions, Garage conversions, Basement finishing (only if actually offered).
+### Business description
+
+748 characters — see `GBP_DESCRIPTION` in [shared/gbpProfile.ts](../shared/gbpProfile.ts).
+
+### Service areas (8 cities)
+
+Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, ID — plus optional 35-mile radius centered on Meridian.
+
+### Services (12 items)
+
+Core + supporting services with starting prices — see `GBP_SERVICES`.
+
+### Products (22 items, 4 categories)
+
+**Remodeling Services** (7) · **Free Planning Resources** (4) · **Consultation & Tools** (3) · **Areas We Serve** (8)
+
+Each product includes a **Product URL** back to the website — see `GBP_PRODUCTS`. This is the primary deep-linking layer (GBP Services have no per-item URL field).
 
 ### Attributes
-- Identifies as: set any that apply (veteran-owned etc. - only if true)
-- `Online estimates: Yes` (the on-site estimator qualifies)
-- `Onsite services: Yes`
-- Payments: match `paymentAccepted` in schema (cash, check, credit card, financing)
+
+- Online estimates: Yes
+- Onsite services: Yes
+- Payments: Cash, Check, Credit cards, Financing available
+- Service options: Free estimates
 
 ### Links
-- Website: `https://boiseremodeling.co`
-- Appointment link: `https://boiseremodeling.co/contact`
-- After verification, add the GBP listing URL + Maps short link to `BUSINESS_INFO.sameAs` in `lib/seo.ts` (plumbing is ready; this closes the entity loop).
 
-### Photos (minimum viable set, week 1)
-1. Logo (square) + cover photo (the hero remodel interior, 1200x900+)
-2. 10+ project photos, captioned by city and project type before upload (filenames like `kitchen-remodel-boise-north-end-after.jpg` - Google reads them)
-3. Team/founder photo, work-in-progress shots (dust barriers, floor protection - they visualize the differentiators)
-4. Ongoing: 2-4 new photos per month, every completed project, geotagged where possible
+| Link type | URL |
+|-----------|-----|
+| Website | `https://boiseremodeling.co` |
+| Appointment | `https://boiseremodeling.co/contact` |
+| Review (short) | `https://boiseremodeling.co/review` → redirects to GBP review URL |
+| Facebook | `https://www.facebook.com/boiseremodeling` |
+| Instagram | `https://www.instagram.com/boiseremodeling` |
 
-### Q&A seeding (post and answer these yourself - it is allowed and expected)
-1. "Do you provide free estimates?" → free 60-90 min in-home visit + online planning-range estimator
-2. "What areas do you serve?" → the 8 cities verbatim
-3. "Do you handle permits?" → yes, Ada and Canyon County, in-house
-4. "How much does a kitchen remodel cost?" → planning bands from the estimator ($15k-$35k refresh to $150k+ luxury), link to cost guide
-5. "Are you licensed and insured?" → bonded + insured (add license number once displayed on site; see 11-eeat-audit.md)
-6. "Do you build ADUs?" → yes, attached and detached, including Boise ordinance guidance
+### Photos (minimum 15)
 
-### Posts cadence
-- Weekly "Update" post alternating: project showcase (city-tagged), cost/planning tip linking to a guide, seasonal angle, review highlight.
-- Every post links to a deep page (guide or city-service), never just the homepage.
+See `GBP_PHOTO_CHECKLIST`. Caption formula: `{Project type} in {City}, Idaho — Boise Remodeling Co`
 
-### Reviews
-Begin collection the day verification lands - the full system is in 08-review-strategy.md. Target: 10 reviews in 60 days, each mentioning city + service.
+### Q&A (seed all 12 on day 1)
 
-## Part 3 - Bing Places + Apple Business Connect (same week)
-- Bing Places: import from GBP once verified (fastest path), or create manually with identical NAP. Categories: Remodeler / General Contractor.
-- Apple Business Connect: register at businessconnect.apple.com with identical NAP; pick category `Home Improvement`. Apple Maps powers Siri voice results - relevant for "remodeling contractor near me" voice queries.
+See `GBP_QA_SEED` — post each question yourself, then answer as owner.
 
-## GBP-to-website alignment checklist (keep in sync permanently)
-- GBP service area == `BUSINESS_INFO.serviceArea` (8 cities) == `areaServed` schema
-- GBP categories == services in `shared/contentData.ts` == `hasOfferCatalog`
-- GBP hours == `BUSINESS_INFO.hours` == `openingHoursSpecification`
-- GBP description claims (2017, written guarantee, weekly updates) == homepage copy
-- GBP URL in `BUSINESS_INFO.sameAs` (after verification)
+### Posts (weekly)
+
+See `GBP_POSTS_STARTER` for weeks 1–4. Rotate monthly: city spotlight → `/areas/{city}`, service → `/services/{service}`, cost guide, process guide, contractor guide, review highlight.
+
+---
+
+## Part 3 — Reviews (see 08-review-strategy.md)
+
+After verification:
+
+1. Copy GBP short review link → set `NEXT_PUBLIC_GBP_REVIEW_URL`
+2. Verbal link: `boiseremodeling.co/review`
+3. Day 0: in-person ask — `buildInPersonAskScript()` in reviewOutreach.ts
+4. Day 1: `sendWalkthroughReviewEmail()` 
+5. Day 7: `sendReviewReminderEmail()` — one reminder only
+6. Target: 10 reviews in 60 days
+
+When genuine reviews exist: update `BUSINESS_INFO.rating` / `reviewCount` in [lib/seo.ts](../lib/seo.ts) → activates AggregateRating schema.
+
+---
+
+## Part 4 — Messaging & parallel listings
+
+**Welcome message:** see `GBP_MESSAGING.welcomeMessage`
+
+| Platform | URL | Category |
+|----------|-----|----------|
+| Bing Places | bingplaces.com | Remodeler / General Contractor |
+| Apple Business Connect | businessconnect.apple.com | Home Improvement |
+
+Import Bing from GBP after verification. Set `NEXT_PUBLIC_BING_PLACES_URL` and `NEXT_PUBLIC_APPLE_BUSINESS_URL` when live.
+
+---
+
+## Part 5 — Schema & env sync
+
+After verification, set in production env:
+
+```bash
+NEXT_PUBLIC_GBP_URL=https://maps.app.goo.gl/...
+NEXT_PUBLIC_GBP_REVIEW_URL=https://g.page/r/.../review
+# Optional as listings go live:
+NEXT_PUBLIC_BING_PLACES_URL=
+NEXT_PUBLIC_APPLE_BUSINESS_URL=
+NEXT_PUBLIC_YELP_URL=
+NEXT_PUBLIC_HOUZZ_URL=
+```
+
+`BUSINESS_INFO.sameAs` in lib/seo.ts automatically includes Facebook, Instagram, and any env URLs above.
+
+### Monthly sync (`GBP_MONTHLY_SYNC`)
+
+- 1 Google Post with deep link
+- 2–4 new photos
+- Respond to reviews within 48h
+- Check Q&A
+- Verify NAP on all profiles
+- Update rating/reviewCount if changed
+
+### Quarterly sync (`GBP_QUARTERLY_SYNC`)
+
+- Old phone citation sweep: `"Boise Remodeling Co" (208) 405-8425`
+- Duplicate GBP audit
+- Update product/post links for new guides
+
+---
+
+## GBP-to-website alignment (permanent)
+
+| Element | GBP | Website source |
+|---------|-----|----------------|
+| Service areas | 8 cities | `BUSINESS_INFO.serviceArea` |
+| Hours | Mon–Sat table | `BUSINESS_INFO.hours` |
+| Phone | (208) 477-1169 | `SITE_CONFIG` |
+| Core services | 5 + extended | `shared/contentData.ts` + `GBP_SERVICES` |
+| Description claims | GBP description | `GBP_DESCRIPTION` / homepage copy |
+| Entity graph | GBP URL in sameAs | `NEXT_PUBLIC_GBP_URL` |

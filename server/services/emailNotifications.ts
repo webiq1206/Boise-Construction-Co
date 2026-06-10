@@ -1095,3 +1095,33 @@ export async function sendContractSignedConfirmation(
   });
   await sendEmail(subcontractorEmail, subject, htmlBody);
 }
+
+/** Day 1 post-walkthrough review request (see shared/reviewOutreach.ts). */
+export async function sendWalkthroughReviewEmail(
+  customerEmail: string,
+  params: { customerFirstName: string; city: string; projectType: string },
+): Promise<void> {
+  const { buildDay1ReviewEmail } = await import('@/shared/reviewOutreach');
+  const { subject, bodyHtml } = buildDay1ReviewEmail(params);
+  const htmlBody = wrapEmailHtml({
+    title: 'How was your project?',
+    subtitle: `${params.city} ${params.projectType}`,
+    content: bodyHtml,
+  });
+  await sendEmail(customerEmail, subject, htmlBody);
+}
+
+/** Day 7 single review reminder — send once, then stop. */
+export async function sendReviewReminderEmail(
+  customerEmail: string,
+  params: { customerFirstName: string; city: string; projectType: string },
+): Promise<void> {
+  const { buildDay7ReviewReminderEmail } = await import('@/shared/reviewOutreach');
+  const { subject, bodyHtml } = buildDay7ReviewReminderEmail(params);
+  const htmlBody = wrapEmailHtml({
+    title: 'Quick review reminder',
+    subtitle: `${params.city} ${params.projectType}`,
+    content: bodyHtml,
+  });
+  await sendEmail(customerEmail, subject, htmlBody);
+}

@@ -16,6 +16,7 @@
     "verify:images": "tsx scripts/verify-blog-images.ts",
     "verify:no-em-dash": "tsx scripts/verify-no-em-dash.ts",
     "resources:generate": "tsx scripts/generate-resource-pdfs.ts",
+    "gbp:print": "tsx scripts/print-gbp-profile.ts",
     "verify:estimate": "tsx scripts/verify-estimate-engine.ts",
     "images:blog": "node scripts/generate-blog-image-registry.mjs && node scripts/setup-blog-images.mjs",
     "images:generate": "node scripts/generate-blog-images.mjs",

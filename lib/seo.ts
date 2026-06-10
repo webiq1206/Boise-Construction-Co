@@ -5,6 +5,7 @@
  */
 
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { GBP_SOCIAL, getExternalProfileUrls } from '@/shared/gbpProfile';
 
 interface SEOMetaData {
   title: string;
@@ -473,8 +474,9 @@ export const BUSINESS_INFO = {
   reviewCount: 0,
   yearlyServicesCompleted: 0,
   sameAs: [
-    'https://www.facebook.com/boiseremodeling',
-    'https://www.instagram.com/boiseremodeling',
+    GBP_SOCIAL.facebook,
+    GBP_SOCIAL.instagram,
+    ...getExternalProfileUrls(),
   ],
 };
 

@@ -27,7 +27,10 @@ Healthy review corpus mentions, over time: each of the 5 services, each of the 8
 ### 4. Distribution
 Google first until 15+ reviews, then alternate asks toward Houzz (drives its own ranking) and Facebook recommendations. Nextdoor recommendations accrue organically from the business page.
 
-### 5. On-site integration (code tasks, plumbing already built)
+### 5. On-site integration (implemented)
+- **Review redirect:** `GET /review` → `NEXT_PUBLIC_GBP_REVIEW_URL` (fallback: `/contact?review=pending`). Verbal link: `boiseremodeling.co/review`
+- **Scripts & templates:** [shared/reviewOutreach.ts](../shared/reviewOutreach.ts) — in-person ask, Day 1/Day 7 email copy, SMS closeout text, response template, email signature line
+- **Email senders:** `sendWalkthroughReviewEmail()` and `sendReviewReminderEmail()` in [server/services/emailNotifications.ts](../server/services/emailNotifications.ts)
 - Add `date`, `city`, `service` fields to entries in `shared/testimonialsData.ts` as new reviews land; Review schema on /testimonials already supports `datePublished`.
 - When genuine Google reviews exist: set `BUSINESS_INFO.rating` / `reviewCount` (`lib/seo.ts`) → `aggregateRating` activates automatically in LocalBusiness + Review schema. Update monthly.
 - Add new city-tagged testimonials for Kuna/Star/Middleton/Caldwell to unlock proof blocks on their 24 landing pages (currently proof deserts - see 04-landing-page-audit.md).

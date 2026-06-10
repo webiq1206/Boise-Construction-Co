@@ -27,11 +27,7 @@ Live search verification (June 10, 2026) found the retired `(208) 405-8425` numb
 2. **MapQuest** (mapquest.com/us/idaho/boise-remodeling-co-519905114): "Boise, ID 83701" + `(208) 405-8425` + the correct website URL - so the wrong phone is directly tied to boiseremodeling.co. Photo is served from a Yelp CDN, indicating MapQuest syndicated this from a Yelp listing.
 3. **Yelp (inferred)**: an unclaimed/legacy Yelp listing with the old number is the likely upstream source of the MapQuest record.
 
-**Fix (this week, in order):**
-- Find and claim the Yelp listing (search Yelp for "Boise Remodeling Co"); correct phone to (208) 477-1169, set service-area model, suppress any street address. Yelp feeds MapQuest, Apple Maps (historically), and many aggregators - fixing the source matters more than fixing each mirror.
-- Correct or delete the ProMatcher/VentureStreet profile (log into the account that created it or use their update form). Deletion is acceptable; the conflict costs more than the citation earns.
-- Submit a MapQuest correction (listing edit/claim flow) after Yelp is fixed.
-- Re-run the verification search in 30 days: `"Boise Remodeling Co" (208) 405-8425` should return nothing live.
+**Fix (this week, in order):** see [gbp-phase0-citation-checklist.md](./gbp-phase0-citation-checklist.md)
 
 ### Everything else: missing
 No findable presence on: Google (unverified), Bing Places, Apple Maps, Yelp, Houzz, Angi, BBB, Thumbtack, Porch, BuildZoom, Nextdoor, HomeAdvisor, Idaho AGC, Boise Metro Chamber. Facebook/Instagram pages are referenced in `sameAs` - verify both actually exist and carry the canonical NAP (could not be confirmed from search).
