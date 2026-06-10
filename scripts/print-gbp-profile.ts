@@ -81,7 +81,7 @@ function printPosts() {
 function printPhotos() {
   console.log('\n=== PHOTO CHECKLIST ===');
   GBP_PHOTO_CHECKLIST.forEach((p, i) => {
-    console.log(`${i + 1}. ${p.type} — ${p.spec} (${p.filename})`);
+    console.log(`${i + 1}. ${p.type} - ${p.spec} (${p.filename})`);
   });
 }
 

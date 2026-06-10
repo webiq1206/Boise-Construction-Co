@@ -1111,7 +1111,7 @@ export async function sendWalkthroughReviewEmail(
   await sendEmail(customerEmail, subject, htmlBody);
 }
 
-/** Day 7 single review reminder — send once, then stop. */
+/** Day 7 single review reminder - send once, then stop. */
 export async function sendReviewReminderEmail(
   customerEmail: string,
   params: { customerFirstName: string; city: string; projectType: string },
