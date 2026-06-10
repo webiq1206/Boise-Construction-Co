@@ -24,3 +24,9 @@ live in the scanned extensions.
 **How to apply:** if a build fails on this check, replace the offending em-dash
 with `-`. If you ever need to widen/narrow what's checked, edit
 `SCAN_EXTENSIONS` / `EXCLUDED_DIRS` in the script.
+
+**Auto-fixer exists:** an auto-fix counterpart runs in the deploy build before
+the guard, so publishing self-heals stray em-dashes (the guard remains the
+backstop). Gotcha: any script that embeds the em-dash search patterns will trip
+the guard on itself, so such scripts must be added to the guard's path-exclusion
+set (the guard and fixer already exclude each other).

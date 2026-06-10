@@ -55,8 +55,11 @@ const EXCLUDED_DIRS = new Set([
   'test-results',
 ]);
 
-// This script intentionally contains the patterns it searches for, so skip it.
-const EXCLUDED_FILES = new Set([join('scripts', 'verify-no-em-dash.ts')]);
+// These scripts intentionally contain the patterns they search for, so skip them.
+const EXCLUDED_FILES = new Set([
+  join('scripts', 'verify-no-em-dash.ts'),
+  join('scripts', 'fix-em-dash.ts'),
+]);
 
 interface Violation {
   file: string;
