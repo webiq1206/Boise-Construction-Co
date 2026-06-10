@@ -14,6 +14,8 @@ export interface BlogPostData {
   hubSlug: string;
   tags: string[];
   publishedAt: string;
+  /** Last substantive revision date (ISO). Feeds Article dateModified. */
+  updatedAt?: string;
   heroImage?: string;
   thumbnail?: string;
   faqs: Array<{ question: string; answer: string }>;

@@ -280,10 +280,10 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'city-service',
   },
   'what-makes-great-remodeling-contractor': {
-    hero: '/images/services/adu.png',
-    alt: 'Precision craftsmanship on a custom ADU build demonstrating expert Treasure Valley work',
+    hero: '/images/blog/kitchen-roi-remodeling.png',
+    alt: 'Quality finished kitchen remodel showing the craftsmanship a great Treasure Valley contractor delivers',
     topicTags: ["contractor","craftsmanship"],
-    source: 'services',
+    source: 'blog',
   },
   'consultation-process-remodeling': {
     hero: '/images/city-service/adu__star.png',
@@ -463,6 +463,12 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     hero: '/images/services/room-addition.png',
     alt: 'Boise home addition guide for second stories, suites, and ADUs',
     topicTags: ["addition","guide","pillar"],
+    source: 'services',
+  },
+  'boise-adu-guide': {
+    hero: '/images/services/adu.png',
+    alt: 'Boise ADU guide covering zoning rules, costs, and detached guest house construction',
+    topicTags: ["adu","guide","pillar"],
     source: 'services',
   },
   'whole-home-remodeling-guide': {

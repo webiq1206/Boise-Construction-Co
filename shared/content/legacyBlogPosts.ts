@@ -67,6 +67,11 @@ export const LEGACY_BLOG_POSTS: BlogPostData[] = [
       { url: '/blog/boise-permit-guide' },
       { url: '/areas/boise' },
       { url: '/areas/nampa' },
+      // Canyon-county cities are the most under-linked pages in the manifest;
+      // this permit post is their most topically relevant source
+      // (local-seo-audit/06-internal-linking-plan.md Gap 3).
+      { url: '/areas/middleton', anchor: 'Remodeling in Middleton' },
+      { url: '/areas/caldwell', anchor: 'Remodeling in Caldwell' },
     ],
     faqs: [
       {

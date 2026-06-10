@@ -78,6 +78,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
     title: guide.title,
     description: guide.excerpt,
     publishedAt: guide.publishedAt,
+    updatedAt: guide.updatedAt,
     slug: guide.slug,
     pathPrefix: 'guides',
     image: getAbsoluteImageUrl(getBlogHeroImage(guide.slug, guide.heroImage), getBaseUrl()),

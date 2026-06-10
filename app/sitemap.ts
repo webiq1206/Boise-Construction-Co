@@ -9,6 +9,7 @@ import {
   isCategoryHubIndexable,
 } from '@/shared/contentHubs';
 import { getBaseUrl } from '@/lib/seo';
+import { isCityServiceNoindex } from '@/lib/page-metadata';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = getBaseUrl().replace(/\/$/, '');
@@ -47,8 +48,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  // Noindexed doorway-risk combos must not be advertised in the sitemap; they
+  // stay crawlable via internal links but are excluded here (see
+  // local-seo-audit/12-technical-plan.md T1).
   const cityServicePages: MetadataRoute.Sitemap = SERVICES.flatMap((s) =>
-    CITIES.map((c) => ({
+    CITIES.filter((c) => !isCityServiceNoindex(s.slug, c.slug)).map((c) => ({
       url: `${baseUrl}/services/${s.slug}/${c.slug}`,
       lastModified: now,
       changeFrequency: 'monthly' as const,

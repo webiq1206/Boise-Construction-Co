@@ -167,6 +167,15 @@ const additionSlugs = [
   ['home-addition-timeline-guide', 'Home Addition Timeline Guide'],
 ] as const;
 
+/** ADU-adjacent clusters force-link the ADU pillar (local-seo-audit/06-internal-linking-plan.md Gap 4). */
+const ADU_PILLAR_LINK = { url: '/guides/boise-adu-guide', anchor: 'Boise ADU Guide' };
+const ADDITION_EXTRA_LINKS: Record<string, Array<{ url: string; anchor?: string }>> = {
+  'adu-guide-boise': [ADU_PILLAR_LINK, { url: '/services/adu/boise', anchor: 'ADU builder in Boise' }],
+  'garage-conversions': [ADU_PILLAR_LINK, { url: adu, anchor: 'ADU and guest house construction' }],
+  'multigenerational-living-remodels': [ADU_PILLAR_LINK],
+  'primary-suite-additions': [{ url: ab, anchor: 'Room additions in Boise' }],
+};
+
 export const ADDITION_CLUSTER_POSTS: BlogPostData[] = additionSlugs.map(([slug, title]) =>
   buildClusterPost({
     slug,
@@ -180,6 +189,7 @@ export const ADDITION_CLUSTER_POSTS: BlogPostData[] = additionSlugs.map(([slug, 
     takeaways: ['Match architecture to protect resale.', 'Budget contingency for site and structure.'],
     serviceUrl: a,
     cityServiceUrl: ab,
+    extraRelatedLinks: ADDITION_EXTRA_LINKS[slug],
   }),
 );
 

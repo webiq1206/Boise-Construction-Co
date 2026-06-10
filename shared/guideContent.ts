@@ -13,6 +13,12 @@ import {
 } from './content/wave1/locationGuides';
 import { ALL_HUB_PILLARS, LOCATION_GUIDES } from './content/allHubsContent';
 import { expandPillar } from './content/contentFactory';
+import {
+  BOISE_ADU_GUIDE_FAQS,
+  BOISE_ADU_GUIDE_HTML,
+  BOISE_ADU_GUIDE_QUICK_ANSWER,
+  BOISE_ADU_GUIDE_TAKEAWAYS,
+} from './content/boiseAduGuide';
 
 export type GuideType = 'hub-pillar' | 'location' | 'neighborhood' | 'master';
 
@@ -28,6 +34,8 @@ export interface GuidePageData {
   guideType: GuideType;
   tags: string[];
   publishedAt: string;
+  /** Last substantive revision date (ISO). Feeds Article dateModified. */
+  updatedAt?: string;
   heroImage?: string;
   quickAnswer?: string;
   keyTakeaways?: string[];
@@ -153,6 +161,14 @@ export const GUIDE_PAGES: GuidePageData[] = [
       { url: '/blog/category/remodeling-costs' },
       { url: '/areas' },
       { url: '/#calculator' },
+      // The cost guide is the site's highest-authority content asset; route
+      // that authority to the money pages with cost-flavored anchors
+      // (local-seo-audit/06-internal-linking-plan.md Gap 2).
+      { url: '/services/kitchen-remodel/boise', anchor: 'Kitchen remodeling costs in Boise' },
+      { url: '/services/bathroom-remodel', anchor: 'Bathroom remodel pricing' },
+      { url: '/services/whole-home-remodel', anchor: 'Whole-home remodel investment' },
+      { url: '/services/room-addition', anchor: 'Room addition costs' },
+      { url: '/services/adu', anchor: 'ADU construction costs' },
     ],
     primaryKeyword: 'boise remodeling cost',
   },
@@ -303,6 +319,35 @@ export const GUIDE_PAGES: GuidePageData[] = [
       { url: '/services/kitchen-remodel/boise' },
     ],
     primaryKeyword: 'boise remodeling',
+  },
+  {
+    slug: 'boise-adu-guide',
+    title: 'Boise ADU Guide: Rules, Costs & Building a Second Unit',
+    seoTitle: 'Boise ADU Guide | Rules, Costs & Permits',
+    metaDescription:
+      'Boise ADU guide: zoning rules, size limits, costs ($90k-$300k+), permits, and attached vs detached vs garage conversion for Treasure Valley lots.',
+    excerpt:
+      'Everything Treasure Valley homeowners need to plan an accessory dwelling unit: Boise zoning rules, realistic costs, permits, and design choices.',
+    content: BOISE_ADU_GUIDE_HTML,
+    author: 'Boise Remodeling Co',
+    hubSlug: 'home-additions',
+    guideType: 'hub-pillar',
+    tags: ['adu', 'guest house', 'boise', 'addition'],
+    publishedAt: '2026-06-10',
+    quickAnswer: BOISE_ADU_GUIDE_QUICK_ANSWER,
+    keyTakeaways: BOISE_ADU_GUIDE_TAKEAWAYS,
+    faqs: BOISE_ADU_GUIDE_FAQS,
+    linkedClusterSlugs: ['adu-guide-boise', 'garage-conversions', 'multigenerational-living-remodels'],
+    linkedServices: ['adu'],
+    linkedCities: ['boise', 'meridian', 'eagle', 'nampa'],
+    relatedLinks: [
+      { url: '/services/adu', anchor: 'ADU and guest house construction' },
+      { url: '/services/adu/boise', anchor: 'ADU builder in Boise' },
+      { url: '/guides/boise-home-addition-guide' },
+      { url: '/guides/boise-remodeling-cost-guide' },
+      { url: '/resources/ada-canyon-permit-flow' },
+    ],
+    primaryKeyword: 'boise adu guide',
   },
   ...ALL_HUB_PILLARS,
   ...LOCATION_GUIDES,

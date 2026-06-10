@@ -45,6 +45,18 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
   const serviceLC = service.name.toLowerCase();
 
   const sections: LandingSection[] = [
+    ...(content.costGuidance
+      ? [
+          {
+            heading: content.costGuidance.heading,
+            paragraphs: content.costGuidance.paragraphs,
+            links: [
+              { label: 'Boise Remodeling Cost Guide', href: '/guides/boise-remodeling-cost-guide' },
+              { label: 'Get your planning range', href: '/#calculator' },
+            ],
+          },
+        ]
+      : []),
     {
       heading: `${service.name} across the Treasure Valley`,
       paragraphs: [

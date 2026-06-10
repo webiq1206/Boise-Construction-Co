@@ -20,7 +20,7 @@ import { HomePageSchema } from "@/components/seo/HomePageSchema";
 import { buildCanonical } from "@/lib/page-metadata";
 
 export const metadata: Metadata = {
-  title: { absolute: "Boise Remodeling Co | Treasure Valley Design-Build" },
+  title: { absolute: "Remodeling Contractor in Boise, ID | Boise Remodeling Co" },
   description:
     "Design-build remodeling for Boise, Meridian, Eagle, Nampa & the Treasure Valley. Clear expectations and budget guidance. Schedule a free in-home consultation.",
   alternates: {

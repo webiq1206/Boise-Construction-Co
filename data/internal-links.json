@@ -2,7 +2,7 @@
   "generatedAt": null,
   "counts": {
     "blog": 69,
-    "guide": 24,
+    "guide": 25,
     "service": 5,
     "city": 8,
     "cityService": 40
@@ -18,6 +18,20 @@
           "url": "/areas/boise",
           "anchor": "Remodeling in Boise",
           "title": "Remodeling Services in Boise, Idaho",
+          "type": "city",
+          "score": 999
+        },
+        {
+          "url": "/areas/caldwell",
+          "anchor": "Remodeling in Caldwell",
+          "title": "Remodeling Services in Caldwell, Idaho",
+          "type": "city",
+          "score": 999
+        },
+        {
+          "url": "/areas/middleton",
+          "anchor": "Remodeling in Middleton",
+          "title": "Remodeling Services in Middleton, Idaho",
           "type": "city",
           "score": 999
         },
@@ -48,13 +62,6 @@
           "title": "Outdoor Living Remodeling Guide",
           "type": "guide",
           "score": 0.313
-        },
-        {
-          "url": "/services/whole-home-remodel",
-          "anchor": "Whole-Home Remodel",
-          "title": "Whole-Home Remodel in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": 0.233
         }
       ]
     },
@@ -93,9 +100,9 @@
           "score": 999
         },
         {
-          "url": "/blog/remodeling-before-selling",
-          "anchor": "Remodeling Before Selling",
-          "title": "Remodeling Before Selling",
+          "url": "/blog/exterior-remodeling-roi",
+          "anchor": "Exterior Remodeling ROI",
+          "title": "Exterior Remodeling ROI",
           "type": "blog",
           "score": 1.5
         },
@@ -115,6 +122,13 @@
       "url": "/blog/adu-guide-boise",
       "links": [
         {
+          "url": "/guides/boise-adu-guide",
+          "anchor": "Boise ADU Guide",
+          "title": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
+          "type": "guide",
+          "score": 999
+        },
+        {
           "url": "/guides/boise-home-addition-guide",
           "anchor": "Home Additions",
           "title": "Boise Home Addition Guide",
@@ -126,6 +140,13 @@
           "anchor": "Boise Remodeling Cost Guide (2026 Planning Ranges)",
           "title": "Boise Remodeling Cost Guide (2026 Planning Ranges)",
           "type": "guide",
+          "score": 999
+        },
+        {
+          "url": "/services/adu/boise",
+          "anchor": "ADU builder in Boise",
+          "title": "ADU / Guest House in Boise, Idaho",
+          "type": "city-service",
           "score": 999
         },
         {
@@ -141,13 +162,6 @@
           "title": "Room Addition in Boise, Idaho",
           "type": "city-service",
           "score": 999
-        },
-        {
-          "url": "/blog/home-addition-timeline-guide",
-          "anchor": "Home Addition Timeline Guide",
-          "title": "Home Addition Timeline Guide",
-          "type": "blog",
-          "score": 1.568
         },
         {
           "url": "/guides/boise-remodeling-process-guide",
@@ -193,9 +207,9 @@
           "score": 999
         },
         {
-          "url": "/blog/curbless-shower-guide",
-          "anchor": "Curbless Shower Guide",
-          "title": "Curbless Shower Guide",
+          "url": "/blog/bathroom-remodel-roi",
+          "anchor": "Bathroom Remodel ROI",
+          "title": "Bathroom Remodel ROI",
           "type": "blog",
           "score": 1.25
         },
@@ -293,9 +307,9 @@
           "score": 999
         },
         {
-          "url": "/blog/luxury-bathroom-features",
-          "anchor": "Luxury Bathroom Features",
-          "title": "Luxury Bathroom Features",
+          "url": "/blog/curbless-shower-guide",
+          "anchor": "Curbless Shower Guide",
+          "title": "Curbless Shower Guide",
           "type": "blog",
           "score": 1.306
         },
@@ -354,7 +368,7 @@
           "anchor": "Whole-Home Remodel",
           "title": "Whole-Home Remodel in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.11
+          "score": 0.15
         }
       ]
     },
@@ -443,18 +457,18 @@
           "score": 999
         },
         {
-          "url": "/blog/second-story-additions",
-          "anchor": "Second Story Additions",
-          "title": "Second Story Additions",
+          "url": "/blog/garage-conversions",
+          "anchor": "Garage Conversions",
+          "title": "Garage Conversions",
           "type": "blog",
           "score": 1.5
         },
         {
-          "url": "/guides/treasure-valley-remodeling-guide",
-          "anchor": "Treasure Valley Remodeling Guide",
-          "title": "Treasure Valley Remodeling Guide",
+          "url": "/guides/boise-adu-guide",
+          "anchor": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
+          "title": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
           "type": "guide",
-          "score": 0.238
+          "score": 0.715
         }
       ]
     },
@@ -493,18 +507,18 @@
           "score": 999
         },
         {
-          "url": "/blog/ada-vs-canyon-county-permit-timelines",
-          "anchor": "Ada vs Canyon County Remodel Permits: Timelines Homeowners Should Know",
-          "title": "Ada vs Canyon County Remodel Permits: Timelines Homeowners Should Know",
+          "url": "/blog/design-development-guide",
+          "anchor": "Design Development Guide",
+          "title": "Design Development Guide",
           "type": "blog",
-          "score": 1
+          "score": 1.35
         },
         {
-          "url": "/guides/middleton-remodeling-guide",
-          "anchor": "Middleton Remodeling Guide",
-          "title": "Middleton Remodeling Guide",
+          "url": "/guides/treasure-valley-remodeling-guide",
+          "anchor": "Treasure Valley Remodeling Guide",
+          "title": "Treasure Valley Remodeling Guide",
           "type": "guide",
-          "score": 0.287
+          "score": 0.302
         }
       ]
     },
@@ -543,9 +557,9 @@
           "score": 999
         },
         {
-          "url": "/blog/design-development-guide",
-          "anchor": "Design Development Guide",
-          "title": "Design Development Guide",
+          "url": "/blog/material-selection-guide",
+          "anchor": "Material Selection Guide",
+          "title": "Material Selection Guide",
           "type": "blog",
           "score": 1.279
         },
@@ -650,11 +664,11 @@
           "score": 0.12
         },
         {
-          "url": "/services/adu",
-          "anchor": "ADU / Guest House",
-          "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
+          "url": "/services/room-addition",
+          "anchor": "Room Addition",
+          "title": "Room Addition in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.01
+          "score": 0.03
         }
       ]
     },
@@ -700,11 +714,11 @@
           "score": 1.5
         },
         {
-          "url": "/blog/bathroom-layout-planning-guide",
-          "anchor": "Bathroom Layout Planning Guide",
-          "title": "Bathroom Layout Planning Guide",
-          "type": "blog",
-          "score": 1.306
+          "url": "/guides/caldwell-remodeling-guide",
+          "anchor": "Caldwell Remodeling Guide",
+          "title": "Caldwell Remodeling Guide",
+          "type": "guide",
+          "score": 0.302
         }
       ]
     },
@@ -750,9 +764,9 @@
           "score": 0.12
         },
         {
-          "url": "/services/room-addition",
-          "anchor": "Room Addition",
-          "title": "Room Addition in Boise & Treasure Valley, Idaho",
+          "url": "/services/kitchen-remodel",
+          "anchor": "Kitchen Remodel",
+          "title": "Kitchen Remodel in Boise & Treasure Valley, Idaho",
           "type": "service",
           "score": -0.01
         }
@@ -900,9 +914,9 @@
           "score": 0.917
         },
         {
-          "url": "/guides/star-remodeling-guide",
-          "anchor": "Star Remodeling Guide",
-          "title": "Star Remodeling Guide",
+          "url": "/guides/middleton-remodeling-guide",
+          "anchor": "Middleton Remodeling Guide",
+          "title": "Middleton Remodeling Guide",
           "type": "guide",
           "score": 0.263
         }
@@ -943,11 +957,11 @@
           "score": 999
         },
         {
-          "url": "/blog/outdoor-living-roi",
-          "anchor": "Outdoor Living ROI",
-          "title": "Outdoor Living ROI",
+          "url": "/blog/remodeling-long-term-living",
+          "anchor": "Remodeling for Long-Term Living",
+          "title": "Remodeling for Long-Term Living",
           "type": "blog",
-          "score": 1.35
+          "score": 1.295
         },
         {
           "url": "/guides/north-end-remodeling-guide",
@@ -986,25 +1000,25 @@
           "score": 999
         },
         {
+          "url": "/blog/remodeling-before-selling",
+          "anchor": "Remodeling Before Selling",
+          "title": "Remodeling Before Selling",
+          "type": "blog",
+          "score": 1.5
+        },
+        {
+          "url": "/blog/energy-efficiency-roi",
+          "anchor": "Energy Efficiency ROI",
+          "title": "Energy Efficiency ROI",
+          "type": "blog",
+          "score": 1.417
+        },
+        {
           "url": "/blog/outdoor-living-roi",
           "anchor": "Outdoor Living ROI",
           "title": "Outdoor Living ROI",
           "type": "blog",
           "score": 1.417
-        },
-        {
-          "url": "/blog/remodeling-long-term-living",
-          "anchor": "Remodeling for Long-Term Living",
-          "title": "Remodeling for Long-Term Living",
-          "type": "blog",
-          "score": 1.35
-        },
-        {
-          "url": "/guides/north-end-remodeling-guide",
-          "anchor": "North End Remodeling Guide",
-          "title": "North End Remodeling Guide",
-          "type": "guide",
-          "score": 0.313
         }
       ]
     },
@@ -1065,10 +1079,24 @@
       "url": "/blog/garage-conversions",
       "links": [
         {
+          "url": "/guides/boise-adu-guide",
+          "anchor": "Boise ADU Guide",
+          "title": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
+          "type": "guide",
+          "score": 999
+        },
+        {
           "url": "/guides/boise-home-addition-guide",
           "anchor": "Home Additions",
           "title": "Boise Home Addition Guide",
           "type": "guide",
+          "score": 999
+        },
+        {
+          "url": "/services/adu",
+          "anchor": "ADU and guest house construction",
+          "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
+          "type": "service",
           "score": 999
         },
         {
@@ -1084,20 +1112,6 @@
           "title": "Room Addition in Boise, Idaho",
           "type": "city-service",
           "score": 999
-        },
-        {
-          "url": "/blog/bedroom-additions",
-          "anchor": "Bedroom Additions",
-          "title": "Bedroom Additions",
-          "type": "blog",
-          "score": 1.5
-        },
-        {
-          "url": "/blog/multigenerational-living-remodels",
-          "anchor": "Multigenerational Living Remodels",
-          "title": "Multigenerational Living Remodels",
-          "type": "blog",
-          "score": 1.393
         },
         {
           "url": "/guides/treasure-valley-remodeling-guide",
@@ -1143,18 +1157,18 @@
           "score": 999
         },
         {
+          "url": "/blog/whole-home-remodel-cost-boise",
+          "anchor": "Whole Home Remodel Cost Boise",
+          "title": "Whole Home Remodel Cost Boise",
+          "type": "blog",
+          "score": 1.019
+        },
+        {
           "url": "/guides/eagle-remodeling-guide",
           "anchor": "Eagle Remodeling Guide",
           "title": "Eagle Remodeling Guide",
           "type": "guide",
           "score": 0.463
-        },
-        {
-          "url": "/services/room-addition",
-          "anchor": "Room Addition",
-          "title": "Room Addition in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": -0.08
         }
       ]
     },
@@ -1186,13 +1200,6 @@
           "score": 999
         },
         {
-          "url": "/blog/adu-guide-boise",
-          "anchor": "ADU Guide Boise",
-          "title": "ADU Guide Boise",
-          "type": "blog",
-          "score": 1.568
-        },
-        {
           "url": "/blog/primary-suite-additions",
           "anchor": "Primary Suite Additions",
           "title": "Primary Suite Additions",
@@ -1200,11 +1207,18 @@
           "score": 1.5
         },
         {
-          "url": "/blog/multigenerational-living-remodels",
-          "anchor": "Multigenerational Living Remodels",
-          "title": "Multigenerational Living Remodels",
+          "url": "/blog/second-story-additions",
+          "anchor": "Second Story Additions",
+          "title": "Second Story Additions",
           "type": "blog",
-          "score": 1.442
+          "score": 1.5
+        },
+        {
+          "url": "/guides/boise-adu-guide",
+          "anchor": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
+          "title": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
+          "type": "guide",
+          "score": 0.635
         }
       ]
     },
@@ -1243,11 +1257,11 @@
           "score": 999
         },
         {
-          "url": "/blog/remodel-cost-per-square-foot-boise",
-          "anchor": "Cost Per Square Foot to Remodel a Home in Boise",
-          "title": "Cost Per Square Foot to Remodel a Home in Boise",
+          "url": "/blog/bathroom-remodel-cost-boise",
+          "anchor": "Bathroom Remodel Cost Boise: Guest vs Master Bath",
+          "title": "Bathroom Remodel Cost Boise: Guest vs Master Bath",
           "type": "blog",
-          "score": 0.924
+          "score": 0.977
         },
         {
           "url": "/guides/east-boise-remodeling-guide",
@@ -1393,18 +1407,18 @@
           "score": 0.257
         },
         {
-          "url": "/services/adu",
-          "anchor": "ADU / Guest House",
-          "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": -0.33
-        },
-        {
           "url": "/services/bathroom-remodel",
           "anchor": "Bathroom Remodel",
           "title": "Bathroom Remodel in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.33
+          "score": -0.29
+        },
+        {
+          "url": "/services/room-addition",
+          "anchor": "Room Addition",
+          "title": "Room Addition in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": -0.29
         }
       ]
     },
@@ -1600,11 +1614,11 @@
           "score": 0.228
         },
         {
-          "url": "/services/adu",
-          "anchor": "ADU / Guest House",
-          "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
+          "url": "/services/bathroom-remodel",
+          "anchor": "Bathroom Remodel",
+          "title": "Bathroom Remodel in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.36
+          "score": -0.351
         }
       ]
     },
@@ -1736,18 +1750,18 @@
           "score": 999
         },
         {
+          "url": "/blog/curbless-shower-guide",
+          "anchor": "Curbless Shower Guide",
+          "title": "Curbless Shower Guide",
+          "type": "blog",
+          "score": 1.306
+        },
+        {
           "url": "/blog/walk-in-shower-guide",
           "anchor": "Walk-In Shower Guide",
           "title": "Walk-In Shower Guide",
           "type": "blog",
           "score": 1.306
-        },
-        {
-          "url": "/blog/aging-in-place-bathroom-design",
-          "anchor": "Aging-in-Place Bathroom Design",
-          "title": "Aging-in-Place Bathroom Design",
-          "type": "blog",
-          "score": 1.25
         },
         {
           "url": "/guides/nampa-remodeling-guide",
@@ -1829,18 +1843,18 @@
           "score": 999
         },
         {
-          "url": "/blog/home-addition-cost-boise",
-          "anchor": "Home Addition Cost Boise",
-          "title": "Home Addition Cost Boise",
-          "type": "blog",
-          "score": 1.064
+          "url": "/services/bathroom-remodel",
+          "anchor": "Bathroom Remodel",
+          "title": "Bathroom Remodel in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 999
         },
         {
-          "url": "/blog/whole-home-remodel-cost-boise",
-          "anchor": "Whole Home Remodel Cost Boise",
-          "title": "Whole Home Remodel Cost Boise",
-          "type": "blog",
-          "score": 1.019
+          "url": "/services/kitchen-remodel",
+          "anchor": "Kitchen Remodel",
+          "title": "Kitchen Remodel in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 999
         },
         {
           "url": "/blog/what-impacts-remodeling-costs-boise",
@@ -1872,6 +1886,13 @@
           "score": 999
         },
         {
+          "url": "/services/whole-home-remodel",
+          "anchor": "Whole-Home Remodel",
+          "title": "Whole-Home Remodel in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 999
+        },
+        {
           "url": "/services/whole-home-remodel/boise",
           "anchor": "Whole-Home Remodel in Boise",
           "title": "Whole-Home Remodel in Boise, Idaho",
@@ -1886,23 +1907,16 @@
           "score": 1.35
         },
         {
-          "url": "/blog/remodeling-timeline-guide",
-          "anchor": "Remodeling Timeline Guide",
-          "title": "Remodeling Timeline Guide",
+          "url": "/blog/ada-vs-canyon-county-permit-timelines",
+          "anchor": "Ada vs Canyon County Remodel Permits: Timelines Homeowners Should Know",
+          "title": "Ada vs Canyon County Remodel Permits: Timelines Homeowners Should Know",
           "type": "blog",
-          "score": 1.35
+          "score": 0.917
         },
         {
-          "url": "/blog/warranty-guide-remodeling",
-          "anchor": "Warranty Guide",
-          "title": "Warranty Guide",
-          "type": "blog",
-          "score": 1.35
-        },
-        {
-          "url": "/guides/star-remodeling-guide",
-          "anchor": "Star Remodeling Guide",
-          "title": "Star Remodeling Guide",
+          "url": "/guides/kuna-remodeling-guide",
+          "anchor": "Kuna Remodeling Guide",
+          "title": "Kuna Remodeling Guide",
           "type": "guide",
           "score": 0.223
         }
@@ -1914,6 +1928,13 @@
       "anchor": "Multigenerational Living Remodels",
       "url": "/blog/multigenerational-living-remodels",
       "links": [
+        {
+          "url": "/guides/boise-adu-guide",
+          "anchor": "Boise ADU Guide",
+          "title": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
+          "type": "guide",
+          "score": 999
+        },
         {
           "url": "/guides/boise-home-addition-guide",
           "anchor": "Home Additions",
@@ -1941,13 +1962,6 @@
           "title": "Bedroom Additions",
           "type": "blog",
           "score": 1.442
-        },
-        {
-          "url": "/services/room-addition/kuna",
-          "anchor": "Room Addition in Kuna",
-          "title": "Room Addition in Kuna, Idaho",
-          "type": "city-service",
-          "score": 0.167
         },
         {
           "url": "/guides/treasure-valley-remodeling-guide",
@@ -2004,7 +2018,7 @@
           "anchor": "ADU / Guest House in Boise",
           "title": "ADU / Guest House in Boise, Idaho",
           "type": "city-service",
-          "score": 0.1
+          "score": 0.06
         }
       ]
     },
@@ -2100,11 +2114,11 @@
           "score": 1.4
         },
         {
-          "url": "/guides/boise-remodeling-guide",
-          "anchor": "Boise Remodeling Guide",
-          "title": "Boise Remodeling Guide",
+          "url": "/guides/middleton-remodeling-guide",
+          "anchor": "Middleton Remodeling Guide",
+          "title": "Middleton Remodeling Guide",
           "type": "guide",
-          "score": 0.04
+          "score": 0.08
         }
       ]
     },
@@ -2150,11 +2164,11 @@
           "score": 1.4
         },
         {
-          "url": "/guides/caldwell-remodeling-guide",
-          "anchor": "Caldwell Remodeling Guide",
-          "title": "Caldwell Remodeling Guide",
+          "url": "/guides/star-remodeling-guide",
+          "anchor": "Star Remodeling Guide",
+          "title": "Star Remodeling Guide",
           "type": "guide",
-          "score": 0.04
+          "score": 0.08
         }
       ]
     },
@@ -2193,11 +2207,11 @@
           "score": 1.417
         },
         {
-          "url": "/blog/exterior-remodeling-roi",
-          "anchor": "Exterior Remodeling ROI",
-          "title": "Exterior Remodeling ROI",
+          "url": "/blog/energy-efficiency-roi",
+          "anchor": "Energy Efficiency ROI",
+          "title": "Energy Efficiency ROI",
           "type": "blog",
-          "score": 1.417
+          "score": 1.35
         },
         {
           "url": "/guides/north-end-remodeling-guide",
@@ -2229,23 +2243,23 @@
           "score": 999
         },
         {
-          "url": "/blog/boise-permit-guide",
-          "anchor": "Boise Permit Guide",
-          "title": "Boise Permit Guide",
-          "type": "blog",
-          "score": 1.41
-        },
-        {
           "url": "/blog/remodeling-timeline-guide",
           "anchor": "Remodeling Timeline Guide",
           "title": "Remodeling Timeline Guide",
           "type": "blog",
-          "score": 1.41
+          "score": 1.45
         },
         {
           "url": "/blog/warranty-guide-remodeling",
           "anchor": "Warranty Guide",
           "title": "Warranty Guide",
+          "type": "blog",
+          "score": 1.45
+        },
+        {
+          "url": "/blog/boise-permit-guide",
+          "anchor": "Boise Permit Guide",
+          "title": "Boise Permit Guide",
           "type": "blog",
           "score": 1.41
         },
@@ -2293,18 +2307,18 @@
           "score": 1.46
         },
         {
-          "url": "/services/room-addition/eagle",
-          "anchor": "Room Addition in Eagle",
-          "title": "Room Addition in Eagle, Idaho",
-          "type": "city-service",
-          "score": 0.167
+          "url": "/blog/multigenerational-living-remodels",
+          "anchor": "Multigenerational Living Remodels",
+          "title": "Multigenerational Living Remodels",
+          "type": "blog",
+          "score": 1.393
         },
         {
-          "url": "/guides/treasure-valley-remodeling-guide",
-          "anchor": "Treasure Valley Remodeling Guide",
-          "title": "Treasure Valley Remodeling Guide",
+          "url": "/guides/boise-adu-guide",
+          "anchor": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
+          "title": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
           "type": "guide",
-          "score": 0.111
+          "score": 0.549
         }
       ]
     },
@@ -2329,23 +2343,23 @@
           "score": 1.31
         },
         {
+          "url": "/blog/remodeling-timeline-guide",
+          "anchor": "Remodeling Timeline Guide",
+          "title": "Remodeling Timeline Guide",
+          "type": "blog",
+          "score": 1.31
+        },
+        {
+          "url": "/blog/warranty-guide-remodeling",
+          "anchor": "Warranty Guide",
+          "title": "Warranty Guide",
+          "type": "blog",
+          "score": 1.31
+        },
+        {
           "url": "/blog/construction-phase-guide",
           "anchor": "Construction Phase Guide",
           "title": "Construction Phase Guide",
-          "type": "blog",
-          "score": 1.279
-        },
-        {
-          "url": "/blog/design-development-guide",
-          "anchor": "Design Development Guide",
-          "title": "Design Development Guide",
-          "type": "blog",
-          "score": 1.279
-        },
-        {
-          "url": "/blog/material-selection-guide",
-          "anchor": "Material Selection Guide",
-          "title": "Material Selection Guide",
           "type": "blog",
           "score": 1.279
         },
@@ -2400,11 +2414,11 @@
           "score": 0.217
         },
         {
-          "url": "/services/adu/boise",
-          "anchor": "ADU / Guest House in Boise",
-          "title": "ADU / Guest House in Boise, Idaho",
+          "url": "/services/kitchen-remodel/kuna",
+          "anchor": "Kitchen Remodel in Kuna",
+          "title": "Kitchen Remodel in Kuna, Idaho",
           "type": "city-service",
-          "score": 0.06
+          "score": 0.056
         }
       ]
     },
@@ -2497,7 +2511,7 @@
           "anchor": "Boise Remodeling Guide",
           "title": "Boise Remodeling Guide",
           "type": "guide",
-          "score": 0.174
+          "score": 0.214
         },
         {
           "url": "/services/whole-home-remodel/kuna",
@@ -2593,9 +2607,9 @@
           "score": 1.46
         },
         {
-          "url": "/blog/energy-efficiency-roi",
-          "anchor": "Energy Efficiency ROI",
-          "title": "Energy Efficiency ROI",
+          "url": "/blog/outdoor-living-roi",
+          "anchor": "Outdoor Living ROI",
+          "title": "Outdoor Living ROI",
           "type": "blog",
           "score": 1.417
         },
@@ -2700,11 +2714,11 @@
           "score": 1.35
         },
         {
-          "url": "/guides/north-end-remodeling-guide",
-          "anchor": "North End Remodeling Guide",
-          "title": "North End Remodeling Guide",
+          "url": "/guides/nampa-remodeling-guide",
+          "anchor": "Nampa Remodeling Guide",
+          "title": "Nampa Remodeling Guide",
           "type": "guide",
-          "score": 0.191
+          "score": 0.222
         }
       ]
     },
@@ -2793,9 +2807,9 @@
           "score": 1.37
         },
         {
-          "url": "/blog/material-selection-guide",
-          "anchor": "Material Selection Guide",
-          "title": "Material Selection Guide",
+          "url": "/blog/design-development-guide",
+          "anchor": "Design Development Guide",
+          "title": "Design Development Guide",
           "type": "blog",
           "score": 1.35
         },
@@ -2900,11 +2914,11 @@
           "score": 1.013
         },
         {
-          "url": "/guides/eagle-remodeling-guide",
-          "anchor": "Eagle Remodeling Guide",
-          "title": "Eagle Remodeling Guide",
+          "url": "/guides/boise-adu-guide",
+          "anchor": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
+          "title": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
           "type": "guide",
-          "score": 0.253
+          "score": 0.58
         }
       ]
     },
@@ -2943,16 +2957,16 @@
           "score": 1.46
         },
         {
-          "url": "/blog/garage-conversions",
-          "anchor": "Garage Conversions",
-          "title": "Garage Conversions",
-          "type": "blog",
-          "score": 1.442
+          "url": "/guides/boise-adu-guide",
+          "anchor": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
+          "title": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
+          "type": "guide",
+          "score": 0.512
         },
         {
-          "url": "/services/room-addition/nampa",
-          "anchor": "Room Addition in Nampa",
-          "title": "Room Addition in Nampa, Idaho",
+          "url": "/services/room-addition/middleton",
+          "anchor": "Room Addition in Middleton",
+          "title": "Room Addition in Middleton, Idaho",
           "type": "city-service",
           "score": 0.167
         }
@@ -2993,18 +3007,18 @@
           "score": 1.25
         },
         {
-          "url": "/guides/caldwell-remodeling-guide",
-          "anchor": "Caldwell Remodeling Guide",
-          "title": "Caldwell Remodeling Guide",
-          "type": "guide",
-          "score": 0.2
+          "url": "/blog/luxury-bathroom-features",
+          "anchor": "Luxury Bathroom Features",
+          "title": "Luxury Bathroom Features",
+          "type": "blog",
+          "score": 1.25
         },
         {
-          "url": "/services/bathroom-remodel/kuna",
-          "anchor": "Bathroom Remodel in Kuna",
-          "title": "Bathroom Remodel in Kuna, Idaho",
-          "type": "city-service",
-          "score": 0.133
+          "url": "/blog/aging-in-place-bathroom-design",
+          "anchor": "Aging-in-Place Bathroom Design",
+          "title": "Aging-in-Place Bathroom Design",
+          "type": "blog",
+          "score": 1.205
         }
       ]
     },
@@ -3050,11 +3064,11 @@
           "score": 0.177
         },
         {
-          "url": "/services/kitchen-remodel/kuna",
-          "anchor": "Kitchen Remodel in Kuna",
-          "title": "Kitchen Remodel in Kuna, Idaho",
+          "url": "/services/kitchen-remodel/caldwell",
+          "anchor": "Kitchen Remodel in Caldwell",
+          "title": "Kitchen Remodel in Caldwell, Idaho",
           "type": "city-service",
-          "score": 0.056
+          "score": 0.053
         }
       ]
     },
@@ -3086,9 +3100,9 @@
           "score": 1.5
         },
         {
-          "url": "/blog/bathroom-remodel-roi",
-          "anchor": "Bathroom Remodel ROI",
-          "title": "Bathroom Remodel ROI",
+          "url": "/blog/bathroom-layout-planning-guide",
+          "anchor": "Bathroom Layout Planning Guide",
+          "title": "Bathroom Layout Planning Guide",
           "type": "blog",
           "score": 1.306
         },
@@ -3129,6 +3143,13 @@
           "score": 1.37
         },
         {
+          "url": "/blog/material-selection-guide",
+          "anchor": "Material Selection Guide",
+          "title": "Material Selection Guide",
+          "type": "blog",
+          "score": 1.35
+        },
+        {
           "url": "/blog/punch-list-guide",
           "anchor": "Punch List Guide",
           "title": "Punch List Guide",
@@ -3143,18 +3164,11 @@
           "score": 1.33
         },
         {
-          "url": "/blog/preconstruction-guide",
-          "anchor": "Preconstruction Guide",
-          "title": "Preconstruction Guide",
-          "type": "blog",
-          "score": 1.33
-        },
-        {
-          "url": "/blog/construction-phase-guide",
-          "anchor": "Construction Phase Guide",
-          "title": "Construction Phase Guide",
-          "type": "blog",
-          "score": 1.31
+          "url": "/guides/middleton-remodeling-guide",
+          "anchor": "Middleton Remodeling Guide",
+          "title": "Middleton Remodeling Guide",
+          "type": "guide",
+          "score": 0.167
         }
       ]
     },
@@ -3193,18 +3207,18 @@
           "score": 1.041
         },
         {
-          "url": "/blog/how-to-budget-remodel-boise",
-          "anchor": "How to Budget for a Remodel in Boise",
-          "title": "How to Budget for a Remodel in Boise",
+          "url": "/blog/remodel-cost-per-square-foot-boise",
+          "anchor": "Cost Per Square Foot to Remodel a Home in Boise",
+          "title": "Cost Per Square Foot to Remodel a Home in Boise",
           "type": "blog",
-          "score": 1.024
+          "score": 1.035
         },
         {
-          "url": "/guides/east-boise-remodeling-guide",
-          "anchor": "East Boise Remodeling Guide",
-          "title": "East Boise Remodeling Guide",
+          "url": "/guides/boise-remodeling-guide",
+          "anchor": "Boise Remodeling Guide",
+          "title": "Boise Remodeling Guide",
           "type": "guide",
-          "score": 0.153
+          "score": 0.174
         }
       ]
     },
@@ -3250,11 +3264,11 @@
           "score": 1.099
         },
         {
-          "url": "/blog/consultation-process-remodeling",
-          "anchor": "What to Expect During the Consultation Process",
-          "title": "What to Expect During the Consultation Process",
+          "url": "/blog/design-build-vs-general-contractor",
+          "anchor": "Design-Build vs General Contractor",
+          "title": "Design-Build vs General Contractor",
           "type": "blog",
-          "score": 1
+          "score": 1.036
         }
       ]
     },
@@ -3293,18 +3307,18 @@
           "score": 1.041
         },
         {
+          "url": "/blog/how-to-budget-remodel-boise",
+          "anchor": "How to Budget for a Remodel in Boise",
+          "title": "How to Budget for a Remodel in Boise",
+          "type": "blog",
+          "score": 0.977
+        },
+        {
           "url": "/guides/whole-home-remodeling-guide",
           "anchor": "Whole Home Remodeling Guide",
           "title": "Whole Home Remodeling Guide",
           "type": "guide",
           "score": 0.156
-        },
-        {
-          "url": "/services/whole-home-remodel/nampa",
-          "anchor": "Whole-Home Remodel in Nampa",
-          "title": "Whole-Home Remodel in Nampa, Idaho",
-          "type": "city-service",
-          "score": 0.125
         }
       ]
     },
@@ -3450,11 +3464,11 @@
           "score": 1.005
         },
         {
-          "url": "/blog/design-build-vs-general-contractor",
-          "anchor": "Design-Build vs General Contractor",
-          "title": "Design-Build vs General Contractor",
+          "url": "/blog/consultation-process-remodeling",
+          "anchor": "What to Expect During the Consultation Process",
+          "title": "What to Expect During the Consultation Process",
           "type": "blog",
-          "score": 0.972
+          "score": 0.95
         }
       ]
     },
@@ -3568,7 +3582,7 @@
           "anchor": "Remodeling in Caldwell",
           "title": "Remodeling Services in Caldwell, Idaho",
           "type": "city",
-          "score": 0.471
+          "score": 0.431
         },
         {
           "url": "/blog/backyard-transformations-boise",
@@ -3657,6 +3671,13 @@
       "url": "/services/adu/kuna",
       "links": [
         {
+          "url": "/services/adu",
+          "anchor": "ADU / Guest House",
+          "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 2.05
+        },
+        {
           "url": "/services/adu/star",
           "anchor": "ADU / Guest House in Star",
           "title": "ADU / Guest House in Star, Idaho",
@@ -3702,13 +3723,6 @@
           "url": "/blog/decks-vs-patios-boise",
           "anchor": "Decks vs Patios",
           "title": "Decks vs Patios",
-          "type": "blog",
-          "score": 0.11
-        },
-        {
-          "url": "/blog/outdoor-entertaining-spaces",
-          "anchor": "Outdoor Entertaining Spaces",
-          "title": "Outdoor Entertaining Spaces",
           "type": "blog",
           "score": 0.11
         }
@@ -3824,7 +3838,7 @@
           "anchor": "Remodeling in Middleton",
           "title": "Remodeling Services in Middleton, Idaho",
           "type": "city",
-          "score": 0.471
+          "score": 0.431
         },
         {
           "url": "/blog/backyard-transformations-boise",
@@ -3848,6 +3862,13 @@
       "anchor": "ADU / Guest House in Nampa",
       "url": "/services/adu/nampa",
       "links": [
+        {
+          "url": "/services/adu",
+          "anchor": "ADU / Guest House",
+          "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 1.973
+        },
         {
           "url": "/services/adu/middleton",
           "anchor": "ADU / Guest House in Middleton",
@@ -3896,13 +3917,6 @@
           "title": "Bathroom Remodel Cost Boise: Guest vs Master Bath",
           "type": "blog",
           "score": 0.174
-        },
-        {
-          "url": "/blog/decks-vs-patios-boise",
-          "anchor": "Decks vs Patios",
-          "title": "Decks vs Patios",
-          "type": "blog",
-          "score": 0.07
         }
       ]
     },
@@ -4080,7 +4094,7 @@
           "anchor": "Remodeling in Caldwell",
           "title": "Remodeling Services in Caldwell, Idaho",
           "type": "city",
-          "score": 0.451
+          "score": 0.411
         },
         {
           "url": "/blog/small-bathroom-remodel-ideas",
@@ -4336,7 +4350,7 @@
           "anchor": "Remodeling in Middleton",
           "title": "Remodeling Services in Middleton, Idaho",
           "type": "city",
-          "score": 0.451
+          "score": 0.411
         },
         {
           "url": "/blog/outdoor-kitchens-boise",
@@ -4496,13 +4510,6 @@
           "score": 1.86
         },
         {
-          "url": "/services/kitchen-remodel/caldwell",
-          "anchor": "Kitchen Remodel in Caldwell",
-          "title": "Kitchen Remodel in Caldwell, Idaho",
-          "type": "city-service",
-          "score": 1.8
-        },
-        {
           "url": "/services/kitchen-remodel/eagle",
           "anchor": "Kitchen Remodel in Eagle",
           "title": "Kitchen Remodel in Eagle, Idaho",
@@ -4520,6 +4527,13 @@
           "url": "/services/kitchen-remodel/middleton",
           "anchor": "Kitchen Remodel in Middleton",
           "title": "Kitchen Remodel in Middleton, Idaho",
+          "type": "city-service",
+          "score": 1.8
+        },
+        {
+          "url": "/services/kitchen-remodel/nampa",
+          "anchor": "Kitchen Remodel in Nampa",
+          "title": "Kitchen Remodel in Nampa, Idaho",
           "type": "city-service",
           "score": 1.8
         },
@@ -4560,13 +4574,6 @@
           "score": 1.72
         },
         {
-          "url": "/services/kitchen-remodel/nampa",
-          "anchor": "Kitchen Remodel in Nampa",
-          "title": "Kitchen Remodel in Nampa, Idaho",
-          "type": "city-service",
-          "score": 1.718
-        },
-        {
           "url": "/services/kitchen-remodel/star",
           "anchor": "Kitchen Remodel in Star",
           "title": "Kitchen Remodel in Star, Idaho",
@@ -4588,11 +4595,18 @@
           "score": 1.678
         },
         {
+          "url": "/services/kitchen-remodel/middleton",
+          "anchor": "Kitchen Remodel in Middleton",
+          "title": "Kitchen Remodel in Middleton, Idaho",
+          "type": "city-service",
+          "score": 1.678
+        },
+        {
           "url": "/areas/caldwell",
           "anchor": "Remodeling in Caldwell",
           "title": "Remodeling Services in Caldwell, Idaho",
           "type": "city",
-          "score": 0.411
+          "score": 0.371
         },
         {
           "url": "/blog/kitchen-cabinet-trends",
@@ -4631,13 +4645,6 @@
           "score": 1.678
         },
         {
-          "url": "/services/kitchen-remodel/middleton",
-          "anchor": "Kitchen Remodel in Middleton",
-          "title": "Kitchen Remodel in Middleton, Idaho",
-          "type": "city-service",
-          "score": 1.678
-        },
-        {
           "url": "/services/kitchen-remodel/nampa",
           "anchor": "Kitchen Remodel in Nampa",
           "title": "Kitchen Remodel in Nampa, Idaho",
@@ -4650,6 +4657,13 @@
           "title": "Kitchen Remodel in Star, Idaho",
           "type": "city-service",
           "score": 1.678
+        },
+        {
+          "url": "/services/kitchen-remodel/meridian",
+          "anchor": "Kitchen Remodel in Meridian",
+          "title": "Kitchen Remodel in Meridian, Idaho",
+          "type": "city-service",
+          "score": 1.638
         },
         {
           "url": "/areas/eagle",
@@ -4666,11 +4680,11 @@
           "score": 0.145
         },
         {
-          "url": "/blog/kitchen-cabinet-trends",
-          "anchor": "Kitchen Cabinet Trends",
-          "title": "Kitchen Cabinet Trends",
+          "url": "/blog/home-addition-cost-boise",
+          "anchor": "Home Addition Cost Boise",
+          "title": "Home Addition Cost Boise",
           "type": "blog",
-          "score": 0.096
+          "score": 0.098
         }
       ]
     },
@@ -4695,13 +4709,6 @@
           "score": 1.72
         },
         {
-          "url": "/services/kitchen-remodel/meridian",
-          "anchor": "Kitchen Remodel in Meridian",
-          "title": "Kitchen Remodel in Meridian, Idaho",
-          "type": "city-service",
-          "score": 1.72
-        },
-        {
           "url": "/services/kitchen-remodel/middleton",
           "anchor": "Kitchen Remodel in Middleton",
           "title": "Kitchen Remodel in Middleton, Idaho",
@@ -4712,6 +4719,13 @@
           "url": "/services/kitchen-remodel/nampa",
           "anchor": "Kitchen Remodel in Nampa",
           "title": "Kitchen Remodel in Nampa, Idaho",
+          "type": "city-service",
+          "score": 1.72
+        },
+        {
+          "url": "/services/kitchen-remodel/star",
+          "anchor": "Kitchen Remodel in Star",
+          "title": "Kitchen Remodel in Star, Idaho",
           "type": "city-service",
           "score": 1.72
         },
@@ -4752,13 +4766,6 @@
           "score": 1.64
         },
         {
-          "url": "/services/kitchen-remodel/star",
-          "anchor": "Kitchen Remodel in Star",
-          "title": "Kitchen Remodel in Star, Idaho",
-          "type": "city-service",
-          "score": 1.638
-        },
-        {
           "url": "/services/kitchen-remodel/caldwell",
           "anchor": "Kitchen Remodel in Caldwell",
           "title": "Kitchen Remodel in Caldwell, Idaho",
@@ -4776,6 +4783,13 @@
           "url": "/services/kitchen-remodel/middleton",
           "anchor": "Kitchen Remodel in Middleton",
           "title": "Kitchen Remodel in Middleton, Idaho",
+          "type": "city-service",
+          "score": 1.598
+        },
+        {
+          "url": "/services/kitchen-remodel/nampa",
+          "anchor": "Kitchen Remodel in Nampa",
+          "title": "Kitchen Remodel in Nampa, Idaho",
           "type": "city-service",
           "score": 1.598
         },
@@ -4823,13 +4837,6 @@
           "score": 1.598
         },
         {
-          "url": "/services/kitchen-remodel/nampa",
-          "anchor": "Kitchen Remodel in Nampa",
-          "title": "Kitchen Remodel in Nampa, Idaho",
-          "type": "city-service",
-          "score": 1.598
-        },
-        {
           "url": "/services/kitchen-remodel/star",
           "anchor": "Kitchen Remodel in Star",
           "title": "Kitchen Remodel in Star, Idaho",
@@ -4844,11 +4851,18 @@
           "score": 1.558
         },
         {
+          "url": "/services/kitchen-remodel/eagle",
+          "anchor": "Kitchen Remodel in Eagle",
+          "title": "Kitchen Remodel in Eagle, Idaho",
+          "type": "city-service",
+          "score": 1.558
+        },
+        {
           "url": "/areas/middleton",
           "anchor": "Remodeling in Middleton",
           "title": "Remodeling Services in Middleton, Idaho",
           "type": "city",
-          "score": 0.411
+          "score": 0.371
         },
         {
           "url": "/blog/ada-vs-canyon-county-permit-timelines",
@@ -4880,13 +4894,6 @@
           "score": 1.56
         },
         {
-          "url": "/services/kitchen-remodel/eagle",
-          "anchor": "Kitchen Remodel in Eagle",
-          "title": "Kitchen Remodel in Eagle, Idaho",
-          "type": "city-service",
-          "score": 1.558
-        },
-        {
           "url": "/services/kitchen-remodel/meridian",
           "anchor": "Kitchen Remodel in Meridian",
           "title": "Kitchen Remodel in Meridian, Idaho",
@@ -4908,6 +4915,13 @@
           "score": 1.558
         },
         {
+          "url": "/services/kitchen-remodel/caldwell",
+          "anchor": "Kitchen Remodel in Caldwell",
+          "title": "Kitchen Remodel in Caldwell, Idaho",
+          "type": "city-service",
+          "score": 1.518
+        },
+        {
           "url": "/areas/nampa",
           "anchor": "Remodeling in Nampa",
           "title": "Remodeling Services in Nampa, Idaho",
@@ -4922,9 +4936,9 @@
           "score": 0.063
         },
         {
-          "url": "/blog/kitchen-remodel-timeline-boise",
-          "anchor": "Kitchen Remodel Timeline Boise",
-          "title": "Kitchen Remodel Timeline Boise",
+          "url": "/blog/kitchen-cabinet-trends",
+          "anchor": "Kitchen Cabinet Trends",
+          "title": "Kitchen Cabinet Trends",
           "type": "blog",
           "score": 0.031
         }
@@ -4951,13 +4965,6 @@
           "score": 1.52
         },
         {
-          "url": "/services/kitchen-remodel/caldwell",
-          "anchor": "Kitchen Remodel in Caldwell",
-          "title": "Kitchen Remodel in Caldwell, Idaho",
-          "type": "city-service",
-          "score": 1.518
-        },
-        {
           "url": "/services/kitchen-remodel/eagle",
           "anchor": "Kitchen Remodel in Eagle",
           "title": "Kitchen Remodel in Eagle, Idaho",
@@ -4972,6 +4979,13 @@
           "score": 1.518
         },
         {
+          "url": "/services/kitchen-remodel/middleton",
+          "anchor": "Kitchen Remodel in Middleton",
+          "title": "Kitchen Remodel in Middleton, Idaho",
+          "type": "city-service",
+          "score": 1.518
+        },
+        {
           "url": "/areas/star",
           "anchor": "Remodeling in Star",
           "title": "Remodeling Services in Star, Idaho",
@@ -4979,16 +4993,16 @@
           "score": 0.411
         },
         {
+          "url": "/blog/kitchen-remodel-timeline-boise",
+          "anchor": "Kitchen Remodel Timeline Boise",
+          "title": "Kitchen Remodel Timeline Boise",
+          "type": "blog",
+          "score": 0.031
+        },
+        {
           "url": "/blog/covered-patios-boise",
           "anchor": "Covered Patios",
           "title": "Covered Patios",
-          "type": "blog",
-          "score": 0.03
-        },
-        {
-          "url": "/blog/decks-vs-patios-boise",
-          "anchor": "Decks vs Patios",
-          "title": "Decks vs Patios",
           "type": "blog",
           "score": 0.03
         }
@@ -5008,6 +5022,13 @@
           "score": 1.86
         },
         {
+          "url": "/services/room-addition/nampa",
+          "anchor": "Room Addition in Nampa",
+          "title": "Room Addition in Nampa, Idaho",
+          "type": "city-service",
+          "score": 1.8
+        },
+        {
           "url": "/services/room-addition/star",
           "anchor": "Room Addition in Star",
           "title": "Room Addition in Star, Idaho",
@@ -5025,13 +5046,6 @@
           "url": "/services/room-addition/meridian",
           "anchor": "Room Addition in Meridian",
           "title": "Room Addition in Meridian, Idaho",
-          "type": "city-service",
-          "score": 1.76
-        },
-        {
-          "url": "/services/room-addition/middleton",
-          "anchor": "Room Addition in Middleton",
-          "title": "Room Addition in Middleton, Idaho",
           "type": "city-service",
           "score": 1.76
         },
@@ -5072,6 +5086,13 @@
           "score": 1.72
         },
         {
+          "url": "/services/room-addition/middleton",
+          "anchor": "Room Addition in Middleton",
+          "title": "Room Addition in Middleton, Idaho",
+          "type": "city-service",
+          "score": 1.678
+        },
+        {
           "url": "/services/room-addition/nampa",
           "anchor": "Room Addition in Nampa",
           "title": "Room Addition in Nampa, Idaho",
@@ -5093,18 +5114,11 @@
           "score": 1.638
         },
         {
-          "url": "/services/room-addition/meridian",
-          "anchor": "Room Addition in Meridian",
-          "title": "Room Addition in Meridian, Idaho",
-          "type": "city-service",
-          "score": 1.638
-        },
-        {
           "url": "/areas/caldwell",
           "anchor": "Remodeling in Caldwell",
           "title": "Remodeling Services in Caldwell, Idaho",
           "type": "city",
-          "score": 0.371
+          "score": 0.331
         },
         {
           "url": "/blog/room-addition-guide-treasure-valley",
@@ -5143,6 +5157,13 @@
           "score": 1.638
         },
         {
+          "url": "/services/room-addition/meridian",
+          "anchor": "Room Addition in Meridian",
+          "title": "Room Addition in Meridian, Idaho",
+          "type": "city-service",
+          "score": 1.638
+        },
+        {
           "url": "/services/room-addition/middleton",
           "anchor": "Room Addition in Middleton",
           "title": "Room Addition in Middleton, Idaho",
@@ -5153,13 +5174,6 @@
           "url": "/services/room-addition/nampa",
           "anchor": "Room Addition in Nampa",
           "title": "Room Addition in Nampa, Idaho",
-          "type": "city-service",
-          "score": 1.638
-        },
-        {
-          "url": "/services/room-addition/star",
-          "anchor": "Room Addition in Star",
-          "title": "Room Addition in Star, Idaho",
           "type": "city-service",
           "score": 1.638
         },
@@ -5193,6 +5207,13 @@
       "url": "/services/room-addition/kuna",
       "links": [
         {
+          "url": "/services/room-addition/star",
+          "anchor": "Room Addition in Star",
+          "title": "Room Addition in Star, Idaho",
+          "type": "city-service",
+          "score": 1.72
+        },
+        {
           "url": "/services/room-addition/caldwell",
           "anchor": "Room Addition in Caldwell",
           "title": "Room Addition in Caldwell, Idaho",
@@ -5217,13 +5238,6 @@
           "url": "/services/room-addition/middleton",
           "anchor": "Room Addition in Middleton",
           "title": "Room Addition in Middleton, Idaho",
-          "type": "city-service",
-          "score": 1.68
-        },
-        {
-          "url": "/services/room-addition/nampa",
-          "anchor": "Room Addition in Nampa",
-          "title": "Room Addition in Nampa, Idaho",
           "type": "city-service",
           "score": 1.68
         },
@@ -5264,6 +5278,13 @@
           "score": 1.64
         },
         {
+          "url": "/services/room-addition/nampa",
+          "anchor": "Room Addition in Nampa",
+          "title": "Room Addition in Nampa, Idaho",
+          "type": "city-service",
+          "score": 1.598
+        },
+        {
           "url": "/services/room-addition/star",
           "anchor": "Room Addition in Star",
           "title": "Room Addition in Star, Idaho",
@@ -5281,13 +5302,6 @@
           "url": "/services/room-addition/eagle",
           "anchor": "Room Addition in Eagle",
           "title": "Room Addition in Eagle, Idaho",
-          "type": "city-service",
-          "score": 1.558
-        },
-        {
-          "url": "/services/room-addition/middleton",
-          "anchor": "Room Addition in Middleton",
-          "title": "Room Addition in Middleton, Idaho",
           "type": "city-service",
           "score": 1.558
         },
@@ -5360,7 +5374,7 @@
           "anchor": "Remodeling in Middleton",
           "title": "Remodeling Services in Middleton, Idaho",
           "type": "city",
-          "score": 0.371
+          "score": 0.331
         },
         {
           "url": "/blog/adu-guide-boise",
@@ -5392,6 +5406,13 @@
           "score": 1.56
         },
         {
+          "url": "/services/room-addition/middleton",
+          "anchor": "Room Addition in Middleton",
+          "title": "Room Addition in Middleton, Idaho",
+          "type": "city-service",
+          "score": 1.558
+        },
+        {
           "url": "/services/room-addition/caldwell",
           "anchor": "Room Addition in Caldwell",
           "title": "Room Addition in Caldwell, Idaho",
@@ -5409,13 +5430,6 @@
           "url": "/services/room-addition/meridian",
           "anchor": "Room Addition in Meridian",
           "title": "Room Addition in Meridian, Idaho",
-          "type": "city-service",
-          "score": 1.518
-        },
-        {
-          "url": "/services/room-addition/middleton",
-          "anchor": "Room Addition in Middleton",
-          "title": "Room Addition in Middleton, Idaho",
           "type": "city-service",
           "score": 1.518
         },
@@ -5456,6 +5470,13 @@
           "score": 1.52
         },
         {
+          "url": "/services/room-addition/middleton",
+          "anchor": "Room Addition in Middleton",
+          "title": "Room Addition in Middleton, Idaho",
+          "type": "city-service",
+          "score": 1.518
+        },
+        {
           "url": "/services/room-addition/nampa",
           "anchor": "Room Addition in Nampa",
           "title": "Room Addition in Nampa, Idaho",
@@ -5473,13 +5494,6 @@
           "url": "/services/room-addition/caldwell",
           "anchor": "Room Addition in Caldwell",
           "title": "Room Addition in Caldwell, Idaho",
-          "type": "city-service",
-          "score": 1.478
-        },
-        {
-          "url": "/services/room-addition/eagle",
-          "anchor": "Room Addition in Eagle",
-          "title": "Room Addition in Eagle, Idaho",
           "type": "city-service",
           "score": 1.478
         },
@@ -5616,7 +5630,7 @@
           "anchor": "Remodeling in Caldwell",
           "title": "Remodeling Services in Caldwell, Idaho",
           "type": "city",
-          "score": 0.323
+          "score": 0.283
         },
         {
           "url": "/blog/whole-home-remodel-timeline",
@@ -5872,7 +5886,7 @@
           "anchor": "Remodeling in Middleton",
           "title": "Remodeling Services in Middleton, Idaho",
           "type": "city",
-          "score": 0.323
+          "score": 0.283
         },
         {
           "url": "/blog/ada-vs-canyon-county-permit-timelines",
@@ -5946,9 +5960,9 @@
           "score": 0.031
         },
         {
-          "url": "/blog/luxury-outdoor-living",
-          "anchor": "Luxury Outdoor Living",
-          "title": "Luxury Outdoor Living",
+          "url": "/blog/decks-vs-patios-boise",
+          "anchor": "Decks vs Patios",
+          "title": "Decks vs Patios",
           "type": "blog",
           "score": 0.03
         }
@@ -6003,16 +6017,16 @@
           "score": 0.323
         },
         {
-          "url": "/blog/outdoor-entertaining-spaces",
-          "anchor": "Outdoor Entertaining Spaces",
-          "title": "Outdoor Entertaining Spaces",
+          "url": "/blog/luxury-outdoor-living",
+          "anchor": "Luxury Outdoor Living",
+          "title": "Luxury Outdoor Living",
           "type": "blog",
           "score": 0.03
         },
         {
-          "url": "/blog/outdoor-fireplaces-boise",
-          "anchor": "Outdoor Fireplaces",
-          "title": "Outdoor Fireplaces",
+          "url": "/blog/outdoor-entertaining-spaces",
+          "anchor": "Outdoor Entertaining Spaces",
+          "title": "Outdoor Entertaining Spaces",
           "type": "blog",
           "score": 0.03
         }
@@ -6107,7 +6121,7 @@
           "anchor": "Remodeling in Middleton",
           "title": "Remodeling Services in Middleton, Idaho",
           "type": "city",
-          "score": 0.533
+          "score": 0.493
         },
         {
           "url": "/services/adu/caldwell",
@@ -6138,9 +6152,9 @@
           "score": 0.211
         },
         {
-          "url": "/blog/design-development-guide",
-          "anchor": "Design Development Guide",
-          "title": "Design Development Guide",
+          "url": "/blog/construction-phase-guide",
+          "anchor": "Construction Phase Guide",
+          "title": "Construction Phase Guide",
           "type": "blog",
           "score": 0.127
         }
@@ -6199,12 +6213,12 @@
           "anchor": "Room Addition in Eagle",
           "title": "Room Addition in Eagle, Idaho",
           "type": "city-service",
-          "score": 0.211
+          "score": 0.251
         },
         {
-          "url": "/blog/material-selection-guide",
-          "anchor": "Material Selection Guide",
-          "title": "Material Selection Guide",
+          "url": "/blog/design-development-guide",
+          "anchor": "Design Development Guide",
+          "title": "Design Development Guide",
           "type": "blog",
           "score": 0.127
         }
@@ -6238,9 +6252,9 @@
           "score": 0.66
         },
         {
-          "url": "/blog/punch-list-guide",
-          "anchor": "Punch List Guide",
-          "title": "Punch List Guide",
+          "url": "/blog/material-selection-guide",
+          "anchor": "Material Selection Guide",
+          "title": "Material Selection Guide",
           "type": "blog",
           "score": 0.16
         },
@@ -6356,7 +6370,7 @@
           "anchor": "Remodeling in Caldwell",
           "title": "Remodeling Services in Caldwell, Idaho",
           "type": "city",
-          "score": 0.533
+          "score": 0.493
         },
         {
           "url": "/areas/nampa",
@@ -6373,18 +6387,18 @@
           "score": 0.291
         },
         {
-          "url": "/services/kitchen-remodel/middleton",
-          "anchor": "Kitchen Remodel in Middleton",
-          "title": "Kitchen Remodel in Middleton, Idaho",
-          "type": "city-service",
-          "score": 0.291
-        },
-        {
           "url": "/services/adu/middleton",
           "anchor": "ADU / Guest House in Middleton",
           "title": "ADU / Guest House in Middleton, Idaho",
           "type": "city-service",
           "score": 0.271
+        },
+        {
+          "url": "/services/kitchen-remodel/middleton",
+          "anchor": "Kitchen Remodel in Middleton",
+          "title": "Kitchen Remodel in Middleton, Idaho",
+          "type": "city-service",
+          "score": 0.251
         },
         {
           "url": "/services/room-addition/middleton",
@@ -6394,11 +6408,11 @@
           "score": 0.251
         },
         {
-          "url": "/blog/construction-phase-guide",
-          "anchor": "Construction Phase Guide",
-          "title": "Construction Phase Guide",
+          "url": "/blog/punch-list-guide",
+          "anchor": "Punch List Guide",
+          "title": "Punch List Guide",
           "type": "blog",
-          "score": 0.087
+          "score": 0.127
         }
       ]
     },
@@ -6413,21 +6427,21 @@
           "anchor": "Nampa Remodeling Guide",
           "title": "Nampa Remodeling Guide",
           "type": "guide",
-          "score": 0.66
+          "score": 0.7
         },
         {
           "url": "/areas/caldwell",
           "anchor": "Remodeling in Caldwell",
           "title": "Remodeling Services in Caldwell, Idaho",
           "type": "city",
-          "score": 0.493
+          "score": 0.453
         },
         {
           "url": "/areas/middleton",
           "anchor": "Remodeling in Middleton",
           "title": "Remodeling Services in Middleton, Idaho",
           "type": "city",
-          "score": 0.493
+          "score": 0.453
         },
         {
           "url": "/services/bathroom-remodel/nampa",
@@ -6458,9 +6472,9 @@
           "score": 0.251
         },
         {
-          "url": "/blog/design-development-guide",
-          "anchor": "Design Development Guide",
-          "title": "Design Development Guide",
+          "url": "/blog/construction-phase-guide",
+          "anchor": "Construction Phase Guide",
+          "title": "Construction Phase Guide",
           "type": "blog",
           "score": 0.087
         }
@@ -6522,9 +6536,9 @@
           "score": 0.291
         },
         {
-          "url": "/blog/material-selection-guide",
-          "anchor": "Material Selection Guide",
-          "title": "Material Selection Guide",
+          "url": "/blog/design-development-guide",
+          "anchor": "Design Development Guide",
+          "title": "Design Development Guide",
           "type": "blog",
           "score": 0.087
         }
@@ -6579,11 +6593,11 @@
           "score": 0.734
         },
         {
-          "url": "/guides/caldwell-remodeling-guide",
-          "anchor": "Caldwell Remodeling Guide",
-          "title": "Caldwell Remodeling Guide",
+          "url": "/guides/nampa-remodeling-guide",
+          "anchor": "Nampa Remodeling Guide",
+          "title": "Nampa Remodeling Guide",
           "type": "guide",
-          "score": 0.12
+          "score": 0.16
         },
         {
           "url": "/services/adu/star",
@@ -6591,6 +6605,70 @@
           "title": "ADU / Guest House in Star, Idaho",
           "type": "city-service",
           "score": -0.15
+        }
+      ]
+    },
+    "/guides/boise-adu-guide": {
+      "type": "guide",
+      "title": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
+      "anchor": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
+      "url": "/guides/boise-adu-guide",
+      "links": [
+        {
+          "url": "/guides/boise-home-addition-guide",
+          "anchor": "Boise Home Addition Guide",
+          "title": "Boise Home Addition Guide",
+          "type": "guide",
+          "score": 999
+        },
+        {
+          "url": "/services/adu/boise",
+          "anchor": "ADU builder in Boise",
+          "title": "ADU / Guest House in Boise, Idaho",
+          "type": "city-service",
+          "score": 999
+        },
+        {
+          "url": "/blog/adu-guide-boise",
+          "anchor": "ADU Guide Boise",
+          "title": "ADU Guide Boise",
+          "type": "blog",
+          "score": 0.561
+        },
+        {
+          "url": "/blog/second-story-additions",
+          "anchor": "Second Story Additions",
+          "title": "Second Story Additions",
+          "type": "blog",
+          "score": 0.552
+        },
+        {
+          "url": "/blog/multigenerational-living-remodels",
+          "anchor": "Multigenerational Living Remodels",
+          "title": "Multigenerational Living Remodels",
+          "type": "blog",
+          "score": 0.542
+        },
+        {
+          "url": "/blog/bedroom-additions",
+          "anchor": "Bedroom Additions",
+          "title": "Bedroom Additions",
+          "type": "blog",
+          "score": 0.515
+        },
+        {
+          "url": "/guides/harris-ranch-remodeling-guide",
+          "anchor": "Harris Ranch Remodeling Guide",
+          "title": "Harris Ranch Remodeling Guide",
+          "type": "guide",
+          "score": 0.1
+        },
+        {
+          "url": "/services/adu/caldwell",
+          "anchor": "ADU / Guest House in Caldwell",
+          "title": "ADU / Guest House in Caldwell, Idaho",
+          "type": "city-service",
+          "score": 0.027
         }
       ]
     },
@@ -6643,9 +6721,9 @@
           "score": 0.743
         },
         {
-          "url": "/guides/nampa-remodeling-guide",
-          "anchor": "Nampa Remodeling Guide",
-          "title": "Nampa Remodeling Guide",
+          "url": "/guides/caldwell-remodeling-guide",
+          "anchor": "Caldwell Remodeling Guide",
+          "title": "Caldwell Remodeling Guide",
           "type": "guide",
           "score": 0.253
         },
@@ -6718,7 +6796,7 @@
           "anchor": "ADU / Guest House in Boise",
           "title": "ADU / Guest House in Boise, Idaho",
           "type": "city-service",
-          "score": -0.22
+          "score": -0.26
         }
       ]
     },
@@ -6736,25 +6814,18 @@
           "score": 999
         },
         {
+          "url": "/guides/boise-adu-guide",
+          "anchor": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
+          "title": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
+          "type": "guide",
+          "score": 0.85
+        },
+        {
           "url": "/blog/adu-guide-boise",
           "anchor": "ADU Guide Boise",
           "title": "ADU Guide Boise",
           "type": "blog",
-          "score": 0.616
-        },
-        {
-          "url": "/blog/multigenerational-living-remodels",
-          "anchor": "Multigenerational Living Remodels",
-          "title": "Multigenerational Living Remodels",
-          "type": "blog",
-          "score": 0.546
-        },
-        {
-          "url": "/blog/bedroom-additions",
-          "anchor": "Bedroom Additions",
-          "title": "Bedroom Additions",
-          "type": "blog",
-          "score": 0.53
+          "score": 0.576
         },
         {
           "url": "/blog/home-addition-timeline-guide",
@@ -6771,11 +6842,18 @@
           "score": 0.518
         },
         {
-          "url": "/guides/eagle-foothills-remodeling-guide",
-          "anchor": "Eagle Foothills Remodeling Guide",
-          "title": "Eagle Foothills Remodeling Guide",
-          "type": "guide",
-          "score": 0
+          "url": "/blog/primary-suite-additions",
+          "anchor": "Primary Suite Additions",
+          "title": "Primary Suite Additions",
+          "type": "blog",
+          "score": 0.518
+        },
+        {
+          "url": "/blog/multigenerational-living-remodels",
+          "anchor": "Multigenerational Living Remodels",
+          "title": "Multigenerational Living Remodels",
+          "type": "blog",
+          "score": 0.506
         },
         {
           "url": "/services/room-addition/star",
@@ -6835,9 +6913,9 @@
           "score": 0.606
         },
         {
-          "url": "/guides/hidden-springs-remodeling-guide",
-          "anchor": "Hidden Springs Remodeling Guide",
-          "title": "Hidden Springs Remodeling Guide",
+          "url": "/guides/eagle-foothills-remodeling-guide",
+          "anchor": "Eagle Foothills Remodeling Guide",
+          "title": "Eagle Foothills Remodeling Guide",
           "type": "guide",
           "score": 0.176
         },
@@ -6871,6 +6949,13 @@
           "score": 999
         },
         {
+          "url": "/services/kitchen-remodel/boise",
+          "anchor": "Kitchen remodeling costs in Boise",
+          "title": "Kitchen Remodel in Boise, Idaho",
+          "type": "city-service",
+          "score": 999
+        },
+        {
           "url": "/blog/how-to-budget-remodel-boise",
           "anchor": "How to Budget for a Remodel in Boise",
           "title": "How to Budget for a Remodel in Boise",
@@ -6892,18 +6977,11 @@
           "score": 0.618
         },
         {
-          "url": "/blog/bathroom-remodel-cost-boise",
-          "anchor": "Bathroom Remodel Cost Boise: Guest vs Master Bath",
-          "title": "Bathroom Remodel Cost Boise: Guest vs Master Bath",
-          "type": "blog",
-          "score": 0.582
-        },
-        {
-          "url": "/guides/eagle-foothills-remodeling-guide",
-          "anchor": "Eagle Foothills Remodeling Guide",
-          "title": "Eagle Foothills Remodeling Guide",
+          "url": "/guides/eagle-remodeling-guide",
+          "anchor": "Eagle Remodeling Guide",
+          "title": "Eagle Remodeling Guide",
           "type": "guide",
-          "score": 0.118
+          "score": 0.158
         },
         {
           "url": "/services/bathroom-remodel/nampa",
@@ -6970,9 +7048,9 @@
           "score": 0.065
         },
         {
-          "url": "/services/adu/boise",
-          "anchor": "ADU / Guest House in Boise",
-          "title": "ADU / Guest House in Boise, Idaho",
+          "url": "/services/bathroom-remodel/boise",
+          "anchor": "Bathroom Remodel in Boise",
+          "title": "Bathroom Remodel in Boise, Idaho",
           "type": "city-service",
           "score": -0.26
         }
@@ -7006,6 +7084,13 @@
           "score": 0.794
         },
         {
+          "url": "/blog/material-selection-guide",
+          "anchor": "Material Selection Guide",
+          "title": "Material Selection Guide",
+          "type": "blog",
+          "score": 0.72
+        },
+        {
           "url": "/blog/punch-list-guide",
           "anchor": "Punch List Guide",
           "title": "Punch List Guide",
@@ -7013,25 +7098,18 @@
           "score": 0.72
         },
         {
-          "url": "/blog/remodeling-timeline-guide",
-          "anchor": "Remodeling Timeline Guide",
-          "title": "Remodeling Timeline Guide",
+          "url": "/blog/preconstruction-guide",
+          "anchor": "Preconstruction Guide",
+          "title": "Preconstruction Guide",
           "type": "blog",
           "score": 0.703
         },
         {
-          "url": "/blog/warranty-guide-remodeling",
-          "anchor": "Warranty Guide",
-          "title": "Warranty Guide",
-          "type": "blog",
-          "score": 0.703
-        },
-        {
-          "url": "/guides/kuna-remodeling-guide",
-          "anchor": "Kuna Remodeling Guide",
-          "title": "Kuna Remodeling Guide",
+          "url": "/guides/hidden-springs-remodeling-guide",
+          "anchor": "Hidden Springs Remodeling Guide",
+          "title": "Hidden Springs Remodeling Guide",
           "type": "guide",
-          "score": 0.043
+          "score": 0.063
         },
         {
           "url": "/services/whole-home-remodel/nampa",
@@ -7063,16 +7141,16 @@
           "score": 999
         },
         {
-          "url": "/guides/meridian-remodeling-guide",
-          "anchor": "Meridian Remodeling Guide",
-          "title": "Meridian Remodeling Guide",
-          "type": "guide",
-          "score": 1.23
-        },
-        {
           "url": "/guides/nampa-remodeling-guide",
           "anchor": "Nampa Remodeling Guide",
           "title": "Nampa Remodeling Guide",
+          "type": "guide",
+          "score": 1.27
+        },
+        {
+          "url": "/guides/meridian-remodeling-guide",
+          "anchor": "Meridian Remodeling Guide",
+          "title": "Meridian Remodeling Guide",
           "type": "guide",
           "score": 1.23
         },
@@ -7098,11 +7176,11 @@
           "score": 0.142
         },
         {
-          "url": "/services/adu/caldwell",
-          "anchor": "ADU / Guest House in Caldwell",
-          "title": "ADU / Guest House in Caldwell, Idaho",
+          "url": "/services/bathroom-remodel/caldwell",
+          "anchor": "Bathroom Remodel in Caldwell",
+          "title": "Bathroom Remodel in Caldwell, Idaho",
           "type": "city-service",
-          "score": -0.077
+          "score": -0.103
         }
       ]
     },
@@ -7195,7 +7273,7 @@
           "anchor": "Eagle Remodeling Guide",
           "title": "Eagle Remodeling Guide",
           "type": "guide",
-          "score": 1.27
+          "score": 1.31
         },
         {
           "url": "/guides/hidden-springs-remodeling-guide",
@@ -7266,7 +7344,7 @@
           "anchor": "Eagle Foothills Remodeling Guide",
           "title": "Eagle Foothills Remodeling Guide",
           "type": "guide",
-          "score": 1.17
+          "score": 1.21
         },
         {
           "url": "/blog/home-addition-cost-boise",
@@ -7283,9 +7361,9 @@
           "score": 0.031
         },
         {
-          "url": "/blog/outdoor-kitchens-boise",
-          "anchor": "Outdoor Kitchens",
-          "title": "Outdoor Kitchens",
+          "url": "/blog/outdoor-fireplaces-boise",
+          "anchor": "Outdoor Fireplaces",
+          "title": "Outdoor Fireplaces",
           "type": "blog",
           "score": 0.03
         },
@@ -7354,11 +7432,11 @@
           "score": 0.057
         },
         {
-          "url": "/services/bathroom-remodel/boise",
-          "anchor": "Bathroom Remodel in Boise",
-          "title": "Bathroom Remodel in Boise, Idaho",
+          "url": "/services/adu/boise",
+          "anchor": "ADU / Guest House in Boise",
+          "title": "ADU / Guest House in Boise, Idaho",
           "type": "city-service",
-          "score": -0.26
+          "score": -0.3
         }
       ]
     },
@@ -7368,6 +7446,13 @@
       "anchor": "Harris Ranch Remodeling Guide",
       "url": "/guides/harris-ranch-remodeling-guide",
       "links": [
+        {
+          "url": "/guides/treasure-valley-remodeling-guide",
+          "anchor": "Treasure Valley Remodeling Guide",
+          "title": "Treasure Valley Remodeling Guide",
+          "type": "guide",
+          "score": 999
+        },
         {
           "url": "/guides/east-boise-remodeling-guide",
           "anchor": "East Boise Remodeling Guide",
@@ -7386,13 +7471,6 @@
           "url": "/guides/middleton-remodeling-guide",
           "anchor": "Middleton Remodeling Guide",
           "title": "Middleton Remodeling Guide",
-          "type": "guide",
-          "score": 1.07
-        },
-        {
-          "url": "/guides/star-remodeling-guide",
-          "anchor": "Star Remodeling Guide",
-          "title": "Star Remodeling Guide",
           "type": "guide",
           "score": 1.07
         },
@@ -7418,9 +7496,9 @@
           "score": 0.051
         },
         {
-          "url": "/services/adu/boise",
-          "anchor": "ADU / Guest House in Boise",
-          "title": "ADU / Guest House in Boise, Idaho",
+          "url": "/services/bathroom-remodel/boise",
+          "anchor": "Bathroom Remodel in Boise",
+          "title": "Bathroom Remodel in Boise, Idaho",
           "type": "city-service",
           "score": -0.3
         }
@@ -7444,21 +7522,28 @@
           "anchor": "Eagle Remodeling Guide",
           "title": "Eagle Remodeling Guide",
           "type": "guide",
-          "score": 1.386
+          "score": 1.426
         },
         {
           "url": "/guides/eagle-foothills-remodeling-guide",
           "anchor": "Eagle Foothills Remodeling Guide",
           "title": "Eagle Foothills Remodeling Guide",
           "type": "guide",
-          "score": 1.13
+          "score": 1.17
         },
         {
-          "url": "/guides/kuna-remodeling-guide",
-          "anchor": "Kuna Remodeling Guide",
-          "title": "Kuna Remodeling Guide",
+          "url": "/guides/star-remodeling-guide",
+          "anchor": "Star Remodeling Guide",
+          "title": "Star Remodeling Guide",
           "type": "guide",
-          "score": 0.88
+          "score": 0.92
+        },
+        {
+          "url": "/blog/outdoor-kitchens-boise",
+          "anchor": "Outdoor Kitchens",
+          "title": "Outdoor Kitchens",
+          "type": "blog",
+          "score": 0.03
         },
         {
           "url": "/blog/remodeling-long-term-living",
@@ -7471,13 +7556,6 @@
           "url": "/blog/remodeling-before-selling",
           "anchor": "Remodeling Before Selling",
           "title": "Remodeling Before Selling",
-          "type": "blog",
-          "score": -0.003
-        },
-        {
-          "url": "/blog/walk-in-shower-guide",
-          "anchor": "Walk-In Shower Guide",
-          "title": "Walk-In Shower Guide",
           "type": "blog",
           "score": -0.003
         },
@@ -7532,18 +7610,18 @@
           "score": 0.13
         },
         {
-          "url": "/blog/material-selection-guide",
-          "anchor": "Material Selection Guide",
-          "title": "Material Selection Guide",
+          "url": "/blog/remodeling-timeline-guide",
+          "anchor": "Remodeling Timeline Guide",
+          "title": "Remodeling Timeline Guide",
           "type": "blog",
-          "score": 0.023
+          "score": 0.047
         },
         {
-          "url": "/blog/punch-list-guide",
-          "anchor": "Punch List Guide",
-          "title": "Punch List Guide",
+          "url": "/blog/warranty-guide-remodeling",
+          "anchor": "Warranty Guide",
+          "title": "Warranty Guide",
           "type": "blog",
-          "score": 0.023
+          "score": 0.047
         },
         {
           "url": "/services/adu/kuna",
@@ -7579,14 +7657,21 @@
           "anchor": "Nampa Remodeling Guide",
           "title": "Nampa Remodeling Guide",
           "type": "guide",
-          "score": 1.19
+          "score": 1.23
         },
         {
           "url": "/guides/kuna-remodeling-guide",
           "anchor": "Kuna Remodeling Guide",
           "title": "Kuna Remodeling Guide",
           "type": "guide",
-          "score": 0.99
+          "score": 1.03
+        },
+        {
+          "url": "/blog/walk-in-shower-guide",
+          "anchor": "Walk-In Shower Guide",
+          "title": "Walk-In Shower Guide",
+          "type": "blog",
+          "score": 0.142
         },
         {
           "url": "/blog/whole-home-remodel-planning-checklist",
@@ -7599,13 +7684,6 @@
           "url": "/blog/aging-in-place-bathroom-design",
           "anchor": "Aging-in-Place Bathroom Design",
           "title": "Aging-in-Place Bathroom Design",
-          "type": "blog",
-          "score": 0.12
-        },
-        {
-          "url": "/blog/energy-efficiency-roi",
-          "anchor": "Energy Efficiency ROI",
-          "title": "Energy Efficiency ROI",
           "type": "blog",
           "score": 0.12
         },
@@ -7632,18 +7710,18 @@
           "score": 999
         },
         {
+          "url": "/guides/kuna-remodeling-guide",
+          "anchor": "Kuna Remodeling Guide",
+          "title": "Kuna Remodeling Guide",
+          "type": "guide",
+          "score": 1.09
+        },
+        {
           "url": "/guides/star-remodeling-guide",
           "anchor": "Star Remodeling Guide",
           "title": "Star Remodeling Guide",
           "type": "guide",
           "score": 1.09
-        },
-        {
-          "url": "/guides/kuna-remodeling-guide",
-          "anchor": "Kuna Remodeling Guide",
-          "title": "Kuna Remodeling Guide",
-          "type": "guide",
-          "score": 1.05
         },
         {
           "url": "/guides/east-boise-remodeling-guide",
@@ -7653,32 +7731,32 @@
           "score": 1.03
         },
         {
-          "url": "/blog/outdoor-living-roi",
-          "anchor": "Outdoor Living ROI",
-          "title": "Outdoor Living ROI",
+          "url": "/blog/material-selection-guide",
+          "anchor": "Material Selection Guide",
+          "title": "Material Selection Guide",
+          "type": "blog",
+          "score": 0.023
+        },
+        {
+          "url": "/blog/punch-list-guide",
+          "anchor": "Punch List Guide",
+          "title": "Punch List Guide",
+          "type": "blog",
+          "score": 0.023
+        },
+        {
+          "url": "/blog/energy-efficiency-roi",
+          "anchor": "Energy Efficiency ROI",
+          "title": "Energy Efficiency ROI",
           "type": "blog",
           "score": 0.02
         },
         {
-          "url": "/blog/small-bathroom-remodel-ideas",
-          "anchor": "Small Bathroom Remodel Ideas",
-          "title": "Small Bathroom Remodel Ideas",
-          "type": "blog",
-          "score": 0.02
-        },
-        {
-          "url": "/blog/remodeling-long-term-living",
-          "anchor": "Remodeling for Long-Term Living",
-          "title": "Remodeling for Long-Term Living",
-          "type": "blog",
-          "score": 0.011
-        },
-        {
-          "url": "/services/kitchen-remodel/middleton",
-          "anchor": "Kitchen Remodel in Middleton",
-          "title": "Kitchen Remodel in Middleton, Idaho",
+          "url": "/services/adu/middleton",
+          "anchor": "ADU / Guest House in Middleton",
+          "title": "ADU / Guest House in Middleton, Idaho",
           "type": "city-service",
-          "score": -0.057
+          "score": -0.073
         }
       ]
     },
@@ -7717,23 +7795,23 @@
           "score": 0.99
         },
         {
+          "url": "/blog/outdoor-living-roi",
+          "anchor": "Outdoor Living ROI",
+          "title": "Outdoor Living ROI",
+          "type": "blog",
+          "score": 0.12
+        },
+        {
+          "url": "/blog/small-bathroom-remodel-ideas",
+          "anchor": "Small Bathroom Remodel Ideas",
+          "title": "Small Bathroom Remodel Ideas",
+          "type": "blog",
+          "score": 0.12
+        },
+        {
           "url": "/blog/addition-roi-remodeling",
           "anchor": "Addition ROI",
           "title": "Addition ROI",
-          "type": "blog",
-          "score": 0.102
-        },
-        {
-          "url": "/blog/bathroom-remodel-roi",
-          "anchor": "Bathroom Remodel ROI",
-          "title": "Bathroom Remodel ROI",
-          "type": "blog",
-          "score": 0.102
-        },
-        {
-          "url": "/blog/curbless-shower-guide",
-          "anchor": "Curbless Shower Guide",
-          "title": "Curbless Shower Guide",
           "type": "blog",
           "score": 0.102
         },
@@ -7795,11 +7873,11 @@
           "score": 0.153
         },
         {
-          "url": "/blog/energy-efficiency-roi",
-          "anchor": "Energy Efficiency ROI",
-          "title": "Energy Efficiency ROI",
+          "url": "/blog/remodeling-long-term-living",
+          "anchor": "Remodeling for Long-Term Living",
+          "title": "Remodeling for Long-Term Living",
           "type": "blog",
-          "score": 0.13
+          "score": 0.151
         },
         {
           "url": "/services/whole-home-remodel/star",
@@ -7870,7 +7948,7 @@
           "anchor": "North End Remodeling Guide",
           "title": "North End Remodeling Guide",
           "type": "guide",
-          "score": -0.009
+          "score": 0.031
         }
       ]
     },
@@ -7888,18 +7966,18 @@
           "score": 999
         },
         {
+          "url": "/guides/kuna-remodeling-guide",
+          "anchor": "Kuna Remodeling Guide",
+          "title": "Kuna Remodeling Guide",
+          "type": "guide",
+          "score": 1.05
+        },
+        {
           "url": "/guides/middleton-remodeling-guide",
           "anchor": "Middleton Remodeling Guide",
           "title": "Middleton Remodeling Guide",
           "type": "guide",
           "score": 1.05
-        },
-        {
-          "url": "/guides/kuna-remodeling-guide",
-          "anchor": "Kuna Remodeling Guide",
-          "title": "Kuna Remodeling Guide",
-          "type": "guide",
-          "score": 1.01
         },
         {
           "url": "/guides/harris-ranch-remodeling-guide",
@@ -7952,32 +8030,32 @@
           "score": 999
         },
         {
-          "url": "/guides/hidden-springs-remodeling-guide",
-          "anchor": "Hidden Springs Remodeling Guide",
-          "title": "Hidden Springs Remodeling Guide",
-          "type": "guide",
-          "score": 0.773
-        },
-        {
           "url": "/guides/north-end-remodeling-guide",
           "anchor": "North End Remodeling Guide",
           "title": "North End Remodeling Guide",
           "type": "guide",
-          "score": 0.773
-        },
-        {
-          "url": "/guides/star-remodeling-guide",
-          "anchor": "Star Remodeling Guide",
-          "title": "Star Remodeling Guide",
-          "type": "guide",
-          "score": 0.75
+          "score": 0.813
         },
         {
           "url": "/guides/eagle-foothills-remodeling-guide",
           "anchor": "Eagle Foothills Remodeling Guide",
           "title": "Eagle Foothills Remodeling Guide",
           "type": "guide",
-          "score": 0.733
+          "score": 0.773
+        },
+        {
+          "url": "/guides/eagle-remodeling-guide",
+          "anchor": "Eagle Remodeling Guide",
+          "title": "Eagle Remodeling Guide",
+          "type": "guide",
+          "score": 0.773
+        },
+        {
+          "url": "/guides/hidden-springs-remodeling-guide",
+          "anchor": "Hidden Springs Remodeling Guide",
+          "title": "Hidden Springs Remodeling Guide",
+          "type": "guide",
+          "score": 0.773
         },
         {
           "url": "/blog/warranty-guide-remodeling",
@@ -8051,11 +8129,11 @@
           "score": 0.466
         },
         {
-          "url": "/guides/best-remodeling-roi-boise",
-          "anchor": "Best Remodeling Projects for ROI in Boise",
-          "title": "Best Remodeling Projects for ROI in Boise",
+          "url": "/guides/north-end-remodeling-guide",
+          "anchor": "North End Remodeling Guide",
+          "title": "North End Remodeling Guide",
           "type": "guide",
-          "score": 0.013
+          "score": 0.023
         },
         {
           "url": "/services/whole-home-remodel/caldwell",
@@ -8072,13 +8150,6 @@
       "anchor": "ADU / Guest House",
       "url": "/services/adu",
       "links": [
-        {
-          "url": "/services/adu/middleton",
-          "anchor": "ADU / Guest House in Middleton",
-          "title": "ADU / Guest House in Middleton, Idaho",
-          "type": "city-service",
-          "score": 1.583
-        },
         {
           "url": "/services/adu/nampa",
           "anchor": "ADU / Guest House in Nampa",
@@ -8115,6 +8186,13 @@
           "score": 1.543
         },
         {
+          "url": "/services/adu/meridian",
+          "anchor": "ADU / Guest House in Meridian",
+          "title": "ADU / Guest House in Meridian, Idaho",
+          "type": "city-service",
+          "score": 1.543
+        },
+        {
           "url": "/blog/covered-patios-boise",
           "anchor": "Covered Patios",
           "title": "Covered Patios",
@@ -8142,13 +8220,6 @@
           "title": "Bathroom Remodel in Kuna, Idaho",
           "type": "city-service",
           "score": 1.54
-        },
-        {
-          "url": "/services/bathroom-remodel/caldwell",
-          "anchor": "Bathroom Remodel in Caldwell",
-          "title": "Bathroom Remodel in Caldwell, Idaho",
-          "type": "city-service",
-          "score": 1.52
         },
         {
           "url": "/services/bathroom-remodel/meridian",
@@ -8179,18 +8250,25 @@
           "score": 1.52
         },
         {
+          "url": "/services/bathroom-remodel/caldwell",
+          "anchor": "Bathroom Remodel in Caldwell",
+          "title": "Bathroom Remodel in Caldwell, Idaho",
+          "type": "city-service",
+          "score": 1.48
+        },
+        {
+          "url": "/blog/bathroom-remodel-roi",
+          "anchor": "Bathroom Remodel ROI",
+          "title": "Bathroom Remodel ROI",
+          "type": "blog",
+          "score": 0.023
+        },
+        {
           "url": "/blog/small-bathroom-remodel-ideas",
           "anchor": "Small Bathroom Remodel Ideas",
           "title": "Small Bathroom Remodel Ideas",
           "type": "blog",
           "score": 0.013
-        },
-        {
-          "url": "/blog/backyard-transformations-boise",
-          "anchor": "Backyard Transformations",
-          "title": "Backyard Transformations",
-          "type": "blog",
-          "score": -0.013
         }
       ]
     },
@@ -8272,6 +8350,13 @@
           "score": 1.54
         },
         {
+          "url": "/services/room-addition/eagle",
+          "anchor": "Room Addition in Eagle",
+          "title": "Room Addition in Eagle, Idaho",
+          "type": "city-service",
+          "score": 1.52
+        },
+        {
           "url": "/services/room-addition/meridian",
           "anchor": "Room Addition in Meridian",
           "title": "Room Addition in Meridian, Idaho",
@@ -8300,25 +8385,18 @@
           "score": 1.52
         },
         {
-          "url": "/services/room-addition/boise",
-          "anchor": "Room Addition in Boise",
-          "title": "Room Addition in Boise, Idaho",
-          "type": "city-service",
-          "score": 1.5
+          "url": "/blog/bedroom-additions",
+          "anchor": "Bedroom Additions",
+          "title": "Bedroom Additions",
+          "type": "blog",
+          "score": 0.028
         },
         {
-          "url": "/blog/primary-suite-additions",
-          "anchor": "Primary Suite Additions",
-          "title": "Primary Suite Additions",
+          "url": "/blog/home-addition-timeline-guide",
+          "anchor": "Home Addition Timeline Guide",
+          "title": "Home Addition Timeline Guide",
           "type": "blog",
-          "score": 0.056
-        },
-        {
-          "url": "/blog/second-story-additions",
-          "anchor": "Second Story Additions",
-          "title": "Second Story Additions",
-          "type": "blog",
-          "score": 0.056
+          "score": 0.028
         }
       ]
     },
@@ -8448,11 +8526,11 @@
     "/blog/remodeling-long-term-living": 5,
     "/blog/outdoor-kitchens-boise": 5,
     "/blog/covered-patios-boise": 6,
-    "/blog/decks-vs-patios-boise": 6,
+    "/blog/decks-vs-patios-boise": 5,
     "/blog/outdoor-fireplaces-boise": 5,
-    "/blog/outdoor-entertaining-spaces": 5,
+    "/blog/outdoor-entertaining-spaces": 4,
     "/blog/luxury-outdoor-living": 6,
-    "/blog/backyard-transformations-boise": 7,
+    "/blog/backyard-transformations-boise": 6,
     "/blog/ada-vs-canyon-county-permit-timelines": 5,
     "/blog/how-to-choose-design-build-contractor": 5,
     "/blog/whole-home-remodel-planning-checklist": 5,
@@ -8460,29 +8538,30 @@
     "/guides/boise-remodeling-cost-guide": 25,
     "/guides/treasure-valley-remodeling-guide": 17,
     "/guides/boise-remodeling-guide": 7,
+    "/guides/boise-adu-guide": 9,
     "/guides/boise-kitchen-remodeling-guide": 9,
     "/guides/boise-bathroom-remodeling-guide": 7,
-    "/guides/boise-home-addition-guide": 8,
+    "/guides/boise-home-addition-guide": 9,
     "/guides/whole-home-remodeling-guide": 8,
     "/guides/choose-remodeling-contractor-boise": 10,
     "/guides/boise-remodeling-process-guide": 10,
-    "/guides/best-remodeling-roi-boise": 7,
+    "/guides/best-remodeling-roi-boise": 6,
     "/guides/outdoor-living-remodeling-guide": 9,
     "/guides/meridian-remodeling-guide": 5,
-    "/guides/eagle-remodeling-guide": 6,
-    "/guides/kuna-remodeling-guide": 9,
-    "/guides/star-remodeling-guide": 7,
-    "/guides/middleton-remodeling-guide": 7,
-    "/guides/nampa-remodeling-guide": 6,
-    "/guides/caldwell-remodeling-guide": 7,
-    "/guides/north-end-remodeling-guide": 7,
+    "/guides/eagle-remodeling-guide": 7,
+    "/guides/kuna-remodeling-guide": 8,
+    "/guides/star-remodeling-guide": 5,
+    "/guides/middleton-remodeling-guide": 9,
+    "/guides/nampa-remodeling-guide": 7,
+    "/guides/caldwell-remodeling-guide": 6,
+    "/guides/north-end-remodeling-guide": 6,
     "/guides/boise-bench-remodeling-guide": 8,
-    "/guides/harris-ranch-remodeling-guide": 6,
-    "/guides/east-boise-remodeling-guide": 8,
+    "/guides/harris-ranch-remodeling-guide": 7,
+    "/guides/east-boise-remodeling-guide": 7,
     "/guides/hidden-springs-remodeling-guide": 6,
-    "/guides/eagle-foothills-remodeling-guide": 7,
-    "/services/kitchen-remodel": 12,
-    "/services/bathroom-remodel": 11,
+    "/guides/eagle-foothills-remodeling-guide": 6,
+    "/services/kitchen-remodel": 14,
+    "/services/bathroom-remodel": 13,
     "/services/whole-home-remodel": 15,
     "/services/room-addition": 6,
     "/services/adu": 5,
@@ -8492,9 +8571,9 @@
     "/areas/nampa": 8,
     "/areas/kuna": 11,
     "/areas/star": 8,
-    "/areas/middleton": 8,
-    "/areas/caldwell": 8,
-    "/services/kitchen-remodel/boise": 16,
+    "/areas/middleton": 9,
+    "/areas/caldwell": 9,
+    "/services/kitchen-remodel/boise": 17,
     "/services/kitchen-remodel/meridian": 8,
     "/services/kitchen-remodel/eagle": 8,
     "/services/kitchen-remodel/nampa": 8,
@@ -8502,32 +8581,32 @@
     "/services/kitchen-remodel/star": 7,
     "/services/kitchen-remodel/middleton": 8,
     "/services/kitchen-remodel/caldwell": 8,
-    "/services/bathroom-remodel/boise": 10,
+    "/services/bathroom-remodel/boise": 11,
     "/services/bathroom-remodel/meridian": 8,
     "/services/bathroom-remodel/eagle": 8,
     "/services/bathroom-remodel/nampa": 8,
-    "/services/bathroom-remodel/kuna": 10,
+    "/services/bathroom-remodel/kuna": 9,
     "/services/bathroom-remodel/star": 8,
     "/services/bathroom-remodel/middleton": 8,
-    "/services/bathroom-remodel/caldwell": 7,
+    "/services/bathroom-remodel/caldwell": 8,
     "/services/whole-home-remodel/boise": 18,
     "/services/whole-home-remodel/meridian": 8,
     "/services/whole-home-remodel/eagle": 8,
-    "/services/whole-home-remodel/nampa": 8,
+    "/services/whole-home-remodel/nampa": 7,
     "/services/whole-home-remodel/kuna": 9,
     "/services/whole-home-remodel/star": 8,
     "/services/whole-home-remodel/middleton": 7,
     "/services/whole-home-remodel/caldwell": 9,
-    "/services/room-addition/boise": 11,
+    "/services/room-addition/boise": 10,
     "/services/room-addition/meridian": 7,
-    "/services/room-addition/eagle": 8,
+    "/services/room-addition/eagle": 7,
     "/services/room-addition/nampa": 8,
-    "/services/room-addition/kuna": 10,
+    "/services/room-addition/kuna": 9,
     "/services/room-addition/star": 8,
-    "/services/room-addition/middleton": 7,
+    "/services/room-addition/middleton": 8,
     "/services/room-addition/caldwell": 7,
     "/services/adu/boise": 11,
-    "/services/adu/meridian": 7,
+    "/services/adu/meridian": 8,
     "/services/adu/eagle": 8,
     "/services/adu/nampa": 7,
     "/services/adu/kuna": 9,

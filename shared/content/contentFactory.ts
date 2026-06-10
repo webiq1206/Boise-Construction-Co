@@ -75,6 +75,9 @@ export interface ClusterConfig {
   cityServiceUrl?: string;
   extraSections?: ContentSection[];
   publishedAt?: string;
+  /** Forced internal-link overrides appended to the defaults (e.g. linking the
+   * ADU cluster posts to the ADU pillar; see local-seo-audit/06-internal-linking-plan.md). */
+  extraRelatedLinks?: Array<{ url: string; anchor?: string }>;
 }
 
 export function buildClusterPost(config: ClusterConfig): BlogPostData {
@@ -148,6 +151,7 @@ export function buildClusterPost(config: ClusterConfig): BlogPostData {
       { url: serviceUrl },
       { url: cityUrl },
       { url: '/guides/boise-remodeling-cost-guide' },
+      ...(config.extraRelatedLinks ?? []),
     ],
     wordCountTarget: 'cluster',
   };
@@ -249,6 +253,9 @@ export function buildLocationGuide(config: LocationGuideConfig): GuidePageData {
     guideType: config.guideType,
     tags: [config.citySlug, config.cityName.toLowerCase(), 'idaho'],
     publishedAt: '2026-05-12',
+    // All location/neighborhood guides were substantively expanded in the
+    // June 2026 audit pass (local-seo-audit/05-content-plan.md).
+    updatedAt: '2026-06-10',
     quickAnswer: config.quickAnswer,
     keyTakeaways: config.takeaways,
     faqs: getLocationFaqs(config.cityName, config.citySlug, config.county),

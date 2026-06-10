@@ -29,12 +29,28 @@ const LOGO_URL = `${baseUrl}/images/brc-logo.png`;
 /**
  * Generate LocalBusiness schema for homepage and location pages
  */
+/**
+ * Wikipedia URLs for areaServed city disambiguation (entity resolution for
+ * knowledge graphs and generative engines). Keys match CITY_SEO_DATA.
+ */
+const CITY_WIKIPEDIA: Record<string, string> = {
+  Boise: 'https://en.wikipedia.org/wiki/Boise',
+  Meridian: 'https://en.wikipedia.org/wiki/Meridian,_Idaho',
+  Eagle: 'https://en.wikipedia.org/wiki/Eagle,_Idaho',
+  Nampa: 'https://en.wikipedia.org/wiki/Nampa,_Idaho',
+  Kuna: 'https://en.wikipedia.org/wiki/Kuna,_Idaho',
+  Star: 'https://en.wikipedia.org/wiki/Star,_Idaho',
+  Middleton: 'https://en.wikipedia.org/wiki/Middleton,_Idaho',
+  Caldwell: 'https://en.wikipedia.org/wiki/Caldwell,_Idaho',
+};
+
 export function generateLocalBusinessSchema(city?: string): SchemaContext {
   // A single-location business has ONE set of coordinates (its HQ). Emitting
   // per-city coordinates under one @id confuses entity disambiguation, so geo
   // is always the HQ; the service area is expressed via `areaServed`. The
   // optional `city` only customizes the human-readable description.
-  const coordinates = CITY_SEO_DATA.Kuna.coordinates;
+  // HQ geo matches the NAP locality (Meridian) - previously pointed at Kuna.
+  const coordinates = CITY_SEO_DATA.Meridian.coordinates;
 
   return {
     '@context': 'https://schema.org',
@@ -70,6 +86,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     areaServed: BUSINESS_INFO.serviceArea.map(area => ({
       '@type': 'City',
       name: area,
+      ...(CITY_WIKIPEDIA[area] ? { sameAs: CITY_WIKIPEDIA[area] } : {}),
     })),
     ...(BUSINESS_INFO.reviewCount > 0
       ? {
@@ -218,6 +235,16 @@ export function generateOrganizationSchema(): SchemaContext {
       addressRegion: BUSINESS_INFO.address.state,
       addressCountry: BUSINESS_INFO.address.country,
     },
+    knowsAbout: [
+      'kitchen remodeling',
+      'bathroom remodeling',
+      'whole-home renovation',
+      'room additions',
+      'accessory dwelling units',
+      'design-build construction',
+      'Ada County building permits',
+      'Canyon County building permits',
+    ],
     sameAs: BUSINESS_INFO.sameAs,
     contactPoint: {
       '@type': 'ContactPoint',

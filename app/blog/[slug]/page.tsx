@@ -89,6 +89,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     title: post.title,
     description: post.excerpt,
     publishedAt: post.publishedAt,
+    updatedAt: post.updatedAt,
     author: post.author,
     slug: post.slug,
     image: getAbsoluteImageUrl(getBlogHeroImage(post.slug, post.heroImage), getBaseUrl()),

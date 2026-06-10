@@ -231,6 +231,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('second-story-additions', 'Second Story Additions', 'home-additions'),
   cluster('garage-conversions', 'Garage Conversions', 'home-additions'),
   cluster('adu-guide-boise', 'ADU Guide Boise', 'home-additions'),
+  guide('boise-adu-guide', 'Boise ADU Guide', 'home-additions', 'pillar'),
   cluster('multigenerational-living-remodels', 'Multigenerational Living Remodels', 'home-additions'),
   cluster('home-addition-timeline-guide', 'Home Addition Timeline Guide', 'home-additions'),
   cluster('room-addition-guide-treasure-valley', 'Room Addition Guide Treasure Valley', 'home-additions'),

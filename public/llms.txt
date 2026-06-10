@@ -1,6 +1,14 @@
 # Boise Remodeling Co
 
-> Design-build remodeling for kitchens, bathrooms, whole-home renovations, room additions, and ADUs in Boise, Idaho and the Treasure Valley.
+> Design-build remodeling for kitchens, bathrooms, whole-home renovations, room additions, and ADUs in Boise, Idaho and the Treasure Valley. Founded 2017. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell. Phone (208) 477-1169.
+
+## 2026 planning ranges (details on each service page)
+
+- Kitchen remodel: $35k-$75k mid-range; $75k-$150k+ full gut with layout changes
+- Bathroom remodel: $18k-$45k guest bath; $35k-$85k+ primary bath
+- Whole-home remodel: $150k-$400k+
+- Room addition: $80k-$250k+
+- ADU: $90k-$180k garage conversion; $180k-$300k+ detached new build
 
 ## Authoritative Guides (https://boiseremodeling.co/guides)
 
@@ -9,11 +17,16 @@
 - Boise Kitchen Remodeling Guide: /guides/boise-kitchen-remodeling-guide
 - Boise Bathroom Remodeling Guide: /guides/boise-bathroom-remodeling-guide
 - Boise Home Addition Guide: /guides/boise-home-addition-guide
+- Boise ADU Guide (rules, costs, permits): /guides/boise-adu-guide
 - Whole Home Remodeling Guide: /guides/whole-home-remodeling-guide
 - Choose a Remodeling Contractor Boise: /guides/choose-remodeling-contractor-boise
 - Boise Remodeling Process Guide: /guides/boise-remodeling-process-guide
 - Best Remodeling ROI Boise: /guides/best-remodeling-roi-boise
 - Outdoor Living Remodeling Guide: /guides/outdoor-living-remodeling-guide
+
+## Local permit resources
+
+- Ada County vs Canyon County permit flow: /resources/ada-canyon-permit-flow
 - City guides: /guides/boise-remodeling-guide, /guides/meridian-remodeling-guide, /guides/eagle-remodeling-guide, /guides/kuna-remodeling-guide, /guides/star-remodeling-guide, /guides/middleton-remodeling-guide, /guides/nampa-remodeling-guide, /guides/caldwell-remodeling-guide
 - Neighborhood guides: /guides/north-end-remodeling-guide, /guides/boise-bench-remodeling-guide, /guides/harris-ranch-remodeling-guide, /guides/east-boise-remodeling-guide, /guides/hidden-springs-remodeling-guide, /guides/eagle-foothills-remodeling-guide
 
@@ -40,4 +53,4 @@
 - https://boiseremodeling.co/contact
 - Estimator: https://boiseremodeling.co/#calculator
 
-Last updated: 2026-05-30. Full sitemap: https://boiseremodeling.co/sitemap.xml
+Last updated: 2026-06-10. Full sitemap: https://boiseremodeling.co/sitemap.xml
