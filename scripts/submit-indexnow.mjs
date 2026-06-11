@@ -1,0 +1,158 @@
+#!/usr/bin/env node
+/**
+ * IndexNow automatic submission script.
+ * Fetches sitemap(s), extracts URLs, and submits them to IndexNow API.
+ *
+ * Environment (or defaults):
+ *   INDEXNOW_KEY    (default: f9e329f80c1a4609bd70d590f64e0544)
+ *   HOST            (default: boiseremodeling.co)
+ *   SITEMAP_URL     (default: https://boiseremodeling.co/sitemap.xml)
+ *   KEY_LOCATION    (default: https://boiseremodeling.co/f9e329f80c1a4609bd70d590f64e0544.txt)
+ */
+
+const INDEXNOW_KEY = process.env.INDEXNOW_KEY ?? 'f9e329f80c1a4609bd70d590f64e0544';
+const HOST = process.env.HOST ?? 'boiseremodeling.co';
+const SITEMAP_URL = process.env.SITEMAP_URL ?? 'https://boiseremodeling.co/sitemap.xml';
+const KEY_LOCATION = process.env.KEY_LOCATION ?? 'https://boiseremodeling.co/f9e329f80c1a4609bd70d590f64e0544.txt';
+const INDEXNOW_API = 'https://api.indexnow.org/indexnow';
+
+/**
+ * @param {string} url
+ * @returns {Promise<string>}
+ */
+async function fetchText(url) {
+  const res = await fetch(url, { redirect: 'follow' });
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status} fetching ${url}`);
+  }
+  return res.text();
+}
+
+/**
+ * Extract <loc> URLs from sitemap XML text.
+ * @param {string} xml
+ * @returns {string[]}
+ */
+function extractUrls(xml) {
+  const urls = [];
+  const re = /<loc>([^<]+)<\/loc>/gi;
+  let m;
+  while ((m = re.exec(xml)) !== null) {
+    urls.push(m[1].trim());
+  }
+  return urls;
+}
+
+/**
+ * @param {string} url
+ * @returns {boolean}
+ */
+function isSitemapIndex(url) {
+  return url.includes('sitemapindex') || url.includes('/sitemap-index');
+}
+
+/**
+ * Recursively fetch all URLs from a sitemap or sitemap index.
+ * @param {string} url
+ * @param {Set<string>} visited
+ * @returns {Promise<string[]>}
+ */
+async function collectSitemapUrls(url, visited = new Set()) {
+  if (visited.has(url)) return [];
+  visited.add(url);
+
+  console.log(`[IndexNow] Fetching sitemap: ${url}`);
+  const xml = await fetchText(url);
+  const urls = extractUrls(xml);
+
+  // Detect if this is a sitemap index by checking for <sitemapindex> or if the URLs look like sitemaps
+  const isIndex = xml.includes('<sitemapindex') || xml.includes('<sitemap>');
+  if (isIndex) {
+    const childUrls = [];
+    for (const childUrl of urls) {
+      if (childUrl.endsWith('.xml')) {
+        const childUrls2 = await collectSitemapUrls(childUrl, visited);
+        childUrls.push(...childUrls2);
+      } else {
+        childUrls.push(childUrl);
+      }
+    }
+    return childUrls;
+  }
+
+  return urls;
+}
+
+/**
+ * Main entry point.
+ */
+async function main() {
+  console.log(`[IndexNow] Host: ${HOST}`);
+  console.log(`[IndexNow] Key:  ${INDEXNOW_KEY}`);
+  console.log(`[IndexNow] Key location: ${KEY_LOCATION}`);
+  console.log(`[IndexNow] Sitemap: ${SITEMAP_URL}`);
+
+  // Verify prerequisites
+  const checks = [
+    { url: SITEMAP_URL, label: 'sitemap.xml' },
+    { url: `https://${HOST}/robots.txt`, label: 'robots.txt' },
+    { url: KEY_LOCATION, label: 'key file' },
+  ];
+
+  for (const { url, label } of checks) {
+    const res = await fetch(url, { method: 'HEAD', redirect: 'follow' });
+    console.log(`[IndexNow] ${label} ${res.ok ? 'OK' : 'FAIL'} (${res.status}) ${url}`);
+    if (!res.ok) {
+      console.warn(`[IndexNow] WARNING: ${label} returned HTTP ${res.status} at ${url}. Proceeding anyway. The key file must be publicly accessible before search engines will validate it.`);
+    }
+  }
+
+  // Collect URLs
+  const allUrls = await collectSitemapUrls(SITEMAP_URL);
+  const hostUrls = allUrls.filter((u) => u.startsWith(`https://${HOST}`) || u.startsWith(`http://${HOST}`));
+
+  console.log(`[IndexNow] Total URLs in sitemap(s): ${allUrls.length}`);
+  console.log(`[IndexNow] URLs belonging to ${HOST}: ${hostUrls.length}`);
+
+  if (hostUrls.length === 0) {
+    console.log('[IndexNow] No URLs to submit. Exiting.');
+    process.exit(0);
+  }
+
+  // Submit to IndexNow
+  const payload = {
+    host: HOST,
+    key: INDEXNOW_KEY,
+    keyLocation: KEY_LOCATION,
+    urlList: hostUrls,
+  };
+
+  console.log(`[IndexNow] Submitting ${hostUrls.length} URL(s) to ${INDEXNOW_API} ...`);
+
+  const res = await fetch(INDEXNOW_API, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const responseText = await res.text();
+  console.log(`[IndexNow] Response: HTTP ${res.status}`);
+  if (responseText) {
+    console.log(`[IndexNow] Body: ${responseText}`);
+  }
+
+  if (res.status === 200 || res.status === 202) {
+    console.log(`[IndexNow] SUCCESS: Submitted ${hostUrls.length} URL(s)`);
+  } else {
+    console.error(`[IndexNow] FAIL: Unexpected HTTP ${res.status}`);
+    process.exit(1);
+  }
+}
+
+main().catch((err) => {
+  console.error(`[IndexNow] Error: ${err.message}`);
+  process.exit(1);
+});
