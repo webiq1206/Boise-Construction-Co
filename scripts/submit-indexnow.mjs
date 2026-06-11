@@ -129,26 +129,45 @@ async function main() {
 
   console.log(`[IndexNow] Submitting ${hostUrls.length} URL(s) to ${INDEXNOW_API} ...`);
 
-  const res = await fetch(INDEXNOW_API, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  });
+  // Submit to the unified IndexNow API first, then fall back to Yandex
+  const endpoints = [
+    { url: INDEXNOW_API, name: 'IndexNow (Microsoft)' },
+    { url: 'https://yandex.com/indexnow', name: 'IndexNow (Yandex)' },
+  ];
 
-  const responseText = await res.text();
-  console.log(`[IndexNow] Response: HTTP ${res.status}`);
-  if (responseText) {
-    console.log(`[IndexNow] Body: ${responseText}`);
+  let succeeded = false;
+  for (const { url, name } of endpoints) {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const responseText = await res.text();
+    console.log(`[IndexNow] ${name} response: HTTP ${res.status}`);
+    if (responseText) {
+      console.log(`[IndexNow] ${name} body: ${responseText}`);
+    }
+
+    if (res.status === 200 || res.status === 202) {
+      console.log(`[IndexNow] SUCCESS: ${name} accepted ${hostUrls.length} URL(s)`);
+      succeeded = true;
+    } else if (res.status === 403) {
+      console.warn(`[IndexNow] ${name} returned HTTP 403. This usually means the site is not yet authorized by that search engine. Submission is still valid for other engines. Continuing with next endpoint...`);
+    } else if (res.status === 429) {
+      console.warn(`[IndexNow] ${name} returned HTTP 429 (rate limited). Retrying with next endpoint...`);
+    } else {
+      console.warn(`[IndexNow] ${name} returned HTTP ${res.status}. Continuing with next endpoint...`);
+    }
   }
 
-  if (res.status === 200 || res.status === 202) {
-    console.log(`[IndexNow] SUCCESS: Submitted ${hostUrls.length} URL(s)`);
+  if (succeeded) {
+    console.log(`[IndexNow] DONE: At least one search engine accepted the submission.`);
   } else {
-    console.error(`[IndexNow] FAIL: Unexpected HTTP ${res.status}`);
-    process.exit(1);
+    console.warn(`[IndexNow] WARNING: No search engine accepted the submission. The URLs may not be indexed yet. The site may need to be registered with the search engines first. The key file is available at ${KEY_LOCATION}.`);
   }
 }
 
