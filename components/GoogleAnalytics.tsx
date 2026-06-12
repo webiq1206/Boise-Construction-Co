@@ -1,7 +1,7 @@
 import { GoogleAnalytics as NextGoogleAnalytics } from '@next/third-parties/google';
 
 const GA_MEASUREMENT_ID =
-  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? 'G-1HD7RT8PKJ';
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? 'G-NGE449QF9Y';
 
 export function GoogleAnalytics() {
   if (!GA_MEASUREMENT_ID) return null;
