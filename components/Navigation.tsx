@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -9,12 +9,6 @@ import { cn } from "@/lib/utils";
 import { CTA_PRIMARY, CTA_PRIMARY_SHORT } from "@/shared/ctaCopy";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { useModals } from "@/components/modals/modalsContext";
-import { useAdaptiveGlassTheme } from "@/hooks/useAdaptiveGlassTheme";
-import {
-  ADAPTIVE_GLASS_ATTR,
-  ADAPTIVE_GLASS_BAR_BASE,
-  getAdaptiveGlassClasses,
-} from "@/components/marketing/adaptiveGlassTheme";
 
 const NAV_LINKS = [
   { label: "Services", href: "/#services" },
@@ -26,26 +20,14 @@ const NAV_LINKS = [
   { label: "Contact", href: "/contact" },
 ];
 
-function Logo({ hero }: { hero: boolean }) {
+function Logo() {
   return (
     <Link href="/" className="flex flex-col leading-none">
-      <span
-        className={cn(
-          "font-sans text-[1.05rem] font-light tracking-tight transition-colors duration-300",
-          hero ? "text-inverse-foreground" : "text-foreground"
-        )}
-      >
+      <span className="font-sans text-[1.05rem] font-light tracking-tight text-foreground">
         Boise Remodeling{" "}
-        <em className={cn("brc-accent transition-colors duration-300", hero ? "text-inverse-muted" : "text-accent")}>
-          Co
-        </em>
+        <em className="brc-accent text-accent">Co</em>
       </span>
-      <span
-        className={cn(
-          "text-[9px] tracking-[0.15em] uppercase font-sans font-medium mt-0.5 transition-colors duration-300",
-          hero ? "text-inverse-muted/80" : "text-muted-foreground"
-        )}
-      >
+      <span className="text-[9px] tracking-[0.15em] uppercase font-sans font-medium mt-0.5 text-muted-foreground">
         Design &amp; Build
       </span>
     </Link>
@@ -55,11 +37,7 @@ function Logo({ hero }: { hero: boolean }) {
 export function Navigation() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const { openConsult } = useModals();
-  const bottomBarRef = useRef<HTMLDivElement>(null);
-  const bottomBarTheme = useAdaptiveGlassTheme(bottomBarRef);
-  const bottomBarClasses = getAdaptiveGlassClasses(bottomBarTheme);
 
   const isPortal =
     pathname?.startsWith("/admin") ||
@@ -71,14 +49,6 @@ export function Navigation() {
     pathname === "/subcontractor" ||
     pathname?.startsWith("/subcontractor/purchases");
   const isHome = pathname === "/";
-  const isHeroMode = isHome && !scrolled && !isPortal;
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 72);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     if (mobileOpen) {
@@ -93,7 +63,7 @@ export function Navigation() {
     return (
       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90">
         <nav className="container flex h-16 items-center justify-between gap-4 px-6">
-          <Logo hero={false} />
+          <Logo />
         </nav>
       </header>
     );
@@ -101,28 +71,16 @@ export function Navigation() {
 
   return (
     <>
-      <header
-        className={cn(
-          "sticky top-0 z-[100] w-full transition-all duration-300",
-          isHeroMode
-            ? "bg-transparent border-b border-transparent"
-            : "bg-background/97 backdrop-blur border-b border-border"
-        )}
-      >
+      <header className="sticky top-0 z-[100] w-full bg-background/97 backdrop-blur border-b border-border">
         <nav className="container flex h-[60px] items-center justify-between gap-4 px-4 md:px-6">
-          <Logo hero={isHeroMode} />
+          <Logo />
 
           <div className="hidden md:flex items-center gap-0">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className={cn(
-                  "px-4 py-2 text-[13px] font-medium transition-colors rounded-sm hover-elevate",
-                  isHeroMode
-                    ? "text-inverse-muted hover:text-inverse-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
+                className="px-4 py-2 text-[13px] font-medium transition-colors rounded-sm hover-elevate text-muted-foreground hover:text-foreground"
               >
                 {link.label}
               </Link>
@@ -132,10 +90,7 @@ export function Navigation() {
           <div className="hidden md:flex items-center gap-4">
             <a
               href={SITE_CONFIG.phoneHref}
-              className={cn(
-                "flex items-center gap-2 text-[13px] font-medium transition-colors",
-                isHeroMode ? "text-inverse-muted hover:text-inverse-foreground" : "text-muted-foreground hover:text-foreground"
-              )}
+              className="flex items-center gap-2 text-[13px] font-medium transition-colors text-muted-foreground hover:text-foreground"
               data-testid="link-phone-desktop"
             >
               <span className="relative flex h-2 w-2">
@@ -146,10 +101,7 @@ export function Navigation() {
             </a>
             <a
               href={SITE_CONFIG.phoneSmsHref}
-              className={cn(
-                "text-[13px] font-medium transition-colors",
-                isHeroMode ? "text-inverse-muted hover:text-inverse-foreground" : "text-muted-foreground hover:text-foreground"
-              )}
+              className="text-[13px] font-medium transition-colors text-muted-foreground hover:text-foreground"
               data-testid="link-text-desktop"
             >
               Text us
@@ -170,7 +122,6 @@ export function Navigation() {
               variant="ghost"
               size="icon"
               aria-label="Open navigation menu"
-              className={isHeroMode ? "text-inverse-foreground" : undefined}
               onClick={() => setMobileOpen(true)}
               data-testid="button-mobile-menu-open"
             >
@@ -180,7 +131,7 @@ export function Navigation() {
         </nav>
       </header>
 
-      {/* Full-screen mobile nav overlay - md:hidden via pointer-events only on desktop */}
+      {/* Full-screen mobile nav overlay */}
       <div
         className={cn(
           "fixed inset-0 z-[200] bg-background flex flex-col md:hidden",
@@ -191,7 +142,7 @@ export function Navigation() {
       >
         {/* Header row */}
         <div className="flex items-center justify-between px-6 h-[60px] border-b border-border/40 shrink-0">
-          <Logo hero={false} />
+          <Logo />
           <Button
             variant="ghost"
             size="icon"
@@ -257,34 +208,22 @@ export function Navigation() {
         </div>
       </div>
 
-      {/* Sticky bottom bar (hidden while an estimator bar or modal owns the bottom edge) */}
+      {/* Sticky bottom bar */}
       <div
-        ref={bottomBarRef}
-        {...{ [ADAPTIVE_GLASS_ATTR]: "" }}
         data-mobile-nav-bar=""
-        className={cn(
-          ADAPTIVE_GLASS_BAR_BASE,
-          "bottom-0 z-[100] md:hidden",
-          bottomBarClasses.bar
-        )}
+        className="fixed left-0 right-0 bottom-0 z-[100] md:hidden pb-safe border-t bg-background/97 backdrop-blur-md border-border"
       >
-        <div className={cn("grid grid-cols-3 divide-x", bottomBarClasses.divide)}>
+        <div className="grid grid-cols-3 divide-x divide-border">
           <a
             href={SITE_CONFIG.phoneHref}
-            className={cn(
-              "flex items-center justify-center gap-2 py-4 text-sm font-medium",
-              bottomBarClasses.text
-            )}
+            className="flex items-center justify-center gap-2 py-4 text-sm font-medium text-foreground"
             data-testid="button-call-mobile"
           >
             Call
           </a>
           <a
             href={SITE_CONFIG.phoneSmsHref}
-            className={cn(
-              "flex items-center justify-center gap-2 py-4 text-sm font-medium",
-              bottomBarClasses.text
-            )}
+            className="flex items-center justify-center gap-2 py-4 text-sm font-medium text-foreground"
             data-testid="button-text-mobile"
           >
             Text
@@ -292,10 +231,7 @@ export function Navigation() {
           {isHome ? (
             <a
               href="/#consult"
-              className={cn(
-                "flex items-center justify-center gap-2 py-4 text-sm font-medium",
-                bottomBarClasses.text
-              )}
+              className="flex items-center justify-center gap-2 py-4 text-sm font-medium text-foreground"
               data-testid="button-begin-conversation-mobile"
             >
               {CTA_PRIMARY_SHORT}
@@ -303,10 +239,7 @@ export function Navigation() {
           ) : (
             <button
               onClick={openConsult}
-              className={cn(
-                "flex items-center justify-center gap-2 py-4 text-sm font-medium",
-                bottomBarClasses.text
-              )}
+              className="flex items-center justify-center gap-2 py-4 text-sm font-medium text-foreground"
               data-testid="button-begin-conversation-mobile"
             >
               {CTA_PRIMARY_SHORT}

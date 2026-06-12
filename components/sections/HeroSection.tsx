@@ -24,7 +24,7 @@ function StatCard({ num, label }: { num: string; label: string }) {
 export function HeroSection() {
   return (
     <>
-      <section className="relative -mt-[60px] pt-[60px] min-h-[85vh] md:min-h-screen flex items-center overflow-hidden bg-inverse">
+      <section className="relative min-h-[85vh] md:min-h-screen flex items-center overflow-hidden bg-inverse">
         <Image
           src={SITE_IMAGES.hero}
           alt="Modern luxury home interior remodel in Boise Idaho Treasure Valley"
