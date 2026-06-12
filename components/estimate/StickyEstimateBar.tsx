@@ -1,15 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  ADAPTIVE_GLASS_ATTR,
-  ADAPTIVE_GLASS_BAR_BASE,
-  getAdaptiveGlassClasses,
-} from "@/components/marketing/adaptiveGlassTheme";
-import { useAdaptiveGlassTheme } from "@/hooks/useAdaptiveGlassTheme";
 import { AnimatedPrice } from "@/components/estimate/EstimateResultPanel";
 import type { EstimateResult } from "@/shared/estimateEngine";
 
@@ -47,10 +41,7 @@ export function StickyEstimateBar({
   onCta,
 }: StickyEstimateBarProps) {
   const [expanded, setExpanded] = useState(false);
-  const barRef = useRef<HTMLDivElement>(null);
   const isInline = mode === "inline";
-  const glassTheme = useAdaptiveGlassTheme(barRef, { enabled: isInline && visible });
-  const glass = getAdaptiveGlassClasses(isInline ? glassTheme : "onLight");
 
   // While the inline bar owns the bottom edge, hide the global Call/Text bar
   // instead of stacking two bars (modal visibility is handled by ModalProvider).
@@ -73,11 +64,9 @@ export function StickyEstimateBar({
 
   return (
     <div
-      ref={barRef}
-      {...(isInline ? { [ADAPTIVE_GLASS_ATTR]: "" } : {})}
       className={cn(
         isInline
-          ? cn(ADAPTIVE_GLASS_BAR_BASE, "bottom-0 z-[120] lg:hidden", glass.bar)
+          ? "fixed left-0 right-0 pb-safe border-t bottom-0 z-[120] lg:hidden bg-background/97 backdrop-blur-md border-border"
           : "sticky bottom-0 z-20 -mx-6 -mb-6 mt-4 border-t border-border bg-background/97 backdrop-blur-md pb-safe md:hidden"
       )}
       data-testid="mobile-estimate-bar"
@@ -85,30 +74,27 @@ export function StickyEstimateBar({
       {expanded && result && (
         <div
           id={sheetId}
-          className={cn(
-            "px-4 pt-4 pb-2 border-b",
-            isInline ? glass.divide : "border-border"
-          )}
+          className="px-4 pt-4 pb-2 border-b border-border"
           data-testid="estimate-bar-sheet"
         >
           <div className="flex items-baseline justify-between gap-3 mb-2">
-            <p className={cn("text-[11px] uppercase tracking-wide", glass.textMuted)}>
+            <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
               {summary}
             </p>
-            <p className={cn("text-[11px]", glass.textMuted)}>{result.confidenceLabel}</p>
+            <p className="text-[11px] text-muted-foreground">{result.confidenceLabel}</p>
           </div>
           <ul className="space-y-1.5 mb-2">
             {result.included.slice(0, SHEET_SCOPE_COUNT).map((item) => (
               <li
                 key={item}
-                className={cn("flex items-start gap-2 text-xs leading-snug", glass.textMuted)}
+                className="flex items-start gap-2 text-xs leading-snug text-muted-foreground"
               >
                 <Check className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
                 {item}
               </li>
             ))}
           </ul>
-          <p className={cn("text-[10px] leading-snug", glass.textMuted)}>
+          <p className="text-[10px] leading-snug text-muted-foreground">
             Planning estimate only, not a binding quote.
           </p>
         </div>
@@ -125,17 +111,12 @@ export function StickyEstimateBar({
           data-testid="estimate-bar-toggle"
         >
           <span className="min-w-0">
-            <span
-              className={cn(
-                "block text-[10px] uppercase tracking-wide truncate",
-                glass.textMuted
-              )}
-            >
+            <span className="block text-[10px] uppercase tracking-wide truncate text-muted-foreground">
               {result ? summary : "Your planning range"}
             </span>
             {result ? (
               <span
-                className={cn("block text-lg leading-tight brc-display-num tabular-nums", glass.text)}
+                className="block text-lg leading-tight brc-display-num tabular-nums text-foreground"
                 data-testid="mobile-estimate-range"
                 aria-live="polite"
                 aria-atomic="true"
@@ -146,7 +127,7 @@ export function StickyEstimateBar({
               </span>
             ) : (
               <span
-                className={cn("block text-sm leading-tight", glass.text)}
+                className="block text-sm leading-tight text-foreground"
                 data-testid="mobile-estimate-placeholder"
               >
                 Make your selections to see it
@@ -155,9 +136,9 @@ export function StickyEstimateBar({
           </span>
           {result &&
             (expanded ? (
-              <ChevronDown className={cn("h-4 w-4 flex-shrink-0", glass.textMuted)} />
+              <ChevronDown className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
             ) : (
-              <ChevronUp className={cn("h-4 w-4 flex-shrink-0", glass.textMuted)} />
+              <ChevronUp className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
             ))}
         </button>
 
