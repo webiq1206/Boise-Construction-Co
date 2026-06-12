@@ -7,6 +7,7 @@ import { Providers } from '@/components/Providers'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import { SITE_TAGLINE } from '@/shared/siteContent'
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
+import { MicrosoftClarity } from '@/components/MicrosoftClarity'
 import './globals.css'
 
 const montserrat = Montserrat({
@@ -107,6 +108,7 @@ export default function RootLayout({
           <Toaster />
         </Providers>
         <GoogleAnalytics />
+        <MicrosoftClarity />
       </body>
     </html>
   )
