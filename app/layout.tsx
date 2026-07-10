@@ -91,7 +91,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`dark ${montserrat.variable} ${fraunces.variable}`} style={{ colorScheme: 'dark' }} suppressHydrationWarning>
-      <head>
+      <head suppressHydrationWarning>
         <script
           dangerouslySetInnerHTML={{
             __html: `document.documentElement.classList.add('js')`,
