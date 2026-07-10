@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import dynamic from "next/dynamic";
 import { FAQSection } from "@/components/FAQSection";
 import { ConsultationForm } from "@/components/ConsultationForm";
@@ -18,7 +19,7 @@ import { CONSULT_BULLETS, SITE_TAGLINE } from "@/shared/siteContent";
 import { CTA_PRIMARY } from "@/shared/ctaCopy";
 import { HomePageSchema } from "@/components/seo/HomePageSchema";
 import { buildCanonical } from "@/lib/page-metadata";
-import { SITE_IMAGES } from "@/shared/siteImages";
+import { SITE_IMAGES, GALLERY_IMAGES } from "@/shared/siteImages";
 
 const EstimateCalculator = dynamic(
   () =>
@@ -65,8 +66,20 @@ export default function HomePage() {
       <WhyChooseUsSection limit={5} />
       <BudgetInclusionsSection />
       <FAQSection />
-      <Section id="consult" divider className="pb-28 md:pb-28">
-        <div className="container px-4">
+      <Section id="consult" divider className="relative overflow-hidden pb-28 md:pb-28">
+        {/* Faint photographic texture so the closing section is not flat */}
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <Image
+            src={GALLERY_IMAGES.bathroom.after}
+            alt=""
+            fill
+            loading="lazy"
+            sizes="100vw"
+            className="object-cover opacity-[0.07] img-brand-grade"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/85 to-background" />
+        </div>
+        <div className="container px-4 relative z-10">
           <div className="max-w-5xl mx-auto grid md:grid-cols-5 gap-12 items-start">
             <div className="md:col-span-2">
               <Reveal>

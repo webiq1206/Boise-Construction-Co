@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { ArrowRight, Check } from "lucide-react";
 import { Section } from "@/components/marketing/Section";
@@ -8,13 +9,27 @@ import {
   STANDARD_INCLUSIONS,
   OPTIONAL_ENHANCEMENTS,
 } from "@/shared/siteContent";
+import { GALLERY_IMAGES } from "@/shared/siteImages";
 import { Button } from "@/components/ui/button";
 import { CTA_PRIMARY } from "@/shared/ctaCopy";
 
 export function BudgetInclusionsSection() {
   return (
-    <Section id="budget" variant="inverse" divider>
-      <div className="container px-4">
+    <Section id="budget" variant="inverse" divider className="relative overflow-hidden">
+      {/* Subtle photographic texture behind the dark band so it does not read flat */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <Image
+          src={GALLERY_IMAGES.kitchen.after}
+          alt=""
+          fill
+          loading="lazy"
+          sizes="100vw"
+          className="object-cover opacity-[0.10] img-brand-grade"
+        />
+        <div className="absolute inset-0 bg-inverse/85" />
+        <div className="absolute inset-0 bg-gradient-to-b from-inverse via-inverse/70 to-inverse" />
+      </div>
+      <div className="container px-4 relative z-10">
         <div className="max-w-5xl mx-auto">
           <SectionHeader
             eyebrow="Budget and scope"
