@@ -4,6 +4,46 @@ Before/after record of changes made during audit passes. Most recent first.
 
 ---
 
+## Audit pass 2026-07-10 (part 2: E-E-A-T authorship + conversion tracking)
+
+Implemented every remaining audit item that does not require external/owner data.
+
+### 5. Named-expert authorship (E-E-A-T)
+**Files:** `shared/authors.ts` (new), `components/marketing/AuthorBio.tsx` (new),
+`components/marketing/BlogPostLayout.tsx`, `components/marketing/GuidePageLayout.tsx`,
+`app/blog/[slug]/page.tsx`, `app/guides/[slug]/page.tsx`.
+- **Before:** guides used `author: 'Boise Remodeling Co'` (org), the guide page passed no author
+  to the Article schema, and no page had a visible author bio.
+- **After:** content is attributed to **Jared Brost, Founder** as a single source of truth
+  (`EXPERT_AUTHOR`). Article schema now emits `author: { @type: Person, name: "Jared Brost",
+  url: ".../about#team" }` on all 79 blog posts + 26 guides (verified). Byline links to
+  `/about#team`; a visible "Written by" **AuthorBio** block with credentials renders at the end of
+  every article and guide (verified `data-testid="author-bio"`).
+- **Why:** named, described, accountable authorship is a primary E-E-A-T signal for a founder-led
+  local remodeler and a citation trust signal for AI answer engines.
+
+### 6. Conversion-event tracking (calls + form submits)
+**Files:** `lib/analytics.ts` (new), `components/ConversionTracking.tsx` (new),
+`app/layout.tsx`, `components/ConsultationForm.tsx`.
+- **Before:** GA loaded site-wide but no conversion events were defined.
+- **After:** a delegated site-wide listener fires `contact_click` (method = phone/sms/email) for
+  every `tel:`/`sms:`/`mailto:` link, and the consultation form fires `generate_lead` on a
+  successful submit. Safe no-op when GA is absent/blocked.
+- **Why:** the audit requires defined conversion events for calls and form submits; these are the
+  two primary lead actions.
+
+### 7. Refreshed `llms.txt`
+**File:** `public/llms.txt`. Added the `/services` hub + explicit service URLs, an "About the
+company" block naming founder/author Jared Brost, and bumped the date to 2026-07-10.
+
+### Performance evidence (partial — PSI field data pending)
+PSI API quota was exhausted at audit time, so a throttled Lighthouse score could not be captured
+(unthrottled localhost numbers would be misleading and were not reported). Legitimate lab evidence:
+homepage gzipped HTML **32 KB**, `next/image` serves **WebP/AVIF**, shared JS **87.4 KB**. Re-run
+PSI for mobile + desktop to record LCP/INP/CLS.
+
+---
+
 ## Audit pass 2026-07-10 (re-audit + implementation)
 
 Verified against a live crawl of all 163 sitemap URLs. The site was already mechanically

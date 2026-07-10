@@ -8,6 +8,8 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { AuthorBio } from './AuthorBio';
+import { EXPERT_AUTHOR } from '@/shared/authors';
 import {
   Accordion,
   AccordionContent,
@@ -78,12 +80,13 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                 {formatDate(guide.publishedAt)}
               </span>
               <span>{readingTime} min read</span>
-              {guide.author && (
-                <span className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  {guide.author}
-                </span>
-              )}
+              <Link
+                href={EXPERT_AUTHOR.url}
+                className="flex items-center gap-2 hover:text-foreground transition-colors"
+              >
+                <User className="h-4 w-4" />
+                {EXPERT_AUTHOR.name}
+              </Link>
             </div>
           </header>
 
@@ -174,6 +177,8 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                   </div>
                 </div>
               )}
+
+              <AuthorBio />
 
               <div className="lg:hidden mt-10">
                 <ArticleSidebarCta />

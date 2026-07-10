@@ -42,15 +42,25 @@
 - /blog/category/remodeling-roi
 - /blog/category/outdoor-living
 
-## Services
+## Services (https://boiseremodeling.co/services)
 
-- Kitchen, bathroom, whole-home, room addition, ADU: /services/{service-slug}
+- Kitchen Remodel: /services/kitchen-remodel
+- Bathroom Remodel: /services/bathroom-remodel
+- Whole-Home Remodel: /services/whole-home-remodel
+- Room Addition: /services/room-addition
+- ADU / Guest House: /services/adu
 - City pages: /services/{service-slug}/{city-slug} for boise, meridian, eagle, nampa, kuna, star, middleton, caldwell
 - Areas: /areas/{city-slug}
+
+## About the company
+
+- Founded 2017 by Jared Brost, who leads the design-build process on every project and authors the guides and articles on this site.
+- Design-build: one accountable team handles design, estimating, Ada and Canyon County permitting, and construction under one contract.
+- Every project backed by a written scope before construction and a workmanship guarantee. About: https://boiseremodeling.co/about
 
 ## Contact
 
 - https://boiseremodeling.co/contact
 - Estimator: https://boiseremodeling.co/#calculator
 
-Last updated: 2026-06-10. Full sitemap: https://boiseremodeling.co/sitemap.xml
+Last updated: 2026-07-10. Full sitemap: https://boiseremodeling.co/sitemap.xml

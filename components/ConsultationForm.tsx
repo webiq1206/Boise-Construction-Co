@@ -28,6 +28,7 @@ import { EstimateCTA } from "@/components/modals/EstimateCTA";
 import { CTA_FORM_CONFIRM, CTA_FORM_REVIEW } from "@/shared/ctaCopy";
 import { CONSULT_BULLETS } from "@/shared/siteContent";
 import { SITE_CONFIG } from "@/shared/siteConfig";
+import { trackEvent } from "@/lib/analytics";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
   HOUSE_NUMBER_REGEX,
@@ -201,6 +202,12 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
     onSuccess: () => {
       setSuccess(true);
       sessionStorage.removeItem("brc_estimate");
+      // Conversion event: a completed consultation request is the primary lead.
+      trackEvent("generate_lead", {
+        form: "consultation",
+        project_type: pendingData?.projectType,
+        has_estimate: !!estimate,
+      });
     },
   });
 

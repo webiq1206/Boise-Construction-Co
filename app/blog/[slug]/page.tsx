@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BLOG_POSTS } from "@/shared/blogContent";
+import { EXPERT_AUTHOR } from "@/shared/authors";
 import {
   generateArticleSchema,
   generateBreadcrumbSchema,
@@ -90,7 +91,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     description: post.excerpt,
     publishedAt: post.publishedAt,
     updatedAt: post.updatedAt,
-    author: post.author,
+    author: EXPERT_AUTHOR.name,
     slug: post.slug,
     image: getAbsoluteImageUrl(getBlogHeroImage(post.slug, post.heroImage), getBaseUrl()),
   });

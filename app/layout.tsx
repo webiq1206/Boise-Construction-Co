@@ -8,6 +8,7 @@ import { ScrollToTop } from '@/components/ScrollToTop'
 import { SITE_TAGLINE } from '@/shared/siteContent'
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
 import { MicrosoftClarity } from '@/components/MicrosoftClarity'
+import { ConversionTracking } from '@/components/ConversionTracking'
 import './globals.css'
 
 const montserrat = Montserrat({
@@ -120,6 +121,7 @@ export default function RootLayout({
         </Providers>
         <GoogleAnalytics />
         <MicrosoftClarity />
+        <ConversionTracking />
       </body>
     </html>
   )
