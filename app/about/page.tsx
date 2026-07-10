@@ -49,7 +49,7 @@ function HeroBreadcrumbs() {
                   {item.name}
                 </Link>
               ) : (
-                <span className={isLast ? 'text-inverse-foreground/90 font-medium' : ''}>
+                <span className={isLast ? 'text-inverse-foreground/90 font-normal' : ''}>
                   {item.name}
                 </span>
               )}
@@ -213,7 +213,7 @@ export default function AboutPage() {
                 </ul>
                 <div className="mt-8 pt-8 border-t border-border">
                   <div className="brc-label text-muted-foreground mb-3">Founder</div>
-                  <h3 className="font-sans font-medium text-base text-foreground mb-2">
+                  <h3 className="font-sans font-normal text-base text-foreground mb-2">
                     Jared Brost
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
@@ -253,6 +253,14 @@ export default function AboutPage() {
         {/* ─── Principles ─── */}
         <Section variant="inverse" divider>
           <div className="container px-4 max-w-5xl">
+            {/* Stacked emblem - bright badge on the dark band */}
+            <img
+              src="/brand/icons/boise-remodeling-co-emblem-light.svg"
+              alt="Boise Remodeling Co emblem"
+              width={72}
+              height={72}
+              className="h-16 w-16 md:h-[72px] md:w-[72px] mb-8"
+            />
             <SectionHeader
               eyebrow="Our standards"
               inverse
@@ -273,7 +281,7 @@ export default function AboutPage() {
                     <DisplayNum className="text-2xl text-inverse-foreground/20 leading-none mb-4 block">
                       {formatStepNumber(i)}
                     </DisplayNum>
-                    <h3 className="font-sans font-medium text-sm mb-2 text-inverse-foreground">
+                    <h3 className="font-sans font-normal text-sm mb-2 text-inverse-foreground">
                       {title}
                     </h3>
                     <p className="text-sm text-inverse-muted leading-relaxed">{desc}</p>
@@ -303,7 +311,7 @@ export default function AboutPage() {
                 <Reveal key={city.slug} delay={Math.min(i, 7) * 50}>
                   <Link href={`/areas/${city.slug}`} className="block h-full group">
                     <MarketingCard className="h-full transition-colors group-hover:border-foreground/20">
-                      <p className="font-sans font-medium text-sm text-foreground mb-0.5">
+                      <p className="font-sans font-normal text-sm text-foreground mb-0.5">
                         {city.name}
                       </p>
                       <p className="text-xs text-muted-foreground">Idaho</p>

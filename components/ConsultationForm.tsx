@@ -59,7 +59,7 @@ const PROJECT_OPTIONS = [
   { value: "other", label: "Other / Not sure yet" },
 ];
 
-const labelClass = "text-xs tracking-wide font-medium uppercase text-muted-foreground";
+const labelClass = "text-xs tracking-wide font-normal uppercase text-muted-foreground";
 
 function RequiredMark() {
   return (
@@ -209,9 +209,14 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
 
     return (
       <div className="flex flex-col items-start py-4 space-y-5" data-testid="consultation-success">
-        <div className="w-10 h-10 rounded-sm flex items-center justify-center bg-accent/10">
-          <CheckCircle2 className="h-5 w-5 text-accent" />
-        </div>
+        {/* Stacked emblem confirms the brand on the request-received state */}
+        <img
+          src="/brand/icons/boise-remodeling-co-emblem-light.svg"
+          alt="Boise Remodeling Co emblem"
+          width={56}
+          height={56}
+          className="h-14 w-14"
+        />
         <div>
           <h3
             ref={successHeadingRef}
@@ -230,19 +235,19 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
 
         <ol className="space-y-3 text-sm text-muted-foreground">
           <li className="flex gap-3">
-            <span className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full border border-border text-[11px] font-semibold text-foreground">
+            <span className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full border border-border text-[11px] font-normal text-foreground">
               1
             </span>
             <span className="pt-0.5">We review your request and any planning range you attached.</span>
           </li>
           <li className="flex gap-3">
-            <span className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full border border-border text-[11px] font-semibold text-foreground">
+            <span className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full border border-border text-[11px] font-normal text-foreground">
               2
             </span>
             <span className="pt-0.5">We reach out within one business day to find a time that works.</span>
           </li>
           <li className="flex gap-3">
-            <span className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full border border-border text-[11px] font-semibold text-foreground">
+            <span className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full border border-border text-[11px] font-normal text-foreground">
               3
             </span>
             <span className="pt-0.5">
@@ -253,7 +258,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
 
         <p className="text-sm text-muted-foreground">
           Need us sooner?{" "}
-          <a href={SITE_CONFIG.phoneHref} className="inline-flex items-center gap-1.5 font-medium text-foreground underline-offset-2 hover:underline">
+          <a href={SITE_CONFIG.phoneHref} className="inline-flex items-center gap-1.5 font-normal text-foreground underline-offset-2 hover:underline">
             <Phone className="h-3.5 w-3.5" />
             {SITE_CONFIG.phone}
           </a>
@@ -307,7 +312,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
 
         {estimate && decision === "confirmed" && (
           <div className="rounded-sm p-4 text-sm bg-accent/5 border border-accent/20">
-            <p className="font-medium mb-1 text-foreground">Planning range from estimator:</p>
+            <p className="font-normal mb-1 text-foreground">Planning range from estimator:</p>
             <p className="text-muted-foreground">
               {projectLabel}
               {finishLabel ? ` · ${finishLabel}` : ""}
@@ -319,7 +324,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
               ) : null}
             </p>
             <p className="mt-1 text-foreground">
-              <DisplayNum className="font-medium">
+              <DisplayNum className="font-normal">
                 {formatPlanningCurrency(estimate.priceLow)} to {formatPlanningCurrency(estimate.priceHigh)}
               </DisplayNum>
             </p>
@@ -395,7 +400,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
             className="rounded-sm p-4 text-sm bg-accent/5 border border-accent/20 space-y-2"
             data-testid="estimate-cta-card"
           >
-            <p className="font-medium text-foreground">Want a planning range first?</p>
+            <p className="font-normal text-foreground">Want a planning range first?</p>
             <p className="text-muted-foreground">
               Use our instant estimator to get a ballpark range for your project, and
               we&apos;ll carry it over to this form automatically.
@@ -425,7 +430,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
         {estimate && decision !== "dropped" && (
           <div className="rounded-sm p-4 text-sm bg-accent/5 border border-accent/20 space-y-3">
             <div>
-              <p className="font-medium mb-1 text-foreground">
+              <p className="font-normal mb-1 text-foreground">
                 Planning range from estimator
               </p>
               <p className="text-muted-foreground" data-testid="text-estimate-summary">
@@ -439,7 +444,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
                 ) : null}
               </p>
               <p className="mt-1 text-foreground" data-testid="text-estimate-range">
-                <DisplayNum className="font-medium">
+                <DisplayNum className="font-normal">
                   {formatPlanningCurrency(estimate.priceLow)} to {formatPlanningCurrency(estimate.priceHigh)}
                 </DisplayNum>
               </p>
@@ -507,7 +512,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
             {decision === "confirmed" && (
               <div className="flex flex-wrap items-center gap-2 border-t border-accent/20 pt-3">
                 <CheckCircle2 className="h-4 w-4 text-accent" />
-                <span className="font-medium text-foreground" data-testid="status-estimate-attached">
+                <span className="font-normal text-foreground" data-testid="status-estimate-attached">
                   This range will be attached to your request.
                 </span>
                 <Button

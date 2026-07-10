@@ -20,10 +20,24 @@ export function Footer() {
       <div className="container px-4 py-16 md:py-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-10 mb-12 lg:gap-0 lg:divide-x lg:divide-inverse-foreground/10 [&>*]:lg:px-6 [&>*:first-child]:lg:pl-0 [&>*:last-child]:lg:pr-0">
           <div>
-            <div className="mb-4">
-              <span className="font-sans font-light text-lg tracking-tight text-inverse-foreground">
-                Boise <em className="brc-accent text-accent">Remodeling</em> Co
-              </span>
+            <div className="mb-5 flex items-center gap-4">
+              {/* Bright emblem badge reads as a mark on the dark footer band */}
+              <img
+                src="/brand/icons/boise-remodeling-co-emblem-light.svg"
+                alt=""
+                aria-hidden="true"
+                width={44}
+                height={44}
+                className="h-11 w-11 shrink-0"
+              />
+              {/* Reverse (white) primary logo with tagline */}
+              <img
+                src="/brand/logos/boise-remodeling-co-logo-primary-reverse.svg"
+                alt="Boise Remodeling Co"
+                width={168}
+                height={45}
+                className="h-[45px] w-auto"
+              />
             </div>
             <p className="text-sm mb-6 text-inverse-muted font-sans">
               {SITE_TAGLINE}.
@@ -68,7 +82,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-sans font-medium text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
+            <h3 className="font-sans font-normal text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
               Services
             </h3>
             <ul className="space-y-2.5">
@@ -86,7 +100,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-sans font-medium text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
+            <h3 className="font-sans font-normal text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
               Resources
             </h3>
             <ul className="space-y-2.5">
@@ -124,7 +138,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-sans font-medium text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
+            <h3 className="font-sans font-normal text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
               Studio
             </h3>
             <ul className="space-y-2.5">
@@ -149,7 +163,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-sans font-medium text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
+            <h3 className="font-sans font-normal text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
               <Link href="/areas" className="hover:text-inverse-foreground transition-colors">
                 Service Areas
               </Link>
@@ -169,7 +183,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-sans font-medium text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
+            <h3 className="font-sans font-normal text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
               From the Blog
             </h3>
             <ul className="space-y-2.5">
@@ -217,7 +231,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-sans font-medium text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
+            <h3 className="font-sans font-normal text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
               Start a Conversation
             </h3>
             <ul className="space-y-2.5">

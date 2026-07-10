@@ -98,7 +98,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                   <div className="rounded-lg border border-accent/20 bg-accent/5 p-5 md:p-6 mb-8">
                     <div className="flex items-center gap-2 mb-2">
                       <BookOpen className="h-5 w-5 text-accent" />
-                      <p className="text-sm font-medium">Part of a larger guide</p>
+                      <p className="text-sm font-normal">Part of a larger guide</p>
                     </div>
                     <p className="text-sm text-muted-foreground mb-3">
                       This article goes deep on one topic. Start with the overview if you have not
@@ -106,7 +106,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                     </p>
                     <Link
                       href={guidePath(pillarSlug)}
-                      className="text-sm text-accent hover:underline inline-flex items-center font-medium"
+                      className="text-sm text-accent hover:underline inline-flex items-center font-normal"
                     >
                       {hub.title}
                       <ArrowRight className="ml-1 h-4 w-4" />
@@ -130,7 +130,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
 
               {post.faqs && post.faqs.length > 0 && (
                 <section className="mt-12 pt-8 border-t border-border" data-testid="blog-faqs">
-                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-3">
+                  <p className="text-xs font-normal uppercase tracking-wider text-muted-foreground mb-3">
                     Common questions
                   </p>
                   <h2 className="text-xl md:text-2xl font-sans font-light tracking-tight text-foreground mb-6">
@@ -143,7 +143,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                         value={`faq-${i}`}
                         className="border-0 border-t border-border"
                       >
-                        <AccordionTrigger className="text-left py-5 hover:no-underline font-sans font-medium text-sm text-foreground">
+                        <AccordionTrigger className="text-left py-5 hover:no-underline font-sans font-normal text-sm text-foreground">
                           {faq.question}
                         </AccordionTrigger>
                         <AccordionContent className="text-sm leading-relaxed pb-6 text-muted-foreground">
@@ -180,7 +180,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                 <div className="mt-6 rounded-lg border border-border p-4">
                   <div className="flex items-center gap-2 mb-3">
                     <Tag className="h-4 w-4 text-muted-foreground" />
-                    <h3 className="font-medium text-sm">Topics</h3>
+                    <h3 className="font-normal text-sm">Topics</h3>
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     {post.tags.map((tag) => (

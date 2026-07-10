@@ -22,14 +22,15 @@ const NAV_LINKS = [
 
 function Logo() {
   return (
-    <Link href="/" className="flex flex-col leading-none">
-      <span className="font-sans text-[1.05rem] font-light tracking-tight text-foreground">
-        Boise Remodeling{" "}
-        <em className="brc-accent text-accent">Co</em>
-      </span>
-      <span className="text-[9px] tracking-[0.15em] uppercase font-sans font-medium mt-0.5 text-muted-foreground">
-        Design &amp; Build
-      </span>
+    <Link href="/" className="flex items-center" aria-label="Boise Remodeling Co - home">
+      {/* Reverse (white) wordmark for the dark ground */}
+      <img
+        src="/brand/logos/boise-remodeling-co-wordmark-reverse.svg"
+        alt="Boise Remodeling Co"
+        width={216}
+        height={26}
+        className="h-[26px] w-auto"
+      />
     </Link>
   );
 }
@@ -80,7 +81,7 @@ export function Navigation() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="px-4 py-2 text-[13px] font-medium transition-colors rounded-sm hover-elevate text-muted-foreground hover:text-foreground"
+                className="px-4 py-2 text-[13px] font-normal transition-colors rounded-sm hover-elevate text-muted-foreground hover:text-foreground"
               >
                 {link.label}
               </Link>
@@ -90,7 +91,7 @@ export function Navigation() {
           <div className="hidden md:flex items-center gap-4">
             <a
               href={SITE_CONFIG.phoneHref}
-              className="flex items-center gap-2 text-[13px] font-medium transition-colors text-muted-foreground hover:text-foreground"
+              className="flex items-center gap-2 text-[13px] font-normal transition-colors text-muted-foreground hover:text-foreground"
               data-testid="link-phone-desktop"
             >
               <span className="relative flex h-2 w-2">
@@ -101,7 +102,7 @@ export function Navigation() {
             </a>
             <a
               href={SITE_CONFIG.phoneSmsHref}
-              className="text-[13px] font-medium transition-colors text-muted-foreground hover:text-foreground"
+              className="text-[13px] font-normal transition-colors text-muted-foreground hover:text-foreground"
               data-testid="link-text-desktop"
             >
               Text us
@@ -161,7 +162,7 @@ export function Navigation() {
               <Link
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="block px-6 py-5 text-2xl font-medium text-muted-foreground hover:text-foreground transition-colors"
+                className="block px-6 py-5 text-2xl font-normal text-muted-foreground hover:text-foreground transition-colors"
                 data-testid={`link-mobile-nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
               >
                 {link.label}
@@ -174,7 +175,7 @@ export function Navigation() {
         <div className="shrink-0 border-t border-border/40 px-6 py-6 space-y-3">
           <a
             href={SITE_CONFIG.phoneHref}
-            className="flex items-center gap-3 text-base font-medium text-foreground"
+            className="flex items-center gap-3 text-base font-normal text-foreground"
             data-testid="link-phone-mobile-menu"
           >
             <span className="relative flex h-2.5 w-2.5">
@@ -185,7 +186,7 @@ export function Navigation() {
           </a>
           <a
             href={SITE_CONFIG.phoneSmsHref}
-            className="flex items-center gap-3 text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-3 text-base font-normal text-muted-foreground hover:text-foreground transition-colors"
             data-testid="link-text-mobile-menu"
           >
             Text us instead
@@ -216,14 +217,14 @@ export function Navigation() {
         <div className="grid grid-cols-3 divide-x divide-border">
           <a
             href={SITE_CONFIG.phoneHref}
-            className="flex items-center justify-center gap-2 py-4 text-sm font-medium text-foreground"
+            className="flex items-center justify-center gap-2 py-4 text-sm font-normal text-foreground"
             data-testid="button-call-mobile"
           >
             Call
           </a>
           <a
             href={SITE_CONFIG.phoneSmsHref}
-            className="flex items-center justify-center gap-2 py-4 text-sm font-medium text-foreground"
+            className="flex items-center justify-center gap-2 py-4 text-sm font-normal text-foreground"
             data-testid="button-text-mobile"
           >
             Text
@@ -231,7 +232,7 @@ export function Navigation() {
           {isHome ? (
             <a
               href="/#consult"
-              className="flex items-center justify-center gap-2 py-4 text-sm font-medium text-foreground"
+              className="flex items-center justify-center gap-2 py-4 text-sm font-normal text-foreground"
               data-testid="button-begin-conversation-mobile"
             >
               {CTA_PRIMARY_SHORT}
@@ -239,7 +240,7 @@ export function Navigation() {
           ) : (
             <button
               onClick={openConsult}
-              className="flex items-center justify-center gap-2 py-4 text-sm font-medium text-foreground"
+              className="flex items-center justify-center gap-2 py-4 text-sm font-normal text-foreground"
               data-testid="button-begin-conversation-mobile"
             >
               {CTA_PRIMARY_SHORT}

@@ -27,7 +27,7 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
                   {item.name}
                 </Link>
               ) : (
-                <span className={isLast ? "text-foreground font-medium" : ""}>
+                <span className={isLast ? "text-foreground font-normal" : ""}>
                   {item.name}
                 </span>
               )}

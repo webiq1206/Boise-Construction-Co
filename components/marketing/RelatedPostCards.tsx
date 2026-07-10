@@ -77,7 +77,7 @@ export function RelatedPostCards({
                     />
                   </div>
                 )}
-                <p className="text-sm font-medium text-foreground group-hover:text-foreground/70 transition-colors">
+                <p className="text-sm font-normal text-foreground group-hover:text-foreground/70 transition-colors">
                   {link.anchor}
                 </p>
               </MarketingCard>

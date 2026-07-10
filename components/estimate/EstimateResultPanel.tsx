@@ -79,7 +79,7 @@ function IncludedSection({ included, project }: { included: string[]; project?: 
 
   return (
     <div className="mb-6" data-testid="typically-included-section">
-      <p className="text-[11px] font-medium mb-2 text-inverse-foreground/90">
+      <p className="text-[11px] font-normal mb-2 text-inverse-foreground/90">
         What&apos;s typically included
       </p>
       <div className="space-y-2 mb-2">

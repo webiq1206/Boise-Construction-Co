@@ -53,7 +53,7 @@ export function WhyChooseUsSection({ limit }: WhyChooseUsSectionProps) {
 
         {limit !== undefined && (
           <p className="text-sm text-muted-foreground text-center mt-6 max-w-xl mx-auto">
-            <a href="/about" className="text-foreground hover:text-foreground/70 transition-colors font-medium">
+            <a href="/about" className="text-foreground hover:text-foreground/70 transition-colors font-normal">
               Learn more about our approach
             </a>
           </p>

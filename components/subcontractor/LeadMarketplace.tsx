@@ -1562,7 +1562,7 @@ function SubcontractorPortalContent() {
 
         {/* Agreement Status */}
         {user && !user.agreementAccepted && (
-          <Alert className="mb-6 border-amber-300 bg-amber-50 dark:bg-amber-950/30">
+          <Alert className="mb-6 border-amber-300 dark:border-amber-700/60 bg-amber-50 dark:bg-amber-950/30">
             <AlertTriangle className="h-4 w-4 text-amber-600" />
             <AlertTitle>Agreement Required</AlertTitle>
             <AlertDescription>

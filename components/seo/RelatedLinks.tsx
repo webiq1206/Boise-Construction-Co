@@ -33,7 +33,7 @@ function ExploreFurther({ serviceSlug }: { serviceSlug?: string }) {
   ];
   return (
     <div className="border-t border-border pt-8">
-      <h2 className="font-sans font-medium text-sm mb-4 text-foreground">Explore further</h2>
+      <h2 className="font-sans font-normal text-sm mb-4 text-foreground">Explore further</h2>
       <ul className="grid sm:grid-cols-2 gap-2">
         {links.map((link) => (
           <li key={link.href} className="list-none">
@@ -87,7 +87,7 @@ export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksPro
             {SERVICES.map((service) => (
               <Link key={service.slug} href={cityServicePath(service.slug, citySlug)}>
                 <MarketingCard className="h-full hover:border-accent/40 transition-colors">
-                  <h3 className="font-medium text-sm text-foreground mb-2">{service.name}</h3>
+                  <h3 className="font-normal text-sm text-foreground mb-2">{service.name}</h3>
                   <p className="text-sm text-muted-foreground">{service.shortDescription}</p>
                 </MarketingCard>
               </Link>
@@ -106,7 +106,7 @@ export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksPro
       <div className="space-y-10">
       <div className="grid md:grid-cols-2 gap-10">
         <div>
-          <h2 className="font-sans font-medium text-sm mb-4 text-foreground">
+          <h2 className="font-sans font-normal text-sm mb-4 text-foreground">
             Same service, nearby cities
           </h2>
           <ul className="space-y-2">
@@ -123,7 +123,7 @@ export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksPro
           </ul>
         </div>
         <div>
-          <h2 className="font-sans font-medium text-sm mb-4 text-foreground">
+          <h2 className="font-sans font-normal text-sm mb-4 text-foreground">
             More services in {CITIES.find((c) => c.slug === citySlug)?.name}
           </h2>
           <ul className="space-y-2">
@@ -139,10 +139,10 @@ export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksPro
             ))}
           </ul>
           <div className="mt-6 pt-6 border-t border-border space-y-2">
-            <Link href={servicePath(serviceSlug)} className="text-sm font-medium text-foreground hover:text-foreground/70">
+            <Link href={servicePath(serviceSlug)} className="text-sm font-normal text-foreground hover:text-foreground/70">
               All {SERVICES.find((s) => s.slug === serviceSlug)?.name} areas →
             </Link>
-            <Link href={areaPath(citySlug)} className="block text-sm font-medium text-foreground hover:text-foreground/70">
+            <Link href={areaPath(citySlug)} className="block text-sm font-normal text-foreground hover:text-foreground/70">
               Remodeling in {CITIES.find((c) => c.slug === citySlug)?.name} →
             </Link>
           </div>

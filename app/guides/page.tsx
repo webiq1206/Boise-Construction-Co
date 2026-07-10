@@ -70,7 +70,7 @@ export default function GuidesIndexPage() {
       />
       <Section spacing="lg" className="pt-28 md:pt-32">
         <div className="container px-4 max-w-4xl mx-auto text-center mb-12">
-          <p className="text-xs font-medium uppercase tracking-wider text-accent mb-3">
+          <p className="text-xs font-normal uppercase tracking-wider text-accent mb-3">
             Treasure Valley authority
           </p>
           <h1 className="text-3xl md:text-4xl font-sans font-light tracking-tight text-foreground mb-4">
@@ -92,14 +92,14 @@ export default function GuidesIndexPage() {
         </div>
 
         <div className="container px-4 max-w-6xl mx-auto mb-16">
-          <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground mb-6">
+          <h2 className="text-sm font-normal uppercase tracking-wider text-muted-foreground mb-6">
             Hub pillar guides
           </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {pillarGuides.map((guide) => (
               <MarketingCard key={guide.slug} className="p-6 flex flex-col h-full">
                 <BookOpen className="h-5 w-5 text-accent mb-3" />
-                <h3 className="font-medium text-lg mb-2">{guide.title}</h3>
+                <h3 className="font-normal text-lg mb-2">{guide.title}</h3>
                 <p className="text-sm text-muted-foreground flex-1 mb-3">{guide.excerpt}</p>
                 <GuideCardStats guide={guide} />
                 <Link
@@ -115,14 +115,14 @@ export default function GuidesIndexPage() {
         </div>
 
         <div className="container px-4 max-w-6xl mx-auto mb-16">
-          <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground mb-6">
+          <h2 className="text-sm font-normal uppercase tracking-wider text-muted-foreground mb-6">
             City &amp; neighborhood guides
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {locationGuides.map((guide) => (
               <MarketingCard key={guide.slug} className="p-5 flex flex-col h-full">
                 <MapPin className="h-4 w-4 text-accent mb-2" />
-                <h3 className="font-medium text-base mb-1">{guide.title}</h3>
+                <h3 className="font-normal text-base mb-1">{guide.title}</h3>
                 <p className="text-sm text-muted-foreground flex-1 mb-2 line-clamp-2">
                   {guide.excerpt}
                 </p>
@@ -140,14 +140,14 @@ export default function GuidesIndexPage() {
         </div>
 
         <div className="container px-4 max-w-6xl mx-auto">
-          <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground mb-6">
+          <h2 className="text-sm font-normal uppercase tracking-wider text-muted-foreground mb-6">
             Browse by topic
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {sortedHubs.map((hub) => {
               return (
                 <MarketingCard key={hub.hubSlug} className="p-5">
-                  <h3 className="font-medium mb-1">{hub.title}</h3>
+                  <h3 className="font-normal mb-1">{hub.title}</h3>
                   <p className="text-sm text-muted-foreground mb-3">{hub.description}</p>
                   <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
                     <Link

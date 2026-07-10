@@ -44,7 +44,7 @@ export default function ResourcesIndexPage() {
     <Section spacing="lg" className="pt-28 md:pt-32">
       <JsonLd data={schemas} />
       <div className="container px-4 max-w-4xl mx-auto">
-        <p className="text-xs font-medium uppercase tracking-wider text-accent mb-3">
+        <p className="text-xs font-normal uppercase tracking-wider text-accent mb-3">
           Free downloads
         </p>
         <h1 className="text-3xl md:text-4xl font-sans font-light tracking-tight text-foreground mb-4">
@@ -58,19 +58,19 @@ export default function ResourcesIndexPage() {
           . These are planning tools - not quotes or contracts.
         </p>
 
-        <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground mb-4">
+        <h2 className="text-sm font-normal uppercase tracking-wider text-muted-foreground mb-4">
           PDF worksheets
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 mb-12">
           {pdfs.map((r) => (
             <MarketingCard key={r.id} className="p-5 flex flex-col h-full">
               <FileText className="h-5 w-5 text-accent mb-3" />
-              <h3 className="font-medium mb-2">{r.title}</h3>
+              <h3 className="font-normal mb-2">{r.title}</h3>
               <p className="text-sm text-muted-foreground flex-1 mb-4">{r.description}</p>
               <a
                 href={r.href}
                 download
-                className="inline-flex items-center text-sm text-accent hover:underline font-medium"
+                className="inline-flex items-center text-sm text-accent hover:underline font-normal"
               >
                 <Download className="h-4 w-4 mr-1" />
                 Download PDF
@@ -79,18 +79,18 @@ export default function ResourcesIndexPage() {
           ))}
         </div>
 
-        <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground mb-4">
+        <h2 className="text-sm font-normal uppercase tracking-wider text-muted-foreground mb-4">
           Visual guides
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
           {visuals.map((r) => (
             <MarketingCard key={r.id} className="p-5 flex flex-col h-full">
               <Workflow className="h-5 w-5 text-accent mb-3" />
-              <h3 className="font-medium mb-2">{r.title}</h3>
+              <h3 className="font-normal mb-2">{r.title}</h3>
               <p className="text-sm text-muted-foreground flex-1 mb-4">{r.description}</p>
               <Link
                 href={r.href}
-                className="inline-flex items-center text-sm text-accent hover:underline font-medium"
+                className="inline-flex items-center text-sm text-accent hover:underline font-normal"
               >
                 View infographic
                 <ArrowRight className="h-4 w-4 ml-1" />

@@ -105,7 +105,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                   >
                     <div className="flex items-center gap-2 mb-3">
                       <BookOpen className="h-5 w-5 text-accent" />
-                      <h2 className="text-base font-medium">Go deeper in this guide</h2>
+                      <h2 className="text-base font-normal">Go deeper in this guide</h2>
                     </div>
                     <p className="text-sm text-muted-foreground mb-4">
                       Topic-specific articles - read these for detail beyond this overview.
@@ -140,7 +140,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
 
               {guide.faqs.length > 0 && (
                 <section className="mt-12 pt-8 border-t border-border" data-testid="guide-faqs">
-                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-3">
+                  <p className="text-xs font-normal uppercase tracking-wider text-muted-foreground mb-3">
                     Common questions
                   </p>
                   <h2 className="text-xl md:text-2xl font-sans font-light tracking-tight text-foreground mb-6">
@@ -153,7 +153,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                         value={`faq-${i}`}
                         className="border-0 border-t border-border"
                       >
-                        <AccordionTrigger className="text-left py-5 hover:no-underline font-sans font-medium text-sm text-foreground">
+                        <AccordionTrigger className="text-left py-5 hover:no-underline font-sans font-normal text-sm text-foreground">
                           {faq.question}
                         </AccordionTrigger>
                         <AccordionContent className="text-sm leading-relaxed pb-6 text-muted-foreground">

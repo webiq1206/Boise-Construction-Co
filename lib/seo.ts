@@ -254,9 +254,9 @@ export function generateSafePageTitle(primary: string, suffix?: string): string 
  * Default Open Graph / Twitter image path used as a site-wide fallback so every
  * page emits an og:image. Pages with their own hero (blog posts, guides) override
  * this with a more specific image.
- * TODO: Replace with a purpose-built 1200x630 social card asset.
+ * Purpose-built 1200x630 dark social card: reverse wordmark + Maker's Seal on #1C1F1E.
  */
-export const DEFAULT_OG_IMAGE_PATH = '/images/hero-remodel-interior.webp';
+export const DEFAULT_OG_IMAGE_PATH = '/images/og-default.png';
 
 /**
  * Absolute URL for the default Open Graph image.

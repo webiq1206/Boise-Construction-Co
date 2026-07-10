@@ -291,10 +291,16 @@ export function StripePaymentForm({
           options={{
             clientSecret,
             appearance: {
-              theme: "stripe",
+              // Dark-only brand: Stripe's night base tuned to the BRC palette
+              theme: "night",
               variables: {
-                colorPrimary: "#2D8652",
+                colorPrimary: "#93A386",      /* sage accent */
+                colorBackground: "#1F2321",   /* input field */
+                colorText: "#E6E3DE",
+                colorTextSecondary: "#9AA098",
+                colorDanger: "#C77B6B",
                 borderRadius: "8px",
+                fontFamily: "Montserrat, system-ui, sans-serif",
               },
             },
           }}

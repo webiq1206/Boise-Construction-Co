@@ -4,20 +4,26 @@
   "description": "Design-build remodeling for kitchens, bathrooms, and whole-home renovations in the Treasure Valley, Idaho.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f8f5f0",
-  "theme_color": "#3A3E3D",
+  "background_color": "#1C1F1E",
+  "theme_color": "#1C1F1E",
   "icons": [
     {
-      "src": "/images/brc-icon.png",
+      "src": "/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/images/brc-icon.png",
+      "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

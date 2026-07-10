@@ -98,7 +98,7 @@ function SelectButton<T extends string>({
             {active && (
               <Check className="absolute top-2.5 right-2.5 h-3.5 w-3.5 text-foreground" />
             )}
-            <span className="font-medium text-xs text-foreground">{opt.label}</span>
+            <span className="font-normal text-xs text-foreground">{opt.label}</span>
             {opt.sub && (
               <span className="text-[11px] leading-snug text-muted-foreground">{opt.sub}</span>
             )}
@@ -208,7 +208,7 @@ function ProjectTiles({
             )}
           >
             {active && <Check className="absolute top-3 right-3 h-4 w-4 text-foreground" />}
-            <span className="font-medium text-sm text-foreground">{info.label}</span>
+            <span className="font-normal text-sm text-foreground">{info.label}</span>
             <span className="text-xs text-muted-foreground">{info.sub}</span>
           </button>
         );
@@ -253,7 +253,7 @@ function FinishTiles({
             )}
           >
             {active && <Check className="absolute top-3 right-3 h-4 w-4 text-foreground" />}
-            <span className="font-medium text-sm text-foreground">{info.label}</span>
+            <span className="font-normal text-sm text-foreground">{info.label}</span>
             <span className="text-xs text-muted-foreground">{info.sub}</span>
             {project && (
               <span className="text-[11px] leading-snug text-muted-foreground/90 mt-0.5">
@@ -310,7 +310,7 @@ function SizePicker({
                 !presets && "opacity-50 cursor-not-allowed"
               )}
             >
-              <span className="font-medium text-xs text-foreground">{preset.label}</span>
+              <span className="font-normal text-xs text-foreground">{preset.label}</span>
               {presets && (
                 <span className="text-[11px] text-muted-foreground">
                   ~{preset.sqft.toLocaleString()} sqft
@@ -510,10 +510,10 @@ function RefinementFields({
 function StepHeader({ num, label }: { num: number; label: string }) {
   return (
     <div className="flex items-center gap-3 mb-5">
-      <span className="flex-shrink-0 flex items-center justify-center h-7 w-7 rounded-full border border-primary/60 text-primary text-[11px] font-semibold tracking-wide">
+      <span className="flex-shrink-0 flex items-center justify-center h-7 w-7 rounded-full border border-primary/60 text-primary text-[11px] font-normal tracking-wide">
         {num}
       </span>
-      <span className="font-sans font-medium text-sm text-foreground tracking-wide">{label}</span>
+      <span className="font-sans font-normal text-sm text-foreground tracking-wide">{label}</span>
     </div>
   );
 }
@@ -883,7 +883,7 @@ export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitPr
           aria-controls="refine-estimate-panel"
         >
           <div>
-            <span className="font-medium text-sm block text-foreground">
+            <span className="font-normal text-sm block text-foreground">
               Improve estimate accuracy
             </span>
             <span className="text-xs text-muted-foreground">

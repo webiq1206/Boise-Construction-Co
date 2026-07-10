@@ -269,7 +269,7 @@ export function AddressAutocomplete({
                 <span>
                   {s.mainText ? (
                     <>
-                      <span className="font-medium text-foreground">{s.mainText}</span>
+                      <span className="font-normal text-foreground">{s.mainText}</span>
                       {s.secondaryText && (
                         <span className="block text-xs text-muted-foreground">
                           {s.secondaryText}
@@ -316,7 +316,7 @@ export function AddressAutocomplete({
           <div className="flex items-start gap-2">
             <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
             <div>
-              <p className="font-medium text-foreground">Property located</p>
+              <p className="font-normal text-foreground">Property located</p>
               <p className="text-muted-foreground text-xs mt-0.5">
                 {buildCleanAddress(profile) || profile.formattedAddress}
               </p>

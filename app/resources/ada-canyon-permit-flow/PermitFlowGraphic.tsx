@@ -28,10 +28,10 @@ function FlowStep({
         className,
       )}
     >
-      <span className="absolute -top-2.5 -left-2.5 flex h-7 w-7 items-center justify-center rounded-full bg-accent text-xs font-semibold text-accent-foreground">
+      <span className="absolute -top-2.5 -left-2.5 flex h-7 w-7 items-center justify-center rounded-full bg-accent text-xs font-normal text-accent-foreground">
         {n}
       </span>
-      <p className="font-medium text-sm text-foreground mt-1">{title}</p>
+      <p className="font-normal text-sm text-foreground mt-1">{title}</p>
       <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{body}</p>
     </div>
   );
@@ -50,7 +50,7 @@ function CountyColumn({
 }) {
   return (
     <div className={cn('rounded-xl border-2 p-5 md:p-6', accentClass)}>
-      <h3 className="text-lg font-medium text-foreground">{title}</h3>
+      <h3 className="text-lg font-normal text-foreground">{title}</h3>
       <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
       <ul className="mt-4 space-y-1.5 text-sm text-foreground">
         {cities.map((c) => (
@@ -68,7 +68,7 @@ export function PermitFlowGraphic() {
   return (
     <div className="space-y-10" data-testid="permit-flow-graphic">
       <div>
-        <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground mb-4">
+        <h2 className="text-sm font-normal uppercase tracking-wider text-muted-foreground mb-4">
           Typical permit path
         </h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -87,7 +87,7 @@ export function PermitFlowGraphic() {
       </div>
 
       <div>
-        <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground mb-4">
+        <h2 className="text-sm font-normal uppercase tracking-wider text-muted-foreground mb-4">
           Which county?
         </h2>
         <div className="grid md:grid-cols-2 gap-4">
@@ -107,14 +107,14 @@ export function PermitFlowGraphic() {
       </div>
 
       <div className="rounded-lg border border-dashed border-border p-5 bg-muted/20">
-        <h2 className="text-sm font-medium text-foreground mb-3">Usually needs permits</h2>
+        <h2 className="text-sm font-normal text-foreground mb-3">Usually needs permits</h2>
         <div className="grid sm:grid-cols-2 gap-x-8 gap-y-2 text-sm text-muted-foreground">
           <span>Wall removal / beams</span>
           <span>Plumbing relocations</span>
           <span>Panel or circuit additions</span>
           <span>Additions & ADUs</span>
         </div>
-        <h2 className="text-sm font-medium text-foreground mt-5 mb-3">Often minimal review</h2>
+        <h2 className="text-sm font-normal text-foreground mt-5 mb-3">Often minimal review</h2>
         <div className="grid sm:grid-cols-2 gap-x-8 gap-y-2 text-sm text-muted-foreground">
           <span>Like-for-like fixture swap</span>
           <span>Cabinet refacing (no MEP)</span>
@@ -124,15 +124,15 @@ export function PermitFlowGraphic() {
       </div>
 
       <div className="overflow-x-auto">
-        <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground mb-4">
+        <h2 className="text-sm font-normal uppercase tracking-wider text-muted-foreground mb-4">
           Timeline comparison (layout changes)
         </h2>
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="border-b border-border">
-              <th className="text-left py-2 pr-4 font-medium text-foreground">Phase</th>
-              <th className="text-left py-2 pr-4 font-medium text-foreground">Ada County</th>
-              <th className="text-left py-2 font-medium text-foreground">Canyon County</th>
+              <th className="text-left py-2 pr-4 font-normal text-foreground">Phase</th>
+              <th className="text-left py-2 pr-4 font-normal text-foreground">Ada County</th>
+              <th className="text-left py-2 font-normal text-foreground">Canyon County</th>
             </tr>
           </thead>
           <tbody className="text-muted-foreground">

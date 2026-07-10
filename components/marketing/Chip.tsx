@@ -15,7 +15,7 @@ export function Chip({ children, active, className, onClick }: ChipProps) {
       type={onClick ? "button" : undefined}
       onClick={onClick}
       className={cn(
-        "inline-flex items-center rounded-sm px-3 py-1 text-xs font-medium tracking-wide transition-colors duration-200 ease-out",
+        "inline-flex items-center rounded-sm px-3 py-1 text-xs font-normal tracking-wide transition-colors duration-200 ease-out",
         active
           ? "bg-primary text-primary-foreground"
           : "bg-[hsl(var(--surface-muted))] text-foreground",

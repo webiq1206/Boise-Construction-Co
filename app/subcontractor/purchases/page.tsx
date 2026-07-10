@@ -637,7 +637,7 @@ export default function PurchaseHistoryPage() {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-                <Leaf className="w-5 h-5 text-white" />
+                <Leaf className="w-5 h-5 text-primary-foreground" />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-primary">Purchase History</h1>

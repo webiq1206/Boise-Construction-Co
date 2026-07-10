@@ -39,7 +39,7 @@ export function ServicesGrid() {
                     className="object-cover img-brand-grade transition-transform duration-300 ease-out group-hover:scale-[1.02]"
                   />
                 </div>
-                <h3 className="font-sans font-medium text-base mb-2 text-foreground">
+                <h3 className="font-sans font-normal text-base mb-2 text-foreground">
                   {service.name}
                 </h3>
                 <p className="text-sm leading-relaxed mb-4 text-muted-foreground">

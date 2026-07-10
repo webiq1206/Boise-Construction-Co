@@ -19,14 +19,14 @@ export function GuideContentBlocks({
           className="quick-answer rounded-lg border border-accent/20 bg-accent/5 p-5 md:p-6"
           data-speakable="summary"
         >
-          <p className="text-xs font-medium uppercase tracking-wider text-accent mb-2">Quick answer</p>
+          <p className="text-xs font-normal uppercase tracking-wider text-accent mb-2">Quick answer</p>
           <p className="text-foreground leading-relaxed">{quickAnswer}</p>
         </div>
       )}
 
       {keyTakeaways && keyTakeaways.length > 0 && (
         <div className="key-takeaways rounded-lg border border-border bg-muted/30 p-5 md:p-6">
-          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-3">
+          <p className="text-xs font-normal uppercase tracking-wider text-muted-foreground mb-3">
             Key takeaways
           </p>
           <ul className="space-y-2 text-sm md:text-base text-foreground list-disc pl-5">
@@ -53,7 +53,7 @@ export function GuideJumpChips({ headings }: GuideJumpChipsProps) {
 
   return (
     <nav className="lg:hidden mb-6" aria-label="Jump to section" data-testid="guide-jump-chips">
-      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-2">
+      <p className="text-xs font-normal uppercase tracking-wider text-muted-foreground mb-2">
         Jump to
       </p>
       <div className="flex flex-wrap gap-2">
@@ -84,7 +84,7 @@ export function GuideSidebarToc({ headings }: GuideSidebarTocProps) {
       aria-label="Table of contents"
       data-testid="guide-toc"
     >
-      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-3">
+      <p className="text-xs font-normal uppercase tracking-wider text-muted-foreground mb-3">
         On this page
       </p>
       <ol className="space-y-1 text-sm">

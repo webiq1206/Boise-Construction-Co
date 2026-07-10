@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     description:
       `${SITE_TAGLINE}. Kitchen, bathroom, whole-home, and addition remodeling across the Treasure Valley.`,
     type: "website",
-    images: [{ url: SITE_IMAGES.hero, width: 1200, height: 630, alt: "Boise Remodeling Co" }],
+    images: [{ url: "/images/og-default.png", width: 1200, height: 630, alt: "Boise Remodeling Co" }],
   },
 };
 

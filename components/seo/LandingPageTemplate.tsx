@@ -92,7 +92,7 @@ function HeroBreadcrumbs({ items }: { items: BreadcrumbItem[] }) {
                   {item.name}
                 </Link>
               ) : (
-                <span className={isLast ? 'text-inverse-foreground/90 font-medium' : ''}>
+                <span className={isLast ? 'text-inverse-foreground/90 font-normal' : ''}>
                   {item.name}
                 </span>
               )}
@@ -229,7 +229,7 @@ export function LandingPageTemplate({
                     >
                       <Check className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
                       <span className="text-sm leading-relaxed">
-                        <strong className="font-medium text-foreground">{lead}</strong>
+                        <strong className="font-normal text-foreground">{lead}</strong>
                         {body && (
                           <span className="text-muted-foreground">{', '}{body}</span>
                         )}
@@ -328,7 +328,7 @@ export function LandingPageTemplate({
                         {formatStepNumber(i)}
                       </DisplayNum>
                       <div>
-                        <h3 className="font-medium text-base text-foreground mb-1.5">{step.title}</h3>
+                        <h3 className="font-normal text-base text-foreground mb-1.5">{step.title}</h3>
                         <p className="text-sm text-muted-foreground leading-relaxed">
                           {step.description}
                         </p>
@@ -356,7 +356,7 @@ export function LandingPageTemplate({
                       <div className="w-0.5 bg-accent/50 flex-shrink-0 rounded-full" />
                       <div>
                         <div className="brc-label mb-3">Planning details</div>
-                        <h3 className="font-sans font-medium text-base text-foreground mt-3 mb-3">
+                        <h3 className="font-sans font-normal text-base text-foreground mt-3 mb-3">
                           Typical timeline
                         </h3>
                         <p className="text-sm text-muted-foreground leading-relaxed">{timeline}</p>
@@ -372,7 +372,7 @@ export function LandingPageTemplate({
                       <div className="w-0.5 bg-accent/50 flex-shrink-0 rounded-full" />
                       <div>
                         <div className="brc-label mb-3">Local details</div>
-                        <h3 className="font-sans font-medium text-base text-foreground mt-3 mb-3">
+                        <h3 className="font-sans font-normal text-base text-foreground mt-3 mb-3">
                           Local notes
                         </h3>
                         <p className="text-sm text-muted-foreground leading-relaxed">{localNote}</p>
@@ -403,7 +403,7 @@ export function LandingPageTemplate({
                   ))}
                   {section.subsections?.map((sub) => (
                     <div key={sub.heading} className="mt-6">
-                      <h3 className="font-sans font-medium text-base text-foreground mb-2">
+                      <h3 className="font-sans font-normal text-base text-foreground mb-2">
                         {sub.heading}
                       </h3>
                       {sub.paragraphs.map((p, k) => (
@@ -419,7 +419,7 @@ export function LandingPageTemplate({
                         <li key={link.href} className="list-none">
                           <Link
                             href={link.href}
-                            className="inline-flex items-center text-sm text-accent hover:underline font-medium"
+                            className="inline-flex items-center text-sm text-accent hover:underline font-normal"
                           >
                             {link.label}
                             <ArrowRight className="ml-1 h-3.5 w-3.5" />
@@ -476,13 +476,13 @@ export function LandingPageTemplate({
                             sizes="(max-width: 640px) 50vw, 25vw"
                             className="object-cover"
                           />
-                          <span className="absolute bottom-1 left-1 text-[10px] uppercase tracking-wide bg-accent text-white px-1.5 py-0.5 rounded">
+                          <span className="absolute bottom-1 left-1 text-[10px] uppercase tracking-wide bg-accent text-accent-foreground px-1.5 py-0.5 rounded">
                             After
                           </span>
                         </div>
                       </div>
                       <div className="p-5">
-                        <h3 className="font-medium text-base text-foreground mb-1.5">
+                        <h3 className="font-normal text-base text-foreground mb-1.5">
                           {project.title}
                         </h3>
                         <p className="text-sm text-muted-foreground leading-relaxed">
@@ -511,7 +511,7 @@ export function LandingPageTemplate({
                       <blockquote className="text-sm text-muted-foreground leading-relaxed mb-3">
                         &ldquo;{t.quote}&rdquo;
                       </blockquote>
-                      <cite className="text-sm font-medium text-foreground not-italic">
+                      <cite className="text-sm font-normal text-foreground not-italic">
                         {t.name}
                       </cite>
                     </MarketingCard>
@@ -538,7 +538,7 @@ export function LandingPageTemplate({
                   value={`faq-${i}`}
                   className="border-0 border-t border-border"
                 >
-                  <AccordionTrigger className="text-left py-5 hover:no-underline font-sans font-medium text-sm text-foreground">
+                  <AccordionTrigger className="text-left py-5 hover:no-underline font-sans font-normal text-sm text-foreground">
                     {faq.question}
                   </AccordionTrigger>
                   <AccordionContent className="text-sm leading-relaxed pb-6 text-muted-foreground">

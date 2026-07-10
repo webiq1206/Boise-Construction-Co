@@ -35,6 +35,16 @@ export const metadata: Metadata = {
   authors: [{ name: 'Boise Remodeling Co' }],
   creator: 'Boise Remodeling Co',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://boiseremodeling.co'),
+  // Favicon set built from the Maker's Seal (boise-remodeling-co-seal-dark).
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    apple: [{ url: '/icons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -42,13 +52,13 @@ export const metadata: Metadata = {
     siteName: 'Boise Remodeling Co',
     title: 'Boise Remodeling Co | Treasure Valley Design-Build',
     description: `${SITE_TAGLINE}. Kitchen, bathroom, whole-home, and addition remodeling across the Treasure Valley.`,
-    images: [{ url: '/images/hero-remodel-interior.webp', width: 1200, height: 630, alt: 'Boise Remodeling Co' }],
+    images: [{ url: '/images/og-default.png', width: 1200, height: 630, alt: 'Boise Remodeling Co' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Boise Remodeling Co | Treasure Valley Design-Build',
     description: `${SITE_TAGLINE}. Design-build remodeling for Boise and the Treasure Valley.`,
-    images: ['/images/hero-remodel-interior.webp'],
+    images: ['/images/og-default.png'],
   },
   robots: {
     index: true,
@@ -64,7 +74,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#3A3E3D',
+  themeColor: '#1C1F1E',
+  colorScheme: 'dark',
   width: 'device-width',
   initialScale: 1,
   // Required for env(safe-area-inset-*) to resolve on notched devices, so
@@ -78,7 +89,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${montserrat.variable} ${fraunces.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`dark ${montserrat.variable} ${fraunces.variable}`} style={{ colorScheme: 'dark' }} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{

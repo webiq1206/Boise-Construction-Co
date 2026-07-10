@@ -64,7 +64,7 @@ export default function AdaCanyonPermitFlowPage() {
             Planning resources
           </Link>
 
-          <p className="text-xs font-medium uppercase tracking-wider text-accent mb-3">
+          <p className="text-xs font-normal uppercase tracking-wider text-accent mb-3">
             Visual guide
           </p>
           <h1 className="text-3xl md:text-4xl font-sans font-light tracking-tight text-foreground mb-4">
@@ -79,7 +79,7 @@ export default function AdaCanyonPermitFlowPage() {
             <a
               href="/downloads/ada-canyon-permit-guide.pdf"
               download
-              className="inline-flex items-center gap-2 rounded-md bg-accent text-accent-foreground px-4 py-2 text-sm font-medium hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-md bg-accent text-accent-foreground px-4 py-2 text-sm font-normal hover:opacity-90"
             >
               <Download className="h-4 w-4" />
               Download PDF reference

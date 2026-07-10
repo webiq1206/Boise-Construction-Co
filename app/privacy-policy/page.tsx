@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     description: "How we protect your data when you use Boise Remodeling Co remodeling and renovation services in Idaho.",
     url: PRIVACY_CANONICAL,
     type: "website",
-    images: [{ url: "/images/hero-remodel-interior.png", width: 1200, height: 630, alt: "Boise Remodeling Co" }],
+    images: [{ url: "/images/og-default.png", width: 1200, height: 630, alt: "Boise Remodeling Co" }],
   },
   twitter: {
     card: "summary_large_image",

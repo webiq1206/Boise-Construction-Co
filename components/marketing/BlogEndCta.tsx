@@ -22,7 +22,7 @@ export function BlogEndCta() {
         <a
           href={SITE_CONFIG.phoneHref}
           data-testid="link-bottom-cta-call"
-          className="inline-flex items-center justify-center gap-2 rounded-sm border border-inverse-foreground/30 bg-inverse-foreground/10 px-4 py-2 min-h-11 text-sm font-medium text-inverse-foreground transition-colors hover-elevate"
+          className="inline-flex items-center justify-center gap-2 rounded-sm border border-inverse-foreground/30 bg-inverse-foreground/10 px-4 py-2 min-h-11 text-sm font-normal text-inverse-foreground transition-colors hover-elevate"
         >
           <Phone className="h-4 w-4" />
           {SITE_CONFIG.phone}
@@ -30,7 +30,7 @@ export function BlogEndCta() {
         <a
           href={SITE_CONFIG.phoneSmsHref}
           data-testid="link-bottom-cta-text"
-          className="inline-flex items-center justify-center gap-2 rounded-sm border border-inverse-foreground/30 bg-inverse-foreground/10 px-4 py-2 min-h-11 text-sm font-medium text-inverse-foreground transition-colors hover-elevate"
+          className="inline-flex items-center justify-center gap-2 rounded-sm border border-inverse-foreground/30 bg-inverse-foreground/10 px-4 py-2 min-h-11 text-sm font-normal text-inverse-foreground transition-colors hover-elevate"
         >
           <MessageSquare className="h-4 w-4" />
           Text us

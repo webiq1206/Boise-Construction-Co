@@ -39,7 +39,7 @@ export function FeaturedProjectSection() {
           aspectClass="aspect-[16/10] md:aspect-[16/9]"
           caption={
             <>
-              <p className="font-sans font-medium text-sm text-inverse-foreground mb-1">
+              <p className="font-sans font-normal text-sm text-inverse-foreground mb-1">
                 {project.title}
               </p>
               <p className="text-sm text-inverse-muted max-w-xl">{project.description}</p>

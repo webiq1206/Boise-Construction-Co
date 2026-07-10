@@ -86,7 +86,7 @@ function HeroBreadcrumbs() {
                   {item.name}
                 </Link>
               ) : (
-                <span className={isLast ? 'text-inverse-foreground/90 font-medium' : ''}>
+                <span className={isLast ? 'text-inverse-foreground/90 font-normal' : ''}>
                   {item.name}
                 </span>
               )}
@@ -435,7 +435,7 @@ export default function ContactPage() {
                     value={`faq-${i}`}
                     className="border-0 border-t border-border"
                   >
-                    <AccordionTrigger className="text-left py-5 hover:no-underline font-sans font-medium text-sm text-foreground">
+                    <AccordionTrigger className="text-left py-5 hover:no-underline font-sans font-normal text-sm text-foreground">
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent className="text-sm leading-relaxed pb-6 text-muted-foreground">
@@ -469,7 +469,7 @@ export default function ContactPage() {
                 <Reveal key={city.slug} delay={Math.min(i, 7) * 50}>
                   <Link href={`/areas/${city.slug}`} className="block h-full group">
                     <MarketingCard className="h-full transition-colors group-hover:border-foreground/20">
-                      <p className="font-sans font-medium text-sm text-foreground mb-0.5">
+                      <p className="font-sans font-normal text-sm text-foreground mb-0.5">
                         {city.name}
                       </p>
                       <p className="text-xs text-muted-foreground">Idaho</p>

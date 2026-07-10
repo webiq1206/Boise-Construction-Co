@@ -939,7 +939,7 @@ function AdminDashboardContent({ embedded = false }: { embedded?: boolean }) {
         case "urgent": return "bg-red-600 text-white";
         case "high": return "bg-orange-600 text-white";
         case "normal": return "bg-blue-600 text-white";
-        case "low": return "bg-gray-400 text-white";
+        case "low": return "bg-slate-600 text-white";
         default: return "bg-blue-600 text-white";
       }
     };
