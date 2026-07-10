@@ -8,19 +8,25 @@ Before/after record of changes made during audit passes. Most recent first.
 
 Implemented every remaining audit item that does not require external/owner data.
 
-### 5. Named-expert authorship (E-E-A-T)
-**Files:** `shared/authors.ts` (new), `components/marketing/AuthorBio.tsx` (new),
-`components/marketing/BlogPostLayout.tsx`, `components/marketing/GuidePageLayout.tsx`,
-`app/blog/[slug]/page.tsx`, `app/guides/[slug]/page.tsx`.
-- **Before:** guides used `author: 'Boise Remodeling Co'` (org), the guide page passed no author
-  to the Article schema, and no page had a visible author bio.
-- **After:** content is attributed to **Jared Brost, Founder** as a single source of truth
-  (`EXPERT_AUTHOR`). Article schema now emits `author: { @type: Person, name: "Jared Brost",
-  url: ".../about#team" }` on all 79 blog posts + 26 guides (verified). Byline links to
-  `/about#team`; a visible "Written by" **AuthorBio** block with credentials renders at the end of
-  every article and guide (verified `data-testid="author-bio"`).
-- **Why:** named, described, accountable authorship is a primary E-E-A-T signal for a founder-led
-  local remodeler and a citation trust signal for AI answer engines.
+### 5. Editorial authorship — company attribution (per owner request)
+**Files:** `shared/authors.ts`, `components/marketing/BlogPostLayout.tsx`,
+`components/marketing/GuidePageLayout.tsx`, `app/blog/[slug]/page.tsx`, `app/guides/[slug]/page.tsx`,
+`app/about/page.tsx`, `lib/seo.ts`, `public/llms.txt`, `shared/reviewOutreach.ts`,
+`shared/gbpProfile.ts`.
+- **Decision:** the owner does not want any individual named on the site and has no personal bio,
+  so content is attributed to **Boise Remodeling Co** (the company), not a named person. (An
+  earlier pass had briefly wired named authorship + an author-bio block; that was fully reverted.)
+- **After:** Article schema emits an **Organization** author on all 79 posts + 26 guides
+  (`author: { @type: Organization, name: "Boise Remodeling Co" }`, verified). Byline reads
+  "Boise Remodeling Co" linked to `/about`. The About page "Founder / Jared Brost" section was
+  replaced with an "Our commitment / one accountable team" company block. `BUSINESS_INFO.founderName`
+  emptied so the Organization schema omits the `founder` Person entity (verified absent). All
+  Jared/Brost mentions removed from the About page, guides, blog, `llms.txt`, and the review-outreach
+  / GBP-plan templates. (The only remaining reference is the private admin-login email in
+  `lib/auth.ts`, which is a backend auth credential, not site content — left intact so admin access
+  is not broken.)
+- **Note:** without a named expert author, E-E-A-T relies on company-level signals; the biggest
+  remaining lift is still real third-party reviews (see Critical #1).
 
 ### 6. Conversion-event tracking (calls + form submits)
 **Files:** `lib/analytics.ts` (new), `components/ConversionTracking.tsx` (new),

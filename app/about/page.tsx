@@ -212,16 +212,15 @@ export default function AboutPage() {
                   ))}
                 </ul>
                 <div className="mt-8 pt-8 border-t border-border">
-                  <div className="brc-label text-muted-foreground mb-3">Founder</div>
+                  <div className="brc-label text-muted-foreground mb-3">Our commitment</div>
                   <h3 className="font-sans font-normal text-base text-foreground mb-2">
-                    Jared Brost
+                    One accountable team
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Boise Remodeling Co was founded by Jared Brost in 2017. Jared leads the
-                    design-build process on every project, from the first in-home visit through
-                    Ada and Canyon County permitting to the final walkthrough, and is the single
-                    point of accountability behind the company&apos;s written scope and
-                    workmanship guarantee.
+                    Boise Remodeling Co has run design-build remodels across the Treasure Valley
+                    since 2017. One team leads every project from the first in-home visit through
+                    Ada and Canyon County permitting to the final walkthrough, and stands behind a
+                    written scope before construction and a workmanship guarantee on our labor.
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed mt-4">
                     New to remodeling? Start with our guide to{' '}

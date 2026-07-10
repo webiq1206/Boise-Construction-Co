@@ -466,8 +466,8 @@ export const GBP_PHOTO_CHECKLIST = [
   },
   {
     type: 'Team/founder',
-    spec: 'Jared at job site or office',
-    filename: 'jared-brost-project-manager-boise.jpg',
+    spec: 'Team member at job site or office',
+    filename: 'team-project-manager-boise.jpg',
   },
   {
     type: 'Work-in-progress',

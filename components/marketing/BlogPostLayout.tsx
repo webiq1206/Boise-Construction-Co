@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Calendar, Tag, User, BookOpen } from 'lucide-react';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { AuthorBio } from './AuthorBio';
-import { EXPERT_AUTHOR } from '@/shared/authors';
+import { CONTENT_AUTHOR } from '@/shared/authors';
 import {
   Accordion,
   AccordionContent,
@@ -84,11 +83,11 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
               </span>
               <span>{readingTime} min read</span>
               <Link
-                href={EXPERT_AUTHOR.url}
+                href={CONTENT_AUTHOR.url}
                 className="flex items-center gap-2 hover:text-foreground transition-colors"
               >
                 <User className="h-4 w-4" />
-                {EXPERT_AUTHOR.name}
+                {CONTENT_AUTHOR.name}
               </Link>
             </div>
           </header>
@@ -171,8 +170,6 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                   </div>
                 </div>
               )}
-
-              <AuthorBio />
 
               <div className="lg:hidden mt-10">
                 <ArticleSidebarCta ctaDescription="Planning a remodel? Get a free in-home visit and planning range from our team." />

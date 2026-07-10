@@ -442,10 +442,11 @@ export const BUSINESS_INFO = {
   legalName: SITE_CONFIG.legalName,
   alternateName: ['Boise Remodeling', 'BRC'],
   /**
-   * Real founder/owner name; emits a `founder` Person entity on the
-   * Organization schema, linked to /about#team.
+   * No named individual is published on the site by request. Left empty so the
+   * Organization schema omits the `founder` Person entity (the emit is gated on
+   * this being non-empty). Set a name here only if the owner opts in later.
    */
-  founderName: 'Jared Brost',
+  founderName: '',
   phone: SITE_CONFIG.phone,
   email: SITE_CONFIG.email,
   // Service-area business: street address and ZIP intentionally omitted. NAP

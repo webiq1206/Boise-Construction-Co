@@ -15,7 +15,7 @@ This is a **mechanically excellent, genuinely well-architected local site** with
 
 The site is held back in exactly one place: **local proof / reviews.** `reviewCount = 0`, no `AggregateRating` is emitted (correctly — the code refuses to fabricate one), and the on-page testimonials are placeholder initials with generic copy. For a home-remodeler competing in Maps and AI answers, the absence of real, attributable reviews is the single biggest ceiling on local authority and conversion. **This cannot be fixed in code — it needs the owner to supply real reviews and connect the Google Business Profile.** Everything else is polish.
 
-**Overall: B+ (8.2 / 10)** — an A-grade technical site capped by a C-grade local-proof layer.
+**Overall: B+ (8.1 / 10)** — an A-grade technical site capped by a C-grade local-proof layer.
 
 ### Launch blockers
 **None.** No indexing blockers, broken pages, or production-critical failures were found.
@@ -28,14 +28,14 @@ The site is held back in exactly one place: **local proof / reviews.** `reviewCo
 |---|---:|---:|:--:|---|
 | SEO (technical, on-page, indexation, schema, internal linking) | 20 | 9.5 | A+ | 163/163 pages 200; 0 dup/missing titles or descriptions; 1 H1 each; canonical + schema on every page; clean robots/sitemap; HTTPS enforced |
 | Local SEO & geographic authority | 20 | 6.5 | C | Correct `HomeAndConstructionBusiness` + consistent NAP + 9 area & 40 city×service pages, **but** reviewCount 0, no AggregateRating, placeholder testimonials, license "available upon request", GBP link unverified |
-| Content quality & topical authority (incl. E-E-A-T) | 15 | 8.0 | B | Deep content (avg 792 words), pillar+cluster guides, service clusters; **named-expert (Jared Brost) authorship + bios now on all articles/guides**; still capped by absent third-party proof (reviews) |
+| Content quality & topical authority (incl. E-E-A-T) | 15 | 7.5 | B | Deep content (avg 792 words), pillar+cluster guides, service clusters; company-level authorship by owner choice (no named expert); capped by absent third-party proof (reviews) |
 | UX & conversion | 13 | 8.7 | A- | Recent UX pass: accessible Radix nav, inline form validation, breadcrumbs, `/services` hub, portal error states, touch-safe slider; strong CTA system + estimator |
 | GEO (entity clarity, AI readability) | 12 | 9.0 | A | Full main content in raw HTML; `@graph` entity model; `llms.txt`; consistent quotable facts |
 | AEO (answer extraction) | 8 | 8.0 | B | FAQPage ×145, quick-answer blocks, question headings, Speakable, cost/process/"what to expect" content |
 | Performance & Core Web Vitals | 7 | 7.5* | B | *Not measured. SSG + `next/image` (AVIF/WebP) + font preload + progressive reveal predict strong CWV; run PSI to confirm |
 | UI, trust & branding | 5 | 8.5 | A- | Cohesive dark brand system, brand-built favicon/OG, consistent components; trust capped by review absence |
 
-**Weighted overall: 8.18 -> B+**
+**Weighted overall: 8.10 -> B+**
 
 No dimension is capped by a Blocker. Local SEO is the lever: closing the review/proof gap alone would move the overall from B+ toward A-.
 
@@ -53,7 +53,7 @@ No dimension is capped by a Blocker. Local SEO is the lever: closing the review/
 ### Medium
 4. **Thin category-hub pages — FIXED this run.** `/blog/category/remodeling-roi` (332w) and `/outdoor-living` (336w) sat just under the 350-word bar; `/resources` was 311w. Enriched with unique local/authorship intro copy -> now 397w, 393w, and 416w.
 5. **Formulaic short category-hub meta descriptions — FIXED this run.** All 9 hubs shared a 61–69-char template ("Articles about X for Treasure Valley homeowners."). Rewritten to unique, benefit-led ~157-char descriptions from each hub's own description + article count + service-area.
-6. **Author authority was org-level — FIXED this run.** All 79 blog posts and 26 guides are now attributed to **Jared Brost, Founder**: `Person` author on the Article schema (linked to `/about#team`), a linked byline, and a visible "Written by" author-bio block with credentials at the end of every article/guide. Also added: site-wide **conversion-event tracking** (`contact_click` on tel/sms/mailto, `generate_lead` on form submit) and a refreshed `llms.txt` naming the author + `/services`.
+6. **Authorship is company-level by owner choice.** The owner does not want any individual named on the site, so all 79 posts + 26 guides carry an **Organization** author ("Boise Remodeling Co") and a company byline; no named-expert `Person` author or personal bio is published, and the founder Person entity was removed from the Organization schema. This is a deliberate trade-off: E-E-A-T rests on company-level signals rather than a named expert. Also shipped this run: site-wide **conversion-event tracking** (`contact_click` on tel/sms/mailto, `generate_lead` on form submit) and a refreshed `llms.txt` including `/services`.
 7. **Overlapping cost content across clusters.** Kitchen/bathroom cost articles + the cost pillar guide + service-page cost sections cover adjacent intent. *Fix:* confirm one canonical cost target per service and internally link the rest to it (cannibalization guard). Doorway mitigation already exists — see `programmatic-seo-analysis.md`.
 
 ### Low

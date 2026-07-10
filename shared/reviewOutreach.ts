@@ -23,7 +23,7 @@ export function buildReviewResponseTemplate(params: {
   detailTheyMentioned: string;
 }): string {
   const { customerName, city, projectType, detailTheyMentioned } = params;
-  return `Thank you, ${customerName}. We enjoyed your ${city} ${projectType} - especially ${detailTheyMentioned}. Glad the weekly updates and written scope kept things clear. - Jared, ${GBP_NAP.name}`;
+  return `Thank you, ${customerName}. We enjoyed your ${city} ${projectType} - especially ${detailTheyMentioned}. Glad the weekly updates and written scope kept things clear. - The ${GBP_NAP.name} team`;
 }
 
 export function getReviewLink(): string {
@@ -61,7 +61,7 @@ Leave a review: ${reviewLink}
 
 Questions? Call or text ${GBP_NAP.phone} anytime.
 
-- Jared
+- The Boise Remodeling Co team
 ${GBP_NAP.name}
 ${GBP_NAP.phone}
 ${GBP_NAP.website}`;
@@ -72,7 +72,7 @@ ${GBP_NAP.website}`;
 <p>If you have a moment, a Google review helps other ${city} homeowners find a remodeling team they can trust. No script needed - whatever stood out to you (communication, timeline, craftsmanship) is perfect.</p>
 <p><a href="${reviewLink}">Leave a review on Google</a></p>
 <p>Questions? Call or text <a href="tel:2084771169">${GBP_NAP.phone}</a> anytime.</p>
-<p>- Jared<br>${GBP_NAP.name}<br>${GBP_NAP.phone}<br><a href="${GBP_NAP.website}">${GBP_NAP.website.replace(/^https?:\/\//, '')}</a></p>`;
+<p>- The Boise Remodeling Co team<br>${GBP_NAP.name}<br>${GBP_NAP.phone}<br><a href="${GBP_NAP.website}">${GBP_NAP.website.replace(/^https?:\/\//, '')}</a></p>`;
 
   return { subject, preview, bodyText, bodyHtml };
 }
@@ -96,7 +96,7 @@ ${reviewLink}
 
 Either way, thank you again for choosing ${GBP_NAP.name}.
 
-- Jared
+- The Boise Remodeling Co team
 ${GBP_NAP.phone}`;
 
   const bodyHtml = `
@@ -104,7 +104,7 @@ ${GBP_NAP.phone}`;
 <p>Just a gentle follow-up from your ${city} ${projectType}. If you are willing to share a quick Google review, it genuinely helps neighbors researching remodelers in the Treasure Valley.</p>
 <p><a href="${reviewLink}">Leave a review on Google</a></p>
 <p>Either way, thank you again for choosing ${GBP_NAP.name}.</p>
-<p>- Jared<br>${GBP_NAP.phone}</p>`;
+<p>- The Boise Remodeling Co team<br>${GBP_NAP.phone}</p>`;
 
   return { subject, preview, bodyText, bodyHtml };
 }

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { GUIDE_PAGES, getGuideBySlug } from '@/shared/guideContent';
-import { EXPERT_AUTHOR } from '@/shared/authors';
+import { CONTENT_AUTHOR } from '@/shared/authors';
 import {
   generateArticleSchema,
   generateBreadcrumbSchema,
@@ -80,7 +80,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
     description: guide.excerpt,
     publishedAt: guide.publishedAt,
     updatedAt: guide.updatedAt,
-    author: EXPERT_AUTHOR.name,
+    author: CONTENT_AUTHOR.name,
     slug: guide.slug,
     pathPrefix: 'guides',
     image: getAbsoluteImageUrl(getBlogHeroImage(guide.slug, guide.heroImage), getBaseUrl()),
