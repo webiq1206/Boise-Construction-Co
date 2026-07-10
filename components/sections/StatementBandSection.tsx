@@ -7,7 +7,7 @@ export function StatementBandSection() {
     <section className="relative h-48 md:h-64 overflow-hidden">
       <Image
         src={SITE_IMAGES.statementBand}
-        alt="Whole-home remodel after photo in Eagle, Idaho Treasure Valley"
+        alt="Warm open-concept great room and kitchen remodel in the Treasure Valley, Idaho"
         fill
         loading="lazy"
         quality={65}

@@ -10,7 +10,8 @@ export const SITE_IMAGES = {
   // before/after used in the featured slider.
   hero: "/images/hero-great-room.webp",
   process: "/images/process-design-review.webp",
-  statementBand: "/images/gallery/gallery-addition-after.webp",
+  // Warm, furnished great room (licensed stock, Pexels) for the full-bleed band.
+  statementBand: "/images/statement-great-room.webp",
   leadership: "/images/gallery/gallery-kitchen-after.webp",
 } as const;
 
