@@ -5,9 +5,12 @@
  */
 
 export const SITE_IMAGES = {
-  hero: "/images/hero-remodel-interior.webp",
+  // Hero: a massive great room with an open kitchen in the background.
+  hero: "/images/gallery/gallery-whole-home-after.webp",
   process: "/images/process-design-review.webp",
-  statementBand: "/images/gallery/gallery-whole-home-after.webp",
+  // Statement band moved off the great room so it does not repeat the hero on
+  // the home page.
+  statementBand: "/images/gallery/gallery-addition-after.webp",
   leadership: "/images/gallery/gallery-kitchen-after.webp",
 } as const;
 
