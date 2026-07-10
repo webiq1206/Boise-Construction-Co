@@ -73,7 +73,7 @@ export default function HomePage() {
                 <div className="brc-label mb-5">Begin a conversation</div>
                 <h2 className="font-sans font-light text-[2rem] md:text-[2.75rem] lg:text-[3.25rem] leading-[1.08] tracking-tight mb-4 text-foreground">
                   Tell us about your{" "}
-                  <em className="brc-accent text-accent">home</em>.
+                  <em className="brc-accent">home</em>.
                 </h2>
                 <p className="text-base leading-relaxed mb-8 text-muted-foreground">
                   We will reach out within one business day to schedule your free

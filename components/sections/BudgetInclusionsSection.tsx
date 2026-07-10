@@ -23,7 +23,7 @@ export function BudgetInclusionsSection() {
             title={
               <>
                 Clear guidance on what to{" "}
-                <em className="brc-accent text-accent">expect</em>
+                <em className="brc-accent">expect</em>
               </>
             }
             description="Planning ranges upfront, a written scope before construction, and standard inclusions on every project, so you always know where things stand."

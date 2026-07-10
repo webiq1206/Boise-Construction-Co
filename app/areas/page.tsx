@@ -52,7 +52,7 @@ export default function AreasHubPage() {
               title={
                 <>
                   Treasure Valley service{" "}
-                  <em className="brc-accent text-accent">areas</em>
+                  <em className="brc-accent">areas</em>
                 </>
               }
               description={`We serve homeowners across ${TREASURE_VALLEY_CITIES}, and surrounding communities with kitchen, bathroom, whole-home, and addition remodeling under one design-build team.`}

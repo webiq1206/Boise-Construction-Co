@@ -76,7 +76,7 @@ export default function ServicesIndexPage() {
             title={
               <>
                 Design-build expertise for every major{' '}
-                <em className="brc-accent text-accent">remodel</em>
+                <em className="brc-accent">remodel</em>
               </>
             }
             description="One accountable team handles design, estimating, permitting, and construction under a single contract, so your project stays aligned from the first in-home visit through the final walkthrough."
@@ -118,7 +118,7 @@ export default function ServicesIndexPage() {
               <div className="h-full min-h-[220px] rounded-sm border border-card-border bg-card p-6 md:p-8 flex flex-col justify-center">
                 <div className="brc-label mb-3">Not sure where to start</div>
                 <h2 className="font-sans font-light text-xl md:text-2xl tracking-tight mb-2 text-foreground">
-                  Tell us about your <em className="brc-accent text-accent">project</em>
+                  Tell us about your <em className="brc-accent">project</em>
                 </h2>
                 <p className="text-sm leading-relaxed mb-5 text-muted-foreground">
                   Every remodel starts with a free in-home visit and an honest planning range, with no obligation.
@@ -142,7 +142,7 @@ export default function ServicesIndexPage() {
             title={
               <>
                 Serving communities across the{' '}
-                <em className="brc-accent text-accent">valley</em>
+                <em className="brc-accent">valley</em>
               </>
             }
             description="Permit paths, housing stock, and HOA requirements differ between Ada and Canyon County communities. Choose your city for local guidance."
@@ -169,7 +169,7 @@ export default function ServicesIndexPage() {
         <div className="container px-4 max-w-2xl mx-auto">
           <MarketingCard className="cta-card-dark p-10 md:p-12 text-center">
             <h2 className="font-sans font-light text-section-title mb-4 text-inverse-foreground">
-              Ready to plan your <em className="brc-accent text-accent">remodel</em>?
+              Ready to plan your <em className="brc-accent">remodel</em>?
             </h2>
             <p className="text-inverse-muted mb-8 max-w-md mx-auto">
               Book a free in-home visit or get an instant planning range for your project.

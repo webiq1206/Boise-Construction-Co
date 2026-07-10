@@ -129,7 +129,7 @@ export default function AboutPage() {
             <div className="brc-label text-inverse-muted mt-6 mb-5">About us</div>
             <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-4xl mb-6">
               About Boise Remodeling{' '}
-              <em className="brc-accent text-accent">Co</em>
+              <em className="brc-accent">Co</em>
             </h1>
             <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-4">
               We are a locally owned design-build remodeling company serving the Treasure Valley.
@@ -193,7 +193,7 @@ export default function AboutPage() {
                   title={
                     <>
                       Design-build,{' '}
-                      <em className="brc-accent text-accent">explained</em>
+                      <em className="brc-accent">explained</em>
                     </>
                   }
                   description="Design-build means your designer, estimator, and construction lead work together under one roof. Layout, selections, permits, and schedule stay aligned so your kitchen, bathroom, whole-home, or addition project does not drift between vendors."
@@ -227,14 +227,14 @@ export default function AboutPage() {
                     New to remodeling? Start with our guide to{' '}
                     <Link
                       href="/guides/choose-remodeling-contractor-boise"
-                      className="text-foreground underline underline-offset-2 hover:text-accent"
+                      className="text-foreground underline underline-offset-2 hover:text-accent-legible"
                     >
                       choosing a remodeling contractor in Boise
                     </Link>{' '}
                     or explore our most requested service,{' '}
                     <Link
                       href="/services/kitchen-remodel"
-                      className="text-foreground underline underline-offset-2 hover:text-accent"
+                      className="text-foreground underline underline-offset-2 hover:text-accent-legible"
                     >
                       kitchen remodeling in Boise
                     </Link>
@@ -268,7 +268,7 @@ export default function AboutPage() {
               title={
                 <>
                   Six principles we never{' '}
-                  <em className="brc-accent text-accent">compromise</em> on
+                  <em className="brc-accent">compromise</em> on
                 </>
               }
               className="mb-0 max-w-3xl"
@@ -300,7 +300,7 @@ export default function AboutPage() {
               size="display"
               title={
                 <>
-                  Service <em className="brc-accent text-accent">areas</em>
+                  Service <em className="brc-accent">areas</em>
                 </>
               }
               description={`We serve homeowners in ${TREASURE_VALLEY_CITIES}, and surrounding communities.`}

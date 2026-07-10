@@ -44,7 +44,7 @@ export default function ResourcesIndexPage() {
     <Section spacing="lg" className="pt-28 md:pt-32">
       <JsonLd data={schemas} />
       <div className="container px-4 max-w-4xl mx-auto">
-        <p className="text-xs font-normal uppercase tracking-wider text-accent mb-3">
+        <p className="text-xs font-normal uppercase tracking-wider text-accent-legible mb-3">
           Free downloads
         </p>
         <h1 className="text-3xl md:text-4xl font-sans font-light tracking-tight text-foreground mb-4">
@@ -52,7 +52,7 @@ export default function ResourcesIndexPage() {
         </h1>
         <p className="text-lg text-muted-foreground mb-12 max-w-2xl">
           Printable PDFs and visual guides to use alongside our{' '}
-          <Link href="/guides" className="text-accent hover:underline">
+          <Link href="/guides" className="text-accent-legible hover:underline">
             remodeling guides
           </Link>
           . These are planning tools - not quotes or contracts.
@@ -70,7 +70,7 @@ export default function ResourcesIndexPage() {
               <a
                 href={r.href}
                 download
-                className="inline-flex items-center text-sm text-accent hover:underline font-normal"
+                className="inline-flex items-center text-sm text-accent-legible hover:underline font-normal"
               >
                 <Download className="h-4 w-4 mr-1" />
                 Download PDF
@@ -90,7 +90,7 @@ export default function ResourcesIndexPage() {
               <p className="text-sm text-muted-foreground flex-1 mb-4">{r.description}</p>
               <Link
                 href={r.href}
-                className="inline-flex items-center text-sm text-accent hover:underline font-normal"
+                className="inline-flex items-center text-sm text-accent-legible hover:underline font-normal"
               >
                 View infographic
                 <ArrowRight className="h-4 w-4 ml-1" />
@@ -100,11 +100,11 @@ export default function ResourcesIndexPage() {
         </div>
 
         <p className="text-sm text-muted-foreground mt-12 text-center">
-          <Link href="/guides/boise-remodeling-cost-guide" className="text-accent hover:underline">
+          <Link href="/guides/boise-remodeling-cost-guide" className="text-accent-legible hover:underline">
             Start with the cost guide
           </Link>
           {' · '}
-          <Link href="/contact" className="text-accent hover:underline">
+          <Link href="/contact" className="text-accent-legible hover:underline">
             Schedule a consultation
           </Link>
         </p>

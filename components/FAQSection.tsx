@@ -31,7 +31,7 @@ export function FAQSection() {
             title={
               <>
                 Straight answers to the questions that{" "}
-                <em className="brc-accent text-accent">matter</em>
+                <em className="brc-accent">matter</em>
               </>
             }
             className="mb-10"

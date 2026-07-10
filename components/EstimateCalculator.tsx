@@ -959,7 +959,7 @@ export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitPr
           <div className="brc-label mb-3">Project Estimator</div>
           <h2 className="font-sans font-light text-section-title md:text-section-title-lg mb-3 text-foreground">
             Plan your project{" "}
-            <em className="brc-accent text-accent">investment</em>
+            <em className="brc-accent">investment</em>
           </h2>
           <p className="text-base max-w-2xl leading-relaxed text-muted-foreground mb-3">
             Answer three quick questions for an instant planning range. Nothing is pre-selected

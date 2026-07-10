@@ -29,7 +29,7 @@ export function WhyChooseUsSection({ limit }: WhyChooseUsSectionProps) {
           title={
             <>
               Built for homeowners who want{" "}
-              <em className="brc-accent text-accent">clarity</em>, not chaos
+              <em className="brc-accent">clarity</em>, not chaos
             </>
           }
           description={DIFFERENTIATORS_INTRO}

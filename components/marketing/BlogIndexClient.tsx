@@ -108,7 +108,7 @@ export function BlogIndexClient() {
                     <span className="text-foreground">{activeHubMeta.title}</span>.{' '}
                     <Link
                       href={categoryHubPath(activeHubMeta.hubSlug)}
-                      className="text-accent hover:underline"
+                      className="text-accent-legible hover:underline"
                     >
                       View topic hub
                     </Link>

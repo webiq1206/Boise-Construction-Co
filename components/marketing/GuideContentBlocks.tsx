@@ -19,7 +19,7 @@ export function GuideContentBlocks({
           className="quick-answer rounded-lg border border-accent/20 bg-accent/5 p-5 md:p-6"
           data-speakable="summary"
         >
-          <p className="text-xs font-normal uppercase tracking-wider text-accent mb-2">Quick answer</p>
+          <p className="text-xs font-normal uppercase tracking-wider text-accent-legible mb-2">Quick answer</p>
           <p className="text-foreground leading-relaxed">{quickAnswer}</p>
         </div>
       )}

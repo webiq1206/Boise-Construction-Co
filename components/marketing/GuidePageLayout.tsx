@@ -114,7 +114,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                         <li key={c.slug}>
                           <Link
                             href={`/blog/${c.replacesSlug ?? c.slug}`}
-                            className="text-sm text-accent hover:underline inline-flex items-center"
+                            className="text-sm text-accent-legible hover:underline inline-flex items-center"
                           >
                             {c.title}
                             <ArrowRight className="ml-1 h-3 w-3 shrink-0" />

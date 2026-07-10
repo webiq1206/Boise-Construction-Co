@@ -46,7 +46,7 @@ export function TestimonialsSection({ limit = 4, showViewAll = true }: Testimoni
           title={
             <>
               Trusted for{" "}
-              <em className="brc-accent text-accent">craftsmanship</em> and communication
+              <em className="brc-accent">craftsmanship</em> and communication
             </>
           }
           description="Clear communication, reliable timelines, and quality homeowners notice every day."

@@ -109,7 +109,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                     </p>
                     <Link
                       href={guidePath(pillarSlug)}
-                      className="text-sm text-accent hover:underline inline-flex items-center font-normal"
+                      className="text-sm text-accent-legible hover:underline inline-flex items-center font-normal"
                     >
                       {hub.title}
                       <ArrowRight className="ml-1 h-4 w-4" />
@@ -119,7 +119,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                         <span className="text-muted-foreground mx-2">·</span>
                         <Link
                           href={categoryHubPath(post.hubSlug)}
-                          className="text-sm text-muted-foreground hover:text-accent hover:underline"
+                          className="text-sm text-muted-foreground hover:text-accent-legible hover:underline"
                         >
                           All articles in this topic
                         </Link>

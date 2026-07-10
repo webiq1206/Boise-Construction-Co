@@ -64,7 +64,7 @@ export default function AdaCanyonPermitFlowPage() {
             Planning resources
           </Link>
 
-          <p className="text-xs font-normal uppercase tracking-wider text-accent mb-3">
+          <p className="text-xs font-normal uppercase tracking-wider text-accent-legible mb-3">
             Visual guide
           </p>
           <h1 className="text-3xl md:text-4xl font-sans font-light tracking-tight text-foreground mb-4">
@@ -114,7 +114,7 @@ export default function AdaCanyonPermitFlowPage() {
             </ConsultCTA>
             <Link
               href="/guides/boise-remodeling-process-guide"
-              className="inline-flex items-center text-sm text-accent hover:underline"
+              className="inline-flex items-center text-sm text-accent-legible hover:underline"
             >
               Remodeling process guide
             </Link>

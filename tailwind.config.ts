@@ -66,6 +66,9 @@ export default {
           foreground: "hsl(var(--accent-foreground) / <alpha-value>)",
           border: "var(--accent-border)",
         },
+        // Lifted sage for readable links/hover so they stay AA on the dark ground
+        // (the small-accent --accent is the deeper #5D6561, too dark for text).
+        "accent-legible": "hsl(var(--accent-legible) / <alpha-value>)",
         destructive: {
           DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
           foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",

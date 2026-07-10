@@ -70,7 +70,7 @@ export default function GuidesIndexPage() {
       />
       <Section spacing="lg" className="pt-28 md:pt-32">
         <div className="container px-4 max-w-4xl mx-auto text-center mb-12">
-          <p className="text-xs font-normal uppercase tracking-wider text-accent mb-3">
+          <p className="text-xs font-normal uppercase tracking-wider text-accent-legible mb-3">
             Treasure Valley authority
           </p>
           <h1 className="text-3xl md:text-4xl font-sans font-light tracking-tight text-foreground mb-4">
@@ -83,7 +83,7 @@ export default function GuidesIndexPage() {
           <p className="mt-4">
             <Link
               href="/resources"
-              className="text-sm text-accent hover:underline inline-flex items-center justify-center"
+              className="text-sm text-accent-legible hover:underline inline-flex items-center justify-center"
             >
               Free PDF worksheets & permit infographic
               <ArrowRight className="ml-1 h-4 w-4" />
@@ -104,7 +104,7 @@ export default function GuidesIndexPage() {
                 <GuideCardStats guide={guide} />
                 <Link
                   href={guidePath(guide.slug)}
-                  className="inline-flex items-center text-sm text-accent hover:underline"
+                  className="inline-flex items-center text-sm text-accent-legible hover:underline"
                 >
                   Read guide
                   <ArrowRight className="ml-1 h-4 w-4" />
@@ -129,7 +129,7 @@ export default function GuidesIndexPage() {
                 <GuideCardStats guide={guide} />
                 <Link
                   href={guidePath(guide.slug)}
-                  className="text-sm text-accent hover:underline inline-flex items-center"
+                  className="text-sm text-accent-legible hover:underline inline-flex items-center"
                 >
                   Read
                   <ArrowRight className="ml-1 h-3 w-3" />
@@ -152,14 +152,14 @@ export default function GuidesIndexPage() {
                   <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
                     <Link
                       href={guidePath(hub.pillarSlug)}
-                      className="text-accent hover:underline inline-flex items-center"
+                      className="text-accent-legible hover:underline inline-flex items-center"
                     >
                       Pillar guide
                       <ArrowRight className="ml-1 h-3 w-3" />
                     </Link>
                     <Link
                       href={`/blog/category/${hub.hubSlug}`}
-                      className="text-muted-foreground hover:text-accent hover:underline"
+                      className="text-muted-foreground hover:text-accent-legible hover:underline"
                     >
                       Related articles
                     </Link>

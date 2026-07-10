@@ -50,7 +50,7 @@ export default function StyleGuidePage() {
           <h2 className="text-section-title font-sans font-light">Typography</h2>
           <p className="brc-label">Eyebrow label</p>
           <h1 className="text-display font-sans font-light">
-            Display with <em className="brc-accent text-accent">accent</em>
+            Display with <em className="brc-accent">accent</em>
           </h1>
           <h2 className="text-3xl md:text-4xl font-sans font-light">Section title</h2>
           <p className="text-base leading-relaxed text-foreground max-w-prose">

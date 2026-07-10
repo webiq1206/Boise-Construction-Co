@@ -19,7 +19,7 @@ export function ServicesGrid() {
           title={
             <>
               Design-build expertise for every major{" "}
-              <em className="brc-accent text-accent">remodel</em>
+              <em className="brc-accent">remodel</em>
             </>
           }
           description="Full design-build coordination under one roof, not piecemeal trades managed by multiple vendors. One team handles layout, permitting, and construction so your project stays aligned from start to finish."
@@ -58,7 +58,7 @@ export function ServicesGrid() {
             <div className="h-full min-h-[220px] rounded-sm border border-card-border bg-card p-6 md:p-8 flex flex-col justify-center">
               <div className="brc-label mb-3">Not sure where to start</div>
               <h3 className="font-sans font-light text-xl md:text-2xl tracking-tight mb-2 text-foreground">
-                Tell us about your <em className="brc-accent text-accent">project</em>
+                Tell us about your <em className="brc-accent">project</em>
               </h3>
               <p className="text-sm leading-relaxed mb-5 text-muted-foreground">
                 Every remodel starts with a free in-home visit and an honest planning range, with no obligation.

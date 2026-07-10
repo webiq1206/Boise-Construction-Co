@@ -39,7 +39,7 @@ export function ProcessSection() {
             <div className="brc-label mb-5">Our process</div>
             <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] lg:text-[2.75rem] leading-[1.08] tracking-tight mb-10 text-foreground">
               From first visit to{" "}
-              <em className="brc-accent text-accent">final walkthrough</em>
+              <em className="brc-accent">final walkthrough</em>
             </h2>
             <div className="space-y-0">
               {HOW_WE_BUILD_STEPS.map((step, i) => (

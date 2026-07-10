@@ -157,7 +157,7 @@ export function Navigation() {
                         <Link
                           href={link.href}
                           onClick={() => setMobileOpen(false)}
-                          className="block px-6 py-5 text-2xl font-normal text-foreground hover:text-accent transition-colors"
+                          className="block px-6 py-5 text-2xl font-normal text-foreground hover:text-accent-legible transition-colors"
                           data-testid={`link-mobile-nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
                         >
                           {link.label}

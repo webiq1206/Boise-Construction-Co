@@ -14,7 +14,7 @@ export function GuideResourceDownloads({ resources }: GuideResourceDownloadsProp
       className="rounded-lg border border-border bg-background p-5 md:p-6 mb-8"
       data-testid="guide-resources"
     >
-      <p className="text-xs font-normal uppercase tracking-wider text-accent mb-2">
+      <p className="text-xs font-normal uppercase tracking-wider text-accent-legible mb-2">
         Free planning tools
       </p>
       <h2 className="text-base font-normal text-foreground mb-2">Downloads & visual guides</h2>
@@ -30,7 +30,7 @@ export function GuideResourceDownloads({ resources }: GuideResourceDownloadsProp
       </ul>
       <p className="text-xs text-muted-foreground mt-4">
         All resources are planning aids, not quotes or contracts.{' '}
-        <Link href="/resources" className="text-accent hover:underline">
+        <Link href="/resources" className="text-accent-legible hover:underline">
           View all resources
         </Link>
       </p>
@@ -58,7 +58,7 @@ function ResourceRow({ resource }: { resource: GuideResource }) {
         <a
           href={resource.href}
           download
-          className="inline-flex items-center gap-1.5 text-sm text-accent hover:underline shrink-0 font-normal"
+          className="inline-flex items-center gap-1.5 text-sm text-accent-legible hover:underline shrink-0 font-normal"
           data-testid={`download-${resource.id}`}
         >
           <Download className="h-4 w-4" />
@@ -67,7 +67,7 @@ function ResourceRow({ resource }: { resource: GuideResource }) {
       ) : (
         <Link
           href={resource.href}
-          className="inline-flex items-center gap-1.5 text-sm text-accent hover:underline shrink-0 font-normal"
+          className="inline-flex items-center gap-1.5 text-sm text-accent-legible hover:underline shrink-0 font-normal"
         >
           View
           <Download className="h-4 w-4" />

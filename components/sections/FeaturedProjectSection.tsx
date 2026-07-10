@@ -22,7 +22,7 @@ export function FeaturedProjectSection() {
           <div className="brc-label mb-4">Featured project</div>
           <h2 className="font-sans font-light text-[2rem] md:text-[2.75rem] lg:text-[3.25rem] leading-[1.08] tracking-tight mb-4 text-foreground">
             See what a thoughtful remodel can{" "}
-            <em className="brc-accent text-accent">become</em>
+            <em className="brc-accent">become</em>
           </h2>
           <p className="text-base leading-relaxed text-muted-foreground">
             {project.title} in {cityName}, Idaho. Drag to reveal the transformation.

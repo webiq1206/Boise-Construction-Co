@@ -50,7 +50,7 @@ export function HeroSection() {
               <div className="brc-label mb-6 text-inverse-muted">{HERO_EYEBROW}</div>
               <h1 className="font-sans font-light text-inverse-foreground text-display tracking-tight mb-6">
                 Boise remodeling with{" "}
-                <em className="brc-accent text-accent">clarity</em> and confidence.
+                <em className="brc-accent">clarity</em> and confidence.
               </h1>
               <p
                 data-speakable="summary"

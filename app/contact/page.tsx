@@ -228,7 +228,7 @@ export default function ContactPage() {
             <div className="brc-label text-inverse-muted mt-6 mb-5">Get in touch</div>
             <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-4xl mb-6">
               Contact Boise Remodeling{' '}
-              <em className="brc-accent text-accent">Co</em>
+              <em className="brc-accent">Co</em>
             </h1>
             <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-6">
               Schedule a free 60 to 90 minute in-home visit, call our team, or use the project
@@ -276,7 +276,7 @@ export default function ContactPage() {
               title={
                 <>
                   Every way to{' '}
-                  <em className="brc-accent text-accent">connect</em>
+                  <em className="brc-accent">connect</em>
                 </>
               }
               description="Call, email, or visit - we respond within one business day and never use high-pressure sales tactics."
@@ -372,7 +372,7 @@ export default function ContactPage() {
                   title={
                     <>
                       No pressure. No pitch.{' '}
-                      <em className="brc-accent text-accent">Just answers.</em>
+                      <em className="brc-accent">Just answers.</em>
                     </>
                   }
                   description="Your free 60 to 90 minute in-home visit is focused on planning guidance and an honest project range - not a commission-driven pitch."
@@ -409,7 +409,7 @@ export default function ContactPage() {
                   <div className="brc-label mb-5">Request your visit</div>
                   <h2 className="font-sans font-light text-[2rem] md:text-[2.75rem] leading-[1.08] tracking-tight mb-4 text-foreground">
                     Tell us about your{' '}
-                    <em className="brc-accent text-accent">home</em>.
+                    <em className="brc-accent">home</em>.
                   </h2>
                   <p className="text-base leading-relaxed mb-8 text-muted-foreground">
                     Send a few details and we will reach out within one business day to schedule
@@ -431,7 +431,7 @@ export default function ContactPage() {
             <Reveal>
               <div className="brc-label mb-5">Common questions</div>
               <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
-                Before you <em className="brc-accent text-accent">reach out</em>
+                Before you <em className="brc-accent">reach out</em>
               </h2>
               <Accordion type="single" collapsible className="w-full">
                 {CONTACT_FAQS.map((faq, i) => (
@@ -463,7 +463,7 @@ export default function ContactPage() {
               size="display"
               title={
                 <>
-                  Where we <em className="brc-accent text-accent">work</em>
+                  Where we <em className="brc-accent">work</em>
                 </>
               }
               description={`We serve homeowners in ${TREASURE_VALLEY_CITIES}, and surrounding communities.`}

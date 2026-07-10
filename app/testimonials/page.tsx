@@ -72,7 +72,7 @@ export default function TestimonialsPage() {
             title={
               <>
                 Projects &amp; homeowner{" "}
-                <em className="brc-accent text-accent">reviews</em>
+                <em className="brc-accent">reviews</em>
               </>
             }
             description="Explore recent design-build work across the Treasure Valley and hear from homeowners who prioritized clarity, craftsmanship, and communication."

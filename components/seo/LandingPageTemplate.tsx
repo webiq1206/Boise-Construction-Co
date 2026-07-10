@@ -215,7 +215,7 @@ export function LandingPageTemplate({
             <Reveal>
               <div className="brc-label mb-5">Why choose us</div>
               <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
-                Why homeowners <em className="brc-accent text-accent">choose us</em>
+                Why homeowners <em className="brc-accent">choose us</em>
               </h2>
             </Reveal>
             <ul className="grid sm:grid-cols-2 gap-4">
@@ -268,7 +268,7 @@ export function LandingPageTemplate({
             <Reveal>
               <div className="brc-label mb-5">Scope of work</div>
               <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
-                What&apos;s <em className="brc-accent text-accent">included</em>
+                What&apos;s <em className="brc-accent">included</em>
               </h2>
             </Reveal>
             <MarketingCard>
@@ -312,7 +312,7 @@ export function LandingPageTemplate({
               <div className="relative h-full flex flex-col justify-end p-8 md:p-12 lg:p-14">
                 <div className="brc-label text-inverse-muted mb-4">How it works</div>
                 <h2 className="font-sans font-light text-[2rem] md:text-[2.75rem] leading-[1.06] tracking-tight text-inverse-foreground">
-                  Our <em className="brc-accent text-accent">process</em>,
+                  Our <em className="brc-accent">process</em>,
                   <br />
                   step by step
                 </h2>
@@ -419,7 +419,7 @@ export function LandingPageTemplate({
                         <li key={link.href} className="list-none">
                           <Link
                             href={link.href}
-                            className="inline-flex items-center text-sm text-accent hover:underline font-normal"
+                            className="inline-flex items-center text-sm text-accent-legible hover:underline font-normal"
                           >
                             {link.label}
                             <ArrowRight className="ml-1 h-3.5 w-3.5" />
@@ -444,7 +444,7 @@ export function LandingPageTemplate({
               <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
                 {proofHeading ?? (
                   <>
-                    Recent <em className="brc-accent text-accent">local work</em>
+                    Recent <em className="brc-accent">local work</em>
                   </>
                 )}
               </h2>
@@ -529,7 +529,7 @@ export function LandingPageTemplate({
           <Reveal>
             <div className="brc-label mb-5">Common questions</div>
             <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
-              Frequently asked <em className="brc-accent text-accent">questions</em>
+              Frequently asked <em className="brc-accent">questions</em>
             </h2>
             <Accordion type="single" collapsible className="w-full">
               {faqs.map((faq, i) => (
