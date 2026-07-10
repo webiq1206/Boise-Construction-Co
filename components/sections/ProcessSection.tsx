@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { DisplayNum, Section } from "@/components/marketing";
 import { HOW_WE_BUILD_STEPS } from "@/shared/siteContent";
-import { SITE_IMAGES } from "@/shared/siteImages";
+import { GALLERY_IMAGES } from "@/shared/siteImages";
 
 const GRAIN_URL = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/2Fsvg%3E")`;
 
@@ -12,8 +12,8 @@ export function ProcessSection() {
       <div className="grid md:grid-cols-2 overflow-hidden">
         <div className="hidden md:block relative min-h-[380px] md:min-h-[560px] overflow-hidden">
           <Image
-            src={SITE_IMAGES.process}
-            alt="Architectural blueprints and finish material samples for a Treasure Valley remodel"
+            src={GALLERY_IMAGES.outdoor.after}
+            alt="Finished outdoor living space by Boise Remodeling Co in the Treasure Valley"
             fill
             loading="lazy"
             sizes="50vw"

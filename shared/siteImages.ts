@@ -5,9 +5,13 @@
  */
 
 export const SITE_IMAGES = {
-  hero: "/images/hero-remodel-interior.webp",
+  // Hero: a massive great room with an open kitchen in the background (licensed
+  // stock, Pexels, free for commercial use). Distinct from the whole-home
+  // before/after used in the featured slider.
+  hero: "/images/hero-great-room.webp",
   process: "/images/process-design-review.webp",
-  statementBand: "/images/gallery/gallery-whole-home-after.webp",
+  // Warm, furnished great room (licensed stock, Pexels) for the full-bleed band.
+  statementBand: "/images/statement-great-room.webp",
   leadership: "/images/gallery/gallery-kitchen-after.webp",
 } as const;
 

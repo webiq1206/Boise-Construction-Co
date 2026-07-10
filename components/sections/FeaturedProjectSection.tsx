@@ -12,7 +12,11 @@ function cityDisplayName(slug: string) {
 }
 
 export function FeaturedProjectSection() {
-  const project = GALLERY_PROJECTS[0];
+  // Feature the whole-home great-room transformation (great room with the
+  // kitchen visible in the background) rather than the standalone kitchen.
+  const project =
+    GALLERY_PROJECTS.find((p) => p.serviceType === "whole-home-remodel") ??
+    GALLERY_PROJECTS[0];
   const cityName = cityDisplayName(project.city);
 
   return (
