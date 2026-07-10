@@ -1,5 +1,7 @@
 # Metadata Map
 
+> **Re-audit 2026-07-10 (live crawl, 163 URLs):** 0 duplicate titles, 0 duplicate descriptions, 0 missing titles/descriptions; canonical + og:image on every page. Two defects found and fixed: (a) 9 blog category hubs had short 61-69c formulaic descriptions -> now unique ~157c descriptions; (b) `/areas` title 64c -> 51c. No outstanding metadata defects.
+
 Title / description / canonical / Open Graph inventory and defects.
 
 ## Title generation

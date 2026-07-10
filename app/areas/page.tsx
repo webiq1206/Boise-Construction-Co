@@ -21,7 +21,7 @@ import { EstimateCTA } from "@/components/modals/EstimateCTA";
 export const metadata = buildPageMetadata({
   kind: "about",
   path: "/areas",
-  titleOverride: "Service Areas | Treasure Valley Remodeling",
+  titleOverride: "Treasure Valley Service Areas",
   descriptionOverride:
     "Design-build remodeling across the Treasure Valley: Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho.",
 });

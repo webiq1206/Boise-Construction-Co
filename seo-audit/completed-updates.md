@@ -1,8 +1,58 @@
 # Completed Updates Log
 
-Before/after record of changes made during this audit pass. Populated as implementation proceeds.
+Before/after record of changes made during audit passes. Most recent first.
 
-> Status: audit deliverables complete; implementation in progress. Each entry will list file(s), before, after, and rationale.
+---
+
+## Audit pass 2026-07-10 (re-audit + implementation)
+
+Verified against a live crawl of all 163 sitemap URLs. The site was already mechanically
+near-perfect (0 duplicate/missing titles or descriptions, 1 H1 per page, canonical + schema on
+every page, full content in raw HTML). Implemented the concrete gaps found; flagged the
+review/GBP/credential items that require real-world data (not fabricated).
+
+### 1. Enriched blog category-hub metadata (9 pages)
+**File:** `app/blog/category/[hubSlug]/page.tsx` (`generateMetadata`).
+- **Before:** all 9 hubs shared a formulaic 61–69-char description: `Articles about {topic} for Treasure Valley homeowners.`
+- **After:** unique, benefit-led ~157-char description built from each hub's own `description` +
+  article count + service-area, trimmed on a word boundary. Verified live length 157c on
+  `/blog/category/remodeling-costs`.
+- **Why:** short, duplicate-shaped descriptions under-earn the click and read as templated.
+
+### 2. Added unique intro copy to category hubs (thin-content fix)
+**File:** `app/blog/category/[hubSlug]/page.tsx` (body).
+- **Before:** hub description one-liner only; `/blog/category/remodeling-roi` 332w and
+  `/outdoor-living` 336w were just under the 350-word bar.
+- **After:** added a factual local + authorship paragraph (team-written, Ada/Canyon permit
+  context, real planning ranges). Verified 397w and 393w respectively.
+- **Why:** lifts thin index pages over the threshold and adds E-E-A-T/local framing without
+  keyword-swapped boilerplate.
+
+### 3. Enriched `/resources` (thin-content fix)
+**File:** `app/resources/page.tsx`.
+- **Before:** 311 raw words.
+- **After:** two descriptive paragraphs on what each worksheet does and how it feeds a free
+  consultation → 416 words. Verified.
+
+### 4. Trimmed `/areas` title (truncation risk)
+**File:** `app/areas/page.tsx`.
+- **Before:** `Service Areas | Treasure Valley Remodeling | Boise Remodeling Co` (64c, truncates in SERP).
+- **After:** `Treasure Valley Service Areas | Boise Remodeling Co` (51c). Verified.
+
+### Flagged — requires real data, not implemented (do NOT fabricate)
+- **Reviews/ratings (Critical).** `reviewCount = 0`; testimonials are placeholders. Populate
+  `shared/testimonialsData.ts` + `BUSINESS_INFO.reviewCount`/`rating` with genuine reviews; the
+  `AggregateRating`/`Review` schema plumbing (`lib/schema.ts`) activates automatically.
+- **GBP linkage (High).** Set `NEXT_PUBLIC_GBP_URL` / `NEXT_PUBLIC_GBP_REVIEW_URL` once confirmed.
+- **License/credential (High).** Replace `licenses: ['License details available upon request']`
+  with a real registration/bond/insurer, or state bond/insurance concretely.
+- **Named-expert authorship (Medium).** Attribute flagship guides to Jared Brost with a visible bio.
+
+Build: `next build` clean; em-dash guard passes.
+
+---
+
+## Audit pass (prior) — original implementation
 
 ## Changes
 

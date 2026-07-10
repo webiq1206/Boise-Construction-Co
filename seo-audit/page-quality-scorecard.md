@@ -1,5 +1,7 @@
 # Page Quality Scorecard
 
+> **Re-audit 2026-07-10:** overall site grade **B+ (8.1/10)** on the LOCAL weight profile. Dimension grades: SEO A+ (9.5), GEO A (9.0), UX/conversion A- (8.7), UI/trust A- (8.5), AEO B (8.0), Content/E-E-A-T B (7.5), Performance B (7.5, not measured), **Local SEO C (6.5)** — the one lever. Every page is mechanically clean (1 H1, canonical, schema, unique title/meta); per-page quality is gated by shared trust signals (reviews) rather than page-level defects.
+
 Scores are 0–100 using the weighted model in [README.md](README.md): Content 30 · Intent 20 · Local 20 · E-E-A-T 15 · Conversion 15.
 
 Two columns are shown for templated pages: **Before** (audit baseline) and **After** (post-implementation in this pass). Data-gated items (named authors, real reviews, license #) cap the achievable E-E-A-T score until supplied.

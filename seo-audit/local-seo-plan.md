@@ -1,5 +1,7 @@
 # Local SEO Plan
 
+> **Re-audit 2026-07-10:** NAP consistent (Meridian, ID) across site + schema; correct HomeAndConstructionBusiness type; 9 area + 40 city-service pages live. **Top priority (Critical): real reviews.** `reviewCount = 0`, testimonials are placeholders, no AggregateRating emitted. Sequence: (1) collect real Google reviews + populate `shared/testimonialsData.ts` and `BUSINESS_INFO.reviewCount/rating`; (2) confirm GBP -> website link and set `NEXT_PUBLIC_GBP_URL`/`_REVIEW_URL`; (3) concrete license/bond field; (4) per-city proof (projects, reviews). Schema plumbing already exists and activates on real data.
+
 NAP consistency, GBP alignment, citations, local schema, and local proof.
 
 ## NAP consistency — 1 inconsistency

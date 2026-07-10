@@ -50,12 +50,27 @@ export default function ResourcesIndexPage() {
         <h1 className="text-3xl md:text-4xl font-sans font-light tracking-tight text-foreground mb-4">
           Remodel planning resources
         </h1>
-        <p className="text-lg text-muted-foreground mb-12 max-w-2xl">
+        <p className="text-lg text-muted-foreground mb-5 max-w-2xl">
           Printable PDFs and visual guides to use alongside our{' '}
           <Link href="/guides" className="text-accent-legible hover:underline">
             remodeling guides
           </Link>
           . These are planning tools - not quotes or contracts.
+        </p>
+        <p className="text-base text-muted-foreground mb-4 max-w-2xl leading-relaxed">
+          We built these worksheets from the same process we use on real Treasure Valley
+          projects: a budget worksheet to pressure-test your planning range before you talk to
+          anyone, a scope checklist so nothing gets missed between design and construction, and a
+          visual walkthrough of the Ada and Canyon County permit flow so you know what approvals a
+          Boise, Meridian, Eagle or Nampa remodel actually needs.
+        </p>
+        <p className="text-base text-muted-foreground mb-12 max-w-2xl leading-relaxed">
+          Download any of them for free, no email required. When you are ready, you can bring your
+          notes to a{' '}
+          <Link href="/contact" className="text-accent-legible hover:underline">
+            free in-home consultation
+          </Link>{' '}
+          and we will turn them into a written scope and an honest planning range for your home.
         </p>
 
         <h2 className="text-sm font-normal uppercase tracking-wider text-muted-foreground mb-4">

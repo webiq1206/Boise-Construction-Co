@@ -1,5 +1,7 @@
 # Programmatic SEO Analysis
 
+> **Re-audit 2026-07-10:** live crawl confirms the templated network is not thin/duplicate at the mechanical level — 0 duplicate titles/descriptions across all 163 URLs, avg 792 raw words/page, and thin combos are excluded from the sitemap (not served indexable). City-service pages carry real local proof + unique copy. Residual watch item: cost-topic overlap between service pages, the cost pillar guide, and cost blog posts (verify one canonical cost target per service).
+
 Uniqueness scoring for the templated page network (40 city×service + 8 area + 5 service).
 
 ## Method

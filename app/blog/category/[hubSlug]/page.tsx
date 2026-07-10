@@ -43,7 +43,19 @@ export async function generateMetadata({
   const posts = BLOG_POSTS.filter((p) => p.hubSlug === params.hubSlug);
   const indexable = isCategoryHubIndexable(params.hubSlug, posts.length);
   const title = `${hub.title} Articles`;
-  const description = `Articles about ${hub.title.toLowerCase()} for Treasure Valley homeowners.`;
+  // Benefit-led, unique per hub (uses the hub's own description) and long enough
+  // to earn the click, instead of the old formulaic 60-char template.
+  const countPhrase = posts.length >= 3 ? `${posts.length} in-depth articles` : 'Expert articles';
+  const rawDescription =
+    `${hub.description} ${countPhrase} on ${hub.title.toLowerCase()} for Boise, Meridian, Eagle, Nampa and Treasure Valley homeowners planning a remodel.`.replace(
+      /\s+/g,
+      ' ',
+    );
+  // Trim to ~158 chars on a word boundary so descriptions never truncate mid-word.
+  const description =
+    rawDescription.length <= 158
+      ? rawDescription
+      : rawDescription.slice(0, 158).replace(/\s+\S*$/, '') + '…';
   const heroImage = getHubHeroImage(params.hubSlug);
   const imageUrl = getAbsoluteImageUrl(heroImage, getBaseUrl());
 
@@ -127,7 +139,14 @@ export default function BlogCategoryHubPage({
           <h1 className="text-3xl md:text-4xl font-sans font-light tracking-tight mb-4">
             {hub.title}
           </h1>
-          <p className="text-lg text-muted-foreground mb-6 max-w-2xl">{hub.description}</p>
+          <p className="text-lg text-muted-foreground mb-4 max-w-2xl">{hub.description}</p>
+          <p className="text-base text-muted-foreground mb-6 max-w-2xl leading-relaxed">
+            Every article below is written by the Boise Remodeling Co design-build team for
+            homeowners across Boise, Meridian, Eagle, Nampa and the wider Treasure Valley, with
+            real planning ranges, Ada and Canyon County permit context, and lessons from projects
+            we have actually built. Start with the complete guide for the full overview, or jump
+            to a specific article below.
+          </p>
           <Link
             href={guidePath(hub.pillarSlug)}
             className="inline-flex items-center text-accent-legible hover:underline text-sm mb-10"
