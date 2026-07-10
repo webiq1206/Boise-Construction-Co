@@ -51,6 +51,23 @@ export function ServicesGrid() {
               </article>
             </Reveal>
           ))}
+
+          {/* CTA card fills the final grid cell so an odd service count never
+              leaves a lonely card, and gives the section a clear next step. */}
+          <Reveal delay={SERVICES.length * 40}>
+            <div className="h-full min-h-[220px] rounded-sm border border-card-border bg-card p-6 md:p-8 flex flex-col justify-center">
+              <div className="brc-label mb-3">Not sure where to start</div>
+              <h3 className="font-sans font-light text-xl md:text-2xl tracking-tight mb-2 text-foreground">
+                Tell us about your <em className="brc-accent text-accent">project</em>
+              </h3>
+              <p className="text-sm leading-relaxed mb-5 text-muted-foreground">
+                Every remodel starts with a free in-home visit and an honest planning range, with no obligation.
+              </p>
+              <Button variant="brand" className="self-start" asChild>
+                <a href="#consult">Book a free consultation</a>
+              </Button>
+            </div>
+          </Reveal>
         </div>
 
         <div className="mt-12 text-center">

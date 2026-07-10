@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { ConsultationForm } from "@/components/ConsultationForm";
 import { EstimateCalculator } from "@/components/EstimateCalculator";
+import { requestHideMobileNavBar } from "@/lib/mobileNavBar";
 import { ModalsContext, type ModalType } from "./modalsContext";
 
 export function ModalProvider({ children }: { children: React.ReactNode }) {
@@ -20,13 +21,11 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
   const close = useCallback(() => setOpen(null), []);
 
   // The global mobile Call/Text bar sits above the dialog overlay; hide it
-  // while a conversion modal is open so it never covers the dialog.
+  // while a conversion modal is open so it never covers the dialog. Ref-counted
+  // so it can't fight the inline estimate bar over the same flag.
   useEffect(() => {
     if (open === null) return;
-    document.body.dataset.hideMobileNavBar = "true";
-    return () => {
-      delete document.body.dataset.hideMobileNavBar;
-    };
+    return requestHideMobileNavBar();
   }, [open]);
 
   return (

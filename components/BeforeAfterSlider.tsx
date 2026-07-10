@@ -25,6 +25,11 @@ export function BeforeAfterSlider({
 }: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
+  // Touch gesture arbitration: don't hijack a vertical page scroll. We only
+  // start scrubbing once the finger moves clearly horizontally.
+  const pendingRef = useRef(false);
+  const startRef = useRef({ x: 0, y: 0 });
+  const movedRef = useRef(false);
   const [pos, setPos] = useState(50);
   const instructionsId = useId();
 
@@ -39,26 +44,60 @@ export function BeforeAfterSlider({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full overflow-hidden select-none touch-none cursor-ew-resize ${aspectClass} ${className}`}
+      className={`relative w-full overflow-hidden select-none touch-pan-y cursor-ew-resize ${aspectClass} ${className}`}
       onPointerDown={(e) => {
-        draggingRef.current = true;
-        e.currentTarget.setPointerCapture(e.pointerId);
-        updateFromClientX(e.clientX);
+        movedRef.current = false;
+        if (e.pointerType === "mouse") {
+          // Mouse has no scroll-gesture conflict: capture and jump immediately.
+          draggingRef.current = true;
+          e.currentTarget.setPointerCapture(e.pointerId);
+          updateFromClientX(e.clientX);
+        } else {
+          // Touch/pen: wait to see if the gesture is horizontal (scrub) or
+          // vertical (let the page scroll) before capturing.
+          pendingRef.current = true;
+          startRef.current = { x: e.clientX, y: e.clientY };
+        }
       }}
       onPointerMove={(e) => {
-        if (draggingRef.current) updateFromClientX(e.clientX);
+        if (draggingRef.current) {
+          updateFromClientX(e.clientX);
+          return;
+        }
+        if (pendingRef.current) {
+          const dx = e.clientX - startRef.current.x;
+          const dy = e.clientY - startRef.current.y;
+          if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) {
+            // Horizontal intent: take over the gesture.
+            pendingRef.current = false;
+            draggingRef.current = true;
+            movedRef.current = true;
+            e.currentTarget.setPointerCapture(e.pointerId);
+            updateFromClientX(e.clientX);
+          } else if (Math.abs(dy) > 8) {
+            // Vertical intent: release to the browser for scrolling.
+            pendingRef.current = false;
+          }
+        }
       }}
       onPointerUp={(e) => {
+        // A tap (no drag) still positions the divider where the user tapped.
+        if (pendingRef.current && !movedRef.current) {
+          updateFromClientX(e.clientX);
+        }
         draggingRef.current = false;
+        pendingRef.current = false;
         if (e.currentTarget.hasPointerCapture(e.pointerId)) {
           e.currentTarget.releasePointerCapture(e.pointerId);
         }
       }}
       onPointerCancel={() => {
         draggingRef.current = false;
+        pendingRef.current = false;
       }}
       onLostPointerCapture={() => {
         draggingRef.current = false;
+        pendingRef.current = false;
       }}
       data-testid="slider-before-after"
     >
@@ -131,7 +170,7 @@ export function BeforeAfterSlider({
               setPos(100);
             }
           }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-inverse-foreground text-inverse shadow-md pointer-events-auto cursor-ew-resize focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-inverse-foreground text-inverse shadow-md pointer-events-auto cursor-ew-resize focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           data-testid="handle-before-after"
         >
           <MoveHorizontal className="h-4 w-4" />

@@ -340,9 +340,11 @@ html, body {
   }
 }
 
-/* Consistent warmth across project photography */
+/* Consistent moody grade across project photography - slightly desaturated
+   and darkened so bright interiors sit cohesively on the dark ground and
+   keep overlaid hero text legible. */
 .img-brand-grade {
-  filter: saturate(0.92) contrast(1.02) brightness(0.98);
+  filter: saturate(0.86) contrast(1.04) brightness(0.9);
 }
 
 /* ─── Decorative accent (Fraunces italic emphasis only) ─── */

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Loader2, MapPin, CheckCircle2, AlertCircle } from "lucide-react";
+import { Loader2, MapPin, CheckCircle2, AlertCircle, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { PropertyProfile, PropertyProfileInput } from "@/shared/propertyProfile";
 import { getPropertyProfileSummary } from "@/shared/propertyProfile";
@@ -223,6 +223,16 @@ export function AddressAutocomplete({
             setError(null);
           }}
           onFocus={() => suggestions.length > 0 && setOpen(true)}
+          onBlur={() => {
+            // Auto-enrich an address the user typed but didn't pick from the
+            // list, so the property lookup isn't lost behind a manual button.
+            // Suggestions use onMouseDown preventDefault, so clicking one does
+            // not blur the input; the profile guard covers keyboard selection.
+            const looksLikeAddress = value.trim().length >= 8 && /\d/.test(value);
+            if (!enriching && !profile && looksLikeAddress) {
+              void useTypedAddress();
+            }
+          }}
           onKeyDown={handleKeyDown}
           placeholder="Start typing your street address…"
           disabled={disabled || enriching}
@@ -286,15 +296,18 @@ export function AddressAutocomplete({
         )}
       </div>
 
-      <button
-        type="button"
-        className="text-xs text-primary underline-offset-2 hover:underline disabled:opacity-50 min-h-8"
-        onClick={useTypedAddress}
-        disabled={disabled || enriching || value.trim().length < 5}
-        data-testid="button-use-typed-address"
-      >
-        Use this address and look up property data
-      </button>
+      {!profile && value.trim().length >= 5 && (
+        <button
+          type="button"
+          className="mt-1 inline-flex items-center gap-2 rounded-sm border border-border px-3 min-h-11 text-sm text-foreground hover-elevate disabled:opacity-50"
+          onClick={useTypedAddress}
+          disabled={disabled || enriching}
+          data-testid="button-use-typed-address"
+        >
+          <Search className="h-4 w-4" />
+          Look up property data for this address
+        </button>
+      )}
 
       {error && (
         <p

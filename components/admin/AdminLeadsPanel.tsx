@@ -410,7 +410,7 @@ function AdminDashboardContent({ embedded = false }: { embedded?: boolean }) {
   const [filterPriority, setFilterPriority] = useState<string>("all");
   const [filterTags, setFilterTags] = useState<string[]>([]);
 
-  const { data: leads = [], isLoading } = useQuery<Lead[]>({
+  const { data: leads = [], isLoading, isError, refetch } = useQuery<Lead[]>({
     queryKey: ["/api/leads"],
     queryFn: async () => {
       const res = await fetch("/api/leads");
@@ -1541,6 +1541,23 @@ function AdminDashboardContent({ embedded = false }: { embedded?: boolean }) {
         <div className="flex flex-col items-center gap-4">
           <Shield className="w-12 h-12 text-primary animate-pulse" />
           <p className="text-muted-foreground">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className={embedded ? "py-16" : "min-h-screen bg-background flex items-center justify-center"}>
+        <div className="flex flex-col items-center gap-4 text-center px-4">
+          <AlertTriangle className="w-12 h-12 text-muted-foreground/60" />
+          <div>
+            <p className="text-foreground mb-1">We could not load the leads dashboard.</p>
+            <p className="text-sm text-muted-foreground">This is usually temporary. Please try again.</p>
+          </div>
+          <Button variant="outline" onClick={() => refetch()} data-testid="button-retry-admin-leads">
+            Retry
+          </Button>
         </div>
       </div>
     );

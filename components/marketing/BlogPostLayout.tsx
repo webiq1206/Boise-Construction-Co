@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Calendar, Tag, User, BookOpen } from 'lucide-react';
+import { ArrowRight, Calendar, Tag, User, BookOpen } from 'lucide-react';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import {
   Accordion,
   AccordionContent,
@@ -56,16 +57,18 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
 
       <Section spacing="sm" className="pt-8 md:pt-10 pb-0">
         <div className="container px-4 max-w-6xl mx-auto">
-          <Link
-            href="/blog"
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 mb-6"
-            data-testid="link-back-to-blog"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Blog
-          </Link>
+          <Breadcrumbs
+            items={[
+              { name: 'Home', href: '/' },
+              { name: 'Blog', href: '/blog' },
+              ...(hub && isCategoryHubIndexable(post.hubSlug, hubPosts.length)
+                ? [{ name: hub.categoryLabel ?? hub.title, href: categoryHubPath(post.hubSlug) }]
+                : []),
+              { name: post.title },
+            ]}
+          />
 
-          <header className="max-w-3xl mb-8 md:mb-10">
+          <header className="max-w-3xl mb-8 md:mb-10 mt-2">
             <Chip className="mb-4">{hub?.categoryLabel ?? post.category}</Chip>
             <h1 className="text-3xl md:text-4xl lg:text-[2.75rem] font-sans font-light tracking-tight text-foreground mb-4">
               {post.title}

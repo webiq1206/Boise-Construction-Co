@@ -5,6 +5,7 @@ import { Check, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { AnimatedPrice } from "@/components/estimate/EstimateResultPanel";
+import { requestHideMobileNavBar } from "@/lib/mobileNavBar";
 import type { EstimateResult } from "@/shared/estimateEngine";
 
 const SHEET_SCOPE_COUNT = 4;
@@ -45,12 +46,10 @@ export function StickyEstimateBar({
 
   // While the inline bar owns the bottom edge, hide the global Call/Text bar
   // instead of stacking two bars (modal visibility is handled by ModalProvider).
+  // Ref-counted so overlapping requests release cleanly.
   useEffect(() => {
     if (!isInline || !visible) return;
-    document.body.dataset.hideMobileNavBar = "true";
-    return () => {
-      delete document.body.dataset.hideMobileNavBar;
-    };
+    return requestHideMobileNavBar();
   }, [isInline, visible]);
 
   // Collapse the sheet when the range goes away (e.g. user changed project).

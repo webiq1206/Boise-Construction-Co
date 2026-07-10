@@ -91,6 +91,9 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    // Validate each field on blur (and re-validate on change once touched) so
+    // users get inline feedback instead of every error at once on submit.
+    mode: "onTouched",
     defaultValues: {
       name: "",
       phone: "",
@@ -381,7 +384,17 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data) => setPendingData(data))}
+        onSubmit={form.handleSubmit((data) => {
+          // If an estimate is attached but not yet confirmed, don't silently
+          // block: send the user to the decision and explain why.
+          if (!canSubmit) {
+            document
+              .getElementById("consult-estimate-gate")
+              ?.scrollIntoView({ behavior: "smooth", block: "center" });
+            return;
+          }
+          setPendingData(data);
+        })}
         className="space-y-5"
       >
         {showTrust && (
@@ -428,7 +441,10 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
         )}
 
         {estimate && decision !== "dropped" && (
-          <div className="rounded-sm p-4 text-sm bg-accent/5 border border-accent/20 space-y-3">
+          <div
+            id="consult-estimate-gate"
+            className="scroll-mt-24 rounded-sm p-4 text-sm bg-accent/5 border border-accent/20 space-y-3"
+          >
             <div>
               <p className="font-normal mb-1 text-foreground">
                 Planning range from estimator
@@ -713,13 +729,15 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
           <Button
             type="submit"
             variant="brand"
-            disabled={mutation.isPending || !canSubmit}
+            disabled={mutation.isPending}
+            aria-disabled={!canSubmit}
+            aria-describedby="consult-submit-help"
             data-testid="button-submit-consultation"
           >
             {CTA_FORM_REVIEW}
             <ArrowRight className="h-4 w-4" />
           </Button>
-          <p className="text-xs text-muted-foreground">
+          <p id="consult-submit-help" className="text-xs text-muted-foreground">
             {canSubmit
               ? "Nothing is sent until you confirm on the next screen. No spam, response within one business day."
               : "Please confirm your planning range above before continuing."}

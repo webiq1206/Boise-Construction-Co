@@ -168,7 +168,7 @@ export function Footer() {
                 Service Areas
               </Link>
             </h3>
-            <ul className="space-y-2.5 max-h-48 overflow-y-auto pr-2">
+            <ul className="space-y-2.5">
               {CITIES.map((city) => (
                 <li key={city.slug}>
                   <Link

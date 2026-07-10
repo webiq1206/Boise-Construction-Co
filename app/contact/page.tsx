@@ -32,6 +32,7 @@ import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
 import { CONSULT_BULLETS, HERO_STATS } from '@/shared/siteContent';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { EstimateCTA } from '@/components/modals/EstimateCTA';
+import { Button } from '@/components/ui/button';
 
 const CONTACT_FAQS = [
   {
@@ -247,9 +248,13 @@ export default function ContactPage() {
               Prefer to text? Message us instead
             </a>
             <div className="flex flex-wrap gap-3 mb-8">
-              <ConsultCTA variant="brand">
-                {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
-              </ConsultCTA>
+              {/* Scroll straight to the inline form rather than opening a modal,
+                  so the primary contact action is one tap from the hero. */}
+              <Button variant="brand" asChild>
+                <a href="#consult">
+                  {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
+                </a>
+              </Button>
               <EstimateCTA variant="heroGhost">
                 {CTA_SECONDARY}
               </EstimateCTA>
@@ -396,7 +401,7 @@ export default function ContactPage() {
         </Section>
 
         {/* ─── Inline consultation form ─── */}
-        <Section id="consult" divider>
+        <Section id="consult" divider className="scroll-mt-24">
           <div className="container px-4">
             <div className="max-w-5xl mx-auto grid md:grid-cols-5 gap-12 items-start">
               <div className="md:col-span-2">

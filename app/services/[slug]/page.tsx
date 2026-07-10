@@ -80,7 +80,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
   const schemas = [
     landingBreadcrumbs([
       { name: 'Home', url: '/' },
-      { name: 'Services', url: '/#services' },
+      { name: 'Services', url: '/services' },
       { name: service.name, url: path },
     ]),
     landingServiceSchema(service.name, content.overview),
@@ -101,7 +101,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         manifestPath={path}
         breadcrumbs={[
           { name: 'Home', href: '/' },
-          { name: 'Services', href: '/#services' },
+          { name: 'Services', href: '/services' },
           { name: service.name },
         ]}
         benefits={content.benefits}

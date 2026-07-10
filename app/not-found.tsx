@@ -40,7 +40,7 @@ export default function NotFound() {
             <h3 className="font-normal mb-4 text-foreground">Popular Pages</h3>
             <div className="grid grid-cols-2 gap-2">
               {[
-                { href: "/#services", label: "Our Services" },
+                { href: "/services", label: "Our Services" },
                 { href: "/#consult", label: "Free Consultation" },
                 { href: "/blog", label: "Blog and Ideas" },
                 { href: "/#calculator", label: "Project Estimator" },

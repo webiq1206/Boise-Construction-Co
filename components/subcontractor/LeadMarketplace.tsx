@@ -14,6 +14,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Switch } from "@/components/ui/switch";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth, User } from "@/hooks/useAuth";
 import { NotificationsBell } from "@/components/NotificationsBell";
@@ -589,7 +590,12 @@ function SubcontractorPortalContent() {
   }, [authLoading, isAuthenticated, isSubcontractor, router, user]);
 
   // Fetch available leads
-  const { data: leads = [], isLoading: leadsLoading } = useQuery<Lead[]>({
+  const {
+    data: leads = [],
+    isLoading: leadsLoading,
+    isError: leadsError,
+    refetch: refetchLeads,
+  } = useQuery<Lead[]>({
     queryKey: ["/api/leads", "available"],
     queryFn: async () => {
       const res = await fetch("/api/leads?status=available");
@@ -1253,8 +1259,10 @@ function SubcontractorPortalContent() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 flex-shrink-0"
+                className="h-9 w-9 flex-shrink-0"
                 onClick={() => isWatched ? unwatchLeadMutation.mutate(lead.id) : watchLeadMutation.mutate(lead.id)}
+                aria-label={isWatched ? "Remove from watchlist" : "Add to watchlist"}
+                aria-pressed={isWatched}
                 title={isWatched ? "Remove from watchlist" : "Add to watchlist"}
               >
                 {isWatched ? (
@@ -1867,7 +1875,31 @@ function SubcontractorPortalContent() {
           {activeTab === "available" && (
             <>
               {leadsLoading ? (
-                <div className="text-center py-8 text-muted-foreground">Loading leads...</div>
+                <div className="grid gap-4 md:grid-cols-2" aria-busy="true" aria-label="Loading leads">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <Card key={i}>
+                      <CardContent className="py-6 space-y-3">
+                        <Skeleton className="h-5 w-2/3" />
+                        <Skeleton className="h-4 w-1/2" />
+                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-9 w-32" />
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : leadsError ? (
+                <Card>
+                  <CardContent className="py-8 text-center">
+                    <AlertTriangle className="h-10 w-10 mx-auto mb-4 text-muted-foreground/60" />
+                    <p className="text-muted-foreground mb-1">We could not load available leads.</p>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      This is usually temporary. Please try again.
+                    </p>
+                    <Button variant="outline" onClick={() => refetchLeads()} data-testid="button-retry-leads">
+                      Retry
+                    </Button>
+                  </CardContent>
+                </Card>
               ) : filteredLeads.length === 0 ? (
                 <Card>
                   <CardContent className="py-8 text-center text-muted-foreground">

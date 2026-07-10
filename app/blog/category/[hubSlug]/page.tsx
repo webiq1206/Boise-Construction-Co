@@ -14,6 +14,7 @@ import {
 import { buildCanonical } from '@/lib/page-metadata';
 import { getHubHeroImage, getBlogImageAlt, getAbsoluteImageUrl } from '@/shared/blogImages';
 import { Section } from '@/components/marketing/Section';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { BlogCard } from '@/components/marketing/BlogCard';
 import { HubHeroBanner } from '@/components/marketing/BlogHeroBanner';
 import { generateBreadcrumbSchema, generateCollectionPageSchema } from '@/lib/schema';
@@ -113,12 +114,13 @@ export default function BlogCategoryHubPage({
       />
       <Section spacing="lg" className="pt-28 md:pt-32">
         <div className="container px-4 max-w-6xl mx-auto">
-          <Link
-            href="/blog"
-            className="text-sm text-muted-foreground hover:text-foreground mb-6 inline-block"
-          >
-            ← Back to blog
-          </Link>
+          <Breadcrumbs
+            items={[
+              { name: 'Home', href: '/' },
+              { name: 'Blog', href: '/blog' },
+              { name: hub.title },
+            ]}
+          />
 
           <HubHeroBanner src={hubHero} alt={hubAlt} />
 

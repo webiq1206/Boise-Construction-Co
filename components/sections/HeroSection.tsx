@@ -34,6 +34,9 @@ export function HeroSection() {
           className="object-cover opacity-[0.72] img-brand-grade"
         />
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/90 via-inverse/55 to-inverse/15" />
+        {/* Mobile: text + stat cards span full width over the bright image centre,
+            so add a vertical scrim that the desktop horizontal gradient doesn't cover. */}
+        <div className="md:hidden absolute inset-0 pointer-events-none bg-gradient-to-t from-inverse/95 via-inverse/70 to-inverse/45" />
         <div className="absolute inset-x-0 top-0 h-40 pointer-events-none bg-gradient-to-b from-inverse/80 via-inverse/45 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-32 pointer-events-none bg-gradient-to-t from-background via-background/50 to-transparent" />
         <div

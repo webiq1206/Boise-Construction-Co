@@ -97,7 +97,7 @@ export default function CityServicePage({
   const schemas = [
     landingBreadcrumbs([
       { name: 'Home', url: '/' },
-      { name: 'Services', url: '/#services' },
+      { name: 'Services', url: '/services' },
       { name: service.name, url: `/services/${service.slug}` },
       { name: `${city.name}, ID`, url: path },
     ]),
