@@ -72,7 +72,7 @@ export function BudgetInclusionsSection() {
                       key={item}
                       className="flex items-start gap-3 text-sm text-inverse-muted"
                     >
-                      <Check className="h-4 w-4 flex-shrink-0 mt-0.5 text-accent" />
+                      <Check className="h-4 w-4 flex-shrink-0 mt-0.5 text-accent-legible" />
                       {item}
                     </li>
                   ))}

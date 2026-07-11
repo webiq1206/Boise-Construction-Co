@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { CTA_QUOTE } from "@/shared/ctaCopy";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 
@@ -37,6 +38,8 @@ function Logo() {
 export function Navigation() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const isActivePath = (href: string) =>
+    href === "/" ? pathname === "/" : Boolean(pathname?.startsWith(href));
   const isPortal =
     pathname?.startsWith("/admin") ||
     pathname?.startsWith("/subcontractor/portal") ||
@@ -64,15 +67,25 @@ export function Navigation() {
           <Logo />
 
           <div className="hidden md:flex items-center gap-0">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="px-4 py-2 text-[13px] font-normal transition-colors rounded-sm hover-elevate text-muted-foreground hover:text-foreground"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const active = isActivePath(link.href);
+              return (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "relative px-4 py-2 text-[13px] font-normal transition-colors rounded-sm hover-elevate",
+                    active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  {link.label}
+                  {active && (
+                    <span className="absolute inset-x-4 bottom-1 h-px bg-accent-legible" />
+                  )}
+                </Link>
+              );
+            })}
           </div>
 
           <div className="hidden md:flex items-center gap-4">
@@ -82,8 +95,8 @@ export function Navigation() {
               data-testid="link-phone-desktop"
             >
               <span className="relative flex h-2 w-2">
-                <span className="pulse-accent absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+                <span className="pulse-accent absolute inline-flex h-full w-full rounded-full bg-accent-legible opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-legible" />
               </span>
               {SITE_CONFIG.phone}
             </a>
@@ -142,18 +155,28 @@ export function Navigation() {
 
                   {/* Nav links */}
                   <nav className="flex-1 overflow-y-auto">
-                    {NAV_LINKS.map((link) => (
-                      <div key={link.label} className="border-b border-border/40">
-                        <Link
-                          href={link.href}
-                          onClick={() => setMobileOpen(false)}
-                          className="block px-6 py-5 text-2xl font-normal text-foreground hover:text-accent-legible transition-colors"
-                          data-testid={`link-mobile-nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
-                        >
-                          {link.label}
-                        </Link>
-                      </div>
-                    ))}
+                    {NAV_LINKS.map((link) => {
+                      const active = isActivePath(link.href);
+                      return (
+                        <div key={link.label} className="border-b border-border/40">
+                          <Link
+                            href={link.href}
+                            onClick={() => setMobileOpen(false)}
+                            aria-current={active ? "page" : undefined}
+                            className={cn(
+                              "flex items-center gap-3 px-6 py-5 text-2xl font-normal transition-colors hover:text-accent-legible",
+                              active ? "text-accent-legible" : "text-foreground",
+                            )}
+                            data-testid={`link-mobile-nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
+                          >
+                            {active && (
+                              <span className="h-4 w-px bg-accent-legible" aria-hidden="true" />
+                            )}
+                            {link.label}
+                          </Link>
+                        </div>
+                      );
+                    })}
                   </nav>
 
                   {/* Bottom contact row */}
@@ -164,8 +187,8 @@ export function Navigation() {
                       data-testid="link-phone-mobile-menu"
                     >
                       <span className="relative flex h-2.5 w-2.5">
-                        <span className="pulse-accent absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent" />
+                        <span className="pulse-accent absolute inline-flex h-full w-full rounded-full bg-accent-legible opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-legible" />
                       </span>
                       {SITE_CONFIG.phone}
                     </a>

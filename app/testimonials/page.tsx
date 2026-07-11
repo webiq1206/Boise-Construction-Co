@@ -3,7 +3,6 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { Section } from '@/components/marketing/Section';
 import { PageHeader } from '@/components/marketing/PageHeader';
 import { ProjectGallerySection } from '@/components/sections/ProjectGallerySection';
-import { TestimonialsSection } from '@/components/sections/TestimonialsSection';
 import { buildPageMetadata } from '@/lib/page-metadata';
 import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
 import { Button } from '@/components/ui/button';
@@ -12,23 +11,19 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import {
   generateBreadcrumbSchema,
   generateCollectionPageSchema,
-  generateReviewSchema,
 } from '@/lib/schema';
 import { GALLERY_PROJECTS } from '@/shared/galleryData';
-import { TESTIMONIALS } from '@/shared/testimonialsData';
 
 export const metadata = buildPageMetadata({
   kind: 'about',
   path: '/testimonials',
-  titleOverride: 'Projects & Reviews',
+  titleOverride: 'Our Work',
   descriptionOverride:
-    'See Treasure Valley remodeling transformations and read reviews from Boise Remodeling Co homeowners. Kitchen, bath, whole-home, and addition projects.',
+    'See Treasure Valley remodeling transformations by Boise Remodeling Co: kitchen, bathroom, whole-home, and addition projects with real before-and-after comparisons.',
 });
 
-// Review schema is wired to the LocalBusiness entity below. AggregateRating
-// stays gated inside generateReviewSchema until BUSINESS_INFO.rating/reviewCount
-// reflect genuine, verified reviews (no fabricated ratings). Add ISO `date`
-// values to TESTIMONIALS entries to surface review dates.
+// No Review/AggregateRating structured data is emitted until BUSINESS_INFO
+// reflects genuine, verified reviews. We never publish fabricated review markup.
 
 export default function TestimonialsPage() {
   const schemas = [
@@ -37,7 +32,7 @@ export default function TestimonialsPage() {
       { name: 'Projects & Reviews', url: '/testimonials' },
     ]),
     generateCollectionPageSchema({
-      title: 'Projects & Reviews',
+      title: 'Our Work',
       description:
         'Treasure Valley remodeling transformations from Boise Remodeling Co: kitchen, bath, whole-home, and addition projects.',
       url: '/testimonials',
@@ -46,13 +41,6 @@ export default function TestimonialsPage() {
         url: `/services/${p.serviceType}/${p.city}`,
       })),
     }),
-    generateReviewSchema(
-      TESTIMONIALS.map((t) => ({
-        author: t.customerName,
-        rating: Number(t.rating) || 5,
-        text: t.testimonial,
-      })),
-    ),
   ];
 
   return (
@@ -63,7 +51,7 @@ export default function TestimonialsPage() {
           <Breadcrumbs
             items={[
               { name: 'Home', href: '/' },
-              { name: 'Projects & Reviews' },
+              { name: 'Our Work' },
             ]}
           />
           <PageHeader
@@ -71,11 +59,11 @@ export default function TestimonialsPage() {
             className="mt-6"
             title={
               <>
-                Projects &amp; homeowner{" "}
-                <em className="brc-accent">reviews</em>
+                Our <em className="brc-accent">work</em> across the
+                Treasure Valley
               </>
             }
-            description="Explore recent design-build work across the Treasure Valley and hear from homeowners who prioritized clarity, craftsmanship, and communication."
+            description="Explore recent design-build transformations. Drag any slider to compare the before and after, then picture the same clarity and craftsmanship in your home."
           />
           <div className="mb-8" />
           <div className="flex flex-wrap gap-3">
@@ -90,7 +78,6 @@ export default function TestimonialsPage() {
       </Section>
 
       <ProjectGallerySection limit={6} showViewAll={false} />
-      <TestimonialsSection limit={4} showViewAll={false} />
 
       <Section divider spacing="sm">
         <div className="container px-4 max-w-2xl mx-auto">

@@ -102,7 +102,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                 {hub && pillarSlug && (
                   <div className="rounded-lg border border-accent/20 bg-accent/5 p-5 md:p-6 mb-8">
                     <div className="flex items-center gap-2 mb-2">
-                      <BookOpen className="h-5 w-5 text-accent" />
+                      <BookOpen className="h-5 w-5 text-accent-legible" />
                       <p className="text-sm font-normal">Part of a larger guide</p>
                     </div>
                     <p className="text-sm text-muted-foreground mb-3">

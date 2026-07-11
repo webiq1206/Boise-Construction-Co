@@ -21,7 +21,7 @@ export default function NotFound() {
       <div className="max-w-2xl mx-auto text-center">
         <div className="mb-8">
           <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-accent/10 mb-4">
-            <Wrench className="h-12 w-12 text-accent" />
+            <Wrench className="h-12 w-12 text-accent-legible" />
           </div>
           <h1 className="text-6xl mb-2">
             <DisplayNum className="text-foreground">404</DisplayNum>
@@ -50,7 +50,7 @@ export default function NotFound() {
                   href={item.href}
                   className="flex items-center gap-2 p-3 rounded-sm hover:bg-muted transition-colors text-sm text-muted-foreground hover:text-foreground"
                 >
-                  <ArrowRight className="h-4 w-4 text-accent" />
+                  <ArrowRight className="h-4 w-4 text-accent-legible" />
                   {item.label}
                 </Link>
               ))}

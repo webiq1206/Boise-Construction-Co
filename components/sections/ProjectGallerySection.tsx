@@ -37,10 +37,21 @@ function BeforeAfterCard({ project }: { project: GalleryProject }) {
 interface ProjectGallerySectionProps {
   limit?: number;
   showViewAll?: boolean;
+  /** Service types to omit — e.g. one already shown in the featured section. */
+  excludeServiceTypes?: string[];
 }
 
-export function ProjectGallerySection({ limit = 6, showViewAll = true }: ProjectGallerySectionProps) {
-  const projects = GALLERY_PROJECTS.slice(0, limit);
+export function ProjectGallerySection({
+  limit = 6,
+  showViewAll = true,
+  excludeServiceTypes = [],
+}: ProjectGallerySectionProps) {
+  const projects = GALLERY_PROJECTS.filter(
+    (p) => !excludeServiceTypes.includes(p.serviceType),
+  ).slice(0, limit);
+
+  // 4 or fewer reads best as a 2-up grid of larger cards; 5+ uses 3 columns.
+  const lgCols = projects.length <= 4 ? "lg:grid-cols-2" : "lg:grid-cols-3";
 
   return (
     <Section id="gallery" divider>
@@ -51,7 +62,7 @@ export function ProjectGallerySection({ limit = 6, showViewAll = true }: Project
           description="Explore recent kitchen, bathroom, whole-home, and addition projects. Drag any slider to compare before and after."
           className="mb-10 max-w-3xl"
         />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className={`grid sm:grid-cols-2 ${lgCols} gap-6`}>
           {projects.map((project, i) => (
             <Reveal key={project.title} delay={i * 60}>
               <BeforeAfterCard project={project} />
@@ -61,7 +72,7 @@ export function ProjectGallerySection({ limit = 6, showViewAll = true }: Project
         {showViewAll && (
           <div className="mt-10 text-center">
             <Button variant="brandOutline" asChild>
-              <Link href="/testimonials">See more projects and reviews</Link>
+              <Link href="/testimonials">See more of our work</Link>
             </Button>
           </div>
         )}

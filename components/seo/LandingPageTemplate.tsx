@@ -16,8 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-
-const GRAIN_URL = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E")`;
+import { GRAIN_URL } from '@/lib/grain';
 
 interface BreadcrumbItem {
   name: string;
@@ -33,6 +32,8 @@ interface LandingPageTemplateProps {
   breatherImageUrl?: string;
   processImageUrl?: string;
   manifestPath?: string;
+  /** Optional planning starting point ("$15k") shown near the hero CTAs. */
+  planningFrom?: string;
   benefits?: string[];
   inclusions?: string[];
   timeline?: string;
@@ -138,6 +139,7 @@ export function LandingPageTemplate({
   breatherImageUrl,
   processImageUrl,
   manifestPath,
+  planningFrom,
   benefits,
   inclusions,
   timeline,
@@ -198,14 +200,20 @@ export function LandingPageTemplate({
             <ConsultCTA variant="brand">
               {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
             </ConsultCTA>
-            <Button
-              variant="outline"
-              className="bg-white/10 backdrop-blur-sm border-white/30 text-white"
-              asChild
-            >
+            <Button variant="heroGhost" asChild>
               <a href="/#consult">{CTA_SECONDARY}</a>
             </Button>
           </div>
+          {planningFrom && (
+            <p className="mt-6 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm text-inverse-muted">
+              <span className="uppercase tracking-[0.12em] text-[11px]">Planning from</span>
+              <span className="brc-display-num text-inverse-foreground text-lg leading-none">
+                {planningFrom}
+              </span>
+              <span className="opacity-40">·</span>
+              <span>Your exact range is confirmed at the free in-home visit</span>
+            </p>
+          )}
         </div>
       </section>
 
@@ -228,7 +236,7 @@ export function LandingPageTemplate({
                       delay={Math.min(i, 5) * 70}
                       className="marketing-card p-5 flex items-start gap-3 h-full"
                     >
-                      <Check className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
+                      <Check className="h-4 w-4 text-accent-legible flex-shrink-0 mt-0.5" />
                       <span className="text-sm leading-relaxed">
                         <strong className="font-normal text-foreground">{lead}</strong>
                         {body && (
@@ -280,7 +288,7 @@ export function LandingPageTemplate({
                       delay={Math.min(i, 6) * 60}
                       className="flex items-start gap-3 text-sm"
                     >
-                      <Check className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
+                      <Check className="h-4 w-4 text-accent-legible flex-shrink-0 mt-0.5" />
                       <span className="text-muted-foreground">{item}</span>
                     </Reveal>
                   </li>
@@ -325,7 +333,7 @@ export function LandingPageTemplate({
                 {processSteps.map((step, i) => (
                   <Reveal key={step.title} delay={Math.min(i, 5) * 70}>
                     <div className="flex gap-5 py-7">
-                      <DisplayNum className="text-2xl w-9 flex-shrink-0 leading-none mt-0.5 text-foreground/20">
+                      <DisplayNum className="text-2xl w-9 flex-shrink-0 leading-none mt-0.5 text-accent-legible">
                         {formatStepNumber(i)}
                       </DisplayNum>
                       <div>

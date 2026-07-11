@@ -99,6 +99,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         breatherImageUrl={images.breather}
         processImageUrl={images.process}
         manifestPath={path}
+        planningFrom={service.planningFrom}
         breadcrumbs={[
           { name: 'Home', href: '/' },
           { name: 'Services', href: '/services' },

@@ -45,7 +45,7 @@ function ResourceRow({ resource }: { resource: GuideResource }) {
   return (
     <div className="flex gap-3 items-start rounded-md border border-border/80 p-3 bg-muted/20">
       <div className="flex items-center justify-center w-9 h-9 rounded-md bg-accent/10 shrink-0">
-        <Icon className="h-4 w-4 text-accent" />
+        <Icon className="h-4 w-4 text-accent-legible" />
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm font-normal text-foreground">{resource.title}</p>

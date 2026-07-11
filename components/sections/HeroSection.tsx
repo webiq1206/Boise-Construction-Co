@@ -5,8 +5,7 @@ import { HERO_EYEBROW, HERO_SUBHEAD, HERO_STATS, TRUST_ITEMS } from "@/shared/si
 import { SITE_IMAGES } from "@/shared/siteImages";
 import { CTA_PRIMARY, CTA_SECONDARY } from "@/shared/ctaCopy";
 import { DisplayNum } from "@/components/marketing";
-
-const GRAIN_URL = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/2Fsvg%3E")`;
+import { GRAIN_URL } from "@/lib/grain";
 
 function StatCard({ num, label }: { num: string; label: string }) {
   return (
@@ -87,13 +86,17 @@ export function HeroSection() {
 
       <div className="bg-background border-t border-border/60 py-8 md:py-10">
         <div className="container px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 max-w-5xl mx-auto border-l border-t border-border/70">
-            {TRUST_ITEMS.map((item) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 max-w-5xl mx-auto border-l border-t border-border/70">
+            {TRUST_ITEMS.map((item, i) => (
               <div
                 key={item}
-                className="flex items-center justify-center px-4 py-5 md:py-3 text-center border-r border-b border-border/70"
+                className="flex items-center justify-center px-4 py-5 md:py-4 text-center border-r border-b border-border/70"
               >
-                <span className="text-[11px] leading-snug tracking-[0.2em] uppercase text-muted-foreground">
+                <span
+                  className={`text-[11px] leading-snug tracking-[0.2em] uppercase ${
+                    i < 2 ? "text-foreground" : "text-muted-foreground"
+                  }`}
+                >
                   {item}
                 </span>
               </div>

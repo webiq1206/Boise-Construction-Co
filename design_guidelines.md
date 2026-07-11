@@ -6,9 +6,16 @@
 
 **Core principles:**
 - Clarity over clutter: one primary action per section
-- Charcoal primary CTAs; sage accent for heading emphasis only
+- Bone primary CTAs; **sage is the brand accent** — strategic, not decorative
 - Mobile-first conversion (estimator, consult CTA)
 - Shared tokens in `app/globals.css` — no one-off page styles
+
+**Sage usage (two tones, used where each reads best):**
+- **Lifted sage `#899F95` (`--accent-legible`) = all sage TEXT:** heading accent
+  words (`.brc-accent`), eyebrow ticks, text-link hover, focus rings, step
+  numerals. AA-legible (5.9:1) on the charcoal ground at any size.
+- **Deep sage `#5D6561` (`--accent`) = graphic fills only:** chips, tints,
+  slider track, icon grounds (always with bone text on top). Too dark for text.
 
 ---
 
@@ -29,7 +36,7 @@
 ## Typography
 
 - **UI & body:** Montserrat (`font-sans`)
-- **Accent word:** Fraunces italic via `.brc-accent` (max one word per heading)
+- **Accent word:** Fraunces italic in lifted sage via `.brc-accent` (max one word per heading)
 - **Numerals:** Fraunces via `.brc-display-num` / `<DisplayNum>`
 - **Eyebrows:** `.brc-label` — 11px, uppercase, 0.14em tracking
 

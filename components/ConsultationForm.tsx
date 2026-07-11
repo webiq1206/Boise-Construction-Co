@@ -534,7 +534,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
 
             {decision === "confirmed" && (
               <div className="flex flex-wrap items-center gap-2 border-t border-accent/20 pt-3">
-                <CheckCircle2 className="h-4 w-4 text-accent" />
+                <CheckCircle2 className="h-4 w-4 text-accent-legible" />
                 <span className="font-normal text-foreground" data-testid="status-estimate-attached">
                   This range will be attached to your request.
                 </span>

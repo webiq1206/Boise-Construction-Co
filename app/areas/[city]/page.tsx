@@ -14,7 +14,6 @@ import { AREA_PAGE_FAQS, getAreaIntro } from '@/shared/seoContent';
 import { generateSpeakableSchema } from '@/lib/schema';
 import { getAreaImageSet } from '@/shared/cityServiceImages';
 import type { LandingSection, LandingProof } from '@/components/seo/LandingPageTemplate';
-import { getTestimonialsForCity } from '@/shared/testimonialsData';
 import { getGalleryProjectsForCity } from '@/shared/galleryData';
 
 export function generateStaticParams() {
@@ -86,16 +85,12 @@ export default function AreaPage({ params }: { params: { city: string } }) {
     },
   ];
 
-  const cityTestimonials = getTestimonialsForCity(city.slug);
+  // Real before/after projects only — no seeded testimonials or star ratings
+  // until genuine, verified reviews exist.
   const cityProjects = getGalleryProjectsForCity(city.slug);
   const proof: LandingProof | undefined =
-    cityTestimonials.length > 0 || cityProjects.length > 0
+    cityProjects.length > 0
       ? {
-          testimonials: cityTestimonials.map((t) => ({
-            name: t.customerName,
-            rating: Number(t.rating) || 5,
-            quote: t.testimonial,
-          })),
           projects: cityProjects.map((p) => ({
             title: p.title,
             description: p.description,

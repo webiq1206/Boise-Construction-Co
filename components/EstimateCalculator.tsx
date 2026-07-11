@@ -90,12 +90,12 @@ function SelectButton<T extends string>({
             aria-pressed={active}
             className={cn(
               "relative flex min-h-11 flex-col items-start gap-1 p-4 rounded-sm text-left transition-all border bg-card",
-              active ? "border-foreground/40 border-[1.5px] bg-muted/40" : "border-border",
+              active ? "border-accent-legible border-[1.5px] bg-accent-legible/10" : "border-border",
               disabled && "opacity-50 cursor-not-allowed"
             )}
           >
             {active && (
-              <Check className="absolute top-2.5 right-2.5 h-3.5 w-3.5 text-foreground" />
+              <Check className="absolute top-2.5 right-2.5 h-3.5 w-3.5 text-accent-legible" />
             )}
             <span className="font-normal text-xs text-foreground">{opt.label}</span>
             {opt.sub && (
@@ -203,10 +203,10 @@ function ProjectTiles({
             aria-pressed={active}
             className={cn(
               "relative flex min-h-11 flex-col items-start gap-1.5 p-5 rounded-sm text-left transition-all border bg-card",
-              active ? "border-foreground/40 border-[1.5px] bg-muted/40" : "border-border"
+              active ? "border-accent-legible border-[1.5px] bg-accent-legible/10" : "border-border"
             )}
           >
-            {active && <Check className="absolute top-3 right-3 h-4 w-4 text-foreground" />}
+            {active && <Check className="absolute top-3 right-3 h-4 w-4 text-accent-legible" />}
             <span className="font-normal text-sm text-foreground">{info.label}</span>
             <span className="text-xs text-muted-foreground">{info.sub}</span>
           </button>
@@ -247,11 +247,11 @@ function FinishTiles({
             aria-pressed={active}
             className={cn(
               "relative flex min-h-11 flex-col items-start gap-1.5 p-5 rounded-sm text-left transition-all border bg-card",
-              active ? "border-foreground/40 border-[1.5px] bg-muted/40" : "border-border",
+              active ? "border-accent-legible border-[1.5px] bg-accent-legible/10" : "border-border",
               disabled && "opacity-50 cursor-not-allowed"
             )}
           >
-            {active && <Check className="absolute top-3 right-3 h-4 w-4 text-foreground" />}
+            {active && <Check className="absolute top-3 right-3 h-4 w-4 text-accent-legible" />}
             <span className="font-normal text-sm text-foreground">{info.label}</span>
             <span className="text-xs text-muted-foreground">{info.sub}</span>
             {project && (
@@ -305,7 +305,7 @@ function SizePicker({
               aria-pressed={active}
               className={cn(
                 "relative flex min-h-11 flex-col items-center gap-0.5 p-3 rounded-sm text-center transition-all border bg-card",
-                active ? "border-foreground/40 border-[1.5px] bg-muted/40" : "border-border",
+                active ? "border-accent-legible border-[1.5px] bg-accent-legible/10" : "border-border",
                 !presets && "opacity-50 cursor-not-allowed"
               )}
             >
@@ -760,7 +760,7 @@ export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitPr
                     className={cn(
                       "block rounded-full transition-all",
                       i === stepIndex
-                        ? "w-5 h-1.5 bg-foreground"
+                        ? "w-5 h-1.5 bg-accent-legible"
                         : reachable
                           ? "w-1.5 h-1.5 bg-foreground/40"
                           : "w-1.5 h-1.5 bg-border"

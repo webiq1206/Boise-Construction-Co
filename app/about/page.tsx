@@ -22,8 +22,7 @@ import { HERO_STATS, PRINCIPLES, TRUST_ITEMS } from '@/shared/siteContent';
 import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
 import { Button } from '@/components/ui/button';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
-
-const GRAIN_URL = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E")`;
+import { GRAIN_URL } from '@/lib/grain';
 
 const SPEAKABLE_SUMMARY =
   'We are a locally owned design-build remodeling company serving the Treasure Valley. Our focus is clarity: written scope before construction, proactive weekly updates, permits handled in-house for Ada and Canyon County, and a written workmanship guarantee on our labor.';
@@ -145,11 +144,7 @@ export default function AboutPage() {
               <ConsultCTA variant="brand">
                 {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
               </ConsultCTA>
-              <Button
-                variant="outline"
-                className="bg-white/10 backdrop-blur-sm border-white/30 text-white"
-                asChild
-              >
+              <Button variant="heroGhost" asChild>
                 <a href="/#consult">{CTA_SECONDARY}</a>
               </Button>
             </div>
@@ -207,7 +202,7 @@ export default function AboutPage() {
                 <ul className="grid sm:grid-cols-2 gap-3">
                   {TRUST_ITEMS.map((item) => (
                     <li key={item} className="flex items-start gap-3 text-sm text-muted-foreground">
-                      <Check className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
+                      <Check className="h-4 w-4 text-accent-legible flex-shrink-0 mt-0.5" />
                       <span>{item}</span>
                     </li>
                   ))}

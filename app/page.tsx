@@ -10,7 +10,7 @@ import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { ProcessSection } from "@/components/sections/ProcessSection";
 import { FeaturedProjectSection } from "@/components/sections/FeaturedProjectSection";
 import { BudgetInclusionsSection } from "@/components/sections/BudgetInclusionsSection";
-import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
+import { ProjectGallerySection } from "@/components/sections/ProjectGallerySection";
 import { Section } from "@/components/marketing/Section";
 import { MarketingCard } from "@/components/marketing/MarketingCard";
 import { Check } from "lucide-react";
@@ -59,7 +59,11 @@ export default function HomePage() {
       <ServicesGrid />
       <ProcessSection />
       <FeaturedProjectSection />
-      <TestimonialsSection limit={3} showViewAll={true} />
+      <ProjectGallerySection
+        limit={6}
+        showViewAll={true}
+        excludeServiceTypes={["whole-home-remodel"]}
+      />
       <EstimateCalculator />
       <WhyChooseUsSection limit={5} />
       <BudgetInclusionsSection />
@@ -97,7 +101,7 @@ export default function HomePage() {
                       key={item}
                       className="flex items-center gap-3 text-sm text-muted-foreground"
                     >
-                      <Check className="h-4 w-4 flex-shrink-0 text-foreground/60" />
+                      <Check className="h-4 w-4 flex-shrink-0 text-accent-legible" />
                       {item}
                     </div>
                   ))}

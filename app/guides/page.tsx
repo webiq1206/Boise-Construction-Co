@@ -98,7 +98,7 @@ export default function GuidesIndexPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {pillarGuides.map((guide) => (
               <MarketingCard key={guide.slug} className="p-6 flex flex-col h-full">
-                <BookOpen className="h-5 w-5 text-accent mb-3" />
+                <BookOpen className="h-5 w-5 text-accent-legible mb-3" />
                 <h3 className="font-normal text-lg mb-2">{guide.title}</h3>
                 <p className="text-sm text-muted-foreground flex-1 mb-3">{guide.excerpt}</p>
                 <GuideCardStats guide={guide} />
@@ -121,7 +121,7 @@ export default function GuidesIndexPage() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {locationGuides.map((guide) => (
               <MarketingCard key={guide.slug} className="p-5 flex flex-col h-full">
-                <MapPin className="h-4 w-4 text-accent mb-2" />
+                <MapPin className="h-4 w-4 text-accent-legible mb-2" />
                 <h3 className="font-normal text-base mb-1">{guide.title}</h3>
                 <p className="text-sm text-muted-foreground flex-1 mb-2 line-clamp-2">
                   {guide.excerpt}

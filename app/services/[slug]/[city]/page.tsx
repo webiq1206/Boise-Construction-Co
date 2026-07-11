@@ -24,7 +24,6 @@ import {
 } from '@/shared/seoContent';
 import { generateSpeakableSchema } from '@/lib/schema';
 import { getCityServiceImageSet } from '@/shared/cityServiceImages';
-import { getTestimonialsFor } from '@/shared/testimonialsData';
 import { getGalleryProjectsFor } from '@/shared/galleryData';
 
 export function generateStaticParams() {
@@ -75,16 +74,12 @@ export default function CityServicePage({
   const images = getCityServiceImageSet(service.slug, city.slug);
   const sections = getCityServiceSections(content, city, seo);
 
-  const matchedTestimonials = getTestimonialsFor(service.slug, city.slug);
+  // Real before/after projects only. Written testimonials stay hidden until we
+  // have genuine, verified reviews (no seeded quotes or star ratings).
   const matchedProjects = getGalleryProjectsFor(service.slug, city.slug);
   const proof: LandingProof | undefined =
-    matchedTestimonials.length > 0 || matchedProjects.length > 0
+    matchedProjects.length > 0
       ? {
-          testimonials: matchedTestimonials.map((t) => ({
-            name: t.customerName,
-            rating: Number(t.rating) || 5,
-            quote: t.testimonial,
-          })),
           projects: matchedProjects.map((p) => ({
             title: p.title,
             description: p.description,
@@ -117,6 +112,7 @@ export default function CityServicePage({
         breatherImageUrl={images.breather}
         processImageUrl={images.process}
         manifestPath={path}
+        planningFrom={service.planningFrom}
         breadcrumbs={[
           { name: 'Home', href: '/' },
           { name: service.name, href: `/services/${service.slug}` },

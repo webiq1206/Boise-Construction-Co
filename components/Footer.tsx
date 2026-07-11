@@ -18,8 +18,8 @@ export function Footer() {
   return (
     <footer className="bg-inverse text-inverse-foreground">
       <div className="container px-4 py-16 md:py-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-10 mb-12 lg:gap-0 lg:divide-x lg:divide-inverse-foreground/10 [&>*]:lg:px-6 [&>*:first-child]:lg:pl-0 [&>*:last-child]:lg:pr-0">
-          <div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-10 mb-12 lg:gap-0 lg:divide-x lg:divide-inverse-foreground/10 [&>*]:lg:px-6 [&>*:first-child]:lg:pl-0 [&>*:last-child]:lg:pr-0">
+          <div className="lg:col-span-2">
             <div className="mb-5 flex items-center gap-4">
               {/* Bright emblem badge reads as a mark on the dark footer band */}
               <img
@@ -144,7 +144,7 @@ export function Footer() {
             <ul className="space-y-2.5">
               {[
                 { label: "About", href: "/about" },
-                { label: "Projects & Reviews", href: "/testimonials" },
+                { label: "Our Work", href: "/testimonials" },
                 { label: "Contact", href: "/contact" },
                 { label: "Why Choose Us", href: "/#why-choose-us" },
                 { label: "How We Build", href: "/#how-we-build" },

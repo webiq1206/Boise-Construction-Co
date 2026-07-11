@@ -83,11 +83,29 @@ export const DIFFERENTIATORS: Differentiator[] = [
   },
 ];
 
+/**
+ * Headline credibility stats. Owner-provided facts about the business — keep
+ * these accurate and update in one place. `established` is the founding year
+ * (see shared/gbpProfile.ts GBP_NAP.founded); `projectsCompleted` is a rounded
+ * completed-project count.
+ */
+export const PROOF_STATS = {
+  established: "2017",
+  projectsCompleted: "200+",
+} as const;
+
+/**
+ * Post-hero proof bar. Leads with the two credibility stats, then the genuine
+ * trust signals the business carries. No review counts or ratings until real
+ * ones exist. Keep labels concise so the strip stays on one desktop row.
+ */
 export const TRUST_ITEMS = [
+  `Est. ${PROOF_STATS.established}`,
+  `${PROOF_STATS.projectsCompleted} Projects`,
   "Bonded · Insured",
-  "Liability Coverage",
-  "Permits Handled · In-House",
+  "Permits In-House",
   "Workmanship Guarantee",
+  "Free In-Home Visit",
 ];
 
 export const PROMISE_ITEMS = [

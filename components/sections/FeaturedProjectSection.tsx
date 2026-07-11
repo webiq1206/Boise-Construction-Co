@@ -20,7 +20,7 @@ export function FeaturedProjectSection() {
   const cityName = cityDisplayName(project.city);
 
   return (
-    <section id="gallery" className="relative overflow-hidden bg-background section-divider border-t border-border/60">
+    <section id="featured-project" className="relative overflow-hidden bg-background section-divider border-t border-border/60">
       <div className="container px-4 pt-16 md:pt-24 pb-10 md:pb-12">
         <Reveal className="max-w-3xl">
           <div className="brc-label mb-4">Featured project</div>
@@ -55,7 +55,7 @@ export function FeaturedProjectSection() {
       <div className="container px-4 py-10 text-center">
         <Reveal delay={120}>
           <Button variant="brandOutline" asChild>
-            <Link href="/testimonials">View all projects and reviews</Link>
+            <Link href="/testimonials">See more of our work</Link>
           </Button>
         </Reveal>
       </div>

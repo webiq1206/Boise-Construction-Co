@@ -5,6 +5,13 @@ export interface ServiceData {
   slug: string;
   name: string;
   shortDescription: string;
+  /**
+   * Planning starting point (a floor, not a bid or a wide range). Rendered as
+   * "Planning from $X" to give price context without committing to a spread —
+   * the real number comes from the estimator + in-home visit. Sourced from the
+   * published GBP starting figures (shared/gbpProfile.ts).
+   */
+  planningFrom: string;
 }
 
 export interface CityData {
@@ -19,26 +26,31 @@ export const SERVICES: ServiceData[] = [
     slug: 'kitchen-remodel',
     name: 'Kitchen Remodel',
     shortDescription: 'Custom kitchen renovations from cabinet refreshes to full gut-and-rebuild.',
+    planningFrom: '$15k',
   },
   {
     slug: 'bathroom-remodel',
     name: 'Bathroom Remodel',
     shortDescription: 'Spa-quality bathroom transformations designed around how you actually live.',
+    planningFrom: '$18k',
   },
   {
     slug: 'whole-home-remodel',
     name: 'Whole-Home Remodel',
     shortDescription: 'Cohesive whole-home renovations with a single project manager start to finish.',
+    planningFrom: '$150k',
   },
   {
     slug: 'room-addition',
     name: 'Room Addition',
     shortDescription: 'Thoughtfully designed additions that feel like they were always part of your home.',
+    planningFrom: '$80k',
   },
   {
     slug: 'adu',
     name: 'ADU / Guest House',
     shortDescription: 'Detached or attached accessory dwelling units designed to maximize your property value.',
+    planningFrom: '$90k',
   },
 ];
 

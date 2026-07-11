@@ -3,6 +3,8 @@ import Script from 'next/script';
 const CLARITY_PROJECT_ID = 'x5wrjdadlb';
 
 export function MicrosoftClarity() {
+  // Production-only: keep dev sessions out of Clarity heatmaps/recordings.
+  if (process.env.NODE_ENV !== 'production') return null;
   if (!CLARITY_PROJECT_ID) return null;
   return (
     <Script

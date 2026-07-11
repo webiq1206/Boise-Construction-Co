@@ -48,7 +48,8 @@ html, body {
    is present. This is the identity, not a toggle. Palette:
      --bg #1C1F1E · --bg-2 #222624 · --surface #262B29 · hairline #39403D
      bone #F7F5F3 · body #E6E3DE · mist #9AA098 · faint #6E756F
-     sage accents #5D6561 · lifted sage (links/focus) #899F95 · accent WORDS = bone
+     deep sage #5D6561 = graphic fills/chips/tints · lifted sage #899F95 =
+     ALL sage text (accent WORDS, eyebrow ticks, links/hover, focus, numerals)
    ═══════════════════════════════════════════════════════════════════ */
 :root, .dark {
   --button-outline: rgba(255,255,255, .08);
@@ -354,15 +355,17 @@ html, body {
   filter: saturate(0.86) contrast(1.04) brightness(0.9);
 }
 
-/* ─── Decorative accent (Fraunces italic emphasis only) ─── */
+/* ─── Decorative accent (Fraunces italic emphasis) ─── */
 .brc-accent {
   font-family: var(--font-fraunces, Georgia, serif);
   font-style: italic;
   font-optical-sizing: auto;
-  /* Accent WORDS are the serif grace note, not a colour pop: they inherit their
-     heading's bone so the elegance comes from the italic serif form (truest to
-     the brand-system PDF). Overrides any text-accent on the same element. */
-  color: inherit;
+  /* Accent WORDS are the serif grace note AND the brand's sage moment. We use
+     the lifted sage (#899F95), not the deep #5D6561, because deep sage fails
+     legibility as text on the charcoal ground — the lifted tone stays AA
+     (5.9:1) at any size while reading unmistakably as the same sage family.
+     Overrides any text-accent on the same element. */
+  color: hsl(var(--accent-legible));
 }
 
 /* ─── Decorative display numerals (Fraunces: stats, prices, step markers) ─── */
@@ -388,13 +391,16 @@ html, body {
   content: "";
   width: 24px;
   height: 1px;
-  background: currentColor;
+  /* Sage tick: the eyebrow's brand accent. Lifted sage so the 1px hairline
+     actually reads on the dark ground. */
+  background: hsl(var(--accent-legible));
   flex-shrink: 0;
 }
 /* Ensure inverse-muted wins over the default label color on dark/image bands */
 .brc-label.text-inverse-muted {
   color: hsl(var(--inverse-muted) / 0.68);
 }
+/* The sage tick is intentional on every band, but keep the label TEXT muted. */
 
 /* ─── Calculator range slider ─── */
 .brc-slider {
@@ -476,7 +482,7 @@ html, body {
   text-underline-offset: 2px;
   transition: color 0.15s;
 }
-.blog-content a:hover { color: hsl(var(--accent)); }
+.blog-content a:hover { color: hsl(var(--accent-legible)); }
 .blog-content ul, .blog-content ol {
   margin-bottom: 1.25rem;
   padding-left: 1.5rem;
@@ -598,9 +604,13 @@ html, body {
   gap: 0.25rem 1rem;
 }
 
-/* Marketing text link (tertiary action) */
+/* Marketing text link (tertiary action) — reveals sage on hover */
 .brc-text-link {
-  @apply inline-flex items-center gap-2 text-sm font-normal text-foreground underline-offset-2 hover:underline transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm;
+  @apply inline-flex items-center gap-2 text-sm font-normal text-foreground underline-offset-2 hover:underline hover:text-accent-legible transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm;
+}
+/* Arrow in text links picks up the sage on hover too */
+.brc-text-link:hover svg {
+  color: hsl(var(--accent-legible));
 }
 
 /* ─── Semantic status tokens (badges, confidence labels) - dark ground ─── */

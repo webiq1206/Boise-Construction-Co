@@ -3,8 +3,7 @@ import { Reveal } from "@/components/Reveal";
 import { DisplayNum, Section } from "@/components/marketing";
 import { HOW_WE_BUILD_STEPS } from "@/shared/siteContent";
 import { GALLERY_IMAGES } from "@/shared/siteImages";
-
-const GRAIN_URL = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/2Fsvg%3E")`;
+import { GRAIN_URL } from "@/lib/grain";
 
 export function ProcessSection() {
   return (
@@ -47,7 +46,7 @@ export function ProcessSection() {
                   key={step.number}
                   className={`flex gap-5 py-6 ${i < HOW_WE_BUILD_STEPS.length - 1 ? "border-b border-border" : ""}`}
                 >
-                  <DisplayNum className="text-2xl w-8 flex-shrink-0 leading-none mt-0.5 text-foreground/20">
+                  <DisplayNum className="text-2xl w-8 flex-shrink-0 leading-none mt-0.5 text-accent-legible">
                     {step.number}
                   </DisplayNum>
                   <div>

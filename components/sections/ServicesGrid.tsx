@@ -42,9 +42,17 @@ export function ServicesGrid() {
                 <h3 className="font-sans font-normal text-base mb-2 text-foreground">
                   {service.name}
                 </h3>
-                <p className="text-sm leading-relaxed mb-4 text-muted-foreground">
+                <p className="text-sm leading-relaxed mb-3 text-muted-foreground">
                   {service.shortDescription}
                 </p>
+                <div className="mb-4 flex items-baseline gap-2">
+                  <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                    Planning from
+                  </span>
+                  <span className="brc-display-num text-foreground text-base leading-none">
+                    {service.planningFrom}
+                  </span>
+                </div>
                 <TextLink href={servicePath(service.slug)} showArrow>
                   Learn more
                 </TextLink>
@@ -70,10 +78,11 @@ export function ServicesGrid() {
           </Reveal>
         </div>
 
-        <div className="mt-12 text-center">
-          <Button variant="brand" asChild>
-            <a href="#consult">{CTA_SECONDARY}</a>
+        <div className="mt-12 flex flex-col items-center gap-4">
+          <Button variant="brandOutline" asChild>
+            <a href="/services">Explore all services</a>
           </Button>
+          <TextLink href="#consult">{CTA_SECONDARY}</TextLink>
         </div>
       </div>
     </Section>

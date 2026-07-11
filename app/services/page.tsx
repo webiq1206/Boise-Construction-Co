@@ -104,9 +104,19 @@ export default function ServicesIndexPage() {
                       <p className="text-sm leading-relaxed mb-4 text-muted-foreground flex-1">
                         {service.shortDescription}
                       </p>
-                      <span className="brc-text-link">
-                        Learn more <ArrowRight className="h-4 w-4" />
-                      </span>
+                      <div className="mt-auto pt-4 border-t border-border/60 flex items-center justify-between gap-3">
+                        <div>
+                          <div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                            Planning from
+                          </div>
+                          <div className="brc-display-num text-foreground text-lg leading-none mt-0.5">
+                            {service.planningFrom}
+                          </div>
+                        </div>
+                        <span className="brc-text-link">
+                          Learn more <ArrowRight className="h-4 w-4" />
+                        </span>
+                      </div>
                     </div>
                   </article>
                 </Link>

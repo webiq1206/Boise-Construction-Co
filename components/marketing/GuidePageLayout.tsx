@@ -105,7 +105,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                     data-testid="guide-cluster-links"
                   >
                     <div className="flex items-center gap-2 mb-3">
-                      <BookOpen className="h-5 w-5 text-accent" />
+                      <BookOpen className="h-5 w-5 text-accent-legible" />
                       <h2 className="text-base font-normal">Go deeper in this guide</h2>
                     </div>
                     <p className="text-sm text-muted-foreground mb-4">

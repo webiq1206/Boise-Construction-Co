@@ -32,6 +32,7 @@ import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
 import { CONSULT_BULLETS, HERO_STATS } from '@/shared/siteContent';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { Button } from '@/components/ui/button';
+import { GRAIN_URL } from '@/lib/grain';
 
 const CONTACT_FAQS = [
   {
@@ -59,8 +60,6 @@ const CONTACT_FAQS = [
       'Use our online project estimator for an instant planning range, then book a free in-home visit for a written scope tailored to your home.',
   },
 ];
-
-const GRAIN_URL = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E")`;
 
 const SPEAKABLE_SUMMARY =
   'Contact Boise Remodeling Co for a free consultation. Schedule a free 60 to 90 minute in-home visit, call our team, or use the project estimator to explore a planning range for your remodel.';
@@ -141,7 +140,7 @@ function ContactChannel({
       padding={featured ? 'lg' : 'default'}
     >
       <div className="flex items-start gap-4">
-        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-accent/10 text-accent">
+        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-sm bg-accent-legible/10 text-accent-legible">
           {icon}
         </div>
         <div className="min-w-0 flex-1">
@@ -247,15 +246,15 @@ export default function ContactPage() {
               Prefer to text? Message us instead
             </a>
             <div className="flex flex-wrap gap-3 mb-8">
-              {/* Scroll straight to the inline form rather than opening a modal,
-                  so the primary contact action is one tap from the hero. */}
+              {/* Primary action on the contact page is the inline form below —
+                  one tap from the hero. The estimator lives on the homepage. */}
               <Button variant="brand" asChild>
-                <a href="#calculator">
-                  {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
+                <a href="#consult">
+                  Request your free visit <ArrowRight className="h-4 w-4" />
                 </a>
               </Button>
               <Button variant="heroGhost" asChild>
-                <a href="#consult">{CTA_SECONDARY}</a>
+                <a href="/#calculator">Get an instant estimate</a>
               </Button>
             </div>
             <div className="grid grid-cols-3 gap-3 max-w-xl">
@@ -381,7 +380,7 @@ export default function ContactPage() {
                   {CONSULT_BULLETS.map((bullet, i) => (
                     <li key={bullet}>
                       <div className="flex items-start gap-3 py-4">
-                        <Check className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
+                        <Check className="h-4 w-4 text-accent-legible flex-shrink-0 mt-0.5" />
                         <span className="text-base text-foreground">{bullet}</span>
                       </div>
                       {i < CONSULT_BULLETS.length - 1 && (
@@ -392,7 +391,7 @@ export default function ContactPage() {
                 </ul>
                 <div className="flex flex-col sm:flex-row flex-wrap gap-3">
                   <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
-                  <Button variant="brandOutline" asChild><a href="/#consult">{CTA_SECONDARY}</a></Button>
+                  <Button variant="brandOutline" asChild><a href="#consult">{CTA_SECONDARY}</a></Button>
                 </div>
               </Reveal>
             </div>
@@ -512,7 +511,7 @@ export default function ContactPage() {
                 <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3">
                   <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
                   <Button variant="heroGhost" asChild>
-                    <a href="/#consult">{CTA_SECONDARY}</a>
+                    <a href="#consult">{CTA_SECONDARY}</a>
                   </Button>
                 </div>
               </MarketingCard>
