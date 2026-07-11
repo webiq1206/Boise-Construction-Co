@@ -52,3 +52,7 @@ NEXT_PUBLIC_GA_MEASUREMENT_ID = "G-NGE449QF9Y"
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 120000
+
+[[ports]]
+localPort = 5000
+externalPort = 80
