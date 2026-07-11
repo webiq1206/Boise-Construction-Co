@@ -19,7 +19,7 @@ export function ProcessSection() {
             sizes="50vw"
             className="object-cover img-brand-grade"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-primary/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-inverse/55 via-inverse/35 to-inverse/85" />
           <div
             className="absolute inset-0 pointer-events-none"
             style={{ backgroundImage: GRAIN_URL, backgroundRepeat: "repeat", opacity: 0.028 }}
