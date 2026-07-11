@@ -7,6 +7,10 @@ import { remodelCostPerSquareFootBoise } from './remodel-cost-per-square-foot-bo
 import { whatImpactsRemodelingCostsBoise } from './what-impacts-remodeling-costs-boise';
 import { howToBudgetRemodelBoise } from './how-to-budget-remodel-boise';
 import { luxuryRemodelCostBoise } from './luxury-remodel-cost-boise';
+import { questionsToAskRemodelingContractor } from './questions-to-ask-remodeling-contractor';
+import { remodelingContractorRedFlags } from './remodeling-contractor-red-flags';
+import { designBuildVsGeneralContractor } from './design-build-vs-general-contractor';
+import { howToCompareRemodelingEstimates } from './how-to-compare-remodeling-estimates';
 
 /**
  * Wave 2: bespoke, comprehensive blog posts (1,600+ words, Answer-First,
@@ -23,4 +27,9 @@ export const WAVE2_POSTS: BlogPostData[] = [
   whatImpactsRemodelingCostsBoise,
   howToBudgetRemodelBoise,
   luxuryRemodelCostBoise,
+  // Contractor Selection hub
+  questionsToAskRemodelingContractor,
+  remodelingContractorRedFlags,
+  designBuildVsGeneralContractor,
+  howToCompareRemodelingEstimates,
 ];

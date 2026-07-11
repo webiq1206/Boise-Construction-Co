@@ -16,6 +16,11 @@ export const BLOG_OG_IMAGES: Record<string, string> = {
   'what-impacts-remodeling-costs-boise': '/images/blog/what-impacts-remodeling-costs-boise-og.jpg',
   'how-to-budget-remodel-boise': '/images/blog/how-to-budget-remodel-boise-og.jpg',
   'luxury-remodel-cost-boise': '/images/blog/luxury-remodel-cost-boise-og.jpg',
+  // Contractor Selection hub
+  'questions-to-ask-remodeling-contractor': '/images/blog/questions-to-ask-remodeling-contractor-og.jpg',
+  'remodeling-contractor-red-flags': '/images/blog/remodeling-contractor-red-flags-og.jpg',
+  'design-build-vs-general-contractor': '/images/blog/design-build-vs-general-contractor-og.jpg',
+  'how-to-compare-remodeling-estimates': '/images/blog/how-to-compare-remodeling-estimates-og.jpg',
 };
 
 export function getBlogOgImage(slug: string): string | undefined {
