@@ -6,9 +6,8 @@ import { usePathname } from "next/navigation";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { CTA_PRIMARY, CTA_PRIMARY_SHORT } from "@/shared/ctaCopy";
+import { CTA_QUOTE } from "@/shared/ctaCopy";
 import { SITE_CONFIG } from "@/shared/siteConfig";
-import { useModals } from "@/components/modals/modalsContext";
 
 const NAV_LINKS = [
   { label: "Services", href: "/services" },
@@ -38,8 +37,6 @@ function Logo() {
 export function Navigation() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { openConsult } = useModals();
-
   const isPortal =
     pathname?.startsWith("/admin") ||
     pathname?.startsWith("/subcontractor/portal") ||
@@ -49,7 +46,6 @@ export function Navigation() {
     pathname?.startsWith("/subcontractor/contracts") ||
     pathname === "/subcontractor" ||
     pathname?.startsWith("/subcontractor/purchases");
-  const isHome = pathname === "/";
 
   if (isPortal) {
     return (
@@ -98,15 +94,9 @@ export function Navigation() {
             >
               Text us
             </a>
-            {isHome ? (
-              <Button variant="brand" size="sm" className="min-h-11" asChild>
-                <a href="/#consult">{CTA_PRIMARY_SHORT}</a>
-              </Button>
-            ) : (
-              <Button variant="brand" size="sm" className="min-h-11" onClick={openConsult}>
-                {CTA_PRIMARY_SHORT}
-              </Button>
-            )}
+            <Button variant="brand" size="sm" className="min-h-11" asChild>
+              <a href="/#calculator">{CTA_QUOTE}</a>
+            </Button>
           </div>
 
           {/* Mobile menu - Radix Dialog gives focus trap, Escape, scroll-lock,
@@ -186,24 +176,11 @@ export function Navigation() {
                     >
                       Text us instead
                     </a>
-                    {isHome ? (
-                      <Button variant="brand" className="w-full" asChild>
-                        <a href="/#consult" onClick={() => setMobileOpen(false)}>
-                          {CTA_PRIMARY}
-                        </a>
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="brand"
-                        className="w-full"
-                        onClick={() => {
-                          setMobileOpen(false);
-                          openConsult();
-                        }}
-                      >
-                        {CTA_PRIMARY}
-                      </Button>
-                    )}
+                    <Button variant="brand" className="w-full" asChild>
+                      <a href="/#calculator" onClick={() => setMobileOpen(false)}>
+                        {CTA_QUOTE}
+                      </a>
+                    </Button>
                   </div>
                 </Dialog.Content>
               </Dialog.Portal>
@@ -232,23 +209,13 @@ export function Navigation() {
           >
             Text
           </a>
-          {isHome ? (
-            <a
-              href="/#consult"
-              className="flex items-center justify-center gap-2 py-4 text-sm font-normal text-foreground"
-              data-testid="button-begin-conversation-mobile"
-            >
-              {CTA_PRIMARY_SHORT}
-            </a>
-          ) : (
-            <button
-              onClick={openConsult}
-              className="flex items-center justify-center gap-2 py-4 text-sm font-normal text-foreground"
-              data-testid="button-begin-conversation-mobile"
-            >
-              {CTA_PRIMARY_SHORT}
-            </button>
-          )}
+          <a
+            href="/#calculator"
+            className="flex items-center justify-center gap-2 py-4 text-sm font-normal text-foreground"
+            data-testid="button-begin-conversation-mobile"
+          >
+            {CTA_QUOTE}
+          </a>
         </div>
       </div>
     </>
