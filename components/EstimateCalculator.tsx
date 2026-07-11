@@ -969,12 +969,23 @@ export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitPr
           </p>
         </div>
 
-        <div className="hidden lg:grid lg:grid-cols-[3fr_2fr] gap-8 md:gap-12 items-start max-w-6xl mx-auto">
-          {stacked}
-          <div className="lg:sticky lg:top-24">{resultPanel}</div>
-        </div>
+        {/* Elevated panel frames the estimator as a distinct interactive tool,
+            lifting it off the flat dark sections around it. The sage accent line
+            signals "interactive". Layered surfaces: page -> panel -> cards. */}
+        <div className="max-w-6xl mx-auto relative rounded-xl border border-border bg-surface-muted shadow-xl">
+          <div
+            className="absolute inset-x-0 top-0 h-[2px] rounded-t-xl bg-gradient-to-r from-transparent via-accent-legible/70 to-transparent"
+            aria-hidden="true"
+          />
+          <div className="p-5 sm:p-6 md:p-8 lg:p-10">
+            <div className="hidden lg:grid lg:grid-cols-[3fr_2fr] gap-8 md:gap-12 items-start">
+              {stacked}
+              <div className="lg:sticky lg:top-24">{resultPanel}</div>
+            </div>
 
-        <div className="lg:hidden max-w-xl mx-auto">{stepper}</div>
+            <div className="lg:hidden max-w-xl mx-auto">{stepper}</div>
+          </div>
+        </div>
       </div>
 
       <StickyEstimateBar

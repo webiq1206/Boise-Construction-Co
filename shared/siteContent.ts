@@ -284,3 +284,16 @@ export const CONSULT_BULLETS = [
   "Honest planning ranges, in writing",
   "Response within one business day",
 ];
+
+/**
+ * Full-bleed cinematic statement band on the homepage — a photographic
+ * "breather" that breaks the run of text sections below the estimator.
+ * `accentWord` renders as the sage Fraunces accent (keep it to one word).
+ */
+export const STATEMENT_BAND = {
+  eyebrow: "Our commitment",
+  statement: "Every detail, every decision, handled with",
+  accentWord: "intention",
+  support:
+    "One accountable team, a written plan before we build, and proactive updates every week, from your first in-home visit to the final walkthrough.",
+} as const;

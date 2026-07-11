@@ -11,6 +11,7 @@ import { ProcessSection } from "@/components/sections/ProcessSection";
 import { FeaturedProjectSection } from "@/components/sections/FeaturedProjectSection";
 import { BudgetInclusionsSection } from "@/components/sections/BudgetInclusionsSection";
 import { ProjectGallerySection } from "@/components/sections/ProjectGallerySection";
+import { BrandStatementBand } from "@/components/sections/BrandStatementBand";
 import { Section } from "@/components/marketing/Section";
 import { MarketingCard } from "@/components/marketing/MarketingCard";
 import { Check } from "lucide-react";
@@ -65,21 +66,25 @@ export default function HomePage() {
         excludeServiceTypes={["whole-home-remodel"]}
       />
       <EstimateCalculator />
+      <BrandStatementBand />
       <WhyChooseUsSection limit={5} />
       <BudgetInclusionsSection />
       <FAQSection />
       <Section id="consult" divider className="relative overflow-hidden pb-28 md:pb-28">
-        {/* Faint photographic texture so the closing section is not flat */}
+        {/* Warm, dimmed lifestyle photo grounds the closing section. Directional
+            scrims keep the left-column copy legible and fade the edges into the
+            page ground; the form card floats above on its own shadow. */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
           <Image
-            src={GALLERY_IMAGES.bathroom.after}
+            src={GALLERY_IMAGES.kitchen.after}
             alt=""
             fill
             loading="lazy"
             sizes="100vw"
-            className="object-cover opacity-[0.07] img-brand-grade"
+            className="object-cover opacity-[0.28] img-brand-grade"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/85 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-transparent to-background" />
         </div>
         <div className="container px-4 relative z-10">
           <div className="max-w-5xl mx-auto grid md:grid-cols-5 gap-12 items-start">
@@ -108,7 +113,7 @@ export default function HomePage() {
                 </div>
               </Reveal>
             </div>
-            <MarketingCard className="md:col-span-3" padding="lg">
+            <MarketingCard className="md:col-span-3 shadow-2xl" padding="lg">
               <ConsultationForm />
             </MarketingCard>
           </div>
