@@ -7,9 +7,9 @@ import { Reveal } from '@/components/Reveal';
 import { RelatedLinks } from './RelatedLinks';
 import { RelatedPostCards } from '@/components/marketing/RelatedPostCards';
 import type { FAQItem } from '@/shared/seoContent';
+import { Button } from '@/components/ui/button';
 import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
-import { EstimateCTA } from '@/components/modals/EstimateCTA';
 import {
   Accordion,
   AccordionContent,
@@ -198,12 +198,13 @@ export function LandingPageTemplate({
             <ConsultCTA variant="brand">
               {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
             </ConsultCTA>
-            <EstimateCTA
+            <Button
               variant="outline"
               className="bg-white/10 backdrop-blur-sm border-white/30 text-white"
+              asChild
             >
-              {CTA_SECONDARY}
-            </EstimateCTA>
+              <a href="/#consult">{CTA_SECONDARY}</a>
+            </Button>
           </div>
         </div>
       </section>

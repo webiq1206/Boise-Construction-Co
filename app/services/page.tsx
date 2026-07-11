@@ -9,8 +9,8 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { Reveal } from '@/components/Reveal';
 import { TextLink } from '@/components/marketing/TextLink';
 import { JsonLd } from '@/components/seo/JsonLd';
+import { Button } from '@/components/ui/button';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
-import { EstimateCTA } from '@/components/modals/EstimateCTA';
 import { SERVICES, CITIES } from '@/shared/contentData';
 import { servicePath, areaPath } from '@/lib/seo-routes';
 import { getServiceBackground } from '@/shared/serviceBackgrounds';
@@ -176,7 +176,7 @@ export default function ServicesIndexPage() {
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
-              <EstimateCTA variant="heroGhost">{CTA_SECONDARY}</EstimateCTA>
+              <Button variant="heroGhost" asChild><a href="/#consult">{CTA_SECONDARY}</a></Button>
             </div>
           </MarketingCard>
         </div>

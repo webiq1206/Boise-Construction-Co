@@ -15,8 +15,8 @@ import {
 } from "@/lib/schema";
 import { CITIES, TREASURE_VALLEY_CITIES } from "@/shared/contentData";
 import { CTA_PRIMARY, CTA_SECONDARY } from "@/shared/ctaCopy";
+import { Button } from "@/components/ui/button";
 import { ConsultCTA } from "@/components/modals/ConsultCTA";
-import { EstimateCTA } from "@/components/modals/EstimateCTA";
 
 export const metadata = buildPageMetadata({
   kind: "about",
@@ -64,9 +64,9 @@ export default function AreasHubPage() {
               <ConsultCTA variant="brand">
                 {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
               </ConsultCTA>
-              <EstimateCTA variant="brandOutline">
-                {CTA_SECONDARY}
-              </EstimateCTA>
+              <Button variant="brandOutline" asChild>
+                <a href="/#consult">{CTA_SECONDARY}</a>
+              </Button>
             </div>
           </div>
         </Section>

@@ -64,7 +64,7 @@ export function ServicesGrid() {
                 Every remodel starts with a free in-home visit and an honest planning range, with no obligation.
               </p>
               <Button variant="brand" className="self-start" asChild>
-                <a href="#consult">Book a free consultation</a>
+                <a href="#calculator">Get an estimate</a>
               </Button>
             </div>
           </Reveal>
@@ -72,7 +72,7 @@ export function ServicesGrid() {
 
         <div className="mt-12 text-center">
           <Button variant="brand" asChild>
-            <a href="#calculator">{CTA_SECONDARY}</a>
+            <a href="#consult">{CTA_SECONDARY}</a>
           </Button>
         </div>
       </div>

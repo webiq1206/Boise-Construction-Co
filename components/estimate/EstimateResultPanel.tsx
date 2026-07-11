@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { EstimateResult, ProjectType } from "@/shared/estimateEngine";
 import { INCLUDED_SCOPE_NOTE, APPLIANCE_DISCLAIMER, formatPlanningCurrency } from "@/shared/estimateEngine";
-import { CTA_PRIMARY } from "@/shared/ctaCopy";
 
 const ANIM_DURATION = 320;
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
@@ -239,7 +238,7 @@ export function EstimateResultPanel({
             className="w-full mb-3"
             data-testid="button-book-visit"
           >
-            {CTA_PRIMARY}
+            Schedule a free visit
             <ArrowRight className="h-4 w-4" />
           </Button>
 

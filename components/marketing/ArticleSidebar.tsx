@@ -13,7 +13,7 @@ interface ArticleSidebarProps {
 
 export function ArticleSidebar({
   tocHeadings,
-  ctaDescription = 'Ready for a written scope? Schedule an in-home visit with our design-build team.',
+  ctaDescription = 'Get an instant planning range for your project before you commit to anything.',
 }: ArticleSidebarProps) {
   return (
     <>
@@ -31,7 +31,7 @@ export function ArticleSidebarCta({ description }: { description: string }) {
           <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10">
             <Wrench className="h-5 w-5 text-inverse-foreground/60" />
           </div>
-          <h3 className="font-normal text-sm text-inverse-foreground">Free Consultation</h3>
+          <h3 className="font-normal text-sm text-inverse-foreground">Instant Estimate</h3>
         </div>
         <p className="text-sm text-inverse-muted">{description}</p>
         <ConsultCTA variant="brand" size="sm" className="w-full">

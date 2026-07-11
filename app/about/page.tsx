@@ -20,8 +20,8 @@ import {
 import { CITIES, TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { HERO_STATS, PRINCIPLES, TRUST_ITEMS } from '@/shared/siteContent';
 import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
+import { Button } from '@/components/ui/button';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
-import { EstimateCTA } from '@/components/modals/EstimateCTA';
 
 const GRAIN_URL = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E")`;
 
@@ -145,12 +145,13 @@ export default function AboutPage() {
               <ConsultCTA variant="brand">
                 {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
               </ConsultCTA>
-              <EstimateCTA
+              <Button
                 variant="outline"
                 className="bg-white/10 backdrop-blur-sm border-white/30 text-white"
+                asChild
               >
-                {CTA_SECONDARY}
-              </EstimateCTA>
+                <a href="/#consult">{CTA_SECONDARY}</a>
+              </Button>
             </div>
             <div className="grid grid-cols-3 gap-3 max-w-xl">
               {HERO_STATS.map((stat) => (

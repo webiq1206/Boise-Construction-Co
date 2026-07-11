@@ -60,10 +60,10 @@ export function HeroSection() {
               </p>
               <div className="flex flex-wrap gap-3 mb-6 md:mb-0">
                 <Button variant="brand" asChild>
-                  <a href="#consult">{CTA_PRIMARY}</a>
+                  <a href="#calculator">{CTA_PRIMARY}</a>
                 </Button>
                 <Button variant="heroGhost" asChild>
-                  <a href="#calculator">{CTA_SECONDARY}</a>
+                  <a href="#consult">{CTA_SECONDARY}</a>
                 </Button>
               </div>
 

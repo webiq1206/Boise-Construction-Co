@@ -11,8 +11,8 @@ export function BlogEndCta() {
         Ready to start your project?
       </h2>
       <p className="text-inverse-muted mb-8 max-w-lg mx-auto">
-        Book a free in-home visit. We&apos;ll walk your space, hear your goals, and give you a
-        planning range on the spot with no obligation.
+        Get an instant planning range in 60 seconds, then book a free in-home visit when you&apos;re
+        ready. No obligation, no pressure.
       </p>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
         <ConsultCTA variant="brand" size="lg" data-testid="link-bottom-cta-consult">

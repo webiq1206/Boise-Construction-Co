@@ -31,7 +31,6 @@ import { CITIES, TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
 import { CONSULT_BULLETS, HERO_STATS } from '@/shared/siteContent';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
-import { EstimateCTA } from '@/components/modals/EstimateCTA';
 import { Button } from '@/components/ui/button';
 
 const CONTACT_FAQS = [
@@ -251,13 +250,13 @@ export default function ContactPage() {
               {/* Scroll straight to the inline form rather than opening a modal,
                   so the primary contact action is one tap from the hero. */}
               <Button variant="brand" asChild>
-                <a href="#consult">
+                <a href="#calculator">
                   {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
                 </a>
               </Button>
-              <EstimateCTA variant="heroGhost">
-                {CTA_SECONDARY}
-              </EstimateCTA>
+              <Button variant="heroGhost" asChild>
+                <a href="#consult">{CTA_SECONDARY}</a>
+              </Button>
             </div>
             <div className="grid grid-cols-3 gap-3 max-w-xl">
               {HERO_STATS.map((stat) => (
@@ -393,7 +392,7 @@ export default function ContactPage() {
                 </ul>
                 <div className="flex flex-col sm:flex-row flex-wrap gap-3">
                   <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
-                  <EstimateCTA variant="brandOutline">{CTA_SECONDARY}</EstimateCTA>
+                  <Button variant="brandOutline" asChild><a href="/#consult">{CTA_SECONDARY}</a></Button>
                 </div>
               </Reveal>
             </div>
@@ -512,9 +511,9 @@ export default function ContactPage() {
                 </a>
                 <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3">
                   <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
-                  <EstimateCTA variant="heroGhost">
-                    {CTA_SECONDARY}
-                  </EstimateCTA>
+                  <Button variant="heroGhost" asChild>
+                    <a href="/#consult">{CTA_SECONDARY}</a>
+                  </Button>
                 </div>
               </MarketingCard>
             </Reveal>

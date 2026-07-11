@@ -65,10 +65,10 @@ export function FAQSection() {
           )}
           <div className="mt-10 flex flex-wrap gap-3 justify-center">
             <Button variant="brand" asChild>
-              <a href="#consult">{CTA_PRIMARY}</a>
+              <a href="#calculator">{CTA_PRIMARY}</a>
             </Button>
             <Button variant="brandOutline" asChild>
-              <a href="#calculator">{CTA_SECONDARY}</a>
+              <a href="#consult">{CTA_SECONDARY}</a>
             </Button>
           </div>
         </div>

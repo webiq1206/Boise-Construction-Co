@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { DisplayNum, Section } from "@/components/marketing";
 import { EstimateResultPanel } from "@/components/estimate/EstimateResultPanel";
 import { StickyEstimateBar } from "@/components/estimate/StickyEstimateBar";
-import { CTA_PRIMARY_SHORT } from "@/shared/ctaCopy";
 import {
   type ProjectType,
   type FinishLevel,
@@ -719,7 +718,7 @@ export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitPr
       barCtaAction = () => goToStep(STEP_INDEX.review);
       break;
     default:
-      barCtaLabel = CTA_PRIMARY_SHORT;
+      barCtaLabel = "Schedule a visit";
       barCtaAction = handleBookVisit;
   }
 

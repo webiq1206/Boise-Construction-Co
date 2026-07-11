@@ -6,8 +6,8 @@ import { ProjectGallerySection } from '@/components/sections/ProjectGallerySecti
 import { TestimonialsSection } from '@/components/sections/TestimonialsSection';
 import { buildPageMetadata } from '@/lib/page-metadata';
 import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
+import { Button } from '@/components/ui/button';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
-import { EstimateCTA } from '@/components/modals/EstimateCTA';
 import { JsonLd } from '@/components/seo/JsonLd';
 import {
   generateBreadcrumbSchema,
@@ -82,9 +82,9 @@ export default function TestimonialsPage() {
             <ConsultCTA variant="brand">
               {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
             </ConsultCTA>
-            <EstimateCTA variant="brandOutline">
-              {CTA_SECONDARY}
-            </EstimateCTA>
+            <Button variant="brandOutline" asChild>
+              <a href="/#consult">{CTA_SECONDARY}</a>
+            </Button>
           </div>
         </div>
       </Section>

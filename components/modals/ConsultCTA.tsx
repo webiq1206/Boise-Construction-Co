@@ -10,13 +10,13 @@ interface ConsultCTAProps extends Omit<ButtonProps, "onClick" | "asChild"> {
 }
 
 export function ConsultCTA({ onExtraClick, children, ...props }: ConsultCTAProps) {
-  const { openConsult } = useModals();
+  const { openEstimate } = useModals();
   const pathname = usePathname();
 
   if (pathname === "/") {
     return (
       <Button {...props} asChild>
-        <a href="/#consult" onClick={onExtraClick}>
+        <a href="/#calculator" onClick={onExtraClick}>
           {children}
         </a>
       </Button>
@@ -27,7 +27,7 @@ export function ConsultCTA({ onExtraClick, children, ...props }: ConsultCTAProps
     <Button
       {...props}
       onClick={() => {
-        openConsult();
+        openEstimate();
         onExtraClick?.();
       }}
     >

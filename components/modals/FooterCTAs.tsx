@@ -15,22 +15,22 @@ export function FooterCTAs() {
     <>
       <li>
         {isHome ? (
-          <a href="/#consult" className={cls}>
+          <a href="/#calculator" className={cls}>
             {CTA_PRIMARY}
           </a>
         ) : (
-          <button onClick={openConsult} className={cls}>
+          <button onClick={openEstimate} className={cls}>
             {CTA_PRIMARY}
           </button>
         )}
       </li>
       <li>
         {isHome ? (
-          <a href="/#calculator" className={cls}>
+          <a href="/#consult" className={cls}>
             {CTA_SECONDARY}
           </a>
         ) : (
-          <button onClick={openEstimate} className={cls}>
+          <button onClick={openConsult} className={cls}>
             {CTA_SECONDARY}
           </button>
         )}
