@@ -11,10 +11,6 @@ deploymentTarget = "autoscale"
 build = ["bash", "build.sh"]
 run = ["bash", "start.sh"]
 
-[[ports]]
-localPort = 5000
-externalPort = 80
-
 [env]
 PORT = "5000"
 
