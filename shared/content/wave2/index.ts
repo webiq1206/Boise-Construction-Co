@@ -31,6 +31,10 @@ import { aduCostBoise } from './adu-cost-boise';
 import { garageConversions } from './garage-conversions';
 import { basementFinishingBoise } from './basement-finishing-boise';
 import { primarySuiteAdditions } from './primary-suite-additions';
+import { secondStoryAdditions } from './second-story-additions';
+import { bedroomAdditions } from './bedroom-additions';
+import { multigenerationalLivingRemodels } from './multigenerational-living-remodels';
+import { homeAdditionTimelineGuide } from './home-addition-timeline-guide';
 
 /**
  * Wave 2: bespoke, comprehensive blog posts (1,600+ words, Answer-First,
@@ -75,4 +79,8 @@ export const WAVE2_POSTS: BlogPostData[] = [
   garageConversions,
   basementFinishingBoise,
   primarySuiteAdditions,
+  secondStoryAdditions,
+  bedroomAdditions,
+  multigenerationalLivingRemodels,
+  homeAdditionTimelineGuide,
 ];

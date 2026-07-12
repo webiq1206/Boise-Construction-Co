@@ -44,6 +44,10 @@ export const BLOG_OG_IMAGES: Record<string, string> = {
   'garage-conversions': '/images/blog/garage-conversions-og.jpg',
   'basement-finishing-boise': '/images/blog/basement-finishing-boise-og.jpg',
   'primary-suite-additions': '/images/blog/primary-suite-additions-og.jpg',
+  'second-story-additions': '/images/blog/second-story-additions-og.jpg',
+  'bedroom-additions': '/images/blog/bedroom-additions-og.jpg',
+  'multigenerational-living-remodels': '/images/blog/multigenerational-living-remodels-og.jpg',
+  'home-addition-timeline-guide': '/images/blog/home-addition-timeline-guide-og.jpg',
 };
 
 export function getBlogOgImage(slug: string): string | undefined {
