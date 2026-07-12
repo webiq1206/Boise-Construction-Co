@@ -67,6 +67,11 @@ export const whyRemodelingBidsVary: BlogPostData = {
       answer:
         'No, and it is a common source of bid differences. Some contractors include permits and coordinate inspections; others exclude them to lower the headline number or expect the homeowner to handle them. Always confirm whether permits are in the bid before comparing.',
     },
+    {
+      question: 'Should I ask a contractor to walk me through their bid?',
+      answer:
+        'Yes, and how they respond is revealing. A professional will happily explain what drives their number - scope, allowances, labor, and contingency - line by line. Vague answers, reluctance to itemize, or pressure to just trust the total are warning signs. Understanding the reasoning behind a bid matters more than the bottom-line figure, because it tells you what you are actually buying.',
+    },
   ],
   content: `
 <h2 id="overview">Why do remodeling bids vary so much?</h2>

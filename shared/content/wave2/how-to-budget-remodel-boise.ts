@@ -67,6 +67,11 @@ export const howToBudgetRemodelBoise: BlogPostData = {
       answer:
         'Compare aligned scopes, not totals. Make sure each bid includes the same work, the same allowances for cabinets, tile, and fixtures, and the same permit responsibility. A low bid that excludes permits or sets low allowances is not actually lower - it just defers the cost.',
     },
+    {
+      question: 'Should I share my budget with my contractor?',
+      answer:
+        'Yes. A clear budget lets a good contractor design to it - steering finish levels, scope, and phasing so the plan fits your number instead of producing a design you cannot afford. Withholding it usually wastes time on both sides and leads to a proposal that has to be value-engineered back down. Being honest about your budget is one of the most useful things you can bring to the first conversation.',
+    },
   ],
   content: `
 <h2 id="framework">How to budget for a remodel in Boise</h2>

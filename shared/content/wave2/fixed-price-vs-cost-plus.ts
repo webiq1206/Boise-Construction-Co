@@ -67,6 +67,11 @@ export const fixedPriceVsCostPlus: BlogPostData = {
       answer:
         'Many residential design-build remodelers use a fixed-price or guaranteed-maximum approach for defined projects because homeowners value budget certainty, while reserving cost-plus for truly open-ended or unusually complex work. The key in any case is a detailed written scope and clear change-order process.',
     },
+    {
+      question: 'What is a guaranteed maximum price contract?',
+      answer:
+        'A guaranteed maximum price (GMP) is a hybrid: you see actual costs like cost-plus, but the contractor guarantees the total will not exceed an agreed ceiling for the defined scope, like fixed-price. Some arrangements even share any savings if the project finishes under the cap. For homeowners who want both cost transparency and a firm safety net, a GMP is often the most reassuring structure.',
+    },
   ],
   content: `
 <h2 id="overview">Fixed-price vs. cost-plus: the short answer</h2>
@@ -107,6 +112,6 @@ export const fixedPriceVsCostPlus: BlogPostData = {
 <p>This is also why the debate over contract type can be overblown. Homeowners sometimes agonize over fixed-price versus cost-plus as if the structure alone determines the outcome, when in reality the quality of the scope and the integrity of the contractor matter far more. A trustworthy contractor with a detailed written scope will treat you fairly under any structure, documenting changes and controlling costs because that is how they operate. An untrustworthy one will find ways to increase the total regardless of the contract on paper. So while it is worth understanding the trade-offs and choosing the structure that fits your project and comfort level, do not let the contract type distract you from the two things that actually protect you: a clear, detailed scope, and a contractor whose words and documents consistently line up.</p>
 
 <h2 id="next-steps">Talk through the right contract for your project</h2>
-<p>We are happy to explain how our contracts and pricing work and to recommend the structure that fits your project and comfort level - always built on a detailed written scope. Our free in-home visit is the place to have that conversation. When you are ready, <a href="/contact">schedule a consultation</a> or read the full <a href="/guides/choose-remodeling-contractor-boise">guide to choosing a remodeling contractor</a>.</p>
+<p>We are happy to explain how our contracts and pricing work and to recommend the structure that fits your project and comfort level - always built on a detailed written scope. Our free in-home visit, anywhere in Boise and the wider Treasure Valley, is the place to have that conversation. When you are ready, <a href="/contact">schedule a consultation</a> or read the full <a href="/guides/choose-remodeling-contractor-boise">guide to choosing a remodeling contractor</a>.</p>
 `.trim(),
 };

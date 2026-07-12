@@ -67,6 +67,11 @@ export const kitchenRemodelTimelineBoise: BlogPostData = {
       answer:
         'Not the kitchen itself - it will be out of service through most of construction. Most homeowners set up a temporary kitchen with a fridge, microwave, and sink in another room. Planning for that up front makes the weeks without a kitchen far more bearable.',
     },
+    {
+      question: 'How long does the design and planning phase take before construction starts?',
+      answer:
+        'Usually several weeks to a couple of months, depending on how quickly selections and drawings are finalized and whether permits are required. This pre-construction phase - design, product selections, and permitting - happens before demolition and is where a smooth build is set up. Finalizing decisions early is the single best way to keep the later construction phase on schedule.',
+    },
   ],
   content: `
 <h2 id="how-long">How long does a kitchen remodel take in Boise?</h2>

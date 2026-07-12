@@ -67,6 +67,11 @@ export const kitchenLayoutIdeasBoiseHomes: BlogPostData = {
       answer:
         'Yes, though changing the layout - moving the sink, stove, or walls - adds cost because it involves plumbing, electrical, and sometimes structural work and permits. The payoff can be significant if the existing layout fights how you live, which is why layout is one of the first things to evaluate in a remodel.',
     },
+    {
+      question: 'Which kitchen layout works best for a small space?',
+      answer:
+        'For compact kitchens, a single-wall or galley layout usually makes the most of limited square footage by keeping everything within easy reach and freeing up floor space. An L-shape can work well when there is a corner to use. The goal in a small kitchen is an efficient work triangle and generous, uninterrupted counter runs rather than squeezing in an island that crowds the walkways.',
+    },
   ],
   content: `
 <h2 id="overview">Choosing a kitchen layout for your Boise home</h2>

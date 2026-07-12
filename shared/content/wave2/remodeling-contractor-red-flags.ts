@@ -67,6 +67,11 @@ export const remodelingContractorRedFlags: BlogPostData = {
       answer:
         'Verify their Idaho contractor registration and current insurance, ask for a physical business address, read recent reviews, and call real references from local projects. Legitimate contractors make verification easy; evasiveness about any of these is itself a red flag.',
     },
+    {
+      question: 'Is a bid that comes in far below the others a red flag?',
+      answer:
+        'It can be. A price well under every other bid often means the scope is incomplete, allowances are unrealistically low, the contractor misunderstood the work, or corners are planned - and the gap tends to reappear later as change orders. A suspiciously low number deserves the same scrutiny as a high one: compare exactly what each bid includes before assuming the cheapest is the best value.',
+    },
   ],
   content: `
 <h2 id="why-matters">Why spotting red flags matters</h2>

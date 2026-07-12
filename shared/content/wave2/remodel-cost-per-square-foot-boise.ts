@@ -70,6 +70,11 @@ export const remodelCostPerSquareFootBoise: BlogPostData = {
       answer:
         'New construction has a predictable, repeatable per-square-foot cost because everything is built once, in sequence, on a clean site. Remodels work around existing conditions, protect finished areas, and uncover surprises, so their per-square-foot cost varies far more from project to project.',
     },
+    {
+      question: 'Does a larger remodel cost less per square foot?',
+      answer:
+        'Often, yes. Fixed costs like design, permits, and mobilization spread across more square footage, and larger scopes tend to use materials and labor more efficiently, so the per-square-foot figure usually drops as project size grows. That is one reason a small, high-detail space such as a kitchen or bath costs far more per square foot than a whole-home project.',
+    },
   ],
   content: `
 <h2 id="how-much">What does it cost per square foot to remodel a home in Boise?</h2>

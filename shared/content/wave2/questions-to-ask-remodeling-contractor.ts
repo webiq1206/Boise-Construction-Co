@@ -70,6 +70,11 @@ export const questionsToAskRemodelingContractor: BlogPostData = {
       answer:
         'Interviewing two or three contractors is usually enough to compare approaches, communication, and value. More important than the number is asking each the same questions and comparing aligned scopes rather than just bottom-line prices.',
     },
+    {
+      question: 'Should I ask a contractor about their warranty?',
+      answer:
+        'Absolutely. Ask what workmanship warranty they provide, how long it lasts, and how they handle callbacks after the project is complete. A contractor who stands behind their work in writing and responds to warranty issues promptly is demonstrating accountability - and their answer tells you whether they expect to be reachable long after the final payment.',
+    },
   ],
   content: `
 <h2 id="why-questions">Why the right questions matter</h2>

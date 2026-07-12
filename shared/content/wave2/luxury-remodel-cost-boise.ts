@@ -67,6 +67,11 @@ export const luxuryRemodelCostBoise: BlogPostData = {
       answer:
         'In premium Boise-area neighborhoods, high-end finishes can support strong resale, but luxury remodels generally return a lower percentage of cost than mid-range ones. The best reason to do a luxury remodel is to enjoy a home built precisely to your taste for years, with resale as a secondary benefit.',
     },
+    {
+      question: 'What drives the cost of a luxury remodel the most?',
+      answer:
+        'Custom and made-to-order elements. Fully custom cabinetry, natural stone, imported tile, designer plumbing and lighting, integrated smart-home systems, and structural changes such as moving walls or adding steel all carry premium material and labor costs. Luxury budgets also reflect the added design time and craftsmanship needed to execute those details to a flawless standard.',
+    },
   ],
   content: `
 <h2 id="how-much">How much does a luxury remodel cost in Boise and Eagle?</h2>

@@ -67,6 +67,11 @@ export const howToCompareRemodelingEstimates: BlogPostData = {
       answer:
         'Two or three estimates are usually enough to compare approaches and value. Beyond that, the effort of normalizing many bids outweighs the benefit. Focus on aligning scope and evaluating communication and trust, not on collecting the largest number of quotes.',
     },
+    {
+      question: 'How do I compare estimates that include different scopes?',
+      answer:
+        'Normalize them first. List every line item across all bids and note what each does and does not include - demolition, permits, allowances, appliances, cleanup, and warranty - then adjust each price for the gaps so you are comparing the same scope. A bid is only cheaper if it truly covers the same work; once the scopes match, the real cost differences become clear.',
+    },
   ],
   content: `
 <h2 id="why-hard">Why comparing estimates is harder than it looks</h2>

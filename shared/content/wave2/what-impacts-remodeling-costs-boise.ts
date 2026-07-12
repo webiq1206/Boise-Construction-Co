@@ -67,6 +67,11 @@ export const whatImpactsRemodelingCostsBoise: BlogPostData = {
       answer:
         'Bids differ because they include different scopes, allowances, and levels of permit and detail. One bid may exclude permits or set a low cabinet allowance while another includes everything. Always compare what each bid covers, not just the total - our guide on why bids vary explains how.',
     },
+    {
+      question: 'How much do finish selections change the total cost?',
+      answer:
+        'A great deal. For the same footprint and layout, moving from builder-grade to premium finishes - cabinetry, countertops, tile, plumbing fixtures, and lighting - can change a remodel budget by 30 to 60 percent or more. Because finishes are one of the few cost drivers you control directly, they are also the easiest lever for keeping a project within budget.',
+    },
   ],
   content: `
 <h2 id="overview">What impacts remodeling costs in Boise?</h2>

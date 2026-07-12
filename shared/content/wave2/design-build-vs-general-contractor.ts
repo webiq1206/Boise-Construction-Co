@@ -67,6 +67,11 @@ export const designBuildVsGeneralContractor: BlogPostData = {
       answer:
         'No. With design-build you are fully involved in design decisions - you simply work with a team whose designers and builders collaborate from the start, so your choices are grounded in what is buildable and affordable. Many homeowners find they get more design confidence, not less.',
     },
+    {
+      question: 'Is design-build usually faster than the traditional approach?',
+      answer:
+        'Often, yes. Because design and construction happen under one roof, pricing and constructability feedback occur during design instead of after, so there is no separate bidding phase and fewer redesigns to hit budget. That overlap and single point of accountability typically compress the overall timeline compared with designing first, then bidding the drawings out to separate contractors.',
+    },
   ],
   content: `
 <h2 id="overview">Design-build vs. general contractor: the short answer</h2>
