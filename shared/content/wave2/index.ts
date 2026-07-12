@@ -19,6 +19,10 @@ import { kitchenCabinetTrendsBoise } from './kitchen-cabinet-trends-boise';
 import { quartzVsQuartziteCountertops } from './quartz-vs-quartzite-countertops';
 import { kitchenIslandDesignGuide } from './kitchen-island-design-guide';
 import { smallKitchenRemodelIdeasBoise } from './small-kitchen-remodel-ideas-boise';
+import { openConceptKitchenRemodeling } from './open-concept-kitchen-remodeling';
+import { walkInShowerGuide } from './walk-in-shower-guide';
+import { curblessShowerGuide } from './curbless-shower-guide';
+import { smallBathroomRemodelIdeas } from './small-bathroom-remodel-ideas';
 
 /**
  * Wave 2: bespoke, comprehensive blog posts (1,600+ words, Answer-First,
@@ -49,4 +53,9 @@ export const WAVE2_POSTS: BlogPostData[] = [
   quartzVsQuartziteCountertops,
   kitchenIslandDesignGuide,
   smallKitchenRemodelIdeasBoise,
+  openConceptKitchenRemodeling,
+  // Bathroom hub
+  walkInShowerGuide,
+  curblessShowerGuide,
+  smallBathroomRemodelIdeas,
 ];

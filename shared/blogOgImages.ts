@@ -30,6 +30,11 @@ export const BLOG_OG_IMAGES: Record<string, string> = {
   'quartz-vs-quartzite-countertops': '/images/blog/quartz-vs-quartzite-countertops-og.jpg',
   'kitchen-island-design-guide': '/images/blog/kitchen-island-design-guide-og.jpg',
   'small-kitchen-remodel-ideas-boise': '/images/blog/small-kitchen-remodel-ideas-boise-og.jpg',
+  'open-concept-kitchen-remodeling': '/images/blog/open-concept-kitchen-remodeling-og.jpg',
+  // Bathroom hub
+  'walk-in-shower-guide': '/images/blog/walk-in-shower-guide-og.jpg',
+  'curbless-shower-guide': '/images/blog/curbless-shower-guide-og.jpg',
+  'small-bathroom-remodel-ideas': '/images/blog/small-bathroom-remodel-ideas-og.jpg',
 };
 
 export function getBlogOgImage(slug: string): string | undefined {

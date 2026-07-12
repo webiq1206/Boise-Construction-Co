@@ -94,9 +94,9 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'gallery',
   },
   'open-concept-kitchen-remodeling': {
-    hero: '/images/blog/open-concept-kitchen-remodeling.png',
-    alt: 'Open-concept kitchen connected to living space after wall removal in Boise',
-    topicTags: ["kitchen","open-concept"],
+    hero: '/images/blog/open-concept-kitchen-remodeling.webp',
+    alt: 'Open-concept kitchen with a large central island flowing into the living area after wall removal in an upscale Boise home',
+    topicTags: ["kitchen","open-concept","boise"],
     source: 'blog',
   },
   'kitchen-island-design-guide': {
@@ -130,15 +130,15 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'city-service',
   },
   'walk-in-shower-guide': {
-    hero: '/images/blog/walk-in-shower-guide.png',
-    alt: 'Walk-in shower with glass enclosure and tile surround in a Treasure Valley bath',
-    topicTags: ["bathroom","shower"],
+    hero: '/images/blog/walk-in-shower-guide.webp',
+    alt: 'Large walk-in shower with a frameless glass enclosure, floor-to-ceiling tile, and a built-in niche and bench in a remodeled Boise bathroom',
+    topicTags: ["bathroom","shower","boise"],
     source: 'blog',
   },
   'curbless-shower-guide': {
-    hero: '/images/blog/curbless-shower-guide.png',
-    alt: 'Curbless shower with linear drain and accessible entry in a master bathroom',
-    topicTags: ["bathroom","shower","accessibility"],
+    hero: '/images/blog/curbless-shower-guide.webp',
+    alt: 'Curbless zero-threshold walk-in shower with a flush tile floor and linear drain in an accessible Boise bathroom',
+    topicTags: ["bathroom","shower","accessibility","boise"],
     source: 'blog',
   },
   'luxury-bathroom-features': {
@@ -148,10 +148,10 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'city-service',
   },
   'small-bathroom-remodel-ideas': {
-    hero: '/images/city-service/bathroom-remodel__meridian.png',
-    alt: 'Compact bathroom remodel maximizing storage and light in Meridian',
-    topicTags: ["bathroom","small","meridian"],
-    source: 'city-service',
+    hero: '/images/blog/small-bathroom-remodel-ideas.webp',
+    alt: 'Compact remodeled bathroom with a shower-tub combo, single vanity, and light finishes in a modest older Boise home',
+    topicTags: ["bathroom","small","boise"],
+    source: 'blog',
   },
   'aging-in-place-bathroom-design': {
     hero: '/images/city-service/bathroom-remodel__nampa.png',
