@@ -142,10 +142,16 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'blog',
   },
   'luxury-bathroom-features': {
-    hero: '/images/city-service/bathroom-remodel__eagle.png',
-    alt: 'Luxury master bathroom with premium tile and fixtures in Eagle',
-    topicTags: ["bathroom","luxury","eagle"],
-    source: 'city-service',
+    hero: '/images/blog/luxury-bathroom-features.webp',
+    alt: 'Luxury primary bathroom with a freestanding soaking tub, frameless glass shower, double vanity, and marble-look tile in an upscale Eagle-area home',
+    topicTags: ["bathroom","luxury","boise"],
+    source: 'blog',
+  },
+  'how-long-does-a-bathroom-remodel-take': {
+    hero: '/images/blog/how-long-does-a-bathroom-remodel-take.webp',
+    alt: 'Freshly completed mid-range bathroom remodel with a navy vanity, white quartz top, and tiled shower-tub in a Boise home',
+    topicTags: ["bathroom","timeline","boise"],
+    source: 'blog',
   },
   'small-bathroom-remodel-ideas': {
     hero: '/images/blog/small-bathroom-remodel-ideas.webp',
@@ -154,10 +160,10 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'blog',
   },
   'aging-in-place-bathroom-design': {
-    hero: '/images/city-service/bathroom-remodel__nampa.png',
-    alt: 'Accessible bathroom design with grab bars and curbless shower in Nampa',
-    topicTags: ["bathroom","aging-in-place","nampa"],
-    source: 'city-service',
+    hero: '/images/blog/aging-in-place-bathroom-design.webp',
+    alt: 'Accessible aging-in-place bathroom with a curbless walk-in shower, bench, integrated grab bars, and comfort-height vanity in a Boise home',
+    topicTags: ["bathroom","aging-in-place","boise"],
+    source: 'blog',
   },
   'bathroom-remodel-roi': {
     hero: '/images/gallery/gallery-bathroom-after.png',
@@ -166,10 +172,10 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'gallery',
   },
   'bathroom-layout-planning-guide': {
-    hero: '/images/city-service/bathroom-remodel__kuna.png',
-    alt: 'Bathroom layout with optimized vanity and shower placement in Kuna',
-    topicTags: ["bathroom","layout","kuna"],
-    source: 'city-service',
+    hero: '/images/blog/bathroom-layout-planning-guide.webp',
+    alt: 'Well-planned classic full bathroom with a white vanity, separate tub and glass shower, subway tile, and hex-tile floor in a Boise home',
+    topicTags: ["bathroom","layout","boise"],
+    source: 'blog',
   },
   'primary-suite-additions': {
     hero: '/images/city-service/room-addition__eagle.png',

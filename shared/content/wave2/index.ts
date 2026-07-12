@@ -23,6 +23,10 @@ import { openConceptKitchenRemodeling } from './open-concept-kitchen-remodeling'
 import { walkInShowerGuide } from './walk-in-shower-guide';
 import { curblessShowerGuide } from './curbless-shower-guide';
 import { smallBathroomRemodelIdeas } from './small-bathroom-remodel-ideas';
+import { agingInPlaceBathroomDesign } from './aging-in-place-bathroom-design';
+import { luxuryBathroomFeatures } from './luxury-bathroom-features';
+import { bathroomLayoutPlanningGuide } from './bathroom-layout-planning-guide';
+import { howLongDoesABathroomRemodelTake } from './how-long-does-a-bathroom-remodel-take';
 
 /**
  * Wave 2: bespoke, comprehensive blog posts (1,600+ words, Answer-First,
@@ -58,4 +62,8 @@ export const WAVE2_POSTS: BlogPostData[] = [
   walkInShowerGuide,
   curblessShowerGuide,
   smallBathroomRemodelIdeas,
+  agingInPlaceBathroomDesign,
+  luxuryBathroomFeatures,
+  bathroomLayoutPlanningGuide,
+  howLongDoesABathroomRemodelTake,
 ];

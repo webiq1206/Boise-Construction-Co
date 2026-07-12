@@ -35,6 +35,10 @@ export const BLOG_OG_IMAGES: Record<string, string> = {
   'walk-in-shower-guide': '/images/blog/walk-in-shower-guide-og.jpg',
   'curbless-shower-guide': '/images/blog/curbless-shower-guide-og.jpg',
   'small-bathroom-remodel-ideas': '/images/blog/small-bathroom-remodel-ideas-og.jpg',
+  'aging-in-place-bathroom-design': '/images/blog/aging-in-place-bathroom-design-og.jpg',
+  'luxury-bathroom-features': '/images/blog/luxury-bathroom-features-og.jpg',
+  'bathroom-layout-planning-guide': '/images/blog/bathroom-layout-planning-guide-og.jpg',
+  'how-long-does-a-bathroom-remodel-take': '/images/blog/how-long-does-a-bathroom-remodel-take-og.jpg',
 };
 
 export function getBlogOgImage(slug: string): string | undefined {
