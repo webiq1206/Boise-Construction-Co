@@ -178,10 +178,22 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'blog',
   },
   'primary-suite-additions': {
-    hero: '/images/city-service/room-addition__eagle.png',
-    alt: 'Primary suite addition with bedroom and bath tied to an Eagle home',
-    topicTags: ["addition","primary-suite","eagle"],
-    source: 'city-service',
+    hero: '/images/blog/primary-suite-additions.webp',
+    alt: 'Spacious primary suite addition with a vaulted ceiling, sitting area, and ensuite glimpse in an upscale Boise home',
+    topicTags: ["addition","primary-suite","boise"],
+    source: 'blog',
+  },
+  'adu-cost-boise': {
+    hero: '/images/blog/adu-cost-boise.webp',
+    alt: 'Detached accessory dwelling unit backyard cottage with lap siding and a covered porch in a Boise backyard',
+    topicTags: ["adu","addition","boise"],
+    source: 'blog',
+  },
+  'basement-finishing-boise': {
+    hero: '/images/blog/basement-finishing-boise.webp',
+    alt: 'Finished basement family room with a sectional, media area, egress window, and warm neutral finishes in a Boise home',
+    topicTags: ["addition","basement","boise"],
+    source: 'blog',
   },
   'bedroom-additions': {
     hero: '/images/city-service/room-addition__meridian.png',
@@ -196,9 +208,9 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'blog',
   },
   'garage-conversions': {
-    hero: '/images/blog/garage-conversions.png',
-    alt: 'Converted garage living space with new windows and finished interior',
-    topicTags: ["addition","garage-conversion"],
+    hero: '/images/blog/garage-conversions.webp',
+    alt: 'Converted garage finished as a bright bonus room and home office with new windows and luxury vinyl plank flooring in a Boise home',
+    topicTags: ["addition","garage-conversion","boise"],
     source: 'blog',
   },
   'adu-guide-boise': {

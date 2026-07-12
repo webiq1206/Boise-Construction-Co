@@ -27,6 +27,10 @@ import { agingInPlaceBathroomDesign } from './aging-in-place-bathroom-design';
 import { luxuryBathroomFeatures } from './luxury-bathroom-features';
 import { bathroomLayoutPlanningGuide } from './bathroom-layout-planning-guide';
 import { howLongDoesABathroomRemodelTake } from './how-long-does-a-bathroom-remodel-take';
+import { aduCostBoise } from './adu-cost-boise';
+import { garageConversions } from './garage-conversions';
+import { basementFinishingBoise } from './basement-finishing-boise';
+import { primarySuiteAdditions } from './primary-suite-additions';
 
 /**
  * Wave 2: bespoke, comprehensive blog posts (1,600+ words, Answer-First,
@@ -66,4 +70,9 @@ export const WAVE2_POSTS: BlogPostData[] = [
   luxuryBathroomFeatures,
   bathroomLayoutPlanningGuide,
   howLongDoesABathroomRemodelTake,
+  // Additions / ADU hub
+  aduCostBoise,
+  garageConversions,
+  basementFinishingBoise,
+  primarySuiteAdditions,
 ];

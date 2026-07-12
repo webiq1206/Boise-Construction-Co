@@ -39,6 +39,11 @@ export const BLOG_OG_IMAGES: Record<string, string> = {
   'luxury-bathroom-features': '/images/blog/luxury-bathroom-features-og.jpg',
   'bathroom-layout-planning-guide': '/images/blog/bathroom-layout-planning-guide-og.jpg',
   'how-long-does-a-bathroom-remodel-take': '/images/blog/how-long-does-a-bathroom-remodel-take-og.jpg',
+  // Additions / ADU hub
+  'adu-cost-boise': '/images/blog/adu-cost-boise-og.jpg',
+  'garage-conversions': '/images/blog/garage-conversions-og.jpg',
+  'basement-finishing-boise': '/images/blog/basement-finishing-boise-og.jpg',
+  'primary-suite-additions': '/images/blog/primary-suite-additions-og.jpg',
 };
 
 export function getBlogOgImage(slug: string): string | undefined {
