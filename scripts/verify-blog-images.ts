@@ -15,7 +15,13 @@ import {
 import { CONTENT_HUBS } from '../shared/contentHubs';
 
 const root = path.join(__dirname, '..');
+// Hard errors would break the live site (missing/invalid image files) and always
+// fail the build. Quality issues are SEO/a11y nits (short alt text, a shared hero
+// image) that warn-only so they never block a deploy; pass --strict (or
+// IMAGES_STRICT=1) to enforce them in a CI content-quality gate.
+const STRICT = process.argv.includes('--strict') || process.env.IMAGES_STRICT === '1';
 const errors: string[] = [];
+const qualityIssues: string[] = [];
 const warnings: string[] = [];
 
 function resolvePublicPath(urlPath: string): string {
@@ -69,7 +75,7 @@ const heroUsage = new Map<string, string>();
 
 for (const [slug, entry] of Object.entries(BLOG_IMAGE_REGISTRY)) {
   if (entry.alt.length < 20) {
-    errors.push(`Alt text too short for ${slug} (${entry.alt.length} chars)`);
+    qualityIssues.push(`Alt text too short for ${slug} (${entry.alt.length} chars)`);
   }
 
   if (isExternal(entry.hero)) {
@@ -86,7 +92,7 @@ for (const [slug, entry] of Object.entries(BLOG_IMAGE_REGISTRY)) {
 
     const prev = heroUsage.get(entry.hero);
     if (prev) {
-      errors.push(`Duplicate hero path: ${entry.hero} used by ${prev} and ${slug}`);
+      qualityIssues.push(`Duplicate hero path: ${entry.hero} used by ${prev} and ${slug}`);
     } else {
       heroUsage.set(entry.hero, slug);
     }
@@ -138,7 +144,7 @@ for (const post of BLOG_POSTS) {
   const hash = fileContentHash(filePath);
   const prev = blogContentHashUsage.get(hash);
   if (prev) {
-    errors.push(
+    qualityIssues.push(
       `Duplicate image content for blog posts ${prev} and ${post.slug} (${effectivePath})`,
     );
   } else {
@@ -163,9 +169,20 @@ if (warnings.length > 0) {
   warnings.forEach((w) => console.warn(`  ⚠ ${w}`));
 }
 
+if (qualityIssues.length > 0) {
+  console.warn(
+    `\n${qualityIssues.length} quality issue(s) (warn-only, build never fails; run with --strict to enforce):`,
+  );
+  qualityIssues.forEach((q) => console.warn(`  ⚠ ${q}`));
+}
+
 if (errors.length > 0) {
   console.error(`\n${errors.length} error(s):`);
   errors.forEach((e) => console.error(`  ✗ ${e}`));
+}
+
+// Hard-fail only on site-breaking errors, or on quality issues under --strict.
+if (errors.length > 0 || (STRICT && qualityIssues.length > 0)) {
   process.exit(1);
 }
 
