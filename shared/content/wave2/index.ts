@@ -15,6 +15,10 @@ import { whyRemodelingBidsVary } from './why-remodeling-bids-vary';
 import { fixedPriceVsCostPlus } from './fixed-price-vs-cost-plus';
 import { kitchenRemodelTimelineBoise } from './kitchen-remodel-timeline-boise';
 import { kitchenLayoutIdeasBoiseHomes } from './kitchen-layout-ideas-boise-homes';
+import { kitchenCabinetTrendsBoise } from './kitchen-cabinet-trends-boise';
+import { quartzVsQuartziteCountertops } from './quartz-vs-quartzite-countertops';
+import { kitchenIslandDesignGuide } from './kitchen-island-design-guide';
+import { smallKitchenRemodelIdeasBoise } from './small-kitchen-remodel-ideas-boise';
 
 /**
  * Wave 2: bespoke, comprehensive blog posts (1,600+ words, Answer-First,
@@ -41,4 +45,8 @@ export const WAVE2_POSTS: BlogPostData[] = [
   // Kitchen hub
   kitchenRemodelTimelineBoise,
   kitchenLayoutIdeasBoiseHomes,
+  kitchenCabinetTrendsBoise,
+  quartzVsQuartziteCountertops,
+  kitchenIslandDesignGuide,
+  smallKitchenRemodelIdeasBoise,
 ];

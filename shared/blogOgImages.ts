@@ -26,6 +26,10 @@ export const BLOG_OG_IMAGES: Record<string, string> = {
   // Kitchen hub
   'kitchen-remodel-timeline-boise': '/images/blog/kitchen-remodel-timeline-boise-og.jpg',
   'kitchen-layout-ideas-boise-homes': '/images/blog/kitchen-layout-ideas-boise-homes-og.jpg',
+  'kitchen-cabinet-trends-boise': '/images/blog/kitchen-cabinet-trends-boise-og.jpg',
+  'quartz-vs-quartzite-countertops': '/images/blog/quartz-vs-quartzite-countertops-og.jpg',
+  'kitchen-island-design-guide': '/images/blog/kitchen-island-design-guide-og.jpg',
+  'small-kitchen-remodel-ideas-boise': '/images/blog/small-kitchen-remodel-ideas-boise-og.jpg',
 };
 
 export function getBlogOgImage(slug: string): string | undefined {

@@ -100,10 +100,28 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'blog',
   },
   'kitchen-island-design-guide': {
-    hero: '/images/city-service/kitchen-remodel__middleton.png',
-    alt: 'Large kitchen island with seating in a Middleton home remodel',
-    topicTags: ["kitchen","island","middleton"],
-    source: 'city-service',
+    hero: '/images/blog/kitchen-island-design-guide.webp',
+    alt: 'Large kitchen island with counter seating, pendant lights, and a waterfall quartz edge in a remodeled Boise home',
+    topicTags: ["kitchen","island","boise"],
+    source: 'blog',
+  },
+  'kitchen-cabinet-trends-boise': {
+    hero: '/images/blog/kitchen-cabinet-trends-boise.webp',
+    alt: 'Two-tone kitchen with sage-green lower cabinets, white uppers, and warm wood open shelving in a Boise remodel',
+    topicTags: ["kitchen","cabinets","boise"],
+    source: 'blog',
+  },
+  'quartz-vs-quartzite-countertops': {
+    hero: '/images/blog/quartz-vs-quartzite-countertops.webp',
+    alt: 'Kitchen with a dramatic natural quartzite island and countertops with bold veining in a Boise home',
+    topicTags: ["kitchen","countertops","boise"],
+    source: 'blog',
+  },
+  'small-kitchen-remodel-ideas-boise': {
+    hero: '/images/blog/small-kitchen-remodel-ideas-boise.webp',
+    alt: 'Compact remodeled galley kitchen with white cabinets and open shelving in a modest older Boise bungalow',
+    topicTags: ["kitchen","small","boise"],
+    source: 'blog',
   },
   'walk-in-pantry-design-guide': {
     hero: '/images/city-service/kitchen-remodel__caldwell.png',
