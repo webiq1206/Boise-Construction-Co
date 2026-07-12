@@ -190,7 +190,7 @@ function ProjectTiles({
   idPrefix: string;
 }) {
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
       {(Object.keys(PROJECT_LABELS) as ProjectType[]).map((type) => {
         const info = PROJECT_LABELS[type];
         const active = project === type;
@@ -202,13 +202,13 @@ function ProjectTiles({
             data-testid={`${idPrefix}button-project-${type}`}
             aria-pressed={active}
             className={cn(
-              "relative flex min-h-11 flex-col items-start gap-1.5 p-5 rounded-sm text-left transition-all border bg-card",
+              "relative flex min-h-11 flex-col items-start gap-0.5 p-4 rounded-sm text-left transition-all border bg-card",
               active ? "border-accent-legible border-[1.5px] bg-accent-legible/10" : "border-border"
             )}
           >
-            {active && <Check className="absolute top-3 right-3 h-4 w-4 text-accent-legible" />}
-            <span className="font-normal text-sm text-foreground">{info.label}</span>
-            <span className="text-xs text-muted-foreground">{info.sub}</span>
+            {active && <Check className="absolute top-2.5 right-2.5 h-4 w-4 text-accent-legible" />}
+            <span className="font-normal text-sm text-foreground pr-5">{info.label}</span>
+            <span className="text-xs leading-snug text-muted-foreground">{info.sub}</span>
           </button>
         );
       })}
@@ -233,7 +233,7 @@ function FinishTiles({
   const disabled = project === null;
 
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
       {levels.map((level) => {
         const info = FINISH_LABELS[level];
         const active = finish === level;
@@ -246,16 +246,16 @@ function FinishTiles({
             data-testid={`${idPrefix}button-finish-${level}`}
             aria-pressed={active}
             className={cn(
-              "relative flex min-h-11 flex-col items-start gap-1.5 p-5 rounded-sm text-left transition-all border bg-card",
+              "relative flex min-h-11 flex-col items-start gap-0.5 p-4 rounded-sm text-left transition-all border bg-card",
               active ? "border-accent-legible border-[1.5px] bg-accent-legible/10" : "border-border",
               disabled && "opacity-50 cursor-not-allowed"
             )}
           >
-            {active && <Check className="absolute top-3 right-3 h-4 w-4 text-accent-legible" />}
-            <span className="font-normal text-sm text-foreground">{info.label}</span>
-            <span className="text-xs text-muted-foreground">{info.sub}</span>
+            {active && <Check className="absolute top-2.5 right-2.5 h-4 w-4 text-accent-legible" />}
+            <span className="font-normal text-sm text-foreground pr-5">{info.label}</span>
+            <span className="text-xs leading-snug text-muted-foreground">{info.sub}</span>
             {project && (
-              <span className="text-[11px] leading-snug text-muted-foreground/90 mt-0.5">
+              <span className="text-[11px] leading-snug text-accent-legible/90 mt-1 brc-display-num">
                 {getFinishPlanningHint(project, level)}
               </span>
             )}
@@ -508,7 +508,7 @@ function RefinementFields({
 
 function StepHeader({ num, label }: { num: number; label: string }) {
   return (
-    <div className="flex items-center gap-3 mb-5">
+    <div className="flex items-center gap-3 mb-3">
       <span className="flex-shrink-0 flex items-center justify-center h-7 w-7 rounded-full border border-primary/60 text-primary text-[11px] font-normal tracking-wide">
         {num}
       </span>
@@ -844,7 +844,7 @@ export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitPr
 
   const stackedIdPrefix = "";
   const stacked = (
-    <div className="space-y-8">
+    <div className="space-y-5">
       <div>
         <StepHeader num={1} label="What are we remodeling?" />
         <ProjectTiles project={project} onSelect={handleSelectProject} idPrefix={stackedIdPrefix} />
@@ -874,7 +874,7 @@ export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitPr
           disabled={!complete}
           onClick={() => setRefineOpen(!refineOpen)}
           className={cn(
-            "w-full flex items-center justify-between p-5 text-left bg-surface-muted hover:bg-muted/80 transition-colors",
+            "w-full flex items-center justify-between p-4 text-left bg-surface-muted hover:bg-muted/80 transition-colors",
             !complete && "opacity-50 cursor-not-allowed"
           )}
           data-testid="button-refine-toggle"
@@ -905,7 +905,7 @@ export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitPr
         </button>
 
         {refineOpen && complete && project && (
-          <div id="refine-estimate-panel" className="p-5 bg-card border-t border-border">
+          <div id="refine-estimate-panel" className="p-4 bg-card border-t border-border">
             <RefinementFields
               project={project}
               refinements={refinements}
@@ -954,18 +954,15 @@ export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitPr
   return (
     <Section id="calculator" divider>
       <div ref={sectionRef} className="container px-4 pb-24 lg:pb-0">
-        <div className="max-w-6xl mx-auto mb-10">
+        <div className="max-w-6xl mx-auto mb-6">
           <div className="brc-label mb-3">Project Estimator</div>
-          <h2 className="font-sans font-light text-section-title md:text-section-title-lg mb-3 text-foreground">
+          <h2 className="font-sans font-light text-section-title mb-2 text-foreground">
             Plan your project{" "}
             <em className="brc-accent">investment</em>
           </h2>
-          <p className="text-base max-w-2xl leading-relaxed text-muted-foreground mb-3">
-            Answer three quick questions for an instant planning range. Nothing is pre-selected
-            and nothing is submitted until you say so.
-          </p>
-          <p className="text-xs text-muted-foreground/90 max-w-2xl">
-            Planning estimate only, not a binding quote. Final pricing requires an in-home evaluation.
+          <p className="text-sm max-w-2xl leading-relaxed text-muted-foreground">
+            Three quick questions, an instant planning range. Nothing is pre-selected or submitted
+            until you say so - a planning estimate only, not a binding quote.
           </p>
         </div>
 
@@ -977,8 +974,8 @@ export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitPr
             className="absolute inset-x-0 top-0 h-[2px] rounded-t-xl bg-gradient-to-r from-transparent via-accent-legible/70 to-transparent"
             aria-hidden="true"
           />
-          <div className="p-5 sm:p-6 md:p-8 lg:p-10">
-            <div className="hidden lg:grid lg:grid-cols-[3fr_2fr] gap-8 md:gap-12 items-start">
+          <div className="p-5 sm:p-6 lg:p-7">
+            <div className="hidden lg:grid lg:grid-cols-[3fr_2fr] gap-6 xl:gap-8 items-start">
               {stacked}
               <div className="lg:sticky lg:top-24">{resultPanel}</div>
             </div>
