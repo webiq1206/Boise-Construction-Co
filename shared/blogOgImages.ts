@@ -48,6 +48,11 @@ export const BLOG_OG_IMAGES: Record<string, string> = {
   'bedroom-additions': '/images/blog/bedroom-additions-og.jpg',
   'multigenerational-living-remodels': '/images/blog/multigenerational-living-remodels-og.jpg',
   'home-addition-timeline-guide': '/images/blog/home-addition-timeline-guide-og.jpg',
+  // Whole-Home hub
+  'whole-home-remodel-timeline': '/images/blog/whole-home-remodel-timeline-og.jpg',
+  'remodeling-vs-moving': '/images/blog/remodeling-vs-moving-og.jpg',
+  'living-through-a-remodel': '/images/blog/living-through-a-remodel-og.jpg',
+  'remodeling-mistakes-to-avoid': '/images/blog/remodeling-mistakes-to-avoid-og.jpg',
 };
 
 export function getBlogOgImage(slug: string): string | undefined {

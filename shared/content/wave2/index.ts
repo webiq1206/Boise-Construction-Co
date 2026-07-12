@@ -35,6 +35,10 @@ import { secondStoryAdditions } from './second-story-additions';
 import { bedroomAdditions } from './bedroom-additions';
 import { multigenerationalLivingRemodels } from './multigenerational-living-remodels';
 import { homeAdditionTimelineGuide } from './home-addition-timeline-guide';
+import { wholeHomeRemodelTimeline } from './whole-home-remodel-timeline';
+import { remodelingVsMoving } from './remodeling-vs-moving';
+import { livingThroughARemodel } from './living-through-a-remodel';
+import { remodelingMistakesToAvoid } from './remodeling-mistakes-to-avoid';
 
 /**
  * Wave 2: bespoke, comprehensive blog posts (1,600+ words, Answer-First,
@@ -83,4 +87,9 @@ export const WAVE2_POSTS: BlogPostData[] = [
   bedroomAdditions,
   multigenerationalLivingRemodels,
   homeAdditionTimelineGuide,
+  // Whole-Home hub
+  wholeHomeRemodelTimeline,
+  remodelingVsMoving,
+  livingThroughARemodel,
+  remodelingMistakesToAvoid,
 ];
