@@ -34,8 +34,6 @@ const CHARCOAL = '#1C1F1E';
 
 const fontLight = fs.readFileSync(path.join(assets, 'Montserrat-Light.ttf'));
 const fontMedium = fs.readFileSync(path.join(assets, 'Montserrat-Medium.ttf'));
-const sealPng = fs.readFileSync(path.join(assets, 'seal-transparent.png'));
-const sealDataUri = `data:image/png;base64,${sealPng.toString('base64')}`;
 
 /** Minimal hyperscript for satori's element tree (no JSX in .mjs). */
 function h(type, style, children) {
@@ -58,44 +56,45 @@ export async function generateOgCard(slug, title, sourceImage) {
 
   const bg = await bgDataUri(src);
 
+  // Centered, crop-safe composition. The seal and title live in the middle of
+  // the frame so nothing is cut when a platform crops the 1.91:1 card to 4:3
+  // (Google Business Profile) or square (iMessage/link thumbnails). Content
+  // stays inside a centered safe zone rather than the left/bottom edges.
   const tree = h('div', {
-    width: W, height: H, display: 'flex', position: 'relative',
+    width: W, height: H, position: 'relative', display: 'flex',
+    alignItems: 'center', justifyContent: 'center',
     fontFamily: 'Montserrat', backgroundColor: CHARCOAL,
   }, [
     // Full-bleed photo
     h('img', { position: 'absolute', top: 0, left: 0, width: W, height: H, objectFit: 'cover' }),
-    // Darker overlay — atmospheric up top, deep at the bottom for legibility
+    // Dark overlay — fairly even so centered text stays legible over any photo
     h('div', {
       position: 'absolute', top: 0, left: 0, width: W, height: H, display: 'flex',
       backgroundImage:
-        'linear-gradient(180deg, rgba(24,27,26,0.72) 0%, rgba(24,27,26,0.58) 40%, rgba(24,27,26,0.97) 100%)',
+        'linear-gradient(180deg, rgba(24,27,26,0.64) 0%, rgba(24,27,26,0.56) 50%, rgba(24,27,26,0.80) 100%)',
     }),
-    // Transparent white seal, top-left
-    h('div', { position: 'absolute', top: 52, left: 64, display: 'flex' }, [
-      h('img', { width: 104, height: 104 }),
-    ]),
-    // Content, bottom-left — mirrors the site's section header (tick + eyebrow + light headline)
+    // Centered content stack
     h('div', {
-      position: 'absolute', left: 64, right: 64, bottom: 62, display: 'flex', flexDirection: 'column',
+      position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center',
+      width: 820,
     }, [
-      h('div', { display: 'flex', alignItems: 'center', marginBottom: 22 }, [
-        h('div', { width: 46, height: 2, backgroundColor: SAGE, display: 'flex' }),
-        h('div', {
-          display: 'flex', fontSize: 18, fontWeight: 500, color: MIST, marginLeft: 18,
-          letterSpacing: '2.6px',
-        }, 'BOISE REMODELING CO   ·   BOISEREMODELING.CO'),
-      ]),
+      // Title — centered, constrained so it survives 4:3/square crops
       h('div', {
-        display: 'flex', fontSize: 62, fontWeight: 300, color: BONE, lineHeight: 1.08,
-        letterSpacing: '-0.5px', maxWidth: 1010,
+        display: 'flex', textAlign: 'center', fontSize: 58, fontWeight: 300, color: BONE,
+        lineHeight: 1.14, letterSpacing: '-0.5px', maxWidth: 760,
       }, title),
+      // Sage rule
+      h('div', { width: 56, height: 2, backgroundColor: SAGE, marginTop: 32, marginBottom: 20, display: 'flex' }),
+      // Eyebrow — brand + domain, centered
+      h('div', {
+        display: 'flex', textAlign: 'center', fontSize: 18, fontWeight: 500, color: MIST,
+        letterSpacing: '2.4px',
+      }, 'BOISE REMODELING CO   ·   BOISEREMODELING.CO'),
     ]),
   ]);
 
-  // satori can't fetch remote/data <img> for us here, so inject src post-build
-  // via the tree: set the img src props directly.
+  // satori can't fetch remote/data <img> for us here, so inject the photo src.
   tree.props.children[0].props.src = bg;
-  tree.props.children[2].props.children[0].props.src = sealDataUri;
 
   const svg = await satori(tree, {
     width: W, height: H,

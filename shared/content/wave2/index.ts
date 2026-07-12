@@ -11,6 +11,10 @@ import { questionsToAskRemodelingContractor } from './questions-to-ask-remodelin
 import { remodelingContractorRedFlags } from './remodeling-contractor-red-flags';
 import { designBuildVsGeneralContractor } from './design-build-vs-general-contractor';
 import { howToCompareRemodelingEstimates } from './how-to-compare-remodeling-estimates';
+import { whyRemodelingBidsVary } from './why-remodeling-bids-vary';
+import { fixedPriceVsCostPlus } from './fixed-price-vs-cost-plus';
+import { kitchenRemodelTimelineBoise } from './kitchen-remodel-timeline-boise';
+import { kitchenLayoutIdeasBoiseHomes } from './kitchen-layout-ideas-boise-homes';
 
 /**
  * Wave 2: bespoke, comprehensive blog posts (1,600+ words, Answer-First,
@@ -32,4 +36,9 @@ export const WAVE2_POSTS: BlogPostData[] = [
   remodelingContractorRedFlags,
   designBuildVsGeneralContractor,
   howToCompareRemodelingEstimates,
+  whyRemodelingBidsVary,
+  fixedPriceVsCostPlus,
+  // Kitchen hub
+  kitchenRemodelTimelineBoise,
+  kitchenLayoutIdeasBoiseHomes,
 ];

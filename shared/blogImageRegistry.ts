@@ -64,16 +64,16 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'blog',
   },
   'kitchen-remodel-timeline-boise': {
-    hero: '/images/city-service/kitchen-remodel__meridian.png',
-    alt: 'Kitchen remodel in progress with cabinetry installed in a Meridian home',
-    topicTags: ["kitchen","timeline","meridian"],
-    source: 'city-service',
+    hero: '/images/blog/kitchen-remodel-timeline-boise.webp',
+    alt: 'Bright modern farmhouse kitchen in a remodeled Boise home with white cabinetry and a sage-green island',
+    topicTags: ["kitchen","timeline","boise"],
+    source: 'blog',
   },
   'kitchen-layout-ideas-boise-homes': {
-    hero: '/images/city-service/kitchen-remodel__nampa.png',
-    alt: 'Efficient kitchen layout with clear work triangle in a Nampa home',
-    topicTags: ["kitchen","layout","nampa"],
-    source: 'city-service',
+    hero: '/images/blog/kitchen-layout-ideas-boise-homes.webp',
+    alt: 'Large open-concept kitchen with a central island and walk-in pantry in a remodeled Boise home',
+    topicTags: ["kitchen","layout","boise"],
+    source: 'blog',
   },
   'kitchen-cabinet-trends': {
     hero: '/images/city-service/kitchen-remodel__kuna.png',
@@ -262,10 +262,10 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'blog',
   },
   'fixed-price-vs-cost-plus': {
-    hero: '/images/gallery/gallery-basement-before.png',
-    alt: 'Remodel scope documents and pricing notes laid out for a fixed-price versus cost-plus comparison',
+    hero: '/images/blog/fixed-price-vs-cost-plus.webp',
+    alt: 'Refined butler’s pantry and home bar in a remodeled Boise home with floor-to-ceiling cabinetry',
     topicTags: ["contractor","pricing"],
-    source: 'gallery',
+    source: 'blog',
   },
   'how-to-compare-remodeling-estimates': {
     hero: '/images/blog/how-to-compare-remodeling-estimates.webp',
@@ -274,10 +274,10 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'blog',
   },
   'why-remodeling-bids-vary': {
-    hero: '/images/city-service/bathroom-remodel__middleton.png',
-    alt: 'Finished bathroom remodel illustrating scope differences in contractor bids',
+    hero: '/images/blog/why-remodeling-bids-vary.webp',
+    alt: 'Elegant formal dining room in a remodeled Boise home with paneled walls and a statement light fixture',
     topicTags: ["contractor","pricing"],
-    source: 'city-service',
+    source: 'blog',
   },
   'what-makes-great-remodeling-contractor': {
     hero: '/images/blog/kitchen-roi-remodeling.png',

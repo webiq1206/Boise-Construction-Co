@@ -21,6 +21,11 @@ export const BLOG_OG_IMAGES: Record<string, string> = {
   'remodeling-contractor-red-flags': '/images/blog/remodeling-contractor-red-flags-og.jpg',
   'design-build-vs-general-contractor': '/images/blog/design-build-vs-general-contractor-og.jpg',
   'how-to-compare-remodeling-estimates': '/images/blog/how-to-compare-remodeling-estimates-og.jpg',
+  'why-remodeling-bids-vary': '/images/blog/why-remodeling-bids-vary-og.jpg',
+  'fixed-price-vs-cost-plus': '/images/blog/fixed-price-vs-cost-plus-og.jpg',
+  // Kitchen hub
+  'kitchen-remodel-timeline-boise': '/images/blog/kitchen-remodel-timeline-boise-og.jpg',
+  'kitchen-layout-ideas-boise-homes': '/images/blog/kitchen-layout-ideas-boise-homes-og.jpg',
 };
 
 export function getBlogOgImage(slug: string): string | undefined {
