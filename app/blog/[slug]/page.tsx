@@ -16,6 +16,7 @@ import {
   getBlogHeroImage,
   getBlogImageAlt,
 } from "@/shared/blogImages";
+import { getBlogOgImage } from "@/shared/blogOgImages";
 import { getBaseUrl } from "@/lib/seo";
 
 export async function generateStaticParams() {
@@ -48,6 +49,11 @@ export async function generateMetadata({
   const imageUrl = getAbsoluteImageUrl(heroPath, getBaseUrl());
   const imageAlt = getBlogImageAlt(post.slug);
 
+  // Prefer the branded Open Graph share card (photo + dark overlay + title +
+  // seal, 1200x630) when one exists; fall back to the featured hero image.
+  const ogCard = getBlogOgImage(post.slug);
+  const shareImageUrl = ogCard ? getAbsoluteImageUrl(ogCard, getBaseUrl()) : imageUrl;
+
   return {
     title,
     description,
@@ -60,13 +66,13 @@ export async function generateMetadata({
       url: buildCanonical(`/blog/${post.slug}`),
       type: "article",
       publishedTime: post.publishedAt,
-      images: [{ url: imageUrl, alt: imageAlt }],
+      images: [{ url: shareImageUrl, width: 1200, height: 630, alt: imageAlt }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [imageUrl],
+      images: [shareImageUrl],
     },
   };
 }
