@@ -113,11 +113,42 @@ const boiseSections: ContentSection[] = [
   },
 ];
 
+// Insert on-brand sage callouts between the assembled <h2>/<p> blocks by
+// anchoring on stable section headings.
+function injectCallouts(html: string, callouts: Array<[string, string]>): string {
+  return callouts.reduce((acc, [anchor, callout]) => acc.replace(anchor, callout + anchor), html);
+}
+
+const TV_CALLOUTS: Array<[string, string]> = [
+  [
+    '<h2>Ada County vs Canyon County</h2>',
+    '<div class="callout note"><p class="callout-label">Which county are you in?</p><p><strong>Ada County:</strong> Boise, Meridian, Eagle, Kuna, and Star. <strong>Canyon County:</strong> Nampa, Middleton, and Caldwell. The two use <span class="sage">different permit portals and review cadences</span>, which affects your timeline - your design-build contractor handles the right path for you.</p></div>',
+  ],
+  [
+    '<h2>Planning ranges by project type</h2>',
+    '<div class="callout tip"><p class="callout-label">Get a rough number first</p><p>Try the <a href="/#calculator">project estimator</a> for a quick planning range, then see the <a href="/guides/boise-remodeling-cost-guide">Boise Remodeling Cost Guide</a> for detailed bands by project. Read these as <span class="sage">planning ranges</span>, not quotes.</p></div>',
+  ],
+];
+
+const BOISE_CALLOUTS: Array<[string, string]> = [
+  [
+    '<h2>North End and Bench</h2>',
+    '<div class="callout tip"><p class="callout-label">Remodeling an older Boise home?</p><p>North End bungalows and Bench ranches are full of character - and often outdated wiring and plumbing behind the walls. Budget for <span class="sage">electrical and plumbing updates</span> and creative layout solutions, and hold a contingency for the surprises older homes reveal once opened.</p></div>',
+  ],
+  [
+    '<h2>Boise planning checklist</h2>',
+    '<div class="callout note"><p class="callout-label">Key point</p><p>The most successful Boise remodels lock scope, structure, and selections <span class="sage">before demolition</span>. Decisions made on paper are inexpensive; the same changes mid-construction become costly change orders.</p></div>',
+  ],
+];
+
 export const TREASURE_VALLEY_GUIDE_HTML = expandLocation(
-  buildSectionsHtml(tvSections),
+  injectCallouts(buildSectionsHtml(tvSections), TV_CALLOUTS),
   'treasure-valley-remodeling-guide',
 );
-export const BOISE_GUIDE_HTML = expandLocation(buildSectionsHtml(boiseSections), 'boise-remodeling-guide');
+export const BOISE_GUIDE_HTML = expandLocation(
+  injectCallouts(buildSectionsHtml(boiseSections), BOISE_CALLOUTS),
+  'boise-remodeling-guide',
+);
 
 export const TV_QUICK_ANSWER =
   'The Treasure Valley covers Boise, Meridian, Eagle, Kuna, Star, Middleton, Nampa, and Caldwell - Ada and Canyon Counties use different permit paths. Pick your city guide, then the topic guide for your project.';
