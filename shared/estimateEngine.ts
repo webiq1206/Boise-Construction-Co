@@ -288,15 +288,15 @@ const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>>
   },
   bathroom: {
     refresh: {
-      low: 5000, high: 15000, roi: 70,
+      low: 8000, high: 22000, roi: 70,
       included: ["New vanity and mirror", "Tile shower refresh", "Updated fixtures and hardware", "New toilet if needed", "Lighting update"],
     },
     "mid-range": {
-      low: 15000, high: 35000, roi: 71,
+      low: 18000, high: 40000, roi: 71,
       included: ["Custom tile shower", "Semi-custom vanity", "Heated floors", "Updated plumbing", "New windows"],
     },
     "high-end": {
-      low: 35000, high: 80000, roi: 65,
+      low: 40000, high: 80000, roi: 65,
       included: ["Wet room or custom walk-in shower", "Freestanding soaking tub", "Radiant heated floors", "Custom built-ins", "High-end plumbing fixtures"],
     },
     luxury: {
@@ -306,33 +306,33 @@ const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>>
   },
   "whole-home": {
     refresh: {
-      low: 25000, high: 60000, roi: 65,
+      low: 40000, high: 90000, roi: 65,
       included: ["Kitchen and bath cosmetic refresh", "New flooring throughout", "Fresh interior paint", "Updated light fixtures"],
     },
     "mid-range": {
-      low: 60000, high: 150000, roi: 68,
+      low: 90000, high: 190000, roi: 68,
       included: ["Kitchen and bath mid-range renovation", "Open-concept conversion", "New flooring throughout", "Updated HVAC and windows"],
     },
     "high-end": {
-      low: 150000, high: 350000, roi: 62,
+      low: 190000, high: 375000, roi: 62,
       included: ["Custom kitchen and bath renovation", "Structural modifications", "New windows and doors", "High-end finishes throughout"],
     },
     luxury: {
-      low: 350000, high: 700000, roi: 55,
+      low: 375000, high: 725000, roi: 55,
       included: ["Full gut renovation", "Structural engineering", "Smart home system", "Premium finishes throughout", "New HVAC, electrical and plumbing"],
     },
   },
   addition: {
     "mid-range": {
-      low: 80000, high: 180000, roi: 63,
+      low: 100000, high: 190000, roi: 63,
       included: ["Bedroom or family room addition", "Full HVAC integration", "Updated electrical panel", "Mid-range finishes"],
     },
     "high-end": {
-      low: 180000, high: 400000, roi: 58,
+      low: 190000, high: 360000, roi: 58,
       included: ["400 to 600 sqft addition", "High-end finishes", "Full integration with existing layout", "Custom windows and doors"],
     },
     luxury: {
-      low: 400000, high: 750000, roi: 50,
+      low: 360000, high: 700000, roi: 50,
       included: ["600+ sqft addition", "Structural engineering", "Premium finishes throughout", "Custom design integration"],
     },
   },
