@@ -332,7 +332,7 @@ const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>>
       included: ["400 to 600 sqft addition", "High-end finishes", "Full integration with existing layout", "Custom windows and doors"],
     },
     luxury: {
-      low: 360000, high: 700000, roi: 50,
+      low: 360000, high: 560000, roi: 50,
       included: ["600+ sqft addition", "Structural engineering", "Premium finishes throughout", "Custom design integration"],
     },
   },
