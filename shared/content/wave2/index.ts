@@ -39,6 +39,16 @@ import { wholeHomeRemodelTimeline } from './whole-home-remodel-timeline';
 import { remodelingVsMoving } from './remodeling-vs-moving';
 import { livingThroughARemodel } from './living-through-a-remodel';
 import { remodelingMistakesToAvoid } from './remodeling-mistakes-to-avoid';
+import { wholeHomeRemodelPlanningChecklist } from './whole-home-remodel-planning-checklist';
+import { consultationProcessRemodeling } from './consultation-process-remodeling';
+import { materialSelectionGuide } from './material-selection-guide';
+import { boisePermitGuide } from './boise-permit-guide';
+import { kitchenRemodelRoi } from './kitchen-remodel-roi';
+import { bathroomRemodelRoi } from './bathroom-remodel-roi';
+import { energyEfficiencyRoi } from './energy-efficiency-roi';
+import { exteriorRemodelingRoi } from './exterior-remodeling-roi';
+import { outdoorKitchensBoise } from './outdoor-kitchens-boise';
+import { coveredPatiosBoise } from './covered-patios-boise';
 
 /**
  * Wave 2: bespoke, comprehensive blog posts (1,600+ words, Answer-First,
@@ -92,4 +102,17 @@ export const WAVE2_POSTS: BlogPostData[] = [
   remodelingVsMoving,
   livingThroughARemodel,
   remodelingMistakesToAvoid,
+  wholeHomeRemodelPlanningChecklist,
+  // Remodeling Process hub
+  consultationProcessRemodeling,
+  materialSelectionGuide,
+  boisePermitGuide,
+  // ROI & Home Value hub
+  kitchenRemodelRoi,
+  bathroomRemodelRoi,
+  energyEfficiencyRoi,
+  exteriorRemodelingRoi,
+  // Outdoor Living hub
+  outdoorKitchensBoise,
+  coveredPatiosBoise,
 ];
