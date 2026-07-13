@@ -20,7 +20,10 @@ function assert(condition: boolean, message: string) {
   }
 }
 
-const projects: ProjectType[] = ["kitchen", "bathroom", "whole-home", "addition", "adu"];
+const projects: ProjectType[] = ["kitchen", "bathroom", "whole-home", "addition", "adu", "basement"];
+
+const mid = (r: { priceLow: number; priceHigh: number }) => (r.priceLow + r.priceHigh) / 2;
+const width = (r: { priceLow: number; priceHigh: number }) => r.priceHigh - r.priceLow;
 
 // Nothing is selected by default and no estimate can exist without selections.
 assert(EMPTY_ESTIMATE_INPUT.project === null, "no project selected by default");
@@ -41,6 +44,9 @@ for (const project of projects) {
 
   if (project === "addition" || project === "adu") {
     assert(!visibility.layoutChanges, `${project} hides layout changes`);
+    assert(maxFields === 2, `${project} exposes two refinement fields`);
+  } else if (project === "basement") {
+    assert(visibility.layoutChanges, `${project} shows layout changes`);
     assert(maxFields === 2, `${project} exposes two refinement fields`);
   } else {
     assert(visibility.layoutChanges, `${project} shows layout changes`);
@@ -78,7 +84,6 @@ const kitchenDetailed = calculateEstimate(
 assert(kitchenDetailed.confidence === "detailed", "kitchen reaches detailed guidance at max fields");
 assert(kitchenDetailed.confidencePercent === 85, "kitchen detailed guidance is 85%");
 
-// Unset refinements never move the price (null acts as a 1.0x multiplier).
 const kitchenBase = calculateEstimate(
   {
     project: "kitchen",
@@ -97,9 +102,23 @@ const kitchenNeutral = calculateEstimate(
   },
   2,
 );
+// Neutral refinements carry no cost premium, so the CENTER is unchanged - but
+// answering the questions (even with "standard") is information that reduces
+// uncertainty, so the band tightens and the range gets narrower.
 assert(
-  kitchenBase.priceLow === kitchenNeutral.priceLow && kitchenBase.priceHigh === kitchenNeutral.priceHigh,
-  "neutral refinements match unset refinements in price",
+  Math.abs(mid(kitchenNeutral) - mid(kitchenBase)) <= 1000,
+  "neutral refinements keep the estimate center",
+);
+assert(
+  width(kitchenNeutral) < width(kitchenBase),
+  "providing detail (even neutral) narrows the range",
+);
+
+// The uncertainty band tightens as detail is added: a fully-specified estimate
+// is strictly narrower (as a spread) than the starting range.
+assert(
+  kitchenDetailed.priceHigh / kitchenDetailed.priceLow < kitchenBase.priceHigh / kitchenBase.priceLow,
+  "adding detail narrows the range spread",
 );
 
 // ADU configuration: detached carries a premium over attached; neither uses
@@ -159,9 +178,12 @@ const bathOneFixture = calculateEstimate(
   },
   1,
 );
+// A low fixture count carries no discount multiplier, so it never pulls the
+// estimate CENTER below the base (the band may tighten around that center as
+// detail is added, but the midpoint does not drop).
 assert(
-  bathOneFixture.priceLow >= bathBase.priceLow && bathOneFixture.priceHigh >= bathBase.priceHigh,
-  "low fixture count never discounts the range",
+  mid(bathOneFixture) >= mid(bathBase) - 1,
+  "low fixture count never discounts the estimate center",
 );
 
 const wholeHomeLarge = calculateEstimate(

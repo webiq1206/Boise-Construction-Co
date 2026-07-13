@@ -226,11 +226,11 @@ export function EstimateResultPanel({
             visit.
           </p>
 
-          {/* Slim confidence meter: a gentle nudge to add optional details, never
-              alters the dollar range. */}
+          {/* Precision meter: the more detail provided, the tighter the range.
+              Doubles as a nudge to answer the optional questions. */}
           <div className="mb-4">
             <div className="flex justify-between text-[11px] mb-1.5 text-inverse-muted">
-              <span>Detail level</span>
+              <span>Estimate precision</span>
               <span>{result.confidencePercent}%</span>
             </div>
             <div
@@ -239,13 +239,18 @@ export function EstimateResultPanel({
               aria-valuenow={result.confidencePercent}
               aria-valuemin={0}
               aria-valuemax={100}
-              aria-label="Details provided"
+              aria-label="Estimate precision"
             >
               <div
                 className="h-full rounded-full transition-all duration-500 bg-inverse-foreground/50"
                 style={{ width: `${result.confidencePercent}%` }}
               />
             </div>
+            <p className="text-[11px] text-inverse-muted mt-1.5">
+              {result.confidencePercent >= 85
+                ? "Fully detailed - this is your tightest planning range."
+                : "Add optional details to tighten this range."}
+            </p>
           </div>
 
           <div className="border-y border-inverse-foreground/10 py-3 mb-4">

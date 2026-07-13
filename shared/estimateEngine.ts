@@ -589,13 +589,26 @@ export function calculateEstimate(input: EstimateInput, userRefinementCount = 0)
   const maxFields = getMaxRefinementFields(input.project);
   const { level, percent } = getPlanningDetail(userRefinementCount, maxFields);
 
-  // Price is a pure, monotonic function of the cost drivers (project, finish,
-  // size, refinements). A more intensive selection always yields a higher
-  // range. The planning-detail meter below is a separate confidence cue and
-  // intentionally does NOT alter the dollar range, so two configurations are
-  // always directly comparable.
-  const priceLow = Math.round((base.low * sizeMult * refMult.low) / 1000) * 1000;
-  const priceHigh = Math.round((base.high * sizeMult * refMult.high) / 1000) * 1000;
+  // The estimate is a central figure with an uncertainty band around it.
+  //
+  // The CENTER is a pure, monotonic function of the cost drivers (project,
+  // finish, size, refinements): a more intensive selection always moves the
+  // center up, so two configurations remain directly comparable.
+  const centerLow = base.low * sizeMult * refMult.low;
+  const centerHigh = base.high * sizeMult * refMult.high;
+  const center = (centerLow + centerHigh) / 2;
+
+  // The BAND starts at the category's own natural spread and TIGHTENS as the
+  // user supplies more detail, so a fully-specified estimate is genuinely more
+  // precise - not just a higher "detail" score. This is what makes "improve
+  // estimate accuracy" real: fewer unknowns, a narrower range.
+  const startBand = (base.high - base.low) / (base.high + base.low);
+  const detailRatio = maxFields > 0 ? Math.min(1, userRefinementCount / maxFields) : 0;
+  const BAND_TIGHTENING = 0.55; // remove up to 55% of the band at full detail
+  const band = startBand * (1 - BAND_TIGHTENING * detailRatio);
+
+  const priceLow = Math.round((center * (1 - band)) / 1000) * 1000;
+  const priceHigh = Math.round((center * (1 + band)) / 1000) * 1000;
 
   return {
     priceLow,
