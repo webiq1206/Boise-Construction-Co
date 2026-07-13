@@ -568,6 +568,7 @@ export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitPr
   /* ── Step navigation (mobile / modal guided flow) ── */
 
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
+  const stepperRootRef = useRef<HTMLDivElement>(null);
   const pendingFocusRef = useRef(false);
   const advanceTimerRef = useRef<number | null>(null);
 
@@ -604,8 +605,36 @@ export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitPr
   useEffect(() => {
     if (!pendingFocusRef.current) return;
     pendingFocusRef.current = false;
-    // Orient keyboard / screen-reader users (and scroll the step into view).
-    stepHeadingRef.current?.focus();
+    // Every step opens at the top. Scroll the wizard's scroll container back to
+    // the start - the dialog body when in a modal, the window when inline - so
+    // the new step is never revealed mid-scroll. Focus moves to the heading for
+    // keyboard / screen-reader users, with preventScroll so it does not fight
+    // the scroll we just performed.
+    // Only when the guided stepper is actually on screen (mobile / modal). On
+    // desktop it is display:none (lg:hidden) yet still receives step changes, so
+    // guard on offsetParent to avoid scrolling the page against a hidden node.
+    const root = stepperRootRef.current;
+    if (root && root.offsetParent !== null) {
+      let ancestor: HTMLElement | null = root.parentElement;
+      let scrolledContainer = false;
+      while (ancestor && ancestor !== document.body && ancestor !== document.documentElement) {
+        const overflowY = getComputedStyle(ancestor).overflowY;
+        if (
+          (overflowY === "auto" || overflowY === "scroll") &&
+          ancestor.scrollHeight > ancestor.clientHeight
+        ) {
+          ancestor.scrollTo({ top: 0, behavior: "auto" });
+          scrolledContainer = true;
+          break;
+        }
+        ancestor = ancestor.parentElement;
+      }
+      if (!scrolledContainer) {
+        const top = root.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
+      }
+    }
+    stepHeadingRef.current?.focus({ preventScroll: true });
   }, [stepIndex]);
 
   useEffect(() => {
@@ -726,7 +755,7 @@ export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitPr
 
   const stepperIdPrefix = "step-";
   const stepper = (
-    <div data-testid="estimate-stepper">
+    <div ref={stepperRootRef} data-testid="estimate-stepper">
       <div className="flex items-center justify-between gap-3 mb-4 min-h-9">
         {stepIndex > 0 ? (
           <Button

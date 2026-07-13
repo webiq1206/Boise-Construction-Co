@@ -19,7 +19,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Check, CheckCircle2, ArrowRight, Phone, Plus, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Check, CheckCircle2, ArrowRight, Phone, Plus, X, ChevronDown } from "lucide-react";
 import type { StoredEstimate } from "@/shared/estimateEngine";
 import { FINISH_LABELS, PROJECT_LABELS, formatPlanningCurrency } from "@/shared/estimateEngine";
 import { DisplayNum } from "@/components/marketing";
@@ -87,6 +88,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
   const [propertyProfile, setPropertyProfile] = useState<PropertyProfile | null>(null);
   const [addressInput, setAddressInput] = useState("");
   const [showNote, setShowNote] = useState(false);
+  const [showAddrInfo, setShowAddrInfo] = useState(false);
   const lastKeyRef = useRef<string | null>(null);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
 
@@ -148,9 +150,31 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
   }, [form]);
 
   useEffect(() => {
-    if (success) {
-      successHeadingRef.current?.focus();
+    if (!success) return;
+    // Open the confirmation at the top, whether the form lives in the scrolling
+    // dialog body (modal) or inline on the page.
+    const el = successHeadingRef.current;
+    if (el && el.offsetParent !== null) {
+      let ancestor: HTMLElement | null = el.parentElement;
+      let scrolledContainer = false;
+      while (ancestor && ancestor !== document.body && ancestor !== document.documentElement) {
+        const overflowY = getComputedStyle(ancestor).overflowY;
+        if (
+          (overflowY === "auto" || overflowY === "scroll") &&
+          ancestor.scrollHeight > ancestor.clientHeight
+        ) {
+          ancestor.scrollTo({ top: 0, behavior: "auto" });
+          scrolledContainer = true;
+          break;
+        }
+        ancestor = ancestor.parentElement;
+      }
+      if (!scrolledContainer) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
+      }
     }
+    el?.focus({ preventScroll: true });
   }, [success]);
 
   function handleRevise() {
@@ -518,14 +542,27 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
                   data-testid="input-address"
                 />
               </FormControl>
-              <FormDescription className="text-xs text-muted-foreground">
-                We use county property records to prepare for your visit. Your information is never
-                shared or sold -{" "}
-                <Link href="/privacy-policy" className="underline underline-offset-2 hover:text-foreground">
-                  privacy policy
-                </Link>
-                .
-              </FormDescription>
+              <button
+                type="button"
+                onClick={() => setShowAddrInfo((v) => !v)}
+                aria-expanded={showAddrInfo}
+                aria-controls="address-info"
+                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mt-1"
+                data-testid="button-address-info"
+              >
+                Why we ask for your address
+                <ChevronDown className={cn("h-3 w-3 transition-transform", showAddrInfo && "rotate-180")} />
+              </button>
+              {showAddrInfo && (
+                <FormDescription id="address-info" className="text-xs text-muted-foreground mt-1">
+                  We use county property records to prepare for your visit. Your information is never
+                  shared or sold -{" "}
+                  <Link href="/privacy-policy" className="underline underline-offset-2 hover:text-foreground">
+                    privacy policy
+                  </Link>
+                  .
+                </FormDescription>
+              )}
               <FormMessage />
             </FormItem>
           )}
