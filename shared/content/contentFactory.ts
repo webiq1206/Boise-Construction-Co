@@ -170,6 +170,10 @@ export interface PillarConfig {
   linkedClusterSlugs: string[];
   linkedServices?: string[];
   extraSections?: ContentSection[];
+  /** Bespoke, hand-authored guide body HTML. Overrides generated sections. */
+  content?: string;
+  /** Bespoke FAQs. Overrides the generic hub pillar FAQs. */
+  faqs?: Array<{ question: string; answer: string }>;
 }
 
 export function buildPillarGuide(config: PillarConfig): GuidePageData {
@@ -196,7 +200,7 @@ export function buildPillarGuide(config: PillarConfig): GuidePageData {
     seoTitle: config.seoTitle,
     metaDescription: config.metaDescription,
     excerpt: config.excerpt,
-    content: expandPillar(buildSectionsHtml(sections), config.slug, config.hubSlug),
+    content: config.content ?? expandPillar(buildSectionsHtml(sections), config.slug, config.hubSlug),
     author: 'Boise Remodeling Co',
     hubSlug: config.hubSlug,
     guideType: 'hub-pillar',
@@ -204,7 +208,7 @@ export function buildPillarGuide(config: PillarConfig): GuidePageData {
     publishedAt: '2026-05-10',
     quickAnswer: config.quickAnswer,
     keyTakeaways: config.takeaways,
-    faqs: hubFaqs.length > 0 ? hubFaqs : [],
+    faqs: config.faqs ?? (hubFaqs.length > 0 ? hubFaqs : []),
     linkedClusterSlugs: config.linkedClusterSlugs,
     linkedServices: config.linkedServices,
     relatedLinks: [

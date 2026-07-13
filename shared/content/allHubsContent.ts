@@ -4,6 +4,7 @@
 import { buildClusterPost, buildPillarGuide, buildLocationGuide } from './contentFactory';
 import type { BlogPostData } from '../blogContent';
 import type { GuidePageData } from '../guideContent';
+import { KITCHEN_GUIDE_CONTENT, KITCHEN_GUIDE_FAQS } from './guides/kitchen-guide-content';
 
 const k = '/services/kitchen-remodel';
 const kb = '/services/kitchen-remodel/boise';
@@ -44,6 +45,8 @@ export const KITCHEN_PILLAR = buildPillarGuide({
     'walk-in-pantry-design-guide',
   ],
   linkedServices: ['kitchen-remodel'],
+  content: KITCHEN_GUIDE_CONTENT,
+  faqs: KITCHEN_GUIDE_FAQS,
 });
 
 const kitchenClusters = [

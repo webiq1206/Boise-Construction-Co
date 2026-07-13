@@ -575,6 +575,152 @@ html, body {
   text-align: center;
 }
 
+/* ===================================================================
+   Guide callouts — sage-forward tips, key points, checklists, warnings,
+   and budget snapshots. Opt-in via markup (.callout.<variant>) inside
+   .blog-content, so blog posts are unaffected unless they use them.
+   =================================================================== */
+.blog-content .callout {
+  position: relative;
+  margin: 1.9rem 0;
+  padding: 1.15rem 1.35rem;
+  border: 1px solid hsl(var(--border));
+  border-left: 3px solid hsl(var(--accent-legible));
+  border-radius: 0.75rem;
+  background: hsl(var(--muted) / 0.30);
+}
+.blog-content .callout > *:first-child { margin-top: 0; }
+.blog-content .callout > *:last-child { margin-bottom: 0; }
+.blog-content .callout p { margin: 0.5rem 0; font-size: 0.98rem; }
+.blog-content .callout .callout-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: hsl(var(--accent-legible));
+}
+.blog-content .callout .callout-label::before {
+  content: '';
+  display: inline-block;
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: hsl(var(--accent-legible));
+  transform: rotate(45deg);
+}
+
+/* Tip — lifted sage, soft sage wash */
+.blog-content .callout.tip {
+  border-left-color: hsl(var(--accent-legible));
+  background: hsl(var(--accent) / 0.07);
+}
+
+/* Key point — deep sage, heavier bar */
+.blog-content .callout.note {
+  border-left-width: 4px;
+  border-left-color: hsl(var(--accent));
+  background: hsl(var(--accent) / 0.10);
+}
+
+/* Budget / cost snapshot */
+.blog-content .callout.cost {
+  border-left-color: hsl(var(--accent-legible));
+  background: hsl(var(--accent) / 0.07);
+}
+.blog-content .callout.cost strong { color: hsl(var(--accent-legible)); font-weight: 500; }
+
+/* Warning / important — restrained clay tone that pairs with sage,
+   used sparingly so caution reads distinctly from tips. */
+.blog-content .callout.warning {
+  border-left-color: #c07f4a;
+  background: hsl(28 45% 46% / 0.10);
+}
+.blog-content .callout.warning .callout-label { color: #d1936b; }
+.blog-content .callout.warning .callout-label::before { background: #d1936b; }
+
+/* Checklist — sage checkboxes with a checkmark */
+.blog-content .callout.checklist ul {
+  list-style: none;
+  margin: 0.35rem 0 0;
+  padding: 0;
+}
+.blog-content .callout.checklist li {
+  position: relative;
+  margin: 0.6rem 0;
+  padding-left: 1.95rem;
+  font-size: 0.98rem;
+}
+.blog-content .callout.checklist li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.12rem;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 1.5px solid hsl(var(--accent-legible));
+  border-radius: 0.3rem;
+}
+.blog-content .callout.checklist li::after {
+  content: '';
+  position: absolute;
+  left: 0.42rem;
+  top: 0.26rem;
+  width: 0.3rem;
+  height: 0.6rem;
+  border-right: 2px solid hsl(var(--accent-legible));
+  border-bottom: 2px solid hsl(var(--accent-legible));
+  transform: rotate(45deg);
+}
+
+/* Decorative lead paragraph + inline sage accent for eye-draw */
+.blog-content .guide-lead {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: hsl(var(--foreground));
+}
+.blog-content .sage {
+  color: hsl(var(--accent-legible));
+  font-weight: 500;
+}
+
+/* Numbered step flow — sage numerals draw the eye through a sequence */
+.blog-content ol.steps {
+  list-style: none;
+  counter-reset: step;
+  margin: 1.5rem 0;
+  padding: 0;
+}
+.blog-content ol.steps > li {
+  position: relative;
+  counter-increment: step;
+  margin: 0 0 1.1rem;
+  padding: 0 0 0 3rem;
+  min-height: 2rem;
+}
+.blog-content ol.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: -0.1rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid hsl(var(--accent) / 0.5);
+  background: hsl(var(--accent) / 0.12);
+  color: hsl(var(--accent-legible));
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-feature-settings: 'tnum';
+}
+.blog-content ol.steps > li strong { color: hsl(var(--heading)); }
+
 /* Collapsible guide/article sections (long-form scanability) */
 .guide-section-details[open] .guide-section-summary span {
   display: none;
