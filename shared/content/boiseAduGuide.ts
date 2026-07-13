@@ -87,6 +87,10 @@ export const BOISE_ADU_GUIDE_HTML = `
 <p>Boise adopted a modern zoning code in December 2023 that broadly allows ADUs in residential zones. In general terms: one ADU is allowed on most single-family lots, detached units are typically capped around 900 square feet, and standards govern height, setbacks, and design compatibility. The city also offers a set of pre-approved ADU plan sets (roughly 280 to 695 square feet) that can reduce design cost and shorten plan review for homeowners whose lots and goals fit them - we evaluate whether a pre-approved plan or a custom design serves you better during feasibility. Rules evolve, so we verify the current standards with the City of Boise Planning Division at the start of every project - and you should too before committing to a design.</p>
 <p>Feasibility on a specific lot usually comes down to three things: <strong>setbacks and lot coverage</strong> (how much buildable envelope remains), <strong>utility capacity</strong> (sewer, water, and electrical panel), and <strong>access</strong> (alley-loaded lots in neighborhoods like the North End are often ideal). Our <a href="/guides/north-end-remodeling-guide">North End</a> and <a href="/guides/boise-bench-remodeling-guide">Boise Bench</a> guides cover the housing stock where ADU demand is strongest.</p>
 
+<div class="callout checklist"><p class="callout-label">Does your lot work for an ADU?</p><ul><li><strong>Setbacks &amp; lot coverage</strong> - how much buildable envelope remains</li><li><strong>Utility capacity</strong> - sewer, water, and electrical panel</li><li><strong>Access</strong> - alley-loaded lots (common in the North End) are often ideal</li></ul></div>
+
+<div class="callout warning"><p class="callout-label">Verify the current rules first</p><p>ADU zoning has changed recently and continues to evolve, and standards are set <span class="sage">city by city</span>, not county-wide. Confirm today's requirements with your city before committing to a design - or work with a design-build team that checks them at the start of every project.</p></div>
+
 <h2>ADU rules in Meridian, Eagle, Nampa, and the rest of the valley</h2>
 <p>ADU standards are set city by city, not county-wide. Meridian, Eagle, Kuna, and Star each apply their own size caps, parking requirements, and in some cases owner-occupancy conditions through Ada County-coordinated review; Nampa, Caldwell, and Middleton route through Canyon County processes with their own standards. HOA covenants in newer subdivisions can restrict ADUs even where city zoning allows them - check CC&Rs early. Our <a href="/resources/ada-canyon-permit-flow">Ada vs Canyon County permit guide</a> explains how review differs between the two counties.</p>
 
@@ -94,6 +98,8 @@ export const BOISE_ADU_GUIDE_HTML = `
 <p><strong>Garage conversions</strong> reuse an existing foundation, slab, and roof, which makes them the most budget-efficient path to a legal unit - typical scope adds insulation, HVAC, a kitchen and bath, fire separation, and egress windows. See our <a href="/blog/garage-conversions">garage conversion guide</a>.</p>
 <p><strong>Attached ADUs</strong> convert or extend part of the main house (a basement, a wing, or a new addition) and share walls and utilities. They cost less than detached units and suit <a href="/blog/multigenerational-living-remodels">multigenerational households</a> that want proximity with privacy.</p>
 <p><strong>Detached ADUs</strong> are backyard cottages with their own envelope and utility runs. They are the most expensive option and the most flexible: maximum privacy, strongest rental appeal, and no disruption to the main house during construction.</p>
+
+<div class="callout tip"><p class="callout-label">The most budget-friendly path</p><p>A <span class="sage">garage conversion</span> is usually the cheapest route to a legal unit, because it reuses the existing foundation, walls, and roof. A detached new-build ADU is the most expensive but the most flexible - match the type to your budget, your lot, and how much privacy the unit needs.</p></div>
 
 <h2>What does an ADU cost in the Treasure Valley?</h2>
 <table class="cost-table">
@@ -111,6 +117,8 @@ export const BOISE_ADU_GUIDE_HTML = `
 
 <h2>Design choices that make an ADU work</h2>
 <p>Good ADUs live larger than their square footage: vaulted ceilings over the main space, full-height storage walls, pocket doors, and a galley or L-kitchen sized for real cooking. If the unit may ever house aging parents, build in zero-step entry, a <a href="/blog/curbless-shower-guide">curbless shower</a>, and 36-inch doorways now - retrofitting later costs far more. Match exterior materials to the main house; several valley jurisdictions require design compatibility, and resale value rewards it regardless.</p>
+
+<div class="callout tip"><p class="callout-label">Future-proof it now</p><p>If the unit may ever house aging parents, build in a <span class="sage">zero-step entry, a curbless shower, and 36-inch doorways</span> during construction. These cost little to include now and far more to retrofit later - and they broaden the unit's appeal to renters and buyers.</p></div>
 
 <h2>ADU rental income and resale value</h2>
 <p>A permitted ADU adds appraisable square footage and a rental income stream that many Treasure Valley buyers now actively search for. Long-term rental of a permitted unit is broadly allowed; short-term rental licensing is a separate, stricter track in Boise. Our <a href="/guides/best-remodeling-roi-boise">remodeling ROI guide</a> covers how second units compare to other high-return projects, and the <a href="/blog/addition-roi-remodeling">addition ROI article</a> covers the underlying math.</p>

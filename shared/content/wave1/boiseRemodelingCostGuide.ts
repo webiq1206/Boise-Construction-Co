@@ -203,7 +203,32 @@ sections[sections.length - 1]!.paragraphs[1] = sections[sections.length - 1]!.pa
   .replace('${PILLAR_BOISE}', '/guides/boise-remodeling-guide')
   .replace('${PILLAR_TV}', PILLAR_TV);
 
-export const BOISE_REMODELING_COST_GUIDE_HTML = buildSectionsHtml(sections);
+// Weave a few on-brand sage callouts into the assembled HTML by inserting them
+// before stable section headings (buildSectionsHtml emits clean <h2>/<p> blocks,
+// so callouts sit between blocks - never nested inside a paragraph).
+const COST_CALLOUTS: Array<[string, string]> = [
+  [
+    '<h2>How much does a kitchen remodel cost in Boise?</h2>',
+    '<div class="callout tip"><p class="callout-label">Read the ranges as bands, not quotes</p><p>The table above reflects <span class="sage">planning ranges</span> we use in design-build consultations. Your home\'s condition, layout changes, and finish level move you within - or beyond - these bands. A written scope after a walk-through is the only way to a real number.</p></div>',
+  ],
+  [
+    '<h2>Remodel cost per square foot in Boise - is it useful?</h2>',
+    '<div class="callout note"><p class="callout-label">Key point</p><p>Cost per square foot is a shorthand, <span class="sage">not a contract price</span>. It swings wildly by project type - an open kitchen with new cabinetry and MEP is nothing like a paint-and-carpet refresh - so use it only for rough planning, never as a fixed bid.</p></div>',
+  ],
+  [
+    '<h2>How to budget for a remodel in the Treasure Valley</h2>',
+    '<div class="callout warning"><p class="callout-label">Always hold a contingency</p><p>Older Treasure Valley homes routinely hide outdated wiring, worn plumbing, or damage behind drywall. Budget a <strong>10-15% contingency</strong> for concealed conditions - it is the single best protection against a surprise derailing your project.</p></div>',
+  ],
+  [
+    '<h2>Design-build vs bidding out: what it means for your number</h2>',
+    '<div class="callout tip"><p class="callout-label">Compare apples to apples</p><p>A lower bid is often a smaller scope. Before comparing prices, match the line items - <span class="sage">demo, haul-off, protection, permits, engineering, allowances, and finish install</span>. Bids only mean something when the scope behind them is the same.</p></div>',
+  ],
+];
+
+export const BOISE_REMODELING_COST_GUIDE_HTML = COST_CALLOUTS.reduce(
+  (html, [anchor, callout]) => html.replace(anchor, callout + anchor),
+  buildSectionsHtml(sections),
+);
 
 export const BOISE_REMODELING_COST_QUICK_ANSWER =
   'Treasure Valley remodels in 2026 typically range from about $18,000 for a small bath refresh to $400,000+ for whole-home or luxury programs, with most full kitchens between $45,000 and $120,000 and master baths from $35,000 to $85,000+. Exact cost depends on layout changes, finishes, permits (Ada or Canyon County), and existing home conditions - not national averages.';
