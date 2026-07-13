@@ -19,7 +19,7 @@ export const metadata = buildPageMetadata({
   path: '/testimonials',
   titleOverride: 'Our Work',
   descriptionOverride:
-    'See Treasure Valley remodeling transformations by Boise Remodeling Co: kitchen, bathroom, whole-home, and addition projects with real before-and-after comparisons.',
+    'Treasure Valley remodeling transformations by Boise Remodeling Co: kitchen, bathroom, whole-home, and addition projects with before-and-after comparisons.',
 });
 
 // No Review/AggregateRating structured data is emitted until BUSINESS_INFO

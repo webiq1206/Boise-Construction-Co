@@ -39,7 +39,7 @@ function buildCityServiceImages(): Record<string, string> {
   const map: Record<string, string> = {};
   for (const service of SERVICE_SLUGS) {
     for (const city of CITY_SLUGS) {
-      map[`${service}/${city}`] = `/images/city-service/${service}__${city}.png`;
+      map[`${service}/${city}`] = `/images/city-service/${service}__${city}.webp`;
     }
   }
   return map;
@@ -51,14 +51,14 @@ export const CITY_SERVICE_IMAGES: Record<string, string> = buildCityServiceImage
  * Distinct neighborhood-style hero images for each city area page.
  */
 export const CITY_HERO_IMAGES: Record<string, string> = {
-  boise: "/images/areas/boise.png",
-  meridian: "/images/areas/meridian.png",
-  eagle: "/images/areas/eagle.png",
-  nampa: "/images/areas/nampa.png",
-  kuna: "/images/areas/kuna.png",
-  star: "/images/areas/star.png",
-  middleton: "/images/areas/middleton.png",
-  caldwell: "/images/areas/caldwell.png",
+  boise: "/images/areas/boise.webp",
+  meridian: "/images/areas/meridian.webp",
+  eagle: "/images/areas/eagle.webp",
+  nampa: "/images/areas/nampa.webp",
+  kuna: "/images/areas/kuna.webp",
+  star: "/images/areas/star.webp",
+  middleton: "/images/areas/middleton.webp",
+  caldwell: "/images/areas/caldwell.webp",
 };
 
 /**
@@ -66,11 +66,11 @@ export const CITY_HERO_IMAGES: Record<string, string> = {
  * Each is visually distinct from the others.
  */
 export const SERVICE_FALLBACK_IMAGES: Record<string, string> = {
-  "kitchen-remodel": "/images/services/kitchen-remodel.png",
-  "bathroom-remodel": "/images/services/bathroom-remodel.png",
-  "whole-home-remodel": "/images/services/whole-home-remodel.png",
-  "room-addition": "/images/services/room-addition.png",
-  "adu": "/images/services/adu.png",
+  "kitchen-remodel": "/images/services/kitchen-remodel.webp",
+  "bathroom-remodel": "/images/services/bathroom-remodel.webp",
+  "whole-home-remodel": "/images/services/whole-home-remodel.webp",
+  "room-addition": "/images/services/room-addition.webp",
+  "adu": "/images/services/adu.webp",
 };
 
 /**

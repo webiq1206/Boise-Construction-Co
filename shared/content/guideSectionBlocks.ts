@@ -256,7 +256,7 @@ export function clusterLinksSection(hubSlug: string, linkedSlugs?: string[]): Co
   const items = clusters
     .filter((c) => !slugs || slugs.has(c.slug))
     .slice(0, 8)
-    .map((c) => `<a href="/blog/${c.replacesSlug ?? c.slug}">${c.title}</a>`);
+    .map((c) => `<a href="/blog/${c.slug}">${c.title}</a>`);
   if (items.length === 0) return null;
   return {
     h2: 'Go deeper: related articles',

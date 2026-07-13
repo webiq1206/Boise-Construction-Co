@@ -19,9 +19,9 @@ import { getBaseUrl } from '@/lib/seo';
 import { generateBreadcrumbSchema } from '@/lib/schema';
 import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
 
-const TITLE = 'Remodeling Services in Boise & the Treasure Valley';
+const TITLE = 'Remodeling Services | Treasure Valley';
 const DESCRIPTION =
-  'Design-build remodeling services across Boise, Meridian, Eagle, Nampa and the Treasure Valley: kitchen, bathroom, whole-home, room addition, and ADU projects under one accountable team.';
+  'Design-build remodeling in Boise, Meridian, Eagle, Nampa and the Treasure Valley. Kitchen, bathroom, whole-home, addition, and ADU projects under one accountable team.';
 
 export const metadata: Metadata = {
   title: { absolute: `${TITLE} | Boise Remodeling Co` },
@@ -70,6 +70,7 @@ export default function ServicesIndexPage() {
         <div className="container px-4">
           <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Services' }]} />
           <SectionHeader
+            as="h1"
             eyebrow="Our services"
             size="display"
             className="mt-2 max-w-3xl"

@@ -155,6 +155,7 @@ export function generateServiceSchema(serviceName: string, serviceDescription: s
       name: BUSINESS_INFO.name,
       telephone: BUSINESS_INFO.phone,
       email: BUSINESS_INFO.email,
+      priceRange: '$$',
       address: {
         '@type': 'PostalAddress',
         addressLocality: city || BUSINESS_INFO.address.city,
@@ -176,7 +177,6 @@ export function generateServiceSchema(serviceName: string, serviceDescription: s
       '@type': 'Offer',
       availability: 'https://schema.org/InStock',
       priceCurrency: 'USD',
-      priceRange: '$$',
     },
   };
 }

@@ -1,4 +1,4 @@
-import { buildSectionsHtml, CITIES_LIST, PILLAR_TV, type ContentSection } from './snippets';
+import { buildSectionsHtml, CITIES_LIST, PILLAR_TV, PILLAR_BOISE, type ContentSection } from './snippets';
 
 const sections: ContentSection[] = [
   {
@@ -186,7 +186,7 @@ const sections: ContentSection[] = [
     paragraphs: [
       'Interest rates, insurance rebuild costs, and local labor demand all influence 2026 budgets. Material tariffs and supply chains still affect cabinetry and appliance lead times - lock long-lead items early in design.',
       'If you are in a mapped floodplain or hillside overlay (common near the Bench and Foothills), feasibility studies may be required before addition pricing is firm.',
-      'For city-level context, read <a href="${PILLAR_BOISE}">Boise Remodeling Guide</a> and the <a href="${PILLAR_TV}">Treasure Valley Remodeling Guide</a>.',
+      `For city-level context, read <a href="${PILLAR_BOISE}">Boise Remodeling Guide</a> and the <a href="${PILLAR_TV}">Treasure Valley Remodeling Guide</a>.`,
     ],
   },
   {
@@ -197,11 +197,6 @@ const sections: ContentSection[] = [
     ],
   },
 ];
-
-// Fix template literals in last section - I used wrong syntax with ${PILLAR_BOISE} inside string
-sections[sections.length - 1]!.paragraphs[1] = sections[sections.length - 1]!.paragraphs[1]!
-  .replace('${PILLAR_BOISE}', '/guides/boise-remodeling-guide')
-  .replace('${PILLAR_TV}', PILLAR_TV);
 
 // Weave a few on-brand sage callouts into the assembled HTML by inserting them
 // before stable section headings (buildSectionsHtml emits clean <h2>/<p> blocks,

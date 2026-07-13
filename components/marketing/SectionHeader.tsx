@@ -10,6 +10,7 @@ export interface SectionHeaderProps {
   reveal?: boolean;
   inverse?: boolean;
   size?: "default" | "display";
+  as?: "h1" | "h2" | "h3";
 }
 
 export function SectionHeader({
@@ -21,6 +22,7 @@ export function SectionHeader({
   reveal = true,
   inverse = false,
   size = "default",
+  as: Heading = "h2",
 }: SectionHeaderProps) {
   const content = (
     <div
@@ -32,7 +34,7 @@ export function SectionHeader({
       )}
     >
       {eyebrow && <div className="brc-label mb-4">{eyebrow}</div>}
-      <h2
+      <Heading
         className={cn(
           "font-light tracking-tight mb-4",
           size === "display"
@@ -42,7 +44,7 @@ export function SectionHeader({
         )}
       >
         {title}
-      </h2>
+      </Heading>
       {description && (
         <p
           className={cn(
