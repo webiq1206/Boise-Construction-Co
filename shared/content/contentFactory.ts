@@ -245,13 +245,25 @@ export function buildLocationGuide(config: LocationGuideConfig): GuidePageData {
     config.guideType,
   );
 
+  // A single, scannable local-permit callout at the top of every location guide.
+  // It surfaces the one most actionable local fact - which county your project
+  // routes through - in the on-brand sage note style, without duplicating the
+  // housing intro. Kept to one callout so these shorter pages stay uncluttered.
+  const permitBlurb =
+    config.county === 'ada'
+      ? `${config.cityName} remodeling permits route through <strong>Ada County</strong> plan review. Structural changes, layout moves, and additions all require it - and a design-build contractor handles the submissions and inspections for you.`
+      : `${config.cityName} remodeling permits route through <strong>Canyon County</strong>, which uses different portals and a different review cadence than Ada County (Boise, Meridian). Your design-build contractor handles the submissions and inspections for you.`;
+  const localCallout =
+    `<div class="callout note"><p class="callout-label">${config.cityName} permit snapshot</p>` +
+    `<p>${permitBlurb} See <a href="/blog/ada-vs-canyon-county-permit-timelines">Ada vs Canyon County permit timelines</a>.</p></div>`;
+
   return {
     slug: config.slug,
     title: config.title,
     seoTitle: config.seoTitle,
     metaDescription: config.metaDescription,
     excerpt: config.excerpt,
-    content: expandLocation(buildSectionsHtml(sections), config.slug),
+    content: localCallout + expandLocation(buildSectionsHtml(sections), config.slug),
     author: 'Boise Remodeling Co',
     hubSlug: 'treasure-valley-locations',
     guideType: config.guideType,
