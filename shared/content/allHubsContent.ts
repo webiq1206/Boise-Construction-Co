@@ -4,6 +4,14 @@
 import { buildClusterPost, buildPillarGuide, buildLocationGuide } from './contentFactory';
 import type { BlogPostData } from '../blogContent';
 import type { GuidePageData } from '../guideContent';
+import { KITCHEN_GUIDE_CONTENT, KITCHEN_GUIDE_FAQS } from './guides/kitchen-guide-content';
+import { BATHROOM_GUIDE_CONTENT, BATHROOM_GUIDE_FAQS } from './guides/bathroom-guide-content';
+import { ADDITION_GUIDE_CONTENT, ADDITION_GUIDE_FAQS } from './guides/addition-guide-content';
+import { WHOLE_HOME_GUIDE_CONTENT, WHOLE_HOME_GUIDE_FAQS } from './guides/whole-home-guide-content';
+import { CONTRACTOR_GUIDE_CONTENT, CONTRACTOR_GUIDE_FAQS } from './guides/contractor-guide-content';
+import { PROCESS_GUIDE_CONTENT, PROCESS_GUIDE_FAQS } from './guides/process-guide-content';
+import { ROI_GUIDE_CONTENT, ROI_GUIDE_FAQS } from './guides/roi-guide-content';
+import { OUTDOOR_GUIDE_CONTENT, OUTDOOR_GUIDE_FAQS } from './guides/outdoor-guide-content';
 
 const k = '/services/kitchen-remodel';
 const kb = '/services/kitchen-remodel/boise';
@@ -44,6 +52,8 @@ export const KITCHEN_PILLAR = buildPillarGuide({
     'walk-in-pantry-design-guide',
   ],
   linkedServices: ['kitchen-remodel'],
+  content: KITCHEN_GUIDE_CONTENT,
+  faqs: KITCHEN_GUIDE_FAQS,
 });
 
 const kitchenClusters = [
@@ -100,6 +110,8 @@ export const BATHROOM_PILLAR = buildPillarGuide({
     'bathroom-layout-planning-guide',
   ],
   linkedServices: ['bathroom-remodel'],
+  content: BATHROOM_GUIDE_CONTENT,
+  faqs: BATHROOM_GUIDE_FAQS,
 });
 
 const bathSlugs = [
@@ -155,6 +167,8 @@ export const ADDITION_PILLAR = buildPillarGuide({
     'room-addition-guide-treasure-valley',
   ],
   linkedServices: ['room-addition', 'adu'],
+  content: ADDITION_GUIDE_CONTENT,
+  faqs: ADDITION_GUIDE_FAQS,
 });
 
 const additionSlugs = [
@@ -219,6 +233,8 @@ export const WHOLE_HOME_PILLAR = buildPillarGuide({
     'whole-home-remodel-planning-checklist',
   ],
   linkedServices: ['whole-home-remodel'],
+  content: WHOLE_HOME_GUIDE_CONTENT,
+  faqs: WHOLE_HOME_GUIDE_FAQS,
 });
 
 const wholeSlugs = [
@@ -275,6 +291,8 @@ export const CONTRACTOR_PILLAR = buildPillarGuide({
     'how-to-choose-design-build-contractor',
   ],
   linkedServices: ['kitchen-remodel', 'bathroom-remodel', 'whole-home-remodel'],
+  content: CONTRACTOR_GUIDE_CONTENT,
+  faqs: CONTRACTOR_GUIDE_FAQS,
 });
 
 const contractorSlugs = [
@@ -333,6 +351,8 @@ export const PROCESS_PILLAR = buildPillarGuide({
     'ada-vs-canyon-county-permit-timelines',
   ],
   linkedServices: ['whole-home-remodel', 'kitchen-remodel', 'bathroom-remodel'],
+  content: PROCESS_GUIDE_CONTENT,
+  faqs: PROCESS_GUIDE_FAQS,
 });
 
 const processSlugs = [
@@ -389,6 +409,8 @@ export const ROI_PILLAR = buildPillarGuide({
     'remodeling-long-term-living',
   ],
   linkedServices: ['kitchen-remodel', 'bathroom-remodel', 'room-addition'],
+  content: ROI_GUIDE_CONTENT,
+  faqs: ROI_GUIDE_FAQS,
 });
 
 const roiSlugs = [
@@ -445,6 +467,8 @@ export const OUTDOOR_PILLAR = buildPillarGuide({
     'backyard-transformations-boise',
   ],
   linkedServices: ['whole-home-remodel'],
+  content: OUTDOOR_GUIDE_CONTENT,
+  faqs: OUTDOOR_GUIDE_FAQS,
 });
 
 const outdoorSlugs = [

@@ -8,16 +8,19 @@ interface SectionedArticleProps {
   /** How many sections stay expanded by default (long articles). */
   defaultOpenCount?: number;
   testId?: string;
+  /** When true, never collapse — render the full article inline (guides). */
+  forceExpanded?: boolean;
 }
 
 export function SectionedArticle({
   html,
   defaultOpenCount = 3,
   testId = 'article-content',
+  forceExpanded = false,
 }: SectionedArticleProps) {
   const sections = splitHtmlByH2(html);
 
-  if (!shouldUseCollapsibleSections(sections.length)) {
+  if (forceExpanded || !shouldUseCollapsibleSections(sections.length)) {
     return (
       <article className="blog-content prose-measure" data-testid={testId}>
         <div dangerouslySetInnerHTML={{ __html: html }} />

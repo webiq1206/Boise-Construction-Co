@@ -97,21 +97,22 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                 quickAnswer={guide.quickAnswer}
                 keyTakeaways={guide.keyTakeaways}
               >
-                <GuideResourceDownloads resources={resources} />
+                {/* The guide itself leads — always fully visible, never collapsed. */}
+                <SectionedArticle html={contentWithIds} testId="guide-content" forceExpanded />
 
                 {publishedClusters.length > 0 && (
                   <div
-                    className="rounded-lg border border-border bg-muted/20 p-5 md:p-6 mb-8"
+                    className="rounded-xl border border-accent/20 bg-accent/5 p-5 md:p-6 mt-12"
                     data-testid="guide-cluster-links"
                   >
-                    <div className="flex items-center gap-2 mb-3">
+                    <div className="flex items-center gap-2 mb-1.5">
                       <BookOpen className="h-5 w-5 text-accent-legible" />
-                      <h2 className="text-base font-normal">Go deeper in this guide</h2>
+                      <h2 className="text-base font-normal text-foreground">Go deeper on specific topics</h2>
                     </div>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Topic-specific articles - read these for detail beyond this overview.
+                      In-depth articles that expand on the sections above.
                     </p>
-                    <ul className="space-y-2">
+                    <ul className="grid gap-2 sm:grid-cols-2">
                       {publishedClusters.slice(0, 8).map((c) => (
                         <li key={c.slug}>
                           <Link
@@ -136,7 +137,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                   </div>
                 )}
 
-                <SectionedArticle html={contentWithIds} testId="guide-content" />
+                <GuideResourceDownloads resources={resources} />
               </GuideContentBlocks>
 
               {guide.faqs.length > 0 && (
