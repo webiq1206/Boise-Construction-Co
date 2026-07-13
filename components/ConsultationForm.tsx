@@ -58,6 +58,7 @@ const PROJECT_OPTIONS = [
   { value: "whole-home", label: "Whole-Home Remodel" },
   { value: "addition", label: "Room Addition" },
   { value: "adu", label: "ADU / Guest House" },
+  { value: "basement", label: "Basement Finishing" },
   { value: "other", label: "Other / Not sure yet" },
 ];
 

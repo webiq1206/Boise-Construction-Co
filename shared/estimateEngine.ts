@@ -1,4 +1,4 @@
-export type ProjectType = "kitchen" | "bathroom" | "whole-home" | "addition" | "adu";
+export type ProjectType = "kitchen" | "bathroom" | "whole-home" | "addition" | "adu" | "basement";
 export type FinishLevel = "refresh" | "mid-range" | "high-end" | "luxury";
 export type LayoutChanges = "none" | "moderate" | "major";
 export type PlumbingElectrical = "cosmetic" | "partial" | "full";
@@ -86,6 +86,7 @@ export const PROJECT_SIZE_CONFIG: Record<ProjectType, ProjectSizeConfig> = {
   "whole-home": { min: 800, max: 8000, step: 100, baselineSqft: 1800 },
   addition: { min: 200, max: 1200, step: 50, baselineSqft: 400 },
   adu: { min: 300, max: 900, step: 50, baselineSqft: 600 },
+  basement: { min: 400, max: 2000, step: 50, baselineSqft: 900 },
 };
 
 export const EMPTY_REFINEMENTS: EstimateRefinements = {
@@ -165,7 +166,11 @@ export interface RefinementVisibility {
 /** Which optional detail fields appear for each project type. */
 export function getRefinementVisibility(project: ProjectType): RefinementVisibility {
   return {
-    layoutChanges: project === "kitchen" || project === "bathroom" || project === "whole-home",
+    layoutChanges:
+      project === "kitchen" ||
+      project === "bathroom" ||
+      project === "whole-home" ||
+      project === "basement",
     plumbingElectrical: true,
     cabinetTier: project === "kitchen",
     fixtureCount: project === "bathroom",
@@ -214,6 +219,7 @@ export const PROJECT_LABELS: Record<ProjectType, { label: string; sub: string }>
   "whole-home": { label: "Whole-Home", sub: "Multi-room renovation" },
   addition: { label: "Room Addition", sub: "New square footage" },
   adu: { label: "ADU / Guest House", sub: "Detached or attached unit" },
+  basement: { label: "Basement Finishing", sub: "Finish your lower level" },
 };
 
 export const FINISH_LABELS: Record<FinishLevel, { label: string; sub: string }> = {
@@ -231,7 +237,7 @@ const ALL_FINISH_LEVELS: FinishLevel[] = ["refresh", "mid-range", "high-end", "l
  * ADUs / guest houses start at "mid-range".
  */
 export function getAvailableFinishLevels(project: ProjectType): FinishLevel[] {
-  if (project === "addition" || project === "adu") {
+  if (project === "addition" || project === "adu" || project === "basement") {
     return ALL_FINISH_LEVELS.filter((level) => level !== "refresh");
   }
   return ALL_FINISH_LEVELS;
@@ -342,6 +348,20 @@ const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>>
     luxury: {
       low: 350000, high: 550000, roi: 58,
       included: ["Large detached guest house", "Premium finishes and fixtures", "Smart home integration", "Structural engineering and custom design"],
+    },
+  },
+  basement: {
+    "mid-range": {
+      low: 35000, high: 75000, roi: 68,
+      included: ["Framing, insulation, and drywall", "Egress window and code compliance", "LVP or carpet flooring throughout", "Recessed lighting and updated electrical", "Optional bedroom and full bathroom"],
+    },
+    "high-end": {
+      low: 75000, high: 140000, roi: 62,
+      included: ["Full basement suite build-out", "Wet bar or kitchenette rough-in", "Premium flooring and custom tile", "Custom lighting and built-ins", "Full bathroom with tile shower"],
+    },
+    luxury: {
+      low: 140000, high: 260000, roi: 55,
+      included: ["Luxury finishes throughout", "Home theater or wine room", "Full kitchenette or bar", "Spa-style bathroom", "Smart home integration"],
     },
   },
 };
