@@ -53,6 +53,19 @@ export const BLOG_OG_IMAGES: Record<string, string> = {
   'remodeling-vs-moving': '/images/blog/remodeling-vs-moving-og.jpg',
   'living-through-a-remodel': '/images/blog/living-through-a-remodel-og.jpg',
   'remodeling-mistakes-to-avoid': '/images/blog/remodeling-mistakes-to-avoid-og.jpg',
+  'whole-home-remodel-planning-checklist': '/images/blog/whole-home-remodel-planning-checklist-og.jpg',
+  // Remodeling Process hub
+  'consultation-process-remodeling': '/images/blog/consultation-process-remodeling-og.jpg',
+  'material-selection-guide': '/images/blog/material-selection-guide-og.jpg',
+  'boise-permit-guide': '/images/blog/boise-permit-guide-og.jpg',
+  // ROI & Home Value hub
+  'kitchen-remodel-roi': '/images/blog/kitchen-remodel-roi-og.jpg',
+  'bathroom-remodel-roi': '/images/blog/bathroom-remodel-roi-og.jpg',
+  'energy-efficiency-roi': '/images/blog/energy-efficiency-roi-og.jpg',
+  'exterior-remodeling-roi': '/images/blog/exterior-remodeling-roi-og.jpg',
+  // Outdoor Living hub
+  'outdoor-kitchens-boise': '/images/blog/outdoor-kitchens-boise-og.jpg',
+  'covered-patios-boise': '/images/blog/covered-patios-boise-og.jpg',
 };
 
 export function getBlogOgImage(slug: string): string | undefined {

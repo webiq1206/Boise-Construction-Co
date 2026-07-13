@@ -1,0 +1,55 @@
+{
+  "_note": "Posts shipped with on-brand placeholder images pending image-generation credits. When credits are topped up, generate each below via the MCP image tool, then: download raw PNG -> sharp resize 1792x1024 cover webp q72 -> public/images/blog/{slug}.webp, and run scripts/generate-og-images.mjs {slug} \"{ogTitle}\". This overwrites the placeholders at the same paths; no re-wiring needed. All prompts follow the locked spec: authentic real completed-project look, tier/type varied, natural light, no people/text/logos.",
+  "pending": [
+    {
+      "slug": "whole-home-remodel-planning-checklist",
+      "ogTitle": "Whole-Home Remodel Planning Checklist",
+      "prompt": "A realistic, authentic overhead photograph of a home remodel planning table in a Boise Idaho home, printed floor plans, a tape measure, an open notebook and pen, and a few material samples (a tile, a wood sample, a paint swatch) neatly arranged, warm natural light, authentic and true-to-life, photographed for a remodeling company. Not a render, not CGI, not a stock photo, no warped or surreal details. No people, no logos, no readable text or writing."
+    },
+    {
+      "slug": "consultation-process-remodeling",
+      "ogTitle": "What to Expect at a Remodeling Consultation",
+      "prompt": "A realistic, authentic photograph of an in-home design consultation setup on a kitchen table in a Boise Idaho home, spread with printed remodel plans, fabric and finish samples, a laptop showing a design, and two coffee mugs, warm natural window light, authentic and true-to-life, photographed for a remodeling company. Not a render, not CGI, not a stock photo, no warped or surreal details. No people, no logos, no readable text or writing."
+    },
+    {
+      "slug": "material-selection-guide",
+      "ogTitle": "Material Selection Guide",
+      "prompt": "A realistic, authentic overhead flat-lay photograph of a remodel material selection board, neatly arranged samples of tile, a quartz countertop sample, wood flooring, a cabinet door sample, paint swatches, and metal hardware finishes on a light surface, warm natural light, authentic and true-to-life, photographed for a remodeling company. Not a render, not CGI, not a stock photo, no warped or surreal details. No people, no logos, no readable text or writing."
+    },
+    {
+      "slug": "boise-permit-guide",
+      "ogTitle": "Boise Remodeling Permits",
+      "prompt": "A realistic, authentic photograph of rolled-out architectural blueprints and construction drawings for a home remodel on a wood workbench, with a scale ruler, a builder's pencil, and a small architectural scale model, warm natural light, authentic and true-to-life, photographed for a remodeling company. Not a render, not CGI, not a stock photo, no warped or surreal details. No people, no logos, no readable text or writing."
+    },
+    {
+      "slug": "kitchen-remodel-roi",
+      "ogTitle": "Does a Kitchen Remodel Add Value?",
+      "prompt": "A realistic, authentic photograph of a completed classic white shaker kitchen remodel in a mid-range Boise Idaho home, a farmhouse sink under a window, white subway tile, light quartz counters, brushed nickel hardware, bright and fresh, mid-range tier, photographed for a remodeling company's completed-project portfolio. Natural daylight, true-to-life materials and proportions, believable real home, looks like an actual finished contractor project, not a stock photo and not AI-generated, no warped or surreal details. No people, no text, no logos."
+    },
+    {
+      "slug": "bathroom-remodel-roi",
+      "ogTitle": "Does a Bathroom Remodel Add Value?",
+      "prompt": "A realistic, authentic photograph of a freshly completed mid-range bathroom remodel in a Boise Idaho home, a quality walk-in shower with a glass panel, an updated wood vanity with a quartz top, subway or light tile, a large mirror, bright and clean, mid-range tier, photographed for a remodeling company's completed-project portfolio. Natural light, true-to-life materials and proportions, believable real home, looks like an actual finished contractor project, not a stock photo and not AI-generated, no warped or surreal details. No people, no text, no logos."
+    },
+    {
+      "slug": "energy-efficiency-roi",
+      "ogTitle": "Energy-Efficiency ROI",
+      "prompt": "An authentic documentary photograph of an energy-efficiency upgrade in a Boise Idaho home during renovation, a wall cavity and attic space with new batt and blown insulation installed, air-sealing at the framing, and a modern high-efficiency furnace visible, a real mid-project jobsite, photographed by the contractor. Natural light, true-to-life materials and proportions, believable real renovation, looks like an actual contractor jobsite photo, not a stock photo and not AI-generated, no warped or surreal details. No people, no text, no logos."
+    },
+    {
+      "slug": "exterior-remodeling-roi",
+      "ogTitle": "Exterior Remodeling ROI",
+      "prompt": "A realistic, authentic photograph of a Boise Idaho home's front exterior with excellent curb appeal, a new stained-wood entry door, a modern garage door, fresh siding and paint, tidy water-wise landscaping and a clean walkway, clear daytime light, mid-range tier, photographed for a remodeling company's completed-project portfolio. True-to-life materials and proportions, believable real home, looks like an actual finished contractor project, not a stock photo and not AI-generated, no warped or surreal details. No people, no text, no logos."
+    },
+    {
+      "slug": "outdoor-kitchens-boise",
+      "ogTitle": "Outdoor Kitchens in Boise",
+      "prompt": "A realistic, authentic photograph of a completed built-in outdoor kitchen in a Boise Idaho backyard, a stainless built-in grill, stone counters, a bar with stools, storage cabinetry, under a covered patio structure, warm evening light, mid-to-upscale tier, photographed for a remodeling company's completed-project portfolio. True-to-life materials and proportions, believable real home, looks like an actual finished contractor project, not a stock photo and not AI-generated, no warped or surreal details. No people, no text, no logos."
+    },
+    {
+      "slug": "covered-patios-boise",
+      "ogTitle": "Covered Patios in Boise",
+      "prompt": "A realistic, authentic photograph of a completed covered patio on a Boise Idaho home, a solid-roof patio cover with a finished wood ceiling, recessed lighting and a ceiling fan, comfortable outdoor furniture, attached to the house and matching its architecture, warm daylight, mid-range tier, photographed for a remodeling company's completed-project portfolio. True-to-life materials and proportions, believable real home, looks like an actual finished contractor project, not a stock photo and not AI-generated, no warped or surreal details. No people, no text, no logos."
+    }
+  ]
+}
