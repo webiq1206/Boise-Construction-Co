@@ -8,6 +8,8 @@ export interface TextLinkProps {
   className?: string;
   showArrow?: boolean;
   external?: boolean;
+  /** Descriptive accessible name for generic link text (e.g. "Learn more"). */
+  ariaLabel?: string;
 }
 
 export function TextLink({
@@ -16,6 +18,7 @@ export function TextLink({
   className,
   showArrow = true,
   external = false,
+  ariaLabel,
 }: TextLinkProps) {
   const content = (
     <>
@@ -26,14 +29,14 @@ export function TextLink({
 
   if (external || href.startsWith("http") || href.startsWith("tel:") || href.startsWith("sms:") || href.startsWith("mailto:")) {
     return (
-      <a href={href} className={cn("brc-text-link", className)}>
+      <a href={href} className={cn("brc-text-link", className)} aria-label={ariaLabel}>
         {content}
       </a>
     );
   }
 
   return (
-    <Link href={href} className={cn("brc-text-link", className)}>
+    <Link href={href} className={cn("brc-text-link", className)} aria-label={ariaLabel}>
       {content}
     </Link>
   );

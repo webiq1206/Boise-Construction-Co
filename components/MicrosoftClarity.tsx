@@ -9,7 +9,7 @@ export function MicrosoftClarity() {
   return (
     <Script
       id="clarity-script"
-      strategy="afterInteractive"
+      strategy="lazyOnload"
       dangerouslySetInnerHTML={{
         __html: `(function(c,l,a,r,i,t,y){
             c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};

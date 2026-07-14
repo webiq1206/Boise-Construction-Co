@@ -578,7 +578,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
               <FormItem>
                 <FormLabel className={labelClass}>
                   Anything else we should know?{" "}
-                  <span className="normal-case text-muted-foreground/70">(optional)</span>
+                  <span className="normal-case text-muted-foreground">(optional)</span>
                 </FormLabel>
                 <FormControl>
                   <Textarea
@@ -601,7 +601,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
             data-testid="button-add-note"
           >
             <Plus className="h-3.5 w-3.5" />
-            Add a note <span className="text-muted-foreground/70">(optional)</span>
+            Add a note <span className="text-muted-foreground">(optional)</span>
           </button>
         )}
 

@@ -2,65 +2,58 @@
 
 > Design-build remodeling for kitchens, bathrooms, whole-home renovations, room additions, and ADUs in Boise, Idaho and the Treasure Valley. Founded 2017. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell. Phone (208) 477-1169.
 
-## 2026 planning ranges (details on each service page)
+Design-build means one accountable team handles design, estimating, Ada and Canyon County permitting, and construction under one contract, backed by a written scope and a workmanship guarantee. 2026 planning ranges: kitchen remodel $35k-$75k mid-range ($75k-$150k+ full gut); bathroom remodel $18k-$45k guest ($35k-$85k+ primary); whole-home $150k-$400k+; room addition $80k-$250k+; ADU $90k-$180k garage conversion ($180k-$300k+ detached).
 
-- Kitchen remodel: $35k-$75k mid-range; $75k-$150k+ full gut with layout changes
-- Bathroom remodel: $18k-$45k guest bath; $35k-$85k+ primary bath
-- Whole-home remodel: $150k-$400k+
-- Room addition: $80k-$250k+
-- ADU: $90k-$180k garage conversion; $180k-$300k+ detached new build
+## Services
 
-## Authoritative Guides (https://boiseremodeling.co/guides)
+- [Kitchen Remodel](https://boiseremodeling.co/services/kitchen-remodel): mid-range refresh to full-gut layout changes.
+- [Bathroom Remodel](https://boiseremodeling.co/services/bathroom-remodel): guest baths to primary-suite renovations.
+- [Whole-Home Remodel](https://boiseremodeling.co/services/whole-home-remodel): multi-room and full-house renovations.
+- [Room Addition](https://boiseremodeling.co/services/room-addition): bump-outs, second stories, and new rooms.
+- [ADU / Guest House](https://boiseremodeling.co/services/adu): garage conversions and detached new builds.
+- [All Services](https://boiseremodeling.co/services): plus city pages at /services/{service}/{city} and [Service Areas](https://boiseremodeling.co/areas).
 
-- Treasure Valley Remodeling Guide: /guides/treasure-valley-remodeling-guide
-- Boise Remodeling Cost Guide: /guides/boise-remodeling-cost-guide
-- Boise Kitchen Remodeling Guide: /guides/boise-kitchen-remodeling-guide
-- Boise Bathroom Remodeling Guide: /guides/boise-bathroom-remodeling-guide
-- Boise Home Addition Guide: /guides/boise-home-addition-guide
-- Boise ADU Guide (rules, costs, permits): /guides/boise-adu-guide
-- Whole Home Remodeling Guide: /guides/whole-home-remodeling-guide
-- Choose a Remodeling Contractor Boise: /guides/choose-remodeling-contractor-boise
-- Boise Remodeling Process Guide: /guides/boise-remodeling-process-guide
-- Best Remodeling ROI Boise: /guides/best-remodeling-roi-boise
-- Outdoor Living Remodeling Guide: /guides/outdoor-living-remodeling-guide
+## Authoritative guides
+
+- [Treasure Valley Remodeling Guide](https://boiseremodeling.co/guides/treasure-valley-remodeling-guide)
+- [Boise Remodeling Cost Guide](https://boiseremodeling.co/guides/boise-remodeling-cost-guide)
+- [Boise Kitchen Remodeling Guide](https://boiseremodeling.co/guides/boise-kitchen-remodeling-guide)
+- [Boise Bathroom Remodeling Guide](https://boiseremodeling.co/guides/boise-bathroom-remodeling-guide)
+- [Boise Home Addition Guide](https://boiseremodeling.co/guides/boise-home-addition-guide)
+- [Boise ADU Guide (rules, costs, permits)](https://boiseremodeling.co/guides/boise-adu-guide)
+- [Whole Home Remodeling Guide](https://boiseremodeling.co/guides/whole-home-remodeling-guide)
+- [Choose a Remodeling Contractor in Boise](https://boiseremodeling.co/guides/choose-remodeling-contractor-boise)
+- [Boise Remodeling Process Guide](https://boiseremodeling.co/guides/boise-remodeling-process-guide)
+- [Best Remodeling ROI in Boise](https://boiseremodeling.co/guides/best-remodeling-roi-boise)
+- [Outdoor Living Remodeling Guide](https://boiseremodeling.co/guides/outdoor-living-remodeling-guide)
 
 ## Local permit resources
 
-- Ada County vs Canyon County permit flow: /resources/ada-canyon-permit-flow
-- City guides: /guides/boise-remodeling-guide, /guides/meridian-remodeling-guide, /guides/eagle-remodeling-guide, /guides/kuna-remodeling-guide, /guides/star-remodeling-guide, /guides/middleton-remodeling-guide, /guides/nampa-remodeling-guide, /guides/caldwell-remodeling-guide
-- Neighborhood guides: /guides/north-end-remodeling-guide, /guides/boise-bench-remodeling-guide, /guides/harris-ranch-remodeling-guide, /guides/east-boise-remodeling-guide, /guides/hidden-springs-remodeling-guide, /guides/eagle-foothills-remodeling-guide
+- [Ada County vs Canyon County permit flow](https://boiseremodeling.co/resources/ada-canyon-permit-flow)
+- City guides: [Boise](https://boiseremodeling.co/guides/boise-remodeling-guide), [Meridian](https://boiseremodeling.co/guides/meridian-remodeling-guide), [Eagle](https://boiseremodeling.co/guides/eagle-remodeling-guide), [Kuna](https://boiseremodeling.co/guides/kuna-remodeling-guide), [Star](https://boiseremodeling.co/guides/star-remodeling-guide), [Middleton](https://boiseremodeling.co/guides/middleton-remodeling-guide), [Nampa](https://boiseremodeling.co/guides/nampa-remodeling-guide), [Caldwell](https://boiseremodeling.co/guides/caldwell-remodeling-guide)
+- Neighborhood guides: [North End](https://boiseremodeling.co/guides/north-end-remodeling-guide), [Boise Bench](https://boiseremodeling.co/guides/boise-bench-remodeling-guide), [Harris Ranch](https://boiseremodeling.co/guides/harris-ranch-remodeling-guide), [East Boise](https://boiseremodeling.co/guides/east-boise-remodeling-guide), [Hidden Springs](https://boiseremodeling.co/guides/hidden-springs-remodeling-guide), [Eagle Foothills](https://boiseremodeling.co/guides/eagle-foothills-remodeling-guide)
 
 ## Blog category hubs
 
-- /blog/category/remodeling-costs
-- /blog/category/kitchen-remodeling
-- /blog/category/bathroom-remodeling
-- /blog/category/home-additions
-- /blog/category/whole-home-remodeling
-- /blog/category/contractor-selection
-- /blog/category/remodeling-process
-- /blog/category/remodeling-roi
-- /blog/category/outdoor-living
+- [Remodeling Costs](https://boiseremodeling.co/blog/category/remodeling-costs)
+- [Kitchen Remodeling](https://boiseremodeling.co/blog/category/kitchen-remodeling)
+- [Bathroom Remodeling](https://boiseremodeling.co/blog/category/bathroom-remodeling)
+- [Home Additions](https://boiseremodeling.co/blog/category/home-additions)
+- [Whole-Home Remodeling](https://boiseremodeling.co/blog/category/whole-home-remodeling)
+- [Contractor Selection](https://boiseremodeling.co/blog/category/contractor-selection)
+- [Remodeling Process](https://boiseremodeling.co/blog/category/remodeling-process)
+- [Remodeling ROI](https://boiseremodeling.co/blog/category/remodeling-roi)
+- [Outdoor Living](https://boiseremodeling.co/blog/category/outdoor-living)
 
-## Services (https://boiseremodeling.co/services)
+## About and contact
 
-- Kitchen Remodel: /services/kitchen-remodel
-- Bathroom Remodel: /services/bathroom-remodel
-- Whole-Home Remodel: /services/whole-home-remodel
-- Room Addition: /services/room-addition
-- ADU / Guest House: /services/adu
-- City pages: /services/{service-slug}/{city-slug} for boise, meridian, eagle, nampa, kuna, star, middleton, caldwell
-- Areas: /areas/{city-slug}
+- [About Boise Remodeling Co](https://boiseremodeling.co/about): design-build remodels across the Treasure Valley since 2017.
+- [Contact](https://boiseremodeling.co/contact)
+- [Free estimator](https://boiseremodeling.co/#calculator)
 
-## About the company
+## Optional
 
-- Boise Remodeling Co has run design-build remodels across the Treasure Valley since 2017.
-- Design-build: one accountable team handles design, estimating, Ada and Canyon County permitting, and construction under one contract.
-- Every project backed by a written scope before construction and a workmanship guarantee. About: https://boiseremodeling.co/about
+- [Blog](https://boiseremodeling.co/blog)
+- [Sitemap](https://boiseremodeling.co/sitemap.xml)
 
-## Contact
-
-- https://boiseremodeling.co/contact
-- Estimator: https://boiseremodeling.co/#calculator
-
-Last updated: 2026-07-10. Full sitemap: https://boiseremodeling.co/sitemap.xml
+Last updated: 2026-07-14.

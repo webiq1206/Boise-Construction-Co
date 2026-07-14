@@ -344,7 +344,7 @@ html, body {
   }
 
   .text-inverse-muted {
-    color: hsl(var(--inverse-muted) / 0.68);
+    color: hsl(var(--inverse-muted));
   }
 }
 
@@ -398,7 +398,7 @@ html, body {
 }
 /* Ensure inverse-muted wins over the default label color on dark/image bands */
 .brc-label.text-inverse-muted {
-  color: hsl(var(--inverse-muted) / 0.68);
+  color: hsl(var(--inverse-muted));
 }
 /* The sage tick is intentional on every band, but keep the label TEXT muted. */
 

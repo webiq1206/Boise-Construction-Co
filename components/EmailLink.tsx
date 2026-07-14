@@ -23,7 +23,7 @@ export function EmailLink({
       type="button"
       onClick={handleClick}
       className={className}
-      aria-label={`Send email to ${SITE_CONFIG.name}`}
+      aria-label={`${label} - send email to ${SITE_CONFIG.name}`}
     >
       {label}
     </button>

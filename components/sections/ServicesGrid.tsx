@@ -53,7 +53,7 @@ export function ServicesGrid() {
                     {service.planningFrom}
                   </span>
                 </div>
-                <TextLink href={servicePath(service.slug)} showArrow>
+                <TextLink href={servicePath(service.slug)} showArrow ariaLabel={`Learn more about ${service.name}`}>
                   Learn more
                 </TextLink>
               </article>
