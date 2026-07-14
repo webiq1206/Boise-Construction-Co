@@ -449,11 +449,13 @@ export const BUSINESS_INFO = {
   founderName: '',
   phone: SITE_CONFIG.phone,
   email: SITE_CONFIG.email,
-  // Service-area business: street address and ZIP intentionally omitted. NAP
-  // locality kept consistent (Meridian, Idaho) across all surfaces.
+  // Canonical NAP sourced from SITE_CONFIG. Street + ZIP feed structured data
+  // and off-site citations; locality (Meridian, Idaho) stays consistent.
   address: {
+    street: SITE_CONFIG.address.street,
     city: SITE_CONFIG.address.city,
     state: 'Idaho',
+    postalCode: SITE_CONFIG.address.postalCode,
     country: 'United States',
   },
   hours: {

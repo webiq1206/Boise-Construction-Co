@@ -17,11 +17,15 @@ export const SITE_CONFIG = {
   phoneSmsHref: `sms:${process.env.NEXT_PUBLIC_PHONE_TEL ?? DEFAULT_PHONE_TEL}`,
   email: process.env.NEXT_PUBLIC_EMAIL ?? DEFAULT_EMAIL,
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL,
-  // Service-area business: no public storefront, so no street address or ZIP is
-  // exposed. Keep city/state for NAP consistency across all surfaces.
+  // Canonical NAP. Street + ZIP are the single source of truth for structured
+  // data and off-site citations (GBP, directories); city/state stay consistent
+  // across all surfaces. The address is not rendered on-page unless a component
+  // opts in - it powers LocalBusiness/Organization schema and citation packets.
   address: {
+    street: "4031 W Wapoot St",
     city: "Meridian",
     state: "ID",
+    postalCode: "83646",
     cityState: "Meridian, ID",
     serviceArea: "Treasure Valley · Ada and Canyon County",
   },

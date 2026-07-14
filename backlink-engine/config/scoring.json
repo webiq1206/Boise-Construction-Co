@@ -4,6 +4,17 @@
   "site": {
     "domain": "boiseremodeling.co",
     "brand": "Boise Remodeling Co",
+    "nap": {
+      "name": "Boise Remodeling Co",
+      "street": "4031 W Wapoot St",
+      "city": "Meridian",
+      "state": "ID",
+      "postalCode": "83646",
+      "phone": "(208) 477-1169",
+      "phoneTel": "2084771169",
+      "email": "hello@boiseremodeling.co",
+      "url": "https://boiseremodeling.co"
+    },
     "industry": "residential design-build remodeling",
     "geo": ["Boise", "Meridian", "Eagle", "Nampa", "Star", "Kuna", "Garden City", "Treasure Valley", "Idaho"],
     "topics": ["home remodeling", "kitchen remodel", "bathroom remodel", "home addition", "ADU", "whole-home renovation", "design-build", "general contractor", "home improvement"]
