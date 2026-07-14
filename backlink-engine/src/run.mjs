@@ -19,6 +19,7 @@ import { ahrefs, _today } from "./ahrefs.mjs";
 import { classify } from "./classify.mjs";
 import { store } from "./store.mjs";
 import { buildArtifacts } from "./outreach.mjs";
+import { resolveContacts } from "./contacts.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const P = (f) => join(ROOT, f);
@@ -98,7 +99,24 @@ if (!DRY && ahrefs.hasKey()) {
 const queue = await store.readQueue();
 const queued = new Set(queue.map((q) => q.domain));
 const toDraft = activeSorted.filter((o) => o.priority >= 52 && !queued.has(o.domain)); // P1/P2
-const artifacts = buildArtifacts(toDraft.map((s) => ({ ...s, feasibility: s.feasibility, category: s.category })));
+
+// Resolve outreach contacts (email discovery) for email-channel drafts. Network,
+// so skipped in --dry-run; self-serve targets are form submissions and need none.
+let resolvedCount = 0, formOnly = 0;
+if (!DRY) {
+  const emailChannels = new Set(["application", "digital_pr", "outreach"]);
+  const targets = toDraft.filter((o) => emailChannels.has(o.feasibility));
+  const contacts = await resolveContacts(targets);
+  for (const o of toDraft) {
+    const c = contacts.get(o.id);
+    if (!c) continue;
+    o.resolvedContact = c;
+    if (c.email) resolvedCount++; else if (c.contactForm) formOnly++;
+  }
+  log.push(`- Contacts: resolved ${resolvedCount} email addresses, ${formOnly} form-only (of ${targets.length} email-channel targets).`);
+}
+
+const artifacts = buildArtifacts(toDraft.map((s) => ({ ...s, feasibility: s.feasibility, category: s.category, resolvedContact: s.resolvedContact })));
 const merged = [...queue, ...artifacts];
 await store.writeQueue(merged);
 const emails = artifacts.filter((a) => a.type === "email").length;

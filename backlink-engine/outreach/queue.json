@@ -1,197 +1,5 @@
 [
   {
-    "domain": "bbb.org",
-    "name": "Better Business Bureau – accredited profile",
-    "channel": "application",
-    "category": "review_platform",
-    "priority": 86.6,
-    "contact": "bbb.org get-accredited",
-    "status": "awaiting_approval",
-    "missingInputs": [
-      "senderName",
-      "senderEmail",
-      "senderPhone"
-    ],
-    "draftedOn": "2026-07-14",
-    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
-  },
-  {
-    "domain": "idahopower.com",
-    "name": "Idaho Power – Trade Ally / Energy-Efficiency Contractor Network",
-    "channel": "application",
-    "category": "utility_program",
-    "priority": 84.8,
-    "contact": "Idaho Power Energy Efficiency program (web form)",
-    "status": "awaiting_approval",
-    "missingInputs": [
-      "senderName",
-      "senderEmail",
-      "senderPhone"
-    ],
-    "draftedOn": "2026-07-14",
-    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
-  },
-  {
-    "domain": "various-manufacturers",
-    "name": "Supplier / manufacturer dealer-locator links (NEEDS VENDOR LIST)",
-    "channel": "application",
-    "category": "supplier",
-    "priority": 84.4,
-    "contact": "each brand's dealer/pro program",
-    "status": "awaiting_approval",
-    "missingInputs": [
-      "senderName",
-      "senderEmail",
-      "senderPhone"
-    ],
-    "draftedOn": "2026-07-14",
-    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
-  },
-  {
-    "domain": "nari.org",
-    "name": "NARI National – Find a Remodeler",
-    "channel": "application",
-    "category": "association",
-    "priority": 79.2,
-    "contact": "nari.org membership",
-    "status": "awaiting_approval",
-    "missingInputs": [
-      "senderName",
-      "senderEmail",
-      "senderPhone"
-    ],
-    "draftedOn": "2026-07-14",
-    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
-  },
-  {
-    "domain": "thescoutguide.com",
-    "name": "The Scout Guide – Boise (curated local business guide)",
-    "channel": "application",
-    "category": "directory",
-    "priority": 76.7,
-    "contact": "The Scout Guide Boise editor",
-    "status": "awaiting_approval",
-    "missingInputs": [
-      "senderName",
-      "senderEmail",
-      "senderPhone"
-    ],
-    "draftedOn": "2026-07-14",
-    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
-  },
-  {
-    "domain": "nariofidaho.org",
-    "name": "NARI of Idaho – member directory",
-    "channel": "application",
-    "category": "association",
-    "priority": 73.4,
-    "contact": "nariofidaho.org membership",
-    "status": "awaiting_approval",
-    "missingInputs": [
-      "senderName",
-      "senderEmail",
-      "senderPhone"
-    ],
-    "draftedOn": "2026-07-14",
-    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
-  },
-  {
-    "domain": "bcaswi.org",
-    "name": "Building Contractors Association of SW Idaho – member directory",
-    "channel": "application",
-    "category": "association",
-    "priority": 71.3,
-    "contact": "bcaswi.org/contact-us",
-    "status": "awaiting_approval",
-    "missingInputs": [
-      "senderName",
-      "senderEmail",
-      "senderPhone"
-    ],
-    "draftedOn": "2026-07-14",
-    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
-  },
-  {
-    "domain": "discovery",
-    "name": "Unlinked brand-mention reclamation (ongoing)",
-    "channel": "outreach",
-    "category": "unlinked_mention",
-    "priority": 70.7,
-    "contact": "per-page site owner",
-    "status": "awaiting_approval",
-    "missingInputs": [
-      "senderName",
-      "senderEmail",
-      "senderPhone"
-    ],
-    "draftedOn": "2026-07-14",
-    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
-  },
-  {
-    "domain": "guildquality.com",
-    "name": "GuildQuality – member reviews profile",
-    "channel": "application",
-    "category": "review_platform",
-    "priority": 70.5,
-    "contact": "guildquality.com",
-    "status": "awaiting_approval",
-    "missingInputs": [
-      "senderName",
-      "senderEmail",
-      "senderPhone"
-    ],
-    "draftedOn": "2026-07-14",
-    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
-  },
-  {
-    "domain": "thisoldhouse.com",
-    "name": "This Old House – editorial mention / expert contribution",
-    "channel": "digital_pr",
-    "category": "digital_pr",
-    "priority": 69.2,
-    "contact": "editorial / journalist query platforms",
-    "status": "awaiting_approval",
-    "missingInputs": [
-      "senderName",
-      "senderEmail",
-      "senderPhone"
-    ],
-    "draftedOn": "2026-07-14",
-    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
-  },
-  {
-    "domain": "statesman.com",
-    "name": "Idaho Statesman – local news feature / expert source",
-    "channel": "digital_pr",
-    "category": "digital_pr",
-    "priority": 68.1,
-    "contact": "Statesman newsroom / real estate reporter",
-    "status": "awaiting_approval",
-    "missingInputs": [
-      "senderName",
-      "senderEmail",
-      "senderPhone"
-    ],
-    "draftedOn": "2026-07-14",
-    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
-  },
-  {
-    "domain": "boisechamber.org",
-    "name": "Boise Metro Chamber of Commerce – member directory",
-    "channel": "application",
-    "category": "association",
-    "priority": 64.1,
-    "contact": "boisechamber.org membership",
-    "status": "awaiting_approval",
-    "missingInputs": [
-      "senderName",
-      "senderEmail",
-      "senderPhone"
-    ],
-    "draftedOn": "2026-07-14",
-    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
-  },
-  {
     "type": "packet",
     "channel": "self_serve",
     "domain": "homeadvisor.com",
@@ -227,6 +35,76 @@
     "id": "homeadvisor",
     "name": "HomeAdvisor - pro profile",
     "priority": 89.3,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "application",
+    "domain": "bbb.org",
+    "to": "info@thebbb.org",
+    "subject": "Membership inquiry - Boise Remodeling Co (design-build remodeler)",
+    "body": "Hi Better Business Bureau – accredited profile team,\n\nWe're a design-build remodeling company serving the Treasure Valley and would like to join / apply to Better Business Bureau – accredited profile. Could you send current requirements, dues, and directory-listing details?\n\nWe focus on kitchen remodels, bathroom remodels, home additions, ADUs, whole-home renovations and are licensed, bonded & insured, design-build under one roof. Happy to provide references.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "low",
+      "source": "site-crawl",
+      "mx": true,
+      "contactForm": "https://bbb.org",
+      "candidates": [
+        "info@thebbb.org",
+        "service@interactiveblue.com"
+      ]
+    },
+    "missingInputs": [
+      "sender.name",
+      "verifyContact"
+    ],
+    "status": "awaiting_approval",
+    "id": "bbb-accreditation",
+    "name": "Better Business Bureau – accredited profile",
+    "priority": 86.6,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "application",
+    "domain": "idahopower.com",
+    "to": "opportunity@home.cwi",
+    "subject": "Membership inquiry - Boise Remodeling Co (design-build remodeler)",
+    "body": "Hi Idaho Power – Trade Ally / Energy-Efficiency Contractor Network team,\n\nWe're a design-build remodeling company serving the Treasure Valley and would like to join / apply to Idaho Power – Trade Ally / Energy-Efficiency Contractor Network. Could you send current requirements, dues, and directory-listing details?\n\nWe focus on kitchen remodels, bathroom remodels, home additions, ADUs, whole-home renovations and are licensed, bonded & insured, design-build under one roof. Happy to provide references.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "low",
+      "source": "site-crawl",
+      "mx": false,
+      "contactForm": "https://idahopower.com",
+      "candidates": [
+        "opportunity@home.cwi"
+      ]
+    },
+    "missingInputs": [
+      "sender.name",
+      "verifyContact"
+    ],
+    "status": "awaiting_approval",
+    "id": "idahopower-trade-ally",
+    "name": "Idaho Power – Trade Ally / Energy-Efficiency Contractor Network",
+    "priority": 84.8,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "application",
+    "domain": "various-manufacturers",
+    "to": "[FIND CONTACT]",
+    "subject": "Membership inquiry - Boise Remodeling Co (design-build remodeler)",
+    "body": "Hi Supplier / manufacturer dealer-locator links (NEEDS VENDOR LIST) team,\n\nWe're a design-build remodeling company serving the Treasure Valley and would like to join / apply to Supplier / manufacturer dealer-locator links (NEEDS VENDOR LIST). Could you send current requirements, dues, and directory-listing details?\n\nWe focus on kitchen remodels, bathroom remodels, home additions, ADUs, whole-home renovations and are licensed, bonded & insured, design-build under one roof. Happy to provide references.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "missingInputs": [
+      "sender.name",
+      "contactEmail"
+    ],
+    "status": "awaiting_approval",
+    "id": "supplier-dealer-locators",
+    "name": "Supplier / manufacturer dealer-locator links (NEEDS VENDOR LIST)",
+    "priority": 84.4,
     "draftedOn": "2026-07-14"
   },
   {
@@ -385,9 +263,19 @@
     "type": "email",
     "channel": "application",
     "domain": "fixr.com",
-    "to": "fixr.com pros",
+    "to": "support@fixr.com",
     "subject": "Membership inquiry - Boise Remodeling Co (design-build remodeler)",
     "body": "Hi Fixr.com - contractor cost-guide listing team,\n\nWe're a design-build remodeling company serving the Treasure Valley and would like to join / apply to Fixr.com - contractor cost-guide listing. Could you send current requirements, dues, and directory-listing details?\n\nWe focus on kitchen remodels, bathroom remodels, home additions, ADUs, whole-home renovations and are licensed, bonded & insured, design-build under one roof. Happy to provide references.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "high",
+      "source": "site-crawl",
+      "mx": true,
+      "candidates": [
+        "support@fixr.com",
+        "press@fixr.com",
+        "john.doe@gmail.com"
+      ]
+    },
     "missingInputs": [
       "sender.name"
     ],
@@ -395,6 +283,31 @@
     "id": "fixr",
     "name": "Fixr.com - contractor cost-guide listing",
     "priority": 79.6,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "application",
+    "domain": "nari.org",
+    "to": "info@nari.org",
+    "subject": "Membership inquiry - Boise Remodeling Co (design-build remodeler)",
+    "body": "Hi NARI National – Find a Remodeler team,\n\nWe're a design-build remodeling company serving the Treasure Valley and would like to join / apply to NARI National – Find a Remodeler. Could you send current requirements, dues, and directory-listing details?\n\nWe focus on kitchen remodels, bathroom remodels, home additions, ADUs, whole-home renovations and are licensed, bonded & insured, design-build under one roof. Happy to provide references.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "high",
+      "source": "site-crawl",
+      "mx": true,
+      "contactForm": "https://nari.org",
+      "candidates": [
+        "info@nari.org"
+      ]
+    },
+    "missingInputs": [
+      "sender.name"
+    ],
+    "status": "awaiting_approval",
+    "id": "nari-national",
+    "name": "NARI National – Find a Remodeler",
+    "priority": 79.2,
     "draftedOn": "2026-07-14"
   },
   {
@@ -437,14 +350,46 @@
   },
   {
     "type": "email",
+    "channel": "application",
+    "domain": "thescoutguide.com",
+    "to": "info@thescoutguide.com",
+    "subject": "Membership inquiry - Boise Remodeling Co (design-build remodeler)",
+    "body": "Hi The Scout Guide – Boise (curated local business guide) team,\n\nWe're a design-build remodeling company serving the Treasure Valley and would like to join / apply to The Scout Guide – Boise (curated local business guide). Could you send current requirements, dues, and directory-listing details?\n\nWe focus on kitchen remodels, bathroom remodels, home additions, ADUs, whole-home renovations and are licensed, bonded & insured, design-build under one roof. Happy to provide references.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "high",
+      "source": "site-crawl",
+      "mx": true,
+      "contactForm": "https://thescoutguide.com",
+      "candidates": [
+        "info@thescoutguide.com",
+        "info@zonnys.com"
+      ]
+    },
+    "missingInputs": [
+      "sender.name"
+    ],
+    "status": "awaiting_approval",
+    "id": "the-scout-guide-boise",
+    "name": "The Scout Guide – Boise (curated local business guide)",
+    "priority": 76.7,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
     "channel": "digital_pr",
     "domain": "idahostatesman.com",
-    "to": "Statesman real-estate/home desk",
+    "to": "info@idahostatesman.com",
     "subject": "Local remodeling expert source - Meridian, ID",
     "body": "Hi Idaho Statesman (idahostatesman.com) - local news feature team,\n\nI'm [SENDER NAME] with Boise Remodeling Co, a design-build remodeler in Idaho's Treasure Valley. If you're ever working on a home-improvement, remodeling-cost, or local-housing story, I'm happy to be a quotable local source with concrete numbers.\n\nA current angle we can speak to with data: [INSERT LOCAL DATA POINT - e.g. average Treasure Valley kitchen-remodel range, permit trends]. Feel free to quote directly.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "low",
+      "source": "role-guess",
+      "mx": true
+    },
     "missingInputs": [
       "sender.name",
-      "descriptions.long"
+      "descriptions.long",
+      "verifyContact"
     ],
     "status": "awaiting_approval",
     "id": "idahostatesman-dofollow",
@@ -488,6 +433,138 @@
     "id": "alignable",
     "name": "Alignable – local business network profile",
     "priority": 75.1,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "application",
+    "domain": "nariofidaho.org",
+    "to": "[FIND CONTACT]",
+    "subject": "Membership inquiry - Boise Remodeling Co (design-build remodeler)",
+    "body": "Hi NARI of Idaho – member directory team,\n\nWe're a design-build remodeling company serving the Treasure Valley and would like to join / apply to NARI of Idaho – member directory. Could you send current requirements, dues, and directory-listing details?\n\nWe focus on kitchen remodels, bathroom remodels, home additions, ADUs, whole-home renovations and are licensed, bonded & insured, design-build under one roof. Happy to provide references.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "missingInputs": [
+      "sender.name",
+      "contactEmail"
+    ],
+    "status": "awaiting_approval",
+    "id": "nari-of-idaho",
+    "name": "NARI of Idaho – member directory",
+    "priority": 73.4,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "application",
+    "domain": "bcaswi.org",
+    "to": "happyhomes4you@me.com",
+    "subject": "Membership inquiry - Boise Remodeling Co (design-build remodeler)",
+    "body": "Hi Building Contractors Association of SW Idaho – member directory team,\n\nWe're a design-build remodeling company serving the Treasure Valley and would like to join / apply to Building Contractors Association of SW Idaho – member directory. Could you send current requirements, dues, and directory-listing details?\n\nWe focus on kitchen remodels, bathroom remodels, home additions, ADUs, whole-home renovations and are licensed, bonded & insured, design-build under one roof. Happy to provide references.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "low",
+      "source": "site-crawl",
+      "mx": true,
+      "contactForm": "https://bcaswi.org/contact",
+      "candidates": [
+        "happyhomes4you@me.com",
+        "jacob@ihlre.com"
+      ]
+    },
+    "missingInputs": [
+      "sender.name",
+      "verifyContact"
+    ],
+    "status": "awaiting_approval",
+    "id": "bcaswi",
+    "name": "Building Contractors Association of SW Idaho – member directory",
+    "priority": 71.3,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "outreach",
+    "domain": "discovery",
+    "to": "[FIND CONTACT]",
+    "subject": "Thanks for the mention - quick request",
+    "body": "Hi,\n\nThank you for mentioning Boise Remodeling Co. Would you be open to linking the mention to our site so readers can find us directly? https://boiseremodeling.co is the best page. Either way, we appreciate it.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "missingInputs": [
+      "sender.name",
+      "contactEmail"
+    ],
+    "status": "awaiting_approval",
+    "id": "unlinked-mentions",
+    "name": "Unlinked brand-mention reclamation (ongoing)",
+    "priority": 70.7,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "application",
+    "domain": "guildquality.com",
+    "to": "info@guildquality.com",
+    "subject": "Membership inquiry - Boise Remodeling Co (design-build remodeler)",
+    "body": "Hi GuildQuality – member reviews profile team,\n\nWe're a design-build remodeling company serving the Treasure Valley and would like to join / apply to GuildQuality – member reviews profile. Could you send current requirements, dues, and directory-listing details?\n\nWe focus on kitchen remodels, bathroom remodels, home additions, ADUs, whole-home renovations and are licensed, bonded & insured, design-build under one roof. Happy to provide references.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "low",
+      "source": "role-guess",
+      "mx": true,
+      "contactForm": "https://guildquality.com/join"
+    },
+    "missingInputs": [
+      "sender.name",
+      "verifyContact"
+    ],
+    "status": "awaiting_approval",
+    "id": "guildquality",
+    "name": "GuildQuality – member reviews profile",
+    "priority": 70.5,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "outreach",
+    "domain": "discovery",
+    "to": "[FIND CONTACT]",
+    "subject": "A resource for your readers - Meridian remodeling",
+    "body": "Hi,\n\nI came across your page and thought our guides for Treasure Valley homeowners might be a useful resource. We publish practical, local remodeling content at https://boiseremodeling.co. No worries either way - just thought it might help.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long",
+      "contactEmail"
+    ],
+    "status": "awaiting_approval",
+    "id": "resource-broken-link",
+    "name": "Resource-page & broken-link building (ongoing)",
+    "priority": 69.5,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "digital_pr",
+    "domain": "thisoldhouse.com",
+    "to": "contact@thisoldhouse.com",
+    "subject": "Local remodeling expert source - Meridian, ID",
+    "body": "Hi This Old House – editorial mention / expert contribution team,\n\nI'm [SENDER NAME] with Boise Remodeling Co, a design-build remodeler in Idaho's Treasure Valley. If you're ever working on a home-improvement, remodeling-cost, or local-housing story, I'm happy to be a quotable local source with concrete numbers.\n\nA current angle we can speak to with data: [INSERT LOCAL DATA POINT - e.g. average Treasure Valley kitchen-remodel range, permit trends]. Feel free to quote directly.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "high",
+      "source": "site-crawl",
+      "mx": true,
+      "contactForm": "https://thisoldhouse.com",
+      "candidates": [
+        "contact@thisoldhouse.com",
+        "membersupport@thisoldhouse.com",
+        "youdidit@thisoldhouse.com",
+        "reviewsteam@thisoldhousereviews.com",
+        "reviews@thisoldhousereviews.com"
+      ]
+    },
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long"
+    ],
+    "status": "awaiting_approval",
+    "id": "thisoldhouse-pr",
+    "name": "This Old House – editorial mention / expert contribution",
+    "priority": 69.2,
     "draftedOn": "2026-07-14"
   },
   {
@@ -568,13 +645,49 @@
   },
   {
     "type": "email",
+    "channel": "digital_pr",
+    "domain": "statesman.com",
+    "to": "asevilla@statesman.com",
+    "subject": "Local remodeling expert source - Meridian, ID",
+    "body": "Hi Idaho Statesman – local news feature / expert source team,\n\nI'm [SENDER NAME] with Boise Remodeling Co, a design-build remodeler in Idaho's Treasure Valley. If you're ever working on a home-improvement, remodeling-cost, or local-housing story, I'm happy to be a quotable local source with concrete numbers.\n\nA current angle we can speak to with data: [INSERT LOCAL DATA POINT - e.g. average Treasure Valley kitchen-remodel range, permit trends]. Feel free to quote directly.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "high",
+      "source": "site-crawl",
+      "mx": true,
+      "candidates": [
+        "asevilla@statesman.com",
+        "csebesta@statesman.com",
+        "dsengupta@statesman.com",
+        "karina.kumar@statesman.com",
+        "katey.psencik@statesman.com"
+      ]
+    },
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long"
+    ],
+    "status": "awaiting_approval",
+    "id": "idaho-statesman-pr",
+    "name": "Idaho Statesman – local news feature / expert source",
+    "priority": 68.1,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
     "channel": "application",
     "domain": "phius.org",
-    "to": "phius.org membership",
+    "to": "info@phius.org",
     "subject": "Membership inquiry - Boise Remodeling Co (design-build remodeler)",
     "body": "Hi PHIUS - Passive House Institute US directory (conditional) team,\n\nWe're a design-build remodeling company serving the Treasure Valley and would like to join / apply to PHIUS - Passive House Institute US directory (conditional). Could you send current requirements, dues, and directory-listing details?\n\nWe focus on kitchen remodels, bathroom remodels, home additions, ADUs, whole-home renovations and are licensed, bonded & insured, design-build under one roof. Happy to provide references.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "low",
+      "source": "role-guess",
+      "mx": true,
+      "contactForm": "https://phius.org"
+    },
     "missingInputs": [
-      "sender.name"
+      "sender.name",
+      "verifyContact"
     ],
     "status": "awaiting_approval",
     "id": "phius",
@@ -660,11 +773,44 @@
   },
   {
     "type": "email",
+    "channel": "application",
+    "domain": "boisechamber.org",
+    "to": "info@boisechamber.org",
+    "subject": "Membership inquiry - Boise Remodeling Co (design-build remodeler)",
+    "body": "Hi Boise Metro Chamber of Commerce – member directory team,\n\nWe're a design-build remodeling company serving the Treasure Valley and would like to join / apply to Boise Metro Chamber of Commerce – member directory. Could you send current requirements, dues, and directory-listing details?\n\nWe focus on kitchen remodels, bathroom remodels, home additions, ADUs, whole-home renovations and are licensed, bonded & insured, design-build under one roof. Happy to provide references.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "low",
+      "source": "role-guess",
+      "mx": true,
+      "contactForm": "https://boisechamber.org"
+    },
+    "missingInputs": [
+      "sender.name",
+      "verifyContact"
+    ],
+    "status": "awaiting_approval",
+    "id": "boise-metro-chamber",
+    "name": "Boise Metro Chamber of Commerce – member directory",
+    "priority": 64.1,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
     "channel": "digital_pr",
     "domain": "citylifestyle.com",
-    "to": "City Lifestyle Boise editor",
+    "to": "scott.davidson@citylifestyle.com",
     "subject": "Local remodeling expert source - Meridian, ID",
     "body": "Hi City Lifestyle - Boise/Eagle local glossy magazine team,\n\nI'm [SENDER NAME] with Boise Remodeling Co, a design-build remodeler in Idaho's Treasure Valley. If you're ever working on a home-improvement, remodeling-cost, or local-housing story, I'm happy to be a quotable local source with concrete numbers.\n\nA current angle we can speak to with data: [INSERT LOCAL DATA POINT - e.g. average Treasure Valley kitchen-remodel range, permit trends]. Feel free to quote directly.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "high",
+      "source": "site-crawl",
+      "mx": true,
+      "contactForm": "https://citylifestyle.com",
+      "candidates": [
+        "scott.davidson@citylifestyle.com",
+        "example@gmail.com"
+      ]
+    },
     "missingInputs": [
       "sender.name",
       "descriptions.long"
@@ -717,12 +863,18 @@
     "type": "email",
     "channel": "digital_pr",
     "domain": "featured.com",
-    "to": "featured.com, qwoted.com, helpab2bwriter.com",
+    "to": "info@featured.com",
     "subject": "Local remodeling expert source - Meridian, ID",
     "body": "Hi Featured.com / Qwoted / Help a B2B Writer – journalist queries (ongoing) team,\n\nI'm [SENDER NAME] with Boise Remodeling Co, a design-build remodeler in Idaho's Treasure Valley. If you're ever working on a home-improvement, remodeling-cost, or local-housing story, I'm happy to be a quotable local source with concrete numbers.\n\nA current angle we can speak to with data: [INSERT LOCAL DATA POINT - e.g. average Treasure Valley kitchen-remodel range, permit trends]. Feel free to quote directly.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "low",
+      "source": "role-guess",
+      "mx": true
+    },
     "missingInputs": [
       "sender.name",
-      "descriptions.long"
+      "descriptions.long",
+      "verifyContact"
     ],
     "status": "awaiting_approval",
     "id": "featured-haro",
@@ -772,12 +924,22 @@
     "type": "email",
     "channel": "digital_pr",
     "domain": "boisedev.com",
-    "to": "BoiseDev tips",
+    "to": "don@boisedev.com",
     "subject": "Local remodeling expert source - Meridian, ID",
     "body": "Hi BoiseDev – local development/business news team,\n\nI'm [SENDER NAME] with Boise Remodeling Co, a design-build remodeler in Idaho's Treasure Valley. If you're ever working on a home-improvement, remodeling-cost, or local-housing story, I'm happy to be a quotable local source with concrete numbers.\n\nA current angle we can speak to with data: [INSERT LOCAL DATA POINT - e.g. average Treasure Valley kitchen-remodel range, permit trends]. Feel free to quote directly.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "contact": {
+      "confidence": "low",
+      "source": "site-crawl",
+      "mx": true,
+      "contactForm": "https://boisedev.com",
+      "candidates": [
+        "don@boisedev.com"
+      ]
+    },
     "missingInputs": [
       "sender.name",
-      "descriptions.long"
+      "descriptions.long",
+      "verifyContact"
     ],
     "status": "awaiting_approval",
     "id": "boisedev-pr",

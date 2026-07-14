@@ -18,6 +18,7 @@ backlink-engine/
 │   ├── score.mjs              # deterministic gate + score + rank (no deps)
 │   ├── ahrefs.mjs             # Ahrefs API v3 client (env key, headless)
 │   ├── classify.mjs           # refdomain -> opportunity classifier + white-hat filter
+│   ├── contacts.mjs           # email discovery (site-crawl + de-obfuscation + MX + optional Hunter.io)
 │   ├── store.mjs              # persistence: Neon Postgres, or JSON files locally
 │   ├── outreach.mjs           # generates real drafts + citation packets from NAP/profile
 │   ├── run.mjs                # orchestrator (discover->score->monitor->draft)
@@ -36,6 +37,7 @@ npm run backlink:preflight   # validate config + env + live Ahrefs (run before f
 npm run backlink:run         # full loop (needs AHREFS_API_KEY; DATABASE_URL for durability)
 npm run backlink:run -- --dry-run   # offline: scoring + drafting + JSON persistence
 npm run backlink:score       # re-score the current opportunity list
+npm run backlink:contacts    # resolve + report outreach email addresses for P1/P2 targets
 npm run backlink:send        # dry-run report of what WOULD send (never sends unless enabled)
 ```
 
@@ -47,6 +49,7 @@ npm run backlink:send        # dry-run report of what WOULD send (never sends un
 | `RESEND_API_KEY` | sending approved outreach | sends unavailable (drafts still generate) |
 | `BACKLINK_SEND_ENABLED` | global send kill-switch (`true` to arm) | off by default - nothing sends |
 | `OUTREACH_FROM` | From address for sends | `hello@boiseremodeling.co` |
+| `HUNTER_API_KEY` | enhanced email discovery (optional) | site-crawl only (still finds most) |
 
 ## The autonomous loop
 `npm run backlink:run` -> DISCOVER (competitor refdomains) -> QUALIFY/CLASSIFY (anti-spam gate) ->

@@ -44,6 +44,7 @@ try {
 process.env.AHREFS_API_KEY ? ok.push("AHREFS_API_KEY set") : warn.push("AHREFS_API_KEY not set (discovery/monitor will skip)");
 process.env.DATABASE_URL ? ok.push("DATABASE_URL set (Postgres persistence)") : warn.push("DATABASE_URL not set (JSON-file persistence - fine for local, NOT durable on ephemeral cron)");
 process.env.RESEND_API_KEY ? ok.push("RESEND_API_KEY set") : warn.push("RESEND_API_KEY not set (sends unavailable)");
+process.env.HUNTER_API_KEY ? ok.push("HUNTER_API_KEY set (enhanced email discovery)") : warn.push("HUNTER_API_KEY not set (email discovery uses site-crawl only - still finds most)");
 process.env.BACKLINK_SEND_ENABLED === "true" ? warn.push("BACKLINK_SEND_ENABLED=true (approved items WILL send)") : ok.push("send disabled (safe default)");
 
 // 5. live Ahrefs path (free call)

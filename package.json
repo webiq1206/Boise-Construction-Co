@@ -25,7 +25,8 @@
     "backlink:score": "node backlink-engine/src/score.mjs",
     "backlink:run": "node backlink-engine/src/run.mjs",
     "backlink:preflight": "node backlink-engine/src/preflight.mjs",
-    "backlink:send": "node backlink-engine/src/send.mjs"
+    "backlink:send": "node backlink-engine/src/send.mjs",
+    "backlink:contacts": "node backlink-engine/src/contacts.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

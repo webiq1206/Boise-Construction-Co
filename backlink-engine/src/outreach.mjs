@@ -21,12 +21,22 @@ const PROFILE = readJSON("config/profile.json");
 const sig = () =>
   `${PROFILE.sender.name || "[SENDER NAME]"}\n${NAP.name} · ${NAP.url.replace("https://", "")}\n${NAP.phone} · ${NAP.city}, ${NAP.state}`;
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function missing(fields) {
   const miss = [];
   if (!PROFILE.sender.name) miss.push("sender.name");
   if (fields.includes("long") && !PROFILE.descriptions.long) miss.push("descriptions.long");
   if (fields.includes("portfolio") && !PROFILE.portfolioAssets.length) miss.push("portfolioAssets");
   return miss;
+}
+
+/** Best recipient for an opportunity: resolved contact > curated email > none. */
+function recipient(o) {
+  const rc = o.resolvedContact;
+  if (rc && rc.email) return { to: rc.email, meta: rc };
+  if (o.contact && EMAIL_RE.test(String(o.contact).trim())) return { to: String(o.contact).trim().toLowerCase(), meta: { confidence: "curated", source: "curated" } };
+  return { to: "[FIND CONTACT]", meta: rc || null };
 }
 
 function citationPacket(o) {
@@ -57,14 +67,21 @@ function citationPacket(o) {
 }
 
 function email(o, subject, body, needs) {
+  const { to, meta } = recipient(o);
+  const miss = missing(needs);
+  if (!EMAIL_RE.test(to)) miss.push("contactEmail");
+  // Only auto-qualify a confidently-resolved, deliverable address. Low-confidence,
+  // role-guessed, off-domain, or MX-failing addresses need a human to confirm.
+  else if (meta && (["low", "form-only"].includes(meta.confidence) || meta.source === "role-guess" || meta.mx === false)) miss.push("verifyContact");
   return {
     type: "email",
     channel: o.feasibility,
     domain: o.domain,
-    to: o.contact || "[FIND CONTACT]",
+    to,
     subject,
     body: `${body}\n\n${sig()}`,
-    missingInputs: [...missing(needs), ...(o.contact ? [] : ["contactEmail"])],
+    contact: meta ? { confidence: meta.confidence, source: meta.source, mx: meta.mx, contactForm: meta.contactForm, candidates: meta.candidates } : undefined,
+    missingInputs: miss,
     status: "awaiting_approval",
   };
 }

@@ -1,0 +1,152 @@
+{
+  "bbb.org": {
+    "email": "info@thebbb.org",
+    "confidence": "low",
+    "mx": true,
+    "source": "site-crawl",
+    "contactForm": "https://bbb.org",
+    "candidates": [
+      "info@thebbb.org",
+      "service@interactiveblue.com"
+    ]
+  },
+  "idahopower.com": {
+    "email": "opportunity@home.cwi",
+    "confidence": "low",
+    "mx": false,
+    "source": "site-crawl",
+    "contactForm": "https://idahopower.com",
+    "candidates": [
+      "opportunity@home.cwi"
+    ]
+  },
+  "fixr.com": {
+    "email": "support@fixr.com",
+    "confidence": "high",
+    "mx": true,
+    "source": "site-crawl",
+    "candidates": [
+      "support@fixr.com",
+      "press@fixr.com",
+      "john.doe@gmail.com"
+    ]
+  },
+  "nari.org": {
+    "email": "info@nari.org",
+    "confidence": "high",
+    "mx": true,
+    "source": "site-crawl",
+    "contactForm": "https://nari.org",
+    "candidates": [
+      "info@nari.org"
+    ]
+  },
+  "thescoutguide.com": {
+    "email": "info@thescoutguide.com",
+    "confidence": "high",
+    "mx": true,
+    "source": "site-crawl",
+    "contactForm": "https://thescoutguide.com",
+    "candidates": [
+      "info@thescoutguide.com",
+      "info@zonnys.com"
+    ]
+  },
+  "idahostatesman.com": {
+    "email": "info@idahostatesman.com",
+    "confidence": "low",
+    "mx": true,
+    "source": "role-guess",
+    "note": "unverified role address; confirm before sending"
+  },
+  "bcaswi.org": {
+    "email": "happyhomes4you@me.com",
+    "confidence": "low",
+    "mx": true,
+    "source": "site-crawl",
+    "contactForm": "https://bcaswi.org/contact",
+    "candidates": [
+      "happyhomes4you@me.com",
+      "jacob@ihlre.com"
+    ]
+  },
+  "guildquality.com": {
+    "email": "info@guildquality.com",
+    "confidence": "low",
+    "mx": true,
+    "source": "role-guess",
+    "contactForm": "https://guildquality.com/join",
+    "note": "unverified role address; confirm before sending"
+  },
+  "thisoldhouse.com": {
+    "email": "contact@thisoldhouse.com",
+    "confidence": "high",
+    "mx": true,
+    "source": "site-crawl",
+    "contactForm": "https://thisoldhouse.com",
+    "candidates": [
+      "contact@thisoldhouse.com",
+      "membersupport@thisoldhouse.com",
+      "youdidit@thisoldhouse.com",
+      "reviewsteam@thisoldhousereviews.com",
+      "reviews@thisoldhousereviews.com"
+    ]
+  },
+  "statesman.com": {
+    "email": "asevilla@statesman.com",
+    "confidence": "high",
+    "mx": true,
+    "source": "site-crawl",
+    "candidates": [
+      "asevilla@statesman.com",
+      "csebesta@statesman.com",
+      "dsengupta@statesman.com",
+      "karina.kumar@statesman.com",
+      "katey.psencik@statesman.com"
+    ]
+  },
+  "phius.org": {
+    "email": "info@phius.org",
+    "confidence": "low",
+    "mx": true,
+    "source": "role-guess",
+    "contactForm": "https://phius.org",
+    "note": "unverified role address; confirm before sending"
+  },
+  "boisechamber.org": {
+    "email": "info@boisechamber.org",
+    "confidence": "low",
+    "mx": true,
+    "source": "role-guess",
+    "contactForm": "https://boisechamber.org",
+    "note": "unverified role address; confirm before sending"
+  },
+  "citylifestyle.com": {
+    "email": "scott.davidson@citylifestyle.com",
+    "confidence": "high",
+    "mx": true,
+    "source": "site-crawl",
+    "contactForm": "https://citylifestyle.com",
+    "candidates": [
+      "scott.davidson@citylifestyle.com",
+      "example@gmail.com"
+    ]
+  },
+  "featured.com": {
+    "email": "info@featured.com",
+    "confidence": "low",
+    "mx": true,
+    "source": "role-guess",
+    "note": "unverified role address; confirm before sending"
+  },
+  "boisedev.com": {
+    "email": "don@boisedev.com",
+    "confidence": "low",
+    "mx": true,
+    "source": "site-crawl",
+    "contactForm": "https://boisedev.com",
+    "candidates": [
+      "don@boisedev.com"
+    ]
+  }
+}

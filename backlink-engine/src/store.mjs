@@ -47,6 +47,8 @@ export const store = {
       drafted_on date, sent_on timestamptz, updated_at timestamptz DEFAULT now())`;
     await q`CREATE TABLE IF NOT EXISTS backlink_disavow (
       domain text PRIMARY KEY, reason text, added_on date DEFAULT current_date)`;
+    await q`CREATE TABLE IF NOT EXISTS backlink_contacts (
+      domain text PRIMARY KEY, data jsonb NOT NULL, resolved_on date DEFAULT current_date)`;
     return this.mode;
   },
 
@@ -154,5 +156,29 @@ export const store = {
         await q`INSERT INTO backlink_disavow (domain, reason) VALUES (${d}, ${reason})
           ON CONFLICT (domain) DO NOTHING`;
     }
+  },
+
+  // ---- contact cache (email discovery) -------------------------------
+  async getContact(domain) {
+    if (HAS_DB) {
+      const q = await db();
+      const rows = await q`SELECT data FROM backlink_contacts WHERE domain = ${domain}`;
+      if (rows.length) return rows[0].data;
+      return null;
+    }
+    const cache = readJSON("data/history/contacts.json", {});
+    return cache[domain] || null;
+  },
+
+  async putContact(domain, rec) {
+    if (HAS_DB) {
+      const q = await db();
+      await q`INSERT INTO backlink_contacts (domain, data) VALUES (${domain}, ${JSON.stringify(rec)}::jsonb)
+        ON CONFLICT (domain) DO UPDATE SET data = EXCLUDED.data, resolved_on = current_date`;
+      return;
+    }
+    const cache = readJSON("data/history/contacts.json", {});
+    cache[domain] = rec;
+    writeJSON("data/history/contacts.json", cache);
   },
 };
