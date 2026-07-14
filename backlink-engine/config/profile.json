@@ -1,0 +1,21 @@
+{
+  "description": "Business inputs used to fill outreach drafts + citation packets. NAP lives in scoring.json (single source of truth). Fill the empty/placeholder fields to make drafts one-click-ready; any still-empty field is reported as a missingInput and blocks that draft from being marked send-ready.",
+  "sender": {
+    "name": "",
+    "email": "hello@boiseremodeling.co",
+    "phone": "(208) 477-1169",
+    "title": "",
+    "outreachFromDomain": "boiseremodeling.co",
+    "note": "Cold outreach from the primary domain risks email reputation. Prefer a dedicated subdomain (e.g. outreach.boiseremodeling.co) verified in Resend before enabling sends."
+  },
+  "descriptions": {
+    "short": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+    "long": "",
+    "specialties": ["kitchen remodels", "bathroom remodels", "home additions", "ADUs", "whole-home renovations"],
+    "credentials": ["Licensed", "Bonded & insured", "Design-build under one roof"],
+    "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)"
+  },
+  "portfolioAssets": [],
+  "licenses": ["License details available upon request"],
+  "required": ["sender.name", "descriptions.long", "portfolioAssets"]
+}

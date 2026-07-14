@@ -190,5 +190,599 @@
     ],
     "draftedOn": "2026-07-14",
     "note": "Fill placeholders from outreach/templates.md; human approves + sends."
+  },
+  {
+    "type": "packet",
+    "channel": "self_serve",
+    "domain": "homeadvisor.com",
+    "submitTo": "homeadvisor.com/spm",
+    "fields": {
+      "businessName": "Boise Remodeling Co",
+      "category": "Design-Build Remodeling Contractor / General Contractor",
+      "street": "4031 W Wapoot St",
+      "city": "Meridian",
+      "state": "ID",
+      "postalCode": "83646",
+      "phone": "(208) 477-1169",
+      "email": "hello@boiseremodeling.co",
+      "website": "https://boiseremodeling.co",
+      "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
+      "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+      "longDescription": "[ADD LONG DESCRIPTION]",
+      "photos": []
+    },
+    "checklist": [
+      "Claim/verify listing",
+      "Enter NAP exactly as above",
+      "Add categories + service area",
+      "Upload 3-5 portfolio photos",
+      "Confirm the profile links back to the website"
+    ],
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long",
+      "portfolioAssets"
+    ],
+    "status": "awaiting_approval",
+    "id": "homeadvisor",
+    "name": "HomeAdvisor - pro profile",
+    "priority": 89.3,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "packet",
+    "channel": "self_serve",
+    "domain": "topratedlocal.com",
+    "submitTo": "topratedlocal.com",
+    "fields": {
+      "businessName": "Boise Remodeling Co",
+      "category": "Design-Build Remodeling Contractor / General Contractor",
+      "street": "4031 W Wapoot St",
+      "city": "Meridian",
+      "state": "ID",
+      "postalCode": "83646",
+      "phone": "(208) 477-1169",
+      "email": "hello@boiseremodeling.co",
+      "website": "https://boiseremodeling.co",
+      "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
+      "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+      "longDescription": "[ADD LONG DESCRIPTION]",
+      "photos": []
+    },
+    "checklist": [
+      "Claim/verify listing",
+      "Enter NAP exactly as above",
+      "Add categories + service area",
+      "Upload 3-5 portfolio photos",
+      "Confirm the profile links back to the website"
+    ],
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long",
+      "portfolioAssets"
+    ],
+    "status": "awaiting_approval",
+    "id": "topratedlocal",
+    "name": "TopRatedLocal - business profile",
+    "priority": 82.3,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "packet",
+    "channel": "self_serve",
+    "domain": "houzz.com",
+    "submitTo": "houzz.com/pro",
+    "fields": {
+      "businessName": "Boise Remodeling Co",
+      "category": "Design-Build Remodeling Contractor / General Contractor",
+      "street": "4031 W Wapoot St",
+      "city": "Meridian",
+      "state": "ID",
+      "postalCode": "83646",
+      "phone": "(208) 477-1169",
+      "email": "hello@boiseremodeling.co",
+      "website": "https://boiseremodeling.co",
+      "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
+      "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+      "longDescription": "[ADD LONG DESCRIPTION]",
+      "photos": []
+    },
+    "checklist": [
+      "Claim/verify listing",
+      "Enter NAP exactly as above",
+      "Add categories + service area",
+      "Upload 3-5 portfolio photos",
+      "Confirm the profile links back to the website"
+    ],
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long",
+      "portfolioAssets"
+    ],
+    "status": "awaiting_approval",
+    "id": "houzz-pro",
+    "name": "Houzz – professional profile + project portfolio",
+    "priority": 80.4,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "packet",
+    "channel": "self_serve",
+    "domain": "angi.com",
+    "submitTo": "angi.com business",
+    "fields": {
+      "businessName": "Boise Remodeling Co",
+      "category": "Design-Build Remodeling Contractor / General Contractor",
+      "street": "4031 W Wapoot St",
+      "city": "Meridian",
+      "state": "ID",
+      "postalCode": "83646",
+      "phone": "(208) 477-1169",
+      "email": "hello@boiseremodeling.co",
+      "website": "https://boiseremodeling.co",
+      "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
+      "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+      "longDescription": "[ADD LONG DESCRIPTION]",
+      "photos": []
+    },
+    "checklist": [
+      "Claim/verify listing",
+      "Enter NAP exactly as above",
+      "Add categories + service area",
+      "Upload 3-5 portfolio photos",
+      "Confirm the profile links back to the website"
+    ],
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long",
+      "portfolioAssets"
+    ],
+    "status": "awaiting_approval",
+    "id": "angi",
+    "name": "Angi (Angie's List) – business profile",
+    "priority": 80.2,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "packet",
+    "channel": "self_serve",
+    "domain": "porch.com",
+    "submitTo": "porch.com pro",
+    "fields": {
+      "businessName": "Boise Remodeling Co",
+      "category": "Design-Build Remodeling Contractor / General Contractor",
+      "street": "4031 W Wapoot St",
+      "city": "Meridian",
+      "state": "ID",
+      "postalCode": "83646",
+      "phone": "(208) 477-1169",
+      "email": "hello@boiseremodeling.co",
+      "website": "https://boiseremodeling.co",
+      "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
+      "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+      "longDescription": "[ADD LONG DESCRIPTION]",
+      "photos": []
+    },
+    "checklist": [
+      "Claim/verify listing",
+      "Enter NAP exactly as above",
+      "Add categories + service area",
+      "Upload 3-5 portfolio photos",
+      "Confirm the profile links back to the website"
+    ],
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long",
+      "portfolioAssets"
+    ],
+    "status": "awaiting_approval",
+    "id": "porch",
+    "name": "Porch.com - home-services pro profile",
+    "priority": 79.8,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "application",
+    "domain": "fixr.com",
+    "to": "fixr.com pros",
+    "subject": "Membership inquiry - Boise Remodeling Co (design-build remodeler)",
+    "body": "Hi Fixr.com - contractor cost-guide listing team,\n\nWe're a design-build remodeling company serving the Treasure Valley and would like to join / apply to Fixr.com - contractor cost-guide listing. Could you send current requirements, dues, and directory-listing details?\n\nWe focus on kitchen remodels, bathroom remodels, home additions, ADUs, whole-home renovations and are licensed, bonded & insured, design-build under one roof. Happy to provide references.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "missingInputs": [
+      "sender.name"
+    ],
+    "status": "awaiting_approval",
+    "id": "fixr",
+    "name": "Fixr.com - contractor cost-guide listing",
+    "priority": 79.6,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "packet",
+    "channel": "self_serve",
+    "domain": "birdeye.com",
+    "submitTo": "birdeye.com",
+    "fields": {
+      "businessName": "Boise Remodeling Co",
+      "category": "Design-Build Remodeling Contractor / General Contractor",
+      "street": "4031 W Wapoot St",
+      "city": "Meridian",
+      "state": "ID",
+      "postalCode": "83646",
+      "phone": "(208) 477-1169",
+      "email": "hello@boiseremodeling.co",
+      "website": "https://boiseremodeling.co",
+      "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
+      "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+      "longDescription": "[ADD LONG DESCRIPTION]",
+      "photos": []
+    },
+    "checklist": [
+      "Claim/verify listing",
+      "Enter NAP exactly as above",
+      "Add categories + service area",
+      "Upload 3-5 portfolio photos",
+      "Confirm the profile links back to the website"
+    ],
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long",
+      "portfolioAssets"
+    ],
+    "status": "awaiting_approval",
+    "id": "birdeye",
+    "name": "BirdEye – business listing",
+    "priority": 78.7,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "digital_pr",
+    "domain": "idahostatesman.com",
+    "to": "Statesman real-estate/home desk",
+    "subject": "Local remodeling expert source - Meridian, ID",
+    "body": "Hi Idaho Statesman (idahostatesman.com) - local news feature team,\n\nI'm [SENDER NAME] with Boise Remodeling Co, a design-build remodeler in Idaho's Treasure Valley. If you're ever working on a home-improvement, remodeling-cost, or local-housing story, I'm happy to be a quotable local source with concrete numbers.\n\nA current angle we can speak to with data: [INSERT LOCAL DATA POINT - e.g. average Treasure Valley kitchen-remodel range, permit trends]. Feel free to quote directly.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long"
+    ],
+    "status": "awaiting_approval",
+    "id": "idahostatesman-dofollow",
+    "name": "Idaho Statesman (idahostatesman.com) - local news feature",
+    "priority": 75.7,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "packet",
+    "channel": "self_serve",
+    "domain": "alignable.com",
+    "submitTo": "alignable.com",
+    "fields": {
+      "businessName": "Boise Remodeling Co",
+      "category": "Design-Build Remodeling Contractor / General Contractor",
+      "street": "4031 W Wapoot St",
+      "city": "Meridian",
+      "state": "ID",
+      "postalCode": "83646",
+      "phone": "(208) 477-1169",
+      "email": "hello@boiseremodeling.co",
+      "website": "https://boiseremodeling.co",
+      "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
+      "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+      "longDescription": "[ADD LONG DESCRIPTION]",
+      "photos": []
+    },
+    "checklist": [
+      "Claim/verify listing",
+      "Enter NAP exactly as above",
+      "Add categories + service area",
+      "Upload 3-5 portfolio photos",
+      "Confirm the profile links back to the website"
+    ],
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long",
+      "portfolioAssets"
+    ],
+    "status": "awaiting_approval",
+    "id": "alignable",
+    "name": "Alignable – local business network profile",
+    "priority": 75.1,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "packet",
+    "channel": "self_serve",
+    "domain": "chamberofcommerce.com",
+    "submitTo": "chamberofcommerce.com add-listing",
+    "fields": {
+      "businessName": "Boise Remodeling Co",
+      "category": "Design-Build Remodeling Contractor / General Contractor",
+      "street": "4031 W Wapoot St",
+      "city": "Meridian",
+      "state": "ID",
+      "postalCode": "83646",
+      "phone": "(208) 477-1169",
+      "email": "hello@boiseremodeling.co",
+      "website": "https://boiseremodeling.co",
+      "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
+      "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+      "longDescription": "[ADD LONG DESCRIPTION]",
+      "photos": []
+    },
+    "checklist": [
+      "Claim/verify listing",
+      "Enter NAP exactly as above",
+      "Add categories + service area",
+      "Upload 3-5 portfolio photos",
+      "Confirm the profile links back to the website"
+    ],
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long",
+      "portfolioAssets"
+    ],
+    "status": "awaiting_approval",
+    "id": "chamberofcommerce-com",
+    "name": "ChamberofCommerce.com – business listing",
+    "priority": 69.2,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "packet",
+    "channel": "self_serve",
+    "domain": "yelp.com",
+    "submitTo": "biz.yelp.com",
+    "fields": {
+      "businessName": "Boise Remodeling Co",
+      "category": "Design-Build Remodeling Contractor / General Contractor",
+      "street": "4031 W Wapoot St",
+      "city": "Meridian",
+      "state": "ID",
+      "postalCode": "83646",
+      "phone": "(208) 477-1169",
+      "email": "hello@boiseremodeling.co",
+      "website": "https://boiseremodeling.co",
+      "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
+      "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+      "longDescription": "[ADD LONG DESCRIPTION]",
+      "photos": []
+    },
+    "checklist": [
+      "Claim/verify listing",
+      "Enter NAP exactly as above",
+      "Add categories + service area",
+      "Upload 3-5 portfolio photos",
+      "Confirm the profile links back to the website"
+    ],
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long",
+      "portfolioAssets"
+    ],
+    "status": "awaiting_approval",
+    "id": "yelp",
+    "name": "Yelp – business profile",
+    "priority": 69,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "application",
+    "domain": "phius.org",
+    "to": "phius.org membership",
+    "subject": "Membership inquiry - Boise Remodeling Co (design-build remodeler)",
+    "body": "Hi PHIUS - Passive House Institute US directory (conditional) team,\n\nWe're a design-build remodeling company serving the Treasure Valley and would like to join / apply to PHIUS - Passive House Institute US directory (conditional). Could you send current requirements, dues, and directory-listing details?\n\nWe focus on kitchen remodels, bathroom remodels, home additions, ADUs, whole-home renovations and are licensed, bonded & insured, design-build under one roof. Happy to provide references.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "missingInputs": [
+      "sender.name"
+    ],
+    "status": "awaiting_approval",
+    "id": "phius",
+    "name": "PHIUS - Passive House Institute US directory (conditional)",
+    "priority": 67.5,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "packet",
+    "channel": "self_serve",
+    "domain": "clutch.co",
+    "submitTo": "clutch.co get-listed",
+    "fields": {
+      "businessName": "Boise Remodeling Co",
+      "category": "Design-Build Remodeling Contractor / General Contractor",
+      "street": "4031 W Wapoot St",
+      "city": "Meridian",
+      "state": "ID",
+      "postalCode": "83646",
+      "phone": "(208) 477-1169",
+      "email": "hello@boiseremodeling.co",
+      "website": "https://boiseremodeling.co",
+      "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
+      "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+      "longDescription": "[ADD LONG DESCRIPTION]",
+      "photos": []
+    },
+    "checklist": [
+      "Claim/verify listing",
+      "Enter NAP exactly as above",
+      "Add categories + service area",
+      "Upload 3-5 portfolio photos",
+      "Confirm the profile links back to the website"
+    ],
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long",
+      "portfolioAssets"
+    ],
+    "status": "awaiting_approval",
+    "id": "clutch",
+    "name": "Clutch.co - verified B2B profile",
+    "priority": 67.2,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "packet",
+    "channel": "self_serve",
+    "domain": "multiple",
+    "submitTo": "each directory add-business form",
+    "fields": {
+      "businessName": "Boise Remodeling Co",
+      "category": "Design-Build Remodeling Contractor / General Contractor",
+      "street": "4031 W Wapoot St",
+      "city": "Meridian",
+      "state": "ID",
+      "postalCode": "83646",
+      "phone": "(208) 477-1169",
+      "email": "hello@boiseremodeling.co",
+      "website": "https://boiseremodeling.co",
+      "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
+      "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+      "longDescription": "[ADD LONG DESCRIPTION]",
+      "photos": []
+    },
+    "checklist": [
+      "Claim/verify listing",
+      "Enter NAP exactly as above",
+      "Add categories + service area",
+      "Upload 3-5 portfolio photos",
+      "Confirm the profile links back to the website"
+    ],
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long",
+      "portfolioAssets"
+    ],
+    "status": "awaiting_approval",
+    "id": "citation-pack-core",
+    "name": "Core citation pack (YellowPages, Superpages, Hotfrog, EZlocal, DexKnows, YP)",
+    "priority": 64.4,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "digital_pr",
+    "domain": "citylifestyle.com",
+    "to": "City Lifestyle Boise editor",
+    "subject": "Local remodeling expert source - Meridian, ID",
+    "body": "Hi City Lifestyle - Boise/Eagle local glossy magazine team,\n\nI'm [SENDER NAME] with Boise Remodeling Co, a design-build remodeler in Idaho's Treasure Valley. If you're ever working on a home-improvement, remodeling-cost, or local-housing story, I'm happy to be a quotable local source with concrete numbers.\n\nA current angle we can speak to with data: [INSERT LOCAL DATA POINT - e.g. average Treasure Valley kitchen-remodel range, permit trends]. Feel free to quote directly.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long"
+    ],
+    "status": "awaiting_approval",
+    "id": "citylifestyle",
+    "name": "City Lifestyle - Boise/Eagle local glossy magazine",
+    "priority": 62.5,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "packet",
+    "channel": "self_serve",
+    "domain": "merchantcircle.com",
+    "submitTo": "merchantcircle.com",
+    "fields": {
+      "businessName": "Boise Remodeling Co",
+      "category": "Design-Build Remodeling Contractor / General Contractor",
+      "street": "4031 W Wapoot St",
+      "city": "Meridian",
+      "state": "ID",
+      "postalCode": "83646",
+      "phone": "(208) 477-1169",
+      "email": "hello@boiseremodeling.co",
+      "website": "https://boiseremodeling.co",
+      "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
+      "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+      "longDescription": "[ADD LONG DESCRIPTION]",
+      "photos": []
+    },
+    "checklist": [
+      "Claim/verify listing",
+      "Enter NAP exactly as above",
+      "Add categories + service area",
+      "Upload 3-5 portfolio photos",
+      "Confirm the profile links back to the website"
+    ],
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long",
+      "portfolioAssets"
+    ],
+    "status": "awaiting_approval",
+    "id": "merchantcircle",
+    "name": "MerchantCircle - business profile",
+    "priority": 61.7,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "digital_pr",
+    "domain": "featured.com",
+    "to": "featured.com, qwoted.com, helpab2bwriter.com",
+    "subject": "Local remodeling expert source - Meridian, ID",
+    "body": "Hi Featured.com / Qwoted / Help a B2B Writer – journalist queries (ongoing) team,\n\nI'm [SENDER NAME] with Boise Remodeling Co, a design-build remodeler in Idaho's Treasure Valley. If you're ever working on a home-improvement, remodeling-cost, or local-housing story, I'm happy to be a quotable local source with concrete numbers.\n\nA current angle we can speak to with data: [INSERT LOCAL DATA POINT - e.g. average Treasure Valley kitchen-remodel range, permit trends]. Feel free to quote directly.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long"
+    ],
+    "status": "awaiting_approval",
+    "id": "featured-haro",
+    "name": "Featured.com / Qwoted / Help a B2B Writer – journalist queries (ongoing)",
+    "priority": 60.7,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "packet",
+    "channel": "self_serve",
+    "domain": "neustarlocaleze.biz",
+    "submitTo": "neustarlocaleze.biz",
+    "fields": {
+      "businessName": "Boise Remodeling Co",
+      "category": "Design-Build Remodeling Contractor / General Contractor",
+      "street": "4031 W Wapoot St",
+      "city": "Meridian",
+      "state": "ID",
+      "postalCode": "83646",
+      "phone": "(208) 477-1169",
+      "email": "hello@boiseremodeling.co",
+      "website": "https://boiseremodeling.co",
+      "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
+      "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+      "longDescription": "[ADD LONG DESCRIPTION]",
+      "photos": []
+    },
+    "checklist": [
+      "Claim/verify listing",
+      "Enter NAP exactly as above",
+      "Add categories + service area",
+      "Upload 3-5 portfolio photos",
+      "Confirm the profile links back to the website"
+    ],
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long",
+      "portfolioAssets"
+    ],
+    "status": "awaiting_approval",
+    "id": "neustar-localeze",
+    "name": "Neustar Localeze – data aggregator citation",
+    "priority": 59.9,
+    "draftedOn": "2026-07-14"
+  },
+  {
+    "type": "email",
+    "channel": "digital_pr",
+    "domain": "boisedev.com",
+    "to": "BoiseDev tips",
+    "subject": "Local remodeling expert source - Meridian, ID",
+    "body": "Hi BoiseDev – local development/business news team,\n\nI'm [SENDER NAME] with Boise Remodeling Co, a design-build remodeler in Idaho's Treasure Valley. If you're ever working on a home-improvement, remodeling-cost, or local-housing story, I'm happy to be a quotable local source with concrete numbers.\n\nA current angle we can speak to with data: [INSERT LOCAL DATA POINT - e.g. average Treasure Valley kitchen-remodel range, permit trends]. Feel free to quote directly.\n\n[SENDER NAME]\nBoise Remodeling Co · boiseremodeling.co\n(208) 477-1169 · Meridian, ID",
+    "missingInputs": [
+      "sender.name",
+      "descriptions.long"
+    ],
+    "status": "awaiting_approval",
+    "id": "boisedev-pr",
+    "name": "BoiseDev – local development/business news",
+    "priority": 54.2,
+    "draftedOn": "2026-07-14"
   }
 ]

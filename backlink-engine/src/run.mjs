@@ -1,112 +1,112 @@
 #!/usr/bin/env node
 /**
- * Autonomous runner for the deployed (Replit cron) engine.
- * Stages: DISCOVER (competitor mining) -> QUALIFY/CLASSIFY -> SCORE -> MONITOR -> DRAFT -> DIGEST.
- * Network stages require AHREFS_API_KEY; pass --dry-run to exercise scoring/drafting offline.
+ * Autonomous runner. Stages: DISCOVER -> QUALIFY/CLASSIFY -> SCORE -> MONITOR
+ * -> DRAFT -> DIGEST. Uses store.mjs for durable state (Postgres or JSON) and
+ * outreach.mjs to generate real drafts/packets. Network stages need
+ * AHREFS_API_KEY; --dry-run exercises everything else offline.
  *
- * Cron:  npm run backlink:run     (see package.json)
- * Human-only steps are never performed here: no sends, submissions, payments, or disavow uploads.
+ * Never sends, submits, pays, or uploads a disavow file - that is send.mjs,
+ * behind a human-approval gate.
+ *
+ *   npm run backlink:run              # full loop (needs env keys)
+ *   npm run backlink:run -- --dry-run # offline (scoring + drafting + persistence via JSON)
  */
-import { readFileSync, writeFileSync, appendFileSync, existsSync } from "node:fs";
+import { readFileSync, appendFileSync, mkdirSync } from "node:fs";
 import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
 import { ahrefs, _today } from "./ahrefs.mjs";
 import { classify } from "./classify.mjs";
+import { store } from "./store.mjs";
+import { buildArtifacts } from "./outreach.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const P = (f) => join(ROOT, f);
+const readJSON = (f) => JSON.parse(readFileSync(P(f), "utf8"));
 const DRY = process.argv.includes("--dry-run");
-const p = (f) => join(ROOT, f);
-const readJSON = (f) => JSON.parse(readFileSync(p(f), "utf8"));
-const writeJSON = (f, v) => writeFileSync(p(f), JSON.stringify(v, null, 2) + "\n");
 const DATE = _today();
+const OURS = "boiseremodeling.co";
 
 const gates = readJSON("config/quality-gates.json");
-const competitors = readJSON("data/competitors.json");
-const seed = readJSON("data/opportunities.seed.json");
-const known = new Set(seed.map((o) => String(o.domain).toLowerCase()));
+const log = [`## Run ${DATE}${DRY ? " (dry-run)" : ""} [store: ${store.mode}]`];
 
-const log = [`## Run ${DATE}${DRY ? " (dry-run)" : ""}`];
+await store.init();
+const opps = await store.readOpportunities();
+const known = new Set(opps.map((o) => String(o.domain).toLowerCase()));
 let added = 0, rejected = 0;
 
 // ---- DISCOVER + CLASSIFY ----------------------------------------------
 if (!DRY && ahrefs.hasKey()) {
+  const competitors = readJSON("data/competitors.json");
   for (const c of competitors.competitors) {
     if (c.analyzed) continue;
     try {
       const { refdomains = [] } = await ahrefs.refDomains(c.domain, { limit: 40 });
       for (const row of refdomains) {
-        const d = String(row.domain || "").toLowerCase();
         const res = classify(row, c.domain);
         if (!res.keep) { rejected++; continue; }
-        if (known.has(d)) continue; // dedupe
-        known.add(d);
-        seed.push(res.opp);
-        added++;
+        const d = String(res.opp.domain).toLowerCase();
+        if (known.has(d)) continue;
+        known.add(d); opps.push(res.opp); added++;
       }
-      c.analyzed = true;
-      c.analyzedOn = DATE;
-    } catch (e) {
-      log.push(`- discover ${c.domain} FAILED: ${e.message}`);
-    }
+      c.analyzed = true; c.analyzedOn = DATE;
+    } catch (e) { log.push(`- discover ${c.domain} FAILED: ${e.message}`); }
   }
-  writeJSON("data/competitors.json", competitors);
-  writeJSON("data/opportunities.seed.json", seed);
-  log.push(`- Discovery: +${added} new opportunities, ${rejected} rejected (spam/noise/footprint).`);
+  log.push(`- Discovery: +${added} new, ${rejected} rejected (spam/noise/footprint).`);
 } else {
   log.push(`- Discovery: skipped (${DRY ? "dry-run" : "no AHREFS_API_KEY"}).`);
 }
+await store.writeOpportunities(opps);
 
 // ---- SCORE ------------------------------------------------------------
-execSync(`node ${JSON.stringify(p("src/score.mjs"))}`, { stdio: "inherit", env: { ...process.env, RUN_DATE: DATE } });
+execSync(`node ${JSON.stringify(P("src/score.mjs"))}`, { stdio: "inherit", env: { ...process.env, RUN_DATE: DATE } });
 const scored = readJSON("data/opportunities.scored.json");
-const top = scored.opportunities.filter((o) => o.status !== "rejected").slice(0, 5);
-log.push(`- Pipeline: ${scored.counts.active} qualified / ${scored.counts.rejected} gated out. Top P1: ` +
-  top.map((o) => `${o.name} (${o.priority})`).join(", ") + ".");
+// persist scores back onto the canonical records
+const scoreById = new Map(scored.opportunities.map((s) => [s.id, s]));
+for (const o of opps) { const s = scoreById.get(o.id); if (s) { o.priority = s.priority; o.tier = s.tier; o.status = s.status; } }
+await store.writeOpportunities(opps);
+const activeSorted = scored.opportunities.filter((o) => o.status !== "rejected").sort((a, b) => b.priority - a.priority);
+log.push(`- Pipeline: ${scored.counts.active} qualified / ${scored.counts.rejected} gated out. Top: ` + activeSorted.slice(0, 5).map((o) => `${o.name.split(" ")[0]} (${o.priority})`).join(", ") + ".");
 
 // ---- MONITOR ----------------------------------------------------------
 if (!DRY && ahrefs.hasKey()) {
   try {
     const audit = readJSON("data/our-profile-audit.json");
-    const [dr, stats] = await Promise.all([
-      ahrefs.domainRating("boiseremodeling.co", DATE),
-      ahrefs.backlinksStats("boiseremodeling.co", DATE),
+    const [dr, stats, refs] = await Promise.all([
+      ahrefs.domainRating(OURS, DATE),
+      ahrefs.backlinksStats(OURS, DATE),
+      ahrefs.refDomains(OURS, { limit: 100 }),
     ]);
-    const nowDR = dr?.domain_rating?.domain_rating ?? "?";
-    const nowRD = stats?.metrics?.live_refdomains ?? "?";
-    const baseRD = audit.baseline.liveRefdomains;
-    log.push(`- Monitor: DR ${audit.baseline.domainRating} -> ${nowDR} (goal 50). Live refdomains ${baseRD} -> ${nowRD}.`);
-  } catch (e) {
-    log.push(`- Monitor FAILED: ${e.message}`);
-  }
+    const nowDR = dr?.domain_rating?.domain_rating ?? null;
+    const m = stats?.metrics ?? {};
+    await store.appendSnapshot({ date: DATE, dr: nowDR, liveBacklinks: m.live, liveRefdomains: m.live_refdomains, allTimeRefdomains: m.all_time_refdomains });
+    const { added: newRefs, lost: lostRefs } = await store.syncRefdomains(refs?.refdomains ?? []);
+    // refresh disavow with any newly-seen spam-blog residue pointing at us
+    const newSpam = (refs?.refdomains ?? []).map((r) => String(r.domain).toLowerCase())
+      .filter((d) => gates.spamBlogPatternHints.some((h) => d.includes(h)));
+    if (newSpam.length) await store.addDisavow(newSpam, "spam-blog residue (auto-flagged)");
+    const prev = await store.lastSnapshot();
+    const trend = prev?.dr != null && nowDR != null ? (nowDR > prev.dr ? "up" : nowDR < prev.dr ? "down" : "flat") : "n/a";
+    log.push(`- Monitor: DR ${audit.baseline.domainRating} baseline -> ${nowDR} (goal 50, trend ${trend}). Live refdomains ${m.live_refdomains}. +${newRefs.length} new, -${lostRefs.length} lost. ${newSpam.length} new spam flagged for disavow.`);
+    if (lostRefs.length) log.push(`  Lost refdomains: ${lostRefs.slice(0, 8).join(", ")}${lostRefs.length > 8 ? "..." : ""}`);
+  } catch (e) { log.push(`- Monitor FAILED: ${e.message}`); }
 } else {
   log.push("- Monitor: skipped (offline).");
 }
 
-// ---- DRAFT (queue only, never send) -----------------------------------
-const queuePath = "outreach/queue.json";
-const queue = existsSync(p(queuePath)) ? readJSON(queuePath) : [];
+// ---- DRAFT (artifacts only; never sends) ------------------------------
+const queue = await store.readQueue();
 const queued = new Set(queue.map((q) => q.domain));
-const cap = gates.velocityPolicy.maxOutreachSendsPerDay;
-const needsMessage = new Set(["outreach", "digital_pr", "application"]);
-let drafts = 0;
-for (const o of scored.opportunities) {
-  if (drafts >= cap) break;
-  if (o.status === "rejected" || o.priority < 52) continue;   // P1/P2 only
-  if (!needsMessage.has(o.feasibility)) continue;             // self-serve => packet, not message
-  if (queued.has(o.domain)) continue;
-  queue.push({
-    domain: o.domain, name: o.name, channel: o.feasibility, category: o.category,
-    priority: o.priority, contact: o.contact || "", status: "awaiting_approval",
-    missingInputs: ["senderName", "senderEmail", "senderPhone"].filter(() => true),
-    draftedOn: DATE, note: "Fill placeholders from outreach/templates.md; human approves + sends.",
-  });
-  queued.add(o.domain);
-  drafts++;
-}
-writeJSON(queuePath, queue);
-log.push(`- Drafts: +${drafts} queued (awaiting_approval, cap ${cap}/run). Nothing sent.`);
+const toDraft = activeSorted.filter((o) => o.priority >= 52 && !queued.has(o.domain)); // P1/P2
+const artifacts = buildArtifacts(toDraft.map((s) => ({ ...s, feasibility: s.feasibility, category: s.category })));
+const merged = [...queue, ...artifacts];
+await store.writeQueue(merged);
+const emails = artifacts.filter((a) => a.type === "email").length;
+const packets = artifacts.filter((a) => a.type === "packet").length;
+const ready = artifacts.filter((a) => (a.missingInputs || []).length === 0).length;
+log.push(`- Drafts: +${artifacts.length} (${emails} emails, ${packets} citation packets); ${ready} send-ready, ${artifacts.length - ready} awaiting inputs. Velocity cap at SEND: ${gates.velocityPolicy.maxOutreachSendsPerDay}/day. Nothing sent.`);
 
 // ---- DIGEST -----------------------------------------------------------
-appendFileSync(p("data/run-log.md"), "\n" + log.join("\n") + "\n");
+mkdirSync(P("data"), { recursive: true });
+appendFileSync(P("data/run-log.md"), "\n" + log.join("\n") + "\n");
 console.log("\n" + log.join("\n") + "\n");

@@ -1,0 +1,38 @@
+{
+  "type": "packet",
+  "channel": "self_serve",
+  "domain": "clutch.co",
+  "submitTo": "clutch.co get-listed",
+  "fields": {
+    "businessName": "Boise Remodeling Co",
+    "category": "Design-Build Remodeling Contractor / General Contractor",
+    "street": "4031 W Wapoot St",
+    "city": "Meridian",
+    "state": "ID",
+    "postalCode": "83646",
+    "phone": "(208) 477-1169",
+    "email": "hello@boiseremodeling.co",
+    "website": "https://boiseremodeling.co",
+    "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
+    "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
+    "longDescription": "[ADD LONG DESCRIPTION]",
+    "photos": []
+  },
+  "checklist": [
+    "Claim/verify listing",
+    "Enter NAP exactly as above",
+    "Add categories + service area",
+    "Upload 3-5 portfolio photos",
+    "Confirm the profile links back to the website"
+  ],
+  "missingInputs": [
+    "sender.name",
+    "descriptions.long",
+    "portfolioAssets"
+  ],
+  "status": "awaiting_approval",
+  "id": "clutch",
+  "name": "Clutch.co - verified B2B profile",
+  "priority": 67.2,
+  "draftedOn": "2026-07-14"
+}

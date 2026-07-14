@@ -1,57 +1,69 @@
-# Backlink Engine — boiseremodeling.co
+# Backlink Engine - boiseremodeling.co
 
 An autonomous backlink **intelligence** system with **human-approved outreach**. It discovers,
-qualifies, scores, prioritizes, and monitors link opportunities on a schedule with no human
-involvement — and drafts every outreach message — while keeping a human on the irreversible
-send/submit/pay step. See `ARCHITECTURE.md` for the full design and the rationale for that boundary.
+qualifies, scores, prioritizes, monitors, and drafts on a schedule with no human involvement - and
+keeps a human on the irreversible send/submit/pay step. See `ARCHITECTURE.md` for the design and the
+rationale for that boundary.
 
 ## Layout
 ```
 backlink-engine/
-├── ARCHITECTURE.md            # the design: pipeline, scoring, autonomy model, DR-50 roadmap
-├── README.md                  # this file — how to run
+├── ARCHITECTURE.md            # design: pipeline, scoring, autonomy model, DR-50 roadmap
+├── REPLIT-CRON.md             # deploy as a weekly Replit Scheduled Deployment
 ├── config/
-│   ├── scoring.json           # value weights, feasibility multipliers, tiers
-│   └── quality-gates.json     # hard anti-spam gates, anchor + velocity policy
+│   ├── scoring.json           # value weights, feasibility multipliers, tiers, canonical NAP
+│   ├── quality-gates.json     # hard anti-spam gates, anchor + velocity policy
+│   └── profile.json           # business inputs that fill outreach (sender, descriptions, photos)
 ├── src/
-│   └── score.mjs              # deterministic gate + score + rank engine (no deps)
-├── data/
-│   ├── competitors.json       # local competitor seed set
-│   ├── opportunities.seed.json# raw opportunities (grows each discovery run)
-│   ├── opportunities.scored.json  # engine output (gated + ranked)
-│   ├── pipeline-report.md     # human-readable ranked pipeline
-│   ├── our-profile-audit.json # our profile health + disavow candidates
-│   └── disavow.txt            # Google disavow file (spam residue)
+│   ├── score.mjs              # deterministic gate + score + rank (no deps)
+│   ├── ahrefs.mjs             # Ahrefs API v3 client (env key, headless)
+│   ├── classify.mjs           # refdomain -> opportunity classifier + white-hat filter
+│   ├── store.mjs              # persistence: Neon Postgres, or JSON files locally
+│   ├── outreach.mjs           # generates real drafts + citation packets from NAP/profile
+│   ├── run.mjs                # orchestrator (discover->score->monitor->draft)
+│   ├── preflight.mjs          # self-test: config, env, live Ahrefs check
+│   └── send.mjs               # guarded send hook (off by default, approval-gated)
+├── data/                      # opportunities, scored output, audit, disavow, history/, run-log
 └── outreach/
-    └── templates.md           # per-channel message templates (drafts only)
+    ├── templates.md           # per-channel copy (human reference)
+    ├── queue.json             # drafted messages awaiting approval
+    └── citations/             # generated self-serve submission packets
 ```
 
-## Run the scorer
+## Commands
 ```bash
-cd backlink-engine
-node src/score.mjs                       # scores data/opportunities.seed.json
-node src/score.mjs path/to/other.json    # score any opportunity list
+npm run backlink:preflight   # validate config + env + live Ahrefs (run before first cron)
+npm run backlink:run         # full loop (needs AHREFS_API_KEY; DATABASE_URL for durability)
+npm run backlink:run -- --dry-run   # offline: scoring + drafting + JSON persistence
+npm run backlink:score       # re-score the current opportunity list
+npm run backlink:send        # dry-run report of what WOULD send (never sends unless enabled)
 ```
-Outputs `data/opportunities.scored.json` + `data/pipeline-report.md` and prints a ranked table.
+
+## Environment
+| Var | Purpose | Without it |
+|-----|---------|-----------|
+| `AHREFS_API_KEY` | live discovery + monitoring | those stages skip |
+| `DATABASE_URL` | Neon Postgres persistence (durable across the ephemeral cron) | falls back to JSON files |
+| `RESEND_API_KEY` | sending approved outreach | sends unavailable (drafts still generate) |
+| `BACKLINK_SEND_ENABLED` | global send kill-switch (`true` to arm) | off by default - nothing sends |
+| `OUTREACH_FROM` | From address for sends | `hello@boiseremodeling.co` |
 
 ## The autonomous loop
-A scheduled Claude task ("Backlink engine — weekly run") performs discovery + monitoring using the
-Ahrefs MCP and WebSearch, appends new opportunities to `opportunities.seed.json`, re-runs the scorer,
-updates the audit/monitor deltas, drafts outreach into `outreach/queue.json`, and posts a digest.
-Cadence: **weekly** discovery/scoring, **monthly** profile audit + DR-trajectory check.
+`npm run backlink:run` -> DISCOVER (competitor refdomains) -> QUALIFY/CLASSIFY (anti-spam gate) ->
+SCORE -> MONITOR (our DR + live refdomains, new/lost detection, disavow refresh) -> DRAFT (emails +
+citation packets into the queue) -> DIGEST (`data/run-log.md`). State persists in Postgres (or JSON).
+Deploy it weekly via `REPLIT-CRON.md`.
 
 ### What stays human (by design)
-1. **Sending** outreach emails / journalist responses.
-2. **Submitting** directory/citation forms.
-3. **Joining paid** programs (NARI, BBB, Chamber, GuildQuality, Scout Guide…).
-4. **Uploading** the disavow file to Google Search Console.
-The engine prepares all four to one-click readiness; a person approves.
+Sending emails, submitting forms, joining paid programs, uploading the disavow file. The engine
+prepares all of them to one-click readiness; a person approves. `send.mjs` only emails an item a
+human set to `status:"approved"` with a valid recipient, and only when `BACKLINK_SEND_ENABLED=true`.
 
-## First actions (from the 2026-07-14 run)
-1. **Review & upload `data/disavow.txt`** — ~31 spam-blog domains currently point at us (DR 0.1).
-2. **Provide inputs the engine can't guess:** business NAP + short/long descriptions, portfolio
-   photo URLs, and **the vendor/manufacturer list** (unlocks the high-value supplier dealer-locator
-   links) and **a sender name/contact** for outreach.
-3. **Approve the P1 batch** in `data/pipeline-report.md` (BBB, Idaho Power trade-ally, Houzz, Angi,
-   NARI Idaho, BCA of SW Idaho, The Scout Guide…).
+## To finish going live
+1. `npm run backlink:preflight` on Replit (secrets set) - fix any FAIL.
+2. Set `DATABASE_URL` so state is durable, and fill `config/profile.json` (sender name, long
+   description, portfolio photo URLs) so drafts become send-ready.
+3. Create the weekly Scheduled Deployment (see `REPLIT-CRON.md`).
+4. Review `data/disavow.txt` -> upload to Search Console. Approve the P1 batch in
+   `data/pipeline-report.md`. Approve/send outreach from the queue when ready.
 ```

@@ -4,16 +4,23 @@ The engine runs headless on Replit via a **Scheduled Deployment** (Replit's cron
 website deployment and independent of this chat app being open.
 
 ## One-time setup
-1. **Add the secret.** Replit > this Repl > **Secrets** > add `AHREFS_API_KEY` = your Ahrefs API v3
-   key (same subscription already connected in-session). The runner reads it from `process.env`.
-2. **Create the Scheduled Deployment.** Replit > **Deploy** > **Scheduled**:
+1. **Add secrets.** Replit > this Repl > **Secrets**:
+   - `AHREFS_API_KEY` = your Ahrefs API v3 key (required for discovery/monitoring).
+   - `DATABASE_URL` = your Neon Postgres URL (**required for durability** - Scheduled Deployments are
+     ephemeral, so without a DB the engine forgets everything between runs). The repo already uses
+     Neon; reuse the same database. The engine self-creates its `backlink_*` tables on first run.
+   - Optional, only when you're ready to send: `RESEND_API_KEY`, `BACKLINK_SEND_ENABLED=true`,
+     `OUTREACH_FROM`. Leave these unset to keep the engine draft-only.
+2. **Preflight once.** In the Repl shell: `npm run backlink:preflight`. It validates config + secrets
+   and makes one free live Ahrefs call. Fix any `FAIL` before scheduling.
+3. **Create the Scheduled Deployment.** Replit > **Deploy** > **Scheduled**:
    - **Build command:** `npm install`
    - **Run command:** `npm run backlink:run`
    - **Schedule:** weekly, e.g. `0 7 * * 1` (Mondays 07:00). Monthly audit is folded into the run.
-   - Give it the same Secrets scope so `AHREFS_API_KEY` is present.
-3. That's it. Each run mines competitors, re-scores, monitors DR/links, and appends drafts to
-   `outreach/queue.json` + a digest to `data/run-log.md`. It **never** sends, submits, pays, or
-   uploads a disavow file.
+   - Give it the same Secrets scope.
+4. That's it. Each run mines competitors, re-scores, monitors DR + new/lost links, refreshes the
+   disavow list, and appends drafts (emails + citation packets) to the queue + a digest to
+   `data/run-log.md`. It **never** sends, submits, pays, or uploads a disavow file.
 
 ## What the run does (mirrors ARCHITECTURE.md)
 `npm run backlink:run` -> DISCOVER (competitor refdomains via Ahrefs) -> CLASSIFY (white-hat gate) ->

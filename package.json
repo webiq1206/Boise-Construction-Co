@@ -23,7 +23,9 @@
     "images:placeholders": "node scripts/generate-placeholder-images.mjs",
     "prebuild": "npm run verify:no-em-dash && npm run links:generate && npm run audit:links && npm run resources:generate && npm run verify:content && npm run verify:images",
     "backlink:score": "node backlink-engine/src/score.mjs",
-    "backlink:run": "node backlink-engine/src/run.mjs"
+    "backlink:run": "node backlink-engine/src/run.mjs",
+    "backlink:preflight": "node backlink-engine/src/preflight.mjs",
+    "backlink:send": "node backlink-engine/src/send.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
