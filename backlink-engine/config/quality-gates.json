@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "description": "Hard pass/fail gates enforced BEFORE scoring. Any REJECT reason removes an opportunity from the acquisition pipeline. This is the Google-Webmaster-Guidelines compliance layer: it exists to keep the engine white-hat and to keep us OFF risky sources, regardless of how high a domain's DR looks.",
+  "rejectIf": {
+    "spamFlagPresent": {
+      "reason": "Any of these flags = never pursue",
+      "flags": [
+        "pbn",
+        "link_network",
+        "web2_spam_blog",
+        "auto_generated",
+        "scraper_directory",
+        "paid_link_marketplace",
+        "link_exchange_scheme",
+        "spun_content",
+        "guestpost_farm",
+        "comment_spam",
+        "adult_gambling_pharma",
+        "deindexed"
+      ]
+    },
+    "authorityFloorFail": {
+      "reason": "Zero-value profile links: no authority, no traffic, no editorial context",
+      "condition": "dr < 10 AND traffic == 0 AND linkType == 'profile'"
+    },
+    "worthlessFootprint": {
+      "reason": "Classic web2.0 churn pattern: mid DR, zero real traffic, generic blog TLD",
+      "condition": "traffic == 0 AND dr < 65 AND domainMatchesSpamBlogPattern"
+    }
+  },
+  "warnIf": {
+    "paidRequired": "cost != 'free' -> requires human budget approval before pursuit",
+    "nofollowOnly": "dofollow == false -> still valuable for citations/trust/traffic, but flag so anchor mix stays natural",
+    "lowIndexation": "indexed == false -> hold until the linking page is confirmed indexed by Google"
+  },
+  "spamBlogPatternHints": [
+    "blogspot", "bloguetechno", "onesmablog", "ampblogs", "tinyblogging", "full-design",
+    "ampedpages", "blogolize", "blogsuperapp", "arwebo", "blogripley", "free-blogz",
+    "jasperwiki", "mybuzzblog", "loginblogin", "blognody", "madmouseblog", "blog5star",
+    "theideasblog", "dailyblogzz", "blogtov", "blog2news", "blogvivi", "glifeblog",
+    "blog4youth", "pointblog", "pages10", "atualblog", "blogproducer", "exlinko", "seoflx"
+  ],
+  "anchorTextPolicy": {
+    "note": "Keep anchor distribution natural to avoid over-optimization penalties",
+    "targetMix": {
+      "branded": 0.55,
+      "url_or_naked": 0.20,
+      "generic": 0.15,
+      "partial_or_exact_match": 0.10
+    },
+    "hardCap": { "exact_match_keyword": 0.10 }
+  },
+  "velocityPolicy": {
+    "note": "Sustainable, natural link velocity. Do not spike.",
+    "maxNewLiveLinksPerWeek": 8,
+    "maxOutreachSendsPerDay": 12,
+    "maxDirectorySubmissionsPerWeek": 6
+  }
+}

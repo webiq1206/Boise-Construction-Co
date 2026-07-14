@@ -1,0 +1,31 @@
+{
+  "capturedOn": "2026-07-14",
+  "source": "Ahrefs Site Explorer (live)",
+  "target": "boiseremodeling.co",
+  "baseline": {
+    "domainRating": 0.1,
+    "ahrefsRank": 84391411,
+    "liveBacklinks": 51,
+    "liveRefdomains": 33,
+    "allTimeBacklinks": 718,
+    "allTimeRefdomains": 412,
+    "interpretation": "DR is ~0 despite 33 live refdomains because almost the entire profile is worthless web2.0 spam-blog residue that Google discounts. 412 all-time refdomains vs 33 live = heavy churn, a classic signature of a past low-quality/PBN link campaign (mostly dated 2023)."
+  },
+  "keepAndProtect": [
+    { "domain": "expertise.com", "dr": 88, "dofollow": 2, "why": "Legitimate curated 'best remodelers in Boise' editorial listing. Monitor; ensure we stay listed." },
+    { "domain": "promatcher.com", "dr": 62, "dofollow": 10, "why": "Real contractor directory. Low-ish quality but not toxic. Keep." }
+  ],
+  "disavowCandidates": {
+    "note": "Web2.0 spam-blog network domains currently linking to us. Recommend consolidating into a Google disavow file. These match config/quality-gates spamBlogPatternHints and carry DR with ZERO real traffic. Human should review before uploading to Google Search Console.",
+    "domains": [
+      "pointblog.net","bloguetechno.com","onesmablog.com","ampblogs.com","tinyblogging.com",
+      "full-design.com","ampedpages.com","blogolize.com","blogsuperapp.com","arwebo.com",
+      "blogripley.com","free-blogz.com","jasperwiki.com","mybuzzblog.com","loginblogin.com",
+      "blognody.com","madmouseblog.com","blog5star.com","theideasblog.com","dailyblogzz.com",
+      "blogtov.com","blog2news.com","blogvivi.com","glifeblog.com","blog4youth.com","pages10.com",
+      "atualblog.com","blogproducer.com","aboutyoublog.com","exlinko.net","seoflx.net",
+      "best-seo-domains.com","rank-your.site","factmags.com","thezenweb.com","mmwatches.co.uk"
+    ]
+  },
+  "recommendation": "Step 0 of the program is CLEANUP, not acquisition. A DR-0 profile built on spam blogs both (a) provides zero authority and (b) is a latent penalty risk. Disavow the network, then build a clean, editorial + local + association-driven profile from scratch."
+}

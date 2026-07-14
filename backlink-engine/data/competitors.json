@@ -1,0 +1,12 @@
+{
+  "capturedOn": "2026-07-14",
+  "note": "Seed set for local competitor backlink mining. Ahrefs organic-competitors returned EMPTY for us (domain too new for keyword overlap), so competitors are seeded from the local market and refined each run. Domains marked analyzed:true have had their referring domains mined.",
+  "competitors": [
+    { "name": "Renaissance Remodeling", "domain": "remodelboise.com", "analyzed": true, "notes": "25-yr design-build, strongest local profile. Mined 2026-07-14." },
+    { "name": "Boyd Remodeling & Construction", "domain": "boydrc.com", "analyzed": true, "notes": "NARI member, This Old House link. Mined 2026-07-14." },
+    { "name": "Ethos Design+Build", "domain": "ethosdesignremodel.com", "analyzed": true, "analyzedOn": "2026-07-14", "notes": "NARI CotY winner; passive-house angle (phius.org). Mined 2026-07-14." },
+    { "name": "Keilty Remodeling", "domain": "keiltyremodeling.com", "analyzed": true, "analyzedOn": "2026-07-14", "notes": "Since 1991; strong citation + chamber footprint. Mined 2026-07-14." },
+    { "name": "Woodwright Custom Builders", "domain": "woodwrightcustombuilders.com", "analyzed": true, "analyzedOn": "2026-07-14", "notes": "HomeAdvisor + local Boise directories. Mined 2026-07-14." },
+    { "name": "Remedy Residential", "domain": "remedyresidential.com", "analyzed": true, "analyzedOn": "2026-07-14", "notes": "WARNING: profile shows a live paid-link/PBN scheme (*.store/*.shop seoexpress domains) - gate rejects these. Mined 2026-07-14." }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "version": "1.0.0",
+  "description": "Deterministic scoring + quality-gate model for the autonomous backlink engine. All weights sum to 1.0 for the value blend; gates are hard pass/fail applied BEFORE scoring.",
+  "site": {
+    "domain": "boiseremodeling.co",
+    "brand": "Boise Remodeling Co",
+    "industry": "residential design-build remodeling",
+    "geo": ["Boise", "Meridian", "Eagle", "Nampa", "Star", "Kuna", "Garden City", "Treasure Valley", "Idaho"],
+    "topics": ["home remodeling", "kitchen remodel", "bathroom remodel", "home addition", "ADU", "whole-home renovation", "design-build", "general contractor", "home improvement"]
+  },
+  "valueWeights": {
+    "relevance": 0.30,
+    "authority": 0.26,
+    "linkType": 0.16,
+    "dofollow": 0.10,
+    "traffic": 0.12,
+    "local": 0.06
+  },
+  "scales": {
+    "relevance": { "high": 100, "medium": 60, "low": 20, "none": 0 },
+    "linkType": { "editorial": 100, "membership": 85, "review": 62, "citation": 48, "directory": 42, "profile": 32 },
+    "dofollow": { "true": 100, "unknown": 62, "false": 34 },
+    "local": { "true": 100, "false": 0 },
+    "authority": { "note": "raw Domain Rating 0-100 used directly" },
+    "traffic": { "note": "log10(traffic+1)/6 * 100, clamped 0-100 (1M+ monthly = 100)" }
+  },
+  "feasibilityMultiplier": {
+    "self_serve": 1.00,
+    "review_profile": 0.97,
+    "application": 0.92,
+    "outreach": 0.82,
+    "digital_pr": 0.72
+  },
+  "competitorValidationBonus": { "perCompetitor": 5, "max": 12, "note": "links >=1 competitor already has are proven relevant + attainable" },
+  "priorityFormula": "priority = round( (valueScore * feasibilityMultiplier) + competitorBonus , 1 )  // capped at 100",
+  "tiers": [
+    { "name": "P1 - Pursue now", "min": 70 },
+    { "name": "P2 - Queue", "min": 52 },
+    { "name": "P3 - Backlog", "min": 35 },
+    { "name": "P4 - Watch/skip", "min": 0 }
+  ]
+}

@@ -53,6 +53,7 @@ const EXCLUDED_DIRS = new Set([
   'coverage',
   'playwright-report',
   'test-results',
+  'backlink-engine',
 ]);
 
 // These scripts intentionally contain the patterns they search for, so skip them.

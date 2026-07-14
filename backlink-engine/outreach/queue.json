@@ -1,0 +1,194 @@
+[
+  {
+    "domain": "bbb.org",
+    "name": "Better Business Bureau – accredited profile",
+    "channel": "application",
+    "category": "review_platform",
+    "priority": 86.6,
+    "contact": "bbb.org get-accredited",
+    "status": "awaiting_approval",
+    "missingInputs": [
+      "senderName",
+      "senderEmail",
+      "senderPhone"
+    ],
+    "draftedOn": "2026-07-14",
+    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
+  },
+  {
+    "domain": "idahopower.com",
+    "name": "Idaho Power – Trade Ally / Energy-Efficiency Contractor Network",
+    "channel": "application",
+    "category": "utility_program",
+    "priority": 84.8,
+    "contact": "Idaho Power Energy Efficiency program (web form)",
+    "status": "awaiting_approval",
+    "missingInputs": [
+      "senderName",
+      "senderEmail",
+      "senderPhone"
+    ],
+    "draftedOn": "2026-07-14",
+    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
+  },
+  {
+    "domain": "various-manufacturers",
+    "name": "Supplier / manufacturer dealer-locator links (NEEDS VENDOR LIST)",
+    "channel": "application",
+    "category": "supplier",
+    "priority": 84.4,
+    "contact": "each brand's dealer/pro program",
+    "status": "awaiting_approval",
+    "missingInputs": [
+      "senderName",
+      "senderEmail",
+      "senderPhone"
+    ],
+    "draftedOn": "2026-07-14",
+    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
+  },
+  {
+    "domain": "nari.org",
+    "name": "NARI National – Find a Remodeler",
+    "channel": "application",
+    "category": "association",
+    "priority": 79.2,
+    "contact": "nari.org membership",
+    "status": "awaiting_approval",
+    "missingInputs": [
+      "senderName",
+      "senderEmail",
+      "senderPhone"
+    ],
+    "draftedOn": "2026-07-14",
+    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
+  },
+  {
+    "domain": "thescoutguide.com",
+    "name": "The Scout Guide – Boise (curated local business guide)",
+    "channel": "application",
+    "category": "directory",
+    "priority": 76.7,
+    "contact": "The Scout Guide Boise editor",
+    "status": "awaiting_approval",
+    "missingInputs": [
+      "senderName",
+      "senderEmail",
+      "senderPhone"
+    ],
+    "draftedOn": "2026-07-14",
+    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
+  },
+  {
+    "domain": "nariofidaho.org",
+    "name": "NARI of Idaho – member directory",
+    "channel": "application",
+    "category": "association",
+    "priority": 73.4,
+    "contact": "nariofidaho.org membership",
+    "status": "awaiting_approval",
+    "missingInputs": [
+      "senderName",
+      "senderEmail",
+      "senderPhone"
+    ],
+    "draftedOn": "2026-07-14",
+    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
+  },
+  {
+    "domain": "bcaswi.org",
+    "name": "Building Contractors Association of SW Idaho – member directory",
+    "channel": "application",
+    "category": "association",
+    "priority": 71.3,
+    "contact": "bcaswi.org/contact-us",
+    "status": "awaiting_approval",
+    "missingInputs": [
+      "senderName",
+      "senderEmail",
+      "senderPhone"
+    ],
+    "draftedOn": "2026-07-14",
+    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
+  },
+  {
+    "domain": "discovery",
+    "name": "Unlinked brand-mention reclamation (ongoing)",
+    "channel": "outreach",
+    "category": "unlinked_mention",
+    "priority": 70.7,
+    "contact": "per-page site owner",
+    "status": "awaiting_approval",
+    "missingInputs": [
+      "senderName",
+      "senderEmail",
+      "senderPhone"
+    ],
+    "draftedOn": "2026-07-14",
+    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
+  },
+  {
+    "domain": "guildquality.com",
+    "name": "GuildQuality – member reviews profile",
+    "channel": "application",
+    "category": "review_platform",
+    "priority": 70.5,
+    "contact": "guildquality.com",
+    "status": "awaiting_approval",
+    "missingInputs": [
+      "senderName",
+      "senderEmail",
+      "senderPhone"
+    ],
+    "draftedOn": "2026-07-14",
+    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
+  },
+  {
+    "domain": "thisoldhouse.com",
+    "name": "This Old House – editorial mention / expert contribution",
+    "channel": "digital_pr",
+    "category": "digital_pr",
+    "priority": 69.2,
+    "contact": "editorial / journalist query platforms",
+    "status": "awaiting_approval",
+    "missingInputs": [
+      "senderName",
+      "senderEmail",
+      "senderPhone"
+    ],
+    "draftedOn": "2026-07-14",
+    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
+  },
+  {
+    "domain": "statesman.com",
+    "name": "Idaho Statesman – local news feature / expert source",
+    "channel": "digital_pr",
+    "category": "digital_pr",
+    "priority": 68.1,
+    "contact": "Statesman newsroom / real estate reporter",
+    "status": "awaiting_approval",
+    "missingInputs": [
+      "senderName",
+      "senderEmail",
+      "senderPhone"
+    ],
+    "draftedOn": "2026-07-14",
+    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
+  },
+  {
+    "domain": "boisechamber.org",
+    "name": "Boise Metro Chamber of Commerce – member directory",
+    "channel": "application",
+    "category": "association",
+    "priority": 64.1,
+    "contact": "boisechamber.org membership",
+    "status": "awaiting_approval",
+    "missingInputs": [
+      "senderName",
+      "senderEmail",
+      "senderPhone"
+    ],
+    "draftedOn": "2026-07-14",
+    "note": "Fill placeholders from outreach/templates.md; human approves + sends."
+  }
+]
