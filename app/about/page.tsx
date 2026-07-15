@@ -237,15 +237,15 @@ export default function AboutPage() {
                   </p>
                 </div>
                 <div className="mt-8 pt-8 border-t border-border">
-                  <div className="brc-label text-muted-foreground mb-3">Built differently</div>
+                  <div className="brc-label text-muted-foreground mb-3">Where your money goes</div>
                   <h3 className="font-sans font-normal text-base text-foreground mb-2">
-                    Low overhead, by design
+                    Don't pay for a contractor's overhead
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    We skip the big offices, showrooms, and truck fleets that quietly get built into
-                    a remodel. Instead we invest where it shows up in your home: skilled craftsmen,
-                    better materials, and workmanship we stand behind. Every dollar should go toward
-                    your project, not our overhead, so you get more home for what you spend.
+                    Big offices, showrooms, and fleets of trucks do not disappear. They get built
+                    into your price. We run lean on purpose and put more of every dollar into the
+                    materials, labor, and finish of your project, so more of what you spend ends up
+                    in your home.
                   </p>
                 </div>
               </Reveal>

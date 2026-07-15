@@ -33,9 +33,14 @@ export interface Differentiator {
 }
 
 /** Top differentiators for homepage; full list on About. */
-export const HOMEPAGE_DIFFERENTIATOR_INDICES = [0, 1, 2, 3, 6] as const;
+export const HOMEPAGE_DIFFERENTIATOR_INDICES = [0, 1, 2, 3, 4] as const;
 
 export const DIFFERENTIATORS: Differentiator[] = [
+  {
+    title: "Your budget builds your home, not our overhead",
+    contrast: "Instead of paying for big offices, showrooms, and fleets of trucks that quietly get built into your price,",
+    body: "you get a company that runs lean on purpose. We put more of every dollar into the materials, labor, and finish of your project, so more of what you spend ends up in your home.",
+  },
   {
     title: "One team, one point of accountability",
     contrast: "Instead of coordinating a designer, a contractor, and multiple subs who may point fingers when something goes wrong,",
@@ -300,33 +305,19 @@ export const STATEMENT_BAND = {
 
 /**
  * "Where your money goes" positioning: as a lean, newer company we keep
- * overhead low and reinvest it in the work. Used by the ValueOverheadSection on
- * the homepage and echoed on the About page. Tagline is reusable across CTAs.
+ * overhead low and reinvest it in the work. Flagship homepage band placed just
+ * before the estimator so it frames the pricing conversation. Editorial voice,
+ * confident (not a "what you're not paying for" list).
  */
 export const VALUE_MODEL = {
   eyebrow: "Where your money goes",
-  statement: "Don't pay for your contractor's",
-  accentWord: "overhead",
-  lead:
-    "Big offices. Fancy showrooms. Fleets of trucks. Layers of management. Those costs do not disappear, they get built into your project. So we built our company differently.",
-  avoidLabel: "What you are not paying for",
-  avoid: [
-    "Expensive office space",
-    "Fancy showrooms",
-    "Fleets of branded trucks",
-    "Layers of management",
-  ],
-  investLabel: "What your investment goes toward",
-  invest: [
-    "Skilled, vetted craftsmen",
-    "Better materials",
-    "Workmanship we stand behind",
-  ],
-  closer:
-    "Every dollar you invest should go toward your home, not toward paying our bills.",
+  headlineA: "Don't pay for our overhead.",
+  headlineB: "Pay for your",
+  accentWord: "home",
+  costs: "Big offices. Fancy showrooms. Fleets of trucks. Layers of management.",
+  costsBody: "Those costs don't disappear, they get built into your project.",
+  reframe:
+    "So we built our company differently. Every dollar you invest should go toward your home, not toward paying our bills.",
   taglineLead: "Get more home for",
   taglineAccent: "what you spend",
 } as const;
-
-/** Short, reusable value tagline for CTAs and supporting copy. */
-export const VALUE_TAGLINE = "Get more home for what you spend.";

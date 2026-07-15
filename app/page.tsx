@@ -61,7 +61,6 @@ export default function HomePage() {
       <HomePageSchema />
       <HeroSection />
       <ServicesGrid />
-      <ValueOverheadSection />
       <ProcessSection />
       <FeaturedProjectSection />
       <ProjectGallerySection
@@ -69,6 +68,7 @@ export default function HomePage() {
         showViewAll={true}
         excludeServiceTypes={["whole-home-remodel"]}
       />
+      <ValueOverheadSection />
       <EstimateCalculator />
       <BrandStatementBand />
       <WhyChooseUsSection limit={5} />

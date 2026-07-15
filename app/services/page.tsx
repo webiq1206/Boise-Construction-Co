@@ -183,8 +183,7 @@ export default function ServicesIndexPage() {
               Ready to plan your <em className="brc-accent">remodel</em>?
             </h2>
             <p className="text-inverse-muted mb-8 max-w-md mx-auto">
-              Low overhead, reinvested into your project, so you get more home for what you spend.
-              Book a free in-home visit or get an instant planning range.
+              Book a free in-home visit or get an instant planning range for your project.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
