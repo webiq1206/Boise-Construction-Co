@@ -297,3 +297,36 @@ export const STATEMENT_BAND = {
   support:
     "One accountable team, a written plan before we build, and proactive updates every week, from your first in-home visit to the final walkthrough.",
 } as const;
+
+/**
+ * "Where your money goes" positioning: as a lean, newer company we keep
+ * overhead low and reinvest it in the work. Used by the ValueOverheadSection on
+ * the homepage and echoed on the About page. Tagline is reusable across CTAs.
+ */
+export const VALUE_MODEL = {
+  eyebrow: "Where your money goes",
+  statement: "Don't pay for your contractor's",
+  accentWord: "overhead",
+  lead:
+    "Big offices. Fancy showrooms. Fleets of trucks. Layers of management. Those costs do not disappear, they get built into your project. So we built our company differently.",
+  avoidLabel: "What you are not paying for",
+  avoid: [
+    "Expensive office space",
+    "Fancy showrooms",
+    "Fleets of branded trucks",
+    "Layers of management",
+  ],
+  investLabel: "What your investment goes toward",
+  invest: [
+    "Skilled, vetted craftsmen",
+    "Better materials",
+    "Workmanship we stand behind",
+  ],
+  closer:
+    "Every dollar you invest should go toward your home, not toward paying our bills.",
+  taglineLead: "Get more home for",
+  taglineAccent: "what you spend",
+} as const;
+
+/** Short, reusable value tagline for CTAs and supporting copy. */
+export const VALUE_TAGLINE = "Get more home for what you spend.";

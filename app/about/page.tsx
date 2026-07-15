@@ -236,6 +236,18 @@ export default function AboutPage() {
                     .
                   </p>
                 </div>
+                <div className="mt-8 pt-8 border-t border-border">
+                  <div className="brc-label text-muted-foreground mb-3">Built differently</div>
+                  <h3 className="font-sans font-normal text-base text-foreground mb-2">
+                    Low overhead, by design
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    We skip the big offices, showrooms, and truck fleets that quietly get built into
+                    a remodel. Instead we invest where it shows up in your home: skilled craftsmen,
+                    better materials, and workmanship we stand behind. Every dollar should go toward
+                    your project, not our overhead, so you get more home for what you spend.
+                  </p>
+                </div>
               </Reveal>
             </div>
           </div>

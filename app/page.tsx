@@ -5,6 +5,7 @@ import { FAQSection } from "@/components/FAQSection";
 import { ConsultationForm } from "@/components/ConsultationForm";
 import { Reveal } from "@/components/Reveal";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { ValueOverheadSection } from "@/components/sections/ValueOverheadSection";
 import { WhyChooseUsSection } from "@/components/sections/WhyChooseUsSection";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { ProcessSection } from "@/components/sections/ProcessSection";
@@ -60,6 +61,7 @@ export default function HomePage() {
       <HomePageSchema />
       <HeroSection />
       <ServicesGrid />
+      <ValueOverheadSection />
       <ProcessSection />
       <FeaturedProjectSection />
       <ProjectGallerySection
