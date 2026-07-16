@@ -12,8 +12,9 @@ export const SERVICE_BACKGROUNDS: ServiceBackgroundConfig = {
   "whole-home-remodel": "/images/services/whole-home-remodel.webp",
   "room-addition": "/images/services/room-addition.webp",
   "adu": "/images/services/adu.webp",
-  "basement-finish": GALLERY_IMAGES.basement.after,
+  "basement-remodel": GALLERY_IMAGES.basement.after,
   "outdoor-living": GALLERY_IMAGES.outdoor.after,
+  "aging-in-place": GALLERY_IMAGES.bathroom.after,
 };
 
 export const DEFAULT_SERVICE_BACKGROUND = DEFAULT_BACKGROUND;
@@ -63,7 +64,7 @@ const SERVICE_IMAGE_SETS: Record<string, LandingImageSet> = {
     breather: GALLERY_IMAGES.addition.after,
     process: GALLERY_IMAGES.basement.after,
   },
-  "basement-finish": {
+  "basement-remodel": {
     hero: GALLERY_IMAGES.basement.after,
     breather: GALLERY_IMAGES.basement.before,
     process: GALLERY_IMAGES.outdoor.after,
@@ -71,6 +72,11 @@ const SERVICE_IMAGE_SETS: Record<string, LandingImageSet> = {
   "outdoor-living": {
     hero: GALLERY_IMAGES.outdoor.after,
     breather: GALLERY_IMAGES.outdoor.before,
+    process: GALLERY_IMAGES.wholeHome.after,
+  },
+  "aging-in-place": {
+    hero: GALLERY_IMAGES.bathroom.after,
+    breather: GALLERY_IMAGES.bathroom.before,
     process: GALLERY_IMAGES.wholeHome.after,
   },
 };

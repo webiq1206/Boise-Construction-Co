@@ -415,6 +415,212 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       ],
     },
   },
+  'basement-remodel': {
+    slug: 'basement-remodel',
+    name: 'Basement Remodeling',
+    headline: 'Basement Remodeling & Finishing in the Treasure Valley',
+    primaryKeyword: 'basement remodel boise',
+    overview:
+      'A finished basement is the most cost-effective way to add livable square footage in the Treasure Valley, turning an unused lower level into a family room, guest suite, home office, gym, or income-generating apartment. Boise Remodeling Co handles the full basement remodel under one design-build team: egress, framing, insulation, moisture control, mechanicals, and finishes, all permitted and inspected.',
+    benefits: [
+      'More livable square footage without changing your home\'s footprint or roofline',
+      'Egress windows, insulation, and moisture control done to code for a dry, healthy space',
+      'One accountable team for framing, mechanicals, and finishes, with no separate subs to coordinate',
+      'Flexible layouts: family room, guest suite, home theater, office, or a basement apartment',
+    ],
+    inclusions: [
+      'Design and layout planning for your lower level',
+      'Egress windows and code-compliant emergency exits where required',
+      'Framing, insulation, and vapor and moisture management',
+      'Electrical, lighting, HVAC extension, and optional wet bar or kitchenette',
+      'Flooring, drywall, trim, and finish selections guidance',
+    ],
+    timeline: 'Most basement remodels run 6 to 12 weeks after permits, depending on square footage, egress work, and whether a bathroom or kitchenette is included.',
+    processSteps: [
+      { title: 'Assessment and moisture check', description: 'We evaluate ceiling height, moisture, existing mechanicals, and egress so the plan starts on a dry, code-ready foundation.' },
+      { title: 'Design and layout', description: 'We design the lower level around how you will use it and confirm a written scope and allowances before construction.' },
+      { title: 'Permitting and construction', description: 'We file permits and manage framing, mechanicals, and finishes with weekly written updates.' },
+      { title: 'Inspections and walkthrough', description: 'Final inspections are coordinated and we walk every detail with you before handoff.' },
+    ],
+    faqs: [
+      {
+        question: 'How much does it cost to finish a basement in Boise?',
+        answer:
+          'Finishing a basement in the Treasure Valley commonly plans $40,000 to $100,000 or more. A simple open family room sits at the lower end; adding a bathroom, kitchenette, egress windows, or a bedroom suite moves it higher. Use our estimator for a planning range, then book a free in-home visit for a written scope.',
+      },
+      {
+        question: 'Do I need a permit to finish a basement in Idaho?',
+        answer:
+          'Yes. Finishing a basement requires building, electrical, plumbing, and mechanical permits in Ada and Canyon County. We handle permitting and inspections in-house as part of our design-build scope.',
+      },
+      {
+        question: 'Does my basement bedroom need an egress window?',
+        answer:
+          'Yes. Idaho code requires an egress window or door in any basement bedroom so occupants can exit and firefighters can enter. We include egress cutting, wells, and code-compliant sizing when a bedroom is part of the plan.',
+      },
+      {
+        question: 'How do you handle moisture and radon in Treasure Valley basements?',
+        answer:
+          'We assess moisture before framing and address it with proper drainage, vapor barriers, and sealed assemblies. Radon is common in parts of the Treasure Valley; we can plan for testing and mitigation so the finished space stays healthy.',
+      },
+      {
+        question: 'Can I add a bathroom or kitchenette in my basement?',
+        answer:
+          'In most cases yes. Adding a basement bathroom or kitchenette depends on access to plumbing and, sometimes, a sewage ejector pump. We confirm the plumbing strategy during design so it is priced accurately.',
+      },
+      {
+        question: 'Can a basement be turned into a rental or ADU?',
+        answer:
+          'Sometimes. A basement apartment can qualify as an accessory dwelling unit if it meets egress, ceiling height, separate-entrance, and zoning requirements for your city. We review feasibility during design and can coordinate with our ADU service.',
+      },
+      {
+        question: 'How long does finishing a basement take?',
+        answer:
+          'Plan 6 to 12 weeks after permits. Open living space finishes fastest; egress cutting, a bathroom, or a kitchenette add time for rough-ins and inspections.',
+      },
+    ],
+    costGuidance: {
+      heading: 'Basement finishing cost in the Treasure Valley',
+      paragraphs: [
+        'As of 2026, finishing a basement in the Boise area commonly plans $40,000 to $100,000 or more. Open family rooms sit at the lower end; egress windows, a full bathroom, a kitchenette, or a bedroom suite reach the upper end.',
+        'These are planning ranges, not bids. Egress work, plumbing access, and moisture or radon mitigation drive basement budgets, which we confirm in a written scope after your free in-home visit.',
+      ],
+    },
+  },
+  'outdoor-living': {
+    slug: 'outdoor-living',
+    name: 'Outdoor Living & Decks',
+    headline: 'Decks, Covered Patios & Outdoor Living in the Treasure Valley',
+    primaryKeyword: 'deck builder boise',
+    overview:
+      'Outdoor living space is one of the highest-return ways to expand how you use your home in Idaho\'s climate. Boise Remodeling Co designs and builds decks, covered patios, pergolas, and outdoor kitchens as a single design-build project, coordinated with your home\'s architecture and permitted for Ada and Canyon County.',
+    benefits: [
+      'Decks, covered patios, pergolas, and outdoor kitchens from one accountable team',
+      'Designed to match your home\'s materials, rooflines, and sightlines',
+      'Structural, footing, and permit requirements handled in-house',
+      'Durable materials chosen for Treasure Valley sun, snow, and temperature swings',
+    ],
+    inclusions: [
+      'Design and layout for decks, patios, or a full outdoor room',
+      'Footings, framing, and structural engineering where required',
+      'Composite, cedar, or hardwood decking and railing options',
+      'Covered structures, pergolas, and integrated lighting or electrical',
+      'Optional outdoor kitchen, fireplace, or built-in seating',
+    ],
+    timeline: 'Most outdoor living projects run 3 to 8 weeks after permits, depending on size, covered structures, and whether utilities are extended for an outdoor kitchen.',
+    processSteps: [
+      { title: 'Site and design consultation', description: 'We review your yard, grade, and how you want to use the space, then design a deck or patio that fits your home.' },
+      { title: 'Engineering and permitting', description: 'We handle footings, structural details, and permits so the build is safe and code-compliant.' },
+      { title: 'Construction', description: 'Our team builds framing, decking, covers, and finishes with weekly written updates.' },
+      { title: 'Final walkthrough', description: 'We confirm every detail and finish with you before handoff.' },
+    ],
+    faqs: [
+      {
+        question: 'How much does a deck cost in Boise?',
+        answer:
+          'A new deck in the Treasure Valley commonly plans $25,000 to $60,000 or more, depending on size, height, railing, and material. Composite decking costs more upfront than wood but lasts longer with less maintenance. Use our estimator for a planning range.',
+      },
+      {
+        question: 'Do I need a permit to build a deck or covered patio in Ada County?',
+        answer:
+          'Usually yes. Decks above a certain height, attached decks, and covered structures require permits in Ada and Canyon County. We handle permitting and inspections as part of our scope.',
+      },
+      {
+        question: 'Composite or wood decking, which is better for Idaho?',
+        answer:
+          'Both work well here. Composite resists Treasure Valley sun, snow, and moisture with almost no maintenance and lasts decades, at a higher upfront cost. Cedar and hardwood cost less to install but need regular sealing. We help you weigh lifetime cost during design.',
+      },
+      {
+        question: 'Can you build a covered patio or pergola?',
+        answer:
+          'Yes. We design and build covered patios, pergolas, and roofed outdoor rooms that tie into your home\'s roofline and provide shade and shelter through Idaho\'s seasons.',
+      },
+      {
+        question: 'Do you build outdoor kitchens?',
+        answer:
+          'Yes. We build outdoor kitchens with built-in grills, counters, and, where you want them, gas, water, and electrical runs. We plan the utilities during design so the space is fully functional.',
+      },
+      {
+        question: 'How long does a deck or patio take to build?',
+        answer:
+          'Plan 3 to 8 weeks after permits. A straightforward deck builds fastest; covered structures, outdoor kitchens, and extended utilities add time for engineering and rough-ins.',
+      },
+    ],
+    costGuidance: {
+      heading: 'Deck and outdoor living cost in the Treasure Valley',
+      paragraphs: [
+        'As of 2026, decks and outdoor living projects in the Boise area commonly plan $25,000 to $75,000 or more. Ground-level wood decks sit at the lower end; large composite decks, covered patios, and outdoor kitchens reach the upper end.',
+        'These are planning ranges, not bids. Material choice, deck height, covered structures, and utility runs drive outdoor budgets, which we confirm in a written scope after your free in-home visit.',
+      ],
+    },
+  },
+  'aging-in-place': {
+    slug: 'aging-in-place',
+    name: 'Aging-in-Place Remodeling',
+    headline: 'Aging-in-Place & Accessible Remodeling in the Treasure Valley',
+    primaryKeyword: 'aging in place remodel boise',
+    overview:
+      'Aging-in-place remodeling makes it possible to stay safely and comfortably in the home you love as your needs change. Boise Remodeling Co designs accessible, universal-design remodels, from curbless showers and grab bars to widened doorways, zero-step entries, and main-floor living, that look like the rest of your home rather than a clinic.',
+    benefits: [
+      'Universal design that is safe and accessible without looking institutional',
+      'Curbless showers, grab bars, comfort-height fixtures, and slip-resistant surfaces',
+      'Widened doorways, zero-step entries, and single-floor living adaptations',
+      'One team handling design, structural changes, and finishes under one contract',
+    ],
+    inclusions: [
+      'Accessibility assessment of your home and daily routines',
+      'Curbless or roll-in showers, grab-bar blocking, and comfort-height vanities and toilets',
+      'Widened doorways and hallways, lever hardware, and improved lighting',
+      'Zero-step entries, thresholds, or ramps where needed',
+      'Main-floor bedroom or bathroom conversions for single-level living',
+    ],
+    timeline: 'Aging-in-place projects range from a few days for targeted safety upgrades to several weeks for a full accessible bathroom or a main-floor suite conversion.',
+    processSteps: [
+      { title: 'Accessibility assessment', description: 'We review how you move through your home today and where safety, access, and comfort can improve.' },
+      { title: 'Universal-design plan', description: 'We design changes that meet your needs now and adapt for the future, with a written scope before construction.' },
+      { title: 'Construction', description: 'Our team makes structural and finish changes with minimal disruption and weekly written updates.' },
+      { title: 'Walkthrough and orientation', description: 'We confirm every detail works for you and walk through how to use new features safely.' },
+    ],
+    faqs: [
+      {
+        question: 'How much does an aging-in-place remodel cost in Boise?',
+        answer:
+          'It depends on scope. Targeted safety upgrades like grab bars and lever handles can be a few hundred to a few thousand dollars. A full accessible or curbless bathroom commonly plans $20,000 to $45,000, and main-floor living conversions run higher. Use our estimator for a planning range.',
+      },
+      {
+        question: 'What is universal design?',
+        answer:
+          'Universal design makes a home usable by people of all ages and abilities without looking specialized. Curbless showers, comfort-height fixtures, lever hardware, wider doorways, and good lighting all improve safety and access while still looking like a normal, attractive home.',
+      },
+      {
+        question: 'Can you make a bathroom wheelchair accessible?',
+        answer:
+          'Yes. We build curbless roll-in showers, provide a five-foot turning radius where space allows, install grab-bar blocking and comfort-height fixtures, and widen the doorway so a bathroom works for a wheelchair or walker.',
+      },
+      {
+        question: 'What are the most important aging-in-place upgrades?',
+        answer:
+          'The highest-impact changes are a curbless or walk-in shower with grab bars, a zero-step entry into the home, at least one main-floor bedroom and full bathroom, wider doorways, lever hardware, and brighter, evenly distributed lighting.',
+      },
+      {
+        question: 'Will Medicare or insurance pay for accessibility remodeling?',
+        answer:
+          'Generally, Medicare does not cover home modifications. Some costs may be offset through Medicaid home and community-based waivers, VA grants such as HISA or SAH for eligible veterans, or long-term-care policies. We recommend confirming with your provider; we can supply a written scope for those applications.',
+      },
+      {
+        question: 'Do you widen doorways and add zero-step entries?',
+        answer:
+          'Yes. We widen doorways and hallways, adjust thresholds, and build zero-step entries or ramps so every room and the entry itself are accessible, coordinating any structural changes in-house.',
+      },
+    ],
+    costGuidance: {
+      heading: 'Aging-in-place remodeling cost in the Treasure Valley',
+      paragraphs: [
+        'As of 2026, aging-in-place work in the Boise area ranges widely: a few hundred dollars for grab bars and lever hardware, $20,000 to $45,000 for a full accessible or curbless bathroom, and more for main-floor suite conversions or zero-step entries.',
+        'These are planning ranges, not bids. Scope, structural changes, and finish level drive accessibility budgets, which we confirm in a written scope after your free in-home visit.',
+      ],
+    },
+  },
 };
 
 export function getAreaIntro(city: CityData): string {

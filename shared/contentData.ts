@@ -12,6 +12,13 @@ export interface ServiceData {
    * published GBP starting figures (shared/gbpProfile.ts).
    */
   planningFrom: string;
+  /**
+   * Secondary services expand keyword coverage (basement, outdoor living,
+   * aging-in-place). They get full service + city pages, nav, and sitemap
+   * entries, but are kept off the homepage grid so the primary five stay
+   * front-and-center. Shown in full on /services.
+   */
+  secondary?: boolean;
 }
 
 export interface CityData {
@@ -51,6 +58,27 @@ export const SERVICES: ServiceData[] = [
     name: 'ADU / Guest House',
     shortDescription: 'Detached or attached accessory dwelling units designed to maximize your property value.',
     planningFrom: '$90k',
+  },
+  {
+    slug: 'basement-remodel',
+    name: 'Basement Remodeling',
+    shortDescription: 'Finished basements and lower-level living space, from egress and framing to a fully finished suite.',
+    planningFrom: '$40k',
+    secondary: true,
+  },
+  {
+    slug: 'outdoor-living',
+    name: 'Outdoor Living & Decks',
+    shortDescription: 'Decks, covered patios, and outdoor kitchens that extend your living space into the yard.',
+    planningFrom: '$25k',
+    secondary: true,
+  },
+  {
+    slug: 'aging-in-place',
+    name: 'Aging-in-Place Remodeling',
+    shortDescription: 'Accessible, safe, and stylish remodels that let you stay in the home you love for the long term.',
+    planningFrom: '$20k',
+    secondary: true,
   },
 ];
 
