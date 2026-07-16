@@ -39,7 +39,7 @@ export const coveredPatiosBoise: BlogPostData = {
     { url: '/blog/exterior-remodeling-roi', anchor: 'Exterior Remodeling ROI' },
     { url: '/blog/home-addition-cost-boise', anchor: 'Home Addition Cost' },
     { url: '/blog/boise-permit-guide', anchor: 'Boise Remodeling Permits' },
-    { url: '/services/whole-home-remodel', anchor: 'Outdoor Living & Remodeling' },
+    { url: '/services/outdoor-living', anchor: 'Outdoor Living & Decks' },
   ],
   faqs: [
     {

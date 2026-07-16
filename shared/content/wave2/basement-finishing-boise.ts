@@ -39,7 +39,7 @@ export const basementFinishingBoise: BlogPostData = {
     { url: '/blog/garage-conversions', anchor: 'Garage Conversions' },
     { url: '/blog/home-addition-cost-boise', anchor: 'Home Addition Cost' },
     { url: '/blog/multigenerational-living-remodels', anchor: 'Multigenerational Living Remodels' },
-    { url: '/services/room-addition', anchor: 'Room Additions & ADUs' },
+    { url: '/services/basement-remodel', anchor: 'Basement Remodeling' },
   ],
   faqs: [
     {

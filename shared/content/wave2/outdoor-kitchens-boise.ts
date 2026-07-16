@@ -39,7 +39,7 @@ export const outdoorKitchensBoise: BlogPostData = {
     { url: '/blog/exterior-remodeling-roi', anchor: 'Exterior Remodeling ROI' },
     { url: '/blog/kitchen-layout-ideas-boise-homes', anchor: 'Kitchen Layout Ideas' },
     { url: '/blog/home-addition-cost-boise', anchor: 'Home Addition Cost' },
-    { url: '/services/whole-home-remodel', anchor: 'Outdoor Living & Remodeling' },
+    { url: '/services/outdoor-living', anchor: 'Outdoor Living & Decks' },
   ],
   faqs: [
     {

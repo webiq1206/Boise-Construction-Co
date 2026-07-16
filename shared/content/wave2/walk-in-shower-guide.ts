@@ -39,6 +39,7 @@ export const walkInShowerGuide: BlogPostData = {
     { url: '/blog/small-bathroom-remodel-ideas', anchor: 'Small Bathroom Remodel Ideas' },
     { url: '/blog/bathroom-remodel-cost-boise', anchor: 'Bathroom Remodel Cost' },
     { url: '/blog/aging-in-place-bathroom-design', anchor: 'Aging-in-Place Bathroom Design' },
+    { url: '/services/aging-in-place', anchor: 'Aging-in-Place Remodeling' },
     { url: '/services/bathroom-remodel', anchor: 'Bathroom Remodeling' },
   ],
   faqs: [

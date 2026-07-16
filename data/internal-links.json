@@ -271,9 +271,9 @@
           "score": 999
         },
         {
-          "url": "/services/bathroom-remodel",
-          "anchor": "Bathroom Remodeling",
-          "title": "Bathroom Remodel in Boise & Treasure Valley, Idaho",
+          "url": "/services/aging-in-place",
+          "anchor": "Aging-in-Place Remodeling",
+          "title": "Aging-in-Place Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
           "score": 999
         },
@@ -378,9 +378,9 @@
           "score": 999
         },
         {
-          "url": "/services/room-addition",
-          "anchor": "Room Additions & ADUs",
-          "title": "Room Addition in Boise & Treasure Valley, Idaho",
+          "url": "/services/basement-remodel",
+          "anchor": "Basement Remodeling",
+          "title": "Basement Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
           "score": 999
         },
@@ -724,7 +724,7 @@
           "anchor": "Aging-in-Place Remodeling",
           "title": "Aging-in-Place Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.209
+          "score": 0.169
         }
       ]
     },
@@ -820,9 +820,9 @@
           "score": 999
         },
         {
-          "url": "/services/whole-home-remodel",
-          "anchor": "Outdoor Living & Remodeling",
-          "title": "Whole-Home Remodel in Boise & Treasure Valley, Idaho",
+          "url": "/services/outdoor-living",
+          "anchor": "Outdoor Living & Decks",
+          "title": "Outdoor Living & Decks in Boise & Treasure Valley, Idaho",
           "type": "service",
           "score": 999
         },
@@ -877,9 +877,9 @@
           "score": 999
         },
         {
-          "url": "/services/bathroom-remodel",
-          "anchor": "Bathroom Remodeling",
-          "title": "Bathroom Remodel in Boise & Treasure Valley, Idaho",
+          "url": "/services/aging-in-place",
+          "anchor": "Aging-in-Place Remodeling",
+          "title": "Aging-in-Place Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
           "score": 999
         },
@@ -931,7 +931,7 @@
           "anchor": "Outdoor Living & Decks",
           "title": "Outdoor Living & Decks in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.51
+          "score": 0.47
         },
         {
           "url": "/guides/caldwell-remodeling-guide",
@@ -984,11 +984,11 @@
           "score": 0.296
         },
         {
-          "url": "/services/aging-in-place",
-          "anchor": "Aging-in-Place Remodeling",
-          "title": "Aging-in-Place Remodeling in Boise & Treasure Valley, Idaho",
+          "url": "/services/basement-remodel",
+          "anchor": "Basement Remodeling",
+          "title": "Basement Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.21
+          "score": 0.158
         }
       ]
     },
@@ -1084,11 +1084,11 @@
           "score": 0.263
         },
         {
-          "url": "/services/basement-remodel",
-          "anchor": "Basement Remodeling",
-          "title": "Basement Remodeling in Boise & Treasure Valley, Idaho",
+          "url": "/services/adu",
+          "anchor": "ADU / Guest House",
+          "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.209
+          "score": 0.15
         }
       ]
     },
@@ -1573,14 +1573,14 @@
           "anchor": "ADU / Guest House",
           "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.15
+          "score": 0.11
         },
         {
-          "url": "/services/basement-remodel",
-          "anchor": "Basement Remodeling",
-          "title": "Basement Remodeling in Boise & Treasure Valley, Idaho",
+          "url": "/services/kitchen-remodel",
+          "anchor": "Kitchen Remodel",
+          "title": "Kitchen Remodel in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.146
+          "score": 0.11
         }
       ]
     },
@@ -1680,7 +1680,7 @@
           "anchor": "Aging-in-Place Remodeling",
           "title": "Aging-in-Place Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.165
+          "score": 0.125
         }
       ]
     },
@@ -2179,7 +2179,7 @@
           "anchor": "Outdoor Living & Decks",
           "title": "Outdoor Living & Decks in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.252
+          "score": 0.212
         },
         {
           "url": "/guides/eagle-foothills-remodeling-guide",
@@ -2457,7 +2457,7 @@
           "anchor": "Outdoor Living & Decks",
           "title": "Outdoor Living & Decks in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.197
+          "score": 0.157
         },
         {
           "url": "/guides/caldwell-remodeling-guide",
@@ -2503,11 +2503,11 @@
           "score": 999
         },
         {
-          "url": "/services/outdoor-living",
-          "anchor": "Outdoor Living & Decks",
-          "title": "Outdoor Living & Decks in Boise & Treasure Valley, Idaho",
+          "url": "/services/basement-remodel",
+          "anchor": "Basement Remodeling",
+          "title": "Basement Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.172
+          "score": 0.133
         },
         {
           "url": "/guides/hidden-springs-remodeling-guide",
@@ -2560,9 +2560,9 @@
           "score": 999
         },
         {
-          "url": "/services/whole-home-remodel",
-          "anchor": "Outdoor Living & Remodeling",
-          "title": "Whole-Home Remodel in Boise & Treasure Valley, Idaho",
+          "url": "/services/outdoor-living",
+          "anchor": "Outdoor Living & Decks",
+          "title": "Outdoor Living & Decks in Boise & Treasure Valley, Idaho",
           "type": "service",
           "score": 999
         },
@@ -2621,7 +2621,7 @@
           "anchor": "Basement Remodeling",
           "title": "Basement Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.175
+          "score": 0.135
         }
       ]
     },
@@ -2671,7 +2671,7 @@
           "anchor": "Aging-in-Place Remodeling",
           "title": "Aging-in-Place Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.093
+          "score": 0.053
         }
       ]
     },
@@ -2746,18 +2746,18 @@
           "score": 999
         },
         {
+          "url": "/services/whole-home-remodel",
+          "anchor": "Whole-Home Remodel",
+          "title": "Whole-Home Remodel in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 999
+        },
+        {
           "url": "/services/whole-home-remodel/boise",
           "anchor": "Whole-Home Remodel in Boise",
           "title": "Whole-Home Remodel in Boise, Idaho",
           "type": "city-service",
           "score": 999
-        },
-        {
-          "url": "/blog/preconstruction-guide",
-          "anchor": "Preconstruction Guide",
-          "title": "Preconstruction Guide",
-          "type": "blog",
-          "score": 1.35
         },
         {
           "url": "/guides/kuna-remodeling-guide",
@@ -2771,14 +2771,14 @@
           "anchor": "Basement Remodeling",
           "title": "Basement Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.089
+          "score": 0.049
         },
         {
           "url": "/services/adu",
           "anchor": "ADU / Guest House",
           "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.07
+          "score": 0.03
         }
       ]
     },
@@ -2924,11 +2924,11 @@
           "score": 999
         },
         {
-          "url": "/blog/fixed-price-vs-cost-plus",
-          "anchor": "Fixed-Price vs. Cost-Plus Remodeling Contracts: Which Is Better?",
-          "title": "Fixed-Price vs. Cost-Plus Remodeling Contracts: Which Is Better?",
+          "url": "/blog/why-remodeling-bids-vary",
+          "anchor": "Why Remodeling Bids Vary So Much (and How to Read Them)",
+          "title": "Why Remodeling Bids Vary So Much (and How to Read Them)",
           "type": "blog",
-          "score": 0.964
+          "score": 0.955
         },
         {
           "url": "/guides/boise-remodeling-guide",
@@ -2981,6 +2981,13 @@
           "score": 999
         },
         {
+          "url": "/services/whole-home-remodel",
+          "anchor": "Whole-Home Remodeling",
+          "title": "Whole-Home Remodel in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 999
+        },
+        {
           "url": "/guides/north-end-remodeling-guide",
           "anchor": "North End Remodeling Guide",
           "title": "North End Remodeling Guide",
@@ -3024,18 +3031,18 @@
           "score": 0.222
         },
         {
+          "url": "/services/bathroom-remodel",
+          "anchor": "Bathroom Remodel",
+          "title": "Bathroom Remodel in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 0.006
+        },
+        {
           "url": "/services/aging-in-place",
           "anchor": "Aging-in-Place Remodeling",
           "title": "Aging-in-Place Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.045
-        },
-        {
-          "url": "/services/basement-remodel",
-          "anchor": "Basement Remodeling",
-          "title": "Basement Remodeling in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": 0.045
+          "score": 0.005
         }
       ]
     },
@@ -3078,14 +3085,14 @@
           "anchor": "ADU / Guest House",
           "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.046
+          "score": 0.006
         },
         {
           "url": "/services/aging-in-place",
           "anchor": "Aging-in-Place Remodeling",
           "title": "Aging-in-Place Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.021
+          "score": -0.019
         }
       ]
     },
@@ -3124,11 +3131,11 @@
           "score": 999
         },
         {
-          "url": "/blog/design-build-vs-general-contractor",
-          "anchor": "Design-Build vs. General Contractor: Which Is Right for Your Remodel?",
-          "title": "Design-Build vs. General Contractor: Which Is Right for Your Remodel?",
+          "url": "/blog/fixed-price-vs-cost-plus",
+          "anchor": "Fixed-Price vs. Cost-Plus Remodeling Contracts: Which Is Better?",
+          "title": "Fixed-Price vs. Cost-Plus Remodeling Contracts: Which Is Better?",
           "type": "blog",
-          "score": 0.936
+          "score": 0.993
         },
         {
           "url": "/guides/meridian-remodeling-guide",
@@ -3178,14 +3185,14 @@
           "anchor": "Aging-in-Place Remodeling",
           "title": "Aging-in-Place Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.092
+          "score": 0.052
         },
         {
           "url": "/services/basement-remodel",
           "anchor": "Basement Remodeling",
           "title": "Basement Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.01
+          "score": -0.03
         }
       ]
     },
@@ -3260,9 +3267,9 @@
           "score": 999
         },
         {
-          "url": "/blog/warranty-guide-remodeling",
-          "anchor": "Warranty Guide",
-          "title": "Warranty Guide",
+          "url": "/blog/preconstruction-guide",
+          "anchor": "Preconstruction Guide",
+          "title": "Preconstruction Guide",
           "type": "blog",
           "score": 1.45
         },
@@ -3378,12 +3385,12 @@
           "anchor": "Room Addition",
           "title": "Room Addition in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.028
+          "score": 0.012
         },
         {
-          "url": "/services/adu",
-          "anchor": "ADU / Guest House",
-          "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
+          "url": "/services/outdoor-living",
+          "anchor": "Outdoor Living & Decks",
+          "title": "Outdoor Living & Decks in Boise & Treasure Valley, Idaho",
           "type": "service",
           "score": -0.09
         }
@@ -3652,9 +3659,9 @@
           "score": 999
         },
         {
-          "url": "/services/bathroom-remodel",
-          "anchor": "Bathroom Remodeling",
-          "title": "Bathroom Remodel in Boise & Treasure Valley, Idaho",
+          "url": "/services/aging-in-place",
+          "anchor": "Aging-in-Place Remodeling",
+          "title": "Aging-in-Place Remodeling in Boise & Treasure Valley, Idaho",
           "type": "service",
           "score": 999
         },
@@ -3802,11 +3809,11 @@
           "score": 0.9
         },
         {
-          "url": "/blog/why-remodeling-bids-vary",
-          "anchor": "Why Remodeling Bids Vary So Much (and How to Read Them)",
-          "title": "Why Remodeling Bids Vary So Much (and How to Read Them)",
+          "url": "/blog/design-build-vs-general-contractor",
+          "anchor": "Design-Build vs. General Contractor: Which Is Right for Your Remodel?",
+          "title": "Design-Build vs. General Contractor: Which Is Right for Your Remodel?",
           "type": "blog",
-          "score": 0.87
+          "score": 0.845
         },
         {
           "url": "/guides/star-remodeling-guide",
@@ -4049,7 +4056,7 @@
           "anchor": "ADU / Guest House",
           "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.73
+          "score": 1.69
         },
         {
           "url": "/blog/outdoor-kitchens-boise",
@@ -4113,7 +4120,7 @@
           "anchor": "ADU / Guest House",
           "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.613
+          "score": 1.573
         },
         {
           "url": "/areas/caldwell",
@@ -4177,7 +4184,7 @@
           "anchor": "ADU / Guest House",
           "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.573
+          "score": 1.533
         },
         {
           "url": "/areas/eagle",
@@ -4248,7 +4255,7 @@
           "anchor": "ADU / Guest House",
           "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.61
+          "score": 1.57
         },
         {
           "url": "/areas/kuna",
@@ -4305,7 +4312,7 @@
           "anchor": "ADU / Guest House",
           "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.493
+          "score": 1.453
         },
         {
           "url": "/areas/meridian",
@@ -4329,11 +4336,11 @@
           "score": 0.11
         },
         {
-          "url": "/services/outdoor-living",
-          "anchor": "Outdoor Living & Decks",
-          "title": "Outdoor Living & Decks in Boise & Treasure Valley, Idaho",
+          "url": "/services/bathroom-remodel",
+          "anchor": "Bathroom Remodel",
+          "title": "Bathroom Remodel in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.09
+          "score": 0.058
         }
       ]
     },
@@ -4369,7 +4376,7 @@
           "anchor": "ADU / Guest House",
           "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.453
+          "score": 1.413
         },
         {
           "url": "/areas/middleton",
@@ -4393,9 +4400,9 @@
           "score": 0.11
         },
         {
-          "url": "/services/bathroom-remodel",
-          "anchor": "Bathroom Remodel",
-          "title": "Bathroom Remodel in Boise & Treasure Valley, Idaho",
+          "url": "/services/room-addition",
+          "anchor": "Room Addition",
+          "title": "Room Addition in Boise & Treasure Valley, Idaho",
           "type": "service",
           "score": 0.058
         }
@@ -4433,7 +4440,7 @@
           "anchor": "ADU / Guest House",
           "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.413
+          "score": 1.373
         },
         {
           "url": "/areas/nampa",
@@ -4497,7 +4504,7 @@
           "anchor": "ADU / Guest House",
           "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.373
+          "score": 1.333
         },
         {
           "url": "/areas/star",
@@ -5524,6 +5531,13 @@
           "score": 0.463
         },
         {
+          "url": "/blog/warranty-guide-remodeling",
+          "anchor": "Warranty Guide",
+          "title": "Warranty Guide",
+          "type": "blog",
+          "score": 0.059
+        },
+        {
           "url": "/blog/what-makes-great-remodeling-contractor",
           "anchor": "What Makes a Great Remodeling Contractor",
           "title": "What Makes a Great Remodeling Contractor",
@@ -5531,25 +5545,18 @@
           "score": 0.059
         },
         {
-          "url": "/blog/construction-phase-guide",
-          "anchor": "Construction Phase Guide",
-          "title": "Construction Phase Guide",
-          "type": "blog",
-          "score": 0.056
-        },
-        {
-          "url": "/services/kitchen-remodel",
-          "anchor": "Kitchen Remodel",
-          "title": "Kitchen Remodel in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": -0.145
-        },
-        {
           "url": "/services/room-addition",
           "anchor": "Room Addition",
           "title": "Room Addition in Boise & Treasure Valley, Idaho",
           "type": "service",
           "score": -0.15
+        },
+        {
+          "url": "/services/bathroom-remodel",
+          "anchor": "Bathroom Remodel",
+          "title": "Bathroom Remodel in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": -0.185
         }
       ]
     },
@@ -5581,13 +5588,6 @@
           "score": 1.8
         },
         {
-          "url": "/services/bathroom-remodel",
-          "anchor": "Bathroom Remodel",
-          "title": "Bathroom Remodel in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": 1.37
-        },
-        {
           "url": "/blog/luxury-bathroom-features",
           "anchor": "Luxury Bathroom Features Worth the Investment",
           "title": "Luxury Bathroom Features Worth the Investment",
@@ -5614,6 +5614,13 @@
           "title": "Room Addition in Boise & Treasure Valley, Idaho",
           "type": "service",
           "score": -0.131
+        },
+        {
+          "url": "/services/kitchen-remodel",
+          "anchor": "Kitchen Remodel",
+          "title": "Kitchen Remodel in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": -0.171
         }
       ]
     },
@@ -5666,18 +5673,18 @@
           "score": 0.013
         },
         {
+          "url": "/services/room-addition",
+          "anchor": "Room Addition",
+          "title": "Room Addition in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": -0.174
+        },
+        {
           "url": "/services/adu",
           "anchor": "ADU / Guest House",
           "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.142
-        },
-        {
-          "url": "/services/kitchen-remodel",
-          "anchor": "Kitchen Remodel",
-          "title": "Kitchen Remodel in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": -0.174
+          "score": -0.182
         }
       ]
     },
@@ -5709,6 +5716,20 @@
           "score": 1.718
         },
         {
+          "url": "/services/bathroom-remodel/nampa",
+          "anchor": "Bathroom Remodel in Nampa",
+          "title": "Bathroom Remodel in Nampa, Idaho",
+          "type": "city-service",
+          "score": 1.718
+        },
+        {
+          "url": "/services/bathroom-remodel/star",
+          "anchor": "Bathroom Remodel in Star",
+          "title": "Bathroom Remodel in Star, Idaho",
+          "type": "city-service",
+          "score": 1.718
+        },
+        {
           "url": "/areas/eagle",
           "anchor": "Remodeling in Eagle",
           "title": "Remodeling Services in Eagle, Idaho",
@@ -5728,20 +5749,6 @@
           "title": "Room Addition Guide: Matching Your Home in the Treasure Valley",
           "type": "blog",
           "score": 0.065
-        },
-        {
-          "url": "/services/room-addition",
-          "anchor": "Room Addition",
-          "title": "Room Addition in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": -0.174
-        },
-        {
-          "url": "/services/adu",
-          "anchor": "ADU / Guest House",
-          "title": "ADU / Guest House in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": -0.182
         }
       ]
     },
@@ -5759,20 +5766,6 @@
           "score": 1.82
         },
         {
-          "url": "/services/bathroom-remodel/nampa",
-          "anchor": "Bathroom Remodel in Nampa",
-          "title": "Bathroom Remodel in Nampa, Idaho",
-          "type": "city-service",
-          "score": 1.8
-        },
-        {
-          "url": "/services/bathroom-remodel/star",
-          "anchor": "Bathroom Remodel in Star",
-          "title": "Bathroom Remodel in Star, Idaho",
-          "type": "city-service",
-          "score": 1.8
-        },
-        {
           "url": "/services/bathroom-remodel/caldwell",
           "anchor": "Bathroom Remodel in Caldwell",
           "title": "Bathroom Remodel in Caldwell, Idaho",
@@ -5783,6 +5776,20 @@
           "url": "/services/bathroom-remodel/eagle",
           "anchor": "Bathroom Remodel in Eagle",
           "title": "Bathroom Remodel in Eagle, Idaho",
+          "type": "city-service",
+          "score": 1.76
+        },
+        {
+          "url": "/services/bathroom-remodel/meridian",
+          "anchor": "Bathroom Remodel in Meridian",
+          "title": "Bathroom Remodel in Meridian, Idaho",
+          "type": "city-service",
+          "score": 1.76
+        },
+        {
+          "url": "/services/bathroom-remodel/middleton",
+          "anchor": "Bathroom Remodel in Middleton",
+          "title": "Bathroom Remodel in Middleton, Idaho",
           "type": "city-service",
           "score": 1.76
         },
@@ -5830,13 +5837,6 @@
           "score": 1.68
         },
         {
-          "url": "/services/bathroom-remodel/middleton",
-          "anchor": "Bathroom Remodel in Middleton",
-          "title": "Bathroom Remodel in Middleton, Idaho",
-          "type": "city-service",
-          "score": 1.678
-        },
-        {
           "url": "/services/bathroom-remodel/nampa",
           "anchor": "Bathroom Remodel in Nampa",
           "title": "Bathroom Remodel in Nampa, Idaho",
@@ -5849,6 +5849,13 @@
           "title": "Bathroom Remodel in Star, Idaho",
           "type": "city-service",
           "score": 1.678
+        },
+        {
+          "url": "/services/bathroom-remodel/caldwell",
+          "anchor": "Bathroom Remodel in Caldwell",
+          "title": "Bathroom Remodel in Caldwell, Idaho",
+          "type": "city-service",
+          "score": 1.638
         },
         {
           "url": "/areas/meridian",
@@ -5880,13 +5887,6 @@
       "url": "/services/bathroom-remodel/middleton",
       "links": [
         {
-          "url": "/services/bathroom-remodel/meridian",
-          "anchor": "Bathroom Remodel in Meridian",
-          "title": "Bathroom Remodel in Meridian, Idaho",
-          "type": "city-service",
-          "score": 1.678
-        },
-        {
           "url": "/services/bathroom-remodel/boise",
           "anchor": "Bathroom Remodel in Boise",
           "title": "Bathroom Remodel in Boise, Idaho",
@@ -5901,16 +5901,23 @@
           "score": 1.64
         },
         {
-          "url": "/services/bathroom-remodel/caldwell",
-          "anchor": "Bathroom Remodel in Caldwell",
-          "title": "Bathroom Remodel in Caldwell, Idaho",
+          "url": "/services/bathroom-remodel/eagle",
+          "anchor": "Bathroom Remodel in Eagle",
+          "title": "Bathroom Remodel in Eagle, Idaho",
           "type": "city-service",
           "score": 1.638
         },
         {
-          "url": "/services/bathroom-remodel/eagle",
-          "anchor": "Bathroom Remodel in Eagle",
-          "title": "Bathroom Remodel in Eagle, Idaho",
+          "url": "/services/bathroom-remodel/meridian",
+          "anchor": "Bathroom Remodel in Meridian",
+          "title": "Bathroom Remodel in Meridian, Idaho",
+          "type": "city-service",
+          "score": 1.638
+        },
+        {
+          "url": "/services/bathroom-remodel/nampa",
+          "anchor": "Bathroom Remodel in Nampa",
+          "title": "Bathroom Remodel in Nampa, Idaho",
           "type": "city-service",
           "score": 1.638
         },
@@ -5944,13 +5951,6 @@
       "url": "/services/bathroom-remodel/nampa",
       "links": [
         {
-          "url": "/services/bathroom-remodel/meridian",
-          "anchor": "Bathroom Remodel in Meridian",
-          "title": "Bathroom Remodel in Meridian, Idaho",
-          "type": "city-service",
-          "score": 1.638
-        },
-        {
           "url": "/services/bathroom-remodel/middleton",
           "anchor": "Bathroom Remodel in Middleton",
           "title": "Bathroom Remodel in Middleton, Idaho",
@@ -5977,6 +5977,13 @@
           "title": "Bathroom Remodel in Kuna, Idaho",
           "type": "city-service",
           "score": 1.6
+        },
+        {
+          "url": "/services/bathroom-remodel/caldwell",
+          "anchor": "Bathroom Remodel in Caldwell",
+          "title": "Bathroom Remodel in Caldwell, Idaho",
+          "type": "city-service",
+          "score": 1.598
         },
         {
           "url": "/areas/nampa",
@@ -6008,20 +6015,6 @@
       "url": "/services/bathroom-remodel/star",
       "links": [
         {
-          "url": "/services/bathroom-remodel/nampa",
-          "anchor": "Bathroom Remodel in Nampa",
-          "title": "Bathroom Remodel in Nampa, Idaho",
-          "type": "city-service",
-          "score": 1.638
-        },
-        {
-          "url": "/services/bathroom-remodel/caldwell",
-          "anchor": "Bathroom Remodel in Caldwell",
-          "title": "Bathroom Remodel in Caldwell, Idaho",
-          "type": "city-service",
-          "score": 1.598
-        },
-        {
           "url": "/services/bathroom-remodel/eagle",
           "anchor": "Bathroom Remodel in Eagle",
           "title": "Bathroom Remodel in Eagle, Idaho",
@@ -6041,6 +6034,20 @@
           "title": "Bathroom Remodel in Middleton, Idaho",
           "type": "city-service",
           "score": 1.598
+        },
+        {
+          "url": "/services/bathroom-remodel/nampa",
+          "anchor": "Bathroom Remodel in Nampa",
+          "title": "Bathroom Remodel in Nampa, Idaho",
+          "type": "city-service",
+          "score": 1.598
+        },
+        {
+          "url": "/services/bathroom-remodel/boise",
+          "anchor": "Bathroom Remodel in Boise",
+          "title": "Bathroom Remodel in Boise, Idaho",
+          "type": "city-service",
+          "score": 1.56
         },
         {
           "url": "/areas/star",
@@ -8173,7 +8180,7 @@
           "anchor": "Bathroom Remodel in Boise",
           "title": "Bathroom Remodel in Boise, Idaho",
           "type": "city-service",
-          "score": 0.16
+          "score": 0.12
         }
       ]
     },
@@ -8233,9 +8240,9 @@
           "score": 0.331
         },
         {
-          "url": "/blog/design-development-guide",
-          "anchor": "Design Development Guide",
-          "title": "Design Development Guide",
+          "url": "/blog/construction-phase-guide",
+          "anchor": "Construction Phase Guide",
+          "title": "Construction Phase Guide",
           "type": "blog",
           "score": 0.167
         }
@@ -8297,9 +8304,9 @@
           "score": 0.331
         },
         {
-          "url": "/blog/punch-list-guide",
-          "anchor": "Punch List Guide",
-          "title": "Punch List Guide",
+          "url": "/blog/design-development-guide",
+          "anchor": "Design Development Guide",
+          "title": "Design Development Guide",
           "type": "blog",
           "score": 0.167
         }
@@ -8425,11 +8432,11 @@
           "score": 0.331
         },
         {
-          "url": "/blog/warranty-guide-remodeling",
-          "anchor": "Warranty Guide",
-          "title": "Warranty Guide",
+          "url": "/blog/punch-list-guide",
+          "anchor": "Punch List Guide",
+          "title": "Punch List Guide",
           "type": "blog",
-          "score": 0.16
+          "score": 0.167
         }
       ]
     },
@@ -8489,9 +8496,9 @@
           "score": 0.331
         },
         {
-          "url": "/blog/what-makes-great-remodeling-contractor",
-          "anchor": "What Makes a Great Remodeling Contractor",
-          "title": "What Makes a Great Remodeling Contractor",
+          "url": "/blog/warranty-guide-remodeling",
+          "anchor": "Warranty Guide",
+          "title": "Warranty Guide",
           "type": "blog",
           "score": 0.16
         }
@@ -8525,13 +8532,6 @@
           "score": 0.463
         },
         {
-          "url": "/services/bathroom-remodel/nampa",
-          "anchor": "Bathroom Remodel in Nampa",
-          "title": "Bathroom Remodel in Nampa, Idaho",
-          "type": "city-service",
-          "score": 0.371
-        },
-        {
           "url": "/services/adu/nampa",
           "anchor": "ADU / Guest House in Nampa",
           "title": "ADU / Guest House in Nampa, Idaho",
@@ -8553,11 +8553,18 @@
           "score": 0.333
         },
         {
-          "url": "/blog/construction-phase-guide",
-          "anchor": "Construction Phase Guide",
-          "title": "Construction Phase Guide",
+          "url": "/services/bathroom-remodel/nampa",
+          "anchor": "Bathroom Remodel in Nampa",
+          "title": "Bathroom Remodel in Nampa, Idaho",
+          "type": "city-service",
+          "score": 0.331
+        },
+        {
+          "url": "/blog/what-makes-great-remodeling-contractor",
+          "anchor": "What Makes a Great Remodeling Contractor",
+          "title": "What Makes a Great Remodeling Contractor",
           "type": "blog",
-          "score": 0.127
+          "score": 0.16
         }
       ]
     },
@@ -8617,9 +8624,9 @@
           "score": 0.333
         },
         {
-          "url": "/blog/design-development-guide",
-          "anchor": "Design Development Guide",
-          "title": "Design Development Guide",
+          "url": "/blog/construction-phase-guide",
+          "anchor": "Construction Phase Guide",
+          "title": "Construction Phase Guide",
           "type": "blog",
           "score": 0.127
         }
@@ -8866,9 +8873,9 @@
           "score": 0.097
         },
         {
-          "url": "/blog/punch-list-guide",
-          "anchor": "Punch List Guide",
-          "title": "Punch List Guide",
+          "url": "/blog/design-development-guide",
+          "anchor": "Design Development Guide",
+          "title": "Design Development Guide",
           "type": "blog",
           "score": 0.085
         },
@@ -9165,6 +9172,13 @@
           "score": 0.834
         },
         {
+          "url": "/blog/punch-list-guide",
+          "anchor": "Punch List Guide",
+          "title": "Punch List Guide",
+          "type": "blog",
+          "score": 0.76
+        },
+        {
           "url": "/blog/preconstruction-guide",
           "anchor": "Preconstruction Guide",
           "title": "Preconstruction Guide",
@@ -9175,13 +9189,6 @@
           "url": "/blog/remodeling-timeline-guide",
           "anchor": "Remodeling Timeline Guide",
           "title": "Remodeling Timeline Guide",
-          "type": "blog",
-          "score": 0.743
-        },
-        {
-          "url": "/blog/warranty-guide-remodeling",
-          "anchor": "Warranty Guide",
-          "title": "Warranty Guide",
           "type": "blog",
           "score": 0.743
         },
@@ -9257,9 +9264,9 @@
           "score": 0.065
         },
         {
-          "url": "/blog/what-makes-great-remodeling-contractor",
-          "anchor": "What Makes a Great Remodeling Contractor",
-          "title": "What Makes a Great Remodeling Contractor",
+          "url": "/blog/warranty-guide-remodeling",
+          "anchor": "Warranty Guide",
+          "title": "Warranty Guide",
           "type": "blog",
           "score": 0.063
         }
@@ -9286,18 +9293,18 @@
           "score": 0.93
         },
         {
+          "url": "/blog/what-makes-great-remodeling-contractor",
+          "anchor": "What Makes a Great Remodeling Contractor",
+          "title": "What Makes a Great Remodeling Contractor",
+          "type": "blog",
+          "score": 0.62
+        },
+        {
           "url": "/blog/design-build-vs-general-contractor",
           "anchor": "Design-Build vs. General Contractor: Which Is Right for Your Remodel?",
           "title": "Design-Build vs. General Contractor: Which Is Right for Your Remodel?",
           "type": "blog",
           "score": 0.584
-        },
-        {
-          "url": "/blog/what-makes-great-remodeling-contractor",
-          "anchor": "What Makes a Great Remodeling Contractor",
-          "title": "What Makes a Great Remodeling Contractor",
-          "type": "blog",
-          "score": 0.58
         },
         {
           "url": "/blog/fixed-price-vs-cost-plus",
@@ -9449,11 +9456,11 @@
           "score": -0.02
         },
         {
-          "url": "/blog/construction-phase-guide",
-          "anchor": "Construction Phase Guide",
-          "title": "Construction Phase Guide",
+          "url": "/blog/what-makes-great-remodeling-contractor",
+          "anchor": "What Makes a Great Remodeling Contractor",
+          "title": "What Makes a Great Remodeling Contractor",
           "type": "blog",
-          "score": -0.029
+          "score": -0.02
         }
       ]
     },
@@ -9627,6 +9634,13 @@
           "score": 0.005
         },
         {
+          "url": "/blog/construction-phase-guide",
+          "anchor": "Construction Phase Guide",
+          "title": "Construction Phase Guide",
+          "type": "blog",
+          "score": -0.029
+        },
+        {
           "url": "/blog/design-development-guide",
           "anchor": "Design Development Guide",
           "title": "Design Development Guide",
@@ -9639,13 +9653,6 @@
           "title": "Punch List Guide",
           "type": "blog",
           "score": -0.029
-        },
-        {
-          "url": "/blog/preconstruction-guide",
-          "anchor": "Preconstruction Guide",
-          "title": "Preconstruction Guide",
-          "type": "blog",
-          "score": -0.06
         }
       ]
     },
@@ -9684,6 +9691,13 @@
           "score": 1.07
         },
         {
+          "url": "/blog/preconstruction-guide",
+          "anchor": "Preconstruction Guide",
+          "title": "Preconstruction Guide",
+          "type": "blog",
+          "score": 0.007
+        },
+        {
           "url": "/blog/remodeling-timeline-guide",
           "anchor": "Remodeling Timeline Guide",
           "title": "Remodeling Timeline Guide",
@@ -9694,13 +9708,6 @@
           "url": "/blog/warranty-guide-remodeling",
           "anchor": "Warranty Guide",
           "title": "Warranty Guide",
-          "type": "blog",
-          "score": 0.007
-        },
-        {
-          "url": "/blog/what-makes-great-remodeling-contractor",
-          "anchor": "What Makes a Great Remodeling Contractor",
-          "title": "What Makes a Great Remodeling Contractor",
           "type": "blog",
           "score": 0.007
         },
@@ -9819,6 +9826,13 @@
           "score": 0.073
         },
         {
+          "url": "/blog/what-makes-great-remodeling-contractor",
+          "anchor": "What Makes a Great Remodeling Contractor",
+          "title": "What Makes a Great Remodeling Contractor",
+          "type": "blog",
+          "score": 0.007
+        },
+        {
           "url": "/blog/construction-phase-guide",
           "anchor": "Construction Phase Guide",
           "title": "Construction Phase Guide",
@@ -9829,13 +9843,6 @@
           "url": "/blog/design-development-guide",
           "anchor": "Design Development Guide",
           "title": "Design Development Guide",
-          "type": "blog",
-          "score": -0.017
-        },
-        {
-          "url": "/blog/punch-list-guide",
-          "anchor": "Punch List Guide",
-          "title": "Punch List Guide",
           "type": "blog",
           "score": -0.017
         }
@@ -10075,6 +10082,13 @@
           "score": 0.073
         },
         {
+          "url": "/blog/punch-list-guide",
+          "anchor": "Punch List Guide",
+          "title": "Punch List Guide",
+          "type": "blog",
+          "score": -0.017
+        },
+        {
           "url": "/blog/preconstruction-guide",
           "anchor": "Preconstruction Guide",
           "title": "Preconstruction Guide",
@@ -10085,13 +10099,6 @@
           "url": "/blog/remodeling-timeline-guide",
           "anchor": "Remodeling Timeline Guide",
           "title": "Remodeling Timeline Guide",
-          "type": "blog",
-          "score": -0.033
-        },
-        {
-          "url": "/blog/warranty-guide-remodeling",
-          "anchor": "Warranty Guide",
-          "title": "Warranty Guide",
           "type": "blog",
           "score": -0.033
         }
@@ -10132,6 +10139,13 @@
           "score": 0.772
         },
         {
+          "url": "/blog/warranty-guide-remodeling",
+          "anchor": "Warranty Guide",
+          "title": "Warranty Guide",
+          "type": "blog",
+          "score": -0.018
+        },
+        {
           "url": "/blog/construction-phase-guide",
           "anchor": "Construction Phase Guide",
           "title": "Construction Phase Guide",
@@ -10142,13 +10156,6 @@
           "url": "/blog/design-development-guide",
           "anchor": "Design Development Guide",
           "title": "Design Development Guide",
-          "type": "blog",
-          "score": -0.033
-        },
-        {
-          "url": "/blog/punch-list-guide",
-          "anchor": "Punch List Guide",
-          "title": "Punch List Guide",
           "type": "blog",
           "score": -0.033
         },
@@ -10424,25 +10431,11 @@
       "url": "/services/bathroom-remodel",
       "links": [
         {
-          "url": "/services/bathroom-remodel/nampa",
-          "anchor": "Bathroom Remodel in Nampa",
-          "title": "Bathroom Remodel in Nampa, Idaho",
-          "type": "city-service",
-          "score": 1.64
-        },
-        {
           "url": "/services/bathroom-remodel/star",
           "anchor": "Bathroom Remodel in Star",
           "title": "Bathroom Remodel in Star, Idaho",
           "type": "city-service",
           "score": 1.64
-        },
-        {
-          "url": "/services/bathroom-remodel/boise",
-          "anchor": "Bathroom Remodel in Boise",
-          "title": "Bathroom Remodel in Boise, Idaho",
-          "type": "city-service",
-          "score": 1.62
         },
         {
           "url": "/services/bathroom-remodel/kuna",
@@ -10462,6 +10455,20 @@
           "url": "/services/bathroom-remodel/eagle",
           "anchor": "Bathroom Remodel in Eagle",
           "title": "Bathroom Remodel in Eagle, Idaho",
+          "type": "city-service",
+          "score": 1.6
+        },
+        {
+          "url": "/services/bathroom-remodel/meridian",
+          "anchor": "Bathroom Remodel in Meridian",
+          "title": "Bathroom Remodel in Meridian, Idaho",
+          "type": "city-service",
+          "score": 1.6
+        },
+        {
+          "url": "/services/bathroom-remodel/middleton",
+          "anchor": "Bathroom Remodel in Middleton",
+          "title": "Bathroom Remodel in Middleton, Idaho",
           "type": "city-service",
           "score": 1.6
         },
@@ -10800,7 +10807,7 @@
     "/blog/preconstruction-guide": 6,
     "/blog/design-development-guide": 6,
     "/blog/construction-phase-guide": 6,
-    "/blog/punch-list-guide": 6,
+    "/blog/punch-list-guide": 5,
     "/blog/warranty-guide-remodeling": 6,
     "/blog/addition-roi-remodeling": 6,
     "/blog/outdoor-living-roi": 6,
@@ -10840,13 +10847,13 @@
     "/guides/hidden-springs-remodeling-guide": 7,
     "/guides/eagle-foothills-remodeling-guide": 7,
     "/services/kitchen-remodel": 18,
-    "/services/bathroom-remodel": 18,
+    "/services/bathroom-remodel": 16,
     "/services/whole-home-remodel": 18,
     "/services/room-addition": 18,
-    "/services/adu": 14,
+    "/services/adu": 13,
     "/services/basement-remodel": 14,
-    "/services/outdoor-living": 15,
-    "/services/aging-in-place": 15,
+    "/services/outdoor-living": 16,
+    "/services/aging-in-place": 17,
     "/areas/boise": 18,
     "/areas/meridian": 12,
     "/areas/eagle": 14,
@@ -10864,12 +10871,12 @@
     "/services/kitchen-remodel/middleton": 6,
     "/services/kitchen-remodel/caldwell": 7,
     "/services/bathroom-remodel/boise": 8,
-    "/services/bathroom-remodel/meridian": 5,
+    "/services/bathroom-remodel/meridian": 6,
     "/services/bathroom-remodel/eagle": 6,
     "/services/bathroom-remodel/nampa": 5,
     "/services/bathroom-remodel/kuna": 8,
     "/services/bathroom-remodel/star": 5,
-    "/services/bathroom-remodel/middleton": 5,
+    "/services/bathroom-remodel/middleton": 6,
     "/services/bathroom-remodel/caldwell": 6,
     "/services/whole-home-remodel/boise": 14,
     "/services/whole-home-remodel/meridian": 6,
