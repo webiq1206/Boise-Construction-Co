@@ -46,11 +46,11 @@ interface ChipOption {
 }
 
 interface ProjectUIConfig {
-  icon: LucideIcon;
   tabLabel: string;
   headlinePrefix: string;
   headlineAccent: string;
   headlineSuffix: string;
+  twoLineHeadline?: boolean; /* force accent onto a new line (Addition) */
   gridLabel: string;
   subtypes: SubtypeOption[];
   chipsLabel: string;
@@ -108,7 +108,7 @@ const SUBTYPE_DATA: Record<ProjectType, Record<string, SubtypeData>> = {
 };
 
 /* ══════════════════════════════════════════════════════════════════════
-   FOOTER STRIP IMAGES (per project type)
+   FOOTER STRIP IMAGES
 ══════════════════════════════════════════════════════════════════════ */
 
 const FOOTER_BG: Record<ProjectType, string> = {
@@ -126,11 +126,8 @@ const FOOTER_BG: Record<ProjectType, string> = {
 
 const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
   kitchen: {
-    icon: UtensilsCrossed,
     tabLabel: "Kitchen",
-    headlinePrefix: "Calculate your",
-    headlineAccent: "kitchen",
-    headlineSuffix: "remodel cost",
+    headlinePrefix: "Calculate your", headlineAccent: "kitchen", headlineSuffix: "remodel cost",
     gridLabel: "YOUR KITCHEN LAYOUT",
     subtypes: [
       { id: "galley",   icon: AlignLeft,  title: "Galley",  subtitle: "Two facing runs" },
@@ -148,11 +145,8 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
     footerAccent: "kitchen",
   },
   bathroom: {
-    icon: Droplets,
     tabLabel: "Bathroom",
-    headlinePrefix: "Calculate your",
-    headlineAccent: "bathroom",
-    headlineSuffix: "remodel cost",
+    headlinePrefix: "Calculate your", headlineAccent: "bathroom", headlineSuffix: "remodel cost",
     gridLabel: "YOUR BATHROOM TYPE",
     subtypes: [
       { id: "powder",          icon: Droplets, title: "Powder",         subtitle: "Sink & toilet" },
@@ -170,11 +164,8 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
     footerAccent: "bathroom",
   },
   "whole-home": {
-    icon: Home,
     tabLabel: "Whole-Home",
-    headlinePrefix: "Calculate your",
-    headlineAccent: "home",
-    headlineSuffix: "remodel cost",
+    headlinePrefix: "Calculate your", headlineAccent: "home", headlineSuffix: "remodel cost",
     gridLabel: "YOUR PROJECT SCOPE",
     subtypes: [
       { id: "single-room",   icon: Layers,    title: "Single Room",   subtitle: "One space" },
@@ -192,11 +183,11 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
     footerAccent: "home",
   },
   addition: {
-    icon: Building2,
     tabLabel: "Addition",
     headlinePrefix: "Calculate your room",
     headlineAccent: "addition",
     headlineSuffix: "cost",
+    twoLineHeadline: true, /* "room" ends line 1; "addition cost" is line 2 */
     gridLabel: "WHAT ARE YOU ADDING?",
     subtypes: [
       { id: "bedroom-suite", icon: Bed,    title: "Bedroom Suite", subtitle: "Bed + bath" },
@@ -214,11 +205,8 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
     footerAccent: "addition",
   },
   adu: {
-    icon: Building2,
     tabLabel: "ADU",
-    headlinePrefix: "Calculate your",
-    headlineAccent: "ADU",
-    headlineSuffix: "cost",
+    headlinePrefix: "Calculate your", headlineAccent: "ADU", headlineSuffix: "cost",
     gridLabel: "YOUR ADU TYPE",
     subtypes: [
       { id: "attached",      icon: Home,      title: "Attached",      subtitle: "Shares a wall" },
@@ -236,11 +224,8 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
     footerAccent: "ADU",
   },
   basement: {
-    icon: Layers,
     tabLabel: "Basement",
-    headlinePrefix: "Calculate your",
-    headlineAccent: "basement",
-    headlineSuffix: "finishing cost",
+    headlinePrefix: "Calculate your", headlineAccent: "basement", headlineSuffix: "finishing cost",
     gridLabel: "HOW WILL YOU USE IT?",
     subtypes: [
       { id: "family-room",  icon: Sofa,    title: "Family Room",  subtitle: "Living space" },
@@ -277,9 +262,7 @@ function buildRefinements(
 
   switch (effectiveProject) {
     case "kitchen": {
-      // CABINETS -> cabinetTier: semi-custom
       if (addOns.includes("cabinets")) ref.cabinetTier = "semi-custom";
-      // COUNTERS + LIGHTING together -> partial; all four -> full
       if (addOns.length === 4) {
         ref.plumbingElectrical = "full";
       } else if (addOns.includes("counters") && addOns.includes("lighting")) {
@@ -288,13 +271,11 @@ function buildRefinements(
       break;
     }
     case "bathroom": {
-      // 1-2 -> partial; 3-4 -> full
       if (addOns.length >= 3) ref.plumbingElectrical = "full";
       else if (addOns.length >= 1) ref.plumbingElectrical = "partial";
       break;
     }
     case "whole-home": {
-      // LAYOUT -> layoutChanges: moderate; KITCHEN+BATHS -> partial only
       if (addOns.includes("layout")) ref.layoutChanges = "moderate";
       if (addOns.includes("kitchen") && addOns.includes("baths")) {
         ref.plumbingElectrical = "partial";
@@ -302,7 +283,6 @@ function buildRefinements(
       break;
     }
     case "addition": {
-      // 1-2 -> partial; 3-4 -> full
       if (addOns.length >= 3) ref.plumbingElectrical = "full";
       else if (addOns.length >= 1 && !ref.plumbingElectrical) {
         ref.plumbingElectrical = "partial";
@@ -310,7 +290,6 @@ function buildRefinements(
       break;
     }
     case "adu": {
-      // KITCHEN+BATH -> partial; all four -> full
       if (addOns.length === 4) {
         ref.plumbingElectrical = "full";
       } else if (addOns.includes("kitchen") && addOns.includes("bath")) {
@@ -319,7 +298,6 @@ function buildRefinements(
       break;
     }
     case "basement": {
-      // BATH -> partial; BATH+WET BAR -> full; EGRESS handled via sqft bump
       if (addOns.includes("bath") && addOns.includes("wet-bar")) {
         ref.plumbingElectrical = "full";
       } else if (addOns.includes("bath")) {
@@ -333,7 +311,7 @@ function buildRefinements(
 }
 
 /* ══════════════════════════════════════════════════════════════════════
-   SQFT CALCULATOR  (includes basement EGRESS sqft bump)
+   SQFT  (basement EGRESS adds structural/carpentry cost via sqft bump)
 ══════════════════════════════════════════════════════════════════════ */
 
 function computeSqft(
@@ -345,13 +323,12 @@ function computeSqft(
   const data = SUBTYPE_DATA[projectType]?.[subtype];
   if (!data) return null;
   let sqft = data.sqft;
-  // EGRESS window + well adds carpentry / structural cost modeled as sqft bump
   if (projectType === "basement" && addOns.includes("egress")) sqft += 100;
   return sqft;
 }
 
 /* ══════════════════════════════════════════════════════════════════════
-   FOOTER STRIP  (outside main component to avoid remount anti-pattern)
+   FOOTER STRIP  (separate component to avoid remount anti-pattern)
 ══════════════════════════════════════════════════════════════════════ */
 
 function FooterStrip({
@@ -365,7 +342,6 @@ function FooterStrip({
 }) {
   return (
     <div className="relative flex-shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 overflow-hidden">
-      {/* Blurred photo bg */}
       <div
         aria-hidden="true"
         className="absolute inset-0 scale-110"
@@ -376,15 +352,12 @@ function FooterStrip({
           filter: "blur(10px)",
         }}
       />
-      {/* Overlay */}
       <div aria-hidden="true" className="absolute inset-0 bg-inverse/78" />
 
-      {/* Wordmark */}
       <p className="relative text-[8px] tracking-[0.22em] uppercase text-inverse-foreground/80 font-medium select-none">
         BOISE REMODELING Co.
       </p>
 
-      {/* CTA link */}
       <button
         type="button"
         onClick={onConsultClick}
@@ -397,14 +370,13 @@ function FooterStrip({
         <ArrowRight className="h-3 w-3" />
       </button>
 
-      {/* Phone */}
       <p className="relative text-[11px] text-inverse-muted hidden sm:block">(208) 477-1169</p>
     </div>
   );
 }
 
 /* ══════════════════════════════════════════════════════════════════════
-   MAIN COMPONENT
+   CONSTANTS
 ══════════════════════════════════════════════════════════════════════ */
 
 const FINISH_LABELS: Record<FinishLevel, string> = {
@@ -413,6 +385,10 @@ const FINISH_LABELS: Record<FinishLevel, string> = {
   "high-end": "High-End",
   luxury: "Luxury",
 };
+
+/* ══════════════════════════════════════════════════════════════════════
+   MAIN COMPONENT
+══════════════════════════════════════════════════════════════════════ */
 
 interface EstimateCalculatorProps {
   inModal?: boolean;
@@ -433,16 +409,28 @@ export function EstimateCalculator({
   const [gridNudge, setGridNudge]         = useState(false);
   const [scopeOpen, setScopeOpen]         = useState(false);
   const [legalOpen, setLegalOpen]         = useState(false);
-  const nudgeTimer = useRef<number | null>(null);
+  const nudgeTimer  = useRef<number | null>(null);
+  const resultRef   = useRef<HTMLDivElement>(null);
 
   /* ── Derived ── */
   const config = PROJECT_CONFIGS[activeProject];
-  const availFinish = getAvailableFinishLevels(activeProject);
 
   const effectiveProject = useMemo<ProjectType>(() => {
     if (!subtype) return activeProject;
     return SUBTYPE_DATA[activeProject]?.[subtype]?.projectOverride ?? activeProject;
   }, [activeProject, subtype]);
+
+  /* Finish options MUST come from effectiveProject to stay consistent with the engine */
+  const availFinish = useMemo(
+    () => getAvailableFinishLevels(effectiveProject),
+    [effectiveProject],
+  );
+
+  /* When effectiveProject changes (subtype override), drop invalid finish selection */
+  useEffect(() => {
+    if (!availFinish.includes(finish)) setFinish("mid-range");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [availFinish]);
 
   const sqft = useMemo(
     () => computeSqft(activeProject, subtype, addOns),
@@ -488,13 +476,9 @@ export function EstimateCalculator({
     setAddOns([]);
     setShowResult(false);
     setScopeOpen(false);
+    setLegalOpen(false);
     const avail = getAvailableFinishLevels(type);
     if (!avail.includes(finish)) setFinish("mid-range");
-  }
-
-  function handleSelectSubtype(id: string) {
-    setSubtype(id);
-    // If the result is already showing, keep it visible (live update)
   }
 
   function handleToggleChip(id: string) {
@@ -512,6 +496,11 @@ export function EstimateCalculator({
     }
     setShowResult(true);
     setScopeOpen(false);
+    setLegalOpen(false);
+    /* Scroll result into view after it renders */
+    setTimeout(() => {
+      resultRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }, 80);
   }
 
   function handleBookVisit() {
@@ -522,7 +511,7 @@ export function EstimateCalculator({
     }
   }
 
-  /* ── Shared card class ── */
+  /* ── Shared dark card class ── */
   function darkCard(active: boolean) {
     return cn(
       "relative rounded-md border text-left transition-all duration-200",
@@ -533,7 +522,7 @@ export function EstimateCalculator({
   }
 
   /* ══════════════════════════════
-     RENDER HELPERS
+     SECTIONS
   ══════════════════════════════ */
 
   /* Project pill tabs */
@@ -568,24 +557,33 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Headline */
+  /* Headline - Addition uses explicit two-line treatment */
   const headline = (
-    <div className="flex-shrink-0 mb-3" key={activeProject}>
+    <div className="flex-shrink-0 mb-3">
       <p className="text-[9px] tracking-[0.2em] uppercase text-inverse-muted mb-1">
         BALLPARK YOUR PROJECT IN UNDER 60 SECONDS
       </p>
-      <h2 className="font-sans font-light text-[clamp(1.35rem,3.2vw,2.5rem)] leading-[1.1] tracking-tight text-inverse-foreground">
-        {config.headlinePrefix}{" "}
-        <em className="brc-accent">{config.headlineAccent}</em>{" "}
-        {config.headlineSuffix}
-      </h2>
+      {config.twoLineHeadline ? (
+        <h2 className="font-sans font-light text-[clamp(1.35rem,3.2vw,2.5rem)] leading-[1.1] tracking-tight text-inverse-foreground">
+          {config.headlinePrefix}
+          <br />
+          <em className="brc-accent">{config.headlineAccent}</em>{" "}
+          {config.headlineSuffix}
+        </h2>
+      ) : (
+        <h2 className="font-sans font-light text-[clamp(1.35rem,3.2vw,2.5rem)] leading-[1.1] tracking-tight text-inverse-foreground">
+          {config.headlinePrefix}{" "}
+          <em className="brc-accent">{config.headlineAccent}</em>{" "}
+          {config.headlineSuffix}
+        </h2>
+      )}
     </div>
   );
 
   /* Subtype 2x2 grid */
   const subtypeGrid = (
-    <div key={`grid-${activeProject}`}>
-      <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-2.5">
+    <div>
+      <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-2">
         {config.gridLabel}
       </p>
       <div
@@ -603,7 +601,7 @@ export function EstimateCalculator({
             <button
               key={opt.id}
               type="button"
-              onClick={() => handleSelectSubtype(opt.id)}
+              onClick={() => setSubtype(opt.id)}
               data-testid={`calc-subtype-${opt.id}`}
               aria-pressed={active}
               className={cn(darkCard(active), "flex items-start gap-2.5 p-2.5")}
@@ -629,13 +627,17 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Add-on chips */
+  /* Add-on chips - 4-across, wrapping 2x2 on very small screens */
   const chipsRow = (
-    <div className="mt-3" key={`chips-${activeProject}`}>
+    <div className="mt-3">
       <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-2">
         {config.chipsLabel}
       </p>
-      <div className="grid grid-cols-4 gap-2" role="group" aria-label={config.chipsLabel}>
+      <div
+        className="grid grid-cols-2 xs:grid-cols-4 sm:grid-cols-4 gap-2"
+        role="group"
+        aria-label={config.chipsLabel}
+      >
         {config.chips.map((chip) => {
           const Icon = chip.icon;
           const active = addOns.includes(chip.id);
@@ -652,10 +654,7 @@ export function EstimateCalculator({
               )}
             >
               <Icon
-                className={cn(
-                  "h-4 w-4",
-                  active ? "text-accent-legible" : "text-inverse-muted",
-                )}
+                className={cn("h-4 w-4", active ? "text-accent-legible" : "text-inverse-muted")}
               />
               <span className="text-[8px] tracking-widest uppercase text-inverse-foreground leading-tight">
                 {chip.label}
@@ -667,7 +666,7 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Finish level secondary row */
+  /* Finish level secondary row - options tied to effectiveProject */
   const finishRow = (
     <div className="flex-shrink-0 mt-3">
       <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-2">
@@ -698,132 +697,135 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Inline result panel */
-  const resultPanel = result ? (
-    <div className="animate-in fade-in slide-in-from-bottom-2 duration-200 motion-reduce:animate-none space-y-3">
-      {/* Price range */}
-      <div>
-        <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-1.5">
-          Planning range
-        </p>
-        <div
-          className="brc-display-num tabular-nums leading-none text-inverse-foreground text-[clamp(26px,6.5vw,44px)]"
-          data-testid="estimate-range"
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          <AnimatedPrice value={result.priceLow} />
-          <span className="text-inverse-muted/60 mx-1 text-lg">to</span>
-          <AnimatedPrice value={result.priceHigh} />
-        </div>
-      </div>
-
-      {/* ROI */}
-      <p className="text-[11px] text-inverse-muted">
-        Est. {result.roi}% ROI based on Boise market data.
-      </p>
-
-      {/* Scope toggle */}
-      <div className="border-t border-inverse-foreground/10 pt-2.5">
-        <button
-          type="button"
-          onClick={() => setScopeOpen((p) => !p)}
-          className="flex w-full items-center justify-between text-left py-0.5"
-          data-testid="button-toggle-scope"
-          aria-expanded={scopeOpen}
-        >
-          <span className="text-[9px] tracking-widest uppercase text-inverse-muted">
-            What&apos;s typically included ({result.included.length})
-          </span>
-          <ChevronDown
-            className={cn(
-              "h-3.5 w-3.5 text-inverse-muted transition-transform",
-              scopeOpen && "rotate-180",
-            )}
-          />
-        </button>
-        {scopeOpen && (
-          <div className="pt-2 space-y-1.5" id="estimate-scope-list">
-            {result.included.map((item, i) => (
-              <div
-                key={i}
-                className="flex items-start gap-2 text-[10px] text-inverse-muted leading-snug"
-                data-testid={`included-item-${i}`}
-              >
-                <Check className="h-2.5 w-2.5 flex-shrink-0 mt-0.5 text-accent-legible" />
-                {item}
-              </div>
-            ))}
-            <p className="text-[9px] text-inverse-muted/70 pt-1 leading-relaxed">
-              {INCLUDED_SCOPE_NOTE}
-            </p>
-            {effectiveProject === "kitchen" && (
-              <p className="text-[9px] text-inverse-muted/70 leading-relaxed">
-                {APPLIANCE_DISCLAIMER}
-              </p>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* Legal note toggle */}
-      <div>
-        <button
-          type="button"
-          onClick={() => setLegalOpen((p) => !p)}
-          className="flex items-center gap-1 text-[9px] text-inverse-muted/60 hover:text-inverse-muted transition-colors"
-          aria-expanded={legalOpen}
-        >
-          Why a range, not a fixed price?
-          <ChevronDown className={cn("h-3 w-3 transition-transform", legalOpen && "rotate-180")} />
-        </button>
-        {legalOpen && (
-          <p className="text-[9px] text-inverse-muted/70 leading-relaxed mt-1.5">
-            Planning estimate only - not a proposal, bid, or guaranteed cost. Ranges
-            reflect project type, size, location, and finish assumptions. Your consultation
-            delivers a detailed evaluation tailored to your home.
-          </p>
-        )}
-      </div>
-
-      {/* Edit link */}
-      <button
-        type="button"
-        onClick={() => { setShowResult(false); setScopeOpen(false); setLegalOpen(false); }}
-        className="text-[10px] text-inverse-muted hover:text-inverse-foreground transition-colors"
-        data-testid="button-edit-estimate"
-      >
-        Edit selections
-      </button>
-    </div>
-  ) : (
-    <div className="flex items-center h-full">
-      <p className="text-[12px] text-inverse-muted">
-        Select a subtype above and tap Calculate.
-      </p>
-    </div>
-  );
-
-  /* CTA button */
+  /* CALCULATE MY COST button - always this label; result scrolls into view below */
   const ctaButton = (
     <div className="flex-shrink-0 mt-3">
       <Button
-        onClick={showResult ? handleBookVisit : handleCalculate}
-        data-testid={showResult ? "button-book-visit" : "button-calculate"}
-        className={cn(
-          "w-full tracking-[0.14em] text-[11px] uppercase font-normal",
-          "bg-inverse-foreground text-inverse",
-        )}
+        onClick={handleCalculate}
+        data-testid="button-calculate"
+        className="w-full bg-inverse-foreground text-inverse tracking-[0.14em] text-[11px] uppercase font-normal"
       >
-        {showResult ? (
-          <>
-            Book a Free Visit
-            <ArrowRight className="h-4 w-4" />
-          </>
-        ) : (
-          "CALCULATE MY COST"
-        )}
+        CALCULATE MY COST
       </Button>
+    </div>
+  );
+
+  /* Inline result panel - expands below CTA; inputs remain visible above */
+  const resultPanel = (
+    <div
+      ref={resultRef}
+      className={cn(
+        "mt-4 transition-all duration-300",
+        showResult
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none h-0 overflow-hidden mt-0",
+      )}
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      {result ? (
+        <div className="space-y-3 border-t border-inverse-foreground/10 pt-4">
+          {/* Price range */}
+          <div>
+            <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-1.5">
+              Planning range
+            </p>
+            <div
+              className="brc-display-num tabular-nums leading-none text-inverse-foreground text-[clamp(26px,6.5vw,44px)]"
+              data-testid="estimate-range"
+            >
+              <AnimatedPrice value={result.priceLow} />
+              <span className="text-inverse-muted/60 mx-1 text-lg">to</span>
+              <AnimatedPrice value={result.priceHigh} />
+            </div>
+          </div>
+
+          {/* ROI */}
+          <p className="text-[11px] text-inverse-muted">
+            Est. {result.roi}% ROI based on Boise market data.
+          </p>
+
+          {/* Scope accordion */}
+          <div>
+            <button
+              type="button"
+              onClick={() => setScopeOpen((p) => !p)}
+              className="flex w-full items-center justify-between text-left py-0.5"
+              data-testid="button-toggle-scope"
+              aria-expanded={scopeOpen}
+            >
+              <span className="text-[9px] tracking-widest uppercase text-inverse-muted">
+                What&apos;s typically included ({result.included.length})
+              </span>
+              <ChevronDown
+                className={cn(
+                  "h-3.5 w-3.5 text-inverse-muted transition-transform",
+                  scopeOpen && "rotate-180",
+                )}
+              />
+            </button>
+            {scopeOpen && (
+              <div className="pt-2 space-y-1.5">
+                {result.included.map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-start gap-2 text-[10px] text-inverse-muted leading-snug"
+                    data-testid={`included-item-${i}`}
+                  >
+                    <Check className="h-2.5 w-2.5 flex-shrink-0 mt-0.5 text-accent-legible" />
+                    {item}
+                  </div>
+                ))}
+                <p className="text-[9px] text-inverse-muted/70 pt-1 leading-relaxed">
+                  {INCLUDED_SCOPE_NOTE}
+                </p>
+                {effectiveProject === "kitchen" && (
+                  <p className="text-[9px] text-inverse-muted/70 leading-relaxed">
+                    {APPLIANCE_DISCLAIMER}
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Legal */}
+          <div>
+            <button
+              type="button"
+              onClick={() => setLegalOpen((p) => !p)}
+              className="flex items-center gap-1 text-[9px] text-inverse-muted/60 hover:text-inverse-muted transition-colors"
+              aria-expanded={legalOpen}
+            >
+              Why a range, not a fixed price?
+              <ChevronDown className={cn("h-3 w-3 transition-transform", legalOpen && "rotate-180")} />
+            </button>
+            {legalOpen && (
+              <p className="text-[9px] text-inverse-muted/70 leading-relaxed mt-1.5">
+                Planning estimate only - not a proposal, bid, or guaranteed cost. Ranges
+                reflect project type, size, location, and finish assumptions. Your
+                consultation delivers a detailed evaluation tailored to your home.
+              </p>
+            )}
+          </div>
+
+          {/* Book CTA inside result panel */}
+          <Button
+            onClick={handleBookVisit}
+            data-testid="button-book-visit"
+            variant="outline"
+            className="w-full border-inverse-foreground/30 text-inverse-foreground hover:bg-inverse-foreground/10 text-[10px] tracking-[0.12em] uppercase"
+          >
+            Book a Free Visit
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+      ) : (
+        showResult && (
+          <p className="text-[12px] text-inverse-muted border-t border-inverse-foreground/10 pt-4">
+            Select a project type and subtype, then tap Calculate.
+          </p>
+        )
+      )}
     </div>
   );
 
@@ -831,27 +833,22 @@ export function EstimateCalculator({
      LAYOUTS
   ══════════════════════════════ */
 
-  /* inModal: compact scrollable layout without full-viewport constraint */
+  /* inModal: compact layout without full-viewport constraint */
   if (inModal) {
     return (
-      <div className="bg-inverse text-inverse-foreground rounded-lg p-5 flex flex-col gap-0">
+      <div className="bg-inverse text-inverse-foreground rounded-lg p-5 flex flex-col">
         {tabStrip}
         {headline}
-        <div className="mb-0">
-          {showResult ? resultPanel : (
-            <>
-              {subtypeGrid}
-              {chipsRow}
-            </>
-          )}
-        </div>
+        {subtypeGrid}
+        {chipsRow}
         {finishRow}
         {ctaButton}
+        {resultPanel}
       </div>
     );
   }
 
-  /* Inline: full-viewport dark section, single screen */
+  /* Full page: single-screen dark section; result expands below CTA */
   return (
     <Section
       id="calculator"
@@ -861,26 +858,23 @@ export function EstimateCalculator({
       style={{ minHeight: "100dvh" } as React.CSSProperties}
       className="flex flex-col"
     >
-      {/* Main content area */}
-      <div className="container px-4 sm:px-6 pt-16 pb-2 flex-1 flex flex-col min-h-0">
+      <div className="container px-4 sm:px-6 pt-16 pb-4 flex-1 flex flex-col">
         {tabStrip}
         {headline}
 
-        {/* Swap zone: inputs or result - takes remaining flex space */}
-        <div className="flex-1 min-h-0 overflow-hidden">
-          {showResult ? resultPanel : (
-            <div key={activeProject} className="h-full">
-              {subtypeGrid}
-              {chipsRow}
-            </div>
-          )}
-        </div>
-
+        {/* Controls - always visible */}
+        {subtypeGrid}
+        {chipsRow}
         {finishRow}
         {ctaButton}
+
+        {/* Result panel - expands below CTA after Calculate is clicked */}
+        {resultPanel}
+
+        {/* Bottom spacer so content doesn't crowd the footer strip */}
+        <div className="flex-1 min-h-4" />
       </div>
 
-      {/* Footer strip - always at the bottom of the dark section */}
       <FooterStrip
         activeProject={activeProject}
         footerAccent={config.footerAccent}
