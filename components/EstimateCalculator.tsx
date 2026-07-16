@@ -411,6 +411,7 @@ export function EstimateCalculator({
   const [legalOpen, setLegalOpen]         = useState(false);
   const nudgeTimer  = useRef<number | null>(null);
   const resultRef   = useRef<HTMLDivElement>(null);
+  const tabsRef     = useRef<HTMLDivElement>(null);
 
   /* ── Derived ── */
   const config = PROJECT_CONFIGS[activeProject];
@@ -467,6 +468,13 @@ export function EstimateCalculator({
   }, [result, effectiveProject, finish, sqft, refinements, userRefinementCount]);
 
   useEffect(() => () => { if (nudgeTimer.current) clearTimeout(nudgeTimer.current); }, []);
+
+  /* Auto-scroll the active tab into view when project changes */
+  useEffect(() => {
+    if (!tabsRef.current) return;
+    const activeEl = tabsRef.current.querySelector<HTMLElement>('[aria-selected="true"]');
+    activeEl?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+  }, [activeProject]);
 
   /* ── Handlers ── */
   function handleSelectProject(type: ProjectType) {
@@ -525,35 +533,50 @@ export function EstimateCalculator({
      SECTIONS
   ══════════════════════════════ */
 
-  /* Project pill tabs */
+  /* Project pill tabs - single-row horizontal scroll strip */
   const tabStrip = (
-    <div
-      className="flex gap-1.5 flex-wrap flex-shrink-0 mb-3"
-      role="tablist"
-      aria-label="Project type"
-    >
-      {PROJECT_TYPE_ORDER.map((type) => {
-        const pc = PROJECT_CONFIGS[type];
-        const active = activeProject === type;
-        return (
-          <button
-            key={type}
-            type="button"
-            role="tab"
-            aria-selected={active}
-            onClick={() => handleSelectProject(type)}
-            data-testid={`calc-tab-${type}`}
-            className={cn(
-              "px-3 py-1.5 rounded-full border text-[10px] tracking-wide transition-all duration-200",
-              active
-                ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
-                : "bg-transparent border-inverse-foreground/[0.14] text-inverse-muted hover-elevate",
-            )}
-          >
-            {pc.tabLabel}
-          </button>
-        );
-      })}
+    <div className="flex-shrink-0 mb-4">
+      <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-2">
+        CHOOSE YOUR PROJECT TYPE
+      </p>
+      <div className="relative">
+        {/* Scrollable row - hidden scrollbar, single line */}
+        <div
+          ref={tabsRef}
+          className="flex gap-2 overflow-x-auto pb-0.5 [&::-webkit-scrollbar]:hidden"
+          style={{ scrollbarWidth: "none" }}
+          role="tablist"
+          aria-label="Project type"
+        >
+          {PROJECT_TYPE_ORDER.map((type) => {
+            const pc = PROJECT_CONFIGS[type];
+            const active = activeProject === type;
+            return (
+              <button
+                key={type}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => handleSelectProject(type)}
+                data-testid={`calc-tab-${type}`}
+                className={cn(
+                  "flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full border text-[12px] font-medium tracking-wide transition-all duration-200",
+                  active
+                    ? "bg-inverse-foreground text-inverse border-inverse-foreground"
+                    : "bg-transparent border-inverse-foreground/[0.22] text-inverse-muted hover-elevate",
+                )}
+              >
+                {pc.tabLabel}
+              </button>
+            );
+          })}
+        </div>
+        {/* Right-edge gradient fade - hints that more tabs are off-screen */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-inverse to-transparent"
+        />
+      </div>
     </div>
   );
 
