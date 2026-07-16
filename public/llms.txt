@@ -11,6 +11,9 @@ Design-build means one accountable team handles design, estimating, Ada and Cany
 - [Whole-Home Remodel](https://boiseremodeling.co/services/whole-home-remodel): multi-room and full-house renovations.
 - [Room Addition](https://boiseremodeling.co/services/room-addition): bump-outs, second stories, and new rooms.
 - [ADU / Guest House](https://boiseremodeling.co/services/adu): garage conversions and detached new builds.
+- [Basement Remodeling](https://boiseremodeling.co/services/basement-remodel): finished basements, egress, and lower-level living space.
+- [Outdoor Living & Decks](https://boiseremodeling.co/services/outdoor-living): decks, covered patios, and outdoor kitchens.
+- [Aging-in-Place Remodeling](https://boiseremodeling.co/services/aging-in-place): accessible, universal-design remodels.
 - [All Services](https://boiseremodeling.co/services): plus city pages at /services/{service}/{city} and [Service Areas](https://boiseremodeling.co/areas).
 
 ## Authoritative guides
