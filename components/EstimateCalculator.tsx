@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
-  ChevronLeft, Check, ChevronDown, ArrowRight,
+  Check, ChevronDown, ArrowRight,
   UtensilsCrossed, Droplets, Home, Building2, Layers, AlignLeft,
   LayoutGrid, Star, Sun, Monitor, Dumbbell, Bed, Car,
   Lightbulb, Wind, DoorOpen, GlassWater, Sofa, Frame, Triangle, Grid3x3,
@@ -20,8 +20,6 @@ import {
   type EstimateResult,
   EMPTY_REFINEMENTS,
   getAvailableFinishLevels,
-  getSizePresets,
-  getProjectSizeConfig,
   calculateEstimate,
   buildStoredEstimate,
   countVisibleUserRefinements,
@@ -30,9 +28,9 @@ import {
   APPLIANCE_DISCLAIMER,
 } from "@/shared/estimateEngine";
 
-/* ═══════════════════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════════
    TYPES
-═══════════════════════════════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════════════ */
 
 interface SubtypeOption {
   id: string;
@@ -53,10 +51,11 @@ interface ProjectUIConfig {
   headlinePrefix: string;
   headlineAccent: string;
   headlineSuffix: string;
-  subtypeLabel: string;
+  gridLabel: string;
   subtypes: SubtypeOption[];
-  chipLabel: string;
+  chipsLabel: string;
   chips: ChipOption[];
+  footerAccent: string;
 }
 
 type SubtypeData = {
@@ -65,10 +64,9 @@ type SubtypeData = {
   projectOverride?: ProjectType;
 };
 
-/* ═══════════════════════════════════════════════════════════════════════
-   SUBTYPE SQFT + REFINEMENT SEEDS
-   (drives the engine without touching estimateEngine.ts)
-═══════════════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════════
+   SUBTYPE DATA  (sqft + refinement seeds, per spec)
+══════════════════════════════════════════════════════════════════════ */
 
 const SUBTYPE_DATA: Record<ProjectType, Record<string, SubtypeData>> = {
   kitchen: {
@@ -78,16 +76,16 @@ const SUBTYPE_DATA: Record<ProjectType, Record<string, SubtypeData>> = {
     island:      { sqft: 400, refinements: { layoutChanges: "moderate" } },
   },
   bathroom: {
-    powder:            { sqft: 50,  refinements: { fixtureCount: 1 } },
-    "guest-bath":      { sqft: 80,  refinements: { fixtureCount: 2 } },
-    "primary-suite":   { sqft: 120, refinements: { fixtureCount: 3 } },
-    "walk-in-shower":  { sqft: 90,  refinements: { fixtureCount: 2, layoutChanges: "moderate" } },
+    powder:           { sqft: 50,  refinements: { fixtureCount: 1 } },
+    "guest-bath":     { sqft: 80,  refinements: { fixtureCount: 2 } },
+    "primary-suite":  { sqft: 120, refinements: { fixtureCount: 3 } },
+    "walk-in-shower": { sqft: 90,  refinements: { fixtureCount: 2, layoutChanges: "moderate" } },
   },
   "whole-home": {
-    "single-room":    { sqft: 400,  refinements: { roomCount: 1 } },
-    "multi-room":     { sqft: 900,  refinements: { roomCount: 4 } },
-    "whole-home":     { sqft: 1800, refinements: { roomCount: 8 } },
-    "home-addition":  { sqft: 500,  refinements: {}, projectOverride: "addition" },
+    "single-room":   { sqft: 400,  refinements: { roomCount: 1 } },
+    "multi-room":    { sqft: 900,  refinements: { roomCount: 4 } },
+    "whole-home":    { sqft: 1800, refinements: { roomCount: 8 } },
+    "home-addition": { sqft: 500,  refinements: {}, projectOverride: "addition" },
   },
   addition: {
     "bedroom-suite": { sqft: 350, refinements: { plumbingElectrical: "partial" } },
@@ -109,9 +107,22 @@ const SUBTYPE_DATA: Record<ProjectType, Record<string, SubtypeData>> = {
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════════
+   FOOTER STRIP IMAGES (per project type)
+══════════════════════════════════════════════════════════════════════ */
+
+const FOOTER_BG: Record<ProjectType, string> = {
+  kitchen:      "/images/gallery/gallery-kitchen-after.webp",
+  bathroom:     "/images/gallery/gallery-bathroom-after.webp",
+  "whole-home": "/images/gallery/gallery-kitchen-after.webp",
+  addition:     "/images/gallery/gallery-addition-after.webp",
+  adu:          "/images/gallery/gallery-addition-after.webp",
+  basement:     "/images/gallery/gallery-basement-after.webp",
+};
+
+/* ══════════════════════════════════════════════════════════════════════
    PROJECT UI CONFIGS
-═══════════════════════════════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════════════ */
 
 const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
   kitchen: {
@@ -120,20 +131,21 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
     headlinePrefix: "Calculate your",
     headlineAccent: "kitchen",
     headlineSuffix: "remodel cost",
-    subtypeLabel: "YOUR KITCHEN LAYOUT",
+    gridLabel: "YOUR KITCHEN LAYOUT",
     subtypes: [
       { id: "galley",   icon: AlignLeft,  title: "Galley",  subtitle: "Two facing runs" },
       { id: "l-shape",  icon: Frame,      title: "L-Shape", subtitle: "Corner run" },
       { id: "u-shape",  icon: Grid3x3,    title: "U-Shape", subtitle: "Three walls" },
       { id: "island",   icon: LayoutGrid, title: "Island",  subtitle: "Open concept" },
     ],
-    chipLabel: "WHAT ARE YOU UPGRADING?",
+    chipsLabel: "WHAT ARE YOU UPGRADING?",
     chips: [
       { id: "cabinets", icon: LayoutGrid, label: "CABINETS" },
       { id: "counters", icon: Layers,     label: "COUNTERS" },
       { id: "flooring", icon: Grid3x3,    label: "FLOORING" },
       { id: "lighting", icon: Lightbulb,  label: "LIGHTING" },
     ],
+    footerAccent: "kitchen",
   },
   bathroom: {
     icon: Droplets,
@@ -141,20 +153,21 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
     headlinePrefix: "Calculate your",
     headlineAccent: "bathroom",
     headlineSuffix: "remodel cost",
-    subtypeLabel: "YOUR BATHROOM TYPE",
+    gridLabel: "YOUR BATHROOM TYPE",
     subtypes: [
-      { id: "powder",          icon: Droplets,   title: "Powder",         subtitle: "Sink and toilet" },
-      { id: "guest-bath",      icon: Layers,     title: "Guest Bath",     subtitle: "Tub and shower" },
-      { id: "primary-suite",   icon: Star,       title: "Primary Suite",  subtitle: "Spa retreat" },
-      { id: "walk-in-shower",  icon: Wind,       title: "Walk-in Shower", subtitle: "Curbless" },
+      { id: "powder",          icon: Droplets, title: "Powder",         subtitle: "Sink & toilet" },
+      { id: "guest-bath",      icon: Layers,   title: "Guest Bath",     subtitle: "Tub & shower" },
+      { id: "primary-suite",   icon: Star,     title: "Primary Suite",  subtitle: "Spa retreat" },
+      { id: "walk-in-shower",  icon: Wind,     title: "Walk-in Shower", subtitle: "Curbless" },
     ],
-    chipLabel: "WHAT ARE YOU UPGRADING?",
+    chipsLabel: "WHAT ARE YOU UPGRADING?",
     chips: [
-      { id: "shower", icon: Droplets,  label: "SHOWER" },
-      { id: "vanity", icon: Star,      label: "VANITY" },
-      { id: "tub",    icon: Layers,    label: "TUB" },
-      { id: "tile",   icon: Grid3x3,   label: "TILE" },
+      { id: "shower", icon: Droplets, label: "SHOWER" },
+      { id: "vanity", icon: Star,     label: "VANITY" },
+      { id: "tub",    icon: Layers,   label: "TUB" },
+      { id: "tile",   icon: Grid3x3,  label: "TILE" },
     ],
+    footerAccent: "bathroom",
   },
   "whole-home": {
     icon: Home,
@@ -162,20 +175,21 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
     headlinePrefix: "Calculate your",
     headlineAccent: "home",
     headlineSuffix: "remodel cost",
-    subtypeLabel: "YOUR PROJECT SCOPE",
+    gridLabel: "YOUR PROJECT SCOPE",
     subtypes: [
-      { id: "single-room",   icon: Layers,     title: "Single Room",   subtitle: "One space" },
-      { id: "multi-room",    icon: LayoutGrid,  title: "Multi-Room",    subtitle: "A few spaces" },
-      { id: "whole-home",    icon: Home,        title: "Whole Home",    subtitle: "Full renovation" },
-      { id: "home-addition", icon: Building2,   title: "Home Addition", subtitle: "New footage" },
+      { id: "single-room",   icon: Layers,    title: "Single Room",   subtitle: "One space" },
+      { id: "multi-room",    icon: LayoutGrid, title: "Multi-Room",    subtitle: "A few spaces" },
+      { id: "whole-home",    icon: Home,       title: "Whole Home",    subtitle: "Full renovation" },
+      { id: "home-addition", icon: Building2,  title: "Home Addition", subtitle: "New footage" },
     ],
-    chipLabel: "WHAT ARE YOU INCLUDING?",
+    chipsLabel: "WHAT ARE YOU INCLUDING?",
     chips: [
       { id: "kitchen",  icon: UtensilsCrossed, label: "KITCHEN" },
       { id: "baths",    icon: Droplets,        label: "BATHS" },
       { id: "flooring", icon: Grid3x3,         label: "FLOORING" },
       { id: "layout",   icon: LayoutGrid,      label: "LAYOUT" },
     ],
+    footerAccent: "home",
   },
   addition: {
     icon: Building2,
@@ -183,20 +197,21 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
     headlinePrefix: "Calculate your room",
     headlineAccent: "addition",
     headlineSuffix: "cost",
-    subtypeLabel: "WHAT ARE YOU ADDING?",
+    gridLabel: "WHAT ARE YOU ADDING?",
     subtypes: [
-      { id: "bedroom-suite", icon: Bed,      title: "Bedroom Suite", subtitle: "Bed + bath" },
-      { id: "sunroom",       icon: Sun,      title: "Sunroom",       subtitle: "Bright + airy" },
-      { id: "great-room",    icon: Sofa,     title: "Great Room",    subtitle: "Living space" },
-      { id: "second-story",  icon: Layers,   title: "Second Story",  subtitle: "Add a level" },
+      { id: "bedroom-suite", icon: Bed,    title: "Bedroom Suite", subtitle: "Bed + bath" },
+      { id: "sunroom",       icon: Sun,    title: "Sunroom",       subtitle: "Bright + airy" },
+      { id: "great-room",    icon: Sofa,   title: "Great Room",    subtitle: "Living space" },
+      { id: "second-story",  icon: Layers, title: "Second Story",  subtitle: "Add a level" },
     ],
-    chipLabel: "WHAT'S INCLUDED?",
+    chipsLabel: "WHAT'S INCLUDED?",
     chips: [
-      { id: "foundation", icon: Layers,    label: "FOUNDATION" },
-      { id: "framing",    icon: Frame,     label: "FRAMING" },
-      { id: "roofing",    icon: Triangle,  label: "ROOFING" },
-      { id: "hvac",       icon: Wind,      label: "HVAC" },
+      { id: "foundation", icon: Layers,   label: "FOUNDATION" },
+      { id: "framing",    icon: Frame,    label: "FRAMING" },
+      { id: "roofing",    icon: Triangle, label: "ROOFING" },
+      { id: "hvac",       icon: Wind,     label: "HVAC" },
     ],
+    footerAccent: "addition",
   },
   adu: {
     icon: Building2,
@@ -204,20 +219,21 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
     headlinePrefix: "Calculate your",
     headlineAccent: "ADU",
     headlineSuffix: "cost",
-    subtypeLabel: "YOUR ADU TYPE",
+    gridLabel: "YOUR ADU TYPE",
     subtypes: [
       { id: "attached",      icon: Home,      title: "Attached",      subtitle: "Shares a wall" },
       { id: "garage",        icon: Car,       title: "Garage",        subtitle: "Convert existing" },
       { id: "detached",      icon: Building2, title: "Detached",      subtitle: "Standalone build" },
       { id: "above-garage",  icon: Layers,    title: "Above Garage",  subtitle: "Second story" },
     ],
-    chipLabel: "WHAT'S INCLUDED?",
+    chipsLabel: "WHAT'S INCLUDED?",
     chips: [
       { id: "kitchen",  icon: UtensilsCrossed, label: "KITCHEN" },
       { id: "bath",     icon: Droplets,        label: "BATH" },
       { id: "bedroom",  icon: Bed,             label: "BEDROOM" },
       { id: "living",   icon: Sofa,            label: "LIVING" },
     ],
+    footerAccent: "ADU",
   },
   basement: {
     icon: Layers,
@@ -225,27 +241,31 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
     headlinePrefix: "Calculate your",
     headlineAccent: "basement",
     headlineSuffix: "finishing cost",
-    subtypeLabel: "HOW WILL YOU USE IT?",
+    gridLabel: "HOW WILL YOU USE IT?",
     subtypes: [
       { id: "family-room",  icon: Sofa,    title: "Family Room",  subtitle: "Living space" },
       { id: "home-theater", icon: Monitor, title: "Home Theater", subtitle: "Media room" },
       { id: "guest-suite",  icon: Bed,     title: "Guest Suite",  subtitle: "Bed + bath" },
       { id: "gym-flex",     icon: Dumbbell,title: "Gym / Flex",   subtitle: "Workout space" },
     ],
-    chipLabel: "WHAT'S INCLUDED?",
+    chipsLabel: "WHAT'S INCLUDED?",
     chips: [
       { id: "egress",   icon: DoorOpen,   label: "EGRESS" },
       { id: "bath",     icon: Droplets,   label: "BATH" },
       { id: "wet-bar",  icon: GlassWater, label: "WET BAR" },
       { id: "flooring", icon: Grid3x3,    label: "FLOORING" },
     ],
+    footerAccent: "basement",
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════════════
-   REFINEMENT BUILDER
-   Translates subtype seeds + chip selections into EstimateRefinements.
-═══════════════════════════════════════════════════════════════════════ */
+const PROJECT_TYPE_ORDER: ProjectType[] = [
+  "kitchen", "bathroom", "whole-home", "addition", "adu", "basement",
+];
+
+/* ══════════════════════════════════════════════════════════════════════
+   REFINEMENT BUILDER  (exact logic per spec)
+══════════════════════════════════════════════════════════════════════ */
 
 function buildRefinements(
   effectiveProject: ProjectType,
@@ -257,37 +277,54 @@ function buildRefinements(
 
   switch (effectiveProject) {
     case "kitchen": {
+      // CABINETS -> cabinetTier: semi-custom
       if (addOns.includes("cabinets")) ref.cabinetTier = "semi-custom";
-      const peDrivers = (addOns.includes("counters") ? 1 : 0) + (addOns.includes("lighting") ? 1 : 0);
-      if (addOns.length >= 4) ref.plumbingElectrical = "full";
-      else if (peDrivers >= 2 || addOns.includes("counters")) ref.plumbingElectrical = "partial";
+      // COUNTERS + LIGHTING together -> partial; all four -> full
+      if (addOns.length === 4) {
+        ref.plumbingElectrical = "full";
+      } else if (addOns.includes("counters") && addOns.includes("lighting")) {
+        ref.plumbingElectrical = "partial";
+      }
       break;
     }
     case "bathroom": {
+      // 1-2 -> partial; 3-4 -> full
       if (addOns.length >= 3) ref.plumbingElectrical = "full";
       else if (addOns.length >= 1) ref.plumbingElectrical = "partial";
       break;
     }
     case "whole-home": {
-      if (addOns.includes("layout") && !ref.layoutChanges) ref.layoutChanges = "moderate";
+      // LAYOUT -> layoutChanges: moderate; KITCHEN+BATHS -> partial only
+      if (addOns.includes("layout")) ref.layoutChanges = "moderate";
       if (addOns.includes("kitchen") && addOns.includes("baths")) {
-        ref.plumbingElectrical = addOns.length >= 3 ? "full" : "partial";
+        ref.plumbingElectrical = "partial";
       }
       break;
     }
     case "addition": {
+      // 1-2 -> partial; 3-4 -> full
       if (addOns.length >= 3) ref.plumbingElectrical = "full";
-      else if (addOns.length >= 1 && !ref.plumbingElectrical) ref.plumbingElectrical = "partial";
+      else if (addOns.length >= 1 && !ref.plumbingElectrical) {
+        ref.plumbingElectrical = "partial";
+      }
       break;
     }
     case "adu": {
-      if (addOns.length >= 3) ref.plumbingElectrical = "full";
-      else if (addOns.includes("kitchen") && addOns.includes("bath")) ref.plumbingElectrical = "partial";
+      // KITCHEN+BATH -> partial; all four -> full
+      if (addOns.length === 4) {
+        ref.plumbingElectrical = "full";
+      } else if (addOns.includes("kitchen") && addOns.includes("bath")) {
+        ref.plumbingElectrical = "partial";
+      }
       break;
     }
     case "basement": {
-      if (addOns.includes("bath") && addOns.includes("wet-bar")) ref.plumbingElectrical = "full";
-      else if (addOns.includes("bath") && !ref.plumbingElectrical) ref.plumbingElectrical = "partial";
+      // BATH -> partial; BATH+WET BAR -> full; EGRESS handled via sqft bump
+      if (addOns.includes("bath") && addOns.includes("wet-bar")) {
+        ref.plumbingElectrical = "full";
+      } else if (addOns.includes("bath")) {
+        ref.plumbingElectrical = "partial";
+      }
       break;
     }
   }
@@ -295,21 +332,87 @@ function buildRefinements(
   return ref;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════
-   SHARED DARK UI PRIMITIVES
-═══════════════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════════
+   SQFT CALCULATOR  (includes basement EGRESS sqft bump)
+══════════════════════════════════════════════════════════════════════ */
 
-function DarkLabel({ children, className }: { children: React.ReactNode; className?: string }) {
+function computeSqft(
+  projectType: ProjectType,
+  subtype: string | null,
+  addOns: string[],
+): number | null {
+  if (!subtype) return null;
+  const data = SUBTYPE_DATA[projectType]?.[subtype];
+  if (!data) return null;
+  let sqft = data.sqft;
+  // EGRESS window + well adds carpentry / structural cost modeled as sqft bump
+  if (projectType === "basement" && addOns.includes("egress")) sqft += 100;
+  return sqft;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   FOOTER STRIP  (outside main component to avoid remount anti-pattern)
+══════════════════════════════════════════════════════════════════════ */
+
+function FooterStrip({
+  activeProject,
+  footerAccent,
+  onConsultClick,
+}: {
+  activeProject: ProjectType;
+  footerAccent: string;
+  onConsultClick: () => void;
+}) {
   return (
-    <p className={cn("text-[9px] tracking-[0.18em] uppercase text-inverse-muted font-normal mb-3", className)}>
-      {children}
-    </p>
+    <div className="relative flex-shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 overflow-hidden">
+      {/* Blurred photo bg */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 scale-110"
+        style={{
+          backgroundImage: `url(${FOOTER_BG[activeProject]})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "blur(10px)",
+        }}
+      />
+      {/* Overlay */}
+      <div aria-hidden="true" className="absolute inset-0 bg-inverse/78" />
+
+      {/* Wordmark */}
+      <p className="relative text-[8px] tracking-[0.22em] uppercase text-inverse-foreground/80 font-medium select-none">
+        BOISE REMODELING Co.
+      </p>
+
+      {/* CTA link */}
+      <button
+        type="button"
+        onClick={onConsultClick}
+        className="relative flex items-center gap-1.5 text-[11px] text-inverse-foreground hover:text-accent-legible transition-colors"
+        data-testid="link-footer-consult"
+      >
+        See my{" "}
+        <em className="brc-accent">{footerAccent}</em>
+        {" "}price
+        <ArrowRight className="h-3 w-3" />
+      </button>
+
+      {/* Phone */}
+      <p className="relative text-[11px] text-inverse-muted hidden sm:block">(208) 477-1169</p>
+    </div>
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════════
    MAIN COMPONENT
-═══════════════════════════════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════════════ */
+
+const FINISH_LABELS: Record<FinishLevel, string> = {
+  refresh: "Refresh",
+  "mid-range": "Mid-Range",
+  "high-end": "High-End",
+  luxury: "Luxury",
+};
 
 interface EstimateCalculatorProps {
   inModal?: boolean;
@@ -322,44 +425,51 @@ export function EstimateCalculator({
 }: EstimateCalculatorProps = {}) {
 
   /* ── State ── */
-  const [step, setStep] = useState(0); // 0=project 1=subtype 2=finish+size 3=addons
-  const [showResult, setShowResult] = useState(false); // mobile result reveal
-  const [projectType, setProjectType] = useState<ProjectType | null>(null);
-  const [subtype, setSubtype] = useState<string | null>(null);
-  const [finish, setFinish] = useState<FinishLevel>("mid-range");
-  const [sqft, setSqft] = useState<number | null>(null);
-  const [addOns, setAddOns] = useState<string[]>([]);
-  const [scopeOpen, setScopeOpen] = useState(false);
-  const [legalOpen, setLegalOpen] = useState(false);
-  const advanceTimer = useRef<number | null>(null);
+  const [activeProject, setActiveProject] = useState<ProjectType>("kitchen");
+  const [subtype, setSubtype]             = useState<string | null>(null);
+  const [addOns, setAddOns]               = useState<string[]>([]);
+  const [finish, setFinish]               = useState<FinishLevel>("mid-range");
+  const [showResult, setShowResult]       = useState(false);
+  const [gridNudge, setGridNudge]         = useState(false);
+  const [scopeOpen, setScopeOpen]         = useState(false);
+  const [legalOpen, setLegalOpen]         = useState(false);
+  const nudgeTimer = useRef<number | null>(null);
 
   /* ── Derived ── */
-  const effectiveProject = useMemo<ProjectType | null>(() => {
-    if (!projectType || !subtype) return projectType;
-    return SUBTYPE_DATA[projectType]?.[subtype]?.projectOverride ?? projectType;
-  }, [projectType, subtype]);
+  const config = PROJECT_CONFIGS[activeProject];
+  const availFinish = getAvailableFinishLevels(activeProject);
+
+  const effectiveProject = useMemo<ProjectType>(() => {
+    if (!subtype) return activeProject;
+    return SUBTYPE_DATA[activeProject]?.[subtype]?.projectOverride ?? activeProject;
+  }, [activeProject, subtype]);
+
+  const sqft = useMemo(
+    () => computeSqft(activeProject, subtype, addOns),
+    [activeProject, subtype, addOns],
+  );
 
   const refinements = useMemo<EstimateRefinements>(() => {
-    if (!effectiveProject || !subtype || !projectType) return { ...EMPTY_REFINEMENTS };
-    const data = SUBTYPE_DATA[projectType]?.[subtype];
+    if (!subtype) return { ...EMPTY_REFINEMENTS };
+    const data = SUBTYPE_DATA[activeProject]?.[subtype];
     if (!data) return { ...EMPTY_REFINEMENTS };
     return buildRefinements(effectiveProject, subtype, addOns, data.refinements);
-  }, [effectiveProject, projectType, subtype, addOns]);
+  }, [effectiveProject, activeProject, subtype, addOns]);
 
-  const userRefinementCount = useMemo(() => {
-    if (!effectiveProject) return 0;
-    return countVisibleUserRefinements(effectiveProject, getSetRefinementKeys(refinements));
-  }, [effectiveProject, refinements]);
+  const userRefinementCount = useMemo(
+    () => countVisibleUserRefinements(effectiveProject, getSetRefinementKeys(refinements)),
+    [effectiveProject, refinements],
+  );
 
   const result = useMemo<EstimateResult | null>(() => {
-    if (!effectiveProject || !sqft) return null;
+    if (!sqft) return null;
     const input: EstimateInput = { project: effectiveProject, finish, sqft, refinements };
     return calculateEstimate(input, userRefinementCount);
   }, [effectiveProject, finish, sqft, refinements, userRefinementCount]);
 
-  /* ── Persist estimate to sessionStorage ── */
+  /* ── Persist to sessionStorage ── */
   useEffect(() => {
-    if (!result || !effectiveProject || !sqft) return;
+    if (!result || !sqft) return;
     const input: EstimateInput = { project: effectiveProject, finish, sqft, refinements };
     sessionStorage.setItem(
       "brc_estimate",
@@ -368,42 +478,40 @@ export function EstimateCalculator({
     window.dispatchEvent(new CustomEvent("brc_estimate_updated"));
   }, [result, effectiveProject, finish, sqft, refinements, userRefinementCount]);
 
-  useEffect(() => () => { if (advanceTimer.current) clearTimeout(advanceTimer.current); }, []);
+  useEffect(() => () => { if (nudgeTimer.current) clearTimeout(nudgeTimer.current); }, []);
 
   /* ── Handlers ── */
-  function autoAdvance(to: number) {
-    if (advanceTimer.current) clearTimeout(advanceTimer.current);
-    advanceTimer.current = window.setTimeout(() => setStep(to), 220);
-  }
-
   function handleSelectProject(type: ProjectType) {
-    if (type !== projectType) {
-      setProjectType(type);
-      setSubtype(null);
-      setSqft(null);
-      setAddOns([]);
-      setShowResult(false);
-      setScopeOpen(false);
-      const avail = getAvailableFinishLevels(type);
-      if (!avail.includes(finish)) setFinish("mid-range");
-    }
-    autoAdvance(1);
+    if (type === activeProject) return;
+    setActiveProject(type);
+    setSubtype(null);
+    setAddOns([]);
+    setShowResult(false);
+    setScopeOpen(false);
+    const avail = getAvailableFinishLevels(type);
+    if (!avail.includes(finish)) setFinish("mid-range");
   }
 
   function handleSelectSubtype(id: string) {
     setSubtype(id);
-    if (projectType) {
-      const data = SUBTYPE_DATA[projectType]?.[id];
-      if (data) setSqft(data.sqft);
-    }
-    setAddOns([]);
-    setShowResult(false);
-    setScopeOpen(false);
-    autoAdvance(2);
+    // If the result is already showing, keep it visible (live update)
   }
 
-  function toggleChip(id: string) {
-    setAddOns((prev) => (prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]));
+  function handleToggleChip(id: string) {
+    setAddOns((prev) =>
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id],
+    );
+  }
+
+  function handleCalculate() {
+    if (!subtype) {
+      setGridNudge(true);
+      if (nudgeTimer.current) clearTimeout(nudgeTimer.current);
+      nudgeTimer.current = window.setTimeout(() => setGridNudge(false), 900);
+      return;
+    }
+    setShowResult(true);
+    setScopeOpen(false);
   }
 
   function handleBookVisit() {
@@ -414,548 +522,336 @@ export function EstimateCalculator({
     }
   }
 
-  /* ── Derived config ── */
-  const config = projectType ? PROJECT_CONFIGS[projectType] : null;
-  const availFinish = projectType ? getAvailableFinishLevels(projectType) : (["mid-range", "high-end", "luxury"] as FinishLevel[]);
-  const sizePresets = effectiveProject ? getSizePresets(effectiveProject) : null;
-  const sizeConfig = effectiveProject ? getProjectSizeConfig(effectiveProject) : null;
-
-  const canProgress =
-    step === 0 ? projectType !== null :
-    step === 1 ? subtype !== null :
-    step === 2 ? sqft !== null :
-    true;
-
-  const TOTAL_STEPS = 4;
-
-  /* ── Shared card style ── */
-  const darkCard = (active: boolean) =>
-    cn(
-      "relative rounded-md border text-left transition-all hover-elevate",
+  /* ── Shared card class ── */
+  function darkCard(active: boolean) {
+    return cn(
+      "relative rounded-md border text-left transition-all duration-200",
       active
         ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50"
-        : "bg-inverse-foreground/[0.07] border-inverse-foreground/[0.13]",
-    );
-
-  /* ══════════════════════════════════════════
-     STEP RENDERS
-  ══════════════════════════════════════════ */
-
-  function renderProjectStep() {
-    return (
-      <div>
-        <DarkLabel>SELECT YOUR PROJECT</DarkLabel>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {(Object.keys(PROJECT_CONFIGS) as ProjectType[]).map((type) => {
-            const pc = PROJECT_CONFIGS[type];
-            const Icon = pc.icon;
-            const active = projectType === type;
-            return (
-              <button
-                key={type}
-                type="button"
-                onClick={() => handleSelectProject(type)}
-                data-testid={`calc-project-${type}`}
-                aria-pressed={active}
-                className={cn(darkCard(active), "flex flex-col items-start gap-1 p-3")}
-              >
-                {active && <Check className="absolute top-2 right-2 h-3.5 w-3.5 text-accent-legible" />}
-                <Icon className="h-5 w-5 text-accent-legible mb-0.5 flex-shrink-0" />
-                <span className="text-[13px] font-normal text-inverse-foreground leading-tight">
-                  {pc.tabLabel}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+        : "bg-inverse-foreground/[0.06] border-inverse-foreground/[0.12] hover-elevate",
     );
   }
 
-  function renderSubtypeStep() {
-    if (!config) return null;
-    return (
-      <div>
-        <DarkLabel>{config.subtypeLabel}</DarkLabel>
-        <div className="grid grid-cols-2 gap-2.5">
-          {config.subtypes.map((opt) => {
-            const Icon = opt.icon;
-            const active = subtype === opt.id;
-            return (
-              <button
-                key={opt.id}
-                type="button"
-                onClick={() => handleSelectSubtype(opt.id)}
-                data-testid={`calc-subtype-${opt.id}`}
-                aria-pressed={active}
-                className={cn(darkCard(active), "flex items-start gap-3 p-3")}
-              >
-                {active && (
-                  <span className="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-accent-legible flex-shrink-0">
-                    <Check className="h-2.5 w-2.5 text-inverse" />
-                  </span>
-                )}
-                <Icon className="h-5 w-5 flex-shrink-0 mt-0.5 text-accent-legible" />
-                <span className="min-w-0">
-                  <span className="block text-[13px] font-medium text-inverse-foreground leading-tight">
-                    {opt.title}
-                  </span>
-                  <span className="block text-[11px] italic text-inverse-muted leading-snug mt-0.5">
-                    {opt.subtitle}
-                  </span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
+  /* ══════════════════════════════
+     RENDER HELPERS
+  ══════════════════════════════ */
 
-  const FINISH_META: Record<FinishLevel, { label: string; sub: string }> = {
-    refresh:     { label: "Refresh",    sub: "Cosmetic" },
-    "mid-range": { label: "Mid-Range",  sub: "Best value" },
-    "high-end":  { label: "High-End",   sub: "Premium" },
-    luxury:      { label: "Luxury",     sub: "No limit" },
-  };
-
-  function renderFinishSizeStep() {
-    return (
-      <div className="space-y-5">
-        {/* Finish level */}
-        <div>
-          <DarkLabel>FINISH LEVEL</DarkLabel>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {availFinish.map((level) => {
-              const meta = FINISH_META[level];
-              const active = finish === level;
-              return (
-                <button
-                  key={level}
-                  type="button"
-                  onClick={() => setFinish(level)}
-                  data-testid={`calc-finish-${level}`}
-                  aria-pressed={active}
-                  className={cn(darkCard(active), "flex flex-col items-center text-center py-2.5 px-2")}
-                >
-                  {active && <Check className="h-3 w-3 text-accent-legible mb-1" />}
-                  <span className="text-[12px] font-medium text-inverse-foreground">{meta.label}</span>
-                  <span className="text-[10px] text-inverse-muted">{meta.sub}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Size */}
-        <div>
-          <DarkLabel>PROJECT SIZE</DarkLabel>
-          {sizePresets ? (
-            <div className="space-y-3">
-              <div className="grid grid-cols-3 gap-2">
-                {sizePresets.map((preset) => {
-                  const active = sqft === preset.sqft;
-                  return (
-                    <button
-                      key={preset.id}
-                      type="button"
-                      onClick={() => setSqft(preset.sqft)}
-                      data-testid={`calc-size-${preset.id}`}
-                      aria-pressed={active}
-                      className={cn(darkCard(active), "flex flex-col items-center text-center py-2.5 px-2")}
-                    >
-                      <span className="text-[12px] font-medium text-inverse-foreground">{preset.label}</span>
-                      <span className="text-[10px] text-inverse-muted">
-                        ~{preset.sqft.toLocaleString()} sqft
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-              {sqft !== null && sizeConfig && (
-                <div className="animate-in fade-in duration-200 space-y-1.5">
-                  <div className="flex justify-between text-[10px]">
-                    <span className="text-inverse-muted">Fine-tune</span>
-                    <span className="text-inverse-foreground brc-display-num">
-                      {sqft.toLocaleString()} sqft
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    className="brc-slider w-full"
-                    min={sizeConfig.min}
-                    max={sizeConfig.max}
-                    step={sizeConfig.step}
-                    value={sqft}
-                    onChange={(e) => setSqft(Number(e.target.value))}
-                    data-testid="calc-slider-size"
-                    aria-label="Project size"
-                    aria-valuemin={sizeConfig.min}
-                    aria-valuemax={sizeConfig.max}
-                    aria-valuenow={sqft}
-                  />
-                </div>
-              )}
-            </div>
-          ) : (
-            <p className="text-[12px] text-inverse-muted">
-              Choose a project and subtype first.
-            </p>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  function renderAddOnsStep() {
-    if (!config) return null;
-    return (
-      <div>
-        <DarkLabel>{config.chipLabel}</DarkLabel>
-        <div className="grid grid-cols-4 gap-2">
-          {config.chips.map((chip) => {
-            const Icon = chip.icon;
-            const active = addOns.includes(chip.id);
-            return (
-              <button
-                key={chip.id}
-                type="button"
-                onClick={() => toggleChip(chip.id)}
-                data-testid={`calc-chip-${chip.id}`}
-                aria-pressed={active}
-                className={cn(
-                  darkCard(active),
-                  "flex flex-col items-center justify-center gap-1.5 py-3 px-1 text-center",
-                )}
-              >
-                <Icon
-                  className={cn(
-                    "h-4 w-4",
-                    active ? "text-accent-legible" : "text-inverse-muted",
-                  )}
-                />
-                <span className="text-[9px] tracking-widest uppercase text-inverse-foreground leading-tight">
-                  {chip.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-        <p className="text-[10px] text-inverse-muted mt-3 leading-relaxed">
-          Optional - tap to toggle. These sharpen your estimate range.
-        </p>
-      </div>
-    );
-  }
-
-  /* ══════════════════════════════════════════
-     RESULT PANEL (shared by mobile + desktop)
-  ══════════════════════════════════════════ */
-
-  function ResultPanel({ compact = false }: { compact?: boolean }) {
-    if (!result) {
-      return (
-        <div className="space-y-3" data-testid="estimate-result-pending">
-          <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted">Planning range</p>
-          <div
-            className="brc-display-num text-[clamp(28px,5vw,44px)] leading-none text-inverse-muted/40"
-            data-testid="estimate-range-placeholder"
+  /* Project pill tabs */
+  const tabStrip = (
+    <div
+      className="flex gap-1.5 flex-wrap flex-shrink-0 mb-3"
+      role="tablist"
+      aria-label="Project type"
+    >
+      {PROJECT_TYPE_ORDER.map((type) => {
+        const pc = PROJECT_CONFIGS[type];
+        const active = activeProject === type;
+        return (
+          <button
+            key={type}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            onClick={() => handleSelectProject(type)}
+            data-testid={`calc-tab-${type}`}
+            className={cn(
+              "px-3 py-1.5 rounded-full border text-[10px] tracking-wide transition-all duration-200",
+              active
+                ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
+                : "bg-transparent border-inverse-foreground/[0.14] text-inverse-muted hover-elevate",
+            )}
           >
-            $ -- to --
-          </div>
-          <p className="text-[12px] text-inverse-muted leading-relaxed">
-            Complete the steps to see your personalized planning range.
-          </p>
-        </div>
-      );
-    }
-    return (
-      <div className="space-y-4" data-testid="estimate-result-panel">
-        <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted">Planning range</p>
+            {pc.tabLabel}
+          </button>
+        );
+      })}
+    </div>
+  );
 
-        {/* Price range */}
+  /* Headline */
+  const headline = (
+    <div className="flex-shrink-0 mb-3" key={activeProject}>
+      <p className="text-[9px] tracking-[0.2em] uppercase text-inverse-muted mb-1">
+        BALLPARK YOUR PROJECT IN UNDER 60 SECONDS
+      </p>
+      <h2 className="font-sans font-light text-[clamp(1.35rem,3.2vw,2.5rem)] leading-[1.1] tracking-tight text-inverse-foreground">
+        {config.headlinePrefix}{" "}
+        <em className="brc-accent">{config.headlineAccent}</em>{" "}
+        {config.headlineSuffix}
+      </h2>
+    </div>
+  );
+
+  /* Subtype 2x2 grid */
+  const subtypeGrid = (
+    <div key={`grid-${activeProject}`}>
+      <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-2.5">
+        {config.gridLabel}
+      </p>
+      <div
+        className={cn(
+          "grid grid-cols-2 gap-2 transition-all duration-300",
+          gridNudge && "ring-2 ring-accent-legible/60 ring-offset-2 ring-offset-inverse rounded-lg",
+        )}
+        role="group"
+        aria-label={config.gridLabel}
+      >
+        {config.subtypes.map((opt) => {
+          const Icon = opt.icon;
+          const active = subtype === opt.id;
+          return (
+            <button
+              key={opt.id}
+              type="button"
+              onClick={() => handleSelectSubtype(opt.id)}
+              data-testid={`calc-subtype-${opt.id}`}
+              aria-pressed={active}
+              className={cn(darkCard(active), "flex items-start gap-2.5 p-2.5")}
+            >
+              {active && (
+                <span className="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-accent-legible flex-shrink-0">
+                  <Check className="h-2.5 w-2.5 text-inverse" />
+                </span>
+              )}
+              <Icon className="h-4 w-4 flex-shrink-0 mt-0.5 text-accent-legible" />
+              <span className="min-w-0">
+                <span className="block text-[12px] font-medium text-inverse-foreground leading-tight">
+                  {opt.title}
+                </span>
+                <span className="block text-[10px] italic text-inverse-muted leading-snug mt-0.5">
+                  {opt.subtitle}
+                </span>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  /* Add-on chips */
+  const chipsRow = (
+    <div className="mt-3" key={`chips-${activeProject}`}>
+      <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-2">
+        {config.chipsLabel}
+      </p>
+      <div className="grid grid-cols-4 gap-2" role="group" aria-label={config.chipsLabel}>
+        {config.chips.map((chip) => {
+          const Icon = chip.icon;
+          const active = addOns.includes(chip.id);
+          return (
+            <button
+              key={chip.id}
+              type="button"
+              onClick={() => handleToggleChip(chip.id)}
+              data-testid={`calc-chip-${chip.id}`}
+              aria-pressed={active}
+              className={cn(
+                darkCard(active),
+                "flex flex-col items-center justify-center gap-1 py-2.5 px-1 text-center",
+              )}
+            >
+              <Icon
+                className={cn(
+                  "h-4 w-4",
+                  active ? "text-accent-legible" : "text-inverse-muted",
+                )}
+              />
+              <span className="text-[8px] tracking-widest uppercase text-inverse-foreground leading-tight">
+                {chip.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  /* Finish level secondary row */
+  const finishRow = (
+    <div className="flex-shrink-0 mt-3">
+      <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-2">
+        FINISH LEVEL
+      </p>
+      <div className="flex gap-1.5">
+        {availFinish.map((level) => {
+          const active = finish === level;
+          return (
+            <button
+              key={level}
+              type="button"
+              onClick={() => setFinish(level)}
+              data-testid={`calc-finish-${level}`}
+              aria-pressed={active}
+              className={cn(
+                "flex-1 py-1.5 rounded-md border text-[10px] font-normal transition-all duration-200",
+                active
+                  ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
+                  : "bg-inverse-foreground/[0.04] border-inverse-foreground/[0.10] text-inverse-muted hover-elevate",
+              )}
+            >
+              {FINISH_LABELS[level]}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  /* Inline result panel */
+  const resultPanel = result ? (
+    <div className="animate-in fade-in slide-in-from-bottom-2 duration-200 motion-reduce:animate-none space-y-3">
+      {/* Price range */}
+      <div>
+        <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-1.5">
+          Planning range
+        </p>
         <div
-          className="brc-display-num tabular-nums leading-none text-inverse-foreground"
-          style={{ fontSize: compact ? "clamp(26px,4vw,36px)" : "clamp(30px,6vw,52px)" }}
+          className="brc-display-num tabular-nums leading-none text-inverse-foreground text-[clamp(26px,6.5vw,44px)]"
           data-testid="estimate-range"
           aria-live="polite"
           aria-atomic="true"
         >
           <AnimatedPrice value={result.priceLow} />
-          <span className="text-inverse-muted/60 mx-1.5" style={{ fontSize: "0.55em" }}>
-            to
-          </span>
+          <span className="text-inverse-muted/60 mx-1 text-lg">to</span>
           <AnimatedPrice value={result.priceHigh} />
         </div>
+      </div>
 
-        <p className="text-[11px] text-inverse-muted leading-snug">
-          Est. {result.roi}% ROI based on Boise market data.
-        </p>
+      {/* ROI */}
+      <p className="text-[11px] text-inverse-muted">
+        Est. {result.roi}% ROI based on Boise market data.
+      </p>
 
-        {/* Scope toggle */}
-        <div className="border-t border-inverse-foreground/10 pt-3">
-          <button
-            type="button"
-            onClick={() => setScopeOpen((p) => !p)}
-            className="flex w-full items-center justify-between text-left py-0.5"
-            data-testid="button-toggle-scope"
-            aria-expanded={scopeOpen}
-          >
-            <span className="text-[10px] tracking-wide text-inverse-muted">
-              What&apos;s typically included ({result.included.length})
-            </span>
-            <ChevronDown
-              className={cn(
-                "h-3.5 w-3.5 text-inverse-muted transition-transform",
-                scopeOpen && "rotate-180",
-              )}
-            />
-          </button>
-          {scopeOpen && (
-            <div className="pt-2 space-y-1.5" id="estimate-scope-list">
-              {result.included.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-start gap-2 text-[11px] text-inverse-muted leading-snug"
-                  data-testid={`included-item-${i}`}
-                >
-                  <Check className="h-3 w-3 flex-shrink-0 mt-0.5 text-accent-legible" />
-                  {item}
-                </div>
-              ))}
-              <p className="text-[10px] text-inverse-muted/70 pt-1 leading-relaxed">
-                {INCLUDED_SCOPE_NOTE}
-              </p>
-              {effectiveProject === "kitchen" && (
-                <p className="text-[10px] text-inverse-muted/70 leading-relaxed">
-                  {APPLIANCE_DISCLAIMER}
-                </p>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* CTA */}
-        <Button
-          onClick={handleBookVisit}
-          data-testid="button-book-visit"
-          className="w-full bg-inverse-foreground text-inverse tracking-wide"
+      {/* Scope toggle */}
+      <div className="border-t border-inverse-foreground/10 pt-2.5">
+        <button
+          type="button"
+          onClick={() => setScopeOpen((p) => !p)}
+          className="flex w-full items-center justify-between text-left py-0.5"
+          data-testid="button-toggle-scope"
+          aria-expanded={scopeOpen}
         >
-          Schedule a free visit
-          <ArrowRight className="h-4 w-4" />
-        </Button>
+          <span className="text-[9px] tracking-widest uppercase text-inverse-muted">
+            What&apos;s typically included ({result.included.length})
+          </span>
+          <ChevronDown
+            className={cn(
+              "h-3.5 w-3.5 text-inverse-muted transition-transform",
+              scopeOpen && "rotate-180",
+            )}
+          />
+        </button>
+        {scopeOpen && (
+          <div className="pt-2 space-y-1.5" id="estimate-scope-list">
+            {result.included.map((item, i) => (
+              <div
+                key={i}
+                className="flex items-start gap-2 text-[10px] text-inverse-muted leading-snug"
+                data-testid={`included-item-${i}`}
+              >
+                <Check className="h-2.5 w-2.5 flex-shrink-0 mt-0.5 text-accent-legible" />
+                {item}
+              </div>
+            ))}
+            <p className="text-[9px] text-inverse-muted/70 pt-1 leading-relaxed">
+              {INCLUDED_SCOPE_NOTE}
+            </p>
+            {effectiveProject === "kitchen" && (
+              <p className="text-[9px] text-inverse-muted/70 leading-relaxed">
+                {APPLIANCE_DISCLAIMER}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
 
-        <p className="text-[10px] text-center text-inverse-muted/70">
-          Free 60 to 90 min in-home visit. No obligation.
-        </p>
-
-        {/* Legal note */}
+      {/* Legal note toggle */}
+      <div>
         <button
           type="button"
           onClick={() => setLegalOpen((p) => !p)}
-          className="flex w-full items-center justify-center gap-1 text-[10px] text-inverse-muted/60 hover:text-inverse-muted"
+          className="flex items-center gap-1 text-[9px] text-inverse-muted/60 hover:text-inverse-muted transition-colors"
           aria-expanded={legalOpen}
         >
           Why a range, not a fixed price?
           <ChevronDown className={cn("h-3 w-3 transition-transform", legalOpen && "rotate-180")} />
         </button>
         {legalOpen && (
-          <p className="text-[10px] text-inverse-muted/70 leading-relaxed">
-            This estimate is for planning purposes only - not a proposal, bid, or guaranteed project
-            cost. Ranges reflect project type, size, location, finish level, and other assumptions.
-            Your consultation delivers a detailed evaluation tailored to your home.
+          <p className="text-[9px] text-inverse-muted/70 leading-relaxed mt-1.5">
+            Planning estimate only - not a proposal, bid, or guaranteed cost. Ranges
+            reflect project type, size, location, and finish assumptions. Your consultation
+            delivers a detailed evaluation tailored to your home.
           </p>
         )}
       </div>
-    );
-  }
 
-  /* ══════════════════════════════════════════
-     HEADLINE
-  ══════════════════════════════════════════ */
+      {/* Edit link */}
+      <button
+        type="button"
+        onClick={() => { setShowResult(false); setScopeOpen(false); setLegalOpen(false); }}
+        className="text-[10px] text-inverse-muted hover:text-inverse-foreground transition-colors"
+        data-testid="button-edit-estimate"
+      >
+        Edit selections
+      </button>
+    </div>
+  ) : (
+    <div className="flex items-center h-full">
+      <p className="text-[12px] text-inverse-muted">
+        Select a subtype above and tap Calculate.
+      </p>
+    </div>
+  );
 
-  function Headline() {
-    const headlineSize =
-      "font-sans font-light text-[clamp(1.5rem,3.5vw,2.75rem)] leading-[1.1] tracking-tight text-inverse-foreground";
-
-    if (!config) {
-      return (
-        <div>
-          <p className="text-[9px] tracking-[0.2em] uppercase text-inverse-muted mb-2">
-            BALLPARK YOUR PROJECT IN UNDER 60 SECONDS
-          </p>
-          <h2 className={headlineSize}>
-            Get your <em className="brc-accent">instant</em> estimate
-          </h2>
-        </div>
-      );
-    }
-    return (
-      <div>
-        <p className="text-[9px] tracking-[0.2em] uppercase text-inverse-muted mb-2">
-          BALLPARK YOUR PROJECT IN UNDER 60 SECONDS
-        </p>
-        <h2 className={headlineSize}>
-          {config.headlinePrefix}{" "}
-          <em className="brc-accent">{config.headlineAccent}</em>{" "}
-          {config.headlineSuffix}
-        </h2>
-      </div>
-    );
-  }
-
-  /* ══════════════════════════════════════════
-     STEP DOTS
-  ══════════════════════════════════════════ */
-
-  function StepDots() {
-    return (
-      <div className="flex items-center gap-1.5" role="list" aria-label="Estimator progress">
-        {Array.from({ length: TOTAL_STEPS }, (_, i) => (
-          <div
-            key={i}
-            role="listitem"
-            className={cn(
-              "rounded-full transition-all duration-300",
-              i === step && !showResult
-                ? "w-5 h-1.5 bg-inverse-foreground/70"
-                : i < step || showResult
-                  ? "w-1.5 h-1.5 bg-accent-legible"
-                  : "w-1.5 h-1.5 bg-inverse-foreground/20",
-            )}
-          />
-        ))}
-      </div>
-    );
-  }
-
-  /* ══════════════════════════════════════════
-     BOTTOM CTA
-  ══════════════════════════════════════════ */
-
-  function BottomCta() {
-    if (showResult) {
-      return (
-        <div className="flex items-center justify-center pt-4">
-          <button
-            type="button"
-            onClick={() => { setShowResult(false); setStep(3); }}
-            className="text-[11px] text-inverse-muted hover:text-inverse-foreground transition-colors"
-          >
-            Edit selections
-          </button>
-        </div>
-      );
-    }
-
-    const isLast = step === 3;
-    const btnClass =
-      "tracking-widest text-[11px] uppercase font-normal bg-inverse-foreground text-inverse disabled:opacity-40";
-
-    return (
-      <div className="space-y-2 pt-4">
-        {/* Mobile */}
-        <Button
-          disabled={!canProgress}
-          onClick={() => {
-            if (!canProgress) return;
-            if (isLast) {
-              setShowResult(true);
-            } else {
-              setStep((s) => s + 1);
-            }
-          }}
-          className={cn("w-full lg:hidden", btnClass)}
-          data-testid={isLast ? "button-calculate" : "button-continue"}
-        >
-          {isLast ? "Calculate My Cost" : "Continue"}
-        </Button>
-
-        {/* Desktop */}
-        {isLast ? (
-          <Button
-            onClick={handleBookVisit}
-            className={cn("w-full hidden lg:flex", btnClass)}
-            data-testid="button-schedule-desktop"
-          >
-            Schedule a Free Visit
+  /* CTA button */
+  const ctaButton = (
+    <div className="flex-shrink-0 mt-3">
+      <Button
+        onClick={showResult ? handleBookVisit : handleCalculate}
+        data-testid={showResult ? "button-book-visit" : "button-calculate"}
+        className={cn(
+          "w-full tracking-[0.14em] text-[11px] uppercase font-normal",
+          "bg-inverse-foreground text-inverse",
+        )}
+      >
+        {showResult ? (
+          <>
+            Book a Free Visit
             <ArrowRight className="h-4 w-4" />
-          </Button>
+          </>
         ) : (
-          <Button
-            disabled={!canProgress}
-            onClick={() => { if (canProgress) setStep((s) => s + 1); }}
-            className={cn("w-full hidden lg:flex", btnClass)}
-            data-testid="button-continue-desktop"
-          >
-            Continue
-          </Button>
+          "CALCULATE MY COST"
         )}
+      </Button>
+    </div>
+  );
 
-        {/* Skip on add-ons step */}
-        {isLast && !showResult && (
-          <button
-            type="button"
-            onClick={() => {
-              setShowResult(true);
-            }}
-            className="w-full lg:hidden text-[10px] text-center text-inverse-muted py-1"
-          >
-            Skip - see my estimate
-          </button>
-        )}
-      </div>
-    );
-  }
+  /* ══════════════════════════════
+     LAYOUTS
+  ══════════════════════════════ */
 
-  /* ══════════════════════════════════════════
-     WIZARD CONTENT
-  ══════════════════════════════════════════ */
-
-  function WizardContent() {
-    if (showResult) {
-      return <ResultPanel />;
-    }
-    switch (step) {
-      case 0: return renderProjectStep();
-      case 1: return renderSubtypeStep();
-      case 2: return renderFinishSizeStep();
-      case 3: return renderAddOnsStep();
-      default: return null;
-    }
-  }
-
-  /* ══════════════════════════════════════════
-     MODAL LAYOUT (compact, no min-h-screen)
-  ══════════════════════════════════════════ */
-
+  /* inModal: compact scrollable layout without full-viewport constraint */
   if (inModal) {
     return (
-      <div className="bg-inverse text-inverse-foreground rounded-lg p-5">
-        <div className="flex items-center justify-between mb-4">
-          {step > 0 && !showResult ? (
-            <button
-              type="button"
-              onClick={() => setStep((s) => Math.max(0, s - 1))}
-              className="flex items-center gap-1 text-inverse-muted text-[12px] hover:text-inverse-foreground transition-colors"
-              data-testid="button-back-modal"
-            >
-              <ChevronLeft className="h-4 w-4" /> Back
-            </button>
-          ) : <span />}
-          <StepDots />
+      <div className="bg-inverse text-inverse-foreground rounded-lg p-5 flex flex-col gap-0">
+        {tabStrip}
+        {headline}
+        <div className="mb-0">
+          {showResult ? resultPanel : (
+            <>
+              {subtypeGrid}
+              {chipsRow}
+            </>
+          )}
         </div>
-        <div className="mb-5"><Headline /></div>
-        <div className="mb-5"><WizardContent /></div>
-        <BottomCta />
+        {finishRow}
+        {ctaButton}
       </div>
     );
   }
 
-  /* ══════════════════════════════════════════
-     INLINE LAYOUT (full-viewport dark section)
-  ══════════════════════════════════════════ */
-
+  /* Inline: full-viewport dark section, single screen */
   return (
     <Section
       id="calculator"
@@ -965,57 +861,31 @@ export function EstimateCalculator({
       style={{ minHeight: "100dvh" } as React.CSSProperties}
       className="flex flex-col"
     >
-      <div className="container px-4 flex flex-col lg:flex-row gap-0 lg:gap-12 xl:gap-16 flex-1">
+      {/* Main content area */}
+      <div className="container px-4 sm:px-6 pt-16 pb-2 flex-1 flex flex-col min-h-0">
+        {tabStrip}
+        {headline}
 
-        {/* ── WIZARD PANEL ── */}
-        <div className="flex-1 flex flex-col py-16 lg:py-20 min-h-0">
-
-          {/* Top bar */}
-          <div className="flex items-center justify-between mb-8 flex-shrink-0">
-            {step > 0 && !showResult ? (
-              <button
-                type="button"
-                onClick={() => {
-                  if (showResult) { setShowResult(false); }
-                  else { setStep((s) => Math.max(0, s - 1)); }
-                }}
-                className="flex items-center gap-1 text-inverse-muted text-[12px] hover:text-inverse-foreground transition-colors"
-                data-testid="button-back"
-              >
-                <ChevronLeft className="h-4 w-4" /> Back
-              </button>
-            ) : (
-              <span />
-            )}
-            <StepDots />
-          </div>
-
-          {/* Headline */}
-          <div className="mb-6 flex-shrink-0">
-            <Headline />
-          </div>
-
-          {/* Step content */}
-          <div
-            key={`${step}-${showResult}`}
-            className="flex-1 animate-in fade-in slide-in-from-bottom-2 duration-200 motion-reduce:animate-none"
-          >
-            <WizardContent />
-          </div>
-
-          {/* Bottom CTA */}
-          <div className="flex-shrink-0 mt-8 max-w-sm">
-            <BottomCta />
-          </div>
+        {/* Swap zone: inputs or result - takes remaining flex space */}
+        <div className="flex-1 min-h-0 overflow-hidden">
+          {showResult ? resultPanel : (
+            <div key={activeProject} className="h-full">
+              {subtypeGrid}
+              {chipsRow}
+            </div>
+          )}
         </div>
 
-        {/* ── RESULT PANEL (desktop right column) ── */}
-        <div className="hidden lg:flex lg:w-72 xl:w-80 flex-col justify-center flex-shrink-0 py-20">
-          <div className="sticky top-24">
-            <ResultPanel compact />
-          </div>
-        </div>
+        {finishRow}
+        {ctaButton}
       </div>
+
+      {/* Footer strip - always at the bottom of the dark section */}
+      <FooterStrip
+        activeProject={activeProject}
+        footerAccent={config.footerAccent}
+        onConsultClick={handleBookVisit}
+      />
     </Section>
   );
 }
