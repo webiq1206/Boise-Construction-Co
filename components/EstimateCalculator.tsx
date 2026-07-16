@@ -1,689 +1,412 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, Check, ChevronDown } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { LucideIcon } from "lucide-react";
+import {
+  ChevronLeft, Check, ChevronDown, ArrowRight,
+  UtensilsCrossed, Droplets, Home, Building2, Layers, AlignLeft,
+  LayoutGrid, Star, Sun, Monitor, Dumbbell, Bed, Car,
+  Lightbulb, Wind, DoorOpen, GlassWater, Sofa, Frame, Triangle, Grid3x3,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { DisplayNum, Section } from "@/components/marketing";
-import { EstimateResultPanel } from "@/components/estimate/EstimateResultPanel";
-import { StickyEstimateBar } from "@/components/estimate/StickyEstimateBar";
+import { Section } from "@/components/marketing";
+import { AnimatedPrice } from "@/components/estimate/EstimateResultPanel";
 import {
   type ProjectType,
   type FinishLevel,
   type EstimateRefinements,
   type EstimateInput,
-  type PartialEstimateInput,
+  type EstimateResult,
   EMPTY_REFINEMENTS,
-  PROJECT_LABELS,
-  FINISH_LABELS,
-  getProjectSizeConfig,
   getAvailableFinishLevels,
-  getMaxRefinementFields,
-  getRefinementVisibility,
-  getSetRefinementKeys,
   getSizePresets,
-  countVisibleUserRefinements,
-  getPlumbingElectricalLabel,
-  getPlumbingElectricalOptions,
-  getFinishPlanningHint,
-  buildSelectionSummary,
+  getProjectSizeConfig,
   calculateEstimate,
   buildStoredEstimate,
-  isCompleteEstimateInput,
+  countVisibleUserRefinements,
+  getSetRefinementKeys,
+  INCLUDED_SCOPE_NOTE,
+  APPLIANCE_DISCLAIMER,
 } from "@/shared/estimateEngine";
 
-/* ─────────────────────────── Step model ─────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════════
+   TYPES
+═══════════════════════════════════════════════════════════════════════ */
 
-type StepId = "project" | "finish" | "size" | "refine" | "review";
+interface SubtypeOption {
+  id: string;
+  icon: LucideIcon;
+  title: string;
+  subtitle: string;
+}
 
-const STEPS: { id: StepId; title: string; shortLabel: string }[] = [
-  { id: "project", title: "What are we remodeling?", shortLabel: "Project" },
-  { id: "finish", title: "Choose a finish level", shortLabel: "Finish" },
-  { id: "size", title: "How big is the space?", shortLabel: "Size" },
-  { id: "refine", title: "Tailor your range (optional)", shortLabel: "Details" },
-  { id: "review", title: "Your planning range", shortLabel: "Review" },
-];
+interface ChipOption {
+  id: string;
+  icon: LucideIcon;
+  label: string;
+}
 
-const STEP_INDEX: Record<StepId, number> = {
-  project: 0,
-  finish: 1,
-  size: 2,
-  refine: 3,
-  review: 4,
+interface ProjectUIConfig {
+  icon: LucideIcon;
+  tabLabel: string;
+  headlinePrefix: string;
+  headlineAccent: string;
+  headlineSuffix: string;
+  subtypeLabel: string;
+  subtypes: SubtypeOption[];
+  chipLabel: string;
+  chips: ChipOption[];
+}
+
+type SubtypeData = {
+  sqft: number;
+  refinements: Partial<EstimateRefinements>;
+  projectOverride?: ProjectType;
 };
 
-/* ─────────────────────────── Choice tiles ─────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════════
+   SUBTYPE SQFT + REFINEMENT SEEDS
+   (drives the engine without touching estimateEngine.ts)
+═══════════════════════════════════════════════════════════════════════ */
 
-function SelectButton<T extends string>({
-  value,
-  options,
-  onChange,
-  testIdPrefix,
-  allowUnset,
-  disabled,
-  groupLabelId,
-}: {
-  value: T | null;
-  options: { value: T; label: string; sub?: string }[];
-  onChange: (v: T | null) => void;
-  testIdPrefix: string;
-  allowUnset?: boolean;
-  disabled?: boolean;
-  groupLabelId?: string;
-}) {
+const SUBTYPE_DATA: Record<ProjectType, Record<string, SubtypeData>> = {
+  kitchen: {
+    galley:      { sqft: 175, refinements: { layoutChanges: "none" } },
+    "l-shape":   { sqft: 250, refinements: { layoutChanges: "none" } },
+    "u-shape":   { sqft: 325, refinements: { layoutChanges: "moderate" } },
+    island:      { sqft: 400, refinements: { layoutChanges: "moderate" } },
+  },
+  bathroom: {
+    powder:            { sqft: 50,  refinements: { fixtureCount: 1 } },
+    "guest-bath":      { sqft: 80,  refinements: { fixtureCount: 2 } },
+    "primary-suite":   { sqft: 120, refinements: { fixtureCount: 3 } },
+    "walk-in-shower":  { sqft: 90,  refinements: { fixtureCount: 2, layoutChanges: "moderate" } },
+  },
+  "whole-home": {
+    "single-room":    { sqft: 400,  refinements: { roomCount: 1 } },
+    "multi-room":     { sqft: 900,  refinements: { roomCount: 4 } },
+    "whole-home":     { sqft: 1800, refinements: { roomCount: 8 } },
+    "home-addition":  { sqft: 500,  refinements: {}, projectOverride: "addition" },
+  },
+  addition: {
+    "bedroom-suite": { sqft: 350, refinements: { plumbingElectrical: "partial" } },
+    sunroom:         { sqft: 250, refinements: {} },
+    "great-room":    { sqft: 400, refinements: {} },
+    "second-story":  { sqft: 600, refinements: { stories: 2 } },
+  },
+  adu: {
+    attached:       { sqft: 500, refinements: { aduConfig: "attached" } },
+    garage:         { sqft: 400, refinements: { aduConfig: "attached" } },
+    detached:       { sqft: 600, refinements: { aduConfig: "detached" } },
+    "above-garage": { sqft: 550, refinements: { aduConfig: "detached" } },
+  },
+  basement: {
+    "family-room":  { sqft: 700, refinements: { layoutChanges: "none" } },
+    "home-theater": { sqft: 900, refinements: { layoutChanges: "none" } },
+    "guest-suite":  { sqft: 800, refinements: { layoutChanges: "moderate", plumbingElectrical: "partial" } },
+    "gym-flex":     { sqft: 700, refinements: { layoutChanges: "none" } },
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PROJECT UI CONFIGS
+═══════════════════════════════════════════════════════════════════════ */
+
+const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
+  kitchen: {
+    icon: UtensilsCrossed,
+    tabLabel: "Kitchen",
+    headlinePrefix: "Calculate your",
+    headlineAccent: "kitchen",
+    headlineSuffix: "remodel cost",
+    subtypeLabel: "YOUR KITCHEN LAYOUT",
+    subtypes: [
+      { id: "galley",   icon: AlignLeft,  title: "Galley",  subtitle: "Two facing runs" },
+      { id: "l-shape",  icon: Frame,      title: "L-Shape", subtitle: "Corner run" },
+      { id: "u-shape",  icon: Grid3x3,    title: "U-Shape", subtitle: "Three walls" },
+      { id: "island",   icon: LayoutGrid, title: "Island",  subtitle: "Open concept" },
+    ],
+    chipLabel: "WHAT ARE YOU UPGRADING?",
+    chips: [
+      { id: "cabinets", icon: LayoutGrid, label: "CABINETS" },
+      { id: "counters", icon: Layers,     label: "COUNTERS" },
+      { id: "flooring", icon: Grid3x3,    label: "FLOORING" },
+      { id: "lighting", icon: Lightbulb,  label: "LIGHTING" },
+    ],
+  },
+  bathroom: {
+    icon: Droplets,
+    tabLabel: "Bathroom",
+    headlinePrefix: "Calculate your",
+    headlineAccent: "bathroom",
+    headlineSuffix: "remodel cost",
+    subtypeLabel: "YOUR BATHROOM TYPE",
+    subtypes: [
+      { id: "powder",          icon: Droplets,   title: "Powder",         subtitle: "Sink and toilet" },
+      { id: "guest-bath",      icon: Layers,     title: "Guest Bath",     subtitle: "Tub and shower" },
+      { id: "primary-suite",   icon: Star,       title: "Primary Suite",  subtitle: "Spa retreat" },
+      { id: "walk-in-shower",  icon: Wind,       title: "Walk-in Shower", subtitle: "Curbless" },
+    ],
+    chipLabel: "WHAT ARE YOU UPGRADING?",
+    chips: [
+      { id: "shower", icon: Droplets,  label: "SHOWER" },
+      { id: "vanity", icon: Star,      label: "VANITY" },
+      { id: "tub",    icon: Layers,    label: "TUB" },
+      { id: "tile",   icon: Grid3x3,   label: "TILE" },
+    ],
+  },
+  "whole-home": {
+    icon: Home,
+    tabLabel: "Whole-Home",
+    headlinePrefix: "Calculate your",
+    headlineAccent: "home",
+    headlineSuffix: "remodel cost",
+    subtypeLabel: "YOUR PROJECT SCOPE",
+    subtypes: [
+      { id: "single-room",   icon: Layers,     title: "Single Room",   subtitle: "One space" },
+      { id: "multi-room",    icon: LayoutGrid,  title: "Multi-Room",    subtitle: "A few spaces" },
+      { id: "whole-home",    icon: Home,        title: "Whole Home",    subtitle: "Full renovation" },
+      { id: "home-addition", icon: Building2,   title: "Home Addition", subtitle: "New footage" },
+    ],
+    chipLabel: "WHAT ARE YOU INCLUDING?",
+    chips: [
+      { id: "kitchen",  icon: UtensilsCrossed, label: "KITCHEN" },
+      { id: "baths",    icon: Droplets,        label: "BATHS" },
+      { id: "flooring", icon: Grid3x3,         label: "FLOORING" },
+      { id: "layout",   icon: LayoutGrid,      label: "LAYOUT" },
+    ],
+  },
+  addition: {
+    icon: Building2,
+    tabLabel: "Addition",
+    headlinePrefix: "Calculate your room",
+    headlineAccent: "addition",
+    headlineSuffix: "cost",
+    subtypeLabel: "WHAT ARE YOU ADDING?",
+    subtypes: [
+      { id: "bedroom-suite", icon: Bed,      title: "Bedroom Suite", subtitle: "Bed + bath" },
+      { id: "sunroom",       icon: Sun,      title: "Sunroom",       subtitle: "Bright + airy" },
+      { id: "great-room",    icon: Sofa,     title: "Great Room",    subtitle: "Living space" },
+      { id: "second-story",  icon: Layers,   title: "Second Story",  subtitle: "Add a level" },
+    ],
+    chipLabel: "WHAT'S INCLUDED?",
+    chips: [
+      { id: "foundation", icon: Layers,    label: "FOUNDATION" },
+      { id: "framing",    icon: Frame,     label: "FRAMING" },
+      { id: "roofing",    icon: Triangle,  label: "ROOFING" },
+      { id: "hvac",       icon: Wind,      label: "HVAC" },
+    ],
+  },
+  adu: {
+    icon: Building2,
+    tabLabel: "ADU",
+    headlinePrefix: "Calculate your",
+    headlineAccent: "ADU",
+    headlineSuffix: "cost",
+    subtypeLabel: "YOUR ADU TYPE",
+    subtypes: [
+      { id: "attached",      icon: Home,      title: "Attached",      subtitle: "Shares a wall" },
+      { id: "garage",        icon: Car,       title: "Garage",        subtitle: "Convert existing" },
+      { id: "detached",      icon: Building2, title: "Detached",      subtitle: "Standalone build" },
+      { id: "above-garage",  icon: Layers,    title: "Above Garage",  subtitle: "Second story" },
+    ],
+    chipLabel: "WHAT'S INCLUDED?",
+    chips: [
+      { id: "kitchen",  icon: UtensilsCrossed, label: "KITCHEN" },
+      { id: "bath",     icon: Droplets,        label: "BATH" },
+      { id: "bedroom",  icon: Bed,             label: "BEDROOM" },
+      { id: "living",   icon: Sofa,            label: "LIVING" },
+    ],
+  },
+  basement: {
+    icon: Layers,
+    tabLabel: "Basement",
+    headlinePrefix: "Calculate your",
+    headlineAccent: "basement",
+    headlineSuffix: "finishing cost",
+    subtypeLabel: "HOW WILL YOU USE IT?",
+    subtypes: [
+      { id: "family-room",  icon: Sofa,    title: "Family Room",  subtitle: "Living space" },
+      { id: "home-theater", icon: Monitor, title: "Home Theater", subtitle: "Media room" },
+      { id: "guest-suite",  icon: Bed,     title: "Guest Suite",  subtitle: "Bed + bath" },
+      { id: "gym-flex",     icon: Dumbbell,title: "Gym / Flex",   subtitle: "Workout space" },
+    ],
+    chipLabel: "WHAT'S INCLUDED?",
+    chips: [
+      { id: "egress",   icon: DoorOpen,   label: "EGRESS" },
+      { id: "bath",     icon: Droplets,   label: "BATH" },
+      { id: "wet-bar",  icon: GlassWater, label: "WET BAR" },
+      { id: "flooring", icon: Grid3x3,    label: "FLOORING" },
+    ],
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════════════
+   REFINEMENT BUILDER
+   Translates subtype seeds + chip selections into EstimateRefinements.
+═══════════════════════════════════════════════════════════════════════ */
+
+function buildRefinements(
+  effectiveProject: ProjectType,
+  _subtype: string,
+  addOns: string[],
+  subtypeRef: Partial<EstimateRefinements>,
+): EstimateRefinements {
+  const ref: EstimateRefinements = { ...EMPTY_REFINEMENTS, ...subtypeRef };
+
+  switch (effectiveProject) {
+    case "kitchen": {
+      if (addOns.includes("cabinets")) ref.cabinetTier = "semi-custom";
+      const peDrivers = (addOns.includes("counters") ? 1 : 0) + (addOns.includes("lighting") ? 1 : 0);
+      if (addOns.length >= 4) ref.plumbingElectrical = "full";
+      else if (peDrivers >= 2 || addOns.includes("counters")) ref.plumbingElectrical = "partial";
+      break;
+    }
+    case "bathroom": {
+      if (addOns.length >= 3) ref.plumbingElectrical = "full";
+      else if (addOns.length >= 1) ref.plumbingElectrical = "partial";
+      break;
+    }
+    case "whole-home": {
+      if (addOns.includes("layout") && !ref.layoutChanges) ref.layoutChanges = "moderate";
+      if (addOns.includes("kitchen") && addOns.includes("baths")) {
+        ref.plumbingElectrical = addOns.length >= 3 ? "full" : "partial";
+      }
+      break;
+    }
+    case "addition": {
+      if (addOns.length >= 3) ref.plumbingElectrical = "full";
+      else if (addOns.length >= 1 && !ref.plumbingElectrical) ref.plumbingElectrical = "partial";
+      break;
+    }
+    case "adu": {
+      if (addOns.length >= 3) ref.plumbingElectrical = "full";
+      else if (addOns.includes("kitchen") && addOns.includes("bath")) ref.plumbingElectrical = "partial";
+      break;
+    }
+    case "basement": {
+      if (addOns.includes("bath") && addOns.includes("wet-bar")) ref.plumbingElectrical = "full";
+      else if (addOns.includes("bath") && !ref.plumbingElectrical) ref.plumbingElectrical = "partial";
+      break;
+    }
+  }
+
+  return ref;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SHARED DARK UI PRIMITIVES
+═══════════════════════════════════════════════════════════════════════ */
+
+function DarkLabel({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div
-      className="grid grid-cols-2 gap-2"
-      role="group"
-      aria-labelledby={groupLabelId}
-    >
-      {options.map((opt) => {
-        const active = value === opt.value;
-        return (
-          <button
-            key={opt.value}
-            type="button"
-            disabled={disabled}
-            onClick={() => onChange(active && allowUnset ? null : opt.value)}
-            data-testid={`${testIdPrefix}-${opt.value}`}
-            aria-pressed={active}
-            className={cn(
-              "relative flex min-h-11 flex-col items-start gap-1 p-4 rounded-sm text-left transition-all border bg-card",
-              active ? "border-accent-legible border-[1.5px] bg-accent-legible/10" : "border-border",
-              disabled && "opacity-50 cursor-not-allowed"
-            )}
-          >
-            {active && (
-              <Check className="absolute top-2.5 right-2.5 h-3.5 w-3.5 text-accent-legible" />
-            )}
-            <span className="font-normal text-xs text-foreground">{opt.label}</span>
-            {opt.sub && (
-              <span className="text-[11px] leading-snug text-muted-foreground">{opt.sub}</span>
-            )}
-          </button>
-        );
-      })}
-    </div>
+    <p className={cn("text-[9px] tracking-[0.18em] uppercase text-inverse-muted font-normal mb-3", className)}>
+      {children}
+    </p>
   );
 }
 
-function RefinementNumberInput({
-  id,
-  label,
-  min,
-  max,
-  placeholder,
-  value,
-  onCommit,
-  testId,
-}: {
-  id: string;
-  label: string;
-  min: number;
-  max: number;
-  placeholder: string;
-  value: number | null;
-  onCommit: (n: number | null) => void;
-  testId: string;
-}) {
-  const [text, setText] = useState(value !== null ? String(value) : "");
-  const clamp = (n: number) => Math.max(min, Math.min(max, Math.round(n)));
-
-  useEffect(() => {
-    setText(value !== null ? String(value) : "");
-  }, [value]);
-
-  return (
-    <div>
-      <label htmlFor={id} className="brc-label mb-3">
-        {label}
-      </label>
-      <Input
-        id={id}
-        type="number"
-        inputMode="numeric"
-        min={min}
-        max={max}
-        placeholder={placeholder}
-        value={text}
-        onChange={(e) => {
-          const raw = e.target.value;
-          setText(raw);
-          if (raw === "") {
-            onCommit(null);
-            return;
-          }
-          const n = Number(raw);
-          if (Number.isFinite(n)) onCommit(clamp(n));
-        }}
-        onBlur={() => {
-          if (text === "") {
-            onCommit(null);
-            return;
-          }
-          const n = Number(text);
-          if (Number.isFinite(n)) {
-            const c = clamp(n);
-            setText(String(c));
-            onCommit(c);
-          } else {
-            setText("");
-            onCommit(null);
-          }
-        }}
-        data-testid={testId}
-      />
-    </div>
-  );
-}
-
-/* ─────────────────────── Shared step contents ─────────────────────── */
-
-function ProjectTiles({
-  project,
-  onSelect,
-  idPrefix,
-}: {
-  project: ProjectType | null;
-  onSelect: (type: ProjectType) => void;
-  idPrefix: string;
-}) {
-  return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
-      {(Object.keys(PROJECT_LABELS) as ProjectType[]).map((type) => {
-        const info = PROJECT_LABELS[type];
-        const active = project === type;
-        return (
-          <button
-            key={type}
-            type="button"
-            onClick={() => onSelect(type)}
-            data-testid={`${idPrefix}button-project-${type}`}
-            aria-pressed={active}
-            className={cn(
-              "relative flex min-h-11 flex-col items-start gap-0.5 p-4 rounded-sm text-left transition-all border bg-card",
-              active ? "border-accent-legible border-[1.5px] bg-accent-legible/10" : "border-border"
-            )}
-          >
-            {active && <Check className="absolute top-2.5 right-2.5 h-4 w-4 text-accent-legible" />}
-            <span className="font-normal text-sm text-foreground pr-5">{info.label}</span>
-            <span className="text-xs leading-snug text-muted-foreground">{info.sub}</span>
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-function FinishTiles({
-  project,
-  finish,
-  onSelect,
-  idPrefix,
-}: {
-  project: ProjectType | null;
-  finish: FinishLevel | null;
-  onSelect: (level: FinishLevel) => void;
-  idPrefix: string;
-}) {
-  const levels = project
-    ? getAvailableFinishLevels(project)
-    : (Object.keys(FINISH_LABELS) as FinishLevel[]);
-  const disabled = project === null;
-
-  return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
-      {levels.map((level) => {
-        const info = FINISH_LABELS[level];
-        const active = finish === level;
-        return (
-          <button
-            key={level}
-            type="button"
-            disabled={disabled}
-            onClick={() => onSelect(level)}
-            data-testid={`${idPrefix}button-finish-${level}`}
-            aria-pressed={active}
-            className={cn(
-              "relative flex min-h-11 flex-col items-start gap-0.5 p-4 rounded-sm text-left transition-all border bg-card",
-              active ? "border-accent-legible border-[1.5px] bg-accent-legible/10" : "border-border",
-              disabled && "opacity-50 cursor-not-allowed"
-            )}
-          >
-            {active && <Check className="absolute top-2.5 right-2.5 h-4 w-4 text-accent-legible" />}
-            <span className="font-normal text-sm text-foreground pr-5">{info.label}</span>
-            <span className="text-xs leading-snug text-muted-foreground">{info.sub}</span>
-            {project && (
-              <span className="text-[11px] leading-snug text-accent-legible/90 mt-1 brc-display-num">
-                {getFinishPlanningHint(project, level)}
-              </span>
-            )}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-function SizePicker({
-  project,
-  sqft,
-  onSqftChange,
-  idPrefix,
-}: {
-  project: ProjectType | null;
-  sqft: number | null;
-  onSqftChange: (n: number) => void;
-  idPrefix: string;
-}) {
-  const presets = project ? getSizePresets(project) : null;
-  const sizeConfig = project ? getProjectSizeConfig(project) : null;
-
-  const sliderPct =
-    sizeConfig && sqft !== null
-      ? ((sqft - sizeConfig.min) / (sizeConfig.max - sizeConfig.min)) * 100
-      : 0;
-  const sliderBackground = `linear-gradient(to right, hsl(var(--accent)) 0%, hsl(var(--accent)) ${sliderPct}%, hsl(var(--border)) ${sliderPct}%, hsl(var(--border)) 100%)`;
-
-  return (
-    <div>
-      <div className="grid grid-cols-3 gap-2 mb-4" role="group" aria-label="Approximate size">
-        {(presets ?? [
-          { id: "smaller" as const, label: "Smaller", sub: "", sqft: 0 },
-          { id: "typical" as const, label: "Typical", sub: "", sqft: 0 },
-          { id: "larger" as const, label: "Larger", sub: "", sqft: 0 },
-        ]).map((preset) => {
-          const active = sqft !== null && presets !== null && sqft === preset.sqft;
-          return (
-            <button
-              key={preset.id}
-              type="button"
-              disabled={!presets}
-              onClick={() => onSqftChange(preset.sqft)}
-              data-testid={`${idPrefix}size-preset-${preset.id}`}
-              aria-pressed={active}
-              className={cn(
-                "relative flex min-h-11 flex-col items-center gap-0.5 p-3 rounded-sm text-center transition-all border bg-card",
-                active ? "border-accent-legible border-[1.5px] bg-accent-legible/10" : "border-border",
-                !presets && "opacity-50 cursor-not-allowed"
-              )}
-            >
-              <span className="font-normal text-xs text-foreground">{preset.label}</span>
-              {presets && (
-                <span className="text-[11px] text-muted-foreground">
-                  ~{preset.sqft.toLocaleString()} sqft
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </div>
-
-      {sizeConfig && sqft !== null ? (
-        <div className="animate-in fade-in duration-200">
-          <div className="flex items-center justify-between gap-4 mb-3">
-            <span className="text-xs text-muted-foreground">Fine-tune the size</span>
-            <DisplayNum className="text-2xl leading-none text-foreground">
-              {sqft.toLocaleString()}{" "}
-              <span className="text-sm font-sans text-muted-foreground">sqft</span>
-            </DisplayNum>
-          </div>
-          <input
-            type="range"
-            className="brc-slider"
-            min={sizeConfig.min}
-            max={sizeConfig.max}
-            step={sizeConfig.step}
-            value={sqft}
-            onChange={(e) => onSqftChange(Number(e.target.value))}
-            style={{ background: sliderBackground }}
-            data-testid={`${idPrefix}slider-size`}
-            aria-label={`Project size in square feet${project ? ` for ${PROJECT_LABELS[project].label}` : ""}`}
-            aria-valuemin={sizeConfig.min}
-            aria-valuemax={sizeConfig.max}
-            aria-valuenow={sqft}
-          />
-          <div className="flex justify-between text-[11px] mt-2 tracking-wide text-muted-foreground">
-            <span>
-              <DisplayNum>{sizeConfig.min.toLocaleString()}</DisplayNum> sqft
-            </span>
-            <span>
-              <DisplayNum>{sizeConfig.max.toLocaleString()}</DisplayNum> sqft
-            </span>
-          </div>
-        </div>
-      ) : (
-        <p className="text-xs text-muted-foreground">
-          {project
-            ? "Pick a starting point above, then fine-tune with the slider."
-            : "Choose a project type first."}
-        </p>
-      )}
-    </div>
-  );
-}
-
-function RefinementFields({
-  project,
-  refinements,
-  onUpdate,
-  idPrefix,
-}: {
-  project: ProjectType;
-  refinements: EstimateRefinements;
-  onUpdate: <K extends keyof EstimateRefinements>(key: K, value: EstimateRefinements[K]) => void;
-  idPrefix: string;
-}) {
-  const visibility = getRefinementVisibility(project);
-
-  return (
-    <div className="space-y-6">
-      {visibility.layoutChanges && (
-        <div>
-          <span id={`${idPrefix}label-layout`} className="brc-label mb-3">
-            Layout changes
-          </span>
-          <SelectButton
-            value={refinements.layoutChanges}
-            onChange={(v) => onUpdate("layoutChanges", v)}
-            testIdPrefix={`${idPrefix}layout`}
-            allowUnset
-            groupLabelId={`${idPrefix}label-layout`}
-            options={[
-              { value: "none", label: "None", sub: "Same layout" },
-              { value: "moderate", label: "Moderate", sub: "Minor wall changes" },
-              { value: "major", label: "Major", sub: "Structural changes" },
-            ]}
-          />
-        </div>
-      )}
-
-      {visibility.plumbingElectrical && (
-        <div>
-          <span id={`${idPrefix}label-plumbing`} className="brc-label mb-3">
-            {getPlumbingElectricalLabel(project)}
-          </span>
-          <SelectButton
-            value={refinements.plumbingElectrical}
-            onChange={(v) => onUpdate("plumbingElectrical", v)}
-            testIdPrefix={`${idPrefix}plumbing`}
-            allowUnset
-            groupLabelId={`${idPrefix}label-plumbing`}
-            options={getPlumbingElectricalOptions(project)}
-          />
-        </div>
-      )}
-
-      {visibility.cabinetTier && (
-        <div>
-          <span id={`${idPrefix}label-cabinet`} className="brc-label mb-3">
-            Cabinet level
-          </span>
-          <SelectButton
-            value={refinements.cabinetTier}
-            onChange={(v) => onUpdate("cabinetTier", v)}
-            testIdPrefix={`${idPrefix}cabinet`}
-            allowUnset
-            groupLabelId={`${idPrefix}label-cabinet`}
-            options={[
-              { value: "standard", label: "Standard" },
-              { value: "semi-custom", label: "Semi-custom" },
-              { value: "custom", label: "Custom" },
-            ]}
-          />
-        </div>
-      )}
-
-      {visibility.fixtureCount && (
-        <RefinementNumberInput
-          id={`${idPrefix}fixture-count`}
-          label="Number of fixtures"
-          min={1}
-          max={8}
-          placeholder="e.g. 3"
-          value={refinements.fixtureCount}
-          onCommit={(n) => onUpdate("fixtureCount", n)}
-          testId={`${idPrefix}input-fixture-count`}
-        />
-      )}
-
-      {visibility.roomCount && (
-        <RefinementNumberInput
-          id={`${idPrefix}room-count`}
-          label="Rooms being remodeled"
-          min={1}
-          max={12}
-          placeholder="e.g. 4"
-          value={refinements.roomCount}
-          onCommit={(n) => onUpdate("roomCount", n)}
-          testId={`${idPrefix}input-room-count`}
-        />
-      )}
-
-      {visibility.stories && (
-        <div>
-          <span id={`${idPrefix}label-stories`} className="brc-label mb-3">
-            Stories involved
-          </span>
-          <SelectButton
-            value={refinements.stories !== null ? (String(refinements.stories) as "1" | "2") : null}
-            onChange={(v) => onUpdate("stories", v === null ? null : Number(v))}
-            testIdPrefix={`${idPrefix}stories`}
-            allowUnset
-            groupLabelId={`${idPrefix}label-stories`}
-            options={[
-              { value: "1", label: "Single story" },
-              { value: "2", label: "Two story" },
-            ]}
-          />
-        </div>
-      )}
-
-      {visibility.aduConfiguration && (
-        <div>
-          <span id={`${idPrefix}label-adu-type`} className="brc-label mb-3">
-            ADU configuration
-          </span>
-          <SelectButton
-            value={refinements.aduConfig}
-            onChange={(v) => onUpdate("aduConfig", v)}
-            testIdPrefix={`${idPrefix}adu-type`}
-            allowUnset
-            groupLabelId={`${idPrefix}label-adu-type`}
-            options={[
-              { value: "detached", label: "Detached", sub: "Separate structure on lot" },
-              { value: "attached", label: "Attached", sub: "Connected to main home" },
-            ]}
-          />
-        </div>
-      )}
-
-      <p className="text-[11px] text-muted-foreground">
-        Every detail is optional. Tap a selected option again to clear it.
-      </p>
-    </div>
-  );
-}
-
-function StepHeader({ num, label }: { num: number; label: string }) {
-  return (
-    <div className="flex items-center gap-3 mb-3">
-      <span className="flex-shrink-0 flex items-center justify-center h-7 w-7 rounded-full border border-primary/60 text-primary text-[11px] font-normal tracking-wide">
-        {num}
-      </span>
-      <span className="font-sans font-normal text-sm text-foreground tracking-wide">{label}</span>
-    </div>
-  );
-}
-
-/* ─────────────────────────── Calculator ─────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════════
+   MAIN COMPONENT
+═══════════════════════════════════════════════════════════════════════ */
 
 interface EstimateCalculatorProps {
   inModal?: boolean;
   onBookVisit?: () => void;
 }
 
-export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitProp }: EstimateCalculatorProps = {}) {
-  // Nothing is selected by default; users build the estimate intentionally.
-  const [project, setProject] = useState<ProjectType | null>(null);
-  const [finish, setFinish] = useState<FinishLevel | null>(null);
+export function EstimateCalculator({
+  inModal = false,
+  onBookVisit: onBookVisitProp,
+}: EstimateCalculatorProps = {}) {
+
+  /* ── State ── */
+  const [step, setStep] = useState(0); // 0=project 1=subtype 2=finish+size 3=addons
+  const [showResult, setShowResult] = useState(false); // mobile result reveal
+  const [projectType, setProjectType] = useState<ProjectType | null>(null);
+  const [subtype, setSubtype] = useState<string | null>(null);
+  const [finish, setFinish] = useState<FinishLevel>("mid-range");
   const [sqft, setSqft] = useState<number | null>(null);
-  const [refinements, setRefinements] = useState<EstimateRefinements>({ ...EMPTY_REFINEMENTS });
-  const [refineOpen, setRefineOpen] = useState(false);
-  const [stepIndex, setStepIndex] = useState(0);
+  const [addOns, setAddOns] = useState<string[]>([]);
+  const [scopeOpen, setScopeOpen] = useState(false);
+  const [legalOpen, setLegalOpen] = useState(false);
+  const advanceTimer = useRef<number | null>(null);
 
-  const input: PartialEstimateInput = useMemo(
-    () => ({ project, finish, sqft, refinements }),
-    [project, finish, sqft, refinements]
-  );
+  /* ── Derived ── */
+  const effectiveProject = useMemo<ProjectType | null>(() => {
+    if (!projectType || !subtype) return projectType;
+    return SUBTYPE_DATA[projectType]?.[subtype]?.projectOverride ?? projectType;
+  }, [projectType, subtype]);
 
-  const complete = isCompleteEstimateInput(input);
+  const refinements = useMemo<EstimateRefinements>(() => {
+    if (!effectiveProject || !subtype || !projectType) return { ...EMPTY_REFINEMENTS };
+    const data = SUBTYPE_DATA[projectType]?.[subtype];
+    if (!data) return { ...EMPTY_REFINEMENTS };
+    return buildRefinements(effectiveProject, subtype, addOns, data.refinements);
+  }, [effectiveProject, projectType, subtype, addOns]);
 
-  const userRefinementCount = project
-    ? countVisibleUserRefinements(project, getSetRefinementKeys(refinements))
-    : 0;
+  const userRefinementCount = useMemo(() => {
+    if (!effectiveProject) return 0;
+    return countVisibleUserRefinements(effectiveProject, getSetRefinementKeys(refinements));
+  }, [effectiveProject, refinements]);
 
-  const result = useMemo(
-    () => (complete ? calculateEstimate(input as EstimateInput, userRefinementCount) : null),
-    [complete, input, userRefinementCount]
-  );
+  const result = useMemo<EstimateResult | null>(() => {
+    if (!effectiveProject || !sqft) return null;
+    const input: EstimateInput = { project: effectiveProject, finish, sqft, refinements };
+    return calculateEstimate(input, userRefinementCount);
+  }, [effectiveProject, finish, sqft, refinements, userRefinementCount]);
 
-  const progress = {
-    project: project !== null,
-    finish: finish !== null,
-    size: sqft !== null,
-  };
-
-  const selectionSummary = complete
-    ? buildSelectionSummary(input.project as ProjectType, input.finish as FinishLevel, input.sqft as number)
-    : [
-        project && PROJECT_LABELS[project].label,
-        finish && FINISH_LABELS[finish].label,
-        sqft !== null && `${sqft.toLocaleString()} sqft`,
-      ]
-        .filter(Boolean)
-        .join(" · ") || "Project estimator";
-
-  /* ── Step navigation (mobile / modal guided flow) ── */
-
-  const stepHeadingRef = useRef<HTMLHeadingElement>(null);
-  const stepperRootRef = useRef<HTMLDivElement>(null);
-  const pendingFocusRef = useRef(false);
-  const advanceTimerRef = useRef<number | null>(null);
-
-  const canEnterStep = useCallback(
-    (index: number): boolean => {
-      switch (STEPS[index].id) {
-        case "project":
-          return true;
-        case "finish":
-          return project !== null;
-        case "size":
-          return project !== null && finish !== null;
-        case "refine":
-        case "review":
-          return complete;
-        default:
-          return false;
-      }
-    },
-    [project, finish, complete]
-  );
-
-  const goToStep = useCallback(
-    (index: number, focusHeading = true) => {
-      setStepIndex((prev) => {
-        if (index === prev) return prev;
-        pendingFocusRef.current = focusHeading;
-        return index;
-      });
-    },
-    []
-  );
-
+  /* ── Persist estimate to sessionStorage ── */
   useEffect(() => {
-    if (!pendingFocusRef.current) return;
-    pendingFocusRef.current = false;
-    // Every step opens at the top. Scroll the wizard's scroll container back to
-    // the start - the dialog body when in a modal, the window when inline - so
-    // the new step is never revealed mid-scroll. Focus moves to the heading for
-    // keyboard / screen-reader users, with preventScroll so it does not fight
-    // the scroll we just performed.
-    // Only when the guided stepper is actually on screen (mobile / modal). On
-    // desktop it is display:none (lg:hidden) yet still receives step changes, so
-    // guard on offsetParent to avoid scrolling the page against a hidden node.
-    const root = stepperRootRef.current;
-    if (root && root.offsetParent !== null) {
-      let ancestor: HTMLElement | null = root.parentElement;
-      let scrolledContainer = false;
-      while (ancestor && ancestor !== document.body && ancestor !== document.documentElement) {
-        const overflowY = getComputedStyle(ancestor).overflowY;
-        if (
-          (overflowY === "auto" || overflowY === "scroll") &&
-          ancestor.scrollHeight > ancestor.clientHeight
-        ) {
-          ancestor.scrollTo({ top: 0, behavior: "auto" });
-          scrolledContainer = true;
-          break;
-        }
-        ancestor = ancestor.parentElement;
-      }
-      if (!scrolledContainer) {
-        const top = root.getBoundingClientRect().top + window.scrollY - 80;
-        window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
-      }
-    }
-    stepHeadingRef.current?.focus({ preventScroll: true });
-  }, [stepIndex]);
+    if (!result || !effectiveProject || !sqft) return;
+    const input: EstimateInput = { project: effectiveProject, finish, sqft, refinements };
+    sessionStorage.setItem(
+      "brc_estimate",
+      JSON.stringify(buildStoredEstimate(input, userRefinementCount)),
+    );
+    window.dispatchEvent(new CustomEvent("brc_estimate_updated"));
+  }, [result, effectiveProject, finish, sqft, refinements, userRefinementCount]);
 
-  useEffect(() => {
-    return () => {
-      if (advanceTimerRef.current !== null) window.clearTimeout(advanceTimerRef.current);
-    };
-  }, []);
+  useEffect(() => () => { if (advanceTimer.current) clearTimeout(advanceTimer.current); }, []);
 
-  /** Brief pause so the selected state is perceivable before advancing. */
-  const advanceToStep = useCallback(
-    (index: number) => {
-      if (advanceTimerRef.current !== null) window.clearTimeout(advanceTimerRef.current);
-      advanceTimerRef.current = window.setTimeout(() => goToStep(index), 180);
-    },
-    [goToStep]
-  );
-
-  /* ── Selection handlers ── */
+  /* ── Handlers ── */
+  function autoAdvance(to: number) {
+    if (advanceTimer.current) clearTimeout(advanceTimer.current);
+    advanceTimer.current = window.setTimeout(() => setStep(to), 220);
+  }
 
   function handleSelectProject(type: ProjectType) {
-    if (type !== project) {
-      setProject(type);
-      // Size and detail options are project-specific; clear them so nothing
-      // carries over implicitly.
+    if (type !== projectType) {
+      setProjectType(type);
+      setSubtype(null);
       setSqft(null);
-      setRefinements({ ...EMPTY_REFINEMENTS });
-      if (finish !== null && !getAvailableFinishLevels(type).includes(finish)) {
-        setFinish(null);
-      }
+      setAddOns([]);
+      setShowResult(false);
+      setScopeOpen(false);
+      const avail = getAvailableFinishLevels(type);
+      if (!avail.includes(finish)) setFinish("mid-range");
     }
-    advanceToStep(STEP_INDEX.finish);
+    autoAdvance(1);
   }
 
-  function handleSelectFinish(level: FinishLevel) {
-    setFinish(level);
-    advanceToStep(STEP_INDEX.size);
+  function handleSelectSubtype(id: string) {
+    setSubtype(id);
+    if (projectType) {
+      const data = SUBTYPE_DATA[projectType]?.[id];
+      if (data) setSqft(data.sqft);
+    }
+    setAddOns([]);
+    setShowResult(false);
+    setScopeOpen(false);
+    autoAdvance(2);
   }
 
-  function updateRefinement<K extends keyof EstimateRefinements>(key: K, value: EstimateRefinements[K]) {
-    setRefinements((prev) => ({ ...prev, [key]: value }));
+  function toggleChip(id: string) {
+    setAddOns((prev) => (prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]));
   }
 
   function handleBookVisit() {
-    if (!complete) return;
-    sessionStorage.setItem(
-      "brc_estimate",
-      JSON.stringify(buildStoredEstimate(input as EstimateInput, userRefinementCount))
-    );
-    window.dispatchEvent(new CustomEvent("brc_estimate_updated"));
     if (onBookVisitProp) {
       onBookVisitProp();
     } else {
@@ -691,338 +414,608 @@ export function EstimateCalculator({ inModal = false, onBookVisit: onBookVisitPr
     }
   }
 
-  // Persist only user-completed estimates; never write a range the user did
-  // not intentionally build.
-  useEffect(() => {
-    if (!complete) return;
-    sessionStorage.setItem(
-      "brc_estimate",
-      JSON.stringify(buildStoredEstimate(input as EstimateInput, userRefinementCount))
+  /* ── Derived config ── */
+  const config = projectType ? PROJECT_CONFIGS[projectType] : null;
+  const availFinish = projectType ? getAvailableFinishLevels(projectType) : (["mid-range", "high-end", "luxury"] as FinishLevel[]);
+  const sizePresets = effectiveProject ? getSizePresets(effectiveProject) : null;
+  const sizeConfig = effectiveProject ? getProjectSizeConfig(effectiveProject) : null;
+
+  const canProgress =
+    step === 0 ? projectType !== null :
+    step === 1 ? subtype !== null :
+    step === 2 ? sqft !== null :
+    true;
+
+  const TOTAL_STEPS = 4;
+
+  /* ── Shared card style ── */
+  const darkCard = (active: boolean) =>
+    cn(
+      "relative rounded-md border text-left transition-all hover-elevate",
+      active
+        ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50"
+        : "bg-inverse-foreground/[0.07] border-inverse-foreground/[0.13]",
     );
-    window.dispatchEvent(new CustomEvent("brc_estimate_updated"));
-  }, [complete, input, userRefinementCount]);
 
-  /* ── Inline sticky bar visibility ── */
+  /* ══════════════════════════════════════════
+     STEP RENDERS
+  ══════════════════════════════════════════ */
 
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [calculatorInView, setCalculatorInView] = useState(false);
-
-  useEffect(() => {
-    if (inModal) return;
-    const el = sectionRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setCalculatorInView(entry.isIntersecting),
-      { threshold: 0.05 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [inModal]);
-
-  /* ── Sticky bar contextual CTA ── */
-
-  const currentStep = STEPS[stepIndex];
-  let barCtaLabel: string;
-  let barCtaDisabled = false;
-  let barCtaAction: () => void;
-
-  switch (currentStep.id) {
-    case "project":
-      barCtaLabel = "Continue";
-      barCtaDisabled = project === null;
-      barCtaAction = () => goToStep(STEP_INDEX.finish);
-      break;
-    case "finish":
-      barCtaLabel = "Continue";
-      barCtaDisabled = finish === null;
-      barCtaAction = () => goToStep(STEP_INDEX.size);
-      break;
-    case "size":
-      barCtaLabel = "Continue";
-      barCtaDisabled = sqft === null;
-      barCtaAction = () => goToStep(STEP_INDEX.refine);
-      break;
-    case "refine":
-      barCtaLabel = "Review estimate";
-      barCtaAction = () => goToStep(STEP_INDEX.review);
-      break;
-    default:
-      barCtaLabel = "Schedule a visit";
-      barCtaAction = handleBookVisit;
-  }
-
-  /* ── Guided stepper (mobile + modal) ── */
-
-  const stepperIdPrefix = "step-";
-  const stepper = (
-    <div ref={stepperRootRef} data-testid="estimate-stepper">
-      <div className="flex items-center justify-between gap-3 mb-4 min-h-9">
-        {stepIndex > 0 ? (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => goToStep(stepIndex - 1)}
-            data-testid="button-step-back"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Button>
-        ) : (
-          <span />
-        )}
-        <div className="flex items-center gap-3">
-          <span className="text-[11px] tracking-wide uppercase text-muted-foreground">
-            Step {stepIndex + 1} of {STEPS.length}
-          </span>
-          <ol className="flex items-center gap-1.5" aria-label="Estimator progress">
-            {STEPS.map((step, i) => {
-              const reachable = canEnterStep(i);
-              return (
-                <li key={step.id}>
-                  <button
-                    type="button"
-                    disabled={!reachable}
-                    onClick={() => goToStep(i)}
-                    aria-label={`Step ${i + 1}: ${step.shortLabel}`}
-                    aria-current={i === stepIndex ? "step" : undefined}
-                    className={cn(
-                      "block rounded-full transition-all",
-                      i === stepIndex
-                        ? "w-5 h-1.5 bg-accent-legible"
-                        : reachable
-                          ? "w-1.5 h-1.5 bg-foreground/40"
-                          : "w-1.5 h-1.5 bg-border"
-                    )}
-                  />
-                </li>
-              );
-            })}
-          </ol>
+  function renderProjectStep() {
+    return (
+      <div>
+        <DarkLabel>SELECT YOUR PROJECT</DarkLabel>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {(Object.keys(PROJECT_CONFIGS) as ProjectType[]).map((type) => {
+            const pc = PROJECT_CONFIGS[type];
+            const Icon = pc.icon;
+            const active = projectType === type;
+            return (
+              <button
+                key={type}
+                type="button"
+                onClick={() => handleSelectProject(type)}
+                data-testid={`calc-project-${type}`}
+                aria-pressed={active}
+                className={cn(darkCard(active), "flex flex-col items-start gap-1 p-3")}
+              >
+                {active && <Check className="absolute top-2 right-2 h-3.5 w-3.5 text-accent-legible" />}
+                <Icon className="h-5 w-5 text-accent-legible mb-0.5 flex-shrink-0" />
+                <span className="text-[13px] font-normal text-inverse-foreground leading-tight">
+                  {pc.tabLabel}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
+    );
+  }
 
-      <h3
-        ref={stepHeadingRef}
-        tabIndex={-1}
-        className="font-sans font-light text-xl text-foreground mb-5 outline-none scroll-mt-24"
-        data-testid="step-heading"
-      >
-        {currentStep.title}
-      </h3>
+  function renderSubtypeStep() {
+    if (!config) return null;
+    return (
+      <div>
+        <DarkLabel>{config.subtypeLabel}</DarkLabel>
+        <div className="grid grid-cols-2 gap-2.5">
+          {config.subtypes.map((opt) => {
+            const Icon = opt.icon;
+            const active = subtype === opt.id;
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => handleSelectSubtype(opt.id)}
+                data-testid={`calc-subtype-${opt.id}`}
+                aria-pressed={active}
+                className={cn(darkCard(active), "flex items-start gap-3 p-3")}
+              >
+                {active && (
+                  <span className="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-accent-legible flex-shrink-0">
+                    <Check className="h-2.5 w-2.5 text-inverse" />
+                  </span>
+                )}
+                <Icon className="h-5 w-5 flex-shrink-0 mt-0.5 text-accent-legible" />
+                <span className="min-w-0">
+                  <span className="block text-[13px] font-medium text-inverse-foreground leading-tight">
+                    {opt.title}
+                  </span>
+                  <span className="block text-[11px] italic text-inverse-muted leading-snug mt-0.5">
+                    {opt.subtitle}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 
-      <div
-        key={currentStep.id}
-        className="animate-in fade-in slide-in-from-bottom-2 duration-200 motion-reduce:animate-none"
-      >
-        {currentStep.id === "project" && (
-          <ProjectTiles project={project} onSelect={handleSelectProject} idPrefix={stepperIdPrefix} />
-        )}
+  const FINISH_META: Record<FinishLevel, { label: string; sub: string }> = {
+    refresh:     { label: "Refresh",    sub: "Cosmetic" },
+    "mid-range": { label: "Mid-Range",  sub: "Best value" },
+    "high-end":  { label: "High-End",   sub: "Premium" },
+    luxury:      { label: "Luxury",     sub: "No limit" },
+  };
 
-        {currentStep.id === "finish" && (
-          <FinishTiles
-            project={project}
-            finish={finish}
-            onSelect={handleSelectFinish}
-            idPrefix={stepperIdPrefix}
-          />
-        )}
-
-        {currentStep.id === "size" && (
-          <SizePicker project={project} sqft={sqft} onSqftChange={setSqft} idPrefix={stepperIdPrefix} />
-        )}
-
-        {currentStep.id === "refine" && project && (
-          <div>
-            <p className="text-xs text-muted-foreground mb-5">
-              A few optional details sharpen your planning range. Skip this step any time.
-            </p>
-            <RefinementFields
-              project={project}
-              refinements={refinements}
-              onUpdate={updateRefinement}
-              idPrefix={stepperIdPrefix}
-            />
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="mt-4 text-muted-foreground"
-              onClick={() => goToStep(STEP_INDEX.review)}
-              data-testid="button-skip-refine"
-            >
-              Skip for now
-            </Button>
+  function renderFinishSizeStep() {
+    return (
+      <div className="space-y-5">
+        {/* Finish level */}
+        <div>
+          <DarkLabel>FINISH LEVEL</DarkLabel>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {availFinish.map((level) => {
+              const meta = FINISH_META[level];
+              const active = finish === level;
+              return (
+                <button
+                  key={level}
+                  type="button"
+                  onClick={() => setFinish(level)}
+                  data-testid={`calc-finish-${level}`}
+                  aria-pressed={active}
+                  className={cn(darkCard(active), "flex flex-col items-center text-center py-2.5 px-2")}
+                >
+                  {active && <Check className="h-3 w-3 text-accent-legible mb-1" />}
+                  <span className="text-[12px] font-medium text-inverse-foreground">{meta.label}</span>
+                  <span className="text-[10px] text-inverse-muted">{meta.sub}</span>
+                </button>
+              );
+            })}
           </div>
-        )}
+        </div>
 
-        {currentStep.id === "review" && (
-          <EstimateResultPanel
-            result={result}
-            selectionSummary={selectionSummary}
-            onBookVisit={handleBookVisit}
-            project={project}
-            progress={progress}
-          />
-        )}
+        {/* Size */}
+        <div>
+          <DarkLabel>PROJECT SIZE</DarkLabel>
+          {sizePresets ? (
+            <div className="space-y-3">
+              <div className="grid grid-cols-3 gap-2">
+                {sizePresets.map((preset) => {
+                  const active = sqft === preset.sqft;
+                  return (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => setSqft(preset.sqft)}
+                      data-testid={`calc-size-${preset.id}`}
+                      aria-pressed={active}
+                      className={cn(darkCard(active), "flex flex-col items-center text-center py-2.5 px-2")}
+                    >
+                      <span className="text-[12px] font-medium text-inverse-foreground">{preset.label}</span>
+                      <span className="text-[10px] text-inverse-muted">
+                        ~{preset.sqft.toLocaleString()} sqft
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+              {sqft !== null && sizeConfig && (
+                <div className="animate-in fade-in duration-200 space-y-1.5">
+                  <div className="flex justify-between text-[10px]">
+                    <span className="text-inverse-muted">Fine-tune</span>
+                    <span className="text-inverse-foreground brc-display-num">
+                      {sqft.toLocaleString()} sqft
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    className="brc-slider w-full"
+                    min={sizeConfig.min}
+                    max={sizeConfig.max}
+                    step={sizeConfig.step}
+                    value={sqft}
+                    onChange={(e) => setSqft(Number(e.target.value))}
+                    data-testid="calc-slider-size"
+                    aria-label="Project size"
+                    aria-valuemin={sizeConfig.min}
+                    aria-valuemax={sizeConfig.max}
+                    aria-valuenow={sqft}
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            <p className="text-[12px] text-inverse-muted">
+              Choose a project and subtype first.
+            </p>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 
-  /* ── Stacked layout (desktop inline) ── */
-
-  const stackedIdPrefix = "";
-  const stacked = (
-    <div className="space-y-5">
+  function renderAddOnsStep() {
+    if (!config) return null;
+    return (
       <div>
-        <StepHeader num={1} label="What are we remodeling?" />
-        <ProjectTiles project={project} onSelect={handleSelectProject} idPrefix={stackedIdPrefix} />
+        <DarkLabel>{config.chipLabel}</DarkLabel>
+        <div className="grid grid-cols-4 gap-2">
+          {config.chips.map((chip) => {
+            const Icon = chip.icon;
+            const active = addOns.includes(chip.id);
+            return (
+              <button
+                key={chip.id}
+                type="button"
+                onClick={() => toggleChip(chip.id)}
+                data-testid={`calc-chip-${chip.id}`}
+                aria-pressed={active}
+                className={cn(
+                  darkCard(active),
+                  "flex flex-col items-center justify-center gap-1.5 py-3 px-1 text-center",
+                )}
+              >
+                <Icon
+                  className={cn(
+                    "h-4 w-4",
+                    active ? "text-accent-legible" : "text-inverse-muted",
+                  )}
+                />
+                <span className="text-[9px] tracking-widest uppercase text-inverse-foreground leading-tight">
+                  {chip.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        <p className="text-[10px] text-inverse-muted mt-3 leading-relaxed">
+          Optional - tap to toggle. These sharpen your estimate range.
+        </p>
       </div>
+    );
+  }
 
-      <div>
-        <StepHeader num={2} label="Choose a finish level" />
-        {project === null && (
-          <p className="text-xs text-muted-foreground mb-3">Choose a project type first.</p>
-        )}
-        <FinishTiles
-          project={project}
-          finish={finish}
-          onSelect={handleSelectFinish}
-          idPrefix={stackedIdPrefix}
-        />
-      </div>
+  /* ══════════════════════════════════════════
+     RESULT PANEL (shared by mobile + desktop)
+  ══════════════════════════════════════════ */
 
-      <div>
-        <StepHeader num={3} label="How big is the space?" />
-        <SizePicker project={project} sqft={sqft} onSqftChange={setSqft} idPrefix={stackedIdPrefix} />
-      </div>
+  function ResultPanel({ compact = false }: { compact?: boolean }) {
+    if (!result) {
+      return (
+        <div className="space-y-3" data-testid="estimate-result-pending">
+          <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted">Planning range</p>
+          <div
+            className="brc-display-num text-[clamp(28px,5vw,44px)] leading-none text-inverse-muted/40"
+            data-testid="estimate-range-placeholder"
+          >
+            $ -- to --
+          </div>
+          <p className="text-[12px] text-inverse-muted leading-relaxed">
+            Complete the steps to see your personalized planning range.
+          </p>
+        </div>
+      );
+    }
+    return (
+      <div className="space-y-4" data-testid="estimate-result-panel">
+        <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted">Planning range</p>
 
-      <div className="rounded-sm overflow-hidden border border-border marketing-card">
+        {/* Price range */}
+        <div
+          className="brc-display-num tabular-nums leading-none text-inverse-foreground"
+          style={{ fontSize: compact ? "clamp(26px,4vw,36px)" : "clamp(30px,6vw,52px)" }}
+          data-testid="estimate-range"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <AnimatedPrice value={result.priceLow} />
+          <span className="text-inverse-muted/60 mx-1.5" style={{ fontSize: "0.55em" }}>
+            to
+          </span>
+          <AnimatedPrice value={result.priceHigh} />
+        </div>
+
+        <p className="text-[11px] text-inverse-muted leading-snug">
+          Est. {result.roi}% ROI based on Boise market data.
+        </p>
+
+        {/* Scope toggle */}
+        <div className="border-t border-inverse-foreground/10 pt-3">
+          <button
+            type="button"
+            onClick={() => setScopeOpen((p) => !p)}
+            className="flex w-full items-center justify-between text-left py-0.5"
+            data-testid="button-toggle-scope"
+            aria-expanded={scopeOpen}
+          >
+            <span className="text-[10px] tracking-wide text-inverse-muted">
+              What&apos;s typically included ({result.included.length})
+            </span>
+            <ChevronDown
+              className={cn(
+                "h-3.5 w-3.5 text-inverse-muted transition-transform",
+                scopeOpen && "rotate-180",
+              )}
+            />
+          </button>
+          {scopeOpen && (
+            <div className="pt-2 space-y-1.5" id="estimate-scope-list">
+              {result.included.map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-2 text-[11px] text-inverse-muted leading-snug"
+                  data-testid={`included-item-${i}`}
+                >
+                  <Check className="h-3 w-3 flex-shrink-0 mt-0.5 text-accent-legible" />
+                  {item}
+                </div>
+              ))}
+              <p className="text-[10px] text-inverse-muted/70 pt-1 leading-relaxed">
+                {INCLUDED_SCOPE_NOTE}
+              </p>
+              {effectiveProject === "kitchen" && (
+                <p className="text-[10px] text-inverse-muted/70 leading-relaxed">
+                  {APPLIANCE_DISCLAIMER}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* CTA */}
+        <Button
+          onClick={handleBookVisit}
+          data-testid="button-book-visit"
+          className="w-full bg-inverse-foreground text-inverse tracking-wide"
+        >
+          Schedule a free visit
+          <ArrowRight className="h-4 w-4" />
+        </Button>
+
+        <p className="text-[10px] text-center text-inverse-muted/70">
+          Free 60 to 90 min in-home visit. No obligation.
+        </p>
+
+        {/* Legal note */}
         <button
           type="button"
-          disabled={!complete}
-          onClick={() => setRefineOpen(!refineOpen)}
-          className={cn(
-            "w-full flex items-center justify-between p-4 text-left bg-surface-muted hover:bg-muted/80 transition-colors",
-            !complete && "opacity-50 cursor-not-allowed"
-          )}
-          data-testid="button-refine-toggle"
-          aria-expanded={refineOpen && complete}
-          aria-controls="refine-estimate-panel"
+          onClick={() => setLegalOpen((p) => !p)}
+          className="flex w-full items-center justify-center gap-1 text-[10px] text-inverse-muted/60 hover:text-inverse-muted"
+          aria-expanded={legalOpen}
         >
-          <div>
-            <span className="font-normal text-sm block text-foreground">
-              Improve estimate accuracy
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {complete
-                ? "Add optional details for a more tailored planning range"
-                : "Finish the three steps above to unlock"}
-            </span>
-            {refineOpen && complete && project && (
-              <span className="text-[11px] block mt-1 text-muted-foreground">
-                {userRefinementCount} of {getMaxRefinementFields(project)} details added
-              </span>
-            )}
-          </div>
-          <ChevronDown
-            className={cn(
-              "h-5 w-5 flex-shrink-0 transition-transform text-muted-foreground",
-              refineOpen && complete && "rotate-180"
-            )}
-          />
+          Why a range, not a fixed price?
+          <ChevronDown className={cn("h-3 w-3 transition-transform", legalOpen && "rotate-180")} />
         </button>
-
-        {refineOpen && complete && project && (
-          <div id="refine-estimate-panel" className="p-4 bg-card border-t border-border">
-            <RefinementFields
-              project={project}
-              refinements={refinements}
-              onUpdate={updateRefinement}
-              idPrefix={stackedIdPrefix}
-            />
-          </div>
+        {legalOpen && (
+          <p className="text-[10px] text-inverse-muted/70 leading-relaxed">
+            This estimate is for planning purposes only - not a proposal, bid, or guaranteed project
+            cost. Ranges reflect project type, size, location, finish level, and other assumptions.
+            Your consultation delivers a detailed evaluation tailored to your home.
+          </p>
         )}
       </div>
-    </div>
-  );
+    );
+  }
 
-  const resultPanel = (
-    <EstimateResultPanel
-      result={result}
-      selectionSummary={selectionSummary}
-      onBookVisit={handleBookVisit}
-      project={project}
-      progress={progress}
-    />
-  );
+  /* ══════════════════════════════════════════
+     HEADLINE
+  ══════════════════════════════════════════ */
 
-  /* ── Modal layout: guided stepper everywhere, side panel on md+ ── */
+  function Headline() {
+    const headlineSize =
+      "font-sans font-light text-[clamp(1.5rem,3.5vw,2.75rem)] leading-[1.1] tracking-tight text-inverse-foreground";
+
+    if (!config) {
+      return (
+        <div>
+          <p className="text-[9px] tracking-[0.2em] uppercase text-inverse-muted mb-2">
+            BALLPARK YOUR PROJECT IN UNDER 60 SECONDS
+          </p>
+          <h2 className={headlineSize}>
+            Get your <em className="brc-accent">instant</em> estimate
+          </h2>
+        </div>
+      );
+    }
+    return (
+      <div>
+        <p className="text-[9px] tracking-[0.2em] uppercase text-inverse-muted mb-2">
+          BALLPARK YOUR PROJECT IN UNDER 60 SECONDS
+        </p>
+        <h2 className={headlineSize}>
+          {config.headlinePrefix}{" "}
+          <em className="brc-accent">{config.headlineAccent}</em>{" "}
+          {config.headlineSuffix}
+        </h2>
+      </div>
+    );
+  }
+
+  /* ══════════════════════════════════════════
+     STEP DOTS
+  ══════════════════════════════════════════ */
+
+  function StepDots() {
+    return (
+      <div className="flex items-center gap-1.5" role="list" aria-label="Estimator progress">
+        {Array.from({ length: TOTAL_STEPS }, (_, i) => (
+          <div
+            key={i}
+            role="listitem"
+            className={cn(
+              "rounded-full transition-all duration-300",
+              i === step && !showResult
+                ? "w-5 h-1.5 bg-inverse-foreground/70"
+                : i < step || showResult
+                  ? "w-1.5 h-1.5 bg-accent-legible"
+                  : "w-1.5 h-1.5 bg-inverse-foreground/20",
+            )}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  /* ══════════════════════════════════════════
+     BOTTOM CTA
+  ══════════════════════════════════════════ */
+
+  function BottomCta() {
+    if (showResult) {
+      return (
+        <div className="flex items-center justify-center pt-4">
+          <button
+            type="button"
+            onClick={() => { setShowResult(false); setStep(3); }}
+            className="text-[11px] text-inverse-muted hover:text-inverse-foreground transition-colors"
+          >
+            Edit selections
+          </button>
+        </div>
+      );
+    }
+
+    const isLast = step === 3;
+    const btnClass =
+      "tracking-widest text-[11px] uppercase font-normal bg-inverse-foreground text-inverse disabled:opacity-40";
+
+    return (
+      <div className="space-y-2 pt-4">
+        {/* Mobile */}
+        <Button
+          disabled={!canProgress}
+          onClick={() => {
+            if (!canProgress) return;
+            if (isLast) {
+              setShowResult(true);
+            } else {
+              setStep((s) => s + 1);
+            }
+          }}
+          className={cn("w-full lg:hidden", btnClass)}
+          data-testid={isLast ? "button-calculate" : "button-continue"}
+        >
+          {isLast ? "Calculate My Cost" : "Continue"}
+        </Button>
+
+        {/* Desktop */}
+        {isLast ? (
+          <Button
+            onClick={handleBookVisit}
+            className={cn("w-full hidden lg:flex", btnClass)}
+            data-testid="button-schedule-desktop"
+          >
+            Schedule a Free Visit
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        ) : (
+          <Button
+            disabled={!canProgress}
+            onClick={() => { if (canProgress) setStep((s) => s + 1); }}
+            className={cn("w-full hidden lg:flex", btnClass)}
+            data-testid="button-continue-desktop"
+          >
+            Continue
+          </Button>
+        )}
+
+        {/* Skip on add-ons step */}
+        {isLast && !showResult && (
+          <button
+            type="button"
+            onClick={() => {
+              setShowResult(true);
+            }}
+            className="w-full lg:hidden text-[10px] text-center text-inverse-muted py-1"
+          >
+            Skip - see my estimate
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  /* ══════════════════════════════════════════
+     WIZARD CONTENT
+  ══════════════════════════════════════════ */
+
+  function WizardContent() {
+    if (showResult) {
+      return <ResultPanel />;
+    }
+    switch (step) {
+      case 0: return renderProjectStep();
+      case 1: return renderSubtypeStep();
+      case 2: return renderFinishSizeStep();
+      case 3: return renderAddOnsStep();
+      default: return null;
+    }
+  }
+
+  /* ══════════════════════════════════════════
+     MODAL LAYOUT (compact, no min-h-screen)
+  ══════════════════════════════════════════ */
 
   if (inModal) {
     return (
-      <div>
-        <div className="grid md:grid-cols-[3fr_2fr] gap-6 md:gap-8 items-start">
-          <div>{stepper}</div>
-          <div className="hidden md:block">{resultPanel}</div>
+      <div className="bg-inverse text-inverse-foreground rounded-lg p-5">
+        <div className="flex items-center justify-between mb-4">
+          {step > 0 && !showResult ? (
+            <button
+              type="button"
+              onClick={() => setStep((s) => Math.max(0, s - 1))}
+              className="flex items-center gap-1 text-inverse-muted text-[12px] hover:text-inverse-foreground transition-colors"
+              data-testid="button-back-modal"
+            >
+              <ChevronLeft className="h-4 w-4" /> Back
+            </button>
+          ) : <span />}
+          <StepDots />
         </div>
-        <StickyEstimateBar
-          mode="modal"
-          result={result}
-          summary={selectionSummary}
-          ctaLabel={barCtaLabel}
-          ctaDisabled={barCtaDisabled}
-          onCta={barCtaAction}
-        />
+        <div className="mb-5"><Headline /></div>
+        <div className="mb-5"><WizardContent /></div>
+        <BottomCta />
       </div>
     );
   }
 
-  /* ── Inline layout: stepper on mobile, stacked two-column on desktop ── */
+  /* ══════════════════════════════════════════
+     INLINE LAYOUT (full-viewport dark section)
+  ══════════════════════════════════════════ */
 
   return (
-    <Section id="calculator" divider>
-      <div ref={sectionRef} className="container px-4 pb-24 lg:pb-0">
-        <div className="max-w-6xl mx-auto mb-6">
-          <div className="brc-label mb-3">Project Estimator</div>
-          <h2 className="font-sans font-light text-section-title mb-2 text-foreground">
-            Plan your project{" "}
-            <em className="brc-accent">investment</em>
-          </h2>
-          <p className="text-sm max-w-2xl leading-relaxed text-muted-foreground">
-            Three quick questions, an instant planning range. Nothing is pre-selected or submitted
-            until you say so - a planning estimate only, not a binding quote.
-          </p>
+    <Section
+      id="calculator"
+      variant="inverse"
+      spacing="none"
+      divider
+      style={{ minHeight: "100dvh" } as React.CSSProperties}
+      className="flex flex-col"
+    >
+      <div className="container px-4 flex flex-col lg:flex-row gap-0 lg:gap-12 xl:gap-16 flex-1">
+
+        {/* ── WIZARD PANEL ── */}
+        <div className="flex-1 flex flex-col py-16 lg:py-20 min-h-0">
+
+          {/* Top bar */}
+          <div className="flex items-center justify-between mb-8 flex-shrink-0">
+            {step > 0 && !showResult ? (
+              <button
+                type="button"
+                onClick={() => {
+                  if (showResult) { setShowResult(false); }
+                  else { setStep((s) => Math.max(0, s - 1)); }
+                }}
+                className="flex items-center gap-1 text-inverse-muted text-[12px] hover:text-inverse-foreground transition-colors"
+                data-testid="button-back"
+              >
+                <ChevronLeft className="h-4 w-4" /> Back
+              </button>
+            ) : (
+              <span />
+            )}
+            <StepDots />
+          </div>
+
+          {/* Headline */}
+          <div className="mb-6 flex-shrink-0">
+            <Headline />
+          </div>
+
+          {/* Step content */}
+          <div
+            key={`${step}-${showResult}`}
+            className="flex-1 animate-in fade-in slide-in-from-bottom-2 duration-200 motion-reduce:animate-none"
+          >
+            <WizardContent />
+          </div>
+
+          {/* Bottom CTA */}
+          <div className="flex-shrink-0 mt-8 max-w-sm">
+            <BottomCta />
+          </div>
         </div>
 
-        {/* Elevated panel frames the estimator as a distinct interactive tool,
-            lifting it off the flat dark sections around it. The sage accent line
-            signals "interactive". Layered surfaces: page -> panel -> cards. */}
-        <div className="max-w-6xl mx-auto relative rounded-xl border border-border bg-surface-muted shadow-xl">
-          <div
-            className="absolute inset-x-0 top-0 h-[2px] rounded-t-xl bg-gradient-to-r from-transparent via-accent-legible/70 to-transparent"
-            aria-hidden="true"
-          />
-          <div className="p-5 sm:p-6 lg:p-7">
-            <div className="hidden lg:grid lg:grid-cols-[3fr_2fr] gap-6 xl:gap-8 items-start">
-              {stacked}
-              <div className="lg:sticky lg:top-24">{resultPanel}</div>
-            </div>
-
-            <div className="lg:hidden max-w-xl mx-auto">{stepper}</div>
+        {/* ── RESULT PANEL (desktop right column) ── */}
+        <div className="hidden lg:flex lg:w-72 xl:w-80 flex-col justify-center flex-shrink-0 py-20">
+          <div className="sticky top-24">
+            <ResultPanel compact />
           </div>
         </div>
       </div>
-
-      <StickyEstimateBar
-        mode="inline"
-        visible={calculatorInView}
-        result={result}
-        summary={selectionSummary}
-        ctaLabel={barCtaLabel}
-        ctaDisabled={barCtaDisabled}
-        onCta={barCtaAction}
-      />
     </Section>
   );
 }
