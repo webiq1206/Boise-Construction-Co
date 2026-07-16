@@ -2,10 +2,10 @@ import type { BlogPostData } from '../../blogContent';
 
 export const multigenerationalLivingRemodels: BlogPostData = {
   slug: 'multigenerational-living-remodels',
-  title: 'Multigenerational Living Remodels: In-Law Suites and More',
-  seoTitle: 'Multigenerational Living Remodels (Boise)',
+  title: 'Mother-in-Law Suites & Multigenerational Living Remodels',
+  seoTitle: 'Mother-in-Law Suites & Multigenerational Living (Boise)',
   metaDescription:
-    'How to remodel for multigenerational living in Boise: in-law suites, ADUs, dual primary suites, private entrances, accessibility, and balancing togetherness with privacy.',
+    'How to add a mother-in-law suite in Boise: in-law suite cost and ideas, ADUs vs suites, private entrances, accessibility, and balancing togetherness with privacy.',
   excerpt:
     'More Treasure Valley families are living under one roof across generations. Here is how to remodel for multigenerational living - in-law suites, ADUs, and homes that balance togetherness with privacy.',
   category: 'Home Additions',
@@ -15,17 +15,19 @@ export const multigenerationalLivingRemodels: BlogPostData = {
   updatedAt: '2026-07-11',
   tags: ['multigenerational', 'in-law suite', 'adu', 'additions', 'boise'],
   heroImage: '/images/blog/multigenerational-living-remodels.webp',
-  primaryKeyword: 'multigenerational living',
+  primaryKeyword: 'mother in law suite',
   secondaryKeywords: [
+    'mother in law suite cost',
+    'mother in law suite ideas',
     'in-law suite addition',
-    'multigenerational home remodel',
+    'multigenerational living',
     'in-law suite cost',
   ],
   searchIntent: 'informational',
-  featuredSnippetTargets: ['multigenerational living', 'in-law suite'],
+  featuredSnippetTargets: ['mother in law suite', 'in-law suite', 'multigenerational living'],
   wordCountTarget: 'cluster',
   quickAnswer:
-    'Remodeling for multigenerational living creates private, self-sufficient space for family members under one roof - most often an in-law suite (a bedroom, bathroom, and sometimes a kitchenette and separate entrance) or a full ADU. The best designs balance togetherness with privacy, build in accessibility for aging relatives, and give each generation independence. Options range from converting a basement or garage to building an attached suite or a detached unit, chosen to fit the family, the home, and the budget.',
+    'Remodeling for multigenerational living creates private, self-sufficient space for family members under one roof - most often a mother-in-law suite (also called an in-law suite: a bedroom, bathroom, and sometimes a kitchenette and separate entrance) or a full ADU. The best designs balance togetherness with privacy, build in accessibility for aging relatives, and give each generation independence. Options range from converting a basement or garage to building an attached suite or a detached unit, chosen to fit the family, the home, and the budget.',
   keyTakeaways: [
     'An in-law suite typically includes a bedroom, bathroom, and often a kitchenette and private entrance.',
     'A full ADU offers the most independence; a basement or garage conversion is often the most affordable.',
@@ -43,12 +45,12 @@ export const multigenerationalLivingRemodels: BlogPostData = {
   ],
   faqs: [
     {
-      question: 'What is an in-law suite?',
+      question: 'What is a mother-in-law suite?',
       answer:
-        'An in-law suite is a private living area within or attached to a home for a family member, typically including a bedroom, a bathroom, and often a kitchenette and sometimes a separate entrance. It gives a relative - often an aging parent or an adult child - their own semi-independent space while remaining part of the household. In-law suites can be created by converting existing space or building an addition.',
+        'A mother-in-law suite, also called an in-law suite, is a private living area within or attached to a home for a family member, typically including a bedroom, a bathroom, and often a kitchenette and sometimes a separate entrance. It gives a relative - often an aging parent or an adult child - their own semi-independent space while remaining part of the household. In-law suites can be created by converting existing space or building an addition.',
     },
     {
-      question: 'How much does an in-law suite cost?',
+      question: 'How much does a mother-in-law suite cost?',
       answer:
         'The cost depends on how it is built. Converting a basement or garage into an in-law suite is generally the most affordable because the structure exists; building an attached addition costs more; and a detached ADU costs the most. Adding a kitchenette and bathroom increases cost due to plumbing. Size, accessibility features, and finish level all factor in. An in-home assessment gives the most accurate figure.',
     },
@@ -75,7 +77,7 @@ export const multigenerationalLivingRemodels: BlogPostData = {
   ],
   content: `
 <h2 id="overview">Remodeling for multigenerational living</h2>
-<p><strong>Remodeling for multigenerational living creates private, self-sufficient space for family members under one roof - most often an in-law suite (a bedroom, bathroom, and sometimes a kitchenette and separate entrance) or a full ADU.</strong> The best designs balance togetherness with privacy, build in accessibility for aging relatives, and give each generation independence. Options range from converting a basement or garage to building an attached suite or a detached unit, chosen to fit the family, the home, and the budget. More Treasure Valley families are choosing to live together across generations - to care for aging parents, to help adult children, to share costs, or simply to be close - and a thoughtful remodel makes that arrangement work beautifully. This guide covers the options and the design principles. It is part of our <a href="/guides/boise-home-addition-guide">Boise Home Addition Guide</a>.</p>
+<p><strong>Remodeling for multigenerational living creates private, self-sufficient space for family members under one roof - most often a mother-in-law suite (also called an in-law suite: a bedroom, bathroom, and sometimes a kitchenette and separate entrance) or a full ADU.</strong> The best designs balance togetherness with privacy, build in accessibility for aging relatives, and give each generation independence. Options range from converting a basement or garage to building an attached suite or a detached unit, chosen to fit the family, the home, and the budget. More Treasure Valley families are choosing to live together across generations - to care for aging parents, to help adult children, to share costs, or simply to be close - and a thoughtful remodel makes that arrangement work beautifully. This guide covers the options and the design principles. It is part of our <a href="/guides/boise-home-addition-guide">Boise Home Addition Guide</a>.</p>
 
 <h2 id="why">Why multigenerational living is growing</h2>
 <p>Multigenerational households - two or more adult generations living together - have become far more common, and several forces drive the trend in the Treasure Valley. Families want to <strong>care for aging parents</strong> at home rather than in facilities, keeping loved ones close while providing support. <strong>Adult children</strong> may live with parents while saving, studying, or launching careers, especially amid housing costs. <strong>Sharing a household</strong> spreads expenses and enables shared childcare and companionship across generations. And for many, it is simply a cultural or personal preference to keep family together. Whatever the reason, the common thread is a desire for togetherness that still respects everyone's need for <strong>independence and privacy</strong>. A home designed or remodeled for multigenerational living makes that balance possible - letting family share meals, holidays, and daily life while each generation retains its own space and autonomy. The alternative, cramming multiple generations into a home designed for one household, breeds friction; a purpose-built suite or unit transforms the experience. This is why remodeling for multigenerational living is one of the fastest-growing motivations behind additions and conversions.</p>

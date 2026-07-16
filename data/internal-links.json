@@ -145,7 +145,7 @@
         {
           "url": "/blog/multigenerational-living-remodels",
           "anchor": "Multigenerational Living Remodels",
-          "title": "Multigenerational Living Remodels: In-Law Suites and More",
+          "title": "Mother-in-Law Suites & Multigenerational Living Remodels",
           "type": "blog",
           "score": 999
         },
@@ -366,7 +366,7 @@
         {
           "url": "/blog/multigenerational-living-remodels",
           "anchor": "Multigenerational Living Remodels",
-          "title": "Multigenerational Living Remodels: In-Law Suites and More",
+          "title": "Mother-in-Law Suites & Multigenerational Living Remodels",
           "type": "blog",
           "score": 999
         },
@@ -2306,8 +2306,8 @@
     },
     "/blog/multigenerational-living-remodels": {
       "type": "blog",
-      "title": "Multigenerational Living Remodels: In-Law Suites and More",
-      "anchor": "Multigenerational Living Remodels: In-Law Suites and More",
+      "title": "Mother-in-Law Suites & Multigenerational Living Remodels",
+      "anchor": "Mother-in-Law Suites & Multigenerational Living Remodels",
       "url": "/blog/multigenerational-living-remodels",
       "links": [
         {
@@ -2357,7 +2357,7 @@
           "anchor": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
           "title": "Boise ADU Guide: Rules, Costs & Building a Second Unit",
           "type": "guide",
-          "score": 0.507
+          "score": 0.505
         }
       ]
     },
@@ -8099,10 +8099,10 @@
         },
         {
           "url": "/blog/multigenerational-living-remodels",
-          "anchor": "Multigenerational Living Remodels: In-Law Suites and More",
-          "title": "Multigenerational Living Remodels: In-Law Suites and More",
+          "anchor": "Mother-in-Law Suites & Multigenerational Living Remodels",
+          "title": "Mother-in-Law Suites & Multigenerational Living Remodels",
           "type": "blog",
-          "score": -0.011
+          "score": -0.013
         },
         {
           "url": "/blog/remodeling-vs-moving",
@@ -8718,10 +8718,10 @@
         },
         {
           "url": "/blog/multigenerational-living-remodels",
-          "anchor": "Multigenerational Living Remodels: In-Law Suites and More",
-          "title": "Multigenerational Living Remodels: In-Law Suites and More",
+          "anchor": "Mother-in-Law Suites & Multigenerational Living Remodels",
+          "title": "Mother-in-Law Suites & Multigenerational Living Remodels",
           "type": "blog",
-          "score": 0.507
+          "score": 0.505
         },
         {
           "url": "/blog/room-addition-guide-treasure-valley",
@@ -8910,10 +8910,10 @@
         },
         {
           "url": "/blog/multigenerational-living-remodels",
-          "anchor": "Multigenerational Living Remodels: In-Law Suites and More",
-          "title": "Multigenerational Living Remodels: In-Law Suites and More",
+          "anchor": "Mother-in-Law Suites & Multigenerational Living Remodels",
+          "title": "Mother-in-Law Suites & Multigenerational Living Remodels",
           "type": "blog",
-          "score": 0.41
+          "score": 0.405
         },
         {
           "url": "/blog/adu-cost-boise",
@@ -11017,7 +11017,7 @@
       },
       {
         "slug": "multigenerational-living-remodels",
-        "title": "Multigenerational Living Remodels: In-Law Suites and More",
+        "title": "Mother-in-Law Suites & Multigenerational Living Remodels",
         "publishedAt": "2026-07-10"
       },
       {
