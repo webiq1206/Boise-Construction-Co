@@ -12,15 +12,61 @@ export function trackEvent(name: string, params: GtagParams = {}): void {
   gtag('event', name, params);
 }
 
+/** Optional first-party identifiers for Conversions API match quality. */
+export interface MetaUserData {
+  email?: string;
+  phone?: string;
+}
+
+function readCookie(name: string): string | undefined {
+  if (typeof document === 'undefined') return undefined;
+  const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+  return match ? decodeURIComponent(match[1]) : undefined;
+}
+
 /**
- * Thin, safe wrapper over the Meta (Facebook) Pixel's fbq. The pixel is loaded
- * via components/MetaPixel with strategy="lazyOnload", which defines window.fbq
- * before any user interaction. If fbq is absent (pixel disabled, blocked, dev,
- * or SSR) the call is a no-op. Pass a Meta standard event name such as 'Lead'.
+ * Fires a Meta (Facebook) standard event through BOTH the browser Pixel and the
+ * server-side Conversions API, sharing one eventID so Meta deduplicates them
+ * (counts the conversion once, but keeps the signal that ad blockers / ITP would
+ * otherwise strip from the browser). The Pixel is loaded via components/MetaPixel
+ * (lazyOnload). Both paths are best-effort no-ops when unavailable:
+ * fbq is guarded, and /api/meta-capi silently skips if the CAPI token is unset.
+ *
+ * Pass a standard event name (e.g. 'Lead'). `userData` (email/phone) is optional
+ * but greatly improves server-side match quality; it is hashed on the server and
+ * never sent to the Pixel.
  */
-export function trackMetaEvent(name: string, params: GtagParams = {}): void {
+export function trackMetaEvent(name: string, params: GtagParams = {}, userData?: MetaUserData): void {
   if (typeof window === 'undefined') return;
+
+  const eventId =
+    typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID()
+      : `${name}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
   const fbq = (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq;
-  if (typeof fbq !== 'function') return;
-  fbq('track', name, params);
+  if (typeof fbq === 'function') {
+    fbq('track', name, params, { eventID: eventId });
+  }
+
+  // Server-side copy, deduped via eventId. Fire-and-forget; never block or throw.
+  try {
+    fetch('/api/meta-capi', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      keepalive: true,
+      body: JSON.stringify({
+        eventName: name,
+        eventId,
+        eventSourceUrl: window.location.href,
+        actionSource: 'website',
+        customData: params,
+        userData,
+        fbp: readCookie('_fbp'),
+        fbc: readCookie('_fbc'),
+      }),
+    }).catch(() => {});
+  } catch {
+    /* ignore */
+  }
 }
