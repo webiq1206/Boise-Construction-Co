@@ -16,10 +16,24 @@ const nextConfig = {
   },
   images: {
     // Optimization runs on the standalone Node server (output: 'standalone'),
-    // so we keep Next's optimizer enabled to serve AVIF/WebP and responsive
-    // sizes (better LCP/CLS). Flip `unoptimized` back to true only if deploying
-    // to a static export target without an image-optimization backend.
-    formats: ['image/avif', 'image/webp'],
+    // so the optimizer stays enabled for responsive sizes (better LCP/CLS).
+    //
+    // AVIF is deliberately OFF. Encoding AVIF is many times more CPU-expensive
+    // than WebP, and on the small Replit instance that made every uncached
+    // image slow to first paint. Every source in public/images is already WebP,
+    // so WebP output is close to a passthrough and AVIF bought almost nothing.
+    formats: ['image/webp'],
+    // Next defaults to 8 device widths x 8 image widths, so a single photo can
+    // spawn a large matrix of on-demand encodes and cache misses. These trimmed
+    // sets still cover phone / tablet / laptop / retina while cutting the number
+    // of variants the server has to generate and keep warm.
+    deviceSizes: [640, 828, 1080, 1920],
+    imageSizes: [96, 256, 384],
+    // Next defaults this to 60 SECONDS, so optimized variants expired and were
+    // re-encoded about once a minute - the main reason images felt slow again
+    // and again. Optimized URLs are keyed by src + width + quality, so a long
+    // TTL is safe: changing an image changes its URL.
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       {
         protocol: 'https',
