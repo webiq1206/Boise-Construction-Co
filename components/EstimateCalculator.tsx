@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
-  Check, ChevronDown, ArrowRight,
+  Check, ChevronDown, ArrowRight, Lock,
   UtensilsCrossed, Droplets, Home, Building2, Layers, AlignLeft,
   LayoutGrid, Star, Sun, Monitor, Dumbbell, Bed, Car,
   Lightbulb, Wind, DoorOpen, GlassWater, Sofa, Frame, Triangle, Grid3x3,
@@ -363,6 +363,13 @@ export function EstimateCalculator({
   const [finish, setFinish]               = useState<FinishLevel>("mid-range");
   const [scopeOpen, setScopeOpen]         = useState(false);
   const [legalOpen, setLegalOpen]         = useState(false);
+  /* Lead-gate: contact form that must be submitted before the price range reveals. */
+  const [gateSubmitted, setGateSubmitted] = useState(false);
+  const [gateName,      setGateName]      = useState("");
+  const [gateEmail,     setGateEmail]     = useState("");
+  const [gatePhone,     setGatePhone]     = useState("");
+  const [gateLoading,   setGateLoading]   = useState(false);
+  const [gateError,     setGateError]     = useState<string | null>(null);
   /* Guards the estimator-completion conversion event so it fires at most once
      per mount even if the visitor recalculates after editing. */
   const engagementFired   = useRef(false);
@@ -415,6 +422,13 @@ export function EstimateCalculator({
     );
     window.dispatchEvent(new CustomEvent("brc_estimate_updated"));
   }, [effectiveProject, finish, sqft, refinements, userRefinementCount]);
+
+  /* Restore gate state from sessionStorage (skip re-gate on return visits). */
+  useEffect(() => {
+    if (sessionStorage.getItem("brc_gate_passed") === "1") {
+      setGateSubmitted(true);
+    }
+  }, []);
 
   /* ── Handlers ── */
 
@@ -481,6 +495,51 @@ export function EstimateCalculator({
     } else {
       document.getElementById("consult")?.scrollIntoView({ behavior: "smooth" });
     }
+  }
+
+  async function handleGateSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setGateLoading(true);
+    setGateError(null);
+
+    const payload = {
+      name: gateName,
+      email: gateEmail,
+      phone: gatePhone,
+      projectType: effectiveProject,
+      estimate: {
+        project: effectiveProject,
+        finish,
+        sqft,
+        priceLow: result.priceLow,
+        priceHigh: result.priceHigh,
+        roi: result.roi,
+        refinements,
+      },
+    };
+
+    try {
+      const res = await fetch("/api/estimate-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        console.warn("[gate] API returned", res.status);
+      }
+      trackMetaEvent("Lead", {
+        content_name: effectiveProject,
+        content_category: "estimate_gate",
+      });
+      trackEvent("generate_lead", { project: effectiveProject, source: "estimate_gate" });
+    } catch (err) {
+      console.warn("[gate] Submit error:", err);
+    }
+
+    /* Always reveal the result regardless of API success - never hard-block the user */
+    sessionStorage.setItem("brc_gate_passed", "1");
+    setGateSubmitted(true);
+    setGateLoading(false);
   }
 
   /* ── Shared dark card class ── */
@@ -804,6 +863,113 @@ export function EstimateCalculator({
     </div>
   );
 
+  /* Lead-gate panel - shown in place of the result until contact info is submitted */
+  const subtypeTitle =
+    config.subtypes.find((s) => s.id === subtype)?.title ?? config.tabLabel;
+
+  const leadsGatePanel = (
+    <div className="mt-8 border-t border-inverse-foreground/15 pt-6" aria-label="Unlock your estimate">
+      <div className="space-y-5">
+        {/* Header */}
+        <div className="flex items-start gap-3">
+          <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-accent-legible/20">
+            <Lock className="h-4 w-4 text-accent-legible" />
+          </div>
+          <div>
+            <p className="text-[18px] font-light text-inverse-foreground leading-tight">
+              Your estimate is ready
+            </p>
+            <p className="text-[13px] text-inverse-muted mt-0.5">
+              Enter your info below to see it
+            </p>
+          </div>
+        </div>
+
+        {/* Project summary chips */}
+        <div className="flex flex-wrap gap-2">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-[11.5px] text-inverse-foreground">
+            {config.tabLabel}
+          </span>
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-[11.5px] text-inverse-foreground">
+            {subtypeTitle}
+          </span>
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-[11.5px] text-inverse-foreground">
+            {FINISH_LABELS[finish]}
+          </span>
+        </div>
+
+        {/* Blurred price teaser */}
+        <div className="relative select-none">
+          <div
+            className="brc-display-num tabular-nums leading-none text-inverse-foreground text-[clamp(32px,8vw,52px)] blur-sm pointer-events-none"
+            aria-hidden="true"
+          >
+            {formatPlanningCurrency(result.priceLow)}
+            <span className="text-inverse-muted/60 mx-2 text-xl">to</span>
+            {formatPlanningCurrency(result.priceHigh)}
+          </div>
+          <div className="absolute inset-0 flex items-center">
+            <span className="inline-flex items-center gap-1.5 text-[12px] text-inverse-muted bg-inverse px-3 py-1.5 rounded-full border border-inverse-foreground/15">
+              <Lock className="h-3 w-3" />
+              Enter your info to unlock
+            </span>
+          </div>
+        </div>
+
+        {/* Contact form */}
+        <form onSubmit={handleGateSubmit} noValidate className="space-y-3">
+          <input
+            type="text"
+            placeholder="First name"
+            value={gateName}
+            onChange={(e) => setGateName(e.target.value)}
+            required
+            minLength={2}
+            className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
+            data-testid="gate-input-name"
+            autoComplete="given-name"
+          />
+          <input
+            type="email"
+            placeholder="Email address"
+            value={gateEmail}
+            onChange={(e) => setGateEmail(e.target.value)}
+            required
+            className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
+            data-testid="gate-input-email"
+            autoComplete="email"
+          />
+          <input
+            type="tel"
+            placeholder="Phone number"
+            value={gatePhone}
+            onChange={(e) => setGatePhone(e.target.value)}
+            required
+            minLength={10}
+            className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
+            data-testid="gate-input-phone"
+            autoComplete="tel"
+          />
+          {gateError && (
+            <p className="text-[12px] text-red-400">{gateError}</p>
+          )}
+          <Button
+            type="submit"
+            disabled={gateLoading}
+            data-testid="button-gate-submit"
+            className="w-full h-14 bg-inverse-foreground text-inverse text-[14px] tracking-[0.12em] uppercase"
+          >
+            {gateLoading ? "Sending..." : "Reveal My Estimate"}
+            {!gateLoading && <ArrowRight className="h-4 w-4" />}
+          </Button>
+          <p className="text-[12px] text-inverse-muted/70 text-center leading-relaxed">
+            We will email you a copy too. No spam, ever.
+          </p>
+        </form>
+      </div>
+    </div>
+  );
+
   /* ══════════════════════════════
      LAYOUTS
   ══════════════════════════════ */
@@ -818,7 +984,7 @@ export function EstimateCalculator({
       {sizeGrid}
       {chipsRow}
       {finishRow}
-      {resultPanel}
+      {gateSubmitted ? resultPanel : leadsGatePanel}
     </>
   );
 
