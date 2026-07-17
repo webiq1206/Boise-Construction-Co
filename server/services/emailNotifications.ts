@@ -337,7 +337,7 @@ export async function sendLeadPurchasedNotification(leadData: {
               </tr>
               <tr>
                 <td class="label">Email:</td>
-                <td class="value"><a href="mailto:${purchaserData.email}" style="color: ${EMAIL_BRAND.charcoal}; text-decoration: none;">${purchaserData.email}</a></td>
+                <td class="value"><a href="mailto:${purchaserData.email}" style="color: ${EMAIL_BRAND.text}; text-decoration: none;">${purchaserData.email}</a></td>
               </tr>
             </table>
           </div>
@@ -376,7 +376,7 @@ export async function sendLeadPurchasedNotification(leadData: {
               </tr>
               <tr>
                 <td class="label">Quote Value:</td>
-                <td class="value" style="font-size: 20px; font-weight: 600; color: ${EMAIL_BRAND.charcoal};">${leadValue.display}</td>
+                <td class="value" style="font-size: 20px; font-weight: 600; color: ${EMAIL_BRAND.text};">${leadValue.display}</td>
               </tr>
             </table>
           </div>
@@ -445,11 +445,11 @@ export async function sendLeadPurchaseConfirmation(purchaserEmail: string, leadD
               </tr>
               <tr>
                 <td class="label">Email:</td>
-                <td class="value"><a href="mailto:${leadData.email}" style="color: ${EMAIL_BRAND.charcoal}; text-decoration: none; font-weight: 600;">${leadData.email}</a></td>
+                <td class="value"><a href="mailto:${leadData.email}" style="color: ${EMAIL_BRAND.text}; text-decoration: none; font-weight: 600;">${leadData.email}</a></td>
               </tr>
               <tr>
                 <td class="label">Phone:</td>
-                <td class="value"><a href="tel:${leadData.phone}" style="color: ${EMAIL_BRAND.charcoal}; text-decoration: none; font-weight: 600;">${leadData.phone}</a></td>
+                <td class="value"><a href="tel:${leadData.phone}" style="color: ${EMAIL_BRAND.text}; text-decoration: none; font-weight: 600;">${leadData.phone}</a></td>
               </tr>
               <tr>
                 <td class="label">Service Area:</td>
@@ -467,7 +467,7 @@ export async function sendLeadPurchaseConfirmation(purchaserEmail: string, leadD
               </tr>
               <tr>
                 <td class="label">Quote Range:</td>
-                <td class="value" style="font-size: 20px; font-weight: 600; color: ${EMAIL_BRAND.charcoal};">${leadValue.display}</td>
+                <td class="value" style="font-size: 20px; font-weight: 600; color: ${EMAIL_BRAND.text};">${leadValue.display}</td>
               </tr>
             </table>
           </div>
@@ -554,11 +554,11 @@ export async function sendAdminAutoDeclineNotification(leadData: {
               </tr>
               <tr>
                 <td class="label">Email:</td>
-                <td class="value"><a href="mailto:${leadData.email}" style="color: ${EMAIL_BRAND.charcoal}; text-decoration: none;">${leadData.email}</a></td>
+                <td class="value"><a href="mailto:${leadData.email}" style="color: ${EMAIL_BRAND.text}; text-decoration: none;">${leadData.email}</a></td>
               </tr>
               <tr>
                 <td class="label">Phone:</td>
-                <td class="value"><a href="tel:${leadData.phone}" style="color: ${EMAIL_BRAND.charcoal}; text-decoration: none;">${leadData.phone}</a></td>
+                <td class="value"><a href="tel:${leadData.phone}" style="color: ${EMAIL_BRAND.text}; text-decoration: none;">${leadData.phone}</a></td>
               </tr>
               <tr>
                 <td class="label">Service Area:</td>
@@ -576,7 +576,7 @@ export async function sendAdminAutoDeclineNotification(leadData: {
               </tr>
               <tr>
                 <td class="label">Estimated Value:</td>
-                <td class="value" style="font-size: 20px; font-weight: 600; color: ${EMAIL_BRAND.charcoal};">${leadValue.display}</td>
+                <td class="value" style="font-size: 20px; font-weight: 600; color: ${EMAIL_BRAND.text};">${leadValue.display}</td>
               </tr>
               <tr>
                 <td class="label">Time Pending:</td>
@@ -643,7 +643,7 @@ export async function sendCustomerStatusUpdate(
           <div style="text-align:center; margin: 30px 0;">
             <a href="${statusUrl}" class="cta-button">View Quote Status →</a>
           </div>
-          <p style="font-size: 14px; color: ${EMAIL_BRAND.charcoalLight};">Questions? Call us at <a href="${SITE_CONFIG.phoneHref}">${escapeHtml(SITE_CONFIG.phone)}</a> or <a href="${SITE_CONFIG.phoneSmsHref}">send us a text</a>.</p>
+          <p style="font-size: 14px; color: ${EMAIL_BRAND.textMuted};">Questions? Call us at <a href="${SITE_CONFIG.phoneHref}">${escapeHtml(SITE_CONFIG.phone)}</a> or <a href="${SITE_CONFIG.phoneSmsHref}">send us a text</a>.</p>
         </div>
         ${buildEmailFooter()}
       </div>
@@ -718,7 +718,7 @@ export async function sendContractorNewLeadAvailable(
               ${buildLeadFrequencyRow(leadData.selectedServices, leadData.frequency, leadData.serviceData)}
               ${leadData.propertyType ? `<tr><td class="label">Property Type:</td><td class="value">${leadData.propertyType}</td></tr>` : ""}
               <tr><td class="label">Est. Project Value:</td><td class="value" style="font-size: 18px; font-weight: 600; color: #1e40af;">${leadValue.display}</td></tr>
-              <tr><td class="label">Your Cost:</td><td class="value" style="font-size: 20px; font-weight: 600; color: ${EMAIL_BRAND.charcoal};">$${formatQuoteForDisplay(leadData.currentLeadPrice, true)}</td></tr>
+              <tr><td class="label">Your Cost:</td><td class="value" style="font-size: 20px; font-weight: 600; color: ${EMAIL_BRAND.text};">$${formatQuoteForDisplay(leadData.currentLeadPrice, true)}</td></tr>
             </table>
           </div>
 
@@ -996,7 +996,7 @@ function formatDigestLeadList(title: string, leads: any[]): string {
         <tr><td class="label">Customer</td><td class="label">City</td><td class="label">Service</td></tr>
         ${rows}
       </table>
-      ${leads.length > 10 ? `<p style="font-size:13px;color:${EMAIL_BRAND.charcoalLight};">+ ${leads.length - 10} more in dashboard</p>` : ""}
+      ${leads.length > 10 ? `<p style="font-size:13px;color:${EMAIL_BRAND.textMuted};">+ ${leads.length - 10} more in dashboard</p>` : ""}
     </div>
   `;
 }

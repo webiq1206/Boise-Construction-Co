@@ -1,15 +1,21 @@
 import { SITE_CONFIG } from "@/shared/siteConfig";
 
-/** Site brand tokens - aligned with app/globals.css */
+/**
+ * Dark-brand email tokens - the site's actual palette (app/globals.css). Every
+ * outbound email renders on the charcoal ground with bone text and sage accents
+ * so it matches boiseremodeling.co. Key names are semantic (bg/surface/text/...)
+ * so both the shared CSS here and the inline styles in emailNotifications.ts
+ * pull the same colors.
+ */
 export const EMAIL_BRAND = {
-  charcoal: "#3A3E3D",
-  charcoalLight: "#5A5F5C",
-  sage: "#999F93",
-  canvas: "#F5F3EF",
-  white: "#ffffff",
-  border: "#E0DDD8",
-  highlightBg: "#F0EFEB",
-  accentDark: "#2D8652",
+  bg: "#1C1F1E",         // page background (charcoal)
+  surface: "#262B29",    // content card
+  raised: "#2E3331",     // highlighted boxes, footer, badges
+  hairline: "#39403D",   // borders + dividers
+  text: "#F7F5F3",       // primary text (bone)
+  textMuted: "#9AA098",  // secondary text (mist)
+  accent: "#899F95",     // legible sage - links, bars, ticks
+  accentDeep: "#5D6561", // deep sage fill
 } as const;
 
 export const SITE_BASE_URL = SITE_CONFIG.siteUrl;
@@ -40,13 +46,27 @@ export function htmlToPlainText(html: string): string {
     .trim();
 }
 
+/**
+ * The real brand mark for the dark email header: the reverse (light) wordmark.
+ * Served as PNG because many email clients (Gmail, Outlook) do not render SVG.
+ * Uses an absolute URL so it loads from any inbox.
+ */
+export function buildLogoImage(width = 210): string {
+  return `
+    <img src="${SITE_BASE_URL}/brand/logos/boise-remodeling-co-wordmark-reverse-1660w.png"
+      alt="${escapeHtml(SITE_CONFIG.name)}" width="${width}"
+      style="display:block;margin:0 auto;width:${width}px;max-width:72%;height:auto;border:0;outline:none;text-decoration:none;" />
+  `;
+}
+
+/** Bone text wordmark for the footer (always renders, even if images are off). */
 export function buildTextLogo(): string {
   return `
-    <div style="margin-bottom: 20px;">
-      <div style="font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size: 22px; font-weight: 300; letter-spacing: -0.02em; color: ${EMAIL_BRAND.charcoal}; line-height: 1.2;">
-        Boise Remodeling <span style="color: ${EMAIL_BRAND.sage}; font-style: italic;">Co</span>
+    <div style="margin-bottom:16px;">
+      <div style="font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:20px;font-weight:400;color:${EMAIL_BRAND.text};line-height:1.2;">
+        Boise Remodeling <span style="color:${EMAIL_BRAND.accent};font-style:italic;">Co.</span>
       </div>
-      <div style="font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: ${EMAIL_BRAND.charcoalLight}; margin-top: 4px;">
+      <div style="font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:${EMAIL_BRAND.textMuted};margin-top:6px;">
         Design &amp; Build
       </div>
     </div>
@@ -57,53 +77,55 @@ export const emailStyles = `
   body {
     margin: 0;
     padding: 0;
-    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-    background-color: ${EMAIL_BRAND.canvas};
+    font-family: Arial, Helvetica, 'Segoe UI', sans-serif;
+    background-color: ${EMAIL_BRAND.bg};
+    color: ${EMAIL_BRAND.text};
     line-height: 1.6;
   }
   .email-wrapper {
     max-width: 600px;
     margin: 0 auto;
-    background-color: ${EMAIL_BRAND.white};
+    background-color: ${EMAIL_BRAND.surface};
   }
   .header {
-    background: linear-gradient(135deg, ${EMAIL_BRAND.highlightBg} 0%, ${EMAIL_BRAND.white} 100%);
-    color: ${EMAIL_BRAND.charcoal};
-    padding: 40px 30px;
+    background-color: ${EMAIL_BRAND.bg};
+    padding: 36px 30px 28px;
     text-align: center;
-    border-bottom: 1px solid ${EMAIL_BRAND.border};
+    border-bottom: 1px solid ${EMAIL_BRAND.hairline};
   }
   .header h1 {
-    margin: 0;
-    font-size: 28px;
-    font-weight: 600;
-    letter-spacing: -0.5px;
-    color: ${EMAIL_BRAND.charcoal};
+    margin: 20px 0 0 0;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: ${EMAIL_BRAND.text};
   }
   .header p {
     margin: 8px 0 0 0;
     font-size: 14px;
-    color: ${EMAIL_BRAND.charcoalLight};
+    color: ${EMAIL_BRAND.textMuted};
   }
   .content {
-    padding: 40px 30px;
-    background-color: ${EMAIL_BRAND.white};
+    padding: 36px 30px;
+    background-color: ${EMAIL_BRAND.surface};
+    color: ${EMAIL_BRAND.text};
   }
+  .content p { color: ${EMAIL_BRAND.text}; }
+  .content a { color: ${EMAIL_BRAND.accent}; }
   .greeting {
     font-size: 18px;
-    color: ${EMAIL_BRAND.charcoal};
+    color: ${EMAIL_BRAND.text};
     margin: 0 0 20px 0;
   }
-  .section {
-    margin: 30px 0;
-  }
+  .section { margin: 28px 0; }
   .section-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: ${EMAIL_BRAND.charcoal};
-    margin: 0 0 15px 0;
+    font-size: 13px;
+    font-weight: 400;
+    color: ${EMAIL_BRAND.textMuted};
+    margin: 0 0 14px 0;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.12em;
   }
   .info-table {
     width: 100%;
@@ -112,90 +134,83 @@ export const emailStyles = `
   }
   .info-table td {
     padding: 12px 0;
-    border-bottom: 1px solid ${EMAIL_BRAND.border};
+    border-bottom: 1px solid ${EMAIL_BRAND.hairline};
   }
   .info-table .label {
-    font-weight: 600;
-    color: ${EMAIL_BRAND.charcoalLight};
+    color: ${EMAIL_BRAND.textMuted};
     width: 40%;
   }
   .info-table .value {
-    color: ${EMAIL_BRAND.charcoal};
+    color: ${EMAIL_BRAND.text};
   }
   .highlight-box {
-    background: ${EMAIL_BRAND.highlightBg};
-    border-left: 4px solid ${EMAIL_BRAND.sage};
+    background: ${EMAIL_BRAND.raised};
+    border-left: 3px solid ${EMAIL_BRAND.accent};
     padding: 20px;
-    margin: 25px 0;
+    margin: 24px 0;
     border-radius: 4px;
   }
-  .highlight-box p {
-    margin: 0;
-    color: ${EMAIL_BRAND.charcoal};
-  }
+  .highlight-box p { margin: 0; color: ${EMAIL_BRAND.text}; }
   .warning-box {
-    background: #fffbeb;
-    border-left: 4px solid #f59e0b;
+    background: #2a2a1c;
+    border-left: 3px solid #c9a227;
     padding: 20px;
-    margin: 25px 0;
+    margin: 24px 0;
     border-radius: 4px;
   }
-  .warning-box p {
-    margin: 0;
-    color: #78350f;
-  }
+  .warning-box p { margin: 0; color: #e8dca6; }
   .cta-button {
     display: inline-block;
-    background: ${EMAIL_BRAND.charcoal};
-    color: #ffffff !important;
+    background: ${EMAIL_BRAND.text};
+    color: ${EMAIL_BRAND.bg} !important;
     padding: 14px 32px;
     text-decoration: none;
     border-radius: 6px;
-    font-weight: 600;
+    font-weight: 400;
+    letter-spacing: 0.04em;
     margin: 20px 0;
     text-align: center;
   }
   .footer {
-    background-color: ${EMAIL_BRAND.highlightBg};
+    background-color: ${EMAIL_BRAND.bg};
     padding: 30px;
     text-align: center;
-    border-top: 1px solid ${EMAIL_BRAND.border};
+    border-top: 1px solid ${EMAIL_BRAND.hairline};
   }
   .footer-contact {
     font-size: 13px;
-    color: ${EMAIL_BRAND.charcoalLight};
+    color: ${EMAIL_BRAND.textMuted};
     margin: 5px 0;
   }
   .footer-contact a {
-    color: ${EMAIL_BRAND.charcoal};
+    color: ${EMAIL_BRAND.text};
     text-decoration: none;
   }
   .divider {
     height: 1px;
-    background-color: ${EMAIL_BRAND.border};
-    margin: 25px 0;
+    background-color: ${EMAIL_BRAND.hairline};
+    margin: 24px 0;
   }
   .badge {
     display: inline-block;
-    background-color: ${EMAIL_BRAND.highlightBg};
-    color: ${EMAIL_BRAND.charcoal};
+    background-color: ${EMAIL_BRAND.raised};
+    color: ${EMAIL_BRAND.text};
     padding: 6px 12px;
     border-radius: 4px;
     font-size: 13px;
-    font-weight: 600;
     margin: 5px 0;
   }
 `;
 
 export function buildEmailFooter(): string {
   return `
-    <div class="footer">
+    <div class="footer" style="background-color:${EMAIL_BRAND.bg};padding:30px;text-align:center;border-top:1px solid ${EMAIL_BRAND.hairline};">
       ${buildTextLogo()}
-      <p class="footer-contact">${escapeHtml(`${SITE_CONFIG.address.cityState} · ${SITE_CONFIG.address.serviceArea}`)}</p>
-      <p class="footer-contact">Phone: <a href="${SITE_CONFIG.phoneHref}">${escapeHtml(SITE_CONFIG.phone)}</a></p>
-      <p class="footer-contact">Text: <a href="${SITE_CONFIG.phoneSmsHref}">${escapeHtml(SITE_CONFIG.phone)}</a></p>
-      <p class="footer-contact">Email: <a href="mailto:${escapeHtml(SITE_CONFIG.email)}">${escapeHtml(SITE_CONFIG.email)}</a></p>
-      <p class="footer-contact">Web: <a href="${SITE_BASE_URL}">${escapeHtml(SITE_BASE_URL.replace(/^https?:\/\//, ""))}</a></p>
+      <p class="footer-contact" style="font-size:13px;color:${EMAIL_BRAND.textMuted};margin:5px 0;">${escapeHtml(`${SITE_CONFIG.address.cityState} · ${SITE_CONFIG.address.serviceArea}`)}</p>
+      <p class="footer-contact" style="font-size:13px;color:${EMAIL_BRAND.textMuted};margin:5px 0;">Phone: <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.text};text-decoration:none;">${escapeHtml(SITE_CONFIG.phone)}</a></p>
+      <p class="footer-contact" style="font-size:13px;color:${EMAIL_BRAND.textMuted};margin:5px 0;">Text: <a href="${SITE_CONFIG.phoneSmsHref}" style="color:${EMAIL_BRAND.text};text-decoration:none;">${escapeHtml(SITE_CONFIG.phone)}</a></p>
+      <p class="footer-contact" style="font-size:13px;color:${EMAIL_BRAND.textMuted};margin:5px 0;">Email: <a href="mailto:${escapeHtml(SITE_CONFIG.email)}" style="color:${EMAIL_BRAND.text};text-decoration:none;">${escapeHtml(SITE_CONFIG.email)}</a></p>
+      <p class="footer-contact" style="font-size:13px;color:${EMAIL_BRAND.textMuted};margin:5px 0;">Web: <a href="${SITE_BASE_URL}" style="color:${EMAIL_BRAND.text};text-decoration:none;">${escapeHtml(SITE_BASE_URL.replace(/^https?:\/\//, ""))}</a></p>
     </div>
   `;
 }
@@ -211,16 +226,18 @@ export function wrapEmailHtml(options: {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="supported-color-schemes" content="dark">
   <style>${emailStyles}</style>
 </head>
-<body>
-  <div class="email-wrapper">
-    <div class="header">
-      ${buildTextLogo()}
-      <h1>${escapeHtml(title)}</h1>
-      ${subtitle ? `<p>${escapeHtml(subtitle)}</p>` : ""}
+<body style="margin:0;padding:0;background-color:${EMAIL_BRAND.bg};color:${EMAIL_BRAND.text};">
+  <div class="email-wrapper" style="max-width:600px;margin:0 auto;background-color:${EMAIL_BRAND.surface};">
+    <div class="header" style="background-color:${EMAIL_BRAND.bg};padding:36px 30px 28px;text-align:center;border-bottom:1px solid ${EMAIL_BRAND.hairline};">
+      ${buildLogoImage()}
+      <h1 style="margin:20px 0 0 0;font-family:'Fraunces',Georgia,serif;font-size:26px;font-weight:400;color:${EMAIL_BRAND.text};">${escapeHtml(title)}</h1>
+      ${subtitle ? `<p style="margin:8px 0 0 0;font-size:14px;color:${EMAIL_BRAND.textMuted};">${escapeHtml(subtitle)}</p>` : ""}
     </div>
-    <div class="content">
+    <div class="content" style="padding:36px 30px;background-color:${EMAIL_BRAND.surface};color:${EMAIL_BRAND.text};">
       ${content}
     </div>
     ${buildEmailFooter()}
