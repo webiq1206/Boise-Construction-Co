@@ -363,7 +363,11 @@ export function EstimateCalculator({
   const [finish, setFinish]               = useState<FinishLevel>("mid-range");
   const [scopeOpen, setScopeOpen]         = useState(false);
   const [legalOpen, setLegalOpen]         = useState(false);
-  /* Lead-gate: contact form that must be submitted before the price range reveals. */
+  /* Lead-gate three-state flow:
+     gateOpen=false  gateSubmitted=false -> show "Get estimate" CTA
+     gateOpen=true   gateSubmitted=false -> show contact form (gate)
+     gateSubmitted=true (any gateOpen)   -> show full result panel */
+  const [gateOpen,      setGateOpen]      = useState(false);
   const [gateSubmitted, setGateSubmitted] = useState(false);
   const [gateName,      setGateName]      = useState("");
   const [gateEmail,     setGateEmail]     = useState("");
@@ -893,6 +897,24 @@ export function EstimateCalculator({
     </div>
   );
 
+  /* CTA shown after user configures their estimate -- clicking opens the gate form */
+  const calculateCta = (
+    <div className="mt-8 border-t border-inverse-foreground/15 pt-6">
+      <Button
+        type="button"
+        onClick={() => setGateOpen(true)}
+        data-testid="button-get-estimate"
+        className="w-full h-14 bg-inverse-foreground text-inverse text-[14px] tracking-[0.12em] uppercase"
+      >
+        Get My Estimate Range
+        <ArrowRight className="h-4 w-4" />
+      </Button>
+      <p className="text-[12px] text-inverse-muted/70 text-center mt-3 leading-relaxed">
+        Takes 30 seconds. We will email you a copy too.
+      </p>
+    </div>
+  );
+
   /* Lead-gate panel - shown in place of the result until contact info is submitted */
   const subtypeTitle =
     config.subtypes.find((s) => s.id === subtype)?.title ?? config.tabLabel;
@@ -1014,7 +1036,7 @@ export function EstimateCalculator({
       {sizeGrid}
       {chipsRow}
       {finishRow}
-      {gateSubmitted ? resultPanel : leadsGatePanel}
+      {gateSubmitted ? resultPanel : gateOpen ? leadsGatePanel : calculateCta}
     </>
   );
 
