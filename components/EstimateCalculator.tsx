@@ -11,7 +11,6 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/marketing";
-import { AnimatedPrice } from "@/components/estimate/EstimateResultPanel";
 import {
   type ProjectType,
   type FinishLevel,
@@ -20,7 +19,8 @@ import {
   type EstimateResult,
   EMPTY_REFINEMENTS,
   getAvailableFinishLevels,
-  getSizePresets,
+  PROJECT_SIZE_CONFIG,
+  formatPlanningCurrency,
   calculateEstimate,
   buildStoredEstimate,
   countVisibleUserRefinements,
@@ -118,6 +118,21 @@ const SUBTYPE_DATA: Record<ProjectType, Record<string, SubtypeData>> = {
     "gym-flex":     { sqft: 700, refinements: { layoutChanges: "none" } },
   },
 };
+
+/* The layout whose typical size is closest to the project baseline - used as the
+   default selection so a sensible live estimate shows immediately on load. */
+function defaultSubtypeFor(project: ProjectType): string {
+  const baseline = PROJECT_SIZE_CONFIG[project].baselineSqft;
+  const ids = Object.keys(SUBTYPE_DATA[project]);
+  return ids.reduce(
+    (best, id) =>
+      Math.abs(SUBTYPE_DATA[project][id].sqft - baseline) <
+      Math.abs(SUBTYPE_DATA[project][best].sqft - baseline)
+        ? id
+        : best,
+    ids[0],
+  );
+}
 
 /* ══════════════════════════════════════════════════════════════════════
    FOOTER STRIP IMAGES
@@ -340,17 +355,14 @@ export function EstimateCalculator({
 
   /* ── State ── */
   const [activeProject, setActiveProject] = useState<ProjectType>("kitchen");
-  const [subtype, setSubtype]             = useState<string | null>(null);
-  const [size, setSize]                   = useState<"smaller" | "typical" | "larger">("typical");
+  const [subtype, setSubtype]             = useState<string>(() => defaultSubtypeFor("kitchen"));
+  const [sqft, setSqft]                   = useState<number>(
+    () => SUBTYPE_DATA.kitchen[defaultSubtypeFor("kitchen")].sqft,
+  );
   const [addOns, setAddOns]               = useState<string[]>([]);
   const [finish, setFinish]               = useState<FinishLevel>("mid-range");
-  const [showResult, setShowResult]       = useState(false);
-  const [gridNudge, setGridNudge]         = useState(false);
   const [scopeOpen, setScopeOpen]         = useState(false);
   const [legalOpen, setLegalOpen]         = useState(false);
-  const nudgeTimer  = useRef<number | null>(null);
-  const resultRef   = useRef<HTMLDivElement>(null);
-  const tabsRef     = useRef<HTMLDivElement>(null);
   /* Guards the estimator-completion conversion event so it fires at most once
      per mount even if the visitor recalculates after editing. */
   const leadFired   = useRef(false);
@@ -358,10 +370,10 @@ export function EstimateCalculator({
   /* ── Derived ── */
   const config = PROJECT_CONFIGS[activeProject];
 
-  const effectiveProject = useMemo<ProjectType>(() => {
-    if (!subtype) return activeProject;
-    return SUBTYPE_DATA[activeProject]?.[subtype]?.projectOverride ?? activeProject;
-  }, [activeProject, subtype]);
+  const effectiveProject = useMemo<ProjectType>(
+    () => SUBTYPE_DATA[activeProject]?.[subtype]?.projectOverride ?? activeProject,
+    [activeProject, subtype],
+  );
 
   /* Finish options MUST come from effectiveProject to stay consistent with the engine */
   const availFinish = useMemo(
@@ -375,21 +387,10 @@ export function EstimateCalculator({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [availFinish]);
 
-  /* Size presets (Smaller / Typical / Larger) come from the engine per project.
-     The user's size choice drives sqft; defaulting to Typical keeps the opening
-     estimate at the sensible base range instead of an inflated fixed size. */
-  const sizePresets = useMemo(() => getSizePresets(effectiveProject), [effectiveProject]);
-
-  const sqft = useMemo<number | null>(() => {
-    if (!subtype) return null;
-    const preset = sizePresets.find((p) => p.id === size) ?? sizePresets[1];
-    let s = preset.sqft;
-    if (effectiveProject === "basement" && addOns.includes("egress")) s += 100;
-    return s;
-  }, [subtype, size, sizePresets, effectiveProject, addOns]);
+  /* Size config (min / max / step / baseline) for the sqft slider, per project. */
+  const sizeConfig = PROJECT_SIZE_CONFIG[effectiveProject];
 
   const refinements = useMemo<EstimateRefinements>(() => {
-    if (!subtype) return { ...EMPTY_REFINEMENTS };
     const data = SUBTYPE_DATA[activeProject]?.[subtype];
     if (!data) return { ...EMPTY_REFINEMENTS };
     return buildRefinements(effectiveProject, subtype, addOns, data.refinements);
@@ -400,91 +401,77 @@ export function EstimateCalculator({
     [effectiveProject, refinements],
   );
 
-  const result = useMemo<EstimateResult | null>(() => {
-    if (!sqft) return null;
+  const result = useMemo<EstimateResult>(() => {
     const input: EstimateInput = { project: effectiveProject, finish, sqft, refinements };
     return calculateEstimate(input, userRefinementCount);
   }, [effectiveProject, finish, sqft, refinements, userRefinementCount]);
 
-  /* ── Persist to sessionStorage ── */
+  /* ── Persist to sessionStorage (live, on every change) ── */
   useEffect(() => {
-    if (!result || !sqft) return;
     const input: EstimateInput = { project: effectiveProject, finish, sqft, refinements };
     sessionStorage.setItem(
       "brc_estimate",
       JSON.stringify(buildStoredEstimate(input, userRefinementCount)),
     );
     window.dispatchEvent(new CustomEvent("brc_estimate_updated"));
-  }, [result, effectiveProject, finish, sqft, refinements, userRefinementCount]);
-
-  useEffect(() => () => { if (nudgeTimer.current) clearTimeout(nudgeTimer.current); }, []);
-
-  /* Auto-scroll the active tab into view when project changes */
-  useEffect(() => {
-    if (!tabsRef.current) return;
-    const activeEl = tabsRef.current.querySelector<HTMLElement>('[aria-selected="true"]');
-    activeEl?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
-  }, [activeProject]);
+  }, [effectiveProject, finish, sqft, refinements, userRefinementCount]);
 
   /* ── Handlers ── */
-  function handleSelectProject(type: ProjectType) {
-    if (type === activeProject) return;
-    setActiveProject(type);
-    setSubtype(null);
-    setSize("typical");
-    setAddOns([]);
-    setShowResult(false);
-    setScopeOpen(false);
-    setLegalOpen(false);
-    const avail = getAvailableFinishLevels(type);
-    if (!avail.includes(finish)) setFinish("mid-range");
+
+  /* Estimator engagement is the campaign's conversion signal. Now that the range
+     updates live (no Calculate button), the Meta Lead + GA generate_lead events
+     fire once per session on the first real interaction or when a visit is
+     booked - a close proxy for the old "clicked Calculate" completion event. */
+  function fireLeadOnce() {
+    if (leadFired.current) return;
+    leadFired.current = true;
+    trackMetaEvent("Lead", {
+      content_name: effectiveProject,
+      content_category: "remodel_estimate",
+    });
+    trackEvent("generate_lead", { project: effectiveProject });
   }
 
-  /* Return from the result view to the inputs (CTA flow: after an estimate the
-     Calculate button is replaced by Edit Estimate + Book Free Visit). */
-  function handleEditEstimate() {
-    setShowResult(false);
-    setScopeOpen(false);
-    setLegalOpen(false);
-    setTimeout(() => {
-      document.getElementById("calculator")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 40);
+  function handleSelectProject(type: ProjectType) {
+    if (type === activeProject) return;
+    const sub = defaultSubtypeFor(type);
+    setActiveProject(type);
+    setSubtype(sub);
+    setSqft(SUBTYPE_DATA[type][sub].sqft);
+    setAddOns([]);
+    const avail = getAvailableFinishLevels(type);
+    if (!avail.includes(finish)) setFinish("mid-range");
+    fireLeadOnce();
+  }
+
+  /* Selecting a layout sets a smart default size, which the slider fine-tunes. */
+  function handleSelectSubtype(id: string) {
+    setSubtype(id);
+    const data = SUBTYPE_DATA[activeProject]?.[id];
+    if (data) {
+      const c = PROJECT_SIZE_CONFIG[data.projectOverride ?? activeProject];
+      setSqft(Math.max(c.min, Math.min(c.max, data.sqft)));
+    }
+    fireLeadOnce();
+  }
+
+  function handleSelectFinish(level: FinishLevel) {
+    setFinish(level);
+    fireLeadOnce();
   }
 
   function handleToggleChip(id: string) {
-    setAddOns((prev) =>
-      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id],
-    );
+    setAddOns((prev) => (prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]));
+    fireLeadOnce();
   }
 
-  function handleCalculate() {
-    if (!subtype) {
-      setGridNudge(true);
-      if (nudgeTimer.current) clearTimeout(nudgeTimer.current);
-      nudgeTimer.current = window.setTimeout(() => setGridNudge(false), 900);
-      return;
-    }
-    setShowResult(true);
-    setScopeOpen(false);
-    setLegalOpen(false);
-    /* Estimator completion is the campaign's conversion signal. Fire the Meta
-       standard Lead event (ad-set optimization) plus a GA generate_lead event,
-       once per session, on the first successful estimate. */
-    if (!leadFired.current) {
-      leadFired.current = true;
-      trackMetaEvent("Lead", {
-        content_name: effectiveProject,
-        content_category: "remodel_estimate",
-      });
-      trackEvent("generate_lead", { project: effectiveProject });
-    }
-    /* Scroll result into view after it renders */
-    setTimeout(() => {
-      resultRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }, 80);
+  function handleSqft(value: number) {
+    setSqft(value);
+    fireLeadOnce();
   }
 
   function handleBookVisit() {
+    fireLeadOnce();
     if (onBookVisitProp) {
       onBookVisitProp();
     } else {
@@ -575,14 +562,7 @@ export function EstimateCalculator({
   const subtypeGrid = (
     <div>
       <p className={stepLabel}>2 &middot; {config.gridLabel}</p>
-      <div
-        className={cn(
-          "grid grid-cols-2 gap-2.5 transition-all duration-300",
-          gridNudge && "ring-2 ring-accent-legible/70 ring-offset-2 ring-offset-inverse rounded-lg",
-        )}
-        role="group"
-        aria-label={config.gridLabel}
-      >
+      <div className="grid grid-cols-2 gap-2.5" role="group" aria-label={config.gridLabel}>
         {config.subtypes.map((opt) => {
           const Icon = opt.icon;
           const active = subtype === opt.id;
@@ -590,7 +570,7 @@ export function EstimateCalculator({
             <button
               key={opt.id}
               type="button"
-              onClick={() => setSubtype(opt.id)}
+              onClick={() => handleSelectSubtype(opt.id)}
               data-testid={`calc-subtype-${opt.id}`}
               aria-pressed={active}
               className={cn(darkCard(active), "flex items-start gap-3 p-4 min-h-[76px]")}
@@ -616,34 +596,43 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Step 3 - Size (restores the measurement input; drives sqft). Revealed once a
-     layout is chosen so the form expands naturally as the user progresses. */
+  /* Step 3 - Size: a precise sqft slider (cost is very size-sensitive). The chosen
+     layout pre-sets a smart default; the slider fine-tunes for accuracy. */
+  const sizePct = ((sqft - sizeConfig.min) / (sizeConfig.max - sizeConfig.min)) * 100;
   const sizeGrid = (
-    <div className="mt-5">
-      <p className={stepLabel}>3 &middot; About how big?</p>
-      <div className="grid grid-cols-3 gap-2.5" role="group" aria-label="Project size">
-        {sizePresets.map((preset) => {
-          const active = size === preset.id;
-          return (
-            <button
-              key={preset.id}
-              type="button"
-              onClick={() => setSize(preset.id)}
-              data-testid={`calc-size-${preset.id}`}
-              aria-pressed={active}
-              className={cn(
-                darkCard(active),
-                "flex flex-col items-center justify-center text-center gap-1 px-2 py-4 min-h-[72px]",
-              )}
-            >
-              <span className="text-[15px] text-inverse-foreground leading-tight">{preset.label}</span>
-              <span className="text-[12px] italic text-inverse-muted leading-snug">
-                ~{preset.sqft.toLocaleString()} sq ft
-              </span>
-            </button>
-          );
-        })}
+    <div className="mt-6">
+      <div className="flex items-baseline justify-between mb-3">
+        <p className={cn(stepLabel, "mb-0")}>3 &middot; About how big?</p>
+        <span
+          className="brc-display-num tabular-nums text-[22px] leading-none text-inverse-foreground"
+          data-testid="calc-sqft-value"
+        >
+          {sqft.toLocaleString()}
+          <span className="text-[13px] text-inverse-muted ml-1">sq ft</span>
+        </span>
       </div>
+      <input
+        type="range"
+        className="brc-slider"
+        min={sizeConfig.min}
+        max={sizeConfig.max}
+        step={sizeConfig.step}
+        value={sqft}
+        onChange={(e) => handleSqft(Number(e.target.value))}
+        data-testid="calc-sqft-slider"
+        aria-label="Approximate square footage"
+        style={{
+          background: `linear-gradient(to right, hsl(var(--accent-legible)) 0%, hsl(var(--accent-legible)) ${sizePct}%, hsl(var(--inverse-foreground) / 0.14) ${sizePct}%, hsl(var(--inverse-foreground) / 0.14) 100%)`,
+        }}
+      />
+      <div className="flex justify-between mt-2 text-[12px] text-inverse-muted">
+        <span>Compact ({sizeConfig.min.toLocaleString()})</span>
+        <span>Large ({sizeConfig.max.toLocaleString()} sq ft)</span>
+      </div>
+      <p className="mt-2.5 text-[12.5px] text-inverse-muted/80 leading-relaxed">
+        Not sure? The layout above sets a typical size. Drag only if your space is notably smaller or
+        larger. Size is the biggest cost driver, so a closer number means a closer estimate.
+      </p>
     </div>
   );
 
@@ -693,7 +682,7 @@ export function EstimateCalculator({
             <button
               key={level}
               type="button"
-              onClick={() => setFinish(level)}
+              onClick={() => handleSelectFinish(level)}
               data-testid={`calc-finish-${level}`}
               aria-pressed={active}
               className={cn(
@@ -711,34 +700,10 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Primary CTA - single action before an estimate exists */
-  const ctaButton = (
-    <div className="mt-7">
-      <Button
-        onClick={handleCalculate}
-        data-testid="button-calculate"
-        className="w-full h-14 bg-inverse-foreground text-inverse hover:bg-inverse-foreground/90 tracking-[0.14em] text-[14px] uppercase font-normal"
-      >
-        Calculate My Cost
-      </Button>
-    </div>
-  );
-
-  /* Result panel - shown after Calculate; inputs stay above for live edits */
+  /* Live planning range - always visible, updates as selections change */
   const resultPanel = (
-    <div
-      ref={resultRef}
-      className={cn(
-        "transition-all duration-300",
-        showResult
-          ? "opacity-100 pointer-events-auto mt-7"
-          : "opacity-0 pointer-events-none h-0 overflow-hidden mt-0",
-      )}
-      aria-live="polite"
-      aria-atomic="true"
-    >
-      {result ? (
-        <div className="space-y-5 border-t border-inverse-foreground/15 pt-6">
+    <div className="mt-8" aria-live="polite" aria-atomic="true">
+      <div className="space-y-5 border-t border-inverse-foreground/15 pt-6">
           {/* Price range */}
           <div>
             <p className="text-[12px] tracking-[0.14em] uppercase text-inverse-muted mb-2">
@@ -748,9 +713,9 @@ export function EstimateCalculator({
               className="brc-display-num tabular-nums leading-none text-inverse-foreground text-[clamp(32px,8vw,52px)]"
               data-testid="estimate-range"
             >
-              <AnimatedPrice value={result.priceLow} />
+              {formatPlanningCurrency(result.priceLow)}
               <span className="text-inverse-muted/60 mx-2 text-xl">to</span>
-              <AnimatedPrice value={result.priceHigh} />
+              {formatPlanningCurrency(result.priceHigh)}
             </div>
             <p className="mt-2.5 text-[14px] text-inverse-muted">
               Est. {result.roi}% ROI based on Boise market data.
@@ -817,34 +782,16 @@ export function EstimateCalculator({
             )}
           </div>
 
-          {/* Two-action flow: adjust selections, or book the visit (recommended) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleEditEstimate}
-              data-testid="button-edit-estimate"
-              className="h-12 order-2 sm:order-1 border-inverse-foreground/30 text-inverse-foreground hover:bg-inverse-foreground/10 text-[13px] tracking-[0.1em] uppercase"
-            >
-              Edit Estimate
-            </Button>
-            <Button
-              onClick={handleBookVisit}
-              data-testid="button-book-visit"
-              className="h-12 order-1 sm:order-2 bg-inverse-foreground text-inverse hover:bg-inverse-foreground/90 text-[13px] tracking-[0.1em] uppercase"
-            >
-              Book Free Visit
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      ) : (
-        showResult && (
-          <p className="text-[14px] text-inverse-muted border-t border-inverse-foreground/15 pt-6">
-            Choose a project and layout, then tap Calculate.
-          </p>
-        )
-      )}
+          {/* Single primary CTA - book the free visit (recommended next step) */}
+          <Button
+            onClick={handleBookVisit}
+            data-testid="button-book-visit"
+            className="w-full h-14 bg-inverse-foreground text-inverse hover:bg-inverse-foreground/90 text-[14px] tracking-[0.12em] uppercase"
+          >
+            Book Free Visit
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+      </div>
     </div>
   );
 
@@ -859,14 +806,9 @@ export function EstimateCalculator({
       {intro}
       {projectGrid}
       {subtypeGrid}
-      {subtype && (
-        <>
-          {sizeGrid}
-          {chipsRow}
-          {finishRow}
-        </>
-      )}
-      {!showResult && ctaButton}
+      {sizeGrid}
+      {chipsRow}
+      {finishRow}
       {resultPanel}
     </>
   );
