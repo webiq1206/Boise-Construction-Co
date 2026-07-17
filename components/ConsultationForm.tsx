@@ -29,7 +29,7 @@ import { EstimateCTA } from "@/components/modals/EstimateCTA";
 import { CTA_FORM_SEND } from "@/shared/ctaCopy";
 import { CONSULT_BULLETS } from "@/shared/siteContent";
 import { SITE_CONFIG } from "@/shared/siteConfig";
-import { trackEvent } from "@/lib/analytics";
+import { trackEvent, trackMetaEvent } from "@/lib/analytics";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
   HOUSE_NUMBER_REGEX,
@@ -219,12 +219,20 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
     onSuccess: (_data, variables) => {
       setSuccess(true);
       sessionStorage.removeItem("brc_estimate");
-      // Conversion event: a completed consultation request is the primary lead.
+      // Conversion event: a submitted consultation request is the PRIMARY lead
+      // (estimate on the site, then submit). GA generate_lead + Meta Lead. The
+      // Meta Lead carries the visitor's email + phone, which the server-side
+      // Conversions API hashes for high match quality (best cost-per-result).
       trackEvent("generate_lead", {
         form: "consultation",
         project_type: variables.projectType,
         has_estimate: !!estimate && attached,
       });
+      trackMetaEvent(
+        "Lead",
+        { content_name: variables.projectType, content_category: "consultation_request" },
+        { email: variables.email, phone: variables.phone },
+      );
     },
   });
 

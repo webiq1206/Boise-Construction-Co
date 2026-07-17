@@ -365,7 +365,7 @@ export function EstimateCalculator({
   const [legalOpen, setLegalOpen]         = useState(false);
   /* Guards the estimator-completion conversion event so it fires at most once
      per mount even if the visitor recalculates after editing. */
-  const leadFired   = useRef(false);
+  const engagementFired   = useRef(false);
 
   /* ── Derived ── */
   const config = PROJECT_CONFIGS[activeProject];
@@ -418,18 +418,22 @@ export function EstimateCalculator({
 
   /* ── Handlers ── */
 
-  /* Estimator engagement is the campaign's conversion signal. Now that the range
-     updates live (no Calculate button), the Meta Lead + GA generate_lead events
-     fire once per session on the first real interaction or when a visit is
-     booked - a close proxy for the old "clicked Calculate" completion event. */
-  function fireLeadOnce() {
-    if (leadFired.current) return;
-    leadFired.current = true;
-    trackMetaEvent("Lead", {
+  /* Estimator engagement is UPPER FUNNEL, not the primary conversion. The goal
+     is: get an estimate on the site, then submit the consultation form - that
+     submission is the Lead (fired with email/phone in ConsultationForm). This
+     fires once per session on first real interaction or when a visit is booked,
+     as InitiateCheckout / begin_checkout: it feeds a retargeting audience of
+     people who started an estimate but have not submitted, and gives Meta higher
+     early volume to optimize toward the real Lead. Not counted as a Lead, so no
+     double-counting. */
+  function fireEstimatorEngagement() {
+    if (engagementFired.current) return;
+    engagementFired.current = true;
+    trackMetaEvent("InitiateCheckout", {
       content_name: effectiveProject,
       content_category: "remodel_estimate",
     });
-    trackEvent("generate_lead", { project: effectiveProject });
+    trackEvent("begin_checkout", { project: effectiveProject });
   }
 
   function handleSelectProject(type: ProjectType) {
@@ -441,7 +445,7 @@ export function EstimateCalculator({
     setAddOns([]);
     const avail = getAvailableFinishLevels(type);
     if (!avail.includes(finish)) setFinish("mid-range");
-    fireLeadOnce();
+    fireEstimatorEngagement();
   }
 
   /* Selecting a layout sets a smart default size, which the slider fine-tunes. */
@@ -452,26 +456,26 @@ export function EstimateCalculator({
       const c = PROJECT_SIZE_CONFIG[data.projectOverride ?? activeProject];
       setSqft(Math.max(c.min, Math.min(c.max, data.sqft)));
     }
-    fireLeadOnce();
+    fireEstimatorEngagement();
   }
 
   function handleSelectFinish(level: FinishLevel) {
     setFinish(level);
-    fireLeadOnce();
+    fireEstimatorEngagement();
   }
 
   function handleToggleChip(id: string) {
     setAddOns((prev) => (prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]));
-    fireLeadOnce();
+    fireEstimatorEngagement();
   }
 
   function handleSqft(value: number) {
     setSqft(value);
-    fireLeadOnce();
+    fireEstimatorEngagement();
   }
 
   function handleBookVisit() {
-    fireLeadOnce();
+    fireEstimatorEngagement();
     if (onBookVisitProp) {
       onBookVisitProp();
     } else {
