@@ -499,13 +499,29 @@ export function EstimateCalculator({
 
   async function handleGateSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    /* Explicit client-side validation before touching the API */
+    if (!gateName.trim() || gateName.trim().length < 2) {
+      setGateError("Please enter your first name.");
+      return;
+    }
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!gateEmail.trim() || !emailRe.test(gateEmail.trim())) {
+      setGateError("Please enter a valid email address.");
+      return;
+    }
+    if (gatePhone.replace(/\D/g, "").length < 10) {
+      setGateError("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
     setGateLoading(true);
     setGateError(null);
 
     const payload = {
-      name: gateName,
-      email: gateEmail,
-      phone: gatePhone,
+      name: gateName.trim(),
+      email: gateEmail.trim(),
+      phone: gatePhone.trim(),
       projectType: effectiveProject,
       estimate: {
         project: effectiveProject,
@@ -524,21 +540,35 @@ export function EstimateCalculator({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) {
+
+      if (res.ok) {
+        /* Happy path: contact captured, reveal result */
+        trackMetaEvent("Lead", {
+          content_name: effectiveProject,
+          content_category: "estimate_gate",
+        });
+        trackEvent("generate_lead", { project: effectiveProject, source: "estimate_gate" });
+        sessionStorage.setItem("brc_gate_passed", "1");
+        setGateSubmitted(true);
+      } else if (res.status >= 500) {
+        /* Server/infra error: not the user's fault; reveal so they aren't hard-blocked */
+        console.warn("[gate] Server error", res.status, "- revealing estimate anyway");
+        sessionStorage.setItem("brc_gate_passed", "1");
+        setGateSubmitted(true);
+      } else {
+        /* 4xx: our client validation should have caught this; show error, keep gate */
         console.warn("[gate] API returned", res.status);
+        setGateError("Something went wrong. Please check your info and try again.");
+        setGateLoading(false);
+        return;
       }
-      trackMetaEvent("Lead", {
-        content_name: effectiveProject,
-        content_category: "estimate_gate",
-      });
-      trackEvent("generate_lead", { project: effectiveProject, source: "estimate_gate" });
     } catch (err) {
-      console.warn("[gate] Submit error:", err);
+      /* Network failure: reveal so infra issues never block a real user */
+      console.warn("[gate] Network error:", err);
+      sessionStorage.setItem("brc_gate_passed", "1");
+      setGateSubmitted(true);
     }
 
-    /* Always reveal the result regardless of API success - never hard-block the user */
-    sessionStorage.setItem("brc_gate_passed", "1");
-    setGateSubmitted(true);
     setGateLoading(false);
   }
 
@@ -917,7 +947,7 @@ export function EstimateCalculator({
         </div>
 
         {/* Contact form */}
-        <form onSubmit={handleGateSubmit} noValidate className="space-y-3">
+        <form onSubmit={handleGateSubmit} className="space-y-3">
           <input
             type="text"
             placeholder="First name"
