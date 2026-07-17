@@ -35,6 +35,10 @@ export function htmlToPlainText(html: string): string {
     .replace(/<br\s*\/?>/gi, "\n")
     .replace(/<\/p>/gi, "\n\n")
     .replace(/<\/li>/gi, "\n")
+    // Keep table rows readable in the plain-text fallback: separate cells with
+    // a space and end each row with a newline before tags are stripped.
+    .replace(/<\/td>/gi, " ")
+    .replace(/<\/tr>/gi, "\n")
     .replace(/<[^>]+>/g, "")
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")

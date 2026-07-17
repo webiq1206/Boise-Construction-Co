@@ -5,13 +5,20 @@ import { consultationRequests } from "@/shared/schema";
 import { getUncachableEmailClient } from "@/server/services/emailTransport";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import {
-  escapeHtml,
-  wrapEmailHtml,
   htmlToPlainText,
   getAdminRecipientEmails,
   formatFromAddress,
   getReplyToAddress,
 } from "@/server/services/emailLayout";
+import {
+  buildAdminEmailHtml,
+  buildCustomerEmailHtml,
+  buildAdminSubject,
+  buildCustomerSubject,
+  formatLeadReplyTo,
+  type VerifiedEstimate,
+  type PropertyEnrichment,
+} from "@/server/services/consultationEmail";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
   EMPTY_REFINEMENTS,
@@ -48,7 +55,7 @@ const refinementsSchema = z
 
 const estimateSchema = z
   .object({
-    project: z.enum(["kitchen", "bathroom", "whole-home", "addition", "adu"]),
+    project: z.enum(["kitchen", "bathroom", "whole-home", "addition", "adu", "basement"]),
     finish: z.enum(["refresh", "mid-range", "high-end", "luxury"]),
     sqft: z.number().int().positive(),
     priceLow: z.number().nonnegative(),
@@ -77,7 +84,9 @@ const bodySchema = z.object({
  * stored lead never carries client-tampered or stale numbers. Returns null
  * (estimate rejected) if the inputs themselves are out of bounds.
  */
-function verifyEstimate(estimate: NonNullable<z.infer<typeof estimateSchema>>) {
+function verifyEstimate(
+  estimate: NonNullable<z.infer<typeof estimateSchema>>
+): VerifiedEstimate | null {
   const sizeConfig = getProjectSizeConfig(estimate.project);
   if (estimate.sqft < sizeConfig.min || estimate.sqft > sizeConfig.max) {
     return null;
@@ -115,6 +124,8 @@ function verifyEstimate(estimate: NonNullable<z.infer<typeof estimateSchema>>) {
     priceHigh: recomputed.priceHigh,
     roi: recomputed.roi,
     confidence: estimate.confidence || recomputed.confidenceLabel,
+    refinements,
+    included: recomputed.included,
   };
 }
 
@@ -164,56 +175,28 @@ export async function POST(request: NextRequest) {
       const { client, fromEmail } = await getUncachableEmailClient();
       const from = formatFromAddress(fromEmail);
 
-      const estimateBlock = estimate
-        ? `<p><strong>Calculator estimate:</strong> ${escapeHtml(estimate.project)} (${escapeHtml(estimate.finish)}, ${estimate.sqft.toLocaleString()} sqft): $${Math.round(estimate.priceLow / 1000)}k to $${Math.round(estimate.priceHigh / 1000)}k${estimate.confidence ? ` - ${escapeHtml(estimate.confidence)}` : ""}</p>`
-        : "";
+      const lead = {
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        address: data.address,
+        zip: data.zip,
+        projectType: data.projectType,
+        message: data.message,
+      };
+      const enrichment = (data.propertyProfile as PropertyEnrichment | null) ?? null;
 
-      const profile = data.propertyProfile as {
-        parcelId?: string;
-        squareFootage?: number;
-        lotSizeSqFt?: number;
-        permittingAuthority?: string;
-        jurisdiction?: string;
-      } | null | undefined;
-      const propertyBlock = profile
-        ? `<div class="highlight-box" style="margin-top:12px;">
-            <p><strong>Property (auto-enriched):</strong></p>
-            <p style="margin-top:6px;">${escapeHtml(data.address)}</p>
-            ${profile.parcelId ? `<p>Parcel: ${escapeHtml(profile.parcelId)}</p>` : ""}
-            ${profile.squareFootage ? `<p>~${profile.squareFootage.toLocaleString()} sq ft</p>` : ""}
-            ${profile.lotSizeSqFt ? `<p>Lot: ${profile.lotSizeSqFt.toLocaleString()} sq ft</p>` : ""}
-            ${profile.permittingAuthority ? `<p>Permits: ${escapeHtml(profile.permittingAuthority)}</p>` : ""}
-          </div>`
-        : `<p><strong>Address:</strong> ${escapeHtml(data.address)}</p>`;
-
-      const adminHtml = wrapEmailHtml({
-        title: "New Consultation Request",
-        subtitle: escapeHtml(data.name),
-        content: `
-          <table class="info-table">
-            <tr><td class="label">Name:</td><td class="value">${escapeHtml(data.name)}</td></tr>
-            <tr><td class="label">Phone:</td><td class="value"><a href="tel:${escapeHtml(data.phone)}">${escapeHtml(data.phone)}</a></td></tr>
-            <tr><td class="label">Email:</td><td class="value"><a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a></td></tr>
-            <tr><td class="label">ZIP:</td><td class="value">${escapeHtml(data.zip || "")}</td></tr>
-            <tr><td class="label">Project:</td><td class="value">${escapeHtml(data.projectType)}</td></tr>
-          </table>
-          ${propertyBlock}
-          ${estimateBlock}
-          <div class="highlight-box">
-            <p><strong>Message:</strong></p>
-            <p style="margin-top:8px;">${escapeHtml(data.message || "(none)")}</p>
-          </div>
-          <p style="font-size:12px;color:#888;margin-top:16px;">Submitted via ${escapeHtml(SITE_CONFIG.siteUrl)}</p>
-        `,
-      });
-
+      // ---- Admin / internal-team email --------------------------------------
+      // Reply-To is the LEAD, so hitting Reply in any mail client goes straight
+      // to the customer.
+      const adminHtml = buildAdminEmailHtml(lead, estimate, enrichment);
       const adminEmails = await getAdminRecipientEmails(SITE_CONFIG.email);
       for (const adminEmail of adminEmails) {
         const adminResult = await client.emails.send({
           from,
-          replyTo: getReplyToAddress(),
+          replyTo: formatLeadReplyTo(data.name, data.email),
           to: adminEmail,
-          subject: `New consultation request: ${data.name}`,
+          subject: buildAdminSubject(lead, estimate),
           html: adminHtml,
           text: htmlToPlainText(adminHtml),
         });
@@ -225,21 +208,15 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      const customerHtml = wrapEmailHtml({
-        title: `Thanks, ${escapeHtml(data.name)}!`,
-        subtitle: "We received your consultation request",
-        content: `
-          <p class="greeting">We received your consultation request and will reach out within one business day to schedule your free in-home visit.</p>
-          <p>In the meantime, feel free to call us at <a href="${SITE_CONFIG.phoneHref}">${escapeHtml(SITE_CONFIG.phone)}</a>, <a href="${SITE_CONFIG.phoneSmsHref}">send us a text</a>, or reply to this email with any questions.</p>
-          <p style="margin-top:24px;">The Boise Remodeling Co team</p>
-        `,
-      });
-
+      // ---- Customer / lead email --------------------------------------------
+      // Includes the full estimate + every selection so the lead has it in
+      // writing without ever logging in.
+      const customerHtml = buildCustomerEmailHtml(lead, estimate);
       const customerResult = await client.emails.send({
         from,
         replyTo: getReplyToAddress(),
         to: data.email,
-        subject: "We received your request | Boise Remodeling Co",
+        subject: buildCustomerSubject(lead, estimate),
         html: customerHtml,
         text: htmlToPlainText(customerHtml),
       });
