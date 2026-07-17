@@ -20,6 +20,7 @@ import {
   type EstimateResult,
   EMPTY_REFINEMENTS,
   getAvailableFinishLevels,
+  getSizePresets,
   calculateEstimate,
   buildStoredEstimate,
   countVisibleUserRefinements,
@@ -27,6 +28,17 @@ import {
   INCLUDED_SCOPE_NOTE,
   APPLIANCE_DISCLAIMER,
 } from "@/shared/estimateEngine";
+import { trackEvent, trackMetaEvent } from "@/lib/analytics";
+
+/* Project-level icons for the project-type card grid. */
+const PROJECT_ICONS: Record<ProjectType, LucideIcon> = {
+  kitchen: UtensilsCrossed,
+  bathroom: Droplets,
+  "whole-home": Home,
+  addition: Building2,
+  adu: DoorOpen,
+  basement: Layers,
+};
 
 /* ══════════════════════════════════════════════════════════════════════
    TYPES
@@ -110,15 +122,6 @@ const SUBTYPE_DATA: Record<ProjectType, Record<string, SubtypeData>> = {
 /* ══════════════════════════════════════════════════════════════════════
    FOOTER STRIP IMAGES
 ══════════════════════════════════════════════════════════════════════ */
-
-const FOOTER_BG: Record<ProjectType, string> = {
-  kitchen:      "/images/gallery/gallery-kitchen-after.webp",
-  bathroom:     "/images/gallery/gallery-bathroom-after.webp",
-  "whole-home": "/images/gallery/gallery-kitchen-after.webp",
-  addition:     "/images/gallery/gallery-addition-after.webp",
-  adu:          "/images/gallery/gallery-addition-after.webp",
-  basement:     "/images/gallery/gallery-basement-after.webp",
-};
 
 /* ══════════════════════════════════════════════════════════════════════
    PROJECT UI CONFIGS
@@ -311,71 +314,6 @@ function buildRefinements(
 }
 
 /* ══════════════════════════════════════════════════════════════════════
-   SQFT  (basement EGRESS adds structural/carpentry cost via sqft bump)
-══════════════════════════════════════════════════════════════════════ */
-
-function computeSqft(
-  projectType: ProjectType,
-  subtype: string | null,
-  addOns: string[],
-): number | null {
-  if (!subtype) return null;
-  const data = SUBTYPE_DATA[projectType]?.[subtype];
-  if (!data) return null;
-  let sqft = data.sqft;
-  if (projectType === "basement" && addOns.includes("egress")) sqft += 100;
-  return sqft;
-}
-
-/* ══════════════════════════════════════════════════════════════════════
-   FOOTER STRIP  (separate component to avoid remount anti-pattern)
-══════════════════════════════════════════════════════════════════════ */
-
-function FooterStrip({
-  activeProject,
-  footerAccent,
-  onConsultClick,
-}: {
-  activeProject: ProjectType;
-  footerAccent: string;
-  onConsultClick: () => void;
-}) {
-  return (
-    <div className="relative flex-shrink-0 flex items-center justify-between px-4 sm:px-6 h-14 overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 scale-110"
-        style={{
-          backgroundImage: `url(${FOOTER_BG[activeProject]})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          filter: "blur(10px)",
-        }}
-      />
-      <div aria-hidden="true" className="absolute inset-0 bg-inverse/78" />
-
-      <p className="relative text-[8px] tracking-[0.22em] uppercase text-inverse-foreground/80 font-medium select-none">
-        BOISE REMODELING Co.
-      </p>
-
-      <button
-        type="button"
-        onClick={onConsultClick}
-        className="relative flex items-center gap-1.5 text-[11px] text-inverse-foreground hover:text-accent-legible transition-colors"
-        data-testid="link-footer-consult"
-      >
-        See my{" "}
-        <em className="brc-accent">{footerAccent}</em>
-        {" "}price
-        <ArrowRight className="h-3 w-3" />
-      </button>
-
-      <p className="relative text-[11px] text-inverse-muted hidden sm:block">(208) 477-1169</p>
-    </div>
-  );
-}
-
-/* ══════════════════════════════════════════════════════════════════════
    CONSTANTS
 ══════════════════════════════════════════════════════════════════════ */
 
@@ -403,6 +341,7 @@ export function EstimateCalculator({
   /* ── State ── */
   const [activeProject, setActiveProject] = useState<ProjectType>("kitchen");
   const [subtype, setSubtype]             = useState<string | null>(null);
+  const [size, setSize]                   = useState<"smaller" | "typical" | "larger">("typical");
   const [addOns, setAddOns]               = useState<string[]>([]);
   const [finish, setFinish]               = useState<FinishLevel>("mid-range");
   const [showResult, setShowResult]       = useState(false);
@@ -412,6 +351,9 @@ export function EstimateCalculator({
   const nudgeTimer  = useRef<number | null>(null);
   const resultRef   = useRef<HTMLDivElement>(null);
   const tabsRef     = useRef<HTMLDivElement>(null);
+  /* Guards the estimator-completion conversion event so it fires at most once
+     per mount even if the visitor recalculates after editing. */
+  const leadFired   = useRef(false);
 
   /* ── Derived ── */
   const config = PROJECT_CONFIGS[activeProject];
@@ -433,10 +375,18 @@ export function EstimateCalculator({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [availFinish]);
 
-  const sqft = useMemo(
-    () => computeSqft(activeProject, subtype, addOns),
-    [activeProject, subtype, addOns],
-  );
+  /* Size presets (Smaller / Typical / Larger) come from the engine per project.
+     The user's size choice drives sqft; defaulting to Typical keeps the opening
+     estimate at the sensible base range instead of an inflated fixed size. */
+  const sizePresets = useMemo(() => getSizePresets(effectiveProject), [effectiveProject]);
+
+  const sqft = useMemo<number | null>(() => {
+    if (!subtype) return null;
+    const preset = sizePresets.find((p) => p.id === size) ?? sizePresets[1];
+    let s = preset.sqft;
+    if (effectiveProject === "basement" && addOns.includes("egress")) s += 100;
+    return s;
+  }, [subtype, size, sizePresets, effectiveProject, addOns]);
 
   const refinements = useMemo<EstimateRefinements>(() => {
     if (!subtype) return { ...EMPTY_REFINEMENTS };
@@ -481,12 +431,24 @@ export function EstimateCalculator({
     if (type === activeProject) return;
     setActiveProject(type);
     setSubtype(null);
+    setSize("typical");
     setAddOns([]);
     setShowResult(false);
     setScopeOpen(false);
     setLegalOpen(false);
     const avail = getAvailableFinishLevels(type);
     if (!avail.includes(finish)) setFinish("mid-range");
+  }
+
+  /* Return from the result view to the inputs (CTA flow: after an estimate the
+     Calculate button is replaced by Edit Estimate + Book Free Visit). */
+  function handleEditEstimate() {
+    setShowResult(false);
+    setScopeOpen(false);
+    setLegalOpen(false);
+    setTimeout(() => {
+      document.getElementById("calculator")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 40);
   }
 
   function handleToggleChip(id: string) {
@@ -505,6 +467,17 @@ export function EstimateCalculator({
     setShowResult(true);
     setScopeOpen(false);
     setLegalOpen(false);
+    /* Estimator completion is the campaign's conversion signal. Fire the Meta
+       standard Lead event (ad-set optimization) plus a GA generate_lead event,
+       once per session, on the first successful estimate. */
+    if (!leadFired.current) {
+      leadFired.current = true;
+      trackMetaEvent("Lead", {
+        content_name: effectiveProject,
+        content_category: "remodel_estimate",
+      });
+      trackEvent("generate_lead", { project: effectiveProject });
+    }
     /* Scroll result into view after it renders */
     setTimeout(() => {
       resultRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -533,86 +506,79 @@ export function EstimateCalculator({
      SECTIONS
   ══════════════════════════════ */
 
-  /* Project pill tabs - single-row horizontal scroll strip */
-  const tabStrip = (
-    <div className="flex-shrink-0 mb-4">
-      <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-2">
-        CHOOSE YOUR PROJECT TYPE
-      </p>
-      <div className="relative">
-        {/* Scrollable row - hidden scrollbar, single line */}
-        <div
-          ref={tabsRef}
-          className="flex gap-2 overflow-x-auto pb-0.5 [&::-webkit-scrollbar]:hidden"
-          style={{ scrollbarWidth: "none" }}
-          role="tablist"
-          aria-label="Project type"
-        >
-          {PROJECT_TYPE_ORDER.map((type) => {
-            const pc = PROJECT_CONFIGS[type];
-            const active = activeProject === type;
-            return (
-              <button
-                key={type}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                onClick={() => handleSelectProject(type)}
-                data-testid={`calc-tab-${type}`}
-                className={cn(
-                  "flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full border text-[12px] font-medium tracking-wide transition-all duration-200",
-                  active
-                    ? "bg-inverse-foreground text-inverse border-inverse-foreground"
-                    : "bg-transparent border-inverse-foreground/[0.22] text-inverse-muted hover-elevate",
-                )}
-              >
-                {pc.tabLabel}
-              </button>
-            );
-          })}
-        </div>
-        {/* Right-edge gradient fade - hints that more tabs are off-screen */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-inverse to-transparent"
-        />
+  /* Consistent, readable step label used across every input group. */
+  const stepLabel = "block text-[13px] tracking-[0.12em] uppercase text-inverse-muted mb-3";
+
+  /* Step 1 - Project type: prominent card grid (matches the other inputs) */
+  const projectGrid = (
+    <div className="mb-6">
+      <p className={stepLabel}>1 &middot; Choose your project</p>
+      <div
+        className="grid grid-cols-2 sm:grid-cols-3 gap-2.5"
+        role="tablist"
+        aria-label="Project type"
+      >
+        {PROJECT_TYPE_ORDER.map((type) => {
+          const pc = PROJECT_CONFIGS[type];
+          const Icon = PROJECT_ICONS[type];
+          const active = activeProject === type;
+          return (
+            <button
+              key={type}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              onClick={() => handleSelectProject(type)}
+              data-testid={`calc-tab-${type}`}
+              className={cn(darkCard(active), "flex items-center gap-3 px-4 py-3.5 min-h-[58px]")}
+            >
+              <Icon
+                className={cn("h-5 w-5 flex-shrink-0", active ? "text-accent-legible" : "text-inverse-muted")}
+              />
+              <span className="text-[15px] text-inverse-foreground leading-tight">{pc.tabLabel}</span>
+              {active && (
+                <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-accent-legible flex-shrink-0">
+                  <Check className="h-3 w-3 text-inverse" />
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
 
-  /* Headline - Addition uses explicit two-line treatment */
-  const headline = (
-    <div className="flex-shrink-0 mb-3">
-      <p className="text-[9px] tracking-[0.2em] uppercase text-inverse-muted mb-1">
-        BALLPARK YOUR PROJECT IN UNDER 60 SECONDS
+  /* Intro - eyebrow + dynamic per-project headline */
+  const intro = (
+    <div className="mb-7">
+      <p className="text-[12px] tracking-[0.16em] uppercase text-inverse-muted mb-2.5">
+        Ballpark your project in under 60 seconds
       </p>
-      {config.twoLineHeadline ? (
-        <h2 className="font-sans font-light text-[clamp(1.35rem,3.2vw,2.5rem)] leading-[1.1] tracking-tight text-inverse-foreground">
-          {config.headlinePrefix}
-          <br />
-          <em className="brc-accent">{config.headlineAccent}</em>{" "}
-          {config.headlineSuffix}
-        </h2>
-      ) : (
-        <h2 className="font-sans font-light text-[clamp(1.35rem,3.2vw,2.5rem)] leading-[1.1] tracking-tight text-inverse-foreground">
-          {config.headlinePrefix}{" "}
-          <em className="brc-accent">{config.headlineAccent}</em>{" "}
-          {config.headlineSuffix}
-        </h2>
-      )}
+      <h2 className="font-sans font-light text-[clamp(1.75rem,4vw,3rem)] leading-[1.08] tracking-tight text-inverse-foreground">
+        {config.twoLineHeadline ? (
+          <>
+            {config.headlinePrefix}
+            <br />
+            <em className="brc-accent">{config.headlineAccent}</em> {config.headlineSuffix}
+          </>
+        ) : (
+          <>
+            {config.headlinePrefix} <em className="brc-accent">{config.headlineAccent}</em>{" "}
+            {config.headlineSuffix}
+          </>
+        )}
+      </h2>
     </div>
   );
 
-  /* Subtype 2x2 grid */
+  /* Step 2 - Layout / type (drives refinement complexity) */
   const subtypeGrid = (
     <div>
-      <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-2">
-        {config.gridLabel}
-      </p>
+      <p className={stepLabel}>2 &middot; {config.gridLabel}</p>
       <div
         className={cn(
-          "grid grid-cols-2 gap-2 transition-all duration-300",
-          gridNudge && "ring-2 ring-accent-legible/60 ring-offset-2 ring-offset-inverse rounded-lg",
+          "grid grid-cols-2 gap-2.5 transition-all duration-300",
+          gridNudge && "ring-2 ring-accent-legible/70 ring-offset-2 ring-offset-inverse rounded-lg",
         )}
         role="group"
         aria-label={config.gridLabel}
@@ -627,19 +593,19 @@ export function EstimateCalculator({
               onClick={() => setSubtype(opt.id)}
               data-testid={`calc-subtype-${opt.id}`}
               aria-pressed={active}
-              className={cn(darkCard(active), "flex items-start gap-2.5 p-2.5")}
+              className={cn(darkCard(active), "flex items-start gap-3 p-4 min-h-[76px]")}
             >
               {active && (
-                <span className="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-accent-legible flex-shrink-0">
-                  <Check className="h-2.5 w-2.5 text-inverse" />
+                <span className="absolute top-3 right-3 flex h-5 w-5 items-center justify-center rounded-full bg-accent-legible flex-shrink-0">
+                  <Check className="h-3 w-3 text-inverse" />
                 </span>
               )}
-              <Icon className="h-4 w-4 flex-shrink-0 mt-0.5 text-accent-legible" />
-              <span className="min-w-0">
-                <span className="block text-[12px] font-medium text-inverse-foreground leading-tight">
+              <Icon className="h-5 w-5 flex-shrink-0 mt-0.5 text-accent-legible" />
+              <span className="min-w-0 pr-5">
+                <span className="block text-[15px] text-inverse-foreground leading-tight">
                   {opt.title}
                 </span>
-                <span className="block text-[10px] italic text-inverse-muted leading-snug mt-0.5">
+                <span className="block text-[12.5px] italic text-inverse-muted leading-snug mt-1">
                   {opt.subtitle}
                 </span>
               </span>
@@ -650,14 +616,43 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Add-on chips - 4-across, wrapping 2x2 on very small screens */
+  /* Step 3 - Size (restores the measurement input; drives sqft). Revealed once a
+     layout is chosen so the form expands naturally as the user progresses. */
+  const sizeGrid = (
+    <div className="mt-5">
+      <p className={stepLabel}>3 &middot; About how big?</p>
+      <div className="grid grid-cols-3 gap-2.5" role="group" aria-label="Project size">
+        {sizePresets.map((preset) => {
+          const active = size === preset.id;
+          return (
+            <button
+              key={preset.id}
+              type="button"
+              onClick={() => setSize(preset.id)}
+              data-testid={`calc-size-${preset.id}`}
+              aria-pressed={active}
+              className={cn(
+                darkCard(active),
+                "flex flex-col items-center justify-center text-center gap-1 px-2 py-4 min-h-[72px]",
+              )}
+            >
+              <span className="text-[15px] text-inverse-foreground leading-tight">{preset.label}</span>
+              <span className="text-[12px] italic text-inverse-muted leading-snug">
+                ~{preset.sqft.toLocaleString()} sq ft
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  /* Step 4 - Upgrades (optional add-ons) */
   const chipsRow = (
-    <div className="mt-3">
-      <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-2">
-        {config.chipsLabel}
-      </p>
+    <div className="mt-5">
+      <p className={stepLabel}>4 &middot; {config.chipsLabel}</p>
       <div
-        className="grid grid-cols-2 xs:grid-cols-4 sm:grid-cols-4 gap-2"
+        className="grid grid-cols-2 sm:grid-cols-4 gap-2.5"
         role="group"
         aria-label={config.chipsLabel}
       >
@@ -673,13 +668,11 @@ export function EstimateCalculator({
               aria-pressed={active}
               className={cn(
                 darkCard(active),
-                "flex flex-col items-center justify-center gap-1 py-2.5 px-1 text-center",
+                "flex flex-col items-center justify-center gap-1.5 py-4 px-2 min-h-[68px] text-center",
               )}
             >
-              <Icon
-                className={cn("h-4 w-4", active ? "text-accent-legible" : "text-inverse-muted")}
-              />
-              <span className="text-[8px] tracking-widest uppercase text-inverse-foreground leading-tight">
+              <Icon className={cn("h-5 w-5", active ? "text-accent-legible" : "text-inverse-muted")} />
+              <span className="text-[11.5px] tracking-[0.08em] uppercase text-inverse-foreground leading-tight">
                 {chip.label}
               </span>
             </button>
@@ -689,13 +682,11 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Finish level secondary row - options tied to effectiveProject */
+  /* Step 5 - Finish level (options tied to effectiveProject) */
   const finishRow = (
-    <div className="flex-shrink-0 mt-3">
-      <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-2">
-        FINISH LEVEL
-      </p>
-      <div className="flex gap-1.5">
+    <div className="mt-5">
+      <p className={stepLabel}>5 &middot; Finish level</p>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {availFinish.map((level) => {
           const active = finish === level;
           return (
@@ -706,10 +697,10 @@ export function EstimateCalculator({
               data-testid={`calc-finish-${level}`}
               aria-pressed={active}
               className={cn(
-                "flex-1 py-1.5 rounded-md border text-[10px] font-normal transition-all duration-200",
+                "rounded-md border text-[13.5px] py-3 min-h-[48px] transition-all duration-200",
                 active
                   ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
-                  : "bg-inverse-foreground/[0.04] border-inverse-foreground/[0.10] text-inverse-muted hover-elevate",
+                  : "bg-inverse-foreground/[0.05] border-inverse-foreground/[0.12] text-inverse-muted hover-elevate",
               )}
             >
               {FINISH_LABELS[level]}
@@ -720,90 +711,85 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* CALCULATE MY COST button - always this label; result scrolls into view below */
+  /* Primary CTA - single action before an estimate exists */
   const ctaButton = (
-    <div className="flex-shrink-0 mt-3">
+    <div className="mt-7">
       <Button
         onClick={handleCalculate}
         data-testid="button-calculate"
-        className="w-full bg-inverse-foreground text-inverse tracking-[0.14em] text-[11px] uppercase font-normal"
+        className="w-full h-14 bg-inverse-foreground text-inverse hover:bg-inverse-foreground/90 tracking-[0.14em] text-[14px] uppercase font-normal"
       >
-        CALCULATE MY COST
+        Calculate My Cost
       </Button>
     </div>
   );
 
-  /* Inline result panel - expands below CTA; inputs remain visible above */
+  /* Result panel - shown after Calculate; inputs stay above for live edits */
   const resultPanel = (
     <div
       ref={resultRef}
       className={cn(
-        "mt-4 transition-all duration-300",
+        "transition-all duration-300",
         showResult
-          ? "opacity-100 pointer-events-auto"
+          ? "opacity-100 pointer-events-auto mt-7"
           : "opacity-0 pointer-events-none h-0 overflow-hidden mt-0",
       )}
       aria-live="polite"
       aria-atomic="true"
     >
       {result ? (
-        <div className="space-y-3 border-t border-inverse-foreground/10 pt-4">
+        <div className="space-y-5 border-t border-inverse-foreground/15 pt-6">
           {/* Price range */}
           <div>
-            <p className="text-[9px] tracking-[0.18em] uppercase text-inverse-muted mb-1.5">
-              Planning range
+            <p className="text-[12px] tracking-[0.14em] uppercase text-inverse-muted mb-2">
+              Your planning range
             </p>
             <div
-              className="brc-display-num tabular-nums leading-none text-inverse-foreground text-[clamp(26px,6.5vw,44px)]"
+              className="brc-display-num tabular-nums leading-none text-inverse-foreground text-[clamp(32px,8vw,52px)]"
               data-testid="estimate-range"
             >
               <AnimatedPrice value={result.priceLow} />
-              <span className="text-inverse-muted/60 mx-1 text-lg">to</span>
+              <span className="text-inverse-muted/60 mx-2 text-xl">to</span>
               <AnimatedPrice value={result.priceHigh} />
             </div>
+            <p className="mt-2.5 text-[14px] text-inverse-muted">
+              Est. {result.roi}% ROI based on Boise market data.
+            </p>
           </div>
 
-          {/* ROI */}
-          <p className="text-[11px] text-inverse-muted">
-            Est. {result.roi}% ROI based on Boise market data.
-          </p>
-
           {/* Scope accordion */}
-          <div>
+          <div className="border-t border-inverse-foreground/10 pt-4">
             <button
               type="button"
               onClick={() => setScopeOpen((p) => !p)}
-              className="flex w-full items-center justify-between text-left py-0.5"
+              className="flex w-full items-center justify-between text-left"
               data-testid="button-toggle-scope"
               aria-expanded={scopeOpen}
             >
-              <span className="text-[9px] tracking-widest uppercase text-inverse-muted">
+              <span className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground">
                 What&apos;s typically included ({result.included.length})
               </span>
               <ChevronDown
-                className={cn(
-                  "h-3.5 w-3.5 text-inverse-muted transition-transform",
-                  scopeOpen && "rotate-180",
-                )}
+                className={cn("h-4 w-4 text-inverse-muted transition-transform", scopeOpen && "rotate-180")}
               />
             </button>
             {scopeOpen && (
-              <div className="pt-2 space-y-1.5">
+              <div className="pt-3 space-y-2">
                 {result.included.map((item, i) => (
                   <div
                     key={i}
-                    className="flex items-start gap-2 text-[10px] text-inverse-muted leading-snug"
+                    className="flex items-start gap-2.5 text-[13.5px] text-inverse-muted leading-snug"
                     data-testid={`included-item-${i}`}
                   >
-                    <Check className="h-2.5 w-2.5 flex-shrink-0 mt-0.5 text-accent-legible" />
+                    <Check className="h-3.5 w-3.5 flex-shrink-0 mt-0.5 text-accent-legible" />
                     {item}
                   </div>
                 ))}
-                <p className="text-[9px] text-inverse-muted/70 pt-1 leading-relaxed">
+                <p className="text-[12px] text-inverse-muted/70 pt-1.5 leading-relaxed">
                   {INCLUDED_SCOPE_NOTE}
                 </p>
                 {effectiveProject === "kitchen" && (
-                  <p className="text-[9px] text-inverse-muted/70 leading-relaxed">
+                  <p className="text-[12px] text-inverse-muted/70 leading-relaxed">
                     {APPLIANCE_DISCLAIMER}
                   </p>
                 )}
@@ -816,36 +802,46 @@ export function EstimateCalculator({
             <button
               type="button"
               onClick={() => setLegalOpen((p) => !p)}
-              className="flex items-center gap-1 text-[9px] text-inverse-muted/60 hover:text-inverse-muted transition-colors"
+              className="flex items-center gap-1.5 text-[12px] text-inverse-muted/70 hover:text-inverse-muted transition-colors"
               aria-expanded={legalOpen}
             >
               Why a range, not a fixed price?
-              <ChevronDown className={cn("h-3 w-3 transition-transform", legalOpen && "rotate-180")} />
+              <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", legalOpen && "rotate-180")} />
             </button>
             {legalOpen && (
-              <p className="text-[9px] text-inverse-muted/70 leading-relaxed mt-1.5">
-                Planning estimate only - not a proposal, bid, or guaranteed cost. Ranges
-                reflect project type, size, location, and finish assumptions. Your
-                consultation delivers a detailed evaluation tailored to your home.
+              <p className="text-[12px] text-inverse-muted/70 leading-relaxed mt-2">
+                Planning estimate only, not a proposal, bid, or guaranteed cost. Ranges reflect
+                project type, size, location, and finish assumptions. Your consultation delivers a
+                detailed evaluation tailored to your home.
               </p>
             )}
           </div>
 
-          {/* Book CTA inside result panel */}
-          <Button
-            onClick={handleBookVisit}
-            data-testid="button-book-visit"
-            variant="outline"
-            className="w-full border-inverse-foreground/30 text-inverse-foreground hover:bg-inverse-foreground/10 text-[10px] tracking-[0.12em] uppercase"
-          >
-            Book a Free Visit
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Button>
+          {/* Two-action flow: adjust selections, or book the visit (recommended) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleEditEstimate}
+              data-testid="button-edit-estimate"
+              className="h-12 order-2 sm:order-1 border-inverse-foreground/30 text-inverse-foreground hover:bg-inverse-foreground/10 text-[13px] tracking-[0.1em] uppercase"
+            >
+              Edit Estimate
+            </Button>
+            <Button
+              onClick={handleBookVisit}
+              data-testid="button-book-visit"
+              className="h-12 order-1 sm:order-2 bg-inverse-foreground text-inverse hover:bg-inverse-foreground/90 text-[13px] tracking-[0.1em] uppercase"
+            >
+              Book Free Visit
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       ) : (
         showResult && (
-          <p className="text-[12px] text-inverse-muted border-t border-inverse-foreground/10 pt-4">
-            Select a project type and subtype, then tap Calculate.
+          <p className="text-[14px] text-inverse-muted border-t border-inverse-foreground/15 pt-6">
+            Choose a project and layout, then tap Calculate.
           </p>
         )
       )}
@@ -856,53 +852,41 @@ export function EstimateCalculator({
      LAYOUTS
   ══════════════════════════════ */
 
-  /* inModal: compact layout without full-viewport constraint */
+  /* Ordered input flow. Size / upgrades / finish reveal once a layout is chosen
+     so the form grows naturally (no dead space, minimal scrolling). */
+  const flow = (
+    <>
+      {intro}
+      {projectGrid}
+      {subtypeGrid}
+      {subtype && (
+        <>
+          {sizeGrid}
+          {chipsRow}
+          {finishRow}
+        </>
+      )}
+      {!showResult && ctaButton}
+      {resultPanel}
+    </>
+  );
+
+  /* inModal: compact card without full-viewport constraint */
   if (inModal) {
     return (
-      <div className="bg-inverse text-inverse-foreground rounded-lg p-5 flex flex-col">
-        {tabStrip}
-        {headline}
-        {subtypeGrid}
-        {chipsRow}
-        {finishRow}
-        {ctaButton}
-        {resultPanel}
+      <div className="bg-inverse text-inverse-foreground rounded-lg p-5 sm:p-6">
+        {flow}
       </div>
     );
   }
 
-  /* Full page: single-screen dark section; result expands below CTA */
+  /* Full page: dark section that sizes to its content (no forced viewport height,
+     no footer banner, no dead space below the form). */
   return (
-    <Section
-      id="calculator"
-      variant="inverse"
-      spacing="none"
-      divider
-      style={{ minHeight: "100dvh" } as React.CSSProperties}
-      className="flex flex-col"
-    >
-      <div className="container px-4 sm:px-6 pt-16 pb-4 flex-1 flex flex-col">
-        {tabStrip}
-        {headline}
-
-        {/* Controls - always visible */}
-        {subtypeGrid}
-        {chipsRow}
-        {finishRow}
-        {ctaButton}
-
-        {/* Result panel - expands below CTA after Calculate is clicked */}
-        {resultPanel}
-
-        {/* Bottom spacer so content doesn't crowd the footer strip */}
-        <div className="flex-1 min-h-4" />
+    <Section id="calculator" variant="inverse" divider className="scroll-mt-16">
+      <div className="container px-4 sm:px-6">
+        <div className="mx-auto w-full max-w-3xl">{flow}</div>
       </div>
-
-      <FooterStrip
-        activeProject={activeProject}
-        footerAccent={config.footerAccent}
-        onConsultClick={handleBookVisit}
-      />
     </Section>
   );
 }
