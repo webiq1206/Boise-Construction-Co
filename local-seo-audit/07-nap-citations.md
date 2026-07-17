@@ -23,7 +23,7 @@
 
 Live search verification (June 10, 2026) found the retired `(208) 405-8425` number is now the number search engines and AI assistants associate with the business - a synthesized answer literally reported "(208) 477-1169 is not associated with Boise Remodeling Co. in available business records. The primary contact number is (208) 405-8425." This is the exact entity-corruption failure this audit exists to prevent.
 
-1. **ProMatcher** (promatcher.com/profile/BoiseRemodelingCo): `2283 N Coopers Hawk Ave, Lake Fork, ID 83635`, phone `208-405-8425`, owner name "Jared Brost". Lake Fork is ~100 miles north of the service area. Publishes a residential address; anchors the entity to the wrong geography.
+1. **ProMatcher** (promatcher.com/profile/BoiseRemodelingCo): `2283 N Coopers Hawk Ave, Lake Fork, ID 83635`, phone `208-405-8425`, owner name "the owner". Lake Fork is ~100 miles north of the service area. Publishes a residential address; anchors the entity to the wrong geography.
 2. **MapQuest** (mapquest.com/us/idaho/boise-remodeling-co-519905114): "Boise, ID 83701" + `(208) 405-8425` + the correct website URL - so the wrong phone is directly tied to boiseremodeling.co. Photo is served from a Yelp CDN, indicating MapQuest syndicated this from a Yelp listing.
 3. **Yelp (inferred)**: an unclaimed/legacy Yelp listing with the old number is the likely upstream source of the MapQuest record.
 

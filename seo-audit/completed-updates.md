@@ -18,10 +18,10 @@ Implemented every remaining audit item that does not require external/owner data
   earlier pass had briefly wired named authorship + an author-bio block; that was fully reverted.)
 - **After:** Article schema emits an **Organization** author on all 79 posts + 26 guides
   (`author: { @type: Organization, name: "Boise Remodeling Co" }`, verified). Byline reads
-  "Boise Remodeling Co" linked to `/about`. The About page "Founder / Jared Brost" section was
+  "Boise Remodeling Co" linked to `/about`. The About page "Founder / the owner" section was
   replaced with an "Our commitment / one accountable team" company block. `BUSINESS_INFO.founderName`
   emptied so the Organization schema omits the `founder` Person entity (verified absent). All
-  Jared/Brost mentions removed from the About page, guides, blog, `llms.txt`, and the review-outreach
+  owner-name mentions removed from the About page, guides, blog, `llms.txt`, and the review-outreach
   / GBP-plan templates. (The only remaining reference is the private admin-login email in
   `lib/auth.ts`, which is a backend auth credential, not site content — left intact so admin access
   is not broken.)
@@ -40,7 +40,7 @@ Implemented every remaining audit item that does not require external/owner data
 
 ### 7. Refreshed `llms.txt`
 **File:** `public/llms.txt`. Added the `/services` hub + explicit service URLs, an "About the
-company" block naming founder/author Jared Brost, and bumped the date to 2026-07-10.
+company" block naming founder/author the owner, and bumped the date to 2026-07-10.
 
 ### Performance evidence (partial — PSI field data pending)
 PSI API quota was exhausted at audit time, so a throttled Lighthouse score could not be captured
@@ -92,7 +92,7 @@ review/GBP/credential items that require real-world data (not fabricated).
 - **GBP linkage (High).** Set `NEXT_PUBLIC_GBP_URL` / `NEXT_PUBLIC_GBP_REVIEW_URL` once confirmed.
 - **License/credential (High).** Replace `licenses: ['License details available upon request']`
   with a real registration/bond/insurer, or state bond/insurance concretely.
-- **Named-expert authorship (Medium).** Attribute flagship guides to Jared Brost with a visible bio.
+- **Named-expert authorship (Medium).** Attribute flagship guides to the owner with a visible bio.
 
 Build: `next build` clean; em-dash guard passes.
 

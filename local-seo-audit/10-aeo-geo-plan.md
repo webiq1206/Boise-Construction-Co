@@ -29,7 +29,7 @@ Generative engines cite pages that contain facts unavailable elsewhere. Current 
 2. **Permit specifics** - expand permit-flow resource with current fee schedules and review timelines per office. Cite city/county sources.
 3. **Boise ADU ordinance explainer** - new pillar; the ordinance facts (size caps, occupancy rules) are public but poorly synthesized anywhere.
 4. **Neighborhood housing-stock knowledge** - North End historic district remodel rules, Bench mid-century layouts. The 6 neighborhood guides are the right asset at 4x current depth.
-5. **Named human expertise** - engines weight attributed content; Person author (Jared Brost) on guides (11-eeat-audit.md).
+5. **Named human expertise** - engines weight attributed content; Person author (the owner) on guides (11-eeat-audit.md).
 
 **Entity coverage for GEO** (machine-readable identity): canonical NAP everywhere + GBP/Bing/Apple live + `sameAs` graph + Wikipedia-disambiguated `areaServed` + `knowsAbout` (09-schema-plan.md). An engine answering "remodeling contractor in Meridian Idaho" must find one consistent entity, not the current ProMatcher contradiction.
 

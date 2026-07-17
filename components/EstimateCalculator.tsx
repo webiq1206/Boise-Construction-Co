@@ -720,6 +720,11 @@ export function EstimateCalculator({
             <p className="mt-2.5 text-[14px] text-inverse-muted">
               Est. {result.roi}% ROI based on Boise market data.
             </p>
+            <p className="mt-2.5 text-[12.5px] text-inverse-muted/80 leading-relaxed">
+              This is a ballpark planning range, not a quote or bid. Actual cost depends on your
+              home, selections, and site conditions. Your free in-home visit provides an exact,
+              written price.
+            </p>
           </div>
 
           {/* Scope accordion */}

@@ -8,7 +8,7 @@ Sitewide EEAT score: **4.2/10** - the lowest non-GBP score in the audit. The sit
 
 ## Expertise - 4/10
 - All content attributed to the Organization; no human expert exists anywhere on the site.
-- **Fix (implemented this pass)**: founder section on /about (`#team` anchor): Jared Brost, role, years in trade, photo placeholder, 2-3 sentence bio. Wire `BUSINESS_INFO.founderName` → Organization `founder` schema. Then attribute expanded guides to him via the existing Article Person-author plumbing.
+- **Fix (implemented this pass)**: founder section on /about (`#team` anchor): the owner, role, years in trade, photo placeholder, 2-3 sentence bio. Wire `BUSINESS_INFO.founderName` → Organization `founder` schema. Then attribute expanded guides to him via the existing Article Person-author plumbing.
 - Owner to supply: real bio facts, headshot, any trade credentials. Do not fabricate - ship structure with accurate minimal facts now, enrich later.
 
 ## Authoritativeness - 3/10

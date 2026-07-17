@@ -280,7 +280,7 @@ for (const r of rows) {
           content: 6,
           eeat: 3,
           priority: 'Critical',
-          actions: 'Add founder (Jared Brost) bio + photo, team section, license/insurance specifics, year-by-year history; this page gates sitewide EEAT',
+          actions: 'Add founder (the owner) bio + photo, team section, license/insurance specifics, year-by-year history; this page gates sitewide EEAT',
         },
         '/areas': {
           primaryKeyword: 'Remodeling Service Areas Treasure Valley',

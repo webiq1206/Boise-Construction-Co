@@ -26,10 +26,10 @@ All 8 cities have stable Wikipedia entries.
 
 ## Fix 3 - Founder Person (implemented this pass)
 
-`BUSINESS_INFO.founderName = ''` gates the founder entity off. Owner Jared Brost is already publicly associated with the business (permit records, ProMatcher). Anonymity provides zero privacy and costs EEAT. Set `founderName: 'Jared Brost'` → emits:
+`BUSINESS_INFO.founderName = ''` gates the founder entity off. Owner the owner is already publicly associated with the business (permit records, ProMatcher). Anonymity provides zero privacy and costs EEAT. Set `founderName: 'the owner'` → emits:
 
 ```json
-"founder": { "@type": "Person", "name": "Jared Brost", "url": "https://boiseremodeling.co/about#team" }
+"founder": { "@type": "Person", "name": "the owner", "url": "https://boiseremodeling.co/about#team" }
 ```
 Requires the matching on-page `/about#team` section (see 11-eeat-audit.md - implemented together so schema and page agree).
 

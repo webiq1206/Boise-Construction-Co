@@ -29,7 +29,7 @@ This site is an inverted pyramid: a technically excellent, schema-rich, well-arc
 - **All 13 city/neighborhood guides expanded ~2x** with hand-written local-housing-stock content
 - **Server-rendered 2026 cost bands** on 5 service pages + 40 city-service pages + city-level cost FAQs (the estimator's prices were invisible to crawlers/AI)
 - **Service FAQs 3 → 8-9** per service from the AEO question inventory
-- **Founder entity**: Jared Brost on /about#team + Organization `founder` schema
+- **Founder entity**: the owner on /about#team + Organization `founder` schema
 - **Schema fixes**: geo coordinates corrected (Kuna → Meridian, was contradicting the NAP), Wikipedia `sameAs` on all 8 areaServed cities, `knowsAbout` topical claims
 - **Sitemap fix**: 4 noindexed doorway pages removed (sitemap now 163 URLs, consistent)
 - **Homepage retitled**: now targets "remodeling contractor in Boise, ID" instead of nothing

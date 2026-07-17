@@ -19,7 +19,7 @@ These three caps depress every URL regardless of template quality. Fixing them m
 The Google Business Profile is created but unverified/suspended. Until it is live there is no profile for any page to align with, no GBP URL in `BUSINESS_INFO.sameAs` (`lib/seo.ts`), and no entity reconciliation between the website and Maps. **Fix: 02-gbp-plan.md.** Once verified and linked, rescore to 7+, with city-service pages aligned to GBP services/areas.
 
 ### EEAT = 4 sitewide (3 on /about)
-- No named founder or team anywhere: `BUSINESS_INFO.founderName = ''`, so the `founder` Person entity is gated off in `generateOrganizationSchema()` (`lib/schema.ts`). Public permit records already associate Jared Brost with the business, so anonymity gains nothing.
+- No named founder or team anywhere: `BUSINESS_INFO.founderName = ''`, so the `founder` Person entity is gated off in `generateOrganizationSchema()` (`lib/schema.ts`). Public permit records already associate the owner with the business, so anonymity gains nothing.
 - `licenses: ['License details available upon request']` - no license number displayed.
 - `rating: 0, reviewCount: 0` - `aggregateRating` gated off in both LocalBusiness and Review schema.
 - 4 testimonials, undated, first names + last initial only.

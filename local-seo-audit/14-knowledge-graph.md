@@ -7,7 +7,7 @@ graph TD
     Org["Organization: Boise Remodeling Co (#organization)"]
     LB["LocalBusiness / HomeAndConstructionBusiness (#localbusiness)"]
     Site["WebSite (#website)"]
-    Founder["Person: Jared Brost (NEW - this pass)"]
+    Founder["Person: the owner (NEW - this pass)"]
     Cred["Credential: ID contractor registration (MISSING - owner)"]
     GBP["GBP listing (MISSING - unverified)"]
 

@@ -324,7 +324,7 @@ Upload in this order. Rename files before uploading (Google reads filenames). Ca
 | 1 | Logo (square, 720px or larger) | boise-remodeling-co-logo.jpg |
 | 2 | Cover photo (landscape, 1200x900 or larger) | design-build-remodeling-treasure-valley-cover.jpg |
 | 3-12 | Project photos (10+, before/after) | kitchen-remodel-boise-north-end-after.jpg |
-| 13 | Team or founder photo | jared-brost-project-manager-boise.jpg |
+| 13 | Team or founder photo | team-project-manager-boise.jpg |
 | 14 | Work-in-progress (dust barriers, floor protection) | job-site-protection-daily-cleanup.jpg |
 | 15 | Branded vehicle or signage | boise-remodeling-co-vehicle.jpg |
 
@@ -461,7 +461,7 @@ Leave a review: [paste your Google review link]
 
 Questions? Call or text (208) 477-1169 anytime.
 
-- Jared  
+- the owner  
 Boise Remodeling Co  
 (208) 477-1169  
 boiseremodeling.co
@@ -482,7 +482,7 @@ Just a gentle follow-up from your [city] [project type]. If you are willing to s
 
 Either way, thank you again for choosing Boise Remodeling Co.
 
-- Jared  
+- the owner  
 (208) 477-1169
 
 ---
@@ -491,7 +491,7 @@ Either way, thank you again for choosing Boise Remodeling Co.
 
 **Positive review template:**
 
-> Thank you, [Name]. We enjoyed your [city] [project type] - especially [something specific they mentioned]. Glad the weekly updates and written scope kept things clear. - Jared, Boise Remodeling Co
+> Thank you, [Name]. We enjoyed your [city] [project type] - especially [something specific they mentioned]. Glad the weekly updates and written scope kept things clear. - the owner, Boise Remodeling Co
 
 **Negative review:** Respond once, factually, offer to resolve offline. Never argue publicly.
 
