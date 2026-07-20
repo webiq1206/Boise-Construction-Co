@@ -262,6 +262,49 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
   },
 };
 
+/** Budget ranges shown in the gate form, calibrated per project type. */
+const BUDGET_RANGES: Record<ProjectType, string[]> = {
+  kitchen: [
+    "Under $25,000",
+    "$25,000 - $50,000",
+    "$50,000 - $100,000",
+    "$100,000 - $150,000",
+    "Over $150,000",
+  ],
+  bathroom: [
+    "Under $15,000",
+    "$15,000 - $30,000",
+    "$30,000 - $60,000",
+    "$60,000 - $100,000",
+    "Over $100,000",
+  ],
+  "whole-home": [
+    "Under $100,000",
+    "$100,000 - $200,000",
+    "$200,000 - $400,000",
+    "$400,000 - $600,000",
+    "Over $600,000",
+  ],
+  addition: [
+    "Under $75,000",
+    "$75,000 - $150,000",
+    "$150,000 - $300,000",
+    "Over $300,000",
+  ],
+  adu: [
+    "Under $150,000",
+    "$150,000 - $250,000",
+    "$250,000 - $400,000",
+    "Over $400,000",
+  ],
+  basement: [
+    "Under $40,000",
+    "$40,000 - $75,000",
+    "$75,000 - $150,000",
+    "Over $150,000",
+  ],
+};
+
 const PROJECT_TYPE_ORDER: ProjectType[] = [
   "kitchen", "bathroom", "whole-home", "addition", "adu", "basement",
 ];
@@ -374,6 +417,7 @@ export function EstimateCalculator({
   const [gatePhone,     setGatePhone]     = useState("");
   const [gateLoading,   setGateLoading]   = useState(false);
   const [gateError,     setGateError]     = useState<string | null>(null);
+  const [gateBudget,    setGateBudget]    = useState("");
   /* Guards the estimator-completion conversion event so it fires at most once
      per mount even if the visitor recalculates after editing. */
   const engagementFired   = useRef(false);
@@ -433,6 +477,11 @@ export function EstimateCalculator({
       setGateSubmitted(true);
     }
   }, []);
+
+  /* Reset budget selection when the project type changes (ranges differ per project). */
+  useEffect(() => {
+    setGateBudget("");
+  }, [effectiveProject]);
 
   /* ── Handlers ── */
 
@@ -518,6 +567,10 @@ export function EstimateCalculator({
       setGateError("Please enter a valid 10-digit phone number.");
       return;
     }
+    if (!gateBudget) {
+      setGateError("Please select your desired budget range.");
+      return;
+    }
 
     setGateLoading(true);
     setGateError(null);
@@ -526,6 +579,7 @@ export function EstimateCalculator({
       name: gateName.trim(),
       email: gateEmail.trim(),
       phone: gatePhone.trim(),
+      budget: gateBudget,
       projectType: effectiveProject,
       estimate: {
         project: effectiveProject,
@@ -1002,6 +1056,22 @@ export function EstimateCalculator({
             data-testid="gate-input-phone"
             autoComplete="tel"
           />
+          <select
+            value={gateBudget}
+            onChange={(e) => setGateBudget(e.target.value)}
+            required
+            className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground outline-none focus:border-inverse-foreground/50 transition-colors appearance-none cursor-pointer"
+            data-testid="gate-select-budget"
+          >
+            <option value="" disabled className="bg-neutral-900 text-inverse-muted">
+              Desired budget range
+            </option>
+            {BUDGET_RANGES[effectiveProject].map((range) => (
+              <option key={range} value={range} className="bg-neutral-900 text-inverse-foreground">
+                {range}
+              </option>
+            ))}
+          </select>
           {gateError && (
             <p className="text-[12px] text-red-400">{gateError}</p>
           )}

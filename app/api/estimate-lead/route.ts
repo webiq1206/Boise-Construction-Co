@@ -54,6 +54,7 @@ const bodySchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   phone: z.string().min(10),
+  budget: z.string().min(1).optional(),
   projectType: z.string().min(1),
   estimate: estimateSchema,
 });
@@ -120,7 +121,9 @@ export async function POST(request: NextRequest) {
           zip: "",
           address: "",
           projectType: data.projectType,
-          message: "Submitted via estimate gate",
+          message: data.budget
+            ? `Submitted via estimate gate | Budget: ${data.budget}`
+            : "Submitted via estimate gate",
           estimateProject: estimate?.project || null,
           estimateFinish: estimate?.finish || null,
           estimateLow: estimate?.priceLow?.toString() || null,
