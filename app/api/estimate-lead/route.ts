@@ -146,6 +146,7 @@ export async function POST(request: NextRequest) {
         email: data.email,
         address: "",
         projectType: data.projectType,
+        budget: data.budget,
       };
 
       const adminHtml = buildAdminEmailHtml(lead, estimate);

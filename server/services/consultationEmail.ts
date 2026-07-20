@@ -35,6 +35,7 @@ export interface LeadContact {
   address: string;
   zip?: string;
   projectType: string;
+  budget?: string;
   message?: string;
 }
 
@@ -266,6 +267,7 @@ export function buildAdminEmailHtml(
           <tr><td style="${LABEL_CELL}">Email</td><td style="${CELL}"><a href="mailto:${escapeHtml(lead.email)}" style="color:${EMAIL_BRAND.accent};text-decoration:none;">${escapeHtml(lead.email)}</a></td></tr>
           <tr><td style="${LABEL_CELL}">Address</td><td style="${VALUE_CELL}">${escapeHtml(lead.address)}${lead.zip ? ` ${escapeHtml(lead.zip)}` : ""}</td></tr>
           <tr><td style="${LABEL_CELL}">Project</td><td style="${VALUE_CELL}">${escapeHtml(projectLabel)}</td></tr>
+          ${lead.budget ? `<tr><td style="${LABEL_CELL}">Desired budget</td><td style="${VALUE_CELL};font-weight:600;">${escapeHtml(lead.budget)}</td></tr>` : ""}
         </table>
       </div>
 
@@ -299,10 +301,15 @@ export function buildCustomerEmailHtml(
   const firstName = firstNameOf(lead.name);
   const projectLabel = estimate ? PROJECT_LABELS[estimate.project].label : lead.projectType;
 
+  const budgetNote = lead.budget
+    ? `<p style="margin:16px 0;color:${EMAIL_BRAND.text};line-height:1.6;">Your stated budget is <strong>${escapeHtml(lead.budget)}</strong>. We will make sure our recommendations fit that range when we connect.</p>`
+    : "";
+
   const content = estimate
     ? `
       <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">Thanks, ${escapeHtml(firstName)}. Here is the planning range you built, saved so you have it in writing.</p>
       ${buildEstimateSectionsHtml(estimate)}
+      ${budgetNote}
       <p style="color:${EMAIL_BRAND.text};line-height:1.6;">We will reach out within one business day to schedule your free in-home visit, where we confirm the scope and give you a firm number. In the meantime, reply to this email or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> with any questions.</p>
       <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The Boise Remodeling Co team</p>
     `
