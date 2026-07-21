@@ -30,6 +30,7 @@ import { CTA_FORM_SEND } from "@/shared/ctaCopy";
 import { CONSULT_BULLETS } from "@/shared/siteContent";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { trackEvent, trackMetaEvent } from "@/lib/analytics";
+import { readStoredPrefill } from "@/lib/leadPrefill";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
   HOUSE_NUMBER_REGEX,
@@ -123,6 +124,17 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
   // profile, falling back to a 5-digit ZIP parsed from the address text.
   const deriveZip = (addr: string) =>
     propertyProfile?.zip?.slice(0, 5) || extractZip(addr) || "";
+
+  // Prefill contact fields for pre-qualified visitors (e.g. a Meta lead-form
+  // click that already captured their name / phone / email) so they don't
+  // re-type what they just entered on Facebook. Address stays blank because the
+  // property lookup needs a full street address, not just a ZIP.
+  useEffect(() => {
+    const pf = readStoredPrefill();
+    if (pf.name) form.setValue("name", pf.name, { shouldValidate: false });
+    if (pf.phone) form.setValue("phone", pf.phone, { shouldValidate: false });
+    if (pf.email) form.setValue("email", pf.email, { shouldValidate: false });
+  }, [form]);
 
   useEffect(() => {
     function loadEstimate() {

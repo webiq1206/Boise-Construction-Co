@@ -29,6 +29,7 @@ import {
   APPLIANCE_DISCLAIMER,
 } from "@/shared/estimateEngine";
 import { trackEvent, trackMetaEvent } from "@/lib/analytics";
+import { applyLeadParams } from "@/lib/leadPrefill";
 
 /* Project-level icons for the project-type card grid. */
 const PROJECT_ICONS: Record<ProjectType, LucideIcon> = {
@@ -471,8 +472,15 @@ export function EstimateCalculator({
     window.dispatchEvent(new CustomEvent("brc_estimate_updated"));
   }, [effectiveProject, finish, sqft, refinements, userRefinementCount]);
 
-  /* Restore gate state from sessionStorage (skip re-gate on return visits). */
+  /* On mount: apply lead-form prefill + gate bypass for pre-qualified traffic
+     (e.g. a Meta Instant Form click that already captured their contact info),
+     then restore gate state for return visits. A pre-qualified visitor skips the
+     gate entirely and sees the range instantly - no re-entering their info. */
   useEffect(() => {
+    const { prefill } = applyLeadParams();
+    if (prefill.name) setGateName(prefill.name);
+    if (prefill.email) setGateEmail(prefill.email);
+    if (prefill.phone) setGatePhone(prefill.phone);
     if (sessionStorage.getItem("brc_gate_passed") === "1") {
       setGateSubmitted(true);
     }
@@ -567,10 +575,8 @@ export function EstimateCalculator({
       setGateError("Please enter a valid 10-digit phone number.");
       return;
     }
-    if (!gateBudget) {
-      setGateError("Please select your desired budget range.");
-      return;
-    }
+    /* Budget is optional: an extra required field before the number is friction
+       and reads as a bait-and-switch. We still capture it when offered. */
 
     setGateLoading(true);
     setGateError(null);
@@ -579,7 +585,8 @@ export function EstimateCalculator({
       name: gateName.trim(),
       email: gateEmail.trim(),
       phone: gatePhone.trim(),
-      budget: gateBudget,
+      /* Omit when blank: the API treats budget as optional but rejects "" */
+      budget: gateBudget || undefined,
       projectType: effectiveProject,
       estimate: {
         project: effectiveProject,
@@ -1059,12 +1066,11 @@ export function EstimateCalculator({
           <select
             value={gateBudget}
             onChange={(e) => setGateBudget(e.target.value)}
-            required
             className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground outline-none focus:border-inverse-foreground/50 transition-colors appearance-none cursor-pointer"
             data-testid="gate-select-budget"
           >
-            <option value="" disabled className="bg-neutral-900 text-inverse-muted">
-              Desired budget range
+            <option value="" className="bg-neutral-900 text-inverse-muted">
+              Desired budget range (optional)
             </option>
             {BUDGET_RANGES[effectiveProject].map((range) => (
               <option key={range} value={range} className="bg-neutral-900 text-inverse-foreground">
