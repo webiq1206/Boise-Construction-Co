@@ -1,19 +1,19 @@
 /**
- * Lead prefill + gate bypass for pre-qualified traffic (e.g. Meta lead-form clicks).
+ * Lead prefill for pre-qualified traffic (e.g. Meta lead-form clicks).
  *
- * When a visitor arrives from a source that ALREADY collected their contact info
- * (a Facebook / Instagram Instant Form), we don't want to ask again. The ad's
- * completion button links here, optionally with the lead's answers as URL params.
- * We:
- *   1. Skip the estimate gate so the price range shows instantly (no re-entry).
- *   2. Prefill the consultation form (name / phone / email) so booking is one tap.
- *   3. Strip any PII params from the visible URL for privacy.
+ * When a visitor arrives from a source that already collected their contact info
+ * (a Facebook / Instagram Instant Form), the ad's completion button links here,
+ * optionally with the lead's answers as URL params. We PREFILL the estimate gate
+ * and the consultation form so they don't re-type what they just entered.
  *
- * Contact info is NOT required to *see* the range (the gate is a lead-capture step),
- * so a pre-qualified visitor can skip straight to the number.
+ * We intentionally do NOT skip the gate. Contact info is always captured (or
+ * confirmed) on-site BEFORE the price range is shown, so a visitor can never see
+ * a number we have no way to follow up on. Prefilling just turns that into a
+ * single tap for people who already gave us their details on Facebook.
+ *
+ * We also strip any PII params from the visible URL for privacy.
  *
  * Example completion-button link:
- *   https://boiseremodeling.co/?src=fb#calculator
  *   https://boiseremodeling.co/?src=fb&name=Jane%20Smith&email=...&phone=...#calculator
  */
 
@@ -35,15 +35,14 @@ const PII_PARAM_KEYS = [
 ];
 
 const STORAGE_PREFILL = "brc_prefill";
-const STORAGE_GATE = "brc_gate_passed";
 const STORAGE_SOURCE = "brc_lead_source";
 
 /**
- * Parse the current URL for a lead source + prefill params, persist them for the
- * forms, and clean PII out of the address bar. Safe to call on every mount.
+ * Parse the current URL for prefill params, persist them for the forms, and
+ * clean PII out of the address bar. Safe to call on every mount.
  */
-export function applyLeadParams(): { skipGate: boolean; prefill: LeadPrefill } {
-  const empty = { skipGate: false, prefill: {} as LeadPrefill };
+export function applyLeadParams(): { prefill: LeadPrefill } {
+  const empty = { prefill: {} as LeadPrefill };
   if (typeof window === "undefined") return empty;
 
   try {
@@ -51,9 +50,6 @@ export function applyLeadParams(): { skipGate: boolean; prefill: LeadPrefill } {
     const p = url.searchParams;
 
     const src = (p.get("src") || p.get("utm_source") || "").toLowerCase();
-    const explicitSkip = p.get("skipgate") === "1" || p.get("prefilled") === "1";
-    const isPrefilledSource = PREFILLED_SOURCES.has(src) || explicitSkip;
-
     const first = (p.get("first_name") || p.get("fname") || "").trim();
     const last = (p.get("last_name") || p.get("lname") || "").trim();
     const name = (p.get("name") || [first, last].filter(Boolean).join(" ")).trim();
@@ -70,13 +66,12 @@ export function applyLeadParams(): { skipGate: boolean; prefill: LeadPrefill } {
     if (Object.keys(prefill).length > 0) {
       sessionStorage.setItem(STORAGE_PREFILL, JSON.stringify(prefill));
     }
-    if (isPrefilledSource) {
-      sessionStorage.setItem(STORAGE_GATE, "1");
-      sessionStorage.setItem(STORAGE_SOURCE, src || "fb");
+    if (PREFILLED_SOURCES.has(src)) {
+      sessionStorage.setItem(STORAGE_SOURCE, src);
     }
 
     // Privacy: never leave a phone/email sitting in the address bar (URLs get
-    // logged, cached, and shared). Keep everything else, including the #calculator hash.
+    // logged, cached, and shared). Keep everything else, incl. the #calculator hash.
     const hadPII = PII_PARAM_KEYS.some((k) => p.has(k));
     if (hadPII) {
       PII_PARAM_KEYS.forEach((k) => p.delete(k));
@@ -85,7 +80,7 @@ export function applyLeadParams(): { skipGate: boolean; prefill: LeadPrefill } {
       window.history.replaceState(window.history.state, "", clean);
     }
 
-    return { skipGate: isPrefilledSource, prefill };
+    return { prefill };
   } catch {
     return empty;
   }

@@ -472,10 +472,10 @@ export function EstimateCalculator({
     window.dispatchEvent(new CustomEvent("brc_estimate_updated"));
   }, [effectiveProject, finish, sqft, refinements, userRefinementCount]);
 
-  /* On mount: apply lead-form prefill + gate bypass for pre-qualified traffic
-     (e.g. a Meta Instant Form click that already captured their contact info),
-     then restore gate state for return visits. A pre-qualified visitor skips the
-     gate entirely and sees the range instantly - no re-entering their info. */
+  /* On mount: prefill the gate for pre-qualified traffic (e.g. a Meta Instant
+     Form click that already captured their info) so it's a single tap, then
+     restore gate state for return visits. We never skip the gate: contact is
+     always captured on-site before the range is revealed. */
   useEffect(() => {
     const { prefill } = applyLeadParams();
     if (prefill.name) setGateName(prefill.name);
