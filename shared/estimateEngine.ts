@@ -602,10 +602,18 @@ export function calculateEstimate(input: EstimateInput, userRefinementCount = 0)
   // user supplies more detail, so a fully-specified estimate is genuinely more
   // precise - not just a higher "detail" score. This is what makes "improve
   // estimate accuracy" real: fewer unknowns, a narrower range.
-  const startBand = (base.high - base.low) / (base.high + base.low);
+  const rawBand = (base.high - base.low) / (base.high + base.low);
+  // Compress the category's natural spread so even a bare estimate reads as a
+  // confident, personalized range - not guesswork. A too-wide range erodes
+  // trust, and an inflated high end scares qualified homeowners off before we
+  // get to talk value. Clamp the starting spread to a sensible maximum.
+  const MAX_START_BAND = 0.28; // starting range never wider than ~1.8x low-to-high
+  const startBand = Math.min(MAX_START_BAND, rawBand * 0.82);
+
   const detailRatio = maxFields > 0 ? Math.min(1, userRefinementCount / maxFields) : 0;
-  const BAND_TIGHTENING = 0.55; // remove up to 55% of the band at full detail
-  const band = startBand * (1 - BAND_TIGHTENING * detailRatio);
+  const BAND_TIGHTENING = 0.6; // remove up to 60% of the band at full detail
+  const MIN_BAND = 0.1; // keep an honest band (~1.2x); never a false single number
+  const band = Math.max(MIN_BAND, startBand * (1 - BAND_TIGHTENING * detailRatio));
 
   const priceLow = Math.round((center * (1 - band)) / 1000) * 1000;
   const priceHigh = Math.round((center * (1 + band)) / 1000) * 1000;

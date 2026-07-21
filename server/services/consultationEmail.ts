@@ -302,7 +302,7 @@ export function buildCustomerEmailHtml(
   const projectLabel = estimate ? PROJECT_LABELS[estimate.project].label : lead.projectType;
 
   const budgetNote = lead.budget
-    ? `<p style="margin:16px 0;color:${EMAIL_BRAND.text};line-height:1.6;">Your stated budget is <strong>${escapeHtml(lead.budget)}</strong>. We will make sure our recommendations fit that range when we connect.</p>`
+    ? `<p style="margin:16px 0;color:${EMAIL_BRAND.text};line-height:1.6;">Your stated project budget is <strong>${escapeHtml(lead.budget)}</strong>. We will do everything we can to recommend solutions that fit within that budget while helping you achieve the goals you have shared. If your ideal scope runs beyond it, we will focus on the features that matter most to you, talk through phasing the work in stages, and explore materials and design options that stretch your investment further. Our job is to find the best path forward for your home, never to tell you your budget is not enough.</p>`
     : "";
 
   const content = estimate
