@@ -29,7 +29,7 @@ import {
   APPLIANCE_DISCLAIMER,
 } from "@/shared/estimateEngine";
 import { trackEvent, trackMetaEvent } from "@/lib/analytics";
-import { applyLeadParams } from "@/lib/leadPrefill";
+import { applyLeadParams, writeStoredPrefill } from "@/lib/leadPrefill";
 
 /* Project-level icons for the project-type card grid. */
 const PROJECT_ICONS: Record<ProjectType, LucideIcon> = {
@@ -577,6 +577,14 @@ export function EstimateCalculator({
     }
     /* Budget is optional: an extra required field before the number is friction
        and reads as a bait-and-switch. We still capture it when offered. */
+
+    /* Carry the contact info they just entered to the consultation form, so
+       booking a visit is one tap and never asks for name / email / phone again. */
+    writeStoredPrefill({
+      name: gateName.trim(),
+      email: gateEmail.trim(),
+      phone: gatePhone.trim(),
+    });
 
     setGateLoading(true);
     setGateError(null);

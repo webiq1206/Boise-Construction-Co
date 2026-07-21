@@ -96,3 +96,28 @@ export function readStoredPrefill(): LeadPrefill {
     return {};
   }
 }
+
+/** Fired after writeStoredPrefill so already-mounted forms can re-read. */
+export const PREFILL_UPDATED_EVENT = "brc_prefill_updated";
+
+/**
+ * Persist contact info captured on-site (e.g. from the estimate gate) so the
+ * consultation form can prefill it and the visitor never re-types name / email /
+ * phone to book a visit. Merges over any existing prefill (so a zip carried in
+ * from a Facebook link survives), then notifies mounted forms via a DOM event.
+ */
+export function writeStoredPrefill(prefill: LeadPrefill): void {
+  if (typeof window === "undefined") return;
+  try {
+    const next: LeadPrefill = { ...readStoredPrefill() };
+    if (prefill.name) next.name = prefill.name;
+    if (prefill.email) next.email = prefill.email;
+    if (prefill.phone) next.phone = prefill.phone;
+    if (prefill.zip) next.zip = prefill.zip;
+    if (Object.keys(next).length === 0) return;
+    sessionStorage.setItem(STORAGE_PREFILL, JSON.stringify(next));
+    window.dispatchEvent(new CustomEvent(PREFILL_UPDATED_EVENT));
+  } catch {
+    /* sessionStorage unavailable (private mode / quota) - non-fatal */
+  }
+}

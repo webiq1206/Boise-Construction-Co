@@ -30,7 +30,7 @@ import { CTA_FORM_SEND } from "@/shared/ctaCopy";
 import { CONSULT_BULLETS } from "@/shared/siteContent";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { trackEvent, trackMetaEvent } from "@/lib/analytics";
-import { readStoredPrefill } from "@/lib/leadPrefill";
+import { readStoredPrefill, PREFILL_UPDATED_EVENT } from "@/lib/leadPrefill";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
   HOUSE_NUMBER_REGEX,
@@ -125,15 +125,27 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
   const deriveZip = (addr: string) =>
     propertyProfile?.zip?.slice(0, 5) || extractZip(addr) || "";
 
-  // Prefill contact fields for pre-qualified visitors (e.g. a Meta lead-form
-  // click that already captured their name / phone / email) so they don't
-  // re-type what they just entered on Facebook. Address stays blank because the
-  // property lookup needs a full street address, not just a ZIP.
+  // Prefill contact fields so a visitor never re-types name / phone / email.
+  // Two sources feed this: a Meta lead-form click that arrived with the info in
+  // the URL, and the estimate gate on this same page (which writes the info it
+  // just captured and dispatches PREFILL_UPDATED_EVENT). We fill only fields the
+  // visitor hasn't touched, so an event never clobbers something they edited.
+  // Address stays blank because the property lookup needs a full street address.
   useEffect(() => {
-    const pf = readStoredPrefill();
-    if (pf.name) form.setValue("name", pf.name, { shouldValidate: false });
-    if (pf.phone) form.setValue("phone", pf.phone, { shouldValidate: false });
-    if (pf.email) form.setValue("email", pf.email, { shouldValidate: false });
+    function applyPrefill() {
+      const pf = readStoredPrefill();
+      const fillIfEmpty = (field: "name" | "phone" | "email", value?: string) => {
+        if (value && !form.getValues(field)) {
+          form.setValue(field, value, { shouldValidate: false });
+        }
+      };
+      fillIfEmpty("name", pf.name);
+      fillIfEmpty("phone", pf.phone);
+      fillIfEmpty("email", pf.email);
+    }
+    applyPrefill();
+    window.addEventListener(PREFILL_UPDATED_EVENT, applyPrefill);
+    return () => window.removeEventListener(PREFILL_UPDATED_EVENT, applyPrefill);
   }, [form]);
 
   useEffect(() => {
