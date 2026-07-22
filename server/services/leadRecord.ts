@@ -92,6 +92,37 @@ export function buildLeadEstimateRecord(est: VerifiedEstimate): LeadEstimateReco
   };
 }
 
+/**
+ * A budget band for the CRM that is never empty.
+ *
+ * The gate asks for a budget but allows it to be skipped, and the consultation
+ * form does not ask at all, so the column was blank on most leads. When the
+ * homeowner did not state one, the estimator's own band is the best available
+ * signal, marked "(est.)" so nobody on the team mistakes a computed range for
+ * something the homeowner actually said. The distinction is also spelled out in
+ * the estimate summary, which records "Stated budget: Not provided".
+ */
+export function resolveBudgetRange(
+  statedBudget: string | undefined,
+  est: VerifiedEstimate | null
+): string | undefined {
+  if (statedBudget && statedBudget.trim()) return statedBudget.trim();
+  if (!est) return undefined;
+  return `${formatUsd(est.priceLow)} - ${formatUsd(est.priceHigh)} (est.)`;
+}
+
+/** Concise statement of what the homeowner wants done, for the goals field. */
+export function buildProjectGoals(est: VerifiedEstimate | null): string | undefined {
+  if (!est) return undefined;
+  const bits = [
+    `${PROJECT_LABELS[est.project].label}${est.layoutLabel ? ` (${est.layoutLabel})` : ""}`,
+    `${est.sqft.toLocaleString("en-US")} sq ft`,
+    `${FINISH_LABELS[est.finish].label} finish`,
+  ];
+  if (est.upgradeLabels?.length) bits.push(`Upgrading: ${est.upgradeLabels.join(", ")}`);
+  return bits.join(" | ");
+}
+
 function section(title: string, lines: string[]): string {
   if (lines.length === 0) return "";
   return `${title}\n${lines.map((l) => `  ${l}`).join("\n")}\n`;

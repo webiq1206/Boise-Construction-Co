@@ -31,7 +31,12 @@ import {
   type EstimateRefinements,
 } from "@/shared/estimateEngine";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
-import { buildLeadEstimateRecord, buildLeadNotes } from "@/server/services/leadRecord";
+import {
+  buildLeadEstimateRecord,
+  buildLeadNotes,
+  resolveBudgetRange,
+  buildProjectGoals,
+} from "@/server/services/leadRecord";
 
 const propertyProfileSchema = z
   .object({
@@ -207,10 +212,11 @@ export async function POST(request: NextRequest) {
       state: (data.propertyProfile as { city?: string; state?: string; zip?: string } | null)?.state || undefined,
       zip: data.zip || (data.propertyProfile as { city?: string; state?: string; zip?: string } | null)?.zip || undefined,
       projectTypes: data.projectType ? [data.projectType] : [],
-      budgetRange: undefined,
+      budgetRange: resolveBudgetRange(undefined, estimate),
       projectScope: estimate
         ? `${PROJECT_LABELS[estimate.project].label} - ${formatUsd(estimate.priceLow)} to ${formatUsd(estimate.priceHigh)} (${estimate.confidence})`
         : undefined,
+      projectGoals: buildProjectGoals(estimate),
       // The homeowner's own words stay in finalNotes; the estimate record goes
       // to estimateSummary, which the dashboard sizes for it (20k vs 2k).
       finalNotes: data.message || undefined,
