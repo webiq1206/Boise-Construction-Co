@@ -66,6 +66,17 @@ export function buildCanonical(path: string): string {
 const BRAND_SUFFIX = 'Boise Remodeling Co';
 
 /**
+ * Site-wide feed discovery. Declared beside the canonical because Next replaces
+ * the whole `alternates` object per page, so a root-only declaration would be
+ * dropped on every page that sets its own canonical.
+ */
+export const FEED_ALTERNATES = {
+  'application/rss+xml': [
+    { url: '/feed.xml', title: 'Boise Remodeling Co | Remodeling Guides and Insights' },
+  ],
+};
+
+/**
  * Remove a trailing "| Boise Remodeling Co" (one or more times) from a title.
  * The root layout template appends the brand exactly once, so child titles
  * must not carry it themselves or it doubles in the rendered <title>.
@@ -89,6 +100,11 @@ const SERVICE_TITLE_OVERRIDES: Record<string, string> = {
   'whole-home-remodel': 'Treasure Valley Whole-Home Remodeling',
   'room-addition': 'Treasure Valley Home Additions',
   adu: 'Treasure Valley ADUs & Guest Houses',
+  // Without an override these fall back to "<name> in the Treasure Valley",
+  // which overruns the title budget and word-truncates to "... in the".
+  'basement-remodel': 'Treasure Valley Basement Remodeling',
+  'outdoor-living': 'Treasure Valley Decks & Outdoor Living',
+  'aging-in-place': 'Aging-in-Place Remodeling in Boise',
 };
 
 export function buildPageMetadata(input: PageMetaInput): Metadata {
@@ -162,7 +178,7 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
   return {
     title,
     description,
-    alternates: { canonical },
+    alternates: { canonical, types: FEED_ALTERNATES },
     ...(input.noindex ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       title,

@@ -8,7 +8,7 @@ import {
   generateFAQSchema,
   generateSpeakableSchema,
 } from "@/lib/schema";
-import { buildCanonical, stripBrandSuffix } from "@/lib/page-metadata";
+import { buildCanonical, stripBrandSuffix, FEED_ALTERNATES } from "@/lib/page-metadata";
 import { generateSafePageTitle } from "@/lib/seo";
 import { BlogPostLayout } from "@/components/marketing/BlogPostLayout";
 import {
@@ -59,6 +59,7 @@ export async function generateMetadata({
     description,
     alternates: {
       canonical: buildCanonical(`/blog/${post.slug}`),
+      types: FEED_ALTERNATES,
     },
     openGraph: {
       title,

@@ -43,6 +43,13 @@ export const metadata: Metadata = {
     "Design-build remodeling for Boise, Meridian, Eagle, Nampa & the Treasure Valley. Clear expectations and budget guidance. Schedule a free in-home consultation.",
   alternates: {
     canonical: buildCanonical("/"),
+    // Setting `alternates` replaces the root declaration, so the feed link has
+    // to be repeated here or the homepage loses feed discovery entirely.
+    types: {
+      "application/rss+xml": [
+        { url: "/feed.xml", title: "Boise Remodeling Co | Remodeling Guides and Insights" },
+      ],
+    },
   },
   openGraph: {
     title: "Boise Remodeling Co | Treasure Valley Design-Build",

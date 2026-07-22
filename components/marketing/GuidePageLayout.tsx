@@ -97,7 +97,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                 quickAnswer={guide.quickAnswer}
                 keyTakeaways={guide.keyTakeaways}
               >
-                {/* The guide itself leads — always fully visible, never collapsed. */}
+                {/* The guide itself leads - always fully visible, never collapsed. */}
                 <SectionedArticle html={contentWithIds} testId="guide-content" forceExpanded />
 
                 {publishedClusters.length > 0 && (

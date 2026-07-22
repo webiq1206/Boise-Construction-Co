@@ -8,7 +8,7 @@ import {
   generateFAQSchema,
   generateSpeakableSchema,
 } from '@/lib/schema';
-import { buildCanonical, stripBrandSuffix } from '@/lib/page-metadata';
+import { buildCanonical, stripBrandSuffix, FEED_ALTERNATES } from '@/lib/page-metadata';
 import { GuidePageLayout } from '@/components/marketing/GuidePageLayout';
 import { getHubBySlug, guidePath } from '@/shared/contentHubs';
 import {
@@ -42,7 +42,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: buildCanonical(guidePath(guide.slug)) },
+    alternates: { canonical: buildCanonical(guidePath(guide.slug)), types: FEED_ALTERNATES },
     openGraph: {
       title,
       description,

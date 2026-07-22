@@ -2,15 +2,16 @@ import { Metadata } from "next";
 import { ObfuscatedEmail } from "@/components/ObfuscatedEmail";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/schema";
-import { buildCanonical } from "@/lib/page-metadata";
+import { buildCanonical, FEED_ALTERNATES } from "@/lib/page-metadata";
 
 const PRIVACY_CANONICAL = buildCanonical("/privacy-policy");
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Boise Remodeling Co privacy policy. How we protect your data when you request remodeling services in Kuna & Boise, Idaho.",
+  description: "Boise Remodeling Co privacy policy. How we protect your data when you request remodeling services across Boise and the Treasure Valley.",
   alternates: {
     canonical: PRIVACY_CANONICAL,
+      types: FEED_ALTERNATES,
   },
   openGraph: {
     title: "Privacy Policy | Boise Remodeling Co",

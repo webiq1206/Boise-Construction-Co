@@ -34,6 +34,14 @@ export const metadata: Metadata = {
   },
   description: `Design-build remodeling for Boise, Meridian, Eagle, Nampa & the Treasure Valley. Clear expectations and budget guidance. Schedule a free in-home consultation.`,
   manifest: '/site.webmanifest',
+  // Feed discovery for readers, aggregators, and AI/answer-engine crawlers.
+  alternates: {
+    types: {
+      'application/rss+xml': [
+        { url: '/feed.xml', title: 'Boise Remodeling Co | Remodeling Guides and Insights' },
+      ],
+    },
+  },
   authors: [{ name: 'Boise Remodeling Co' }],
   creator: 'Boise Remodeling Co',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://boiseremodeling.co'),

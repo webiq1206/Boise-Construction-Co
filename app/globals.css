@@ -362,7 +362,7 @@ html, body {
   font-optical-sizing: auto;
   /* Accent WORDS are the serif grace note AND the brand's sage moment. We use
      the lifted sage (#899F95), not the deep #5D6561, because deep sage fails
-     legibility as text on the charcoal ground — the lifted tone stays AA
+     legibility as text on the charcoal ground - the lifted tone stays AA
      (5.9:1) at any size while reading unmistakably as the same sage family.
      Overrides any text-accent on the same element. */
   color: hsl(var(--accent-legible));
@@ -576,7 +576,7 @@ html, body {
 }
 
 /* ===================================================================
-   Guide callouts — sage-forward tips, key points, checklists, warnings,
+   Guide callouts - sage-forward tips, key points, checklists, warnings,
    and budget snapshots. Opt-in via markup (.callout.<variant>) inside
    .blog-content, so blog posts are unaffected unless they use them.
    =================================================================== */
@@ -613,13 +613,13 @@ html, body {
   transform: rotate(45deg);
 }
 
-/* Tip — lifted sage, soft sage wash */
+/* Tip - lifted sage, soft sage wash */
 .blog-content .callout.tip {
   border-left-color: hsl(var(--accent-legible));
   background: hsl(var(--accent) / 0.07);
 }
 
-/* Key point — deep sage, heavier bar */
+/* Key point - deep sage, heavier bar */
 .blog-content .callout.note {
   border-left-width: 4px;
   border-left-color: hsl(var(--accent));
@@ -633,7 +633,7 @@ html, body {
 }
 .blog-content .callout.cost strong { color: hsl(var(--accent-legible)); font-weight: 500; }
 
-/* Warning / important — restrained clay tone that pairs with sage,
+/* Warning / important - restrained clay tone that pairs with sage,
    used sparingly so caution reads distinctly from tips. */
 .blog-content .callout.warning {
   border-left-color: #c07f4a;
@@ -642,7 +642,7 @@ html, body {
 .blog-content .callout.warning .callout-label { color: #d1936b; }
 .blog-content .callout.warning .callout-label::before { background: #d1936b; }
 
-/* Checklist — sage checkboxes with a checkmark */
+/* Checklist - sage checkboxes with a checkmark */
 .blog-content .callout.checklist ul {
   list-style: none;
   margin: 0.35rem 0 0;
@@ -687,7 +687,7 @@ html, body {
   font-weight: 500;
 }
 
-/* Numbered step flow — sage numerals draw the eye through a sequence */
+/* Numbered step flow - sage numerals draw the eye through a sequence */
 .blog-content ol.steps {
   list-style: none;
   counter-reset: step;
@@ -750,7 +750,7 @@ html, body {
   gap: 0.25rem 1rem;
 }
 
-/* Marketing text link (tertiary action) — reveals sage on hover */
+/* Marketing text link (tertiary action) - reveals sage on hover */
 .brc-text-link {
   @apply inline-flex items-center gap-2 text-sm font-normal text-foreground underline-offset-2 hover:underline hover:text-accent-legible transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm;
 }

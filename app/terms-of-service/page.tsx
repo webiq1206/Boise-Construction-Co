@@ -2,12 +2,14 @@ import { Metadata } from "next";
 import { ObfuscatedEmail } from "@/components/ObfuscatedEmail";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/schema";
+import { buildCanonical, FEED_ALTERNATES } from "@/lib/page-metadata";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "Terms of service for Boise Remodeling Co. Your rights when using our remodeling and renovation services in Kuna & Boise, Idaho.",
+  description: "Terms of service for Boise Remodeling Co. Your rights when using our remodeling and renovation services across Boise and the Treasure Valley.",
   alternates: {
-    canonical: "https://boiseremodeling.co/terms-of-service",
+    canonical: buildCanonical("/terms-of-service"),
+    types: FEED_ALTERNATES,
   },
   openGraph: {
     title: "Terms of Service | Boise Remodeling Co",

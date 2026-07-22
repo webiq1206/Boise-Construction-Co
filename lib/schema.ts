@@ -54,8 +54,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
 
   return {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    additionalType: 'HomeAndConstructionBusiness',
+    '@type': 'GeneralContractor',
     name: BUSINESS_INFO.name,
     legalName: BUSINESS_INFO.legalName,
     description: `Design-build remodeling contractor serving ${city || 'Boise'} and the Treasure Valley, Idaho. Kitchen remodels, bathrooms, additions & whole-home renovations.`,
@@ -152,7 +151,7 @@ export function generateServiceSchema(serviceName: string, serviceDescription: s
     name: serviceName,
     description: serviceDescription,
     provider: {
-      '@type': 'LocalBusiness',
+      '@type': 'GeneralContractor',
       name: BUSINESS_INFO.name,
       telephone: BUSINESS_INFO.phone,
       email: BUSINESS_INFO.email,
@@ -271,8 +270,7 @@ export function generateReviewSchema(reviews: Array<{
 }>): SchemaContext {
   return {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    additionalType: 'HomeAndConstructionBusiness',
+    '@type': 'GeneralContractor',
     '@id': LOCALBUSINESS_ID,
     name: BUSINESS_INFO.name,
     // AggregateRating is gated on a real, populated review count. Emitting a

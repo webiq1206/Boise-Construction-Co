@@ -246,7 +246,7 @@ export default function ContactPage() {
               Prefer to text? Message us instead
             </a>
             <div className="flex flex-wrap gap-3 mb-8">
-              {/* Primary action on the contact page is the inline form below —
+              {/* Primary action on the contact page is the inline form below -
                   one tap from the hero. The estimator lives on the homepage. */}
               <Button variant="brand" asChild>
                 <a href="#consult">

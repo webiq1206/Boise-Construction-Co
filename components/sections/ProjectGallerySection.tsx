@@ -37,7 +37,7 @@ function BeforeAfterCard({ project }: { project: GalleryProject }) {
 interface ProjectGallerySectionProps {
   limit?: number;
   showViewAll?: boolean;
-  /** Service types to omit — e.g. one already shown in the featured section. */
+  /** Service types to omit - e.g. one already shown in the featured section. */
   excludeServiceTypes?: string[];
 }
 

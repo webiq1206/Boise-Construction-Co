@@ -14,7 +14,7 @@ import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { SERVICES, CITIES } from '@/shared/contentData';
 import { servicePath, areaPath } from '@/lib/seo-routes';
 import { getServiceBackground } from '@/shared/serviceBackgrounds';
-import { buildCanonical } from '@/lib/page-metadata';
+import { buildCanonical, FEED_ALTERNATES } from '@/lib/page-metadata';
 import { getBaseUrl } from '@/lib/seo';
 import { generateBreadcrumbSchema } from '@/lib/schema';
 import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
@@ -26,7 +26,7 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: { absolute: `${TITLE} | Boise Remodeling Co` },
   description: DESCRIPTION,
-  alternates: { canonical: buildCanonical('/services') },
+  alternates: { canonical: buildCanonical('/services'), types: FEED_ALTERNATES },
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,

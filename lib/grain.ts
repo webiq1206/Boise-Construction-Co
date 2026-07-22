@@ -3,7 +3,7 @@
  *
  * Used as a faint `background-image` over dark bands/hero imagery to keep large
  * flat areas from looking digitally sterile. Kept in one place so the (easy to
- * corrupt) URL-encoded SVG can't drift or break per-file — two homepage
+ * corrupt) URL-encoded SVG can't drift or break per-file - two homepage
  * sections previously shipped a malformed `%3C/2Fsvg%3E` closing tag that
  * silently disabled the texture.
  *

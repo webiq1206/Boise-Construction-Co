@@ -89,7 +89,7 @@ export const DIFFERENTIATORS: Differentiator[] = [
 ];
 
 /**
- * Headline credibility stats. Owner-provided facts about the business — keep
+ * Headline credibility stats. Owner-provided facts about the business - keep
  * these accurate and update in one place. `established` is the founding year
  * (see shared/gbpProfile.ts GBP_NAP.founded); `projectsCompleted` is a rounded
  * completed-project count.
@@ -291,7 +291,7 @@ export const CONSULT_BULLETS = [
 ];
 
 /**
- * Full-bleed cinematic statement band on the homepage — a photographic
+ * Full-bleed cinematic statement band on the homepage - a photographic
  * "breather" that breaks the run of text sections below the estimator.
  * `accentWord` renders as the sage Fraunces accent (keep it to one word).
  */

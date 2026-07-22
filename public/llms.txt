@@ -57,6 +57,12 @@ Design-build means one accountable team handles design, estimating, Ada and Cany
 ## Optional
 
 - [Blog](https://boiseremodeling.co/blog)
-- [Sitemap](https://boiseremodeling.co/sitemap.xml)
 
-Last updated: 2026-07-14.
+## Machine-readable endpoints
+
+- [Sitemap](https://boiseremodeling.co/sitemap.xml): every indexable page.
+- [Image sitemap](https://boiseremodeling.co/sitemap-images.xml): project before/after and guide imagery with titles and captions.
+- [RSS feed](https://boiseremodeling.co/feed.xml): guides and articles, newest first, with publication and revision dates.
+- [Full text for LLMs](https://boiseremodeling.co/llms-full.txt): expanded reference copy of the core facts.
+
+Last updated: 2026-07-22.

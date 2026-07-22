@@ -7,7 +7,7 @@ export interface ServiceData {
   shortDescription: string;
   /**
    * Planning starting point (a floor, not a bid or a wide range). Rendered as
-   * "Planning from $X" to give price context without committing to a spread —
+   * "Planning from $X" to give price context without committing to a spread -
    * the real number comes from the estimator + in-home visit. Sourced from the
    * published GBP starting figures (shared/gbpProfile.ts).
    */

@@ -67,7 +67,7 @@ export async function generateOgCard(slug, title, sourceImage) {
   }, [
     // Full-bleed photo
     h('img', { position: 'absolute', top: 0, left: 0, width: W, height: H, objectFit: 'cover' }),
-    // Dark overlay — fairly even so centered text stays legible over any photo
+    // Dark overlay - fairly even so centered text stays legible over any photo
     h('div', {
       position: 'absolute', top: 0, left: 0, width: W, height: H, display: 'flex',
       backgroundImage:
@@ -78,14 +78,14 @@ export async function generateOgCard(slug, title, sourceImage) {
       position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center',
       width: 820,
     }, [
-      // Title — centered, constrained so it survives 4:3/square crops
+      // Title - centered, constrained so it survives 4:3/square crops
       h('div', {
         display: 'flex', textAlign: 'center', fontSize: 58, fontWeight: 300, color: BONE,
         lineHeight: 1.14, letterSpacing: '-0.5px', maxWidth: 760,
       }, title),
       // Sage rule
       h('div', { width: 56, height: 2, backgroundColor: SAGE, marginTop: 32, marginBottom: 20, display: 'flex' }),
-      // Eyebrow — brand + domain, centered
+      // Eyebrow - brand + domain, centered
       h('div', {
         display: 'flex', textAlign: 'center', fontSize: 18, fontWeight: 500, color: MIST,
         letterSpacing: '2.4px',

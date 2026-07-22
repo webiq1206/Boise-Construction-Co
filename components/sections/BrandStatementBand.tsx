@@ -5,7 +5,7 @@ import { STATEMENT_BAND } from "@/shared/siteContent";
 import { GRAIN_URL } from "@/lib/grain";
 
 /**
- * Full-bleed cinematic statement band — a photographic "breather" with an
+ * Full-bleed cinematic statement band - a photographic "breather" with an
  * editorial overlay. Placed between text-heavy sections (e.g. after the
  * estimator) to give the eye a rest and reinforce the brand voice. Copy lives
  * in shared/siteContent.ts (STATEMENT_BAND).

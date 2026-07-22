@@ -11,7 +11,7 @@ import {
   isCategoryHubIndexable,
   CATEGORY_HUB_MIN_POSTS,
 } from '@/shared/contentHubs';
-import { buildCanonical } from '@/lib/page-metadata';
+import { buildCanonical, FEED_ALTERNATES } from '@/lib/page-metadata';
 import { getHubHeroImage, getBlogImageAlt, getAbsoluteImageUrl } from '@/shared/blogImages';
 import { Section } from '@/components/marketing/Section';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
@@ -62,7 +62,7 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: buildCanonical(categoryHubPath(params.hubSlug)) },
+    alternates: { canonical: buildCanonical(categoryHubPath(params.hubSlug)), types: FEED_ALTERNATES },
     robots: indexable ? undefined : { index: false, follow: true },
     openGraph: {
       title,

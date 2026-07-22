@@ -8,7 +8,7 @@ interface SectionedArticleProps {
   /** How many sections stay expanded by default (long articles). */
   defaultOpenCount?: number;
   testId?: string;
-  /** When true, never collapse — render the full article inline (guides). */
+  /** When true, never collapse - render the full article inline (guides). */
   forceExpanded?: boolean;
 }
 
