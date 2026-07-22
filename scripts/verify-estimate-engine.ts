@@ -366,19 +366,64 @@ for (const project of ["addition", "adu"] as ProjectType[]) {
   );
 }
 
-// 7. Regression guard on the reported lead. A 400sf high-end kitchen with
-//    moderate layout, partial plumbing/electrical and semi-custom cabinetry was
-//    quoted $198k-$247k and flagged as far too high. Keep it well below that.
-const reportedLead = priceAt("kitchen", "high-end", 400, {
-  ...EMPTY_REFINEMENTS,
-  layoutChanges: "moderate",
-  plumbingElectrical: "partial",
-  cabinetTier: "semi-custom",
-});
-check(
-  reportedLead.priceHigh < 210_000,
-  `reported-lead regression: back up to ${reportedLead.priceLow}-${reportedLead.priceHigh}`,
-);
+// 7. SOURCE FIDELITY. At its baseline size with no refinements, every project
+//    and finish must reproduce the 2025 Boise Remodeling Cost Guide exactly.
+//    This is the check that keeps the estimator honest to the published
+//    pricing: any future edit to PRICE_MATRIX, the band model, or the size
+//    scaling that causes the tool to quote something other than the guide at
+//    the reference size now fails the build.
+const COST_GUIDE_2025: Partial<Record<ProjectType, Partial<Record<FinishLevel, [number, number]>>>> = {
+  kitchen: {
+    refresh: [18750, 31250],
+    "mid-range": [43750, 68750],
+    "high-end": [100000, 162500],
+    luxury: [175000, 225000],
+  },
+  bathroom: {
+    refresh: [12000, 20000],
+    "mid-range": [22000, 36000],
+    "high-end": [44000, 64000],
+    luxury: [72000, 112000],
+  },
+  "whole-home": {
+    refresh: [54000, 90000],
+    "mid-range": [135000, 225000],
+    "high-end": [270000, 387000],
+    luxury: [450000, 765000],
+  },
+  addition: {
+    "mid-range": [120000, 170000],
+    "high-end": [200000, 280000],
+    luxury: [340000, 460000],
+  },
+  adu: {
+    "mid-range": [210000, 300000],
+    "high-end": [300000, 420000],
+    luxury: [420000, 600000],
+  },
+  basement: {
+    "mid-range": [45000, 76500],
+    "high-end": [90000, 144000],
+    luxury: [157500, 225000],
+  },
+};
+
+for (const project of projects) {
+  const tiers = COST_GUIDE_2025[project];
+  if (!tiers) continue;
+  const baseline = getProjectSizeConfig(project).baselineSqft;
+  for (const finish of getAvailableFinishLevels(project)) {
+    const expected = tiers[finish];
+    if (!expected) continue;
+    const r = priceAt(project, finish, baseline, { ...EMPTY_REFINEMENTS });
+    // The guide's figures are exact multiples of its per-square-foot rates, and
+    // the engine rounds to the nearest 1k, so allow only that rounding.
+    check(
+      Math.abs(r.priceLow - expected[0]) <= 500 && Math.abs(r.priceHigh - expected[1]) <= 500,
+      `cost-guide fidelity ${project}/${finish} @${baseline}sf: engine ${r.priceLow}-${r.priceHigh}, guide ${expected[0]}-${expected[1]}`,
+    );
+  }
+}
 
 console.log(
   `All estimate engine checks passed (${sweepChecks} exhaustive invariant checks across every project, finish, size step and scope ladder).`,

@@ -106,6 +106,21 @@ export interface EstimateDisclosure {
   upgrades: string[];
 }
 
+/**
+ * Baseline inclusions that apply to every project, per the 2025 Boise
+ * Remodeling Cost Guide. Listed ahead of the finish-specific scope so a
+ * homeowner sees that permits and project management are covered rather than
+ * assuming they are extras.
+ */
+const UNIVERSAL_INCLUDES = [
+  "Design and planning",
+  "Permits",
+  "Demolition and disposal",
+  "Labor and materials",
+  "Project management",
+  "Standard warranties",
+];
+
 /** Exclusions and assumptions that hold for every project type. */
 const UNIVERSAL_EXCLUDES = [
   "Appliances, which are client-supplied (we guide selection but do not purchase or install)",
@@ -123,7 +138,8 @@ const UNIVERSAL_ASSUMPTIONS = [
   "Work proceeds in one continuous phase with normal site access",
   "Standard material lead times, with no expedited or special-order surcharges",
   "Finishes are selected from the allowances set during design",
-  "Typical Treasure Valley labor and material costs as of 2026",
+  "2025 Boise-area market conditions for labor and materials",
+  "A typical project with no major structural issues",
 ];
 
 const UNIVERSAL_INCREASES = [
@@ -206,7 +222,7 @@ const PROJECT_EXCLUDES: Partial<Record<ProjectType, string[]>> = {
  */
 export function buildEstimateDisclosure(input: EstimateInput): EstimateDisclosure {
   return {
-    includes: buildDynamicScope(input),
+    includes: [...UNIVERSAL_INCLUDES, ...buildDynamicScope(input)],
     excludes: [...UNIVERSAL_EXCLUDES, ...(PROJECT_EXCLUDES[input.project] ?? [])],
     assumptions: UNIVERSAL_ASSUMPTIONS,
     increases: UNIVERSAL_INCREASES,
@@ -402,100 +418,127 @@ export const CONFIDENCE_LABELS = PLANNING_DETAIL_LABELS;
  * (refresh for new construction) are intentionally absent; always resolve
  * prices through `getPriceData`, which normalizes the finish first.
  */
+/**
+ * Base ranges per project x finish AT THE PROJECT'S BASELINE SIZE, before any
+ * size scaling or refinement multipliers.
+ *
+ * SOURCE: the 2025 Boise Remodeling Cost Guide (owner-supplied), which states
+ * per-square-foot ranges against a reference size for each project type. Those
+ * reference sizes match `PROJECT_SIZE_CONFIG` baselines exactly (kitchen 250,
+ * bathroom 80, whole-home 1,800, addition 400, ADU 600, basement 900), so each
+ * cell here is the guide's per-square-foot range multiplied by that size.
+ *
+ * The guide's kitchen high-end cell is internally inconsistent: it lists
+ * $400-$650/sf but a total of $100,000-$137,500, and $137,500 implies $550/sf.
+ * The per-square-foot figure is used, because the guide's stated unit is per
+ * square foot and $650 sits flush against the $700 luxury floor (a $550 cap
+ * would leave a gap between the tiers). Change `high` on kitchen high-end to
+ * 137500 if the dollar figure was the intended one.
+ *
+ * The guide quotes kitchens "no wall movement" and bathrooms "no layout
+ * change", which is why these are pure baselines: layout, systems, and
+ * cabinetry choices are applied on top as multipliers rather than baked in.
+ *
+ * Note that a per-square-foot rate holds only at the reference size. Cost is
+ * scaled sublinearly from here (see SIZE_ELASTICITY), so a larger kitchen has a
+ * lower effective rate per square foot, which is how remodel cost actually
+ * behaves and is consistent with the guide's own rates falling as project size
+ * rises across categories.
+ */
 const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>> = {
   kitchen: {
     refresh: {
-      low: 15000, high: 35000, roi: 72,
+      low: 18750, high: 31250, roi: 72,
       included: ["New countertops (laminate/entry quartz)", "Cabinet repaints or door replacement", "Appliance selection guidance (appliances are client-supplied)", "New plumbing fixtures", "LVP or tile flooring"],
     },
     "mid-range": {
-      low: 35000, high: 75000, roi: 74,
+      low: 43750, high: 68750, roi: 74,
       included: ["Semi-custom cabinetry", "Quartz or granite countertops", "Appliance selection guidance (appliances are client-supplied)", "Tile backsplash", "Updated plumbing and electrical"],
     },
     "high-end": {
-      low: 75000, high: 150000, roi: 70,
+      low: 100000, high: 162500, roi: 70,
       included: ["Custom or semi-custom cabinetry", "Premium stone countertops", "Appliance selection guidance (appliances are client-supplied)", "Island addition or expansion", "Custom tile work and lighting redesign"],
     },
     luxury: {
-      low: 150000, high: 300000, roi: 62,
+      low: 175000, high: 225000, roi: 62,
       included: ["Fully custom cabinetry", "Exotic stone countertops", "Appliance selection guidance (appliances are client-supplied)", "Structural layout changes", "Smart home integration"],
     },
   },
   bathroom: {
     refresh: {
-      low: 8000, high: 22000, roi: 70,
+      low: 12000, high: 20000, roi: 70,
       included: ["New vanity and mirror", "Tile shower refresh", "Updated fixtures and hardware", "New toilet if needed", "Lighting update"],
     },
     "mid-range": {
-      low: 18000, high: 40000, roi: 71,
+      low: 22000, high: 36000, roi: 71,
       included: ["Custom tile shower", "Semi-custom vanity", "Heated floors", "Updated plumbing", "New windows"],
     },
     "high-end": {
-      low: 40000, high: 80000, roi: 65,
+      low: 44000, high: 64000, roi: 65,
       included: ["Wet room or custom walk-in shower", "Freestanding soaking tub", "Radiant heated floors", "Custom built-ins", "High-end plumbing fixtures"],
     },
     luxury: {
-      low: 80000, high: 160000, roi: 58,
+      low: 72000, high: 112000, roi: 58,
       included: ["Steam shower system", "Spa soaking tub", "Heated floors and walls", "Full layout reconfiguration", "Designer fixtures throughout"],
     },
   },
   "whole-home": {
     refresh: {
-      low: 40000, high: 90000, roi: 65,
+      low: 54000, high: 90000, roi: 65,
       included: ["Kitchen and bath cosmetic refresh", "New flooring throughout", "Fresh interior paint", "Updated light fixtures"],
     },
     "mid-range": {
-      low: 90000, high: 190000, roi: 68,
+      low: 135000, high: 225000, roi: 68,
       included: ["Kitchen and bath mid-range renovation", "Open-concept conversion", "New flooring throughout", "Updated HVAC and windows"],
     },
     "high-end": {
-      low: 190000, high: 375000, roi: 62,
+      low: 270000, high: 387000, roi: 62,
       included: ["Custom kitchen and bath renovation", "Structural modifications", "New windows and doors", "High-end finishes throughout"],
     },
     luxury: {
-      low: 375000, high: 725000, roi: 55,
+      low: 450000, high: 765000, roi: 55,
       included: ["Full gut renovation", "Structural engineering", "Smart home system", "Premium finishes throughout", "New HVAC, electrical and plumbing"],
     },
   },
   addition: {
     "mid-range": {
-      low: 100000, high: 190000, roi: 63,
+      low: 120000, high: 170000, roi: 63,
       included: ["Bedroom or family room addition", "Full HVAC integration", "Updated electrical panel", "Mid-range finishes"],
     },
     "high-end": {
-      low: 190000, high: 360000, roi: 58,
+      low: 200000, high: 280000, roi: 58,
       included: ["400 to 600 sqft addition", "High-end finishes", "Full integration with existing layout", "Custom windows and doors"],
     },
     luxury: {
-      low: 360000, high: 560000, roi: 50,
+      low: 340000, high: 460000, roi: 50,
       included: ["600+ sqft addition", "Structural engineering", "Premium finishes throughout", "Custom design integration"],
     },
   },
   adu: {
     "mid-range": {
-      low: 185000, high: 260000, roi: 70,
+      low: 210000, high: 300000, roi: 70,
       included: ["Full design-build ADU", "Mid-range kitchen and bath finishes", "Separate HVAC system", "Permit coordination through CO"],
     },
     "high-end": {
-      low: 260000, high: 350000, roi: 65,
+      low: 300000, high: 420000, roi: 65,
       included: ["600+ sqft ADU or guest house", "High-end finishes throughout", "Custom kitchen and bath", "Engineered foundation and structural plans"],
     },
     luxury: {
-      low: 350000, high: 550000, roi: 58,
+      low: 420000, high: 600000, roi: 58,
       included: ["Large detached guest house", "Premium finishes and fixtures", "Smart home integration", "Structural engineering and custom design"],
     },
   },
   basement: {
     "mid-range": {
-      low: 35000, high: 75000, roi: 68,
+      low: 45000, high: 76500, roi: 68,
       included: ["Framing, insulation, and drywall", "Egress window and code compliance", "LVP or carpet flooring throughout", "Recessed lighting and updated electrical", "Optional bedroom and full bathroom"],
     },
     "high-end": {
-      low: 75000, high: 140000, roi: 62,
+      low: 90000, high: 144000, roi: 62,
       included: ["Full basement suite build-out", "Wet bar or kitchenette rough-in", "Premium flooring and custom tile", "Custom lighting and built-ins", "Full bathroom with tile shower"],
     },
     luxury: {
-      low: 140000, high: 260000, roi: 55,
+      low: 157500, high: 225000, roi: 55,
       included: ["Luxury finishes throughout", "Home theater or wine room", "Full kitchenette or bar", "Spa-style bathroom", "Smart home integration"],
     },
   },
@@ -656,11 +699,13 @@ function getRefinementMultipliers(ref: EstimateRefinements, project: ProjectType
     high *= 1.2;
   }
 
-  // Detached units carry their own foundation, envelope, and utility runs;
-  // attached units share systems with the main home.
-  if (project === "adu" && ref.aduConfig === "detached") {
-    low *= 1.05;
-    high *= 1.12;
+  // The cost guide's ADU reference is explicitly a DETACHED unit, so detached
+  // is the baseline and carries no premium; charging one on top would double
+  // count it. An attached unit is the discount, because it shares foundation,
+  // envelope, and utility runs with the main home.
+  if (project === "adu" && ref.aduConfig === "attached") {
+    low *= 0.9;
+    high *= 0.93;
   }
 
   return { low, high };
@@ -777,8 +822,14 @@ export function calculateEstimate(input: EstimateInput, userRefinementCount = 0)
   // confident, personalized range - not guesswork. A too-wide range erodes
   // trust, and an inflated high end scares qualified homeowners off before we
   // get to talk value. Clamp the starting spread to a sensible maximum.
-  const MAX_START_BAND = 0.28; // starting range never wider than ~1.8x low-to-high
-  const startBand = Math.min(MAX_START_BAND, rawBand * 0.82);
+  // The base range now comes from the owner's own cost guide, so it IS the
+  // honest spread for a typical project. Compressing it (this previously
+  // multiplied by 0.82 to make ranges read as more confident) would quote a
+  // narrower range than our own published guidance, claiming precision the
+  // source does not support. The starting band therefore reproduces the guide
+  // exactly, and only real detail from the visitor tightens it below that.
+  const MAX_START_BAND = 0.28; // safety cap; no current category reaches it
+  const startBand = Math.min(MAX_START_BAND, rawBand);
 
   const detailRatio = maxFields > 0 ? Math.min(1, userRefinementCount / maxFields) : 0;
   const BAND_TIGHTENING = 0.6; // remove up to 60% of the band at full detail

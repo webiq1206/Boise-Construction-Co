@@ -44,7 +44,7 @@ integrations = ["javascript_mem_db:1.0.0", "javascript_openai_ai_integrations:1.
 [userenv]
 
 [userenv.shared]
-ADMIN_EMAILS = "webiq.co@gmail.com,info@webiq.co,hello@boisecabinetco.co,hello@boiseremodeling.co,hello@p5homeco.com"
+ADMIN_EMAILS = "webiq.co@gmail.com,info@webiq.co,hello@boisecabinet.co,hello@boiseremodeling.co,hello@p5homeco.com"
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY = "pk_live_51LGm9XKmgtIDVx8lrH27gaoWAdwf1F0O7Gxx2RkNqICfBvPslxV7IJCdufiFDHnNxaCKgr3IcOZokNdmNaxy3z6z000ipOzjOv"
 NODE_OPTIONS = "--max-old-space-size=1536"
 NEXT_PUBLIC_GA_MEASUREMENT_ID = "G-NGE449QF9Y"

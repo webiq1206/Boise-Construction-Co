@@ -16,27 +16,37 @@ type, finish level, size step, and scope ladder, asserting that:
 - supplying more detail always tightens the band, never widens it
 - remodel cost scales **sublinearly** with floor area, while new construction
   (additions, ADUs) scales close to linearly
-- the specific configuration that produced the reported $198k-$247k kitchen
-  stays well below that figure
+- at its reference size with nothing else selected, every project and finish
+  reproduces the 2025 Boise Remodeling Cost Guide exactly
 
 This suite is wired into `prebuild`, so a change that breaks any invariant
 fails the build before it can reach a homeowner. It is also verified to
 actually catch regressions: restoring the old linear size scaling makes it fail
 with `kitchen: price scaled 2.00x for 2.00x area (must be sublinear)`.
 
-**2. Do the dollar amounts match real Boise costs?** This cannot be proven from
-inside the repository, and it is not currently grounded in anything.
+**2. Do the dollar amounts match real Boise costs?** They now come from a
+stated source. `PRICE_MATRIX` encodes the **2025 Boise Remodeling Cost Guide**
+(owner-supplied), which gives per-square-foot ranges against a reference size
+per project type. Those reference sizes match the engine baselines exactly, so
+each cell is the guide rate multiplied by that size, and a source-fidelity
+check in the invariant suite fails the build if the estimator ever quotes
+something other than the guide at the reference size.
 
-The base rates live in `PRICE_MATRIX` in `shared/estimateEngine.ts`. Searching
-the repository turns up **no source, citation, survey, or calibration note for
-any of those numbers**, and they were introduced in a UI redesign commit rather
-than derived from job costs. Every other module in this codebase documents its
-provenance carefully; these numbers do not, because there is nothing to cite.
+Two things to know about that encoding:
 
-No amount of math correctness fixes that. A perfectly-calculated estimate built
-on an unfounded base rate is still wrong. The structural fixes removed two real
-defects that were inflating results, but the anchor itself still needs to come
-from you.
+- The guide's kitchen high-end cell is internally inconsistent: it lists
+  $400-$650/sf but a total of $100,000-$137,500, and $137,500 implies $550/sf.
+  The per-square-foot figure is used, because the guide's stated unit is per
+  square foot and $650 sits flush against the $700 luxury floor. Change `high`
+  on kitchen high-end to 137500 if the dollar figure was intended.
+- A per-square-foot rate holds only at the reference size. Cost scales
+  sublinearly from there, so larger projects carry a lower effective rate. This
+  matches how remodel cost behaves and mirrors the guide's own rates falling as
+  category size rises.
+
+This is a real source, but it is still a published guide rather than a
+regression against closed jobs. The procedure below remains the way to confirm
+it against what you actually bill.
 
 ## How to calibrate against real jobs
 
@@ -102,19 +112,20 @@ The invariant suite will catch any change that breaks monotonicity, band
 sanity, or the scaling rules. It will **not** tell you the new numbers are
 right, only that they are internally consistent.
 
-## Current base rates, for reference
+## Current base rates
 
-These are what a homeowner sees at baseline size with nothing else selected.
-Every one of these is an unvalidated assumption until checked against real jobs.
+What a homeowner sees at the reference size with nothing else selected. These
+now reproduce the 2025 Boise Remodeling Cost Guide exactly, and the invariant
+suite fails the build if they drift.
 
 | Project | refresh | mid-range | high-end | luxury |
 |---|---|---|---|---|
-| kitchen (250 sf) | $18-32k | $40-70k | $82-143k | $164-287k |
-| bathroom (80 sf) | $11-19k | $21-37k | $44-76k | $87-153k |
-| whole-home (1,800 sf) | $47-83k | $101-179k | $207-358k | $407-693k |
-| addition (400 sf) | n/a | $108-182k | $205-345k | $378-542k |
-| adu (600 sf) | n/a | $192-253k | $268-342k | $368-532k |
-| basement (900 sf) | n/a | $40-70k | $81-134k | $151-249k |
+| kitchen (250 sf) | $19-31k | $44-69k | $100-163k | $175-225k |
+| bathroom (80 sf) | $12-20k | $22-36k | $44-64k | $72-112k |
+| whole-home (1,800 sf) | $54-90k | $135-225k | $270-387k | $450-765k |
+| addition (400 sf) | n/a | $120-170k | $200-280k | $340-460k |
+| adu (600 sf) | n/a | $210-300k | $300-420k | $420-600k |
+| basement (900 sf) | n/a | $45-77k | $90-144k | $158-225k |
 
 ## Size elasticity
 
