@@ -8,6 +8,9 @@ interface ForwardPayload {
   email: string;
   phone: string;
   projectTypes: string[];
+  /** Property address. The team qualifies service area on this, so it is worth
+      sending even though the dashboard may currently ignore unknown fields. */
+  address?: string;
   budgetRange?: string;
   projectScope?: string;
   source: string;

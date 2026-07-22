@@ -21,6 +21,8 @@ export interface LeadPrefill {
   name?: string;
   email?: string;
   phone?: string;
+  /** Property address, captured at whichever lead surface the visitor hits first. */
+  address?: string;
   zip?: string;
 }
 
@@ -192,6 +194,7 @@ export function writeStoredPrefill(prefill: LeadPrefill): void {
     if (prefill.name) next.name = prefill.name;
     if (prefill.email) next.email = prefill.email;
     if (prefill.phone) next.phone = prefill.phone;
+    if (prefill.address) next.address = prefill.address;
     if (prefill.zip) next.zip = prefill.zip;
     if (Object.keys(next).length === 0) return;
     durableSet(STORAGE_PREFILL, JSON.stringify(next));

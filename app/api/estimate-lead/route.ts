@@ -27,6 +27,7 @@ import {
   type EstimateRefinements,
 } from "@/shared/estimateEngine";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
+import type { PropertyProfile } from "@/shared/propertyProfile";
 
 const refinementsSchema = z
   .object({
@@ -62,6 +63,16 @@ const bodySchema = z.object({
   phone: z.string().min(10),
   budget: z.string().min(1).optional(),
   projectType: z.string().min(1),
+  // Property address. Optional in the schema so an older client that predates
+  // this field still submits successfully rather than 400ing, but the gate now
+  // requires it, and the team needs it to confirm service area.
+  address: z.string().max(300).optional(),
+  zip: z.string().max(10).optional(),
+  propertyProfile: z
+    .object({ formattedAddress: z.string(), city: z.string(), state: z.string(), zip: z.string() })
+    .passthrough()
+    .optional()
+    .nullable(),
   estimate: estimateSchema,
 });
 
@@ -126,8 +137,10 @@ export async function POST(request: NextRequest) {
           name: data.name,
           phone: data.phone,
           email: data.email,
-          zip: "",
-          address: "",
+          zip: data.zip || "",
+          address: data.address || "",
+          city: (data.propertyProfile as { city?: string } | null)?.city || null,
+          propertyProfile: (data.propertyProfile as PropertyProfile | null) ?? null,
           projectType: data.projectType,
           message: data.budget
             ? `Submitted via estimate gate | Budget: ${data.budget}`
@@ -149,6 +162,7 @@ export async function POST(request: NextRequest) {
       email: data.email,
       phone: data.phone,
       projectTypes: data.projectType ? [data.projectType] : [],
+      address: data.address || undefined,
       budgetRange: data.budget || undefined,
       projectScope: estimate
         ? `${data.projectType} - estimated $${estimate.priceLow.toLocaleString()}${"–"}$${estimate.priceHigh.toLocaleString()}`
@@ -164,7 +178,8 @@ export async function POST(request: NextRequest) {
         name: data.name,
         phone: data.phone,
         email: data.email,
-        address: "",
+        address: data.address || "",
+        zip: data.zip,
         projectType: data.projectType,
         budget: data.budget,
       };

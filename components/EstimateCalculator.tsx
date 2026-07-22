@@ -11,6 +11,9 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/marketing";
+import { AddressAutocomplete } from "@/components/AddressAutocomplete";
+import type { PropertyProfile } from "@/shared/propertyProfile";
+import { HOUSE_NUMBER_REGEX, extractZip } from "@/shared/addressValidation";
 import {
   type ProjectType,
   type FinishLevel,
@@ -424,6 +427,12 @@ export function EstimateCalculator({
   const [gateLoading,   setGateLoading]   = useState(false);
   const [gateError,     setGateError]     = useState<string | null>(null);
   const [gateBudget,    setGateBudget]    = useState("");
+  /* Property address. Collected here as well as on the consultation form: this
+     gate is the path most leads arrive through, and without it the team cannot
+     confirm the property is inside the service area, and the county property
+     lookup that prepares the visit has nothing to work from. */
+  const [gateAddress,   setGateAddress]   = useState("");
+  const [gateProfile,   setGateProfile]   = useState<PropertyProfile | null>(null);
   /* Contact details we already hold for this visitor. Present means they have
      passed the gate before (possibly on an earlier visit), so the estimator is
      theirs to use freely: no re-entry, editable, and resubmittable. */
@@ -537,6 +546,7 @@ export function EstimateCalculator({
     if (saved.name) setGateName(saved.name);
     if (saved.email) setGateEmail(saved.email);
     if (saved.phone) setGatePhone(saved.phone);
+    if (saved.address) setGateAddress(saved.address);
     if (hasPassedGate()) {
       setGateSubmitted(true);
       setSavedIdentity({
@@ -761,6 +771,10 @@ export function EstimateCalculator({
       setGateError("Please enter a valid 10-digit phone number.");
       return;
     }
+    if (!gateAddress.trim() || !HOUSE_NUMBER_REGEX.test(gateAddress.trim())) {
+      setGateError("Please enter your property address, including the house number.");
+      return;
+    }
     /* Budget is optional: an extra required field before the number is friction
        and reads as a bait-and-switch. We still capture it when offered. */
 
@@ -770,6 +784,8 @@ export function EstimateCalculator({
       name: gateName.trim(),
       email: gateEmail.trim(),
       phone: gatePhone.trim(),
+      address: gateAddress.trim(),
+      zip: gateProfile?.zip?.slice(0, 5) || extractZip(gateAddress) || undefined,
     });
 
     setGateLoading(true);
@@ -782,6 +798,9 @@ export function EstimateCalculator({
       /* Omit when blank: the API treats budget as optional but rejects "" */
       budget: gateBudget || undefined,
       projectType: effectiveProject,
+      address: gateAddress.trim(),
+      zip: gateProfile?.zip?.slice(0, 5) || extractZip(gateAddress) || undefined,
+      propertyProfile: gateProfile,
       estimate: {
         project: effectiveProject,
         finish,
@@ -1520,6 +1539,23 @@ export function EstimateCalculator({
             data-testid="gate-input-phone"
             autoComplete="tel"
           />
+
+          <div>
+            <AddressAutocomplete
+              value={gateAddress}
+              onChange={setGateAddress}
+              onProfileResolved={(profile) => {
+                setGateProfile(profile);
+                // The lookup returns a normalized address; prefer it so the
+                // team gets a clean, geocodable line rather than free text.
+                if (profile?.formattedAddress) setGateAddress(profile.formattedAddress);
+              }}
+              data-testid="gate-input-address"
+            />
+            <p className="mt-1.5 text-[11.5px] text-inverse-muted/80">
+              So we can confirm we serve your area and check county records before your visit.
+            </p>
+          </div>
           <select
             value={gateBudget}
             onChange={(e) => setGateBudget(e.target.value)}

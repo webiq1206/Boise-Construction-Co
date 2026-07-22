@@ -130,7 +130,9 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
   // the URL, and the estimate gate on this same page (which writes the info it
   // just captured and dispatches PREFILL_UPDATED_EVENT). We fill only fields the
   // visitor hasn't touched, so an event never clobbers something they edited.
-  // Address stays blank because the property lookup needs a full street address.
+  // Address prefills too now that the estimate gate captures a validated street
+  // address through the same autocomplete; a visitor who came through the gate
+  // should never be asked for their address a second time.
   useEffect(() => {
     function applyPrefill() {
       const pf = readStoredPrefill();
@@ -142,6 +144,10 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
       fillIfEmpty("name", pf.name);
       fillIfEmpty("phone", pf.phone);
       fillIfEmpty("email", pf.email);
+      if (pf.address && !form.getValues("address")) {
+        setAddressInput(pf.address);
+        form.setValue("address", pf.address, { shouldValidate: false });
+      }
     }
     applyPrefill();
     window.addEventListener(PREFILL_UPDATED_EVENT, applyPrefill);

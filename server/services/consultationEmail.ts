@@ -374,7 +374,7 @@ export function buildAdminEmailHtml(
           <tr><td style="${LABEL_CELL}">Name</td><td style="${VALUE_CELL}">${escapeHtml(lead.name)}</td></tr>
           <tr><td style="${LABEL_CELL}">Phone</td><td style="${CELL}"><a href="${escapeHtml(telHref)}" style="color:${EMAIL_BRAND.accent};text-decoration:none;">${escapeHtml(lead.phone)}</a></td></tr>
           <tr><td style="${LABEL_CELL}">Email</td><td style="${CELL}"><a href="mailto:${escapeHtml(lead.email)}" style="color:${EMAIL_BRAND.accent};text-decoration:none;">${escapeHtml(lead.email)}</a></td></tr>
-          <tr><td style="${LABEL_CELL}">Address</td><td style="${VALUE_CELL}">${escapeHtml(lead.address)}${lead.zip ? ` ${escapeHtml(lead.zip)}` : ""}</td></tr>
+          <tr><td style="${LABEL_CELL}">Address</td><td style="${VALUE_CELL}">${lead.address ? `${escapeHtml(lead.address)}${lead.zip ? ` ${escapeHtml(lead.zip)}` : ""}` : "Not provided"}</td></tr>
           <tr><td style="${LABEL_CELL}">Project</td><td style="${VALUE_CELL}">${escapeHtml(projectLabel)}</td></tr>
           ${lead.budget ? `<tr><td style="${LABEL_CELL}">Desired budget</td><td style="${VALUE_CELL};font-weight:600;">${escapeHtml(lead.budget)}</td></tr>` : ""}
         </table>
