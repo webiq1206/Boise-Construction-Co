@@ -123,10 +123,20 @@ export async function getUserFromDb(userId: string) {
   return result[0] || null;
 }
 
+/**
+ * Authoritative admin allowlist. Checked on every OIDC login via
+ * `getDesignatedRole`, which grants the "admin" role and upgrades an existing
+ * account on its next sign-in. Every /admin page and /api/admin route gates on
+ * that stored role, so adding an address here is what actually grants access.
+ *
+ * Compare lowercased; entries must be lowercase.
+ */
 const ADMIN_EMAILS = [
   "webiq.co@gmail.com",
   "info@webiq.co",
   "hello@boiseremodeling.co",
+  "hello@boisecabinet.co",
+  "hello@p5homeco.com",
   "brostjared@gmail.com",
 ];
 
