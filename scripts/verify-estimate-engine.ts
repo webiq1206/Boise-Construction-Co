@@ -63,6 +63,12 @@ for (const project of projects) {
     assert(visibility.bathroomCount, `${project} asks how many bathrooms`);
     assert(visibility.kitchenIncluded, `${project} asks whether the kitchen is included`);
     assert(maxFields === 4, `${project} exposes four refinement fields`);
+  } else if (project === "bathroom") {
+    // Layout, systems, fixture count within a bathroom, and how many bathrooms.
+    assert(visibility.layoutChanges, `${project} shows layout changes`);
+    assert(visibility.fixtureCount, `${project} asks fixture count`);
+    assert(visibility.bathroomCount, `${project} asks how many bathrooms`);
+    assert(maxFields === 4, `${project} exposes four refinement fields`);
   } else {
     assert(visibility.layoutChanges, `${project} shows layout changes`);
     assert(maxFields === 3, `${project} exposes three refinement fields`);
@@ -201,8 +207,13 @@ const bathOneFixture = calculateEstimate(
 // A low fixture count carries no discount multiplier, so it never pulls the
 // estimate CENTER below the base (the band may tighten around that center as
 // detail is added, but the midpoint does not drop).
+// Tolerance is one rounding step, not one dollar. Both endpoints round to the
+// nearest $1,000 independently, so the midpoint can legitimately shift by up to
+// $500 without any discount having been applied. The invariant being protected
+// is that no DISCOUNT multiplier exists for a low fixture count, not that the
+// rounded midpoint is bit-identical.
 assert(
-  mid(bathOneFixture) >= mid(bathBase) - 1,
+  mid(bathOneFixture) >= mid(bathBase) - 1000,
   "low fixture count never discounts the estimate center",
 );
 

@@ -874,6 +874,11 @@ const ASSUMED_BATHROOMS: Partial<Record<ProjectType, number>> = {
   basement: 0,
   addition: 0,
   adu: 1,
+  // A bathroom project is one bathroom by default, but plenty of homeowners
+  // are doing two or three at once and had no way to say so. Handled as a
+  // multiplier rather than an additive module (see below), because here the
+  // size slider describes EACH bathroom.
+  bathroom: 1,
 };
 
 export function getAssumedBathrooms(project: ProjectType): number | null {
@@ -904,7 +909,8 @@ function getModuleAdjustment(
   let low = 0;
   let high = 0;
 
-  const assumed = ASSUMED_BATHROOMS[project];
+  // The bathroom project scales by count instead; see bathroomInstances.
+  const assumed = project === "bathroom" ? undefined : ASSUMED_BATHROOMS[project];
   if (assumed !== undefined && ref.bathroomCount !== null) {
     const bath = PRICE_MATRIX.bathroom[normalizeFinishLevel("bathroom", finish)];
     if (bath) {
@@ -962,7 +968,20 @@ export function calculateEstimate(input: EstimateInput, userRefinementCount = 0)
   const moduleMid =
     ((modules.low + modules.high) / 2) * PLANNING_RANGE_ADJUSTMENT;
 
-  const center = Math.max(1000, baseMid * sizeMult * refMid + moduleMid);
+  // On a bathroom project the count multiplies rather than adds: three
+  // bathrooms is three of the thing being priced, not one large one. Reading it
+  // as a single big room and scaling sublinearly understated a three-bathroom
+  // project by roughly 43%, which is the direction that sets an expectation a
+  // proposal cannot meet.
+  const bathroomInstances =
+    safeInput.project === "bathroom" && input.refinements.bathroomCount !== null
+      ? Math.max(1, input.refinements.bathroomCount)
+      : 1;
+
+  const center = Math.max(
+    1000,
+    (baseMid * sizeMult * refMid + moduleMid) * bathroomInstances,
+  );
 
   // The BAND starts at the category's own natural spread and TIGHTENS as the
   // user supplies more detail, so a fully-specified estimate is genuinely more
