@@ -4,6 +4,7 @@ import * as client from "openid-client";
 import { db } from "./db";
 import { users } from "@/shared/schema";
 import { eq } from "drizzle-orm";
+import { getDesignatedRole } from "./adminAccess";
 
 export interface SessionData {
   userId?: string;
@@ -123,29 +124,8 @@ export async function getUserFromDb(userId: string) {
   return result[0] || null;
 }
 
-/**
- * Authoritative admin allowlist. Checked on every OIDC login via
- * `getDesignatedRole`, which grants the "admin" role and upgrades an existing
- * account on its next sign-in. Every /admin page and /api/admin route gates on
- * that stored role, so adding an address here is what actually grants access.
- *
- * Compare lowercased; entries must be lowercase.
- */
-const ADMIN_EMAILS = [
-  "webiq.co@gmail.com",
-  "info@webiq.co",
-  "hello@boiseremodeling.co",
-  "hello@boisecabinet.co",
-  "hello@p5homeco.com",
-  "brostjared@gmail.com",
-];
-
-function getDesignatedRole(email: string | undefined): "admin" | "subcontractor" {
-  if (email && ADMIN_EMAILS.includes(email.toLowerCase())) {
-    return "admin";
-  }
-  return "subcontractor";
-}
+// The admin allowlist lives in lib/adminAccess.ts so this login path and the
+// user-upsert path in server/storage.ts cannot disagree about who is an admin.
 
 export async function upsertUserFromClaims(claims: SessionData["claims"]) {
   if (!db || !claims?.sub) return null;

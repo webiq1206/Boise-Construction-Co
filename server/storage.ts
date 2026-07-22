@@ -3,6 +3,7 @@ import { randomUUID } from "crypto";
 import { BLOG_POSTS } from "@shared/blogContent";
 import { db } from "./db";
 import { eq, and, or, desc, lte } from "drizzle-orm";
+import { getDesignatedRole } from "@/lib/adminAccess";
 
 export interface IStorage {
   createQuote(quote: InsertQuote): Promise<Quote>;
@@ -405,10 +406,9 @@ export class MemStorage implements IStorage {
     const id = userData.id || randomUUID();
     const existing = this.users.get(id);
     
-    // Check if email is in admin list
-    const adminEmails = (process.env.ADMIN_EMAILS || "").split(",").map(e => e.trim().toLowerCase()).filter(Boolean);
-    const isAdminEmail = userData.email && adminEmails.includes(userData.email.toLowerCase());
-    const role = userData.role ?? (isAdminEmail ? "admin" : "subcontractor");
+    // Role comes from the shared allowlist (lib/adminAccess.ts), the same one
+    // the OIDC login path uses, so the two cannot disagree.
+    const role = userData.role ?? getDesignatedRole(userData.email);
     
     const user: User = {
       id,
@@ -1087,10 +1087,9 @@ export class DBStorage implements IStorage {
     const id = userData.id || randomUUID();
     const existing = await this.getUser(id);
     
-    // Check if email is in admin list
-    const adminEmails = (process.env.ADMIN_EMAILS || "").split(",").map(e => e.trim().toLowerCase()).filter(Boolean);
-    const isAdminEmail = userData.email && adminEmails.includes(userData.email.toLowerCase());
-    const defaultRole = isAdminEmail ? "admin" : "subcontractor";
+    // Role comes from the shared allowlist (lib/adminAccess.ts), the same one
+    // the OIDC login path uses, so the two cannot disagree.
+    const defaultRole = getDesignatedRole(userData.email);
 
     if (existing) {
       // Update existing user - preserve existing role, or use admin if in admin list and no explicit role
