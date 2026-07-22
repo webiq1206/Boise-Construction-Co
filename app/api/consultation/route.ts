@@ -27,6 +27,7 @@ import {
   countVisibleUserRefinements,
   getProjectSizeConfig,
   getSetRefinementKeys,
+  PROJECT_LABELS,
   type EstimateRefinements,
 } from "@/shared/estimateEngine";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
@@ -199,18 +200,21 @@ export async function POST(request: NextRequest) {
       fullName: data.name,
       email: data.email,
       phone: data.phone,
+      // Field names must match the dashboard's externalLeadSchema exactly; it
+      // strips anything it does not recognise rather than erroring.
+      propertyAddress: data.address || undefined,
+      city: (data.propertyProfile as { city?: string; state?: string; zip?: string } | null)?.city || undefined,
+      state: (data.propertyProfile as { city?: string; state?: string; zip?: string } | null)?.state || undefined,
+      zip: data.zip || (data.propertyProfile as { city?: string; state?: string; zip?: string } | null)?.zip || undefined,
       projectTypes: data.projectType ? [data.projectType] : [],
-      address: data.address || undefined,
-      propertyZip: data.zip || undefined,
+      budgetRange: undefined,
       projectScope: estimate
-        ? `${data.projectType} - estimated $${estimate.priceLow.toLocaleString()}${"–"}$${estimate.priceHigh.toLocaleString()}`
+        ? `${PROJECT_LABELS[estimate.project].label} - ${formatUsd(estimate.priceLow)} to ${formatUsd(estimate.priceHigh)} (${estimate.confidence})`
         : undefined,
-      estimateLow: estimate?.priceLow,
-      estimateHigh: estimate?.priceHigh,
-      estimateRange: estimate ? `${formatUsd(estimate.priceLow)} to ${formatUsd(estimate.priceHigh)}` : undefined,
-      estimateConfidence: estimate?.confidence,
+      // The full readable record. Trimmed to the dashboard's limit by the
+      // forwarder; the untrimmed structured copy rides along in `estimate`.
+      finalNotes: buildLeadNotes(crmLead, estimate, crmProfile),
       estimate: estimate ? buildLeadEstimateRecord(estimate) : undefined,
-      notes: buildLeadNotes(crmLead, estimate, crmProfile),
       source: "boiseremodeling.co",
     });
 
