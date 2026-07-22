@@ -11,7 +11,7 @@ export const homeAdditionCostBoise: BlogPostData = {
   metaDescription:
     'How much does a home addition cost in Boise? 2026 planning ranges by type - room additions, primary suites, second stories, and bump-outs - plus permits, timelines, and ROI.',
   excerpt:
-    'Ground-floor home additions in Boise typically plan $80,000-$250,000+ depending on size, foundation, and finish level. Here is the cost by addition type and how to budget.',
+    'Ground-floor home additions in Boise typically plan $96,000-$224,000 depending on size, foundation, and finish level. Here is the cost by addition type and how to budget.',
   category: 'Boise Remodeling Costs',
   hubSlug: 'remodeling-costs',
   author: 'Boise Remodeling Co',
@@ -33,9 +33,9 @@ export const homeAdditionCostBoise: BlogPostData = {
   ],
   wordCountTarget: 'cluster',
   quickAnswer:
-    'A home addition in Boise typically costs $80,000-$250,000 or more as of 2026, or roughly $300-$500 per square foot. Small bump-outs land lower, while primary suite additions and second-story additions reach the top of the range. Foundation, roof tie-ins, and matching existing architecture drive cost more than interior finishes.',
+    'A home addition in Boise typically costs $96,000-$224,000 as of 2026, or roughly $240-$560 per square foot, based on a 400 square foot addition. Small bump-outs land lower, while primary suite additions and second-story additions reach the top of the range and beyond. Foundation, roof tie-ins, and matching existing architecture drive cost more than interior finishes.',
   keyTakeaways: [
-    'Home additions in Boise plan $80,000-$250,000+, roughly $300-$500 per square foot.',
+    'Home additions in Boise plan $96,000-$224,000, roughly $240-$560 per square foot.',
     'Additions cost more per square foot than interior remodels because they build new foundation, walls, and roof.',
     'Second-story additions cost more than ground-floor because of structural reinforcement.',
     'Additions almost always require permits and plan review in Ada or Canyon County.',
@@ -54,12 +54,12 @@ export const homeAdditionCostBoise: BlogPostData = {
     {
       question: 'How much does a home addition cost in Boise?',
       answer:
-        'As of 2026, a home addition in Boise typically plans $80,000-$250,000 or more, roughly $300-$500 per square foot. Small bump-outs land lower; primary suite and second-story additions reach the top of the range because of foundation, structure, and roof work.',
+        'As of 2026, a home addition in Boise typically plans $96,000-$224,000 or more, roughly $240-$560 per square foot. Small bump-outs land lower; primary suite and second-story additions reach the top of the range because of foundation, structure, and roof work.',
     },
     {
       question: 'What does a room addition cost per square foot in Boise?',
       answer:
-        'Room additions in the Treasure Valley commonly run $300-$500 per square foot - more than interior remodels because you are building new foundation, framing, roof, and systems from the ground up. Bathrooms and kitchens within an addition push the higher end.',
+        'Room additions in the Treasure Valley commonly run $240-$560 per square foot - more than interior remodels because you are building new foundation, framing, roof, and systems from the ground up. Bathrooms and kitchens within an addition push the higher end.',
     },
     {
       question: 'How much does a second-story addition cost?',
@@ -84,7 +84,7 @@ export const homeAdditionCostBoise: BlogPostData = {
   ],
   content: `
 <h2 id="how-much">How much does a home addition cost in Boise?</h2>
-<p><strong>As of 2026, a home addition in Boise typically costs $80,000-$250,000 or more, or roughly $300-$500 per square foot.</strong> Additions cost more per square foot than interior remodels for a simple reason: you are building new foundation, framing, roof, and systems from the ground up, rather than working within existing walls. Small bump-outs land at the low end; primary suites and second-story additions reach the top.</p>
+<p><strong>As of 2026, a home addition in Boise typically costs $96,000-$224,000 or more, or roughly $240-$560 per square foot.</strong> Additions cost more per square foot than interior remodels for a simple reason: you are building new foundation, framing, roof, and systems from the ground up, rather than working within existing walls. Small bump-outs land at the low end; primary suites and second-story additions reach the top.</p>
 <p>These are planning ranges from real Treasure Valley design-build consultations, part of our <a href="/guides/boise-remodeling-cost-guide">Boise Remodeling Cost Guide</a>. For a quick starting number, use our <a href="/#calculator">project estimator</a>.</p>
 <table class="cost-table">
 <thead><tr><th>Addition type</th><th>2026 Boise planning range</th><th>Notes</th></tr></thead>
