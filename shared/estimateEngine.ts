@@ -566,24 +566,32 @@ const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>>
 
 /** Resolves base price data, normalizing disallowed finish levels first. */
 /**
- * Deliberate downward adjustment applied to every cost-guide rate before a
- * planning range is shown, set by the owner to avoid opening a conversation
- * with a number that reads as sticker shock.
+ * Deliberate downward adjustment applied to the published cost-guide rates, set
+ * by the owner to avoid opening a conversation with a number that reads as
+ * sticker shock.
  *
- * Kept as a single constant rather than baked into PRICE_MATRIX so the matrix
- * stays a faithful, auditable copy of the published guide and this business
- * decision remains one visible, reversible number. Set to 1 to quote the guide
- * as published.
+ * Applied ASYMMETRICALLY, and that matters. Sticker shock is caused by the top
+ * of a range: the figure a homeowner fixates on and repeats is the ceiling.
+ * Cutting the floor by the same amount softens nothing, and actively harms,
+ * because it advertises an entry price the work cannot be delivered for. A
+ * uniform 20% cut had pulled the whole-home floor from the guide's $75/sq ft to
+ * $60/sq ft, which reads as a light cosmetic refresh rather than the "replace
+ * and upgrade" scope that rate is meant to describe.
  *
- * Scaling both ends by the same factor leaves the range's width RATIO
- * unchanged, so the uncertainty band and every monotonicity property are
- * unaffected; only the absolute figures move.
+ * So the ceiling comes down and the floor stays honest. The range narrows from
+ * above, which also reads as more confident than a wide one.
  *
- * Note the tradeoff this encodes: the estimator now quotes below the company's
- * own published cost guide, so the difference surfaces at proposal time rather
- * than in the estimate. See ESTIMATOR-CALIBRATION.md.
+ * Set both to 1 to quote the guide exactly as published.
  */
-export const PLANNING_RANGE_ADJUSTMENT = 0.8;
+export const PLANNING_RANGE_ADJUSTMENT_LOW = 1;
+export const PLANNING_RANGE_ADJUSTMENT_HIGH = 0.8;
+
+/**
+ * @deprecated Use the LOW/HIGH pair. Retained because the invariant suite and
+ * the whole-home module maths reference a single scalar; it tracks the high-end
+ * factor, which is the one that moves.
+ */
+export const PLANNING_RANGE_ADJUSTMENT = PLANNING_RANGE_ADJUSTMENT_HIGH;
 
 export function getPriceData(project: ProjectType, finish: FinishLevel): PriceData {
   const normalized = normalizeFinishLevel(project, finish);
@@ -594,8 +602,8 @@ export function getPriceData(project: ProjectType, finish: FinishLevel): PriceDa
   }
   return {
     ...data,
-    low: data.low * PLANNING_RANGE_ADJUSTMENT,
-    high: data.high * PLANNING_RANGE_ADJUSTMENT,
+    low: data.low * PLANNING_RANGE_ADJUSTMENT_LOW,
+    high: data.high * PLANNING_RANGE_ADJUSTMENT_HIGH,
   };
 }
 
