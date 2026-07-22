@@ -7,7 +7,7 @@ export const remodelCostPerSquareFootBoise: BlogPostData = {
   metaDescription:
     'What does it cost per square foot to remodel a home in Boise? 2026 ranges by project type, why the metric misleads, when it helps, and how to budget a Treasure Valley remodel instead.',
   excerpt:
-    'Remodel cost per square foot in Boise ranges from about $100 to $250 for whole-home work, but the metric misleads for kitchens and baths. Here is how to use it correctly.',
+    'Remodel cost per square foot in Boise runs about $60 to $172 for whole-home work, but the metric misleads for kitchens and baths. Here is how to use it correctly.',
   category: 'Boise Remodeling Costs',
   hubSlug: 'remodeling-costs',
   author: 'Boise Remodeling Co',
@@ -28,9 +28,9 @@ export const remodelCostPerSquareFootBoise: BlogPostData = {
   ],
   wordCountTarget: 'cluster',
   quickAnswer:
-    'Remodel cost per square foot in Boise runs roughly $100-$250 for whole-home projects, $60-$150 for cosmetic updates, and $300-$500 for additions as of 2026. But per-square-foot figures mislead for kitchens and bathrooms, where cost concentrates in cabinets, tile, and fixtures rather than floor area. Use the metric for a first gut-check only, not as a budget.',
+    'Remodel cost per square foot in Boise runs roughly $60-$172 for whole-home projects, $24-$40 for a cosmetic refresh, and $240-$560 for additions as of 2026. But per-square-foot figures mislead for kitchens and bathrooms, where cost concentrates in cabinets, tile, and fixtures rather than floor area, and the rate falls as a project gets larger. Use the metric for a first gut-check only, not as a budget.',
   keyTakeaways: [
-    'Whole-home remodels run about $100-$250 per square foot in Boise; additions $300-$500.',
+    'Whole-home remodels run about $60-$172 per square foot in Boise; additions $240-$560.',
     'Per-square-foot is unreliable for kitchens and baths - cost concentrates in fixtures, not floor area.',
     'A small, finish-dense room can cost more per square foot than a large, simple one.',
     'Scope, finish level, and systems drive your number far more than area.',
@@ -48,17 +48,17 @@ export const remodelCostPerSquareFootBoise: BlogPostData = {
     {
       question: 'How much does it cost per square foot to remodel a house in Boise?',
       answer:
-        'As of 2026, whole-home remodels in Boise run roughly $100-$250 per square foot, cosmetic updates $60-$150, and additions $300-$500. The wide range reflects finish level and how much of the mechanical, electrical, and plumbing you replace - not square footage alone.',
+        'As of 2026, whole-home remodels in Boise run roughly $60-$172 per square foot, cosmetic updates $24-$40, and additions $240-$560. The wide range reflects finish level and how much of the mechanical, electrical, and plumbing you replace - not square footage alone.',
     },
     {
       question: 'What is kitchen remodel cost per square foot?',
       answer:
-        'You may see $150-$350 per square foot quoted for kitchens, but the figure is misleading because kitchen cost lives in cabinets, countertops, and appliances - which are fixed regardless of floor area. A small kitchen can cost more per square foot than a large one. Budget by scope and selections instead.',
+        'You may see $140-$520 per square foot quoted for kitchens, but the figure is misleading because kitchen cost lives in cabinets, countertops, and appliances - which are fixed regardless of floor area. A small kitchen can cost more per square foot than a large one. Budget by scope and selections instead.',
     },
     {
       question: 'Why do additions cost more per square foot than remodels?',
       answer:
-        'Additions build new foundation, framing, roof, and systems from the ground up, while an interior remodel reuses the existing shell. You are comparing new construction to renovation, so additions land at $300-$500 per square foot versus $100-$250 for interior whole-home work.',
+        'Additions build new foundation, framing, roof, and systems from the ground up, while an interior remodel reuses the existing shell. You are comparing new construction to renovation, so additions land at $240-$560 per square foot versus $100-$250 for interior whole-home work.',
     },
     {
       question: 'Is cost per square foot a reliable way to budget a remodel?',
@@ -78,7 +78,7 @@ export const remodelCostPerSquareFootBoise: BlogPostData = {
   ],
   content: `
 <h2 id="how-much">What does it cost per square foot to remodel a home in Boise?</h2>
-<p><strong>As of 2026, remodel cost per square foot in Boise runs roughly $100-$250 for whole-home projects, $60-$150 for cosmetic updates, and $300-$500 for additions.</strong> Those are useful for a first gut-check, but the metric breaks down the moment you apply it to a single room - especially a kitchen or bathroom, where the cost lives in cabinets, tile, and fixtures rather than in floor area. Understanding when per-square-foot helps and when it misleads will save you from budgeting on a number that was never meant to carry that weight.</p>
+<p><strong>As of 2026, remodel cost per square foot in Boise runs roughly $60-$172 for whole-home projects, $24-$40 for cosmetic updates, and $240-$560 for additions.</strong> Those are useful for a first gut-check, but the metric breaks down the moment you apply it to a single room - especially a kitchen or bathroom, where the cost lives in cabinets, tile, and fixtures rather than in floor area. Understanding when per-square-foot helps and when it misleads will save you from budgeting on a number that was never meant to carry that weight.</p>
 <p>This article is part of our <a href="/guides/boise-remodeling-cost-guide">Boise Remodeling Cost Guide</a>. For a project-specific starting range, use our <a href="/#calculator">estimator</a>.</p>
 <table class="cost-table">
 <thead><tr><th>Project type</th><th>2026 Boise cost per square foot</th></tr></thead>
@@ -99,10 +99,10 @@ export const remodelCostPerSquareFootBoise: BlogPostData = {
 <h2 id="by-type">Cost per square foot by project type</h2>
 <p>Because the metric behaves so differently by room, it is only meaningful when you separate project types rather than lumping them together.</p>
 <ul>
-<li><strong>Whole-home remodels</strong> - the best use case for per-square-foot, since cost spreads across the whole footprint. Expect $100-$250 depending on finish level and how much MEP you replace. See <a href="/blog/whole-home-remodel-cost-boise">whole-home remodel cost</a>.</li>
+<li><strong>Whole-home remodels</strong> - the best use case for per-square-foot, since cost spreads across the whole footprint. Expect $60-$172 depending on finish level and how much MEP you replace. See <a href="/blog/whole-home-remodel-cost-boise">whole-home remodel cost</a>.</li>
 <li><strong>Kitchens</strong> - avoid per-square-foot; budget by cabinet run and selections. See <a href="/blog/kitchen-remodel-cost-boise">kitchen remodel cost</a>.</li>
 <li><strong>Bathrooms</strong> - the least reliable per-square-foot room; small and expensive. See <a href="/blog/bathroom-remodel-cost-boise">bathroom remodel cost</a>.</li>
-<li><strong>Additions</strong> - $300-$500 because you build everything new; the metric is more meaningful here than for interior remodels. See <a href="/blog/home-addition-cost-boise">home addition cost</a>.</li>
+<li><strong>Additions</strong> - $240-$560 because you build everything new; the metric is more meaningful here than for interior remodels. See <a href="/blog/home-addition-cost-boise">home addition cost</a>.</li>
 </ul>
 
 <h2 id="when-useful">When cost per square foot is actually useful</h2>

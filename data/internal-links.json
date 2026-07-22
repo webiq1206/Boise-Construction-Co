@@ -2992,7 +2992,7 @@
           "anchor": "North End Remodeling Guide",
           "title": "North End Remodeling Guide",
           "type": "guide",
-          "score": 0.134
+          "score": 0.137
         }
       ]
     },
@@ -3870,7 +3870,7 @@
           "anchor": "Remodel Cost Per Square Foot in Boise: What It Really Tells You",
           "title": "Remodel Cost Per Square Foot in Boise: What It Really Tells You",
           "type": "blog",
-          "score": 1.187
+          "score": 1.193
         }
       ]
     },
@@ -7792,11 +7792,11 @@
           "score": 0.047
         },
         {
-          "url": "/blog/material-selection-guide",
-          "anchor": "Material Selection Guide: Choosing Finishes for Your Remodel",
-          "title": "Material Selection Guide: Choosing Finishes for Your Remodel",
+          "url": "/blog/remodel-cost-per-square-foot-boise",
+          "anchor": "Remodel Cost Per Square Foot in Boise: What It Really Tells You",
+          "title": "Remodel Cost Per Square Foot in Boise: What It Really Tells You",
           "type": "blog",
-          "score": 0.02
+          "score": 0.023
         }
       ]
     },
@@ -7849,9 +7849,9 @@
           "score": 0.12
         },
         {
-          "url": "/blog/remodel-cost-per-square-foot-boise",
-          "anchor": "Remodel Cost Per Square Foot in Boise: What It Really Tells You",
-          "title": "Remodel Cost Per Square Foot in Boise: What It Really Tells You",
+          "url": "/blog/material-selection-guide",
+          "anchor": "Material Selection Guide: Choosing Finishes for Your Remodel",
+          "title": "Material Selection Guide: Choosing Finishes for Your Remodel",
           "type": "blog",
           "score": 0.023
         },
@@ -9048,7 +9048,7 @@
           "anchor": "Remodel Cost Per Square Foot in Boise: What It Really Tells You",
           "title": "Remodel Cost Per Square Foot in Boise: What It Really Tells You",
           "type": "blog",
-          "score": 0.551
+          "score": 0.521
         },
         {
           "url": "/blog/what-impacts-remodeling-costs-boise",
