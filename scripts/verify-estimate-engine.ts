@@ -48,14 +48,22 @@ for (const project of projects) {
 
   // Bathroom count is now priced on every project whose published rate covers a
   // known number of them, so these counts include it.
-  if (project === "addition" || project === "adu") {
+  if (project === "adu") {
+    // A dwelling unit has a kitchen by definition, so there is nothing to ask.
     assert(!visibility.layoutChanges, `${project} hides layout changes`);
     assert(visibility.bathroomCount, `${project} asks how many bathrooms`);
+    assert(!visibility.kitchenIncluded, `${project} does not ask about a kitchen`);
     assert(maxFields === 3, `${project} exposes three refinement fields`);
+  } else if (project === "addition") {
+    assert(!visibility.layoutChanges, `${project} hides layout changes`);
+    assert(visibility.bathroomCount, `${project} asks how many bathrooms`);
+    assert(visibility.kitchenIncluded, `${project} asks about a kitchen`);
+    assert(maxFields === 4, `${project} exposes four refinement fields`);
   } else if (project === "basement") {
     assert(visibility.layoutChanges, `${project} shows layout changes`);
     assert(visibility.bathroomCount, `${project} asks how many bathrooms`);
-    assert(maxFields === 3, `${project} exposes three refinement fields`);
+    assert(visibility.kitchenIncluded, `${project} asks about a wet bar`);
+    assert(maxFields === 4, `${project} exposes four refinement fields`);
   } else if (project === "whole-home") {
     // Layout, systems, bathroom count and kitchen inclusion. Bathroom count and
     // kitchen replaced the retired roomCount, which double counted size.

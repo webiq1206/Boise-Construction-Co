@@ -340,7 +340,7 @@ export function getRefinementVisibility(project: ProjectType): RefinementVisibil
     cabinetTier: project === "kitchen",
     fixtureCount: project === "bathroom",
     bathroomCount: ASSUMED_BATHROOMS[project] !== undefined,
-    kitchenIncluded: project === "whole-home",
+    kitchenIncluded: ASSUMED_KITCHENS[project] !== undefined,
     stories: project === "addition",
     aduConfiguration: project === "adu",
   };
@@ -892,6 +892,42 @@ export function getAssumedBathrooms(project: ProjectType): number | null {
 }
 
 /**
+ * Whether each project's published rate already covers a kitchen, and which
+ * kitchen. Same reasoning as bathrooms: the rate contains one or it does not,
+ * and the homeowner states what theirs actually has.
+ *
+ *   whole-home  covers a full kitchen        "Kitchen and bath ... renovation"
+ *   addition    covers none                  "Bedroom or family room addition"
+ *   basement    covers none, and what gets   "Wet bar or kitchenette rough-in"
+ *               added is a wet bar, not a
+ *               full kitchen
+ *
+ * ADU is absent deliberately: a dwelling unit has a kitchen by definition, so
+ * there is nothing to ask. Kitchen projects are the kitchen.
+ *
+ * `tier` is the price to use for one, from the guide's own kitchen figures. A
+ * basement wet bar is priced at the refresh tier (cabinets, a counter and a
+ * small sink, no appliance or layout work) rather than the project's own finish
+ * level, because charging a full high-end kitchen for a wet bar would overstate
+ * it several times over.
+ */
+const ASSUMED_KITCHENS: Partial<
+  Record<ProjectType, { covered: boolean; tier: FinishLevel | "match" }>
+> = {
+  "whole-home": { covered: true, tier: "match" },
+  addition: { covered: false, tier: "match" },
+  basement: { covered: false, tier: "refresh" },
+};
+
+export function getKitchenQuestion(
+  project: ProjectType,
+): { covered: boolean; isWetBar: boolean } | null {
+  const cfg = ASSUMED_KITCHENS[project];
+  if (!cfg) return null;
+  return { covered: cfg.covered, isWetBar: project === "basement" };
+}
+
+/**
  * Prices a deviation from the assumed bathroom count, and for whole-home the
  * presence of the kitchen, ADDITIVELY using the guide's own figures at the
  * matching finish level.
@@ -926,15 +962,17 @@ function getModuleAdjustment(
     }
   }
 
-  if (
-    project === "whole-home" &&
-    ref.kitchenIncluded === false &&
-    WHOLE_HOME_ASSUMES_KITCHEN
-  ) {
-    const kitchen = PRICE_MATRIX.kitchen[normalizeFinishLevel("kitchen", finish)];
+  const kitchenCfg = ASSUMED_KITCHENS[project];
+  if (kitchenCfg && ref.kitchenIncluded !== null) {
+    const tier =
+      kitchenCfg.tier === "match" ? normalizeFinishLevel("kitchen", finish) : kitchenCfg.tier;
+    const kitchen = PRICE_MATRIX.kitchen[tier];
     if (kitchen) {
-      low -= kitchen.low;
-      high -= kitchen.high;
+      // +1 when they have one the rate does not cover, -1 when the rate covers
+      // one they are not doing, 0 when the two agree.
+      const delta = (ref.kitchenIncluded ? 1 : 0) - (kitchenCfg.covered ? 1 : 0);
+      low += kitchen.low * delta;
+      high += kitchen.high * delta;
     }
   }
 

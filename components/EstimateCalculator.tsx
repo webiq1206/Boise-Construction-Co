@@ -27,6 +27,7 @@ import {
   getPlumbingElectricalOptions,
   getPlumbingElectricalLabel,
   getAssumedBathrooms,
+  getKitchenQuestion,
   FINISH_LABELS as ENGINE_FINISH_LABELS,
   PROJECT_SIZE_CONFIG,
   formatPlanningCurrency,
@@ -368,9 +369,7 @@ function buildRefinements(
   if (cabinetTier && effectiveProject === "kitchen") ref.cabinetTier = cabinetTier;
 
   if (bathroomCount !== null) ref.bathroomCount = bathroomCount;
-  if (kitchenIncluded !== null && effectiveProject === "whole-home") {
-    ref.kitchenIncluded = kitchenIncluded;
-  }
+  if (kitchenIncluded !== null) ref.kitchenIncluded = kitchenIncluded;
 
   return ref;
 }
@@ -680,7 +679,7 @@ export function EstimateCalculator({
      unknown and a whole-home almost always includes baths, so it is asked then
      too. The kitchen question appears the same way. */
   const showBathCount = getAssumedBathrooms(effectiveProject) !== null;
-  const showKitchenIncluded = effectiveProject === "whole-home";
+  const showKitchenIncluded = getKitchenQuestion(effectiveProject) !== null;
   const showSystems =
     ALWAYS_HAS_SYSTEMS.includes(effectiveProject) ||
     // No chips ticked means we do not know the scope yet, and systems work is
@@ -1213,40 +1212,50 @@ export function EstimateCalculator({
     </div>
   );
 
-  const kitchenRow = (
-    <div className="mt-5">
-      <p className={stepLabel}>{stepNo("kitchen")} &middot; Is the kitchen part of it?</p>
-      <div className="grid grid-cols-2 gap-2">
-        {([
-          { value: true, label: "Yes", sub: "Kitchen is being remodeled" },
+  const kitchenRow = (() => {
+    const q = getKitchenQuestion(effectiveProject);
+    const label = q?.isWetBar ? "Is there a wet bar or kitchenette?" : "Is the kitchen part of it?";
+    const opts = q?.isWetBar
+      ? [
+          { value: true, label: "Yes", sub: "Wet bar or kitchenette" },
+          { value: false, label: "No", sub: "No sink or cabinetry down there" },
+        ]
+      : [
+          { value: true, label: "Yes", sub: "Kitchen is part of the project" },
           { value: false, label: "No", sub: "Leaving the kitchen as is" },
-        ]).map((opt) => {
-          const active = kitchenIn === opt.value;
-          return (
-            <button
-              key={String(opt.value)}
-              type="button"
-              onClick={() => {
-                setKitchenIn(opt.value);
-                fireEstimatorEngagement();
-              }}
-              data-testid={`calc-kitchen-${opt.value ? "yes" : "no"}`}
-              aria-pressed={active}
-              className={cn(
-                "rounded-md border py-3 px-3 min-h-[64px] transition-all duration-200 flex flex-col items-center justify-center gap-0.5",
-                active
-                  ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
-                  : "bg-inverse-foreground/[0.05] border-inverse-foreground/[0.12] text-inverse-muted hover-elevate",
-              )}
-            >
-              <span className="text-[13.5px] text-inverse-foreground leading-tight">{opt.label}</span>
-              <span className="text-[11px] text-inverse-muted leading-tight">{opt.sub}</span>
-            </button>
-          );
-        })}
+        ];
+    return (
+      <div className="mt-5">
+        <p className={stepLabel}>{stepNo("kitchen")} &middot; {label}</p>
+        <div className="grid grid-cols-2 gap-2">
+          {opts.map((opt) => {
+            const active = kitchenIn === opt.value;
+            return (
+              <button
+                key={String(opt.value)}
+                type="button"
+                onClick={() => {
+                  setKitchenIn(opt.value);
+                  fireEstimatorEngagement();
+                }}
+                data-testid={`calc-kitchen-${opt.value ? "yes" : "no"}`}
+                aria-pressed={active}
+                className={cn(
+                  "rounded-md border py-3 px-3 min-h-[64px] transition-all duration-200 flex flex-col items-center justify-center gap-0.5",
+                  active
+                    ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
+                    : "bg-inverse-foreground/[0.05] border-inverse-foreground/[0.12] text-inverse-muted hover-elevate",
+                )}
+              >
+                <span className="text-[13.5px] text-inverse-foreground leading-tight">{opt.label}</span>
+                <span className="text-[11px] text-inverse-muted leading-tight">{opt.sub}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  );
+    );
+  })();
 
   /* Finish level (options tied to effectiveProject) */
   const finishRow = (
