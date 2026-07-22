@@ -11,11 +11,13 @@ import type { LeadEstimateRecord } from "@/server/services/leadRecord";
  * that source: fullName and email are required, everything else optional.
  */
 
-/** finalNotes is capped at 2000 chars by the dashboard; exceeding it 400s the
- *  whole submission, so the readable record is trimmed to fit. The complete,
- *  untrimmed record still travels in `estimate` and is persisted server-side. */
-const FINAL_NOTES_LIMIT = 1990;
-const PROJECT_SCOPE_LIMIT = 1990;
+/* Limits taken from the dashboard's externalLeadSchema. Exceeding any of them
+   fails validation and loses the whole lead, so every string is clamped before
+   it is sent rather than trusted to be short enough. */
+const FINAL_NOTES_LIMIT = 1990;      // schema max 2000
+const PROJECT_SCOPE_LIMIT = 1990;    // schema max 2000
+const ESTIMATE_SUMMARY_LIMIT = 19_900; // schema max 20000
+const ESTIMATE_RANGE_LIMIT = 95;     // schema max 100
 
 function clamp(value: string, limit: number): string {
   if (value.length <= limit) return value;
@@ -39,16 +41,24 @@ interface ForwardPayload {
   budgetRange?: string;
   projectScope?: string;
   projectGoals?: string;
+  /** The homeowner's own message. Short by nature; the estimate record does not
+   *  belong here, it belongs in estimateSummary. */
   finalNotes?: string;
 
   source?: string;
 
-  /**
-   * The complete structured record. The dashboard strips this today; it is sent
-   * so that once the endpoint persists the raw payload (see sourcePayload in its
-   * leads table) nothing has to change on this side.
-   */
+  /* ── Estimator output ────────────────────────────────────────────────────
+     The dashboard accepts `estimate` as a passthrough object specifically so
+     this side can add fields without them being silently stripped, and stores
+     the whole group as JSON on the lead's sourcePayload column. */
+
+  /** Complete structured record: selections, scope, assumptions, disclaimers. */
   estimate?: LeadEstimateRecord;
+  /** Readable rendering of the same record. 20k limit, not 2k like finalNotes. */
+  estimateSummary?: string;
+  estimateLow?: number;
+  estimateHigh?: number;
+  estimateRange?: string;
 }
 
 export function forwardToLeadDashboard(payload: ForwardPayload): void {
@@ -64,6 +74,12 @@ export function forwardToLeadDashboard(payload: ForwardPayload): void {
     ...payload,
     finalNotes: payload.finalNotes ? clamp(payload.finalNotes, FINAL_NOTES_LIMIT) : undefined,
     projectScope: payload.projectScope ? clamp(payload.projectScope, PROJECT_SCOPE_LIMIT) : undefined,
+    estimateSummary: payload.estimateSummary
+      ? clamp(payload.estimateSummary, ESTIMATE_SUMMARY_LIMIT)
+      : undefined,
+    estimateRange: payload.estimateRange
+      ? clamp(payload.estimateRange, ESTIMATE_RANGE_LIMIT)
+      : undefined,
   };
 
   fetch("https://leads.boiseremodeling.co/api/external/leads", {

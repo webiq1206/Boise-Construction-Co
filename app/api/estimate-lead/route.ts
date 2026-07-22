@@ -190,10 +190,16 @@ export async function POST(request: NextRequest) {
       projectScope: estimate
         ? `${PROJECT_LABELS[estimate.project].label} - ${formatUsd(estimate.priceLow)} to ${formatUsd(estimate.priceHigh)} (${estimate.confidence})`
         : undefined,
-      // The full readable record. Trimmed to the dashboard's limit by the
-      // forwarder; the untrimmed structured copy rides along in `estimate`.
-      finalNotes: buildLeadNotes(crmLead, estimate, crmProfile),
+      // The homeowner's own words stay in finalNotes; the estimate record goes
+      // to estimateSummary, which the dashboard sizes for it (20k vs 2k).
+      finalNotes: undefined,
       estimate: estimate ? buildLeadEstimateRecord(estimate) : undefined,
+      estimateSummary: buildLeadNotes(crmLead, estimate, crmProfile),
+      estimateLow: estimate?.priceLow,
+      estimateHigh: estimate?.priceHigh,
+      estimateRange: estimate
+        ? `${formatUsd(estimate.priceLow)} to ${formatUsd(estimate.priceHigh)}`
+        : undefined,
       source: "boiseremodeling.co",
     });
 
