@@ -14,11 +14,16 @@ import { Section } from "@/components/marketing";
 import {
   type ProjectType,
   type FinishLevel,
+  type PlumbingElectrical,
+  type CabinetTier,
   type EstimateRefinements,
   type EstimateInput,
   type EstimateResult,
   EMPTY_REFINEMENTS,
   getAvailableFinishLevels,
+  getPlumbingElectricalOptions,
+  getPlumbingElectricalLabel,
+  FINISH_LABELS as ENGINE_FINISH_LABELS,
   PROJECT_SIZE_CONFIG,
   formatPlanningCurrency,
   calculateEstimate,
@@ -317,60 +322,35 @@ const PROJECT_TYPE_ORDER: ProjectType[] = [
    REFINEMENT BUILDER  (exact logic per spec)
 ══════════════════════════════════════════════════════════════════════ */
 
+/**
+ * Assembles the engine refinements from what the visitor actually told us.
+ *
+ * The upgrade chips used to silently drive pricing: ticking a fourth chip set
+ * plumbing and electrical to "full", so adding "Flooring" (which has nothing to
+ * do with plumbing) quietly moved a kitchen from $53k-$66k to $57k-$72k and
+ * printed "Full (complete update)" in the customer's confirmation email for a
+ * scope they never chose. Inferring a systems scope from a checkbox count is
+ * not defensible, so it is now asked directly and the chips only capture scope.
+ *
+ * The one inference kept is the whole-home "Layout" chip, because that chip
+ * literally says layout: ticking it is a direct statement, not a guess.
+ */
 function buildRefinements(
   effectiveProject: ProjectType,
   _subtype: string,
   addOns: string[],
   subtypeRef: Partial<EstimateRefinements>,
+  plumbingElectrical: PlumbingElectrical | null,
+  cabinetTier: CabinetTier | null,
 ): EstimateRefinements {
   const ref: EstimateRefinements = { ...EMPTY_REFINEMENTS, ...subtypeRef };
 
-  switch (effectiveProject) {
-    case "kitchen": {
-      if (addOns.includes("cabinets")) ref.cabinetTier = "semi-custom";
-      if (addOns.length === 4) {
-        ref.plumbingElectrical = "full";
-      } else if (addOns.includes("counters") && addOns.includes("lighting")) {
-        ref.plumbingElectrical = "partial";
-      }
-      break;
-    }
-    case "bathroom": {
-      if (addOns.length >= 3) ref.plumbingElectrical = "full";
-      else if (addOns.length >= 1) ref.plumbingElectrical = "partial";
-      break;
-    }
-    case "whole-home": {
-      if (addOns.includes("layout")) ref.layoutChanges = "moderate";
-      if (addOns.includes("kitchen") && addOns.includes("baths")) {
-        ref.plumbingElectrical = "partial";
-      }
-      break;
-    }
-    case "addition": {
-      if (addOns.length >= 3) ref.plumbingElectrical = "full";
-      else if (addOns.length >= 1 && !ref.plumbingElectrical) {
-        ref.plumbingElectrical = "partial";
-      }
-      break;
-    }
-    case "adu": {
-      if (addOns.length === 4) {
-        ref.plumbingElectrical = "full";
-      } else if (addOns.includes("kitchen") && addOns.includes("bath")) {
-        ref.plumbingElectrical = "partial";
-      }
-      break;
-    }
-    case "basement": {
-      if (addOns.includes("bath") && addOns.includes("wet-bar")) {
-        ref.plumbingElectrical = "full";
-      } else if (addOns.includes("bath")) {
-        ref.plumbingElectrical = "partial";
-      }
-      break;
-    }
+  if (effectiveProject === "whole-home" && addOns.includes("layout")) {
+    ref.layoutChanges = "moderate";
   }
+
+  if (plumbingElectrical) ref.plumbingElectrical = plumbingElectrical;
+  if (cabinetTier && effectiveProject === "kitchen") ref.cabinetTier = cabinetTier;
 
   return ref;
 }
@@ -413,6 +393,11 @@ export function EstimateCalculator({
      visitor makes each choice themselves nothing is shown as selected, the
      later steps stay hidden, and no estimate can be produced. Presenting a
      pre-filled answer invites people to accept a project they never chose. */
+  /* Systems scope and cabinetry tier are asked outright rather than inferred
+     from the upgrade chips, so nothing reaches the estimate or the email that
+     the visitor did not choose. */
+  const [peScope, setPeScope] = useState<PlumbingElectrical | null>(null);
+  const [cabTier, setCabTier] = useState<CabinetTier | null>(null);
   const [chosen, setChosen] = useState({ project: false, subtype: false, finish: false });
   const allChosen = chosen.project && chosen.subtype && chosen.finish;
   const [scopeOpen, setScopeOpen]         = useState(false);
@@ -460,8 +445,8 @@ export function EstimateCalculator({
   const refinements = useMemo<EstimateRefinements>(() => {
     const data = SUBTYPE_DATA[activeProject]?.[subtype];
     if (!data) return { ...EMPTY_REFINEMENTS };
-    return buildRefinements(effectiveProject, subtype, addOns, data.refinements);
-  }, [effectiveProject, activeProject, subtype, addOns]);
+    return buildRefinements(effectiveProject, subtype, addOns, data.refinements, peScope, cabTier);
+  }, [effectiveProject, activeProject, subtype, addOns, peScope, cabTier]);
 
   const userRefinementCount = useMemo(
     () => countVisibleUserRefinements(effectiveProject, getSetRefinementKeys(refinements)),
@@ -566,6 +551,8 @@ export function EstimateCalculator({
     setAddOns([]);
     const avail = getAvailableFinishLevels(type);
     if (!avail.includes(finish)) setFinish("mid-range");
+    setPeScope(null);
+    setCabTier(null);
     // Changing the project invalidates the layout and finish choices made under
     // the previous one, so the visitor picks those again rather than inheriting.
     setChosen({ project: true, subtype: false, finish: false });
@@ -864,6 +851,9 @@ export function EstimateCalculator({
   const chipsRow = (
     <div className="mt-5">
       <p className={stepLabel}>4 &middot; {config.chipsLabel}</p>
+      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
+        Select all that apply. Optional, and it helps us understand your scope.
+      </p>
       <div
         className="grid grid-cols-2 sm:grid-cols-4 gap-2.5"
         role="group"
@@ -895,10 +885,86 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Step 5 - Finish level (options tied to effectiveProject) */
+  /* Step 5 - Systems scope. Asked outright because it is a real cost driver
+     (up to 1.22x) that used to be inferred from how many upgrade chips were
+     ticked, which meant a visitor could not see it and never agreed to it. */
+  const systemsRow = (
+    <div className="mt-5">
+      <p className={stepLabel}>5 &middot; {getPlumbingElectricalLabel(effectiveProject)}</p>
+      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
+        Moving pipes and circuits is one of the biggest cost drivers. Not sure? Pick the closest.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        {getPlumbingElectricalOptions(effectiveProject).map((opt) => {
+          const active = peScope === opt.value;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => {
+                setPeScope(opt.value);
+                fireEstimatorEngagement();
+              }}
+              data-testid={`calc-systems-${opt.value}`}
+              aria-pressed={active}
+              className={cn(
+                "rounded-md border py-3 px-3 min-h-[64px] transition-all duration-200 flex flex-col items-center justify-center gap-0.5",
+                active
+                  ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
+                  : "bg-inverse-foreground/[0.05] border-inverse-foreground/[0.12] text-inverse-muted hover-elevate",
+              )}
+            >
+              <span className="text-[13.5px] text-inverse-foreground leading-tight">{opt.label}</span>
+              <span className="text-[11px] text-inverse-muted leading-tight">{opt.sub}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  /* Step 6 - Cabinetry tier (kitchens only). Previously assumed from the
+     "Cabinets" chip; now an explicit choice. */
+  const cabinetRow = (
+    <div className="mt-5">
+      <p className={stepLabel}>6 &middot; Cabinetry</p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        {([
+          { value: "standard" as const, label: "Stock", sub: "Standard sizes and finishes" },
+          { value: "semi-custom" as const, label: "Semi-Custom", sub: "More sizes, door styles, colors" },
+          { value: "custom" as const, label: "Custom", sub: "Built to your exact space" },
+        ]).map((opt) => {
+          const active = cabTier === opt.value;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => {
+                setCabTier(opt.value);
+                fireEstimatorEngagement();
+              }}
+              data-testid={`calc-cabinets-${opt.value}`}
+              aria-pressed={active}
+              className={cn(
+                "rounded-md border py-3 px-3 min-h-[64px] transition-all duration-200 flex flex-col items-center justify-center gap-0.5",
+                active
+                  ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
+                  : "bg-inverse-foreground/[0.05] border-inverse-foreground/[0.12] text-inverse-muted hover-elevate",
+              )}
+            >
+              <span className="text-[13.5px] text-inverse-foreground leading-tight">{opt.label}</span>
+              <span className="text-[11px] text-inverse-muted leading-tight">{opt.sub}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  /* Finish level (options tied to effectiveProject) */
   const finishRow = (
     <div className="mt-5">
-      <p className={stepLabel}>5 &middot; Finish level</p>
+      <p className={stepLabel}>{effectiveProject === "kitchen" ? 7 : 6} &middot; Finish level</p>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {availFinish.map((level) => {
           const active = chosen.finish && finish === level;
@@ -910,13 +976,20 @@ export function EstimateCalculator({
               data-testid={`calc-finish-${level}`}
               aria-pressed={active}
               className={cn(
-                "rounded-md border text-[13.5px] py-3 min-h-[48px] transition-all duration-200",
+                "rounded-md border py-3 px-2 min-h-[64px] transition-all duration-200 flex flex-col items-center justify-center gap-0.5",
                 active
                   ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
                   : "bg-inverse-foreground/[0.05] border-inverse-foreground/[0.12] text-inverse-muted hover-elevate",
               )}
             >
-              {FINISH_LABELS[level]}
+              {/* Finish is the single biggest price driver (roughly 2x per tier),
+                  so it gets the same explanatory subtitle the other cards have. */}
+              <span className="text-[13.5px] text-inverse-foreground leading-tight">
+                {ENGINE_FINISH_LABELS[level].label}
+              </span>
+              <span className="text-[11px] text-inverse-muted leading-tight">
+                {ENGINE_FINISH_LABELS[level].sub}
+              </span>
             </button>
           );
         })}
@@ -1276,6 +1349,8 @@ export function EstimateCalculator({
       {chosen.project && subtypeGrid}
       {chosen.subtype && sizeGrid}
       {chosen.subtype && chipsRow}
+      {chosen.subtype && systemsRow}
+      {chosen.subtype && effectiveProject === "kitchen" && cabinetRow}
       {chosen.subtype && finishRow}
       {allChosen &&
         (gateSubmitted ? resultPanel : gateOpen ? leadsGatePanel : calculateCta)}
