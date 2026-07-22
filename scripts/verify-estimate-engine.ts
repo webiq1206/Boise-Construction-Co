@@ -8,9 +8,12 @@ import {
   getRefinementVisibility,
   getSetRefinementKeys,
   getSizePresets,
+  getAvailableFinishLevels,
   isCompleteEstimateInput,
   type ProjectType,
   type UserRefinementKey,
+  type FinishLevel,
+  type EstimateRefinements,
 } from "../shared/estimateEngine";
 
 function assert(condition: boolean, message: string) {
@@ -212,4 +215,171 @@ assert(
 const aduMaxSqft = getProjectSizeConfig("adu").max;
 assert(aduMaxSqft === 900, "ADU square footage is capped at 900");
 
-console.log("All estimate engine checks passed.");
+/* ══════════════════════════════════════════════════════════════════════
+   EXHAUSTIVE INVARIANT SWEEP
+
+   The checks above are scenario spot-checks. These sweep the entire input
+   space (every project x finish x size step x scope ladder) and assert the
+   properties the model must ALWAYS satisfy. This is what catches a pricing
+   regression before a homeowner sees it.
+
+   NOTE: this proves the arithmetic is self-consistent and well-behaved. It
+   cannot prove the base rates in PRICE_MATRIX match real Boise costs; that
+   requires calibration against closed jobs.
+══════════════════════════════════════════════════════════════════════ */
+
+let sweepChecks = 0;
+function check(condition: boolean, message: string) {
+  sweepChecks++;
+  assert(condition, message);
+}
+
+function sizeGrid(project: ProjectType): number[] {
+  const { min, max, step } = getProjectSizeConfig(project);
+  const points: number[] = [];
+  for (let s = min; s <= max; s += step) points.push(s);
+  if (points[points.length - 1] !== max) points.push(max);
+  return points;
+}
+
+function priceAt(
+  project: ProjectType,
+  finish: FinishLevel,
+  sqft: number,
+  refinements: EstimateRefinements,
+) {
+  const count = countVisibleUserRefinements(project, getSetRefinementKeys(refinements));
+  return calculateEstimate({ project, finish, sqft, refinements }, count);
+}
+
+// 1. Well-formedness across every reachable combination.
+for (const project of projects) {
+  for (const finish of getAvailableFinishLevels(project)) {
+    for (const sqft of sizeGrid(project)) {
+      const r = priceAt(project, finish, sqft, { ...EMPTY_REFINEMENTS });
+      const where = `${project}/${finish}/${sqft}sf`;
+      check(Number.isFinite(r.priceLow) && Number.isFinite(r.priceHigh), `${where}: finite price`);
+      check(r.priceLow > 0, `${where}: positive low`);
+      check(r.priceLow < r.priceHigh, `${where}: low below high`);
+      check(r.priceLow % 1000 === 0 && r.priceHigh % 1000 === 0, `${where}: rounded to 1k`);
+      const spread = r.priceHigh / r.priceLow;
+      check(spread >= 1.1, `${where}: band at least 1.1x (got ${spread.toFixed(2)})`);
+      check(spread <= 2.2, `${where}: band at most 2.2x (got ${spread.toFixed(2)})`);
+    }
+  }
+}
+
+// 2. Monotonic in size: a larger space never costs less.
+for (const project of projects) {
+  for (const finish of getAvailableFinishLevels(project)) {
+    let prev = 0;
+    for (const sqft of sizeGrid(project)) {
+      const m = mid(priceAt(project, finish, sqft, { ...EMPTY_REFINEMENTS }));
+      check(m >= prev, `${project}/${finish}: size monotonic at ${sqft}sf (${m} < ${prev})`);
+      prev = m;
+    }
+  }
+}
+
+// 3. Monotonic in finish: a richer finish never costs less.
+for (const project of projects) {
+  for (const sqft of sizeGrid(project)) {
+    let prev = 0;
+    for (const finish of getAvailableFinishLevels(project)) {
+      const m = mid(priceAt(project, finish, sqft, { ...EMPTY_REFINEMENTS }));
+      check(m >= prev, `${project}@${sqft}sf: finish monotonic at ${finish} (${m} < ${prev})`);
+      prev = m;
+    }
+  }
+}
+
+// 4. Monotonic in scope: escalating any refinement never lowers the estimate.
+const LADDERS: { key: keyof EstimateRefinements; values: unknown[] }[] = [
+  { key: "layoutChanges", values: ["none", "moderate", "major"] },
+  { key: "plumbingElectrical", values: ["cosmetic", "partial", "full"] },
+  { key: "cabinetTier", values: ["standard", "semi-custom", "custom"] },
+  { key: "fixtureCount", values: [1, 2, 3, 4, 5, 6, 7, 8] },
+  { key: "roomCount", values: [1, 2, 3, 4, 6, 8, 10, 12] },
+  { key: "stories", values: [1, 2] },
+  { key: "aduConfig", values: ["attached", "detached"] },
+];
+
+for (const project of projects) {
+  const v = getRefinementVisibility(project);
+  const shows: Record<string, boolean> = {
+    layoutChanges: v.layoutChanges,
+    plumbingElectrical: v.plumbingElectrical,
+    cabinetTier: v.cabinetTier,
+    fixtureCount: v.fixtureCount,
+    roomCount: v.roomCount,
+    stories: v.stories,
+    aduConfig: v.aduConfiguration,
+  };
+  for (const finish of getAvailableFinishLevels(project)) {
+    const sqft = getProjectSizeConfig(project).baselineSqft;
+    for (const { key, values } of LADDERS) {
+      if (!shows[key as string]) continue;
+      let prev = 0;
+      for (const value of values) {
+        const refinements = { ...EMPTY_REFINEMENTS, [key]: value } as EstimateRefinements;
+        const m = mid(priceAt(project, finish, sqft, refinements));
+        check(
+          m >= prev,
+          `${project}/${finish}: scope monotonic for ${String(key)}=${String(value)} (${m} < ${prev})`,
+        );
+        prev = m;
+      }
+    }
+  }
+}
+
+// 5. Size scaling must be SUBLINEAR for remodels. Cost follows cabinet runs,
+//    fixture counts and tile area, not floor area. Linear scaling here is what
+//    produced the $198k-$247k kitchen that triggered this work.
+for (const project of ["kitchen", "bathroom", "basement", "whole-home"] as ProjectType[]) {
+  const cfg = getProjectSizeConfig(project);
+  const doubled = Math.min(cfg.max, cfg.baselineSqft * 2);
+  if (doubled <= cfg.baselineSqft) continue;
+  const small = mid(priceAt(project, "mid-range", cfg.baselineSqft, { ...EMPTY_REFINEMENTS }));
+  const big = mid(priceAt(project, "mid-range", doubled, { ...EMPTY_REFINEMENTS }));
+  const areaRatio = doubled / cfg.baselineSqft;
+  const priceRatio = big / small;
+  check(
+    priceRatio < areaRatio,
+    `${project}: price scaled ${priceRatio.toFixed(2)}x for ${areaRatio.toFixed(2)}x area (must be sublinear)`,
+  );
+}
+
+// 6. New construction SHOULD scale close to linearly: an addition really does
+//    cost roughly proportionally more per square foot added.
+for (const project of ["addition", "adu"] as ProjectType[]) {
+  const cfg = getProjectSizeConfig(project);
+  const bigger = Math.min(cfg.max, Math.round(cfg.baselineSqft * 1.5));
+  if (bigger <= cfg.baselineSqft) continue;
+  const small = mid(priceAt(project, "mid-range", cfg.baselineSqft, { ...EMPTY_REFINEMENTS }));
+  const big = mid(priceAt(project, "mid-range", bigger, { ...EMPTY_REFINEMENTS }));
+  const areaRatio = bigger / cfg.baselineSqft;
+  const priceRatio = big / small;
+  check(
+    priceRatio > 1 + (areaRatio - 1) * 0.6,
+    `${project}: new construction should scale near-linearly (got ${priceRatio.toFixed(2)}x for ${areaRatio.toFixed(2)}x area)`,
+  );
+}
+
+// 7. Regression guard on the reported lead. A 400sf high-end kitchen with
+//    moderate layout, partial plumbing/electrical and semi-custom cabinetry was
+//    quoted $198k-$247k and flagged as far too high. Keep it well below that.
+const reportedLead = priceAt("kitchen", "high-end", 400, {
+  ...EMPTY_REFINEMENTS,
+  layoutChanges: "moderate",
+  plumbingElectrical: "partial",
+  cabinetTier: "semi-custom",
+});
+check(
+  reportedLead.priceHigh < 210_000,
+  `reported-lead regression: back up to ${reportedLead.priceLow}-${reportedLead.priceHigh}`,
+);
+
+console.log(
+  `All estimate engine checks passed (${sweepChecks} exhaustive invariant checks across every project, finish, size step and scope ladder).`,
+);
