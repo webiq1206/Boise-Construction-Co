@@ -226,6 +226,11 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
               confidence: estimate.confidenceLabel,
               sqft: estimate.sqft,
               refinements: estimate.refinements,
+              // Forwarded verbatim from the estimator so the emails can restate
+              // the layout card and upgrade chips the visitor actually chose,
+              // not just the derived refinements.
+              layoutLabel: estimate.layoutLabel,
+              upgradeLabels: estimate.upgradeLabels,
             }
           : null,
       };

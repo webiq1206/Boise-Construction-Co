@@ -28,6 +28,10 @@ export interface VerifiedEstimate {
   confidence: string;
   refinements: EstimateRefinements;
   included: string[];
+  /** The layout/type card the visitor picked, e.g. "L-Shape". */
+  layoutLabel?: string;
+  /** The upgrade chips they ticked, e.g. ["Cabinets", "Counters"]. */
+  upgradeLabels?: string[];
 }
 
 /** The lead's submitted contact details + note. */
@@ -78,16 +82,34 @@ export function buildSelectionRows(
   project: ProjectType,
   finish: FinishLevel,
   sqft: number,
-  r: EstimateRefinements
+  r: EstimateRefinements,
+  /** The layout/type card the visitor picked, e.g. "L-Shape". */
+  layoutLabel?: string,
+  /** The "what are you upgrading" chips they ticked, e.g. ["Cabinets"]. */
+  upgradeLabels?: string[]
 ): { label: string; value: string }[] {
   const visibility = getRefinementVisibility(project);
   const isNewConstruction = project === "addition" || project === "adu";
 
+  // Ordered to mirror the estimator itself, so the email reads back exactly the
+  // sequence of choices the visitor made and nothing they picked is missing.
   const rows: { label: string; value: string }[] = [
     { label: "Project type", value: PROJECT_LABELS[project].label },
-    { label: "Finish level", value: FINISH_LABELS[finish].label },
-    { label: "Approx. size", value: `${sqft.toLocaleString("en-US")} sq ft` },
   ];
+
+  if (layoutLabel) rows.push({ label: "Layout / type", value: layoutLabel });
+
+  rows.push({ label: "Approx. size", value: `${sqft.toLocaleString("en-US")} sq ft` });
+
+  rows.push({
+    label: "Upgrading",
+    value:
+      upgradeLabels && upgradeLabels.length > 0
+        ? upgradeLabels.join(", ")
+        : "None selected",
+  });
+
+  rows.push({ label: "Finish level", value: FINISH_LABELS[finish].label });
 
   if (visibility.layoutChanges && r.layoutChanges) {
     const map: Record<string, string> = {
@@ -201,7 +223,14 @@ function renderIncludedList(items: string[]): string {
  */
 export function buildEstimateSectionsHtml(est: VerifiedEstimate): string {
   const rangeText = `${formatUsd(est.priceLow)} to ${formatUsd(est.priceHigh)}`;
-  const rows = buildSelectionRows(est.project, est.finish, est.sqft, est.refinements);
+  const rows = buildSelectionRows(
+    est.project,
+    est.finish,
+    est.sqft,
+    est.refinements,
+    est.layoutLabel,
+    est.upgradeLabels,
+  );
   const roiNote = est.roi ? ` &middot; Typical resale ROI ~${Math.round(est.roi)}%` : "";
   const disclosure = buildEstimateDisclosure({
     project: est.project,

@@ -64,6 +64,11 @@ const estimateSchema = z
     roi: z.number(),
     confidence: z.string().max(80).optional(),
     refinements: refinementsSchema,
+    // The visitor-facing labels for the layout card and upgrade chips they
+    // chose. Length-capped here and escaped at render, so the emails can
+    // restate every selection verbatim without trusting the client.
+    layoutLabel: z.string().max(60).optional(),
+    upgradeLabels: z.array(z.string().max(40)).max(12).optional(),
   })
   .optional()
   .nullable();
@@ -127,6 +132,8 @@ function verifyEstimate(
     confidence: estimate.confidence || recomputed.confidenceLabel,
     refinements,
     included: recomputed.included,
+    layoutLabel: estimate.layoutLabel,
+    upgradeLabels: estimate.upgradeLabels,
   };
 }
 

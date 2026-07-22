@@ -408,6 +408,13 @@ export function EstimateCalculator({
   );
   const [addOns, setAddOns]               = useState<string[]>([]);
   const [finish, setFinish]               = useState<FinishLevel>("mid-range");
+  /* Nothing is pre-selected for the visitor. The state above still holds
+     working values so the engine always has a valid input, but until the
+     visitor makes each choice themselves nothing is shown as selected, the
+     later steps stay hidden, and no estimate can be produced. Presenting a
+     pre-filled answer invites people to accept a project they never chose. */
+  const [chosen, setChosen] = useState({ project: false, subtype: false, finish: false });
+  const allChosen = chosen.project && chosen.subtype && chosen.finish;
   const [scopeOpen, setScopeOpen]         = useState(false);
   const [legalOpen, setLegalOpen]         = useState(false);
   const [limitsOpen, setLimitsOpen]       = useState(false);
@@ -466,6 +473,25 @@ export function EstimateCalculator({
     return calculateEstimate(input, userRefinementCount);
   }, [effectiveProject, finish, sqft, refinements, userRefinementCount]);
 
+  /* The visitor's literal card/chip choices, resolved to the exact labels shown
+     on screen so the emails can restate them word for word. */
+  const selectedLayoutLabel = useMemo(
+    () =>
+      chosen.subtype
+        ? PROJECT_CONFIGS[activeProject].subtypes.find((s) => s.id === subtype)?.title
+        : undefined,
+    [chosen.subtype, activeProject, subtype],
+  );
+
+  const selectedUpgradeLabels = useMemo(() => {
+    const chips = PROJECT_CONFIGS[activeProject].chips;
+    return addOns
+      .map((id) => chips.find((c) => c.id === id)?.label)
+      .filter((l): l is string => !!l)
+      // Chips render uppercase for the grid; title-case reads better in email.
+      .map((l) => l.charAt(0) + l.slice(1).toLowerCase());
+  }, [activeProject, addOns]);
+
   /* Exclusions, assumptions and cost drivers, from the same shared source the
      confirmation emails use, so the on-screen and emailed estimate never differ. */
   const disclosure = useMemo(
@@ -479,7 +505,15 @@ export function EstimateCalculator({
     const input: EstimateInput = { project: effectiveProject, finish, sqft, refinements };
     sessionStorage.setItem(
       "brc_estimate",
-      JSON.stringify(buildStoredEstimate(input, userRefinementCount)),
+      JSON.stringify({
+        ...buildStoredEstimate(input, userRefinementCount),
+        // Carried alongside the engine result so the consultation form can
+        // forward the visitor's literal choices to the emails. Without these
+        // the emails could only show derived values (for example "moderate
+        // layout changes") and never the card the visitor actually clicked.
+        layoutLabel: selectedLayoutLabel,
+        upgradeLabels: selectedUpgradeLabels,
+      }),
     );
     window.dispatchEvent(new CustomEvent("brc_estimate_updated"));
   }, [effectiveProject, finish, sqft, refinements, userRefinementCount]);
@@ -524,7 +558,7 @@ export function EstimateCalculator({
   }
 
   function handleSelectProject(type: ProjectType) {
-    if (type === activeProject) return;
+    if (type === activeProject && chosen.project) return;
     const sub = defaultSubtypeFor(type);
     setActiveProject(type);
     setSubtype(sub);
@@ -532,12 +566,16 @@ export function EstimateCalculator({
     setAddOns([]);
     const avail = getAvailableFinishLevels(type);
     if (!avail.includes(finish)) setFinish("mid-range");
+    // Changing the project invalidates the layout and finish choices made under
+    // the previous one, so the visitor picks those again rather than inheriting.
+    setChosen({ project: true, subtype: false, finish: false });
     fireEstimatorEngagement();
   }
 
   /* Selecting a layout sets a smart default size, which the slider fine-tunes. */
   function handleSelectSubtype(id: string) {
     setSubtype(id);
+    setChosen((p) => ({ ...p, subtype: true }));
     const data = SUBTYPE_DATA[activeProject]?.[id];
     if (data) {
       const c = PROJECT_SIZE_CONFIG[data.projectOverride ?? activeProject];
@@ -548,6 +586,7 @@ export function EstimateCalculator({
 
   function handleSelectFinish(level: FinishLevel) {
     setFinish(level);
+    setChosen((p) => ({ ...p, finish: true }));
     fireEstimatorEngagement();
   }
 
@@ -616,6 +655,8 @@ export function EstimateCalculator({
         priceHigh: result.priceHigh,
         roi: result.roi,
         refinements,
+        layoutLabel: selectedLayoutLabel,
+        upgradeLabels: selectedUpgradeLabels,
       },
     };
 
@@ -686,7 +727,7 @@ export function EstimateCalculator({
         {PROJECT_TYPE_ORDER.map((type) => {
           const pc = PROJECT_CONFIGS[type];
           const Icon = PROJECT_ICONS[type];
-          const active = activeProject === type;
+          const active = chosen.project && activeProject === type;
           return (
             <button
               key={type}
@@ -720,7 +761,12 @@ export function EstimateCalculator({
         Ballpark your project in under 60 seconds
       </p>
       <h2 className="font-sans font-light text-[clamp(1.75rem,4vw,3rem)] leading-[1.08] tracking-tight text-inverse-foreground">
-        {config.twoLineHeadline ? (
+        {!chosen.project ? (
+          /* Before a project is picked the headline must not name one. */
+          <>
+            Calculate your <em className="brc-accent">remodel</em> cost
+          </>
+        ) : config.twoLineHeadline ? (
           <>
             {config.headlinePrefix}
             <br />
@@ -743,7 +789,7 @@ export function EstimateCalculator({
       <div className="grid grid-cols-2 gap-2.5" role="group" aria-label={config.gridLabel}>
         {config.subtypes.map((opt) => {
           const Icon = opt.icon;
-          const active = subtype === opt.id;
+          const active = chosen.subtype && subtype === opt.id;
           return (
             <button
               key={opt.id}
@@ -855,7 +901,7 @@ export function EstimateCalculator({
       <p className={stepLabel}>5 &middot; Finish level</p>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {availFinish.map((level) => {
-          const active = finish === level;
+          const active = chosen.finish && finish === level;
           return (
             <button
               key={level}
@@ -1224,11 +1270,15 @@ export function EstimateCalculator({
     <>
       {intro}
       {projectGrid}
-      {subtypeGrid}
-      {sizeGrid}
-      {chipsRow}
-      {finishRow}
-      {gateSubmitted ? resultPanel : gateOpen ? leadsGatePanel : calculateCta}
+      {/* Each step appears only once the one before it has been answered, so a
+          visitor is never presented with a pre-filled choice they did not make
+          and cannot reach an estimate without selecting every input. */}
+      {chosen.project && subtypeGrid}
+      {chosen.subtype && sizeGrid}
+      {chosen.subtype && chipsRow}
+      {chosen.subtype && finishRow}
+      {allChosen &&
+        (gateSubmitted ? resultPanel : gateOpen ? leadsGatePanel : calculateCta)}
     </>
   );
 

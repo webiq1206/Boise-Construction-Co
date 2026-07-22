@@ -49,6 +49,11 @@ const estimateSchema = z.object({
   priceHigh: z.number().nonnegative(),
   roi: z.number(),
   refinements: refinementsSchema,
+  // The visitor-facing labels for the layout card and upgrade chips they chose.
+  // Length-capped and escaped at render so the emails can restate every
+  // selection verbatim without trusting the client.
+  layoutLabel: z.string().max(60).optional(),
+  upgradeLabels: z.array(z.string().max(40)).max(12).optional(),
 });
 
 const bodySchema = z.object({
@@ -95,6 +100,8 @@ function verifyEstimate(
     confidence: recomputed.confidenceLabel,
     refinements,
     included: recomputed.included,
+    layoutLabel: estimate.layoutLabel,
+    upgradeLabels: estimate.upgradeLabels,
   };
 }
 

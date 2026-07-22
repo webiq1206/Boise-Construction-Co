@@ -806,6 +806,15 @@ export interface StoredEstimate extends EstimateInput {
   roi: number;
   confidence: ConfidenceLevel;
   confidenceLabel: string;
+  /**
+   * The visitor's literal on-screen choices, attached by the estimator so the
+   * consultation form can forward them to the emails. The engine itself does
+   * not use these; they exist so an emailed estimate can restate the layout
+   * card and upgrade chips that were actually clicked, rather than only the
+   * refinements those choices happened to derive.
+   */
+  layoutLabel?: string;
+  upgradeLabels?: string[];
 }
 
 export function buildStoredEstimate(input: EstimateInput, userRefinementCount = 0): StoredEstimate {
