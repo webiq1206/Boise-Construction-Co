@@ -1214,16 +1214,25 @@ export function EstimateCalculator({
 
   const kitchenRow = (() => {
     const q = getKitchenQuestion(effectiveProject);
-    const label = q?.isWetBar ? "Is there a wet bar or kitchenette?" : "Is the kitchen part of it?";
+    const label = q?.isWetBar
+      ? "Is there a wet bar or kitchenette?"
+      : q?.isDowngrade
+        ? "What kind of kitchen?"
+        : "Is the kitchen part of it?";
     const opts = q?.isWetBar
       ? [
           { value: true, label: "Yes", sub: "Wet bar or kitchenette" },
           { value: false, label: "No", sub: "No sink or cabinetry down there" },
         ]
-      : [
-          { value: true, label: "Yes", sub: "Kitchen is part of the project" },
-          { value: false, label: "No", sub: "Leaving the kitchen as is" },
-        ];
+      : q?.isDowngrade
+        ? [
+            { value: true, label: "Full kitchen", sub: "Full-size appliances and run" },
+            { value: false, label: "Kitchenette", sub: "Compact galley or efficiency" },
+          ]
+        : [
+            { value: true, label: "Yes", sub: "Kitchen is part of the project" },
+            { value: false, label: "No", sub: "Leaving the kitchen as is" },
+          ];
     return (
       <div className="mt-5">
         <p className={stepLabel}>{stepNo("kitchen")} &middot; {label}</p>

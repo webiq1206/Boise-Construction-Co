@@ -912,19 +912,39 @@ export function getAssumedBathrooms(project: ProjectType): number | null {
  * it several times over.
  */
 const ASSUMED_KITCHENS: Partial<
-  Record<ProjectType, { covered: boolean; tier: FinishLevel | "match" }>
+  Record<
+    ProjectType,
+    {
+      covered: boolean;
+      tier: FinishLevel | "match";
+      /**
+       * When set, answering "no" means a SMALLER kitchen rather than none at
+       * all, and the deduction is only the difference between the two tiers.
+       * An ADU must have a kitchen to be a dwelling; the real variable is
+       * whether it is a full one or a compact galley, and the guide already
+       * prices a lesser kitchen at its refresh tier.
+       */
+      lesserTier?: FinishLevel;
+    }
+  >
 > = {
   "whole-home": { covered: true, tier: "match" },
   addition: { covered: false, tier: "match" },
   basement: { covered: false, tier: "refresh" },
+  adu: { covered: true, tier: "match", lesserTier: "refresh" },
 };
 
 export function getKitchenQuestion(
   project: ProjectType,
-): { covered: boolean; isWetBar: boolean } | null {
+): { covered: boolean; isWetBar: boolean; isDowngrade: boolean } | null {
   const cfg = ASSUMED_KITCHENS[project];
   if (!cfg) return null;
-  return { covered: cfg.covered, isWetBar: project === "basement" };
+  return {
+    covered: cfg.covered,
+    isWetBar: project === "basement",
+    // "No" means a smaller kitchen, not the absence of one.
+    isDowngrade: cfg.lesserTier !== undefined,
+  };
 }
 
 /**
@@ -967,7 +987,16 @@ function getModuleAdjustment(
     const tier =
       kitchenCfg.tier === "match" ? normalizeFinishLevel("kitchen", finish) : kitchenCfg.tier;
     const kitchen = PRICE_MATRIX.kitchen[tier];
-    if (kitchen) {
+
+    if (kitchen && kitchenCfg.lesserTier && !ref.kitchenIncluded) {
+      // Downgrade rather than removal: deduct only the gap between the kitchen
+      // the rate assumes and the smaller one actually going in.
+      const lesser = PRICE_MATRIX.kitchen[kitchenCfg.lesserTier];
+      if (lesser) {
+        low -= kitchen.low - lesser.low;
+        high -= kitchen.high - lesser.high;
+      }
+    } else if (kitchen) {
       // +1 when they have one the rate does not cover, -1 when the rate covers
       // one they are not doing, 0 when the two agree.
       const delta = (ref.kitchenIncluded ? 1 : 0) - (kitchenCfg.covered ? 1 : 0);
