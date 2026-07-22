@@ -18,6 +18,7 @@ import {
   formatLeadReplyTo,
   type VerifiedEstimate,
   type PropertyEnrichment,
+  formatUsd,
 } from "@/server/services/consultationEmail";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
@@ -29,6 +30,7 @@ import {
   type EstimateRefinements,
 } from "@/shared/estimateEngine";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
+import { buildLeadEstimateRecord, buildLeadNotes } from "@/server/services/leadRecord";
 
 const propertyProfileSchema = z
   .object({
@@ -179,14 +181,36 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Same complete record as the estimate-gate path, so a lead looks identical
+    // in the CRM regardless of which form produced it. The address was being
+    // dropped here even though this form requires it.
+    const crmLead = {
+      name: data.name,
+      phone: data.phone,
+      email: data.email,
+      address: data.address,
+      zip: data.zip,
+      projectType: data.projectType,
+      message: data.message,
+    };
+    const crmProfile = (data.propertyProfile as PropertyEnrichment | null) ?? null;
+
     forwardToLeadDashboard({
       fullName: data.name,
       email: data.email,
       phone: data.phone,
       projectTypes: data.projectType ? [data.projectType] : [],
+      address: data.address || undefined,
+      propertyZip: data.zip || undefined,
       projectScope: estimate
         ? `${data.projectType} - estimated $${estimate.priceLow.toLocaleString()}${"–"}$${estimate.priceHigh.toLocaleString()}`
         : undefined,
+      estimateLow: estimate?.priceLow,
+      estimateHigh: estimate?.priceHigh,
+      estimateRange: estimate ? `${formatUsd(estimate.priceLow)} to ${formatUsd(estimate.priceHigh)}` : undefined,
+      estimateConfidence: estimate?.confidence,
+      estimate: estimate ? buildLeadEstimateRecord(estimate) : undefined,
+      notes: buildLeadNotes(crmLead, estimate, crmProfile),
       source: "boiseremodeling.co",
     });
 

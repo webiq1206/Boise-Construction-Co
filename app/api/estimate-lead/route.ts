@@ -28,6 +28,8 @@ import {
 } from "@/shared/estimateEngine";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import type { PropertyProfile } from "@/shared/propertyProfile";
+import { buildLeadEstimateRecord, buildLeadNotes } from "@/server/services/leadRecord";
+import { formatUsd, type PropertyEnrichment } from "@/server/services/consultationEmail";
 
 const refinementsSchema = z
   .object({
@@ -157,16 +159,38 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // The CRM gets exactly what the homeowner saw: every selection, the range,
+    // the scope, the assumptions and the disclaimers, both as structured fields
+    // and as readable notes. Built from the same helpers the emails render from,
+    // so the two records cannot drift apart.
+    const crmLead = {
+      name: data.name,
+      phone: data.phone,
+      email: data.email,
+      address: data.address || "",
+      zip: data.zip,
+      projectType: data.projectType,
+      budget: data.budget,
+    };
+    const crmProfile = (data.propertyProfile as PropertyEnrichment | null) ?? null;
+
     forwardToLeadDashboard({
       fullName: data.name,
       email: data.email,
       phone: data.phone,
       projectTypes: data.projectType ? [data.projectType] : [],
       address: data.address || undefined,
+      propertyZip: data.zip || undefined,
       budgetRange: data.budget || undefined,
       projectScope: estimate
         ? `${data.projectType} - estimated $${estimate.priceLow.toLocaleString()}${"–"}$${estimate.priceHigh.toLocaleString()}`
         : undefined,
+      estimateLow: estimate?.priceLow,
+      estimateHigh: estimate?.priceHigh,
+      estimateRange: estimate ? `${formatUsd(estimate.priceLow)} to ${formatUsd(estimate.priceHigh)}` : undefined,
+      estimateConfidence: estimate?.confidence,
+      estimate: estimate ? buildLeadEstimateRecord(estimate) : undefined,
+      notes: buildLeadNotes(crmLead, estimate, crmProfile),
       source: "boiseremodeling.co",
     });
 
