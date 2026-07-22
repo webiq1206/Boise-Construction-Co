@@ -858,6 +858,12 @@ const WHOLE_HOME_ASSUMES_KITCHEN = true;
 /**
  * How many bathrooms each project's published rate already covers.
  *
+ * This is NOT a default applied to a lead. The estimator requires the homeowner
+ * to state the count on every project type that has one, so the figure here is
+ * only ever the reference point the adjustment measures FROM, never a stand-in
+ * for an answer nobody gave. A published rate unavoidably contains some number
+ * of bathrooms; knowing which number is what makes the stated count priceable.
+ *
  * Whole-home's count of 2 is derived arithmetically (see above). The others are
  * read from the scope the guide publishes for each project, which is weaker
  * evidence, so they are recorded here explicitly rather than buried:

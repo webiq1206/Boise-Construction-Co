@@ -424,7 +424,11 @@ export function EstimateCalculator({
   const [bathCount, setBathCount] = useState<number | null>(null);
   const [kitchenIn, setKitchenIn] = useState<boolean | null>(null);
   const [chosen, setChosen] = useState({ project: false, subtype: false, finish: false });
-  const allChosen = chosen.project && chosen.subtype && chosen.finish;
+  /* Bathroom count and kitchen inclusion are REQUIRED wherever they are shown.
+     Leaving them optional meant a skipped answer silently priced at whatever
+     the published rate happens to assume, which is an assumption made on the
+     homeowner's behalf about the single largest swing in the estimate. Asked
+     and answered, never inferred. Declared after the visibility flags below. */
   const [scopeOpen, setScopeOpen]         = useState(false);
   const [legalOpen, setLegalOpen]         = useState(false);
   const [limitsOpen, setLimitsOpen]       = useState(false);
@@ -714,6 +718,13 @@ export function EstimateCalculator({
     "finish",
   ];
   const stepNo = (id: string) => visibleSteps.indexOf(id) + 1;
+
+  const allChosen =
+    chosen.project &&
+    chosen.subtype &&
+    chosen.finish &&
+    (!showBathCount || bathCount !== null) &&
+    (!showKitchenIncluded || kitchenIn !== null);
 
   /* Identity of the current estimate. Used to tell whether the visitor has
      actually changed something since we last told the team about it. */
