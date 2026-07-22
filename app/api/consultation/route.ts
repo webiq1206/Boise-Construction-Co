@@ -57,6 +57,8 @@ const refinementsSchema = z
     fixtureCount: z.number().int().min(1).max(8).nullable().optional(),
     stories: z.number().int().min(1).max(2).nullable().optional(),
     roomCount: z.number().int().min(1).max(12).nullable().optional(),
+    bathroomCount: z.number().int().min(0).max(12).nullable().optional(),
+    kitchenIncluded: z.boolean().nullable().optional(),
     aduConfig: z.enum(["detached", "attached"]).nullable().optional(),
   })
   .optional()

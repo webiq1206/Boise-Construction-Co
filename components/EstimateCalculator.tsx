@@ -115,9 +115,9 @@ const SUBTYPE_DATA: Record<ProjectType, Record<string, SubtypeData>> = {
     "walk-in-shower": { sqft: 90,  refinements: { fixtureCount: 2, layoutChanges: "moderate" } },
   },
   "whole-home": {
-    "single-room":   { sqft: 400,  refinements: { roomCount: 1 } },
-    "multi-room":    { sqft: 900,  refinements: { roomCount: 4 } },
-    "whole-home":    { sqft: 1800, refinements: { roomCount: 8 } },
+    "single-room":   { sqft: 400,  refinements: {} },
+    "multi-room":    { sqft: 900,  refinements: {} },
+    "whole-home":    { sqft: 1800, refinements: {} },
     "home-addition": { sqft: 500,  refinements: {}, projectOverride: "addition" },
   },
   addition: {
@@ -354,6 +354,8 @@ function buildRefinements(
   subtypeRef: Partial<EstimateRefinements>,
   plumbingElectrical: PlumbingElectrical | null,
   cabinetTier: CabinetTier | null,
+  bathroomCount: number | null,
+  kitchenIncluded: boolean | null,
 ): EstimateRefinements {
   const ref: EstimateRefinements = { ...EMPTY_REFINEMENTS, ...subtypeRef };
 
@@ -363,6 +365,11 @@ function buildRefinements(
 
   if (plumbingElectrical) ref.plumbingElectrical = plumbingElectrical;
   if (cabinetTier && effectiveProject === "kitchen") ref.cabinetTier = cabinetTier;
+
+  if (effectiveProject === "whole-home") {
+    if (bathroomCount !== null) ref.bathroomCount = bathroomCount;
+    if (kitchenIncluded !== null) ref.kitchenIncluded = kitchenIncluded;
+  }
 
   return ref;
 }
@@ -410,6 +417,11 @@ export function EstimateCalculator({
      the visitor did not choose. */
   const [peScope, setPeScope] = useState<PlumbingElectrical | null>(null);
   const [cabTier, setCabTier] = useState<CabinetTier | null>(null);
+  /* Whole-home only. Bathrooms are the largest swing in a whole-home budget and
+     were never asked; the kitchen is the second largest. Both are priced as
+     modules against what the published rate already assumes. */
+  const [bathCount, setBathCount] = useState<number | null>(null);
+  const [kitchenIn, setKitchenIn] = useState<boolean | null>(null);
   const [chosen, setChosen] = useState({ project: false, subtype: false, finish: false });
   const allChosen = chosen.project && chosen.subtype && chosen.finish;
   const [scopeOpen, setScopeOpen]         = useState(false);
@@ -471,8 +483,8 @@ export function EstimateCalculator({
   const refinements = useMemo<EstimateRefinements>(() => {
     const data = SUBTYPE_DATA[activeProject]?.[subtype];
     if (!data) return { ...EMPTY_REFINEMENTS };
-    return buildRefinements(effectiveProject, subtype, addOns, data.refinements, peScope, cabTier);
-  }, [effectiveProject, activeProject, subtype, addOns, peScope, cabTier]);
+    return buildRefinements(effectiveProject, subtype, addOns, data.refinements, peScope, cabTier, bathCount, kitchenIn);
+  }, [effectiveProject, activeProject, subtype, addOns, peScope, cabTier, bathCount, kitchenIn]);
 
   const userRefinementCount = useMemo(
     () => countVisibleUserRefinements(effectiveProject, getSetRefinementKeys(refinements)),
@@ -594,6 +606,8 @@ export function EstimateCalculator({
     if (!avail.includes(finish)) setFinish("mid-range");
     setPeScope(null);
     setCabTier(null);
+    setBathCount(null);
+    setKitchenIn(null);
     // Changing the project invalidates the layout and finish choices made under
     // the previous one, so the visitor picks those again rather than inheriting.
     setChosen({ project: true, subtype: false, finish: false });
@@ -656,6 +670,13 @@ export function EstimateCalculator({
   const ALWAYS_HAS_SYSTEMS: ProjectType[] = ["addition", "adu"];
 
   const showCabinetry = effectiveProject === "kitchen" && addOns.includes("cabinets");
+  /* Bathrooms drive a whole-home budget more than anything else, so the count is
+     asked whenever baths are in scope. With no chips ticked the scope is still
+     unknown and a whole-home almost always includes baths, so it is asked then
+     too. The kitchen question appears the same way. */
+  const showBathCount =
+    effectiveProject === "whole-home" && (addOns.length === 0 || addOns.includes("baths"));
+  const showKitchenIncluded = effectiveProject === "whole-home";
   const showSystems =
     ALWAYS_HAS_SYSTEMS.includes(effectiveProject) ||
     // No chips ticked means we do not know the scope yet, and systems work is
@@ -672,6 +693,12 @@ export function EstimateCalculator({
   useEffect(() => {
     if (!showSystems) setPeScope((prev) => (prev === null ? prev : null));
   }, [showSystems]);
+  useEffect(() => {
+    if (!showBathCount) setBathCount((prev) => (prev === null ? prev : null));
+  }, [showBathCount]);
+  useEffect(() => {
+    if (!showKitchenIncluded) setKitchenIn((prev) => (prev === null ? prev : null));
+  }, [showKitchenIncluded]);
 
   /* Numbers are derived, never hardcoded, so a hidden step cannot leave a gap
      in the sequence the visitor reads. */
@@ -682,6 +709,8 @@ export function EstimateCalculator({
     "upgrades",
     ...(showSystems ? ["systems"] : []),
     ...(showCabinetry ? ["cabinetry"] : []),
+    ...(showBathCount ? ["bathcount"] : []),
+    ...(showKitchenIncluded ? ["kitchen"] : []),
     "finish",
   ];
   const stepNo = (id: string) => visibleSteps.indexOf(id) + 1;
@@ -1115,6 +1144,77 @@ export function EstimateCalculator({
                 fireEstimatorEngagement();
               }}
               data-testid={`calc-cabinets-${opt.value}`}
+              aria-pressed={active}
+              className={cn(
+                "rounded-md border py-3 px-3 min-h-[64px] transition-all duration-200 flex flex-col items-center justify-center gap-0.5",
+                active
+                  ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
+                  : "bg-inverse-foreground/[0.05] border-inverse-foreground/[0.12] text-inverse-muted hover-elevate",
+              )}
+            >
+              <span className="text-[13.5px] text-inverse-foreground leading-tight">{opt.label}</span>
+              <span className="text-[11px] text-inverse-muted leading-tight">{opt.sub}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  /* Whole-home: bathroom count. The published whole-home rate already assumes
+     two, so this prices the difference rather than the whole thing. */
+  const bathCountRow = (
+    <div className="mt-5">
+      <p className={stepLabel}>{stepNo("bathcount")} &middot; How many bathrooms?</p>
+      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
+        Bathrooms move a whole-home budget more than any other room. Count every one in the project.
+      </p>
+      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+        {[1, 2, 3, 4, 5, 6].map((n) => {
+          const active = bathCount === n;
+          return (
+            <button
+              key={n}
+              type="button"
+              onClick={() => {
+                setBathCount(n);
+                fireEstimatorEngagement();
+              }}
+              data-testid={`calc-baths-${n}`}
+              aria-pressed={active}
+              className={cn(
+                "rounded-md border py-3 min-h-[52px] text-[15px] transition-all duration-200",
+                active
+                  ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
+                  : "bg-inverse-foreground/[0.05] border-inverse-foreground/[0.12] text-inverse-muted hover-elevate",
+              )}
+            >
+              {n}{n === 6 ? "+" : ""}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const kitchenRow = (
+    <div className="mt-5">
+      <p className={stepLabel}>{stepNo("kitchen")} &middot; Is the kitchen part of it?</p>
+      <div className="grid grid-cols-2 gap-2">
+        {([
+          { value: true, label: "Yes", sub: "Kitchen is being remodeled" },
+          { value: false, label: "No", sub: "Leaving the kitchen as is" },
+        ]).map((opt) => {
+          const active = kitchenIn === opt.value;
+          return (
+            <button
+              key={String(opt.value)}
+              type="button"
+              onClick={() => {
+                setKitchenIn(opt.value);
+                fireEstimatorEngagement();
+              }}
+              data-testid={`calc-kitchen-${opt.value ? "yes" : "no"}`}
               aria-pressed={active}
               className={cn(
                 "rounded-md border py-3 px-3 min-h-[64px] transition-all duration-200 flex flex-col items-center justify-center gap-0.5",
@@ -1609,6 +1709,8 @@ export function EstimateCalculator({
       {chosen.subtype && chipsRow}
       {chosen.subtype && showSystems && systemsRow}
       {chosen.subtype && showCabinetry && cabinetRow}
+      {chosen.subtype && showBathCount && bathCountRow}
+      {chosen.subtype && showKitchenIncluded && kitchenRow}
       {chosen.subtype && finishRow}
       {allChosen &&
         (gateSubmitted ? resultPanel : gateOpen ? leadsGatePanel : calculateCta)}

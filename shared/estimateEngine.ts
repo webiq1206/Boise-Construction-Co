@@ -11,7 +11,8 @@ export type UserRefinementKey =
   | "plumbingElectrical"
   | "cabinetTier"
   | "fixtureCount"
-  | "roomCount"
+  | "bathroomCount"
+  | "kitchenIncluded"
   | "stories"
   | "aduConfig";
 
@@ -39,7 +40,17 @@ export interface EstimateRefinements {
   cabinetTier: CabinetTier | null;
   fixtureCount: number | null;
   stories: number | null;
+  /**
+   * @deprecated Retired as a whole-home price driver. It double counted size
+   * (sqft already scales the estimate) and was set silently by the layout card
+   * rather than chosen. Kept on the type so estimates stored before the change
+   * still parse. Whole-home now prices bathroomCount and kitchenIncluded.
+   */
   roomCount: number | null;
+  /** Whole-home: number of bathrooms in scope. */
+  bathroomCount: number | null;
+  /** Whole-home: whether the kitchen is part of the project. */
+  kitchenIncluded: boolean | null;
   aduConfig: AduConfig | null;
 }
 
@@ -247,6 +258,8 @@ export const EMPTY_REFINEMENTS: EstimateRefinements = {
   fixtureCount: null,
   stories: null,
   roomCount: null,
+  bathroomCount: null,
+  kitchenIncluded: null,
   aduConfig: null,
 };
 
@@ -309,7 +322,8 @@ export interface RefinementVisibility {
   plumbingElectrical: boolean;
   cabinetTier: boolean;
   fixtureCount: boolean;
-  roomCount: boolean;
+  bathroomCount: boolean;
+  kitchenIncluded: boolean;
   stories: boolean;
   aduConfiguration: boolean;
 }
@@ -325,7 +339,8 @@ export function getRefinementVisibility(project: ProjectType): RefinementVisibil
     plumbingElectrical: true,
     cabinetTier: project === "kitchen",
     fixtureCount: project === "bathroom",
-    roomCount: project === "whole-home",
+    bathroomCount: project === "whole-home",
+    kitchenIncluded: project === "whole-home",
     stories: project === "addition",
     aduConfiguration: project === "adu",
   };
@@ -625,7 +640,8 @@ export function countVisibleUserRefinements(
     else if (key === "plumbingElectrical" && visibility.plumbingElectrical) count++;
     else if (key === "cabinetTier" && visibility.cabinetTier) count++;
     else if (key === "fixtureCount" && visibility.fixtureCount) count++;
-    else if (key === "roomCount" && visibility.roomCount) count++;
+    else if (key === "bathroomCount" && visibility.bathroomCount) count++;
+    else if (key === "kitchenIncluded" && visibility.kitchenIncluded) count++;
     else if (key === "stories" && visibility.stories) count++;
     else if (key === "aduConfig" && visibility.aduConfiguration) count++;
   }
@@ -717,12 +733,6 @@ function getRefinementMultipliers(ref: EstimateRefinements, project: ProjectType
     high *= fixtureFactor;
   }
 
-  if (project === "whole-home" && ref.roomCount !== null) {
-    const roomFactor = Math.max(1, 1 + (ref.roomCount - 3) * 0.06);
-    low *= roomFactor;
-    high *= roomFactor;
-  }
-
   if (project === "addition" && ref.stories !== null && ref.stories > 1) {
     low *= 1.12;
     high *= 1.2;
@@ -797,8 +807,12 @@ export function buildDynamicScope(input: EstimateInput): string[] {
     extra.push(`${r.fixtureCount} plumbing ${r.fixtureCount === 1 ? "fixture" : "fixtures"}`);
   }
 
-  if (input.project === "whole-home" && r.roomCount !== null) {
-    extra.push(`${r.roomCount} ${r.roomCount === 1 ? "room" : "rooms"} renovated`);
+  if (input.project === "whole-home" && r.bathroomCount !== null) {
+    extra.push(`${r.bathroomCount} ${r.bathroomCount === 1 ? "bathroom" : "bathrooms"}`);
+  }
+
+  if (input.project === "whole-home" && r.kitchenIncluded !== null) {
+    extra.push(r.kitchenIncluded ? "Kitchen renovation included" : "Kitchen not included");
   }
 
   if (input.project === "addition" && r.stories !== null) {
@@ -815,6 +829,67 @@ export function buildDynamicScope(input: EstimateInput): string[] {
     seen.add(item);
     return true;
   });
+}
+
+/**
+ * What the whole-home rate already assumes.
+ *
+ * A whole-home price is not uniform per square foot: kitchens and bathrooms
+ * cost several times what general living space does. The published rate must
+ * therefore assume some number of each, and that number is solvable rather than
+ * a matter of opinion, because the same guide prices kitchens and bathrooms on
+ * their own. Subtracting a kitchen and N baths from the whole-home figure
+ * leaves a residual that must be a believable rate for flooring, paint, trim,
+ * doors and lighting:
+ *
+ *   assumed baths     refresh   mid-range   high-end   luxury
+ *   1                    $17       $51        $78       $171   per sq ft
+ *   2                     $8       $37        $52       $128
+ *   3                    -$1       $22        $22        $79
+ *
+ * Three baths is impossible: it makes refresh negative. One bath implies $51/sf
+ * for paint and flooring, more than a bathroom costs per foot. Two is the only
+ * count that stays believable at every finish level, and 1,800 sq ft with one
+ * kitchen and two baths is the standard Treasure Valley three-bed home.
+ */
+const WHOLE_HOME_ASSUMED_BATHS = 2;
+const WHOLE_HOME_ASSUMES_KITCHEN = true;
+
+/**
+ * Prices a whole-home deviation from that baseline ADDITIVELY, using the
+ * guide's own kitchen and bathroom figures at the matching finish level.
+ *
+ * Additive rather than a multiplier, because a fourth bathroom costs what a
+ * bathroom costs; it does not scale with the size of the house. And because the
+ * adjustment is zero at the assumed baseline, a typical whole-home still
+ * reproduces the published rate exactly, which the source-fidelity check
+ * enforces.
+ */
+function getWholeHomeModuleAdjustment(
+  ref: EstimateRefinements,
+  finish: FinishLevel,
+): { low: number; high: number } {
+  let low = 0;
+  let high = 0;
+
+  if (ref.bathroomCount !== null) {
+    const bath = PRICE_MATRIX.bathroom[normalizeFinishLevel("bathroom", finish)];
+    if (bath) {
+      const delta = ref.bathroomCount - WHOLE_HOME_ASSUMED_BATHS;
+      low += bath.low * delta;
+      high += bath.high * delta;
+    }
+  }
+
+  if (ref.kitchenIncluded === false && WHOLE_HOME_ASSUMES_KITCHEN) {
+    const kitchen = PRICE_MATRIX.kitchen[normalizeFinishLevel("kitchen", finish)];
+    if (kitchen) {
+      low -= kitchen.low;
+      high -= kitchen.high;
+    }
+  }
+
+  return { low, high };
 }
 
 export function calculateEstimate(input: EstimateInput, userRefinementCount = 0): EstimateResult {
@@ -840,7 +915,20 @@ export function calculateEstimate(input: EstimateInput, userRefinementCount = 0)
   // selection still always moves it up.
   const baseMid = (base.low + base.high) / 2;
   const refMid = (refMult.low + refMult.high) / 2;
-  const center = baseMid * sizeMult * refMid;
+
+  // Whole-home kitchen and bathroom counts are priced as modules added to or
+  // removed from the scaled base, not as multipliers. The adjustment is applied
+  // after size scaling because a bathroom costs what a bathroom costs whatever
+  // the size of the house, and is scaled by the planning adjustment so it stays
+  // consistent with every other figure the estimator shows.
+  const modules =
+    safeInput.project === "whole-home"
+      ? getWholeHomeModuleAdjustment(input.refinements, safeInput.finish)
+      : { low: 0, high: 0 };
+  const moduleMid =
+    ((modules.low + modules.high) / 2) * PLANNING_RANGE_ADJUSTMENT;
+
+  const center = Math.max(1000, baseMid * sizeMult * refMid + moduleMid);
 
   // The BAND starts at the category's own natural spread and TIGHTENS as the
   // user supplies more detail, so a fully-specified estimate is genuinely more

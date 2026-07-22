@@ -163,10 +163,17 @@ export function buildSelectionRows(
     });
   }
 
-  if (visibility.roomCount && r.roomCount != null) {
+  if (visibility.bathroomCount && r.bathroomCount != null) {
     rows.push({
-      label: "Rooms renovated",
-      value: `${r.roomCount} ${r.roomCount === 1 ? "room" : "rooms"}`,
+      label: "Bathrooms in scope",
+      value: `${r.bathroomCount} ${r.bathroomCount === 1 ? "bathroom" : "bathrooms"}`,
+    });
+  }
+
+  if (visibility.kitchenIncluded && r.kitchenIncluded != null) {
+    rows.push({
+      label: "Kitchen",
+      value: r.kitchenIncluded ? "Included in the project" : "Not included",
     });
   }
 

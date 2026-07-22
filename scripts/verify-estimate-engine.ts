@@ -52,6 +52,13 @@ for (const project of projects) {
   } else if (project === "basement") {
     assert(visibility.layoutChanges, `${project} shows layout changes`);
     assert(maxFields === 2, `${project} exposes two refinement fields`);
+  } else if (project === "whole-home") {
+    // Layout, systems, bathroom count and kitchen inclusion. Bathroom count and
+    // kitchen replaced the retired roomCount, which double counted size.
+    assert(visibility.layoutChanges, `${project} shows layout changes`);
+    assert(visibility.bathroomCount, `${project} asks how many bathrooms`);
+    assert(visibility.kitchenIncluded, `${project} asks whether the kitchen is included`);
+    assert(maxFields === 4, `${project} exposes four refinement fields`);
   } else {
     assert(visibility.layoutChanges, `${project} shows layout changes`);
     assert(maxFields === 3, `${project} exposes three refinement fields`);
@@ -300,7 +307,8 @@ const LADDERS: { key: keyof EstimateRefinements; values: unknown[] }[] = [
   { key: "plumbingElectrical", values: ["cosmetic", "partial", "full"] },
   { key: "cabinetTier", values: ["standard", "semi-custom", "custom"] },
   { key: "fixtureCount", values: [1, 2, 3, 4, 5, 6, 7, 8] },
-  { key: "roomCount", values: [1, 2, 3, 4, 6, 8, 10, 12] },
+  { key: "bathroomCount", values: [1, 2, 3, 4, 5] },
+  { key: "kitchenIncluded", values: [false, true] },
   { key: "stories", values: [1, 2] },
   { key: "aduConfig", values: ["attached", "detached"] },
 ];
@@ -312,7 +320,8 @@ for (const project of projects) {
     plumbingElectrical: v.plumbingElectrical,
     cabinetTier: v.cabinetTier,
     fixtureCount: v.fixtureCount,
-    roomCount: v.roomCount,
+    bathroomCount: v.bathroomCount,
+    kitchenIncluded: v.kitchenIncluded,
     stories: v.stories,
     aduConfig: v.aduConfiguration,
   };
