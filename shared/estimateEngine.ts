@@ -545,6 +545,26 @@ const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>>
 };
 
 /** Resolves base price data, normalizing disallowed finish levels first. */
+/**
+ * Deliberate downward adjustment applied to every cost-guide rate before a
+ * planning range is shown, set by the owner to avoid opening a conversation
+ * with a number that reads as sticker shock.
+ *
+ * Kept as a single constant rather than baked into PRICE_MATRIX so the matrix
+ * stays a faithful, auditable copy of the published guide and this business
+ * decision remains one visible, reversible number. Set to 1 to quote the guide
+ * as published.
+ *
+ * Scaling both ends by the same factor leaves the range's width RATIO
+ * unchanged, so the uncertainty band and every monotonicity property are
+ * unaffected; only the absolute figures move.
+ *
+ * Note the tradeoff this encodes: the estimator now quotes below the company's
+ * own published cost guide, so the difference surfaces at proposal time rather
+ * than in the estimate. See ESTIMATOR-CALIBRATION.md.
+ */
+export const PLANNING_RANGE_ADJUSTMENT = 0.8;
+
 export function getPriceData(project: ProjectType, finish: FinishLevel): PriceData {
   const normalized = normalizeFinishLevel(project, finish);
   const data = PRICE_MATRIX[project][normalized];
@@ -552,7 +572,11 @@ export function getPriceData(project: ProjectType, finish: FinishLevel): PriceDa
     // Unreachable as long as getAvailableFinishLevels matches PRICE_MATRIX keys.
     throw new Error(`No price data for ${project}/${normalized}`);
   }
-  return data;
+  return {
+    ...data,
+    low: data.low * PLANNING_RANGE_ADJUSTMENT,
+    high: data.high * PLANNING_RANGE_ADJUSTMENT,
+  };
 }
 
 export function formatPlanningCurrency(n: number): string {

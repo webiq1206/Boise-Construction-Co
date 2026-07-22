@@ -44,6 +44,34 @@ Two things to know about that encoding:
   matches how remodel cost behaves and mirrors the guide's own rates falling as
   category size rises.
 
+## The 20 percent planning adjustment
+
+Quoted ranges are deliberately set **20 percent below** the published guide,
+via `PLANNING_RANGE_ADJUSTMENT` in `shared/estimateEngine.ts`. This is an owner
+decision, made to avoid opening the conversation with a number that reads as
+sticker shock.
+
+It is a single constant rather than 42 edited numbers, so `PRICE_MATRIX` stays
+a faithful, auditable copy of the guide and the decision remains one visible,
+reversible line. Set it to `1` to quote the guide as published. Scaling both
+ends by the same factor leaves the range width ratio untouched, so the
+uncertainty band and every monotonicity property are unaffected.
+
+The invariant suite verifies this exact relationship, so the offset stays
+intentional and any other drift still fails the build.
+
+**The tradeoff this encodes.** The estimator now quotes below the company's own
+cost guide, which means the difference surfaces at proposal time rather than in
+the estimate. That is the failure mode of an estimate that is too low: a
+homeowner can arrive expecting a number the work cannot be delivered for. If
+proposals start landing consistently above the range, raising this constant is
+the first lever to reach for, not the base rates.
+
+**Site content is not adjusted by this constant.** Cost figures published in
+guides, articles, and llms.txt are separate hand-written content and still
+reflect older, higher numbers. They will read as inconsistent with the
+estimator until reconciled.
+
 This is a real source, but it is still a published guide rather than a
 regression against closed jobs. The procedure below remains the way to confirm
 it against what you actually bill.
@@ -114,18 +142,17 @@ right, only that they are internally consistent.
 
 ## Current base rates
 
-What a homeowner sees at the reference size with nothing else selected. These
-now reproduce the 2025 Boise Remodeling Cost Guide exactly, and the invariant
-suite fails the build if they drift.
+What a homeowner sees at the reference size with nothing else selected, after
+the 20 percent planning adjustment. The guide figure is in parentheses.
 
 | Project | refresh | mid-range | high-end | luxury |
 |---|---|---|---|---|
-| kitchen (250 sf) | $19-31k | $44-69k | $100-163k | $175-225k |
-| bathroom (80 sf) | $12-20k | $22-36k | $44-64k | $72-112k |
-| whole-home (1,800 sf) | $54-90k | $135-225k | $270-387k | $450-765k |
-| addition (400 sf) | n/a | $120-170k | $200-280k | $340-460k |
-| adu (600 sf) | n/a | $210-300k | $300-420k | $420-600k |
-| basement (900 sf) | n/a | $45-77k | $90-144k | $158-225k |
+| kitchen (250 sf) | $15-25k *(19-31)* | $35-55k *(44-69)* | $80-130k *(100-163)* | $140-180k *(175-225)* |
+| bathroom (80 sf) | $10-16k *(12-20)* | $18-29k *(22-36)* | $35-51k *(44-64)* | $58-90k *(72-112)* |
+| whole-home (1,800 sf) | $43-72k *(54-90)* | $108-180k *(135-225)* | $216-310k *(270-387)* | $360-612k *(450-765)* |
+| addition (400 sf) | n/a | $96-136k *(120-170)* | $160-224k *(200-280)* | $272-368k *(340-460)* |
+| adu (600 sf) | n/a | $168-240k *(210-300)* | $240-336k *(300-420)* | $336-480k *(420-600)* |
+| basement (900 sf) | n/a | $36-61k *(45-77)* | $72-115k *(90-144)* | $126-180k *(158-225)* |
 
 ## Size elasticity
 

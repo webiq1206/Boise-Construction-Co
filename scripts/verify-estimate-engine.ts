@@ -8,6 +8,7 @@ import {
   getRefinementVisibility,
   getSetRefinementKeys,
   getSizePresets,
+  PLANNING_RANGE_ADJUSTMENT,
   getAvailableFinishLevels,
   isCompleteEstimateInput,
   type ProjectType,
@@ -416,11 +417,16 @@ for (const project of projects) {
     const expected = tiers[finish];
     if (!expected) continue;
     const r = priceAt(project, finish, baseline, { ...EMPTY_REFINEMENTS });
-    // The guide's figures are exact multiples of its per-square-foot rates, and
-    // the engine rounds to the nearest 1k, so allow only that rounding.
+    // Quoted ranges sit a deliberate PLANNING_RANGE_ADJUSTMENT below the
+    // published guide (an owner decision, see the constant). Verify that exact
+    // relationship rather than the raw guide figure, so the offset stays
+    // intentional and any OTHER drift still fails the build.
+    const wantLow = expected[0] * PLANNING_RANGE_ADJUSTMENT;
+    const wantHigh = expected[1] * PLANNING_RANGE_ADJUSTMENT;
+    // The engine rounds to the nearest 1k, so allow only that rounding.
     check(
-      Math.abs(r.priceLow - expected[0]) <= 500 && Math.abs(r.priceHigh - expected[1]) <= 500,
-      `cost-guide fidelity ${project}/${finish} @${baseline}sf: engine ${r.priceLow}-${r.priceHigh}, guide ${expected[0]}-${expected[1]}`,
+      Math.abs(r.priceLow - wantLow) <= 500 && Math.abs(r.priceHigh - wantHigh) <= 500,
+      `cost-guide fidelity ${project}/${finish} @${baseline}sf: engine ${r.priceLow}-${r.priceHigh}, expected ${Math.round(wantLow)}-${Math.round(wantHigh)} (guide ${expected[0]}-${expected[1]} x ${PLANNING_RANGE_ADJUSTMENT})`,
     );
   }
 }
