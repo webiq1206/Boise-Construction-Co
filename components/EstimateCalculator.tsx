@@ -26,6 +26,9 @@ import {
   countVisibleUserRefinements,
   getSetRefinementKeys,
   INCLUDED_SCOPE_NOTE,
+  buildEstimateDisclosure,
+  NOT_A_QUOTE_NOTICE,
+  ONSITE_REQUIRED_NOTICE,
   APPLIANCE_DISCLAIMER,
 } from "@/shared/estimateEngine";
 import { trackEvent, trackMetaEvent } from "@/lib/analytics";
@@ -407,6 +410,7 @@ export function EstimateCalculator({
   const [finish, setFinish]               = useState<FinishLevel>("mid-range");
   const [scopeOpen, setScopeOpen]         = useState(false);
   const [legalOpen, setLegalOpen]         = useState(false);
+  const [limitsOpen, setLimitsOpen]       = useState(false);
   /* Lead-gate three-state flow:
      gateOpen=false  gateSubmitted=false -> show "Get estimate" CTA
      gateOpen=true   gateSubmitted=false -> show contact form (gate)
@@ -461,6 +465,14 @@ export function EstimateCalculator({
     const input: EstimateInput = { project: effectiveProject, finish, sqft, refinements };
     return calculateEstimate(input, userRefinementCount);
   }, [effectiveProject, finish, sqft, refinements, userRefinementCount]);
+
+  /* Exclusions, assumptions and cost drivers, from the same shared source the
+     confirmation emails use, so the on-screen and emailed estimate never differ. */
+  const disclosure = useMemo(
+    () =>
+      buildEstimateDisclosure({ project: effectiveProject, finish, sqft, refinements }),
+    [effectiveProject, finish, sqft, refinements],
+  );
 
   /* ── Persist to sessionStorage (live, on every change) ── */
   useEffect(() => {
@@ -884,12 +896,15 @@ export function EstimateCalculator({
               {formatPlanningCurrency(result.priceHigh)}
             </div>
             <p className="mt-2.5 text-[14px] text-inverse-muted">
-              Est. {result.roi}% ROI based on Boise market data.
+              Typical resale return for this project type: about {result.roi}%.
             </p>
-            <p className="mt-2.5 text-[12.5px] text-inverse-muted/80 leading-relaxed">
-              This is a ballpark planning range, not a quote or bid. Actual cost depends on your
-              home, selections, and site conditions. Your free in-home visit provides an exact,
-              written price.
+            {/* Always visible, never behind a toggle: a homeowner must not be
+                able to leave this screen thinking they were given a price. */}
+            <p className="mt-3 text-[12.5px] text-inverse-foreground/90 leading-relaxed font-normal">
+              {NOT_A_QUOTE_NOTICE}
+            </p>
+            <p className="mt-1.5 text-[12.5px] text-inverse-muted/80 leading-relaxed">
+              {ONSITE_REQUIRED_NOTICE}
             </p>
           </div>
 
@@ -929,6 +944,99 @@ export function EstimateCalculator({
                     {APPLIANCE_DISCLAIMER}
                   </p>
                 )}
+              </div>
+            )}
+          </div>
+
+          {/* Exclusions, assumptions and cost drivers. Collapsed so the panel
+              stays scannable, but the content is complete and comes from the
+              same source as the confirmation email. */}
+          <div className="border-t border-inverse-foreground/10 pt-4">
+            <button
+              type="button"
+              onClick={() => setLimitsOpen((p) => !p)}
+              className="flex w-full items-center justify-between text-left"
+              data-testid="button-toggle-limits"
+              aria-expanded={limitsOpen}
+            >
+              <span className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground">
+                What&apos;s not included &amp; what could change it
+              </span>
+              <ChevronDown
+                className={cn("h-4 w-4 text-inverse-muted transition-transform", limitsOpen && "rotate-180")}
+              />
+            </button>
+            {limitsOpen && (
+              <div className="pt-3 space-y-5">
+                <div>
+                  <p className="text-[12px] tracking-[0.1em] uppercase text-inverse-muted mb-2">
+                    Not included
+                  </p>
+                  <ul className="space-y-1.5">
+                    {disclosure.excludes.map((item, i) => (
+                      <li
+                        key={i}
+                        className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\00d7'] before:absolute before:left-0 before:text-inverse-muted/70"
+                        data-testid={`excluded-item-${i}`}
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="text-[12px] tracking-[0.1em] uppercase text-inverse-muted mb-2">
+                    What we assumed
+                  </p>
+                  <ul className="space-y-1.5">
+                    {disclosure.assumptions.map((item, i) => (
+                      <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\2022'] before:absolute before:left-0 before:text-inverse-muted/70">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <p className="text-[12px] tracking-[0.1em] uppercase text-inverse-muted mb-2">
+                      Could raise the cost
+                    </p>
+                    <ul className="space-y-1.5">
+                      {disclosure.increases.map((item, i) => (
+                        <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\2191'] before:absolute before:left-0 before:text-inverse-muted/70">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="text-[12px] tracking-[0.1em] uppercase text-inverse-muted mb-2">
+                      Could lower the cost
+                    </p>
+                    <ul className="space-y-1.5">
+                      {disclosure.decreases.map((item, i) => (
+                        <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\2193'] before:absolute before:left-0 before:text-inverse-muted/70">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-[12px] tracking-[0.1em] uppercase text-inverse-muted mb-2">
+                    Optional upgrades that add cost
+                  </p>
+                  <ul className="space-y-1.5">
+                    {disclosure.upgrades.map((item, i) => (
+                      <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\002b'] before:absolute before:left-0 before:text-inverse-muted/70">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             )}
           </div>

@@ -7,6 +7,9 @@ import { SITE_CONFIG } from "@/shared/siteConfig";
 import {
   getRefinementVisibility,
   getPlumbingElectricalLabel,
+  buildEstimateDisclosure,
+  NOT_A_QUOTE_NOTICE,
+  ONSITE_REQUIRED_NOTICE,
   PROJECT_LABELS,
   FINISH_LABELS,
   type EstimateRefinements,
@@ -161,6 +164,26 @@ function renderSelectionRows(rows: { label: string; value: string }[]): string {
     .join("");
 }
 
+/** Neutral bulleted list for assumptions, cost drivers, and upgrades. */
+function renderPlainList(items: string[], fontSize = 14): string {
+  return `<ul style="margin:0;padding-left:18px;">${items
+    .map(
+      (item) =>
+        `<li style="color:${EMAIL_BRAND.text};font-size:${fontSize}px;line-height:1.5;margin:0 0 7px;">${escapeHtml(item)}</li>`
+    )
+    .join('')}</ul>`;
+}
+
+/** Exclusions, marked so they cannot be mistaken for included scope. */
+function renderExcludedList(items: string[]): string {
+  return items
+    .map(
+      (item) =>
+        `<tr><td style="vertical-align:top;color:${EMAIL_BRAND.textMuted};padding:5px 10px 5px 0;font-size:14px;line-height:1.5;">&times;</td><td style="color:${EMAIL_BRAND.textMuted};padding:5px 0;font-size:14px;line-height:1.5;">${escapeHtml(item)}</td></tr>`
+    )
+    .join('\n');
+}
+
 function renderIncludedList(items: string[]): string {
   return items
     .map(
@@ -180,6 +203,12 @@ export function buildEstimateSectionsHtml(est: VerifiedEstimate): string {
   const rangeText = `${formatUsd(est.priceLow)} to ${formatUsd(est.priceHigh)}`;
   const rows = buildSelectionRows(est.project, est.finish, est.sqft, est.refinements);
   const roiNote = est.roi ? ` &middot; Typical resale ROI ~${Math.round(est.roi)}%` : "";
+  const disclosure = buildEstimateDisclosure({
+    project: est.project,
+    finish: est.finish,
+    sqft: est.sqft,
+    refinements: est.refinements,
+  });
 
   return `
     <div style="background:${EMAIL_BRAND.raised};border-left:3px solid ${EMAIL_BRAND.accent};padding:24px;margin:24px 0;border-radius:4px;">
@@ -196,14 +225,48 @@ export function buildEstimateSectionsHtml(est: VerifiedEstimate): string {
     </div>
 
     <div style="margin:28px 0;">
-      <p style="${SECTION_TITLE}">What a project like this typically includes</p>
+      <p style="${SECTION_TITLE}">What this range covers</p>
       <table style="width:100%;border-collapse:collapse;">
-        ${renderIncludedList(est.included)}
+        ${renderIncludedList(disclosure.includes)}
       </table>
     </div>
 
+    <div style="margin:28px 0;">
+      <p style="${SECTION_TITLE}">What it does not cover</p>
+      <table style="width:100%;border-collapse:collapse;">
+        ${renderExcludedList(disclosure.excludes)}
+      </table>
+    </div>
+
+    <div style="margin:28px 0;">
+      <p style="${SECTION_TITLE}">What we assumed</p>
+      ${renderPlainList(disclosure.assumptions)}
+    </div>
+
+    <div style="margin:28px 0;">
+      <p style="${SECTION_TITLE}">What could move the final number</p>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr>
+          <td style="vertical-align:top;padding:0 12px 0 0;width:50%;">
+            <p style="margin:0 0 8px;font-size:12px;color:${EMAIL_BRAND.textMuted};">Upward</p>
+            ${renderPlainList(disclosure.increases, 13)}
+          </td>
+          <td style="vertical-align:top;padding:0;width:50%;">
+            <p style="margin:0 0 8px;font-size:12px;color:${EMAIL_BRAND.textMuted};">Downward</p>
+            ${renderPlainList(disclosure.decreases, 13)}
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div style="margin:28px 0;">
+      <p style="${SECTION_TITLE}">Optional upgrades that add cost</p>
+      ${renderPlainList(disclosure.upgrades)}
+    </div>
+
     <div style="background:#2a2a1c;border-left:3px solid #c9a227;padding:18px;margin:24px 0;border-radius:4px;">
-      <p style="margin:0;color:#e8dca6;font-size:13px;line-height:1.55;">This is a planning estimate only, not a proposal, bid, or guaranteed price. The range reflects the selections above and typical Treasure Valley project costs. Your final scope and price are confirmed at your free in-home consultation.</p>
+      <p style="margin:0 0 10px;color:#e8dca6;font-size:13px;line-height:1.55;"><strong>${escapeHtml(NOT_A_QUOTE_NOTICE)}</strong></p>
+      <p style="margin:0;color:#e8dca6;font-size:13px;line-height:1.55;">${escapeHtml(ONSITE_REQUIRED_NOTICE)}</p>
     </div>
   `;
 }

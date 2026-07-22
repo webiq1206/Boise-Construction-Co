@@ -80,6 +80,141 @@ export const INCLUDED_SCOPE_NOTE =
 export const APPLIANCE_DISCLAIMER =
   "Appliances are client-supplied; we'll guide your selection but do not purchase or install them.";
 
+/**
+ * The single, unambiguous statement of what this number is. Used verbatim in
+ * the estimator and in both outbound emails so a homeowner cannot come away
+ * believing they were given a price.
+ */
+export const NOT_A_QUOTE_NOTICE =
+  "This is an estimated budget range, not a quote, bid, or offer. No part of this range is a commitment to a price.";
+
+export const ONSITE_REQUIRED_NOTICE =
+  "Every home is different, and the things that move a remodel budget most (what is behind the walls, the age and condition of existing systems, access, and structural realities) cannot be assessed from a web form. A firm, itemized proposal follows an on-site consultation and assessment.";
+
+export interface EstimateDisclosure {
+  /** Work the range is intended to cover. */
+  includes: string[];
+  /** Work the range explicitly does NOT cover. */
+  excludes: string[];
+  /** Conditions the range assumes to be true. */
+  assumptions: string[];
+  /** What tends to push the final number above the range. */
+  increases: string[];
+  /** What tends to bring the final number down. */
+  decreases: string[];
+  /** Common selections that add cost if chosen. */
+  upgrades: string[];
+}
+
+/** Exclusions and assumptions that hold for every project type. */
+const UNIVERSAL_EXCLUDES = [
+  "Appliances, which are client-supplied (we guide selection but do not purchase or install)",
+  "Unknown conditions discovered at demolition: rot, water damage, failed framing, or pest damage",
+  "Hazardous material abatement (asbestos or lead paint), which is common in pre-1980 homes",
+  "Code upgrades triggered by inspection, such as panel replacement, egress, or insulation",
+  "Furniture, decor, window coverings, and art",
+  "Landscaping or exterior restoration beyond the immediate work area",
+  "Temporary housing, storage, or moving costs",
+];
+
+const UNIVERSAL_ASSUMPTIONS = [
+  "The home is structurally sound with no active leaks, rot, or pest damage",
+  "Existing systems that are not being replaced already meet code",
+  "Work proceeds in one continuous phase with normal site access",
+  "Standard material lead times, with no expedited or special-order surcharges",
+  "Finishes are selected from the allowances set during design",
+  "Typical Treasure Valley labor and material costs as of 2026",
+];
+
+const UNIVERSAL_INCREASES = [
+  "Relocating plumbing, gas, or load-bearing walls",
+  "Structural surprises found once walls or floors are opened",
+  "Older homes with knob-and-tube wiring, galvanized supply lines, or plaster walls",
+  "Custom millwork, imported stone, or specialty-order materials",
+  "A compressed schedule, or living in the home during construction",
+  "Difficult access: second story, tight lots, or limited staging area",
+];
+
+const UNIVERSAL_DECREASES = [
+  "Keeping the existing layout and plumbing locations",
+  "Choosing stock or semi-custom cabinetry over fully custom",
+  "Reusing sound cabinet boxes, flooring, or fixtures where practical",
+  "A flexible timeline that lets us schedule efficiently",
+  "Combining adjacent rooms into a single mobilization",
+];
+
+const PROJECT_UPGRADES: Record<ProjectType, string[]> = {
+  kitchen: [
+    "Island addition or expansion",
+    "Panel-ready or integrated appliance fronts",
+    "Walk-in or butler's pantry",
+    "Layered and under-cabinet lighting design",
+    "Waterfall edges or full-height stone backsplash",
+  ],
+  bathroom: [
+    "Radiant heated flooring",
+    "Steam shower or body-spray systems",
+    "Freestanding soaking tub",
+    "Frameless custom glass enclosure",
+    "Double vanity with custom storage",
+  ],
+  "whole-home": [
+    "Opening the floor plan between primary living spaces",
+    "New windows and exterior doors throughout",
+    "HVAC replacement or zoning",
+    "Smart home wiring and integration",
+    "Built-in cabinetry and millwork packages",
+  ],
+  addition: [
+    "Vaulted or coffered ceilings",
+    "A full bath rather than a half bath",
+    "Matching or replacing existing siding and roofing for a seamless exterior",
+    "Covered porch or deck tie-in",
+  ],
+  adu: [
+    "Full kitchen rather than a kitchenette",
+    "Separate utility metering",
+    "Garage or covered parking",
+    "Upgraded exterior to match the main home",
+  ],
+  basement: [
+    "Wet bar or kitchenette",
+    "Home theater pre-wire and soundproofing",
+    "Additional egress windows for extra bedrooms",
+    "Full bathroom rather than a half bath",
+  ],
+};
+
+const PROJECT_EXCLUDES: Partial<Record<ProjectType, string[]>> = {
+  kitchen: ["Countertop appliances, cookware, and small-appliance garages beyond the cabinet plan"],
+  basement: [
+    "Foundation repair, waterproofing, or drainage correction if moisture is present",
+    "Radon mitigation, if testing shows it is needed",
+  ],
+  addition: ["Site work beyond the building footprint, such as utility mains or driveway changes"],
+  adu: [
+    "Utility connection fees and impact fees charged by the jurisdiction",
+    "Site work beyond the building footprint",
+  ],
+};
+
+/**
+ * Everything a homeowner needs to read the number correctly: what it covers,
+ * what it does not, what it assumes, and which way the final figure is likely
+ * to move. Shared by the estimator UI and both outbound emails so the two can
+ * never tell a different story.
+ */
+export function buildEstimateDisclosure(input: EstimateInput): EstimateDisclosure {
+  return {
+    includes: buildDynamicScope(input),
+    excludes: [...UNIVERSAL_EXCLUDES, ...(PROJECT_EXCLUDES[input.project] ?? [])],
+    assumptions: UNIVERSAL_ASSUMPTIONS,
+    increases: UNIVERSAL_INCREASES,
+    decreases: UNIVERSAL_DECREASES,
+    upgrades: PROJECT_UPGRADES[input.project],
+  };
+}
+
 export const PROJECT_SIZE_CONFIG: Record<ProjectType, ProjectSizeConfig> = {
   kitchen: { min: 100, max: 600, step: 25, baselineSqft: 250 },
   bathroom: { min: 40, max: 200, step: 10, baselineSqft: 80 },
@@ -433,9 +568,37 @@ export function getSetRefinementKeys(refinements: EstimateRefinements): UserRefi
   );
 }
 
+/**
+ * How strongly cost actually tracks floor area, by project type.
+ *
+ * Remodel cost does NOT scale linearly with square footage. A 400 sqft kitchen
+ * does not contain 1.6x the cabinetry, appliances, or plumbing points of a 250
+ * sqft one: the extra area is mostly open floor. Cost follows cabinet runs,
+ * fixture counts, and tile area, which grow far more slowly than floor area.
+ * Treating area as linear was inflating large-room estimates badly (a 400 sqft
+ * high-end kitchen priced at $198k-$247k, roughly double a realistic figure).
+ *
+ * New construction is the exception: an addition or ADU genuinely costs close
+ * to proportionally more per square foot added, so those stay near-linear.
+ *
+ * 1.0 = perfectly linear with area. Lower = more of the cost is fixed.
+ */
+const SIZE_ELASTICITY: Record<ProjectType, number> = {
+  kitchen: 0.55, // cabinet runs + appliance count dominate, not floor area
+  bathroom: 0.6, // fixture count and tile area, not floor area
+  'whole-home': 0.85, // more area genuinely means more rooms to touch
+  addition: 0.95, // new square footage: near-linear
+  adu: 0.9, // new construction, but fixed kitchen/bath cores dilute it
+  basement: 0.75, // large open areas are cheap per sqft once systems are in
+};
+
 function getSizeMultiplier(sqft: number, project: ProjectType): number {
   const baseline = PROJECT_SIZE_CONFIG[project].baselineSqft;
-  return Math.max(0.5, Math.min(2.5, sqft / baseline));
+  // Clamp the ratio before scaling so an extreme slider position cannot produce
+  // a runaway multiplier, then damp it by the project's elasticity.
+  const ratio = Math.max(0.35, Math.min(3, sqft / baseline));
+  const scaled = Math.pow(ratio, SIZE_ELASTICITY[project]);
+  return Math.max(0.6, Math.min(2, scaled));
 }
 
 function getRefinementMultipliers(ref: EstimateRefinements, project: ProjectType): { low: number; high: number } {
@@ -594,9 +757,16 @@ export function calculateEstimate(input: EstimateInput, userRefinementCount = 0)
   // The CENTER is a pure, monotonic function of the cost drivers (project,
   // finish, size, refinements): a more intensive selection always moves the
   // center up, so two configurations remain directly comparable.
-  const centerLow = base.low * sizeMult * refMult.low;
-  const centerHigh = base.high * sizeMult * refMult.high;
-  const center = (centerLow + centerHigh) / 2;
+  // Center = expected cost; the band below carries the uncertainty. Keeping
+  // those two jobs separate matters: the previous form took the mean of
+  // (lowest base x lowest multipliers) and (highest base x highest
+  // multipliers), so every selection compounded worst-case against worst-case
+  // and dragged the center upward. Scaling the midpoints instead keeps the
+  // center a fair expected value while staying monotonic - a more intensive
+  // selection still always moves it up.
+  const baseMid = (base.low + base.high) / 2;
+  const refMid = (refMult.low + refMult.high) / 2;
+  const center = baseMid * sizeMult * refMid;
 
   // The BAND starts at the category's own natural spread and TIGHTENS as the
   // user supplies more detail, so a fully-specified estimate is genuinely more
