@@ -28,6 +28,7 @@ import {
   getSetRefinementKeys,
   type EstimateRefinements,
 } from "@/shared/estimateEngine";
+import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 
 const propertyProfileSchema = z
   .object({
@@ -170,6 +171,17 @@ export async function POST(request: NextRequest) {
         console.error("[consultation] DB insert failed:", dbErr);
       }
     }
+
+    forwardToLeadDashboard({
+      fullName: data.name,
+      email: data.email,
+      phone: data.phone,
+      projectTypes: data.projectType ? [data.projectType] : [],
+      projectScope: estimate
+        ? `${data.projectType} - estimated $${estimate.priceLow.toLocaleString()}${"–"}$${estimate.priceHigh.toLocaleString()}`
+        : undefined,
+      source: "boiseremodeling.co",
+    });
 
     try {
       const { client, fromEmail } = await getUncachableEmailClient();
