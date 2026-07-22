@@ -26,6 +26,7 @@ import {
   getAvailableFinishLevels,
   getPlumbingElectricalOptions,
   getPlumbingElectricalLabel,
+  getAssumedBathrooms,
   FINISH_LABELS as ENGINE_FINISH_LABELS,
   PROJECT_SIZE_CONFIG,
   formatPlanningCurrency,
@@ -366,9 +367,9 @@ function buildRefinements(
   if (plumbingElectrical) ref.plumbingElectrical = plumbingElectrical;
   if (cabinetTier && effectiveProject === "kitchen") ref.cabinetTier = cabinetTier;
 
-  if (effectiveProject === "whole-home") {
-    if (bathroomCount !== null) ref.bathroomCount = bathroomCount;
-    if (kitchenIncluded !== null) ref.kitchenIncluded = kitchenIncluded;
+  if (bathroomCount !== null) ref.bathroomCount = bathroomCount;
+  if (kitchenIncluded !== null && effectiveProject === "whole-home") {
+    ref.kitchenIncluded = kitchenIncluded;
   }
 
   return ref;
@@ -674,8 +675,7 @@ export function EstimateCalculator({
      asked whenever baths are in scope. With no chips ticked the scope is still
      unknown and a whole-home almost always includes baths, so it is asked then
      too. The kitchen question appears the same way. */
-  const showBathCount =
-    effectiveProject === "whole-home" && (addOns.length === 0 || addOns.includes("baths"));
+  const showBathCount = getAssumedBathrooms(effectiveProject) !== null;
   const showKitchenIncluded = effectiveProject === "whole-home";
   const showSystems =
     ALWAYS_HAS_SYSTEMS.includes(effectiveProject) ||
@@ -1167,10 +1167,15 @@ export function EstimateCalculator({
     <div className="mt-5">
       <p className={stepLabel}>{stepNo("bathcount")} &middot; How many bathrooms?</p>
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
-        Bathrooms move a whole-home budget more than any other room. Count every one in the project.
+        {effectiveProject === "whole-home"
+          ? "Bathrooms move a whole-home budget more than any other room. Count every one in the project."
+          : "A bathroom is one of the largest single line items here. Count every one included."}
       </p>
-      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-        {[1, 2, 3, 4, 5, 6].map((n) => {
+      <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
+        {(getAssumedBathrooms(effectiveProject) === 0
+          ? [0, 1, 2, 3, 4, 5, 6]
+          : [1, 2, 3, 4, 5, 6]
+        ).map((n) => {
           const active = bathCount === n;
           return (
             <button
@@ -1189,7 +1194,7 @@ export function EstimateCalculator({
                   : "bg-inverse-foreground/[0.05] border-inverse-foreground/[0.12] text-inverse-muted hover-elevate",
               )}
             >
-              {n}{n === 6 ? "+" : ""}
+              {n === 0 ? "None" : `${n}${n === 6 ? "+" : ""}`}
             </button>
           );
         })}

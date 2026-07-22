@@ -46,12 +46,16 @@ for (const project of projects) {
   const visibleCount = Object.values(visibility).filter(Boolean).length;
   assert(maxFields === visibleCount, `${project} max fields matches visibility (${maxFields})`);
 
+  // Bathroom count is now priced on every project whose published rate covers a
+  // known number of them, so these counts include it.
   if (project === "addition" || project === "adu") {
     assert(!visibility.layoutChanges, `${project} hides layout changes`);
-    assert(maxFields === 2, `${project} exposes two refinement fields`);
+    assert(visibility.bathroomCount, `${project} asks how many bathrooms`);
+    assert(maxFields === 3, `${project} exposes three refinement fields`);
   } else if (project === "basement") {
     assert(visibility.layoutChanges, `${project} shows layout changes`);
-    assert(maxFields === 2, `${project} exposes two refinement fields`);
+    assert(visibility.bathroomCount, `${project} asks how many bathrooms`);
+    assert(maxFields === 3, `${project} exposes three refinement fields`);
   } else if (project === "whole-home") {
     // Layout, systems, bathroom count and kitchen inclusion. Bathroom count and
     // kitchen replaced the retired roomCount, which double counted size.
@@ -156,9 +160,14 @@ assert(
 const aduDetailed = calculateEstimate(
   {
     ...aduInput,
-    refinements: { ...EMPTY_REFINEMENTS, plumbingElectrical: "full", aduConfig: "attached" },
+    refinements: {
+      ...EMPTY_REFINEMENTS,
+      plumbingElectrical: "full",
+      aduConfig: "attached",
+      bathroomCount: 1,
+    },
   },
-  2,
+  3,
 );
 assert(aduDetailed.confidence === "detailed", "ADU reaches detailed guidance at max fields");
 

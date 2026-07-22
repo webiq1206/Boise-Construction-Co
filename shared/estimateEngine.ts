@@ -339,7 +339,7 @@ export function getRefinementVisibility(project: ProjectType): RefinementVisibil
     plumbingElectrical: true,
     cabinetTier: project === "kitchen",
     fixtureCount: project === "bathroom",
-    bathroomCount: project === "whole-home",
+    bathroomCount: ASSUMED_BATHROOMS[project] !== undefined,
     kitchenIncluded: project === "whole-home",
     stories: project === "addition",
     aduConfiguration: project === "adu",
@@ -856,32 +856,69 @@ const WHOLE_HOME_ASSUMED_BATHS = 2;
 const WHOLE_HOME_ASSUMES_KITCHEN = true;
 
 /**
- * Prices a whole-home deviation from that baseline ADDITIVELY, using the
- * guide's own kitchen and bathroom figures at the matching finish level.
+ * How many bathrooms each project's published rate already covers.
  *
- * Additive rather than a multiplier, because a fourth bathroom costs what a
- * bathroom costs; it does not scale with the size of the house. And because the
- * adjustment is zero at the assumed baseline, a typical whole-home still
+ * Whole-home's count of 2 is derived arithmetically (see above). The others are
+ * read from the scope the guide publishes for each project, which is weaker
+ * evidence, so they are recorded here explicitly rather than buried:
+ *
+ *   basement  "Optional bedroom and full bathroom"  -> optional, so 0 assumed
+ *   addition  "Bedroom or family room addition"     -> no bath mentioned, 0
+ *   adu       "Mid-range kitchen and bath finishes" -> one bath, 1
+ *
+ * Projects absent from this map do not price bathroom count: a bathroom remodel
+ * IS the bathroom, and a kitchen has none.
+ */
+const ASSUMED_BATHROOMS: Partial<Record<ProjectType, number>> = {
+  "whole-home": WHOLE_HOME_ASSUMED_BATHS,
+  basement: 0,
+  addition: 0,
+  adu: 1,
+};
+
+export function getAssumedBathrooms(project: ProjectType): number | null {
+  return ASSUMED_BATHROOMS[project] ?? null;
+}
+
+/**
+ * Prices a deviation from the assumed bathroom count, and for whole-home the
+ * presence of the kitchen, ADDITIVELY using the guide's own figures at the
+ * matching finish level.
+ *
+ * Additive rather than a multiplier, because a bathroom costs what a bathroom
+ * costs; it does not scale with the size of the house. And because the
+ * adjustment is zero at the assumed baseline, a typical project still
  * reproduces the published rate exactly, which the source-fidelity check
  * enforces.
+ *
+ * The bathroom figure used is the guide's standalone bathroom remodel. For a
+ * basement or an addition the true incremental cost differs somewhat (no
+ * demolition, but slab or new plumbing runs instead), so this is a reasoned
+ * approximation rather than a derived number, unlike the whole-home baseline.
  */
-function getWholeHomeModuleAdjustment(
+function getModuleAdjustment(
+  project: ProjectType,
   ref: EstimateRefinements,
   finish: FinishLevel,
 ): { low: number; high: number } {
   let low = 0;
   let high = 0;
 
-  if (ref.bathroomCount !== null) {
+  const assumed = ASSUMED_BATHROOMS[project];
+  if (assumed !== undefined && ref.bathroomCount !== null) {
     const bath = PRICE_MATRIX.bathroom[normalizeFinishLevel("bathroom", finish)];
     if (bath) {
-      const delta = ref.bathroomCount - WHOLE_HOME_ASSUMED_BATHS;
+      const delta = ref.bathroomCount - assumed;
       low += bath.low * delta;
       high += bath.high * delta;
     }
   }
 
-  if (ref.kitchenIncluded === false && WHOLE_HOME_ASSUMES_KITCHEN) {
+  if (
+    project === "whole-home" &&
+    ref.kitchenIncluded === false &&
+    WHOLE_HOME_ASSUMES_KITCHEN
+  ) {
     const kitchen = PRICE_MATRIX.kitchen[normalizeFinishLevel("kitchen", finish)];
     if (kitchen) {
       low -= kitchen.low;
@@ -921,10 +958,7 @@ export function calculateEstimate(input: EstimateInput, userRefinementCount = 0)
   // after size scaling because a bathroom costs what a bathroom costs whatever
   // the size of the house, and is scaled by the planning adjustment so it stays
   // consistent with every other figure the estimator shows.
-  const modules =
-    safeInput.project === "whole-home"
-      ? getWholeHomeModuleAdjustment(input.refinements, safeInput.finish)
-      : { low: 0, high: 0 };
+  const modules = getModuleAdjustment(safeInput.project, input.refinements, safeInput.finish);
   const moduleMid =
     ((modules.low + modules.high) / 2) * PLANNING_RANGE_ADJUSTMENT;
 
