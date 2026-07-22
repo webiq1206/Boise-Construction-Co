@@ -55,6 +55,18 @@ export interface PropertyEnrichment {
   jurisdiction?: string;
 }
 
+/**
+ * Lead dashboard the internal team works out of. Overridable per environment so
+ * a staging deploy does not point staff at production leads.
+ *
+ * This links to the dashboard root rather than a specific lead: the inserts in
+ * the lead routes do not capture the generated row id, and the dashboard's URL
+ * shape for an individual lead is not known here, so a deep link would be a
+ * guess that could land on a 404. Swap in a per-lead URL once both are settled.
+ */
+export const LEADS_DASHBOARD_URL =
+  process.env.NEXT_PUBLIC_LEADS_DASHBOARD_URL ?? "https://leads.boiseremodeling.co";
+
 export function formatUsd(n: number): string {
   return `$${Math.round(n).toLocaleString("en-US")}`;
 }
@@ -347,6 +359,11 @@ export function buildAdminEmailHtml(
           </td>
           <td>
             <a href="${escapeHtml(telHref)}" style="display:inline-block;background:transparent;color:${EMAIL_BRAND.text};border:1px solid ${EMAIL_BRAND.accent};padding:11px 24px;text-decoration:none;border-radius:6px;font-size:14px;">Call ${escapeHtml(lead.phone)}</a>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="padding-top:10px;">
+            <a href="${escapeHtml(LEADS_DASHBOARD_URL)}" style="display:inline-block;background:transparent;color:${EMAIL_BRAND.textMuted};border:1px solid ${EMAIL_BRAND.hairline};padding:11px 24px;text-decoration:none;border-radius:6px;font-size:14px;">View in lead dashboard</a>
           </td>
         </tr>
       </table>
