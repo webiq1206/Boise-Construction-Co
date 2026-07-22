@@ -215,7 +215,7 @@ export function generateOrganizationSchema(): SchemaContext {
       '@type': 'ImageObject',
       url: LOGO_URL,
     },
-    description: 'Design-build remodeling contractor serving the Treasure Valley since 2017. Kitchen remodels, bathrooms, additions, and whole-home renovations. Licensed, insured, and committed to excellence.',
+    description: 'Design-build remodeling contractor serving the Treasure Valley since 2020. Kitchen remodels, bathrooms, additions, and whole-home renovations. Licensed, insured, and committed to excellence.',
     foundingDate: BUSINESS_INFO.founded,
     // founder is gated: only emitted once a real named founder is supplied in
     // BUSINESS_INFO.founderName (see seo-audit/trust-signal-map.md).

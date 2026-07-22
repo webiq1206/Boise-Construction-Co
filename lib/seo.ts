@@ -479,7 +479,7 @@ export const BUSINESS_INFO = {
     saturday: '8:00 AM - 4:00 PM',
     sunday: 'Closed',
   },
-  founded: '2017',
+  founded: '2020',
   serviceArea: ['Boise', 'Meridian', 'Eagle', 'Nampa', 'Kuna', 'Star', 'Middleton', 'Caldwell'],
   serviceRadius: '35 miles',
   licenses: ['License details available upon request'],

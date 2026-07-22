@@ -95,7 +95,7 @@ export const DIFFERENTIATORS: Differentiator[] = [
  * completed-project count.
  */
 export const PROOF_STATS = {
-  established: "2017",
+  established: "2020",
   projectsCompleted: "200+",
 } as const;
 

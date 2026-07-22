@@ -214,7 +214,7 @@ export default function AboutPage() {
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     Boise Remodeling Co has run design-build remodels across the Treasure Valley
-                    since 2017. One team leads every project from the first in-home visit through
+                    since 2020. One team leads every project from the first in-home visit through
                     Ada and Canyon County permitting to the final walkthrough, and stands behind a
                     written scope before construction and a workmanship guarantee on our labor.
                   </p>
