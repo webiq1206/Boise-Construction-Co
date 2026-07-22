@@ -38,6 +38,85 @@ const STORAGE_PREFILL = "brc_prefill";
 const STORAGE_SOURCE = "brc_lead_source";
 
 /**
+ * Contact details persist in localStorage, not sessionStorage, so a visitor who
+ * gave us their information yesterday is not asked for it again today. Session
+ * storage dies with the tab, which meant a returning visitor hit the gate a
+ * second time to see a number they had already earned.
+ *
+ * Reads fall back to sessionStorage so anything written by the previous
+ * behaviour still resolves, and every access is guarded: Safari private mode
+ * and storage quotas both throw, and neither should break the estimator.
+ */
+function durableGet(key: string): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const fromLocal = window.localStorage.getItem(key);
+    if (fromLocal !== null) return fromLocal;
+  } catch {
+    /* localStorage unavailable; fall through to session */
+  }
+  try {
+    return window.sessionStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function durableSet(key: string, value: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(key, value);
+    return;
+  } catch {
+    /* fall through to session storage */
+  }
+  try {
+    window.sessionStorage.setItem(key, value);
+  } catch {
+    /* no storage available; the visitor just re-enters details */
+  }
+}
+
+export function durableRemove(key: string): void {
+  if (typeof window === "undefined") return;
+  try { window.localStorage.removeItem(key); } catch { /* ignore */ }
+  try { window.sessionStorage.removeItem(key); } catch { /* ignore */ }
+}
+
+/** Key set when the visitor has passed the contact gate. */
+export const GATE_PASSED_KEY = "brc_gate_passed";
+
+export function hasPassedGate(): boolean {
+  return durableGet(GATE_PASSED_KEY) === "1";
+}
+
+export function markGatePassed(): void {
+  durableSet(GATE_PASSED_KEY, "1");
+}
+
+/**
+ * Signature of the estimate we last sent to the team, stored durably so a
+ * returning visitor who changes their project is offered a resubmit, while one
+ * who rebuilds the same estimate is not nagged to send a duplicate.
+ */
+const STORAGE_LAST_SENT = "brc_last_sent";
+
+export function readLastSentKey(): string | null {
+  return durableGet(STORAGE_LAST_SENT);
+}
+
+export function writeLastSentKey(key: string): void {
+  durableSet(STORAGE_LAST_SENT, key);
+}
+
+/** Forget the visitor entirely: clears saved contact details and gate state. */
+export function clearStoredIdentity(): void {
+  durableRemove(GATE_PASSED_KEY);
+  durableRemove(STORAGE_PREFILL);
+  durableRemove(STORAGE_LAST_SENT);
+}
+
+/**
  * Parse the current URL for prefill params, persist them for the forms, and
  * clean PII out of the address bar. Safe to call on every mount.
  */
@@ -64,10 +143,10 @@ export function applyLeadParams(): { prefill: LeadPrefill } {
     if (zip) prefill.zip = zip;
 
     if (Object.keys(prefill).length > 0) {
-      sessionStorage.setItem(STORAGE_PREFILL, JSON.stringify(prefill));
+      durableSet(STORAGE_PREFILL, JSON.stringify(prefill));
     }
     if (PREFILLED_SOURCES.has(src)) {
-      sessionStorage.setItem(STORAGE_SOURCE, src);
+      durableSet(STORAGE_SOURCE, src);
     }
 
     // Privacy: never leave a phone/email sitting in the address bar (URLs get
@@ -90,7 +169,7 @@ export function applyLeadParams(): { prefill: LeadPrefill } {
 export function readStoredPrefill(): LeadPrefill {
   if (typeof window === "undefined") return {};
   try {
-    const raw = sessionStorage.getItem(STORAGE_PREFILL);
+    const raw = durableGet(STORAGE_PREFILL);
     return raw ? (JSON.parse(raw) as LeadPrefill) : {};
   } catch {
     return {};
@@ -115,7 +194,7 @@ export function writeStoredPrefill(prefill: LeadPrefill): void {
     if (prefill.phone) next.phone = prefill.phone;
     if (prefill.zip) next.zip = prefill.zip;
     if (Object.keys(next).length === 0) return;
-    sessionStorage.setItem(STORAGE_PREFILL, JSON.stringify(next));
+    durableSet(STORAGE_PREFILL, JSON.stringify(next));
     window.dispatchEvent(new CustomEvent(PREFILL_UPDATED_EVENT));
   } catch {
     /* sessionStorage unavailable (private mode / quota) - non-fatal */

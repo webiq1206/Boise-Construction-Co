@@ -37,7 +37,16 @@ import {
   APPLIANCE_DISCLAIMER,
 } from "@/shared/estimateEngine";
 import { trackEvent, trackMetaEvent } from "@/lib/analytics";
-import { applyLeadParams, writeStoredPrefill } from "@/lib/leadPrefill";
+import {
+  applyLeadParams,
+  writeStoredPrefill,
+  readStoredPrefill,
+  hasPassedGate,
+  markGatePassed,
+  clearStoredIdentity,
+  readLastSentKey,
+  writeLastSentKey,
+} from "@/lib/leadPrefill";
 
 /* Project-level icons for the project-type card grid. */
 const PROJECT_ICONS: Record<ProjectType, LucideIcon> = {
@@ -415,6 +424,14 @@ export function EstimateCalculator({
   const [gateLoading,   setGateLoading]   = useState(false);
   const [gateError,     setGateError]     = useState<string | null>(null);
   const [gateBudget,    setGateBudget]    = useState("");
+  /* Contact details we already hold for this visitor. Present means they have
+     passed the gate before (possibly on an earlier visit), so the estimator is
+     theirs to use freely: no re-entry, editable, and resubmittable. */
+  const [savedIdentity, setSavedIdentity] = useState<{ name: string; email: string; phone: string } | null>(null);
+  /* Signature of the estimate last sent to the team, so we can tell whether
+     what is on screen now is actually new information worth resubmitting. */
+  const [lastSentKey, setLastSentKey] = useState<string | null>(null);
+  const [resendState, setResendState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   /* Guards the estimator-completion conversion event so it fires at most once
      per mount even if the visitor recalculates after editing. */
   const engagementFired   = useRef(false);
@@ -512,8 +529,22 @@ export function EstimateCalculator({
     if (prefill.name) setGateName(prefill.name);
     if (prefill.email) setGateEmail(prefill.email);
     if (prefill.phone) setGatePhone(prefill.phone);
-    if (sessionStorage.getItem("brc_gate_passed") === "1") {
+    // A visitor who already gave us their details should never be asked again,
+    // including on a later visit, so this reads durable storage and restores
+    // both the gate state AND the saved contact info (needed to resubmit an
+    // updated estimate without retyping anything).
+    const saved = readStoredPrefill();
+    if (saved.name) setGateName(saved.name);
+    if (saved.email) setGateEmail(saved.email);
+    if (saved.phone) setGatePhone(saved.phone);
+    if (hasPassedGate()) {
       setGateSubmitted(true);
+      setSavedIdentity({
+        name: saved.name ?? "",
+        email: saved.email ?? "",
+        phone: saved.phone ?? "",
+      });
+      setLastSentKey(readLastSentKey());
     }
   }, []);
 
@@ -596,6 +627,74 @@ export function EstimateCalculator({
     }
   }
 
+  /* Identity of the current estimate. Used to tell whether the visitor has
+     actually changed something since we last told the team about it. */
+  const estimateKey = [
+    effectiveProject, finish, sqft,
+    JSON.stringify(refinements),
+    selectedLayoutLabel ?? "",
+    selectedUpgradeLabels.join("|"),
+  ].join("~");
+
+  const hasUnsentChanges = lastSentKey !== null && lastSentKey !== estimateKey;
+
+  /* Send an UPDATED estimate using the contact details we already hold, so a
+     visitor who reworks their project can tell us without retyping anything and
+     the team sees the revision rather than the abandoned first pass. */
+  async function handleResend() {
+    if (!savedIdentity?.email) return;
+    setResendState("sending");
+    try {
+      const res = await fetch("/api/estimate-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: savedIdentity.name,
+          email: savedIdentity.email,
+          phone: savedIdentity.phone,
+          projectType: effectiveProject,
+          estimate: {
+            project: effectiveProject,
+            finish,
+            sqft,
+            priceLow: result.priceLow,
+            priceHigh: result.priceHigh,
+            roi: result.roi,
+            refinements,
+            layoutLabel: selectedLayoutLabel,
+            upgradeLabels: selectedUpgradeLabels,
+          },
+        }),
+      });
+      if (!res.ok && res.status < 500) throw new Error(String(res.status));
+      setLastSentKey(estimateKey);
+      writeLastSentKey(estimateKey);
+      setResendState("sent");
+      trackEvent("generate_lead", { project: effectiveProject, source: "estimate_resend" });
+    } catch {
+      setResendState("error");
+    }
+  }
+
+  /* Let the visitor correct details we hold. Reopens the gate prefilled, rather
+     than wiping it, so editing is a change and not a re-registration. */
+  function handleEditIdentity() {
+    setGateSubmitted(false);
+    setGateOpen(true);
+    setResendState("idle");
+  }
+
+  /* Forget this visitor on this device (shared computers, wrong person). */
+  function handleForgetIdentity() {
+    clearStoredIdentity();
+    setSavedIdentity(null);
+    setGateSubmitted(false);
+    setGateOpen(false);
+    setLastSentKey(null);
+    setResendState("idle");
+    setGateName(""); setGateEmail(""); setGatePhone("");
+  }
+
   async function handleGateSubmit(e: React.FormEvent) {
     e.preventDefault();
 
@@ -661,12 +760,16 @@ export function EstimateCalculator({
           content_category: "estimate_gate",
         });
         trackEvent("generate_lead", { project: effectiveProject, source: "estimate_gate" });
-        sessionStorage.setItem("brc_gate_passed", "1");
+        markGatePassed();
+        setSavedIdentity({ name: gateName.trim(), email: gateEmail.trim(), phone: gatePhone.trim() });
+        setLastSentKey(estimateKey);
+        writeLastSentKey(estimateKey);
+        setResendState("idle");
         setGateSubmitted(true);
       } else if (res.status >= 500) {
         /* Server/infra error: not the user's fault; reveal so they aren't hard-blocked */
         console.warn("[gate] Server error", res.status, "- revealing estimate anyway");
-        sessionStorage.setItem("brc_gate_passed", "1");
+        markGatePassed();
         setGateSubmitted(true);
       } else {
         /* 4xx: our client validation should have caught this; show error, keep gate */
@@ -678,7 +781,7 @@ export function EstimateCalculator({
     } catch (err) {
       /* Network failure: reveal so infra issues never block a real user */
       console.warn("[gate] Network error:", err);
-      sessionStorage.setItem("brc_gate_passed", "1");
+      markGatePassed();
       setGateSubmitted(true);
     }
 
@@ -1179,6 +1282,76 @@ export function EstimateCalculator({
               </p>
             )}
           </div>
+
+          {/* Who we already have on file. Shown once the visitor has passed the
+              gate so the estimator is theirs to use freely: they can keep
+              changing selections without being asked again, correct what we
+              hold, or send us the revised numbers. */}
+          {savedIdentity?.email && (
+            <div className="rounded-md border border-inverse-foreground/[0.12] bg-inverse-foreground/[0.04] p-3.5">
+              <div className="flex flex-wrap items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="text-[12px] text-inverse-muted">
+                    Saved on this device, so you can keep exploring without re-entering anything
+                  </p>
+                  <p className="text-[13.5px] text-inverse-foreground mt-0.5 truncate">
+                    {savedIdentity.name}
+                    {savedIdentity.email ? ` · ${savedIdentity.email}` : ""}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3 flex-shrink-0">
+                  <button
+                    type="button"
+                    onClick={handleEditIdentity}
+                    data-testid="button-edit-identity"
+                    className="text-[12px] text-inverse-foreground underline underline-offset-2 hover:opacity-80"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleForgetIdentity}
+                    data-testid="button-forget-identity"
+                    className="text-[12px] text-inverse-muted hover:text-inverse-foreground"
+                  >
+                    Not you?
+                  </button>
+                </div>
+              </div>
+
+              {/* Resubmitting is only meaningful once something has actually
+                  changed, so the prompt appears rather than sitting there
+                  inviting duplicate leads. */}
+              {hasUnsentChanges && resendState !== "sent" && (
+                <div className="mt-3 pt-3 border-t border-inverse-foreground/10">
+                  <p className="text-[12px] text-inverse-muted mb-2">
+                    You have changed your project since we last heard from you.
+                  </p>
+                  <Button
+                    type="button"
+                    onClick={handleResend}
+                    disabled={resendState === "sending"}
+                    data-testid="button-resend-estimate"
+                    variant="brandOutline"
+                    className="h-10 text-[12.5px] tracking-[0.08em] uppercase"
+                  >
+                    {resendState === "sending" ? "Sending…" : "Send us my updated estimate"}
+                  </Button>
+                  {resendState === "error" && (
+                    <p className="text-[12px] text-destructive mt-2">
+                      That did not go through. Please try again.
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {resendState === "sent" && (
+                <p className="mt-3 pt-3 border-t border-inverse-foreground/10 text-[12px] text-accent-legible">
+                  Sent. We have your updated numbers and will follow up on these.
+                </p>
+              )}
+            </div>
+          )}
 
           {/* Single primary CTA - book the free visit (recommended next step) */}
           <Button
