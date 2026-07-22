@@ -627,6 +627,55 @@ export function EstimateCalculator({
     }
   }
 
+  /* ── Which questions are worth asking ──────────────────────────────────
+     A question only earns a place if its answer can change the estimate for
+     the work the visitor actually described. Asking about cabinetry when they
+     never said they are touching cabinets is noise, and answering it would
+     move a price for work that is not in scope. */
+
+  /* Upgrade chips that imply plumbing or electrical work is in play. */
+  const SYSTEMS_CHIPS: Record<ProjectType, string[]> = {
+    kitchen: ["counters", "lighting"],
+    bathroom: ["shower", "vanity", "tub"],
+    "whole-home": ["kitchen", "baths", "layout"],
+    addition: [],
+    adu: [],
+    basement: ["bath", "wet-bar", "egress"],
+  };
+  /* New construction always carries its own systems, whatever else is ticked. */
+  const ALWAYS_HAS_SYSTEMS: ProjectType[] = ["addition", "adu"];
+
+  const showCabinetry = effectiveProject === "kitchen" && addOns.includes("cabinets");
+  const showSystems =
+    ALWAYS_HAS_SYSTEMS.includes(effectiveProject) ||
+    // No chips ticked means we do not know the scope yet, and systems work is
+    // too big a cost driver to quietly assume away.
+    addOns.length === 0 ||
+    addOns.some((id) => SYSTEMS_CHIPS[effectiveProject].includes(id));
+
+  /* A hidden question must not keep pricing the estimate. Clearing the value
+     when its step disappears is what stops an invisible input from moving the
+     number, which is the same failure the upgrade chips used to cause. */
+  useEffect(() => {
+    if (!showCabinetry) setCabTier((prev) => (prev === null ? prev : null));
+  }, [showCabinetry]);
+  useEffect(() => {
+    if (!showSystems) setPeScope((prev) => (prev === null ? prev : null));
+  }, [showSystems]);
+
+  /* Numbers are derived, never hardcoded, so a hidden step cannot leave a gap
+     in the sequence the visitor reads. */
+  const visibleSteps: string[] = [
+    "project",
+    "layout",
+    "size",
+    "upgrades",
+    ...(showSystems ? ["systems"] : []),
+    ...(showCabinetry ? ["cabinetry"] : []),
+    "finish",
+  ];
+  const stepNo = (id: string) => visibleSteps.indexOf(id) + 1;
+
   /* Identity of the current estimate. Used to tell whether the visitor has
      actually changed something since we last told the team about it. */
   const estimateKey = [
@@ -808,7 +857,7 @@ export function EstimateCalculator({
   /* Step 1 - Project type: prominent card grid (matches the other inputs) */
   const projectGrid = (
     <div className="mb-6">
-      <p className={stepLabel}>1 &middot; Choose your project</p>
+      <p className={stepLabel}>{stepNo("project")} &middot; Choose your project</p>
       <div
         className="grid grid-cols-2 sm:grid-cols-3 gap-2.5"
         role="tablist"
@@ -875,7 +924,7 @@ export function EstimateCalculator({
   /* Step 2 - Layout / type (drives refinement complexity) */
   const subtypeGrid = (
     <div>
-      <p className={stepLabel}>2 &middot; {config.gridLabel}</p>
+      <p className={stepLabel}>{stepNo("layout")} &middot; {config.gridLabel}</p>
       <div className="grid grid-cols-2 gap-2.5" role="group" aria-label={config.gridLabel}>
         {config.subtypes.map((opt) => {
           const Icon = opt.icon;
@@ -916,7 +965,7 @@ export function EstimateCalculator({
   const sizeGrid = (
     <div className="mt-6">
       <div className="flex items-baseline justify-between mb-3">
-        <p className={cn(stepLabel, "mb-0")}>3 &middot; About how big?</p>
+        <p className={cn(stepLabel, "mb-0")}>{stepNo("size")} &middot; About how big?</p>
         <span
           className="brc-display-num tabular-nums text-[22px] leading-none text-inverse-foreground"
           data-testid="calc-sqft-value"
@@ -953,7 +1002,7 @@ export function EstimateCalculator({
   /* Step 4 - Upgrades (optional add-ons) */
   const chipsRow = (
     <div className="mt-5">
-      <p className={stepLabel}>4 &middot; {config.chipsLabel}</p>
+      <p className={stepLabel}>{stepNo("upgrades")} &middot; {config.chipsLabel}</p>
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
         Select all that apply. Optional, and it helps us understand your scope.
       </p>
@@ -993,7 +1042,7 @@ export function EstimateCalculator({
      ticked, which meant a visitor could not see it and never agreed to it. */
   const systemsRow = (
     <div className="mt-5">
-      <p className={stepLabel}>5 &middot; {getPlumbingElectricalLabel(effectiveProject)}</p>
+      <p className={stepLabel}>{stepNo("systems")} &middot; {getPlumbingElectricalLabel(effectiveProject)}</p>
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
         Moving pipes and circuits is one of the biggest cost drivers. Not sure? Pick the closest.
       </p>
@@ -1030,7 +1079,7 @@ export function EstimateCalculator({
      "Cabinets" chip; now an explicit choice. */
   const cabinetRow = (
     <div className="mt-5">
-      <p className={stepLabel}>6 &middot; Cabinetry</p>
+      <p className={stepLabel}>{stepNo("cabinetry")} &middot; Cabinetry</p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
         {([
           { value: "standard" as const, label: "Stock", sub: "Standard sizes and finishes" },
@@ -1067,7 +1116,7 @@ export function EstimateCalculator({
   /* Finish level (options tied to effectiveProject) */
   const finishRow = (
     <div className="mt-5">
-      <p className={stepLabel}>{effectiveProject === "kitchen" ? 7 : 6} &middot; Finish level</p>
+      <p className={stepLabel}>{stepNo("finish")} &middot; Finish level</p>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {availFinish.map((level) => {
           const active = chosen.finish && finish === level;
@@ -1522,8 +1571,8 @@ export function EstimateCalculator({
       {chosen.project && subtypeGrid}
       {chosen.subtype && sizeGrid}
       {chosen.subtype && chipsRow}
-      {chosen.subtype && systemsRow}
-      {chosen.subtype && effectiveProject === "kitchen" && cabinetRow}
+      {chosen.subtype && showSystems && systemsRow}
+      {chosen.subtype && showCabinetry && cabinetRow}
       {chosen.subtype && finishRow}
       {allChosen &&
         (gateSubmitted ? resultPanel : gateOpen ? leadsGatePanel : calculateCta)}
