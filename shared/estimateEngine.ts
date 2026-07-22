@@ -346,10 +346,15 @@ export const PLUMBING_ELECTRICAL_OPTIONS: Record<
   "remodel" | "newConstruction",
   { value: PlumbingElectrical; label: string; sub: string }[]
 > = {
+  // The distinction that matters is RELOCATION, not disconnection. Taking a sink
+  // out to fit new cabinets and putting it back in the same place is routine and
+  // carries no premium; actually moving the supply, drain, or a circuit is what
+  // drives cost. The old copy ("Fixtures only" / "Some rerouting") left visitors
+  // guessing which side of that line a normal cabinet swap fell on.
   remodel: [
-    { value: "cosmetic", label: "Cosmetic", sub: "Fixtures only" },
-    { value: "partial", label: "Partial", sub: "Some rerouting" },
-    { value: "full", label: "Full", sub: "Complete update" },
+    { value: "cosmetic", label: "Staying put", sub: "Nothing moves location" },
+    { value: "partial", label: "Some moves", sub: "A few lines or circuits relocate" },
+    { value: "full", label: "Full rework", sub: "Systems relocated or replaced" },
   ],
   newConstruction: [
     { value: "cosmetic", label: "Standard", sub: "Tie into existing home" },

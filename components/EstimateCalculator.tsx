@@ -1044,7 +1044,7 @@ export function EstimateCalculator({
     <div className="mt-5">
       <p className={stepLabel}>{stepNo("systems")} &middot; {getPlumbingElectricalLabel(effectiveProject)}</p>
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
-        Moving pipes and circuits is one of the biggest cost drivers. Not sure? Pick the closest.
+        Taking a sink out and putting it back in the same spot is routine. This is about whether pipes or circuits actually change location, which is where the cost is.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
         {getPlumbingElectricalOptions(effectiveProject).map((opt) => {

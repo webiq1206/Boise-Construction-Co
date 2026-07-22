@@ -134,9 +134,9 @@ export function buildSelectionRows(
 
   if (visibility.plumbingElectrical && r.plumbingElectrical) {
     const remodel: Record<string, string> = {
-      cosmetic: "Cosmetic (fixtures only)",
-      partial: "Partial (some rerouting)",
-      full: "Full (complete update)",
+      cosmetic: "Staying put (nothing moves location)",
+      partial: "Some moves (a few lines or circuits relocate)",
+      full: "Full rework (systems relocated or replaced)",
     };
     const newBuild: Record<string, string> = {
       cosmetic: "Standard (tie into existing home)",
