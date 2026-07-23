@@ -408,7 +408,9 @@ for (const project of ["addition", "adu"] as ProjectType[]) {
 }
 
 // 7. SOURCE FIDELITY. At its baseline size with no refinements, every project
-//    and finish must reproduce the 2025 Boise Remodeling Cost Guide exactly.
+//    and finish must reproduce its reference pricing exactly. That reference is
+//    the 2025 Boise Remodeling Cost Guide for every category except ADU, which
+//    is calibrated to a real closed job (see the note on the adu entry below).
 //    This is the check that keeps the estimator honest to the published
 //    pricing: any future edit to PRICE_MATRIX, the band model, or the size
 //    scaling that causes the tool to quote something other than the guide at
@@ -437,10 +439,14 @@ const COST_GUIDE_2025: Partial<Record<ProjectType, Partial<Record<FinishLevel, [
     "high-end": [200000, 280000],
     luxury: [340000, 460000],
   },
+  // ADU is the one category NOT from the guide. It is calibrated to a real
+  // closed job: cheapest delivered detached ADU about $145,000, owner-set
+  // starting point $250/sq ft. Guide values were [210000, 300000],
+  // [300000, 420000], [420000, 600000], all scaled by 0.7364.
   adu: {
-    "mid-range": [210000, 300000],
-    "high-end": [300000, 420000],
-    luxury: [420000, 600000],
+    "mid-range": [155000, 221000],
+    "high-end": [221000, 309000],
+    luxury: [309000, 442000],
   },
   basement: {
     "mid-range": [45000, 76500],

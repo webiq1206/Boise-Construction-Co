@@ -44,6 +44,41 @@ Two things to know about that encoding:
   matches how remodel cost behaves and mirrors the guide's own rates falling as
   category size rises.
 
+## Calibrated categories (real jobs beat the guide)
+
+**ADU, calibrated 2026-07.** This is the first category whose rates come from a
+closed job rather than the published guide, and it is the model for how the
+rest should eventually be set.
+
+The guide put a mid-range detached ADU at $210,000 to $300,000 against the
+600 sq ft reference, which is $350/sq ft at the floor. The cheapest detached
+ADU actually delivered came in around **$145,000**, and the owner set the
+starting point at **$250/sq ft**. Every ADU tier was scaled by the same
+**0.7364** so the tier relationships the guide gets right are preserved while
+the entry point matches what the work actually costs.
+
+| | Guide (was) | Calibrated (now) |
+|---|---|---|
+| mid-range | $210,000 - $300,000 | $155,000 - $221,000 |
+| high-end | $300,000 - $420,000 | $221,000 - $309,000 |
+| luxury | $420,000 - $600,000 | $309,000 - $442,000 |
+
+A 600 sq ft mid-range detached ADU now quotes $149,000 to $182,000, or
+$248/sq ft at the floor. The real $145,000 job sits just below that low end,
+which is where a cheapest-ever job belongs.
+
+The source-fidelity check in the invariant suite was updated to match, so ADU
+is now asserted against the calibrated numbers rather than the guide. The
+guide values are recorded in a comment there and in `PRICE_MATRIX` so the
+departure stays visible and reversible.
+
+**Still uncalibrated: room addition.** The same question was raised about
+additions and has not been answered. The guide puts a mid-range 400 sq ft
+addition at $120,000 to $170,000 ($300/sq ft at the floor), which is the same
+shape of number the ADU guide got wrong by 26 percent. One data point fixes
+it: the cheapest room addition actually delivered, and its rough square
+footage.
+
 ## The planning adjustment (ceiling only)
 
 Quoted ranges sit below the published guide via

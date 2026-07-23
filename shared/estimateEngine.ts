@@ -626,17 +626,30 @@ const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>>
       included: ["600+ sqft addition", "Structural engineering", "Premium finishes throughout", "Custom design integration"],
     },
   },
+  /*
+   * ADU rates are calibrated to a real closed job, not to the 2025 cost guide.
+   *
+   * The guide put a mid-range detached ADU at $210,000 to $300,000 against the
+   * 600 sq ft reference, i.e. $350/sq ft at the floor. The cheapest detached
+   * ADU actually delivered came in around $145,000, and the owner set the
+   * starting point at $250/sq ft. Every tier is scaled by the same 0.7364 so
+   * the relationships between tiers, which the guide gets right, are preserved
+   * while the entry point matches what the work actually costs.
+   *
+   * This is the first category calibrated against a closed job rather than a
+   * published guide. See ESTIMATOR-CALIBRATION.md.
+   */
   adu: {
     "mid-range": {
-      low: 210000, high: 300000, roi: 70,
+      low: 155000, high: 221000, roi: 70,
       included: ["Full design-build ADU", "Mid-range kitchen and bath finishes", "Separate HVAC system", "Permit coordination through CO"],
     },
     "high-end": {
-      low: 300000, high: 420000, roi: 65,
+      low: 221000, high: 309000, roi: 65,
       included: ["600+ sqft ADU or guest house", "High-end finishes throughout", "Custom kitchen and bath", "Engineered foundation and structural plans"],
     },
     luxury: {
-      low: 420000, high: 600000, roi: 58,
+      low: 309000, high: 442000, roi: 58,
       included: ["Large detached guest house", "Premium finishes and fixtures", "Smart home integration", "Structural engineering and custom design"],
     },
   },
