@@ -99,6 +99,41 @@ the component shares, both of which are one step removed from a real addition.
 One closed job (contract value and square footage) replaces the whole
 derivation, exactly as the $145,000 ADU replaced the guide.
 
+## Whole-home bathroom reference scales with size (fixed 2026-07)
+
+`ASSUMED_BATHROOMS["whole-home"]` is not a default applied to a lead. The
+estimator asks for the real count; this number is the bath content already
+baked into the published rate, and it is only what the adjustment measures
+FROM. It was solved at the 1,800 sq ft reference and then held flat while the
+rate was scaled across an 800 to 8,000 sq ft slider, so it measured from the
+wrong place at every size except the baseline.
+
+Re-solved the same way: subtract a kitchen and N baths from the whole-home
+figure and read the residual left for general living space, which should stay
+roughly constant across sizes because flooring, paint and trim do not get
+cheaper per foot as a house grows. At mid-range the reference leaves $39/sq ft
+with 2 baths, and that residual is reproduced by one bath per 1,000 sq ft:
+
+| home size | baths the rate covers |
+|---|---|
+| 1,800 sq ft | 2 (unchanged, so source fidelity holds) |
+| 3,000 sq ft | 3 |
+| 5,000 sq ft | 5 |
+| 8,000 sq ft | 8 |
+
+The practical effect is a price **reduction** on large homes, not an increase.
+An 8,000 sq ft mid-range whole-home with 5 stated bathrooms was quoting
+$539,000 to $719,000; it now quotes $420,000 to $560,000, because the rate
+already covers eight and the homeowner has five. Previously those three extra
+baths were charged twice.
+
+**Open question this raises.** Eight bathrooms in an 8,000 sq ft house is a
+lot. That the arithmetic demands it suggests the top of the size curve is
+generous, i.e. the 0.85 whole-home elasticity extrapolates too high over a
+4.4x span. That is a question about elasticity, not about this constant, and it
+should be settled against a real large-home job rather than by adjusting one
+number to make the other look right.
+
 ## The size multiplier plateau (fixed 2026-07)
 
 `getSizeMultiplier` clamped its result to [0.6, 2] as a runaway guard. Because

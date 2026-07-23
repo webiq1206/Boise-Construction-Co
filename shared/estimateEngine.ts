@@ -1005,6 +1005,50 @@ export function buildDynamicScope(input: EstimateInput): string[] {
  * kitchen and two baths is the standard Treasure Valley three-bed home.
  */
 const WHOLE_HOME_ASSUMED_BATHS = 2;
+
+/**
+ * Square feet of house per bathroom the whole-home rate already covers.
+ *
+ * The count above is solved at the 1,800 sq ft reference, but the rate is then
+ * scaled across an 800 to 8,000 sq ft slider, and the bath content embedded in
+ * it scales too. Holding the reference at a flat 2 makes the adjustment measure
+ * from the wrong place at every size except the baseline.
+ *
+ * Solved the same way as the baseline count. Subtract a kitchen and N baths
+ * from the whole-home figure and read the residual left for general living
+ * space, which should stay roughly constant across house sizes because
+ * flooring, paint and trim do not get cheaper per foot as a house grows. At
+ * mid-range the 1,800 sq ft reference leaves $39/sq ft with 2 baths, and that
+ * same residual is reproduced by:
+ *
+ *   1,800 sq ft -> 2 baths      5,000 sq ft -> 5 baths
+ *   3,000 sq ft -> 3 baths      8,000 sq ft -> 8 baths
+ *
+ * which is one bath per 1,000 sq ft, and returns exactly 2 at the reference so
+ * the source-fidelity check is untouched.
+ *
+ * Note what this implies: eight bathrooms in an 8,000 sq ft house is a lot, so
+ * the top of the size curve is probably generous. That is a question about the
+ * elasticity, not about this constant, and it is recorded in
+ * ESTIMATOR-CALIBRATION.md rather than papered over here.
+ */
+const WHOLE_HOME_SQFT_PER_BATH = 1000;
+
+/**
+ * Bathrooms the published rate already covers for a house of this size.
+ *
+ * This is a reference point, never a default applied to a lead: the estimator
+ * asks for the real count, and this is only what the adjustment measures FROM.
+ */
+export function getAssumedBathroomsForSize(
+  project: ProjectType,
+  sqft: number,
+): number | null {
+  if (project === "whole-home") {
+    return Math.max(1, Math.round(sqft / WHOLE_HOME_SQFT_PER_BATH));
+  }
+  return ASSUMED_BATHROOMS[project] ?? null;
+}
 const WHOLE_HOME_ASSUMES_KITCHEN = true;
 
 /**
@@ -1119,12 +1163,18 @@ function getModuleAdjustment(
   project: ProjectType,
   ref: EstimateRefinements,
   finish: FinishLevel,
+  sqft: number,
 ): { low: number; high: number } {
   let low = 0;
   let high = 0;
 
   // The bathroom project scales by count instead; see bathroomInstances.
-  const assumed = project === "bathroom" ? undefined : ASSUMED_BATHROOMS[project];
+  // Whole-home's reference scales with house size; every other project's is
+  // fixed, because a basement or addition does not gain baths as it grows.
+  const assumed =
+    project === "bathroom"
+      ? undefined
+      : (getAssumedBathroomsForSize(project, sqft) ?? undefined);
   if (assumed !== undefined && ref.bathroomCount !== null) {
     const bath = PRICE_MATRIX.bathroom[normalizeFinishLevel("bathroom", finish)];
     if (bath) {
@@ -1189,7 +1239,12 @@ export function calculateEstimate(input: EstimateInput, userRefinementCount = 0)
   // after size scaling because a bathroom costs what a bathroom costs whatever
   // the size of the house, and is scaled by the planning adjustment so it stays
   // consistent with every other figure the estimator shows.
-  const modules = getModuleAdjustment(safeInput.project, input.refinements, safeInput.finish);
+  const modules = getModuleAdjustment(
+    safeInput.project,
+    input.refinements,
+    safeInput.finish,
+    safeInput.sqft,
+  );
   const moduleMid =
     ((modules.low + modules.high) / 2) * PLANNING_RANGE_ADJUSTMENT;
 
