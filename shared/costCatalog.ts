@@ -228,6 +228,16 @@ export function getComponents(project: ProjectType): ComponentDef[] {
   return [...DIRECT_COMPONENTS[project], ...SOFT_COSTS];
 }
 
+/**
+ * Real installed unit costs keyed by component id.
+ *
+ * Stored as one JSON blob in siteSettings so pricing can be corrected without
+ * a deploy. Category totals are deliberately NOT editable this way: those are
+ * validated figures that should move through the calibration procedure in
+ * ESTIMATOR-CALIBRATION.md against a real closed job, not through a text box.
+ */
+export type UnitCostOverrides = Record<string, number>;
+
 export interface TakeoffLine {
   id: string;
   label: string;
@@ -280,9 +290,21 @@ export function buildTakeoff(
   project: ProjectType,
   finish: FinishLevel,
   sqft: number,
-  total: number
+  total: number,
+  /**
+   * Real installed unit costs keyed by component id, from the admin pricing
+   * panel. Each one flips its line from derived to measured and is priced
+   * directly; the rest of the total redistributes across the still-derived
+   * lines, so the takeoff keeps reconciling as real numbers arrive one by one.
+   */
+  overrides?: UnitCostOverrides
 ): Takeoff {
-  const components = getComponents(project);
+  const components = getComponents(project).map((component) => {
+    const override = overrides?.[component.id];
+    return override !== undefined && Number.isFinite(override) && override >= 0
+      ? { ...component, unitCost: override }
+      : component;
+  });
 
   const priced = components.map((component) => {
     const quantity = quantityFor(component.quantity, sqft);
@@ -380,9 +402,10 @@ export function takeoffForRange(
   finish: FinishLevel,
   sqft: number,
   priceLow: number,
-  priceHigh: number
+  priceHigh: number,
+  overrides?: UnitCostOverrides
 ): Takeoff {
-  return buildTakeoff(project, finish, sqft, (priceLow + priceHigh) / 2);
+  return buildTakeoff(project, finish, sqft, (priceLow + priceHigh) / 2, overrides);
 }
 
 /**

@@ -11,6 +11,7 @@ import {
   formatQuantity,
   formatTakeoffAmount,
   TAKEOFF_BASIS_NOTICE,
+  type UnitCostOverrides,
 } from "@/shared/costCatalog";
 import {
   buildEstimateDisclosure,
@@ -80,7 +81,10 @@ export interface LeadEstimateRecord {
   };
 }
 
-export function buildLeadEstimateRecord(est: VerifiedEstimate): LeadEstimateRecord {
+export function buildLeadEstimateRecord(
+  est: VerifiedEstimate,
+  overrides?: UnitCostOverrides,
+): LeadEstimateRecord {
   const disclosure = buildEstimateDisclosure({
     project: est.project,
     finish: est.finish,
@@ -94,6 +98,7 @@ export function buildLeadEstimateRecord(est: VerifiedEstimate): LeadEstimateReco
     est.sqft,
     est.priceLow,
     est.priceHigh,
+    overrides,
   );
 
   const rows = buildSelectionRows(
@@ -222,6 +227,43 @@ export function buildLeadPropertyRecord(
   ) as LeadPropertyRecord;
 }
 
+/**
+ * Dashboard intake fields the estimator can answer honestly.
+ *
+ * The dashboard accepts 37 fields; the estimator legitimately fills 21. The
+ * remaining 16 belong to its own Part 2 questionnaire (site status, plans
+ * status, decision maker, priority factors and so on) and this tool never asks
+ * them. They stay empty on purpose: a guessed answer in a structured field is
+ * worse than a blank one, because the team cannot tell the difference.
+ *
+ * smsOptIn is deliberately never set. It is a consent record, and asserting
+ * consent nobody gave is a TCPA problem, not a data-completeness win.
+ */
+export function buildCrmIntakeFields(est: VerifiedEstimate | null): {
+  additionAttached?: string;
+  targetHomeSizeRange?: string;
+} {
+  if (!est) return {};
+  const out: { additionAttached?: string; targetHomeSizeRange?: string } = {};
+
+  // Only ADU actually asks attached vs detached, so only ADU answers it.
+  if (est.project === "adu" && est.refinements.aduConfig) {
+    out.additionAttached = est.refinements.aduConfig === "attached" ? "yes" : "no";
+  }
+
+  /*
+   * Only for new construction. On an addition or ADU the project square
+   * footage IS the size of the space being built, which is what this field
+   * means. On a kitchen or bath it is the area of one room, and reporting that
+   * as the target home size would be actively misleading.
+   */
+  if (est.project === "adu" || est.project === "addition") {
+    out.targetHomeSizeRange = `${est.sqft.toLocaleString("en-US")} sq ft`;
+  }
+
+  return out;
+}
+
 /** Concise statement of what the homeowner wants done, for the goals field. */
 export function buildProjectGoals(est: VerifiedEstimate | null): string | undefined {
   if (!est) return undefined;
@@ -251,7 +293,8 @@ function section(title: string, lines: string[]): string {
 export function buildLeadNotes(
   lead: LeadContact,
   est: VerifiedEstimate | null,
-  profile?: PropertyEnrichment | null
+  profile?: PropertyEnrichment | null,
+  overrides?: UnitCostOverrides,
 ): string {
   const parts: string[] = [];
 
@@ -266,7 +309,7 @@ export function buildLeadNotes(
   );
 
   if (est) {
-    const r = buildLeadEstimateRecord(est);
+    const r = buildLeadEstimateRecord(est, overrides);
     parts.push(
       section("ESTIMATE SHOWN TO HOMEOWNER", [
         `Planning range: ${r.formattedRange}`,

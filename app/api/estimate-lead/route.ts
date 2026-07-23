@@ -28,8 +28,10 @@ import {
   type EstimateRefinements,
 } from "@/shared/estimateEngine";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
+import { readUnitCostOverrides } from "@/app/api/admin/pricing/route";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
+  buildCrmIntakeFields,
   buildLeadPropertyRecord,
   buildLeadEstimateRecord,
   buildLeadNotes,
@@ -181,6 +183,10 @@ export async function POST(request: NextRequest) {
       projectType: data.projectType,
       budget: data.budget,
     };
+    // Real unit costs entered in the admin pricing panel, applied to every
+    // breakdown this request renders so the panel, emails and CRM agree.
+    const unitCostOverrides = await readUnitCostOverrides();
+
     const crmProfile = (data.propertyProfile as PropertyEnrichment | null) ?? null;
 
     forwardToLeadDashboard({
@@ -202,11 +208,14 @@ export async function POST(request: NextRequest) {
       // The homeowner's own words stay in finalNotes; the estimate record goes
       // to estimateSummary, which the dashboard sizes for it (20k vs 2k).
       finalNotes: undefined,
-      estimate: estimate ? buildLeadEstimateRecord(estimate) : undefined,
+      estimate: estimate ? buildLeadEstimateRecord(estimate, unitCostOverrides) : undefined,
       // Zoning, lot size, assessed value, owner and occupancy as structured
       // fields, alongside the same rows the admin email renders.
       property: buildLeadPropertyRecord(crmProfile),
-      estimateSummary: buildLeadNotes(crmLead, estimate, crmProfile),
+      // Structured intake fields the estimator can answer. See
+      // buildCrmIntakeFields for why the rest stay deliberately empty.
+      ...buildCrmIntakeFields(estimate),
+      estimateSummary: buildLeadNotes(crmLead, estimate, crmProfile, unitCostOverrides),
       estimateLow: estimate?.priceLow,
       estimateHigh: estimate?.priceHigh,
       estimateRange: estimate
@@ -248,7 +257,7 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      const customerHtml = buildCustomerEmailHtml(lead, estimate);
+      const customerHtml = buildCustomerEmailHtml(lead, estimate, unitCostOverrides);
       const customerResult = await client.emails.send({
         from,
         replyTo: getReplyToAddress(),

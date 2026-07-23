@@ -9,6 +9,7 @@ import {
   formatQuantity,
   formatTakeoffAmount,
   TAKEOFF_BASIS_NOTICE,
+  type UnitCostOverrides,
 } from "@/shared/costCatalog";
 import {
   getRefinementVisibility,
@@ -260,13 +261,14 @@ function renderIncludedList(items: string[]): string {
  * pricing this company has bid, so TAKEOFF_BASIS_NOTICE always renders with
  * them. Without it, "$11,880 cabinetry" reads as a quote for cabinetry.
  */
-function renderTakeoffHtml(est: VerifiedEstimate): string {
+function renderTakeoffHtml(est: VerifiedEstimate, overrides?: UnitCostOverrides): string {
   const takeoff = takeoffForRange(
     est.project,
     est.finish,
     est.sqft,
     est.priceLow,
     est.priceHigh,
+    overrides,
   );
 
   const groupRows = (group: "direct" | "soft") =>
@@ -299,7 +301,7 @@ function renderTakeoffHtml(est: VerifiedEstimate): string {
   `;
 }
 
-export function buildEstimateSectionsHtml(est: VerifiedEstimate): string {
+export function buildEstimateSectionsHtml(est: VerifiedEstimate, overrides?: UnitCostOverrides): string {
   const rangeText = `${formatUsd(est.priceLow)} to ${formatUsd(est.priceHigh)}`;
   const rows = buildSelectionRows(
     est.project,
@@ -331,7 +333,7 @@ export function buildEstimateSectionsHtml(est: VerifiedEstimate): string {
       </table>
     </div>
 
-    ${renderTakeoffHtml(est)}
+    ${renderTakeoffHtml(est, overrides)}
 
     <div style="margin:28px 0;">
       <p style="${SECTION_TITLE}">What this range covers</p>
@@ -452,7 +454,8 @@ export function buildPropertyRows(
 export function buildAdminEmailHtml(
   lead: LeadContact,
   estimate: VerifiedEstimate | null,
-  profile?: PropertyEnrichment | null
+  profile?: PropertyEnrichment | null,
+  overrides?: UnitCostOverrides
 ): string {
   const firstName = firstNameOf(lead.name);
   const telHref = telHrefOf(lead.phone);
@@ -497,7 +500,7 @@ export function buildAdminEmailHtml(
 
       ${
         estimate
-          ? buildEstimateSectionsHtml(estimate)
+          ? buildEstimateSectionsHtml(estimate, overrides)
           : `<p style="margin:24px 0;color:${EMAIL_BRAND.textMuted};">No planning range was attached to this request.</p>`
       }
 
@@ -520,7 +523,8 @@ export function buildAdminEmailHtml(
  */
 export function buildCustomerEmailHtml(
   lead: LeadContact,
-  estimate: VerifiedEstimate | null
+  estimate: VerifiedEstimate | null,
+  overrides?: UnitCostOverrides
 ): string {
   const firstName = firstNameOf(lead.name);
   const projectLabel = estimate ? PROJECT_LABELS[estimate.project].label : lead.projectType;
@@ -532,7 +536,7 @@ export function buildCustomerEmailHtml(
   const content = estimate
     ? `
       <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">Thanks, ${escapeHtml(firstName)}. Here is the planning range you built, saved so you have it in writing.</p>
-      ${buildEstimateSectionsHtml(estimate)}
+      ${buildEstimateSectionsHtml(estimate, overrides)}
       ${budgetNote}
       <p style="color:${EMAIL_BRAND.text};line-height:1.6;">We will reach out within one business day to schedule your free in-home visit, where we confirm the scope and give you a firm number. In the meantime, reply to this email or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> with any questions.</p>
       <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The Boise Remodeling Co team</p>

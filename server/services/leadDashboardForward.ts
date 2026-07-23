@@ -60,6 +60,12 @@ interface ForwardPayload {
    * `estimate`, so fields added here are not silently stripped.
    */
   property?: LeadPropertyRecord;
+
+  /* Structured intake fields the estimator can answer honestly. */
+  /** "yes" or "no". Only set for ADU, the one project that asks. */
+  additionAttached?: string;
+  /** New-construction size, e.g. "600 sq ft". Addition and ADU only. */
+  targetHomeSizeRange?: string;
   /** Readable rendering of the same record. 20k limit, not 2k like finalNotes. */
   estimateSummary?: string;
   estimateLow?: number;
