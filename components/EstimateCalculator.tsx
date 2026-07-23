@@ -1171,6 +1171,7 @@ export function EstimateCalculator({
         Confirms we serve your area and auto-fills your home size if we find a match.
       </p>
       <AddressAutocomplete
+        variant="inverse"
         value={gateAddress}
         onChange={setGateAddress}
         onProfileResolved={(profile) => {

@@ -30,6 +30,7 @@ interface AddressAutocompleteProps {
   "aria-describedby"?: string;
   "aria-invalid"?: React.AriaAttributes["aria-invalid"];
   "data-testid"?: string;
+  variant?: "default" | "inverse";
 }
 
 export function AddressAutocomplete({
@@ -42,6 +43,7 @@ export function AddressAutocomplete({
   "aria-describedby": ariaDescribedBy,
   "aria-invalid": ariaInvalid,
   "data-testid": testId = "input-address",
+  variant = "default",
 }: AddressAutocompleteProps) {
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   const [open, setOpen] = useState(false);
@@ -323,14 +325,21 @@ export function AddressAutocomplete({
 
       {profile && (
         <div
-          className="rounded-sm p-4 text-sm bg-muted/30 border border-border space-y-2"
+          className={cn(
+            "rounded-sm p-4 text-sm space-y-2",
+            variant === "inverse"
+              ? "bg-white/10 border border-white/20"
+              : "bg-muted/30 border border-border"
+          )}
           data-testid="property-profile-summary"
         >
           <div className="flex items-start gap-2">
             <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
             <div>
-              <p className="font-normal text-foreground">Property located</p>
-              <p className="text-muted-foreground text-xs mt-0.5">
+              <p className={cn("font-normal", variant === "inverse" ? "text-white" : "text-foreground")}>
+                Property located
+              </p>
+              <p className={cn("text-xs mt-0.5", variant === "inverse" ? "text-white/60" : "text-muted-foreground")}>
                 {buildCleanAddress(profile) || profile.formattedAddress}
               </p>
               {confidence && (
@@ -339,7 +348,9 @@ export function AddressAutocomplete({
                     "inline-block mt-1 text-xs px-2 py-0.5 rounded-sm",
                     confidence.color === "green" && "bg-success/10 text-success",
                     confidence.color === "yellow" && "bg-warning-soft/15 text-warning",
-                    confidence.color === "gray" && "bg-muted text-muted-foreground"
+                    confidence.color === "gray" && (
+                      variant === "inverse" ? "bg-white/10 text-white/60" : "bg-muted text-muted-foreground"
+                    )
                   )}
                 >
                   {confidence.label}
@@ -348,7 +359,7 @@ export function AddressAutocomplete({
             </div>
           </div>
           {(summaryLines.length > 0 || measurementLines.length > 0) && (
-            <ul className="text-xs text-muted-foreground list-disc pl-5 space-y-0.5">
+            <ul className={cn("text-xs list-disc pl-5 space-y-0.5", variant === "inverse" ? "text-white/60" : "text-muted-foreground")}>
               {[...summaryLines, ...measurementLines].map((line) => (
                 <li key={line}>{line}</li>
               ))}
