@@ -28,6 +28,7 @@ import {
   getPlumbingElectricalLabel,
   getAssumedBathrooms,
   getKitchenQuestion,
+  getTypicalSelections,
   FINISH_LABELS as ENGINE_FINISH_LABELS,
   PROJECT_SIZE_CONFIG,
   formatPlanningCurrency,
@@ -422,6 +423,10 @@ export function EstimateCalculator({
      modules against what the published rate already assumes. */
   const [bathCount, setBathCount] = useState<number | null>(null);
   const [kitchenIn, setKitchenIn] = useState<boolean | null>(null);
+  /* True once the visitor overrides a pre-selected value, after which the
+     profile stops overwriting their choice. */
+  const [edited, setEdited] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [chosen, setChosen] = useState({ project: false, subtype: false, finish: false });
   /* Bathroom count and kitchen inclusion are REQUIRED wherever they are shown.
      Leaving them optional meant a skipped answer silently priced at whatever
@@ -690,6 +695,22 @@ export function EstimateCalculator({
   /* A hidden question must not keep pricing the estimate. Clearing the value
      when its step disappears is what stops an invisible input from moving the
      number, which is the same failure the upgrade chips used to cause. */
+  /* The estimator configures the project rather than interrogating the visitor.
+     Choosing a finish level loads what that level typically includes, so nobody
+     is asked whether their cabinetry is "semi-custom" or whether their plumbing
+     counts as relocated. Both are shown and both are editable; once the visitor
+     changes one, the profile stops touching their choices. */
+  const typical = useMemo(
+    () => getTypicalSelections(effectiveProject, finish),
+    [effectiveProject, finish],
+  );
+
+  useEffect(() => {
+    if (!chosen.finish || edited) return;
+    setPeScope(typical.plumbingElectrical);
+    setCabTier(typical.cabinetTier);
+  }, [chosen.finish, edited, typical]);
+
   useEffect(() => {
     if (!showCabinetry) setCabTier((prev) => (prev === null ? prev : null));
   }, [showCabinetry]);
@@ -710,14 +731,16 @@ export function EstimateCalculator({
     "layout",
     "size",
     "upgrades",
-    ...(showSystems ? ["systems"] : []),
-    ...(showCabinetry ? ["cabinetry"] : []),
     ...(showBathCount ? ["bathcount"] : []),
     ...(showKitchenIncluded ? ["kitchen"] : []),
     "finish",
   ];
   const stepNo = (id: string) => visibleSteps.indexOf(id) + 1;
 
+  /* Only the things a homeowner actually knows are required: their project,
+     layout, size, finish, bathroom count and whether the kitchen is in scope.
+     Cabinetry and systems scope are pre-selected from the finish profile, so
+     they always hold a value and never block completion. */
   const allChosen =
     chosen.project &&
     chosen.subtype &&
@@ -1113,6 +1136,7 @@ export function EstimateCalculator({
               type="button"
               onClick={() => {
                 setPeScope(opt.value);
+                setEdited(true);
                 fireEstimatorEngagement();
               }}
               data-testid={`calc-systems-${opt.value}`}
@@ -1151,6 +1175,7 @@ export function EstimateCalculator({
               type="button"
               onClick={() => {
                 setCabTier(opt.value);
+                setEdited(true);
                 fireEstimatorEngagement();
               }}
               data-testid={`calc-cabinets-${opt.value}`}
@@ -1265,6 +1290,45 @@ export function EstimateCalculator({
       </div>
     );
   })();
+
+  /* What we have pre-selected, stated plainly. This replaces two questions the
+     visitor could not answer without a paragraph of explanation, and it reads as
+     competence rather than as a form: the estimator already understands the
+     project. Editing is one tap away for the minority who want it. */
+  const typicalPanel = (
+    <div className="mt-6 rounded-md border border-inverse-foreground/[0.14] bg-inverse-foreground/[0.04] p-4">
+      <p className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground">
+        Typical for a {FINISH_LABELS[finish]} {config.tabLabel.toLowerCase()}
+      </p>
+      <p className="mt-1 text-[12px] text-inverse-muted">
+        We have pre-selected what is most common. Nothing here is locked in.
+      </p>
+      <ul className="mt-3 space-y-1.5">
+        {typical.summary.map((item, i) => (
+          <li key={i} className="flex items-start gap-2 text-[13px] text-inverse-muted leading-snug">
+            <Check className="h-3.5 w-3.5 flex-shrink-0 mt-0.5 text-accent-legible" />
+            {item}
+          </li>
+        ))}
+      </ul>
+      <button
+        type="button"
+        onClick={() => setEditOpen((v) => !v)}
+        aria-expanded={editOpen}
+        data-testid="button-edit-assumptions"
+        className="mt-3 inline-flex items-center gap-1.5 text-[12.5px] text-inverse-foreground underline underline-offset-2 hover:opacity-80"
+      >
+        Need to adjust anything?
+        <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", editOpen && "rotate-180")} />
+      </button>
+      {editOpen && (
+        <div className="mt-1">
+          {showSystems && systemsRow}
+          {showCabinetry && cabinetRow}
+        </div>
+      )}
+    </div>
+  );
 
   /* Finish level (options tied to effectiveProject) */
   const finishRow = (
@@ -1741,11 +1805,10 @@ export function EstimateCalculator({
       {chosen.project && subtypeGrid}
       {chosen.subtype && sizeGrid}
       {chosen.subtype && chipsRow}
-      {chosen.subtype && showSystems && systemsRow}
-      {chosen.subtype && showCabinetry && cabinetRow}
       {chosen.subtype && showBathCount && bathCountRow}
       {chosen.subtype && showKitchenIncluded && kitchenRow}
       {chosen.subtype && finishRow}
+      {chosen.finish && typicalPanel}
       {allChosen &&
         (gateSubmitted ? resultPanel : gateOpen ? leadsGatePanel : calculateCta)}
     </>

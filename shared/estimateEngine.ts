@@ -231,6 +231,98 @@ const PROJECT_EXCLUDES: Partial<Record<ProjectType, string[]>> = {
  * to move. Shared by the estimator UI and both outbound emails so the two can
  * never tell a different story.
  */
+/* ══════════════════════════════════════════════════════════════════════
+   TYPICAL SELECTIONS ("project profiles")
+
+   The estimator should behave like a project manager, not a form. A PM does
+   not ask a homeowner how many linear feet of cabinet they have; they look at
+   an L-shaped kitchen at a mid-range finish and know what that usually means.
+
+   So the finish level carries a profile of what it typically includes, and the
+   estimator pre-selects it rather than asking. Two rules keep this honest and
+   distinguish it from the hidden inference removed elsewhere in this engine:
+
+     1. Every pre-selected value is SHOWN to the homeowner, not buried.
+     2. Every one of them is editable.
+
+   The line is what a homeowner actually knows. They know their project type,
+   roughly how big it is, how many bathrooms they have, and how nice they want
+   it. They do not know whether their cabinetry is "semi-custom", or whether
+   their plumbing counts as "relocated". Asking the second kind adds friction
+   without adding accuracy, because the answer is a guess either way.
+══════════════════════════════════════════════════════════════════════ */
+
+export interface TypicalSelections {
+  cabinetTier: CabinetTier | null;
+  plumbingElectrical: PlumbingElectrical | null;
+  layoutChanges: LayoutChanges | null;
+  /** Plain-language lines describing what this finish level typically includes. */
+  summary: string[];
+}
+
+const FINISH_PROFILES: Record<FinishLevel, Omit<TypicalSelections, "summary">> = {
+  refresh: { cabinetTier: "standard", plumbingElectrical: "cosmetic", layoutChanges: "none" },
+  "mid-range": { cabinetTier: "semi-custom", plumbingElectrical: "cosmetic", layoutChanges: "none" },
+  "high-end": { cabinetTier: "semi-custom", plumbingElectrical: "partial", layoutChanges: "moderate" },
+  luxury: { cabinetTier: "custom", plumbingElectrical: "full", layoutChanges: "major" },
+};
+
+const PROFILE_SUMMARY: Record<ProjectType, Record<FinishLevel, string[]>> = {
+  kitchen: {
+    refresh: ["Stock cabinetry", "Laminate or entry quartz counters", "Existing layout kept", "Plumbing stays where it is", "LVP or tile flooring"],
+    "mid-range": ["Semi-custom cabinetry", "Quartz counters", "Tile backsplash", "Existing layout kept", "Plumbing stays where it is"],
+    "high-end": ["Semi-custom or custom cabinetry", "Premium stone counters", "Full tile backsplash", "Some walls or plumbing moved", "Layered and under-cabinet lighting"],
+    luxury: ["Fully custom cabinetry", "Exotic stone counters", "Structural layout changes", "Systems relocated throughout", "Designer lighting package"],
+  },
+  bathroom: {
+    refresh: ["New vanity and mirror", "Tile shower refresh", "Fixtures replaced in place", "Existing layout kept"],
+    "mid-range": ["Custom tile shower", "Semi-custom vanity", "Existing layout kept", "Plumbing stays where it is"],
+    "high-end": ["Walk-in or wet-room shower", "Freestanding tub", "Some plumbing moved", "Heated floors"],
+    luxury: ["Full layout reconfiguration", "Steam or spa shower", "Systems relocated throughout", "Designer fixtures"],
+  },
+  "whole-home": {
+    refresh: ["Cosmetic kitchen and bath refresh", "New flooring throughout", "Fresh paint", "Existing layout kept"],
+    "mid-range": ["Kitchen and baths renovated", "New flooring throughout", "Existing layout kept", "Systems stay in place"],
+    "high-end": ["Custom kitchen and baths", "Some structural changes", "New windows and doors", "Systems partly reworked"],
+    luxury: ["Full gut renovation", "Structural engineering", "All new systems", "Smart home integration"],
+  },
+  addition: {
+    refresh: [], "mid-range": ["New foundation, framing and roof", "Tied into existing HVAC", "Mid-range finishes", "Standard utility runs"],
+    "high-end": ["New foundation, framing and roof", "Custom windows and doors", "Extended utility runs", "High-end finishes"],
+    luxury: ["Structural engineering", "Premium finishes throughout", "Separate systems", "Custom design integration"],
+  },
+  adu: {
+    refresh: [], "mid-range": ["Full design-build unit", "Mid-range kitchen and bath", "Separate HVAC", "Permits through certificate of occupancy"],
+    "high-end": ["Custom kitchen and bath", "High-end finishes", "Engineered foundation", "Extended utility runs"],
+    luxury: ["Premium finishes throughout", "Smart home integration", "Structural engineering", "Fully separate systems"],
+  },
+  basement: {
+    refresh: [], "mid-range": ["Framing, insulation and drywall", "Egress and code compliance", "LVP or carpet throughout", "Recessed lighting"],
+    "high-end": ["Full suite build-out", "Premium flooring and tile", "Custom lighting and built-ins", "Some systems reworked"],
+    luxury: ["Luxury finishes throughout", "Theater or wine room", "Spa-style bath", "Systems relocated as needed"],
+  },
+};
+
+/**
+ * What the estimator pre-selects for a project at a given finish level, and the
+ * plain-language summary shown alongside it. Only fields the project actually
+ * prices are returned, so nothing is pre-selected that would never apply.
+ */
+export function getTypicalSelections(
+  project: ProjectType,
+  finish: FinishLevel,
+): TypicalSelections {
+  const normalized = normalizeFinishLevel(project, finish);
+  const profile = FINISH_PROFILES[normalized];
+  const visibility = getRefinementVisibility(project);
+  return {
+    cabinetTier: visibility.cabinetTier ? profile.cabinetTier : null,
+    plumbingElectrical: visibility.plumbingElectrical ? profile.plumbingElectrical : null,
+    layoutChanges: visibility.layoutChanges ? profile.layoutChanges : null,
+    summary: PROFILE_SUMMARY[project][normalized] ?? [],
+  };
+}
+
 export function buildEstimateDisclosure(input: EstimateInput): EstimateDisclosure {
   return {
     includes: [...UNIVERSAL_INCLUDES, ...buildDynamicScope(input)],
