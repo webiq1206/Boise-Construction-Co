@@ -414,6 +414,18 @@ export const consultationRequests = pgTable("consultation_requests", {
   estimateHigh: decimal("estimate_high", { precision: 10, scale: 2 }),
   estimateSqft: integer("estimate_sqft"),
   estimateConfidence: text("estimate_confidence"),
+  /*
+   * Estimate accuracy loop. Recording what a job actually contracted for is
+   * the only thing that ever proves whether the estimator is right: the
+   * invariant suite proves the model is self-consistent, and the cost guide
+   * proves nothing at all (its ADU floor was 26% above the cheapest real job).
+   * Variance is computed against the range shown to the homeowner, so the
+   * question answered is "did we tell them the truth", not "did we guess a
+   * midpoint".
+   */
+  actualContractValue: decimal("actual_contract_value", { precision: 12, scale: 2 }),
+  actualRecordedAt: timestamp("actual_recorded_at"),
+  actualNotes: text("actual_notes"),
   // Status
   status: text("status").notNull().default("new"), // new, contacted, converted, closed
   createdAt: timestamp("created_at").defaultNow().notNull(),

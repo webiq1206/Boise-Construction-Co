@@ -18,6 +18,7 @@ import {
   formatQuantity,
   formatTakeoffAmount,
   TAKEOFF_BASIS_NOTICE,
+  type UnitCostOverrides,
 } from "@/shared/costCatalog";
 import { HOUSE_NUMBER_REGEX, extractZip } from "@/shared/addressValidation";
 import {
@@ -441,6 +442,14 @@ export function EstimateCalculator({
      and answered, never inferred. Declared after the visibility flags below. */
   const [scopeOpen, setScopeOpen]         = useState(false);
   const [takeoffOpen, setTakeoffOpen]     = useState(false);
+  /*
+   * Real unit costs recorded in the admin pricing panel. The estimator runs in
+   * the browser and cannot read the database, so without this the homeowner
+   * would see derived allocations while the confirmation email and the CRM
+   * show measured costs. Fetched once; an empty map simply means every line is
+   * still a derived allocation, which is the correct fallback.
+   */
+  const [unitCostOverrides, setUnitCostOverrides] = useState<UnitCostOverrides>({});
   const [legalOpen, setLegalOpen]         = useState(false);
   const [limitsOpen, setLimitsOpen]       = useState(false);
   /* Lead-gate three-state flow:
@@ -488,6 +497,23 @@ export function EstimateCalculator({
   );
 
   /* When effectiveProject changes (subtype override), drop invalid finish selection */
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/pricing/unit-costs")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((body) => {
+        if (!cancelled && body?.overrides && typeof body.overrides === "object") {
+          setUnitCostOverrides(body.overrides as UnitCostOverrides);
+        }
+      })
+      .catch(() => {
+        // Pricing must never be the reason the estimator fails to render.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   useEffect(() => {
     if (!availFinish.includes(finish)) setFinish("mid-range");
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1469,6 +1495,7 @@ export function EstimateCalculator({
                 sqft,
                 result.priceLow,
                 result.priceHigh,
+                unitCostOverrides,
               );
               const group = (g: "direct" | "soft") =>
                 takeoff.lines.filter((l) => l.group === g && l.cost > 0);
