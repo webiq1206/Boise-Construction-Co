@@ -1,3 +1,5 @@
+import { esriQuery } from './esriClient';
+
 /**
  * Ada County Assessor API Service
  * Fetches property data from Ada County parcel database
@@ -7,8 +9,50 @@ export interface PropertyData {
   parcel: string;
   address: string;
   city: string;
+
+  /*
+   * Fields below this line come straight off the Ada County parcel layer.
+   * They are records, not guesses, and are safe to show a homeowner or quote
+   * back to the team. Canyon County's layer publishes none of them except
+   * acreage, so expect them to be undefined outside Ada.
+   */
+  zip?: string;
+  /** Zoning code, e.g. R1. Drives ADU feasibility. */
+  zoning?: string;
+  /** Assessor's total assessed value in dollars. */
+  assessedValue?: number;
+  /**
+   * True when the parcel carries a homeowner's exemption, which means the
+   * owner lives there. Absent exemption usually means a rental or second home.
+   */
+  ownerOccupied?: boolean;
+  subdivision?: string;
+  ownerName?: string;
+  /** Assessor use code: R residential, C commercial, and so on. */
+  propertyUseCode?: string;
+  /** Zoning category label, e.g. Residential. Canyon only. */
+  zoningCategory?: string;
+  /** FEMA flood zone, e.g. X or AE. Canyon only for now. */
+  floodZone?: string;
+  /**
+   * True when the parcel sits in a FEMA Special Flood Hazard Area, which adds
+   * elevation requirements and permit cost to additions and basement work.
+   */
+  inFloodHazardArea?: boolean;
+
+  /** Real: from the ACRES column. */
   lotSizeAcres?: number;
+  /** Real when derived from ACRES, estimated only if the parcel lacks acreage. */
   lotSizeSqFt?: number;
+
+  /*
+   * Everything below is ESTIMATED by estimatePropertyMeasurements() from the
+   * city and street name. The parcel layer publishes nothing about the
+   * structure, so these are planning defaults for the on-site measuring tool
+   * and must never be presented as county records. Check measurementsEstimated
+   * before displaying any of them.
+   */
+  measurementsEstimated?: boolean;
   buildingSqFt?: number;
   groundFloorSqFt?: number;
   upperFloorSqFt?: number;
@@ -31,6 +75,60 @@ export interface PropertySearchResult {
 }
 
 const ADA_COUNTY_PARCEL_API = 'https://www.schoolsitelocator.com/server/rest/services/ssl_IM/MapServer/131/query';
+
+/*
+ * The layer exposes 44 columns; these are the ones worth carrying. Note what is
+ * NOT here, because it does not exist on this layer at any price: home square
+ * footage, bedrooms, bathrooms, and year built. PROPYEAR is the assessment
+ * year, not the year the house was built, so it is deliberately omitted.
+ */
+const ADA_OUT_FIELDS = [
+  'PARCEL',
+  'ADDCONCAT',
+  'CITY',
+  'ZIPCODE',
+  'ZONING',
+  'ACRES',
+  'TOTALVALUE',
+  'HOMEEXEMPT',
+  'SUBNM',
+  'PRIMOWNER',
+  'PROPCODE',
+].join(',');
+
+const SQ_FT_PER_ACRE = 43560;
+
+/** All Ada requests share one breaker so a sick host is skipped once, not per call. */
+function adaQuery(params: Record<string, string>) {
+  return esriQuery(ADA_COUNTY_PARCEL_API, params, { breakerKey: 'ada', label: 'ada:131' });
+}
+
+/** Pull the real, record-backed columns off one returned feature. */
+function mapAdaAttributes(property: Record<string, unknown>): Partial<PropertyData> {
+  const text = (value: unknown): string | undefined => {
+    const trimmed = typeof value === 'string' ? value.trim() : '';
+    return trimmed.length > 0 ? trimmed : undefined;
+  };
+  const num = (value: unknown): number | undefined =>
+    typeof value === 'number' && Number.isFinite(value) ? value : undefined;
+
+  const acres = num(property.ACRES);
+  const homeExempt = num(property.HOMEEXEMPT);
+
+  return {
+    zip: text(property.ZIPCODE),
+    zoning: text(property.ZONING),
+    subdivision: text(property.SUBNM),
+    ownerName: text(property.PRIMOWNER),
+    propertyUseCode: text(property.PROPCODE),
+    assessedValue: num(property.TOTALVALUE),
+    // The exemption is stored as a negative offset, so any non-zero value means
+    // the owner claimed it and therefore lives on the parcel.
+    ownerOccupied: homeExempt === undefined ? undefined : homeExempt !== 0,
+    lotSizeAcres: acres,
+    lotSizeSqFt: acres === undefined ? undefined : Math.round(acres * SQ_FT_PER_ACRE),
+  };
+}
 
 // Known Ada County cities with common misspellings
 const CITY_MAPPINGS: Record<string, string> = {
@@ -153,7 +251,7 @@ function normalizeCity(city: string): string | null {
  *   "123 NORTH MAIN STREET" -> "123 N MAIN ST"
  *   "456 SOUTH COOPERS HAWK AVENUE" -> "456 S COOPERS HAWK AVE"
  */
-function normalizeStreetAddress(address: string): string {
+export function normalizeStreetAddress(address: string): string {
   if (!address) return '';
   
   let normalized = address.trim().toUpperCase();
@@ -293,14 +391,19 @@ export async function searchAdaCountyProperties(
     
     console.log('[AdaCountyAssessor] Query:', query);
     
-    // Try exact match first
-    let response = await fetch(`${ADA_COUNTY_PARCEL_API}?where=${encodeURIComponent(query)}&outFields=PARCEL,ADDCONCAT,CITY&returnGeometry=false&resultRecordCount=10&f=json`);
-    let data = await response.json();
-    
-    console.log('[AdaCountyAssessor] Exact match results:', data.features?.length || 0);
+    // Try exact match first. esriQuery applies the timeout, retry and circuit
+    // breaker, and returns null rather than throwing when the host is unwell.
+    let data = await adaQuery({
+      where: query,
+      outFields: ADA_OUT_FIELDS,
+      returnGeometry: 'false',
+      resultRecordCount: '10',
+    });
+
+    console.log('[AdaCountyAssessor] Exact match results:', data?.features?.length || 0);
     
     // If no exact match, try partial match on street address
-    if (!data.features || data.features.length === 0) {
+    if (!data?.features || data.features.length === 0) {
       // Clean streetAddress for LIKE query by removing any trailing city names that might have been missed
       // This handles cases where parsing failed to detect the city properly
       let cleanStreetForLike = streetAddress;
@@ -316,12 +419,16 @@ export async function searchAdaCountyProperties(
         partialQuery += ` AND CITY='${normalizedCity.replace(/'/g, "''")}'`;
       }
       console.log('[AdaCountyAssessor] Trying partial query:', partialQuery);
-      response = await fetch(`${ADA_COUNTY_PARCEL_API}?where=${encodeURIComponent(partialQuery)}&outFields=PARCEL,ADDCONCAT,CITY&resultRecordCount=20&f=json`);
-      data = await response.json();
-      console.log('[AdaCountyAssessor] Partial match results:', data.features?.length || 0);
+      data = await adaQuery({
+        where: partialQuery,
+        outFields: ADA_OUT_FIELDS,
+        returnGeometry: 'false',
+        resultRecordCount: '20',
+      });
+      console.log('[AdaCountyAssessor] Partial match results:', data?.features?.length || 0);
       
       // CRITICAL: If we have a normalized city, REQUIRE exact city match
-      if (data.features && data.features.length > 0 && normalizedCity) {
+      if (data?.features && data.features.length > 0 && normalizedCity) {
         const cityFiltered = data.features.filter((f: any) => 
           f.attributes.CITY && f.attributes.CITY.toUpperCase() === normalizedCity
         );
@@ -342,7 +449,7 @@ export async function searchAdaCountyProperties(
       }
     }
     
-    if (!data.features || data.features.length === 0) {
+    if (!data?.features || data.features.length === 0) {
       console.log('[AdaCountyAssessor] No properties found');
       return {
         success: false,
@@ -362,13 +469,19 @@ export async function searchAdaCountyProperties(
         address: property.ADDCONCAT,
         city: property.CITY,
       };
-      
-      // Apply intelligent estimation
+
+      // Estimates first, so the real assessor columns below overwrite any of
+      // them that overlap. Real acreage always beats a guessed lot size.
       const estimation = estimatePropertyMeasurements(propertyData.address, propertyData.city);
-      
+      const recorded = mapAdaAttributes(property);
+
       return {
         ...propertyData,
         ...estimation,
+        measurementsEstimated: true,
+        ...Object.fromEntries(
+          Object.entries(recorded).filter(([, value]) => value !== undefined)
+        ),
       };
     });
     

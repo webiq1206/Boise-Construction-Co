@@ -8,6 +8,7 @@ import {
   createDefaultMeasurementBundle,
 } from "@/shared/measurementBundle";
 import type { PropertyProfile, PropertyProfileInput } from "@/shared/propertyProfile";
+import { pickBestAddressMatch } from "@/lib/assessors/addressMatch";
 import { parseFormattedAddress, resolvePlaceToAddress } from "./geocoding";
 
 const CITY_PERMITTING: Record<string, string> = {
@@ -39,20 +40,31 @@ function mapAssessorToProfileFields(
   assessor: PropertyData,
   county: "ada" | "canyon"
 ): Partial<PropertyProfile> {
-  const sqFt =
-    assessor.buildingSqFt ??
-    assessor.groundFloorSqFt ??
-    (assessor.upperFloorSqFt && assessor.groundFloorSqFt
-      ? assessor.groundFloorSqFt + assessor.upperFloorSqFt
-      : undefined);
-
+  /*
+   * squareFootage is deliberately NOT set from assessor.buildingSqFt. Neither
+   * county's parcel layer publishes building characteristics, so that value is
+   * a city-level guess from estimatePropertyMeasurements(). It used to land in
+   * the admin email under "Property records" as "Home: ~1,900 sq ft", which
+   * read as a county record and was really just the Meridian default. Home
+   * size stays unknown until someone measures it or the homeowner tells us.
+   */
   return {
     parcelId: assessor.parcel,
     county,
-    squareFootage: sqFt,
-    lotSizeSqFt: assessor.lotSizeSqFt,
+    // Lot size only travels when it came from the ACRES column. Without it the
+    // assessor object still carries an estimated lotSizeSqFt, which belongs to
+    // the measuring tool and not to a record shown to the team.
+    lotSizeSqFt: assessor.lotSizeAcres !== undefined ? assessor.lotSizeSqFt : undefined,
     lotSizeAcres: assessor.lotSizeAcres,
-    propertyType: "residential",
+    zoning: assessor.zoning,
+    zoningCategory: assessor.zoningCategory,
+    floodZone: assessor.floodZone,
+    inFloodHazardArea: assessor.inFloodHazardArea,
+    subdivision: assessor.subdivision,
+    ownerName: assessor.ownerName,
+    ownerOccupied: assessor.ownerOccupied,
+    assessedValue: assessor.assessedValue,
+    propertyType: assessor.propertyUseCode === "R" ? "residential" : undefined,
   };
 }
 
@@ -97,8 +109,17 @@ export async function enrichPropertyFromAddress(
   let confidence: PropertyProfile["confidence"] = "low";
   let assessorNote: string | undefined;
 
-  if (assessorResult.success && assessorResult.properties.length > 0) {
-    const best = pickBestAssessorMatch(assessorResult.properties, input);
+  const best =
+    assessorResult.success && assessorResult.properties.length > 0
+      ? pickBestAssessorMatch(assessorResult.properties, input)
+      : null;
+
+  if (!best && assessorResult.properties.length > 0) {
+    assessorNote =
+      "County records were returned for this area but none matched the address closely enough to attach with confidence.";
+  }
+
+  if (best) {
     assessorFields = mapAssessorToProfileFields(best, county);
     measurementBundle = createMeasurementBundleFromAssessor({
       parcel: best.parcel,
@@ -154,14 +175,23 @@ export async function enrichPropertyFromAddress(
   return profile;
 }
 
+/**
+ * The parcel that is actually this address, or null when none of them is.
+ *
+ * Returning null matters. The previous version compared house numbers with a
+ * substring test and fell back to properties[0] regardless, so a lead at
+ * "1386 W Anything St" could be attributed to 11386 W GOLDENSPIRE DR and every
+ * field after that (zoning, lot, assessed value, owner) would describe someone
+ * else's house. No enrichment is the better failure.
+ */
 function pickBestAssessorMatch(
   properties: PropertyData[],
   input: PropertyProfileInput
-): PropertyData {
-  if (properties.length === 1) return properties[0];
-  const street = (input.streetAddress ?? "").toUpperCase();
-  const match = properties.find((p) =>
-    street && p.address.toUpperCase().includes(street.split(" ")[0] ?? "")
-  );
-  return match ?? properties[0];
+): PropertyData | null {
+  const target =
+    input.streetAddress?.trim() ||
+    (input.formattedAddress ?? "").split(",")[0]?.trim() ||
+    "";
+  if (!target) return null;
+  return pickBestAddressMatch(properties, target, (p) => p.address);
 }

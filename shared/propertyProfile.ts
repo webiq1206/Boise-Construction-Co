@@ -23,6 +23,25 @@ export interface PropertyProfile {
   bathrooms?: number;
   assessedValue?: number;
   ownerName?: string;
+  /** Zoning code from the county parcel record, e.g. R1. Gates ADU feasibility. */
+  zoning?: string;
+  /** Subdivision name from the county parcel record. */
+  subdivision?: string;
+  /**
+   * True when the parcel carries a homeowner's exemption, i.e. the owner lives
+   * there. False suggests a rental or second home, which changes how a lead is
+   * qualified. Undefined when the county does not publish it.
+   */
+  ownerOccupied?: boolean;
+  /** Zoning category label, e.g. Residential. */
+  zoningCategory?: string;
+  /** FEMA flood zone designation, e.g. X or AE. */
+  floodZone?: string;
+  /**
+   * True when the parcel is in a FEMA Special Flood Hazard Area. Additions and
+   * basement work there carry elevation requirements and extra permit cost.
+   */
+  inFloodHazardArea?: boolean;
   photoUrls?: string[];
 
   jurisdiction?: string;

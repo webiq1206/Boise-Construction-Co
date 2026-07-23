@@ -1,18 +1,20 @@
 /**
- * Canyon County Assessor API Service
- * 
- * NOTE: Canyon County does not currently have a publicly accessible REST API
- * for parcel data like Ada County does. This implementation provides graceful
- * degradation with helpful error messaging.
- * 
- * Future Enhancement: Canyon County offers free GIS data downloads via FTP
- * (contact 2cAsr@canyoncounty.id.gov). This data could be:
- * - Downloaded and hosted in a custom PostGIS database
- * - Exposed via custom REST API
- * - Integrated into this service
+ * Canyon County Assessor Service
+ *
+ * Canyon County publishes no parcel API of its own. The lookup here instead
+ * uses the countywide parcel layer hosted by the City of Nampa, which is
+ * public and carries a site address for all ~105,000 Canyon parcels. See
+ * canyonParcelLookup.ts for the sources and their limits.
+ *
+ * Canyon returns less than Ada: there is no assessed value, owner of record,
+ * homeowner's exemption or subdivision available. Zoning and flood zone are
+ * present inside Nampa city limits only. Callers must treat all of those as
+ * optional rather than assuming parity with Ada.
  */
 
+import { normalizeStreetAddress } from './adaCountyAssessor';
 import type { PropertySearchResult, PropertyData } from './adaCountyAssessor';
+import { lookupCanyonParcels } from './canyonParcelLookup';
 
 // Known Canyon County cities with common misspellings
 const CITY_MAPPINGS: Record<string, string> = {
@@ -21,6 +23,11 @@ const CITY_MAPPINGS: Record<string, string> = {
   'CALDWEL': 'CALDWELL', // Common misspelling
   'MIDDLETON': 'MIDDLETON',
   'MIDLETON': 'MIDDLETON', // Common misspelling
+  'MELBA': 'MELBA',
+  'GREENLEAF': 'GREENLEAF',
+  'NOTUS': 'NOTUS',
+  'PARMA': 'PARMA',
+  'WILDER': 'WILDER',
 };
 
 /**
@@ -140,46 +147,72 @@ function extractCityFromAddress(address: string): string | null {
 }
 
 /**
- * Search for properties by address in Canyon County
- * 
- * Currently returns a helpful error message explaining that Canyon County
- * data is not available via API and manual entry is required.
+ * Search for properties by address in Canyon County.
+ *
+ * Backed by the countywide parcel layer the City of Nampa publishes; see
+ * canyonParcelLookup.ts for what that source does and does not carry. Canyon
+ * has no assessed value, owner, or homeowner's exemption available, so those
+ * stay undefined here rather than being guessed at.
  */
 export async function searchCanyonCountyProperties(
   address: string,
   cityContext?: string
 ): Promise<PropertySearchResult> {
-  console.log('[CanyonCountyAssessor] Search requested:', { address, cityContext });
-  
-  // Extract city from address or use cityContext
   const cityFromAddress = extractCityFromAddress(address);
   const normalizedCity = normalizeCity(cityFromAddress || cityContext || '');
-  
-  // Verify this is actually a Canyon County city
-  const canyonCities = ['NAMPA', 'CALDWELL', 'MIDDLETON'];
-  const isCanyonCity = normalizedCity && canyonCities.includes(normalizedCity);
-  
-  console.log('[CanyonCountyAssessor] Detected city:', normalizedCity, 'Is Canyon County:', isCanyonCity);
-  
-  if (isCanyonCity) {
-    // This is a Canyon County city - return helpful error
+
+  // Strip the city, state and ZIP so only the street portion is matched, then
+  // apply the same abbreviation rules Ada uses (NORTH to N, STREET to ST).
+  const streetOnly = address.split(',')[0] ?? address;
+  const street = normalizeStreetAddress(streetOnly);
+
+  console.log('[CanyonCountyAssessor] Search:', { street, normalizedCity });
+
+  const parcels = await lookupCanyonParcels(street, normalizedCity ?? undefined);
+
+  if (parcels.length === 0) {
+    const known = 'Canyon County includes Nampa, Caldwell, Middleton, Melba, Greenleaf, Notus, Parma and Wilder.';
     return {
       success: false,
       properties: [],
-      error: `Canyon County property data is not yet available through automatic lookup.`,
-      suggestion: `Canyon County (${normalizedCity}) addresses require manual measurement entry. Please use the "Edit Measurements" option to enter your property dimensions, or use the map measurement tool.`
-    };
-  } else {
-    // Not a recognized Canyon County city - return generic error
-    return {
-      success: false,
-      properties: [],
-      error: 'Property not found in Canyon County.',
-      suggestion: normalizedCity 
-        ? `${normalizedCity} may not be in Canyon County. Canyon County includes: Nampa, Caldwell, and Middleton.`
-        : 'Canyon County includes: Nampa, Caldwell, and Middleton. Please include the location name in your address.'
+      error: 'Property not found in Canyon County records.',
+      suggestion: normalizedCity
+        ? `No Canyon County parcel matched that address in ${normalizedCity}. Check the street number and spelling, or enter measurements manually.`
+        : `${known} Please include the city in your address.`,
     };
   }
+
+  const properties: PropertyData[] = parcels.map((parcel) => {
+    const city = normalizedCity ?? cityFromAddress ?? '';
+    // Estimates first so the real parcel values below overwrite them. Lot size
+    // here is computed from the surveyed polygon, not guessed from the city.
+    const estimation = estimatePropertyMeasurements(parcel.address, city);
+
+    const recorded: Partial<PropertyData> = {
+      zip: parcel.zip,
+      zoning: parcel.zoning,
+      zoningCategory: parcel.zoningCategory,
+      floodZone: parcel.floodZone,
+      inFloodHazardArea: parcel.inFloodHazardArea,
+      lotSizeSqFt: parcel.lotSizeSqFt,
+      lotSizeAcres: parcel.lotSizeAcres,
+    };
+
+    return {
+      parcel: parcel.account,
+      address: parcel.address,
+      city,
+      ...estimation,
+      measurementsEstimated: true,
+      ...Object.fromEntries(
+        Object.entries(recorded).filter(([, value]) => value !== undefined)
+      ),
+    } as PropertyData;
+  });
+
+  console.log('[CanyonCountyAssessor] Found properties:', properties.length);
+
+  return { success: true, properties };
 }
 
 /**

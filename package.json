@@ -21,12 +21,13 @@
     "images:blog": "node scripts/generate-blog-image-registry.mjs && node scripts/setup-blog-images.mjs",
     "images:generate": "node scripts/generate-blog-images.mjs",
     "images:placeholders": "node scripts/generate-placeholder-images.mjs",
-    "prebuild": "npm run verify:no-em-dash && npm run verify:estimate && npm run links:generate && npm run audit:links && npm run resources:generate && npm run verify:content && npm run verify:images",
+    "prebuild": "npm run verify:no-em-dash && npm run verify:estimate && npm run verify:assessors && npm run links:generate && npm run audit:links && npm run resources:generate && npm run verify:content && npm run verify:images",
     "backlink:score": "node backlink-engine/src/score.mjs",
     "backlink:run": "node backlink-engine/src/run.mjs",
     "backlink:preflight": "node backlink-engine/src/preflight.mjs",
     "backlink:send": "node backlink-engine/src/send.mjs",
-    "backlink:contacts": "node backlink-engine/src/contacts.mjs"
+    "backlink:contacts": "node backlink-engine/src/contacts.mjs",
+    "verify:assessors": "tsx scripts/verify-assessor-logic.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

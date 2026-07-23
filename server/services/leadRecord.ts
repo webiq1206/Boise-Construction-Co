@@ -1,4 +1,5 @@
 import {
+  buildPropertyRows,
   buildSelectionRows,
   formatUsd,
   type VerifiedEstimate,
@@ -185,13 +186,12 @@ export function buildLeadNotes(
   }
 
   if (profile) {
-    const enrichment = [
-      profile.parcelId ? `Parcel: ${profile.parcelId}` : "",
-      profile.squareFootage ? `Home: ~${profile.squareFootage.toLocaleString("en-US")} sq ft` : "",
-      profile.lotSizeSqFt ? `Lot: ${profile.lotSizeSqFt.toLocaleString("en-US")} sq ft` : "",
-      profile.permittingAuthority ? `Permits: ${profile.permittingAuthority}` : "",
-    ].filter(Boolean);
-    parts.push(section("PROPERTY RECORDS (AUTO-ENRICHED)", enrichment));
+    const enrichment = buildPropertyRows(profile).map(
+      ([label, value]) => `${label}: ${value}`
+    );
+    if (enrichment.length > 0) {
+      parts.push(section("COUNTY PARCEL RECORD", enrichment));
+    }
   }
 
   return parts.filter(Boolean).join("\n").trimEnd();

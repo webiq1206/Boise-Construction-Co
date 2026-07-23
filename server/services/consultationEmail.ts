@@ -49,8 +49,16 @@ export interface LeadContact {
 /** Optional county property enrichment shown to the internal team only. */
 export interface PropertyEnrichment {
   parcelId?: string;
-  squareFootage?: number;
   lotSizeSqFt?: number;
+  lotSizeAcres?: number;
+  zoning?: string;
+  zoningCategory?: string;
+  floodZone?: string;
+  inFloodHazardArea?: boolean;
+  subdivision?: string;
+  ownerName?: string;
+  ownerOccupied?: boolean;
+  assessedValue?: number;
   permittingAuthority?: string;
   jurisdiction?: string;
 }
@@ -320,20 +328,75 @@ export function buildEstimateSectionsHtml(est: VerifiedEstimate): string {
 }
 
 function buildPropertyBlock(profile: PropertyEnrichment | null | undefined): string {
-  const hasEnrichment =
-    !!profile &&
-    (profile.parcelId ||
-      profile.squareFootage ||
-      profile.lotSizeSqFt ||
-      profile.permittingAuthority);
-  if (!hasEnrichment || !profile) return "";
+  if (!profile) return "";
+  const rows = buildPropertyRows(profile);
+  if (rows.length === 0) return "";
   return `<div style="background:${EMAIL_BRAND.raised};border-radius:4px;padding:18px;margin:24px 0;">
-      <p style="margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:0.12em;color:${EMAIL_BRAND.textMuted};">Property records (auto-enriched)</p>
-      ${profile.parcelId ? `<p style="margin:4px 0;color:${EMAIL_BRAND.text};">Parcel: ${escapeHtml(profile.parcelId)}</p>` : ""}
-      ${profile.squareFootage ? `<p style="margin:4px 0;color:${EMAIL_BRAND.text};">Home: ~${profile.squareFootage.toLocaleString("en-US")} sq ft</p>` : ""}
-      ${profile.lotSizeSqFt ? `<p style="margin:4px 0;color:${EMAIL_BRAND.text};">Lot: ${profile.lotSizeSqFt.toLocaleString("en-US")} sq ft</p>` : ""}
-      ${profile.permittingAuthority ? `<p style="margin:4px 0;color:${EMAIL_BRAND.text};">Permits: ${escapeHtml(profile.permittingAuthority)}</p>` : ""}
+      <p style="margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:0.12em;color:${EMAIL_BRAND.textMuted};">County parcel record</p>
+      ${rows
+        .map(
+          ([label, value]) =>
+            `<p style="margin:4px 0;color:${EMAIL_BRAND.text};">${escapeHtml(label)}: ${escapeHtml(value)}</p>`
+        )
+        .join("\n      ")}
     </div>`;
+}
+
+/**
+ * Shared by the HTML email and the CRM note so the team reads the same figures
+ * in both places. Every row here is published by the county. Home square
+ * footage, bed and bath counts, and year built are absent on purpose: the
+ * parcel layers do not carry them, and inventing them once put a city-average
+ * guess in front of the sales team labelled as a record.
+ */
+export function buildPropertyRows(
+  profile: PropertyEnrichment
+): Array<[string, string]> {
+  const rows: Array<[string, string]> = [];
+  const usd = (value: number) => `$${Math.round(value).toLocaleString("en-US")}`;
+
+  if (profile.parcelId) rows.push(["Parcel", profile.parcelId]);
+  if (profile.zoning) {
+    rows.push([
+      "Zoning",
+      profile.zoningCategory ? `${profile.zoning} (${profile.zoningCategory})` : profile.zoning,
+    ]);
+  }
+
+  if (profile.lotSizeAcres) {
+    const acres = profile.lotSizeAcres.toFixed(2);
+    rows.push([
+      "Lot",
+      profile.lotSizeSqFt
+        ? `${acres} acres (${profile.lotSizeSqFt.toLocaleString("en-US")} sq ft)`
+        : `${acres} acres`,
+    ]);
+  } else if (profile.lotSizeSqFt) {
+    rows.push(["Lot", `${profile.lotSizeSqFt.toLocaleString("en-US")} sq ft`]);
+  }
+
+  if (profile.assessedValue) rows.push(["Assessed value", usd(profile.assessedValue)]);
+  if (profile.ownerName) rows.push(["Owner of record", profile.ownerName]);
+  if (profile.ownerOccupied !== undefined) {
+    rows.push([
+      "Occupancy",
+      profile.ownerOccupied
+        ? "Owner occupied (homeowner's exemption on file)"
+        : "No homeowner's exemption, likely a rental or second home",
+    ]);
+  }
+  if (profile.subdivision) rows.push(["Subdivision", profile.subdivision]);
+  if (profile.floodZone) {
+    rows.push([
+      "Flood zone",
+      profile.inFloodHazardArea
+        ? `${profile.floodZone} (FEMA special flood hazard area, expect elevation and permit requirements)`
+        : `${profile.floodZone} (outside the special flood hazard area)`,
+    ]);
+  }
+  if (profile.permittingAuthority) rows.push(["Permits", profile.permittingAuthority]);
+
+  return rows;
 }
 
 /**

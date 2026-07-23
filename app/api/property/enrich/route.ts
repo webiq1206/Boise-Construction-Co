@@ -5,6 +5,16 @@ import {
   enrichPropertyFromFormattedAddress,
   enrichPropertyFromPlaceId,
 } from "@/server/services/propertyEnrichment";
+import { clientKeyFrom, rateLimit } from "@/lib/rateLimit";
+
+/*
+ * This route is unauthenticated and fans out to two third party county GIS
+ * hosts. The limit is well clear of what a homeowner filling in the estimator
+ * generates (one lookup per address selection) while preventing the endpoint
+ * being used to drive traffic at those hosts on our behalf.
+ */
+const RATE_LIMIT = 20;
+const RATE_WINDOW_MS = 60_000;
 
 const inputSchema = z.object({
   formattedAddress: z.string().min(1),
@@ -26,6 +36,14 @@ const bodySchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  const limit = rateLimit(clientKeyFrom(request.headers, "property-enrich"), RATE_LIMIT, RATE_WINDOW_MS);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { message: "Too many address lookups. Please wait a moment and try again." },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } }
+    );
+  }
+
   try {
     const raw = await request.json();
     const parsed = bodySchema.safeParse(raw);

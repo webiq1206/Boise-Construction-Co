@@ -3,8 +3,10 @@
  * Routes property searches to appropriate county assessor services
  */
 
+import { LRUCache } from 'lru-cache';
 import { searchAdaCountyProperties } from './adaCountyAssessor';
 import { searchCanyonCountyProperties } from './canyonCountyAssessor';
+import { normalizeForCompare } from './addressMatch';
 import type { PropertySearchResult } from './adaCountyAssessor';
 
 export type County = 'ada' | 'canyon';
@@ -14,16 +16,76 @@ export interface AssessorQueryParams {
   address: string;
   cityContext?: string;
   enableFallback?: boolean; // Try other county if primary fails
+  /**
+   * Skip the cache and always hit the source. Used by the health probe, which
+   * would otherwise report a dead host as healthy by reading its own cached
+   * result back.
+   */
+  bypassCache?: boolean;
+}
+
+const ADA_CITIES = ['KUNA', 'BOISE', 'MERIDIAN', 'EAGLE', 'STAR', 'GARDEN CITY', 'HIDDEN SPRINGS'];
+const CANYON_CITIES = [
+  'NAMPA',
+  'CALDWELL',
+  'MIDDLETON',
+  'MELBA',
+  'GREENLEAF',
+  'NOTUS',
+  'PARMA',
+  'WILDER',
+];
+
+/**
+ * Lookups are pure reads of data that changes at most annually, and the same
+ * address gets queried repeatedly: a homeowner who edits their estimate, comes
+ * back later, or resubmits produces the identical key every time.
+ *
+ * Hits and misses are cached with different lifetimes. A miss is often a
+ * transient outage rather than a genuine "no such parcel", and caching that for
+ * a day would turn a brief blip into a day of missing enrichment.
+ */
+const HIT_TTL_MS = 24 * 60 * 60 * 1000;
+const MISS_TTL_MS = 5 * 60 * 1000;
+const CACHE_MAX = 500;
+
+const resultCache = new LRUCache<string, PropertySearchResult>({
+  max: CACHE_MAX,
+  ttl: HIT_TTL_MS,
+});
+
+function cacheKey(county: County, address: string, cityContext?: string): string {
+  return `${county}|${normalizeForCompare(address)}|${normalizeForCompare(cityContext ?? '')}`;
+}
+
+function isHit(result: PropertySearchResult): boolean {
+  return result.success && result.properties.length > 0;
+}
+
+/** True when the city unambiguously identifies this county. */
+function cityBelongsTo(county: County, cityContext?: string): boolean {
+  if (!cityContext) return false;
+  const city = cityContext.toUpperCase().trim();
+  const list = county === 'ada' ? ADA_CITIES : CANYON_CITIES;
+  return list.some((known) => city.includes(known) || known.includes(city));
+}
+
+export function clearAssessorCache(): void {
+  resultCache.clear();
+}
+
+export function assessorCacheStats(): { size: number; max: number } {
+  return { size: resultCache.size, max: CACHE_MAX };
 }
 
 /**
  * Query property data from county assessor with intelligent fallback
- * 
+ *
  * @param county - Primary county to search ('ada' or 'canyon')
  * @param address - Property address to search
  * @param cityContext - Optional city context from form (e.g., "Kuna", "Nampa")
  * @param enableFallback - If true, tries other county if primary county returns no results
- * 
+ *
  * @returns PropertySearchResult with properties or error message
  */
 export async function queryAssessor({
@@ -31,37 +93,80 @@ export async function queryAssessor({
   address,
   cityContext,
   enableFallback = true,
+  bypassCache = false,
 }: AssessorQueryParams): Promise<PropertySearchResult> {
-  console.log('[AssessorRouter] Querying:', { county, address, cityContext, enableFallback });
-
-  // Try primary county first
-  let result = await queryCounty(county, address, cityContext);
-
-  // If no results and fallback enabled, try the other county
-  if (enableFallback && !result.success && result.properties.length === 0) {
-    const fallbackCounty: County = county === 'ada' ? 'canyon' : 'ada';
-    console.log('[AssessorRouter] Primary county failed, trying fallback:', fallbackCounty);
-    
-    const fallbackResult = await queryCounty(fallbackCounty, address, cityContext);
-    
-    if (fallbackResult.success && fallbackResult.properties.length > 0) {
-      // Fallback succeeded - return fallback results
-      console.log('[AssessorRouter] Fallback succeeded with', fallbackResult.properties.length, 'properties');
-      return fallbackResult;
+  const key = cacheKey(county, address, cityContext);
+  if (!bypassCache) {
+    const cached = resultCache.get(key);
+    if (cached) {
+      console.log('[AssessorRouter] Cache hit:', key);
+      return cached;
     }
-    
-    // Both failed - return original error with enhanced messaging
-    console.log('[AssessorRouter] Both counties failed');
-    return {
-      ...result,
-      suggestion: result.suggestion || 
-        `Property not found in ${formatCountyName(county)}${
-          fallbackCounty ? ` or ${formatCountyName(fallbackCounty)}` : ''
-        }. Please check the address or enter measurements manually.`
-    };
   }
 
+  console.log('[AssessorRouter] Querying:', { county, address, cityContext, enableFallback });
+  const result = await resolveAcrossCounties(county, address, cityContext, enableFallback);
+
+  resultCache.set(key, result, { ttl: isHit(result) ? HIT_TTL_MS : MISS_TTL_MS });
   return result;
+}
+
+async function resolveAcrossCounties(
+  county: County,
+  address: string,
+  cityContext: string | undefined,
+  enableFallback: boolean
+): Promise<PropertySearchResult> {
+  const otherCounty: County = county === 'ada' ? 'canyon' : 'ada';
+  const primary = () => queryCounty(county, address, cityContext);
+  const secondary = () => queryCounty(otherCounty, address, cityContext);
+
+  if (!enableFallback) return primary();
+
+  /*
+   * When the city names the county outright, the other county is almost
+   * certainly wasted work, so it is only paid for if the primary misses.
+   *
+   * When the city is unknown or ambiguous, the previous code ran the two
+   * lookups back to back. Running them together makes the worst case the
+   * slower of the two rather than their sum, which on measured latency is
+   * roughly 900ms saved on a miss.
+   */
+  if (cityBelongsTo(county, cityContext)) {
+    const result = await primary();
+    if (isHit(result)) return result;
+
+    const fallback = await secondary();
+    if (isHit(fallback)) {
+      console.log('[AssessorRouter] Fallback succeeded with', fallback.properties.length, 'properties');
+      return fallback;
+    }
+    return withBothFailedSuggestion(result, county, otherCounty);
+  }
+
+  const [result, fallback] = await Promise.all([primary(), secondary()]);
+  if (isHit(result)) return result;
+  if (isHit(fallback)) {
+    console.log('[AssessorRouter] Fallback succeeded with', fallback.properties.length, 'properties');
+    return fallback;
+  }
+  return withBothFailedSuggestion(result, county, otherCounty);
+}
+
+function withBothFailedSuggestion(
+  result: PropertySearchResult,
+  county: County,
+  fallbackCounty: County
+): PropertySearchResult {
+  console.log('[AssessorRouter] Both counties failed');
+  return {
+    ...result,
+    suggestion:
+      result.suggestion ||
+      `Property not found in ${formatCountyName(county)} or ${formatCountyName(
+        fallbackCounty
+      )}. Please check the address or enter measurements manually.`,
+  };
 }
 
 /**
@@ -99,23 +204,9 @@ function formatCountyName(county: County): string {
  */
 export function getCountyFromCity(cityName?: string): County {
   if (!cityName) return 'ada'; // Default to Ada County
-  
-  const upperCity = cityName.toUpperCase().trim();
-  
-  // Ada County cities
-  const adaCities = ['KUNA', 'BOISE', 'MERIDIAN', 'EAGLE', 'STAR', 'GARDEN CITY', 'HIDDEN SPRINGS'];
-  if (adaCities.some(city => upperCity.includes(city) || city.includes(upperCity))) {
-    return 'ada';
-  }
-  
-  // Canyon County cities
-  const canyonCities = ['NAMPA', 'CALDWELL', 'MIDDLETON'];
-  if (canyonCities.some(city => upperCity.includes(city) || city.includes(upperCity))) {
-    return 'canyon';
-  }
-  
-  // Default to Ada County if city not recognized
-  return 'ada';
+  if (cityBelongsTo('ada', cityName)) return 'ada';
+  if (cityBelongsTo('canyon', cityName)) return 'canyon';
+  return 'ada'; // Default to Ada County if city not recognized
 }
 
 // Re-export types for convenience
