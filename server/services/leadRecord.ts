@@ -7,6 +7,12 @@ import {
   type PropertyEnrichment,
 } from "@/server/services/consultationEmail";
 import {
+  takeoffForRange,
+  formatQuantity,
+  formatTakeoffAmount,
+  TAKEOFF_BASIS_NOTICE,
+} from "@/shared/costCatalog";
+import {
   buildEstimateDisclosure,
   NOT_A_QUOTE_NOTICE,
   ONSITE_REQUIRED_NOTICE,
@@ -49,6 +55,29 @@ export interface LeadEstimateRecord {
   optionalUpgrades: string[];
   /** The disclaimers shown on screen and in the email, verbatim. */
   disclaimers: string[];
+  /**
+   * Component breakdown of the range midpoint: what work, what quantity, what
+   * it typically costs. Lets the team compare the estimate against a real bid
+   * line by line instead of arguing about one total.
+   */
+  takeoff: {
+    catalogVersion: string;
+    /** False while any unit cost is still a derived allocation. */
+    fullyMeasured: boolean;
+    directCost: number;
+    softCost: number;
+    total: number;
+    lines: {
+      id: string;
+      label: string;
+      group: "direct" | "soft";
+      quantity: number;
+      unit: string;
+      unitCost: number;
+      cost: number;
+      provenance: string;
+    }[];
+  };
 }
 
 export function buildLeadEstimateRecord(est: VerifiedEstimate): LeadEstimateRecord {
@@ -58,6 +87,14 @@ export function buildLeadEstimateRecord(est: VerifiedEstimate): LeadEstimateReco
     sqft: est.sqft,
     refinements: est.refinements,
   });
+
+  const takeoff = takeoffForRange(
+    est.project,
+    est.finish,
+    est.sqft,
+    est.priceLow,
+    est.priceHigh,
+  );
 
   const rows = buildSelectionRows(
     est.project,
@@ -89,7 +126,24 @@ export function buildLeadEstimateRecord(est: VerifiedEstimate): LeadEstimateReco
     increasesCost: disclosure.increases,
     decreasesCost: disclosure.decreases,
     optionalUpgrades: disclosure.upgrades,
-    disclaimers: [NOT_A_QUOTE_NOTICE, ONSITE_REQUIRED_NOTICE],
+    disclaimers: [NOT_A_QUOTE_NOTICE, ONSITE_REQUIRED_NOTICE, TAKEOFF_BASIS_NOTICE],
+    takeoff: {
+      catalogVersion: takeoff.catalogVersion,
+      fullyMeasured: takeoff.fullyMeasured,
+      directCost: takeoff.directCost,
+      softCost: takeoff.softCost,
+      total: takeoff.total,
+      lines: takeoff.lines.map((line) => ({
+        id: line.id,
+        label: line.label,
+        group: line.group,
+        quantity: line.quantity,
+        unit: line.unit,
+        unitCost: line.unitCost,
+        cost: line.cost,
+        provenance: line.provenance,
+      })),
+    },
   };
 }
 
@@ -232,6 +286,22 @@ export function buildLeadNotes(
     parts.push(section("COULD INCREASE THE FINAL COST", r.increasesCost));
     parts.push(section("COULD DECREASE THE FINAL COST", r.decreasesCost));
     parts.push(section("OPTIONAL UPGRADES PRESENTED", r.optionalUpgrades));
+    parts.push(
+      section(
+        "WHERE THE MONEY TYPICALLY GOES",
+        r.takeoff.lines
+          .filter((line) => line.cost > 0)
+          .map((line) => {
+            const qty = formatQuantity({ quantity: line.quantity, unit: line.unit as any });
+            return `${line.label}${qty ? ` (${qty})` : ""}: ${formatTakeoffAmount(line.cost)}`;
+          })
+          .concat([
+            `Direct work: ${formatUsd(r.takeoff.directCost)}`,
+            `Running the job: ${formatUsd(r.takeoff.softCost)}`,
+            `Total: ${formatUsd(r.takeoff.total)}  [catalog ${r.takeoff.catalogVersion}, ${r.takeoff.fullyMeasured ? "measured" : "derived allocation"}]`,
+          ]),
+      ),
+    );
     parts.push(section("DISCLAIMERS SHOWN", r.disclaimers));
   } else {
     parts.push(section("ESTIMATE SHOWN TO HOMEOWNER", ["No planning range was attached."]));

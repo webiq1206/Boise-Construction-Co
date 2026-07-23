@@ -366,6 +366,50 @@ export function formatQuantity(line: Pick<TakeoffLine, "quantity" | "unit">): st
   return `${quantity.toLocaleString("en-US")} ${plural}`;
 }
 
+/**
+ * The takeoff for a quoted range.
+ *
+ * Centralises the midpoint convention so the estimator UI, both emails, and
+ * the CRM record can never disagree about what the breakdown is. The midpoint
+ * is the right basis because the range's own width already expresses the
+ * uncertainty; splitting the low end would understate every line and splitting
+ * the high end would overstate every line.
+ */
+export function takeoffForRange(
+  project: ProjectType,
+  finish: FinishLevel,
+  sqft: number,
+  priceLow: number,
+  priceHigh: number
+): Takeoff {
+  return buildTakeoff(project, finish, sqft, (priceLow + priceHigh) / 2);
+}
+
+/**
+ * Money format for a takeoff line.
+ *
+ * Deliberately not the planning-range format, which rounds to the nearest
+ * thousand: at that resolution five different lines on a mid-range kitchen all
+ * render as "$2k" and the breakdown stops carrying information. Deliberately
+ * not exact dollars either, because these are allocations of a total rather
+ * than priced quantities, and "$1,733" claims a precision that does not exist.
+ *
+ * Nearest hundred keeps every line distinguishable without overclaiming.
+ */
+export function formatTakeoffAmount(cost: number): string {
+  return `$${(Math.round(cost / 100) * 100).toLocaleString("en-US")}`;
+}
+
+/**
+ * The sentence that must accompany any display of these line items.
+ *
+ * The totals are validated but the split between lines is an industry-typical
+ * allocation, not a bid this company has priced. Showing a homeowner
+ * "$11,880 cabinetry" without this reads as a quote for cabinetry.
+ */
+export const TAKEOFF_BASIS_NOTICE =
+  "This breakdown shows where money typically goes on a project of this size and finish level. Individual lines are typical allocations, not itemized pricing, and the actual split shifts with your selections and site conditions.";
+
 /** Shares must sum to 1 per project or the takeoff cannot reconcile. */
 export function shareSum(project: ProjectType): number {
   return getComponents(project).reduce((sum, c) => sum + c.share, 0);

@@ -5,6 +5,12 @@ import {
 } from "@/server/services/emailLayout";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import {
+  takeoffForRange,
+  formatQuantity,
+  formatTakeoffAmount,
+  TAKEOFF_BASIS_NOTICE,
+} from "@/shared/costCatalog";
+import {
   getRefinementVisibility,
   getPlumbingElectricalLabel,
   buildEstimateDisclosure,
@@ -247,6 +253,52 @@ function renderIncludedList(items: string[]): string {
  * typically includes, and the planning-estimate disclaimer. A recipient never
  * needs to log in to understand the estimate.
  */
+/**
+ * Where the money goes, from the component catalog.
+ *
+ * Line items are a typical allocation of a validated total, not itemized
+ * pricing this company has bid, so TAKEOFF_BASIS_NOTICE always renders with
+ * them. Without it, "$11,880 cabinetry" reads as a quote for cabinetry.
+ */
+function renderTakeoffHtml(est: VerifiedEstimate): string {
+  const takeoff = takeoffForRange(
+    est.project,
+    est.finish,
+    est.sqft,
+    est.priceLow,
+    est.priceHigh,
+  );
+
+  const groupRows = (group: "direct" | "soft") =>
+    takeoff.lines
+      .filter((line) => line.group === group && line.cost > 0)
+      .map((line) => {
+        const qty = formatQuantity(line);
+        const label = qty
+          ? `${escapeHtml(line.label)} <span style="color:${EMAIL_BRAND.textMuted};">(${escapeHtml(qty)})</span>`
+          : escapeHtml(line.label);
+        return `<tr><td style="${LABEL_CELL}color:${EMAIL_BRAND.text};width:auto;">${label}</td><td style="${VALUE_CELL}text-align:right;white-space:nowrap;">${formatTakeoffAmount(line.cost)}</td></tr>`;
+      })
+      .join("");
+
+  const subtotal = (label: string, amount: number) =>
+    `<tr><td style="padding:11px 0;color:${EMAIL_BRAND.textMuted};">${escapeHtml(label)}</td><td style="padding:11px 0;text-align:right;color:${EMAIL_BRAND.text};white-space:nowrap;">${formatTakeoffAmount(amount)}</td></tr>`;
+
+  return `
+    <div style="margin:28px 0;">
+      <p style="${SECTION_TITLE}">Where the money typically goes</p>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td colspan="2" style="padding:4px 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:${EMAIL_BRAND.textMuted};">The work</td></tr>
+        ${groupRows("direct")}
+        <tr><td colspan="2" style="padding:16px 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:${EMAIL_BRAND.textMuted};">Running the job</td></tr>
+        ${groupRows("soft")}
+        ${subtotal("Midpoint of your planning range", takeoff.total)}
+      </table>
+      <p style="margin:12px 0 0;font-size:12px;line-height:1.55;color:${EMAIL_BRAND.textMuted};">${escapeHtml(TAKEOFF_BASIS_NOTICE)}</p>
+    </div>
+  `;
+}
+
 export function buildEstimateSectionsHtml(est: VerifiedEstimate): string {
   const rangeText = `${formatUsd(est.priceLow)} to ${formatUsd(est.priceHigh)}`;
   const rows = buildSelectionRows(
@@ -278,6 +330,8 @@ export function buildEstimateSectionsHtml(est: VerifiedEstimate): string {
         ${renderSelectionRows(rows)}
       </table>
     </div>
+
+    ${renderTakeoffHtml(est)}
 
     <div style="margin:28px 0;">
       <p style="${SECTION_TITLE}">What this range covers</p>

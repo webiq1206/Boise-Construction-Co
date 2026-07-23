@@ -13,6 +13,12 @@ import { Button } from "@/components/ui/button";
 import { Section } from "@/components/marketing";
 import { AddressAutocomplete } from "@/components/AddressAutocomplete";
 import type { PropertyProfile } from "@/shared/propertyProfile";
+import {
+  takeoffForRange,
+  formatQuantity,
+  formatTakeoffAmount,
+  TAKEOFF_BASIS_NOTICE,
+} from "@/shared/costCatalog";
 import { HOUSE_NUMBER_REGEX, extractZip } from "@/shared/addressValidation";
 import {
   type ProjectType,
@@ -434,6 +440,7 @@ export function EstimateCalculator({
      homeowner's behalf about the single largest swing in the estimate. Asked
      and answered, never inferred. Declared after the visibility flags below. */
   const [scopeOpen, setScopeOpen]         = useState(false);
+  const [takeoffOpen, setTakeoffOpen]     = useState(false);
   const [legalOpen, setLegalOpen]         = useState(false);
   const [limitsOpen, setLimitsOpen]       = useState(false);
   /* Lead-gate three-state flow:
@@ -1434,6 +1441,74 @@ export function EstimateCalculator({
                 )}
               </div>
             )}
+          </div>
+
+          {/* Component breakdown. Collapsed by default: most homeowners want the
+              range, and the ones who want to know why it is that number get the
+              same line items the team sees. Lines are a typical allocation of a
+              validated total, so TAKEOFF_BASIS_NOTICE renders with them. */}
+          <div className="border-t border-inverse-foreground/10 pt-4">
+            <button
+              type="button"
+              onClick={() => setTakeoffOpen((p) => !p)}
+              className="flex w-full items-center justify-between text-left"
+              data-testid="button-toggle-takeoff"
+              aria-expanded={takeoffOpen}
+            >
+              <span className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground">
+                Where the money typically goes
+              </span>
+              <ChevronDown
+                className={cn("h-4 w-4 text-inverse-muted transition-transform", takeoffOpen && "rotate-180")}
+              />
+            </button>
+            {takeoffOpen && (() => {
+              const takeoff = takeoffForRange(
+                effectiveProject,
+                finish,
+                sqft,
+                result.priceLow,
+                result.priceHigh,
+              );
+              const group = (g: "direct" | "soft") =>
+                takeoff.lines.filter((l) => l.group === g && l.cost > 0);
+              const groupLabel = "text-[11.5px] tracking-[0.1em] uppercase text-inverse-muted/70 pt-2.5 pb-1";
+              const row = (l: (typeof takeoff.lines)[number]) => {
+                const qty = formatQuantity(l);
+                return (
+                  <div
+                    key={l.id}
+                    className="flex items-baseline justify-between gap-3 text-[13.5px] text-inverse-muted leading-snug py-1"
+                    data-testid={`takeoff-line-${l.id}`}
+                  >
+                    <span>
+                      {l.label}
+                      {qty && <span className="text-inverse-muted/60"> ({qty})</span>}
+                    </span>
+                    <span className="tabular-nums whitespace-nowrap text-inverse-foreground/90">
+                      {formatTakeoffAmount(l.cost)}
+                    </span>
+                  </div>
+                );
+              };
+              return (
+                <div className="pt-2">
+                  <p className={groupLabel}>The work</p>
+                  {group("direct").map(row)}
+                  <p className={groupLabel}>Running the job</p>
+                  {group("soft").map(row)}
+                  <div className="flex items-baseline justify-between gap-3 text-[13.5px] pt-3 mt-2 border-t border-inverse-foreground/10">
+                    <span className="text-inverse-muted">Midpoint of your range</span>
+                    <span className="tabular-nums whitespace-nowrap text-inverse-foreground">
+                      {formatTakeoffAmount(takeoff.total)}
+                    </span>
+                  </div>
+                  <p className="text-[12px] text-inverse-muted/70 pt-3 leading-relaxed">
+                    {TAKEOFF_BASIS_NOTICE}
+                  </p>
+                </div>
+              );
+            })()}
           </div>
 
           {/* Exclusions, assumptions and cost drivers. Collapsed so the panel
