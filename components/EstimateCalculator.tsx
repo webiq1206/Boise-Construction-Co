@@ -678,6 +678,7 @@ export function EstimateCalculator({
     setKitchenIn(null);
     // Changing the project invalidates the layout and finish choices made under
     // the previous one, so the visitor picks those again rather than inheriting.
+    allChosenScrolled.current = false;
     setChosen({ project: true, subtype: false, finish: false });
     fireEstimatorEngagement();
   }
