@@ -30,7 +30,7 @@ import { CTA_FORM_SEND } from "@/shared/ctaCopy";
 import { CONSULT_BULLETS } from "@/shared/siteContent";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { trackEvent, trackMetaEvent } from "@/lib/analytics";
-import { readStoredPrefill, PREFILL_UPDATED_EVENT } from "@/lib/leadPrefill";
+import { readStoredPrefill, PREFILL_UPDATED_EVENT, hasPassedGate } from "@/lib/leadPrefill";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
   HOUSE_NUMBER_REGEX,
@@ -222,6 +222,10 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
         ...data,
         zip: deriveZip(data.address),
         propertyProfile,
+        /* When the visitor already submitted the estimate gate, both the admin
+           and customer confirmation emails were already sent by /api/estimate-lead.
+           Sending them again from /api/consultation would be a duplicate. */
+        skipEmail: hasPassedGate() ? true : undefined,
         estimate: estimate && attached
           ? {
               project: estimate.project,

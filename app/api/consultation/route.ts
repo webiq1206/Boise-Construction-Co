@@ -96,6 +96,10 @@ const bodySchema = z.object({
   message: z.string().optional(),
   propertyProfile: propertyProfileSchema,
   estimate: estimateSchema,
+  /* Set by the client when the visitor already submitted the estimate gate,
+     which already sent admin + customer emails via /api/estimate-lead.
+     Prevents duplicate email sends when the same person submits both forms. */
+  skipEmail: z.boolean().optional(),
 });
 
 /**
@@ -245,63 +249,65 @@ export async function POST(request: NextRequest) {
       source: "boiseremodeling.co",
     });
 
-    try {
-      const { client, fromEmail } = await getUncachableEmailClient();
-      const from = formatFromAddress(fromEmail);
+    if (!data.skipEmail) {
+      try {
+        const { client, fromEmail } = await getUncachableEmailClient();
+        const from = formatFromAddress(fromEmail);
 
-      const lead = {
-        name: data.name,
-        phone: data.phone,
-        email: data.email,
-        address: data.address,
-        zip: data.zip,
-        projectType: data.projectType,
-        message: data.message,
-      };
-      const enrichment = (data.propertyProfile as PropertyEnrichment | null) ?? null;
+        const lead = {
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          address: data.address,
+          zip: data.zip,
+          projectType: data.projectType,
+          message: data.message,
+        };
+        const enrichment = (data.propertyProfile as PropertyEnrichment | null) ?? null;
 
-      // ---- Admin / internal-team email --------------------------------------
-      // Reply-To is the LEAD, so hitting Reply in any mail client goes straight
-      // to the customer.
-      const adminHtml = buildAdminEmailHtml(lead, estimate, enrichment, unitCostOverrides);
-      const adminEmails = await getAdminRecipientEmails(SITE_CONFIG.email);
-      for (const adminEmail of adminEmails) {
-        const adminResult = await client.emails.send({
+        // ---- Admin / internal-team email ------------------------------------
+        // Reply-To is the LEAD, so hitting Reply in any mail client goes straight
+        // to the customer.
+        const adminHtml = buildAdminEmailHtml(lead, estimate, enrichment, unitCostOverrides);
+        const adminEmails = await getAdminRecipientEmails(SITE_CONFIG.email);
+        for (const adminEmail of adminEmails) {
+          const adminResult = await client.emails.send({
+            from,
+            replyTo: formatLeadReplyTo(data.name, data.email),
+            to: adminEmail,
+            subject: buildAdminSubject(lead, estimate),
+            html: adminHtml,
+            text: htmlToPlainText(adminHtml),
+          });
+          if (adminResult?.error) {
+            console.error(
+              `[consultation] Admin email to ${adminEmail} failed:`,
+              JSON.stringify(adminResult.error)
+            );
+          }
+        }
+
+        // ---- Customer / lead email ------------------------------------------
+        // Includes the full estimate + every selection so the lead has it in
+        // writing without ever logging in.
+        const customerHtml = buildCustomerEmailHtml(lead, estimate, unitCostOverrides);
+        const customerResult = await client.emails.send({
           from,
-          replyTo: formatLeadReplyTo(data.name, data.email),
-          to: adminEmail,
-          subject: buildAdminSubject(lead, estimate),
-          html: adminHtml,
-          text: htmlToPlainText(adminHtml),
+          replyTo: getReplyToAddress(),
+          to: data.email,
+          subject: buildCustomerSubject(lead, estimate),
+          html: customerHtml,
+          text: htmlToPlainText(customerHtml),
         });
-        if (adminResult?.error) {
+        if (customerResult?.error) {
           console.error(
-            `[consultation] Admin email to ${adminEmail} failed:`,
-            JSON.stringify(adminResult.error)
+            `[consultation] Customer email to ${data.email} failed:`,
+            JSON.stringify(customerResult.error)
           );
         }
+      } catch (emailErr) {
+        console.error("[consultation] Email send failed:", emailErr);
       }
-
-      // ---- Customer / lead email --------------------------------------------
-      // Includes the full estimate + every selection so the lead has it in
-      // writing without ever logging in.
-      const customerHtml = buildCustomerEmailHtml(lead, estimate, unitCostOverrides);
-      const customerResult = await client.emails.send({
-        from,
-        replyTo: getReplyToAddress(),
-        to: data.email,
-        subject: buildCustomerSubject(lead, estimate),
-        html: customerHtml,
-        text: htmlToPlainText(customerHtml),
-      });
-      if (customerResult?.error) {
-        console.error(
-          `[consultation] Customer email to ${data.email} failed:`,
-          JSON.stringify(customerResult.error)
-        );
-      }
-    } catch (emailErr) {
-      console.error("[consultation] Email send failed:", emailErr);
     }
 
     return NextResponse.json({ success: true });
