@@ -488,13 +488,16 @@ export function EstimateCalculator({
   const addressStepRef = useRef<HTMLDivElement>(null);
   const layoutRef      = useRef<HTMLDivElement>(null);
   const sizeRef        = useRef<HTMLDivElement>(null);
+  const chipsRef       = useRef<HTMLDivElement>(null);
   const bathRef        = useRef<HTMLDivElement>(null);
   const kitchenRef     = useRef<HTMLDivElement>(null);
+  const finishRef      = useRef<HTMLDivElement>(null);
   const typicalRef     = useRef<HTMLDivElement>(null);
   const ctaAreaRef     = useRef<HTMLDivElement>(null);
   const gateFormRef    = useRef<HTMLDivElement>(null);
   const resultRef      = useRef<HTMLDivElement>(null);
-  const allChosenScrolled = useRef(false);
+  const allChosenScrolled  = useRef(false);
+  const finishScrolled     = useRef(false);
 
   function scrollSmooth(el: HTMLElement | null) {
     if (!el) return;
@@ -815,21 +818,41 @@ export function EstimateCalculator({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chosen.subtype]);
 
-  /* Scroll to the bath-count row when it first becomes visible. */
+  /* Scroll to the bath-count row when it becomes visible. Gated on
+     chosen.subtype so the DOM node is mounted before we try to scroll. */
   useEffect(() => {
-    if (showBathCount) {
+    if (chosen.subtype && showBathCount) {
       scheduleScroll(() => bathRef.current);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showBathCount]);
+  }, [chosen.subtype, showBathCount]);
 
-  /* Scroll to the kitchen row when it first becomes visible. */
+  /* Scroll to the kitchen row when it becomes visible. Gated on
+     chosen.subtype so the DOM node is mounted before we try to scroll. */
   useEffect(() => {
-    if (showKitchenIncluded) {
+    if (chosen.subtype && showKitchenIncluded) {
       scheduleScroll(() => kitchenRef.current);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showKitchenIncluded]);
+  }, [chosen.subtype, showKitchenIncluded]);
+
+  /* Scroll to the finish-level row once all sections above it have been
+     addressed (size, chips, bath count, kitchen). Fires the first time the
+     preconditions are satisfied; sentinel resets when subtype changes so the
+     scroll re-triggers if the visitor picks a different layout. */
+  const bathDone    = !showBathCount || bathCount !== null;
+  const kitchenDone = !showKitchenIncluded || kitchenIn !== null;
+  useEffect(() => {
+    if (!chosen.subtype) {
+      finishScrolled.current = false;
+      return;
+    }
+    if (bathDone && kitchenDone && !chosen.finish && !finishScrolled.current) {
+      finishScrolled.current = true;
+      scheduleScroll(() => finishRef.current);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chosen.subtype, bathDone, kitchenDone, chosen.finish]);
 
   /* Scroll to the typical-selections panel when finish is chosen. */
   useEffect(() => {
@@ -1250,7 +1273,7 @@ export function EstimateCalculator({
 
   /* Step 4 - Upgrades (optional add-ons) */
   const chipsRow = (
-    <div className="mt-5">
+    <div className="mt-5" ref={chipsRef}>
       <p className={stepLabel}>{stepNo("upgrades")} &middot; {config.chipsLabel}</p>
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
         Select all that apply. Optional, and it helps us understand your scope.
@@ -1500,7 +1523,7 @@ export function EstimateCalculator({
 
   /* Finish level (options tied to effectiveProject) */
   const finishRow = (
-    <div className="mt-5">
+    <div className="mt-5" ref={finishRef}>
       <p className={stepLabel}>{stepNo("finish")} &middot; Finish level</p>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {availFinish.map((level) => {
