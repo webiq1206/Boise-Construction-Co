@@ -17,6 +17,7 @@ import {
   type FinishLevel,
   type EstimateRefinements,
 } from "../shared/estimateEngine";
+import { buildTakeoff, shareSum } from "../shared/costCatalog";
 
 function assert(condition: boolean, message: string) {
   if (!condition) {
@@ -486,6 +487,49 @@ for (const project of projects) {
       r.priceHigh <= expected[1],
       `${project}/${finish} ceiling ${r.priceHigh} exceeds the published ${expected[1]}`,
     );
+  }
+}
+
+// 8. COMPONENT TAKEOFF RECONCILIATION. The catalog prices a project from
+//    components and quantities, but it must never move a price. Shares are
+//    asserted to sum to exactly 1 per project, and the sum of the line items
+//    is asserted to reproduce the estimate midpoint on every project, finish
+//    and size. Without this, a share edit could silently change what a
+//    homeowner is quoted.
+for (const project of projects) {
+  const sum = shareSum(project);
+  check(
+    Math.abs(sum - 1) < 1e-9,
+    `${project}: component shares sum to ${sum}, must be exactly 1 or the takeoff cannot reconcile`,
+  );
+
+  const sizeConfig = getProjectSizeConfig(project);
+  for (const finish of getAvailableFinishLevels(project)) {
+    for (let sqft = sizeConfig.min; sqft <= sizeConfig.max; sqft += sizeConfig.step) {
+      const result = calculateEstimate({
+        project,
+        finish,
+        sqft,
+        refinements: EMPTY_REFINEMENTS,
+      });
+      const midpoint = (result.priceLow + result.priceHigh) / 2;
+      const takeoff = buildTakeoff(project, finish, sqft, midpoint);
+
+      // Each line rounds to the nearest dollar, so drift is bounded by the
+      // line count. Anything larger means the shares no longer reconcile.
+      const drift = Math.abs(takeoff.total - midpoint);
+      check(
+        drift <= takeoff.lines.length,
+        `${project}/${finish} @${sqft}sf: takeoff total ${takeoff.total} drifts ${drift.toFixed(2)} from midpoint ${midpoint}`,
+      );
+      sweepChecks++;
+
+      check(
+        takeoff.lines.every((line) => line.cost >= 0 && Number.isFinite(line.cost)),
+        `${project}/${finish} @${sqft}sf: takeoff produced a negative or non-finite line`,
+      );
+      sweepChecks++;
+    }
   }
 }
 
