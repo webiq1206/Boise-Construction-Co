@@ -481,6 +481,26 @@ export function EstimateCalculator({
   /* Guards the estimator-completion conversion event so it fires at most once
      per mount even if the visitor recalculates after editing. */
   const engagementFired   = useRef(false);
+  /* Scroll refs - each targets the top of the section that appears when the
+     visitor completes a step. scheduleScroll() uses double-rAF so the DOM
+     is fully painted before the browser scrolls. Instant on mobile (iOS
+     smooth-scroll is unreliable); smooth on desktop. */
+  const addressStepRef = useRef<HTMLDivElement>(null);
+  const sizeRef        = useRef<HTMLDivElement>(null);
+  const typicalRef     = useRef<HTMLDivElement>(null);
+  const ctaAreaRef     = useRef<HTMLDivElement>(null);
+  const gateFormRef    = useRef<HTMLDivElement>(null);
+  const resultRef      = useRef<HTMLDivElement>(null);
+  const allChosenScrolled = useRef(false);
+
+  function scrollSmooth(el: HTMLElement | null) {
+    if (!el) return;
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    el.scrollIntoView({ behavior: isMobile ? "instant" : "smooth", block: "start" });
+  }
+  function scheduleScroll(getEl: () => HTMLElement | null) {
+    requestAnimationFrame(() => requestAnimationFrame(() => scrollSmooth(getEl())));
+  }
 
   /* ── Derived ── */
   const config = PROJECT_CONFIGS[activeProject];
@@ -525,7 +545,12 @@ export function EstimateCalculator({
   const refinements = useMemo<EstimateRefinements>(() => {
     const data = SUBTYPE_DATA[activeProject]?.[subtype];
     if (!data) return { ...EMPTY_REFINEMENTS };
-    return buildRefinements(effectiveProject, subtype, addOns, data.refinements, peScope, cabTier, bathCount, kitchenIn);
+    /* When the kitchen chip is selected for a whole-home project it already
+       answers "Is the kitchen part of it?" -- treat that as kitchenIn=true so
+       the engine prices it correctly without requiring the step to show. */
+    const effectiveKitchenIn =
+      (effectiveProject === "whole-home" && addOns.includes("kitchen")) ? true : kitchenIn;
+    return buildRefinements(effectiveProject, subtype, addOns, data.refinements, peScope, cabTier, bathCount, effectiveKitchenIn);
   }, [effectiveProject, activeProject, subtype, addOns, peScope, cabTier, bathCount, kitchenIn]);
 
   const userRefinementCount = useMemo(
@@ -717,7 +742,13 @@ export function EstimateCalculator({
      unknown and a whole-home almost always includes baths, so it is asked then
      too. The kitchen question appears the same way. */
   const showBathCount = getAssumedBathrooms(effectiveProject) !== null;
-  const showKitchenIncluded = getKitchenQuestion(effectiveProject) !== null;
+  /* When the "kitchen" chip is selected for a whole-home project the visitor
+     has already answered the kitchen-included question implicitly (yes). Show
+     the follow-up step only when the chip has NOT answered it. */
+  const kitchenChipAnswersQuestion =
+    effectiveProject === "whole-home" && addOns.includes("kitchen");
+  const showKitchenIncluded =
+    getKitchenQuestion(effectiveProject) !== null && !kitchenChipAnswersQuestion;
   const showSystems =
     ALWAYS_HAS_SYSTEMS.includes(effectiveProject) ||
     // No chips ticked means we do not know the scope yet, and systems work is
@@ -757,10 +788,44 @@ export function EstimateCalculator({
     if (!showKitchenIncluded) setKitchenIn((prev) => (prev === null ? prev : null));
   }, [showKitchenIncluded]);
 
+  /* Scroll to the address/layout area whenever a new project is selected so the
+     visitor always sees the next step without manual scrolling. */
+  useEffect(() => {
+    if (chosen.project) {
+      scheduleScroll(() => addressStepRef.current);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeProject]);
+
+  /* Scroll to the size/chips area when layout is first chosen. */
+  useEffect(() => {
+    if (chosen.subtype) {
+      scheduleScroll(() => sizeRef.current);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chosen.subtype]);
+
+  /* Scroll to the typical-selections panel when finish is chosen. */
+  useEffect(() => {
+    if (chosen.finish) {
+      scheduleScroll(() => typicalRef.current);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chosen.finish]);
+
+  /* Scroll to the gate form when it opens. */
+  useEffect(() => {
+    if (gateOpen) {
+      scheduleScroll(() => gateFormRef.current);
+    }
+  }, [gateOpen]);
+
   /* Numbers are derived, never hardcoded, so a hidden step cannot leave a gap
-     in the sequence the visitor reads. */
+     in the sequence the visitor reads. "address" is step 2 -- it appears early
+     so the property lookup can pre-fill the size slider. */
   const visibleSteps: string[] = [
     "project",
+    "address",
     "layout",
     "size",
     "upgrades",
@@ -780,6 +845,16 @@ export function EstimateCalculator({
     chosen.finish &&
     (!showBathCount || bathCount !== null) &&
     (!showKitchenIncluded || kitchenIn !== null);
+
+  /* Scroll to the gate CTA (or result panel for returning visitors) the first
+     time all required choices are made. Must live after allChosen is defined. */
+  useEffect(() => {
+    if (allChosen && !allChosenScrolled.current) {
+      allChosenScrolled.current = true;
+      scheduleScroll(() => ctaAreaRef.current ?? resultRef.current);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allChosen]);
 
   /* Identity of the current estimate. Used to tell whether the visitor has
      actually changed something since we last told the team about it. */
@@ -867,7 +942,7 @@ export function EstimateCalculator({
       return;
     }
     if (!gateAddress.trim() || !HOUSE_NUMBER_REGEX.test(gateAddress.trim())) {
-      setGateError("Please enter your property address, including the house number.");
+      setGateError("Please scroll up and enter your property address (must include a house number).");
       return;
     }
     /* Budget is optional: an extra required field before the number is friction
@@ -929,6 +1004,7 @@ export function EstimateCalculator({
         writeLastSentKey(estimateKey);
         setResendState("idle");
         setGateSubmitted(true);
+        scheduleScroll(() => resultRef.current);
       } else if (res.status >= 500) {
         /* Server/infra error: not the user's fault; reveal so they aren't hard-blocked */
         console.warn("[gate] Server error", res.status, "- revealing estimate anyway");
@@ -1035,7 +1111,37 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Step 2 - Layout / type (drives refinement complexity) */
+  /* Step 2 - Address (early, so property data pre-fills the size slider and
+     the gate form never has to ask for it again). Optional here; required when
+     the gate form is submitted. The onProfileResolved handler snaps sqft to the
+     home's measured interior square footage, bounded by the project range. */
+  const addressStep = (
+    <div className="mt-6" ref={addressStepRef}>
+      <p className={stepLabel}>{stepNo("address")} &middot; Your property address</p>
+      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
+        Confirms we serve your area and auto-fills your home size if we find a match.
+      </p>
+      <AddressAutocomplete
+        value={gateAddress}
+        onChange={setGateAddress}
+        onProfileResolved={(profile) => {
+          setGateProfile(profile);
+          if (profile?.formattedAddress) setGateAddress(profile.formattedAddress);
+          if (profile?.squareFootage) {
+            setSqft(
+              Math.max(sizeConfig.min, Math.min(sizeConfig.max, profile.squareFootage)),
+            );
+          }
+        }}
+        data-testid="early-input-address"
+      />
+      <p className="mt-2 text-[12px] text-inverse-muted/60 leading-relaxed">
+        Optional here -- you can skip ahead and fill it in later.
+      </p>
+    </div>
+  );
+
+  /* Step 3 - Layout / type (drives refinement complexity) */
   const subtypeGrid = (
     <div>
       <p className={stepLabel}>{stepNo("layout")} &middot; {config.gridLabel}</p>
@@ -1073,11 +1179,11 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Step 3 - Size: a precise sqft slider (cost is very size-sensitive). The chosen
+  /* Step 4 - Size: a precise sqft slider (cost is very size-sensitive). The chosen
      layout pre-sets a smart default; the slider fine-tunes for accuracy. */
   const sizePct = ((sqft - sizeConfig.min) / (sizeConfig.max - sizeConfig.min)) * 100;
   const sizeGrid = (
-    <div className="mt-6">
+    <div className="mt-6" ref={sizeRef}>
       <div className="flex items-baseline justify-between mb-3">
         <p className={cn(stepLabel, "mb-0")}>{stepNo("size")} &middot; About how big?</p>
         <span
@@ -1329,7 +1435,7 @@ export function EstimateCalculator({
      competence rather than as a form: the estimator already understands the
      project. Editing is one tap away for the minority who want it. */
   const typicalPanel = (
-    <div className="mt-6 rounded-md border border-inverse-foreground/[0.14] bg-inverse-foreground/[0.04] p-4">
+    <div className="mt-6 rounded-md border border-inverse-foreground/[0.14] bg-inverse-foreground/[0.04] p-4" ref={typicalRef}>
       <p className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground">
         Typical for a {FINISH_LABELS[finish]} {config.tabLabel.toLowerCase()}
       </p>
@@ -1401,7 +1507,7 @@ export function EstimateCalculator({
 
   /* Live planning range - always visible, updates as selections change */
   const resultPanel = (
-    <div className="mt-8" aria-live="polite" aria-atomic="true">
+    <div className="mt-8" ref={resultRef} aria-live="polite" aria-atomic="true">
       <div className="space-y-5 border-t border-inverse-foreground/15 pt-6">
           {/* Price range */}
           <div>
@@ -1736,7 +1842,7 @@ export function EstimateCalculator({
 
   /* CTA shown after user configures their estimate -- clicking opens the gate form */
   const calculateCta = (
-    <div className="mt-8 border-t border-inverse-foreground/15 pt-6">
+    <div className="mt-8 border-t border-inverse-foreground/15 pt-6" ref={ctaAreaRef}>
       <Button
         type="button"
         onClick={() => setGateOpen(true)}
@@ -1757,7 +1863,7 @@ export function EstimateCalculator({
     config.subtypes.find((s) => s.id === subtype)?.title ?? config.tabLabel;
 
   const leadsGatePanel = (
-    <div className="mt-8 border-t border-inverse-foreground/15 pt-6" aria-label="Unlock your estimate">
+    <div className="mt-8 border-t border-inverse-foreground/15 pt-6" ref={gateFormRef} aria-label="Unlock your estimate">
       <div className="space-y-5">
         {/* Header */}
         <div className="flex items-start gap-3">
@@ -1840,22 +1946,30 @@ export function EstimateCalculator({
             autoComplete="tel"
           />
 
-          <div>
-            <AddressAutocomplete
-              value={gateAddress}
-              onChange={setGateAddress}
-              onProfileResolved={(profile) => {
-                setGateProfile(profile);
-                // The lookup returns a normalized address; prefer it so the
-                // team gets a clean, geocodable line rather than free text.
-                if (profile?.formattedAddress) setGateAddress(profile.formattedAddress);
-              }}
-              data-testid="gate-input-address"
-            />
-            <p className="mt-1.5 text-[11.5px] text-inverse-muted/80">
-              So we can confirm we serve your area and check county records before your visit.
-            </p>
-          </div>
+          {/* Address was collected in step 2. Show a confirmation card when
+              already filled; show a plain text input as a fallback for users
+              who skipped step 2. Either way the gate validation enforces it. */}
+          {gateAddress.trim() ? (
+            <div className="rounded-md border border-inverse-foreground/15 bg-inverse-foreground/[0.04] px-4 py-3">
+              <p className="text-[11.5px] text-inverse-muted/70 mb-0.5">Property address</p>
+              <p className="text-[13.5px] text-inverse-foreground leading-snug">{gateAddress}</p>
+            </div>
+          ) : (
+            <div>
+              <input
+                type="text"
+                placeholder="Property address (house number + street)"
+                value={gateAddress}
+                onChange={(e) => setGateAddress(e.target.value)}
+                className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
+                data-testid="gate-input-address"
+                autoComplete="street-address"
+              />
+              <p className="mt-1.5 text-[11.5px] text-inverse-muted/80">
+                So we can confirm we serve your area and check county records before your visit.
+              </p>
+            </div>
+          )}
           <select
             value={gateBudget}
             onChange={(e) => setGateBudget(e.target.value)}
@@ -1904,6 +2018,7 @@ export function EstimateCalculator({
       {/* Each step appears only once the one before it has been answered, so a
           visitor is never presented with a pre-filled choice they did not make
           and cannot reach an estimate without selecting every input. */}
+      {chosen.project && addressStep}
       {chosen.project && subtypeGrid}
       {chosen.subtype && sizeGrid}
       {chosen.subtype && chipsRow}
