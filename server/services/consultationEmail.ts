@@ -53,8 +53,6 @@ export interface PropertyEnrichment {
   lotSizeAcres?: number;
   zoning?: string;
   zoningCategory?: string;
-  floodZone?: string;
-  inFloodHazardArea?: boolean;
   subdivision?: string;
   ownerName?: string;
   ownerOccupied?: boolean;
@@ -386,14 +384,6 @@ export function buildPropertyRows(
     ]);
   }
   if (profile.subdivision) rows.push(["Subdivision", profile.subdivision]);
-  if (profile.floodZone) {
-    rows.push([
-      "Flood zone",
-      profile.inFloodHazardArea
-        ? `${profile.floodZone} (FEMA special flood hazard area, expect elevation and permit requirements)`
-        : `${profile.floodZone} (outside the special flood hazard area)`,
-    ]);
-  }
   if (profile.permittingAuthority) rows.push(["Permits", profile.permittingAuthority]);
 
   return rows;

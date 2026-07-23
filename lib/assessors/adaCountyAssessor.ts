@@ -32,13 +32,6 @@ export interface PropertyData {
   propertyUseCode?: string;
   /** Zoning category label, e.g. Residential. Canyon only. */
   zoningCategory?: string;
-  /** FEMA flood zone, e.g. X or AE. Canyon only for now. */
-  floodZone?: string;
-  /**
-   * True when the parcel sits in a FEMA Special Flood Hazard Area, which adds
-   * elevation requirements and permit cost to additions and basement work.
-   */
-  inFloodHazardArea?: boolean;
 
   /** Real: from the ACRES column. */
   lotSizeAcres?: number;

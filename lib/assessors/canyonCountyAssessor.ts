@@ -7,8 +7,8 @@
  * canyonParcelLookup.ts for the sources and their limits.
  *
  * Canyon returns less than Ada: there is no assessed value, owner of record,
- * homeowner's exemption or subdivision available. Zoning and flood zone are
- * present inside Nampa city limits only. Callers must treat all of those as
+ * homeowner's exemption or subdivision available. Zoning is present inside
+ * Nampa city limits only. Callers must treat all of those as
  * optional rather than assuming parity with Ada.
  */
 
@@ -192,8 +192,6 @@ export async function searchCanyonCountyProperties(
       zip: parcel.zip,
       zoning: parcel.zoning,
       zoningCategory: parcel.zoningCategory,
-      floodZone: parcel.floodZone,
-      inFloodHazardArea: parcel.inFloodHazardArea,
       lotSizeSqFt: parcel.lotSizeSqFt,
       lotSizeAcres: parcel.lotSizeAcres,
     };

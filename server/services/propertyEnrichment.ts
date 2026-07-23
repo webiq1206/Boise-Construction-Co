@@ -58,8 +58,6 @@ function mapAssessorToProfileFields(
     lotSizeAcres: assessor.lotSizeAcres,
     zoning: assessor.zoning,
     zoningCategory: assessor.zoningCategory,
-    floodZone: assessor.floodZone,
-    inFloodHazardArea: assessor.inFloodHazardArea,
     subdivision: assessor.subdivision,
     ownerName: assessor.ownerName,
     ownerOccupied: assessor.ownerOccupied,

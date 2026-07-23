@@ -15,9 +15,6 @@
  *   than read from a column, which is actually more precise than Ada's
  *   rounded ACRES value.
  * - Zoning layer (Nampa city limits only): zoning code and category.
- * - Floodplain layer (FEMA DFIRM, Nampa area): flood zone and whether the
- *   parcel sits in a Special Flood Hazard Area, which drives elevation
- *   requirements and permit cost on additions and basement work.
  *
  * What is NOT available for Canyon at any price here: assessed value, owner of
  * record, homeowner's exemption, and subdivision. Ada publishes those; Canyon
@@ -37,7 +34,6 @@ const CANYON_SERVICE =
 
 const PARCEL_LAYER = 36;
 const ZONING_LAYER = 33;
-const FLOODPLAIN_LAYER = 10;
 
 const BREAKER_KEY = "canyon";
 
@@ -71,8 +67,6 @@ export interface CanyonParcel {
   lotSizeAcres?: number;
   zoning?: string;
   zoningCategory?: string;
-  floodZone?: string;
-  inFloodHazardArea?: boolean;
 }
 
 export function canyonCityCode(city: string | null | undefined): string | undefined {
@@ -88,14 +82,14 @@ function query(layer: number, params: Record<string, string>) {
 }
 
 /**
- * Zoning and flood are polygon layers, so both are point-in-polygon lookups.
- * The point comes from pointOnSurface rather than a vertex average, so it is
- * inside the parcel even when the parcel is concave.
+ * Zoning is a polygon layer, so this is a point-in-polygon lookup. The point
+ * comes from pointOnSurface rather than a vertex average, so it is inside the
+ * parcel even when the parcel is concave.
  */
 async function lookupAtPoint(point: {
   x: number;
   y: number;
-}): Promise<Pick<CanyonParcel, "zoning" | "zoningCategory" | "floodZone" | "inFloodHazardArea">> {
+}): Promise<Pick<CanyonParcel, "zoning" | "zoningCategory">> {
   const common = {
     geometry: JSON.stringify({
       x: point.x,
@@ -109,21 +103,12 @@ async function lookupAtPoint(point: {
     resultRecordCount: "1",
   };
 
-  const [zoningData, floodData] = await Promise.all([
-    query(ZONING_LAYER, { ...common, outFields: "zoning,category" }),
-    query(FLOODPLAIN_LAYER, { ...common, outFields: "FLD_ZONE,SFHA_TF" }),
-  ]);
-
+  const zoningData = await query(ZONING_LAYER, { ...common, outFields: "zoning,category" });
   const zoningAttrs = zoningData?.features?.[0]?.attributes;
-  const floodAttrs = floodData?.features?.[0]?.attributes;
-  const sfha =
-    typeof floodAttrs?.SFHA_TF === "string" ? floodAttrs.SFHA_TF.trim().toUpperCase() : undefined;
 
   return {
     zoning: zoningAttrs?.zoning?.trim() || undefined,
     zoningCategory: zoningAttrs?.category?.trim() || undefined,
-    floodZone: floodAttrs?.FLD_ZONE?.trim() || undefined,
-    inFloodHazardArea: sfha === undefined ? undefined : sfha === "T",
   };
 }
 
@@ -154,7 +139,7 @@ function toParcel(feature: any): CanyonParcel | null {
  *
  * Tries an exact address match first, then a prefix match. Results are ordered
  * best match first using the shared address scorer, and only that best match
- * pays for the zoning and flood lookups. Ordering here also means the caller's
+ * pays for the zoning lookup. Ordering here also means the caller's
  * own best-match selection agrees with the parcel that got enriched, which is
  * what stops zoning silently going missing on multi-result addresses.
  *
@@ -205,7 +190,7 @@ export async function lookupCanyonParcels(
 
   if (scored.length === 0) return [];
 
-  // Only the best match pays for zoning and flood: two extra round trips that
+  // Only the best match pays for the zoning lookup: an extra round trip that
   // would otherwise be spent on parcels the caller is going to discard.
   const best = scored[0];
   const rings: Ring[] | undefined = best.feature?.geometry?.rings;

@@ -9,7 +9,7 @@
  * - Address matching compared house numbers with a substring test, so the
  *   number 1386 matched the parcel at 11386 W GOLDENSPIRE DR and a lead could
  *   be attributed to the wrong house.
- * - The zoning and flood lookup point was the average of a parcel's vertices,
+ * - The zoning lookup point was the average of a parcel's vertices,
  *   which fell outside its own parcel on 3.8 percent of real Nampa parcels and
  *   returned a neighbour's zoning.
  */

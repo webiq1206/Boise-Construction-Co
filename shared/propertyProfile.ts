@@ -35,13 +35,6 @@ export interface PropertyProfile {
   ownerOccupied?: boolean;
   /** Zoning category label, e.g. Residential. */
   zoningCategory?: string;
-  /** FEMA flood zone designation, e.g. X or AE. */
-  floodZone?: string;
-  /**
-   * True when the parcel is in a FEMA Special Flood Hazard Area. Additions and
-   * basement work there carry elevation requirements and extra permit cost.
-   */
-  inFloodHazardArea?: boolean;
   photoUrls?: string[];
 
   jurisdiction?: string;

@@ -4,9 +4,9 @@
  * Parcel polygons arrive from ArcGIS as arrays of rings in NAD83 / Idaho West
  * (US survey feet), so every area here is already square feet.
  *
- * The reason this file exists: zoning and flood zone are looked up by asking
- * "which polygon contains this point", so the point we pick has to actually be
- * inside the parcel. Averaging the ring vertices does not guarantee that. On a
+ * The reason this file exists: zoning is looked up by asking "which polygon
+ * contains this point", so the point we pick has to actually be inside the
+ * parcel. Averaging the ring vertices does not guarantee that. On a
  * 400 parcel sample of real Nampa data the vertex average landed outside its
  * own parcel 3.8 percent of the time, by as much as 218 feet, which silently
  * returns a neighbour's zoning. The true area centroid drops that to 1.0
