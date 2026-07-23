@@ -72,12 +72,56 @@ is now asserted against the calibrated numbers rather than the guide. The
 guide values are recorded in a comment there and in `PRICE_MATRIX` so the
 departure stays visible and reversible.
 
-**Still uncalibrated: room addition.** The same question was raised about
-additions and has not been answered. The guide puts a mid-range 400 sq ft
-addition at $120,000 to $170,000 ($300/sq ft at the floor), which is the same
-shape of number the ADU guide got wrong by 26 percent. One data point fixes
-it: the cheapest room addition actually delivered, and its rough square
-footage.
+**Room addition, derived 2026-07.** Not measured, but no longer the guide.
+
+The guide's addition numbers were internally contradictory: at every matched
+size they made a room addition cost MORE per square foot than an ADU ($282 to
+$345 against $248 to $303 at 600 sq ft). That is backwards. An ADU carries a
+full kitchen, a full bathroom and its own utility connections, which the
+component catalog puts at 18 percent of its cost and which a bedroom or family
+room addition does not have. The ADU figure had been corrected against a real
+job; the addition figure had not, so the two drifted into contradiction.
+
+Derivation: strip those three components (18 percent) from the calibrated ADU,
+then add back 10 percent for tying into an existing structure, which an ADU on
+a clean pad never pays: demolishing the exterior wall, the structural header,
+and matching roofline and finishes. Net 0.902 of an equivalent size ADU, which
+puts every tier at 0.8116 of the guide.
+
+| | Guide (was) | Derived (now) |
+|---|---|---|
+| mid-range | $120,000 - $170,000 | $97,000 - $138,000 |
+| high-end | $200,000 - $280,000 | $162,000 - $227,000 |
+| luxury | $340,000 - $460,000 | $276,000 - $373,000 |
+
+**This is the weakest link in the model.** It rests on the ADU calibration plus
+the component shares, both of which are one step removed from a real addition.
+One closed job (contract value and square footage) replaces the whole
+derivation, exactly as the $145,000 ADU replaced the guide.
+
+## The size multiplier plateau (fixed 2026-07)
+
+`getSizeMultiplier` clamped its result to [0.6, 2] as a runaway guard. Because
+sqft is already bounded by each project's own slider and re-validated server
+side, that clamp was redundant, and it bound well inside the legitimate range
+rather than at the extremes:
+
+- whole-home at 8,000 sq ft was understated by 78 percent, quoted as though it
+  were about 4,000 sq ft
+- addition at 1,200 sq ft was understated by 42 percent
+- small whole-home, addition, ADU and basement projects were overstated by 10
+  to 20 percent
+
+Worse, it produced plateaus: every whole-home between 4,070 and 8,000 sq ft
+returned an identical price, as did every addition above about 830 sq ft. The
+monotonicity invariant never caught it because "a larger space never costs
+less" permits equal.
+
+The fix bounds the input (sqft clamped to the project's configured range)
+instead of the output, letting the elasticity curve run across the whole span.
+A new invariant fails the build if price is flat across more than a tenth of
+any project's size slider, and it is mutation tested: restoring the clamp fails
+with "whole-home/refresh: price is flat across 39 consecutive size steps".
 
 ## The planning adjustment (ceiling only)
 

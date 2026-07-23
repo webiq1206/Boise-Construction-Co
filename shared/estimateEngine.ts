@@ -612,17 +612,39 @@ const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>>
       included: ["Full gut renovation", "Structural engineering", "Smart home system", "Premium finishes throughout", "New HVAC, electrical and plumbing"],
     },
   },
+  /*
+   * Addition rates are derived from the calibrated ADU, not from the 2025 cost
+   * guide, because the guide's addition numbers were internally contradictory.
+   *
+   * At every matched size the guide made a room addition cost MORE per square
+   * foot than an ADU: $282 to $345 against $248 to $303 at 600 sq ft. That is
+   * backwards. An ADU carries a full kitchen, a full bathroom and its own
+   * utility connections, which the component catalog puts at 18% of its cost
+   * and which a bedroom or family room addition does not have. The guide's ADU
+   * figure was already proven 26% high by a real closed job, and its addition
+   * figure was never corrected, so the two drifted into contradiction.
+   *
+   * Derivation: strip those three components (18%) from the calibrated ADU,
+   * then add back 10% for tying into an existing structure, which an ADU on a
+   * clean pad never pays: demolishing the exterior wall, the structural
+   * header, and matching roofline and finishes. Net 0.902 of an equivalent
+   * size ADU, which puts every tier at 0.8116 of the guide.
+   *
+   * This is DERIVED, not measured. It is better founded than the guide, which
+   * is demonstrably wrong here, but one real closed addition would beat it.
+   * See ESTIMATOR-CALIBRATION.md.
+   */
   addition: {
     "mid-range": {
-      low: 120000, high: 170000, roi: 63,
+      low: 97000, high: 138000, roi: 63,
       included: ["Bedroom or family room addition", "Full HVAC integration", "Updated electrical panel", "Mid-range finishes"],
     },
     "high-end": {
-      low: 200000, high: 280000, roi: 58,
+      low: 162000, high: 227000, roi: 58,
       included: ["400 to 600 sqft addition", "High-end finishes", "Full integration with existing layout", "Custom windows and doors"],
     },
     luxury: {
-      low: 340000, high: 460000, roi: 50,
+      low: 276000, high: 373000, roi: 50,
       included: ["600+ sqft addition", "Structural engineering", "Premium finishes throughout", "Custom design integration"],
     },
   },
@@ -794,12 +816,29 @@ const SIZE_ELASTICITY: Record<ProjectType, number> = {
 };
 
 function getSizeMultiplier(sqft: number, project: ProjectType): number {
-  const baseline = PROJECT_SIZE_CONFIG[project].baselineSqft;
-  // Clamp the ratio before scaling so an extreme slider position cannot produce
-  // a runaway multiplier, then damp it by the project's elasticity.
-  const ratio = Math.max(0.35, Math.min(3, sqft / baseline));
-  const scaled = Math.pow(ratio, SIZE_ELASTICITY[project]);
-  return Math.max(0.6, Math.min(2, scaled));
+  const config = PROJECT_SIZE_CONFIG[project];
+
+  /*
+   * Guard the INPUT, not the output.
+   *
+   * This used to clamp the ratio to [0.35, 3] and the result to [0.6, 2] as a
+   * runaway guard. But sqft is already bounded by the project's own slider and
+   * re-validated server side, so those clamps were redundant, and they bound
+   * well inside the legitimate range instead of at the extremes:
+   *
+   *   whole-home at 8,000 sqft   understated by 78% (quoted as ~4,000 sqft)
+   *   addition at 1,200 sqft     understated by 42%
+   *   small whole-home, addition, adu, basement   overstated by 10 to 20%
+   *
+   * Worst of all it produced plateaus: every whole-home between 4,070 and
+   * 8,000 sqft returned an identical price, as did every addition above about
+   * 830 sqft. The monotonicity invariant missed it because equal is not less.
+   *
+   * Clamping sqft to the project's configured range bounds the input honestly
+   * and lets the elasticity curve run over the whole legitimate span.
+   */
+  const bounded = Math.max(config.min, Math.min(config.max, sqft));
+  return Math.pow(bounded / config.baselineSqft, SIZE_ELASTICITY[project]);
 }
 
 function getRefinementMultipliers(ref: EstimateRefinements, project: ProjectType): { low: number; high: number } {

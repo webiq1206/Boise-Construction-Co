@@ -435,10 +435,16 @@ const COST_GUIDE_2025: Partial<Record<ProjectType, Partial<Record<FinishLevel, [
     "high-end": [270000, 387000],
     luxury: [450000, 765000],
   },
+  // Addition, like ADU, is no longer the guide. The guide priced an addition
+  // above an ADU per square foot, which is backwards: an ADU carries a kitchen,
+  // a bath and utility connections that an addition does not. Derived from the
+  // calibrated ADU minus those (18%) plus a tie-in allowance (10%), i.e. 0.8116
+  // of the guide. Guide values were [120000, 170000], [200000, 280000],
+  // [340000, 460000].
   addition: {
-    "mid-range": [120000, 170000],
-    "high-end": [200000, 280000],
-    luxury: [340000, 460000],
+    "mid-range": [97000, 138000],
+    "high-end": [162000, 227000],
+    luxury: [276000, 373000],
   },
   // ADU is the one category NOT from the guide. It is calibrated to a real
   // closed job: cheapest delivered detached ADU about $145,000, owner-set
@@ -530,6 +536,51 @@ for (const project of projects) {
       );
       sweepChecks++;
     }
+  }
+}
+
+// 9. NO SIZE PLATEAUS. "A larger space never costs less" permits equal, which
+//    is how a hard multiplier clamp went unnoticed while it made every
+//    whole-home between 4,070 and 8,000 sqft quote an identical price. Price
+//    must actually respond to size across the whole slider.
+for (const project of projects) {
+  const sizeConfig = getProjectSizeConfig(project);
+  const steps = Math.floor((sizeConfig.max - sizeConfig.min) / sizeConfig.step);
+  for (const finish of getAvailableFinishLevels(project)) {
+    let longestFlatRun = 0;
+    let run = 0;
+    let previous = -1;
+    for (let sqft = sizeConfig.min; sqft <= sizeConfig.max; sqft += sizeConfig.step) {
+      const { priceLow } = calculateEstimate({
+        project,
+        finish,
+        sqft,
+        refinements: EMPTY_REFINEMENTS,
+      });
+      if (priceLow === previous) {
+        run++;
+        longestFlatRun = Math.max(longestFlatRun, run);
+      } else {
+        run = 0;
+      }
+      previous = priceLow;
+    }
+    // Adjacent steps can round to the same dollar figure; a plateau spanning
+    // more than a tenth of the slider is a clamp, not rounding.
+    const allowed = Math.max(2, Math.ceil(steps * 0.1));
+    check(
+      longestFlatRun <= allowed,
+      `${project}/${finish}: price is flat across ${longestFlatRun} consecutive size steps (max allowed ${allowed}); a clamp is binding inside the valid range`,
+    );
+    sweepChecks++;
+
+    const smallest = calculateEstimate({ project, finish, sqft: sizeConfig.min, refinements: EMPTY_REFINEMENTS });
+    const largest = calculateEstimate({ project, finish, sqft: sizeConfig.max, refinements: EMPTY_REFINEMENTS });
+    check(
+      largest.priceLow > smallest.priceLow,
+      `${project}/${finish}: largest size does not cost more than smallest`,
+    );
+    sweepChecks++;
   }
 }
 
