@@ -1181,6 +1181,9 @@ export function EstimateCalculator({
               Math.max(sizeConfig.min, Math.min(sizeConfig.max, profile.squareFootage)),
             );
           }
+          if (profile?.bathrooms !== undefined && showBathCount) {
+            setBathCount(profile.bathrooms);
+          }
           /* Scroll to the layout step once the address resolves so the visitor
              sees their next action without manually scrolling down. */
           scheduleScroll(() => layoutRef.current);
