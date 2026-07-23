@@ -486,7 +486,10 @@ export function EstimateCalculator({
      is fully painted before the browser scrolls. Instant on mobile (iOS
      smooth-scroll is unreliable); smooth on desktop. */
   const addressStepRef = useRef<HTMLDivElement>(null);
+  const layoutRef      = useRef<HTMLDivElement>(null);
   const sizeRef        = useRef<HTMLDivElement>(null);
+  const bathRef        = useRef<HTMLDivElement>(null);
+  const kitchenRef     = useRef<HTMLDivElement>(null);
   const typicalRef     = useRef<HTMLDivElement>(null);
   const ctaAreaRef     = useRef<HTMLDivElement>(null);
   const gateFormRef    = useRef<HTMLDivElement>(null);
@@ -788,14 +791,22 @@ export function EstimateCalculator({
     if (!showKitchenIncluded) setKitchenIn((prev) => (prev === null ? prev : null));
   }, [showKitchenIncluded]);
 
-  /* Scroll to the address/layout area whenever a new project is selected so the
-     visitor always sees the next step without manual scrolling. */
+  /* Scroll to the address step whenever a new project is selected. */
   useEffect(() => {
     if (chosen.project) {
       scheduleScroll(() => addressStepRef.current);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeProject]);
+
+  /* Scroll to the layout/subtype section once the address has been filled in,
+     so the visitor's next action is always visible without manual scrolling. */
+  useEffect(() => {
+    if (gateAddress.trim()) {
+      scheduleScroll(() => layoutRef.current);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gateAddress]);
 
   /* Scroll to the size/chips area when layout is first chosen. */
   useEffect(() => {
@@ -804,6 +815,22 @@ export function EstimateCalculator({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chosen.subtype]);
+
+  /* Scroll to the bath-count row when it first becomes visible. */
+  useEffect(() => {
+    if (showBathCount) {
+      scheduleScroll(() => bathRef.current);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showBathCount]);
+
+  /* Scroll to the kitchen row when it first becomes visible. */
+  useEffect(() => {
+    if (showKitchenIncluded) {
+      scheduleScroll(() => kitchenRef.current);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showKitchenIncluded]);
 
   /* Scroll to the typical-selections panel when finish is chosen. */
   useEffect(() => {
@@ -1143,7 +1170,7 @@ export function EstimateCalculator({
 
   /* Step 3 - Layout / type (drives refinement complexity) */
   const subtypeGrid = (
-    <div>
+    <div ref={layoutRef}>
       <p className={stepLabel}>{stepNo("layout")} &middot; {config.gridLabel}</p>
       <div className="grid grid-cols-2 gap-2.5" role="group" aria-label={config.gridLabel}>
         {config.subtypes.map((opt) => {
@@ -1338,7 +1365,7 @@ export function EstimateCalculator({
   /* Whole-home: bathroom count. The published whole-home rate already assumes
      two, so this prices the difference rather than the whole thing. */
   const bathCountRow = (
-    <div className="mt-5">
+    <div className="mt-5" ref={bathRef}>
       <p className={stepLabel}>{stepNo("bathcount")} &middot; How many bathrooms?</p>
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
         {effectiveProject === "whole-home"
@@ -1398,7 +1425,7 @@ export function EstimateCalculator({
             { value: false, label: "No", sub: "Leaving the kitchen as is" },
           ];
     return (
-      <div className="mt-5">
+      <div className="mt-5" ref={kitchenRef}>
         <p className={stepLabel}>{stepNo("kitchen")} &middot; {label}</p>
         <div className="grid grid-cols-2 gap-2">
           {opts.map((opt) => {
@@ -1946,30 +1973,24 @@ export function EstimateCalculator({
             autoComplete="tel"
           />
 
-          {/* Address was collected in step 2. Show a confirmation card when
-              already filled; show a plain text input as a fallback for users
-              who skipped step 2. Either way the gate validation enforces it. */}
-          {gateAddress.trim() ? (
-            <div className="rounded-md border border-inverse-foreground/15 bg-inverse-foreground/[0.04] px-4 py-3">
-              <p className="text-[11.5px] text-inverse-muted/70 mb-0.5">Property address</p>
-              <p className="text-[13.5px] text-inverse-foreground leading-snug">{gateAddress}</p>
-            </div>
-          ) : (
-            <div>
-              <input
-                type="text"
-                placeholder="Property address (house number + street)"
-                value={gateAddress}
-                onChange={(e) => setGateAddress(e.target.value)}
-                className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
-                data-testid="gate-input-address"
-                autoComplete="street-address"
-              />
-              <p className="mt-1.5 text-[11.5px] text-inverse-muted/80">
-                So we can confirm we serve your area and check county records before your visit.
-              </p>
-            </div>
-          )}
+          {/* Address -- pre-filled from step 2 when available; always editable
+              so the visitor can correct it without leaving the gate form. */}
+          <div>
+            <input
+              type="text"
+              placeholder="Property address (house number + street)"
+              value={gateAddress}
+              onChange={(e) => setGateAddress(e.target.value)}
+              className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
+              data-testid="gate-input-address"
+              autoComplete="street-address"
+            />
+            <p className="mt-1.5 text-[11.5px] text-inverse-muted/80">
+              {gateAddress.trim()
+                ? "Pre-filled from step 2 -- update if needed."
+                : "So we can confirm we serve your area and check county records before your visit."}
+            </p>
+          </div>
           <select
             value={gateBudget}
             onChange={(e) => setGateBudget(e.target.value)}
