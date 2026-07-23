@@ -548,12 +548,7 @@ export function EstimateCalculator({
   const refinements = useMemo<EstimateRefinements>(() => {
     const data = SUBTYPE_DATA[activeProject]?.[subtype];
     if (!data) return { ...EMPTY_REFINEMENTS };
-    /* When the kitchen chip is selected for a whole-home project it already
-       answers "Is the kitchen part of it?" -- treat that as kitchenIn=true so
-       the engine prices it correctly without requiring the step to show. */
-    const effectiveKitchenIn =
-      (effectiveProject === "whole-home" && addOns.includes("kitchen")) ? true : kitchenIn;
-    return buildRefinements(effectiveProject, subtype, addOns, data.refinements, peScope, cabTier, bathCount, effectiveKitchenIn);
+    return buildRefinements(effectiveProject, subtype, addOns, data.refinements, peScope, cabTier, bathCount, kitchenIn);
   }, [effectiveProject, activeProject, subtype, addOns, peScope, cabTier, bathCount, kitchenIn]);
 
   const userRefinementCount = useMemo(
@@ -791,6 +786,19 @@ export function EstimateCalculator({
     if (!showKitchenIncluded) setKitchenIn((prev) => (prev === null ? prev : null));
   }, [showKitchenIncluded]);
 
+  /* Sync kitchenIn with the whole-home kitchen chip selection. When the chip
+     implicitly answers the kitchen question, set state to true so pricing is
+     consistent with what the visitor indicated via the chip. When the chip is
+     deselected, reset to null so the kitchen step shows as unanswered. */
+  useEffect(() => {
+    if (kitchenChipAnswersQuestion) {
+      setKitchenIn(true);
+    } else {
+      setKitchenIn(null);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kitchenChipAnswersQuestion]);
+
   /* Scroll to the address step whenever a new project is selected. */
   useEffect(() => {
     if (chosen.project) {
@@ -798,15 +806,6 @@ export function EstimateCalculator({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeProject]);
-
-  /* Scroll to the layout/subtype section once the address has been filled in,
-     so the visitor's next action is always visible without manual scrolling. */
-  useEffect(() => {
-    if (gateAddress.trim()) {
-      scheduleScroll(() => layoutRef.current);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gateAddress]);
 
   /* Scroll to the size/chips area when layout is first chosen. */
   useEffect(() => {
@@ -1159,6 +1158,9 @@ export function EstimateCalculator({
               Math.max(sizeConfig.min, Math.min(sizeConfig.max, profile.squareFootage)),
             );
           }
+          /* Scroll to the layout step once the address resolves so the visitor
+             sees their next action without manually scrolling down. */
+          scheduleScroll(() => layoutRef.current);
         }}
         data-testid="early-input-address"
       />
@@ -1973,24 +1975,31 @@ export function EstimateCalculator({
             autoComplete="tel"
           />
 
-          {/* Address -- pre-filled from step 2 when available; always editable
-              so the visitor can correct it without leaving the gate form. */}
-          <div>
-            <input
-              type="text"
-              placeholder="Property address (house number + street)"
-              value={gateAddress}
-              onChange={(e) => setGateAddress(e.target.value)}
-              className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
-              data-testid="gate-input-address"
-              autoComplete="street-address"
-            />
-            <p className="mt-1.5 text-[11.5px] text-inverse-muted/80">
-              {gateAddress.trim()
-                ? "Pre-filled from step 2 -- update if needed."
-                : "So we can confirm we serve your area and check county records before your visit."}
-            </p>
-          </div>
+          {/* Address was collected in step 2. Show a read-only confirmation when
+              already filled. When skipped, show a minimal fallback input so the
+              visitor can still submit without scrolling back up. */}
+          {gateAddress.trim() ? (
+            <div className="rounded-md border border-inverse-foreground/15 bg-inverse-foreground/[0.04] px-4 py-3">
+              <p className="text-[11px] text-inverse-muted/70 mb-0.5 uppercase tracking-wide">Property address</p>
+              <p className="text-[13.5px] text-inverse-foreground leading-snug">{gateAddress}</p>
+              <p className="mt-1 text-[11px] text-inverse-muted/60">Scroll to step 2 to update.</p>
+            </div>
+          ) : (
+            <div>
+              <input
+                type="text"
+                placeholder="Property address (house number + street)"
+                value={gateAddress}
+                onChange={(e) => setGateAddress(e.target.value)}
+                className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
+                data-testid="gate-input-address"
+                autoComplete="street-address"
+              />
+              <p className="mt-1.5 text-[11.5px] text-inverse-muted/80">
+                So we can confirm we serve your area and check county records before your visit.
+              </p>
+            </div>
+          )}
           <select
             value={gateBudget}
             onChange={(e) => setGateBudget(e.target.value)}
