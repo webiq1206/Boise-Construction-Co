@@ -23,7 +23,7 @@ const sections: ContentSection[] = [
         ['Bathroom (master)', '$35,000 – $85,000+', '6 – 12 weeks'],
         ['Whole-home remodel', '$150,000 – $400,000+', '4 – 12 months'],
         ['Room addition', '$80,000 – $250,000+', '4 – 9 months'],
-        ['ADU / guest house', '$120,000 – $280,000+', '6 – 12 months'],
+        ['ADU / guest house', '$90,000 – $365,000', '6 – 12 months'],
         ['Luxury remodel', '$200,000 – $600,000+', '6 – 18 months'],
       ],
     },
