@@ -48,6 +48,7 @@ export interface LeadContact {
 
 /** Optional county property enrichment shown to the internal team only. */
 export interface PropertyEnrichment {
+  county?: "ada" | "canyon";
   parcelId?: string;
   lotSizeSqFt?: number;
   lotSizeAcres?: number;

@@ -118,7 +118,9 @@ function mapAdaAttributes(property: Record<string, unknown>): Partial<PropertyDa
     // The exemption is stored as a negative offset, so any non-zero value means
     // the owner claimed it and therefore lives on the parcel.
     ownerOccupied: homeExempt === undefined ? undefined : homeExempt !== 0,
-    lotSizeAcres: acres,
+    // ACRES arrives as a raw float (1.08000004). Round for display; square feet
+    // is still derived from the unrounded value so the two stay consistent.
+    lotSizeAcres: acres === undefined ? undefined : Number(acres.toFixed(2)),
     lotSizeSqFt: acres === undefined ? undefined : Math.round(acres * SQ_FT_PER_ACRE),
   };
 }

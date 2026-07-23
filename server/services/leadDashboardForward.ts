@@ -1,4 +1,4 @@
-import type { LeadEstimateRecord } from "@/server/services/leadRecord";
+import type { LeadEstimateRecord, LeadPropertyRecord } from "@/server/services/leadRecord";
 
 /**
  * Fire-and-forget forwarding to the Boise Remodeling lead dashboard.
@@ -54,6 +54,12 @@ interface ForwardPayload {
 
   /** Complete structured record: selections, scope, assumptions, disclaimers. */
   estimate?: LeadEstimateRecord;
+  /**
+   * County parcel record: zoning, lot size, assessed value, owner and
+   * occupancy. Passthrough on the dashboard side for the same reason as
+   * `estimate`, so fields added here are not silently stripped.
+   */
+  property?: LeadPropertyRecord;
   /** Readable rendering of the same record. 20k limit, not 2k like finalNotes. */
   estimateSummary?: string;
   estimateLow?: number;

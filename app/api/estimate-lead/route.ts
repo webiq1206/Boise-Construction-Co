@@ -30,6 +30,7 @@ import {
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
+  buildLeadPropertyRecord,
   buildLeadEstimateRecord,
   buildLeadNotes,
   resolveBudgetRange,
@@ -202,6 +203,9 @@ export async function POST(request: NextRequest) {
       // to estimateSummary, which the dashboard sizes for it (20k vs 2k).
       finalNotes: undefined,
       estimate: estimate ? buildLeadEstimateRecord(estimate) : undefined,
+      // Zoning, lot size, assessed value, owner and occupancy as structured
+      // fields, alongside the same rows the admin email renders.
+      property: buildLeadPropertyRecord(crmProfile),
       estimateSummary: buildLeadNotes(crmLead, estimate, crmProfile),
       estimateLow: estimate?.priceLow,
       estimateHigh: estimate?.priceHigh,

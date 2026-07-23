@@ -112,6 +112,62 @@ export function resolveBudgetRange(
   return `${formatUsd(est.priceLow)} - ${formatUsd(est.priceHigh)} (est.)`;
 }
 
+/**
+ * The county parcel record as structured data for the CRM.
+ *
+ * Carries both named fields (so the dashboard can query or filter on zoning,
+ * lot size and owner occupancy) and the exact label/value rows the admin email
+ * renders, so the CRM and the email can never show different figures. Only
+ * fields the county actually published are present: Canyon has no assessed
+ * value, owner or subdivision, and zoning there covers Nampa city limits only.
+ */
+export interface LeadPropertyRecord {
+  county?: string;
+  jurisdiction?: string;
+  parcelId?: string;
+  zoning?: string;
+  zoningCategory?: string;
+  lotSizeAcres?: number;
+  lotSizeSqFt?: number;
+  assessedValue?: number;
+  ownerName?: string;
+  ownerOccupied?: boolean;
+  subdivision?: string;
+  permittingAuthority?: string;
+  /** Ready to render, identical to the admin email's parcel block. */
+  rows: { label: string; value: string }[];
+}
+
+export function buildLeadPropertyRecord(
+  profile: PropertyEnrichment | null | undefined
+): LeadPropertyRecord | undefined {
+  if (!profile) return undefined;
+  const rows = buildPropertyRows(profile).map(([label, value]) => ({ label, value }));
+  if (rows.length === 0) return undefined;
+
+  const record: LeadPropertyRecord = {
+    county: profile.county === "ada" ? "Ada County" : profile.county === "canyon" ? "Canyon County" : undefined,
+    jurisdiction: profile.jurisdiction,
+    parcelId: profile.parcelId,
+    zoning: profile.zoning,
+    zoningCategory: profile.zoningCategory,
+    lotSizeAcres: profile.lotSizeAcres,
+    lotSizeSqFt: profile.lotSizeSqFt,
+    assessedValue: profile.assessedValue,
+    ownerName: profile.ownerName,
+    ownerOccupied: profile.ownerOccupied,
+    subdivision: profile.subdivision,
+    permittingAuthority: profile.permittingAuthority,
+    rows,
+  };
+
+  // Drop undefined keys so the dashboard never stores empty columns for a
+  // county that simply does not publish that field.
+  return Object.fromEntries(
+    Object.entries(record).filter(([, value]) => value !== undefined)
+  ) as LeadPropertyRecord;
+}
+
 /** Concise statement of what the homeowner wants done, for the goals field. */
 export function buildProjectGoals(est: VerifiedEstimate | null): string | undefined {
   if (!est) return undefined;
