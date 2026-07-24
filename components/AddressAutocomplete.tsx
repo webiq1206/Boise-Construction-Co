@@ -254,7 +254,7 @@ export function AddressAutocomplete({
           data-testid={testId}
           className={
             variant === "inverse"
-              ? "bg-inverse-foreground/[0.10] border-inverse-foreground/30 text-inverse-foreground placeholder:text-inverse-muted/60 focus-visible:border-inverse-foreground/60 focus-visible:ring-inverse-foreground/20"
+              ? "bg-inverse-foreground/[0.10] border-inverse-foreground/30 text-inverse-foreground placeholder:text-inverse-muted/90 focus-visible:border-inverse-foreground/60 focus-visible:ring-inverse-foreground/20"
               : undefined
           }
         />

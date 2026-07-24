@@ -1198,7 +1198,7 @@ export function EstimateCalculator({
   const addressStep = (
     <div className="mt-6 scroll-mt-20" ref={addressStepRef}>
       <p className={stepLabel}>{stepNo("address")} &middot; Your property address</p>
-      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
+      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
         Confirms we serve your area and auto-fills your home size if we find a match.
       </p>
       <AddressAutocomplete
@@ -1223,7 +1223,7 @@ export function EstimateCalculator({
         }}
         data-testid="early-input-address"
       />
-      <p className="mt-2 text-[12px] text-inverse-muted/60 leading-relaxed">
+      <p className="mt-2 text-[12px] text-inverse-muted/90 leading-relaxed">
         Optional here -- you can skip ahead and fill it in later.
       </p>
     </div>
@@ -1300,7 +1300,7 @@ export function EstimateCalculator({
         <span>Compact ({sizeConfig.min.toLocaleString()})</span>
         <span>Large ({sizeConfig.max.toLocaleString()} sq ft)</span>
       </div>
-      <p className="mt-2.5 text-[12.5px] text-inverse-muted/80 leading-relaxed">
+      <p className="mt-2.5 text-[12.5px] text-inverse-muted/90 leading-relaxed">
         Not sure? The layout above sets a typical size. Drag only if your space is notably smaller or
         larger. Size is the biggest cost driver, so a closer number means a closer estimate.
       </p>
@@ -1311,7 +1311,7 @@ export function EstimateCalculator({
   const chipsRow = (
     <div className="mt-5 scroll-mt-20" ref={chipsRef}>
       <p className={stepLabel}>{stepNo("upgrades")} &middot; {config.chipsLabel}</p>
-      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
+      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
         Select all that apply. Optional, and it helps us understand your scope.
       </p>
       <div
@@ -1351,7 +1351,7 @@ export function EstimateCalculator({
   const systemsRow = (
     <div className="mt-5">
       <p className={stepLabel}>{stepNo("systems")} &middot; {getPlumbingElectricalLabel(effectiveProject)}</p>
-      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
+      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
         Taking a sink out and putting it back in the same spot is routine. This is about whether pipes or circuits actually change location, which is where the cost is.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -1428,7 +1428,7 @@ export function EstimateCalculator({
   const bathCountRow = (
     <div className="mt-5 scroll-mt-20" ref={bathRef}>
       <p className={stepLabel}>{stepNo("bathcount")} &middot; How many bathrooms?</p>
-      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
+      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
         {effectiveProject === "whole-home"
           ? "Bathrooms move a whole-home budget more than any other room. Count every one in the project."
           : "A bathroom is one of the largest single line items here. Count every one included."}
@@ -1627,7 +1627,7 @@ export function EstimateCalculator({
               data-testid="estimate-range"
             >
               {formatPlanningCurrency(result.priceLow)}
-              <span className="text-inverse-muted/60 mx-2 text-xl">to</span>
+              <span className="text-inverse-muted/90 mx-2 text-xl">to</span>
               {formatPlanningCurrency(result.priceHigh)}
             </div>
             <p className="mt-2.5 text-[14px] text-inverse-muted">
@@ -1638,7 +1638,7 @@ export function EstimateCalculator({
             <p className="mt-3 text-[12.5px] text-inverse-foreground/90 leading-relaxed font-normal">
               {NOT_A_QUOTE_NOTICE}
             </p>
-            <p className="mt-1.5 text-[12.5px] text-inverse-muted/80 leading-relaxed">
+            <p className="mt-1.5 text-[12.5px] text-inverse-muted/90 leading-relaxed">
               {ONSITE_REQUIRED_NOTICE}
             </p>
           </div>
@@ -1671,11 +1671,11 @@ export function EstimateCalculator({
                     {item}
                   </div>
                 ))}
-                <p className="text-[12px] text-inverse-muted/70 pt-1.5 leading-relaxed">
+                <p className="text-[12px] text-inverse-muted/90 pt-1.5 leading-relaxed">
                   {INCLUDED_SCOPE_NOTE}
                 </p>
                 {effectiveProject === "kitchen" && (
-                  <p className="text-[12px] text-inverse-muted/70 leading-relaxed">
+                  <p className="text-[12px] text-inverse-muted/90 leading-relaxed">
                     {APPLIANCE_DISCLAIMER}
                   </p>
                 )}
@@ -1717,7 +1717,7 @@ export function EstimateCalculator({
               );
               const group = (g: "direct" | "soft") =>
                 takeoff.lines.filter((l) => l.group === g && l.cost > 0);
-              const groupLabel = "text-[11.5px] tracking-[0.1em] uppercase text-inverse-muted/70 pt-2.5 pb-1";
+              const groupLabel = "text-[11.5px] tracking-[0.1em] uppercase text-inverse-muted/90 pt-2.5 pb-1";
               const row = (l: (typeof takeoff.lines)[number]) => {
                 const qty = formatQuantity(l);
                 return (
@@ -1728,7 +1728,7 @@ export function EstimateCalculator({
                   >
                     <span>
                       {l.label}
-                      {qty && <span className="text-inverse-muted/60"> ({qty})</span>}
+                      {qty && <span className="text-inverse-muted/90"> ({qty})</span>}
                     </span>
                     <span className="tabular-nums whitespace-nowrap text-inverse-foreground/90">
                       {formatTakeoffAmount(l.cost)}
@@ -1748,7 +1748,7 @@ export function EstimateCalculator({
                       {formatTakeoffAmount(takeoff.total)}
                     </span>
                   </div>
-                  <p className="text-[12px] text-inverse-muted/70 pt-3 leading-relaxed">
+                  <p className="text-[12px] text-inverse-muted/90 pt-3 leading-relaxed">
                     {TAKEOFF_BASIS_NOTICE}
                   </p>
                 </div>
@@ -1784,7 +1784,7 @@ export function EstimateCalculator({
                     {disclosure.excludes.map((item, i) => (
                       <li
                         key={i}
-                        className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\00d7'] before:absolute before:left-0 before:text-inverse-muted/70"
+                        className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\00d7'] before:absolute before:left-0 before:text-inverse-muted/90"
                         data-testid={`excluded-item-${i}`}
                       >
                         {item}
@@ -1799,7 +1799,7 @@ export function EstimateCalculator({
                   </p>
                   <ul className="space-y-1.5">
                     {disclosure.assumptions.map((item, i) => (
-                      <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\2022'] before:absolute before:left-0 before:text-inverse-muted/70">
+                      <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\2022'] before:absolute before:left-0 before:text-inverse-muted/90">
                         {item}
                       </li>
                     ))}
@@ -1813,7 +1813,7 @@ export function EstimateCalculator({
                     </p>
                     <ul className="space-y-1.5">
                       {disclosure.increases.map((item, i) => (
-                        <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\2191'] before:absolute before:left-0 before:text-inverse-muted/70">
+                        <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\2191'] before:absolute before:left-0 before:text-inverse-muted/90">
                           {item}
                         </li>
                       ))}
@@ -1825,7 +1825,7 @@ export function EstimateCalculator({
                     </p>
                     <ul className="space-y-1.5">
                       {disclosure.decreases.map((item, i) => (
-                        <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\2193'] before:absolute before:left-0 before:text-inverse-muted/70">
+                        <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\2193'] before:absolute before:left-0 before:text-inverse-muted/90">
                           {item}
                         </li>
                       ))}
@@ -1839,7 +1839,7 @@ export function EstimateCalculator({
                   </p>
                   <ul className="space-y-1.5">
                     {disclosure.upgrades.map((item, i) => (
-                      <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\002b'] before:absolute before:left-0 before:text-inverse-muted/70">
+                      <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\002b'] before:absolute before:left-0 before:text-inverse-muted/90">
                         {item}
                       </li>
                     ))}
@@ -1854,14 +1854,14 @@ export function EstimateCalculator({
             <button
               type="button"
               onClick={() => setLegalOpen((p) => !p)}
-              className="flex items-center gap-1.5 text-[12px] text-inverse-muted/70 hover:text-inverse-muted transition-colors"
+              className="flex items-center gap-1.5 text-[12px] text-inverse-muted/90 hover:text-inverse-muted transition-colors"
               aria-expanded={legalOpen}
             >
               Why a range, not a fixed price?
               <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", legalOpen && "rotate-180")} />
             </button>
             {legalOpen && (
-              <p className="text-[12px] text-inverse-muted/70 leading-relaxed mt-2">
+              <p className="text-[12px] text-inverse-muted/90 leading-relaxed mt-2">
                 Planning estimate only, not a proposal, bid, or guaranteed cost. Ranges reflect
                 project type, size, location, and finish assumptions. Your consultation delivers a
                 detailed evaluation tailored to your home.
@@ -1964,7 +1964,7 @@ export function EstimateCalculator({
         Get My Estimate Range
         <ArrowRight className="h-4 w-4" />
       </Button>
-      <p className="text-[12px] text-inverse-muted/70 text-center mt-3 leading-relaxed">
+      <p className="text-[12px] text-inverse-muted/90 text-center mt-3 leading-relaxed">
         Takes 30 seconds. We will email you a copy too.
       </p>
     </div>
@@ -2012,7 +2012,7 @@ export function EstimateCalculator({
             aria-hidden="true"
           >
             {formatPlanningCurrency(result.priceLow)}
-            <span className="text-inverse-muted/60 mx-2 text-xl">to</span>
+            <span className="text-inverse-muted/90 mx-2 text-xl">to</span>
             {formatPlanningCurrency(result.priceHigh)}
           </div>
           <div className="absolute inset-0 flex items-center">
@@ -2032,7 +2032,7 @@ export function EstimateCalculator({
             onChange={(e) => setGateName(e.target.value)}
             required
             minLength={2}
-            className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
+            className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors"
             data-testid="gate-input-name"
             aria-label="First name"
             autoComplete="given-name"
@@ -2043,7 +2043,7 @@ export function EstimateCalculator({
             value={gateEmail}
             onChange={(e) => setGateEmail(e.target.value)}
             required
-            className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
+            className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors"
             data-testid="gate-input-email"
             aria-label="Email address"
             autoComplete="email"
@@ -2055,7 +2055,7 @@ export function EstimateCalculator({
             onChange={(e) => setGatePhone(e.target.value)}
             required
             minLength={10}
-            className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
+            className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors"
             data-testid="gate-input-phone"
             aria-label="Phone number"
             autoComplete="tel"
@@ -2066,9 +2066,9 @@ export function EstimateCalculator({
               visitor can still submit without scrolling back up. */}
           {gateAddress.trim() ? (
             <div className="rounded-md border border-inverse-foreground/15 bg-inverse-foreground/[0.04] px-4 py-3">
-              <p className="text-[11px] text-inverse-muted/70 mb-0.5 uppercase tracking-wide">Property address</p>
+              <p className="text-[11px] text-inverse-muted/90 mb-0.5 uppercase tracking-wide">Property address</p>
               <p className="text-[13.5px] text-inverse-foreground leading-snug">{gateAddress}</p>
-              <p className="mt-1 text-[11px] text-inverse-muted/60">Scroll to step 2 to update.</p>
+              <p className="mt-1 text-[11px] text-inverse-muted/90">Scroll to step 2 to update.</p>
             </div>
           ) : (
             <div>
@@ -2077,12 +2077,12 @@ export function EstimateCalculator({
                 placeholder="Property address (house number + street)"
                 value={gateAddress}
                 onChange={(e) => setGateAddress(e.target.value)}
-                className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
+                className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors"
                 data-testid="gate-input-address"
                 aria-label="Property address"
                 autoComplete="street-address"
               />
-              <p className="mt-1.5 text-[11.5px] text-inverse-muted/80">
+              <p className="mt-1.5 text-[11.5px] text-inverse-muted/90">
                 So we can confirm we serve your area and check county records before your visit.
               </p>
             </div>
@@ -2104,7 +2104,10 @@ export function EstimateCalculator({
             ))}
           </select>
           {gateError && (
-            <p className="text-[12px] text-red-400">{gateError}</p>
+            // role="alert" so a screen reader announces the validation message
+            // the moment it appears; native required-field errors are announced
+            // by the browser, but these format checks are ours to surface.
+            <p role="alert" className="text-[12px] text-red-400">{gateError}</p>
           )}
           <Button
             type="submit"
@@ -2115,7 +2118,7 @@ export function EstimateCalculator({
             {gateLoading ? "Sending..." : "Reveal My Estimate"}
             {!gateLoading && <ArrowRight className="h-4 w-4" />}
           </Button>
-          <p className="text-[12px] text-inverse-muted/70 text-center leading-relaxed">
+          <p className="text-[12px] text-inverse-muted/90 text-center leading-relaxed">
             We will email you a copy too. No spam, ever.
           </p>
         </form>
