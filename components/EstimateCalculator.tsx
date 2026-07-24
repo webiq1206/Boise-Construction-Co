@@ -887,9 +887,15 @@ export function EstimateCalculator({
     (!showKitchenIncluded || kitchenIn !== null);
 
   /* Scroll to the gate CTA (or result panel for returning visitors) the first
-     time all required choices are made. Must live after allChosen is defined. */
+     time all required choices are made. Must live after allChosen is defined.
+     Auto-scroll must only ever follow an explicit user tap: a bath count
+     pre-filled from property data counts toward allChosen (the estimate can
+     price it) but does NOT count for scrolling until the visitor confirms it
+     with a tap (bathCountConfirmed). Without this, assessor data arriving in
+     the background could yank the page to the CTA past unvisited steps. */
+  const bathConfirmedForScroll = !showBathCount || bathCountConfirmed;
   useEffect(() => {
-    if (allChosen && !allChosenScrolled.current) {
+    if (allChosen && bathConfirmedForScroll && !allChosenScrolled.current) {
       /* Only burn the one-shot sentinel if this scroll was actually queued.
          If an earlier step's scroll already claimed this frame (first wins),
          that earlier step is the correct target and the CTA stays reachable. */
@@ -898,7 +904,7 @@ export function EstimateCalculator({
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allChosen]);
+  }, [allChosen, bathConfirmedForScroll]);
 
   /* Identity of the current estimate. Used to tell whether the visitor has
      actually changed something since we last told the team about it. */
