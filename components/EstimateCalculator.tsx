@@ -15,6 +15,7 @@ import { AddressAutocomplete } from "@/components/AddressAutocomplete";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
   takeoffForRange,
+  takeoffForClient,
   formatQuantity,
   formatTakeoffAmount,
   TAKEOFF_BASIS_NOTICE,
@@ -1665,13 +1666,17 @@ export function EstimateCalculator({
               />
             </button>
             {takeoffOpen && (() => {
-              const takeoff = takeoffForRange(
-                effectiveProject,
-                finish,
-                sqft,
-                result.priceLow,
-                result.priceHigh,
-                unitCostOverrides,
+              // Clients never see PM or overhead itemized; those dollars are
+              // folded proportionally into the visible lines (same total).
+              const takeoff = takeoffForClient(
+                takeoffForRange(
+                  effectiveProject,
+                  finish,
+                  sqft,
+                  result.priceLow,
+                  result.priceHigh,
+                  unitCostOverrides,
+                ),
               );
               const group = (g: "direct" | "soft") =>
                 takeoff.lines.filter((l) => l.group === g && l.cost > 0);

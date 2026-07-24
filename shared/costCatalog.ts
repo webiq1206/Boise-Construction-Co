@@ -408,6 +408,71 @@ export function takeoffForRange(
   return buildTakeoff(project, finish, sqft, (priceLow + priceHigh) / 2, overrides);
 }
 
+/*
+ * Lines the homeowner never sees itemized. Project management and overhead
+ * are real costs of running the job, but showing them as separate lines
+ * invites negotiating them away line by line. Their dollars are folded
+ * proportionally into every remaining line so the client's breakdown still
+ * sums to the same total. Admin surfaces (pricing panel, admin email, CRM
+ * record) always render the full takeoff.
+ */
+export const CLIENT_HIDDEN_COMPONENT_IDS = new Set(["project-management", "overhead-profit"]);
+
+/**
+ * The takeoff as a client is allowed to see it.
+ *
+ * Removes the hidden lines and redistributes their dollars across every
+ * remaining line in proportion to that line's cost, so the visible lines
+ * still sum to the original total. Unit costs are recomputed from the
+ * inflated line cost so quantity x unit cost stays consistent within the
+ * client view. Group subtotals are recomputed from the surviving lines.
+ */
+export function takeoffForClient(takeoff: Takeoff): Takeoff {
+  const hidden = takeoff.lines.filter((l) => CLIENT_HIDDEN_COMPONENT_IDS.has(l.id));
+  const visible = takeoff.lines.filter((l) => !CLIENT_HIDDEN_COMPONENT_IDS.has(l.id));
+  const hiddenCost = hidden.reduce((s, l) => s + l.cost, 0);
+  const visibleCost = visible.reduce((s, l) => s + l.cost, 0);
+
+  if (hiddenCost === 0 || visibleCost === 0) {
+    const lines = visible;
+    const directCost = lines.filter((l) => l.group === "direct").reduce((s, l) => s + l.cost, 0);
+    const softCost = lines.filter((l) => l.group === "soft").reduce((s, l) => s + l.cost, 0);
+    return { ...takeoff, lines, directCost, softCost, total: directCost + softCost };
+  }
+
+  const factor = (visibleCost + hiddenCost) / visibleCost;
+  const lines: TakeoffLine[] = visible.map((line) => {
+    const cost = Math.round(line.cost * factor);
+    return {
+      ...line,
+      cost,
+      unitCost: line.quantity > 0 ? Math.round((cost / line.quantity) * 100) / 100 : 0,
+    };
+  });
+
+  // Rounding each line independently can drift a few dollars from the
+  // original total; settle the difference on the largest line so the client
+  // sees exactly the same total as the full takeoff.
+  const drift = takeoff.total - lines.reduce((s, l) => s + l.cost, 0);
+  if (drift !== 0 && lines.length > 0) {
+    const largest = lines.reduce((a, b) => (b.cost > a.cost ? b : a));
+    largest.cost += drift;
+    largest.unitCost =
+      largest.quantity > 0 ? Math.round((largest.cost / largest.quantity) * 100) / 100 : 0;
+  }
+
+  const directCost = lines.filter((l) => l.group === "direct").reduce((s, l) => s + l.cost, 0);
+  const softCost = lines.filter((l) => l.group === "soft").reduce((s, l) => s + l.cost, 0);
+
+  return {
+    ...takeoff,
+    lines,
+    directCost,
+    softCost,
+    total: directCost + softCost,
+  };
+}
+
 /**
  * Money format for a takeoff line.
  *

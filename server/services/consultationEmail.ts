@@ -6,6 +6,7 @@ import {
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import {
   takeoffForRange,
+  takeoffForClient,
   formatQuantity,
   formatTakeoffAmount,
   TAKEOFF_BASIS_NOTICE,
@@ -261,8 +262,12 @@ function renderIncludedList(items: string[]): string {
  * pricing this company has bid, so TAKEOFF_BASIS_NOTICE always renders with
  * them. Without it, "$11,880 cabinetry" reads as a quote for cabinetry.
  */
-function renderTakeoffHtml(est: VerifiedEstimate, overrides?: UnitCostOverrides): string {
-  const takeoff = takeoffForRange(
+function renderTakeoffHtml(
+  est: VerifiedEstimate,
+  overrides: UnitCostOverrides | undefined,
+  audience: "admin" | "client",
+): string {
+  const fullTakeoff = takeoffForRange(
     est.project,
     est.finish,
     est.sqft,
@@ -270,6 +275,10 @@ function renderTakeoffHtml(est: VerifiedEstimate, overrides?: UnitCostOverrides)
     est.priceHigh,
     overrides,
   );
+  // Clients never see PM or overhead itemized; those dollars are folded
+  // proportionally into the visible lines so the total is unchanged. The
+  // admin email keeps the full breakdown.
+  const takeoff = audience === "client" ? takeoffForClient(fullTakeoff) : fullTakeoff;
 
   const groupRows = (group: "direct" | "soft") =>
     takeoff.lines
@@ -301,7 +310,11 @@ function renderTakeoffHtml(est: VerifiedEstimate, overrides?: UnitCostOverrides)
   `;
 }
 
-export function buildEstimateSectionsHtml(est: VerifiedEstimate, overrides?: UnitCostOverrides): string {
+export function buildEstimateSectionsHtml(
+  est: VerifiedEstimate,
+  overrides?: UnitCostOverrides,
+  audience: "admin" | "client" = "client",
+): string {
   const rangeText = `${formatUsd(est.priceLow)} to ${formatUsd(est.priceHigh)}`;
   const rows = buildSelectionRows(
     est.project,
@@ -333,7 +346,7 @@ export function buildEstimateSectionsHtml(est: VerifiedEstimate, overrides?: Uni
       </table>
     </div>
 
-    ${renderTakeoffHtml(est, overrides)}
+    ${renderTakeoffHtml(est, overrides, audience)}
 
     <div style="margin:28px 0;">
       <p style="${SECTION_TITLE}">What this range covers</p>
@@ -500,7 +513,7 @@ export function buildAdminEmailHtml(
 
       ${
         estimate
-          ? buildEstimateSectionsHtml(estimate, overrides)
+          ? buildEstimateSectionsHtml(estimate, overrides, "admin")
           : `<p style="margin:24px 0;color:${EMAIL_BRAND.textMuted};">No planning range was attached to this request.</p>`
       }
 

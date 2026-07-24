@@ -17,7 +17,12 @@ import {
   type FinishLevel,
   type EstimateRefinements,
 } from "../shared/estimateEngine";
-import { buildTakeoff, shareSum } from "../shared/costCatalog";
+import {
+  buildTakeoff,
+  shareSum,
+  takeoffForClient,
+  CLIENT_HIDDEN_COMPONENT_IDS,
+} from "../shared/costCatalog";
 
 function assert(condition: boolean, message: string) {
   if (!condition) {
@@ -533,6 +538,35 @@ for (const project of projects) {
       check(
         takeoff.lines.every((line) => line.cost >= 0 && Number.isFinite(line.cost)),
         `${project}/${finish} @${sqft}sf: takeoff produced a negative or non-finite line`,
+      );
+      sweepChecks++;
+
+      // CLIENT VIEW. Project management and overhead must never appear as
+      // lines a homeowner can see, and folding them in must not move the
+      // total by a single dollar.
+      const clientView = takeoffForClient(takeoff);
+      check(
+        clientView.lines.every((line) => !CLIENT_HIDDEN_COMPONENT_IDS.has(line.id)),
+        `${project}/${finish} @${sqft}sf: client takeoff leaks a hidden line`,
+      );
+      sweepChecks++;
+      check(
+        clientView.total === takeoff.total,
+        `${project}/${finish} @${sqft}sf: client takeoff total ${clientView.total} != full total ${takeoff.total}`,
+      );
+      sweepChecks++;
+      check(
+        clientView.lines.every((line) => line.cost >= 0 && Number.isFinite(line.cost)) &&
+          clientView.lines.length === takeoff.lines.length - 2,
+        `${project}/${finish} @${sqft}sf: client takeoff malformed`,
+      );
+      sweepChecks++;
+      check(
+        clientView.lines.every((line) => {
+          const original = takeoff.lines.find((l) => l.id === line.id);
+          return original !== undefined && line.cost >= original.cost;
+        }),
+        `${project}/${finish} @${sqft}sf: folding hidden costs in must not shrink any visible line`,
       );
       sweepChecks++;
     }
