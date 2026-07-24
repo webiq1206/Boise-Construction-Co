@@ -29,6 +29,7 @@ interface AddressAutocompleteProps {
   id?: string;
   "aria-describedby"?: string;
   "aria-invalid"?: React.AriaAttributes["aria-invalid"];
+  "aria-label"?: string;
   "data-testid"?: string;
   variant?: "default" | "inverse";
 }
@@ -42,6 +43,7 @@ export function AddressAutocomplete({
   id,
   "aria-describedby": ariaDescribedBy,
   "aria-invalid": ariaInvalid,
+  "aria-label": ariaLabel = "Property address",
   "data-testid": testId = "input-address",
   variant = "default",
 }: AddressAutocompleteProps) {
@@ -240,6 +242,7 @@ export function AddressAutocomplete({
           disabled={disabled || enriching}
           autoComplete="street-address"
           role="combobox"
+          aria-label={ariaLabel}
           aria-expanded={open && suggestions.length > 0}
           aria-controls={listboxId}
           aria-autocomplete="list"

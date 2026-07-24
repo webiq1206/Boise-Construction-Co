@@ -35,6 +35,7 @@ import {
   getPlumbingElectricalOptions,
   getPlumbingElectricalLabel,
   getAssumedBathrooms,
+  getAssumedBathroomsForSize,
   getKitchenQuestion,
   getTypicalSelections,
   FINISH_LABELS as ENGINE_FINISH_LABELS,
@@ -1433,10 +1434,18 @@ export function EstimateCalculator({
           : "A bathroom is one of the largest single line items here. Count every one included."}
       </p>
       <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
-        {(getAssumedBathrooms(effectiveProject) === 0
-          ? [0, 1, 2, 3, 4, 5, 6]
-          : [1, 2, 3, 4, 5, 6]
-        ).map((n) => {
+        {(() => {
+          // The top of the range must reach at least the count the rate already
+          // assumes for this home size, or a large home cannot be described
+          // accurately: whole-home's assumed reference scales with area (about
+          // one bath per 1,000 sq ft), so an 8,000 sq ft home assumes 8. Capping
+          // the buttons at 6 there meant selecting the max still priced BELOW
+          // not answering, because it read as removing two baths from the rate.
+          const start = getAssumedBathrooms(effectiveProject) === 0 ? 0 : 1;
+          const assumedForSize = getAssumedBathroomsForSize(effectiveProject, sqft) ?? 0;
+          const max = Math.max(6, assumedForSize);
+          return Array.from({ length: max - start + 1 }, (_, i) => start + i);
+        })().map((n) => {
           const active = bathCount === n;
           return (
             <button
@@ -2025,6 +2034,7 @@ export function EstimateCalculator({
             minLength={2}
             className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
             data-testid="gate-input-name"
+            aria-label="First name"
             autoComplete="given-name"
           />
           <input
@@ -2035,6 +2045,7 @@ export function EstimateCalculator({
             required
             className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
             data-testid="gate-input-email"
+            aria-label="Email address"
             autoComplete="email"
           />
           <input
@@ -2046,6 +2057,7 @@ export function EstimateCalculator({
             minLength={10}
             className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
             data-testid="gate-input-phone"
+            aria-label="Phone number"
             autoComplete="tel"
           />
 
@@ -2067,6 +2079,7 @@ export function EstimateCalculator({
                 onChange={(e) => setGateAddress(e.target.value)}
                 className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/60 outline-none focus:border-inverse-foreground/50 transition-colors"
                 data-testid="gate-input-address"
+                aria-label="Property address"
                 autoComplete="street-address"
               />
               <p className="mt-1.5 text-[11.5px] text-inverse-muted/80">
@@ -2079,6 +2092,7 @@ export function EstimateCalculator({
             onChange={(e) => setGateBudget(e.target.value)}
             className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground outline-none focus:border-inverse-foreground/50 transition-colors appearance-none cursor-pointer"
             data-testid="gate-select-budget"
+            aria-label="Desired budget range (optional)"
           >
             <option value="" className="bg-neutral-900 text-inverse-muted">
               Desired budget range (optional)
