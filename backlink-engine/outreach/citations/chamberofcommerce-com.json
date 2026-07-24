@@ -15,8 +15,33 @@
     "website": "https://boiseremodeling.co",
     "serviceArea": "Boise, Meridian, Eagle, Nampa, Star, Kuna, Garden City (Ada & Canyon County)",
     "shortDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the Treasure Valley.",
-    "longDescription": "[ADD LONG DESCRIPTION]",
-    "photos": []
+    "longDescription": "Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, and the wider Treasure Valley across Ada and Canyon County. We handle kitchen and bathroom remodels, home additions, accessory dwelling units, basement finishing, and whole-home renovations under one roof, taking each project from design through construction with a single accountable team and a written scope before work begins.",
+    "photos": [
+      {
+        "url": "https://boiseremodeling.co/images/gallery/gallery-kitchen-after.webp",
+        "caption": "Completed kitchen remodel, Treasure Valley"
+      },
+      {
+        "url": "https://boiseremodeling.co/images/gallery/gallery-bathroom-after.webp",
+        "caption": "Completed bathroom remodel, Treasure Valley"
+      },
+      {
+        "url": "https://boiseremodeling.co/images/gallery/gallery-whole-home-after.webp",
+        "caption": "Whole-home renovation, Treasure Valley"
+      },
+      {
+        "url": "https://boiseremodeling.co/images/gallery/gallery-addition-after.webp",
+        "caption": "Home addition, Treasure Valley"
+      },
+      {
+        "url": "https://boiseremodeling.co/images/gallery/gallery-basement-after.webp",
+        "caption": "Finished basement, Treasure Valley"
+      },
+      {
+        "url": "https://boiseremodeling.co/images/gallery/gallery-outdoor-after.webp",
+        "caption": "Outdoor living project, Treasure Valley"
+      }
+    ]
   },
   "checklist": [
     "Claim/verify listing",
@@ -25,14 +50,10 @@
     "Upload 3-5 portfolio photos",
     "Confirm the profile links back to the website"
   ],
-  "missingInputs": [
-    "sender.name",
-    "descriptions.long",
-    "portfolioAssets"
-  ],
+  "missingInputs": [],
   "status": "awaiting_approval",
   "id": "chamberofcommerce-com",
   "name": "ChamberofCommerce.com – business listing",
   "priority": 69.2,
-  "draftedOn": "2026-07-14"
+  "draftedOn": "run"
 }
