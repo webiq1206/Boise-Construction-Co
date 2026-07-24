@@ -1187,9 +1187,10 @@ export function EstimateCalculator({
           if (profile?.bathrooms !== undefined && showBathCount) {
             setBathCount(profile.bathrooms);
           }
-          /* Scroll to the layout step once the address resolves so the visitor
-             sees their next action without manually scrolling down. */
-          scheduleScroll(() => layoutRef.current);
+          /* Do NOT auto-scroll to the layout step here. After the property card
+             renders the subtype grid is immediately below it in the DOM; an extra
+             scroll jump just disorients the visitor (perceived as "skipped step 2"
+             or "jumped to the middle of step 3"). */
         }}
         data-testid="early-input-address"
       />
