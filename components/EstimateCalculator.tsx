@@ -501,15 +501,36 @@ export function EstimateCalculator({
   const gateFormRef    = useRef<HTMLDivElement>(null);
   const resultRef      = useRef<HTMLDivElement>(null);
   const allChosenScrolled  = useRef(false);
-  const finishScrolled     = useRef(false);
+  const pendingScrollTarget = useRef<(() => HTMLElement | null) | null>(null);
 
-  function scrollSmooth(el: HTMLElement | null) {
-    if (!el) return;
-    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-    el.scrollIntoView({ behavior: isMobile ? "instant" : "smooth", block: "start" });
+  /* Auto-scroll is MOBILE ONLY. On desktop the estimator fits on screen and
+     the page must never move on its own. The scroll position is computed
+     manually (not scrollIntoView) so the step heading always lands below the
+     sticky site header: we measure the real header height at scroll time,
+     which holds on iOS Safari where fixed offsets are unreliable. */
+  function scrollToStep(el: HTMLElement | null) {
+    if (!el || typeof window === "undefined") return;
+    if (window.innerWidth >= 768) return;
+    const header = document.querySelector("header");
+    const headerH = header ? header.getBoundingClientRect().height : 64;
+    const top = el.getBoundingClientRect().top + window.scrollY - headerH - 16;
+    window.scrollTo({ top: Math.max(0, top), behavior: "instant" as ScrollBehavior });
   }
-  function scheduleScroll(getEl: () => HTMLElement | null) {
-    requestAnimationFrame(() => requestAnimationFrame(() => scrollSmooth(getEl())));
+  /* Coalesces all scrolls requested in the same frame into exactly ONE scroll.
+     The FIRST requested target wins: effects for earlier steps schedule first,
+     so a race can only ever resolve to the earliest (next) step in sequence --
+     it can never skip ahead past a step the visitor still needs to complete. */
+  function scheduleScroll(getEl: () => HTMLElement | null): boolean {
+    if (pendingScrollTarget.current !== null) return false;
+    pendingScrollTarget.current = getEl;
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        const getTarget = pendingScrollTarget.current;
+        pendingScrollTarget.current = null;
+        if (getTarget) scrollToStep(getTarget());
+      }),
+    );
+    return true;
   }
 
   /* ── Derived ── */
@@ -684,9 +705,11 @@ export function EstimateCalculator({
     // Changing the project invalidates the layout and finish choices made under
     // the previous one, so the visitor picks those again rather than inheriting.
     allChosenScrolled.current = false;
-    finishScrolled.current = false;
     setChosen({ project: true, subtype: false, finish: false });
     fireEstimatorEngagement();
+    /* Advance to the next step (address) directly from the tap, so it fires
+       even when the visitor confirms the already-active default project. */
+    scheduleScroll(() => addressStepRef.current);
   }
 
   /* Selecting a layout sets a smart default size, which the slider fine-tunes. */
@@ -699,6 +722,9 @@ export function EstimateCalculator({
       setSqft(Math.max(c.min, Math.min(c.max, data.sqft)));
     }
     fireEstimatorEngagement();
+    /* Advance to the next step (size) directly from the tap, so it also fires
+       when the visitor re-picks a different layout later. */
+    scheduleScroll(() => sizeRef.current);
   }
 
   function handleSelectFinish(level: FinishLevel) {
@@ -809,65 +835,15 @@ export function EstimateCalculator({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kitchenChipAnswersQuestion]);
 
-  /* Scroll to the address step whenever a new project is selected. */
-  useEffect(() => {
-    if (chosen.project) {
-      scheduleScroll(() => addressStepRef.current);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeProject]);
+  /* Address scroll fires directly from handleSelectProject (see above), so it
+     also works when the visitor confirms the already-active default project. */
 
-  /* Scroll to the size/chips area when layout is first chosen. */
-  useEffect(() => {
-    if (chosen.subtype) {
-      scheduleScroll(() => sizeRef.current);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chosen.subtype]);
+  /* Size scroll fires directly from handleSelectSubtype (see above). */
 
-  /* Scroll to the bath-count row when it becomes visible. Gated on
-     chosen.subtype so the DOM node is mounted before we try to scroll. */
-  useEffect(() => {
-    if (chosen.subtype && showBathCount) {
-      scheduleScroll(() => bathRef.current);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chosen.subtype, showBathCount]);
-
-  /* Scroll to the kitchen row when it becomes visible. Gated on
-     chosen.subtype so the DOM node is mounted before we try to scroll. */
-  useEffect(() => {
-    if (chosen.subtype && showKitchenIncluded) {
-      scheduleScroll(() => kitchenRef.current);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chosen.subtype, showKitchenIncluded]);
-
-  /* Scroll to the finish-level row once all sections above it have been
-     addressed (size, chips, bath count, kitchen). Fires the first time the
-     preconditions are satisfied; sentinel resets when subtype changes so the
-     scroll re-triggers if the visitor picks a different layout.
-     Bath count pre-filled from property data does NOT count as "confirmed" --
-     the user must explicitly tap a number first (see bathCountConfirmed). This
-     prevents the finish scroll from racing past the bath-count row when the
-     assessor data arrives before the visitor has seen that step. */
-  const bathDone    = !showBathCount || bathCount !== null;
-  const kitchenDone = !showKitchenIncluded || kitchenIn !== null;
-  /* For the scroll gate we require the user to have tapped a bath-count button.
-     allChosen (below) still uses bathDone so the estimate unlocks once all
-     inputs have a value regardless of how they were set. */
-  const bathScrollReady = !showBathCount || bathCountConfirmed;
-  useEffect(() => {
-    if (!chosen.subtype) {
-      finishScrolled.current = false;
-      return;
-    }
-    if (bathScrollReady && kitchenDone && !chosen.finish && !finishScrolled.current) {
-      finishScrolled.current = true;
-      scheduleScroll(() => finishRef.current);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chosen.subtype, bathScrollReady, kitchenDone, chosen.finish]);
+  /* NOTE: sections that mount (bath count, kitchen, finish) never scroll by
+     themselves anymore. Auto-scroll advances only in direct response to a
+     user tap, from the click handlers below -- each tap moves to exactly the
+     next step in visual sequence and can never skip an incomplete one. */
 
   /* Scroll to the typical-selections panel when finish is chosen. */
   useEffect(() => {
@@ -914,8 +890,12 @@ export function EstimateCalculator({
      time all required choices are made. Must live after allChosen is defined. */
   useEffect(() => {
     if (allChosen && !allChosenScrolled.current) {
-      allChosenScrolled.current = true;
-      scheduleScroll(() => ctaAreaRef.current ?? resultRef.current);
+      /* Only burn the one-shot sentinel if this scroll was actually queued.
+         If an earlier step's scroll already claimed this frame (first wins),
+         that earlier step is the correct target and the CTA stays reachable. */
+      if (scheduleScroll(() => ctaAreaRef.current ?? resultRef.current)) {
+        allChosenScrolled.current = true;
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allChosen]);
@@ -1431,6 +1411,13 @@ export function EstimateCalculator({
                 setBathCount(n);
                 setBathCountConfirmed(true);
                 fireEstimatorEngagement();
+                /* Advance to the next step in sequence: kitchen if that
+                   question is shown and unanswered, otherwise finish level. */
+                if (showKitchenIncluded && kitchenIn === null) {
+                  scheduleScroll(() => kitchenRef.current);
+                } else if (!chosen.finish) {
+                  scheduleScroll(() => finishRef.current);
+                }
               }}
               data-testid={`calc-baths-${n}`}
               aria-pressed={active}
@@ -1483,6 +1470,10 @@ export function EstimateCalculator({
                 onClick={() => {
                   setKitchenIn(opt.value);
                   fireEstimatorEngagement();
+                  /* Advance to the finish-level step if not yet chosen. */
+                  if (!chosen.finish) {
+                    scheduleScroll(() => finishRef.current);
+                  }
                 }}
                 data-testid={`calc-kitchen-${opt.value ? "yes" : "no"}`}
                 aria-pressed={active}
