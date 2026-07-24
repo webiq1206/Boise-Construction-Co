@@ -429,6 +429,10 @@ export function EstimateCalculator({
      were never asked; the kitchen is the second largest. Both are priced as
      modules against what the published rate already assumes. */
   const [bathCount, setBathCount] = useState<number | null>(null);
+  /* Tracks whether the visitor explicitly tapped a bath-count button.
+     Pre-filling bathCount from property data should NOT count as confirmed --
+     the user must see and accept (or change) it before the finish scroll fires. */
+  const [bathCountConfirmed, setBathCountConfirmed] = useState(false);
   const [kitchenIn, setKitchenIn] = useState<boolean | null>(null);
   /* True once the visitor overrides a pre-selected value, after which the
      profile stops overwriting their choice. */
@@ -675,6 +679,7 @@ export function EstimateCalculator({
     setPeScope(null);
     setCabTier(null);
     setBathCount(null);
+    setBathCountConfirmed(false);
     setKitchenIn(null);
     // Changing the project invalidates the layout and finish choices made under
     // the previous one, so the visitor picks those again rather than inheriting.
@@ -841,20 +846,28 @@ export function EstimateCalculator({
   /* Scroll to the finish-level row once all sections above it have been
      addressed (size, chips, bath count, kitchen). Fires the first time the
      preconditions are satisfied; sentinel resets when subtype changes so the
-     scroll re-triggers if the visitor picks a different layout. */
+     scroll re-triggers if the visitor picks a different layout.
+     Bath count pre-filled from property data does NOT count as "confirmed" --
+     the user must explicitly tap a number first (see bathCountConfirmed). This
+     prevents the finish scroll from racing past the bath-count row when the
+     assessor data arrives before the visitor has seen that step. */
   const bathDone    = !showBathCount || bathCount !== null;
   const kitchenDone = !showKitchenIncluded || kitchenIn !== null;
+  /* For the scroll gate we require the user to have tapped a bath-count button.
+     allChosen (below) still uses bathDone so the estimate unlocks once all
+     inputs have a value regardless of how they were set. */
+  const bathScrollReady = !showBathCount || bathCountConfirmed;
   useEffect(() => {
     if (!chosen.subtype) {
       finishScrolled.current = false;
       return;
     }
-    if (bathDone && kitchenDone && !chosen.finish && !finishScrolled.current) {
+    if (bathScrollReady && kitchenDone && !chosen.finish && !finishScrolled.current) {
       finishScrolled.current = true;
       scheduleScroll(() => finishRef.current);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chosen.subtype, bathDone, kitchenDone, chosen.finish]);
+  }, [chosen.subtype, bathScrollReady, kitchenDone, chosen.finish]);
 
   /* Scroll to the typical-selections panel when finish is chosen. */
   useEffect(() => {
@@ -1416,6 +1429,7 @@ export function EstimateCalculator({
               type="button"
               onClick={() => {
                 setBathCount(n);
+                setBathCountConfirmed(true);
                 fireEstimatorEngagement();
               }}
               data-testid={`calc-baths-${n}`}

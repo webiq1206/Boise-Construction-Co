@@ -249,6 +249,11 @@ export function AddressAutocomplete({
           aria-describedby={describedBy}
           aria-invalid={ariaInvalid ?? (error ? true : undefined)}
           data-testid={testId}
+          className={
+            variant === "inverse"
+              ? "bg-inverse-foreground/[0.10] border-inverse-foreground/30 text-inverse-foreground placeholder:text-inverse-muted/60 focus-visible:border-inverse-foreground/60 focus-visible:ring-inverse-foreground/20"
+              : undefined
+          }
         />
         {(loadingSuggestions || enriching) && (
           <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
