@@ -381,6 +381,14 @@ function buildRefinements(
   if (bathroomCount !== null) ref.bathroomCount = bathroomCount;
   if (kitchenIncluded !== null) ref.kitchenIncluded = kitchenIncluded;
 
+  // Kitchen and bathroom "what are you upgrading" chips scope the estimate: a
+  // partial subset prices below a full remodel. Only pass them for those two
+  // projects; other projects' chips describe inherent build components, not
+  // optional finish scope, and must not scope the price.
+  if (effectiveProject === "kitchen" || effectiveProject === "bathroom") {
+    ref.upgradeScope = addOns.length > 0 ? [...addOns] : null;
+  }
+
   return ref;
 }
 
@@ -1312,7 +1320,9 @@ export function EstimateCalculator({
     <div className="mt-5 scroll-mt-20" ref={chipsRef}>
       <p className={stepLabel}>{stepNo("upgrades")} &middot; {config.chipsLabel}</p>
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
-        Select all that apply. Optional, and it helps us understand your scope.
+        {effectiveProject === "kitchen" || effectiveProject === "bathroom"
+          ? "Pick only the parts you're redoing, or leave blank for a full remodel. This adjusts your range."
+          : "Select all that apply. Optional, and it helps us understand your scope."}
       </p>
       <div
         className="grid grid-cols-2 sm:grid-cols-4 gap-2.5"

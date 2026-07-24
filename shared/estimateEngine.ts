@@ -52,6 +52,15 @@ export interface EstimateRefinements {
   /** Whole-home: whether the kitchen is part of the project. */
   kitchenIncluded: boolean | null;
   aduConfig: AduConfig | null;
+  /**
+   * Kitchen and bathroom: which upgrade components the homeowner is actually
+   * redoing (the "what are you upgrading" chips). null or an empty array means
+   * "not specified", which is priced as a full typical remodel. A non-empty
+   * subset scopes the estimate down: unselected components have their share of
+   * the variable cost removed, while fixed work (demolition, rough plumbing,
+   * permits, project management) stays in regardless. See UPGRADE_SCOPE_WEIGHTS.
+   */
+  upgradeScope: string[] | null;
 }
 
 /** A fully-specified estimate input. Required before any range is calculated. */
@@ -353,6 +362,7 @@ export const EMPTY_REFINEMENTS: EstimateRefinements = {
   bathroomCount: null,
   kitchenIncluded: null,
   aduConfig: null,
+  upgradeScope: null,
 };
 
 /** Estimator starting state: nothing selected, no implicit defaults. */
@@ -1210,6 +1220,51 @@ function getModuleAdjustment(
   return { low, high };
 }
 
+/**
+ * How much of a full kitchen or bathroom each upgrade chip accounts for.
+ *
+ * These are the "what are you upgrading" chips. A homeowner redoing only some
+ * of them is doing a partial remodel that should cost less than a full one, but
+ * not proportionally less: demolition, rough plumbing, permits and project
+ * management happen regardless of which finishes are touched. So each weight is
+ * the component's share of the VARIABLE cost only, and the fixed remainder
+ * (1 minus the sum of the weights) is always charged.
+ *
+ * Values are informed by the component catalog (see costCatalog.ts): a kitchen
+ * is cabinet-dominated, a bathroom is split across the wet area, tile and
+ * vanity. Selecting every chip reproduces the full base rate exactly, so the
+ * source-fidelity check is untouched; selecting a subset scopes down; selecting
+ * none is treated as "not specified" and priced as a full typical remodel.
+ *
+ * Only kitchen and bathroom have finish-scope chips. Additions and ADUs list
+ * what a build inherently includes (foundation, framing), which is not optional
+ * and therefore does not scope the price.
+ */
+const UPGRADE_SCOPE_WEIGHTS: Partial<Record<ProjectType, Record<string, number>>> = {
+  kitchen: { cabinets: 0.24, counters: 0.12, flooring: 0.06, lighting: 0.06 },
+  bathroom: { shower: 0.1, tub: 0.08, vanity: 0.1, tile: 0.12 },
+};
+
+/**
+ * Scope factor in [fixedFraction, 1]. 1.0 when the project has no scope chips,
+ * or when the homeowner has not specified a subset (null/empty), or when they
+ * selected everything. Below 1.0 for a genuine partial scope.
+ */
+export function getUpgradeScopeMultiplier(
+  project: ProjectType,
+  scope: string[] | null | undefined,
+): number {
+  const weights = UPGRADE_SCOPE_WEIGHTS[project];
+  if (!weights) return 1;
+  if (!scope || scope.length === 0) return 1; // not specified -> full typical
+
+  const total = Object.values(weights).reduce((sum, w) => sum + w, 0);
+  const fixedFraction = 1 - total;
+  const selected = scope.reduce((sum, id) => sum + (weights[id] ?? 0), 0);
+  // Clamp so an unknown id or a superset can never push above the full rate.
+  return Math.min(1, fixedFraction + selected);
+}
+
 export function calculateEstimate(input: EstimateInput, userRefinementCount = 0): EstimateResult {
   const finish = normalizeFinishLevel(input.project, input.finish);
   const safeInput: EstimateInput = finish === input.finish ? input : { ...input, finish };
@@ -1258,9 +1313,17 @@ export function calculateEstimate(input: EstimateInput, userRefinementCount = 0)
       ? Math.max(1, input.refinements.bathroomCount)
       : 1;
 
+  // Partial-scope discount for kitchen and bathroom: doing only some of the
+  // upgrade components costs less than a full remodel. 1.0 when the scope is
+  // unspecified or complete, so a typical estimate is unchanged.
+  const scopeMult = getUpgradeScopeMultiplier(
+    safeInput.project,
+    input.refinements.upgradeScope,
+  );
+
   const center = Math.max(
     1000,
-    (baseMid * sizeMult * refMid + moduleMid) * bathroomInstances,
+    (baseMid * sizeMult * refMid + moduleMid) * bathroomInstances * scopeMult,
   );
 
   // The BAND starts at the category's own natural spread and TIGHTENS as the

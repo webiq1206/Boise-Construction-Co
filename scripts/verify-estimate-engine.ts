@@ -618,6 +618,81 @@ for (const project of projects) {
   }
 }
 
+// 10. UPGRADE SCOPE. Kitchen and bathroom "what are you upgrading" chips scope
+//     the estimate down for a partial remodel. The invariants that keep this
+//     honest: an unspecified or complete scope reproduces the full rate exactly
+//     (so source fidelity holds), a partial scope always costs strictly less
+//     than the full remodel, and adding a component never lowers the price.
+const SCOPE_CHIPS: Partial<Record<ProjectType, string[]>> = {
+  kitchen: ["cabinets", "counters", "flooring", "lighting"],
+  bathroom: ["shower", "tub", "vanity", "tile"],
+};
+for (const project of projects) {
+  const chips = SCOPE_CHIPS[project];
+  if (!chips) {
+    // A project without scope chips must be completely unaffected by the field.
+    const cfg = getProjectSizeConfig(project);
+    const withScope = calculateEstimate({
+      project,
+      finish: getAvailableFinishLevels(project)[0],
+      sqft: cfg.baselineSqft,
+      refinements: { ...EMPTY_REFINEMENTS, upgradeScope: ["anything"] },
+    });
+    const without = calculateEstimate({
+      project,
+      finish: getAvailableFinishLevels(project)[0],
+      sqft: cfg.baselineSqft,
+      refinements: EMPTY_REFINEMENTS,
+    });
+    assert(
+      withScope.priceLow === without.priceLow && withScope.priceHigh === without.priceHigh,
+      `${project}: upgradeScope must not affect a project with no scope chips`,
+    );
+    sweepChecks++;
+    continue;
+  }
+
+  const cfg = getProjectSizeConfig(project);
+  for (const finish of getAvailableFinishLevels(project)) {
+    const base = { project, finish, sqft: cfg.baselineSqft } as const;
+    const full = calculateEstimate({ ...base, refinements: EMPTY_REFINEMENTS });
+    const allSelected = calculateEstimate({
+      ...base,
+      refinements: { ...EMPTY_REFINEMENTS, upgradeScope: [...chips] },
+    });
+
+    // None specified and all selected both mean a full remodel.
+    assert(
+      allSelected.priceLow === full.priceLow && allSelected.priceHigh === full.priceHigh,
+      `${project}/${finish}: selecting every upgrade chip must equal the full base rate`,
+    );
+    sweepChecks++;
+
+    // A single-component partial scope must cost strictly less than the full
+    // remodel, and progressively adding components must never lower the price.
+    let prev = 0;
+    for (let i = 1; i <= chips.length; i++) {
+      const subset = chips.slice(0, i);
+      const r = calculateEstimate({
+        ...base,
+        refinements: { ...EMPTY_REFINEMENTS, upgradeScope: subset },
+      });
+      if (i < chips.length) {
+        assert(
+          r.priceHigh < full.priceHigh,
+          `${project}/${finish}: partial scope (${subset.join("+")}) must cost less than a full remodel`,
+        );
+      }
+      assert(
+        r.priceLow >= prev,
+        `${project}/${finish}: adding an upgrade lowered the price at ${subset.join("+")}`,
+      );
+      prev = r.priceLow;
+      sweepChecks++;
+    }
+  }
+}
+
 console.log(
   `All estimate engine checks passed (${sweepChecks} exhaustive invariant checks across every project, finish, size step and scope ladder).`,
 );
