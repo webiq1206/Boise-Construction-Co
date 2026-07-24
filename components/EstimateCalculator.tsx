@@ -504,18 +504,29 @@ export function EstimateCalculator({
   const allChosenScrolled  = useRef(false);
   const pendingScrollTarget = useRef<(() => HTMLElement | null) | null>(null);
 
-  /* Auto-scroll is MOBILE ONLY. On desktop the estimator fits on screen and
-     the page must never move on its own. The scroll position is computed
-     manually (not scrollIntoView) so the step heading always lands below the
-     sticky site header: we measure the real header height at scroll time,
-     which holds on iOS Safari where fixed offsets are unreliable. */
+  /* Auto-scroll runs on every viewport. As each step completes the page
+     advances to the next section so the visitor is not left hunting for what
+     appeared below the fold. The position is computed manually (not
+     scrollIntoView) so the step heading always lands just below the sticky
+     site header: we measure the real header height at scroll time, which holds
+     on iOS Safari where fixed offsets are unreliable.
+
+     Behaviour differs only in feel: instant on mobile, where iOS smooth-scroll
+     is janky and a moving page under a thumb is disorienting, and smooth on
+     desktop, where a gentle glide reads as guidance rather than a jump. A user
+     who prefers no motion (prefers-reduced-motion) gets instant everywhere. */
   function scrollToStep(el: HTMLElement | null) {
     if (!el || typeof window === "undefined") return;
-    if (window.innerWidth >= 768) return;
     const header = document.querySelector("header");
     const headerH = header ? header.getBoundingClientRect().height : 64;
     const top = el.getBoundingClientRect().top + window.scrollY - headerH - 16;
-    window.scrollTo({ top: Math.max(0, top), behavior: "instant" as ScrollBehavior });
+    const isDesktop = window.innerWidth >= 768;
+    const prefersReducedMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const behavior: ScrollBehavior =
+      isDesktop && !prefersReducedMotion ? "smooth" : "instant";
+    window.scrollTo({ top: Math.max(0, top), behavior });
   }
   /* Coalesces all scrolls requested in the same frame into exactly ONE scroll.
      The FIRST requested target wins: effects for earlier steps schedule first,
@@ -524,13 +535,30 @@ export function EstimateCalculator({
   function scheduleScroll(getEl: () => HTMLElement | null): boolean {
     if (pendingScrollTarget.current !== null) return false;
     pendingScrollTarget.current = getEl;
-    requestAnimationFrame(() =>
-      requestAnimationFrame(() => {
-        const getTarget = pendingScrollTarget.current;
-        pendingScrollTarget.current = null;
-        if (getTarget) scrollToStep(getTarget());
-      }),
-    );
+
+    // Fire exactly once, whichever timer wins. The double-rAF path waits for
+    // the new section to paint before measuring, which is what keeps the step
+    // heading landing in the right place. But rAF is throttled or suspended in
+    // background tabs and under load on some mobile browsers, and if it never
+    // fired the scroll would silently fail AND leave pendingScrollTarget stuck,
+    // disabling every later scroll. The setTimeout is the floor: it guarantees
+    // the scroll runs and the sentinel clears even when rAF does not.
+    let done = false;
+    const run = () => {
+      if (done) return;
+      done = true;
+      const getTarget = pendingScrollTarget.current;
+      pendingScrollTarget.current = null;
+      if (getTarget) scrollToStep(getTarget());
+    };
+
+    if (typeof requestAnimationFrame === "function") {
+      requestAnimationFrame(() => requestAnimationFrame(run));
+    }
+    // 80ms comfortably clears a normal two-frame paint (~32ms), so on a healthy
+    // browser rAF still wins and this never runs; it only takes over when rAF
+    // is being throttled.
+    setTimeout(run, 80);
     return true;
   }
 

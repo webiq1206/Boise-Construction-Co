@@ -160,8 +160,14 @@ const DIRECT_COMPONENTS: Record<ProjectType, ComponentDef[]> = {
     { id: "electrical", label: "Electrical and lighting", unit: "each", share: 0.06, quantity: { kind: "per-sqft-count", divisor: 45 }, group: "direct", note: "Recessed cans, circuits, switches, and under-cabinet lighting." },
     { id: "drywall-paint-trim", label: "Drywall, paint, and trim", unit: "square foot", share: 0.07, quantity: { kind: "per-sqft", factor: 1.0 }, group: "direct" },
     { id: "demolition", label: "Demolition and disposal", unit: "allowance", share: 0.04, quantity: { kind: "lot" }, group: "direct", note: "Tear-out, dumpster, and haul-away." },
-    { id: "appliance-install", label: "Appliance installation", unit: "allowance", share: 0.015, quantity: { kind: "lot" }, group: "direct", note: "Installation only. Appliances are client-supplied." },
-    { id: "hardware-misc", label: "Hardware and miscellaneous", unit: "allowance", share: 0.04, quantity: { kind: "lot" }, group: "direct" },
+    // No appliance-installation line: appliances are client-supplied and the
+    // company does not install them, which the exclusions state plainly. A line
+    // reading "Appliance installation" in the breakdown contradicted that and
+    // read as a service offered. Its 0.015 share was folded into the
+    // miscellaneous line below, so the kitchen direct shares still total 0.72
+    // and no price moved; the money is simply no longer labeled as appliance
+    // work the company does not do.
+    { id: "hardware-misc", label: "Hardware and miscellaneous", unit: "allowance", share: 0.055, quantity: { kind: "lot" }, group: "direct", note: "Cabinet hardware, fasteners, surface protection, final detailing, and site cleanup." },
   ],
   bathroom: [
     { id: "shower-tub", label: "Shower or tub system", unit: "allowance", share: 0.15, quantity: { kind: "lot" }, group: "direct", note: "Pan, valve, glass, and surround." },
