@@ -1180,7 +1180,7 @@ export function EstimateCalculator({
      the gate form is submitted. The onProfileResolved handler snaps sqft to the
      home's measured interior square footage, bounded by the project range. */
   const addressStep = (
-    <div className="mt-6" ref={addressStepRef}>
+    <div className="mt-6 scroll-mt-20" ref={addressStepRef}>
       <p className={stepLabel}>{stepNo("address")} &middot; Your property address</p>
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
         Confirms we serve your area and auto-fills your home size if we find a match.
@@ -1215,7 +1215,7 @@ export function EstimateCalculator({
 
   /* Step 3 - Layout / type (drives refinement complexity) */
   const subtypeGrid = (
-    <div ref={layoutRef}>
+    <div className="scroll-mt-20" ref={layoutRef}>
       <p className={stepLabel}>{stepNo("layout")} &middot; {config.gridLabel}</p>
       <div className="grid grid-cols-2 gap-2.5" role="group" aria-label={config.gridLabel}>
         {config.subtypes.map((opt) => {
@@ -1255,7 +1255,7 @@ export function EstimateCalculator({
      layout pre-sets a smart default; the slider fine-tunes for accuracy. */
   const sizePct = ((sqft - sizeConfig.min) / (sizeConfig.max - sizeConfig.min)) * 100;
   const sizeGrid = (
-    <div className="mt-6" ref={sizeRef}>
+    <div className="mt-6 scroll-mt-20" ref={sizeRef}>
       <div className="flex items-baseline justify-between mb-3">
         <p className={cn(stepLabel, "mb-0")}>{stepNo("size")} &middot; About how big?</p>
         <span
@@ -1293,7 +1293,7 @@ export function EstimateCalculator({
 
   /* Step 4 - Upgrades (optional add-ons) */
   const chipsRow = (
-    <div className="mt-5" ref={chipsRef}>
+    <div className="mt-5 scroll-mt-20" ref={chipsRef}>
       <p className={stepLabel}>{stepNo("upgrades")} &middot; {config.chipsLabel}</p>
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
         Select all that apply. Optional, and it helps us understand your scope.
@@ -1410,7 +1410,7 @@ export function EstimateCalculator({
   /* Whole-home: bathroom count. The published whole-home rate already assumes
      two, so this prices the difference rather than the whole thing. */
   const bathCountRow = (
-    <div className="mt-5" ref={bathRef}>
+    <div className="mt-5 scroll-mt-20" ref={bathRef}>
       <p className={stepLabel}>{stepNo("bathcount")} &middot; How many bathrooms?</p>
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/80">
         {effectiveProject === "whole-home"
@@ -1471,7 +1471,7 @@ export function EstimateCalculator({
             { value: false, label: "No", sub: "Leaving the kitchen as is" },
           ];
     return (
-      <div className="mt-5" ref={kitchenRef}>
+      <div className="mt-5 scroll-mt-20" ref={kitchenRef}>
         <p className={stepLabel}>{stepNo("kitchen")} &middot; {label}</p>
         <div className="grid grid-cols-2 gap-2">
           {opts.map((opt) => {
@@ -1508,7 +1508,7 @@ export function EstimateCalculator({
      competence rather than as a form: the estimator already understands the
      project. Editing is one tap away for the minority who want it. */
   const typicalPanel = (
-    <div className="mt-6 rounded-md border border-inverse-foreground/[0.14] bg-inverse-foreground/[0.04] p-4" ref={typicalRef}>
+    <div className="mt-6 scroll-mt-20 rounded-md border border-inverse-foreground/[0.14] bg-inverse-foreground/[0.04] p-4" ref={typicalRef}>
       <p className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground">
         Typical for a {FINISH_LABELS[finish]} {config.tabLabel.toLowerCase()}
       </p>
@@ -1544,7 +1544,7 @@ export function EstimateCalculator({
 
   /* Finish level (options tied to effectiveProject) */
   const finishRow = (
-    <div className="mt-5" ref={finishRef}>
+    <div className="mt-5 scroll-mt-20" ref={finishRef}>
       <p className={stepLabel}>{stepNo("finish")} &middot; Finish level</p>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {availFinish.map((level) => {
@@ -1580,7 +1580,7 @@ export function EstimateCalculator({
 
   /* Live planning range - always visible, updates as selections change */
   const resultPanel = (
-    <div className="mt-8" ref={resultRef} aria-live="polite" aria-atomic="true">
+    <div className="mt-8 scroll-mt-20" ref={resultRef} aria-live="polite" aria-atomic="true">
       <div className="space-y-5 border-t border-inverse-foreground/15 pt-6">
           {/* Price range */}
           <div>
@@ -1915,7 +1915,7 @@ export function EstimateCalculator({
 
   /* CTA shown after user configures their estimate -- clicking opens the gate form */
   const calculateCta = (
-    <div className="mt-8 border-t border-inverse-foreground/15 pt-6" ref={ctaAreaRef}>
+    <div className="mt-8 scroll-mt-20 border-t border-inverse-foreground/15 pt-6" ref={ctaAreaRef}>
       <Button
         type="button"
         onClick={() => setGateOpen(true)}
@@ -1936,7 +1936,7 @@ export function EstimateCalculator({
     config.subtypes.find((s) => s.id === subtype)?.title ?? config.tabLabel;
 
   const leadsGatePanel = (
-    <div className="mt-8 border-t border-inverse-foreground/15 pt-6" ref={gateFormRef} aria-label="Unlock your estimate">
+    <div className="mt-8 scroll-mt-20 border-t border-inverse-foreground/15 pt-6" ref={gateFormRef} aria-label="Unlock your estimate">
       <div className="space-y-5">
         {/* Header */}
         <div className="flex items-start gap-3">
