@@ -9,7 +9,6 @@ import { ValueOverheadSection } from "@/components/sections/ValueOverheadSection
 import { WhyChooseUsSection } from "@/components/sections/WhyChooseUsSection";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { ProcessSection } from "@/components/sections/ProcessSection";
-import { FeaturedProjectSection } from "@/components/sections/FeaturedProjectSection";
 import { BudgetInclusionsSection } from "@/components/sections/BudgetInclusionsSection";
 import { ProjectGallerySection } from "@/components/sections/ProjectGallerySection";
 import { BrandStatementBand } from "@/components/sections/BrandStatementBand";
@@ -20,7 +19,7 @@ import { CONSULT_BULLETS, SITE_TAGLINE } from "@/shared/siteContent";
 import { CTA_PRIMARY } from "@/shared/ctaCopy";
 import { HomePageSchema } from "@/components/seo/HomePageSchema";
 import { buildCanonical } from "@/lib/page-metadata";
-import { SITE_IMAGES, GALLERY_IMAGES } from "@/shared/siteImages";
+import { GALLERY_IMAGES } from "@/shared/siteImages";
 
 const EstimateCalculator = dynamic(
   () =>
@@ -65,21 +64,39 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <div className="flex flex-col pb-20 md:pb-0 bg-background">
+      {/* PAGE ORDER IS THE SALES CONVERSATION, IN THE ORDER A HOMEOWNER HAS IT.
+
+          1. Hero            who we are, and the one action we want
+          2. Where the money goes   frames price before we quote one
+          3. Estimator       the number - the question every visitor arrives with
+          4. What's included what that number actually covers
+          5. Services        what we do
+          6. Our work        proof we do it well
+          7. Why us          why this company rather than another
+          8. Process         what happens after they say yes
+          9. Brand band      the emotional close
+          10. FAQ            the last objections
+          11. Consultation   the ask
+
+          The estimator sits third on purpose. It is the site's primary lead
+          generator and the hero's own call to action points at it, so burying
+          it below services, process, a featured project and the gallery meant
+          the highest-intent visitors scrolled past five sections to reach the
+          thing they came for. Everything above it now exists only to make the
+          number land well; everything below it answers what the number raised. */}
       <HomePageSchema />
       <HeroSection />
-      <ServicesGrid />
-      <ProcessSection />
-      <FeaturedProjectSection />
-      <ProjectGallerySection
-        limit={6}
-        showViewAll={true}
-        excludeServiceTypes={["whole-home-remodel"]}
-      />
       <ValueOverheadSection />
       <EstimateCalculator />
-      <BrandStatementBand />
-      <WhyChooseUsSection limit={5} />
       <BudgetInclusionsSection />
+      <ServicesGrid />
+      {/* No longer excludes whole-home: the featured before/after slider that
+          used to carry that project was removed, so the gallery is now the only
+          place it appears. */}
+      <ProjectGallerySection limit={6} showViewAll={true} />
+      <WhyChooseUsSection limit={5} />
+      <ProcessSection />
+      <BrandStatementBand />
       <FAQSection />
       <Section id="consult" divider className="relative overflow-hidden pb-28 md:pb-28">
         {/* Warm, dimmed lifestyle photo grounds the closing section. Directional

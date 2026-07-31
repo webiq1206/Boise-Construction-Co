@@ -96,7 +96,7 @@ export const DIFFERENTIATORS: Differentiator[] = [
  */
 export const PROOF_STATS = {
   established: "2020",
-  projectsCompleted: "200+",
+  projectsCompleted: "100+",
 } as const;
 
 /**
