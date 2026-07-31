@@ -425,6 +425,72 @@ export function takeoffForRange(
 export const CLIENT_HIDDEN_COMPONENT_IDS = new Set(["project-management", "overhead-profit"]);
 
 /**
+ * Vocabulary that must never appear on a lead-facing surface.
+ *
+ * The hidden lines are removed by `takeoffForClient`, but that only protects
+ * the surfaces that remember to call it. This list is what the build actually
+ * asserts against the fully rendered customer email, so a new surface that
+ * forgets the client view fails `npm run verify:estimate` rather than shipping.
+ *
+ * The component labels are derived from the catalog rather than retyped, so
+ * renaming a hidden line moves the guard with it and cannot silently open a
+ * hole. The extra entries are the wordings used on paper proposals: an issued
+ * proposal (EST-10079) carried a visible "Contractor OH&P" line, which is the
+ * exact failure this guard exists to prevent.
+ *
+ * Matching is case-insensitive and substring-based, so "overhead" also catches
+ * "Overhead & Profit" and "overhead and profit". That is deliberately blunt:
+ * the estimate and both emails have no legitimate use for these words. The
+ * marketing copy that does use "overhead" ("Don't pay for our overhead") lives
+ * on the homepage, which this guard does not cover.
+ */
+export const CLIENT_FORBIDDEN_PHRASES: string[] = Array.from(
+  new Set([
+    ...getComponents("kitchen")
+      .filter((c) => CLIENT_HIDDEN_COMPONENT_IDS.has(c.id))
+      .map((c) => c.label),
+    "overhead",
+    "profit",
+    "OH&P",
+    "supervision",
+    // Extended 2026-07 for the line-item cost engine. The admin email now
+    // carries a real internal breakdown - trade costs, gross profit, the
+    // applied margin and its markup equivalent - so the customer email has to
+    // be guarded against that vocabulary too, not just the old soft-cost
+    // labels. "Contingency" is deliberately NOT here: it renders as a visible
+    // scope line in the client view by design, and is a cost the homeowner is
+    // genuinely told about rather than an internal figure.
+    "margin",
+    "markup",
+    "internal cost",
+    "unit cost",
+    "our cost",
+    "cost code",
+    "gross profit",
+  ]),
+);
+
+/**
+ * The first forbidden phrase present in `html`, or null if it is clean.
+ * Shared by the build guard and any runtime caller that wants to assert before
+ * sending.
+ */
+export function findForbiddenPhrase(html: string): string | null {
+  // Test the VISIBLE TEXT, not the markup. Email HTML is styled inline, so
+  // every "margin:12px" would otherwise trip the "margin" rule and the guard
+  // would be useless noise. Strip style/script blocks and all tags first, which
+  // also means the check measures what a homeowner actually reads.
+  const haystack = html
+    .replace(/<(style|script)[\s\S]*?<\/\1>/gi, " ")
+    .replace(/<[^>]*>/g, " ")
+    .toLowerCase();
+  for (const phrase of CLIENT_FORBIDDEN_PHRASES) {
+    if (haystack.includes(phrase.toLowerCase())) return phrase;
+  }
+  return null;
+}
+
+/**
  * The takeoff as a client is allowed to see it.
  *
  * Removes the hidden lines and redistributes their dollars across every
@@ -503,6 +569,22 @@ export function formatTakeoffAmount(cost: number): string {
  */
 export const TAKEOFF_BASIS_NOTICE =
   "This breakdown shows where money typically goes on a project of this size and finish level. Individual lines are typical allocations, not itemized pricing, and the actual split shifts with your selections and site conditions.";
+
+/**
+ * The client-facing counterpart, used where the scope renders WITHOUT dollars.
+ *
+ * Per-line dollar figures were removed from every lead-facing surface: the
+ * numbers are proportional allocations of a validated total rather than priced
+ * quantities, so printing "$11,880 cabinetry" next to a line both claimed a
+ * precision the model does not have and handed a homeowner a negotiating
+ * anchor for work nobody had walked yet. The company's own issued proposals
+ * (EST-10089) list scope without per-line pricing for the same reason.
+ *
+ * What survives is more useful and less dangerous: the trades in scope and the
+ * quantities the range was actually built from.
+ */
+export const TAKEOFF_SCOPE_NOTICE =
+  "These are the trades and quantities your range was built from. Exact quantities are confirmed during your in-home visit, and the final proposal prices each item individually.";
 
 /** Shares must sum to 1 per project or the takeoff cannot reconcile. */
 export function shareSum(project: ProjectType): number {

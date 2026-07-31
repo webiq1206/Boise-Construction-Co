@@ -17,10 +17,10 @@ import {
   takeoffForRange,
   takeoffForClient,
   formatQuantity,
-  formatTakeoffAmount,
-  TAKEOFF_BASIS_NOTICE,
+  TAKEOFF_SCOPE_NOTICE,
   type UnitCostOverrides,
 } from "@/shared/costCatalog";
+import { resolveQuotedRange } from "@/shared/costs/resolve";
 import { HOUSE_NUMBER_REGEX, extractZip } from "@/shared/addressValidation";
 import {
   type ProjectType,
@@ -44,6 +44,7 @@ import {
   calculateEstimate,
   buildStoredEstimate,
   countVisibleUserRefinements,
+  getMaxRefinementFields,
   getSetRefinementKeys,
   INCLUDED_SCOPE_NOTE,
   buildEstimateDisclosure,
@@ -622,9 +623,24 @@ export function EstimateCalculator({
     [effectiveProject, refinements],
   );
 
+  /**
+   * The quoted range now comes from the line-item cost engine.
+   *
+   * calculateEstimate still runs and still supplies everything that is not the
+   * price - ROI, the typical-inclusions list, the confidence label - and it
+   * remains the source of the market ceiling the cost engine's margin guard
+   * prices against. Only priceLow and priceHigh are replaced, so every consumer
+   * downstream (session storage, both emails, the CRM record) keeps working
+   * against the same shape it always had.
+   */
   const result = useMemo<EstimateResult>(() => {
     const input: EstimateInput = { project: effectiveProject, finish, sqft, refinements };
-    return calculateEstimate(input, userRefinementCount);
+    const guide = calculateEstimate(input, userRefinementCount);
+
+    const maxFields = getMaxRefinementFields(effectiveProject);
+    const detailRatio = maxFields > 0 ? userRefinementCount / maxFields : 0;
+    const range = resolveQuotedRange(effectiveProject, finish, sqft, refinements, detailRatio);
+    return range ? { ...guide, ...range } : guide;
   }, [effectiveProject, finish, sqft, refinements, userRefinementCount]);
 
   /* The visitor's literal card/chip choices, resolved to the exact labels shown
@@ -661,6 +677,13 @@ export function EstimateCalculator({
       "brc_estimate",
       JSON.stringify({
         ...buildStoredEstimate(input, userRefinementCount),
+        // buildStoredEstimate calls the guide engine directly, so without this
+        // the stored record carried guide prices while the panel above showed
+        // the line-item engine's. The consultation form, both emails and the
+        // CRM all read this record, so the two must not diverge: take the
+        // price from `result`, which is the number the visitor actually saw.
+        priceLow: result.priceLow,
+        priceHigh: result.priceHigh,
         // Carried alongside the engine result so the consultation form can
         // forward the visitor's literal choices to the emails. Without these
         // the emails could only show derived values (for example "moderate
@@ -1693,10 +1716,10 @@ export function EstimateCalculator({
             )}
           </div>
 
-          {/* Component breakdown. Collapsed by default: most homeowners want the
-              range, and the ones who want to know why it is that number get the
-              same line items the team sees. Lines are a typical allocation of a
-              validated total, so TAKEOFF_BASIS_NOTICE renders with them. */}
+          {/* Scope breakdown. Collapsed by default: most homeowners want the
+              range, and the ones who want to know what is behind it get the
+              trades and quantities it was built from. Deliberately no per-line
+              dollars - see TAKEOFF_SCOPE_NOTICE. */}
           <div className="border-t border-inverse-foreground/10 pt-4">
             <button
               type="button"
@@ -1706,7 +1729,7 @@ export function EstimateCalculator({
               aria-expanded={takeoffOpen}
             >
               <span className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground">
-                Where the money typically goes
+                The work this range covers
               </span>
               <ChevronDown
                 className={cn("h-4 w-4 text-inverse-muted transition-transform", takeoffOpen && "rotate-180")}
@@ -1728,20 +1751,23 @@ export function EstimateCalculator({
               const group = (g: "direct" | "soft") =>
                 takeoff.lines.filter((l) => l.group === g && l.cost > 0);
               const groupLabel = "text-[11.5px] tracking-[0.1em] uppercase text-inverse-muted/90 pt-2.5 pb-1";
+              // Scope and quantities only. Per-line dollars were removed from
+              // every lead-facing surface: they are proportional allocations of
+              // a validated total, not priced quantities, so showing them
+              // claimed a precision the model does not have and created a
+              // negotiating anchor before anyone had seen the house. See
+              // TAKEOFF_SCOPE_NOTICE.
               const row = (l: (typeof takeoff.lines)[number]) => {
                 const qty = formatQuantity(l);
                 return (
                   <div
                     key={l.id}
-                    className="flex items-baseline justify-between gap-3 text-[13.5px] text-inverse-muted leading-snug py-1"
+                    className="text-[13.5px] text-inverse-muted leading-snug py-1"
                     data-testid={`takeoff-line-${l.id}`}
                   >
                     <span>
                       {l.label}
                       {qty && <span className="text-inverse-muted/90"> ({qty})</span>}
-                    </span>
-                    <span className="tabular-nums whitespace-nowrap text-inverse-foreground/90">
-                      {formatTakeoffAmount(l.cost)}
                     </span>
                   </div>
                 );
@@ -1752,14 +1778,8 @@ export function EstimateCalculator({
                   {group("direct").map(row)}
                   <p className={groupLabel}>Running the job</p>
                   {group("soft").map(row)}
-                  <div className="flex items-baseline justify-between gap-3 text-[13.5px] pt-3 mt-2 border-t border-inverse-foreground/10">
-                    <span className="text-inverse-muted">Midpoint of your range</span>
-                    <span className="tabular-nums whitespace-nowrap text-inverse-foreground">
-                      {formatTakeoffAmount(takeoff.total)}
-                    </span>
-                  </div>
                   <p className="text-[12px] text-inverse-muted/90 pt-3 leading-relaxed">
-                    {TAKEOFF_BASIS_NOTICE}
+                    {TAKEOFF_SCOPE_NOTICE}
                   </p>
                 </div>
               );

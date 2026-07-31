@@ -129,15 +129,21 @@ export interface EstimateDisclosure {
 /**
  * Baseline inclusions that apply to every project, per the 2025 Boise
  * Remodeling Cost Guide. Listed ahead of the finish-specific scope so a
- * homeowner sees that permits and project management are covered rather than
+ * homeowner sees that permits and coordination are covered rather than
  * assuming they are extras.
+ *
+ * The coordination line is deliberately phrased as the benefit rather than as
+ * "project management". The homeowner still learns it is included and costs
+ * them nothing extra, but the estimate never uses the vocabulary of a priced
+ * management line - see CLIENT_FORBIDDEN_PHRASES in shared/costCatalog.ts for
+ * why that vocabulary is kept off every lead-facing surface.
  */
 const UNIVERSAL_INCLUDES = [
   "Design and planning",
   "Permits",
   "Demolition and disposal",
   "Labor and materials",
-  "Project management",
+  "One dedicated point of contact from start to finish",
   "Standard warranties",
 ];
 
@@ -568,21 +574,47 @@ export const CONFIDENCE_LABELS = PLANNING_DETAIL_LABELS;
  * rises across categories.
  */
 const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>> = {
+  /*
+   * Kitchen is calibrated 2026-07 against two issued estimates, not the guide.
+   *
+   * Every tier is scaled by 0.85 from the guide's published figures, which were
+   * refresh [18750, 31250], mid-range [43750, 68750], high-end [100000, 162500]
+   * and luxury [175000, 225000].
+   *
+   * Evidence. EST-10088 billed $34,335 and EST-10049 billed $31,850 for its
+   * kitchen. Neither is directly comparable, because both carry a narrower
+   * scope than this catalog's kitchen: EST-10088 has no flooring and no
+   * backsplash, EST-10049 has no flooring, demolition, drywall or paint in the
+   * kitchen line. Normalizing each to the full component scope in
+   * costCatalog.ts (by the share of direct work it actually covers, and
+   * removing the client-supplied appliances EST-10049 lists) puts a
+   * full-scope, mid-range equivalent at about $35,250 and $46,330 against a
+   * model that quoted $49,500. That is 0.71x and 0.94x.
+   *
+   * The two disagree, so 0.85 is deliberately the conservative middle rather
+   * than the lower reading. Cutting to 0.71 would match EST-10088 but would
+   * under-quote a genuinely full-scope kitchen, which is the more expensive
+   * mistake: the floor is what a homeowner holds you to. One more closed
+   * kitchen with its square footage recorded settles this properly.
+   *
+   * NOTE none of the reference estimates state square footage, so the 250 sq ft
+   * baseline is assumed rather than measured. See ESTIMATOR-CALIBRATION.md.
+   */
   kitchen: {
     refresh: {
-      low: 18750, high: 31250, roi: 72,
+      low: 15900, high: 26600, roi: 72,
       included: ["New countertops (laminate/entry quartz)", "Cabinet repaints or door replacement", "Appliance selection guidance (appliances are client-supplied)", "New plumbing fixtures", "LVP or tile flooring"],
     },
     "mid-range": {
-      low: 43750, high: 68750, roi: 74,
+      low: 37200, high: 58400, roi: 74,
       included: ["Semi-custom cabinetry", "Quartz or granite countertops", "Appliance selection guidance (appliances are client-supplied)", "Tile backsplash", "Updated plumbing and electrical"],
     },
     "high-end": {
-      low: 100000, high: 162500, roi: 70,
+      low: 85000, high: 138100, roi: 70,
       included: ["Custom or semi-custom cabinetry", "Premium stone countertops", "Appliance selection guidance (appliances are client-supplied)", "Island addition or expansion", "Custom tile work and lighting redesign"],
     },
     luxury: {
-      low: 175000, high: 225000, roi: 62,
+      low: 148800, high: 191300, roi: 62,
       included: ["Fully custom cabinetry", "Exotic stone countertops", "Appliance selection guidance (appliances are client-supplied)", "Structural layout changes", "Smart home integration"],
     },
   },
@@ -604,21 +636,42 @@ const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>>
       included: ["Steam shower system", "Spa soaking tub", "Heated floors and walls", "Full layout reconfiguration", "Designer fixtures throughout"],
     },
   },
+  /*
+   * Whole-home is an OWNER PRICING DECISION (2026-07), not the guide and not a
+   * regression against closed jobs.
+   *
+   * Every tier scaled by 4/3 from the guide, which published refresh
+   * [54000, 90000], mid-range [135000, 225000], high-end [270000, 387000] and
+   * luxury [450000, 765000]. The factor is set by the mid-range target: an
+   * 1,800 sq ft mid-range whole-home now quotes $180,000 to $240,000, a $100/sf
+   * floor, against $135,000 to $180,000 ($75/sf) before.
+   *
+   * Evidence status. The range test found no systematic bias to correct: the
+   * two reference jobs erred in OPPOSITE directions (VA Proposal 0.84x, i.e.
+   * the engine quoting LOW, and a water-damage repair 1.45x high, which is not
+   * a remodel). So the data did not contradict an increase, and the one job
+   * that was a real renovation said the engine was low. The size of the
+   * increase is the owner's market judgement. Set the factor back to 1 to
+   * restore the guide.
+   *
+   * Tier spacing improves: mid-range to high-end was an unusually wide 1.93x
+   * and the ladder is unchanged because all four tiers moved together.
+   */
   "whole-home": {
     refresh: {
-      low: 54000, high: 90000, roi: 65,
+      low: 72000, high: 120000, roi: 65,
       included: ["Kitchen and bath cosmetic refresh", "New flooring throughout", "Fresh interior paint", "Updated light fixtures"],
     },
     "mid-range": {
-      low: 135000, high: 225000, roi: 68,
+      low: 180000, high: 300000, roi: 68,
       included: ["Kitchen and bath mid-range renovation", "Open-concept conversion", "New flooring throughout", "Updated HVAC and windows"],
     },
     "high-end": {
-      low: 270000, high: 387000, roi: 62,
+      low: 360000, high: 516000, roi: 62,
       included: ["Custom kitchen and bath renovation", "Structural modifications", "New windows and doors", "High-end finishes throughout"],
     },
     luxury: {
-      low: 450000, high: 765000, roi: 55,
+      low: 600000, high: 1020000, roi: 55,
       included: ["Full gut renovation", "Structural engineering", "Smart home system", "Premium finishes throughout", "New HVAC, electrical and plumbing"],
     },
   },
@@ -1013,6 +1066,24 @@ export function buildDynamicScope(input: EstimateInput): string[] {
  * for paint and flooring, more than a bathroom costs per foot. Two is the only
  * count that stays believable at every finish level, and 1,800 sq ft with one
  * kitchen and two baths is the standard Treasure Valley three-bed home.
+ *
+ * STALE AS OF 2026-07 - the table above no longer reconciles. Whole-home was
+ * raised by 4/3 (owner pricing decision) and kitchen was cut to 0.85 (calibrated
+ * against two issued estimates), while the bathroom rate did not move. Re-running
+ * the same arithmetic on the current numbers leaves $75/sq ft of residual at two
+ * baths, where the original solve accepted $37 and rejected $51 as impossible.
+ *
+ * The count is deliberately LEFT AT 2 rather than re-solved. Re-solving would
+ * push it to about 4, and because this is the figure the stated-bathroom-count
+ * adjustment measures FROM, raising it would quietly discount every home with
+ * fewer than four baths and cancel out the increase that was just applied.
+ *
+ * The honest reading is that the residual test itself is too crude now: it
+ * treats everything that is not a kitchen or a bath as "flooring, paint and
+ * trim", when whole-home scope also carries HVAC, windows, electrical and
+ * plumbing. Settling this properly needs a closed whole-home job with its
+ * square footage and bathroom count, not more arithmetic on published rates.
+ * See ESTIMATOR-CALIBRATION.md.
  */
 const WHOLE_HOME_ASSUMED_BATHS = 2;
 

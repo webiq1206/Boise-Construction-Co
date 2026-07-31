@@ -108,7 +108,7 @@ export const WAVE1_COST_CLUSTERS: BlogPostData[] = [
     'Whole Home Remodel Cost Boise',
     'Whole Home Remodel Cost Boise Idaho',
     'Whole-home remodel cost planning for Boise, Meridian, and Eagle: phasing, contingency, MEP upgrades, timelines, and budgeting tips.',
-    'Whole-home programs often plan between $150,000 and $400,000+ depending on scope and structural work.',
+    'Whole-home programs often plan between $180,000 and $425,000+ depending on scope and structural work.',
     ['whole-home', 'cost', 'boise'],
   ),
   makeCostCluster(

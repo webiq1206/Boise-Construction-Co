@@ -72,6 +72,79 @@ is now asserted against the calibrated numbers rather than the guide. The
 guide values are recorded in a comment there and in `PRICE_MATRIX` so the
 departure stays visible and reversible.
 
+**Kitchen, calibrated 2026-07.** Every tier scaled by **0.85** from the guide.
+
+Two issued estimates: EST-10088 billed $34,335 (pre-discount) and EST-10049's
+kitchen billed $31,850. Neither is directly comparable, because both carry a
+narrower scope than this catalog's kitchen: EST-10088 has no flooring and no
+backsplash, EST-10049 has no flooring, demolition, drywall or paint in the
+kitchen line. Normalizing each to the full component scope in `costCatalog.ts`
+(by the share of direct work it actually covers, and removing the
+client-supplied appliances EST-10049 lists) puts a full-scope, mid-range
+equivalent at about **$35,250** and **$46,330**, against a model quoting
+**$49,500**. That is 0.71x and 0.94x.
+
+| | Guide (was) | Calibrated (now) |
+|---|---|---|
+| refresh | $18,750 - $31,250 | $15,900 - $26,600 |
+| mid-range | $43,750 - $68,750 | $37,200 - $58,400 |
+| high-end | $100,000 - $162,500 | $85,000 - $138,100 |
+| luxury | $175,000 - $225,000 | $148,800 - $191,300 |
+
+A 250 sq ft L-shape mid-range kitchen now quotes **$38,000 to $46,000**, down
+from about $44,000 to $55,000.
+
+**The two data points disagree, so 0.85 is deliberately the conservative middle
+rather than the lower reading.** Cutting to 0.71 would match EST-10088 but would
+under-quote a genuinely full-scope kitchen, and the floor is the number a
+homeowner holds you to. This is the weakest of the three calibrated categories:
+one more closed kitchen **with its square footage recorded** settles it properly.
+
+**Whole-home, owner pricing decision 2026-07.** All tiers scaled by **4/3**.
+
+This one is a judgement call, not a regression, and is labelled as such. The
+range test found **no systematic bias to correct** - the two reference jobs
+erred in opposite directions - but the only one that was a real renovation (the
+VA Proposal) had the engine quoting **low** at 0.84x. The owner's position was
+that mid-range was too low, and the size of the correction is their market
+knowledge rather than anything in the data.
+
+The factor is set by the mid-range target: a $100/sq ft floor at the 1,800 sq ft
+reference. All four tiers moved together, so the ladder is unchanged.
+
+| | Guide (was) | Now |
+|---|---|---|
+| refresh | $54,000 - $90,000 | $72,000 - $120,000 |
+| mid-range | $135,000 - $225,000 | $180,000 - $300,000 |
+| high-end | $270,000 - $387,000 | $360,000 - $516,000 |
+| luxury | $450,000 - $765,000 | $600,000 - $1,020,000 |
+
+An 1,800 sq ft mid-range whole-home now quotes **$180,000 to $240,000**
+($100/sq ft floor), up from $135,000 to $180,000 ($75/sq ft). The VA Proposal
+moves from outside the range to **inside** it at 1,000-1,200 sq ft.
+
+Set the factor back to 1 to restore the guide.
+
+**Two consequences worth watching.**
+
+1. **The elasticity question at the top of the size curve is now sharper.**
+   Whole-home luxury at 8,000 sq ft quotes **$2.13M to $2.90M**. The 0.85
+   elasticity was already flagged as probably generous over that 4.4x span, and
+   a 4/3 uplift multiplies whatever error is there. If large-home quotes start
+   looking wrong, the elasticity is the lever, not the base rate.
+2. **`WHOLE_HOME_ASSUMED_BATHS` is now stale.** It was solved by subtracting a
+   kitchen and N baths from the whole-home figure and checking the residual was
+   believable, which accepted $37/sq ft at two baths and rejected $51 as
+   impossible. With whole-home up 4/3 and kitchen down to 0.85, that same
+   arithmetic now leaves **$75/sq ft** at two baths. It is deliberately left at
+   2: re-solving would push it to about 4, and since it is the figure the
+   stated-bathroom-count adjustment measures FROM, raising it would quietly
+   discount every home with fewer than four baths and cancel out the increase.
+   The residual test is simply too crude now - it treats everything that is not
+   a kitchen or bath as "flooring, paint and trim" when the scope also carries
+   HVAC, windows, electrical and plumbing. One closed whole-home job with square
+   footage and bathroom count settles it.
+
 **Room addition, derived 2026-07.** Not measured, but no longer the guide.
 
 The guide's addition numbers were internally contradictory: at every matched
@@ -198,6 +271,183 @@ estimator until reconciled.
 This is a real source, but it is still a published guide rather than a
 regression against closed jobs. The procedure below remains the way to confirm
 it against what you actually bill.
+
+## Reference estimates on file (2026-07)
+
+Seven owner-supplied estimates were measured against the live engine. They are
+recorded here because they are the closest thing to Step 1 below that exists so
+far, and because two of them are needed to justify the unit rates in
+`costCatalog.ts` if those are ever converted from derived to measured.
+
+| Estimate | Total | Modeled as | Engine midpoint | Ratio |
+|---|---|---|---|---|
+| Kitchen EST-10088 | $34,335 (pre-discount) | kitchen / mid-range @250sf | $49,500 | **1.44x high** |
+| Basement finish EST-10089 | $62,108 | basement / mid-range @900sf | $62,000 | **1.00x** |
+| Garage conversion EST-10080 | $24,695 | basement / mid-range @440sf | $33,500 | **1.36x high** |
+| VA Proposal EST-10079 | $133,808 | whole-home / mid-range @1200sf | $134,500 | **1.01x** |
+| Basement + main repairs EST-10049 | $92,938 | whole-home / mid-range @1500sf | $112,000 | 1.21x high |
+| Walden Addition EST-10010 | $187,470 | mixed addition + 2 baths + flooring | not directly comparable | - |
+| Cabinet proposal EST-10098 | $7,468 cabinets | not a whole project | - | - |
+
+**Caveats that still apply to these figures.**
+
+1. **Market — resolved.** Six of the seven are Pueblo / Pueblo West,
+   **Colorado**, not Boise, Idaho. The owner confirmed (2026-07) that both
+   markets are priced the same, so these are treated as valid reference jobs.
+   If that ever stops being true, kitchen is the category to revisit first.
+2. **No square footage.** Step 3 below sets rates at a **baseline size**, and
+   none of these documents state the area worked on. Every ratio above assumes
+   a size. This is the largest remaining source of error and the cheapest one
+   to remove: recording sqft on the next few closed jobs settles it.
+3. **Scope is not like-for-like.** The kitchen carried no flooring line and
+   client-supplied appliances; the basement had client-supplied tile, pan,
+   surround, toilet and vanities; EST-10049 is a water-damage repair. Each of
+   those makes the real number lower than a full remodel at the same size, so
+   the ratios above are read after normalizing for it (see kitchen, below).
+
+**What the numbers say.** Basement (1.00x) and whole-home (1.01x) land
+essentially on the money and were left alone. Addition and ADU gained no new
+evidence. **Kitchen was the only outlier**, and the gap sat in the base rate
+rather than the multipliers: with no refinements at all, kitchen mid-range at
+its 250 sq ft baseline quoted $49,500 against a $34,335 job, and the
+multipliers then stacked on top (custom cabinets + moderate layout + partial
+plumbing/electrical reached $69,000, or 2.01x). Per Step 3, the base is what
+moved. See the kitchen entry under calibrated categories.
+
+The garage conversion (EST-10080, $24,695) has no matching project type and was
+modeled as a basement, where it reads 1.36x high. That is a **missing category**
+rather than a basement error - a garage conversion has an existing slab, walls
+and roof, so it should not price like finishing a basement. Worth adding as its
+own type if garage conversions become a real share of the work.
+
+### Measured unit rates from EST-10010 (Walden Addition)
+
+The only reference document with a full unit-rate takeoff. These are the rates
+to reach for if `ComponentDef.unitCost` is ever converted from derived to
+measured, subject to the same Colorado-market caveat.
+
+| Trade | Rate |
+|---|---|
+| Site prep / grading labor | $80.30 /hr |
+| Concrete labor | $84.70 /hr |
+| Framing labor | $77.00 /hr |
+| Roofing labor | $69.30 /hr |
+| Insulation labor | $71.50 /hr |
+| Stucco labor | $77.00 /hr |
+| Excavation (crawl space) | $13.20 /cy |
+| Haul away soil | $16.50 /cy |
+| Foundation concrete | $166.75 /cy |
+| Formwork | $8.50 /sf |
+| Rebar | $1.44 /lf |
+| OSB sheathing 7/16 4x8 | $18.37 /ea |
+| 3/4" plywood subfloor | $52.64 /ea |
+| Architectural shingles | $143.75 /sq |
+| R-19 wall batts | $1.44 /sf |
+| R-38 ceiling batts | $2.01 /sf |
+| Stucco mix / color coat | $2.88 / $2.01 /sf |
+| Drywall (hung + finished) | $125-$144 /sheet-equivalent |
+| Baseboard / casing trim | $2.88 /lf |
+| Interior paint | $3.30 /sf, prime $1.44 /sf |
+| Carpet installed | $4.60 /sf |
+| LVP material / install | $4.02 / $3.30 /sf |
+| Floor tile allowance | $6.90 /sf |
+| Shower wall tile | $9.20 /sf |
+| Tile install (floor + surround) | $4,025-$5,175 /bath |
+| Rough plumbing | $4,000-$5,000 /bath |
+| Shower glass with door | $3,450 /ea |
+| Hollow-core prehung door | $181.70 /ea + $220 install |
+| Mini split installed | $5,000-$15,400 |
+
+Cross-checks from the other documents: cabinets ran **$16,678** for a full
+kitchen (EST-10088) and **$12,500** installed (EST-10049); a small cabinet
+system with shelving and a bench ran **$7,468** (EST-10098). Granite counters
+**$8,571** for a kitchen; kitchen counters with waterfall island **$9,350**.
+
+## Range accuracy test: bathroom, kitchen, whole-home (2026-07)
+
+Each reference job was normalized to the share of this catalog's direct scope it
+actually covers, then the question asked was **which tier and size reproduces
+it** rather than scoring against an asserted tier. That matters: scoring against
+an asserted tier mostly measures the tier guess. A first pass judged the Walden
+primary bath "high-end" and produced a false 2.10x alarm; read against its own
+scope (drop-in non-jetted tub, 5x3 pan insert, no radiant heat) it is plainly
+mid-range, where it lands at 1.08x.
+
+| Job | Tier | Full-scope equiv | Engine at judged tier | Result |
+|---|---|---|---|---|
+| Walden primary bath | mid-range | $28,591 | $27,000 - $35,000 | **1.08x, inside** |
+| Kitchen EST-10088 | mid-range | $40,213 | $37,000 - $47,000 | **1.04x, inside** |
+| Kitchen EST-10049 | mid-range | $46,334 | $37,000 - $47,000 | **0.91x, inside** |
+| VA Proposal | mid-range | $133,808 | $96,000 - $128,000 | 0.84x, engine low |
+| Basement+main repairs | mid-range | $92,938 | $116,000 - $154,000 | 1.45x, engine high |
+
+**Kitchen: validated.** Two independent references bracket 1.0 and both land
+inside the quoted range at plausible kitchen sizes. The 0.85 calibration holds.
+
+**Bathroom: validated, on one data point.** The Walden primary bath is the only
+genuine bathroom *remodel* on file and it lands inside mid-range across 80-110
+sq ft (0.89x to 1.08x). No change made. The Walden hall bath reads 1.53x high
+but is **new construction inside an addition** - no demolition, no tear-out, no
+working around existing conditions - so it should price below a remodel, and it
+lands at the top of `refresh`, about what removing demolition would do. It is
+not evidence that the bathroom rate is wrong.
+
+**Whole-home: inconclusive on the data, then raised by owner decision.** Both
+references are atypical: the VA proposal carries 40 percent Plans & Admin, and
+EST-10049 is a water-damage repair with large areas untouched. The two errors
+pointed in **opposite directions** (0.84x and 1.45x), so the data offered no
+systematic bias to correct and the recommendation was to leave it alone.
+
+The owner's judgement was that mid-range sat too low, and all tiers were
+subsequently scaled by 4/3 (see the whole-home entry under calibrated
+categories). Note this does not contradict the test: the only reference that was
+a genuine renovation had the engine quoting **low**. After the change the VA
+Proposal lands **inside** the quoted range at 1,000-1,200 sq ft. The repair job
+now reads further high, which is the expected direction for a job where large
+areas were untouched.
+
+This category remains the least evidenced of the three. One clean whole-home
+remodel with square footage recorded would settle it.
+
+**Band widths** across all three types run 1.21x to 1.38x, inside the 1.10x to
+2.20x guard: never a false single number, never uselessly wide.
+
+**Square footage remains the dominant uncertainty.** Every ratio above assumes a
+size. Sensitivity across plausible sizes moves the kitchen references between
+0.78x and 1.26x and whole-home between 0.71x and 2.01x. Recording actual square
+footage on closed jobs is worth more than any further modeling.
+
+## What a lead sees: scope, not per-line dollars (decided 2026-07)
+
+Leads get the **planning range**, the trades in scope with the quantities the
+range was built from, and the includes/excludes list. They do **not** get a
+dollar figure per line.
+
+The reasoning: those per-line figures are proportional allocations of a
+validated total, not priced quantities. Printing "$11,880 cabinetry" next to a
+line claimed a precision the model does not have and handed the homeowner a
+negotiating anchor for work nobody had walked yet. It also made the disclaimer
+do an unreasonable amount of load-bearing work. The company's own issued
+proposals already work this way (EST-10089 lists scope with a single total),
+and the website estimate sits *earlier* in the funnel than a proposal, so it
+has even less business quoting line-level dollars.
+
+What survives is more useful and less risky: which trades are in scope and the
+quantities behind them.
+
+Enforced in the invariant suite: the rendered client estimate must carry
+`TAKEOFF_SCOPE_NOTICE`, must not carry `TAKEOFF_BASIS_NOTICE`, and must not
+render the priced midpoint subtotal. The **admin** email and the CRM record are
+unchanged and still carry the full priced takeoff.
+
+## An issued proposal leaked OH&P to a client
+
+EST-10079 (VA Proposal, Sep 2025) shows a **"Contractor OH&P"** line under a
+$54,057 "Plans & Admin" heading on a document that went to a homeowner. That is
+the exact disclosure the estimator is built to avoid. It is recorded here
+because it is the evidence behind `CLIENT_FORBIDDEN_PHRASES` in
+`shared/costCatalog.ts` and the lead-facing vocabulary guard in the invariant
+suite: the risk is real and has already materialized once on paper.
 
 ## How to calibrate against real jobs
 

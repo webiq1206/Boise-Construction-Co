@@ -25,9 +25,9 @@ export const luxuryRemodelCostBoise: BlogPostData = {
   featuredSnippetTargets: ['luxury remodel cost boise', 'high end kitchen remodel cost'],
   wordCountTarget: 'cluster',
   quickAnswer:
-    'A luxury remodel in Boise and Eagle typically starts around $200,000 for a multi-room project and often exceeds $400,000 for whole-home custom work as of 2026. High-end kitchens commonly run $120,000+ and luxury primary suites $85,000+. Custom millwork, natural stone, designer fixtures, and extended design time drive luxury cost more than square footage.',
+    'A luxury remodel in Boise and Eagle typically starts around $200,000 for a multi-room project and runs $600,000-$816,000 for whole-home custom work as of 2026. Luxury kitchens commonly run $136,000-$166,000 and luxury primary suites $85,000+. Custom millwork, natural stone, designer fixtures, and extended design time drive luxury cost more than square footage.',
   keyTakeaways: [
-    'Luxury multi-room remodels start around $200,000; whole-home custom work exceeds $400,000.',
+    'Luxury multi-room remodels start around $200,000; whole-home custom work runs $600,000-$816,000.',
     'High-end kitchens run $120,000+ and luxury primary suites $85,000+ in the Boise area.',
     'Custom millwork, natural stone, and designer fixtures define luxury cost, not room size.',
     'Design time is longer and more involved on luxury projects, and it is part of the value.',
@@ -45,7 +45,7 @@ export const luxuryRemodelCostBoise: BlogPostData = {
     {
       question: 'How much does a luxury remodel cost in Boise?',
       answer:
-        'As of 2026, luxury remodels in Boise and Eagle typically start around $200,000 for a multi-room project and often exceed $400,000 for whole-home custom work. High-end kitchens commonly run $120,000 and up, and luxury primary suites $85,000 and up, driven by custom millwork, stone, and designer fixtures.',
+        'As of 2026, luxury remodels in Boise and Eagle typically start around $200,000 for a multi-room project and run $600,000-$816,000 for whole-home custom work. Luxury kitchens commonly run $136,000-$166,000, and luxury primary suites $85,000 and up, driven by custom millwork, stone, and designer fixtures.',
     },
     {
       question: 'What makes a remodel "luxury"?',
@@ -82,7 +82,7 @@ export const luxuryRemodelCostBoise: BlogPostData = {
 <tr><td>Luxury kitchen</td><td>$120,000 - $250,000+</td></tr>
 <tr><td>Luxury primary suite</td><td>$85,000 - $200,000</td></tr>
 <tr><td>Multi-room luxury remodel</td><td>$200,000 - $400,000</td></tr>
-<tr><td>Whole-home custom renovation</td><td>$400,000+</td></tr>
+<tr><td>Whole-home custom renovation</td><td>$600,000 - $816,000</td></tr>
 </tbody>
 </table>
 

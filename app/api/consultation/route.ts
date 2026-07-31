@@ -25,11 +25,13 @@ import {
   EMPTY_REFINEMENTS,
   calculateEstimate,
   countVisibleUserRefinements,
+  getMaxRefinementFields,
   getProjectSizeConfig,
   getSetRefinementKeys,
   PROJECT_LABELS,
   type EstimateRefinements,
 } from "@/shared/estimateEngine";
+import { resolveQuotedRange } from "@/shared/costs/resolve";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import { readUnitCostOverrides } from "@/app/api/admin/pricing/route";
 import {
@@ -120,15 +122,27 @@ function verifyEstimate(
     ...(estimate.refinements ?? {}),
   } as EstimateRefinements;
 
-  const recomputed = calculateEstimate(
+  const detailCount = countVisibleUserRefinements(estimate.project, getSetRefinementKeys(refinements));
+  const guide = calculateEstimate(
     {
       project: estimate.project,
       finish: estimate.finish,
       sqft: estimate.sqft,
       refinements,
     },
-    countVisibleUserRefinements(estimate.project, getSetRefinementKeys(refinements))
+    detailCount
   );
+  // The quoted range comes from the line-item cost engine, via the same shared
+  // resolver the calculator uses, so the page and the email can never disagree.
+  const maxFields = getMaxRefinementFields(estimate.project);
+  const lineItemRange = resolveQuotedRange(
+    estimate.project,
+    estimate.finish,
+    estimate.sqft,
+    refinements,
+    maxFields > 0 ? detailCount / maxFields : 0,
+  );
+  const recomputed = { ...guide, ...(lineItemRange ?? {}) };
 
   if (
     estimate.priceLow !== recomputed.priceLow ||

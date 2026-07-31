@@ -10,8 +10,10 @@ import {
   formatQuantity,
   formatTakeoffAmount,
   TAKEOFF_BASIS_NOTICE,
+  TAKEOFF_SCOPE_NOTICE,
   type UnitCostOverrides,
 } from "@/shared/costCatalog";
+import { resolveInternalEstimate } from "@/shared/costs/resolve";
 import {
   getRefinementVisibility,
   getPlumbingElectricalLabel,
@@ -279,7 +281,11 @@ function renderTakeoffHtml(
   // proportionally into the visible lines so the total is unchanged. The
   // admin email keeps the full breakdown.
   const takeoff = audience === "client" ? takeoffForClient(fullTakeoff) : fullTakeoff;
+  const isClient = audience === "client";
 
+  // The client sees WHAT is in scope and the quantities behind it, never a
+  // dollar figure per line. See TAKEOFF_SCOPE_NOTICE for why. The admin email
+  // keeps the priced takeoff so the team can work from it.
   const groupRows = (group: "direct" | "soft") =>
     takeoff.lines
       .filter((line) => line.group === group && line.cost > 0)
@@ -288,6 +294,9 @@ function renderTakeoffHtml(
         const label = qty
           ? `${escapeHtml(line.label)} <span style="color:${EMAIL_BRAND.textMuted};">(${escapeHtml(qty)})</span>`
           : escapeHtml(line.label);
+        if (isClient) {
+          return `<tr><td colspan="2" style="${LABEL_CELL}color:${EMAIL_BRAND.text};width:auto;">${label}</td></tr>`;
+        }
         return `<tr><td style="${LABEL_CELL}color:${EMAIL_BRAND.text};width:auto;">${label}</td><td style="${VALUE_CELL}text-align:right;white-space:nowrap;">${formatTakeoffAmount(line.cost)}</td></tr>`;
       })
       .join("");
@@ -297,15 +306,80 @@ function renderTakeoffHtml(
 
   return `
     <div style="margin:28px 0;">
-      <p style="${SECTION_TITLE}">Where the money typically goes</p>
+      <p style="${SECTION_TITLE}">${isClient ? "The work this range covers" : "Where the money typically goes"}</p>
       <table style="width:100%;border-collapse:collapse;">
         <tr><td colspan="2" style="padding:4px 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:${EMAIL_BRAND.textMuted};">The work</td></tr>
         ${groupRows("direct")}
         <tr><td colspan="2" style="padding:16px 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:${EMAIL_BRAND.textMuted};">Running the job</td></tr>
         ${groupRows("soft")}
-        ${subtotal("Midpoint of your planning range", takeoff.total)}
+        ${isClient ? "" : subtotal("Midpoint of your planning range", takeoff.total)}
       </table>
-      <p style="margin:12px 0 0;font-size:12px;line-height:1.55;color:${EMAIL_BRAND.textMuted};">${escapeHtml(TAKEOFF_BASIS_NOTICE)}</p>
+      <p style="margin:12px 0 0;font-size:12px;line-height:1.55;color:${EMAIL_BRAND.textMuted};">${escapeHtml(isClient ? TAKEOFF_SCOPE_NOTICE : TAKEOFF_BASIS_NOTICE)}</p>
+    </div>
+  `;
+}
+
+/**
+ * The internal cost breakdown, admin only.
+ *
+ * Parent trades with the quantity that drove them, what they cost us, and what
+ * the homeowner is being charged for them. Child line items are deliberately
+ * NOT rendered: there are thirty to fifty of them and an email is a briefing,
+ * not an audit trail. They stay retrievable in the pricing panel.
+ *
+ * Returns an empty string when the project has no rule set, so a new project
+ * type degrades to the old sections rather than erroring on a live lead.
+ */
+function renderTradeRollupHtml(est: VerifiedEstimate): string {
+  const resolved = resolveInternalEstimate(est.project, est.finish, est.sqft, est.refinements);
+  if (!resolved) return "";
+  const { admin } = resolved;
+
+  const money = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
+
+  const rows = admin.trades
+    .map(
+      (t) =>
+        `<tr><td style="${LABEL_CELL}color:${EMAIL_BRAND.text};width:auto;">${escapeHtml(t.division)}<br><span style="color:${EMAIL_BRAND.textMuted};font-size:12px;">${escapeHtml(t.scopeSummary)}</span></td>` +
+        `<td style="${VALUE_CELL}text-align:right;white-space:nowrap;color:${EMAIL_BRAND.textMuted};">${money(t.internalCost)}</td>` +
+        `<td style="${VALUE_CELL}text-align:right;white-space:nowrap;">${money(t.customerAmount)}</td></tr>`,
+    )
+    .join("");
+
+  const warnings = admin.warnings
+    .map(
+      (w) =>
+        `<li style="margin:4px 0;color:${w.severity === "warn" ? "#D98A3A" : EMAIL_BRAND.textMuted};">${escapeHtml(w.message)}</li>`,
+    )
+    .join("");
+
+  const assumptions = admin.assumptions
+    .slice(0, 8)
+    .map((a) => `<li style="margin:3px 0;color:${EMAIL_BRAND.textMuted};">${escapeHtml(a)}</li>`)
+    .join("");
+
+  return `
+    <div style="margin:28px 0;border:1px solid ${EMAIL_BRAND.hairline};border-radius:6px;padding:18px;">
+      <p style="${SECTION_TITLE}">Internal breakdown (not shown to the lead)</p>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr>
+          <td style="padding:4px 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:${EMAIL_BRAND.textMuted};">Trade</td>
+          <td style="padding:4px 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:${EMAIL_BRAND.textMuted};text-align:right;">Our cost</td>
+          <td style="padding:4px 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:${EMAIL_BRAND.textMuted};text-align:right;">Customer</td>
+        </tr>
+        ${rows}
+        <tr><td colspan="3" style="border-top:1px solid ${EMAIL_BRAND.hairline};padding-top:10px;"></td></tr>
+        <tr><td style="${LABEL_CELL}">Direct cost</td><td colspan="2" style="${VALUE_CELL}text-align:right;">${money(admin.directCost)}</td></tr>
+        <tr><td style="${LABEL_CELL}">Contingency</td><td colspan="2" style="${VALUE_CELL}text-align:right;">${money(admin.contingency)}</td></tr>
+        <tr><td style="${LABEL_CELL}">Total internal cost</td><td colspan="2" style="${VALUE_CELL}text-align:right;">${money(admin.totalInternalCost)}</td></tr>
+        <tr><td style="${LABEL_CELL}">Gross profit</td><td colspan="2" style="${VALUE_CELL}text-align:right;">${money(admin.grossProfit)}</td></tr>
+      </table>
+      <p style="margin:12px 0 0;font-size:13px;color:${EMAIL_BRAND.text};">
+        ${escapeHtml(admin.marginLabel)}<br>
+        <span style="color:${EMAIL_BRAND.textMuted};">Quoted range ${escapeHtml(admin.rangeLabel)}</span>
+      </p>
+      ${warnings ? `<p style="margin:12px 0 4px;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:${EMAIL_BRAND.textMuted};">Needs review</p><ul style="margin:0;padding-left:18px;font-size:13px;">${warnings}</ul>` : ""}
+      ${assumptions ? `<p style="margin:12px 0 4px;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:${EMAIL_BRAND.textMuted};">Assumptions</p><ul style="margin:0;padding-left:18px;font-size:12px;">${assumptions}</ul>` : ""}
     </div>
   `;
 }
@@ -347,6 +421,7 @@ export function buildEstimateSectionsHtml(
     </div>
 
     ${renderTakeoffHtml(est, overrides, audience)}
+    ${audience === "admin" ? renderTradeRollupHtml(est) : ""}
 
     <div style="margin:28px 0;">
       <p style="${SECTION_TITLE}">What this range covers</p>

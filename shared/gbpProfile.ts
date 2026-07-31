@@ -103,7 +103,7 @@ export const GBP_SERVICES: GbpService[] = [
     name: 'Whole-home remodeling',
     description:
       'Cohesive whole-home renovations with a single project manager start to finish. Phased options available.',
-    startingPrice: '$150,000',
+    startingPrice: '$180,000',
   },
   {
     name: 'Room additions',
@@ -191,7 +191,7 @@ export const GBP_PRODUCTS: GbpProduct[] = [
   {
     category: 'Remodeling Services',
     name: 'Whole-Home Remodel',
-    price: 'From $150,000',
+    price: 'From $180,000',
     url: `${SITE}/services/whole-home-remodel`,
     description:
       'Single project manager from design through final walkthrough. Weekly written updates and workmanship guarantee included.',
@@ -370,7 +370,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   },
   {
     question: 'How much does a kitchen remodel cost in Boise?',
-    answer: `As of 2026, planning ranges run roughly $15,000 for a cosmetic refresh, $35,000–$75,000 for mid-range scope, and $75,000–$150,000+ for full gut renovations with layout changes. These are planning ranges, not bids. Full breakdown: ${SITE}/guides/boise-kitchen-remodeling-guide`,
+    answer: `As of 2026, planning ranges run roughly $16,000–$21,000 for a cosmetic refresh, $37,000–$47,000 for mid-range scope, and $85,000–$166,000 for high-end and luxury gut renovations with layout changes. These are planning ranges, not bids. Full breakdown: ${SITE}/guides/boise-kitchen-remodeling-guide`,
   },
   {
     question: 'How much does a bathroom remodel cost?',

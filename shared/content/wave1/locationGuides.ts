@@ -91,7 +91,7 @@ const boiseSections: ContentSection[] = [
   {
     h2: 'Costs and services in Boise',
     paragraphs: [
-      'Kitchens often plan $45,000–$120,000+; master baths vary with layout and waterproofing.',
+      'Kitchens often plan $37,000–$110,000+; master baths vary with layout and waterproofing.',
       `<a href="${PILLAR_COST}">Cost guide</a> · <a href="/services/kitchen-remodel/boise">Kitchen</a> · <a href="/services/bathroom-remodel/boise">Bath</a> · <a href="/areas/boise">Area page</a>.`,
     ],
   },

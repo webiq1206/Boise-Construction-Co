@@ -108,7 +108,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Kitchen remodel cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, most Treasure Valley kitchen remodels plan between $35,000 and $75,000 for mid-range scope: new cabinetry, quartz or granite counters, tile backsplash, and updated plumbing and electrical. Cosmetic refreshes can start near $15,000, while full gut renovations with layout changes, custom cabinetry, and premium finishes commonly run $75,000 to $150,000 or more.',
+        'As of 2026, most Treasure Valley kitchen remodels plan between $37,000 and $47,000 for mid-range scope: new cabinetry, quartz or granite counters, tile backsplash, and updated plumbing and electrical. Cosmetic refreshes run $16,000 to $21,000, while full gut renovations with layout changes, custom cabinetry, and premium finishes commonly run $85,000 to $166,000.',
         'These are planning ranges, not bids. Size, layout changes, and finish level drive the final number, which we confirm with a written scope after your free in-home visit.',
       ],
     },
@@ -233,7 +233,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does a whole-home remodel cost in the Treasure Valley?',
         answer:
-          'Whole-home programs commonly plan $150,000 to $400,000 or more depending on square footage, structural changes, and finish level. Phasing can spread the investment; a written master scope keeps phases cohesive.',
+          'Whole-home programs commonly plan $180,000 to $425,000 or more depending on square footage, structural changes, and finish level. Phasing can spread the investment; a written master scope keeps phases cohesive.',
       },
       {
         question: 'Should I remodel everything at once or in phases?',
@@ -259,7 +259,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Whole-home remodel cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, whole-home remodels in the Boise area commonly plan $150,000 to $400,000 or more, driven by square footage, structural and layout changes, and finish level. Per-square-foot planning shorthand runs roughly $60 to $150+ depending on scope depth.',
+        'As of 2026, whole-home remodels in the Boise area commonly plan $180,000 to $425,000 or more, driven by square footage, structural and layout changes, and finish level. Per-square-foot planning shorthand runs roughly $40 to $236 depending on scope depth.',
         'These are planning ranges, not bids. A written master scope after your free in-home visit defines the real number, and phasing options can spread the investment across stages.',
       ],
     },

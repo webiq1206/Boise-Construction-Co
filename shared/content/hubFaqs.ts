@@ -6,7 +6,7 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'How much does a kitchen remodel cost in Boise?',
         answer:
-          'Most full kitchen remodels in the Treasure Valley plan between roughly $45,000 and $120,000+ depending on layout changes, cabinetry line, and finishes. Guest-scale refreshes cost less; open-concept structural work costs more.',
+          'Most full kitchen remodels in the Treasure Valley plan between roughly $37,000 and $110,000+ depending on layout changes, cabinetry line, and finishes. Guest-scale refreshes cost less; open-concept structural work costs more.',
       },
       {
         question: 'How long does a kitchen remodel take?',
@@ -132,7 +132,7 @@ export function getHubPillarFaqs(hubSlug: string): Array<{ question: string; ans
       {
         question: 'How much does a whole-home remodel cost in the Treasure Valley?',
         answer:
-          'Programs often plan $150,000–$400,000+ depending on how many rooms, structural work, and finish level are involved.',
+          'Programs often plan $180,000–$425,000+ depending on how many rooms, structural work, and finish level are involved.',
       },
       {
         question: 'Should I remodel in phases or all at once?',

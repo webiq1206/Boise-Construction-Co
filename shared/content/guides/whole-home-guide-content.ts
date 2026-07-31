@@ -7,7 +7,7 @@ export const WHOLE_HOME_GUIDE_CONTENT = `
 
 <div class="callout cost">
   <p class="callout-label">Budget &amp; timeline snapshot</p>
-  <p>Whole-home remodels in the Treasure Valley often span <strong>$150,000-$400,000+</strong>, with timelines from <strong>several months to a year</strong> depending on size, scope, and structural work. Most households move out during construction. See our <a href="/blog/whole-home-remodel-cost-boise">Whole-Home Remodel Cost guide</a>.</p>
+  <p>Whole-home remodels in the Treasure Valley often span <strong>$180,000-$425,000+</strong>, with timelines from <strong>several months to a year</strong> depending on size, scope, and structural work. Most households move out during construction. See our <a href="/blog/whole-home-remodel-cost-boise">Whole-Home Remodel Cost guide</a>.</p>
 </div>
 
 <h2>1. Remodel or move?</h2>
@@ -80,7 +80,7 @@ export const WHOLE_HOME_GUIDE_FAQS = [
   {
     question: 'How much does a whole-home remodel cost in Boise?',
     answer:
-      'Whole-home remodels in the Treasure Valley often span $150,000 to $400,000 or more, depending on the home\'s size, the scope, and how much structural and systems work is involved. Cost is driven by square footage, whether you reconfigure the layout and replace systems, custom materials, and finish level. A realistic budget should include a 10-15% contingency, especially for older homes.',
+      'Whole-home remodels in the Treasure Valley often span $180,000 to $425,000 or more, depending on the home\'s size, the scope, and how much structural and systems work is involved. Cost is driven by square footage, whether you reconfigure the layout and replace systems, custom materials, and finish level. A realistic budget should include a 10-15% contingency, especially for older homes.',
   },
   {
     question: 'How long does a whole-home remodel take?',

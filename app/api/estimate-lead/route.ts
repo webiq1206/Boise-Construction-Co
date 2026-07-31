@@ -22,11 +22,13 @@ import {
   EMPTY_REFINEMENTS,
   calculateEstimate,
   countVisibleUserRefinements,
+  getMaxRefinementFields,
   getProjectSizeConfig,
   getSetRefinementKeys,
   PROJECT_LABELS,
   type EstimateRefinements,
 } from "@/shared/estimateEngine";
+import { resolveQuotedRange } from "@/shared/costs/resolve";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import { readUnitCostOverrides } from "@/app/api/admin/pricing/route";
 import type { PropertyProfile } from "@/shared/propertyProfile";
@@ -100,10 +102,22 @@ function verifyEstimate(
     ...(estimate.refinements ?? {}),
   } as EstimateRefinements;
 
-  const recomputed = calculateEstimate(
+  const detailCount = countVisibleUserRefinements(estimate.project, getSetRefinementKeys(refinements));
+  const guide = calculateEstimate(
     { project: estimate.project, finish: estimate.finish, sqft: estimate.sqft, refinements },
-    countVisibleUserRefinements(estimate.project, getSetRefinementKeys(refinements))
+    detailCount
   );
+  // The quoted range comes from the line-item cost engine, via the same shared
+  // resolver the calculator uses, so the page and the email can never disagree.
+  const maxFields = getMaxRefinementFields(estimate.project);
+  const lineItemRange = resolveQuotedRange(
+    estimate.project,
+    estimate.finish,
+    estimate.sqft,
+    refinements,
+    maxFields > 0 ? detailCount / maxFields : 0,
+  );
+  const recomputed = { ...guide, ...(lineItemRange ?? {}) };
 
   if (
     estimate.priceLow !== recomputed.priceLow ||
@@ -238,7 +252,11 @@ export async function POST(request: NextRequest) {
         budget: data.budget,
       };
 
-      const adminHtml = buildAdminEmailHtml(lead, estimate);
+      // Pass the same overrides the CRM record and the customer email use, so
+      // the admin email cannot quote different unit costs than the panel that
+      // set them. Was omitted here while the sibling consultation route passed
+      // them, which made the two lead paths disagree.
+      const adminHtml = buildAdminEmailHtml(lead, estimate, crmProfile, unitCostOverrides);
       const adminEmails = await getAdminRecipientEmails(SITE_CONFIG.email);
       for (const adminEmail of adminEmails) {
         const adminResult = await client.emails.send({

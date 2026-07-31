@@ -18,7 +18,7 @@ const kitchenExtra: ContentSection[] = [
   {
     h2: 'What is a typical kitchen remodel budget in Boise?',
     paragraphs: [
-      'Most full kitchen remodels we plan in Ada County fall between roughly $45,000 and $120,000+, with layout changes and custom cabinetry at the upper end. Cosmetic refreshes - doors, counters, backsplash - can land lower if plumbing and gas stay put.',
+      'Most full kitchen remodels we plan in Ada County fall between roughly $37,000 and $110,000+, with layout changes and custom cabinetry at the upper end. Cosmetic refreshes - doors, counters, backsplash - can land lower if plumbing and gas stay put.',
       'Meridian and Eagle kitchens often include larger islands, walk-in pantries, and panel-ready appliances. Kuna and Star homes may have builder-grade layouts worth reconfiguring for open concept living.',
     ],
   },
@@ -132,7 +132,7 @@ const wholeHomeExtra: ContentSection[] = [
   {
     h2: 'What defines a whole-home remodel budget?',
     paragraphs: [
-      'Whole-home programs in Boise and Meridian often span $150,000–$400,000+ depending on square footage affected, structural work, and number of wet areas.',
+      'Whole-home programs in Boise and Meridian often span $180,000–$425,000+ depending on square footage affected, structural work, and number of wet areas.',
     ],
   },
   {
@@ -344,7 +344,7 @@ export const COST_CLUSTER_CONTENT: Record<
   'whole-home-remodel-cost-boise': {
     html: buildSectionsHtml(clusterSections('whole-home remodel cost', wholeHomeExtra)),
     quickAnswer:
-      'Whole-home remodels in the Treasure Valley often range from $150,000 to $400,000+ depending on scope, structural work, and number of wet areas.',
+      'Whole-home remodels in the Treasure Valley often range from $180,000 to $425,000+ depending on scope, structural work, and number of wet areas.',
     takeaways: [
       'Treat whole-home work as one program with phases.',
       'Hold 10–15% contingency.',

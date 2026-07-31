@@ -90,7 +90,7 @@ export const homeAdditionCostBoise: BlogPostData = {
 <thead><tr><th>Addition type</th><th>2026 Boise planning range</th><th>Notes</th></tr></thead>
 <tbody>
 <tr><td>Bump-out (small)</td><td>$25,000 - $70,000</td><td>Extend a room a few feet; cantilever or small foundation</td></tr>
-<tr><td>Bedroom / room addition</td><td>$80,000 - $150,000</td><td>New ground-floor room with foundation and roof</td></tr>
+<tr><td>Bedroom / room addition</td><td>$93,000 - $189,000</td><td>New ground-floor room with foundation and roof</td></tr>
 <tr><td>Primary suite addition</td><td>$120,000 - $250,000</td><td>Bedroom, ensuite bath, and closet</td></tr>
 <tr><td>Second-story addition</td><td>$150,000 - $300,000+</td><td>New level; structural reinforcement required</td></tr>
 </tbody>

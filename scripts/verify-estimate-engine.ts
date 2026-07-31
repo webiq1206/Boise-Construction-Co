@@ -22,7 +22,15 @@ import {
   shareSum,
   takeoffForClient,
   CLIENT_HIDDEN_COMPONENT_IDS,
+  findForbiddenPhrase,
+  TAKEOFF_BASIS_NOTICE,
+  TAKEOFF_SCOPE_NOTICE,
 } from "../shared/costCatalog";
+import {
+  buildCustomerEmailHtml,
+  buildAdminEmailHtml,
+  buildEstimateSectionsHtml,
+} from "../server/services/consultationEmail";
 
 function assert(condition: boolean, message: string) {
   if (!condition) {
@@ -422,11 +430,17 @@ for (const project of ["addition", "adu"] as ProjectType[]) {
 //    scaling that causes the tool to quote something other than the guide at
 //    the reference size now fails the build.
 const COST_GUIDE_2025: Partial<Record<ProjectType, Partial<Record<FinishLevel, [number, number]>>>> = {
+  // Kitchen is no longer the guide. Calibrated 2026-07 against two issued
+  // estimates (EST-10088 $34,335 and EST-10049 $31,850), both scope-normalized
+  // to this catalog's kitchen definition, which put a full-scope mid-range
+  // equivalent at 0.71x and 0.94x of what the model quoted. Every tier scaled
+  // by the conservative middle, 0.85. Guide values were [18750, 31250],
+  // [43750, 68750], [100000, 162500], [175000, 225000].
   kitchen: {
-    refresh: [18750, 31250],
-    "mid-range": [43750, 68750],
-    "high-end": [100000, 162500],
-    luxury: [175000, 225000],
+    refresh: [15900, 26600],
+    "mid-range": [37200, 58400],
+    "high-end": [85000, 138100],
+    luxury: [148800, 191300],
   },
   bathroom: {
     refresh: [12000, 20000],
@@ -434,11 +448,16 @@ const COST_GUIDE_2025: Partial<Record<ProjectType, Partial<Record<FinishLevel, [
     "high-end": [44000, 64000],
     luxury: [72000, 112000],
   },
+  // Whole-home is no longer the guide. Owner pricing decision 2026-07: every
+  // tier scaled by 4/3 so an 1,800 sqft mid-range whole-home quotes $180,000 to
+  // $240,000 ($100/sf floor) rather than $135,000 to $180,000 ($75/sf). Guide
+  // values were [54000, 90000], [135000, 225000], [270000, 387000],
+  // [450000, 765000].
   "whole-home": {
-    refresh: [54000, 90000],
-    "mid-range": [135000, 225000],
-    "high-end": [270000, 387000],
-    luxury: [450000, 765000],
+    refresh: [72000, 120000],
+    "mid-range": [180000, 300000],
+    "high-end": [360000, 516000],
+    luxury: [600000, 1020000],
   },
   // Addition, like ADU, is no longer the guide. The guide priced an addition
   // above an ADU per square foot, which is backwards: an ADU carries a kitchen,
@@ -691,6 +710,121 @@ for (const project of projects) {
       sweepChecks++;
     }
   }
+}
+
+// 11. LEAD-FACING VOCABULARY. The takeoff invariants above prove that
+//     takeoffForClient strips the hidden lines, but that only protects a
+//     surface that remembers to call it. This section renders the REAL
+//     customer email and asserts the finished HTML contains none of the
+//     forbidden vocabulary, so a future surface that forgets the client view
+//     fails the build instead of reaching a homeowner.
+//
+//     An issued proposal (EST-10079) carried a visible "Contractor OH&P" line
+//     to a client, which is the concrete failure this guard exists to prevent.
+{
+  const sampleLead = {
+    name: "Verification Lead",
+    phone: "2085550000",
+    email: "verify@example.com",
+    address: "123 Main St",
+    zip: "83702",
+    projectType: "kitchen",
+    budget: "$50,000",
+  };
+
+  // Refinement combinations that change which lines render, so the guard is
+  // not just checking one happy path.
+  const refinementCombos: EstimateRefinements[] = [
+    EMPTY_REFINEMENTS,
+    { ...EMPTY_REFINEMENTS, cabinetTier: "custom", layoutChanges: "major", plumbingElectrical: "full" },
+    { ...EMPTY_REFINEMENTS, upgradeScope: ["cabinets"] },
+  ];
+
+  let renderedEmails = 0;
+
+  for (const project of projects) {
+    const cfg = getProjectSizeConfig(project);
+    for (const finish of getAvailableFinishLevels(project)) {
+      for (const sqft of [cfg.min, cfg.baselineSqft, cfg.max]) {
+        for (const refinements of refinementCombos) {
+          const result = calculateEstimate({ project, finish, sqft, refinements });
+          const estimate = {
+            project,
+            finish,
+            sqft,
+            priceLow: result.priceLow,
+            priceHigh: result.priceHigh,
+            roi: result.roi,
+            confidence: result.confidenceLabel,
+            refinements,
+            included: result.included,
+          };
+
+          const customerHtml = buildCustomerEmailHtml(sampleLead, estimate);
+          const leaked = findForbiddenPhrase(customerHtml);
+          check(
+            leaked === null,
+            `${project}/${finish} @${sqft}sf: customer email leaks forbidden vocabulary ("${leaked}"). ` +
+              `These costs must be folded into the visible line items, never named. See CLIENT_FORBIDDEN_PHRASES.`,
+          );
+
+          // The plain-text alternative is derived from this HTML by the send
+          // path, so a clean HTML body is a clean text body.
+          const clientSections = buildEstimateSectionsHtml(estimate, undefined, "client");
+          const sectionLeak = findForbiddenPhrase(clientSections);
+          check(
+            sectionLeak === null,
+            `${project}/${finish} @${sqft}sf: client estimate sections leak forbidden vocabulary ("${sectionLeak}")`,
+          );
+
+          // NO PER-LINE DOLLARS. The client sees trades and quantities; the
+          // dollar figures are proportional allocations, not priced work.
+          // The scope notice renders in place of the basis notice, and the
+          // priced midpoint subtotal must not appear at all.
+          check(
+            clientSections.includes(TAKEOFF_SCOPE_NOTICE) &&
+              !clientSections.includes(TAKEOFF_BASIS_NOTICE),
+            `${project}/${finish} @${sqft}sf: client sections must carry the scope notice, not the priced-basis notice`,
+          );
+          check(
+            !clientSections.includes("Midpoint of your planning range"),
+            `${project}/${finish} @${sqft}sf: client sections must not render the priced takeoff subtotal`,
+          );
+
+          renderedEmails++;
+        }
+      }
+    }
+  }
+
+  // MUTATION CHECK. A guard that cannot fail proves nothing. The admin email
+  // renders the full takeoff on purpose, so it MUST trip the same detector.
+  // If this ever passes as "clean", the detector has stopped working and every
+  // assertion above became worthless.
+  const adminHtml = buildAdminEmailHtml(sampleLead, {
+    project: "kitchen",
+    finish: "mid-range",
+    sqft: 250,
+    priceLow: 44000,
+    priceHigh: 55000,
+    roi: 74,
+    confidence: "Starting range",
+    refinements: EMPTY_REFINEMENTS,
+    included: ["Semi-custom cabinetry"],
+  });
+  check(
+    findForbiddenPhrase(adminHtml) !== null,
+    "admin email no longer contains the hidden lines: the forbidden-phrase detector is broken, " +
+      "so the customer-email assertions above are vacuous",
+  );
+  check(
+    adminHtml.includes("Project management and supervision") && adminHtml.includes("Overhead and profit"),
+    "admin email must keep the full takeoff itemized for the team",
+  );
+
+  console.log(
+    `  lead-facing vocabulary: ${renderedEmails} rendered customer emails clean, detector proven live against the admin email.`,
+  );
 }
 
 console.log(

@@ -217,7 +217,7 @@ export const WHOLE_HOME_PILLAR = buildPillarGuide({
   hubSlug: 'whole-home-remodeling',
   tags: ['whole-home'],
   quickAnswer:
-    'Whole-home remodels in the Treasure Valley often span $150,000–$400,000+ with timelines from several months to a year depending on phasing and permits.',
+    'Whole-home remodels in the Treasure Valley often span $180,000–$425,000+ with timelines from several months to a year depending on phasing and permits.',
   takeaways: [
     'Sequence structural and MEP before finishes.',
     'Hold contingency for concealed conditions.',

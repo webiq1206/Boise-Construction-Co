@@ -51,7 +51,7 @@ const costPillarFaqs = [
   {
     question: 'How much does a typical home remodel cost in Boise?',
     answer:
-      'Most homeowners should plan room-level budgets: kitchens often $45,000–$120,000+, master baths $35,000–$85,000+, and whole-home programs $150,000–$400,000+ depending on scope and finishes.',
+      'Most homeowners should plan room-level budgets: kitchens often $37,000–$110,000+, master baths $35,000–$85,000+, and whole-home programs $180,000–$425,000+ depending on scope and finishes.',
   },
   {
     question: 'Are remodeling costs higher in Eagle than in Meridian?',
@@ -285,7 +285,7 @@ export const GUIDE_PAGES: GuidePageData[] = [
       {
         question: 'How much does a kitchen remodel cost in Boise?',
         answer:
-          'Most full kitchen remodels plan between roughly $45,000 and $120,000+ depending on layout and cabinetry - see our cost guide for detail.',
+          'Most full kitchen remodels plan between roughly $37,000 and $110,000+ depending on layout and cabinetry - see our cost guide for detail.',
       },
       {
         question: 'What Boise neighborhoods do you serve?',
