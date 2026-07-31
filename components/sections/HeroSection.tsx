@@ -9,7 +9,14 @@ import { GRAIN_URL } from "@/lib/grain";
 
 function StatCard({ num, label }: { num: string; label: string }) {
   return (
-    <div className="px-3 py-3 md:px-6 md:py-5 rounded-sm bg-inverse-foreground/10 border border-inverse-foreground/15 backdrop-blur-sm">
+    /* A DARK translucent panel, not a light one. These cards carry light text,
+       and they sit on the right of the hero where the horizontal scrim is at
+       its weakest, directly over the brightest part of the kitchen photo. A 10%
+       WHITE fill lightened that background further and pushed the small
+       uppercase labels close to invisible. Tinting with the dark inverse colour
+       instead gives the light text something to sit on wherever the photo
+       happens to be bright. */
+    <div className="px-3 py-3 md:px-6 md:py-5 rounded-sm bg-inverse/55 border border-inverse-foreground/20 backdrop-blur-md">
       <DisplayNum className="text-inverse-foreground text-lg md:text-3xl leading-none">
         {num}
       </DisplayNum>
@@ -32,7 +39,10 @@ export function HeroSection() {
           sizes="(max-width: 768px) 100vw, 1400px"
           className="object-cover opacity-[0.72] img-brand-grade"
         />
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/90 via-inverse/55 to-inverse/15" />
+        {/* Ends at /30 rather than /15. The stat cards live in the last third
+            of this gradient, and at /15 the photo was effectively unscrimmed
+            behind them. /30 steadies that side without flattening the image. */}
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/90 via-inverse/55 to-inverse/30" />
         {/* Mobile: text + stat cards span full width over the bright image centre,
             so add a vertical scrim that the desktop horizontal gradient doesn't cover. */}
         <div className="md:hidden absolute inset-0 pointer-events-none bg-gradient-to-t from-inverse/95 via-inverse/70 to-inverse/45" />
