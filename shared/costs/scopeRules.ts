@@ -682,16 +682,18 @@ export const ADU_RULES: ScopeRule[] = [
     qty: (_d, s) => 10,
   },
   {
-    code: "03-17-03", // Bathroom vanity, LF
-    qty: () => 4,
+    code: "03-17-03", // Bathroom vanity, LF - one run per bathroom
+    qty: (_d, s) => Math.max(1, s.bathroomCount ?? 1) * 4,
+    assumption: "One 4 foot vanity run per bathroom in the unit.",
   },
   {
-    code: "03-16-01", // Bathroom tile, SF
-    qty: (_d, s) => 140,
+    code: "03-16-01", // Bathroom tile, SF - per bathroom
+    qty: (_d, s) => Math.max(1, s.bathroomCount ?? 1) * 140,
+    assumption: "Roughly 140 square feet of tile per bathroom, floor plus surround.",
   },
   {
-    code: "03-19-06", // Shower glass, EA
-    qty: () => 1,
+    code: "03-19-06", // Shower glass, EA - one per bathroom
+    qty: (_d, s) => Math.max(1, s.bathroomCount ?? 1),
   },
   {
     code: "03-20-01", // Appliances - an ADU is furnished with them

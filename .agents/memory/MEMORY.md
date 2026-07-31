@@ -1,3 +1,4 @@
 - [Email provider decision](email-provider.md) — sends via Resend not Gmail; Gmail couldn't send from the boiseremodeling.co alias; always check Resend's `{data,error}`.
 - [Em-dash build guard](em-dash-guard.md) — prebuild fails on U+2014 in code/content; use hyphens; markdown & .json deliberately out of scope.
 - [Address field validation](address-field-validation.md) — never store raw geocoder formattedAddress in the regex-validated form field; always run buildCleanAddress first.
+- [Two pricing engines](two-pricing-engines.md) — the quoted range comes from the line-item engine in shared/costs, not estimateEngine; new pricing inputs must be wired there or they silently do nothing.

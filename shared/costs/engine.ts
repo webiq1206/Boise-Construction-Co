@@ -357,14 +357,28 @@ export function buildInternalEstimate(
   project?: string,
 ): InternalEstimate {
   const calibration = project ? (MARKET_CALIBRATION[project] ?? 1) : 1;
+  // On a bathroom project the count is the number of bathrooms being remodeled
+  // and the size question asks about EACH bathroom, so the whole takeoff
+  // multiplies: three bathrooms is three of the thing being priced, not one
+  // large one. This mirrors the guide engine's bathroomInstances; without it
+  // the quoted range never moved when the visitor changed the count.
+  const instances =
+    project === "bathroom" ? Math.max(1, selections.bathroomCount ?? 1) : 1;
   const dims = deriveDimensions(selections.sqft, selections.ceilingHeight);
   const warnings: EstimateWarning[] = [];
   const assumptions: string[] = [];
+  if (instances > 1) {
+    // Without this an admin reading a 240 SF bathroom takeoff has no way to
+    // tell three 80 SF bathrooms from one oversized room.
+    assumptions.push(
+      `${instances} bathrooms at roughly ${Math.round(selections.sqft)} square feet each; all quantities cover the full set.`,
+    );
+  }
   const byCode = new Map<string, CostLine>();
 
   for (const rule of rules) {
     if (rule.when && !rule.when(selections)) continue;
-    const quantity = rule.qty(dims, selections);
+    const quantity = rule.qty(dims, selections) * instances;
     if (!Number.isFinite(quantity) || quantity <= 0) continue;
 
     for (const li of resolveCodes(rule.code)) {
