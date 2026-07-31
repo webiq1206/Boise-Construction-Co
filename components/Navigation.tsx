@@ -117,9 +117,13 @@ export function Navigation() {
           <div className="flex md:hidden items-center gap-2">
             <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
               <Dialog.Trigger asChild>
+                {/* The shared icon size is 36px, which suits dense admin
+                    toolbars and is under the 44px touch target for the one
+                    control that opens navigation on a phone. */}
                 <Button
                   variant="ghost"
                   size="icon"
+                  className="h-11 w-11"
                   aria-label="Open navigation menu"
                   data-testid="button-mobile-menu-open"
                 >

@@ -48,6 +48,31 @@ const buttonVariants = cva(
         icon: "h-9 w-9",
       },
     },
+    /*
+     * The marketing variants each declare min-h-11 (44px, the accessibility
+     * touch target), but `size` is merged AFTER `variant`, so the default
+     * size's min-h-9 silently won and every marketing CTA rendered at 36px.
+     * On a phone the homepage's primary "Get an estimate" button measured 38px
+     * including its border, under the 44px minimum.
+     *
+     * Restated here as a compound variant so it merges last and wins. Scoped to
+     * the marketing variants on purpose: raising `size.default` globally would
+     * also inflate the dense admin and form buttons, where 36px is correct.
+     */
+    compoundVariants: [
+      {
+        variant: [
+          "brand",
+          "brandOutline",
+          "heroGhost",
+          "brandGhost",
+          "brandAccent",
+          "brandInverseOutline",
+        ],
+        size: "default",
+        class: "min-h-11 px-6 py-3.5",
+      },
+    ],
     defaultVariants: {
       variant: "default",
       size: "default",

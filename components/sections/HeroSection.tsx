@@ -13,7 +13,7 @@ function StatCard({ num, label }: { num: string; label: string }) {
       <DisplayNum className="text-inverse-foreground text-lg md:text-3xl leading-none">
         {num}
       </DisplayNum>
-      <div className="mt-1 md:mt-1.5 text-[9px] md:text-[11px] tracking-[0.08em] md:tracking-[0.1em] uppercase text-inverse-muted leading-snug">
+      <div className="mt-1 md:mt-1.5 text-[10px] md:text-[11px] tracking-[0.06em] md:tracking-[0.1em] uppercase text-inverse-muted leading-snug">
         {label}
       </div>
     </div>
