@@ -1,37 +1,5 @@
-"use client";
-
-import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import type { ButtonProps } from "@/components/ui/button";
-import { useModals } from "./modalsContext";
-
-interface ConsultCTAProps extends Omit<ButtonProps, "onClick" | "asChild"> {
-  onExtraClick?: () => void;
-}
-
-export function ConsultCTA({ onExtraClick, children, ...props }: ConsultCTAProps) {
-  const { openEstimate } = useModals();
-  const pathname = usePathname();
-
-  if (pathname === "/") {
-    return (
-      <Button {...props} asChild>
-        <a href="/#calculator" onClick={onExtraClick}>
-          {children}
-        </a>
-      </Button>
-    );
-  }
-
-  return (
-    <Button
-      {...props}
-      onClick={() => {
-        openEstimate();
-        onExtraClick?.();
-      }}
-    >
-      {children}
-    </Button>
-  );
-}
+/**
+ * Alias for EstimateCTA — all sitewide "Get an estimate" buttons share one behavior:
+ * homepage scrolls to /#calculator; every other page goes to /estimate.
+ */
+export { EstimateCTA as ConsultCTA } from "./EstimateCTA";
