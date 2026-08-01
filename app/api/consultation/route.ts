@@ -77,6 +77,8 @@ const estimateSchema = z
     priceLow: z.number().nonnegative(),
     priceHigh: z.number().nonnegative(),
     roi: z.number(),
+    // Optional: the homeowner's own budget, typed after they saw the range.
+    statedBudget: z.number().positive().max(50_000_000).nullable().optional(),
     confidence: z.string().max(80).optional(),
     refinements: refinementsSchema,
     // The visitor-facing labels for the layout card and upgrade chips they
@@ -161,6 +163,7 @@ function verifyEstimate(
     priceHigh: recomputed.priceHigh,
     roi: recomputed.roi,
     confidence: estimate.confidence || recomputed.confidenceLabel,
+    statedBudget: estimate.statedBudget ?? null,
     refinements,
     included: recomputed.included,
     layoutLabel: estimate.layoutLabel,

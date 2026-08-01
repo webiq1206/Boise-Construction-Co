@@ -122,7 +122,10 @@ function buildLevers(s: ScopeSelections): Lever[] {
     levers.push({
       key: "quality",
       value: down,
-      label: `a ${down.replace("-", " ")} finish level`,
+      // Keep the hyphen: the tier is labelled "Mid-Range" and "High-End" on the
+      // card the homeowner just clicked, and "a mid range finish level" reads as
+      // a different thing than the one they picked.
+      label: `a ${down} finish level`,
       applies: () => true,
     });
   }
@@ -181,14 +184,36 @@ function solveOptions(
     priced.push({ label: c.label, changes: c.changes, low: r.low, high: r.high, reachesBudget: r.low <= budget });
   }
 
-  return priced
+  const ranked = priced
     .filter((o) => o.reachesBudget)
     .sort((a, b) => {
       const ca = candidates.find((c) => c.label === a.label)!;
       const cb = candidates.find((c) => c.label === b.label)!;
       return ca.depth - cb.depth || ca.rank - cb.rank;
-    })
-    .slice(0, 3);
+    });
+
+  // Every option after the first has to be materially cheaper than the one
+  // already offered, or it is not a choice. Levers overlap: once a refresh
+  // finish level has fired, dropping to standard cabinetry saves a few hundred
+  // dollars, because refresh already assumes stock boxes. Offering that as a
+  // second option asks a homeowner to give up their cabinetry for what reads as
+  // a rounding difference, and it makes the whole estimate look imprecise.
+  //
+  // Sorted fewest-concessions-first, so the option that survives at each price
+  // is always the one that gives up least to get there.
+  const MATERIAL_ABS = 2000;
+  const MATERIAL_PCT = 0.05;
+  const kept: BudgetOption[] = [];
+  for (const o of ranked) {
+    const last = kept[kept.length - 1];
+    if (last) {
+      const saving = last.low - o.low;
+      if (saving < Math.max(MATERIAL_ABS, last.low * MATERIAL_PCT)) continue;
+    }
+    kept.push(o);
+    if (kept.length === 3) break;
+  }
+  return kept;
 }
 
 /**

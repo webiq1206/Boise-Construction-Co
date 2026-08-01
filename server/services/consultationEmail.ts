@@ -14,6 +14,7 @@ import {
   type UnitCostOverrides,
 } from "@/shared/costCatalog";
 import { resolveInternalEstimate } from "@/shared/costs/resolve";
+import { assessBudget, budgetGuidance } from "@/shared/costs/budget";
 import {
   getRefinementVisibility,
   getPlumbingElectricalLabel,
@@ -42,6 +43,8 @@ export interface VerifiedEstimate {
   layoutLabel?: string;
   /** The upgrade chips they ticked, e.g. ["Cabinets", "Counters"]. */
   upgradeLabels?: string[];
+  /** What the homeowner said they were working toward, if they told us. */
+  statedBudget?: number | null;
 }
 
 /** The lead's submitted contact details + note. */
@@ -384,6 +387,62 @@ function renderTradeRollupHtml(est: VerifiedEstimate): string {
   `;
 }
 
+/**
+ * The budget comparison, rendered for whichever audience is reading.
+ *
+ * The homeowner gets the constructive version: where their target sits, what is
+ * driving the cost, and the smallest change that would reach it. The admin gets
+ * the same comparison plus what was actually offered, so the first call starts
+ * from where the pressure is rather than discovering it live.
+ *
+ * Returns empty when no budget was given. Silence is correct: this feature only
+ * exists because the homeowner volunteered a number.
+ */
+function renderBudgetHtml(est: VerifiedEstimate, audience: "admin" | "client"): string {
+  if (!est.statedBudget || est.statedBudget <= 0) return "";
+  const resolved = resolveInternalEstimate(est.project, est.finish, est.sqft, est.refinements);
+  if (!resolved) return "";
+
+  const a = assessBudget(
+    est.project,
+    { quality: est.finish as never, sqft: est.sqft, ...est.refinements } as never,
+    { low: est.priceLow, high: est.priceHigh },
+    est.statedBudget,
+    resolved.admin.trades.slice(0, 2).map((t) => t.division),
+  );
+  const guidance = budgetGuidance(a);
+
+  const alternatives =
+    a.options.length > 1
+      ? `<ul style="margin:10px 0 0;padding-left:18px;color:${EMAIL_BRAND.textMuted};font-size:13px;">` +
+        a.options
+          .slice(1)
+          .map((o) => `<li style="margin:4px 0;">Or ${escapeHtml(o.label)}: ${formatUsd(o.low)} to ${formatUsd(o.high)}</li>`)
+          .join("") +
+        `</ul>`
+      : "";
+
+  const adminExtra =
+    audience === "admin"
+      ? `<p style="margin:12px 0 0;font-size:12px;color:${EMAIL_BRAND.textMuted};">` +
+        `Stated budget ${formatUsd(est.statedBudget)} against ${formatUsd(est.priceLow)} to ${formatUsd(est.priceHigh)}. ` +
+        `${a.options.length} alternative${a.options.length === 1 ? "" : "s"} shown to the lead.` +
+        `</p>`
+      : "";
+
+  return `
+    <div style="margin:28px 0;background:${EMAIL_BRAND.raised};border-left:3px solid ${EMAIL_BRAND.accent};padding:20px;border-radius:4px;">
+      <p style="${SECTION_TITLE}">${audience === "admin" ? "Their budget" : "About your budget"}</p>
+      <p style="margin:0;color:${EMAIL_BRAND.text};font-size:15px;line-height:1.6;">${escapeHtml(a.headline)}</p>
+      ${a.driver ? `<p style="margin:8px 0 0;color:${EMAIL_BRAND.textMuted};font-size:13.5px;line-height:1.6;">${escapeHtml(a.driver)}</p>` : ""}
+      ${guidance ? `<p style="margin:12px 0 0;color:${EMAIL_BRAND.text};font-size:14px;line-height:1.6;">${escapeHtml(guidance)}</p>` : ""}
+      ${alternatives}
+      <p style="margin:14px 0 0;font-size:12px;line-height:1.55;color:${EMAIL_BRAND.textMuted};">${escapeHtml(a.basisNote)}</p>
+      ${adminExtra}
+    </div>
+  `;
+}
+
 export function buildEstimateSectionsHtml(
   est: VerifiedEstimate,
   overrides?: UnitCostOverrides,
@@ -421,6 +480,7 @@ export function buildEstimateSectionsHtml(
     </div>
 
     ${renderTakeoffHtml(est, overrides, audience)}
+    ${renderBudgetHtml(est, audience)}
     ${audience === "admin" ? renderTradeRollupHtml(est) : ""}
 
     <div style="margin:28px 0;">

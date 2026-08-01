@@ -20,7 +20,9 @@ import {
   TAKEOFF_SCOPE_NOTICE,
   type UnitCostOverrides,
 } from "@/shared/costCatalog";
-import { resolveQuotedRange } from "@/shared/costs/resolve";
+import { resolveQuotedRange, resolveInternalEstimate } from "@/shared/costs/resolve";
+import { assessBudget, budgetGuidance, BUDGET_BASIS_NOTE } from "@/shared/costs/budget";
+import type { QualityLevel, ScopeSelections } from "@/shared/costs/engine";
 import { HOUSE_NUMBER_REGEX, extractZip } from "@/shared/addressValidation";
 import {
   type ProjectType,
@@ -426,6 +428,7 @@ export function EstimateCalculator({
   );
   const [addOns, setAddOns]               = useState<string[]>([]);
   const [finish, setFinish]               = useState<FinishLevel>("mid-range");
+  const [budgetInput, setBudgetInput]     = useState<string>("");
   /* Nothing is pre-selected for the visitor. The state above still holds
      working values so the engine always has a valid input, but until the
      visitor makes each choice themselves nothing is shown as selected, the
@@ -633,6 +636,18 @@ export function EstimateCalculator({
    * downstream (session storage, both emails, the CRM record) keeps working
    * against the same shape it always had.
    */
+  /**
+   * The homeowner's stated budget, compared against the range they can already
+   * see. Kept as raw text so a typed "45,000" or "45000" both work and nothing
+   * is reformatted under the cursor while they type.
+   */
+  const budgetValue = useMemo(() => {
+    const n = Number(budgetInput.replace(/[^\d]/g, ""));
+    // Below a few thousand it is a mistyped number, not a budget, and quoting
+    // "unlikely to land near $45" back at someone is worse than saying nothing.
+    return Number.isFinite(n) && n >= 3000 ? n : null;
+  }, [budgetInput]);
+
   const result = useMemo<EstimateResult>(() => {
     const input: EstimateInput = { project: effectiveProject, finish, sqft, refinements };
     const guide = calculateEstimate(input, userRefinementCount);
@@ -642,6 +657,23 @@ export function EstimateCalculator({
     const range = resolveQuotedRange(effectiveProject, finish, sqft, refinements, detailRatio);
     return range ? { ...guide, ...range } : guide;
   }, [effectiveProject, finish, sqft, refinements, userRefinementCount]);
+
+  /**
+   * Declared AFTER `result` on purpose: the comparison must follow the range
+   * the homeowner is looking at, never a stale copy of it.
+   */
+  const budgetAssessment = useMemo(() => {
+    if (budgetValue === null) return null;
+    const internal = resolveInternalEstimate(effectiveProject, finish, sqft, refinements);
+    const topTrades = internal ? internal.admin.trades.slice(0, 2).map((t) => t.division) : [];
+    return assessBudget(
+      effectiveProject,
+      { quality: finish as QualityLevel, sqft, ...refinements } as unknown as ScopeSelections,
+      { low: result.priceLow, high: result.priceHigh },
+      budgetValue,
+      topTrades,
+    );
+  }, [budgetValue, effectiveProject, finish, sqft, refinements, result.priceLow, result.priceHigh]);
 
   /* The visitor's literal card/chip choices, resolved to the exact labels shown
      on screen so the emails can restate them word for word. */
@@ -688,6 +720,7 @@ export function EstimateCalculator({
         // forward the visitor's literal choices to the emails. Without these
         // the emails could only show derived values (for example "moderate
         // layout changes") and never the card the visitor actually clicked.
+        statedBudget: budgetValue,
         layoutLabel: selectedLayoutLabel,
         upgradeLabels: selectedUpgradeLabels,
       }),
@@ -1001,6 +1034,7 @@ export function EstimateCalculator({
             priceHigh: result.priceHigh,
             roi: result.roi,
             refinements,
+            statedBudget: budgetValue,
             layoutLabel: selectedLayoutLabel,
             upgradeLabels: selectedUpgradeLabels,
           },
@@ -1090,6 +1124,7 @@ export function EstimateCalculator({
         priceHigh: result.priceHigh,
         roi: result.roi,
         refinements,
+        statedBudget: budgetValue,
         layoutLabel: selectedLayoutLabel,
         upgradeLabels: selectedUpgradeLabels,
       },
@@ -1678,6 +1713,79 @@ export function EstimateCalculator({
             <p className="mt-1.5 text-[12.5px] text-inverse-muted/90 leading-relaxed">
               {ONSITE_REQUIRED_NOTICE}
             </p>
+          </div>
+
+          {/* BUDGET, ASKED AFTER THE RANGE AND NEVER BEFORE.
+              Asking first anchors the whole interaction: a homeowner who names
+              $40,000 and then sees $27,000-$37,000 reads it as being told what
+              they wanted to hear. The same number after the range reads as an
+              honest estimate. It is also the most intrusive question the form
+              can ask, so it is never the price of seeing a number. */}
+          <div className="border-t border-inverse-foreground/10 pt-4">
+            <label
+              htmlFor="brc-budget"
+              className="block text-[13px] tracking-[0.06em] uppercase text-inverse-foreground"
+            >
+              Working toward a budget?
+            </label>
+            <p className="mt-1.5 text-[12.5px] text-inverse-muted leading-relaxed">
+              Tell us and we will show you what fits. Optional, and it only changes what we show
+              you, never what we charge.
+            </p>
+            <div className="mt-3 flex items-center gap-2">
+              <span className="text-inverse-muted text-[15px]" aria-hidden="true">$</span>
+              <input
+                id="brc-budget"
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                value={budgetInput}
+                onChange={(e) => setBudgetInput(e.target.value.replace(/[^\d,]/g, ""))}
+                placeholder="45,000"
+                aria-describedby="brc-budget-help"
+                data-testid="input-budget"
+                /* 16px, not 15: iOS Safari zooms the whole page when a focused
+                   input renders below 16px, and it does not zoom back out. Every
+                   other input on the site is 16px for the same reason. */
+                className="min-h-11 w-40 rounded-sm border border-inverse-foreground/25 bg-inverse-foreground/5 px-3 text-[16px] text-inverse-foreground placeholder:text-inverse-muted/70 focus:outline-none focus:ring-2 focus:ring-accent-legible"
+              />
+            </div>
+
+            {budgetAssessment && (
+              <div className="mt-4 rounded-sm bg-inverse-foreground/[0.06] border border-inverse-foreground/12 p-4" data-testid="budget-assessment">
+                <p className="text-[14px] text-inverse-foreground leading-relaxed">
+                  {budgetAssessment.headline}
+                </p>
+                {budgetAssessment.driver && (
+                  <p className="mt-1.5 text-[13px] text-inverse-muted leading-relaxed">
+                    {budgetAssessment.driver}
+                  </p>
+                )}
+                {budgetGuidance(budgetAssessment) && (
+                  <p className="mt-2.5 text-[13.5px] text-inverse-foreground leading-relaxed">
+                    {budgetGuidance(budgetAssessment)}
+                  </p>
+                )}
+                {budgetAssessment.options.length > 1 && (
+                  <ul className="mt-3 space-y-1.5">
+                    {budgetAssessment.options.slice(1).map((o) => (
+                      <li key={o.label} className="text-[13px] text-inverse-muted leading-relaxed">
+                        {/* Full dollars, not the compact form used for the
+                            headline range: this list sits directly under a
+                            sentence written in full dollars, and mixing
+                            "$19,000" with "$19k" two lines apart reads as two
+                            different numbers. */}
+                        Or {o.label}: ${o.low.toLocaleString("en-US")} to $
+                        {o.high.toLocaleString("en-US")}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <p id="brc-budget-help" className="mt-3 text-[12px] text-inverse-muted/90 leading-relaxed">
+                  {BUDGET_BASIS_NOTE}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Scope accordion */}
