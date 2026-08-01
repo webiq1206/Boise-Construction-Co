@@ -11,6 +11,7 @@ import { buildPlanningRange, decideMargin } from "../shared/costs/pricing";
 import { RULES_BY_PROJECT, BASELINE_SQFT } from "../shared/costs/scopeRules";
 import { estimateProject } from "../shared/costs/index";
 import { findLeadLeak } from "../shared/costs/outputs";
+import { assessBudget, budgetGuidance } from "../shared/costs/budget";
 import { resolveQuotedRange } from "../shared/costs/resolve";
 import {
   getAvailableFinishLevels,
@@ -272,6 +273,78 @@ for (const project of PROJECTS) {
 if (ceilingPinned.length) {
   console.log(`\nCEILING-PINNED (wired, but the margin guard overrides them - these projects run above the approved ceiling):`);
   for (const p of ceilingPinned) console.log(`  - ${p}`);
+}
+
+// 7. BUDGET COMPARISON. This text is lead-facing, and it makes claims about
+//    money, so it gets the same treatment as everything else a homeowner reads.
+for (const project of PROJECTS) {
+  const rules = RULES_BY_PROJECT[project];
+  if (!rules) continue;
+  const base = BASELINE_SQFT[project];
+  for (const quality of getAvailableFinishLevels(project) as QualityLevel[]) {
+    const selections = { quality, sqft: base } as never;
+    const internal = buildInternalEstimate(rules, selections, project);
+    const range = buildPlanningRange(internal, project, quality, base);
+
+    // Probe across and outside the whole range.
+    const probes = [
+      Math.round(range.high * 1.5),
+      range.high,
+      Math.round((range.low + range.high) / 2),
+      range.low,
+      Math.round(range.low * 0.7),
+      Math.round(range.low * 0.1),
+    ];
+
+    for (const budget of probes) {
+      const a = assessBudget(project, selections, { low: range.low, high: range.high }, budget);
+
+      // The three-state rule. A budget anywhere inside the range is never
+      // treated as short, because it overlaps our own uncertainty.
+      const expected = budget >= range.high ? "above" : budget >= range.low ? "within" : "below";
+      check(
+        a.state === expected,
+        `${project}/${quality} @ budget ${usd(budget)}: state ${a.state}, expected ${expected} against ${usd(range.low)}-${usd(range.high)}`,
+      );
+
+      // Never warn or offer downgrades to someone who is not short.
+      if (a.state !== "below") {
+        check(
+          a.options.length === 0 && !a.unreachable,
+          `${project}/${quality} @ ${usd(budget)}: offered trade-offs to a homeowner who is not short`,
+        );
+      }
+
+      // Every offered option must ACTUALLY reach the budget and actually be
+      // cheaper. Suggesting something that does not help is worse than silence.
+      for (const o of a.options) {
+        check(
+          o.low <= budget,
+          `${project}/${quality} @ ${usd(budget)}: option "${o.label}" lands at ${usd(o.low)}, which does not reach the budget`,
+        );
+        check(
+          o.low <= range.low && o.high <= range.high,
+          `${project}/${quality} @ ${usd(budget)}: option "${o.label}" is not cheaper than the original scope`,
+        );
+      }
+
+      check(
+        a.unreachable === (a.state === "below" && a.options.length === 0),
+        `${project}/${quality} @ ${usd(budget)}: unreachable flag disagrees with the option list`,
+      );
+
+      // Lead-facing copy obeys the same vocabulary wall as everything else.
+      const copy = [a.headline, a.driver ?? "", budgetGuidance(a), ...a.options.map((o) => o.label)].join(" ");
+      const leak = findLeadLeak(copy);
+      check(leak === null, `${project}/${quality} @ ${usd(budget)}: budget copy leaks "${leak}"`);
+
+      // Never lead with the words the owner asked us to avoid.
+      check(
+        !/over budget|can'?t afford|too expensive/i.test(copy),
+        `${project}/${quality} @ ${usd(budget)}: budget copy uses discouraging framing`,
+      );
+    }
+  }
 }
 
 console.log(`\nBaseline planning ranges:`);

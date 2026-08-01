@@ -10,6 +10,7 @@ export * from "./scopeRules";
 export * from "./pricing";
 export * from "./outputs";
 export * from "./resolve";
+export * from "./budget";
 
 import { buildInternalEstimate, type QualityLevel, type ScopeSelections } from "./engine";
 import { buildPlanningRange, type PlanningRange } from "./pricing";
