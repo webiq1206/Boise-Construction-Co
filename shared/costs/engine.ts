@@ -334,6 +334,37 @@ function qualityRateMultiplier(type: CostType, quality: QualityLevel, division: 
   return 1 + (factor - 1) * sensitivity;
 }
 
+/**
+ * Costs a job pays ONCE however many rooms it contains.
+ *
+ * Three bathrooms in one project is one mobilisation, one permit application,
+ * one dumpster on the drive and one supervisor - not three of each. Multiplying
+ * these by the room count is the commonest way a multi-room quote balloons past
+ * what anyone would actually charge, and it was pushing multi-bath jobs into the
+ * margin guard's ceiling, where the price stops responding to any input at all.
+ *
+ * They are not held perfectly flat either: three bathrooms genuinely take longer
+ * than one, so the dumpster is hired longer and the supervisor spends more days
+ * on site. See sharedOverheadFactor.
+ */
+const SHARED_OVERHEAD_DIVISIONS = new Set([
+  "SITE REQUIREMENTS",
+  "ADMINISTRATION",
+  "DESIGN + BUILD LABOR",
+]);
+
+/**
+ * How shared overhead grows with room count.
+ *
+ * Each additional room adds 35% of the base overhead rather than another full
+ * copy: the job runs longer, but the permit, the mobilisation and the set-up are
+ * paid once. Two bathrooms carry 1.35x the site cost of one, three carry 1.7x,
+ * against the 2x and 3x that naive multiplication would charge.
+ */
+function sharedOverheadFactor(instances: number): number {
+  return 1 + (Math.max(1, instances) - 1) * 0.35;
+}
+
 /** Expand a rule's code into the concrete catalog items it prices. */
 function resolveCodes(code: string): LineItem[] {
   const exact = LINE_ITEMS.find((i) => i.code === code);
@@ -378,7 +409,10 @@ export function buildInternalEstimate(
 
   for (const rule of rules) {
     if (rule.when && !rule.when(selections)) continue;
-    const quantity = rule.qty(dims, selections) * instances;
+    const baseQty = rule.qty(dims, selections);
+    // Room work multiplies; shared site costs do not. See SHARED_OVERHEAD_DIVISIONS.
+    const isShared = resolveCodes(rule.code).some((li) => SHARED_OVERHEAD_DIVISIONS.has(li.division));
+    const quantity = baseQty * (isShared ? sharedOverheadFactor(instances) : instances);
     if (!Number.isFinite(quantity) || quantity <= 0) continue;
 
     for (const li of resolveCodes(rule.code)) {

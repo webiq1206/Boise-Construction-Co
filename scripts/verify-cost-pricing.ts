@@ -11,8 +11,15 @@ import { buildPlanningRange, decideMargin } from "../shared/costs/pricing";
 import { RULES_BY_PROJECT, BASELINE_SQFT } from "../shared/costs/scopeRules";
 import { estimateProject } from "../shared/costs/index";
 import { findLeadLeak } from "../shared/costs/outputs";
-import { getAvailableFinishLevels, getProjectSizeConfig, type ProjectType } from "../shared/estimateEngine";
+import { resolveQuotedRange } from "../shared/costs/resolve";
+import {
+  getAvailableFinishLevels,
+  getProjectSizeConfig,
+  getRefinementVisibility,
+  type ProjectType,
+} from "../shared/estimateEngine";
 
+const ceilingPinned: string[] = [];
 let checks = 0;
 let failed = 0;
 function check(cond: boolean, msg: string) {
@@ -181,6 +188,90 @@ for (const project of PROJECTS) {
       `${project}/${quality}: gross profit does not reconcile`,
     );
   }
+}
+
+// 6. A QUESTION WE ASK MUST CHANGE THE ANSWER.
+//
+//    Field visibility comes from getRefinementVisibility, the scope rules come
+//    from RULES_BY_PROJECT, and nothing connected the two. Three project types
+//    showed "bathrooms in scope" and then priced identically whatever the
+//    homeowner answered, which is worse than not asking: they watch the number
+//    not move and conclude the tool is fake.
+//
+//    Asserted for every visible field on every project, not just the one that
+//    broke.
+for (const project of PROJECTS) {
+  if (!RULES_BY_PROJECT[project]) continue;
+  const base = BASELINE_SQFT[project];
+  const vis = getRefinementVisibility(project);
+  const quality: QualityLevel = getAvailableFinishLevels(project)[0] as QualityLevel;
+
+  /*
+   * Compare the UNROUNDED centre, not the published range.
+   *
+   * The range rounds to $5,000 above $100,000, so on a large project a real
+   * $5,357 difference can land in the same bucket and look like a dead field.
+   * The question here is whether the rules respond at all, which is a property
+   * of the centre; whether the response survives rounding is a separate concern.
+   */
+  const priceWith = (ref: Record<string, unknown>) => {
+    const internal = buildInternalEstimate(
+      RULES_BY_PROJECT[project],
+      { quality, sqft: base, ...(ref as object) } as never,
+      project,
+    );
+    return buildPlanningRange(internal, project, quality, base).centre.toFixed(2);
+  };
+
+  const probes: Array<{ field: string; shown: boolean; values: Record<string, unknown>[] }> = [
+    { field: "bathroomCount", shown: vis.bathroomCount, values: [{ bathroomCount: 1 }, { bathroomCount: 3 }] },
+    { field: "fixtureCount", shown: vis.fixtureCount, values: [{ fixtureCount: 1 }, { fixtureCount: 3 }] },
+    { field: "cabinetTier", shown: vis.cabinetTier, values: [{ cabinetTier: "standard" }, { cabinetTier: "custom" }] },
+    { field: "layoutChanges", shown: vis.layoutChanges, values: [{ layoutChanges: "none" }, { layoutChanges: "major" }] },
+    {
+      field: "plumbingElectrical",
+      shown: vis.plumbingElectrical,
+      values: [{ plumbingElectrical: "cosmetic" }, { plumbingElectrical: "full" }],
+    },
+    { field: "kitchenIncluded", shown: vis.kitchenIncluded, values: [{ kitchenIncluded: true }, { kitchenIncluded: false }] },
+  ];
+
+  for (const p of probes) {
+    if (!p.shown) continue;
+    const results = p.values.map(priceWith);
+    if (new Set(results).size > 1) continue;
+
+    /*
+     * Identical prices have two very different causes, and conflating them
+     * sends the next person hunting for a wiring bug that is not there.
+     *
+     * NOT WIRED - the rules genuinely ignore the field. A real defect.
+     *
+     * CEILING-PINNED - the margin guard trimmed this configuration down to the
+     * market ceiling, so the quoted price IS the ceiling and no input can move
+     * it. The field is wired; the guard is overriding it. The fix is to bring
+     * that project's cost under the ceiling, not to add another multiplier.
+     */
+    const allTrimmed = p.values.every((v) => {
+      const internal = buildInternalEstimate(RULES_BY_PROJECT[project], { quality, sqft: base, ...(v as object) } as never, project);
+      return buildPlanningRange(internal, project, quality, base).marginTrimmed;
+    });
+
+    check(
+      allTrimmed,
+      `${project}: "${p.field}" is shown to the homeowner but every value prices identically (${results[0]}) ` +
+        `and the margin guard is NOT trimming, so the field is simply not wired into the scope rules. ` +
+        `Either wire it or stop asking.`,
+    );
+    if (allTrimmed) {
+      ceilingPinned.push(`${project}/${p.field}`);
+    }
+  }
+}
+
+if (ceilingPinned.length) {
+  console.log(`\nCEILING-PINNED (wired, but the margin guard overrides them - these projects run above the approved ceiling):`);
+  for (const p of ceilingPinned) console.log(`  - ${p}`);
 }
 
 console.log(`\nBaseline planning ranges:`);

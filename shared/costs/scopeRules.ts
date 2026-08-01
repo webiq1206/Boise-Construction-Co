@@ -222,6 +222,73 @@ function redoing(s: ScopeSelections, component: string): boolean {
   return s.upgradeScope.includes(component);
 }
 
+/**
+ * Bathrooms in scope, defaulted per project.
+ *
+ * The estimator SHOWS this field on bathroom, whole-home, addition, ADU and
+ * basement, because visibility is driven by ASSUMED_BATHROOMS in
+ * estimateEngine.ts. Nothing connected that table to these rules, so three of
+ * the five asked the question and then priced identically whatever the answer
+ * was. Asking and ignoring is worse than not asking: a homeowner who says their
+ * ADU needs two bathrooms watches the number not move.
+ *
+ * Every rule that depends on bathroom count now goes through here, and an
+ * invariant asserts that each project showing the field actually responds to it.
+ */
+function bathCount(s: ScopeSelections, fallback: number): number {
+  const n = s.bathroomCount;
+  return n === null || n === undefined ? fallback : Math.max(0, n);
+}
+
+/**
+ * What one bathroom adds to a project that is not itself a bathroom remodel.
+ *
+ * Used by additions and ADUs, where a bath is optional scope rather than the
+ * whole job. Priced as its own fixture cluster: tile, vanity, glass, hardware,
+ * ventilation, and a plumbing uplift for the rough-in.
+ */
+function bathroomFixtureRules(project: string, defaultCount: number): ScopeRule[] {
+  const count = (s: ScopeSelections) => bathCount(s, defaultCount);
+  return [
+    {
+      code: "03-16-01", // Tile: floor plus shower surround
+      qty: (_d, s) => count(s) * 140,
+      when: (s) => count(s) > 0,
+      assumption: "About 140 square feet of tile per bathroom, floor plus surround.",
+    },
+    {
+      code: "03-17-03", // Vanity
+      qty: (_d, s) => count(s) * 4,
+      when: (s) => count(s) > 0,
+    },
+    {
+      code: "03-19-06", // Shower glass
+      qty: (_d, s) => count(s),
+      when: (s) => count(s) > 0,
+    },
+    {
+      code: "03-19-01", // Bath hardware: towel bar, ring, paper holder, hooks
+      qty: (_d, s) => count(s) * 4,
+      when: (s) => count(s) > 0,
+    },
+    {
+      code: "03-19-07", // Mirror
+      qty: (_d, s) => count(s),
+      when: (s) => count(s) > 0,
+    },
+    {
+      code: "03-08-02", // Exhaust ducting
+      qty: (_d, s) => count(s),
+      when: (s) => count(s) > 0,
+    },
+    {
+      code: "03-10-01", // Water heater, only once and only if there is a wet room
+      qty: () => 1,
+      when: (s) => count(s) > 0 && project === "adu",
+    },
+  ];
+}
+
 const movesSystems = (s: ScopeSelections) => s.plumbingElectrical === "full";
 const changesLayout = (s: ScopeSelections) => s.layoutChanges === "moderate" || s.layoutChanges === "major";
 const needsPermit = (s: ScopeSelections) => changesLayout(s) || s.plumbingElectrical !== "cosmetic";
@@ -399,15 +466,22 @@ export const KITCHEN_RULES: ScopeRule[] = [
 export const BATHROOM_RULES: ScopeRule[] = [
   ...commonRules("bathroom"),
   ...interiorShellRules("bathroom"),
+  /* The size slider describes ONE bathroom, so a homeowner doing two at once
+     multiplies the fixture work: tile, vanity, glass, hardware, mirrors,
+     ventilation and the rough-in. Site overhead in commonRules is deliberately
+     NOT multiplied - two bathrooms in one job share a dumpster, a permit and a
+     supervisor. */
   {
     code: "03-16-01", // Tile, SF - floor plus a wet wall
     qty: (d, s) => (d.floorArea + d.perimeter * 0.45 * 7),
-    assumption: "Tile covers the floor plus a shower surround roughly 7 feet high across 45% of the perimeter.",
+    assumption:
+      "Tile covers the floor plus a shower surround roughly 7 feet high across 45% of the perimeter, per bathroom in scope.",
   },
   {
     code: "03-17-03", // Vanity, LF
-    qty: (d, s) => Math.max(4, d.floorArea * 0.05) * (s.fixtureCount && s.fixtureCount > 1 ? 1.6 : 1),
-    assumption: "Vanity run scales with room size, floored at a 4 foot single vanity.",
+    qty: (d, s) =>
+      Math.max(4, d.floorArea * 0.05) * (s.fixtureCount && s.fixtureCount > 1 ? 1.6 : 1),
+    assumption: "Vanity run scales with room size, floored at a 4 foot single vanity, per bathroom in scope.",
   },
   {
     code: "03-19-06", // Shower glass, EA
@@ -431,7 +505,8 @@ export const BATHROOM_RULES: ScopeRule[] = [
   },
   {
     code: "03-10-03", // Plumbing, SF-equivalent
-    qty: (d, s) => d.floorArea * PLUMBING_INTENSITY.bathroom * (movesSystems(s) ? 1.3 : 1),
+    qty: (d, s) =>
+      d.floorArea * PLUMBING_INTENSITY.bathroom * (movesSystems(s) ? 1.3 : 1) * (changesLayout(s) ? 1.25 : 1),
     assumption:
       "Bathroom plumbing is priced at 4.5x the whole-dwelling per-square-foot rate: a rough-in, supply, drain, vent and three fixtures against a small floor.",
   },
@@ -601,7 +676,8 @@ function buildShellRules(project: string): ScopeRule[] {
   },
   {
     code: "03-09-08-L", // Electrical labor, SF
-    qty: (d) => d.floorArea * (ELECTRICAL_INTENSITY[project] ?? 1),
+    qty: (d, s) => d.floorArea * (ELECTRICAL_INTENSITY[project] ?? 1) * (movesSystems(s) ? 1.3 : 1),
+    assumption: "Electrical labor carries a 30% uplift when the project takes full new systems.",
   },
   {
     code: "03-09-04-M", // Standard fixtures, SF
@@ -615,9 +691,20 @@ function buildShellRules(project: string): ScopeRule[] {
   },
   {
     code: "03-10-03", // Plumbing, SF-equivalent
-    qty: (d) => d.floorArea * (PLUMBING_INTENSITY[project] ?? 1),
+    qty: (d, s) => d.floorArea * (PLUMBING_INTENSITY[project] ?? 1) * (movesSystems(s) ? 1.35 : 1),
     assumption:
-      "Plumbing intensity is project-specific: an addition carries little unless it has a wet room, an ADU carries a full kitchen and bath.",
+      "Plumbing intensity is project-specific: an addition carries little unless it has a wet room, an ADU carries a full kitchen and bath. Full new systems add 35%.",
+  },
+  {
+    code: "03-17-01", // Kitchen cabinetry, only when the homeowner says there is one
+    qty: () => 12,
+    when: (s) => project === "addition" && s.kitchenIncluded === true,
+    assumption: "An addition carries kitchen cabinetry only when the homeowner states it contains a kitchen.",
+  },
+  {
+    code: "03-17-02", // Countertops for that kitchen
+    qty: () => 10,
+    when: (s) => project === "addition" && s.kitchenIncluded === true,
   },
   {
     code: "03-08-02", // Exhaust / HVAC tie-in, EA
@@ -646,7 +733,19 @@ function buildShellRules(project: string): ScopeRule[] {
  * project is what stops that class of bug: there is no longer an array to
  * inherit from, only a function that must be told which project it is building.
  */
-export const ADDITION_RULES: ScopeRule[] = buildShellRules("addition");
+export const ADDITION_RULES: ScopeRule[] = [
+  ...buildShellRules("addition"),
+  // An addition carries a bathroom only if the homeowner says so, hence a
+  // default of zero. Previously the field was shown and then ignored entirely.
+  ...bathroomFixtureRules("addition", 0),
+  {
+    code: "03-10-03", // Plumbing uplift for a wet room in the addition
+    qty: (d, s) => d.floorArea * PLUMBING_INTENSITY.addition * (bathCount(s, 0) > 0 ? 2.6 : 1),
+    when: (s) => bathCount(s, 0) > 0,
+    assumption:
+      "An addition containing a bathroom carries a full rough-in, which the base addition plumbing rate does not.",
+  },
+];
 
 /* -------------------------------------------------------------------- ADU */
 
@@ -669,37 +768,26 @@ export const ADU_RULES: ScopeRule[] = [
     qty: () => 1,
   },
   {
-    code: "03-10-01", // Water heater, EA
-    qty: () => 1,
-  },
-  {
     code: "03-17-01", // Kitchenette cabinets, LF
-    qty: () => 12,
-    assumption: "A compact ADU kitchen carries about 12 linear feet of cabinet.",
+    qty: (_d, s) => (s.kitchenIncluded === false ? 0 : 12),
+    when: (s) => s.kitchenIncluded !== false,
+    assumption:
+      "A compact ADU kitchen carries about 12 linear feet of cabinet. A homeowner can say the unit has no kitchen, which removes it.",
   },
   {
     code: "03-17-02", // Countertops, LF
-    qty: (_d, s) => 10,
-  },
-  {
-    code: "03-17-03", // Bathroom vanity, LF - one run per bathroom
-    qty: (_d, s) => Math.max(1, s.bathroomCount ?? 1) * 4,
-    assumption: "One 4 foot vanity run per bathroom in the unit.",
-  },
-  {
-    code: "03-16-01", // Bathroom tile, SF - per bathroom
-    qty: (_d, s) => Math.max(1, s.bathroomCount ?? 1) * 140,
-    assumption: "Roughly 140 square feet of tile per bathroom, floor plus surround.",
-  },
-  {
-    code: "03-19-06", // Shower glass, EA - one per bathroom
-    qty: (_d, s) => Math.max(1, s.bathroomCount ?? 1),
+    qty: () => 10,
+    when: (s) => s.kitchenIncluded !== false,
   },
   {
     code: "03-20-01", // Appliances - an ADU is furnished with them
     qty: () => 1,
     when: (s) => s.appliancesByClient !== true,
   },
+  // One bathroom by default, and the homeowner can say otherwise. Previously
+  // the vanity, tile, glass and water heater were hard-coded to a single bath
+  // here, so the stated count changed nothing.
+  ...bathroomFixtureRules("adu", 1),
 ];
 
 /* --------------------------------------------------------------- basement */
@@ -723,7 +811,9 @@ export const BASEMENT_RULES: ScopeRule[] = [
   },
   {
     code: "03-13-01", // Drywall, per SF of project
-    qty: (d) => d.floorArea,
+    qty: (d, s) => d.floorArea * 0.85 * (changesLayout(s) ? 1.3 : 1),
+    assumption:
+      "A finished basement hangs drywall on partition walls and the perimeter, not the full envelope of a new build, so it carries 85% of a ground-up rate. A reconfigured basement carries 30% more.",
   },
   {
     code: "03-14-01", // Interior paint, per SF of project
@@ -765,7 +855,8 @@ export const BASEMENT_RULES: ScopeRule[] = [
   },
   {
     code: "03-10-03", // Plumbing, SF-equivalent
-    qty: (d, s) => d.floorArea * PLUMBING_INTENSITY.basement * ((s.bathroomCount ?? 1) > 0 ? 1 : 0.2),
+    qty: (d, s) =>
+      d.floorArea * PLUMBING_INTENSITY.basement * (bathCount(s, 1) > 0 ? bathCount(s, 1) : 0.2) * (movesSystems(s) ? 1.3 : 1),
     assumption: "Basement plumbing assumes one added bathroom unless the homeowner states otherwise.",
   },
   {
