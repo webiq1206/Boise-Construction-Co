@@ -104,12 +104,12 @@ export default function HomePage() {
             <em className="brc-accent">home</em>
           </>
         }
-        description="If you scrolled past the estimator above, come back anytime — or book a free in-home visit and we'll walk through scope, design direction, and a written project range together."
+        description="If you scrolled past the estimator above, come back anytime - or book a free in-home visit and we'll walk through scope, design direction, and a written project range together."
         variant="tint"
         bullets={[
           "Instant range based on real Treasure Valley costs",
           "Free in-home visit when you're ready for detail",
-          "No obligation — we email you a copy of your estimate",
+          "No obligation - we email you a copy of your estimate",
         ]}
       />
 

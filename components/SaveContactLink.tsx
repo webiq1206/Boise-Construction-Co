@@ -11,7 +11,7 @@ interface SaveContactLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElem
 
 /**
  * Link to the business vCard. On iPhone Safari, tapping opens Contacts with
- * "Add to Contacts" — no app install required.
+ * "Add to Contacts" - no app install required.
  */
 export function SaveContactLink({
   className,

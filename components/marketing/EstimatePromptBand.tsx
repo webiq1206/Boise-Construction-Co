@@ -25,7 +25,7 @@ export function EstimatePromptBand({
   bullets = [
     "Based on real Treasure Valley project costs",
     "Instant range in about 60 seconds",
-    "No obligation — we email you a copy",
+    "No obligation - we email you a copy",
   ],
 }: EstimatePromptBandProps) {
   return (

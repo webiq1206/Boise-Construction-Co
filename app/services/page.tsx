@@ -154,7 +154,7 @@ export default function ServicesIndexPage() {
             <em className="brc-accent">commit</em>
           </>
         }
-        description="Use our Treasure Valley project estimator to see a realistic planning range for kitchen, bath, whole-home, and addition work — then book a free visit when you're ready."
+        description="Use our Treasure Valley project estimator to see a realistic planning range for kitchen, bath, whole-home, and addition work - then book a free visit when you're ready."
       />
 
       <Section divider>

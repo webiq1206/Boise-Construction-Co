@@ -51,7 +51,7 @@ export default function BlogPage() {
           Remodeling Insights &amp; Ideas
         </h1>
         <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-4">
-          Honest advice for Idaho homeowners planning their next renovation — budgeting, timelines,
+          Honest advice for Idaho homeowners planning their next renovation - budgeting, timelines,
           permits, and design-build guidance from Boise Remodeling Co.
         </p>
         <Link
@@ -73,7 +73,7 @@ export default function BlogPage() {
             <em className="brc-accent">range</em>
           </>
         }
-        description="Read enough to know what you want? Use our project estimator for an instant Treasure Valley planning range — takes about 60 seconds, no obligation."
+        description="Read enough to know what you want? Use our project estimator for an instant Treasure Valley planning range - takes about 60 seconds, no obligation."
         variant="greige"
       />
     </>

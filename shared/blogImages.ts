@@ -67,7 +67,7 @@ export interface ArticleInlineFigurePlacement {
 }
 
 /**
- * Editorial inline figures for long articles — inserted after key H2 sections
+ * Editorial inline figures for long articles - inserted after key H2 sections
  * to break up text-heavy content (Phase 4).
  */
 export function getArticleInlineFigures(

@@ -31,7 +31,7 @@ function destPath(name) {
 
 if (!fs.existsSync(staging)) {
   fs.mkdirSync(staging, { recursive: true });
-  console.log(`Created ${staging} — drop PNGs here and re-run.`);
+  console.log(`Created ${staging} - drop PNGs here and re-run.`);
   process.exit(0);
 }
 

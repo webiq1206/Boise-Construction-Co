@@ -80,7 +80,7 @@ export default function EstimatePage() {
         </h1>
         <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed">
           Answer a few questions about your project and get an instant planning range based on real
-          Treasure Valley remodel costs — takes about 60 seconds, no obligation.
+          Treasure Valley remodel costs - takes about 60 seconds, no obligation.
         </p>
       </PageHeroBand>
 
@@ -91,7 +91,7 @@ export default function EstimatePage() {
           <div>
             <div className="brc-label mb-4">What happens next</div>
             <h2 className="font-sans font-light text-2xl md:text-3xl tracking-tight text-foreground mb-4">
-              Your range is a starting point — not a quote
+              Your range is a starting point - not a quote
             </h2>
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6">
               The estimator gives you a realistic planning band for your project type, size, and

@@ -56,7 +56,7 @@ interface BusinessPhoneContactProps {
 }
 
 /**
- * Phone number with an adjacent "Save to contacts" link — use anywhere the
+ * Phone number with an adjacent "Save to contacts" link - use anywhere the
  * business phone is shown on the marketing site.
  */
 export function BusinessPhoneContact({

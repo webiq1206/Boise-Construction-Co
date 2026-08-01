@@ -53,7 +53,7 @@ export function buildBusinessVCard(): string {
     foldLine(`TEL;TYPE=WORK,VOICE:${tel}`),
     foldLine(`EMAIL;TYPE=WORK:${escapeVCard(SITE_CONFIG.email)}`),
     foldLine(`URL:${escapeVCard(SITE_CONFIG.siteUrl)}`),
-    // Locality only — matches public NAP (street is not shown on-site).
+    // Locality only - matches public NAP (street is not shown on-site).
     foldLine(
       `ADR;TYPE=WORK:;;${escapeVCard(SITE_CONFIG.address.city)};${escapeVCard(SITE_CONFIG.address.state)};;${escapeVCard(BUSINESS_INFO.address.country)}`,
     ),
