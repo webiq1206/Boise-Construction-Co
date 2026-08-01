@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
-  Check, ChevronDown, ArrowRight, Lock,
+  Check, ChevronDown, ArrowRight, Lock, Calculator,
   UtensilsCrossed, Droplets, Home, Building2, Layers, AlignLeft,
   LayoutGrid, Star, Sun, Monitor, Dumbbell, Bed, Car,
   Lightbulb, Wind, DoorOpen, GlassWater, Sofa, Frame, Triangle, Grid3x3,
@@ -56,6 +56,7 @@ import {
   APPLIANCE_DISCLAIMER,
 } from "@/shared/estimateEngine";
 import { trackEvent, trackMetaEvent } from "@/lib/analytics";
+import { GRAIN_URL } from "@/lib/grain";
 import {
   applyLeadParams,
   writeStoredPrefill,
@@ -1186,8 +1187,27 @@ export function EstimateCalculator({
     return cn(
       "relative rounded-md border text-left transition-all duration-200",
       active
-        ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50"
-        : "bg-inverse-foreground/[0.06] border-inverse-foreground/[0.12] hover-elevate",
+        ? "border-accent-legible bg-accent/10 ring-2 ring-accent-legible/25 shadow-[0_0_0_1px_hsl(var(--accent-legible)/0.35)]"
+        : "border-accent-legible/30 bg-inverse-foreground/[0.07] hover:border-accent-legible/55 hover:bg-inverse-foreground/[0.11] hover-elevate",
+    );
+  }
+
+  const renderStepLabel = (stepKey: Parameters<typeof stepNo>[0], label: string, className?: string) => (
+    <p className={cn("block text-[13px] tracking-[0.12em] uppercase mb-3", className)}>
+      <span className="text-accent-legible">{stepNo(stepKey)}</span>
+      <span className="text-inverse-muted/50 mx-2" aria-hidden>
+        ·
+      </span>
+      <span className="text-inverse-foreground/90">{label}</span>
+    </p>
+  );
+
+  function darkChoice(active: boolean) {
+    return cn(
+      "rounded-md border transition-all duration-200",
+      active
+        ? "border-accent-legible bg-accent/10 ring-2 ring-accent-legible/25 shadow-[0_0_0_1px_hsl(var(--accent-legible)/0.35)] text-inverse-foreground"
+        : "border-accent-legible/30 bg-inverse-foreground/[0.07] text-inverse-muted hover:border-accent-legible/55 hover:bg-inverse-foreground/[0.11] hover-elevate",
     );
   }
 
@@ -1195,13 +1215,10 @@ export function EstimateCalculator({
      SECTIONS
   ══════════════════════════════ */
 
-  /* Consistent, readable step label used across every input group. */
-  const stepLabel = "block text-[13px] tracking-[0.12em] uppercase text-inverse-muted mb-3";
-
   /* Step 1 - Project type: prominent card grid (matches the other inputs) */
   const projectGrid = (
     <div className="mb-6">
-      <p className={stepLabel}>{stepNo("project")} &middot; Choose your project</p>
+      {renderStepLabel("project", "Choose your project")}
       <div
         className="grid grid-cols-2 sm:grid-cols-3 gap-2.5"
         role="tablist"
@@ -1240,20 +1257,27 @@ export function EstimateCalculator({
   /* Intro - eyebrow + dynamic per-project headline */
   const intro = (
     <div className="mb-7">
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-4 text-[10px] md:text-[11px] tracking-[0.14em] uppercase text-inverse-muted">
-        <span className="inline-flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent-legible" aria-hidden />
-          Free
-        </span>
-        <span className="opacity-40" aria-hidden>·</span>
-        <span>About 60 seconds</span>
-        <span className="opacity-40" aria-hidden>·</span>
-        <span>No obligation</span>
+      <div className="flex items-start gap-4 mb-5">
+        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-sm bg-accent-legible/15 border border-accent-legible/30 text-accent-legible">
+          <Calculator className="h-5 w-5" strokeWidth={1.5} aria-hidden />
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-3 text-[10px] md:text-[11px] tracking-[0.14em] uppercase text-inverse-muted">
+            <span className="inline-flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent-legible" aria-hidden />
+              Free
+            </span>
+            <span className="opacity-40" aria-hidden>·</span>
+            <span>About 60 seconds</span>
+            <span className="opacity-40" aria-hidden>·</span>
+            <span>No obligation</span>
+          </div>
+          <p className="text-[12px] tracking-[0.16em] uppercase text-accent-legible/90 mb-2">
+            Cost estimator
+          </p>
+        </div>
       </div>
-      <p className="text-[12px] tracking-[0.16em] uppercase text-inverse-muted mb-2.5">
-        Ballpark your project in under 60 seconds
-      </p>
-      <h2 className="font-sans font-light text-[clamp(1.75rem,4vw,3rem)] leading-[1.08] tracking-tight text-inverse-foreground">
+      <h2 className="font-sans font-light text-[clamp(1.875rem,4.5vw,3.25rem)] leading-[1.06] tracking-tight text-inverse-foreground pb-6 border-b border-accent-legible/25">
         {!chosen.project ? (
           /* Before a project is picked the headline must not name one. */
           <>
@@ -1281,7 +1305,7 @@ export function EstimateCalculator({
      home's measured interior square footage, bounded by the project range. */
   const addressStep = (
     <div className="mt-6 scroll-mt-20" ref={addressStepRef}>
-      <p className={stepLabel}>{stepNo("address")} &middot; Your property address</p>
+      {renderStepLabel("address", "Your property address")}
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
         Confirms we serve your area and auto-fills your home size if we find a match.
       </p>
@@ -1316,7 +1340,7 @@ export function EstimateCalculator({
   /* Step 3 - Layout / type (drives refinement complexity) */
   const subtypeGrid = (
     <div className="scroll-mt-20" ref={layoutRef}>
-      <p className={stepLabel}>{stepNo("layout")} &middot; {config.gridLabel}</p>
+      {renderStepLabel("layout", config.gridLabel)}
       <div className="grid grid-cols-2 gap-2.5" role="group" aria-label={config.gridLabel}>
         {config.subtypes.map((opt) => {
           const Icon = opt.icon;
@@ -1357,7 +1381,7 @@ export function EstimateCalculator({
   const sizeGrid = (
     <div className="mt-6 scroll-mt-20" ref={sizeRef}>
       <div className="flex items-baseline justify-between mb-3">
-        <p className={cn(stepLabel, "mb-0")}>{stepNo("size")} &middot; About how big?</p>
+        {renderStepLabel("size", "About how big?", "mb-0")}
         <span
           className="brc-display-num tabular-nums text-[22px] leading-none text-inverse-foreground"
           data-testid="calc-sqft-value"
@@ -1398,7 +1422,7 @@ export function EstimateCalculator({
   /* Step 4 - Upgrades (optional add-ons) */
   const chipsRow = (
     <div className="mt-5 scroll-mt-20" ref={chipsRef}>
-      <p className={stepLabel}>{stepNo("upgrades")} &middot; {config.chipsLabel}</p>
+      {renderStepLabel("upgrades", config.chipsLabel)}
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
         {effectiveProject === "kitchen" || effectiveProject === "bathroom"
           ? "Pick only the parts you're redoing, or leave blank for a full remodel. This adjusts your range."
@@ -1440,7 +1464,7 @@ export function EstimateCalculator({
      ticked, which meant a visitor could not see it and never agreed to it. */
   const systemsRow = (
     <div className="mt-5">
-      <p className={stepLabel}>{stepNo("systems")} &middot; {getPlumbingElectricalLabel(effectiveProject)}</p>
+      {renderStepLabel("systems", getPlumbingElectricalLabel(effectiveProject))}
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
         Taking a sink out and putting it back in the same spot is routine. This is about whether pipes or circuits actually change location, which is where the cost is.
       </p>
@@ -1459,10 +1483,8 @@ export function EstimateCalculator({
               data-testid={`calc-systems-${opt.value}`}
               aria-pressed={active}
               className={cn(
-                "rounded-md border py-3 px-3 min-h-[64px] transition-all duration-200 flex flex-col items-center justify-center gap-0.5",
-                active
-                  ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
-                  : "bg-inverse-foreground/[0.05] border-inverse-foreground/[0.12] text-inverse-muted hover-elevate",
+                darkChoice(active),
+                "py-3 px-3 min-h-[64px] flex flex-col items-center justify-center gap-0.5",
               )}
             >
               <span className="text-[13.5px] text-inverse-foreground leading-tight">{opt.label}</span>
@@ -1478,7 +1500,7 @@ export function EstimateCalculator({
      "Cabinets" chip; now an explicit choice. */
   const cabinetRow = (
     <div className="mt-5">
-      <p className={stepLabel}>{stepNo("cabinetry")} &middot; Cabinetry</p>
+      {renderStepLabel("cabinetry", "Cabinetry")}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
         {([
           { value: "standard" as const, label: "Stock", sub: "Standard sizes and finishes" },
@@ -1498,10 +1520,8 @@ export function EstimateCalculator({
               data-testid={`calc-cabinets-${opt.value}`}
               aria-pressed={active}
               className={cn(
-                "rounded-md border py-3 px-3 min-h-[64px] transition-all duration-200 flex flex-col items-center justify-center gap-0.5",
-                active
-                  ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
-                  : "bg-inverse-foreground/[0.05] border-inverse-foreground/[0.12] text-inverse-muted hover-elevate",
+                darkChoice(active),
+                "py-3 px-3 min-h-[64px] flex flex-col items-center justify-center gap-0.5",
               )}
             >
               <span className="text-[13.5px] text-inverse-foreground leading-tight">{opt.label}</span>
@@ -1517,7 +1537,7 @@ export function EstimateCalculator({
      two, so this prices the difference rather than the whole thing. */
   const bathCountRow = (
     <div className="mt-5 scroll-mt-20" ref={bathRef}>
-      <p className={stepLabel}>{stepNo("bathcount")} &middot; How many bathrooms?</p>
+      {renderStepLabel("bathcount", "How many bathrooms?")}
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
         {effectiveProject === "whole-home"
           ? "Bathrooms move a whole-home budget more than any other room. Count every one in the project."
@@ -1556,10 +1576,8 @@ export function EstimateCalculator({
               data-testid={`calc-baths-${n}`}
               aria-pressed={active}
               className={cn(
-                "rounded-md border py-3 min-h-[52px] text-[15px] transition-all duration-200",
-                active
-                  ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
-                  : "bg-inverse-foreground/[0.05] border-inverse-foreground/[0.12] text-inverse-muted hover-elevate",
+                darkChoice(active),
+                "py-3 min-h-[52px] text-[15px]",
               )}
             >
               {n === 0 ? "None" : `${n}${n === 6 ? "+" : ""}`}
@@ -1593,7 +1611,7 @@ export function EstimateCalculator({
           ];
     return (
       <div className="mt-5 scroll-mt-20" ref={kitchenRef}>
-        <p className={stepLabel}>{stepNo("kitchen")} &middot; {label}</p>
+        {renderStepLabel("kitchen", label)}
         <div className="grid grid-cols-2 gap-2">
           {opts.map((opt) => {
             const active = kitchenIn === opt.value;
@@ -1612,10 +1630,8 @@ export function EstimateCalculator({
                 data-testid={`calc-kitchen-${opt.value ? "yes" : "no"}`}
                 aria-pressed={active}
                 className={cn(
-                  "rounded-md border py-3 px-3 min-h-[64px] transition-all duration-200 flex flex-col items-center justify-center gap-0.5",
-                  active
-                    ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
-                    : "bg-inverse-foreground/[0.05] border-inverse-foreground/[0.12] text-inverse-muted hover-elevate",
+                  darkChoice(active),
+                  "py-3 px-3 min-h-[64px] flex flex-col items-center justify-center gap-0.5",
                 )}
               >
                 <span className="text-[13.5px] text-inverse-foreground leading-tight">{opt.label}</span>
@@ -1633,7 +1649,7 @@ export function EstimateCalculator({
      competence rather than as a form: the estimator already understands the
      project. Editing is one tap away for the minority who want it. */
   const typicalPanel = (
-    <div className="mt-6 scroll-mt-20 rounded-md border border-inverse-foreground/[0.14] bg-inverse-foreground/[0.04] p-4" ref={typicalRef}>
+    <div className="mt-6 scroll-mt-20 rounded-md border border-accent-legible/30 bg-inverse-foreground/[0.05] p-4 shadow-[inset_0_0_0_1px_hsl(var(--accent-legible)/0.08)]" ref={typicalRef}>
       <p className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground">
         Typical for a {FINISH_LABELS[finish]} {config.tabLabel.toLowerCase()}
       </p>
@@ -1670,7 +1686,7 @@ export function EstimateCalculator({
   /* Finish level (options tied to effectiveProject) */
   const finishRow = (
     <div className="mt-5 scroll-mt-20" ref={finishRef}>
-      <p className={stepLabel}>{stepNo("finish")} &middot; Finish level</p>
+      {renderStepLabel("finish", "Finish level")}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {availFinish.map((level) => {
           const active = chosen.finish && finish === level;
@@ -1682,10 +1698,8 @@ export function EstimateCalculator({
               data-testid={`calc-finish-${level}`}
               aria-pressed={active}
               className={cn(
-                "rounded-md border py-3 px-2 min-h-[64px] transition-all duration-200 flex flex-col items-center justify-center gap-0.5",
-                active
-                  ? "bg-inverse-foreground/[0.18] border-inverse-foreground/50 text-inverse-foreground"
-                  : "bg-inverse-foreground/[0.05] border-inverse-foreground/[0.12] text-inverse-muted hover-elevate",
+                darkChoice(active),
+                "py-3 px-2 min-h-[64px] flex flex-col items-center justify-center gap-0.5",
               )}
             >
               {/* Finish is the single biggest price driver (roughly 2x per tier),
@@ -2328,10 +2342,26 @@ export function EstimateCalculator({
         id="calculator"
         variant="inverse"
         divider
-        className="scroll-mt-16 relative border-t border-accent-legible/30"
+        className="scroll-mt-16 relative overflow-hidden border-y-2 border-accent-legible/40"
       >
-        <div ref={sectionRef} className="container px-4 sm:px-6 pb-4 md:pb-6">
-          <div className="mx-auto w-full max-w-5xl">{flow}</div>
+        <div className="absolute inset-x-0 top-0 h-1 bg-accent-legible z-10" aria-hidden />
+        <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-accent-legible/15" aria-hidden />
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.028]"
+          style={{ backgroundImage: GRAIN_URL, backgroundRepeat: "repeat" }}
+          aria-hidden
+        />
+        <div ref={sectionRef} className="container px-4 sm:px-6 py-2 md:py-4 relative z-[1]">
+          <div className="mx-auto w-full max-w-5xl">
+            <div className="relative rounded-sm border border-accent-legible/45 bg-inverse-foreground/[0.04] shadow-[0_0_0_1px_hsl(var(--accent-legible)/0.1),0_24px_60px_-20px_rgba(0,0,0,0.55)]">
+              <div className="absolute inset-y-0 left-0 w-1 bg-accent-legible/80 rounded-l-sm" aria-hidden />
+              <div
+                className="absolute inset-x-6 sm:inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-accent-legible/50 to-transparent"
+                aria-hidden
+              />
+              <div className="relative px-5 sm:px-7 md:px-9 py-8 md:py-10 lg:py-12">{flow}</div>
+            </div>
+          </div>
         </div>
       </Section>
       <StickyEstimateBar
