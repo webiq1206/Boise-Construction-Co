@@ -147,39 +147,48 @@ const UNIVERSAL_INCLUDES = [
   "Standard warranties",
 ];
 
-/** Exclusions and assumptions that hold for every project type. */
+/**
+ * Exclusions and assumptions that hold for every project type.
+ *
+ * Written tight on purpose. These lists are the bulk of the confirmation email
+ * and of the on-page scope panel, and a homeowner skims fine print or ignores
+ * it. Every distinct fact below is one a lead needs, so the editing is to the
+ * wording and never to the substance: no item has been dropped to save room,
+ * only said in fewer words.
+ */
 const UNIVERSAL_EXCLUDES = [
-  "Appliances, which are client-supplied (we guide selection but do not purchase or install)",
-  "Unknown conditions discovered at demolition: rot, water damage, failed framing, or pest damage",
-  "Hazardous material abatement (asbestos or lead paint), which is common in pre-1980 homes",
-  "Code upgrades triggered by inspection, such as panel replacement, egress, or insulation",
+  "Appliances, cookware, and small-appliance storage. Appliances are client-supplied: we guide selection but do not purchase or install",
+  "Unknown conditions found at demolition: rot, water damage, failed framing, pest damage",
+  "Hazardous material abatement (asbestos, lead paint), common in pre-1980 homes",
+  "Code upgrades triggered by inspection: panel replacement, egress, insulation",
   "Furniture, decor, window coverings, and art",
-  "Landscaping or exterior restoration beyond the immediate work area",
+  "Landscaping or exterior restoration beyond the work area",
   "Temporary housing, storage, or moving costs",
 ];
 
 const UNIVERSAL_ASSUMPTIONS = [
-  "The home is structurally sound with no active leaks, rot, or pest damage",
-  "Existing systems that are not being replaced already meet code",
-  "Work proceeds in one continuous phase with normal site access",
-  "Standard material lead times, with no expedited or special-order surcharges",
-  "Finishes are selected from the allowances set during design",
-  "2025 Boise-area market conditions for labor and materials",
-  "A typical project with no major structural issues",
+  "The home is structurally sound, with no active leaks, rot, or pest damage",
+  "Systems not being replaced already meet code",
+  "Work runs in one continuous phase with normal site access",
+  "Standard lead times, with no expedited or special-order surcharges",
+  "Finishes come from the allowances set during design",
+  "2025 Boise-area labor and material costs",
+  // "A typical project with no major structural issues" used to sit here and
+  // said the same thing as the first line, which already covers structure.
 ];
 
 const UNIVERSAL_INCREASES = [
   "Relocating plumbing, gas, or load-bearing walls",
-  "Structural surprises found once walls or floors are opened",
-  "Older homes with knob-and-tube wiring, galvanized supply lines, or plaster walls",
+  "Structural surprises found once walls or floors are open",
+  "Knob-and-tube wiring, galvanized supply lines, or plaster in older homes",
   "Custom millwork, imported stone, or specialty-order materials",
   "A compressed schedule, or living in the home during construction",
-  "Difficult access: second story, tight lots, or limited staging area",
+  "Difficult access: second story, tight lots, limited staging",
 ];
 
 const UNIVERSAL_DECREASES = [
   "Keeping the existing layout and plumbing locations",
-  "Choosing stock or semi-custom cabinetry over fully custom",
+  "Stock or semi-custom cabinetry instead of fully custom",
   "Reusing sound cabinet boxes, flooring, or fixtures where practical",
   "A flexible timeline that lets us schedule efficiently",
   "Combining adjacent rooms into a single mobilization",
@@ -228,7 +237,10 @@ const PROJECT_UPGRADES: Record<ProjectType, string[]> = {
 };
 
 const PROJECT_EXCLUDES: Partial<Record<ProjectType, string[]>> = {
-  kitchen: ["Countertop appliances, cookware, and small-appliance garages beyond the cabinet plan"],
+  // Appliances already have a universal exclusion; a second kitchen-specific
+  // one two lines below it made the same point twice. Cookware and
+  // small-appliance garages fold into the universal line instead.
+  kitchen: [],
   basement: [
     "Foundation repair, waterproofing, or drainage correction if moisture is present",
     "Radon mitigation, if testing shows it is needed",
@@ -603,19 +615,19 @@ const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>>
   kitchen: {
     refresh: {
       low: 15900, high: 26600, roi: 72,
-      included: ["New countertops (laminate/entry quartz)", "Cabinet repaints or door replacement", "Appliance selection guidance (appliances are client-supplied)", "New plumbing fixtures", "LVP or tile flooring"],
+      included: ["New countertops (laminate/entry quartz)", "Cabinet repaints or door replacement", "New plumbing fixtures", "LVP or tile flooring"],
     },
     "mid-range": {
       low: 37200, high: 58400, roi: 74,
-      included: ["Semi-custom cabinetry", "Quartz or granite countertops", "Appliance selection guidance (appliances are client-supplied)", "Tile backsplash", "Updated plumbing and electrical"],
+      included: ["Semi-custom cabinetry", "Quartz or granite countertops", "Tile backsplash", "Updated plumbing and electrical"],
     },
     "high-end": {
       low: 85000, high: 138100, roi: 70,
-      included: ["Custom or semi-custom cabinetry", "Premium stone countertops", "Appliance selection guidance (appliances are client-supplied)", "Island addition or expansion", "Custom tile work and lighting redesign"],
+      included: ["Custom or semi-custom cabinetry", "Premium stone countertops", "Island addition or expansion", "Custom tile work and lighting redesign"],
     },
     luxury: {
       low: 148800, high: 191300, roi: 62,
-      included: ["Fully custom cabinetry", "Exotic stone countertops", "Appliance selection guidance (appliances are client-supplied)", "Structural layout changes", "Smart home integration"],
+      included: ["Fully custom cabinetry", "Exotic stone countertops", "Structural layout changes", "Smart home integration"],
     },
   },
   bathroom: {

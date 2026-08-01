@@ -449,11 +449,11 @@ export const KITCHEN_RULES: ScopeRule[] = [
     qty: (d, s) => d.floorArea * PLUMBING_INTENSITY.kitchen * (movesSystems(s) ? 1.4 : 1),
     assumption: "Kitchen plumbing is a single sink cluster, priced well below the whole-dwelling per-square-foot average.",
   },
-  {
-    code: "03-20-01-L", // Appliance install labour only
-    qty: () => 1,
-    assumption: "Appliances are supplied by the homeowner; only installation labor is carried.",
-  },
+  // NO APPLIANCE LINE. This company does not supply or install appliances, so
+  // neither the package nor the install labour belongs in a kitchen estimate.
+  // Carrying the labour was still wrong: we do not set them, and billing an
+  // hour for it contradicts what every page of the site tells homeowners.
+  // Enforced by verify-no-appliance-costs so it cannot come back.
   {
     code: "03-21-06", // Custom vent hood
     qty: () => 1,
@@ -779,11 +779,10 @@ export const ADU_RULES: ScopeRule[] = [
     qty: () => 10,
     when: (s) => s.kitchenIncluded !== false,
   },
-  {
-    code: "03-20-01", // Appliances - an ADU is furnished with them
-    qty: () => 1,
-    when: (s) => s.appliancesByClient !== true,
-  },
+  // NO APPLIANCE LINE, same as the kitchen. An ADU is handed over ready for the
+  // owner's own appliances. This used to carry a full $10,000 package plus $800
+  // of install labour, which is why ADU came in high and why the estimate
+  // contradicted the site's own answer that appliances are client-supplied.
   // One bathroom by default, and the homeowner can say otherwise. Previously
   // the vanity, tile, glass and water heater were hard-coded to a single bath
   // here, so the stated count changed nothing.

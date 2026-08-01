@@ -48,7 +48,6 @@ function toSelections(
     kitchenIncluded: refinements.kitchenIncluded ?? null,
     upgradeScope: refinements.upgradeScope ?? null,
     // The company does not sell or install appliances; see APPLIANCE_DISCLAIMER.
-    appliancesByClient: true,
   };
 }
 

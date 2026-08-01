@@ -7,10 +7,7 @@ import { SITE_CONFIG } from "@/shared/siteConfig";
 import {
   takeoffForRange,
   takeoffForClient,
-  formatQuantity,
-  formatTakeoffAmount,
-  TAKEOFF_BASIS_NOTICE,
-  TAKEOFF_SCOPE_NOTICE,
+  formatQuantity,  TAKEOFF_SCOPE_NOTICE,
   type UnitCostOverrides,
 } from "@/shared/costCatalog";
 import { resolveInternalEstimate } from "@/shared/costs/resolve";
@@ -261,63 +258,77 @@ function renderIncludedList(items: string[]): string {
  * needs to log in to understand the estimate.
  */
 /**
- * Where the money goes, from the component catalog.
+ * The scope lines a homeowner sees, as plain labels.
  *
- * Line items are a typical allocation of a validated total, not itemized
- * pricing this company has bid, so TAKEOFF_BASIS_NOTICE always renders with
- * them. Without it, "$11,880 cabinetry" reads as a quote for cabinetry.
+ * Shared with the "also included" line so the two cannot repeat each other.
  */
-function renderTakeoffHtml(
-  est: VerifiedEstimate,
-  overrides: UnitCostOverrides | undefined,
-  audience: "admin" | "client",
-): string {
-  const fullTakeoff = takeoffForRange(
-    est.project,
-    est.finish,
-    est.sqft,
-    est.priceLow,
-    est.priceHigh,
-    overrides,
+function takeoffLabelsFor(est: VerifiedEstimate, overrides: UnitCostOverrides | undefined): string[] {
+  return takeoffForClient(
+    takeoffForRange(est.project, est.finish, est.sqft, est.priceLow, est.priceHigh, overrides),
+  )
+    .lines.filter((l) => l.cost > 0)
+    .map((l) => l.label);
+}
+
+/**
+ * Drop anything the trade list above already told them.
+ *
+ * "Permits" and "Demolition and disposal" appear verbatim in both lists, and
+ * "Semi-custom cabinetry" restates "Cabinetry" while adding the grade - so the
+ * match is on the leading noun, and the entry that carries extra information
+ * survives. What is left is the genuinely new material: design, the single
+ * point of contact, the warranty, and the finish grades.
+ */
+function dropDuplicatesOf(includes: string[], takeoffLabels: string[]): string[] {
+  // Word order differs between the two lists - "Tile backsplash" against
+  // "Backsplash tile" - so substring matching misses. Compare the set of
+  // meaningful words instead.
+  const NOISE = new Set([
+    "and", "or", "the", "a", "an", "of", "for", "with", "from", "to", "in", "on",
+    // Grade adjectives. The finish level at the top of the email already states
+    // the grade, so "Semi-custom cabinetry" next to "Cabinetry" is one trade
+    // listed twice for one adjective.
+    "new", "updated", "standard", "semicustom", "custom", "premium", "quality", "entry",
+  ]);
+  const words = (s: string) =>
+    s.toLowerCase().replace(/[^a-z ]/g, " ").split(/\s+/).filter((w) => w.length > 2 && !NOISE.has(w));
+
+  const pool = new Set(takeoffLabels.flatMap(words));
+  return includes.filter((inc) => {
+    const w = words(inc);
+    // Keep anything with no meaningful words left to judge on.
+    if (w.length === 0) return true;
+    return !w.every((token) => pool.has(token));
+  });
+}
+
+function renderTakeoffHtml(est: VerifiedEstimate, overrides: UnitCostOverrides | undefined): string {
+  // PM and overhead are folded proportionally into the visible lines, so the
+  // homeowner never sees them itemized and the total is unchanged either way.
+  const takeoff = takeoffForClient(
+    takeoffForRange(est.project, est.finish, est.sqft, est.priceLow, est.priceHigh, overrides),
   );
-  // Clients never see PM or overhead itemized; those dollars are folded
-  // proportionally into the visible lines so the total is unchanged. The
-  // admin email keeps the full breakdown.
-  const takeoff = audience === "client" ? takeoffForClient(fullTakeoff) : fullTakeoff;
-  const isClient = audience === "client";
 
-  // The client sees WHAT is in scope and the quantities behind it, never a
-  // dollar figure per line. See TAKEOFF_SCOPE_NOTICE for why. The admin email
-  // keeps the priced takeoff so the team can work from it.
-  const groupRows = (group: "direct" | "soft") =>
-    takeoff.lines
-      .filter((line) => line.group === group && line.cost > 0)
-      .map((line) => {
-        const qty = formatQuantity(line);
-        const label = qty
-          ? `${escapeHtml(line.label)} <span style="color:${EMAIL_BRAND.textMuted};">(${escapeHtml(qty)})</span>`
-          : escapeHtml(line.label);
-        if (isClient) {
-          return `<tr><td colspan="2" style="${LABEL_CELL}color:${EMAIL_BRAND.text};width:auto;">${label}</td></tr>`;
-        }
-        return `<tr><td style="${LABEL_CELL}color:${EMAIL_BRAND.text};width:auto;">${label}</td><td style="${VALUE_CELL}text-align:right;white-space:nowrap;">${formatTakeoffAmount(line.cost)}</td></tr>`;
-      })
-      .join("");
-
-  const subtotal = (label: string, amount: number) =>
-    `<tr><td style="padding:11px 0;color:${EMAIL_BRAND.textMuted};">${escapeHtml(label)}</td><td style="padding:11px 0;text-align:right;color:${EMAIL_BRAND.text};white-space:nowrap;">${formatTakeoffAmount(amount)}</td></tr>`;
+  // Scope and quantities, never a dollar figure per line. See
+  // TAKEOFF_SCOPE_NOTICE for why.
+  const rows = takeoff.lines
+    .filter((line) => line.cost > 0)
+    .map((line) => {
+      const qty = formatQuantity(line);
+      const label = qty
+        ? `${escapeHtml(line.label)} <span style="color:${EMAIL_BRAND.textMuted};">(${escapeHtml(qty)})</span>`
+        : escapeHtml(line.label);
+      return `<tr><td style="${LABEL_CELL}color:${EMAIL_BRAND.text};width:auto;">${label}</td></tr>`;
+    })
+    .join("");
 
   return `
     <div style="margin:28px 0;">
-      <p style="${SECTION_TITLE}">${isClient ? "The work this range covers" : "Where the money typically goes"}</p>
+      <p style="${SECTION_TITLE}">What this range covers</p>
       <table style="width:100%;border-collapse:collapse;">
-        <tr><td colspan="2" style="padding:4px 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:${EMAIL_BRAND.textMuted};">The work</td></tr>
-        ${groupRows("direct")}
-        <tr><td colspan="2" style="padding:16px 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:${EMAIL_BRAND.textMuted};">Running the job</td></tr>
-        ${groupRows("soft")}
-        ${isClient ? "" : subtotal("Midpoint of your planning range", takeoff.total)}
+        ${rows}
       </table>
-      <p style="margin:12px 0 0;font-size:12px;line-height:1.55;color:${EMAIL_BRAND.textMuted};">${escapeHtml(isClient ? TAKEOFF_SCOPE_NOTICE : TAKEOFF_BASIS_NOTICE)}</p>
+      <p style="margin:12px 0 0;font-size:12px;line-height:1.55;color:${EMAIL_BRAND.textMuted};">${escapeHtml(TAKEOFF_SCOPE_NOTICE)}</p>
     </div>
   `;
 }
@@ -477,6 +488,7 @@ export function buildEstimateSectionsHtml(
     sqft: est.sqft,
     refinements: est.refinements,
   });
+  const alsoIncluded = dropDuplicatesOf(disclosure.includes, takeoffLabelsFor(est, overrides));
 
   return `
     <div style="background:${EMAIL_BRAND.raised};border-left:3px solid ${EMAIL_BRAND.accent};padding:24px;margin:24px 0;border-radius:4px;">
@@ -492,16 +504,49 @@ export function buildEstimateSectionsHtml(
       </table>
     </div>
 
-    ${renderTakeoffHtml(est, overrides, audience)}
+    ${/* Client only. The admin email used to carry this AND the trade rollup
+          below, which are two pricing formats for the same job: an allocation
+          of the total across typical trades, and the actual line-item engine
+          output. Two sets of numbers for one estimate is worse than either
+          alone, because the reader has to work out which one to trust. The
+          engine is the source of truth, so the allocation goes.
+
+          It stays for the client, where it is not a pricing format at all:
+          they see the trades and quantities with no dollar figures, which is
+          the one place this view still earns its space. */ ""}
+    ${audience === "client" ? renderTakeoffHtml(est, overrides) : ""}
+    ${
+      audience === "client" && alsoIncluded.length
+        ? `<div style="margin:-16px 0 28px;">
+      <p style="margin:0;font-size:13px;line-height:1.6;color:${EMAIL_BRAND.textMuted};">
+        <span style="color:${EMAIL_BRAND.text};">Also included:</span> ${escapeHtml(alsoIncluded.join(", "))}.
+      </p>
+    </div>`
+        : ""
+    }
     ${renderBudgetHtml(est, audience)}
     ${audience === "admin" ? renderTradeRollupHtml(est) : ""}
 
-    <div style="margin:28px 0;">
+    ${/* The itemized "what this range covers" checklist used to live here as a
+          second table, immediately under the trade-and-quantity list that has
+          the same heading. The two overlapped almost entirely - cabinetry,
+          countertops, backsplash, plumbing and electrical appeared in both -
+          so a homeowner read the same scope twice in different words.
+
+          Everything the trade list does not already say is kept, as one line
+          rather than a second table: the finish-level specifics that tell them
+          which grade was assumed, and the service commitments that are not
+          trades at all. Nothing is dropped, it is just said once. */ ""}
+    ${
+      audience === "admin"
+        ? `<div style="margin:28px 0;">
       <p style="${SECTION_TITLE}">What this range covers</p>
       <table style="width:100%;border-collapse:collapse;">
         ${renderIncludedList(disclosure.includes)}
       </table>
-    </div>
+    </div>`
+        : ""
+    }
 
     <div style="margin:28px 0;">
       <p style="${SECTION_TITLE}">What it does not cover</p>
@@ -510,10 +555,22 @@ export function buildEstimateSectionsHtml(
       </table>
     </div>
 
-    <div style="margin:28px 0;">
+    ${/* Assumptions read as fine print, so they are set as fine print: one
+          compact paragraph rather than a seventh bulleted block. Every
+          assumption is still here word for word - a homeowner who wants to
+          check what we took for granted can, and nothing has been dropped to
+          make the email shorter. The admin keeps the scannable list. */ ""}
+    ${
+      audience === "client"
+        ? `<div style="margin:28px 0;">
+      <p style="${SECTION_TITLE}">What we assumed</p>
+      <p style="margin:0;font-size:13px;line-height:1.6;color:${EMAIL_BRAND.textMuted};">${escapeHtml(disclosure.assumptions.join(". "))}.</p>
+    </div>`
+        : `<div style="margin:28px 0;">
       <p style="${SECTION_TITLE}">What we assumed</p>
       ${renderPlainList(disclosure.assumptions)}
-    </div>
+    </div>`
+    }
 
     <div style="margin:28px 0;">
       <p style="${SECTION_TITLE}">What could move the final number</p>
@@ -531,10 +588,17 @@ export function buildEstimateSectionsHtml(
       </table>
     </div>
 
-    <div style="margin:28px 0;">
+    ${
+      audience === "client"
+        ? `<div style="margin:28px 0;">
+      <p style="${SECTION_TITLE}">Optional upgrades that add cost</p>
+      <p style="margin:0;font-size:13px;line-height:1.6;color:${EMAIL_BRAND.textMuted};">${escapeHtml(disclosure.upgrades.join(", "))}.</p>
+    </div>`
+        : `<div style="margin:28px 0;">
       <p style="${SECTION_TITLE}">Optional upgrades that add cost</p>
       ${renderPlainList(disclosure.upgrades)}
-    </div>
+    </div>`
+    }
 
     <div style="background:#2a2a1c;border-left:3px solid #c9a227;padding:18px;margin:24px 0;border-radius:4px;">
       <p style="margin:0 0 10px;color:#e8dca6;font-size:13px;line-height:1.55;"><strong>${escapeHtml(NOT_A_QUOTE_NOTICE)}</strong></p>
@@ -703,10 +767,10 @@ export function buildCustomerEmailHtml(
 
   const content = estimate
     ? `
-      <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">Thanks, ${escapeHtml(firstName)}. Here is the planning range you built, saved so you have it in writing.</p>
+      <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">Thanks, ${escapeHtml(firstName)}. Here is the planning range you built.</p>
       ${buildEstimateSectionsHtml(estimate, overrides)}
       ${budgetNote}
-      <p style="color:${EMAIL_BRAND.text};line-height:1.6;">We will reach out within one business day to schedule your free in-home visit, where we confirm the scope and give you a firm number. In the meantime, reply to this email or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> with any questions.</p>
+      <p style="color:${EMAIL_BRAND.text};line-height:1.6;">We will reach out within one business day to book your free in-home visit, where we confirm the scope and give you a firm number. Until then, reply here or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> with any questions.</p>
       <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The Boise Remodeling Co team</p>
     `
     : `

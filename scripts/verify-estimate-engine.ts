@@ -798,9 +798,15 @@ for (const project of projects) {
   }
 
   // MUTATION CHECK. A guard that cannot fail proves nothing. The admin email
-  // renders the full takeoff on purpose, so it MUST trip the same detector.
+  // renders internal figures on purpose, so it MUST trip the same detector.
   // If this ever passes as "clean", the detector has stopped working and every
   // assertion above became worthless.
+  //
+  // This used to prove itself against the old allocation takeoff, which itemized
+  // "Project management and supervision" and "Overhead and profit". That format
+  // has been removed - the admin email carried it AND the line-item engine
+  // rollup, two sets of numbers for one job - so the proof now rests on the
+  // rollup's own internal columns, which are just as forbidden lead-side.
   const adminHtml = buildAdminEmailHtml(sampleLead, {
     project: "kitchen",
     finish: "mid-range",
@@ -818,8 +824,18 @@ for (const project of projects) {
       "so the customer-email assertions above are vacuous",
   );
   check(
-    adminHtml.includes("Project management and supervision") && adminHtml.includes("Overhead and profit"),
-    "admin email must keep the full takeoff itemized for the team",
+    adminHtml.includes("Internal breakdown") &&
+      adminHtml.includes("Our cost") &&
+      adminHtml.includes("Gross profit"),
+    "admin email must keep the line-item engine rollup, with our cost and gross profit, for the team",
+  );
+  // Exactly one pricing format. The allocation takeoff and the engine rollup
+  // disagreeing by a few hundred dollars on the same job is worse than either
+  // alone, because the reader has to decide which to trust.
+  check(
+    !adminHtml.includes("Where the money typically goes") &&
+      !adminHtml.includes("Midpoint of your planning range"),
+    "admin email must not carry the retired allocation takeoff alongside the engine rollup",
   );
 
   console.log(

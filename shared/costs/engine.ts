@@ -44,8 +44,6 @@ export interface ScopeSelections {
   kitchenIncluded?: boolean | null;
   /** Which components the homeowner is actually redoing. Empty/null = everything. */
   upgradeScope?: string[] | null;
-  /** Client is supplying appliances (the company does not sell or install them). */
-  appliancesByClient?: boolean;
 }
 
 /* ------------------------------------------------------- derived dimensions */
