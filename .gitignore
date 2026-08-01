@@ -21,3 +21,7 @@ attached_assets
 .uploads
 public/images/blog/Screenshot_*.png
 tsconfig.tsbuildinfo
+
+# Machine-local Claude Code settings (tool permissions). Specific to one
+# developer's machine, so it must not follow the repo to Replit or a teammate.
+.claude/settings.local.json
