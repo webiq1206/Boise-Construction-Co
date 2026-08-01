@@ -1,10 +1,10 @@
-import { ArrowRight, Calculator, Phone } from 'lucide-react';
+import { ArrowRight, Calculator } from 'lucide-react';
 import { MarketingCard } from './MarketingCard';
 import { GuideSidebarToc } from './GuideContentBlocks';
 import type { TocHeading } from '@/lib/content-utils';
 import { EstimateCTA } from '@/components/modals/EstimateCTA';
 import { CTA_PRIMARY } from '@/shared/ctaCopy';
-import { SITE_CONFIG } from '@/shared/siteConfig';
+import { BusinessPhoneContact } from '@/components/BusinessPhoneContact';
 
 interface ArticleSidebarProps {
   tocHeadings: TocHeading[];
@@ -39,10 +39,15 @@ export function ArticleSidebarCta({ description }: { description: string }) {
           {CTA_PRIMARY}
           <ArrowRight className="ml-2 h-4 w-4" />
         </EstimateCTA>
-        <p className="text-xs text-inverse-muted text-center flex items-center justify-center gap-1">
-          <Phone className="h-3 w-3" />
-          {SITE_CONFIG.phone}
-        </p>
+        <BusinessPhoneContact
+          layout="compact"
+          className="justify-center"
+          phoneClassName="text-xs text-inverse-muted hover:text-inverse-foreground transition-colors"
+          saveClassName="text-xs text-inverse-muted hover:text-inverse-foreground transition-colors"
+          showPhoneIcon
+          iconClassName="h-3 w-3"
+          phoneTestId="link-sidebar-phone"
+        />
       </div>
     </MarketingCard>
   );

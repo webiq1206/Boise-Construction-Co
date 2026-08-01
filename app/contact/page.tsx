@@ -25,6 +25,8 @@ import {
   generateWebPageSchema,
 } from '@/lib/schema';
 import { EmailLink } from '@/components/EmailLink';
+import { BusinessPhoneContact } from '@/components/BusinessPhoneContact';
+import { SaveContactLink } from '@/components/SaveContactLink';
 import { BUSINESS_INFO } from '@/lib/seo';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { CITIES, TREASURE_VALLEY_CITIES } from '@/shared/contentData';
@@ -124,6 +126,8 @@ interface ContactChannelProps {
   children: React.ReactNode;
   subtext: string;
   featured?: boolean;
+  /** Rendered below the card, outside any link wrapper (e.g. save-to-contacts). */
+  companion?: React.ReactNode;
 }
 
 function ContactChannel({
@@ -134,6 +138,7 @@ function ContactChannel({
   children,
   subtext,
   featured,
+  companion,
 }: ContactChannelProps) {
   const inner = (
     <MarketingCard
@@ -163,13 +168,16 @@ function ContactChannel({
 
   if (href) {
     return (
-      <a
-        href={href}
-        className="block h-full group"
-        {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-      >
-        {inner}
-      </a>
+      <div className="h-full">
+        <a
+          href={href}
+          className="block h-full group"
+          {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+        >
+          {inner}
+        </a>
+        {companion ? <div className="mt-2 pl-14">{companion}</div> : null}
+      </div>
     );
   }
 
@@ -235,12 +243,13 @@ export default function ContactPage() {
               Schedule a free 60 to 90 minute in-home visit, call our team, or use the project
               estimator to explore a planning range for your remodel.
             </p>
-            <a
-              href={SITE_CONFIG.phoneHref}
-              className="inline-block brc-display-num tabular-nums text-2xl md:text-3xl text-inverse-foreground hover:text-inverse-foreground/75 transition-colors mb-2"
-            >
-              {BUSINESS_INFO.phone}
-            </a>
+            <BusinessPhoneContact
+              layout="stack"
+              display
+              phoneClassName="text-2xl md:text-3xl text-inverse-foreground hover:text-inverse-foreground/75 transition-colors"
+              saveClassName="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
+              phoneTestId="link-hero-phone"
+            />
             <a
               href={SITE_CONFIG.phoneSmsHref}
               className="block text-sm text-inverse-foreground/80 hover:text-inverse-foreground transition-colors mb-8"
@@ -291,6 +300,9 @@ export default function ContactPage() {
                   href={SITE_CONFIG.phoneHref}
                   subtext="Mon – Fri 7 am – 6 pm · Sat 8 am – 4 pm"
                   featured
+                  companion={
+                    <SaveContactLink className="text-sm text-muted-foreground hover:text-foreground transition-colors" />
+                  }
                 >
                   <span className="brc-display-num tabular-nums">{BUSINESS_INFO.phone}</span>
                 </ContactChannel>
@@ -301,11 +313,14 @@ export default function ContactPage() {
                   label="Text us"
                   href={SITE_CONFIG.phoneSmsHref}
                   subtext="Quick questions? Send us a text"
+                  companion={
+                    <SaveContactLink className="text-sm text-muted-foreground hover:text-foreground transition-colors" />
+                  }
                 >
                   <span className="brc-display-num tabular-nums">{BUSINESS_INFO.phone}</span>
                 </ContactChannel>
               </Reveal>
-              <Reveal delay={60}>
+              <Reveal delay={90}>
                 <ContactChannel
                   icon={<Mail className="h-5 w-5" strokeWidth={1.5} />}
                   label="Email us"
@@ -502,12 +517,14 @@ export default function ContactPage() {
                 <p className="text-base text-inverse-muted mb-2">
                   Call us directly - no phone tree, no sales scripts.
                 </p>
-                <a
-                  href={SITE_CONFIG.phoneHref}
-                  className="inline-block brc-display-num tabular-nums text-2xl text-inverse-foreground hover:text-inverse-foreground/75 transition-colors mb-2"
-                >
-                  {BUSINESS_INFO.phone}
-                </a>
+                <BusinessPhoneContact
+                  layout="stack"
+                  display
+                  className="mb-2"
+                  phoneClassName="text-2xl text-inverse-foreground hover:text-inverse-foreground/75 transition-colors"
+                  saveClassName="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
+                  phoneTestId="link-closing-phone"
+                />
                 <a
                   href={SITE_CONFIG.phoneSmsHref}
                   className="block text-sm text-inverse-muted hover:text-inverse-foreground transition-colors mb-8"

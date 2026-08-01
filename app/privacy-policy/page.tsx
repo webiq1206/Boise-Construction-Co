@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import { ObfuscatedEmail } from "@/components/ObfuscatedEmail";
+import { BusinessPhoneLink } from "@/components/BusinessPhoneContact";
+import { SaveContactLink } from "@/components/SaveContactLink";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/schema";
 import { buildCanonical, FEED_ALTERNATES } from "@/lib/page-metadata";
@@ -111,8 +113,16 @@ export default function PrivacyPolicyPage() {
             </p>
             <ul>
               <li>Email: <ObfuscatedEmail user="hello" domain="boiseremodeling.co" className="text-primary hover:underline inline-flex items-center gap-1" showIcon={false} /></li>
-              <li>Phone: <a href={SITE_CONFIG.phoneHref} className="text-primary hover:underline">{SITE_CONFIG.phone}</a></li>
-              <li>Text: <a href={SITE_CONFIG.phoneSmsHref} className="text-primary hover:underline">{SITE_CONFIG.phone}</a></li>
+              <li>
+                Phone: <BusinessPhoneLink className="text-primary hover:underline" />{" "}
+                <span className="text-muted-foreground">·</span>{" "}
+                <SaveContactLink className="text-primary hover:underline">Save to contacts</SaveContactLink>
+              </li>
+              <li>
+                Text: <a href={SITE_CONFIG.phoneSmsHref} className="text-primary hover:underline">{SITE_CONFIG.phone}</a>{" "}
+                <span className="text-muted-foreground">·</span>{" "}
+                <SaveContactLink className="text-primary hover:underline">Save to contacts</SaveContactLink>
+              </li>
               <li>Service area: {SITE_CONFIG.address.cityState} · {SITE_CONFIG.address.serviceArea}</li>
             </ul>
           </div>

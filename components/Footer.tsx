@@ -4,6 +4,7 @@ import { SITE_TAGLINE } from "@/shared/siteContent";
 import { areaPath, servicePath } from "@/lib/seo-routes";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { EmailLink } from "@/components/EmailLink";
+import { BusinessPhoneContact } from "@/components/BusinessPhoneContact";
 import { FooterCTAs } from "@/components/modals/FooterCTAs";
 import { CONTENT_HUBS, categoryHubPath, guidePath } from "@/shared/contentHubs";
 import { BLOG_POSTS } from "@/shared/blogContent";
@@ -45,12 +46,12 @@ export function Footer() {
               {SITE_TAGLINE}.
             </p>
             <div className="space-y-2">
-              <a
-                href={SITE_CONFIG.phoneHref}
-                className="block text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
-              >
-                {SITE_CONFIG.phone}
-              </a>
+              <BusinessPhoneContact
+                layout="stack"
+                phoneClassName="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
+                saveClassName="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
+                phoneTestId="link-footer-phone"
+              />
               <a
                 href={SITE_CONFIG.phoneSmsHref}
                 className="block text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
@@ -238,19 +239,22 @@ export function Footer() {
             </h3>
             <ul className="space-y-2.5">
               <FooterCTAs />
-              {[
-                { label: SITE_CONFIG.phone, href: SITE_CONFIG.phoneHref },
-                { label: "Text us", href: SITE_CONFIG.phoneSmsHref },
-              ].map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <BusinessPhoneContact
+                  layout="stack"
+                  phoneClassName="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
+                  saveClassName="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
+                  phoneTestId="link-footer-column-phone"
+                />
+              </li>
+              <li>
+                <a
+                  href={SITE_CONFIG.phoneSmsHref}
+                  className="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
+                >
+                  Text us
+                </a>
+              </li>
               <li>
                 <EmailLink className="text-sm text-left text-inverse-muted hover:text-inverse-foreground transition-colors" />
               </li>

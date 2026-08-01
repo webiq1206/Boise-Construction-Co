@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { CTA_QUOTE } from "@/shared/ctaCopy";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { NavEstimateButton } from "@/components/modals/NavEstimateButton";
+import { SaveContactLink } from "@/components/SaveContactLink";
 
 const NAV_LINKS = [
   { label: "Services", href: "/services" },
@@ -90,17 +91,22 @@ export function Navigation() {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
-            <a
-              href={SITE_CONFIG.phoneHref}
-              className="flex items-center gap-2 text-[13px] font-normal transition-colors text-muted-foreground hover:text-foreground"
-              data-testid="link-phone-desktop"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="pulse-accent absolute inline-flex h-full w-full rounded-full bg-accent-legible opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-legible" />
-              </span>
-              {SITE_CONFIG.phone}
-            </a>
+            <div className="flex flex-col items-end gap-0.5">
+              <a
+                href={SITE_CONFIG.phoneHref}
+                className="flex items-center gap-2 text-[13px] font-normal transition-colors text-muted-foreground hover:text-foreground"
+                data-testid="link-phone-desktop"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="pulse-accent absolute inline-flex h-full w-full rounded-full bg-accent-legible opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-legible" />
+                </span>
+                {SITE_CONFIG.phone}
+              </a>
+              <SaveContactLink className="text-[11px] text-muted-foreground hover:text-foreground transition-colors">
+                Save to contacts
+              </SaveContactLink>
+            </div>
             <a
               href={SITE_CONFIG.phoneSmsHref}
               className="text-[13px] font-normal transition-colors text-muted-foreground hover:text-foreground"
@@ -186,17 +192,22 @@ export function Navigation() {
 
                   {/* Bottom contact row */}
                   <div className="shrink-0 border-t border-border/40 px-6 py-6 space-y-3 pb-safe">
-                    <a
-                      href={SITE_CONFIG.phoneHref}
-                      className="flex items-center gap-3 text-base font-normal text-foreground"
-                      data-testid="link-phone-mobile-menu"
-                    >
-                      <span className="relative flex h-2.5 w-2.5">
-                        <span className="pulse-accent absolute inline-flex h-full w-full rounded-full bg-accent-legible opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-legible" />
-                      </span>
-                      {SITE_CONFIG.phone}
-                    </a>
+                    <div className="space-y-1">
+                      <a
+                        href={SITE_CONFIG.phoneHref}
+                        className="flex items-center gap-3 text-base font-normal text-foreground"
+                        data-testid="link-phone-mobile-menu"
+                      >
+                        <span className="relative flex h-2.5 w-2.5">
+                          <span className="pulse-accent absolute inline-flex h-full w-full rounded-full bg-accent-legible opacity-75" />
+                          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-legible" />
+                        </span>
+                        {SITE_CONFIG.phone}
+                      </a>
+                      <SaveContactLink className="pl-[22px] text-sm text-muted-foreground hover:text-foreground transition-colors">
+                        Save to contacts
+                      </SaveContactLink>
+                    </div>
                     <a
                       href={SITE_CONFIG.phoneSmsHref}
                       className="flex items-center gap-3 text-base font-normal text-muted-foreground hover:text-foreground transition-colors"

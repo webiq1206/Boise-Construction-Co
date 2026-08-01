@@ -29,6 +29,7 @@ import { EstimateCTA } from "@/components/modals/EstimateCTA";
 import { CTA_FORM_SEND } from "@/shared/ctaCopy";
 import { CONSULT_BULLETS } from "@/shared/siteContent";
 import { SITE_CONFIG } from "@/shared/siteConfig";
+import { BusinessPhoneContact } from "@/components/BusinessPhoneContact";
 import { trackEvent, trackMetaEvent } from "@/lib/analytics";
 import { readStoredPrefill, PREFILL_UPDATED_EVENT, hasPassedGate } from "@/lib/leadPrefill";
 import type { PropertyProfile } from "@/shared/propertyProfile";
@@ -333,10 +334,13 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
         <div className="flex flex-col gap-1">
           <p className="text-sm text-muted-foreground">
             Need us sooner?{" "}
-            <a href={SITE_CONFIG.phoneHref} className="inline-flex items-center gap-1.5 font-normal text-foreground underline-offset-2 hover:underline">
-              <Phone className="h-3.5 w-3.5" />
-              {SITE_CONFIG.phone}
-            </a>
+            <BusinessPhoneContact
+              inline
+              showPhoneIcon
+              phoneClassName="inline-flex items-center gap-1.5 font-normal text-foreground underline-offset-2 hover:underline"
+              saveClassName="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              phoneTestId="link-consult-success-phone"
+            />
           </p>
           <p className="text-xs text-muted-foreground">
             A confirmation email is on its way to your inbox.
