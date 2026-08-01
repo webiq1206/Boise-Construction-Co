@@ -403,11 +403,23 @@ html, body {
 /* The sage tick is intentional on every band, but keep the label TEXT muted. */
 
 /* ─── Calculator range slider ─── */
+/* The size slider is the estimator's primary measurement control, and on a
+   phone it was a 3px-tall touch target: the element WAS the painted track, so
+   the entire draggable region was three pixels of cross-axis. The 20px thumb
+   drew outside that box, meaning a tap on the visible thumb could miss the
+   input altogether.
+
+   The element is now a 44px touch target. Vertical padding plus
+   background-clip: content-box keeps the PAINTED track at 3px, so the inline
+   progress gradient still renders exactly as before and nothing looks thicker. */
 .brc-slider {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 3px;
+  height: 44px;
+  padding: 20.5px 0;
+  background-color: transparent;
+  background-clip: content-box;
   border-radius: 3px;
   outline: none;
   cursor: pointer;

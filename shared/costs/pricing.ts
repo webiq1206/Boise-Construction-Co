@@ -167,9 +167,22 @@ export interface PlanningRange {
   warnings: EstimateWarning[];
 }
 
-/** Round to a resolution that does not overclaim precision. */
-function roundTo(value: number): number {
-  const step = value >= 100000 ? 5000 : value >= 25000 ? 1000 : 500;
+/**
+ * Rounding resolution for a range, chosen ONCE from its centre.
+ *
+ * Deriving the step per value let a single range straddle two resolutions: a
+ * centre just over $25,000 rounded its high end to the nearest $1,000 and its
+ * low end, still under the threshold, to the nearest $500. The homeowner then
+ * read "$23,500 to $32,000" - two different precisions in one sentence, which
+ * reads like a mistake even though both numbers were correct.
+ *
+ * One step per range keeps the two ends speaking with the same confidence.
+ */
+function stepFor(centre: number): number {
+  return centre >= 100000 ? 5000 : centre >= 25000 ? 1000 : 500;
+}
+
+function roundTo(value: number, step: number): number {
   return Math.round(value / step) * step;
 }
 
@@ -192,10 +205,11 @@ export function buildPlanningRange(
   const band = Math.max(MIN_BAND, BASE_BAND * (1 - BAND_TIGHTENING * clamped));
 
   const centre = decision.price;
+  const step = stepFor(centre);
   return {
     centre,
-    low: roundTo(centre * (1 - band)),
-    high: roundTo(centre * (1 + band)),
+    low: roundTo(centre * (1 - band), step),
+    high: roundTo(centre * (1 + band), step),
     band,
     appliedMargin: decision.appliedMargin,
     marginTrimmed: decision.trimmed,

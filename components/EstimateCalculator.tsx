@@ -1324,7 +1324,11 @@ export function EstimateCalculator({
         data-testid="calc-sqft-slider"
         aria-label="Approximate square footage"
         style={{
-          background: `linear-gradient(to right, hsl(var(--accent-legible)) 0%, hsl(var(--accent-legible)) ${sizePct}%, hsl(var(--inverse-foreground) / 0.14) ${sizePct}%, hsl(var(--inverse-foreground) / 0.14) 100%)`,
+          // backgroundImage, NOT the `background` shorthand. The shorthand
+          // resets background-clip to border-box, which defeated the
+          // content-box clip that keeps the painted track 3px tall inside a
+          // 44px touch target - the slider rendered as a thick 44px bar.
+          backgroundImage: `linear-gradient(to right, hsl(var(--accent-legible)) 0%, hsl(var(--accent-legible)) ${sizePct}%, hsl(var(--inverse-foreground) / 0.14) ${sizePct}%, hsl(var(--inverse-foreground) / 0.14) 100%)`,
         }}
       />
       <div className="flex justify-between mt-2 text-[12px] text-inverse-muted">
