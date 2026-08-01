@@ -38,6 +38,7 @@
     "lib/**/*.tsx",
     "hooks/**/*.ts",
     "hooks/**/*.tsx",
+    "shared/costs/**/*.ts",
     "shared/blogContent.ts",
     "shared/contentData.ts",
     "shared/schema.ts",

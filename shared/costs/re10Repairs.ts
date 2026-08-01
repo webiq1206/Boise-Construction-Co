@@ -1,0 +1,1014 @@
+/**
+ * RE-10 REPAIR TAXONOMY: what each repair request actually costs to do properly.
+ *
+ * The main estimator answers "what does a 250 SF kitchen remodel cost". This one
+ * answers a different question: "here are eleven small repairs an inspector
+ * found, what is the whole list worth". The inputs share nothing - one is a
+ * project with dimensions, the other is a list of discrete items - so this file
+ * carries its own scope layer. What it reuses is the part that matters: the
+ * owner's line-item catalog, the same UOMs and unit costs, and the same true
+ * gross-margin arithmetic.
+ *
+ * WHY RECIPES RATHER THAN LINE ITEMS. An RE-10 says "repair damaged drywall and
+ * repaint the affected wall". Priced literally that is drywall plus paint, and
+ * it would lose money on every job. Doing it properly also means masking the
+ * room, cutting out the damage, hauling it away, taping, floating, sanding,
+ * matching texture, priming, and cleaning up. Each repair kind below expands
+ * into the full set of catalog codes that the work actually consumes, so the
+ * supporting work is priced because it is listed, not remembered.
+ *
+ * WHY MINIMUMS EXIST. The catalog is a whole-project rate card: drywall labour
+ * is $7.50 per square foot of a remodel. Applied to a four-square-foot patch
+ * that is thirty dollars of labour, which does not pay for the drive, let alone
+ * the tradesman. Trade minimums and mobilisation below are what stop a list of
+ * small repairs from being priced into a loss. They are not padding; they are
+ * the difference between the catalog rate and the cost of showing up.
+ */
+import {
+  LINE_ITEMS,
+  item,
+  type CostType,
+  type LineItem,
+  type Uom,
+} from "./lineItemCatalog";
+import { type CostLine, type EstimateWarning, priceAtMargin } from "./engine";
+
+/* ------------------------------------------------------------------ trades */
+
+/**
+ * The parent categories an RE-10 list is organised into. Deliberately the
+ * homeowner's vocabulary, not the catalog's 27 divisions: an agent reads
+ * "Painting", not "PAINTING + WALLPAPER".
+ */
+export type RepairTrade =
+  | "carpentry"
+  | "drywall"
+  | "painting"
+  | "flooring"
+  | "plumbing"
+  | "electrical"
+  | "exterior"
+  | "roofing"
+  | "general";
+
+export const TRADE_LABELS: Record<RepairTrade, string> = {
+  carpentry: "Carpentry and trim",
+  drywall: "Drywall",
+  painting: "Painting",
+  flooring: "Flooring",
+  plumbing: "Plumbing",
+  electrical: "Electrical",
+  exterior: "Exterior and siding",
+  roofing: "Roofing",
+  general: "General repairs",
+};
+
+/* --------------------------------------------------------------- taxonomy */
+
+/** The unit a repair is measured in. EA covers "one door", "one outlet". */
+export type RepairUnit = "EA" | "SF" | "LF";
+
+/**
+ * Why an item cannot be priced automatically.
+ *
+ * These are not edge cases to be tidied away later. An RE-10 that says "repair
+ * foundation crack" or "evaluate mould in crawlspace" is asking a question this
+ * engine must not answer from a web form, and the honest response is to price
+ * what it can and say plainly that the rest needs eyes on it.
+ */
+export type ReviewReason =
+  | "structural"
+  | "foundation"
+  | "water-intrusion"
+  | "mould-hazmat"
+  | "asbestos-lead"
+  | "major-roofing"
+  | "electrical-service"
+  | "sewer-septic"
+  | "hvac-replacement"
+  | "gas"
+  | "fire-damage"
+  | "engineering"
+  | "permit-uncertain"
+  | "concealed"
+  | "incomplete-info"
+  | "out-of-scope";
+
+export const REVIEW_REASON_TEXT: Record<ReviewReason, string> = {
+  structural: "Structural work. Needs an onsite evaluation, and may need an engineer.",
+  foundation: "Foundation concern. Needs an onsite evaluation before any number is meaningful.",
+  "water-intrusion": "Active or past water intrusion. The repair depends on what is found behind the finish.",
+  "mould-hazmat": "Possible mould or hazardous material. Requires testing before scoping.",
+  "asbestos-lead": "Possible asbestos or lead paint, common in pre-1980 homes. Requires testing and a licensed abatement contractor.",
+  "major-roofing": "Roofing beyond a small localized repair. Needs an onsite evaluation.",
+  "electrical-service": "Main service, panel or meter work. Requires a licensed electrician and utility coordination.",
+  "sewer-septic": "Sewer or septic. Requires a licensed specialist and usually a camera inspection.",
+  "hvac-replacement": "HVAC equipment replacement. Requires a licensed mechanical contractor.",
+  gas: "Gas line work. Requires a licensed plumber and a pressure test.",
+  "fire-damage": "Fire damage. Scope depends on a restoration assessment.",
+  engineering: "Requires an engineer's letter or stamped detail.",
+  "permit-uncertain": "May require a permit and inspection. Timeline depends on the jurisdiction.",
+  concealed: "The extent is concealed. What is behind the finish decides the cost.",
+  "incomplete-info": "The request does not say enough to price. More detail or a photo would settle it.",
+  "out-of-scope": "Outside what Boise Remodeling Co. performs. We can help point you to the right trade.",
+};
+
+/**
+ * A recipe component: one catalog code and how much of it a repair consumes.
+ *
+ * `per` multiplies the repair's own quantity. `flat` is added once regardless of
+ * size, which is how set-up work is modelled - masking a room costs the same
+ * whether the patch is one square foot or six.
+ */
+interface Component {
+  /** Catalog code, or a base code whose -M and -L halves both apply. */
+  code: string;
+  /** Multiplier on the repair quantity. */
+  per?: number;
+  /** Fixed quantity, added once per repair item. */
+  flat?: number;
+  why?: string;
+}
+
+interface Recipe {
+  trade: RepairTrade;
+  label: string;
+  unit: RepairUnit;
+  /** Used when the document gives no measurement. Always flagged as assumed. */
+  defaultQty: number;
+  /** What one unit of this repair consumes. */
+  components: Component[];
+  /** Always route to a human, whatever the document says. */
+  alwaysReview?: ReviewReason;
+  /** Minutes of a tradesman's time, used for the labour-hours floor. */
+  crewMinutes?: number;
+}
+
+/**
+ * The repair kinds the estimator can price.
+ *
+ * Chosen from what actually appears on Idaho RE-10s and inspection responses,
+ * and bounded by what this company performs. Anything an inspector writes that
+ * does not map to one of these is not guessed at - it becomes an item for
+ * manual review, which is the whole point of having a closed taxonomy.
+ */
+export type RepairKind =
+  // drywall + paint
+  | "drywall-patch"
+  | "drywall-repaint-wall"
+  | "interior-paint-room"
+  | "exterior-paint-spot"
+  // carpentry + millwork
+  | "trim-repair"
+  | "interior-door-adjust"
+  | "interior-door-replace"
+  | "door-hardware"
+  | "cabinet-repair"
+  | "handrail-repair"
+  | "handrail-replace"
+  | "stair-tread-repair"
+  | "shelving-repair"
+  // flooring
+  | "flooring-patch"
+  | "tile-repair"
+  | "carpet-repair"
+  // plumbing
+  | "faucet-replace"
+  | "toilet-repair"
+  | "supply-valve-replace"
+  | "drain-leak-repair"
+  | "water-heater-replace"
+  // electrical
+  | "outlet-switch-replace"
+  | "gfci-install"
+  | "light-fixture-replace"
+  | "smoke-detector"
+  | "electrical-cover-plates"
+  // exterior
+  | "siding-repair"
+  | "exterior-trim-repair"
+  | "caulking-weatherproofing"
+  | "deck-board-repair"
+  | "deck-railing-repair"
+  | "fence-gate-repair"
+  | "gutter-repair"
+  | "window-seal-repair"
+  // roofing
+  | "roof-minor-repair"
+  // safety / misc
+  | "safety-correction"
+  | "general-minor-repair";
+
+const R = (
+  trade: RepairTrade,
+  label: string,
+  unit: RepairUnit,
+  defaultQty: number,
+  components: Component[],
+  extra: Partial<Recipe> = {},
+): Recipe => ({ trade, label, unit, defaultQty, components, ...extra });
+
+/**
+ * PROTECTION AND CLEAN-UP ON EVERY INTERIOR REPAIR.
+ *
+ * 03-02-04 Temp Protection and 03-02-07 Daily Clean are in the catalog because
+ * real jobs incur them. On an occupied house being sold they are not optional:
+ * floors get covered, furniture gets moved back, and the room is left clean for
+ * a walkthrough. Costed per repair rather than per job so a longer list carries
+ * proportionally more of it.
+ */
+const PROTECT: Component = { code: "03-02-04", flat: 60, why: "Floor and furniture protection, per work area" };
+const CLEANUP: Component = { code: "03-02-07", flat: 0.12, why: "Clean-up and haul-out of debris" };
+
+export const RECIPES: Record<RepairKind, Recipe> = {
+  /* ---------------------------------------------------------- drywall */
+  "drywall-patch": R("drywall", "Drywall patch and finish", "SF", 8, [
+    PROTECT,
+    // Cut out, replace, tape, float, sand. Materials at 1.35x the hole to
+    // cover the feathered-out area a patch always needs.
+    { code: "03-13-01", per: 1.35, why: "Board, tape and compound over the feathered area, not just the hole" },
+    { code: "03-14-01", per: 1.6, why: "Prime, texture-match and paint out to a natural break" },
+    CLEANUP,
+  ], { crewMinutes: 150 }),
+
+  "drywall-repaint-wall": R("drywall", "Drywall repair with full wall repaint", "SF", 12, [
+    PROTECT,
+    { code: "03-13-01", per: 1.35, why: "Board, tape and compound over the feathered area" },
+    // Repainting the whole wall, not just the patch: quantity is the damaged
+    // area, so the paint multiplier carries the rest of the wall.
+    { code: "03-14-01", per: 6, why: "Full wall repainted corner to corner so the patch does not read" },
+    CLEANUP,
+  ], { crewMinutes: 210 }),
+
+  /* ----------------------------------------------------------- paint */
+  "interior-paint-room": R("painting", "Interior painting", "SF", 350, [
+    PROTECT,
+    { code: "03-14-01", per: 1, why: "Wall and ceiling area, primed and painted" },
+    CLEANUP,
+  ], { crewMinutes: 300 }),
+
+  "exterior-paint-spot": R("painting", "Exterior paint touch-up", "SF", 80, [
+    { code: "03-14-02", per: 1.2, why: "Scrape, prime and paint, feathered into sound coating" },
+    CLEANUP,
+  ], { crewMinutes: 150 }),
+
+  /* ------------------------------------------------------- carpentry */
+  "trim-repair": R("carpentry", "Trim and moulding repair", "LF", 12, [
+    PROTECT,
+    { code: "03-18-02", per: 1.15, why: "Trim stock with cutting waste" },
+    { code: "03-14-01", per: 1.2, why: "Prime and paint the replaced run" },
+    CLEANUP,
+  ], { crewMinutes: 120 }),
+
+  "interior-door-adjust": R("carpentry", "Interior door adjustment", "EA", 1, [
+    { code: "03-18-01-L", per: 0.5, why: "Plane, shim and rehang so it latches and swings true" },
+    { code: "03-19-04", per: 0.5, why: "Strike plate and hardware adjustment" },
+  ], { crewMinutes: 45 }),
+
+  "interior-door-replace": R("carpentry", "Interior door replacement", "EA", 1, [
+    PROTECT,
+    { code: "03-18-01", per: 1, why: "Door slab or prehung unit, hung and cased" },
+    { code: "03-19-04", per: 1, why: "Knob, hinges and strike" },
+    { code: "03-14-01", per: 40, why: "Paint the new door and casing" },
+    CLEANUP,
+  ], { crewMinutes: 150 }),
+
+  "door-hardware": R("carpentry", "Door hardware repair or replacement", "EA", 1, [
+    { code: "03-19-04", per: 1, why: "Lockset, deadbolt or hinge set, fitted" },
+  ], { crewMinutes: 40 }),
+
+  "cabinet-repair": R("carpentry", "Cabinet repair", "EA", 1, [
+    PROTECT,
+    { code: "03-17-01-L", per: 0.6, why: "Door, drawer and box repair labour" },
+    { code: "03-19-02", per: 2, why: "Hinges, slides and pulls as needed" },
+    CLEANUP,
+  ], { crewMinutes: 90 }),
+
+  // "Secure the loose handrail" is the commonest RE-10 handrail line, and it is
+  // a re-anchoring job: open up, find the stud, block it, refasten, touch up.
+  // Priced against the railing MATERIAL rate it came out near a thousand
+  // dollars, which is the cost of a new railing, not of fixing this one.
+  "handrail-repair": R("carpentry", "Handrail repair and re-anchoring", "LF", 8, [
+    { code: "03-21-01-L", per: 0.6, why: "Locate framing, block, refasten and make solid" },
+    { code: "03-19-05", flat: 2, why: "Brackets and structural fasteners" },
+    { code: "03-14-01", per: 0.8, why: "Touch up the disturbed finish" },
+  ], { crewMinutes: 105 }),
+
+  "handrail-replace": R("carpentry", "Handrail replacement", "LF", 8, [
+    { code: "03-21-01", per: 1, why: "New rail, brackets and blocking, secured to framing" },
+    { code: "03-14-01", per: 3, why: "Paint or finish the new rail" },
+  ], { crewMinutes: 180 }),
+
+  "stair-tread-repair": R("carpentry", "Stair tread or riser repair", "EA", 2, [
+    PROTECT,
+    { code: "03-18-02", per: 4, why: "Tread and riser stock" },
+    { code: "03-14-01", per: 12, why: "Finish to match" },
+    CLEANUP,
+  ], { crewMinutes: 120 }),
+
+  "shelving-repair": R("carpentry", "Shelving repair", "LF", 6, [
+    { code: "03-19-03", per: 1, why: "Shelf hardware and standards, anchored" },
+    { code: "03-18-02", per: 1, why: "Shelf stock" },
+  ], { crewMinutes: 60 }),
+
+  /* -------------------------------------------------------- flooring */
+  "flooring-patch": R("flooring", "Flooring repair", "SF", 20, [
+    PROTECT,
+    { code: "03-15-02", per: 1.2, why: "Replacement flooring with cutting waste" },
+    CLEANUP,
+  ], { crewMinutes: 180 }),
+
+  "tile-repair": R("flooring", "Tile repair", "SF", 10, [
+    PROTECT,
+    { code: "03-16-01", per: 1.25, why: "Tile, thinset and grout, with breakage allowance" },
+    CLEANUP,
+  ], { crewMinutes: 180 }),
+
+  "carpet-repair": R("flooring", "Carpet repair or restretch", "SF", 60, [
+    PROTECT,
+    { code: "03-15-05", per: 1.1, why: "Carpet, pad and seaming" },
+    CLEANUP,
+  ], { crewMinutes: 120 }),
+
+  /* -------------------------------------------------------- plumbing */
+  "faucet-replace": R("plumbing", "Faucet replacement", "EA", 1, [
+    PROTECT,
+    { code: "03-10-03-M", per: 12, why: "Faucet and supply lines" },
+    { code: "03-10-03-L", per: 10, why: "Removal, install and leak test" },
+  ], { crewMinutes: 90 }),
+
+  "toilet-repair": R("plumbing", "Toilet repair", "EA", 1, [
+    PROTECT,
+    { code: "03-10-03-M", per: 6, why: "Fill valve, flapper, seal and supply" },
+    { code: "03-10-03-L", per: 8, why: "Pull, reset and test" },
+  ], { crewMinutes: 75 }),
+
+  "supply-valve-replace": R("plumbing", "Supply valve replacement", "EA", 1, [
+    { code: "03-10-03-M", per: 4, why: "Angle stop and supply line" },
+    { code: "03-10-03-L", per: 6, why: "Shut down, replace and test" },
+  ], { crewMinutes: 60 }),
+
+  "drain-leak-repair": R("plumbing", "Drain or supply leak repair", "EA", 1, [
+    PROTECT,
+    { code: "03-10-03-M", per: 8, why: "Fittings, trap and line" },
+    { code: "03-10-03-L", per: 14, why: "Trace, repair and test" },
+    { code: "03-13-01", per: 4, why: "Open and close the wall or ceiling if access is needed" },
+    { code: "03-14-01", per: 6, why: "Paint the opened area" },
+    CLEANUP,
+  ], { crewMinutes: 210, alwaysReview: "concealed" }),
+
+  "water-heater-replace": R("plumbing", "Water heater replacement", "EA", 1, [
+    { code: "03-10-01", per: 1, why: "Water heater, pan, expansion tank and venting" },
+    { code: "03-10-03-L", per: 30, why: "Removal, set, connect and test" },
+    CLEANUP,
+  ], { crewMinutes: 300, alwaysReview: "permit-uncertain" }),
+
+  /* ------------------------------------------------------ electrical */
+  "outlet-switch-replace": R("electrical", "Outlet or switch replacement", "EA", 1, [
+    { code: "03-09-04-M", per: 3, why: "Device, plate and box as needed" },
+    { code: "03-09-08-L", per: 4, why: "Replace, terminate and test" },
+  ], { crewMinutes: 40 }),
+
+  "gfci-install": R("electrical", "GFCI outlet installation", "EA", 1, [
+    { code: "03-09-04-M", per: 5, why: "GFCI device and plate" },
+    { code: "03-09-08-L", per: 5, why: "Install, verify protection downstream and test" },
+  ], { crewMinutes: 50 }),
+
+  "light-fixture-replace": R("electrical", "Light fixture replacement", "EA", 1, [
+    PROTECT,
+    { code: "03-09-06-M", per: 6, why: "Fixture and mounting hardware" },
+    { code: "03-09-08-L", per: 6, why: "Remove, mount, wire and test" },
+  ], { crewMinutes: 75 }),
+
+  "smoke-detector": R("electrical", "Smoke or CO detector", "EA", 2, [
+    { code: "03-09-04-M", per: 2.5, why: "Detector and mounting base" },
+    { code: "03-09-08-L", per: 2, why: "Mount, connect and test" },
+  ], { crewMinutes: 30 }),
+
+  "electrical-cover-plates": R("electrical", "Missing cover plates and box repairs", "EA", 4, [
+    { code: "03-09-04-M", per: 0.6, why: "Plates and box extenders" },
+    { code: "03-09-08-L", per: 1, why: "Fit and make safe" },
+  ], { crewMinutes: 20 }),
+
+  /* -------------------------------------------------------- exterior */
+  "siding-repair": R("exterior", "Siding repair", "SF", 32, [
+    { code: "03-11-06", per: 1.2, why: "Siding and trim stock with cutting waste" },
+    { code: "03-06-01", per: 1.1, why: "House wrap behind the repair" },
+    { code: "03-14-02", per: 1.3, why: "Prime and paint to match" },
+    CLEANUP,
+  ], { crewMinutes: 240 }),
+
+  "exterior-trim-repair": R("exterior", "Exterior trim repair", "LF", 16, [
+    { code: "03-11-06", per: 1.2, why: "Trim stock with waste" },
+    { code: "03-14-02", per: 2, why: "Prime and paint all faces" },
+    CLEANUP,
+  ], { crewMinutes: 150 }),
+
+  "caulking-weatherproofing": R("exterior", "Caulking and weatherproofing", "LF", 40, [
+    { code: "03-11-06-M", per: 0.15, why: "Sealant and backer rod" },
+    { code: "03-11-06-L", per: 0.35, why: "Cut out failed sealant, prep and reseal" },
+  ], { crewMinutes: 120 }),
+
+  "deck-board-repair": R("exterior", "Deck board repair", "SF", 40, [
+    { code: "03-22-02", per: 0.9, why: "Decking stock and fasteners" },
+    { code: "03-14-02", per: 1, why: "Stain or seal the replaced boards" },
+    CLEANUP,
+  ], { crewMinutes: 240 }),
+
+  // Repair, not replacement: refasten posts, replace failed balusters, bring
+  // the assembly back to a solid guard. Full replacement is a different job and
+  // a different number.
+  "deck-railing-repair": R("exterior", "Deck railing repair", "LF", 16, [
+    { code: "03-21-02-L", per: 0.7, why: "Refasten posts, replace failed balusters, make solid" },
+    { code: "03-21-02-M", per: 0.3, why: "Replacement balusters, hardware and blocking" },
+    { code: "03-14-02", per: 0.8, why: "Finish the replaced pieces" },
+    CLEANUP,
+  ], { crewMinutes: 210 }),
+
+  "fence-gate-repair": R("exterior", "Fence or gate repair", "LF", 20, [
+    { code: "03-11-06", per: 0.6, why: "Pickets, rails and hardware" },
+    CLEANUP,
+  ], { crewMinutes: 180 }),
+
+  "gutter-repair": R("exterior", "Gutter and downspout repair", "LF", 30, [
+    { code: "03-11-03", per: 1, why: "Gutter, hangers and sealant" },
+    { code: "03-11-02", per: 0.3, why: "Downspout and extensions" },
+    CLEANUP,
+  ], { crewMinutes: 150 }),
+
+  "window-seal-repair": R("exterior", "Window seal and flashing repair", "EA", 1, [
+    { code: "03-11-06-M", per: 3, why: "Flashing, sealant and trim" },
+    { code: "03-11-06-L", per: 5, why: "Remove trim, flash correctly and reseal" },
+    { code: "03-14-02", per: 8, why: "Prime and paint disturbed trim" },
+  ], { crewMinutes: 180, alwaysReview: "concealed" }),
+
+  /* --------------------------------------------------------- roofing */
+  "roof-minor-repair": R("roofing", "Minor roof repair", "SF", 32, [
+    { code: "03-11-01", per: 1.3, why: "Shingles, underlayment and flashing with waste" },
+    CLEANUP,
+  ], { crewMinutes: 240, alwaysReview: "concealed" }),
+
+  /* ---------------------------------------------------------- general */
+  "safety-correction": R("general", "Safety correction", "EA", 1, [
+    { code: "03-19-05", per: 1, why: "Hardware, guards or fasteners to make the condition safe" },
+  ], { crewMinutes: 45 }),
+
+  // Quantity here is the NUMBER of miscellaneous repairs, so every component
+  // scales with it. Built from flat components it priced five repairs the same
+  // as one, which would have been invisible in production because this kind is
+  // always routed to review - a latent trap rather than a live bug, and worth
+  // closing either way.
+  "general-minor-repair": R("general", "General minor repair", "EA", 1, [
+    { code: "03-02-04", per: 60, why: "Protection of each work area" },
+    { code: "03-02-04", per: 25, why: "Materials allowance per small repair" },
+    { code: "03-02-07", per: 0.12, why: "Clean-up and haul-out" },
+  ], { crewMinutes: 60, alwaysReview: "incomplete-info" }),
+};
+
+/* ------------------------------------------------------------ the request */
+
+/** One repair the document asked for. */
+export interface RepairItemInput {
+  id: string;
+  /** The request in the document's own words, kept verbatim for the admin view. */
+  description: string;
+  kind: RepairKind;
+  /** Where in the home, when the document says. */
+  location?: string;
+  /** In the recipe's unit. Omit when the document gives no measurement. */
+  quantity?: number | null;
+  /** Inspection report reference, when the RE-10 cites one. */
+  sourceRef?: string;
+  /** Set when the extractor could not read the request cleanly. */
+  needsReview?: ReviewReason;
+  /** True when a photo was supplied for this item. Narrows the range. */
+  hasPhoto?: boolean;
+}
+
+/** Everything about the property and the deal that changes the price. */
+export interface Re10Context {
+  occupancy?: "occupied" | "vacant" | "unknown";
+  access?: "standard" | "limited" | "difficult";
+  /** Days from today to the repair deadline. Drives the expedite uplift. */
+  daysToDeadline?: number | null;
+  /** True when the inspection report was supplied alongside the RE-10. */
+  hasInspectionReport?: boolean;
+}
+
+/* -------------------------------------------------------------- economics */
+
+/**
+ * RE-10 work carries a 50% gross margin floor, against 30% on remodel projects.
+ *
+ * That is not opportunism. A remodel is one mobilisation, one schedule and weeks
+ * of continuous production. An inspection repair list is a dozen unrelated tasks
+ * in an occupied house on somebody else's deadline, each with its own set-up,
+ * its own material run, and a real chance of finding something worse once the
+ * cover plate comes off. The margin difference is the cost of that fragmentation.
+ */
+export const RE10_TARGET_MARGIN = 0.5;
+
+/** Never priced below this without an authorised admin adjustment. */
+export const RE10_MARGIN_FLOOR = 0.5;
+
+/** Highest the risk uplifts may carry the margin. */
+export const RE10_MARGIN_CEILING = 0.62;
+
+/** Contingency on an inspection list, above the 10% used on remodels. */
+export const RE10_CONTINGENCY_RATE = 0.12;
+
+/**
+ * WHO ACTUALLY SHOWS UP. Minimums and mobilisation are per crew, not per trade.
+ *
+ * This is the difference between a credible number and a silly one. A list with
+ * a drywall patch, some trim, a caulk line and a repaint spans four "trades" on
+ * paper, but it is one carpenter for one day. Charging four trade minimums and
+ * four mobilisations for that would price the company out of exactly the
+ * multi-item lists it is pitching for, which is the failure mode the brief
+ * warns about.
+ *
+ * Only work that genuinely needs a different licensed person gets its own crew:
+ * plumbing, electrical and roofing. Everything else is the general repair crew,
+ * who can hang a door, patch drywall, paint it and reseal a window in one trip.
+ */
+export type RepairCrew = "general" | "plumbing" | "electrical" | "roofing";
+
+export const CREW_FOR_TRADE: Record<RepairTrade, RepairCrew> = {
+  carpentry: "general",
+  drywall: "general",
+  painting: "general",
+  flooring: "general",
+  exterior: "general",
+  general: "general",
+  plumbing: "plumbing",
+  electrical: "electrical",
+  roofing: "roofing",
+};
+
+export const CREW_LABELS: Record<RepairCrew, string> = {
+  general: "General repair crew",
+  plumbing: "Licensed plumber",
+  electrical: "Licensed electrician",
+  roofing: "Roofing crew",
+};
+
+/**
+ * The least a crew can be billed for showing up, before margin.
+ *
+ * Someone has to drive there, park, protect the area, do the work, clean up and
+ * drive back. Below these numbers the visit costs more than it earns whatever
+ * the catalog rate says. Licensed trades are higher because a service call from
+ * a plumber or electrician costs more than a carpenter's morning.
+ */
+export const CREW_MINIMUM_COST: Record<RepairCrew, number> = {
+  general: 385,
+  plumbing: 485,
+  electrical: 465,
+  roofing: 625,
+};
+
+/** Cost of putting one crew on site, per crew that has to attend. */
+export const MOBILISATION_COST = 165;
+
+/**
+ * Mobilisations are shared, not charged per repair.
+ *
+ * Eight repairs handled by two crews is two trips, not eight. The first crew on
+ * site carries a full mobilisation and each additional crew carries a reduced
+ * one, because they overlap on the same days and share one access arrangement.
+ */
+export const ADDITIONAL_TRADE_MOBILISATION_FACTOR = 0.55;
+
+/** Per-item coordination: scheduling, access, updates, documentation. */
+export const COORDINATION_COST_PER_ITEM = 42;
+
+/** Cost of the blended crew hour used for the labour floor. */
+export const CREW_HOURLY_COST = 78;
+
+/* ------------------------------------------------------------- estimating */
+
+export interface PricedRepair {
+  input: RepairItemInput;
+  recipe: Recipe;
+  trade: RepairTrade;
+  quantity: number;
+  /** True when no measurement was given and defaultQty was used. */
+  quantityAssumed: boolean;
+  lines: CostLine[];
+  /** Sum of `lines`, before minimums, mobilisation and margin. */
+  directCost: number;
+  crewMinutes: number;
+  reviewReason?: ReviewReason;
+}
+
+export interface TradeGroup {
+  trade: RepairTrade;
+  label: string;
+  /** Which crew actually attends. Minimums and mobilisation are resolved here. */
+  crew: RepairCrew;
+  repairs: PricedRepair[];
+  /** Sum of the repairs' own line items. */
+  rawCost: number;
+  /** Raised to the trade minimum where the raw cost falls short. */
+  adjustedCost: number;
+  minimumApplied: number;
+  mobilisation: number;
+  /** adjustedCost + mobilisation. */
+  tradeCost: number;
+  customerAmount: number;
+}
+
+export interface Re10Estimate {
+  /** Items priced automatically. */
+  priced: PricedRepair[];
+  /** Items deliberately not priced, with the reason. */
+  review: { input: RepairItemInput; reason: ReviewReason; text: string }[];
+  trades: TradeGroup[];
+  directCost: number;
+  minimumsApplied: number;
+  mobilisation: number;
+  coordination: number;
+  contingency: number;
+  totalInternalCost: number;
+  appliedMargin: number;
+  /** Reasons the margin sits above the 50% floor. */
+  marginUplifts: string[];
+  sellingPrice: number;
+  grossProfit: number;
+  /** Customer-facing planning range. */
+  low: number;
+  high: number;
+  /** Half-width of the range as a fraction of the centre. */
+  bandWidth: number;
+  confidence: "high" | "medium" | "low";
+  /** What is making the range as wide as it is. */
+  uncertainty: string[];
+  assumptions: string[];
+  warnings: EstimateWarning[];
+}
+
+function lineFor(li: LineItem, quantity: number, why?: string): CostLine {
+  return {
+    code: li.code,
+    division: li.division,
+    description: li.description,
+    type: li.type as CostType,
+    uom: li.uom as Uom,
+    quantity,
+    unitCost: li.cost,
+    cost: li.cost * quantity,
+    assumption: why,
+  };
+}
+
+/**
+ * Expand a component's code into its catalog rows.
+ *
+ * A bare code such as "03-13-01" means both halves of a split row: materials
+ * AND labour. An explicit "-M" or "-L" means only that half, which is how a
+ * recipe asks for labour with no material (rehanging a door) or material with
+ * no labour of its own.
+ */
+const BY_CODE = new Map(LINE_ITEMS.map((li) => [li.code, li]));
+
+function rowsFor(code: string): LineItem[] {
+  if (/-[ML]$/.test(code)) return [item(code)];
+  const halves = [BY_CODE.get(`${code}-M`), BY_CODE.get(`${code}-L`)].filter(
+    (li): li is LineItem => li != null,
+  );
+  // item() throws on an unknown code, so a typo in a recipe fails loudly here
+  // rather than quietly pricing zero.
+  return halves.length > 0 ? halves : [item(code)];
+}
+
+/**
+ * Price one repair: expand the recipe against the quantity.
+ *
+ * Returns the labour-hours floor alongside, because a repair whose catalog cost
+ * is trivially small still consumes a tradesman's afternoon, and the group-level
+ * minimum needs to know that.
+ */
+export function priceRepair(input: RepairItemInput): PricedRepair {
+  const recipe = RECIPES[input.kind];
+  const quantityAssumed = input.quantity == null || !Number.isFinite(input.quantity) || input.quantity <= 0;
+  const quantity = quantityAssumed ? recipe.defaultQty : (input.quantity as number);
+
+  const lines: CostLine[] = [];
+  for (const c of recipe.components) {
+    const qty = c.flat != null ? c.flat : (c.per ?? 1) * quantity;
+    if (qty <= 0) continue;
+    for (const li of rowsFor(c.code)) lines.push(lineFor(li, qty, c.why));
+  }
+
+  const directCost = lines.reduce((s, l) => s + l.cost, 0);
+  const reviewReason = input.needsReview ?? recipe.alwaysReview;
+
+  return {
+    input,
+    recipe,
+    trade: recipe.trade,
+    quantity,
+    quantityAssumed,
+    lines,
+    directCost,
+    crewMinutes: (recipe.crewMinutes ?? 60) * (quantityAssumed ? 1 : Math.max(1, quantity / recipe.defaultQty)),
+    reviewReason,
+  };
+}
+
+/**
+ * Risk uplifts above the 50% floor.
+ *
+ * Each is a real cost driver rather than a mood: an occupied house means working
+ * around people and their belongings, a short fuse means paying to jump the
+ * queue, and a one-item trade visit means the drive is not shared with anything.
+ * Capped so the total stays inside RE10_MARGIN_CEILING.
+ */
+function resolveMargin(
+  ctx: Re10Context,
+  tradeCount: number,
+  itemCount: number,
+): { margin: number; uplifts: string[] } {
+  let margin = RE10_TARGET_MARGIN;
+  const uplifts: string[] = [];
+
+  const days = ctx.daysToDeadline;
+  if (days != null && days >= 0 && days <= 7) {
+    margin += 0.05;
+    uplifts.push("Repair deadline inside a week: schedule is bought, not planned.");
+  } else if (days != null && days > 7 && days <= 14) {
+    margin += 0.025;
+    uplifts.push("Repair deadline inside two weeks: limited scheduling flexibility.");
+  }
+
+  if (ctx.occupancy === "occupied") {
+    margin += 0.02;
+    uplifts.push("Occupied property: work around occupants, daily protection and reset.");
+  }
+  if (ctx.access === "difficult") {
+    margin += 0.03;
+    uplifts.push("Difficult access: longer set-up and restricted working hours.");
+  } else if (ctx.access === "limited") {
+    margin += 0.015;
+    uplifts.push("Limited access: coordination around lockbox or showing windows.");
+  }
+
+  if (tradeCount >= 3) {
+    margin += 0.02;
+    uplifts.push(`${tradeCount} separate crews to coordinate on one deadline.`);
+  }
+  if (itemCount >= 10) {
+    margin += 0.015;
+    uplifts.push(`${itemCount} separate repair items to schedule, track and document.`);
+  }
+
+  return { margin: Math.min(margin, RE10_MARGIN_CEILING), uplifts };
+}
+
+/**
+ * Range width from how much the documents actually pinned down.
+ *
+ * A complete RE-10 with an inspection report, measurements and photos earns a
+ * narrow band. A list of one-line requests with no numbers does not, and
+ * pretending otherwise would be the same mistake as quoting a single figure.
+ */
+function resolveBand(
+  priced: PricedRepair[],
+  ctx: Re10Context,
+): { band: number; confidence: "high" | "medium" | "low"; uncertainty: string[] } {
+  if (priced.length === 0) return { band: 0.2, confidence: "low", uncertainty: [] };
+
+  const assumed = priced.filter((p) => p.quantityAssumed);
+  const assumedShare = assumed.length / priced.length;
+  const photoShare = priced.filter((p) => p.input.hasPhoto).length / priced.length;
+
+  let band = 0.14;
+  const uncertainty: string[] = [];
+
+  if (assumedShare > 0) {
+    band += assumedShare * 0.16;
+    const names = assumed.slice(0, 4).map((p) => p.recipe.label.toLowerCase());
+    uncertainty.push(
+      `${assumed.length} of ${priced.length} items gave no measurement, so a typical size was assumed` +
+        (names.length ? ` (${names.join(", ")})` : "") +
+        ". A measurement or a photo would tighten these.",
+    );
+  }
+  if (photoShare < 0.5) {
+    band += 0.05;
+    uncertainty.push("Fewer than half the items have a photo. Photos are the single fastest way to narrow this range.");
+  }
+  if (!ctx.hasInspectionReport) {
+    band += 0.04;
+    uncertainty.push("The inspection report was not supplied, so the findings behind each request are unverified.");
+  }
+  if (ctx.access === "difficult" || ctx.occupancy === "unknown") {
+    band += 0.02;
+    uncertainty.push("Property access and occupancy affect scheduling and set-up cost.");
+  }
+
+  band = Math.min(band, 0.34);
+  const confidence = band <= 0.18 ? "high" : band <= 0.26 ? "medium" : "low";
+  return { band, confidence, uncertainty };
+}
+
+function roundTo(value: number, step: number): number {
+  return Math.round(value / step) * step;
+}
+
+function stepFor(centre: number): number {
+  return centre >= 25000 ? 500 : centre >= 8000 ? 250 : 100;
+}
+
+/**
+ * Price a whole RE-10 list.
+ *
+ * Order matters and is deliberate: line items, then trade minimums, then a
+ * shared mobilisation, then coordination, then contingency, then margin once
+ * over the total. Applying margin per line, or per parent and child separately,
+ * is the double-count the brief warns about - so it is applied exactly once, to
+ * the finished cost.
+ */
+export function estimateRe10(
+  items: RepairItemInput[],
+  ctx: Re10Context = {},
+): Re10Estimate {
+  const warnings: EstimateWarning[] = [];
+  const review: Re10Estimate["review"] = [];
+  const priced: PricedRepair[] = [];
+
+  for (const input of items) {
+    if (!RECIPES[input.kind]) {
+      review.push({ input, reason: "out-of-scope", text: REVIEW_REASON_TEXT["out-of-scope"] });
+      continue;
+    }
+    const p = priceRepair(input);
+    // An item flagged for review is reported, never silently priced. Items whose
+    // reason is only that the extent is concealed still get priced, because a
+    // planning range for "some drywall behind the leak" is useful as long as the
+    // caveat travels with it.
+    if (p.reviewReason && p.reviewReason !== "concealed") {
+      review.push({ input, reason: p.reviewReason, text: REVIEW_REASON_TEXT[p.reviewReason] });
+      continue;
+    }
+    priced.push(p);
+  }
+
+  /* Group by trade and apply the per-trade minimum. */
+  const byTrade = new Map<RepairTrade, PricedRepair[]>();
+  for (const p of priced) {
+    const list = byTrade.get(p.trade) ?? [];
+    list.push(p);
+    byTrade.set(p.trade, list);
+  }
+
+  const tradeOrder: RepairTrade[] = [
+    "carpentry", "drywall", "painting", "flooring",
+    "plumbing", "electrical", "exterior", "roofing", "general",
+  ];
+  const activeTrades = tradeOrder.filter((t) => byTrade.has(t));
+
+  /* Minimums and mobilisation are resolved per CREW, then distributed back over
+     the trades that crew covered, so the customer-facing rollup still reads by
+     trade while the economics reflect who actually drives to the house. */
+  const crewOrder: RepairCrew[] = ["general", "plumbing", "electrical", "roofing"];
+  const byCrew = new Map<RepairCrew, RepairTrade[]>();
+  for (const trade of activeTrades) {
+    const crew = CREW_FOR_TRADE[trade];
+    byCrew.set(crew, [...(byCrew.get(crew) ?? []), trade]);
+  }
+  const activeCrews = crewOrder.filter((c) => byCrew.has(c));
+
+  const tradeAdjustment = new Map<RepairTrade, { minimum: number; mobilisation: number }>();
+  let minimumsApplied = 0;
+  let mobilisation = 0;
+
+  activeCrews.forEach((crew, index) => {
+    const crewTrades = byCrew.get(crew)!;
+    const crewRepairs = crewTrades.flatMap((t) => byTrade.get(t)!);
+    const rawCost = crewRepairs.reduce((s, p) => s + p.directCost, 0);
+
+    // Two floors, whichever binds harder: the crew's flat minimum, and the hours
+    // the work actually takes at crew cost. A long list of small items clears
+    // the flat minimum but can still be underpriced on hours.
+    const crewHours = crewRepairs.reduce((s, p) => s + p.crewMinutes, 0) / 60;
+    const labourFloor = crewHours * CREW_HOURLY_COST;
+    const floor = Math.max(CREW_MINIMUM_COST[crew], labourFloor);
+
+    const topUp = Math.max(0, floor - rawCost);
+    minimumsApplied += topUp;
+
+    // First crew on site pays a full mobilisation; the rest overlap with it.
+    const mob = index === 0 ? MOBILISATION_COST : MOBILISATION_COST * ADDITIONAL_TRADE_MOBILISATION_FACTOR;
+    mobilisation += mob;
+
+    // Split the crew's top-up and mobilisation across its trades by cost share,
+    // so no trade shows a number that did not come from its own work.
+    for (const t of crewTrades) {
+      const tradeRaw = byTrade.get(t)!.reduce((s, p) => s + p.directCost, 0);
+      const share = rawCost > 0 ? tradeRaw / rawCost : 1 / crewTrades.length;
+      tradeAdjustment.set(t, { minimum: topUp * share, mobilisation: mob * share });
+    }
+  });
+
+  const trades: TradeGroup[] = activeTrades.map((trade) => {
+    const repairs = byTrade.get(trade)!;
+    const rawCost = repairs.reduce((s, p) => s + p.directCost, 0);
+    const adj = tradeAdjustment.get(trade) ?? { minimum: 0, mobilisation: 0 };
+    const adjustedCost = rawCost + adj.minimum;
+    return {
+      trade,
+      label: TRADE_LABELS[trade],
+      crew: CREW_FOR_TRADE[trade],
+      repairs,
+      rawCost,
+      adjustedCost,
+      minimumApplied: adj.minimum,
+      mobilisation: adj.mobilisation,
+      tradeCost: adjustedCost + adj.mobilisation,
+      customerAmount: 0, // filled once the margin is known
+    };
+  });
+
+  const directCost = trades.reduce((s, t) => s + t.adjustedCost, 0);
+  const coordination = priced.length * COORDINATION_COST_PER_ITEM;
+  const preContingency = directCost + mobilisation + coordination;
+  const contingency = preContingency * RE10_CONTINGENCY_RATE;
+  const totalInternalCost = preContingency + contingency;
+
+  // Crews, not trades: coordinating one carpenter across four trades is not the
+  // same problem as coordinating a carpenter, a plumber and an electrician.
+  const { margin, uplifts } = resolveMargin(ctx, activeCrews.length, priced.length);
+  const sellingPrice = totalInternalCost > 0 ? priceAtMargin(totalInternalCost, margin) : 0;
+  const grossProfit = sellingPrice - totalInternalCost;
+
+  // Customer amounts per trade are the selling price split by each trade's share
+  // of cost. Splitting the priced total, rather than pricing each trade
+  // independently, is what stops the parts from disagreeing with the whole.
+  const tradeCostTotal = trades.reduce((s, t) => s + t.tradeCost, 0);
+  for (const t of trades) {
+    t.customerAmount = tradeCostTotal > 0 ? sellingPrice * (t.tradeCost / tradeCostTotal) : 0;
+  }
+
+  const { band, confidence, uncertainty } = resolveBand(priced, ctx);
+  const step = stepFor(sellingPrice);
+  const low = sellingPrice > 0 ? roundTo(sellingPrice * (1 - band), step) : 0;
+  const high = sellingPrice > 0 ? roundTo(sellingPrice * (1 + band), step) : 0;
+
+  const assumptions: string[] = [];
+  const assumedCount = priced.filter((p) => p.quantityAssumed).length;
+  if (assumedCount > 0) {
+    assumptions.push(
+      `${assumedCount} repair${assumedCount === 1 ? "" : "s"} had no measurement in the documents, so a typical size for that repair was assumed.`,
+    );
+  }
+  if (activeTrades.length > 1) {
+    assumptions.push(
+      `Repairs across ${activeTrades.length} trades are scheduled together where possible, so travel and set-up are shared rather than charged per item.`,
+    );
+  }
+  assumptions.push("Work is done in one mobilisation per trade, with normal access during working hours.");
+  assumptions.push("Finishes are matched as closely as stock allows; an exact match to aged paint or flooring is not guaranteed.");
+  if (ctx.occupancy === "occupied") {
+    assumptions.push("The property is occupied, so areas are protected and reset each day.");
+  }
+
+  if (review.length > 0) {
+    warnings.push({
+      severity: "warn",
+      message: `${review.length} item${review.length === 1 ? "" : "s"} could not be priced from the documents and need an onsite evaluation.`,
+    });
+  }
+  if (priced.length === 0) {
+    warnings.push({
+      severity: "warn",
+      message: "Nothing on this list could be priced automatically. An onsite evaluation is the right next step.",
+    });
+  }
+  if (margin < RE10_MARGIN_FLOOR) {
+    warnings.push({ severity: "warn", message: "Margin fell below the 50% floor. This should not happen without an admin adjustment." });
+  }
+
+  return {
+    priced,
+    review,
+    trades,
+    directCost,
+    minimumsApplied,
+    mobilisation,
+    coordination,
+    contingency,
+    totalInternalCost,
+    appliedMargin: margin,
+    marginUplifts: uplifts,
+    sellingPrice,
+    grossProfit,
+    low,
+    high,
+    bandWidth: band,
+    confidence,
+    uncertainty,
+    assumptions,
+    warnings,
+  };
+}
