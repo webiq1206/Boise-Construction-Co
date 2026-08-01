@@ -1,8 +1,9 @@
 import { ArrowRight, MessageSquare, Phone } from "lucide-react";
 import { MarketingCard } from "./MarketingCard";
+import { Button } from "@/components/ui/button";
 import { CTA_PRIMARY } from "@/shared/ctaCopy";
 import { SITE_CONFIG } from "@/shared/siteConfig";
-import { ConsultCTA } from "@/components/modals/ConsultCTA";
+import { EstimateCTA } from "@/components/modals/EstimateCTA";
 
 export function BlogEndCta() {
   return (
@@ -15,10 +16,13 @@ export function BlogEndCta() {
         ready. No obligation, no pressure.
       </p>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <ConsultCTA variant="brand" size="lg" data-testid="link-bottom-cta-consult">
+        <EstimateCTA variant="brand" size="lg" data-testid="link-bottom-cta-estimate">
           {CTA_PRIMARY}
           <ArrowRight className="ml-2 h-5 w-5" />
-        </ConsultCTA>
+        </EstimateCTA>
+        <Button variant="heroGhost" size="lg" asChild data-testid="link-bottom-cta-consult">
+          <a href="/contact#consult">Book a free visit</a>
+        </Button>
         <a
           href={SITE_CONFIG.phoneHref}
           data-testid="link-bottom-cta-call"

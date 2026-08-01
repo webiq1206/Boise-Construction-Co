@@ -21,6 +21,8 @@ import { CITIES, TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { HERO_STATS, PRINCIPLES, TRUST_ITEMS } from '@/shared/siteContent';
 import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
 import { Button } from '@/components/ui/button';
+import { AreaCard } from '@/components/marketing/AreaCard';
+import { CITY_HERO_IMAGES } from '@/shared/cityServiceImages';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { GRAIN_URL } from '@/lib/grain';
 
@@ -313,17 +315,10 @@ export default function AboutPage() {
               description={`We serve homeowners in ${TREASURE_VALLEY_CITIES}, and surrounding communities.`}
               className="max-w-3xl"
             />
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {CITIES.map((city, i) => (
                 <Reveal key={city.slug} delay={Math.min(i, 7) * 50}>
-                  <Link href={`/areas/${city.slug}`} className="block h-full group">
-                    <MarketingCard className="h-full transition-colors group-hover:border-foreground/20">
-                      <p className="font-sans font-normal text-sm text-foreground mb-0.5">
-                        {city.name}
-                      </p>
-                      <p className="text-xs text-muted-foreground">Idaho</p>
-                    </MarketingCard>
-                  </Link>
+                  <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />
                 </Reveal>
               ))}
             </div>

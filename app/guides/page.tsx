@@ -1,11 +1,15 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, BookOpen, MapPin } from 'lucide-react';
 import { buildPageMetadata } from '@/lib/page-metadata';
 import { Section } from '@/components/marketing/Section';
 import { MarketingCard } from '@/components/marketing/MarketingCard';
+import { PageHeroBand } from '@/components/sections/PageHeroBand';
+import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
 import { CONTENT_HUBS, guidePath } from '@/shared/contentHubs';
 import { GUIDE_PAGES, type GuidePageData } from '@/shared/guideContent';
+import { getBlogHeroImage, getBlogImageAlt } from '@/shared/blogImages';
 import { generateBreadcrumbSchema, generateWebPageSchema } from '@/lib/schema';
 import {
   countH2Headings,
@@ -68,47 +72,58 @@ export default function GuidesIndexPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <Section spacing="lg" className="pt-28 md:pt-32">
-        <div className="container px-4 max-w-4xl mx-auto text-center mb-12">
-          <p className="text-xs font-normal uppercase tracking-wider text-accent-legible mb-3">
-            Treasure Valley authority
-          </p>
-          <h1 className="text-3xl md:text-4xl font-sans font-light tracking-tight text-foreground mb-4">
-            Remodeling Guides
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            In-depth guides for Boise, Meridian, Eagle, Nampa, and the entire Treasure Valley - costs,
-            process, locations, and planning resources from Boise Remodeling Co.
-          </p>
-          <p className="mt-4">
-            <Link
-              href="/resources"
-              className="text-sm text-accent-legible hover:underline inline-flex items-center justify-center"
-            >
-              Free PDF worksheets & permit infographic
-              <ArrowRight className="ml-1 h-4 w-4" />
-            </Link>
-          </p>
-        </div>
 
+      <PageHeroBand
+        imageSrc={getBlogHeroImage('boise-remodeling-cost-guide')}
+        imageAlt={getBlogImageAlt('boise-remodeling-cost-guide')}
+      >
+        <div className="brc-label text-inverse-muted mb-3">Treasure Valley authority</div>
+        <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
+          Remodeling Guides
+        </h1>
+        <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-4">
+          In-depth guides for Boise, Meridian, Eagle, Nampa, and the entire Treasure Valley — costs,
+          process, locations, and planning resources from Boise Remodeling Co.
+        </p>
+        <Link
+          href="/resources"
+          className="text-sm text-inverse-foreground/90 hover:text-inverse-foreground inline-flex items-center transition-colors"
+        >
+          Free PDF worksheets &amp; permit infographic
+          <ArrowRight className="ml-1 h-4 w-4" />
+        </Link>
+      </PageHeroBand>
+
+      <Section spacing="default" className="pt-12 md:pt-16">
         <div className="container px-4 max-w-6xl mx-auto mb-16">
           <h2 className="text-sm font-normal uppercase tracking-wider text-muted-foreground mb-6">
             Hub pillar guides
           </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {pillarGuides.map((guide) => (
-              <MarketingCard key={guide.slug} className="p-6 flex flex-col h-full">
-                <BookOpen className="h-5 w-5 text-accent-legible mb-3" />
-                <h3 className="font-normal text-lg mb-2">{guide.title}</h3>
-                <p className="text-sm text-muted-foreground flex-1 mb-3">{guide.excerpt}</p>
-                <GuideCardStats guide={guide} />
-                <Link
-                  href={guidePath(guide.slug)}
-                  className="inline-flex items-center text-sm text-accent-legible hover:underline"
-                >
-                  Read guide
-                  <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
+              <MarketingCard key={guide.slug} className="p-0 flex flex-col h-full overflow-hidden">
+                <div className="relative aspect-[16/9] overflow-hidden">
+                  <Image
+                    src={getBlogHeroImage(guide.slug, guide.heroImage)}
+                    alt={getBlogImageAlt(guide.slug)}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover img-brand-grade"
+                  />
+                </div>
+                <div className="p-6 flex flex-col flex-1">
+                  <BookOpen className="h-5 w-5 text-accent-legible mb-3" />
+                  <h3 className="font-normal text-lg mb-2">{guide.title}</h3>
+                  <p className="text-sm text-muted-foreground flex-1 mb-3">{guide.excerpt}</p>
+                  <GuideCardStats guide={guide} />
+                  <Link
+                    href={guidePath(guide.slug)}
+                    className="inline-flex items-center text-sm text-accent-legible hover:underline"
+                  >
+                    Read guide
+                    <ArrowRight className="ml-1 h-4 w-4" />
+                  </Link>
+                </div>
               </MarketingCard>
             ))}
           </div>
@@ -120,20 +135,31 @@ export default function GuidesIndexPage() {
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {locationGuides.map((guide) => (
-              <MarketingCard key={guide.slug} className="p-5 flex flex-col h-full">
-                <MapPin className="h-4 w-4 text-accent-legible mb-2" />
-                <h3 className="font-normal text-base mb-1">{guide.title}</h3>
-                <p className="text-sm text-muted-foreground flex-1 mb-2 line-clamp-2">
-                  {guide.excerpt}
-                </p>
-                <GuideCardStats guide={guide} />
-                <Link
-                  href={guidePath(guide.slug)}
-                  className="text-sm text-accent-legible hover:underline inline-flex items-center"
-                >
-                  Read
-                  <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
+              <MarketingCard key={guide.slug} className="p-0 flex flex-col h-full overflow-hidden">
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image
+                    src={getBlogHeroImage(guide.slug, guide.heroImage)}
+                    alt={getBlogImageAlt(guide.slug)}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 25vw"
+                    className="object-cover img-brand-grade"
+                  />
+                </div>
+                <div className="p-5 flex flex-col flex-1">
+                  <MapPin className="h-4 w-4 text-accent-legible mb-2" />
+                  <h3 className="font-normal text-base mb-1">{guide.title}</h3>
+                  <p className="text-sm text-muted-foreground flex-1 mb-2 line-clamp-2">
+                    {guide.excerpt}
+                  </p>
+                  <GuideCardStats guide={guide} />
+                  <Link
+                    href={guidePath(guide.slug)}
+                    className="text-sm text-accent-legible hover:underline inline-flex items-center"
+                  >
+                    Read
+                    <ArrowRight className="ml-1 h-3 w-3" />
+                  </Link>
+                </div>
               </MarketingCard>
             ))}
           </div>
@@ -144,32 +170,42 @@ export default function GuidesIndexPage() {
             Browse by topic
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {sortedHubs.map((hub) => {
-              return (
-                <MarketingCard key={hub.hubSlug} className="p-5">
-                  <h3 className="font-normal mb-1">{hub.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-3">{hub.description}</p>
-                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-                    <Link
-                      href={guidePath(hub.pillarSlug)}
-                      className="text-accent-legible hover:underline inline-flex items-center"
-                    >
-                      Pillar guide
-                      <ArrowRight className="ml-1 h-3 w-3" />
-                    </Link>
-                    <Link
-                      href={`/blog/category/${hub.hubSlug}`}
-                      className="text-muted-foreground hover:text-accent-legible hover:underline"
-                    >
-                      Related articles
-                    </Link>
-                  </div>
-                </MarketingCard>
-              );
-            })}
+            {sortedHubs.map((hub) => (
+              <MarketingCard key={hub.hubSlug} className="p-5">
+                <h3 className="font-normal mb-1">{hub.title}</h3>
+                <p className="text-sm text-muted-foreground mb-3">{hub.description}</p>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                  <Link
+                    href={guidePath(hub.pillarSlug)}
+                    className="text-accent-legible hover:underline inline-flex items-center"
+                  >
+                    Pillar guide
+                    <ArrowRight className="ml-1 h-3 w-3" />
+                  </Link>
+                  <Link
+                    href={`/blog/category/${hub.hubSlug}`}
+                    className="text-muted-foreground hover:text-accent-legible hover:underline"
+                  >
+                    Related articles
+                  </Link>
+                </div>
+              </MarketingCard>
+            ))}
           </div>
         </div>
       </Section>
+
+      <EstimatePromptBand
+        eyebrow="From reading to planning"
+        title={
+          <>
+            Turn what you learned into a{' '}
+            <em className="brc-accent">number</em>
+          </>
+        }
+        description="After reading our guides, use the project estimator for an instant Treasure Valley planning range — then book a free in-home visit when you're ready to move forward."
+        variant="canvas"
+      />
     </>
   );
 }

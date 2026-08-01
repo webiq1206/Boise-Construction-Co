@@ -16,6 +16,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import type { GalleryProject } from '@/shared/galleryData';
+import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
+import { FeaturedBeforeAfterSection } from '@/components/sections/FeaturedBeforeAfterSection';
 import { GRAIN_URL } from '@/lib/grain';
 
 interface BreadcrumbItem {
@@ -52,6 +55,10 @@ interface LandingPageTemplateProps {
    */
   proof?: LandingProof;
   proofHeading?: string;
+  /** Optional featured before/after for service hub pages. */
+  featuredProject?: GalleryProject;
+  /** Show contextual estimator prompt band (default true on service/area pages). */
+  showEstimatePrompt?: boolean;
   faqs: FAQItem[];
   related: {
     variant: 'service' | 'area' | 'city-service';
@@ -148,6 +155,8 @@ export function LandingPageTemplate({
   sections,
   proof,
   proofHeading,
+  featuredProject,
+  showEstimatePrompt = false,
   faqs,
   related,
 }: LandingPageTemplateProps) {
@@ -298,6 +307,9 @@ export function LandingPageTemplate({
           </div>
         </Section>
       )}
+
+      {/* ─── Featured before/after (service hub) ─── */}
+      {featuredProject && <FeaturedBeforeAfterSection project={featuredProject} />}
 
       {/* ─── Process (split: charcoal panel + steps) ─── */}
       {processSteps && processSteps.length > 0 && (
@@ -530,6 +542,18 @@ export function LandingPageTemplate({
             )}
           </div>
         </Section>
+      )}
+
+      {/* ─── Estimator prompt ─── */}
+      {showEstimatePrompt && (
+        <EstimatePromptBand
+          title={
+            <>
+              What might your <em className="brc-accent">project</em> cost?
+            </>
+          }
+          description="Get an instant planning range based on real Treasure Valley remodel costs — about 60 seconds, no obligation."
+        />
       )}
 
       {/* ─── FAQ ─── */}

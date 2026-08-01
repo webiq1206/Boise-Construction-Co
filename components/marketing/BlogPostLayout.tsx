@@ -13,7 +13,7 @@ import { BlogEndCta } from './BlogEndCta';
 import { RelatedPostCards } from './RelatedPostCards';
 import { Section } from './Section';
 import type { BlogPostData } from '@/shared/blogContent';
-import { getBlogHeroImage, getBlogImageAlt } from '@/shared/blogImages';
+import { getBlogHeroImage, getBlogImageAlt, getArticleInlineFigures, isCostRelatedContent } from '@/shared/blogImages';
 import { BlogHeroBanner } from './BlogHeroBanner';
 import { GuideContentBlocks, GuideJumpChips } from './GuideContentBlocks';
 import { SectionedArticle } from './SectionedArticle';
@@ -34,6 +34,7 @@ import {
 import { getBlogPostsByHub } from '@/shared/blogContent';
 import { getResourcesForBlog } from '@/shared/guideResources';
 import { GuideResourceDownloads } from './GuideResourceDownloads';
+import { InlineEstimateCTA } from './InlineEstimateCTA';
 
 interface BlogPostLayoutProps {
   post: BlogPostData;
@@ -51,6 +52,12 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
   const hubPosts = getBlogPostsByHub(post.hubSlug);
   const pillarSlug = getHubPillarSlug(post.hubSlug);
   const resources = getResourcesForBlog(post.slug);
+  const showInlineEstimate = isCostRelatedContent(post.slug, post.hubSlug);
+  const inlineFigures = getArticleInlineFigures(
+    post.slug,
+    tocHeadings.length,
+    post.hubSlug,
+  );
 
   return (
     <div className="flex flex-col pb-20 md:pb-0">
@@ -130,7 +137,13 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                   </div>
                 )}
 
-                <SectionedArticle html={contentWithIds} testId="blog-content" />
+                <SectionedArticle
+                  html={contentWithIds}
+                  testId="blog-content"
+                  inlineFigures={inlineFigures}
+                />
+
+                {showInlineEstimate && <InlineEstimateCTA />}
               </GuideContentBlocks>
 
               {post.faqs && post.faqs.length > 0 && (
@@ -172,14 +185,14 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
               )}
 
               <div className="lg:hidden mt-10">
-                <ArticleSidebarCta ctaDescription="Planning a remodel? Get a free in-home visit and planning range from our team." />
+                <ArticleSidebarCta description="See what your project might cost with an instant Treasure Valley planning range." />
               </div>
             </div>
 
             <aside className="hidden lg:block w-72 xl:w-80 flex-shrink-0 sticky top-24 self-start">
               <ArticleSidebar
                 tocHeadings={tocHeadings}
-                ctaDescription="Planning a remodel? Get a free in-home visit and planning range from our team."
+                ctaDescription="See what your project might cost with an instant Treasure Valley planning range."
               />
               {post.tags && post.tags.length > 0 && (
                 <div className="mt-6 rounded-lg border border-border p-4">

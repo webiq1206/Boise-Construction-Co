@@ -9,9 +9,9 @@ import {
   STANDARD_INCLUSIONS,
   OPTIONAL_ENHANCEMENTS,
 } from "@/shared/siteContent";
-import { GALLERY_IMAGES } from "@/shared/siteImages";
+import { SITE_IMAGES } from "@/shared/siteImages";
 import { Button } from "@/components/ui/button";
-import { CTA_PRIMARY } from "@/shared/ctaCopy";
+import { CTA_SECONDARY } from "@/shared/ctaCopy";
 
 export function BudgetInclusionsSection() {
   return (
@@ -19,7 +19,7 @@ export function BudgetInclusionsSection() {
       {/* Subtle photographic texture behind the dark band so it does not read flat */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <Image
-          src={GALLERY_IMAGES.kitchen.after}
+          src={SITE_IMAGES.budgetDetail}
           alt=""
           fill
           loading="lazy"
@@ -104,8 +104,8 @@ export function BudgetInclusionsSection() {
           </div>
 
           <Reveal className="mt-12">
-            <Button variant="brand" asChild>
-              <a href="#calculator">{CTA_PRIMARY}</a>
+            <Button variant="brandOutline" asChild>
+              <a href="#consult">{CTA_SECONDARY}</a>
             </Button>
           </Reveal>
         </div>

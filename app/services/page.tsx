@@ -7,13 +7,17 @@ import { SectionHeader } from '@/components/marketing/SectionHeader';
 import { MarketingCard } from '@/components/marketing/MarketingCard';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { Reveal } from '@/components/Reveal';
-import { TextLink } from '@/components/marketing/TextLink';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { Button } from '@/components/ui/button';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
+import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
+import { PageHeroBand } from '@/components/sections/PageHeroBand';
+import { AreaCard } from '@/components/marketing/AreaCard';
 import { SERVICES, CITIES } from '@/shared/contentData';
-import { servicePath, areaPath } from '@/lib/seo-routes';
+import { servicePath } from '@/lib/seo-routes';
 import { getServiceBackground } from '@/shared/serviceBackgrounds';
+import { CITY_HERO_IMAGES } from '@/shared/cityServiceImages';
+import { SITE_IMAGES } from '@/shared/siteImages';
 import { buildCanonical, FEED_ALTERNATES } from '@/lib/page-metadata';
 import { getBaseUrl } from '@/lib/seo';
 import { generateBreadcrumbSchema } from '@/lib/schema';
@@ -66,24 +70,25 @@ export default function ServicesIndexPage() {
     <>
       <JsonLd data={[breadcrumbSchema, itemListSchema]} />
 
-      <Section spacing="lg" className="pt-28 md:pt-32" divider>
-        <div className="container px-4">
-          <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Services' }]} />
-          <SectionHeader
-            as="h1"
-            eyebrow="Our services"
-            size="display"
-            className="mt-2 max-w-3xl"
-            title={
-              <>
-                Design-build expertise for every major{' '}
-                <em className="brc-accent">remodel</em>
-              </>
-            }
-            description="One accountable team handles design, estimating, permitting, and construction under a single contract, so your project stays aligned from the first in-home visit through the final walkthrough."
-          />
+      <PageHeroBand
+        imageSrc={SITE_IMAGES.statementBand}
+        imageAlt="Remodeled Treasure Valley great room with warm finishes and natural light"
+      >
+        <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Services' }]} />
+        <div className="brc-label text-inverse-muted mt-6 mb-4">Our services</div>
+        <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
+          Design-build expertise for every major{' '}
+          <em className="brc-accent">remodel</em>
+        </h1>
+        <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed">
+          One accountable team handles design, estimating, permitting, and construction under a single
+          contract, so your project stays aligned from the first in-home visit through the final walkthrough.
+        </p>
+      </PageHeroBand>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mt-10 md:mt-14">
+      <Section spacing="default" divider className="pt-10 md:pt-14">
+        <div className="container px-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {SERVICES.map((service, i) => (
               <Reveal key={service.slug} delay={Math.min(i, 5) * 40}>
                 <Link href={servicePath(service.slug)} className="group block h-full">
@@ -124,7 +129,6 @@ export default function ServicesIndexPage() {
               </Reveal>
             ))}
 
-            {/* Consult CTA card fills the final grid cell and gives a clear next step. */}
             <Reveal delay={SERVICES.length * 40}>
               <div className="h-full min-h-[220px] rounded-sm border border-card-border bg-card p-6 md:p-8 flex flex-col justify-center">
                 <div className="brc-label mb-3">Not sure where to start</div>
@@ -143,7 +147,16 @@ export default function ServicesIndexPage() {
         </div>
       </Section>
 
-      {/* Service areas */}
+      <EstimatePromptBand
+        title={
+          <>
+            Know your range before you{' '}
+            <em className="brc-accent">commit</em>
+          </>
+        }
+        description="Use our Treasure Valley project estimator to see a realistic planning range for kitchen, bath, whole-home, and addition work — then book a free visit when you're ready."
+      />
+
       <Section divider>
         <div className="container px-4 max-w-5xl">
           <SectionHeader
@@ -158,24 +171,16 @@ export default function ServicesIndexPage() {
             }
             description="Permit paths, housing stock, and HOA requirements differ between Ada and Canyon County communities. Choose your city for local guidance."
           />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
             {CITIES.map((city, i) => (
               <Reveal key={city.slug} delay={Math.min(i, 7) * 40}>
-                <Link href={areaPath(city.slug)} className="block h-full group">
-                  <MarketingCard className="h-full transition-colors group-hover:border-foreground/20">
-                    <p className="font-sans font-normal text-sm text-foreground mb-0.5">
-                      {city.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Idaho</p>
-                  </MarketingCard>
-                </Link>
+                <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />
               </Reveal>
             ))}
           </div>
         </div>
       </Section>
 
-      {/* Closing CTA */}
       <Section divider spacing="sm">
         <div className="container px-4 max-w-2xl mx-auto">
           <MarketingCard className="cta-card-dark p-10 md:p-12 text-center">

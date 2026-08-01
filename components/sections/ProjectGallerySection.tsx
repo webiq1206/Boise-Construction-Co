@@ -64,7 +64,7 @@ export function ProjectGallerySection({
         />
         <div className={`grid sm:grid-cols-2 ${lgCols} gap-6`}>
           {projects.map((project, i) => (
-            <Reveal key={project.title} delay={i * 60}>
+            <Reveal key={`${project.serviceType}-${project.city}`} delay={i * 60}>
               <BeforeAfterCard project={project} />
             </Reveal>
           ))}

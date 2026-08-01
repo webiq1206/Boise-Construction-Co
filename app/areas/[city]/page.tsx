@@ -146,6 +146,7 @@ export default function AreaPage({ params }: { params: { city: string } }) {
         sections={sections}
         proof={proof}
         proofHeading={`Recent ${city.name} remodeling projects`}
+        showEstimatePrompt
         faqs={faqs}
         related={{ variant: 'area', citySlug: city.slug }}
       />

@@ -2,9 +2,10 @@ import { ArrowRight } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Section } from "@/components/marketing/Section";
 import { SectionHeader } from "@/components/marketing/SectionHeader";
-import { PageHeader } from "@/components/marketing/PageHeader";
 import { AreaCard } from "@/components/marketing/AreaCard";
 import { BlogEndCta } from "@/components/marketing/BlogEndCta";
+import { EstimatePromptBand } from "@/components/marketing/EstimatePromptBand";
+import { PageHeroBand } from "@/components/sections/PageHeroBand";
 import { CITY_HERO_IMAGES } from "@/shared/cityServiceImages";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Reveal } from "@/components/Reveal";
@@ -17,6 +18,7 @@ import { CITIES, TREASURE_VALLEY_CITIES } from "@/shared/contentData";
 import { CTA_PRIMARY, CTA_SECONDARY } from "@/shared/ctaCopy";
 import { Button } from "@/components/ui/button";
 import { ConsultCTA } from "@/components/modals/ConsultCTA";
+import { SITE_IMAGES } from "@/shared/siteImages";
 
 export const metadata = buildPageMetadata({
   kind: "about",
@@ -43,33 +45,32 @@ export default function AreasHubPage() {
     <>
       <JsonLd data={schemas} />
       <div className="flex flex-col pb-20 md:pb-0">
-        <Section spacing="sm" className="pt-8 md:pt-12">
-          <div className="container px-4 max-w-3xl">
-            <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Service Areas" }]} />
-            <PageHeader
-              align="left"
-              className="mt-6"
-              title={
-                <>
-                  Treasure Valley service{" "}
-                  <em className="brc-accent">areas</em>
-                </>
-              }
-              description={`We serve homeowners across ${TREASURE_VALLEY_CITIES}, and surrounding communities with kitchen, bathroom, whole-home, and addition remodeling under one design-build team.`}
-            />
-            <p className="sr-only" data-speakable="summary">
-              Treasure Valley design-build remodeling service areas.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <ConsultCTA variant="brand">
-                {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
-              </ConsultCTA>
-              <Button variant="brandOutline" asChild>
-                <a href="/#consult">{CTA_SECONDARY}</a>
-              </Button>
-            </div>
+        <PageHeroBand
+          imageSrc={SITE_IMAGES.hero}
+          imageAlt="Remodeled Treasure Valley home interior with kitchen and living space"
+        >
+          <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Service Areas" }]} />
+          <div className="brc-label text-inverse-muted mt-6 mb-4">Treasure Valley</div>
+          <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
+            Treasure Valley service{" "}
+            <em className="brc-accent">areas</em>
+          </h1>
+          <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-4">
+            We serve homeowners across {TREASURE_VALLEY_CITIES}, and surrounding communities with
+            kitchen, bathroom, whole-home, and addition remodeling under one design-build team.
+          </p>
+          <p className="sr-only" data-speakable="summary">
+            Treasure Valley design-build remodeling service areas.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <ConsultCTA variant="brand">
+              {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
+            </ConsultCTA>
+            <Button variant="heroGhost" asChild>
+              <a href="/#consult">{CTA_SECONDARY}</a>
+            </Button>
           </div>
-        </Section>
+        </PageHeroBand>
 
         <Section variant="greige" divider>
           <div className="container px-4">
@@ -89,6 +90,17 @@ export default function AreasHubPage() {
             </div>
           </div>
         </Section>
+
+        <EstimatePromptBand
+          title={
+            <>
+              Planning a remodel in your{' '}
+              <em className="brc-accent">city</em>?
+            </>
+          }
+          description="Permit paths and housing stock differ across Ada and Canyon County. Get an instant planning range for your city, then book a free in-home visit for local guidance."
+          variant="tint"
+        />
 
         <Section>
           <div className="container px-4">

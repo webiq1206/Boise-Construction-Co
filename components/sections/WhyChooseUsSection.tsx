@@ -1,5 +1,4 @@
 import { Reveal } from "@/components/Reveal";
-import { Button } from "@/components/ui/button";
 import { Section } from "@/components/marketing/Section";
 import { SectionHeader } from "@/components/marketing/SectionHeader";
 import {
@@ -7,7 +6,7 @@ import {
   DIFFERENTIATORS_INTRO,
   HOMEPAGE_DIFFERENTIATOR_INDICES,
 } from "@/shared/siteContent";
-import { CTA_PRIMARY } from "@/shared/ctaCopy";
+import { CTA_SECONDARY } from "@/shared/ctaCopy";
 
 interface WhyChooseUsSectionProps {
   /** When set, show only the first N homepage-curated differentiators. */
@@ -52,18 +51,16 @@ export function WhyChooseUsSection({ limit }: WhyChooseUsSectionProps) {
         </div>
 
         {limit !== undefined && (
-          <p className="text-sm text-muted-foreground text-center mt-6 max-w-xl mx-auto">
+          <p className="text-sm text-muted-foreground text-center mt-10 max-w-xl mx-auto">
             <a href="/about" className="text-foreground hover:text-foreground/70 transition-colors font-normal">
               Learn more about our approach
             </a>
+            {' · '}
+            <a href="#consult" className="text-foreground hover:text-foreground/70 transition-colors font-normal">
+              {CTA_SECONDARY}
+            </a>
           </p>
         )}
-
-        <Reveal className="mt-12 text-center">
-          <Button variant="brand" asChild>
-            <a href="#calculator">{CTA_PRIMARY}</a>
-          </Button>
-        </Reveal>
       </div>
     </Section>
   );

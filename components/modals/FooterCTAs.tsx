@@ -8,7 +8,7 @@ const cls =
   "text-sm text-inverse-muted hover:text-inverse-foreground transition-colors text-left";
 
 export function FooterCTAs() {
-  const { openConsult, openEstimate } = useModals();
+  const { openConsult } = useModals();
   const isHome = usePathname() === "/";
 
   return (
@@ -19,9 +19,9 @@ export function FooterCTAs() {
             {CTA_PRIMARY}
           </a>
         ) : (
-          <button onClick={openEstimate} className={cls}>
+          <a href="/estimate" className={cls}>
             {CTA_PRIMARY}
-          </button>
+          </a>
         )}
       </li>
       <li>

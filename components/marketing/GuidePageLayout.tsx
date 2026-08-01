@@ -23,7 +23,7 @@ import { GuideContentBlocks, GuideJumpChips } from './GuideContentBlocks';
 import { SectionedArticle } from './SectionedArticle';
 import { ArticleSidebar, ArticleSidebarCta } from './ArticleSidebar';
 import type { GuidePageData } from '@/shared/guideContent';
-import { getBlogHeroImage, getBlogImageAlt } from '@/shared/blogImages';
+import { getBlogHeroImage, getBlogImageAlt, getArticleInlineFigures, isCostRelatedContent } from '@/shared/blogImages';
 import { BlogHeroBanner } from './BlogHeroBanner';
 import {
   injectHeadingIds,
@@ -35,6 +35,7 @@ import { getHubBySlug, guidePath, getClustersForHub, categoryHubPath } from '@/s
 import { CATEGORY_HUB_MIN_POSTS } from '@/shared/contentHubs';
 import { getResourcesForGuide } from '@/shared/guideResources';
 import { GuideResourceDownloads } from './GuideResourceDownloads';
+import { InlineEstimateCTA } from './InlineEstimateCTA';
 
 interface GuidePageLayoutProps {
   guide: GuidePageData;
@@ -51,6 +52,12 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
   const readingTime = estimateReadingTime(countSubstantiveWords(guide.content));
   const publishedClusters = getClustersForHub(guide.hubSlug, true);
   const resources = getResourcesForGuide(guide.slug);
+  const showInlineEstimate = isCostRelatedContent(guide.slug, guide.hubSlug);
+  const inlineFigures = getArticleInlineFigures(
+    guide.slug,
+    tocHeadings.length,
+    guide.hubSlug,
+  );
 
   return (
     <div className="flex flex-col pb-20 md:pb-0">
@@ -98,7 +105,14 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                 keyTakeaways={guide.keyTakeaways}
               >
                 {/* The guide itself leads - always fully visible, never collapsed. */}
-                <SectionedArticle html={contentWithIds} testId="guide-content" forceExpanded />
+                <SectionedArticle
+                  html={contentWithIds}
+                  testId="guide-content"
+                  forceExpanded
+                  inlineFigures={inlineFigures}
+                />
+
+                {showInlineEstimate && <InlineEstimateCTA />}
 
                 {publishedClusters.length > 0 && (
                   <div
@@ -179,7 +193,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
               )}
 
               <div className="lg:hidden mt-10">
-                <ArticleSidebarCta />
+                <ArticleSidebarCta description="See what your project might cost with an instant Treasure Valley planning range." />
               </div>
             </div>
 

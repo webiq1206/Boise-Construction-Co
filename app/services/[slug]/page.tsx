@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { LandingPageTemplate } from '@/components/seo/LandingPageTemplate';
+import {
+  LandingPageTemplate,
+  type LandingSection,
+} from '@/components/seo/LandingPageTemplate';
 import { buildPageMetadata } from '@/lib/page-metadata';
 import {
   landingBreadcrumbs,
@@ -13,7 +16,7 @@ import { SERVICE_SEO_CONTENT } from '@/shared/seoContent';
 import { generateSpeakableSchema } from '@/lib/schema';
 import { getServiceImageSet } from '@/shared/serviceBackgrounds';
 import { CITIES } from '@/shared/contentData';
-import type { LandingSection } from '@/components/seo/LandingPageTemplate';
+import { getFeaturedGalleryProject } from '@/shared/galleryData';
 
 export function generateStaticParams() {
   return SERVICE_SLUGS.map((slug) => ({ slug }));
@@ -42,6 +45,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
   const path = servicePath(service.slug);
   const faqs = content.faqs;
   const images = getServiceImageSet(service.slug);
+  const featuredProject = getFeaturedGalleryProject(service.slug);
   const serviceLC = service.name.toLowerCase();
 
   const sections: LandingSection[] = [
@@ -110,6 +114,8 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         timeline={content.timeline}
         processSteps={content.processSteps}
         sections={sections}
+        featuredProject={featuredProject}
+        showEstimatePrompt
         faqs={faqs}
         related={{ variant: 'service', serviceSlug: service.slug }}
       />

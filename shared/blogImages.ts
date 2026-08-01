@@ -45,8 +45,61 @@ export function getHubHeroImage(hubSlug: string): string {
   return HUB_HERO_IMAGES[hubSlug] ?? DEFAULT_BLOG_IMAGE;
 }
 
+/** True for cost guides, cost hub articles, and slug/topic-tagged cost content. */
+export function isCostRelatedContent(slug: string, hubSlug?: string): boolean {
+  if (hubSlug === 'remodeling-costs') return true;
+  const entry = BLOG_IMAGE_REGISTRY[slug];
+  if (entry?.topicTags.includes('cost')) return true;
+  return slug.includes('cost');
+}
+
 export function getAbsoluteImageUrl(path: string, baseUrl: string): string {
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
   const base = baseUrl.replace(/\/$/, '');
   return `${base}${path.startsWith('/') ? path : `/${path}`}`;
+}
+
+export interface ArticleInlineFigurePlacement {
+  afterSectionIndex: number;
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
+/**
+ * Editorial inline figures for long articles — inserted after key H2 sections
+ * to break up text-heavy content (Phase 4).
+ */
+export function getArticleInlineFigures(
+  slug: string,
+  sectionCount: number,
+  hubSlug?: string,
+): ArticleInlineFigurePlacement[] {
+  if (sectionCount < 4) return [];
+
+  const entry = BLOG_IMAGE_REGISTRY[slug];
+  const primarySrc = entry?.hero ?? DEFAULT_BLOG_IMAGE;
+  const primaryAlt = entry?.alt ?? getBlogImageAlt(slug);
+
+  const figures: ArticleInlineFigurePlacement[] = [
+    {
+      afterSectionIndex: 1,
+      src: primarySrc,
+      alt: primaryAlt,
+    },
+  ];
+
+  if (sectionCount >= 6 && hubSlug) {
+    const hubHero = getHubHeroImage(hubSlug);
+    if (hubHero !== primarySrc) {
+      figures.push({
+        afterSectionIndex: Math.floor(sectionCount / 2),
+        src: hubHero,
+        alt: `Treasure Valley ${hubSlug.replace(/-/g, ' ')} remodeling project`,
+        caption: 'Project photography from a recent Treasure Valley remodel.',
+      });
+    }
+  }
+
+  return figures;
 }

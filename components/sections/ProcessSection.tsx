@@ -2,20 +2,20 @@ import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { DisplayNum, Section } from "@/components/marketing";
 import { HOW_WE_BUILD_STEPS } from "@/shared/siteContent";
-import { GALLERY_IMAGES } from "@/shared/siteImages";
+import { SITE_IMAGES } from "@/shared/siteImages";
 import { GRAIN_URL } from "@/lib/grain";
 
 export function ProcessSection() {
   return (
     <Section id="how-we-build" variant="greige" spacing="none" divider className="p-0">
       <div className="grid md:grid-cols-2 overflow-hidden">
-        <div className="hidden md:block relative min-h-[380px] md:min-h-[560px] overflow-hidden">
+        <div className="relative min-h-[220px] md:min-h-[560px] overflow-hidden">
           <Image
-            src={GALLERY_IMAGES.outdoor.after}
-            alt="Finished outdoor living space by Boise Remodeling Co in the Treasure Valley"
+            src={SITE_IMAGES.processInProgress}
+            alt="Kitchen remodel in progress with cabinets being installed by the Boise Remodeling Co team"
             fill
             loading="lazy"
-            sizes="50vw"
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover img-brand-grade"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-inverse/55 via-inverse/35 to-inverse/85" />

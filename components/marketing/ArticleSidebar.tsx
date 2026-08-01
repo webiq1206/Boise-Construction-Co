@@ -1,8 +1,8 @@
-import { ArrowRight, Phone, Wrench } from 'lucide-react';
+import { ArrowRight, Calculator, Phone } from 'lucide-react';
 import { MarketingCard } from './MarketingCard';
 import { GuideSidebarToc } from './GuideContentBlocks';
 import type { TocHeading } from '@/lib/content-utils';
-import { ConsultCTA } from '@/components/modals/ConsultCTA';
+import { EstimateCTA } from '@/components/modals/EstimateCTA';
 import { CTA_PRIMARY } from '@/shared/ctaCopy';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 
@@ -25,19 +25,20 @@ export function ArticleSidebar({
 
 export function ArticleSidebarCta({ description }: { description: string }) {
   return (
-    <MarketingCard className="cta-card-dark">
+    <MarketingCard className="cta-card-dark relative overflow-hidden border-accent-legible/30">
+      <div className="absolute inset-y-0 left-0 w-1 bg-accent-legible/70" aria-hidden />
       <div className="p-5 space-y-4">
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10">
-            <Wrench className="h-5 w-5 text-inverse-foreground/60" />
+          <div className="flex items-center justify-center w-10 h-10 rounded-sm bg-accent-legible/15">
+            <Calculator className="h-5 w-5 text-accent-legible" strokeWidth={1.5} />
           </div>
-          <h3 className="font-normal text-sm text-inverse-foreground">Instant Estimate</h3>
+          <h3 className="font-normal text-sm text-inverse-foreground">Instant estimate</h3>
         </div>
         <p className="text-sm text-inverse-muted">{description}</p>
-        <ConsultCTA variant="brand" size="sm" className="w-full">
+        <EstimateCTA variant="brand" size="sm" className="w-full">
           {CTA_PRIMARY}
           <ArrowRight className="ml-2 h-4 w-4" />
-        </ConsultCTA>
+        </EstimateCTA>
         <p className="text-xs text-inverse-muted text-center flex items-center justify-center gap-1">
           <Phone className="h-3 w-3" />
           {SITE_CONFIG.phone}

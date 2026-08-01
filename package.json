@@ -21,6 +21,8 @@
     "images:blog": "node scripts/generate-blog-image-registry.mjs && node scripts/setup-blog-images.mjs",
     "images:generate": "node scripts/generate-blog-images.mjs",
     "images:placeholders": "node scripts/generate-placeholder-images.mjs",
+    "images:marketing": "node scripts/generate-marketing-images.mjs",
+    "images:optimize": "node scripts/optimize-marketing-images-sharp.mjs",
     "prebuild": "npm run verify:no-em-dash && npm run verify:estimate && npm run verify:budget && npm run verify:assessors && npm run links:generate && npm run audit:links && npm run resources:generate && npm run verify:content && npm run verify:images",
     "backlink:score": "node backlink-engine/src/score.mjs",
     "backlink:run": "node backlink-engine/src/run.mjs",

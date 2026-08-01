@@ -1,7 +1,9 @@
+import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/marketing/Section";
 import { Button } from "@/components/ui/button";
 import { VALUE_MODEL } from "@/shared/siteContent";
+import { SITE_IMAGES } from "@/shared/siteImages";
 import { CTA_PRIMARY } from "@/shared/ctaCopy";
 
 /**
@@ -13,9 +15,9 @@ export function ValueOverheadSection() {
   return (
     <Section id="value" divider>
       <div className="container px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="brc-label mb-6">{VALUE_MODEL.eyebrow}</div>
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 md:gap-16 items-center">
           <Reveal>
+            <div className="brc-label mb-6">{VALUE_MODEL.eyebrow}</div>
             <h2 className="font-sans font-light text-[2rem] md:text-[3rem] lg:text-[3.25rem] leading-[1.06] tracking-tight text-foreground">
               {VALUE_MODEL.headlineA}
               <br />
@@ -41,6 +43,18 @@ export function ValueOverheadSection() {
               <Button variant="brand" asChild>
                 <a href="#calculator">{CTA_PRIMARY}</a>
               </Button>
+            </div>
+          </Reveal>
+
+          <Reveal delay={80}>
+            <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-sm">
+              <Image
+                src={SITE_IMAGES.process}
+                alt="Remodel plans and finish material samples on a kitchen table during design review"
+                fill
+                sizes="(max-width: 768px) 100vw, 40vw"
+                className="object-cover img-brand-grade"
+              />
             </div>
           </Reveal>
         </div>

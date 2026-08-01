@@ -9,6 +9,7 @@ import {
   Lightbulb, Wind, DoorOpen, GlassWater, Sofa, Frame, Triangle, Grid3x3,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { StickyEstimateBar } from "@/components/estimate/StickyEstimateBar";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/marketing";
 import { AddressAutocomplete } from "@/components/AddressAutocomplete";
@@ -471,6 +472,7 @@ export function EstimateCalculator({
   const ctaAreaRef     = useRef<HTMLDivElement>(null);
   const gateFormRef    = useRef<HTMLDivElement>(null);
   const resultRef      = useRef<HTMLDivElement>(null);
+  const sectionRef     = useRef<HTMLDivElement>(null);
   const allChosenScrolled  = useRef(false);
   const pendingScrollTarget = useRef<(() => HTMLElement | null) | null>(null);
 
@@ -958,6 +960,51 @@ export function EstimateCalculator({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allChosen, bathConfirmedForScroll]);
 
+  /* Mobile sticky bar: visible while the inline estimator section is on screen. */
+  const [sectionVisible, setSectionVisible] = useState(true);
+  useEffect(() => {
+    if (inModal) return;
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setSectionVisible(entry.isIntersecting),
+      { root: null, rootMargin: "0px", threshold: 0.08 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [inModal]);
+
+  const stickySummary = useMemo(() => {
+    if (!chosen.project) return "Choose your project type";
+    const parts = [config.tabLabel];
+    if (chosen.subtype) {
+      const title = config.subtypes.find((s) => s.id === subtype)?.title;
+      if (title) parts.push(title);
+    }
+    if (chosen.finish) parts.push(FINISH_LABELS[finish]);
+    return parts.join(" · ");
+  }, [chosen.project, chosen.subtype, chosen.finish, config, subtype, finish]);
+
+  const handleStickyCta = () => {
+    if (gateSubmitted) {
+      document.getElementById("consult")?.scrollIntoView({ behavior: "smooth" });
+      onBookVisitProp?.();
+      return;
+    }
+    if (allChosen) {
+      setGateOpen(true);
+      scheduleScroll(() => gateFormRef.current ?? ctaAreaRef.current);
+      return;
+    }
+    if (!chosen.project) {
+      scheduleScroll(() => layoutRef.current);
+    } else if (!chosen.subtype) {
+      scheduleScroll(() => layoutRef.current);
+    } else if (!chosen.finish) {
+      scheduleScroll(() => finishRef.current);
+    }
+  };
+
   /* Identity of the current estimate. Used to tell whether the visitor has
      actually changed something since we last told the team about it. */
   const estimateKey = [
@@ -1193,6 +1240,16 @@ export function EstimateCalculator({
   /* Intro - eyebrow + dynamic per-project headline */
   const intro = (
     <div className="mb-7">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-4 text-[10px] md:text-[11px] tracking-[0.14em] uppercase text-inverse-muted">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-accent-legible" aria-hidden />
+          Free
+        </span>
+        <span className="opacity-40" aria-hidden>·</span>
+        <span>About 60 seconds</span>
+        <span className="opacity-40" aria-hidden>·</span>
+        <span>No obligation</span>
+      </div>
       <p className="text-[12px] tracking-[0.16em] uppercase text-inverse-muted mb-2.5">
         Ballpark your project in under 60 seconds
       </p>
@@ -2250,8 +2307,15 @@ export function EstimateCalculator({
   /* inModal: compact card without full-viewport constraint */
   if (inModal) {
     return (
-      <div className="bg-inverse text-inverse-foreground rounded-lg p-5 sm:p-6">
+      <div className="relative bg-inverse text-inverse-foreground rounded-lg p-5 sm:p-6">
         {flow}
+        <StickyEstimateBar
+          mode="modal"
+          result={allChosen ? result : null}
+          summary={stickySummary}
+          ctaLabel={gateSubmitted ? "Book Free Visit" : allChosen ? "Get My Range" : "Continue"}
+          onCta={handleStickyCta}
+        />
       </div>
     );
   }
@@ -2259,10 +2323,25 @@ export function EstimateCalculator({
   /* Full page: dark section that sizes to its content (no forced viewport height,
      no footer banner, no dead space below the form). */
   return (
-    <Section id="calculator" variant="inverse" divider className="scroll-mt-16">
-      <div className="container px-4 sm:px-6">
-        <div className="mx-auto w-full max-w-3xl">{flow}</div>
-      </div>
-    </Section>
+    <>
+      <Section
+        id="calculator"
+        variant="inverse"
+        divider
+        className="scroll-mt-16 relative border-t border-accent-legible/30"
+      >
+        <div ref={sectionRef} className="container px-4 sm:px-6 pb-4 md:pb-6">
+          <div className="mx-auto w-full max-w-5xl">{flow}</div>
+        </div>
+      </Section>
+      <StickyEstimateBar
+        mode="inline"
+        visible={sectionVisible}
+        result={allChosen ? result : null}
+        summary={stickySummary}
+        ctaLabel={gateSubmitted ? "Book Free Visit" : allChosen ? "Get My Range" : "Continue"}
+        onCta={handleStickyCta}
+      />
+    </>
   );
 }

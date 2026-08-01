@@ -9,6 +9,7 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CTA_QUOTE } from "@/shared/ctaCopy";
 import { SITE_CONFIG } from "@/shared/siteConfig";
+import { NavEstimateButton } from "@/components/modals/NavEstimateButton";
 
 const NAV_LINKS = [
   { label: "Services", href: "/services" },
@@ -107,9 +108,9 @@ export function Navigation() {
             >
               Text us
             </a>
-            <Button variant="brand" size="sm" className="min-h-11" asChild>
-              <a href="/#calculator">{CTA_QUOTE}</a>
-            </Button>
+            <NavEstimateButton variant="brand" size="sm" className="min-h-11">
+              {CTA_QUOTE}
+            </NavEstimateButton>
           </div>
 
           {/* Mobile menu - Radix Dialog gives focus trap, Escape, scroll-lock,
@@ -203,11 +204,13 @@ export function Navigation() {
                     >
                       Text us instead
                     </a>
-                    <Button variant="brand" className="w-full" asChild>
-                      <a href="/#calculator" onClick={() => setMobileOpen(false)}>
-                        {CTA_QUOTE}
-                      </a>
-                    </Button>
+                    <NavEstimateButton
+                      variant="brand"
+                      className="w-full"
+                      onExtraClick={() => setMobileOpen(false)}
+                    >
+                      {CTA_QUOTE}
+                    </NavEstimateButton>
                   </div>
                 </Dialog.Content>
               </Dialog.Portal>
@@ -236,13 +239,13 @@ export function Navigation() {
           >
             Text
           </a>
-          <a
-            href="/#calculator"
+          <NavEstimateButton
+            asLink
             className="flex items-center justify-center gap-2 py-4 text-sm font-normal text-foreground"
             data-testid="button-begin-conversation-mobile"
           >
             {CTA_QUOTE}
-          </a>
+          </NavEstimateButton>
         </div>
       </div>
     </>

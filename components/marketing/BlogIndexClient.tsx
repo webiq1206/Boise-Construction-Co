@@ -5,7 +5,6 @@ import Link from "next/link";
 import { PenLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/marketing/Section";
-import { PageHeader } from "@/components/marketing/PageHeader";
 import { BlogCard } from "@/components/marketing/BlogCard";
 import { Chip } from "@/components/marketing/Chip";
 import { BLOG_POSTS } from "@/shared/blogContent";
@@ -57,17 +56,7 @@ export function BlogIndexClient() {
 
   return (
     <div className="flex flex-col pb-20 md:pb-0">
-      <Section spacing="sm" divider>
-        <div className="container px-4">
-          <PageHeader
-            eyebrow="Blog"
-            title="Remodeling Insights & Ideas"
-            description="Honest advice for Idaho homeowners planning their next renovation."
-          />
-        </div>
-      </Section>
-
-      <Section spacing="default" className="!pt-0">
+      <Section spacing="default" className="pt-10 md:pt-12">
         <div className="container px-4">
           <div className="max-w-6xl mx-auto">
             {sortedPosts.length === 0 ? (

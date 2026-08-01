@@ -32,6 +32,9 @@ import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
 import { CONSULT_BULLETS, HERO_STATS } from '@/shared/siteContent';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { Button } from '@/components/ui/button';
+import { AreaCard } from '@/components/marketing/AreaCard';
+import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
+import { CITY_HERO_IMAGES } from '@/shared/cityServiceImages';
 import { GRAIN_URL } from '@/lib/grain';
 
 const CONTACT_FAQS = [
@@ -254,7 +257,7 @@ export default function ContactPage() {
                 </a>
               </Button>
               <Button variant="heroGhost" asChild>
-                <a href="/#calculator">Get an instant estimate</a>
+                <a href="/estimate">Get an instant estimate</a>
               </Button>
             </div>
             <div className="grid grid-cols-3 gap-3 max-w-xl">
@@ -453,6 +456,17 @@ export default function ContactPage() {
 
         <StatementBandSection />
 
+        <EstimatePromptBand
+          title={
+            <>
+              Prefer a number before you{' '}
+              <em className="brc-accent">call</em>?
+            </>
+          }
+          description="Use our online project estimator for an instant Treasure Valley planning range — then schedule your free in-home visit when you're ready for a written scope."
+          variant="canvas"
+        />
+
         {/* ─── Service areas ─── */}
         <Section divider>
           <div className="container px-4 max-w-5xl">
@@ -467,17 +481,10 @@ export default function ContactPage() {
               description={`We serve homeowners in ${TREASURE_VALLEY_CITIES}, and surrounding communities.`}
               className="max-w-3xl"
             />
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {CITIES.map((city, i) => (
                 <Reveal key={city.slug} delay={Math.min(i, 7) * 50}>
-                  <Link href={`/areas/${city.slug}`} className="block h-full group">
-                    <MarketingCard className="h-full transition-colors group-hover:border-foreground/20">
-                      <p className="font-sans font-normal text-sm text-foreground mb-0.5">
-                        {city.name}
-                      </p>
-                      <p className="text-xs text-muted-foreground">Idaho</p>
-                    </MarketingCard>
-                  </Link>
+                  <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />
                 </Reveal>
               ))}
             </div>

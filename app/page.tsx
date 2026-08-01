@@ -12,6 +12,7 @@ import { ProcessSection } from "@/components/sections/ProcessSection";
 import { BudgetInclusionsSection } from "@/components/sections/BudgetInclusionsSection";
 import { ProjectGallerySection } from "@/components/sections/ProjectGallerySection";
 import { BrandStatementBand } from "@/components/sections/BrandStatementBand";
+import { EstimatePromptBand } from "@/components/marketing/EstimatePromptBand";
 import { Section } from "@/components/marketing/Section";
 import { MarketingCard } from "@/components/marketing/MarketingCard";
 import { Check } from "lucide-react";
@@ -19,7 +20,7 @@ import { CONSULT_BULLETS, SITE_TAGLINE } from "@/shared/siteContent";
 import { CTA_PRIMARY } from "@/shared/ctaCopy";
 import { HomePageSchema } from "@/components/seo/HomePageSchema";
 import { buildCanonical } from "@/lib/page-metadata";
-import { GALLERY_IMAGES } from "@/shared/siteImages";
+import { SITE_IMAGES } from "@/shared/siteImages";
 
 const EstimateCalculator = dynamic(
   () =>
@@ -94,6 +95,24 @@ export default function HomePage() {
           used to carry that project was removed, so the gallery is now the only
           place it appears. */}
       <ProjectGallerySection limit={6} showViewAll={true} />
+
+      <EstimatePromptBand
+        eyebrow="Still comparing options"
+        title={
+          <>
+            Get your number without leaving{' '}
+            <em className="brc-accent">home</em>
+          </>
+        }
+        description="If you scrolled past the estimator above, come back anytime — or book a free in-home visit and we'll walk through scope, design direction, and a written project range together."
+        variant="tint"
+        bullets={[
+          "Instant range based on real Treasure Valley costs",
+          "Free in-home visit when you're ready for detail",
+          "No obligation — we email you a copy of your estimate",
+        ]}
+      />
+
       <WhyChooseUsSection limit={5} />
       <ProcessSection />
       <BrandStatementBand />
@@ -104,7 +123,7 @@ export default function HomePage() {
             page ground; the form card floats above on its own shadow. */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
           <Image
-            src={GALLERY_IMAGES.kitchen.after}
+            src={SITE_IMAGES.consultBg}
             alt=""
             fill
             loading="lazy"

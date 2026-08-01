@@ -126,6 +126,7 @@ export default function CityServicePage({
         sections={sections}
         proof={proof}
         proofHeading={`Recent ${city.name} ${service.name.toLowerCase()} work`}
+        showEstimatePrompt
         faqs={faqs}
         related={{
           variant: 'city-service',

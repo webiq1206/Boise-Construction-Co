@@ -75,7 +75,7 @@ export function ServicesGrid() {
                 Every remodel starts with a free in-home visit and an honest planning range, with no obligation.
               </p>
               <Button variant="brand" className="self-start" asChild>
-                <a href="#calculator">Get an estimate</a>
+                <a href="#consult">{CTA_SECONDARY}</a>
               </Button>
             </div>
           </Reveal>

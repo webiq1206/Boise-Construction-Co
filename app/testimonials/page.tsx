@@ -1,8 +1,9 @@
 import { ArrowRight } from 'lucide-react';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { Section } from '@/components/marketing/Section';
-import { PageHeader } from '@/components/marketing/PageHeader';
 import { ProjectGallerySection } from '@/components/sections/ProjectGallerySection';
+import { PageHeroBand } from '@/components/sections/PageHeroBand';
+import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
 import { buildPageMetadata } from '@/lib/page-metadata';
 import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
 import { Button } from '@/components/ui/button';
@@ -13,6 +14,7 @@ import {
   generateCollectionPageSchema,
 } from '@/lib/schema';
 import { GALLERY_PROJECTS } from '@/shared/galleryData';
+import { GALLERY_IMAGES } from '@/shared/siteImages';
 
 export const metadata = buildPageMetadata({
   kind: 'about',
@@ -21,9 +23,6 @@ export const metadata = buildPageMetadata({
   descriptionOverride:
     'Treasure Valley remodeling transformations by Boise Remodeling Co: kitchen, bathroom, whole-home, and addition projects with before-and-after comparisons.',
 });
-
-// No Review/AggregateRating structured data is emitted until BUSINESS_INFO
-// reflects genuine, verified reviews. We never publish fabricated review markup.
 
 export default function TestimonialsPage() {
   const schemas = [
@@ -46,38 +45,49 @@ export default function TestimonialsPage() {
   return (
     <div className="flex flex-col pb-20 md:pb-0">
       <JsonLd data={schemas} />
-      <Section spacing="sm" className="pt-8 md:pt-12">
-        <div className="container px-4 max-w-3xl">
-          <Breadcrumbs
-            items={[
-              { name: 'Home', href: '/' },
-              { name: 'Our Work' },
-            ]}
-          />
-          <PageHeader
-            align="left"
-            className="mt-6"
-            title={
-              <>
-                Our <em className="brc-accent">work</em> across the
-                Treasure Valley
-              </>
-            }
-            description="Explore recent design-build transformations. Drag any slider to compare the before and after, then picture the same clarity and craftsmanship in your home."
-          />
-          <div className="mb-8" />
-          <div className="flex flex-wrap gap-3">
-            <ConsultCTA variant="brand">
-              {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
-            </ConsultCTA>
-            <Button variant="brandOutline" asChild>
-              <a href="/#consult">{CTA_SECONDARY}</a>
-            </Button>
-          </div>
-        </div>
-      </Section>
 
-      <ProjectGallerySection limit={6} showViewAll={false} />
+      <PageHeroBand
+        imageSrc={GALLERY_IMAGES.kitchen.after}
+        imageAlt="After: modern kitchen remodel in Boise Idaho"
+        scrim={0.82}
+      >
+        <Breadcrumbs
+          items={[
+            { name: 'Home', href: '/' },
+            { name: 'Our Work' },
+          ]}
+        />
+        <div className="brc-label text-inverse-muted mt-6 mb-4">Before &amp; after</div>
+        <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
+          Our <em className="brc-accent">work</em> across the Treasure Valley
+        </h1>
+        <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-8">
+          Explore recent design-build transformations. Drag any slider to compare the before and after,
+          then picture the same clarity and craftsmanship in your home.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <ConsultCTA variant="brand">
+            {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
+          </ConsultCTA>
+          <Button variant="heroGhost" asChild>
+            <a href="/#consult">{CTA_SECONDARY}</a>
+          </Button>
+        </div>
+      </PageHeroBand>
+
+      <ProjectGallerySection showViewAll={false} />
+
+      <EstimatePromptBand
+        eyebrow="Planning your project"
+        title={
+          <>
+            Curious what your remodel might{' '}
+            <em className="brc-accent">cost</em>?
+          </>
+        }
+        description="After seeing what's possible, get an instant planning range tailored to Treasure Valley project costs — then book a free in-home visit for a written scope."
+        variant="tint"
+      />
 
       <Section divider spacing="sm">
         <div className="container px-4 max-w-2xl mx-auto">
