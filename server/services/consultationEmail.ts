@@ -422,6 +422,18 @@ function renderBudgetHtml(est: VerifiedEstimate, audience: "admin" | "client"): 
         `</ul>`
       : "";
 
+  // Said only when the range lands above what they have, which is the one place
+  // it needs saying. Attached to the solved comparison rather than floating as
+  // its own paragraph, so the reassurance arrives with the options rather than
+  // instead of them.
+  const reassurance =
+    audience === "client" && a.state === "below"
+      ? `<p style="margin:12px 0 0;color:${EMAIL_BRAND.text};font-size:13.5px;line-height:1.6;">` +
+        `We will focus on the features that matter most to you, talk through phasing the work in stages, ` +
+        `and explore options that stretch your investment further. Our job is to find the best path forward ` +
+        `for your home, never to tell you your budget is not enough.</p>`
+      : "";
+
   const adminExtra =
     audience === "admin"
       ? `<p style="margin:12px 0 0;font-size:12px;color:${EMAIL_BRAND.textMuted};">` +
@@ -437,6 +449,7 @@ function renderBudgetHtml(est: VerifiedEstimate, audience: "admin" | "client"): 
       ${a.driver ? `<p style="margin:8px 0 0;color:${EMAIL_BRAND.textMuted};font-size:13.5px;line-height:1.6;">${escapeHtml(a.driver)}</p>` : ""}
       ${guidance ? `<p style="margin:12px 0 0;color:${EMAIL_BRAND.text};font-size:14px;line-height:1.6;">${escapeHtml(guidance)}</p>` : ""}
       ${alternatives}
+      ${reassurance}
       <p style="margin:14px 0 0;font-size:12px;line-height:1.55;color:${EMAIL_BRAND.textMuted};">${escapeHtml(a.basisNote)}</p>
       ${adminExtra}
     </div>
@@ -677,7 +690,14 @@ export function buildCustomerEmailHtml(
   const firstName = firstNameOf(lead.name);
   const projectLabel = estimate ? PROJECT_LABELS[estimate.project].label : lead.projectType;
 
-  const budgetNote = lead.budget
+  // Only when there is no computed comparison to show. Once the estimator has a
+  // real number it renders the solved version - where their budget actually
+  // lands and what would change it - and restating the same figure in a second
+  // paragraph reads as though nobody joined the two up. This stays for the
+  // consultation form, where someone can give a budget with no estimate behind
+  // it and generic reassurance is the honest most we can offer.
+  const budgetNote =
+    lead.budget && !estimate?.statedBudget
     ? `<p style="margin:16px 0;color:${EMAIL_BRAND.text};line-height:1.6;">Your stated project budget is <strong>${escapeHtml(lead.budget)}</strong>. We will do everything we can to recommend solutions that fit within that budget while helping you achieve the goals you have shared. If your ideal scope runs beyond it, we will focus on the features that matter most to you, talk through phasing the work in stages, and explore materials and design options that stretch your investment further. Our job is to find the best path forward for your home, never to tell you your budget is not enough.</p>`
     : "";
 

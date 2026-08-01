@@ -298,48 +298,6 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
   },
 };
 
-/** Budget ranges shown in the gate form, calibrated per project type. */
-const BUDGET_RANGES: Record<ProjectType, string[]> = {
-  kitchen: [
-    "Under $25,000",
-    "$25,000 - $50,000",
-    "$50,000 - $100,000",
-    "$100,000 - $150,000",
-    "Over $150,000",
-  ],
-  bathroom: [
-    "Under $15,000",
-    "$15,000 - $30,000",
-    "$30,000 - $60,000",
-    "$60,000 - $100,000",
-    "Over $100,000",
-  ],
-  "whole-home": [
-    "Under $100,000",
-    "$100,000 - $200,000",
-    "$200,000 - $400,000",
-    "$400,000 - $600,000",
-    "Over $600,000",
-  ],
-  addition: [
-    "Under $75,000",
-    "$75,000 - $150,000",
-    "$150,000 - $300,000",
-    "Over $300,000",
-  ],
-  adu: [
-    "Under $150,000",
-    "$150,000 - $250,000",
-    "$250,000 - $400,000",
-    "Over $400,000",
-  ],
-  basement: [
-    "Under $40,000",
-    "$40,000 - $75,000",
-    "$75,000 - $150,000",
-    "Over $150,000",
-  ],
-};
 
 const PROJECT_TYPE_ORDER: ProjectType[] = [
   "kitchen", "bathroom", "whole-home", "addition", "adu", "basement",
@@ -481,7 +439,6 @@ export function EstimateCalculator({
   const [gatePhone,     setGatePhone]     = useState("");
   const [gateLoading,   setGateLoading]   = useState(false);
   const [gateError,     setGateError]     = useState<string | null>(null);
-  const [gateBudget,    setGateBudget]    = useState("");
   /* Property address. Collected here as well as on the consultation form: this
      gate is the path most leads arrive through, and without it the team cannot
      confirm the property is inside the service area, and the county property
@@ -757,10 +714,11 @@ export function EstimateCalculator({
     }
   }, []);
 
-  /* Reset budget selection when the project type changes (ranges differ per project). */
-  useEffect(() => {
-    setGateBudget("");
-  }, [effectiveProject]);
+  /* The budget deliberately survives a change of project type. It used to be
+     cleared here because the brackets offered were per-project, so a kitchen
+     bracket was meaningless once you switched to a bathroom. A plain number is
+     not: what someone has to spend does not change because they clicked a
+     different tab, and wiping it would silently drop the answer they gave. */
 
   /* ── Handlers ── */
 
@@ -1110,8 +1068,11 @@ export function EstimateCalculator({
       name: gateName.trim(),
       email: gateEmail.trim(),
       phone: gatePhone.trim(),
-      /* Omit when blank: the API treats budget as optional but rejects "" */
-      budget: gateBudget || undefined,
+      /* The CRM's budget field is free text and predates this form, so it keeps
+         receiving a readable string while `estimate.statedBudget` below carries
+         the number the engine actually solves against. Omitted when blank: the
+         API treats budget as optional but rejects "". */
+      budget: budgetValue ? `$${budgetValue.toLocaleString("en-US")}` : undefined,
       projectType: effectiveProject,
       address: gateAddress.trim(),
       zip: gateProfile?.zip?.slice(0, 5) || extractZip(gateAddress) || undefined,
@@ -1715,44 +1676,14 @@ export function EstimateCalculator({
             </p>
           </div>
 
-          {/* BUDGET, ASKED AFTER THE RANGE AND NEVER BEFORE.
-              Asking first anchors the whole interaction: a homeowner who names
-              $40,000 and then sees $27,000-$37,000 reads it as being told what
-              they wanted to hear. The same number after the range reads as an
-              honest estimate. It is also the most intrusive question the form
-              can ask, so it is never the price of seeing a number. */}
-          <div className="border-t border-inverse-foreground/10 pt-4">
-            <label
-              htmlFor="brc-budget"
-              className="block text-[13px] tracking-[0.06em] uppercase text-inverse-foreground"
-            >
-              Working toward a budget?
-            </label>
-            <p className="mt-1.5 text-[12.5px] text-inverse-muted leading-relaxed">
-              Tell us and we will show you what fits. Optional, and it only changes what we show
-              you, never what we charge.
-            </p>
-            <div className="mt-3 flex items-center gap-2">
-              <span className="text-inverse-muted text-[15px]" aria-hidden="true">$</span>
-              <input
-                id="brc-budget"
-                type="text"
-                inputMode="numeric"
-                autoComplete="off"
-                value={budgetInput}
-                onChange={(e) => setBudgetInput(e.target.value.replace(/[^\d,]/g, ""))}
-                placeholder="45,000"
-                aria-describedby="brc-budget-help"
-                data-testid="input-budget"
-                /* 16px, not 15: iOS Safari zooms the whole page when a focused
-                   input renders below 16px, and it does not zoom back out. Every
-                   other input on the site is 16px for the same reason. */
-                className="min-h-11 w-40 rounded-sm border border-inverse-foreground/25 bg-inverse-foreground/5 px-3 text-[16px] text-inverse-foreground placeholder:text-inverse-muted/70 focus:outline-none focus:ring-2 focus:ring-accent-legible"
-              />
-            </div>
-
-            {budgetAssessment && (
-              <div className="mt-4 rounded-sm bg-inverse-foreground/[0.06] border border-inverse-foreground/12 p-4" data-testid="budget-assessment">
+          {/* THE ANSWER TO THE BUDGET ASKED IN THE GATE. There is no second
+              input here: the homeowner has already given us the number, and
+              asking again would read as though we had not been listening.
+              This block is the reply, and it re-solves itself whenever they
+              change a selection above. */}
+          {budgetAssessment && (
+            <div className="border-t border-inverse-foreground/10 pt-4">
+              <div className="rounded-sm bg-inverse-foreground/[0.06] border border-inverse-foreground/12 p-4" data-testid="budget-assessment">
                 <p className="text-[14px] text-inverse-foreground leading-relaxed">
                   {budgetAssessment.headline}
                 </p>
@@ -1781,12 +1712,12 @@ export function EstimateCalculator({
                     ))}
                   </ul>
                 )}
-                <p id="brc-budget-help" className="mt-3 text-[12px] text-inverse-muted/90 leading-relaxed">
+                <p className="mt-3 text-[12px] text-inverse-muted/90 leading-relaxed">
                   {BUDGET_BASIS_NOTE}
                 </p>
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Scope accordion */}
           <div className="border-t border-inverse-foreground/10 pt-4">
@@ -2229,22 +2160,44 @@ export function EstimateCalculator({
               </p>
             </div>
           )}
-          <select
-            value={gateBudget}
-            onChange={(e) => setGateBudget(e.target.value)}
-            className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground outline-none focus:border-inverse-foreground/50 transition-colors appearance-none cursor-pointer"
-            data-testid="gate-select-budget"
-            aria-label="Desired budget range (optional)"
-          >
-            <option value="" className="bg-neutral-900 text-inverse-muted">
-              Desired budget range (optional)
-            </option>
-            {BUDGET_RANGES[effectiveProject].map((range) => (
-              <option key={range} value={range} className="bg-neutral-900 text-inverse-foreground">
-                {range}
-              </option>
-            ))}
-          </select>
+          {/* THE ONE BUDGET ASK. Asked here, before the range, so the estimate
+              we hand back can be framed against it straight away and so the
+              team has a real number for every lead who gets this far, not only
+              the ones who go on to book a visit.
+
+              A number rather than a bracket: "$25,000 - $50,000" is too coarse
+              to solve against, and the trade-off engine needs an actual figure
+              to test selections at. Optional, and never a condition of seeing
+              the range - an extra required field here reads as a
+              bait-and-switch. */}
+          <div>
+            <div className="relative">
+              <span
+                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[16px] text-inverse-muted/90"
+                aria-hidden="true"
+              >
+                $
+              </span>
+              <input
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                value={budgetInput}
+                onChange={(e) => setBudgetInput(e.target.value.replace(/[^\d,]/g, ""))}
+                placeholder="Budget you are working toward (optional)"
+                /* 16px: iOS Safari zooms the page when a focused input renders
+                   below 16px and does not zoom back out. */
+                className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md pl-8 pr-4 py-3 text-[16px] text-inverse-foreground placeholder:text-[14px] placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors"
+                data-testid="gate-input-budget"
+                aria-label="Budget you are working toward (optional)"
+                aria-describedby="brc-gate-budget-help"
+              />
+            </div>
+            <p id="brc-gate-budget-help" className="mt-1.5 text-[11.5px] text-inverse-muted/90">
+              If you share it, we will show you what fits and what to change if it does not.
+              It never changes what we charge.
+            </p>
+          </div>
           {gateError && (
             // role="alert" so a screen reader announces the validation message
             // the moment it appears; native required-field errors are announced
