@@ -16,7 +16,8 @@ import {
   priceRepair,
   RECIPES,
   CREW_FOR_TRADE,
-  CREW_MINIMUM_COST,
+  CREW_MINIMUM_PRICE,
+  WORTHWHILE_JOB_PRICE,
   TRADE_LABELS,
   REVIEW_REASON_TEXT,
   RE10_MARGIN_FLOOR,
@@ -170,6 +171,11 @@ for (const ctx of CONTEXTS) {
 
       const label = `n=${n} pool=${pool.length} ctx=${JSON.stringify(ctx)}`;
 
+      // (a0) The minimum visit price may only ever RAISE the price, so the
+      //      realised margin sits at or above the target and never below it.
+      check(est.realisedMargin >= est.appliedMargin - 1e-9, `${label}: realised margin fell below the target`);
+      check(est.minimumPriceApplied >= -0.01, `${label}: minimum price reduced the price`);
+
       // (a) The floor is absolute.
       check(est.appliedMargin >= RE10_MARGIN_FLOOR - 1e-9, `${label}: margin ${est.appliedMargin} below the 50% floor`);
       check(est.appliedMargin <= RE10_MARGIN_CEILING + 1e-9, `${label}: margin ${est.appliedMargin} above the ceiling`);
@@ -178,7 +184,8 @@ for (const ctx of CONTEXTS) {
       //     profit / price must equal m. This is the check that catches a
       //     markup-vs-margin regression, which is the expensive mistake.
       const realised = est.grossProfit / est.sellingPrice;
-      check(near(realised, est.appliedMargin, 1e-6), `${label}: realised margin ${realised} != applied ${est.appliedMargin}`);
+      check(near(realised, est.realisedMargin, 1e-6), `${label}: reported realised margin does not match profit/price`);
+      check(realised >= RE10_MARGIN_FLOOR - 1e-9, `${label}: realised margin ${realised} below the 50% floor`);
       check(near(est.sellingPrice - est.totalInternalCost, est.grossProfit, 0.01), `${label}: gross profit does not reconcile`);
       check(est.sellingPrice >= est.totalInternalCost * 2 - 0.01, `${label}: 50% margin must at least double cost`);
 
@@ -232,24 +239,46 @@ for (const ctx of CONTEXTS) {
 
 for (const kind of ALL_KINDS) {
   if (RECIPES[kind].alwaysReview) continue;
-  const trade = RECIPES[kind].trade;
-  const crew = CREW_FOR_TRADE[trade];
+  const crew = CREW_FOR_TRADE[RECIPES[kind].trade];
   const est = estimateRe10([{ id: "1", kind, description: "single tiny item", quantity: 1 }]);
   if (est.priced.length === 0) continue;
 
-  // One small repair must never bill under the crew minimum plus mobilisation.
+  // One small repair must never bill under what it costs to send that crew out.
+  // The minimum is a PRICE, so it is checked against the price - the earlier
+  // version compared it to cost and, marked up, quoted $1,505 for a light switch.
   check(
-    est.directCost >= CREW_MINIMUM_COST[crew] - 0.01,
-    `${kind}: single-item job priced at ${est.directCost}, under the ${crew} minimum ${CREW_MINIMUM_COST[crew]}`,
+    est.sellingPrice >= CREW_MINIMUM_PRICE[crew] - 0.01,
+    `${kind}: single-item job priced at ${Math.round(est.sellingPrice)}, under the ${crew} minimum ${CREW_MINIMUM_PRICE[crew]}`,
+  );
+
+  // ...and it must not be absurd in the other direction either. A single small
+  // repair that prices past this is the failure mode that started this rework.
+  check(
+    est.sellingPrice <= 2600,
+    `${kind}: single small repair priced at ${Math.round(est.sellingPrice)}, which will not survive contact with the market`,
   );
 }
 
-// A big single-trade list must clear its minimum on real work, so the top-up
-// stops applying rather than stacking on top of genuine cost.
+// A list whose own work exceeds every minimum must not receive a top-up, so the
+// floors stop applying rather than stacking on top of genuine cost.
 const bigDrywall = estimateRe10(
   Array.from({ length: 12 }, (_, i) => ({ id: String(i), kind: "drywall-repaint-wall" as const, description: "", quantity: 40 })),
 );
-check(bigDrywall.minimumsApplied === 0, `large single-crew list still applied a minimum top-up of ${bigDrywall.minimumsApplied}`);
+check(bigDrywall.minimumsApplied === 0, `large single-crew list still applied a labour-floor top-up of ${bigDrywall.minimumsApplied}`);
+check(bigDrywall.minimumPriceApplied === 0, `large single-crew list still applied a minimum visit price`);
+check(bigDrywall.worthwhile, "a twelve-item drywall list should clear the worthwhile threshold");
+
+// The worthwhile flag has to track the threshold exactly, because the team will
+// act on it.
+for (const kind of ALL_KINDS) {
+  if (RECIPES[kind].alwaysReview) continue;
+  const est = estimateRe10([{ id: "1", kind, description: "", quantity: 1 }]);
+  if (est.priced.length === 0) continue;
+  check(
+    est.worthwhile === est.sellingPrice >= WORTHWHILE_JOB_PRICE,
+    `${kind}: worthwhile flag disagrees with the ${WORTHWHILE_JOB_PRICE} threshold`,
+  );
+}
 
 /* ------------------------- 7. more information must never widen the range */
 

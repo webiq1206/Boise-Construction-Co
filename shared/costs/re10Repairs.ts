@@ -553,19 +553,53 @@ export const CREW_LABELS: Record<RepairCrew, string> = {
 };
 
 /**
- * The least a crew can be billed for showing up, before margin.
+ * THE MINIMUM IS A PRICE, NOT A COST.
  *
- * Someone has to drive there, park, protect the area, do the work, clean up and
- * drive back. Below these numbers the visit costs more than it earns whatever
- * the catalog rate says. Licensed trades are higher because a service call from
- * a plumber or electrician costs more than a carpenter's morning.
+ * This started as a cost floor, which was wrong and expensive. A $465 cost
+ * minimum for an electrician, marked up through a 50% margin, quoted $1,505 to
+ * replace one light switch against a Boise market of roughly $100-250. A trade
+ * minimum in the real world is what you CHARGE to show up, so it belongs after
+ * the margin, not before it.
+ *
+ * These sit deliberately above the handyman market, which runs $75-200 for a
+ * minimum call. Boise Remodeling Co. is a licensed, insured contractor turning
+ * up on a transaction deadline with photo documentation and a warranty, and that
+ * is not the same product as an hourly handyman. But it is a premium, not a
+ * multiple.
  */
-export const CREW_MINIMUM_COST: Record<RepairCrew, number> = {
-  general: 385,
-  plumbing: 485,
-  electrical: 465,
-  roofing: 625,
+export const CREW_MINIMUM_PRICE: Record<RepairCrew, number> = {
+  general: 345,
+  plumbing: 425,
+  electrical: 395,
+  roofing: 650,
 };
+
+/**
+ * Below this, a standalone job is not worth the disruption.
+ *
+ * Not a price - a decision. A single small repair at the minimum still occupies
+ * a scheduling slot, a drive and an admin file. The estimator surfaces this to
+ * the team rather than to the customer, so a one-item RE-10 can be taken as a
+ * favour to an agent who brings the next five, or declined, as a judgement call
+ * rather than by accident.
+ */
+export const WORTHWHILE_JOB_PRICE = 650;
+
+/**
+ * The catalog is a HIGH-END rate card. Repairs are not high-end work.
+ *
+ * This was established when the main estimator was calibrated: the owner's
+ * workbook prices high-end finishes, which is why QUALITY_RATE_FACTOR scales it
+ * down for mid-range projects. RE-10 work is further down again - the job is to
+ * match what is already there, in a house being sold, to builder-grade. Applying
+ * the card unadjusted priced inspection patches at luxury-remodel rates.
+ *
+ * Materials take the bigger correction because that is where the grade lives:
+ * stock trim against custom millwork. Labour moves less, because the hours are
+ * the hours and a repair often takes LONGER per unit than new work.
+ */
+export const REPAIR_GRADE_MATERIAL_FACTOR = 0.58;
+export const REPAIR_GRADE_LABOUR_FACTOR = 0.82;
 
 /** Cost of putting one crew on site, per crew that has to attend. */
 export const MOBILISATION_COST = 165;
@@ -630,7 +664,14 @@ export interface Re10Estimate {
   coordination: number;
   contingency: number;
   totalInternalCost: number;
+  /** The margin the pricing logic targeted. */
   appliedMargin: number;
+  /** What the margin actually came out at once the minimum visit price applied. */
+  realisedMargin: number;
+  /** Amount the minimum visit price added on top of cost-plus-margin. */
+  minimumPriceApplied: number;
+  /** Below WORTHWHILE_JOB_PRICE this is a judgement call, not an automatic yes. */
+  worthwhile: boolean;
   /** Reasons the margin sits above the 50% floor. */
   marginUplifts: string[];
   sellingPrice: number;
@@ -648,6 +689,10 @@ export interface Re10Estimate {
 }
 
 function lineFor(li: LineItem, quantity: number, why?: string): CostLine {
+  // Grade adjustment, applied to the unit cost so the admin view shows the rate
+  // actually used rather than the card rate with a hidden correction after it.
+  const factor = li.type === "Material" ? REPAIR_GRADE_MATERIAL_FACTOR : REPAIR_GRADE_LABOUR_FACTOR;
+  const unitCost = li.cost * factor;
   return {
     code: li.code,
     division: li.division,
@@ -655,8 +700,8 @@ function lineFor(li: LineItem, quantity: number, why?: string): CostLine {
     type: li.type as CostType,
     uom: li.uom as Uom,
     quantity,
-    unitCost: li.cost,
-    cost: li.cost * quantity,
+    unitCost,
+    cost: unitCost * quantity,
     assumption: why,
   };
 }
@@ -888,14 +933,17 @@ export function estimateRe10(
     const crewRepairs = crewTrades.flatMap((t) => byTrade.get(t)!);
     const rawCost = crewRepairs.reduce((s, p) => s + p.directCost, 0);
 
-    // Two floors, whichever binds harder: the crew's flat minimum, and the hours
-    // the work actually takes at crew cost. A long list of small items clears
-    // the flat minimum but can still be underpriced on hours.
+    // The only COST floor is the one that is genuinely a cost: the hours the
+    // work actually takes at crew rate. A four-square-foot patch billed off a
+    // per-square-foot card is thirty dollars of labour for half a day's work,
+    // and no amount of margin fixes an understated cost.
+    //
+    // The trade MINIMUM is not applied here. It is a price, and it is applied
+    // to the finished price further down.
     const crewHours = crewRepairs.reduce((s, p) => s + p.crewMinutes, 0) / 60;
     const labourFloor = crewHours * CREW_HOURLY_COST;
-    const floor = Math.max(CREW_MINIMUM_COST[crew], labourFloor);
 
-    const topUp = Math.max(0, floor - rawCost);
+    const topUp = Math.max(0, labourFloor - rawCost);
     minimumsApplied += topUp;
 
     // First crew on site pays a full mobilisation; the rest overlap with it.
@@ -939,8 +987,21 @@ export function estimateRe10(
   // Crews, not trades: coordinating one carpenter across four trades is not the
   // same problem as coordinating a carpenter, a plumber and an electrician.
   const { margin, uplifts } = resolveMargin(ctx, activeCrews.length, priced.length);
-  const sellingPrice = totalInternalCost > 0 ? priceAtMargin(totalInternalCost, margin) : 0;
+  const pricedAtMargin = totalInternalCost > 0 ? priceAtMargin(totalInternalCost, margin) : 0;
+
+  // THE MINIMUM VISIT PRICE, applied to the finished number.
+  //
+  // Every crew that has to attend carries one. Charging one switch at cost plus
+  // margin is $130 and does not pay for the morning; charging it at a marked-up
+  // cost minimum was $1,505 and does not win the job. The floor is what the
+  // visit is worth, and it binds only when the work itself does not reach it.
+  const minimumPrice = activeCrews.reduce((s, c) => s + CREW_MINIMUM_PRICE[c], 0);
+  const sellingPrice = Math.max(pricedAtMargin, minimumPrice);
+  const minimumPriceApplied = sellingPrice - pricedAtMargin;
   const grossProfit = sellingPrice - totalInternalCost;
+  // The floor can only raise the price, so the realised margin is at or above
+  // the applied one. Report what actually happened rather than the target.
+  const realisedMargin = sellingPrice > 0 ? grossProfit / sellingPrice : margin;
 
   // Customer amounts per trade are the selling price split by each trade's share
   // of cost. Splitting the priced total, rather than pricing each trade
@@ -985,6 +1046,22 @@ export function estimateRe10(
       message: "Nothing on this list could be priced automatically. An onsite evaluation is the right next step.",
     });
   }
+  if (sellingPrice > 0 && sellingPrice < WORTHWHILE_JOB_PRICE) {
+    warnings.push({
+      severity: "info",
+      message:
+        `At ${Math.round(sellingPrice)} this sits below the ${WORTHWHILE_JOB_PRICE} mark where a standalone visit ` +
+        "pays for itself. Worth taking for an agent who brings more work, worth declining otherwise. Internal note only.",
+    });
+  }
+  if (minimumPriceApplied > 0) {
+    warnings.push({
+      severity: "info",
+      message:
+        `The minimum visit price added ${Math.round(minimumPriceApplied)}: the work itself does not fill a trip. ` +
+        "Bundling more of the repair list into the same visit is what makes this efficient.",
+    });
+  }
   if (margin < RE10_MARGIN_FLOOR) {
     warnings.push({ severity: "warn", message: "Margin fell below the 50% floor. This should not happen without an admin adjustment." });
   }
@@ -1000,6 +1077,9 @@ export function estimateRe10(
     contingency,
     totalInternalCost,
     appliedMargin: margin,
+    realisedMargin,
+    minimumPriceApplied,
+    worthwhile: sellingPrice >= WORTHWHILE_JOB_PRICE,
     marginUplifts: uplifts,
     sellingPrice,
     grossProfit,
