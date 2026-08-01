@@ -3870,7 +3870,7 @@
           "anchor": "Eagle Remodeling Guide",
           "title": "Eagle Remodeling Guide",
           "type": "guide",
-          "score": 0.107
+          "score": 0.101
         }
       ]
     },
@@ -9058,11 +9058,11 @@
           "score": 0.465
         },
         {
-          "url": "/blog/whole-home-remodel-cost-boise",
-          "anchor": "Whole-Home Remodel Cost in Boise: 2026 Budget Guide",
-          "title": "Whole-Home Remodel Cost in Boise: 2026 Budget Guide",
+          "url": "/blog/luxury-remodel-cost-boise",
+          "anchor": "Luxury Remodel Cost in Boise & Eagle: 2026 Guide",
+          "title": "Luxury Remodel Cost in Boise & Eagle: 2026 Guide",
           "type": "blog",
-          "score": 0.453
+          "score": 0.442
         },
         {
           "url": "/guides/eagle-foothills-remodeling-guide",
@@ -9385,16 +9385,16 @@
           "score": 0.011
         },
         {
-          "url": "/blog/luxury-remodel-cost-boise",
-          "anchor": "Luxury Remodel Cost in Boise & Eagle: 2026 Guide",
-          "title": "Luxury Remodel Cost in Boise & Eagle: 2026 Guide",
-          "type": "blog",
-          "score": -0.011
-        },
-        {
           "url": "/blog/preconstruction-guide",
           "anchor": "Preconstruction Guide",
           "title": "Preconstruction Guide",
+          "type": "blog",
+          "score": -0.02
+        },
+        {
+          "url": "/blog/remodeling-timeline-guide",
+          "anchor": "Remodeling Timeline Guide",
+          "title": "Remodeling Timeline Guide",
           "type": "blog",
           "score": -0.02
         }
@@ -9442,13 +9442,6 @@
           "score": 0.005
         },
         {
-          "url": "/blog/remodeling-timeline-guide",
-          "anchor": "Remodeling Timeline Guide",
-          "title": "Remodeling Timeline Guide",
-          "type": "blog",
-          "score": -0.02
-        },
-        {
           "url": "/blog/warranty-guide-remodeling",
           "anchor": "Warranty Guide",
           "title": "Warranty Guide",
@@ -9461,6 +9454,13 @@
           "title": "What Makes a Great Remodeling Contractor",
           "type": "blog",
           "score": -0.02
+        },
+        {
+          "url": "/blog/construction-phase-guide",
+          "anchor": "Construction Phase Guide",
+          "title": "Construction Phase Guide",
+          "type": "blog",
+          "score": -0.029
         }
       ]
     },
@@ -9634,13 +9634,6 @@
           "score": 0.005
         },
         {
-          "url": "/blog/construction-phase-guide",
-          "anchor": "Construction Phase Guide",
-          "title": "Construction Phase Guide",
-          "type": "blog",
-          "score": -0.029
-        },
-        {
           "url": "/blog/design-development-guide",
           "anchor": "Design Development Guide",
           "title": "Design Development Guide",
@@ -9653,6 +9646,13 @@
           "title": "Punch List Guide",
           "type": "blog",
           "score": -0.029
+        },
+        {
+          "url": "/blog/preconstruction-guide",
+          "anchor": "Preconstruction Guide",
+          "title": "Preconstruction Guide",
+          "type": "blog",
+          "score": -0.06
         }
       ]
     },
@@ -9691,13 +9691,6 @@
           "score": 1.07
         },
         {
-          "url": "/blog/preconstruction-guide",
-          "anchor": "Preconstruction Guide",
-          "title": "Preconstruction Guide",
-          "type": "blog",
-          "score": 0.007
-        },
-        {
           "url": "/blog/remodeling-timeline-guide",
           "anchor": "Remodeling Timeline Guide",
           "title": "Remodeling Timeline Guide",
@@ -9708,6 +9701,13 @@
           "url": "/blog/warranty-guide-remodeling",
           "anchor": "Warranty Guide",
           "title": "Warranty Guide",
+          "type": "blog",
+          "score": 0.007
+        },
+        {
+          "url": "/blog/what-makes-great-remodeling-contractor",
+          "anchor": "What Makes a Great Remodeling Contractor",
+          "title": "What Makes a Great Remodeling Contractor",
           "type": "blog",
           "score": 0.007
         },
@@ -9826,13 +9826,6 @@
           "score": 0.073
         },
         {
-          "url": "/blog/what-makes-great-remodeling-contractor",
-          "anchor": "What Makes a Great Remodeling Contractor",
-          "title": "What Makes a Great Remodeling Contractor",
-          "type": "blog",
-          "score": 0.007
-        },
-        {
           "url": "/blog/construction-phase-guide",
           "anchor": "Construction Phase Guide",
           "title": "Construction Phase Guide",
@@ -9843,6 +9836,13 @@
           "url": "/blog/design-development-guide",
           "anchor": "Design Development Guide",
           "title": "Design Development Guide",
+          "type": "blog",
+          "score": -0.017
+        },
+        {
+          "url": "/blog/punch-list-guide",
+          "anchor": "Punch List Guide",
+          "title": "Punch List Guide",
           "type": "blog",
           "score": -0.017
         }
@@ -10082,13 +10082,6 @@
           "score": 0.073
         },
         {
-          "url": "/blog/punch-list-guide",
-          "anchor": "Punch List Guide",
-          "title": "Punch List Guide",
-          "type": "blog",
-          "score": -0.017
-        },
-        {
           "url": "/blog/preconstruction-guide",
           "anchor": "Preconstruction Guide",
           "title": "Preconstruction Guide",
@@ -10099,6 +10092,13 @@
           "url": "/blog/remodeling-timeline-guide",
           "anchor": "Remodeling Timeline Guide",
           "title": "Remodeling Timeline Guide",
+          "type": "blog",
+          "score": -0.033
+        },
+        {
+          "url": "/blog/warranty-guide-remodeling",
+          "anchor": "Warranty Guide",
+          "title": "Warranty Guide",
           "type": "blog",
           "score": -0.033
         }
@@ -10139,13 +10139,6 @@
           "score": 0.772
         },
         {
-          "url": "/blog/warranty-guide-remodeling",
-          "anchor": "Warranty Guide",
-          "title": "Warranty Guide",
-          "type": "blog",
-          "score": -0.018
-        },
-        {
           "url": "/blog/construction-phase-guide",
           "anchor": "Construction Phase Guide",
           "title": "Construction Phase Guide",
@@ -10156,6 +10149,13 @@
           "url": "/blog/design-development-guide",
           "anchor": "Design Development Guide",
           "title": "Design Development Guide",
+          "type": "blog",
+          "score": -0.033
+        },
+        {
+          "url": "/blog/punch-list-guide",
+          "anchor": "Punch List Guide",
+          "title": "Punch List Guide",
           "type": "blog",
           "score": -0.033
         },
@@ -10748,7 +10748,7 @@
   "incoming": {
     "/blog/kitchen-remodel-cost-boise": 9,
     "/blog/bathroom-remodel-cost-boise": 8,
-    "/blog/whole-home-remodel-cost-boise": 7,
+    "/blog/whole-home-remodel-cost-boise": 6,
     "/blog/home-addition-cost-boise": 12,
     "/blog/remodel-cost-per-square-foot-boise": 5,
     "/blog/what-impacts-remodeling-costs-boise": 5,
@@ -10807,7 +10807,7 @@
     "/blog/preconstruction-guide": 6,
     "/blog/design-development-guide": 6,
     "/blog/construction-phase-guide": 6,
-    "/blog/punch-list-guide": 5,
+    "/blog/punch-list-guide": 6,
     "/blog/warranty-guide-remodeling": 6,
     "/blog/addition-roi-remodeling": 6,
     "/blog/outdoor-living-roi": 6,
