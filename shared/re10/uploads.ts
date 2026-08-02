@@ -1,0 +1,112 @@
+/**
+ * What the RE-10 estimator accepts, and what it can actually read.
+ *
+ * ONE MODULE SO BOTH SIDES AGREE. The wizard has to tell someone their file is
+ * the wrong type before a 20MB upload, and the route has to enforce it after,
+ * because a browser check is a courtesy and not a control. Two copies of these
+ * rules would drift, and the drift shows up as a file the UI accepted and the
+ * server rejected, which reads as a broken site rather than a wrong file.
+ *
+ * THREE OUTCOMES, NOT TWO. A Word version of a repair addendum is a real
+ * document that a real agent really has; refusing it outright would be
+ * obstructive. But we cannot read it automatically, so it is stored and sent to
+ * the team rather than pretended over. "Attachment" is that middle state, and
+ * the wizard says so plainly rather than letting someone believe a file was
+ * analysed when it was not.
+ */
+
+export const MAX_UPLOAD_FILES = 12;
+export const MAX_TOTAL_UPLOAD_BYTES = 24 * 1024 * 1024;
+
+/** Types the extractor can send to the model: PDF and the four image formats. */
+const READABLE_MIME = new Set([
+  "application/pdf",
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+]);
+
+const READABLE_EXT: Record<string, string> = {
+  pdf: "application/pdf",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  webp: "image/webp",
+  gif: "image/gif",
+};
+
+/**
+ * Stored and forwarded to the team, not analysed.
+ *
+ * HEIC is here and not above on purpose: it is what an iPhone stores photos as,
+ * and it is not a format the model reads. Picking from the photo library
+ * usually hands us a converted JPEG, but picking the same photo out of the
+ * Files app does not, and someone whose photo silently vanished from the
+ * analysis would have no way to know why.
+ */
+const ATTACHMENT_EXT: Record<string, string> = {
+  doc: "application/msword",
+  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  rtf: "application/rtf",
+  txt: "text/plain",
+  odt: "application/vnd.oasis.opendocument.text",
+  pages: "application/x-iwork-pages-sffpages",
+  heic: "image/heic",
+  heif: "image/heif",
+  tif: "image/tiff",
+  tiff: "image/tiff",
+};
+
+const ATTACHMENT_MIME = new Set(Object.values(ATTACHMENT_EXT));
+
+export type UploadClass = "readable" | "attachment" | "rejected";
+
+export function extensionOf(filename: string): string {
+  const dot = filename.lastIndexOf(".");
+  return dot === -1 ? "" : filename.slice(dot + 1).toLowerCase();
+}
+
+/**
+ * The browser's declared type, or the extension when it declares nothing.
+ *
+ * A file dragged from an email client, a scanner folder or a network share
+ * routinely arrives with `type: ""` or `application/octet-stream`. Drag and drop
+ * is exactly where that happens, so trusting the browser's word alone would
+ * make dropped PDFs unreadable while picked ones worked - the kind of bug that
+ * looks like the drop target is broken.
+ */
+export function resolveMimeType(filename: string, declared: string): string {
+  const type = (declared || "").toLowerCase();
+  if (READABLE_MIME.has(type) || ATTACHMENT_MIME.has(type)) return type;
+  const ext = extensionOf(filename);
+  return READABLE_EXT[ext] ?? ATTACHMENT_EXT[ext] ?? type;
+}
+
+export function classifyUpload(filename: string, declared: string): UploadClass {
+  const type = resolveMimeType(filename, declared);
+  if (READABLE_MIME.has(type)) return "readable";
+  if (ATTACHMENT_MIME.has(type)) return "attachment";
+  return "rejected";
+}
+
+export function isReadable(filename: string, declared: string): boolean {
+  return classifyUpload(filename, declared) === "readable";
+}
+
+/**
+ * The `accept` attribute.
+ *
+ * Extensions as well as MIME types, because the file picker on Windows filters
+ * by extension and several of these have no reliable declared type. The wildcard
+ * `image/*` is what makes the photo library a first-class choice on a phone.
+ */
+export const UPLOAD_ACCEPT = [
+  "application/pdf",
+  "image/*",
+  ...Object.keys(READABLE_EXT).map((e) => "." + e),
+  ...Object.keys(ATTACHMENT_EXT).map((e) => "." + e),
+].join(",");
+
+/** Human-readable, for the message shown when a file is turned away. */
+export const READABLE_FORMATS_LABEL = "PDF, JPG, PNG, WEBP or GIF";

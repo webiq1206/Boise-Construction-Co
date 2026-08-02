@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { extractRepairs, isExtractionConfigured, MAX_TOTAL_UPLOAD_BYTES, type ExtractionInput } from "@/server/services/re10Extract";
+import { extractRepairs, isExtractionConfigured, type ExtractionInput } from "@/server/services/re10Extract";
+import {
+  classifyUpload,
+  resolveMimeType,
+  MAX_UPLOAD_FILES,
+  MAX_TOTAL_UPLOAD_BYTES,
+  READABLE_FORMATS_LABEL,
+} from "@/shared/re10/uploads";
 import { uploadFile } from "@/lib/storage/blob";
 import { randomUUID } from "crypto";
 
@@ -17,20 +24,17 @@ import { randomUUID } from "crypto";
  * RE-10 attached to the lead. Storage failures are non-fatal - a homeowner who
  * uploaded a valid document should get their repair list even if our blob
  * store is having a bad day.
+ *
+ * READABLE AND ATTACHED ARE DIFFERENT THINGS. A Word copy of a repair addendum
+ * or a HEIC straight off a phone cannot be sent to the model, but it is still
+ * the document the team needs. Those are stored and named back to the uploader
+ * as attached-not-read, rather than rejected at the door or - worse - accepted
+ * silently and left out of the analysis.
  */
 
 export const runtime = "nodejs";
 // Analysis of a long inspection report with photos genuinely takes a while.
 export const maxDuration = 300;
-
-const MAX_FILES = 12;
-const ALLOWED = new Set([
-  "application/pdf",
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-]);
 
 export async function POST(request: NextRequest) {
   if (!isExtractionConfigured()) {
@@ -57,19 +61,19 @@ export async function POST(request: NextRequest) {
   if (uploaded.length === 0) {
     return NextResponse.json({ error: "failed", message: "No files were attached." }, { status: 400 });
   }
-  if (uploaded.length > MAX_FILES) {
+  if (uploaded.length > MAX_UPLOAD_FILES) {
     return NextResponse.json(
-      { error: "failed", message: `Please send at most ${MAX_FILES} files at a time.` },
+      { error: "failed", message: `Please send at most ${MAX_UPLOAD_FILES} files at a time.` },
       { status: 400 },
     );
   }
 
-  const rejected = uploaded.filter((f) => !ALLOWED.has(f.type));
+  const rejected = uploaded.filter((f) => classifyUpload(f.name, f.type) === "rejected");
   if (rejected.length > 0) {
     return NextResponse.json(
       {
         error: "failed",
-        message: `We can read PDFs and photos. These are not supported: ${rejected.map((f) => f.name).join(", ")}.`,
+        message: `We can read ${READABLE_FORMATS_LABEL}. These are not supported: ${rejected.map((f) => f.name).join(", ")}.`,
       },
       { status: 400 },
     );
@@ -91,10 +95,19 @@ export async function POST(request: NextRequest) {
   for (const f of uploaded) {
     files.push({
       filename: f.name,
-      mimeType: f.type,
+      // Resolved from the extension when the browser declares nothing. Files
+      // dropped from an email client or a scanner folder routinely arrive as
+      // `application/octet-stream`, and taking that at face value would make a
+      // dropped PDF unreadable while the same PDF picked from a dialog worked.
+      mimeType: resolveMimeType(f.name, f.type),
       data: Buffer.from(await f.arrayBuffer()),
     });
   }
+
+  const readable = files.filter((f) => classifyUpload(f.filename, f.mimeType) === "readable");
+  const attachedOnly = files
+    .filter((f) => classifyUpload(f.filename, f.mimeType) === "attachment")
+    .map((f) => f.filename);
 
   // Keep the originals so the team has the actual RE-10 on the lead. Deliberately
   // not awaited-and-failed: a storage outage must not cost the homeowner their
@@ -112,7 +125,23 @@ export async function POST(request: NextRequest) {
     }),
   );
 
-  const outcome = await extractRepairs(files);
+  // Nothing to send the model. The files are already stored, so the team still
+  // has them - say that, and ask for the one format that unblocks the range,
+  // rather than reporting a generic failure over a document we do hold.
+  if (readable.length === 0) {
+    return NextResponse.json(
+      {
+        error: "nothing-readable",
+        message: `We have got ${attachedOnly.join(", ")} and our team can open ${attachedOnly.length === 1 ? "it" : "them"}, but we cannot read ${attachedOnly.length === 1 ? "that format" : "those formats"} automatically. Add a PDF or a photo of the RE-10 for an instant range, or send it over and we will price it by hand.`,
+        batch,
+        stored,
+        attachedOnly,
+      },
+      { status: 422 },
+    );
+  }
+
+  const outcome = await extractRepairs(readable);
 
   if (!outcome.ok) {
     const status = outcome.reason === "busy" ? 503 : outcome.reason === "not-configured" ? 503 : 422;
@@ -125,6 +154,8 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({
     batch,
     stored,
+    // Named back so nobody believes a file was analysed when it was only filed.
+    attachedOnly,
     ...outcome.result,
   });
 }

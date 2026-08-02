@@ -4,6 +4,7 @@ import {
   EXTRACTION_SYSTEM_PROMPT,
   type ExtractionResult,
 } from "@/shared/re10/extraction";
+import { MAX_TOTAL_UPLOAD_BYTES } from "@/shared/re10/uploads";
 
 /**
  * Reading an RE-10 with Claude.
@@ -49,8 +50,14 @@ export type ExtractionFailure =
 const IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 const PDF_TYPE = "application/pdf";
 
-/** Per-request ceiling. The API's own limit is 32MB; stay well inside it. */
-export const MAX_TOTAL_UPLOAD_BYTES = 24 * 1024 * 1024;
+/**
+ * Per-request ceiling. The API's own limit is 32MB; stay well inside it.
+ *
+ * Re-exported from the shared upload rules rather than declared here, so the
+ * wizard can warn about an oversized batch before spending the upload on it and
+ * cannot warn at a different number than the one actually enforced.
+ */
+export { MAX_TOTAL_UPLOAD_BYTES };
 
 export function isExtractionConfigured(): boolean {
   return Boolean(process.env.ANTHROPIC_API_KEY);

@@ -18,6 +18,7 @@ import { estimateRe10, type RepairItemInput, type RepairKind } from "../shared/c
 import { findForbiddenPhrase } from "../shared/costCatalog";
 import { RE10_EVENTS, RE10_FUNNEL_ORDER } from "../shared/re10/analyticsEvents";
 import { EXTRACTABLE_KINDS, EXTRACTION_SCHEMA, EXTRACTION_REVIEW_REASONS } from "../shared/re10/extraction";
+import { classifyUpload, resolveMimeType, UPLOAD_ACCEPT } from "../shared/re10/uploads";
 import fs from "fs";
 
 let checks = 0;
@@ -183,6 +184,61 @@ for (const k of EXTRACTABLE_KINDS) {
 for (const r of EXTRACTION_REVIEW_REASONS) {
   check(schema.properties.repairs.items.properties.needsReview.enum.includes(r), `review reason "${r}" missing from the schema`);
 }
+
+/* ------------------------------------------- 4. the upload contract */
+
+/**
+ * `capture` on the plain file input is the bug that shipped: a phone opens the
+ * camera and nothing else - no photo library, no Files, no Drive - which is the
+ * wrong door when the document is usually a PDF someone was emailed. It belongs
+ * on the camera button and nowhere else, and it is a one-word regression to
+ * reintroduce, so it is checked rather than remembered.
+ */
+const pickerBlock = wizard.slice(wizard.indexOf("ref={pickerRef}"));
+const pickerInput = pickerBlock.slice(0, pickerBlock.indexOf("/>"));
+check(pickerInput.length > 0 && pickerInput.length < 1200, "could not isolate the file picker input");
+check(!/capture/.test(pickerInput), "the plain file picker has a `capture` attribute - phones will open the camera and hide the file and photo pickers");
+check(/multiple/.test(pickerInput), "the file picker is not `multiple` - an RE-10 plus inspection pages is several files");
+check(/UPLOAD_ACCEPT/.test(pickerInput), "the file picker does not use the shared accept list");
+
+const cameraBlock = wizard.slice(wizard.indexOf("ref={cameraRef}"));
+const cameraInput = cameraBlock.slice(0, cameraBlock.indexOf("/>"));
+check(/capture=/.test(cameraInput), "the camera button's input has no `capture` - it will not open the camera");
+
+// Drag and drop is easy to delete by accident when the box is restyled.
+for (const handler of ["onDragEnter", "onDragOver", "onDragLeave", "onDrop"]) {
+  check(wizard.includes(handler + "="), `the upload box has no ${handler} - drag and drop is broken`);
+}
+check(
+  /window.addEventListener\("drop"/.test(wizard),
+  "a file dropped outside the box will navigate the browser away and lose the session",
+);
+
+/* The classifier itself: what we can read, what we only file, what we refuse. */
+for (const [filename, declared, expected] of [
+  ["re10.pdf", "application/pdf", "readable"],
+  ["scan.PDF", "", "readable"],
+  ["photo.jpg", "image/jpeg", "readable"],
+  ["dropped.pdf", "application/octet-stream", "readable"],
+  ["addendum.docx", "", "attachment"],
+  ["addendum.doc", "application/msword", "attachment"],
+  ["IMG_0021.HEIC", "", "attachment"],
+  ["report.zip", "application/zip", "rejected"],
+  ["walkthrough.mp4", "video/mp4", "rejected"],
+  ["installer.exe", "", "rejected"],
+] as const) {
+  check(
+    classifyUpload(filename, declared) === expected,
+    `classifyUpload("${filename}", "${declared}") should be ${expected}, got ${classifyUpload(filename, declared)}`,
+  );
+}
+check(
+  resolveMimeType("dropped.pdf", "application/octet-stream") === "application/pdf",
+  "a PDF dropped with no declared type must still resolve to application/pdf, or drag and drop silently reads nothing",
+);
+check(UPLOAD_ACCEPT.includes("image/*"), "the accept list omits image/* - the photo library is not offered on a phone");
+check(UPLOAD_ACCEPT.includes(".pdf"), "the accept list omits .pdf - Windows file dialogs filter by extension");
+check(!UPLOAD_ACCEPT.includes("capture"), "the accept list is malformed");
 
 console.log(
   failures === 0

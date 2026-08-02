@@ -1,12 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Upload, Check, X, AlertTriangle, ArrowRight, Loader2, Plus } from "lucide-react";
+import { Upload, Check, X, AlertTriangle, ArrowRight, Loader2, Plus, Camera, FileText } from "lucide-react";
 import { Section } from "@/components/marketing/Section";
 import { Button } from "@/components/ui/button";
 import { RECIPES, TRADE_LABELS, type RepairKind } from "@/shared/costs/re10Repairs";
 import { RE10_PRICING_DISCLAIMER } from "@/shared/content/re10Content";
 import type { ExtractedRepair, ExtractionResult } from "@/shared/re10/extraction";
+import {
+  classifyUpload,
+  MAX_UPLOAD_FILES,
+  MAX_TOTAL_UPLOAD_BYTES,
+  UPLOAD_ACCEPT,
+  READABLE_FORMATS_LABEL,
+} from "@/shared/re10/uploads";
 import { RE10_EVENTS } from "@/shared/re10/analyticsEvents";
 import { trackEvent, trackMetaEvent } from "@/lib/analytics";
 
@@ -77,9 +84,17 @@ export function Re10Wizard() {
   const topRef = useRef<HTMLDivElement>(null);
 
   const [files, setFiles] = useState<File[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+  // Nested children fire dragleave as the pointer crosses them, so a boolean
+  // set on the events alone flickers the whole box. Count enter/leave instead.
+  const dragDepth = useRef(0);
+  const pickerRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [extraction, setExtraction] = useState<ExtractionResult | null>(null);
+  /** Files we hold and forward, but cannot read - a Word addendum, a HEIC. */
+  const [attachedOnly, setAttachedOnly] = useState<string[]>([]);
   const [documents, setDocuments] = useState<{ filename: string; url: string }[]>([]);
   const [repairs, setRepairs] = useState<EditableRepair[]>([]);
 
@@ -102,6 +117,86 @@ export function Re10Wizard() {
   useEffect(() => {
     trackEvent(RE10_EVENTS.started);
   }, []);
+
+  /**
+   * A file dropped anywhere except the box must not navigate away.
+   *
+   * The browser's default for a dropped PDF is to open it, which replaces the
+   * page - losing the wizard, the uploads and the step. Someone who misses the
+   * target by an inch should get nothing, not a lost session.
+   */
+  useEffect(() => {
+    const swallow = (e: DragEvent) => e.preventDefault();
+    window.addEventListener("dragover", swallow);
+    window.addEventListener("drop", swallow);
+    return () => {
+      window.removeEventListener("dragover", swallow);
+      window.removeEventListener("drop", swallow);
+    };
+  }, []);
+
+  const fileKey = (f: File) => `${f.name}:${f.size}`;
+
+  /**
+   * Add to the list rather than replace it.
+   *
+   * Someone drops the RE-10, then picks the inspection pages, then adds two
+   * photos from their phone. Replacing on each interaction would silently throw
+   * away the previous ones, and the only sign would be a short repair list.
+   *
+   * Everything turned away is named. A file that vanished without explanation
+   * is worse than one refused out loud.
+   */
+  function addFiles(incoming: File[], method: "picker" | "camera" | "drop") {
+    if (incoming.length === 0) return;
+
+    const problems: string[] = [];
+    const seen = new Set(files.map(fileKey));
+    const next = [...files];
+    let bytes = files.reduce((sum, f) => sum + f.size, 0);
+
+    for (const f of incoming) {
+      if (classifyUpload(f.name, f.type) === "rejected") {
+        problems.push(`${f.name} is not a format we can take`);
+        continue;
+      }
+      if (seen.has(fileKey(f))) continue;
+      if (next.length >= MAX_UPLOAD_FILES) {
+        problems.push(`${f.name} would be past our limit of ${MAX_UPLOAD_FILES} files`);
+        continue;
+      }
+      if (bytes + f.size > MAX_TOTAL_UPLOAD_BYTES) {
+        problems.push(`${f.name} is more than we can send in one go`);
+        continue;
+      }
+      seen.add(fileKey(f));
+      bytes += f.size;
+      next.push(f);
+    }
+
+    const added = next.length - files.length;
+    setFiles(next);
+    setError(
+      problems.length > 0
+        ? `We can read ${READABLE_FORMATS_LABEL}. Left out: ${problems.join("; ")}.`
+        : null,
+    );
+    if (added > 0) {
+      trackEvent(RE10_EVENTS.documentUploaded, { file_count: next.length, added, method });
+    }
+  }
+
+  function removeFile(target: File) {
+    setFiles((prev) => prev.filter((f) => fileKey(f) !== fileKey(target)));
+    setError(null);
+  }
+
+  function onDrop(e: React.DragEvent) {
+    e.preventDefault();
+    dragDepth.current = 0;
+    setIsDragging(false);
+    addFiles(Array.from(e.dataTransfer?.files ?? []), "drop");
+  }
 
   function goTo(next: Step) {
     setStep(next);
@@ -132,6 +227,7 @@ export function Re10Wizard() {
       const extracted = data as ExtractionResult;
       setExtraction(extracted);
       setDocuments(Array.isArray(data.stored) ? data.stored : []);
+      setAttachedOnly(Array.isArray(data.attachedOnly) ? data.attachedOnly : []);
       trackEvent(RE10_EVENTS.analysisCompleted, {
         repairs_found: extracted.repairs.length,
         unmapped: extracted.unmapped.length,
@@ -290,42 +386,124 @@ export function Re10Wizard() {
               repair list, show you what we found, and you correct it before anything is priced.
             </p>
 
-            <label
-              htmlFor="re10-files"
-              className="block rounded-sm border border-dashed border-inverse-foreground/30 bg-inverse-foreground/[0.04] p-8 text-center cursor-pointer hover:border-inverse-foreground/50 transition-colors"
+            {/* The drop target. Buttons rather than a wrapping label, because a
+                label around the whole box makes every click inside it - including
+                a file's remove button - reopen the file dialog. */}
+            <div
+              onDragEnter={(e) => {
+                e.preventDefault();
+                dragDepth.current += 1;
+                setIsDragging(true);
+              }}
+              onDragOver={(e) => e.preventDefault()}
+              onDragLeave={(e) => {
+                e.preventDefault();
+                dragDepth.current = Math.max(0, dragDepth.current - 1);
+                if (dragDepth.current === 0) setIsDragging(false);
+              }}
+              onDrop={onDrop}
+              data-testid="dropzone-re10-files"
+              className={
+                "rounded-sm border border-dashed p-7 sm:p-8 text-center transition-colors " +
+                (isDragging
+                  ? "border-accent-legible bg-accent-legible/10"
+                  : "border-inverse-foreground/30 bg-inverse-foreground/[0.04]")
+              }
             >
               <Upload className="h-6 w-6 mx-auto mb-3 text-inverse-muted" aria-hidden="true" />
-              <span className="block text-[15px] text-inverse-foreground mb-1">
-                Choose files, or take a photo
+
+              {/* Shown only where dragging is possible. A phone has no drag and
+                  drop, and telling someone to drag with their thumb is noise. */}
+              <span className="hidden [@media(pointer:fine)]:block text-[15px] text-inverse-foreground mb-1">
+                {isDragging ? "Drop them here" : "Drag your files here"}
               </span>
-              <span className="block text-[12.5px] text-inverse-muted">
-                PDFs and photos. A phone photo of a printed form works.
+              <span className="[@media(pointer:fine)]:hidden block text-[15px] text-inverse-foreground mb-1">
+                Add your RE-10
               </span>
+
+              <span className="block text-[12.5px] text-inverse-muted mb-5">
+                PDFs, photos or scans. A phone photo of a printed form works.
+              </span>
+
+              <div className="flex flex-col sm:flex-row gap-2.5 justify-center">
+                <Button
+                  type="button"
+                  variant="heroGhost"
+                  className="w-full sm:w-auto"
+                  onClick={() => pickerRef.current?.click()}
+                  data-testid="button-re10-choose-files"
+                >
+                  <FileText className="mr-2 h-4 w-4" aria-hidden="true" />
+                  <span className="hidden [@media(pointer:fine)]:inline">Browse files</span>
+                  <span className="[@media(pointer:fine)]:hidden">Choose files or photos</span>
+                </Button>
+                {/* Coarse pointers only. On a laptop this opens the same dialog
+                    as the button beside it, which is just a duplicate. */}
+                <Button
+                  type="button"
+                  variant="heroGhost"
+                  className="w-full sm:w-auto [@media(pointer:fine)]:hidden"
+                  onClick={() => cameraRef.current?.click()}
+                  data-testid="button-re10-take-photo"
+                >
+                  <Camera className="mr-2 h-4 w-4" aria-hidden="true" />
+                  Take a photo
+                </Button>
+              </div>
+
+              {/* THE PLAIN PICKER CARRIES NO `capture`. That attribute makes a
+                  phone open the camera and nothing else - no photo library, no
+                  Files, no iCloud, no Drive - which is the wrong default when
+                  the document being uploaded is usually a PDF someone was
+                  emailed. The camera is the second button, where it belongs. */}
               <input
+                ref={pickerRef}
                 id="re10-files"
                 type="file"
                 multiple
-                accept="application/pdf,image/*"
-                capture="environment"
+                accept={UPLOAD_ACCEPT}
                 className="sr-only"
                 data-testid="input-re10-files"
                 onChange={(e) => {
-                  const chosen = Array.from(e.target.files ?? []);
-                  setFiles(chosen);
-                  setError(null);
-                  if (chosen.length > 0) {
-                    trackEvent(RE10_EVENTS.documentUploaded, { file_count: chosen.length });
-                  }
+                  addFiles(Array.from(e.target.files ?? []), "picker");
+                  // Cleared so re-picking the same file fires change again.
+                  e.target.value = "";
                 }}
               />
-            </label>
+              <input
+                ref={cameraRef}
+                id="re10-camera"
+                type="file"
+                multiple
+                accept="image/*"
+                capture="environment"
+                className="sr-only"
+                data-testid="input-re10-camera"
+                onChange={(e) => {
+                  addFiles(Array.from(e.target.files ?? []), "camera");
+                  e.target.value = "";
+                }}
+              />
+            </div>
 
             {files.length > 0 && (
-              <ul className="mt-4 space-y-1.5">
+              <ul className="mt-4 space-y-1.5" data-testid="list-re10-files">
                 {files.map((f) => (
-                  <li key={f.name} className="flex items-center gap-2 text-[13px] text-inverse-muted">
+                  <li
+                    key={fileKey(f)}
+                    className="flex items-center gap-2 text-[13px] text-inverse-muted"
+                  >
                     <Check className="h-3.5 w-3.5 text-accent-legible flex-shrink-0" aria-hidden="true" />
-                    {f.name}
+                    <span className="truncate">{f.name}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeFile(f)}
+                      className="ml-auto flex-shrink-0 p-1 -m-1 text-inverse-muted hover:text-inverse-foreground transition-colors"
+                      aria-label={`Remove ${f.name}`}
+                      data-testid="button-re10-remove-file"
+                    >
+                      <X className="h-3.5 w-3.5" aria-hidden="true" />
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -370,6 +548,22 @@ export function Re10Wizard() {
                 <p className="text-[13.5px] text-inverse-foreground leading-relaxed">
                   This did not read like an RE-10 or inspection response. Check you sent the right
                   pages, or carry on and we will review it by hand.
+                </p>
+              </div>
+            )}
+
+            {/* Said out loud, because a file that was filed but not read would
+                otherwise look identical to one that was read and found empty. */}
+            {attachedOnly.length > 0 && (
+              <div
+                className="mb-6 rounded-sm border border-inverse-foreground/20 bg-inverse-foreground/[0.06] p-4"
+                data-testid="notice-re10-attached-only"
+              >
+                <p className="text-[13.5px] text-inverse-foreground leading-relaxed">
+                  {attachedOnly.join(", ")} {attachedOnly.length === 1 ? "is" : "are"} attached for
+                  our team but {attachedOnly.length === 1 ? "was" : "were"} not read automatically.
+                  Anything in {attachedOnly.length === 1 ? "it" : "them"} is not in the list below.
+                  Mention it in the notes on the next step, or we will catch it when we review.
                 </p>
               </div>
             )}
