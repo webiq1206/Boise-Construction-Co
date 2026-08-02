@@ -1,196 +1,181 @@
+/**
+ * Browser-level regression tests for the new-construction estimator.
+ *
+ * The previous version of this file tested the remodeling estimator: kitchen
+ * and bathroom project tabs, cabinet-tier and plumbing refinements, a mobile
+ * stepper headed "What are we remodeling?". None of that UI survived the
+ * repositioning, and because Playwright waits for a locator rather than
+ * failing on a missing one, the whole suite timed out instead of reporting
+ * that it was testing a page that no longer exists.
+ *
+ * The gate test at the bottom is the important one. The estimator hides the
+ * range behind a contact form that POSTs to /api/estimate-lead, and a 4xx from
+ * that route does NOT reveal the estimate: it shows "Something went wrong" and
+ * keeps the gate shut. For the whole repositioning that route rejected every
+ * new-construction project type, so every visitor who finished the estimator
+ * and typed in their details hit a dead end and the lead was never recorded.
+ * The assertion is on the response status rather than on the revealed range,
+ * because 5xx and network failures deliberately reveal the range anyway (so
+ * infrastructure trouble never blocks a real person) and would mask a 4xx.
+ */
 import { expect, test, type Page } from "@playwright/test";
+
+/** The four projects the public estimator offers. */
+const PUBLIC_PROJECTS = [
+  "custom-home",
+  "semi-custom-home",
+  "build-on-your-lot",
+  "shop-home",
+] as const;
+
+/** Retired from the public calculator; must not reappear as tabs. */
+const REMODEL_PROJECTS = ["kitchen", "bathroom", "whole-home", "basement"] as const;
 
 async function openCalculator(page: Page) {
   await page.goto("/#calculator");
   await page.locator("#calculator").scrollIntoViewIfNeeded();
 }
 
-test.describe("Project Estimator (desktop)", () => {
-  test("nothing is selected by default and no range is shown", async ({ page }) => {
+/**
+ * Drive the estimator to the point where every required input is answered.
+ *
+ * Bath count and kitchen inclusion are conditional on the project, so they are
+ * answered only when present rather than assumed either way.
+ */
+async function completeInputs(page: Page, project: string) {
+  await page.getByTestId(`calc-tab-${project}`).click();
+
+  const subtype = page.locator('[data-testid^="calc-subtype-"]:visible').first();
+  await expect(subtype).toBeVisible();
+  await subtype.click();
+
+  const baths = page.locator('[data-testid^="calc-baths-"]:visible').first();
+  if (await baths.count()) await baths.click();
+
+  const kitchen = page.locator('[data-testid="calc-kitchen-yes"]:visible');
+  if (await kitchen.count()) await kitchen.click();
+
+  await page.getByTestId("calc-finish-mid-range").click();
+}
+
+test.describe("New construction estimator", () => {
+  test("offers only new-construction projects, and no range before any input", async ({ page }) => {
     await openCalculator(page);
 
-    await expect(page.getByTestId("button-project-kitchen")).toHaveAttribute("aria-pressed", "false");
-    await expect(page.getByTestId("button-finish-mid-range")).toHaveAttribute("aria-pressed", "false");
+    for (const project of PUBLIC_PROJECTS) {
+      await expect(page.getByTestId(`calc-tab-${project}`)).toBeVisible();
+    }
+    for (const project of REMODEL_PROJECTS) {
+      await expect(page.getByTestId(`calc-tab-${project}`)).toHaveCount(0);
+    }
 
-    // Placeholder panel instead of a dollar range.
-    await expect(page.locator('[data-testid="estimate-range-placeholder"]:visible')).toBeVisible();
+    // Nothing is preselected, so no tab reports itself as the current one.
+    await expect(page.locator('[data-testid^="calc-tab-"][aria-selected="true"]')).toHaveCount(0);
+
+    // No price is shown, and nothing is persisted, before the visitor chooses.
     await expect(page.locator('[data-testid="estimate-range"]')).toHaveCount(0);
-    await expect(page.locator('[data-testid="estimate-progress-checklist"]:visible')).toBeVisible();
-
-    // Refinements are locked until the core selections are made.
-    await expect(page.getByTestId("button-refine-toggle")).toBeDisabled();
-
-    // No estimate is persisted until the user completes the flow.
-    const stored = await page.evaluate(() => sessionStorage.getItem("brc_estimate"));
-    expect(stored).toBeNull();
+    expect(await page.evaluate(() => sessionStorage.getItem("brc_estimate"))).toBeNull();
   });
 
-  test("range appears only after project, finish, and size are chosen", async ({ page }) => {
+  test("reveals each step only once the one before it is answered", async ({ page }) => {
     await openCalculator(page);
 
-    await page.getByTestId("button-project-kitchen").click();
-    await expect(page.getByTestId("button-project-kitchen")).toHaveAttribute("aria-pressed", "true");
-    await expect(page.locator('[data-testid="estimate-range-placeholder"]:visible')).toBeVisible();
+    // Before a project: no layout cards, no size slider, no finish levels.
+    await expect(page.locator('[data-testid^="calc-subtype-"]')).toHaveCount(0);
+    await expect(page.locator('[data-testid="calc-sqft-slider"]')).toHaveCount(0);
+    await expect(page.locator('[data-testid="calc-finish-mid-range"]')).toHaveCount(0);
 
-    await page.getByTestId("button-finish-mid-range").click();
-    await expect(page.locator('[data-testid="estimate-range-placeholder"]:visible')).toBeVisible();
+    await page.getByTestId("calc-tab-custom-home").click();
+    await expect(page.locator('[data-testid^="calc-subtype-"]:visible').first()).toBeVisible();
+    // A layout is still unchosen, so size and finish stay hidden.
+    await expect(page.locator('[data-testid="calc-sqft-slider"]')).toHaveCount(0);
 
-    await page.getByTestId("size-preset-typical").click();
-    await expect(page.locator('[data-testid="estimate-range"]:visible')).toBeVisible();
-    await expect(page.locator('[data-testid="slider-size"]:visible')).toBeVisible();
+    await page.locator('[data-testid^="calc-subtype-"]:visible').first().click();
+    await expect(page.locator('[data-testid="calc-sqft-slider"]:visible')).toBeVisible();
+    await expect(page.locator('[data-testid="calc-finish-mid-range"]:visible')).toBeVisible();
 
-    // Now the estimate is persisted for the consultation handoff.
-    const stored = await page.evaluate(() => sessionStorage.getItem("brc_estimate"));
-    expect(stored).not.toBeNull();
-    const parsed = JSON.parse(stored as string);
-    expect(parsed.project).toBe("kitchen");
-    expect(parsed.finish).toBe("mid-range");
-    expect(parsed.priceLow).toBeGreaterThan(0);
+    // The range is gated behind contact details, so completing the inputs
+    // surfaces the CTA rather than a price.
+    await completeInputs(page, "custom-home");
+    await expect(page.locator('[data-testid="button-get-estimate"]:visible')).toBeVisible();
+    await expect(page.locator('[data-testid="estimate-range"]')).toHaveCount(0);
   });
 
-  test("changing project clears size so nothing carries over implicitly", async ({ page }) => {
+  test("square footage is settable and survives a layout change", async ({ page }) => {
     await openCalculator(page);
+    await page.getByTestId("calc-tab-custom-home").click();
+    await page.locator('[data-testid^="calc-subtype-"]:visible').first().click();
 
-    await page.getByTestId("button-project-kitchen").click();
-    await page.getByTestId("button-finish-mid-range").click();
-    await page.getByTestId("size-preset-typical").click();
-    await expect(page.locator('[data-testid="estimate-range"]:visible')).toBeVisible();
+    const slider = page.locator('[data-testid="calc-sqft-slider"]:visible');
+    const value = page.locator('[data-testid="calc-sqft-value"]:visible');
 
-    await page.getByTestId("button-project-whole-home").click();
-    await expect(page.getByTestId("button-project-whole-home")).toHaveAttribute("aria-pressed", "true");
-    // Size resets; the range disappears until a new size is chosen.
-    await expect(page.locator('[data-testid="estimate-range-placeholder"]:visible')).toBeVisible();
+    const initial = await value.textContent();
+    expect(initial).toBeTruthy();
+
+    // Drag to the maximum; the readout must follow the control.
+    const max = await slider.getAttribute("max");
+    await slider.fill(String(max));
+    await expect(value).not.toHaveText(initial!);
+    await expect(value).toContainText(Number(max).toLocaleString());
   });
 
-  test("refinements unlock when complete, update detail level, and can be cleared", async ({ page }) => {
+  test("switching project swaps in that project's own layout options", async ({ page }) => {
     await openCalculator(page);
 
-    await page.getByTestId("button-project-kitchen").click();
-    await page.getByTestId("button-finish-mid-range").click();
-    await page.getByTestId("size-preset-typical").click();
+    await page.getByTestId("calc-tab-custom-home").click();
+    const customSubtypes = await page
+      .locator('[data-testid^="calc-subtype-"]:visible')
+      .evaluateAll((els) => els.map((e) => e.getAttribute("data-testid")));
 
-    const toggle = page.getByTestId("button-refine-toggle");
-    await expect(toggle).toBeEnabled();
-    await toggle.click();
-    await expect(toggle).toHaveAttribute("aria-expanded", "true");
+    await page.getByTestId("calc-tab-shop-home").click();
+    await expect(page.getByTestId("calc-tab-shop-home")).toHaveAttribute("aria-selected", "true");
+    const shopSubtypes = await page
+      .locator('[data-testid^="calc-subtype-"]:visible')
+      .evaluateAll((els) => els.map((e) => e.getAttribute("data-testid")));
 
-    const resultPanel = page.locator('[data-testid="estimate-result-panel"]:visible');
-    await page.getByTestId("layout-major").click();
-    await page.getByTestId("plumbing-full").click();
-    await page.getByTestId("cabinet-custom").click();
-    await expect(resultPanel.getByText("Detailed planning range")).toBeVisible();
-
-    // Tapping a selected option again clears it.
-    await page.getByTestId("layout-major").click();
-    await expect(page.getByTestId("layout-major")).toHaveAttribute("aria-pressed", "false");
-    await expect(resultPanel.getByText("Refined guidance")).toBeVisible();
-  });
-
-  test("consultation CTA is available once an estimate exists", async ({ page }) => {
-    await openCalculator(page);
-    await page.getByTestId("button-project-bathroom").click();
-    await page.getByTestId("button-finish-mid-range").click();
-    await page.getByTestId("size-preset-typical").click();
-    await expect(page.locator('[data-testid="button-book-visit"]:visible')).toBeVisible();
+    expect(shopSubtypes.length).toBeGreaterThan(0);
+    expect(shopSubtypes).not.toEqual(customSubtypes);
   });
 });
 
-test.describe("Project Estimator (mobile guided flow)", () => {
-  test.use({ viewport: { width: 375, height: 812 } });
+test.describe("Lead gate", () => {
+  /**
+   * Every project the calculator offers must be accepted by the lead route.
+   * This is the regression that shipped: the route's Zod enum listed only the
+   * six remodel project types, so all four of these 400ed.
+   */
+  for (const project of PUBLIC_PROJECTS) {
+    test(`submitting a ${project} estimate is accepted by /api/estimate-lead`, async ({ page }) => {
+      await openCalculator(page);
+      await completeInputs(page, project);
 
-  test("steps through the guided flow with a bottom-anchored estimate bar", async ({ page }) => {
-    await openCalculator(page);
+      await page.getByTestId("button-get-estimate").click();
 
-    await expect(page.getByTestId("estimate-stepper")).toBeVisible();
-    await expect(page.getByTestId("step-heading")).toHaveText("What are we remodeling?");
+      await page.getByTestId("gate-input-name").fill("Test Homeowner");
+      await page.getByTestId("gate-input-email").fill("test.homeowner@example.com");
+      await page.getByTestId("gate-input-phone").fill("2085550147");
 
-    // Sticky bar is pinned to the bottom of the viewport and replaces the
-    // global Call/Text bar.
-    const bar = page.getByTestId("mobile-estimate-bar");
-    await expect(bar).toBeVisible();
-    await expect(page.getByTestId("mobile-estimate-placeholder")).toBeVisible();
-    await expect(page.getByTestId("button-call-mobile")).toBeHidden();
+      // Collected at step 2 when filled; the gate falls back to its own input.
+      const address = page.locator('[data-testid="gate-input-address"]:visible');
+      if (await address.count()) await address.fill("1234 W Test St, Boise, ID 83702");
 
-    const viewportHeight = page.viewportSize()!.height;
-    const barBox = await bar.boundingBox();
-    expect(barBox).not.toBeNull();
-    expect(Math.abs(barBox!.y + barBox!.height - viewportHeight)).toBeLessThanOrEqual(1);
+      const responsePromise = page.waitForResponse(
+        (res) => res.url().includes("/api/estimate-lead") && res.request().method() === "POST",
+      );
+      await page.getByTestId("button-gate-submit").click();
+      const response = await responsePromise;
 
-    // Step 1: project (auto-advances).
-    await page.getByTestId("step-button-project-kitchen").click();
-    await expect(page.getByTestId("step-heading")).toHaveText("Choose a finish level");
+      // 4xx means we sent something the route refuses to parse, and the visitor
+      // is shown a generic error with the gate still closed. 5xx is a DB or
+      // mail failure, which is an environment problem rather than a contract
+      // one, and the client deliberately reveals the estimate anyway.
+      expect(
+        response.status(),
+        `POST /api/estimate-lead rejected a ${project} estimate with ${response.status()}`,
+      ).toBeLessThan(400);
 
-    // Step 2: finish (auto-advances).
-    await page.getByTestId("step-button-finish-mid-range").click();
-    await expect(page.getByTestId("step-heading")).toHaveText("How big is the space?");
-
-    // Step 3: size preset reveals the fine-tune slider and live range.
-    await page.getByTestId("step-size-preset-typical").click();
-    await expect(page.getByTestId("step-slider-size")).toBeVisible();
-    await expect(page.getByTestId("mobile-estimate-range")).toBeVisible();
-
-    // Continue to the optional details step via the sticky bar.
-    await page.getByTestId("mobile-button-book-visit").click();
-    await expect(page.getByTestId("step-heading")).toHaveText("Tailor your range (optional)");
-
-    // Skip details, land on review with the full result panel.
-    await page.getByTestId("button-skip-refine").click();
-    await expect(page.getByTestId("step-heading")).toHaveText("Your planning range");
-    await expect(page.locator('[data-testid="estimate-range"]:visible')).toBeVisible();
-
-    // The bar still hugs the bottom after navigating.
-    const barBoxAfter = await bar.boundingBox();
-    expect(Math.abs(barBoxAfter!.y + barBoxAfter!.height - viewportHeight)).toBeLessThanOrEqual(1);
-  });
-
-  test("expandable summary sheet shows scope details", async ({ page }) => {
-    await openCalculator(page);
-
-    await page.getByTestId("step-button-project-bathroom").click();
-    await page.getByTestId("step-button-finish-mid-range").click();
-    await page.getByTestId("step-size-preset-typical").click();
-    await expect(page.getByTestId("mobile-estimate-range")).toBeVisible();
-
-    await page.getByTestId("estimate-bar-toggle").click();
-    await expect(page.getByTestId("estimate-bar-sheet")).toBeVisible();
-    await expect(page.getByTestId("estimate-bar-sheet")).toContainText("Planning estimate only");
-
-    await page.getByTestId("estimate-bar-toggle").click();
-    await expect(page.getByTestId("estimate-bar-sheet")).toBeHidden();
-  });
-
-  test("back navigation and progress dots work", async ({ page }) => {
-    await openCalculator(page);
-
-    await page.getByTestId("step-button-project-kitchen").click();
-    await expect(page.getByTestId("step-heading")).toHaveText("Choose a finish level");
-
-    await page.getByTestId("button-step-back").click();
-    await expect(page.getByTestId("step-heading")).toHaveText("What are we remodeling?");
-    await expect(page.getByTestId("step-button-project-kitchen")).toHaveAttribute("aria-pressed", "true");
-  });
-
-  test("modal estimator hands off to the consultation modal", async ({ page }) => {
-    // Off-homepage, the estimator opens in a modal with the same guided flow.
-    await page.goto("/contact");
-    await page.getByText("Get your planning range").first().click();
-
-    await expect(page.getByTestId("estimate-stepper")).toBeVisible();
-    await page.getByTestId("step-button-project-adu").click();
-    await page.getByTestId("step-button-finish-mid-range").click();
-    await page.getByTestId("step-size-preset-typical").click();
-    await expect(page.getByTestId("mobile-estimate-range")).toBeVisible();
-
-    // Continue → refine → review, then schedule from the bar.
-    await page.getByTestId("mobile-button-book-visit").click();
-    await page.getByTestId("button-skip-refine").click();
-    await expect(page.locator('[data-testid="estimate-range"]:visible')).toBeVisible();
-    await page.getByTestId("mobile-button-book-visit").click();
-
-    // Consultation modal opens with the ADU estimate carried over.
-    const consultDialog = page.getByRole("dialog", { name: /Schedule your free in-home/ });
-    await expect(consultDialog).toBeVisible();
-    await expect(consultDialog.getByTestId("text-estimate-summary")).toContainText("ADU");
-    await expect(consultDialog.getByTestId("consult-trust-bullets")).toBeVisible();
-  });
+      await expect(page.locator('[data-testid="estimate-range"]:visible')).toBeVisible();
+      await expect(page.locator('[data-testid="estimate-range"]:visible')).toContainText("$");
+    });
+  }
 });

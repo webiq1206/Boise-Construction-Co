@@ -854,32 +854,6 @@ export function EstimateCalculator({
     [effectiveProject, finish, sqft, refinements],
   );
 
-  /* ── Persist to sessionStorage (live, on every change) ── */
-  useEffect(() => {
-    const input: EstimateInput = { project: effectiveProject, finish, sqft, refinements };
-    sessionStorage.setItem(
-      "brc_estimate",
-      JSON.stringify({
-        ...buildStoredEstimate(input, userRefinementCount),
-        // buildStoredEstimate calls the guide engine directly, so without this
-        // the stored record carried guide prices while the panel above showed
-        // the line-item engine's. The consultation form, both emails and the
-        // CRM all read this record, so the two must not diverge: take the
-        // price from `result`, which is the number the visitor actually saw.
-        priceLow: result.priceLow,
-        priceHigh: result.priceHigh,
-        // Carried alongside the engine result so the consultation form can
-        // forward the visitor's literal choices to the emails. Without these
-        // the emails could only show derived values (for example "moderate
-        // layout changes") and never the card the visitor actually clicked.
-        statedBudget: budgetValue,
-        layoutLabel: selectedLayoutLabel,
-        upgradeLabels: selectedUpgradeLabels,
-      }),
-    );
-    window.dispatchEvent(new CustomEvent("brc_estimate_updated"));
-  }, [effectiveProject, finish, sqft, refinements, userRefinementCount]);
-
   /* On mount: prefill the gate for pre-qualified traffic (e.g. a Meta Instant
      Form click that already captured their info) so it's a single tap, then
      restore gate state for return visits. We never skip the gate: contact is
@@ -1159,6 +1133,56 @@ export function EstimateCalculator({
     chosen.finish &&
     (!showBathCount || bathCount !== null) &&
     (!showKitchenIncluded || kitchenIn !== null);
+
+  /* ── Persist to sessionStorage, but only once the visitor has actually
+     answered every question ──
+
+     This used to run unconditionally on mount. The estimator sits on the
+     homepage, so simply loading the page wrote a complete-looking estimate
+     built from the defaults the component initialises with: a custom home,
+     2,200 sq ft, mid-range, $540,000 to $735,000. ConsultationForm reads this
+     key on mount, and when it finds one it attaches it to the lead and sets
+     the project type. A visitor who scrolled straight past the estimator and
+     filled in the contact form therefore sent us, and received back by email,
+     a detailed estimate for a house they never described.
+
+     It lives below allChosen rather than up with the other derived state
+     because it depends on it, and reading allChosen before its declaration
+     would be a temporal dead zone error at render time.
+
+     Nothing is stored until the estimate is real, and the key is cleared if
+     the visitor reopens the flow and leaves it incomplete, so a stale record
+     cannot outlive the selections that produced it. */
+  useEffect(() => {
+    if (!allChosen) {
+      sessionStorage.removeItem("brc_estimate");
+      window.dispatchEvent(new CustomEvent("brc_estimate_updated"));
+      return;
+    }
+    const input: EstimateInput = { project: effectiveProject, finish, sqft, refinements };
+    sessionStorage.setItem(
+      "brc_estimate",
+      JSON.stringify({
+        ...buildStoredEstimate(input, userRefinementCount),
+        // buildStoredEstimate calls the guide engine directly, so without this
+        // the stored record carried guide prices while the panel above showed
+        // the line-item engine's. The consultation form, both emails and the
+        // CRM all read this record, so the two must not diverge: take the
+        // price from `result`, which is the number the visitor actually saw.
+        priceLow: result.priceLow,
+        priceHigh: result.priceHigh,
+        // Carried alongside the engine result so the consultation form can
+        // forward the visitor's literal choices to the emails. Without these
+        // the emails could only show derived values (for example "moderate
+        // layout changes") and never the card the visitor actually clicked.
+        statedBudget: budgetValue,
+        layoutLabel: selectedLayoutLabel,
+        upgradeLabels: selectedUpgradeLabels,
+      }),
+    );
+    window.dispatchEvent(new CustomEvent("brc_estimate_updated"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allChosen, effectiveProject, finish, sqft, refinements, userRefinementCount]);
 
   /* Scroll to the gate CTA (or result panel for returning visitors) the first
      time all required choices are made. Must live after allChosen is defined.
