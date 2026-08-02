@@ -28,6 +28,7 @@ import {
   PROJECT_LABELS,
   type EstimateRefinements,
 } from "@/shared/estimateEngine";
+import { estimateSchema } from "@/shared/estimatePayload";
 import { resolveQuotedRange } from "@/shared/costs/resolve";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import { readUnitCostOverrides } from "@/app/api/admin/pricing/route";
@@ -41,38 +42,6 @@ import {
   buildProjectGoals,
 } from "@/server/services/leadRecord";
 import { formatUsd, type PropertyEnrichment } from "@/server/services/consultationEmail";
-
-const refinementsSchema = z
-  .object({
-    layoutChanges: z.enum(["none", "moderate", "major"]).nullable().optional(),
-    plumbingElectrical: z.enum(["cosmetic", "partial", "full"]).nullable().optional(),
-    cabinetTier: z.enum(["standard", "semi-custom", "custom"]).nullable().optional(),
-    fixtureCount: z.number().int().min(1).max(8).nullable().optional(),
-    stories: z.number().int().min(1).max(2).nullable().optional(),
-    roomCount: z.number().int().min(1).max(12).nullable().optional(),
-    bathroomCount: z.number().int().min(0).max(12).nullable().optional(),
-    kitchenIncluded: z.boolean().nullable().optional(),
-    aduConfig: z.enum(["detached", "attached"]).nullable().optional(),
-  })
-  .optional()
-  .nullable();
-
-const estimateSchema = z.object({
-  project: z.enum(["kitchen", "bathroom", "whole-home", "addition", "adu", "basement"]),
-  finish: z.enum(["refresh", "mid-range", "high-end", "luxury"]),
-  sqft: z.number().int().positive(),
-  priceLow: z.number().nonnegative(),
-  priceHigh: z.number().nonnegative(),
-  roi: z.number(),
-  // Optional: the homeowner's own budget, typed after they saw the range.
-  statedBudget: z.number().positive().max(50_000_000).nullable().optional(),
-  refinements: refinementsSchema,
-  // The visitor-facing labels for the layout card and upgrade chips they chose.
-  // Length-capped and escaped at render so the emails can restate every
-  // selection verbatim without trusting the client.
-  layoutLabel: z.string().max(60).optional(),
-  upgradeLabels: z.array(z.string().max(40)).max(12).optional(),
-});
 
 const bodySchema = z.object({
   name: z.string().min(2),
