@@ -37,6 +37,13 @@ export function TestimonialsSection({ limit = 4, showViewAll = true }: Testimoni
   const items = TESTIMONIALS.slice(0, limit);
   const [featured, ...rest] = items;
 
+  // TESTIMONIALS is empty until real, attributable reviews exist. Without this
+  // the section still renders its own headline, so the page would claim to be
+  // "trusted for craftsmanship and communication" above a blank space and a
+  // button offering to show reviews that are not there. Returns automatically
+  // once the list is populated.
+  if (items.length === 0) return null;
+
   return (
     <Section id="testimonials" variant="greige" divider>
       <div className="container px-4">
@@ -92,7 +99,7 @@ export function TestimonialsSection({ limit = 4, showViewAll = true }: Testimoni
         {showViewAll && (
           <div className="mt-10 text-center">
             <Button variant="brandOutline" asChild>
-              <Link href="/testimonials">Read all reviews</Link>
+              <Link href="/about">Read all reviews</Link>
             </Button>
           </div>
         )}

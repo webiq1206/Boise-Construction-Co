@@ -225,7 +225,7 @@ export default function AboutPage() {
                   <p className="text-sm text-muted-foreground leading-relaxed mt-4">
                     New to building? Start with our{' '}
                     <Link
-                      href="/guides/boise-remodeling-cost-guide"
+                      href="/guides/boise-home-building-cost-guide"
                       className="text-foreground underline underline-offset-2 hover:text-accent-legible"
                     >
                       Boise home building cost guide

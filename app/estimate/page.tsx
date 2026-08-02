@@ -9,7 +9,7 @@ import { PageHeroBand } from "@/components/sections/PageHeroBand";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildCanonical } from "@/lib/page-metadata";
 import { generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/schema";
-import { SITE_IMAGES } from "@/shared/siteImages";
+import { CONSTRUCTION_IMAGES } from "@/shared/siteImages";
 import { CONSULT_BULLETS } from "@/shared/siteContent";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { CTA_SECONDARY } from "@/shared/ctaCopy";
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
 export default function EstimatePage() {
   const schemas = [
     generateWebPageSchema({
-      title: "Remodel Cost Estimator",
+      title: "Home Build Cost Estimator",
       description: DESCRIPTION,
       url: "/estimate",
     }),
@@ -70,19 +70,19 @@ export default function EstimatePage() {
       <JsonLd data={schemas} />
 
       <PageHeroBand
-        imageSrc={SITE_IMAGES.budgetDetail}
-        imageAlt="Quartz kitchen island detail in a remodeled Treasure Valley home"
+        imageSrc={CONSTRUCTION_IMAGES.customHome}
+        imageAlt="Newly built custom home exterior in the Treasure Valley at dusk"
         scrim={0.85}
       >
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Project Estimator" }]} />
         <div className="brc-label text-inverse-muted mt-6 mb-4">Free planning tool</div>
         <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
-          Treasure Valley remodel{" "}
+          Treasure Valley home build{" "}
           <em className="brc-accent">estimator</em>
         </h1>
         <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed">
-          Answer a few questions about your project and get an instant planning range based on real
-          Treasure Valley remodel costs - takes about 60 seconds, no obligation.
+          Answer a few questions about the home you want to build and get an instant planning range
+          based on real Treasure Valley construction costs - takes about 60 seconds, no obligation.
         </p>
       </PageHeroBand>
 
@@ -96,9 +96,9 @@ export default function EstimatePage() {
               Your range is a starting point - not a quote
             </h2>
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6">
-              The estimator gives you a realistic planning band for your project type, size, and
-              finish level. When you&apos;re ready for detail, book a free in-home visit and we&apos;ll
-              walk through scope, design direction, and a written project range together.
+              The estimator gives you a realistic planning band for your home type, size, and
+              finish level. When you&apos;re ready for detail, book a free consultation and we&apos;ll
+              walk your lot, talk through plans and site costs, and put a written range in your hands.
             </p>
             <Button variant="brandOutline" asChild>
               <Link href="/contact#consult">
@@ -107,7 +107,7 @@ export default function EstimatePage() {
             </Button>
           </div>
           <MarketingCard padding="lg">
-            <p className="text-sm font-normal text-foreground mb-4">Your free visit includes</p>
+            <p className="text-sm font-normal text-foreground mb-4">Your free consultation includes</p>
             <ul className="space-y-3">
               {CONSULT_BULLETS.map((bullet) => (
                 <li key={bullet} className="flex items-start gap-3 text-sm text-muted-foreground">

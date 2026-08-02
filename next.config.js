@@ -75,14 +75,20 @@ const nextConfig = {
       '/get-in-touch': '/#consult',
       '/get-quote': '/#consult',
       '/free-quote': '/#consult',
-      '/free-estimate': '/#calculator',
+      // Estimator intent resolves to /estimate, which is a real page carrying
+      // the calculator, its own metadata and canonical, and sitemap priority
+      // 0.9. It used to be listed here as a redirect source itself, pointing at
+      // the homepage anchor. redirects() runs before filesystem routes, so the
+      // page was shadowed by its own alias and never served: the footer CTA,
+      // the contact page and the RE-10 page all bounced to /#calculator, and
+      // the sitemap advertised a URL that 301'd.
+      '/free-estimate': '/estimate',
       '/request-quote': '/#consult',
-      '/request-estimate': '/#consult',
-      '/get-estimate': '/#calculator',
+      '/request-estimate': '/estimate',
+      '/get-estimate': '/estimate',
       '/get-a-quote': '/#consult',
       '/get-a-free-quote': '/#consult',
       '/quote': '/#consult',
-      '/estimate': '/#calculator',
       // The gallery and testimonials both described fabricated remodels and
       // were retired with the repositioning. Until real finished homes exist to
       // show, every "see your work" intent resolves to the services index,
@@ -96,9 +102,9 @@ const nextConfig = {
       '/our-reviews': '/about',
       '/our-services': '/#services',
       '/all-services': '/',
-      '/pricing': '/#calculator',
-      '/our-pricing': '/#calculator',
-      '/rates': '/#calculator',
+      '/pricing': '/estimate',
+      '/our-pricing': '/estimate',
+      '/rates': '/estimate',
       '/faq': '/',
       '/frequently-asked-questions': '/',
       '/commercial': '/',
