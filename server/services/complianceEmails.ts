@@ -5,6 +5,7 @@ import {
   SITE_BASE_URL,
 } from "./emailLayout";
 import { sendEmail } from "./emailNotifications";
+import { SITE_CONFIG } from "@shared/siteConfig";
 
 function contractorName(user: User): string {
   return [user.firstName, user.lastName].filter(Boolean).join(" ") || "Contractor";
@@ -33,7 +34,7 @@ export async function sendComplianceReminderEmail(
 
   await sendEmail(
     user.email,
-    "Compliance Action Required - Boise Remodeling Co",
+    `Compliance Action Required - ${SITE_CONFIG.name}`,
     htmlBody
   );
 }

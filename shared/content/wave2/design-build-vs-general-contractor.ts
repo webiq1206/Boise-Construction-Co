@@ -2,118 +2,136 @@ import type { BlogPostData } from '../../blogContent';
 
 export const designBuildVsGeneralContractor: BlogPostData = {
   slug: 'design-build-vs-general-contractor',
-  title: 'Design-Build vs. General Contractor: Which Is Right for Your Remodel?',
-  seoTitle: 'Design-Build vs General Contractor',
+  title: 'Design-Build vs General Contractor for a New Home',
+  seoTitle: 'Design-Build vs GC for a New Home',
   metaDescription:
-    'Design-build vs. general contractor for a Boise remodel: how each model works, the pros and cons, cost and accountability differences, and how to choose the right one for your project.',
+    'Design-build vs architect plus general contractor for a new home: who draws it, who engineers it, who prices it, and where the budget gap opens up.',
   excerpt:
-    'Design-build and the traditional general-contractor model deliver a remodel very differently. Here is how each works, their pros and cons, and which fits your Boise project.',
-  category: 'Contractor Selection',
-  hubSlug: 'contractor-selection',
-  author: 'Boise Remodeling Co',
-  publishedAt: '2026-05-14',
-  updatedAt: '2026-07-11',
-  tags: ['contractor', 'design-build', 'boise', 'process'],
+    'Building a house from nothing means someone has to draw it, engineer it, price it and permit it. The two delivery models divide that work very differently.',
+  category: 'Choosing a Builder',
+  hubSlug: 'choosing-a-builder',
+  author: 'Boise Construction Co',
+  publishedAt: '2026-06-19',
+  tags: ['choosing a builder', 'design-build', 'boise', 'new construction'],
   heroImage: '/images/blog/design-build-vs-general-contractor.webp',
   primaryKeyword: 'design build vs general contractor',
   secondaryKeywords: [
-    'what is design build remodeling',
-    'design build vs design bid build',
-    'design build contractor boise',
+    'design build home builder boise',
+    'architect vs design build new home',
+    'design bid build custom home',
   ],
   searchIntent: 'informational',
-  featuredSnippetTargets: ['design build vs general contractor', 'what is design build'],
+  featuredSnippetTargets: [
+    'design build vs general contractor',
+    'what is design build home building',
+  ],
   wordCountTarget: 'cluster',
   quickAnswer:
-    'A design-build firm handles design, estimating, permitting, and construction under one contract and one point of accountability, while the traditional model has you hire a designer or architect separately, then bid their plans to a general contractor. Design-build usually means better budget alignment, fewer handoffs, and a single team to hold responsible; the traditional route can offer more design independence. For most Boise remodels, design-build reduces cost surprises and stress.',
+    'Design-build puts drawing, engineering, pricing, permitting and construction under one contract, so the house is priced while it is still being designed. The architect plus general contractor route separates design from construction and prices the drawings after they are finished. Design-build closes the gap between the plan and the budget earlier; separate architects give you design independence.',
   keyTakeaways: [
-    'Design-build puts design and construction under one contract and one accountable team.',
-    'The traditional model separates the designer/architect from the general contractor.',
-    'Design-build aligns budget during design, reducing change orders and surprises.',
-    'The traditional route can offer more design independence but risks finger-pointing.',
-    'For most residential remodels, design-build is simpler, faster, and lower-stress.',
+    'On a new house, the two models differ most in when the design gets priced.',
+    'Design-build prices during drawing; architect plus GC prices after the drawings are done.',
+    'The budget gap opens when a finished set of plans meets construction pricing for the first time.',
+    'An independent architect is genuinely the better route for an unusual site or a design-led house.',
+    'Design and engineering cost 5 to 12 percent of construction cost under either model.',
   ],
   relatedLinks: [
-    { url: '/guides/choose-remodeling-contractor-boise', anchor: 'How to Choose a Remodeling Contractor' },
-    { url: '/blog/design-build-process-guide', anchor: 'Design-Build Process Guide' },
-    { url: '/blog/questions-to-ask-remodeling-contractor', anchor: 'Questions to Ask a Contractor' },
+    { url: '/guides/choose-home-builder-boise', anchor: 'How to Choose a Home Builder in Boise' },
+    { url: '/services/design-build', anchor: 'Design-Build Home Building' },
+    { url: '/guides/custom-home-design-guide', anchor: 'Designing a Custom Home' },
+    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to Compare Home Builder Bids' },
     { url: '/blog/fixed-price-vs-cost-plus', anchor: 'Fixed Price vs Cost Plus' },
-    { url: '/about', anchor: 'About Boise Remodeling Co' },
-    { url: '/services/whole-home-remodel', anchor: 'Whole-Home Remodeling' },
+    { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [
     {
-      question: 'What is the difference between design-build and a general contractor?',
+      question: 'What is design-build for a new home?',
       answer:
-        'A design-build firm handles design, estimating, permitting, and construction under one contract with one point of accountability. A general contractor typically builds from plans someone else designed, so you hire and coordinate the designer or architect separately. Design-build integrates the two phases; the traditional model keeps them apart.',
+        'Design-build means one company holds the contract for design, engineering coordination, pricing, permitting and construction of the house. You work with the same team from the first sketch to handover. The defining feature is that construction pricing runs alongside the drawing rather than after it, so the plan and the budget move together instead of meeting at the end.',
     },
     {
-      question: 'Is design-build cheaper than hiring a general contractor separately?',
+      question: 'Do I need an architect to build a custom home in Idaho?',
       answer:
-        'Design-build is not always cheaper on paper, but it usually produces a more predictable final cost because budget feedback happens during design, reducing change orders. The traditional model can suffer from designs that come in over budget when they hit the contractor, forcing costly revisions late.',
+        'Not always. Many single-family homes in Ada and Canyon County are drawn by residential designers rather than licensed architects, and the building department accepts those plans with the required structural engineering stamped. An architect becomes valuable when the site is difficult, the design is unusual, or you want a house that is genuinely architecturally led rather than assembled from familiar parts.',
+    },
+    {
+      question: 'Is design-build cheaper than hiring an architect and a builder separately?',
+      answer:
+        'Not automatically cheaper, but usually more predictable. Design and engineering cost roughly 5 to 12 percent of construction cost either way, about $9,000 to $35,000. What design-build tends to avoid is the redesign cycle that follows a set of finished plans coming in over budget, which costs both fees and months.',
+    },
+    {
+      question: 'Who pulls the building permit for a new house?',
+      answer:
+        'The builder normally does, under both models, because the permit ties to construction and inspections. What differs is who assembles the submittal. In design-build the same team that drew the house prepares and files it. With separate design, the architect produces the drawings and the general contractor submits them, which can mean a gap while missing items are chased between two firms.',
+    },
+    {
+      question: 'Can I bring my own plans to a design-build builder?',
+      answer:
+        'Yes, and many people do. A builder will review the set for constructability and cost before pricing it, and will usually find items that need resolving: a structural condition, a detail that will not build economically, or a spec that is missing. Bringing plans does not remove the design phase, it shortens it.',
     },
     {
       question: 'What is design-bid-build?',
       answer:
-        'Design-bid-build is the traditional model: you first hire a designer or architect to produce plans, then put those plans out to bid to general contractors, then hire one to build. It separates design from construction into distinct contracts and phases.',
-    },
-    {
-      question: 'When should I choose a general contractor over design-build?',
-      answer:
-        'The traditional route can make sense when you already have complete architectural plans, want a specific independent architect, or are doing a highly custom project where design independence matters most. For most residential remodels, design-build is simpler and reduces risk.',
-    },
-    {
-      question: 'Does design-build mean I have less design control?',
-      answer:
-        'No. With design-build you are fully involved in design decisions - you simply work with a team whose designers and builders collaborate from the start, so your choices are grounded in what is buildable and affordable. Many homeowners find they get more design confidence, not less.',
-    },
-    {
-      question: 'Is design-build usually faster than the traditional approach?',
-      answer:
-        'Often, yes. Because design and construction happen under one roof, pricing and constructability feedback occur during design instead of after, so there is no separate bidding phase and fewer redesigns to hit budget. That overlap and single point of accountability typically compress the overall timeline compared with designing first, then bidding the drawings out to separate contractors.',
+        'It is the traditional sequence: design first, then bid, then build. You hire an architect or designer to complete the drawings, send that set to several general contractors for pricing, and hire one to construct it. The three phases are separate contracts with separate accountability, and the pricing arrives after the design decisions have already been made.',
     },
   ],
   content: `
-<h2 id="overview">Design-build vs. general contractor: the short answer</h2>
-<p><strong>A design-build firm handles design, estimating, permitting, and construction under one contract and one point of accountability, while the traditional model has you hire a designer or architect separately and then bid their plans to a general contractor.</strong> The difference is not just organizational - it changes how budget, timeline, and accountability work throughout your project. For most Boise remodels, design-build reduces cost surprises and stress, but understanding both models helps you choose the right fit. This article is part of our guide on <a href="/guides/choose-remodeling-contractor-boise">choosing a remodeling contractor</a>.</p>
+<h2 id="the-short-answer">The short answer</h2>
+<p><strong>The two models differ most in when the house gets priced.</strong> Design-build prices the house while it is being drawn. The architect plus general contractor route draws the house, finishes the drawings, and then finds out what it costs. Everything else that people say about the two models, accountability, coordination, speed, follows from that one difference in sequence. Building a house from nothing means somebody has to draw it, engineer it, price it, permit it and construct it, and the honest way to compare the models is to walk through those five jobs and see who holds each one. This article is part of our guide to <a href="/guides/choose-home-builder-boise">choosing a home builder in Boise</a>.</p>
 
-<h2 id="what-is-gc">What a general contractor does</h2>
-<p>A general contractor (GC) builds. In the traditional arrangement - often called design-bid-build - you first engage a designer or architect to create the plans for your project. Once the design is complete, you take those plans out to bid, sending them to several general contractors who each price the work. You then hire one GC to construct what the designer drew, coordinating the trades and managing the site. In this model the designer and the builder are two separate businesses with two separate contracts, working in sequence: design first, then build. The GC's expertise is execution - turning finished plans into a finished space.</p>
+<h2 id="who-does-what">Who holds each job</h2>
+<p><strong>The list of tasks is identical under both models; only the ownership changes.</strong></p>
+<table>
+<thead>
+<tr><th>Job</th><th>Design-build</th><th>Architect plus GC</th></tr>
+</thead>
+<tbody>
+<tr><td>Floor plan and elevations</td><td>In-house designer or contracted architect, managed by the builder</td><td>Architect you hire directly</td></tr>
+<tr><td>Structural engineering</td><td>Builder engages and coordinates the engineer</td><td>Architect engages the engineer, or you do</td></tr>
+<tr><td>Construction pricing</td><td>Continuous, during design</td><td>After drawings are complete, via bidding</td></tr>
+<tr><td>Permit submittal</td><td>Builder assembles and files</td><td>Architect produces, GC files</td></tr>
+<tr><td>Construction</td><td>Same company</td><td>The general contractor you selected</td></tr>
+<tr><td>Who owns a problem</td><td>One party</td><td>Two parties with different contracts</td></tr>
+</tbody>
+</table>
 
-<h2 id="what-is-db">What a design-build firm does</h2>
-<p>A design-build firm brings design and construction together under one roof and one contract. The same team that designs your remodel also estimates it, pulls the permits, and builds it. Instead of a handoff from designer to contractor, the designers and builders collaborate from the first conversation, so the design is grounded in real costs and constructability as it develops. You have one point of accountability for the entire project, from the initial concept through the final walkthrough. This integration is the defining feature of design-build, and it is why the model has become popular for residential remodeling. Our <a href="/blog/design-build-process-guide">design-build process guide</a> walks through how it unfolds step by step.</p>
+<h2 id="who-draws-it">Who draws it</h2>
+<p><strong>A new house needs a full drawing set, and in Idaho that set does not have to come from a licensed architect.</strong> Plenty of very good single-family homes in Boise, Meridian and Eagle are drawn by residential designers who do nothing but houses, and the building department accepts those plans as long as the structural work is engineered and stamped.</p>
+<p>Under design-build, the drawing happens inside the builder's process, either with an in-house designer or with an architect the builder brings in and manages. Under the separate model, you hire the architect yourself and hold that relationship directly. The practical difference is not talent. It is that in one case the person drawing sits next to the person who knows what a nine foot ceiling with a cathedral over the great room does to the truss package, and in the other case that conversation happens later, in a bid.</p>
 
-<h2 id="key-difference">The key difference: integration vs. separation</h2>
-<p>Everything else follows from one distinction. In the traditional model, design and construction are <em>separated</em> - different companies, different contracts, different phases. In design-build, they are <em>integrated</em> - one team, one contract, one continuous process. Separation gives you an independent designer whose only job is your design, but it also creates a gap: the designer draws without necessarily pricing as they go, and the true cost only appears when the plans reach contractors. Integration closes that gap by pricing throughout design, but it asks you to trust one firm with both roles. Which trade-off suits you depends on your priorities, your project, and how much you value a single accountable partner.</p>
+<h2 id="who-engineers-it">Who engineers it</h2>
+<p><strong>Structural engineering is a separate discipline in both models, and the question is who coordinates it.</strong> Every new house needs foundation design, beam and header sizing, shear and lateral design, and on a sloped lot a geotechnical report the foundation design responds to.</p>
+<p>In design-build, the builder normally engages the engineer and manages the loop between the drawing and the calculations, which matters because engineering changes the architecture. A beam that needs to grow drops a ceiling. A shear wall requirement can eliminate a window you wanted. Under the separate model, the architect coordinates the engineer and you receive the resolved set, which works well when the architect is experienced and slows things down when the engineering surprises arrive late. In the foothills, where slope and soils drive foundation cost hard, this coordination is worth more than it is on a flat valley lot.</p>
 
-<h2 id="budget">Budget and cost predictability</h2>
-<p>This is where the models differ most in practice. In the traditional route, a common and painful scenario is the design that comes back over budget: you fall in love with plans, take them to bid, and discover every contractor's number is well above what you hoped - forcing expensive redesigns late in the process, or a project that starts on a shaky financial footing. Because design-build prices continuously, budget reality enters the conversation while ideas are still on paper. You find out that the wall is load-bearing or the stone island doubles the counter cost when it is still a decision, not a change order. Design-build is not automatically cheaper, but it tends to produce a more predictable final cost with fewer surprises - which is what most homeowners actually mean by "affordable." See <a href="/blog/fixed-price-vs-cost-plus">fixed-price vs cost-plus</a> for how pricing structures interact with this.</p>
+<h2 id="who-prices-it">Who prices it, and when</h2>
+<p><strong>This is the real fork in the road.</strong> Under design-build, the builder prices as the design develops. Room sizes, roof geometry, window counts and finish levels all get costed while they are still cheap to change, and the budget is a live document rather than a verdict.</p>
+<p>Under design-bid-build, the drawings are completed first and then sent to several general contractors, who each price the same set. That process has a genuine virtue: you get competing numbers on identical documents, which is the cleanest form of price comparison available in this industry and something design-build cannot offer. The catch is that it happens at the end, after you have paid for a full drawing set and formed an attachment to the design. If the bids come back above your budget, you are choosing between value engineering a house you already love and paying for a redesign. Our article on <a href="/blog/how-to-compare-builder-bids">how to compare home builder bids</a> covers how to make those competing numbers genuinely comparable, which is harder than it sounds even when the plans are identical.</p>
 
-<h2 id="accountability">Accountability and finger-pointing</h2>
-<p>When something goes wrong - and on any real project, something will - the models handle it very differently. In the separated model, a problem can become a dispute over whose fault it is: the designer says the contractor built it wrong; the contractor says the design was flawed. You are caught in the middle, mediating between two companies who each have reason to blame the other. In design-build, there is no one to point at - the same firm designed and built it, so they own the outcome and the fix. This single point of accountability is, for many homeowners, the most valuable feature of design-build, because it removes the worst-case scenario of paying two companies while they argue.</p>
+<h2 id="who-permits-it">Who pulls the permit</h2>
+<p><strong>The builder files for the building permit under either model, but the assembly of the submittal is where the models diverge.</strong> A new home submittal in Ada or Canyon County is more than a plan set: site plan with setbacks, drainage, engineering, energy compliance documentation, and utility or septic approvals depending on the parcel. Rural parcels add a septic permit through Central District Health, which runs on its own timeline.</p>
+<p>In design-build the same team that drew the house prepares and files that package, so a plan review comment goes straight to the person who can answer it. With separate design, comments route back to the architect, get resolved, and return to the contractor to refile. That loop is not fatal, but it adds calendar time, and the two counties run different portals and different review cadences, so a submittal that is short one document does not usually announce itself quickly. More on this in our <a href="/blog/boise-building-permit-guide">Boise building permit guide</a>.</p>
 
-<h2 id="timeline">Timeline and coordination</h2>
-<p>Integration also affects schedule. In design-bid-build, the phases are strictly sequential - design must fully finish, then bidding takes time, then construction begins - and each handoff adds delay. Design-build can overlap phases intelligently: long-lead items like custom cabinetry can be identified and ordered during design, permitting can begin as soon as plans are ready, and construction planning happens alongside design. This does not mean rushing; it means eliminating the dead time between separate companies. For homeowners eager to move from idea to finished space without a series of restarts, the coordinated timeline of design-build is a real advantage.</p>
+<h2 id="the-gap">Where the gap between the drawing and the budget opens</h2>
+<p><strong>The gap opens at the moment a finished design meets construction pricing for the first time.</strong> That moment exists in both models. Design-build spreads it over dozens of small moments during design, where each one is a decision. Design-bid-build concentrates it into a single event after the drawings are done, where it is a verdict.</p>
+<p>A concrete version: a client wants a 2,800 square foot single level with a heavy timber entry, a large window package facing the Boise foothills, and a walkout on a sloped lot. Drawn without pricing, that house can easily land above $450 per finished square foot when the excavation, the retaining, the glazing and the structure are all counted. Drawn with pricing alongside, the same client sees at week three that the walkout is adding a significant excavation and foundation cost, and gets to decide whether the walkout or the window package matters more while both are still lines on paper. Neither model makes the house cheaper. One of them tells you earlier. See <a href="/blog/why-home-building-bids-vary">why home building bids vary so much</a> for how much of that gap is scope rather than price.</p>
 
-<h2 id="design-control">Do you give up design control with design-build?</h2>
-<p>A common misconception is that design-build means less design input. The opposite is usually true. You remain fully involved in every design decision; you simply make those decisions alongside a team that can tell you immediately what something costs and whether it is buildable. Rather than designing in a vacuum and hoping it fits the budget, you shape the design with real information at every step. Many homeowners find this gives them more confidence, not less, because their choices are never undermined by a nasty surprise when the plans hit a contractor. The collaboration of designers and builders tends to produce designs that are both beautiful and realistic.</p>
+<h2 id="accountability">What happens when something goes wrong</h2>
+<p><strong>Under one contract, a problem is a problem. Under two, a problem is first a question about whose problem it is.</strong> Something on your build will not go as drawn. A detail will not assemble the way it was shown, a specified product will be discontinued, an inspector will read a condition differently than expected.</p>
+<p>With design-build, the team evaluates it, prices the fix and brings you a recommendation. With separate design and construction, the contractor stops, the question goes to the architect, revised information comes back, and the cost is negotiated, sometimes with a genuine disagreement about whether the drawing was deficient or the construction was. Most of those disputes resolve reasonably. They all cost days, and on a nine to fourteen month build a handful of them costs weeks.</p>
 
-<h2 id="handles-change">How each model handles the unexpected</h2>
-<p>No remodel goes exactly to plan, so how each model absorbs surprises is worth understanding. In the traditional model, a mid-project discovery - say, rot behind a wall or a design detail that will not build as drawn - triggers a slow, awkward loop: the contractor stops, the question goes back to the designer, revised drawings come back, and the change is priced, all while the schedule waits and the two companies may disagree about who should absorb the cost. In design-build, the same discovery is handled internally and quickly: the team that designed it and is building it evaluates options, prices a solution, and brings you one clear recommendation with the cost, so you approve and the work continues. The difference is not that design-build has fewer surprises - every renovation of an existing home has some - but that it resolves them faster and without the finger-pointing that makes surprises so stressful in the separated model. For homeowners, that responsiveness is often the moment the value of an integrated team becomes obvious.</p>
+<h2 id="when-architect">When an architect plus a general contractor is the better choice</h2>
+<p><strong>There are situations where the separate route is straightforwardly the right answer, and we say so.</strong> If you want a house that is genuinely architecturally led, where the design ambition is the point and the budget follows the design rather than constraining it, hire an architect. Design-build firms are good at building well within a number; they are not usually the right home for a project whose value lies in design originality.</p>
+<p>The same applies if you have a difficult or unusual site where the design problem is the hard part, if you already have a relationship with an architect whose work you want, or if you specifically want the independence of a designer with no financial interest in the construction cost. That independence is real. A design-build firm pricing its own design has an inherent tension in it, and the honest answer is that you manage that tension by asking for a line-item budget and checking the allowances rather than by pretending it does not exist. If competitive bidding on identical drawings is important to you, the separate route is the only one that provides it.</p>
 
-<h2 id="pros-cons">Pros and cons at a glance</h2>
-<p><strong>Design-build strengths:</strong> one accountable team, budget aligned throughout design, fewer change orders, coordinated timeline, and no finger-pointing. <strong>Design-build trade-off:</strong> you place both design and construction with one firm, so choosing a firm you trust matters more. <strong>Traditional model strengths:</strong> an independent designer or architect devoted solely to design, and the ability to bid plans competitively to multiple builders. <strong>Traditional model trade-offs:</strong> designs that come in over budget, sequential delays, and the risk of disputes between separate companies. Neither is universally right - but the strengths of design-build map closely to what causes the most stress in residential remodeling.</p>
+<h2 id="what-it-costs">What it costs either way</h2>
+<p><strong>Design and engineering run about 5 to 12 percent of construction cost under both models, commonly $9,000 to $35,000 depending on the complexity of the house.</strong> Design-build does not make design free; it usually structures it as a paid design phase that flows into a construction agreement.</p>
+<p>Construction itself sits in the same band regardless of who drew it. Most Treasure Valley custom homes plan between $250 and $400 per finished square foot excluding land, which puts a 2,400 square foot house between $600,000 and $960,000. Simple single-level designs on flat valley lots can come in near $225 per square foot. Foothills sites with steep grade and high interior detail regularly run above $450. The delivery model affects how confidently you can predict where in that band you will land, not the band itself.</p>
 
-<h2 id="design-fees">How design fees work in each model</h2>
-<p>Homeowners sometimes assume design-build hides the cost of design, but in practice both models charge for it - they just structure it differently. In the traditional route, you pay a designer or architect a separate fee, often a percentage of construction cost or an hourly rate, before you have any construction pricing at all. In design-build, design is typically a defined phase with its own fee that then flows directly into a coordinated construction estimate, so the design work and the build are financially connected rather than sequential purchases. The practical advantage of the design-build approach is that your design investment produces plans that are already priced and buildable, rather than plans you then discover are over budget when they reach contractors. Either way, good design is worth paying for; the question is whether that design happens in isolation or in step with real construction costs. For most homeowners, having design and budget move together from the first meeting is the more reassuring arrangement.</p>
+<h2 id="how-to-choose">How to choose between them</h2>
+<p><strong>Choose based on which risk bothers you more.</strong> If the risk that keeps you up is a beautiful set of plans you cannot afford to build, design-build removes it by pricing continuously. If the risk that bothers you is a builder who both designs and prices with nobody independent checking either, hire an architect and bid the drawings.</p>
+<p>Two practical notes. First, the model matters less than the specific people; a disorganised design-build firm is worse than a good architect and a good contractor. Second, whichever route you take, the contract structure is a separate decision, and <a href="/blog/fixed-price-vs-cost-plus">fixed price versus cost plus</a> will shape your build at least as much as the delivery model does. If you have not decided how custom your house needs to be, <a href="/blog/production-vs-custom-home-builder">production builder versus custom builder</a> is the earlier question.</p>
 
-<h2 id="when-choose">When to choose each model</h2>
-<p>Choose the <strong>traditional model</strong> when you already have complete architectural plans you love, when you specifically want an independent architect for a highly custom or architecturally significant home, or when you have the time and appetite to manage two relationships and a competitive bid process. Choose <strong>design-build</strong> when you want a single team to take you from idea to finished space, when budget predictability and a coordinated schedule matter, when you would rather not referee between a designer and a builder, and when you value one point of accountability for the whole project. For the majority of Boise kitchen, bath, whole-home, and addition remodels, design-build is the simpler, lower-risk path - which is why we built our firm around it.</p>
-
-<h2 id="local">What this means for a Boise remodel</h2>
-<p>Locally, design-build offers a practical edge: the same team that designs your project also knows the Ada and Canyon County permit processes, the realities of Boise's older housing stock, and the HOA review steps in Eagle and the Foothills - so design decisions account for local approvals and conditions from the start. That coordination is harder to achieve when a designer unfamiliar with a builder's local relationships hands off plans cold. Whichever model you choose, the most important factor remains the specific team's competence, communication, and integrity - the traits our <a href="/blog/questions-to-ask-remodeling-contractor">questions to ask a contractor</a> are designed to test.</p>
-
-<h2 id="next-steps">See design-build in action</h2>
-<p>Our free in-home visit is design-build at its most useful - you get design direction and an honest budget in the same conversation, from the team that would build the project. When you are ready, <a href="/contact">schedule a consultation</a>, learn more <a href="/about">about our design-build team</a>, or explore our <a href="/services/whole-home-remodel">whole-home remodeling</a> approach.</p>
+<h2 id="next-steps">Talk it through</h2>
+<p>We build design-build because we think pricing during design is the honest way to run a residential project, and we will tell you when an architect is the better call for what you are describing. If you want to test that, bring us a sketch, a plan set or a lot address and we will walk through it with you. You can <a href="/contact">get in touch</a>, read how our <a href="/services/design-build">design-build process</a> works, or try the <a href="/#calculator">build cost calculator</a> before either conversation.</p>
 `.trim(),
 };

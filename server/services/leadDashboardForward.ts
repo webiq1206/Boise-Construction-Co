@@ -1,7 +1,7 @@
 import type { LeadEstimateRecord, LeadPropertyRecord } from "@/server/services/leadRecord";
 
 /**
- * Fire-and-forget forwarding to the Boise Remodeling lead dashboard.
+ * Fire-and-forget forwarding to the Boise Construction lead dashboard.
  * Never throws or awaits -- a failure here must never affect the API response.
  *
  * FIELD NAMES ARE A CONTRACT. The dashboard validates with a plain zod object,

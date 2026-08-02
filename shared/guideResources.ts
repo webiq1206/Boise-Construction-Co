@@ -12,29 +12,39 @@ export interface GuideResource {
   fileLabel?: string;
 }
 
+/**
+ * Filenames keep their original paths where the subject survived the
+ * repositioning, so existing inbound links and any copy already saved to
+ * someone's downloads folder keep resolving. The permit guide is unchanged in
+ * subject; the budget worksheet and the old kitchen-and-bath checklist are
+ * rebuilt for new construction, and the checklist becomes a lot-evaluation
+ * checklist, which is the equivalent "bring this to the first meeting" document
+ * for someone building rather than renovating.
+ */
 export const GUIDE_RESOURCES: Record<string, GuideResource> = {
   'budget-worksheet': {
     id: 'budget-worksheet',
-    title: 'Remodel Budget Worksheet',
+    title: 'New Home Budget Worksheet',
     description:
-      'Printable worksheet with 2026 Treasure Valley planning ranges, budget buckets, and bid comparison checks.',
+      'Printable worksheet with 2026 Treasure Valley build cost bands, budget buckets from land through landscaping, and bid comparison checks.',
     kind: 'pdf',
-    href: '/downloads/remodel-budget-worksheet.pdf',
+    href: '/downloads/new-home-budget-worksheet.pdf',
     fileLabel: 'PDF · 2 pages',
   },
-  'kitchen-bath-checklist': {
-    id: 'kitchen-bath-checklist',
-    title: 'Kitchen & Bath Planning Checklist',
+  'lot-checklist': {
+    id: 'lot-checklist',
+    title: 'Lot Evaluation Checklist',
     description:
-      'Room-by-room checklist for layouts, selections, permits, and construction - bring to your consultation.',
+      'What to verify before you buy a parcel: access, utilities, septic feasibility, soils, slope, and setbacks. Bring it to a showing.',
     kind: 'pdf',
-    href: '/downloads/kitchen-bath-planning-checklist.pdf',
+    href: '/downloads/lot-evaluation-checklist.pdf',
     fileLabel: 'PDF · 2 pages',
   },
   'ada-canyon-permit-pdf': {
     id: 'ada-canyon-permit-pdf',
     title: 'Ada vs Canyon Permit Guide',
-    description: 'One-page reference: jurisdiction map, when permits apply, and timeline bands.',
+    description:
+      'One-page reference: which county reviews your build, what a new-home permit package contains, and the inspection sequence.',
     kind: 'pdf',
     href: '/downloads/ada-canyon-permit-guide.pdf',
     fileLabel: 'PDF · 1 page',
@@ -51,12 +61,21 @@ export const GUIDE_RESOURCES: Record<string, GuideResource> = {
 
 /** Resource IDs shown on each guide slug */
 export const RESOURCES_BY_GUIDE_SLUG: Record<string, string[]> = {
-  'boise-remodeling-cost-guide': ['budget-worksheet', 'kitchen-bath-checklist'],
-  'boise-remodeling-process-guide': ['kitchen-bath-checklist', 'ada-canyon-permit-pdf', 'ada-canyon-permit-flow'],
-  'treasure-valley-remodeling-guide': ['budget-worksheet', 'ada-canyon-permit-pdf', 'ada-canyon-permit-flow'],
-  'boise-kitchen-remodeling-guide': ['kitchen-bath-checklist', 'budget-worksheet'],
-  'boise-bathroom-remodeling-guide': ['kitchen-bath-checklist'],
-  'boise-remodeling-guide': ['budget-worksheet', 'kitchen-bath-checklist'],
+  'boise-home-building-cost-guide': ['budget-worksheet', 'lot-checklist'],
+  'boise-home-building-process-guide': [
+    'ada-canyon-permit-pdf',
+    'ada-canyon-permit-flow',
+    'budget-worksheet',
+  ],
+  'buying-land-to-build-boise': ['lot-checklist', 'ada-canyon-permit-pdf'],
+  'treasure-valley-home-building-guide': [
+    'budget-worksheet',
+    'ada-canyon-permit-pdf',
+    'ada-canyon-permit-flow',
+  ],
+  'custom-home-design-guide': ['budget-worksheet'],
+  'choose-home-builder-boise': ['budget-worksheet'],
+  'boise-home-building-guide': ['budget-worksheet', 'lot-checklist'],
 };
 
 export const RESOURCES_BY_BLOG_SLUG: Record<string, string[]> = {
@@ -64,10 +83,13 @@ export const RESOURCES_BY_BLOG_SLUG: Record<string, string[]> = {
     'ada-canyon-permit-pdf',
     'ada-canyon-permit-flow',
   ],
-  'how-to-budget-remodel-boise': ['budget-worksheet'],
-  'kitchen-remodel-cost-boise': ['budget-worksheet', 'kitchen-bath-checklist'],
-  'bathroom-remodel-cost-boise': ['kitchen-bath-checklist'],
-  'boise-permit-guide': ['ada-canyon-permit-pdf', 'ada-canyon-permit-flow'],
+  'boise-building-permit-guide': ['ada-canyon-permit-pdf', 'ada-canyon-permit-flow'],
+  'how-to-budget-a-new-home-boise': ['budget-worksheet'],
+  'cost-to-build-a-house-boise': ['budget-worksheet'],
+  'lot-evaluation-checklist': ['lot-checklist'],
+  'how-to-buy-a-buildable-lot-boise': ['lot-checklist'],
+  'well-and-septic-cost-idaho': ['lot-checklist'],
+  'how-to-compare-builder-bids': ['budget-worksheet'],
 };
 
 export function getResourcesForGuide(slug: string): GuideResource[] {

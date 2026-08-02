@@ -25,9 +25,10 @@ import { AreaCard } from '@/components/marketing/AreaCard';
 import { CITY_HERO_IMAGES } from '@/shared/cityServiceImages';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { GRAIN_URL } from '@/lib/grain';
+import { SITE_CONFIG } from '@/shared/siteConfig';
 
 const SPEAKABLE_SUMMARY =
-  'We are a locally owned design-build remodeling company serving the Treasure Valley. Our focus is clarity: written scope before construction, proactive weekly updates, permits handled in-house for Ada and Canyon County, and a written workmanship guarantee on our labor.';
+  'We are a locally owned design-build home builder serving the Treasure Valley. Our focus is clarity: a line-item budget before we break ground, a published draw schedule, weekly written updates, permits handled in-house for Ada and Canyon County, and a one-year workmanship warranty after you take possession.';
 
 function HeroBreadcrumbs() {
   const items = [
@@ -87,16 +88,16 @@ export default function AboutPage() {
   const schemas = [
     generateOrganizationSchema(),
     generateWebPageSchema({
-      title: 'About Boise Remodeling Co',
+      title: `About ${SITE_CONFIG.name}`,
       description:
-        'Treasure Valley design-build remodeling company. Licensed, insured, and committed to clear communication.',
+        'Treasure Valley design-build home builder. Bonded, insured, and committed to clear communication.',
       url: '/about',
     }),
     generateBreadcrumbSchema([
       { name: 'Home', url: '/' },
       { name: 'About', url: '/about' },
     ]),
-    generateSpeakableSchema({ path: '/about', name: 'About Boise Remodeling Co' }),
+    generateSpeakableSchema({ path: '/about', name: `About ${SITE_CONFIG.name}` }),
   ];
 
   return (
@@ -107,7 +108,7 @@ export default function AboutPage() {
         <section className="relative min-h-[540px] md:min-h-[78vh] flex items-end overflow-hidden bg-inverse">
           <Image
             src={SITE_IMAGES.leadership}
-            alt="Boise Remodeling Co design-build team at a finished kitchen project"
+            alt={`${SITE_CONFIG.name} design-build team reviewing plans on a build site`}
             fill
             className="object-cover opacity-[0.82] img-brand-grade"
             sizes="100vw"
@@ -129,18 +130,19 @@ export default function AboutPage() {
             </p>
             <div className="brc-label brc-label-on-photo mt-6 mb-5">About us</div>
             <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-4xl mb-6">
-              About Boise Remodeling{' '}
+              About Boise Construction{' '}
               <em className="brc-accent">Co</em>
             </h1>
             <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-4">
-              We are a locally owned design-build remodeling company serving the Treasure Valley.
-              Homeowners work with one accountable team from first in-home visit through final
-              walkthrough.
+              We are a locally owned design-build home builder serving the Treasure Valley. You work
+              with one accountable team from the first conversation about your lot through the day
+              you get the keys.
             </p>
             <p className="text-base md:text-lg text-inverse-foreground/75 max-w-2xl leading-relaxed mb-8">
-              Our focus is clarity: written scope before construction, proactive weekly updates,
-              permits handled in-house for Ada and Canyon County, and a written workmanship
-              guarantee on our labor. Every detail, every decision - handled with intention.
+              Our focus is clarity: a line-item budget before we break ground, a published draw
+              schedule, a written update every week, permits handled in-house for Ada and Canyon
+              County, and a one-year workmanship warranty. Every detail, every decision - handled
+              with intention.
             </p>
             <div className="flex flex-wrap gap-3 mb-8">
               <ConsultCTA variant="brand">
@@ -164,7 +166,7 @@ export default function AboutPage() {
             <div className="relative min-h-[260px] md:min-h-[520px] overflow-hidden bg-inverse">
               <Image
                 src={SITE_IMAGES.process}
-                alt="Architectural blueprints and finish material samples for a Treasure Valley remodel"
+                alt="Architectural drawings and finish selections for a Treasure Valley new home"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover img-brand-grade"
@@ -194,12 +196,12 @@ export default function AboutPage() {
                       <em className="brc-accent">explained</em>
                     </>
                   }
-                  description="Design-build means your designer, estimator, and construction lead work together under one roof. Layout, selections, permits, and schedule stay aligned so your kitchen, bathroom, whole-home, or addition project does not drift between vendors."
+                  description="Design-build means your designer, estimator, and construction lead work together under one roof. The plan, the budget, the engineering, and the permit set stay aligned, so the house you are shown in design is the house that gets priced and built."
                   className="mb-8 max-w-none"
                 />
                 <p className="text-sm text-muted-foreground leading-relaxed mb-8">
-                  Idaho contractor license information is available upon request. We are bonded and
-                  insured for residential remodeling work across the Treasure Valley.
+                  Idaho contractor registration information is available upon request. We are bonded
+                  and insured for residential construction across the Treasure Valley.
                 </p>
                 <ul className="grid sm:grid-cols-2 gap-3">
                   {TRUST_ITEMS.map((item) => (
@@ -215,25 +217,25 @@ export default function AboutPage() {
                     One accountable team
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Boise Remodeling Co has run design-build remodels across the Treasure Valley
-                    since 2020. One team leads every project from the first in-home visit through
-                    Ada and Canyon County permitting to the final walkthrough, and stands behind a
-                    written scope before construction and a workmanship guarantee on our labor.
+                    {SITE_CONFIG.name} has worked in Treasure Valley residential construction since
+                    2020. One team leads every build from the first look at your lot through Ada and
+                    Canyon County permitting to the final walkthrough, and stands behind a line-item budget
+                    before we break ground and a one-year workmanship warranty after you move in.
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed mt-4">
-                    New to remodeling? Start with our guide to{' '}
+                    New to building? Start with our{' '}
                     <Link
-                      href="/guides/choose-remodeling-contractor-boise"
+                      href="/guides/boise-remodeling-cost-guide"
                       className="text-foreground underline underline-offset-2 hover:text-accent-legible"
                     >
-                      choosing a remodeling contractor in Boise
+                      Boise home building cost guide
                     </Link>{' '}
                     or explore our most requested service,{' '}
                     <Link
-                      href="/services/kitchen-remodel"
+                      href="/services/custom-home-builder"
                       className="text-foreground underline underline-offset-2 hover:text-accent-legible"
                     >
-                      kitchen remodeling in Boise
+                      custom home building in Boise
                     </Link>
                     .
                   </p>

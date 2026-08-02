@@ -16,15 +16,15 @@ export function AreaCard({ city, imageSrc }: AreaCardProps) {
   const href = areaPath(city.slug);
   const countyLabel = getCountyLabel(city.county);
   const title = `${city.name}, Idaho`;
-  const description = `Design-build remodeling in ${city.name} and ${countyLabel}.`;
+  const description = `Custom and semi-custom home building in ${city.name} and ${countyLabel}.`;
 
   return (
     <MarketingCard className="h-full flex flex-col p-0 overflow-hidden hover-elevate group relative">
-      <Link href={href} className="absolute inset-0 z-0" aria-label={`View ${city.name} remodeling services`} />
+      <Link href={href} className="absolute inset-0 z-0" aria-label={`View ${city.name} home building services`} />
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
           src={imageSrc}
-          alt={`Remodeling in ${city.name}, Idaho`}
+          alt={`New home construction in ${city.name}, Idaho`}
           fill
           sizes="(max-width: 640px) 100vw, 50vw"
           className="object-cover img-brand-grade transition-transform duration-300 ease-out group-hover:scale-[1.02]"

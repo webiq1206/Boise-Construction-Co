@@ -34,33 +34,65 @@ import { trackEvent, trackMetaEvent } from "@/lib/analytics";
 import { readStoredPrefill, PREFILL_UPDATED_EVENT, hasPassedGate } from "@/lib/leadPrefill";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
-  HOUSE_NUMBER_REGEX,
-  HOUSE_NUMBER_ERROR_MESSAGE,
+  isLocatableSite,
+  SITE_LOCATION_ERROR_MESSAGE,
   buildCleanAddress,
   extractZip,
 } from "@/shared/addressValidation";
 
-const formSchema = z.object({
-  name: z.string().min(2, "Please enter your full name"),
-  phone: z.string().min(10, "Please enter a valid phone number"),
-  email: z.string().email("Please enter a valid email"),
-  address: z
-    .string()
-    .min(5, "Please enter your property address")
-    .refine((v) => HOUSE_NUMBER_REGEX.test(v.trim()), HOUSE_NUMBER_ERROR_MESSAGE),
-  projectType: z.string().min(1, "Please select a project type"),
-  message: z.string().optional(),
-});
+/**
+ * Someone who has not bought land yet has no site to give us, and that is the
+ * single most common state for a new-build enquiry. Requiring a locatable
+ * address of them would reject the lead we most want. Everyone else has a site,
+ * so it stays required for them - see isLocatableSite for the accepted forms.
+ */
+const LAND_SEARCH_PROJECT_TYPE = "looking-for-land";
+
+const formSchema = z
+  .object({
+    name: z.string().min(2, "Please enter your full name"),
+    phone: z.string().min(10, "Please enter a valid phone number"),
+    email: z.string().email("Please enter a valid email"),
+    address: z.string(),
+    projectType: z.string().min(1, "Please select a project type"),
+    message: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.projectType === LAND_SEARCH_PROJECT_TYPE) return;
+    const address = data.address.trim();
+    if (address.length < 5) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["address"],
+        message: "Please enter your build site address",
+      });
+      return;
+    }
+    if (!isLocatableSite(address)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["address"],
+        message: SITE_LOCATION_ERROR_MESSAGE,
+      });
+    }
+  });
 
 type FormData = z.infer<typeof formSchema>;
 
+/**
+ * Mirrors SERVICES in shared/contentData.ts, plus the two answers that are not a
+ * service: someone still shopping for land, and someone who does not know yet.
+ * Both are real states for a new-build lead and routing them to "other" loses
+ * the one detail that changes the first call.
+ */
 const PROJECT_OPTIONS = [
-  { value: "kitchen", label: "Kitchen Remodel" },
-  { value: "bathroom", label: "Bathroom Remodel" },
-  { value: "whole-home", label: "Whole-Home Remodel" },
-  { value: "addition", label: "Room Addition" },
-  { value: "adu", label: "ADU / Guest House" },
-  { value: "basement", label: "Basement Finishing" },
+  { value: "custom-home", label: "Custom Home" },
+  { value: "semi-custom-home", label: "Semi-Custom Home" },
+  { value: "build-on-my-lot", label: "Build on My Lot" },
+  { value: "shop-home", label: "Shop Home / Barndominium" },
+  { value: "plans-only", label: "Home Design & Plans Only" },
+  { value: "lot-evaluation", label: "Lot Evaluation" },
+  { value: "looking-for-land", label: "Still Looking for Land" },
   { value: "other", label: "Other / Not sure yet" },
 ];
 
@@ -109,6 +141,8 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
       message: "",
     },
   });
+
+  const searchingForLand = form.watch("projectType") === LAND_SEARCH_PROJECT_TYPE;
 
   function handleProfileResolved(profile: PropertyProfile | null) {
     setPropertyProfile(profile);
@@ -479,7 +513,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
             render={({ field }) => (
               <FormItem>
                 <FormLabel className={labelClass}>
-                  What are you planning to remodel?
+                  What are you planning to build?
                   <RequiredMark />
                 </FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
@@ -580,8 +614,8 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
           render={({ field }) => (
             <FormItem>
               <FormLabel className={labelClass}>
-                Property address
-                <RequiredMark />
+                {searchingForLand ? "Where are you looking?" : "Build site address"}
+                {!searchingForLand && <RequiredMark />}
               </FormLabel>
               <FormControl>
                 <AddressAutocomplete
@@ -594,6 +628,11 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
                   data-testid="input-address"
                 />
               </FormControl>
+              <FormDescription className="text-xs text-muted-foreground mt-1">
+                {searchingForLand
+                  ? "Optional. A city or neighborhood is enough while you are still shopping for a lot."
+                  : "No street number yet? A parcel number or lot and subdivision works."}
+              </FormDescription>
               <button
                 type="button"
                 onClick={() => setShowAddrInfo((v) => !v)}
@@ -607,8 +646,8 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
               </button>
               {showAddrInfo && (
                 <FormDescription id="address-info" className="text-xs text-muted-foreground mt-1">
-                  We use county property records to prepare for your visit. Your information is never
-                  shared or sold -{" "}
+                  We pull county parcel records before we meet, so we can tell you what your site will
+                  require. Your information is never shared or sold -{" "}
                   <Link href="/privacy-policy" className="underline underline-offset-2 hover:text-foreground">
                     privacy policy
                   </Link>

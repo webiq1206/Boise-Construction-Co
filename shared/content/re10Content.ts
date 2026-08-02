@@ -26,7 +26,7 @@ export const RE10_DEFINITION =
  * in Boise, so it has to stand alone away from the page and still be true.
  */
 export const RE10_DIRECT_ANSWER =
-  "Boise Remodeling Co completes RE-10 and home inspection repairs for real estate agents, buyers and sellers across Boise and the Treasure Valley. Send the RE-10 and inspection report, and we review the repair list, price it, coordinate access, complete the approved work, and provide photo documentation and invoices for the file.";
+  "Boise Construction Co completes RE-10 and home inspection repairs for real estate agents, buyers and sellers across Boise and the Treasure Valley. Send the RE-10 and inspection report, and we review the repair list, price it, coordinate access, complete the approved work, and provide photo documentation and invoices for the file.";
 
 export interface Re10Benefit {
   title: string;

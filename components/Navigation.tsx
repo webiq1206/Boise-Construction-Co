@@ -14,7 +14,6 @@ import { SaveContactLink } from "@/components/SaveContactLink";
 
 const NAV_LINKS = [
   { label: "Services", href: "/services" },
-  { label: "Our Work", href: "/testimonials" },
   { label: "Areas", href: "/areas" },
   { label: "About", href: "/about" },
   { label: "Guides", href: "/guides" },

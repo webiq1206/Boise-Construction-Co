@@ -43,31 +43,36 @@ const CONTACT_FAQS = [
   {
     question: 'How quickly will you respond to my inquiry?',
     answer:
-      'We respond within one business day. Call us during business hours for an immediate conversation, or submit the form and we will reach out to schedule your free in-home visit.',
+      'We respond within one business day. Call us during business hours for an immediate conversation, or submit the form and we will reach out to schedule your free planning consultation.',
   },
   {
-    question: 'Is the in-home consultation really free?',
+    question: 'Is the planning consultation really free?',
     answer:
-      'Yes. Your 60 to 90 minute in-home visit is free with no obligation. You leave with planning guidance, design direction, and an honest project range - never a high-pressure sales pitch.',
+      'Yes. The 60 to 90 minute consultation is free with no obligation. We meet at our office, or on your lot if you already own one, and you leave with a budget band, a realistic schedule, and a read on what your site will require - never a high-pressure sales pitch.',
+  },
+  {
+    question: 'Do I need to own land before I contact you?',
+    answer:
+      'No. Roughly half the people who call us are still looking. We will walk a lot with you before you buy and tell you what it will cost to build on, which is the single most useful thing you can know before making an offer.',
   },
   {
     question: 'What areas do you serve?',
-    answer: `We serve ${TREASURE_VALLEY_CITIES}, and surrounding Treasure Valley communities across Ada and Canyon County.`,
+    answer: `We build in ${TREASURE_VALLEY_CITIES}, and surrounding Treasure Valley communities across Ada and Canyon County.`,
   },
   {
     question: 'Do you handle permits?',
     answer:
-      'Yes. Permits are included in our design-build scope and handled in-house for both Ada and Canyon County jurisdictions.',
+      'Yes. Building permits, plan review, engineering, and utility applications are part of our design-build scope and handled in-house for both Ada and Canyon County jurisdictions.',
   },
   {
-    question: 'How do I get a cost estimate for my project?',
+    question: 'How do I get a cost estimate for my home?',
     answer:
-      'Use our online project estimator for an instant planning range, then book a free in-home visit for a written scope tailored to your home.',
+      'Use our online build cost estimator for an instant range, then book a free consultation for a written, line-item budget tailored to your plan and your lot.',
   },
 ];
 
 const SPEAKABLE_SUMMARY =
-  'Contact Boise Remodeling Co for a free consultation. Schedule a free 60 to 90 minute in-home visit, call our team, or use the project estimator to explore a planning range for your remodel.';
+  `Contact ${SITE_CONFIG.name} for a free consultation. Schedule a free 60 to 90 minute planning consultation, call our team, or use the build cost estimator to explore a range for your new home.`;
 
 function HeroBreadcrumbs() {
   const items = [
@@ -193,9 +198,9 @@ export default function ContactPage() {
   const schemas = [
     generateLocalBusinessSchema(),
     generateWebPageSchema({
-      title: 'Contact Boise Remodeling Co',
+      title: `Contact ${SITE_CONFIG.name}`,
       description:
-        'Schedule a free in-home consultation or call our Treasure Valley design-build team.',
+        'Schedule a free planning consultation or call our Treasure Valley design-build home building team.',
       url: '/contact',
     }),
     generateBreadcrumbSchema([
@@ -203,7 +208,7 @@ export default function ContactPage() {
       { name: 'Contact', url: '/contact' },
     ]),
     generateFAQSchema(CONTACT_FAQS),
-    generateSpeakableSchema({ path: '/contact', name: 'Contact Boise Remodeling Co' }),
+    generateSpeakableSchema({ path: '/contact', name: `Contact ${SITE_CONFIG.name}` }),
   ];
 
   return (
@@ -214,7 +219,7 @@ export default function ContactPage() {
         <section className="relative min-h-[520px] md:min-h-[72vh] flex items-end overflow-hidden bg-inverse">
           <Image
             src={SITE_IMAGES.hero}
-            alt="Modern luxury home interior remodel in Boise Idaho Treasure Valley"
+            alt="Newly built modern home interior in Boise, Idaho"
             fill
             className="object-cover opacity-[0.82] img-brand-grade"
             sizes="100vw"
@@ -236,12 +241,12 @@ export default function ContactPage() {
             </p>
             <div className="brc-label brc-label-on-photo mt-6 mb-5">Get in touch</div>
             <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-4xl mb-6">
-              Contact Boise Remodeling{' '}
+              Contact Boise Construction{' '}
               <em className="brc-accent">Co</em>
             </h1>
             <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-6">
-              Schedule a free 60 to 90 minute in-home visit, call our team, or use the project
-              estimator to explore a planning range for your remodel.
+              Schedule a free 60 to 90 minute planning consultation, call our team, or use the build
+              cost estimator to explore a range for your new home.
             </p>
             <BusinessPhoneContact
               layout="stack"
@@ -346,7 +351,7 @@ export default function ContactPage() {
                 <ContactChannel
                   icon={<MapPin className="h-5 w-5" strokeWidth={1.5} />}
                   label="Service area"
-                  subtext="Free in-home visits across the Treasure Valley"
+                  subtext="Free planning consultations across the Treasure Valley"
                 >
                   <span className="text-sm leading-relaxed">{TREASURE_VALLEY_CITIES}</span>
                 </ContactChannel>
@@ -361,7 +366,7 @@ export default function ContactPage() {
             <div className="relative min-h-[260px] md:min-h-[520px] overflow-hidden bg-inverse order-2 md:order-1">
               <Image
                 src={SITE_IMAGES.leadership}
-                alt="Boise Remodeling Co team at a finished kitchen project"
+                alt={`${SITE_CONFIG.name} team reviewing plans at a build site`}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover img-brand-grade"
@@ -391,7 +396,7 @@ export default function ContactPage() {
                       <em className="brc-accent">Just answers.</em>
                     </>
                   }
-                  description="Your free 60 to 90 minute in-home visit is focused on planning guidance and an honest project range - not a commission-driven pitch."
+                  description="Your free 60 to 90 minute planning consultation is focused on what your build will actually cost and how long it will take - not a commission-driven pitch."
                   className="mb-8 max-w-none"
                 />
                 <ul className="flex flex-col gap-0 mb-8">
@@ -422,15 +427,15 @@ export default function ContactPage() {
             <div className="max-w-5xl mx-auto grid md:grid-cols-5 gap-12 items-start">
               <div className="md:col-span-2">
                 <Reveal>
-                  <div className="brc-label mb-5">Request your visit</div>
+                  <div className="brc-label mb-5">Request your consultation</div>
                   <h2 className="font-sans font-light text-[2rem] md:text-[2.75rem] leading-[1.08] tracking-tight mb-4 text-foreground">
-                    Tell us about your{' '}
-                    <em className="brc-accent">home</em>.
+                    Tell us about the home you want to{' '}
+                    <em className="brc-accent">build</em>.
                   </h2>
                   <p className="text-base leading-relaxed mb-8 text-muted-foreground">
                     Send a few details and we will reach out within one business day to schedule
-                    your free 60 to 90 minute in-home visit - planning guidance, design direction,
-                    and no obligation.
+                    your free 60 to 90 minute planning consultation - budget band, schedule, and
+                    site requirements, with no obligation.
                   </p>
                 </Reveal>
               </div>
@@ -478,7 +483,7 @@ export default function ContactPage() {
               <em className="brc-accent">call</em>?
             </>
           }
-          description="Use our online project estimator for an instant Treasure Valley planning range - then schedule your free in-home visit when you're ready for a written scope."
+          description="Use our online build cost estimator for an instant Treasure Valley range - then schedule your free consultation when you're ready for a written, line-item budget."
           variant="canvas"
         />
 

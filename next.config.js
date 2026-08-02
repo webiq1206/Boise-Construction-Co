@@ -1,4 +1,10 @@
 const path = require('path');
+const {
+  BLOG_REDIRECTS,
+  GUIDE_REDIRECTS,
+  HUB_REDIRECTS,
+  SERVICE_SLUG_REDIRECTS,
+} = require('./shared/content/contentRedirects');
 
 process.env.WS_NO_BUFFER_UTIL = '1';
 process.env.WS_NO_UTF_8_VALIDATE = '1';
@@ -77,12 +83,17 @@ const nextConfig = {
       '/get-a-free-quote': '/#consult',
       '/quote': '/#consult',
       '/estimate': '/#calculator',
-      '/portfolio': '/testimonials',
-      '/gallery': '/#gallery',
-      '/our-work': '/testimonials',
-      '/projects': '/testimonials',
-      '/reviews': '/testimonials',
-      '/our-reviews': '/testimonials',
+      // The gallery and testimonials both described fabricated remodels and
+      // were retired with the repositioning. Until real finished homes exist to
+      // show, every "see your work" intent resolves to the services index,
+      // which is the closest honest answer.
+      '/portfolio': '/services',
+      '/gallery': '/services',
+      '/our-work': '/services',
+      '/projects': '/services',
+      '/testimonials': '/about',
+      '/reviews': '/about',
+      '/our-reviews': '/about',
       '/our-services': '/#services',
       '/all-services': '/',
       '/pricing': '/#calculator',
@@ -117,15 +128,32 @@ const nextConfig = {
       redirects.push(...r(source, destination));
     }
 
-    const blogRedirects = {
-      '/blog/kitchen-remodel-cost-treasure-valley': '/blog/kitchen-remodel-cost-boise',
-      '/blog/bathroom-remodel-cost-idaho': '/blog/bathroom-remodel-cost-boise',
-      // ROI near-duplicate consolidation (audit §D)
-      '/blog/kitchen-roi-remodeling': '/blog/kitchen-remodel-roi',
-      '/blog/bathroom-roi-remodeling': '/blog/bathroom-remodel-roi',
-    };
-    for (const [source, destination] of Object.entries(blogRedirects)) {
-      redirects.push(...r(source, destination));
+    // Remodeling-to-construction repositioning. See
+    // shared/content/contentRedirects.js for why each destination was chosen.
+    for (const map of [BLOG_REDIRECTS, GUIDE_REDIRECTS, HUB_REDIRECTS]) {
+      for (const [source, destination] of Object.entries(map)) {
+        redirects.push(...r(source, destination));
+      }
+    }
+
+    // Renamed downloads. A PDF URL is the kind of link that gets pasted into an
+    // email and clicked a year later, so the old filenames keep resolving.
+    redirects.push(
+      ...r('/downloads/remodel-budget-worksheet.pdf', '/downloads/new-home-budget-worksheet.pdf'),
+      ...r('/downloads/kitchen-bath-planning-checklist.pdf', '/downloads/lot-evaluation-checklist.pdf'),
+    );
+
+    // Retired service slugs, both the service page and every city variant. The
+    // city is preserved across the redirect so a Nampa visitor stays on a Nampa
+    // page - dropping them on the Boise page would lose the local intent that
+    // made the URL worth ranking.
+    for (const [oldSlug, newSlug] of Object.entries(SERVICE_SLUG_REDIRECTS)) {
+      redirects.push(...r(`/services/${oldSlug}`, `/services/${newSlug}`));
+      redirects.push({
+        source: `/services/${oldSlug}/:city`,
+        destination: `/services/${newSlug}/:city`,
+        permanent: true,
+      });
     }
 
     return redirects;

@@ -55,8 +55,8 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
             heading: content.costGuidance.heading,
             paragraphs: content.costGuidance.paragraphs,
             links: [
-              { label: 'Boise Remodeling Cost Guide', href: '/guides/boise-remodeling-cost-guide' },
-              { label: 'Get your planning range', href: '/#calculator' },
+              { label: 'Boise Home Building Cost Guide', href: '/guides/boise-remodeling-cost-guide' },
+              { label: 'Get your build cost range', href: '/#calculator' },
             ],
           },
         ]
@@ -64,8 +64,8 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
     {
       heading: `${service.name} across the Treasure Valley`,
       paragraphs: [
-        `We provide ${serviceLC} services throughout the Treasure Valley, with dedicated local pages for each city we serve. Permit paths, housing stock, and HOA requirements differ between Ada and Canyon County communities, so each city page covers the details that matter where you live.`,
-        `Choose your city below to see local ${serviceLC} guidance, or schedule a free in-home consultation to discuss your project directly.`,
+        `We provide ${serviceLC} services throughout the Treasure Valley, with dedicated local pages for each city we serve. Lot availability, permit paths, impact fees, and HOA design review differ between Ada and Canyon County communities, so each city page covers the details that matter where you plan to build.`,
+        `Choose your city below to see local ${serviceLC} guidance, or schedule a free planning consultation to discuss your build directly.`,
       ],
       links: CITIES.map((c) => ({
         label: `${service.name} in ${c.name}`,
@@ -75,8 +75,8 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
     {
       heading: `Why design-build for your ${serviceLC}`,
       paragraphs: [
-        `As a design-build remodeler, we bring design, estimating, permitting, and construction under one contract and one accountable team. That removes the handoffs and finger-pointing that happen when a separate designer and general contractor are involved - and it keeps your ${serviceLC} on a single, coordinated schedule.`,
-        `You get a written scope before construction begins, clear allowances for selections, proactive communication throughout the build, and a workmanship guarantee when the project is complete.`,
+        `As a design-build home builder, we bring architectural design, engineering, estimating, permitting, and construction under one contract and one accountable team. That removes the handoffs and finger-pointing that happen when the architect, the plan reviewer, and the general contractor all answer to someone different - and it keeps your ${serviceLC} on a single, coordinated schedule.`,
+        `You get a written scope and a fixed price before we break ground, clear allowances for every selection, a published draw schedule, weekly progress updates through the build, and a one-year workmanship warranty after you take possession.`,
       ],
     },
   ];

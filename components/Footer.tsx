@@ -149,7 +149,7 @@ export function Footer() {
             <ul className="space-y-2.5">
               {[
                 { label: "About", href: "/about" },
-                { label: "Our Work", href: "/testimonials" },
+                { label: "Guides", href: "/guides" },
                 // Sitewide link so the RE-10 page is reachable from every page
                 // and never ships orphaned.
                 { label: "RE-10 Repairs", href: "/re-10-repairs-boise" },

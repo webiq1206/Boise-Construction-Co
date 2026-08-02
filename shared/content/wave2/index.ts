@@ -49,6 +49,11 @@ import { energyEfficiencyRoi } from './energy-efficiency-roi';
 import { exteriorRemodelingRoi } from './exterior-remodeling-roi';
 import { outdoorKitchensBoise } from './outdoor-kitchens-boise';
 import { coveredPatiosBoise } from './covered-patios-boise';
+import { howToBuyABuildableLotBoise } from './how-to-buy-a-buildable-lot-boise';
+import { wellAndSepticCostIdaho } from './well-and-septic-cost-idaho';
+import { lotEvaluationChecklist } from './lot-evaluation-checklist';
+import { buildingInTheBoiseFoothills } from './building-in-the-boise-foothills';
+import { impactFeesAndUtilityConnections } from './impact-fees-and-utility-connections';
 
 /**
  * Wave 2: bespoke, comprehensive blog posts (1,600+ words, Answer-First,
@@ -115,4 +120,10 @@ export const WAVE2_POSTS: BlogPostData[] = [
   // Outdoor Living hub
   outdoorKitchensBoise,
   coveredPatiosBoise,
+  // Land & Lots hub
+  howToBuyABuildableLotBoise,
+  wellAndSepticCostIdaho,
+  lotEvaluationChecklist,
+  buildingInTheBoiseFoothills,
+  impactFeesAndUtilityConnections,
 ];

@@ -22,13 +22,14 @@ import { buildCanonical, FEED_ALTERNATES } from '@/lib/page-metadata';
 import { getBaseUrl } from '@/lib/seo';
 import { generateBreadcrumbSchema } from '@/lib/schema';
 import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
+import { SITE_CONFIG } from '@/shared/siteConfig';
 
-const TITLE = 'Remodeling Services | Treasure Valley';
+const TITLE = 'Home Building Services | Treasure Valley';
 const DESCRIPTION =
-  'Design-build remodeling in Boise, Meridian, Eagle, Nampa and the Treasure Valley. Kitchen, bathroom, whole-home, addition, and ADU projects under one accountable team.';
+  'Design-build home building in Boise, Meridian, Eagle, Nampa and the Treasure Valley. Custom homes, semi-custom homes, builds on your own lot, and permit-ready design under one accountable team.';
 
 export const metadata: Metadata = {
-  title: { absolute: `${TITLE} | Boise Remodeling Co` },
+  title: { absolute: `${TITLE} | ${SITE_CONFIG.name}` },
   description: DESCRIPTION,
   alternates: { canonical: buildCanonical('/services'), types: FEED_ALTERNATES },
   openGraph: {
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: buildCanonical('/services'),
     type: 'website',
-    images: [{ url: '/images/og-default.png', width: 1200, height: 630, alt: 'Boise Remodeling Co' }],
+    images: [{ url: '/images/og-default.png', width: 1200, height: 630, alt: SITE_CONFIG.name }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -57,7 +58,7 @@ export default function ServicesIndexPage() {
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Remodeling Services',
+    name: 'Home Building Services',
     itemListElement: SERVICES.map((service, i) => ({
       '@type': 'ListItem',
       position: i + 1,
@@ -72,17 +73,18 @@ export default function ServicesIndexPage() {
 
       <PageHeroBand
         imageSrc={SITE_IMAGES.statementBand}
-        imageAlt="Remodeled Treasure Valley great room with warm finishes and natural light"
+        imageAlt="Newly built Treasure Valley great room with vaulted ceiling and natural light"
       >
         <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Services' }]} />
         <div className="brc-label text-inverse-muted mt-6 mb-4">Our services</div>
         <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
-          Design-build expertise for every major{' '}
-          <em className="brc-accent">remodel</em>
+          Every way to build a{' '}
+          <em className="brc-accent">new home</em> here
         </h1>
         <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed">
-          One accountable team handles design, estimating, permitting, and construction under a single
-          contract, so your project stays aligned from the first in-home visit through the final walkthrough.
+          One accountable team handles feasibility, design, engineering, Ada and Canyon County permits,
+          and construction under a single contract, so your build stays aligned from the first planning
+          consultation through the day you get the keys.
         </p>
       </PageHeroBand>
 
@@ -96,7 +98,7 @@ export default function ServicesIndexPage() {
                     <div className="relative aspect-[4/3] overflow-hidden">
                       <Image
                         src={getServiceBackground(service.slug)}
-                        alt={`${service.name} project by Boise Remodeling Co`}
+                        alt={`${service.name} by ${SITE_CONFIG.name}`}
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         quality={70}
@@ -136,7 +138,7 @@ export default function ServicesIndexPage() {
                   Tell us about your <em className="brc-accent">project</em>
                 </h2>
                 <p className="text-sm leading-relaxed mb-5 text-muted-foreground">
-                  Every remodel starts with a free in-home visit and an honest planning range, with no obligation.
+                  Every build starts with a free planning consultation and an honest budget band, with no obligation.
                 </p>
                 <ConsultCTA variant="brand" className="self-start">
                   {CTA_PRIMARY}
@@ -154,7 +156,7 @@ export default function ServicesIndexPage() {
             <em className="brc-accent">commit</em>
           </>
         }
-        description="Use our Treasure Valley project estimator to see a realistic planning range for kitchen, bath, whole-home, and addition work - then book a free visit when you're ready."
+        description="Use our Treasure Valley build cost estimator to see a realistic range for a custom or semi-custom home, or a build on land you already own - then book a free consultation when you're ready."
       />
 
       <Section divider>
@@ -169,7 +171,7 @@ export default function ServicesIndexPage() {
                 <em className="brc-accent">valley</em>
               </>
             }
-            description="Permit paths, housing stock, and HOA requirements differ between Ada and Canyon County communities. Choose your city for local guidance."
+            description="Lot availability, permit paths, impact fees, and HOA design review differ between Ada and Canyon County communities. Choose your city for local guidance."
           />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
             {CITIES.map((city, i) => (
@@ -185,10 +187,10 @@ export default function ServicesIndexPage() {
         <div className="container px-4 max-w-2xl mx-auto">
           <MarketingCard className="cta-card-dark p-10 md:p-12 text-center">
             <h2 className="font-sans font-light text-section-title mb-4 text-inverse-foreground">
-              Ready to plan your <em className="brc-accent">remodel</em>?
+              Ready to plan your <em className="brc-accent">build</em>?
             </h2>
             <p className="text-inverse-muted mb-8 max-w-md mx-auto">
-              Book a free in-home visit or get an instant planning range for your project.
+              Book a free planning consultation or get an instant build cost range.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>

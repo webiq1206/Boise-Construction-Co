@@ -7,7 +7,8 @@ import { SITE_CONFIG } from "@/shared/siteConfig";
 import {
   takeoffForRange,
   takeoffForClient,
-  formatQuantity,  TAKEOFF_SCOPE_NOTICE,
+  formatQuantity,
+  TAKEOFF_SCOPE_NOTICE,
   type UnitCostOverrides,
 } from "@/shared/costCatalog";
 import { resolveInternalEstimate } from "@/shared/costs/resolve";
@@ -685,7 +686,7 @@ export function buildAdminEmailHtml(
   const firstName = firstNameOf(lead.name);
   const telHref = telHrefOf(lead.phone);
   const projectLabel = estimate ? PROJECT_LABELS[estimate.project].label : lead.projectType;
-  const mailtoSubject = encodeURIComponent(`Re: your ${projectLabel} project | Boise Remodeling Co`);
+  const mailtoSubject = encodeURIComponent(`Re: your ${projectLabel} project | ${SITE_CONFIG.name}`);
 
   return wrapEmailHtml({
     title: "New Consultation Request",
@@ -770,13 +771,13 @@ export function buildCustomerEmailHtml(
       <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">Thanks, ${escapeHtml(firstName)}. Here is the planning range you built.</p>
       ${buildEstimateSectionsHtml(estimate, overrides)}
       ${budgetNote}
-      <p style="color:${EMAIL_BRAND.text};line-height:1.6;">We will reach out within one business day to book your free in-home visit, where we confirm the scope and give you a firm number. Until then, reply here or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> with any questions.</p>
-      <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The Boise Remodeling Co team</p>
+      <p style="color:${EMAIL_BRAND.text};line-height:1.6;">We will reach out within one business day to book your free planning consultation, where we confirm the scope and give you a firm number. Until then, reply here or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> with any questions.</p>
+      <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The ${escapeHtml(SITE_CONFIG.name)} team</p>
     `
     : `
-      <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">We received your consultation request and will reach out within one business day to schedule your free in-home visit.</p>
+      <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">We received your consultation request and will reach out within one business day to schedule your free planning consultation.</p>
       <p style="color:${EMAIL_BRAND.text};line-height:1.6;">In the meantime, feel free to call us at <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a>, <a href="${SITE_CONFIG.phoneSmsHref}" style="color:${EMAIL_BRAND.accent};">send us a text</a>, or reply to this email with any questions.</p>
-      <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The Boise Remodeling Co team</p>
+      <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The ${escapeHtml(SITE_CONFIG.name)} team</p>
     `;
 
   return wrapEmailHtml({
@@ -796,6 +797,6 @@ export function buildAdminSubject(lead: LeadContact, estimate: VerifiedEstimate 
 export function buildCustomerSubject(lead: LeadContact, estimate: VerifiedEstimate | null): string {
   const projectLabel = estimate ? PROJECT_LABELS[estimate.project].label : lead.projectType;
   return estimate
-    ? `Your ${projectLabel} planning range | Boise Remodeling Co`
-    : "We received your request | Boise Remodeling Co";
+    ? `Your ${projectLabel} planning range | ${SITE_CONFIG.name}`
+    : `We received your request | ${SITE_CONFIG.name}`;
 }

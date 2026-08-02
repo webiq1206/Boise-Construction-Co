@@ -41,8 +41,8 @@ const PATH = "/re-10-repairs-boise";
  * Google truncates around 60 - so the words after the pipe were being written
  * for nobody. Primary term front-loaded, one secondary term, brand last.
  */
-// 56 characters including the brand.
-const TITLE_WITH_BRAND = "RE-10 and Inspection Repairs Boise | Boise Remodeling Co";
+// 57 characters including the brand.
+const TITLE_WITH_BRAND = "RE-10 and Inspection Repairs Boise | Boise Construction Co";
 // The social/OG variant does not carry the brand, which the card shows anyway.
 const TITLE = "RE-10 and Inspection Repairs in Boise";
 // 154 characters, benefit-led, ends on the action.
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: buildCanonical(PATH),
     type: "website",
-    images: [{ url: "/images/og-default.png", width: 1200, height: 630, alt: "Boise Remodeling Co" }],
+    images: [{ url: "/images/og-default.png", width: 1200, height: 630, alt: SITE_CONFIG.name }],
   },
   twitter: {
     card: "summary_large_image",
@@ -96,7 +96,7 @@ export default function Re10RepairsPage() {
       {/* ------------------------------------------------------------ hero */}
       <PageHeroBand
         imageSrc={SITE_IMAGES.processInProgress}
-        imageAlt="Boise Remodeling Co carpenter completing inspection repairs in a Treasure Valley home before closing"
+        imageAlt={`${SITE_CONFIG.name} carpenter completing inspection repairs in a Treasure Valley home before closing`}
         scrim={0.86}
       >
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "RE-10 Repairs" }]} />
@@ -145,28 +145,37 @@ export default function Re10RepairsPage() {
       <Section variant="greige" divider>
         <div className="container px-4 max-w-3xl mx-auto">
           <SectionHeader
-            eyebrow="Why this is different work"
+            eyebrow="Why a home builder does this work"
             size="display"
             title={
               <>
-                An inspection repair is not a{" "}
-                <em className="brc-accent">remodel</em>
+                An inspection repair is a deadline problem wearing{" "}
+                <em className="brc-accent">a tool belt</em>
               </>
             }
             className="mb-6"
           />
           <div className="space-y-4 text-sm md:text-base text-muted-foreground leading-relaxed">
             <p>
-              A remodel has one client and a flexible date. An RE-10 has a contractual deadline, two
-              sides who have already argued about the price, an inspection report behind every line,
-              an occupant whose home it still is, and a closing that does not move because a
-              contractor was slow.
+              We build new homes. That is the main thing we do, and it is fair to ask why a builder
+              takes on a repair list. The answer is that an RE-10 is not really a construction
+              problem. Nothing on a typical list is difficult. What is difficult is that six
+              unrelated trades have to be sequenced through an occupied house and finished before a
+              date that will not move, and that is the same problem we solve on every build.
             </p>
             <p>
-              That is a coordination problem as much as a construction one. We treat it that way: we
-              ask for the deadline and the closing date before we quote, we confirm access in
-              writing, we tell you the same day if something behind a wall changes the scope, and we
-              document what was done so nobody has to take anyone&apos;s word for it.
+              A new home has one client and a schedule we control. An RE-10 has a contractual
+              deadline, two sides who have already argued about the price, an inspection report
+              behind every line, an occupant whose home it still is, and a closing that does not
+              move because a contractor was slow.
+            </p>
+            <p>
+              So we treat it as coordination first: we ask for the deadline and the closing date
+              before we quote, we confirm access in writing, we tell you the same day if something
+              behind a wall changes the scope, and we document what was done so nobody has to take
+              anyone&apos;s word for it. The trade partners who do the work are the same ones who
+              frame, wire and plumb our houses, which is why we can put six of them in one property
+              in one week.
             </p>
           </div>
         </div>
@@ -445,7 +454,7 @@ export default function Re10RepairsPage() {
             className="mb-6"
           />
           <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-5">
-            Boise Remodeling Co provides RE-10 and home inspection repair services for real estate
+            {SITE_CONFIG.name} provides RE-10 and home inspection repair services for real estate
             agents, buyers and sellers in {RE10_SERVICE_AREAS.slice(0, -1).join(", ")} and{" "}
             {RE10_SERVICE_AREAS[RE10_SERVICE_AREAS.length - 1]}. We are based in{" "}
             {SITE_CONFIG.address.cityState} and work across the Treasure Valley.
@@ -463,13 +472,13 @@ export default function Re10RepairsPage() {
             <Link href="/about" className="underline underline-offset-4 hover:text-foreground">
               about the company
             </Link>{" "}
-            and{" "}
-            <Link href="/testimonials" className="underline underline-offset-4 hover:text-foreground">
-              what clients say
-            </Link>
-            . Planning a larger project instead?{" "}
+            and the{" "}
+            <Link href="/areas/boise" className="underline underline-offset-4 hover:text-foreground">
+              Boise area
+            </Link>{" "}
+            specifically. Building a new home instead?{" "}
             <Link href="/estimate" className="underline underline-offset-4 hover:text-foreground">
-              Use the remodel estimator
+              Use the build cost estimator
             </Link>
             .
           </p>

@@ -149,7 +149,7 @@ export function buildRe10CustomerEmail(
     </div>
 
     <p style="color:${EMAIL_BRAND.text};line-height:1.6;">Next step is a short onsite visit to confirm the scope, price the items listed below as needing a look, and get you on the schedule. Reply here or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> and we will get it scheduled against your deadline.</p>
-    <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The Boise Remodeling Co team</p>
+    <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The ${SITE_CONFIG.name} team</p>
   `;
 
   return wrapEmailHtml({

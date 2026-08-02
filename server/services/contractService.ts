@@ -362,7 +362,7 @@ export async function seedDefaultContractTemplate(): Promise<void> {
     name: "Standard Subcontractor Agreement",
     version: "1.0",
     bodyHtml: `<h2>Subcontractor Agreement</h2>
-<p>This agreement is entered into between Boise Remodeling Co and {{contractor.company}} ({{contractor.name}}).</p>
+<p>This agreement is entered into between Boise Construction Co and {{contractor.company}} ({{contractor.name}}).</p>
 <h3>Project Details</h3>
 <p><strong>Project:</strong> {{project.title}}<br/>
 <strong>Address:</strong> {{project.address}}, {{project.city}}<br/>

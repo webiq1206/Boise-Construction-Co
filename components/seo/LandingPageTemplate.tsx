@@ -552,7 +552,7 @@ export function LandingPageTemplate({
               What might your <em className="brc-accent">project</em> cost?
             </>
           }
-          description="Get an instant planning range based on real Treasure Valley remodel costs - about 60 seconds, no obligation."
+          description="Get an instant planning range based on real Treasure Valley build costs - about 60 seconds, no obligation."
         />
       )}
 

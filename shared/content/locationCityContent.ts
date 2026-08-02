@@ -1,255 +1,206 @@
-import { PILLAR_COST, type ContentSection } from './wave1/snippets';
+import { type ContentSection } from './wave1/snippets';
 
-/** City- and neighborhood-specific sections (not shared templates). */
+/**
+ * City- and neighborhood-specific new-construction sections.
+ *
+ * Keyed by place rather than by full guide slug so the lookup survives slug
+ * changes. `getCitySpecificSections` resolves the longest matching place key,
+ * which keeps `harris-ranch-*` from resolving to `boise` and
+ * `eagle-foothills-*` from resolving to `eagle`.
+ */
+
+const COST_GUIDE = '/guides/boise-home-building-cost-guide';
+const LAND_GUIDE = '/guides/buying-land-to-build-boise';
+const TV_GUIDE = '/guides/treasure-valley-home-building-guide';
+const PERMIT_ARTICLE = '/blog/ada-vs-canyon-county-permit-timelines';
 
 const CITY_SNIPPETS: Record<string, ContentSection[]> = {
-  'meridian-remodeling-guide': [
+  boise: [
     {
-      h2: 'Meridian subdivisions and open-kitchen demand',
+      h2: 'What building a new home in Boise actually involves',
       paragraphs: [
-        '1990s–2010s builder-grade kitchens and baths are the most common upgrade path - homeowners want islands, pantry storage, and better connection to family rooms without leaving the subdivision aesthetic.',
-        'Rear-entry mudrooms and drop-zone storage are popular where garage traffic meets kitchen clutter.',
+        '<strong>Boise is the most built-out city in the valley, so nearly all new construction here is infill.</strong> That means a scattered vacant lot in an established neighborhood, a parcel that comes available when an older house comes down, a split lot, or a site up in the foothills. There is very little raw subdivision ground left inside the city limits, and the lots that do come up tend to move quickly.',
+        'Infill has its own cost profile. Water, sewer, and power are usually already in the street, which keeps site work in the serviced range, but the lot is tight, the neighbors are close, and there is nowhere obvious to stage material or park trades. Mature trees, alleys, existing retaining, and a grade that was set decades ago all have to be built around rather than graded away.',
       ],
     },
     {
-      h2: 'Meridian housing stock by era',
+      h2: 'Boise lots: flat and serviced in town, steep above it',
       paragraphs: [
-        'Meridian grew from under 10,000 residents in 1990 to well over 100,000 today, so most of its housing is production-built from three distinct waves. Early-1990s homes around the old downtown core often have compartmentalized kitchens, oak trim, and original electrical panels worth evaluating. The 2000s wave - Lochsa Falls, Paramount, and the subdivisions feeding The Village at Meridian - delivered open-ish great rooms that still hide undersized islands and builder-grade baths. Post-2015 construction near Ten Mile and Chinden mostly needs finish-level upgrades rather than layout surgery.',
-        'Because so many Meridian homes share the same few floor plans, we can often show you a finished remodel of nearly your exact layout before design begins. ZIP codes 83642 and 83646 are both fully inside our service area.',
-      ],
-    },
-    {
-      h2: 'What Meridian homeowners remodel most',
-      paragraphs: [
-        'Kitchen opening and island upsizing lead inquiries, followed by primary bath upgrades from garden-tub-and-stall layouts to walk-in shower suites. Bonus-room conversions over garages make strong home offices, and larger Tuscany and Meridian Ranch lots support room additions when families outgrow the footprint but want to keep their schools.',
-      ],
-    },
-    {
-      h2: 'Meridian permits and trade scheduling',
-      paragraphs: [
-        'Ada County review applies for structural and MEP changes. Peak summer trade demand can extend construction - book design before spring if you want fall completion.',
+        'The valley floor and the foothills are two different building problems. A flat serviced lot on the Bench, in the North End, or on the west side is the cheapest ground in the city to build on. A foothills lot brings slope, driveway grade, geotechnical requirements, retaining, and wildland-urban interface considerations, and steep sites with a high level of detail regularly run above $450 per finished square foot.',
+        'Boise also carries more design constraint than the newer cities around it. Lot coverage, setbacks, and height limits are tighter on older platted lots, and new construction inside a historic district goes through exterior design review before the building permit is issued. We check the zoning envelope and any overlay during feasibility so the plan is drawn to what the lot will actually allow.',
       ],
     },
   ],
-  'eagle-remodeling-guide': [
+  meridian: [
     {
-      h2: 'Eagle finish level and HOA design review',
+      h2: 'Meridian building is subdivision building',
       paragraphs: [
-        'Larger footprints and premium materials are normal here - budget for architectural review time and exterior material boards in Harris Ranch, Hidden Springs, and Foothills communities.',
-        'Roof and stone tie-ins matter when additions must match executive streetscapes.',
+        '<strong>Meridian is the fastest-growing city in the valley, and nearly all of its new houses go up on platted subdivision lots rather than one-off parcels.</strong> If you are building here, you are most likely buying a lot from a developer inside an active phase, or building on a lot you already picked up in one. Acreage inside the city is rare.',
+        'The practical upside is that the ground is serviced. City water, sewer, and pressurized irrigation are typically stubbed to the lot, so site work sits in the $25,000 to $50,000 range rather than the $80,000 to $150,000 a rural parcel needs for a well, a septic system, and access. Very little of what gets built inside Meridian needs a well.',
       ],
     },
     {
-      h2: 'Eagle housing stock and what drives remodels',
+      h2: 'HOA design review and narrow lots',
       paragraphs: [
-        'Eagle (ZIP 83616) carries the highest median finish level in our service area. Estates along the Boise River corridor and golf-course communities like Banbury and Eagle Hills date largely from the 1990s and 2000s: big footprints with dated kitchens, sunken living rooms, and primary baths built around corner garden tubs. Newer foothills construction in Shadow Valley and The Estates trends contemporary and usually needs personalization rather than reconfiguration.',
-        'The common thread in Eagle remodels is bringing 1990s-2000s luxury up to current-decade luxury: panel-ready appliances, full-height backsplashes, curbless wet-room baths, and outdoor living that takes advantage of larger lots near Eagle Island State Park.',
-      ],
-    },
-    {
-      h2: 'Eagle additions and master suites',
-      paragraphs: [
-        'Second stories and master-suite expansions are common; engineering and longer Ada review should be in the calendar from day one.',
-        'Floating Feather corridor properties on acreage are also strong ADU and guest-house candidates, with setback room that smaller in-town lots lack.',
+        '<strong>Most newer Meridian subdivisions run their own architectural review, and it is the step people forget to schedule.</strong> Guidelines commonly cover elevation style, exterior materials and colors, roof pitch, garage orientation, minimum finished square footage, and how closely your front can resemble the house three doors down. Review runs alongside the city submittal, and learning late that the committee wants a different elevation means redrawing sheets.',
+        'The second Meridian constraint is lot geometry. Subdivision lots are often narrow, and side setbacks eat into that width quickly, which pushes plans taller and deeper rather than wider. We size the plan to the actual recorded lot dimensions before design gets far, and we prepare the architectural submittal as part of that work.',
       ],
     },
   ],
-  'kuna-remodeling-guide': [
+  eagle: [
     {
-      h2: 'Kuna growth and family-focused layouts',
+      h2: 'Eagle: bigger lots, higher finish, more site work',
       paragraphs: [
-        'Newer inventory favors kitchen refreshes, laundry/mudroom upgrades, and ADU feasibility on larger lots with alley access.',
-        'Open kitchen conversions are frequent where builder layouts still feel compartmentalized.',
+        '<strong>Eagle is where the larger lots are, and the houses match them.</strong> Acreage along the river corridor, estate parcels north of town, and foothills sites make up much of what is available, and buyers here generally build in the upper half of the custom band rather than the lower. Plan on $250 to $400 per finished square foot excluding land, with detailed foothills builds regularly above $450.',
+        'Larger and further out also means less of Eagle is serviced. Parcels outside city utilities need a well, a septic system, and sometimes a power extension or a private drive, commonly adding $80,000 to $150,000 before a foundation is poured. Septic on a rural Ada County parcel is permitted through Central District Health, and the soil work behind it should happen before the plan is finalized, not after.',
       ],
     },
     {
-      h2: 'Kuna housing stock: young city, young homes',
+      h2: 'Slope, views, and architectural committees in Eagle',
       paragraphs: [
-        'Kuna (ZIP 83634) is one of Idaho\'s fastest-growing cities, and most of its housing postdates 2000. Subdivisions like Crimson Point and developments along the Indian Creek and Ten Mile Creek corridors deliver solid bones with builder-grade everything: laminate counters, basic stall showers, and kitchens that face away from the living space. That makes Kuna remodels efficient - structure rarely needs correction, so budget goes into the finishes and flow homeowners actually feel.',
-        'Older properties near the original downtown grid by Indian Creek Plaza are the exception, where 20th-century homes can need electrical and layout work alongside cosmetic updates.',
-      ],
-    },
-    {
-      h2: 'Why Kuna families remodel instead of move',
-      paragraphs: [
-        'Kuna offers some of the valley\'s most attainable lots, and many owners bought intending to grow into the home. Kitchen-and-bath packages timed a few years after purchase are the standard path, and larger lots make room additions and ADUs feasible where Boise infill lots are too tight.',
+        'On a view lot the grade drives the floor plan more than the floor plan drives the lot. Where the slope falls determines whether you get a walkout or a daylight lower level, where the driveway can land at a usable pitch, how much retaining is required, and which rooms face the view. Sloped sites need a geotechnical report and engineered foundations, and that work belongs at the front of the schedule.',
+        'Many Eagle communities also run an architectural committee with real authority over exterior materials, rooflines, and color palettes. We build that review into the design phase rather than treating it as a permit afterthought.',
       ],
     },
   ],
-  'star-remodeling-guide': [
+  kuna: [
     {
-      h2: 'Star housing and commuter-friendly upgrades',
+      h2: 'Kuna still has ground, and much of it is former farmland',
       paragraphs: [
-        'Smaller footprints benefit from smart storage and efficient kitchen layouts. Outdoor connection to patios is a common second phase after interior work.',
+        '<strong>Kuna is one of the few Ada County cities where you can still choose between a serviced subdivision lot and an acreage parcel.</strong> Inside the city, newer plats are serviced and site work sits in the $25,000 to $50,000 range. Out toward the farm ground and the desert edge, parcels are larger, cheaper per acre, and usually not on city utilities.',
+        'A rural Kuna parcel typically needs a well, a septic system permitted through Central District Health, and sometimes a driveway of real length or a power extension. That package commonly runs $80,000 to $150,000 before construction starts, and it is the number that surprises buyers who compared the land price against a subdivision lot and assumed they were saving money.',
       ],
     },
     {
-      h2: 'Star housing stock along the river corridor',
+      h2: 'Irrigation, canals, and what people build in Kuna',
       paragraphs: [
-        'Star (ZIP 83669) doubled in population over the last decade, and its housing splits into riverside acreage properties near Star Riverfront Park and newer subdivisions like Star River Ranch built since the mid-2000s. The newer stock needs the familiar builder-grade upgrade path: kitchen islands, pantry storage, and primary bath improvements. Acreage properties along the Boise River often support additions, shops, and guest quarters that subdivision lots cannot.',
-        'Star sits at the Ada-Canyon county line, so the permit jurisdiction for your address is worth confirming before design - we handle both and check this on the first visit.',
-      ],
-    },
-  ],
-  'middleton-remodeling-guide': [
-    {
-      h2: 'Middleton and Canyon County permitting',
-      paragraphs: [
-        'Canyon County portals and review cadence differ from Ada - confirm jurisdiction early if your address is near county lines.',
-        'Cross-county trade coordination can add mobilization time; plan one contract with a team that works both corridors regularly.',
-      ],
-    },
-    {
-      h2: 'Middleton housing stock and remodel patterns',
-      paragraphs: [
-        'Middleton (ZIP 83644) mixes century-old farmhouse stock near the original townsite with newer subdivisions like Middleton Heights and acreage properties toward Purple Sage. Farmhouse-era homes reward careful remodeling: original footprints are small, so kitchen openings and primary suite additions deliver outsized livability gains, but knob-and-tube wiring and undersized panels should be budgeted for upgrade when walls open.',
-        'Newer Middleton subdivisions follow the standard builder-grade path - kitchen, bath, and storage upgrades - while acreage owners frequently add shops, guest quarters, and outdoor living that town lots cannot fit.',
+        'Most of the ground around Kuna was irrigated farmland, which leaves laterals, delivery ditches, and irrigation district easements crossing parcels. You cannot build over an easement, the district has to approve any crossing or piping, and the water right that comes with the parcel carries an obligation to keep delivery working for the neighbors downstream. That all belongs on the site plan, not at excavation.',
+        'Because land is more attainable here, Kuna budgets tend to go into the house and the outbuilding rather than the dirt. Shop homes and barndominiums are a common answer on acreage, at $150 to $250 per square foot blended across living and shop space.',
       ],
     },
   ],
-  'nampa-remodeling-guide': [
+  star: [
     {
-      h2: 'Nampa housing mix: bungalows to new build',
+      h2: 'Star is growing fast on former farm ground',
       paragraphs: [
-        'Older bungalows may need electrical and layout creativity; newer sections allow faster cosmetic-to-full-gut paths. Canyon County submission rules apply throughout.',
-        'Kitchen and bath still dominate inquiries - whole-home refreshes are growing in established neighborhoods.',
+        '<strong>Star has two kinds of buildable ground, and which one you have changes the budget more than anything about the house.</strong> Inside the city, new subdivisions on former farmland are serviced and behave much like Meridian, with $25,000 to $50,000 of site work and subdivision design guidelines to satisfy. Outside it, acreage along the river corridor and the surrounding farm ground usually needs a well and a septic system, moving site work into the $80,000 to $150,000 range.',
+        'Star sits in Ada County, so permits follow the Ada County path even though the Canyon County line is close by. If your address is near that line, confirming jurisdiction before design starts is worth the phone call, and we make it on the first visit.',
       ],
     },
     {
-      h2: 'Nampa neighborhoods and housing eras',
+      h2: 'What to check on a Star parcel',
       paragraphs: [
-        'Nampa is the second-largest city in the Treasure Valley, and its housing spans a full century. Early-1900s bungalows and cottages around Downtown Nampa and the Nampa Train Depot have charm and small, divided rooms; opening them up takes structural diligence and almost always reveals electrical work worth doing while walls are open. Mid-century neighborhoods like Greenhurst offer ranch layouts that convert beautifully to open plans. The Karcher corridor and newer south-side subdivisions near Lake Lowell follow the modern builder-grade pattern where finish-level upgrades go furthest.',
-        'ZIP codes 83651, 83686, and 83687 are all in our regular rotation, and Nampa\'s lower entry prices mean remodel budgets often stretch further here than anywhere else in the valley.',
-      ],
-    },
-    {
-      h2: 'Value math in Nampa',
-      paragraphs: [
-        'Because Nampa home values trail Boise and Eagle, the over-improvement risk is real: a luxury-tier kitchen can exceed what the street supports at resale. We design to your neighborhood comps - mid-range packages with durable finishes are usually the sweet spot, and our ROI guidance covers when to stretch and when to hold.',
+        'Former irrigated ground brings district easements, laterals, and pressurized irrigation obligations that constrain where the house, the drive, and a septic drainfield can sit. Annexation status matters too: a parcel not yet inside the city may be reviewed differently and may not have services at the property line even when the subdivision across the road does.',
+        'Construction costs otherwise follow the valley bands. A custom home runs $250 to $400 per finished square foot and a semi-custom home $225 to $300, both excluding land and both before site work.',
       ],
     },
   ],
-  'caldwell-remodeling-guide': [
+  nampa: [
     {
-      h2: 'Caldwell housing stock and downtown revival',
+      h2: 'Nampa: Canyon County permitting and lower land cost',
       paragraphs: [
-        'Caldwell ranges from historic homes near Cleveland Blvd and the College of Idaho to newer construction in Ustick and Wilson - older properties often need electrical, layout, and window updates when kitchens or baths open up.',
-        'The downtown revival around Indian Creek Plaza has renewed interest in remodeling established homes rather than relocating, with kitchen, bath, and whole-home refreshes leading inquiries.',
+        '<strong>Nampa is the largest city in Canyon County, and building here follows a different permit path than Ada.</strong> Canyon County uses its own portal and its own review cadence, and a builder who only works in Boise and Meridian will feel the difference. We work both counties regularly and prepare the submittal the way the reviewing jurisdiction expects to receive it.',
+        'New construction in Nampa splits between infill on the older grid near downtown and new subdivisions on the south and west edges. Land generally costs less here than in Ada County, which is why Nampa is often where a given budget buys both the lot and the house rather than forcing a choice between them.',
       ],
     },
     {
-      h2: 'What Caldwell remodels typically involve',
+      h2: 'Serviced lots and rural parcels around Nampa',
       paragraphs: [
-        'In the College of Idaho and Cleveland Blvd districts (ZIP 83605), early-20th-century homes carry original hardwood, plaster walls, and small service kitchens. The winning approach opens the kitchen to dining while preserving the trim and proportions that make these streets desirable. Out toward Ustick and the newer west side (ZIP 83607), production homes from the 2000s onward follow the standard upgrade arc: island kitchens, walk-in showers, and storage.',
-        'Caldwell\'s value pricing also makes it the valley\'s strongest market for whole-home refreshes - buying an established home below Boise prices and putting the difference into a remodel designed around how you live.',
-      ],
-    },
-    {
-      h2: 'Caldwell permits and Canyon County coordination',
-      paragraphs: [
-        'Caldwell remodels route through Canyon County plan review, which uses different portals and inspection cadence than Ada County - confirm jurisdiction early if your address sits near county or city lines.',
-        'We design for the local semi-arid high-desert climate, planning insulation, ventilation, and exterior materials that handle Treasure Valley freeze-thaw cycles.',
+        'Inside the city, lots are serviced and site work runs $25,000 to $50,000: excavation, foundation prep, utility connections, driveway, and final grade. Head out toward Lake Lowell and the surrounding farm ground and you are into well and septic territory, where $80,000 to $150,000 is the honest planning number once access and power are included.',
+        'Construction cost itself does not fall because the address is in Nampa. Labor and materials price about the same across the valley, so a custom home is still $250 to $400 per finished square foot and a semi-custom home $225 to $300, excluding land. What changes in Nampa is what the ground under it costs.',
       ],
     },
   ],
-  'north-end-remodeling-guide': [
+  caldwell: [
     {
-      h2: 'North End scale and character',
+      h2: 'Caldwell is where farm ground becomes homesites',
       paragraphs: [
-        'Bungalow footprints reward creative storage, respectful additions, and electrical upgrades when walls open. Oversized additions can fight neighborhood rhythm - design for the street.',
-        'Galley-to-open plans need beam and permit diligence in Ada County.',
+        '<strong>More of what gets built in Caldwell sits on land that was recently agricultural, and that shapes the entire project.</strong> Parcels split off larger farms are common, acreage is easier to find than in Ada County, and a good share of it sits outside city services. Caldwell also has infill on established streets near the older core, which is a completely different exercise on a much smaller lot.',
+        'A parcel outside services needs a well, a septic system, and often a long driveway and a power extension, commonly $80,000 to $150,000 before a foundation is poured. Soil and percolation testing should happen before the plan is finished, because where the drainfield is allowed to go frequently decides where the house can go.',
       ],
     },
     {
-      h2: 'Remodeling around historic-district review',
+      h2: 'Irrigation rights, soils, and Canyon County review',
       paragraphs: [
-        'Parts of the North End fall inside Boise historic districts, where exterior changes - additions, window replacements, porch work - go through a certificate-of-appropriateness review before building permits. Interior remodels generally do not trigger historic review, which is why kitchen, bath, and basement projects are the North End\'s bread and butter. We flag district boundaries during feasibility so review time is in the schedule, not a surprise.',
-        'Common scope in these 1900s-1940s homes near Hyde Park: opening a galley kitchen to the dining room with a properly engineered beam, adding a primary bath where a closet or porch allows, and panel upgrades from 60-amp services that predate modern loads. Basements with decent ceiling height are the cheapest square footage in the neighborhood.',
-      ],
-    },
-  ],
-  'boise-bench-remodeling-guide': [
-    {
-      h2: 'Bench ranches and open kitchen conversions',
-      paragraphs: [
-        'Mid-century ranches are prime for opening kitchen to living space when structure allows. Insulation and panel updates often appear once drywall is removed.',
-        'Window and exterior upgrades sometimes pair with interior remodels for comfort in older building envelopes.',
-      ],
-    },
-    {
-      h2: 'Why the Bench is the valley\'s best remodel value',
-      paragraphs: [
-        'The Bench (largely ZIPs 83705 and 83709) is stacked with 1950s-1970s ranches and split-levels on real lots, minutes from downtown, at prices well under the North End. These homes were built with straightforward framing that takes well to open-concept conversion: kitchen walls are often non-bearing or easily beamed, and single-level layouts adapt naturally for aging in place with curbless showers and widened doorways.',
-        'Plan for the era\'s known conditions: 100-amp panels that need upsizing for induction ranges and heat pumps, minimal insulation in 2x4 walls worth addressing while drywall is open, and original galvanized supply lines in pre-1960 homes. None are dealbreakers - they are just line items an experienced local team budgets up front rather than discovering mid-build.',
+        'Converted farm ground carries irrigation district easements, delivery ditches, and water rights with obligations attached. Crossing or piping a lateral needs district approval, and the easement itself is not buildable area. Old farm ground can also hide buried debris, filled areas, and soft soils where a building pad or a corral used to be, which is why a geotechnical look is inexpensive insurance on a rural Caldwell parcel.',
+        'Permits route through Canyon County, on a different portal and review cadence than Ada. Shop homes and barndominiums are popular on Caldwell acreage at $150 to $250 per square foot blended, and a conventional custom home runs $250 to $400 per finished square foot excluding land.',
       ],
     },
   ],
-  'harris-ranch-remodeling-guide': [
+  middleton: [
     {
-      h2: 'Harris Ranch builder-grade upgrades',
+      h2: 'Middleton is small, semi-rural, and mostly acreage',
       paragraphs: [
-        'Islands, mudrooms, and outdoor entertaining upgrades are common. HOAs may review exterior materials - start design before ordering stone or roofing tie-ins.',
+        '<strong>Middleton building is dominated by acreage parcels and small subdivisions rather than large master-planned phases.</strong> The town is compact, the ground around it is farmland and rural residential, and the lots that come available are often an acre or several rather than a quarter of one. That is the appeal, and it is also most of the budget conversation.',
+        'Parcels outside the serviced core need a well, a septic system, and access work, commonly $80,000 to $150,000 before construction begins. Inside a serviced subdivision, site work drops back to $25,000 to $50,000. Establishing which one you are buying is the single most valuable thing you can do before writing an offer.',
       ],
     },
     {
-      h2: 'Remodeling in a master-planned community',
+      h2: 'Building on a Middleton acreage parcel',
       paragraphs: [
-        'Harris Ranch in East Boise (ZIP 83716) is one of the valley\'s premier master-planned communities, built mostly since the mid-2000s along the Boise River and Greenbelt. Structures are young, so remodels here are about elevation, not correction: taking builder-spec kitchens to chef-grade with panel-ready appliances and full-height splash, converting tub-and-stall primary baths to wet rooms, and building out covered outdoor kitchens that use the foothills views.',
-        'The community\'s design standards mean exterior changes need architectural review alongside city permits. We prepare the material boards and submittals as part of design, and interior-only projects skip that layer entirely.',
-      ],
-    },
-  ],
-  'east-boise-remodeling-guide': [
-    {
-      h2: 'East Boise infill and newer construction',
-      paragraphs: [
-        'Primary suite upgrades, open kitchens, and media/flex rooms are frequent. Lot coverage and setback checks matter on infill lots before addition pricing is firm.',
-      ],
-    },
-    {
-      h2: 'East Boise housing range: Warm Springs to the foothills',
-      paragraphs: [
-        'East Boise (ZIPs 83712 and 83716) spans more housing eras than any other part of the city: stately early-1900s homes along the Warm Springs corridor with its geothermal heating district, mid-century neighborhoods toward Table Rock, and contemporary construction in Harris Ranch and the river corridor. Each calls for a different remodel playbook - preservation-minded updates near Warm Springs, open-concept conversions in mid-century stock, and finish-level elevation in newer builds.',
-        'Proximity to the Greenbelt and foothills trailheads keeps East Boise demand strong, which supports more ambitious remodel budgets than most of the valley. Additions still need early setback and lot-coverage checks on the older, tighter lots.',
+        'On acreage the site plan comes before the floor plan. A well and a septic drainfield need required separation from each other and from property lines, the driveway may be hundreds of feet of gravel or paving, power may need extending from the nearest pole, and irrigation easements from the surrounding farm ground can cut straight across what looked like the best building spot.',
+        'Middleton permits route through Canyon County, which uses a different portal and review cadence than Ada. Owners here often build a house and a shop together, and shop homes run $150 to $250 per square foot blended across living and shop space.',
       ],
     },
   ],
-  'hidden-springs-remodeling-guide': [
+  'eagle-foothills': [
     {
-      h2: 'Hidden Springs HOA and exterior coordination',
+      h2: 'Foothills sites: slope, access, and geotechnical work',
       paragraphs: [
-        'Architectural review adds calendar time. Exterior remodels should match community standards for stone, roofing, and color palettes.',
-        'Interior kitchen and bath work still dominates, often with premium fixture levels.',
+        '<strong>A foothills lot is the most expensive ground in the valley to build on, and most of the difference is in the site rather than the house.</strong> Slope drives foundation design, retaining, and driveway grade. Access determines whether concrete trucks and a crane can reach the pad. A geotechnical report is not optional. Steep sites with a high level of detail regularly run above $450 per finished square foot against $250 to $400 for a valley-floor custom home.',
+        'Most Eagle foothills parcels are also off city services, so a well, a septic system permitted through Central District Health, and often a power extension add $80,000 to $150,000. Wildland-urban interface considerations affect exterior materials, defensible space, and access width, and they are cheaper to design for than to retrofit.',
       ],
     },
     {
-      h2: 'Hidden Springs homes, twenty years on',
+      h2: 'Designing to a view lot',
       paragraphs: [
-        'Hidden Springs is a planned village in the Boise foothills (ZIP 83714) built mostly between the late 1990s and 2010s, with traditional architecture and tight community design standards. The first generation of homes is now at the classic remodel age: kitchens and primary baths that were premium in 2002 read dated next to current finishes, and owners who love the community\'s schools, trails, and village core are upgrading in place rather than leaving.',
-        'Typical scope runs kitchen refreshes with island reconfiguration, wet-room primary bath conversions, and basement build-outs. Anything touching the exterior - windows, doors, rooflines, additions - goes through the community\'s architectural review first, and we build that step into every Hidden Springs schedule.',
+        'The grade decides the plan. Where the slope falls sets whether you get a walkout lower level, where the garage can sit without an unusable driveway pitch, and which rooms face the view. Drainage has to be engineered rather than assumed, because water that used to run across an open hillside now runs across your house and your driveway.',
+        'We sequence engineering and Ada County review early and aim to get site work into the dry season, when hillside access is workable and the schedule is not fighting the weather.',
       ],
     },
   ],
-  'eagle-foothills-remodeling-guide': [
+  'hidden-springs': [
     {
-      h2: 'Foothills lots, soil, and structural complexity',
+      h2: 'Building in a planned foothills village',
       paragraphs: [
-        'Hillside and view lots can move foundation and retaining requirements early. Additions and outdoor living should plan drainage and access for equipment.',
-        'Expect engineering and Ada review for structural tie-ins to existing framing.',
+        '<strong>Hidden Springs is a planned community in the Boise foothills with published design standards, so a new house here is designed to a rulebook as much as to a lot.</strong> Exterior materials, roof form, colors, porches, and how the house meets the street are reviewed by the community before the city permit. When a lot becomes available, the first design conversation is about what the standards allow.',
+        'The upside is that the community is served rather than rural, so site work stays in the $25,000 to $50,000 band instead of the $80,000 to $150,000 a well and septic parcel needs. Lots still carry foothills grade, so a geotechnical look and a careful driveway study are worth doing before the plan is set.',
       ],
     },
     {
-      h2: 'Designing for view lots and hillside sites',
+      h2: 'Costs and process in Hidden Springs',
       paragraphs: [
-        'Eagle foothills properties trade flat-lot simplicity for views, privacy, and acreage - and their remodels reflect it. Window-wall conversions that open great rooms to the view, outdoor living terraces engineered into the slope, and primary suite relocations to the view side of the house are the signature projects. Site access for equipment, drainage management, and retaining structures belong in the budget conversation on day one, not as change orders.',
-        'Larger parcels here are also strong candidates for detached ADUs and guest houses, with the setback room that valley-floor subdivisions lack. Engineering and Ada County review timelines run longer for hillside structural work, so we sequence design and permitting to keep construction inside the dry season when slopes are most workable.',
+        'A custom home here runs $250 to $400 per finished square foot excluding land, with detail-heavy builds on sloped lots trending toward the top of that band. Design and engineering commonly land at 5 to 12 percent of construction cost.',
+        'Permits route through Ada County, and the community architectural review runs alongside rather than instead of it. We prepare both packages so the two reviews are not waiting on each other.',
+      ],
+    },
+  ],
+  'harris-ranch': [
+    {
+      h2: 'Building in a master-planned East Boise community',
+      paragraphs: [
+        '<strong>Harris Ranch is master planned, fully serviced, and governed by design standards, which makes it one of the more predictable places in Boise to build.</strong> Utilities are in, the streets exist, and site work generally sits in the $25,000 to $50,000 range. What you trade for that predictability is design freedom: elevations, materials, massing, and colors are reviewed against the community pattern before you build.',
+        'Lots here are limited and urban in scale, so the plan has to be drawn to the lot rather than adapted to it after the fact. Narrow widths, alley-loaded garages, and lot coverage limits shape the footprint before the first interior decision gets made.',
+      ],
+    },
+    {
+      h2: 'What it costs and what to expect',
+      paragraphs: [
+        'Expect the custom band of $250 to $400 per finished square foot excluding land, with the finish level in this part of East Boise generally pushing toward the upper half of it. Design and engineering typically add 5 to 12 percent of construction cost.',
+        'Permits route through Ada County and the community design review happens in parallel. We prepare the architectural submittal during design so approval and plan review are not two delays in sequence.',
       ],
     },
   ],
 };
 
+/** Longest key first so `harris-ranch` wins over `boise` style prefixes. */
+const SNIPPET_KEYS = Object.keys(CITY_SNIPPETS).sort((a, b) => b.length - a.length);
+
 export function getCitySpecificSections(slug: string): ContentSection[] {
-  return CITY_SNIPPETS[slug] ?? [];
+  const direct = CITY_SNIPPETS[slug];
+  if (direct) return direct;
+  const key = SNIPPET_KEYS.find((k) => slug === k || slug.startsWith(`${k}-`));
+  return key ? CITY_SNIPPETS[key] : [];
 }
 
 export function buildLocationGuideSections(
@@ -260,40 +211,69 @@ export function buildLocationGuideSections(
   housingNote: string,
   guideType: 'location' | 'neighborhood',
 ): ContentSection[] {
-  const countyGuide =
+  const countyLabel = county === 'ada' ? 'Ada County' : 'Canyon County';
+  const healthDistrict =
     county === 'ada'
-      ? '<a href="/blog/ada-vs-canyon-county-permit-timelines">Ada vs Canyon permit timelines</a>'
-      : '<a href="/blog/ada-vs-canyon-county-permit-timelines">Canyon County permit timelines</a>';
+      ? 'Central District Health'
+      : 'the county health district';
+  const place = guideType === 'neighborhood' ? 'neighborhood' : 'city';
 
   return [
     {
-      h2: `Remodeling in ${cityName}`,
+      h2: `Building a new home in ${cityName}`,
       paragraphs: [
         housingNote,
-        `This ${guideType === 'neighborhood' ? 'neighborhood' : 'city'} guide links local housing context, permits, and services - start with the <a href="/guides/treasure-valley-remodeling-guide">Treasure Valley hub</a> for valley-wide planning.`,
+        `This ${place} guide covers what the ground is like, whether parcels are serviced, which county reviews the permit, and what a new house costs to build here. For the valley-wide picture, start with the <a href="${TV_GUIDE}">Treasure Valley home building guide</a>.`,
       ],
     },
     ...getCitySpecificSections(slug),
     {
-      h2: 'Services and planning ranges',
+      h2: `Is the lot serviced, or does it need a well and septic?`,
       paragraphs: [
-        `<a href="/services/kitchen-remodel/${citySlug}">Kitchen</a> · <a href="/services/bathroom-remodel/${citySlug}">Bathroom</a> · <a href="/services/whole-home-remodel/${citySlug}">Whole-home</a> · <a href="/services/room-addition/${citySlug}">Additions</a> · <a href="/areas/${citySlug}">${cityName} area page</a>.`,
-        `Planning bands: <a href="${PILLAR_COST}">Boise Remodeling Cost Guide</a>.`,
+        `<strong>This one question moves a ${cityName} budget by roughly $100,000, so it is the first thing we check on any parcel.</strong> A platted lot with water, sewer, and power already at the street usually carries $25,000 to $50,000 of site work: excavation, foundation prep, utility connections, driveway, and final grade. A rural parcel that needs a well, a septic system, and sometimes a private road or a power extension commonly runs $80,000 to $150,000 before a foundation is poured.`,
+        `Septic on a rural ${countyLabel} parcel is permitted through ${healthDistrict}, and the soil and percolation work behind it should be done before the floor plan is locked, because the drainfield location often decides the house location. A written lot evaluation costs $950 to $3,500 and answers these questions before you own the problem. See <a href="${LAND_GUIDE}">buying land to build on</a> and our <a href="/services/lot-evaluation/${citySlug}">${cityName} lot evaluation</a>.`,
       ],
     },
     {
-      h2: county === 'ada' ? 'Ada County permits' : 'Canyon County permits',
+      h2: `What a new home costs to build in ${cityName}`,
+      paragraphs: [
+        `<strong>A custom home in ${cityName} plans at $250 to $400 per finished square foot in 2026, and a semi-custom home at $225 to $300, both excluding land.</strong> A 2,400 square foot custom home lands between $600,000 and $960,000 on that basis. A simple single-level on a flat valley lot can come in near $225 per square foot; a steep foothills site with a high level of detail regularly exceeds $450.`,
+      ],
+      table: {
+        className: 'cost-table',
+        headers: ['Item', '2026 planning range, excluding land'],
+        rows: [
+          ['Custom home', '$250 to $400 per finished square foot'],
+          ['Custom home, 2,400 sq ft', '$600,000 to $960,000'],
+          ['Semi-custom home', '$225 to $300 per finished square foot'],
+          ['Semi-custom, 2,000 sq ft', '$450,000 to $600,000'],
+          ['Site work, serviced lot', '$25,000 to $50,000'],
+          ['Site work, rural parcel with well and septic', '$80,000 to $150,000'],
+          ['Design and engineering', '5 to 12 percent of construction cost'],
+        ],
+      },
+    },
+    {
+      h2: `${countyLabel} permits for a ${cityName} build`,
       paragraphs: [
         county === 'ada'
-          ? `${cityName} layout and structural work typically routes through Ada County plan review.`
-          : `${cityName} uses Canyon County processes - expect different portals and review cadence than Boise or Meridian.`,
-        countyGuide,
+          ? `<strong>A new home in ${cityName} permits through ${countyLabel}.</strong> That means the Ada County portal, Ada County plan review, and the Ada County inspection cadence, plus utility applications and any engineering the site requires. Ada and Canyon do not run the same process, so a set of drawings assembled for one is not automatically ready for the other.`
+          : `<strong>A new home in ${cityName} permits through ${countyLabel}, not Ada.</strong> Canyon uses a different portal and a different review cadence than Boise and Meridian, and drawings assembled for an Ada submittal are not automatically ready for a Canyon one. If your address sits near the county line, confirm jurisdiction before design gets far.`,
+        `We handle permits, plan review responses, engineering coordination, and utility applications in-house for both Ada and Canyon County. For how the two compare, see <a href="${PERMIT_ARTICLE}">Ada vs Canyon County permit timelines</a>.`,
+      ],
+    },
+    {
+      h2: `Building services in ${cityName}`,
+      paragraphs: [
+        `<a href="/services/custom-home-builder/${citySlug}">Custom home building</a> · <a href="/services/semi-custom-homes/${citySlug}">Semi-custom homes</a> · <a href="/services/build-on-your-lot/${citySlug}">Build on your lot</a> · <a href="/services/lot-evaluation/${citySlug}">Lot evaluation</a> · <a href="/areas/${citySlug}">${cityName} area page</a>.`,
+        `Full planning bands by house type are in the <a href="${COST_GUIDE}">Boise home building cost guide</a>.`,
       ],
     },
     {
       h2: 'Next steps',
       paragraphs: [
-        '<a href="/#calculator">Estimator</a> · <a href="/contact">Schedule consultation</a> · <a href="/guides">All guides</a>.',
+        `Run your square footage and finish level through the <a href="/#calculator">estimator</a> for a planning range, then <a href="/contact">schedule a consultation</a> and we will walk the parcel with you before anyone draws a plan. If you have not bought land yet, that conversation is worth having first.`,
+        '<a href="/#calculator">Estimator</a> · <a href="/contact">Schedule a consultation</a> · <a href="/guides">All guides</a>.',
       ],
     },
   ];

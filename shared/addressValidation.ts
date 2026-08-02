@@ -8,6 +8,42 @@ export function hasLeadingHouseNumber(address: string | null | undefined): boole
   return HOUSE_NUMBER_REGEX.test(address.trim());
 }
 
+// ---------------------------------------------------------------------------
+// Buildable sites without a street address
+//
+// A house number is the right requirement for work on an existing house: the
+// address is how a subcontractor finds the job. A vacant parcel is just as
+// locatable but frequently has no number yet, because Ada and Canyon County
+// assign one at permit issue. Requiring a house number there rejects the
+// address the county itself uses.
+//
+// So a site identifier is accepted in place of a house number when it is one
+// of the two forms a pre-address parcel actually comes in: an assessor parcel
+// number, or a lot-and-block within a named subdivision. Free text is still
+// rejected, because "my land in Kuna" is not a site anyone can drive to.
+// ---------------------------------------------------------------------------
+
+/** Ada / Canyon assessor parcel numbers, e.g. "R1234567890" or "S0426212100". */
+const PARCEL_NUMBER_RE = /\b[RS]\d{7,12}\b/i;
+
+/** Plat references, e.g. "Lot 14 Block 2, Copper Ridge" or "Lot 7, Blk 3". */
+const LOT_BLOCK_RE = /\blots?\s*#?\s*\d+[A-Za-z]?\b/i;
+
+export const SITE_LOCATION_ERROR_MESSAGE =
+  "Enter a street address, an assessor parcel number, or a lot and subdivision (for example, Lot 14 Block 2, Copper Ridge).";
+
+/**
+ * True when a string identifies a specific site well enough to visit it, by
+ * street number, parcel number, or plat reference. Use this rather than
+ * hasLeadingHouseNumber anywhere a vacant lot is a legitimate answer.
+ */
+export function isLocatableSite(value: string | null | undefined): boolean {
+  if (!value) return false;
+  const s = value.trim();
+  if (s.length < 5) return false;
+  return HOUSE_NUMBER_REGEX.test(s) || PARCEL_NUMBER_RE.test(s) || LOT_BLOCK_RE.test(s);
+}
+
 export function extractLeadingHouseNumber(value: string | null | undefined): string {
   if (!value) return "";
   const m = value.trim().match(/^(\d+[A-Za-z]?)\b/);

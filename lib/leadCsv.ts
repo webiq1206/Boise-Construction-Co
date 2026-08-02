@@ -162,7 +162,7 @@ function buildNotes(
   if (lead.message) lines.push(`Customer message: ${lead.message}`);
   const purchasedOn = formatPurchaseDate(lead.purchasedAt || lead.createdAt);
   lines.push(
-    `Lead source: Boise Remodeling Co${purchasedOn ? ` - purchased ${purchasedOn}` : ""}`,
+    `Lead source: Boise Construction Co${purchasedOn ? ` - purchased ${purchasedOn}` : ""}`,
   );
   return lines.join("\n");
 }
@@ -276,7 +276,7 @@ export function buildCsvFilename(format: CsvFormat, date: Date = new Date()): st
   const dd = String(date.getDate()).padStart(2, "0");
   const stamp = `${yyyy}-${mm}-${dd}`;
   const suffix = format === "yardbook" ? "yardbook" : "full";
-  return `boiseremodeling-purchased-leads-${suffix}-${stamp}.csv`;
+  return `boiseconstruction-purchased-leads-${suffix}-${stamp}.csv`;
 }
 
 export function downloadCsv(csv: string, filename: string): void {

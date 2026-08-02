@@ -8,21 +8,22 @@ import { buildResourcePdf } from '../lib/pdf/drawResourcePdf';
 import {
   ADA_CANYON_PERMIT_BLOCKS,
   BUDGET_WORKSHEET_BLOCKS,
-  KITCHEN_BATH_CHECKLIST_BLOCKS,
+  LOT_CHECKLIST_BLOCKS,
   PDF_FOOTERS,
 } from '../shared/resourcePdfContent';
 
 const OUT_DIR = path.join(process.cwd(), 'public', 'downloads');
 
+/** Filenames must match the `href` values in shared/guideResources.ts. */
 const FILES = [
   {
-    name: 'remodel-budget-worksheet.pdf',
+    name: 'new-home-budget-worksheet.pdf',
     blocks: BUDGET_WORKSHEET_BLOCKS,
     footer: PDF_FOOTERS.budget,
   },
   {
-    name: 'kitchen-bath-planning-checklist.pdf',
-    blocks: KITCHEN_BATH_CHECKLIST_BLOCKS,
+    name: 'lot-evaluation-checklist.pdf',
+    blocks: LOT_CHECKLIST_BLOCKS,
     footer: PDF_FOOTERS.checklist,
   },
   {

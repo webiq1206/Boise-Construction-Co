@@ -94,7 +94,12 @@ const bodySchema = z.object({
   name: z.string().min(2),
   phone: z.string().min(10),
   email: z.string().email(),
-  address: z.string().min(5),
+  /**
+   * Optional because a new-build enquiry from someone who has not bought land
+   * yet has no site to name. The client requires a locatable site for every
+   * other project type; see LAND_SEARCH_PROJECT_TYPE in ConsultationForm.
+   */
+  address: z.string().max(300).optional().default(""),
   zip: z.string().optional(),
   projectType: z.string().min(1),
   message: z.string().optional(),
@@ -214,8 +219,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Same complete record as the estimate-gate path, so a lead looks identical
-    // in the CRM regardless of which form produced it. The address was being
-    // dropped here even though this form requires it.
+    // in the CRM regardless of which form produced it. Address may be empty when
+    // the enquiry is from someone still shopping for a lot.
     const crmLead = {
       name: data.name,
       phone: data.phone,

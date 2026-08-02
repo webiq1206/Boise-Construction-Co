@@ -25,14 +25,14 @@ export const metadata = buildPageMetadata({
   path: "/areas",
   titleOverride: "Treasure Valley Service Areas",
   descriptionOverride:
-    "Design-build remodeling across the Treasure Valley: Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho.",
+    "Custom home building across the Treasure Valley: Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho.",
 });
 
 export default function AreasHubPage() {
   const schemas = [
     generateWebPageSchema({
       title: "Treasure Valley Service Areas",
-      description: `Design-build remodeling serving ${TREASURE_VALLEY_CITIES}.`,
+      description: `Custom and semi-custom home building serving ${TREASURE_VALLEY_CITIES}.`,
       url: "/areas",
     }),
     generateBreadcrumbSchema([
@@ -47,7 +47,7 @@ export default function AreasHubPage() {
       <div className="flex flex-col pb-20 md:pb-0">
         <PageHeroBand
           imageSrc={SITE_IMAGES.hero}
-          imageAlt="Remodeled Treasure Valley home interior with kitchen and living space"
+          imageAlt="Newly built Treasure Valley home with open kitchen and living space"
         >
           <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Service Areas" }]} />
           <div className="brc-label text-inverse-muted mt-6 mb-4">Treasure Valley</div>
@@ -56,11 +56,11 @@ export default function AreasHubPage() {
             <em className="brc-accent">areas</em>
           </h1>
           <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-4">
-            We serve homeowners across {TREASURE_VALLEY_CITIES}, and surrounding communities with
-            kitchen, bathroom, whole-home, and addition remodeling under one design-build team.
+            We build custom and semi-custom homes across {TREASURE_VALLEY_CITIES}, and the surrounding
+            communities, on lots you own and lots we help you find, under one design-build team.
           </p>
           <p className="sr-only" data-speakable="summary">
-            Treasure Valley design-build remodeling service areas.
+            Treasure Valley new home construction service areas.
           </p>
           <div className="flex flex-wrap gap-3">
             <ConsultCTA variant="brand">
@@ -77,7 +77,7 @@ export default function AreasHubPage() {
             <SectionHeader
               eyebrow="Treasure Valley"
               title={<>Eight cities, one design-build team</>}
-              description="Kitchen, bath, whole-home, and addition remodeling across Ada and Canyon County."
+              description="Custom homes, semi-custom homes, and builds on your own lot across Ada and Canyon County."
               className="mb-10 max-w-2xl mx-auto text-center [&_.brc-label]:justify-center"
               align="center"
             />
@@ -94,11 +94,11 @@ export default function AreasHubPage() {
         <EstimatePromptBand
           title={
             <>
-              Planning a remodel in your{' '}
+              Planning a build in your{' '}
               <em className="brc-accent">city</em>?
             </>
           }
-          description="Permit paths and housing stock differ across Ada and Canyon County. Get an instant planning range for your city, then book a free in-home visit for local guidance."
+          description="Lot costs, impact fees, and permit timelines differ across Ada and Canyon County. Get an instant build cost range for your city, then book a free consultation for local guidance."
           variant="tint"
         />
 

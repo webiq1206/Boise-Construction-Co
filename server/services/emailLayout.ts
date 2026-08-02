@@ -68,7 +68,7 @@ export function buildTextLogo(): string {
   return `
     <div style="margin-bottom:16px;">
       <div style="font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:20px;font-weight:400;color:${EMAIL_BRAND.text};line-height:1.2;">
-        Boise Remodeling <span style="color:${EMAIL_BRAND.accent};font-style:italic;">Co.</span>
+        Boise Construction <span style="color:${EMAIL_BRAND.accent};font-style:italic;">Co.</span>
       </div>
       <div style="font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:${EMAIL_BRAND.textMuted};margin-top:6px;">
         Design &amp; Build

@@ -40,7 +40,7 @@ export function buildBusinessVCard(): string {
     .map((url) => foldLine(`URL;TYPE=${/instagram/i.test(url) ? "instagram" : "facebook"}:${escapeVCard(url)}`));
 
   const note = [
-    "Treasure Valley design-build remodeling.",
+    "Treasure Valley design-build home builder.",
     SITE_CONFIG.address.serviceArea,
     `Hours: ${hoursSummary}`,
   ].join("\n");
@@ -67,4 +67,4 @@ export function buildBusinessVCard(): string {
 }
 
 export const BUSINESS_VCARD_PATH = "/contact.vcf";
-export const BUSINESS_VCARD_FILENAME = "Boise-Remodeling-Co.vcf";
+export const BUSINESS_VCARD_FILENAME = "Boise-Construction-Co.vcf";
