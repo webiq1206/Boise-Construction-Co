@@ -25,8 +25,8 @@ import {
   RE10_MARGIN_CEILING,
   RE10_CONTINGENCY_RATE,
   COORDINATION_COST_PER_ITEM,
-  MOBILISATION_COST,
-  ADDITIONAL_TRADE_MOBILISATION_FACTOR,
+  MOBILIZATION_COST,
+  ADDITIONAL_TRADE_MOBILIZATION_FACTOR,
   type RepairKind,
   type RepairItemInput,
   type Re10Context,
@@ -57,7 +57,7 @@ for (const kind of ALL_KINDS) {
   check(!!CREW_FOR_TRADE[recipe.trade], `${kind}: trade ${recipe.trade} has no crew`);
 
   // Every code must resolve. priceRepair throws on an unknown code, which is the
-  // behaviour we want; this turns that into a named failure instead of a stack.
+  // behavior we want; this turns that into a named failure instead of a stack.
   try {
     const p = priceRepair({ id: kind, kind, description: kind });
     check(p.lines.length > 0, `${kind}: priced to zero lines`);
@@ -103,7 +103,7 @@ for (const kind of ALL_KINDS) {
 /* --------------------------------------------------- 4. review items are safe */
 
 const REVIEW_ONLY: ReviewReason[] = [
-  "structural", "foundation", "mould-hazmat", "asbestos-lead", "electrical-service",
+  "structural", "foundation", "mold-hazmat", "asbestos-lead", "electrical-service",
   "sewer-septic", "hvac-replacement", "gas", "fire-damage", "engineering", "out-of-scope",
 ];
 
@@ -197,10 +197,10 @@ for (const ctx of CONTEXTS) {
       );
 
       // (c) NO DOUBLE COUNTING. The total must be exactly the sum of its parts.
-      const parts = est.directCost + est.mobilisation + est.coordination + est.contingency;
+      const parts = est.directCost + est.mobilization + est.coordination + est.contingency;
       check(near(parts, est.totalInternalCost, 0.01), `${label}: cost parts ${parts} != total ${est.totalInternalCost}`);
       check(
-        near(est.contingency, (est.directCost + est.mobilisation + est.coordination) * RE10_CONTINGENCY_RATE, 0.01),
+        near(est.contingency, (est.directCost + est.mobilization + est.coordination) * RE10_CONTINGENCY_RATE, 0.01),
         `${label}: contingency is not the stated rate on the pre-contingency cost`,
       );
 
@@ -217,16 +217,16 @@ for (const ctx of CONTEXTS) {
         `${label}: coordination not charged per priced item`,
       );
 
-      // (f) Mobilisation: one full, the rest reduced. Never one per repair.
+      // (f) Mobilization: one full, the rest reduced. Never one per repair.
       const crews = new Set(est.trades.map((t) => t.crew));
       const expectedMob =
-        crews.size === 0 ? 0 : MOBILISATION_COST * (1 + (crews.size - 1) * ADDITIONAL_TRADE_MOBILISATION_FACTOR);
-      check(near(est.mobilisation, expectedMob, 0.01), `${label}: mobilisation ${est.mobilisation} != expected ${expectedMob}`);
-      check(est.mobilisation <= MOBILISATION_COST * crews.size + 0.01, `${label}: mobilisation exceeds one per crew`);
+        crews.size === 0 ? 0 : MOBILIZATION_COST * (1 + (crews.size - 1) * ADDITIONAL_TRADE_MOBILIZATION_FACTOR);
+      check(near(est.mobilization, expectedMob, 0.01), `${label}: mobilization ${est.mobilization} != expected ${expectedMob}`);
+      check(est.mobilization <= MOBILIZATION_COST * crews.size + 0.01, `${label}: mobilization exceeds one per crew`);
       if (est.priced.length > crews.size) {
         check(
-          est.mobilisation < MOBILISATION_COST * est.priced.length,
-          `${label}: mobilisation charged per repair rather than per crew`,
+          est.mobilization < MOBILIZATION_COST * est.priced.length,
+          `${label}: mobilization charged per repair rather than per crew`,
         );
       }
 
@@ -349,7 +349,7 @@ for (const kind of ALL_KINDS) {
 const bigDrywall = estimateRe10(
   Array.from({ length: 12 }, (_, i) => ({ id: String(i), kind: "drywall-repaint-wall" as const, description: "", quantity: 40 })),
 );
-check(bigDrywall.minimumsApplied === 0, `large single-crew list still applied a labour-floor top-up of ${bigDrywall.minimumsApplied}`);
+check(bigDrywall.minimumsApplied === 0, `large single-crew list still applied a labor-floor top-up of ${bigDrywall.minimumsApplied}`);
 check(bigDrywall.minimumPriceApplied === 0, `large single-crew list still applied a minimum visit price`);
 check(bigDrywall.worthwhile, "a twelve-item drywall list should clear the worthwhile threshold");
 

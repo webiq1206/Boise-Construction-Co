@@ -21,6 +21,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${baseUrl}/areas`, lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
     { url: `${baseUrl}/estimate`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    {
+      url: `${baseUrl}/re-10-repairs-boise`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
     { url: `${baseUrl}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${baseUrl}/testimonials`, lastModified: now, changeFrequency: 'monthly', priority: 0.65 },
     { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },

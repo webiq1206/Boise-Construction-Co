@@ -148,6 +148,9 @@ export function Footer() {
               {[
                 { label: "About", href: "/about" },
                 { label: "Our Work", href: "/testimonials" },
+                // Sitewide link so the RE-10 page is reachable from every page
+                // and never ships orphaned.
+                { label: "RE-10 Repairs", href: "/re-10-repairs-boise" },
                 { label: "Contact", href: "/contact" },
                 { label: "Why Choose Us", href: "/#why-choose-us" },
                 { label: "How We Build", href: "/#how-we-build" },

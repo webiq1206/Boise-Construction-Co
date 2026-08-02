@@ -17,10 +17,10 @@
  * into the full set of catalog codes that the work actually consumes, so the
  * supporting work is priced because it is listed, not remembered.
  *
- * WHY MINIMUMS EXIST. The catalog is a whole-project rate card: drywall labour
+ * WHY MINIMUMS EXIST. The catalog is a whole-project rate card: drywall labor
  * is $7.50 per square foot of a remodel. Applied to a four-square-foot patch
- * that is thirty dollars of labour, which does not pay for the drive, let alone
- * the tradesman. Trade minimums and mobilisation below are what stop a list of
+ * that is thirty dollars of labor, which does not pay for the drive, let alone
+ * the tradesman. Trade minimums and mobilization below are what stop a list of
  * small repairs from being priced into a loss. They are not padding; they are
  * the difference between the catalog rate and the cost of showing up.
  */
@@ -36,7 +36,7 @@ import { type CostLine, type EstimateWarning, priceAtMargin } from "./engine";
 /* ------------------------------------------------------------------ trades */
 
 /**
- * The parent categories an RE-10 list is organised into. Deliberately the
+ * The parent categories an RE-10 list is organized into. Deliberately the
  * homeowner's vocabulary, not the catalog's 27 divisions: an agent reads
  * "Painting", not "PAINTING + WALLPAPER".
  */
@@ -72,7 +72,7 @@ export type RepairUnit = "EA" | "SF" | "LF";
  * Why an item cannot be priced automatically.
  *
  * These are not edge cases to be tidied away later. An RE-10 that says "repair
- * foundation crack" or "evaluate mould in crawlspace" is asking a question this
+ * foundation crack" or "evaluate mold in crawlspace" is asking a question this
  * engine must not answer from a web form, and the honest response is to price
  * what it can and say plainly that the rest needs eyes on it.
  */
@@ -80,7 +80,7 @@ export type ReviewReason =
   | "structural"
   | "foundation"
   | "water-intrusion"
-  | "mould-hazmat"
+  | "mold-hazmat"
   | "asbestos-lead"
   | "major-roofing"
   | "electrical-service"
@@ -98,7 +98,7 @@ export const REVIEW_REASON_TEXT: Record<ReviewReason, string> = {
   structural: "Structural work. Needs an onsite evaluation, and may need an engineer.",
   foundation: "Foundation concern. Needs an onsite evaluation before any number is meaningful.",
   "water-intrusion": "Active or past water intrusion. The repair depends on what is found behind the finish.",
-  "mould-hazmat": "Possible mould or hazardous material. Requires testing before scoping.",
+  "mold-hazmat": "Possible mold or hazardous material. Requires testing before scoping.",
   "asbestos-lead": "Possible asbestos or lead paint, common in pre-1980 homes. Requires testing and a licensed abatement contractor.",
   "major-roofing": "Roofing beyond a small localized repair. Needs an onsite evaluation.",
   "electrical-service": "Main service, panel or meter work. Requires a licensed electrician and utility coordination.",
@@ -140,7 +140,7 @@ interface Recipe {
   components: Component[];
   /** Always route to a human, whatever the document says. */
   alwaysReview?: ReviewReason;
-  /** Minutes of a tradesman's time, used for the labour-hours floor. */
+  /** Minutes of a tradesman's time, used for the labor-hours floor. */
   crewMinutes?: number;
 }
 
@@ -253,7 +253,7 @@ export const RECIPES: Record<RepairKind, Recipe> = {
   ], { crewMinutes: 100 }),
 
   /* ------------------------------------------------------- carpentry */
-  "trim-repair": R("carpentry", "Trim and moulding repair", "LF", 12, [
+  "trim-repair": R("carpentry", "Trim and molding repair", "LF", 12, [
     PROTECT,
     { code: "03-18-02", per: 1.15, why: "Trim stock with cutting waste" },
     { code: "03-14-01", per: 1.2, why: "Prime and paint the replaced run" },
@@ -279,7 +279,7 @@ export const RECIPES: Record<RepairKind, Recipe> = {
 
   "cabinet-repair": R("carpentry", "Cabinet repair", "EA", 1, [
     PROTECT,
-    { code: "03-17-01-L", per: 0.6, why: "Door, drawer and box repair labour" },
+    { code: "03-17-01-L", per: 0.6, why: "Door, drawer and box repair labor" },
     { code: "03-19-02", per: 2, why: "Hinges, slides and pulls as needed" },
     CLEANUP,
   ], { crewMinutes: 65 }),
@@ -500,7 +500,7 @@ export interface Re10Context {
 /**
  * RE-10 work carries a 50% gross margin floor, against 30% on remodel projects.
  *
- * That is not opportunism. A remodel is one mobilisation, one schedule and weeks
+ * That is not opportunism. A remodel is one mobilization, one schedule and weeks
  * of continuous production. An inspection repair list is a dozen unrelated tasks
  * in an occupied house on somebody else's deadline, each with its own set-up,
  * its own material run, and a real chance of finding something worse once the
@@ -508,7 +508,7 @@ export interface Re10Context {
  */
 export const RE10_TARGET_MARGIN = 0.5;
 
-/** Never priced below this without an authorised admin adjustment. */
+/** Never priced below this without an authorized admin adjustment. */
 export const RE10_MARGIN_FLOOR = 0.5;
 
 /** Highest the risk uplifts may carry the margin. */
@@ -518,12 +518,12 @@ export const RE10_MARGIN_CEILING = 0.62;
 export const RE10_CONTINGENCY_RATE = 0.08;
 
 /**
- * WHO ACTUALLY SHOWS UP. Minimums and mobilisation are per crew, not per trade.
+ * WHO ACTUALLY SHOWS UP. Minimums and mobilization are per crew, not per trade.
  *
  * This is the difference between a credible number and a silly one. A list with
  * a drywall patch, some trim, a caulk line and a repaint spans four "trades" on
  * paper, but it is one carpenter for one day. Charging four trade minimums and
- * four mobilisations for that would price the company out of exactly the
+ * four mobilizations for that would price the company out of exactly the
  * multi-item lists it is pitching for, which is the failure mode the brief
  * warns about.
  *
@@ -580,7 +580,7 @@ export const CREW_MINIMUM_PRICE: Record<RepairCrew, number> = {
  * Not a price - a decision. A single small repair at the minimum still occupies
  * a scheduling slot, a drive and an admin file. The estimator surfaces this to
  * the team rather than to the customer, so a one-item RE-10 can be taken as a
- * favour to an agent who brings the next five, or declined, as a judgement call
+ * favor to an agent who brings the next five, or declined, as a judgement call
  * rather than by accident.
  */
 export const WORTHWHILE_JOB_PRICE = 400;
@@ -595,7 +595,7 @@ export const WORTHWHILE_JOB_PRICE = 400;
  * the card unadjusted priced inspection patches at luxury-remodel rates.
  *
  * Materials take the bigger correction because that is where the grade lives:
- * stock trim against custom millwork. Labour moves less, because the hours are
+ * stock trim against custom millwork. Labor moves less, because the hours are
  * the hours and a repair often takes LONGER per unit than new work.
  */
 export const REPAIR_GRADE_MATERIAL_FACTOR = 0.58;
@@ -604,7 +604,7 @@ export const REPAIR_GRADE_LABOUR_FACTOR = 0.82;
 /**
  * PER-DIVISION GRADE FACTORS, because one global factor cannot be right.
  *
- * A single pair of material/labour factors was the second version of this and it
+ * A single pair of material/labor factors was the second version of this and it
  * failed against the market: every one of the 32 priceable repair kinds came out
  * over its band, from 114% to 535%. The reason is that the catalog's divisions
  * are not uniformly inflated relative to repair work.
@@ -647,21 +647,21 @@ export const REPAIR_GRADE_BY_DIVISION: Record<string, number> = {
 export const REPAIR_GRADE_DEFAULT_FACTOR = 0.42;
 
 /** Cost of putting one crew on site, per crew that has to attend. */
-export const MOBILISATION_COST = 70;
+export const MOBILIZATION_COST = 70;
 
 /**
- * Mobilisations are shared, not charged per repair.
+ * Mobilizations are shared, not charged per repair.
  *
  * Eight repairs handled by two crews is two trips, not eight. The first crew on
- * site carries a full mobilisation and each additional crew carries a reduced
+ * site carries a full mobilization and each additional crew carries a reduced
  * one, because they overlap on the same days and share one access arrangement.
  */
-export const ADDITIONAL_TRADE_MOBILISATION_FACTOR = 0.55;
+export const ADDITIONAL_TRADE_MOBILIZATION_FACTOR = 0.55;
 
 /** Per-item coordination: scheduling, access, updates, documentation. */
 export const COORDINATION_COST_PER_ITEM = 11;
 
-/** Cost of the blended crew hour used for the labour floor. */
+/** Cost of the blended crew hour used for the labor floor. */
 export const CREW_HOURLY_COST = 56;
 
 /**
@@ -724,7 +724,7 @@ export interface PricedRepair {
   /** True when no measurement was given and defaultQty was used. */
   quantityAssumed: boolean;
   lines: CostLine[];
-  /** Sum of `lines`, before minimums, mobilisation and margin. */
+  /** Sum of `lines`, before minimums, mobilization and margin. */
   directCost: number;
   crewMinutes: number;
   reviewReason?: ReviewReason;
@@ -733,7 +733,7 @@ export interface PricedRepair {
 export interface TradeGroup {
   trade: RepairTrade;
   label: string;
-  /** Which crew actually attends. Minimums and mobilisation are resolved here. */
+  /** Which crew actually attends. Minimums and mobilization are resolved here. */
   crew: RepairCrew;
   repairs: PricedRepair[];
   /** Sum of the repairs' own line items. */
@@ -741,8 +741,8 @@ export interface TradeGroup {
   /** Raised to the trade minimum where the raw cost falls short. */
   adjustedCost: number;
   minimumApplied: number;
-  mobilisation: number;
-  /** adjustedCost + mobilisation. */
+  mobilization: number;
+  /** adjustedCost + mobilization. */
   tradeCost: number;
   customerAmount: number;
 }
@@ -755,7 +755,7 @@ export interface Re10Estimate {
   trades: TradeGroup[];
   directCost: number;
   minimumsApplied: number;
-  mobilisation: number;
+  mobilization: number;
   coordination: number;
   contingency: number;
   totalInternalCost: number;
@@ -774,7 +774,7 @@ export interface Re10Estimate {
   /** Customer-facing planning range. */
   low: number;
   high: number;
-  /** Half-width of the range as a fraction of the centre. */
+  /** Half-width of the range as a fraction of the center. */
   bandWidth: number;
   confidence: "high" | "medium" | "low";
   /** What is making the range as wide as it is. */
@@ -805,9 +805,9 @@ function lineFor(li: LineItem, quantity: number, why?: string): CostLine {
  * Expand a component's code into its catalog rows.
  *
  * A bare code such as "03-13-01" means both halves of a split row: materials
- * AND labour. An explicit "-M" or "-L" means only that half, which is how a
- * recipe asks for labour with no material (rehanging a door) or material with
- * no labour of its own.
+ * AND labor. An explicit "-M" or "-L" means only that half, which is how a
+ * recipe asks for labor with no material (rehanging a door) or material with
+ * no labor of its own.
  */
 const BY_CODE = new Map(LINE_ITEMS.map((li) => [li.code, li]));
 
@@ -824,7 +824,7 @@ function rowsFor(code: string): LineItem[] {
 /**
  * Price one repair: expand the recipe against the quantity.
  *
- * Returns the labour-hours floor alongside, because a repair whose catalog cost
+ * Returns the labor-hours floor alongside, because a repair whose catalog cost
  * is trivially small still consumes a tradesman's afternoon, and the group-level
  * minimum needs to know that.
  */
@@ -956,15 +956,15 @@ function roundTo(value: number, step: number): number {
   return Math.round(value / step) * step;
 }
 
-function stepFor(centre: number): number {
-  return centre >= 25000 ? 500 : centre >= 8000 ? 250 : 100;
+function stepFor(center: number): number {
+  return center >= 25000 ? 500 : center >= 8000 ? 250 : 100;
 }
 
 /**
  * Price a whole RE-10 list.
  *
  * Order matters and is deliberate: line items, then trade minimums, then a
- * shared mobilisation, then coordination, then contingency, then margin once
+ * shared mobilization, then coordination, then contingency, then margin once
  * over the total. Applying margin per line, or per parent and child separately,
  * is the double-count the brief warns about - so it is applied exactly once, to
  * the finished cost.
@@ -1008,7 +1008,7 @@ export function estimateRe10(
   ];
   const activeTrades = tradeOrder.filter((t) => byTrade.has(t));
 
-  /* Minimums and mobilisation are resolved per CREW, then distributed back over
+  /* Minimums and mobilization are resolved per CREW, then distributed back over
      the trades that crew covered, so the customer-facing rollup still reads by
      trade while the economics reflect who actually drives to the house. */
   const crewOrder: RepairCrew[] = ["general", "plumbing", "electrical", "roofing"];
@@ -1019,9 +1019,9 @@ export function estimateRe10(
   }
   const activeCrews = crewOrder.filter((c) => byCrew.has(c));
 
-  const tradeAdjustment = new Map<RepairTrade, { minimum: number; mobilisation: number }>();
+  const tradeAdjustment = new Map<RepairTrade, { minimum: number; mobilization: number }>();
   let minimumsApplied = 0;
-  let mobilisation = 0;
+  let mobilization = 0;
 
   activeCrews.forEach((crew, index) => {
     const crewTrades = byCrew.get(crew)!;
@@ -1030,34 +1030,34 @@ export function estimateRe10(
 
     // The only COST floor is the one that is genuinely a cost: the hours the
     // work actually takes at crew rate. A four-square-foot patch billed off a
-    // per-square-foot card is thirty dollars of labour for half a day's work,
+    // per-square-foot card is thirty dollars of labor for half a day's work,
     // and no amount of margin fixes an understated cost.
     //
     // The trade MINIMUM is not applied here. It is a price, and it is applied
     // to the finished price further down.
     const crewHours = crewRepairs.reduce((s, p) => s + p.crewMinutes, 0) / 60;
-    const labourFloor = crewHours * CREW_HOURLY_COST;
+    const laborFloor = crewHours * CREW_HOURLY_COST;
 
-    const topUp = Math.max(0, labourFloor - rawCost);
+    const topUp = Math.max(0, laborFloor - rawCost);
     minimumsApplied += topUp;
 
-    // First crew on site pays a full mobilisation; the rest overlap with it.
-    const mob = index === 0 ? MOBILISATION_COST : MOBILISATION_COST * ADDITIONAL_TRADE_MOBILISATION_FACTOR;
-    mobilisation += mob;
+    // First crew on site pays a full mobilization; the rest overlap with it.
+    const mob = index === 0 ? MOBILIZATION_COST : MOBILIZATION_COST * ADDITIONAL_TRADE_MOBILIZATION_FACTOR;
+    mobilization += mob;
 
-    // Split the crew's top-up and mobilisation across its trades by cost share,
+    // Split the crew's top-up and mobilization across its trades by cost share,
     // so no trade shows a number that did not come from its own work.
     for (const t of crewTrades) {
       const tradeRaw = byTrade.get(t)!.reduce((s, p) => s + p.directCost, 0);
       const share = rawCost > 0 ? tradeRaw / rawCost : 1 / crewTrades.length;
-      tradeAdjustment.set(t, { minimum: topUp * share, mobilisation: mob * share });
+      tradeAdjustment.set(t, { minimum: topUp * share, mobilization: mob * share });
     }
   });
 
   const trades: TradeGroup[] = activeTrades.map((trade) => {
     const repairs = byTrade.get(trade)!;
     const rawCost = repairs.reduce((s, p) => s + p.directCost, 0);
-    const adj = tradeAdjustment.get(trade) ?? { minimum: 0, mobilisation: 0 };
+    const adj = tradeAdjustment.get(trade) ?? { minimum: 0, mobilization: 0 };
     const adjustedCost = rawCost + adj.minimum;
     return {
       trade,
@@ -1067,15 +1067,15 @@ export function estimateRe10(
       rawCost,
       adjustedCost,
       minimumApplied: adj.minimum,
-      mobilisation: adj.mobilisation,
-      tradeCost: adjustedCost + adj.mobilisation,
+      mobilization: adj.mobilization,
+      tradeCost: adjustedCost + adj.mobilization,
       customerAmount: 0, // filled once the margin is known
     };
   });
 
   const directCost = trades.reduce((s, t) => s + t.adjustedCost, 0);
   const coordination = priced.length * COORDINATION_COST_PER_ITEM;
-  const preContingency = directCost + mobilisation + coordination;
+  const preContingency = directCost + mobilization + coordination;
   const contingency = preContingency * RE10_CONTINGENCY_RATE;
   const totalInternalCost = preContingency + contingency;
 
@@ -1123,7 +1123,7 @@ export function estimateRe10(
       `Repairs across ${activeTrades.length} trades are scheduled together where possible, so travel and set-up are shared rather than charged per item.`,
     );
   }
-  assumptions.push("Work is done in one mobilisation per trade, with normal access during working hours.");
+  assumptions.push("Work is done in one mobilization per trade, with normal access during working hours.");
   assumptions.push("Finishes are matched as closely as stock allows; an exact match to aged paint or flooring is not guaranteed.");
   if (ctx.occupancy === "occupied") {
     assumptions.push("The property is occupied, so areas are protected and reset each day.");
@@ -1167,7 +1167,7 @@ export function estimateRe10(
     trades,
     directCost,
     minimumsApplied,
-    mobilisation,
+    mobilization,
     coordination,
     contingency,
     totalInternalCost,
