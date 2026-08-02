@@ -57,6 +57,14 @@ import {
   NOT_A_QUOTE_NOTICE,
   ONSITE_REQUIRED_NOTICE,
   APPLIANCE_DISCLAIMER,
+  type PlanningStage,
+  type AccessoryStructure,
+  type AccessoryStructureKind,
+  PLANNING_STAGES,
+  PLANNING_STAGE_LABELS,
+  PLANNING_STAGE_BAND,
+  ACCESSORY_STRUCTURE_LABELS,
+  defaultAccessoryStructure,
 } from "@/shared/estimateEngine";
 import { trackEvent, trackMetaEvent } from "@/lib/analytics";
 import { GRAIN_URL } from "@/lib/grain";
@@ -599,7 +607,33 @@ export function EstimateCalculator({
      profile stops overwriting their choice. */
   const [edited, setEdited] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
-  const [chosen, setChosen] = useState({ project: false, subtype: false, finish: false });
+  const [chosen, setChosen] = useState({
+    stage: false,
+    project: false,
+    subtype: false,
+    finish: false,
+  });
+
+  /*
+   * THE FIRST QUESTION, and the reason it is not "what are you building".
+   *
+   * Every home here is drawn from scratch, so opening with a product grid or
+   * with the lot asks the visitor to classify themselves against a distinction
+   * the company does not actually make. What genuinely differs between two
+   * enquiries is how much is already decided, and that is what a builder asks
+   * first on the phone. It also decides how honest the range can be: see
+   * PLANNING_STAGE_BAND.
+   */
+  const [planningStage, setPlanningStage] = useState<PlanningStage | null>(null);
+
+  /*
+   * Additional buildings. null until the question has been shown, so "not asked"
+   * and "asked, none wanted" stay distinguishable in the lead record; both price
+   * as none.
+   */
+  const [structures, setStructures] = useState<AccessoryStructure[] | null>(null);
+  /** Which structure's follow-up questions are expanded. */
+  const [openStructure, setOpenStructure] = useState<AccessoryStructureKind | null>(null);
   /* Bathroom count and kitchen inclusion are REQUIRED wherever they are shown.
      Leaving them optional meant a skipped answer silently priced at whatever
      the published rate happens to assume, which is an assumption made on the
@@ -649,6 +683,8 @@ export function EstimateCalculator({
      visitor completes a step. scheduleScroll() uses double-rAF so the DOM
      is fully painted before the browser scrolls. Instant on mobile (iOS
      smooth-scroll is unreliable); smooth on desktop. */
+  const projectGridRef = useRef<HTMLDivElement>(null);
+  const structuresRef  = useRef<HTMLDivElement>(null);
   const addressStepRef = useRef<HTMLDivElement>(null);
   const layoutRef      = useRef<HTMLDivElement>(null);
   const sizeRef        = useRef<HTMLDivElement>(null);
@@ -769,9 +805,17 @@ export function EstimateCalculator({
 
   const refinements = useMemo<EstimateRefinements>(() => {
     const data = SUBTYPE_DATA[activeProject]?.[subtype];
-    if (!data) return { ...EMPTY_REFINEMENTS };
-    return buildRefinements(effectiveProject, subtype, addOns, data.refinements, peScope, cabTier, bathCount, kitchenIn);
-  }, [effectiveProject, activeProject, subtype, addOns, peScope, cabTier, bathCount, kitchenIn]);
+    const base = data
+      ? buildRefinements(effectiveProject, subtype, addOns, data.refinements, peScope, cabTier, bathCount, kitchenIn)
+      : { ...EMPTY_REFINEMENTS };
+    /* Attached to every estimate, including the incomplete one, so the band and
+       the structure pricing follow the visitor's answers rather than lagging a
+       step behind them. */
+    return { ...base, planningStage, accessoryStructures: structures };
+  }, [
+    effectiveProject, activeProject, subtype, addOns, peScope, cabTier, bathCount, kitchenIn,
+    planningStage, structures,
+  ]);
 
   const userRefinementCount = useMemo(
     () => countVisibleUserRefinements(effectiveProject, getSetRefinementKeys(refinements)),
@@ -909,6 +953,35 @@ export function EstimateCalculator({
     trackEvent("begin_checkout", { project: effectiveProject });
   }
 
+  function handleSelectStage(stage: PlanningStage) {
+    setPlanningStage(stage);
+    setChosen((p) => ({ ...p, stage: true }));
+    fireEstimatorEngagement();
+    scheduleScroll(() => projectGridRef.current);
+  }
+
+  /** Tick or untick a structure, keeping the per-structure detail on re-tick. */
+  function toggleStructure(kind: AccessoryStructureKind) {
+    setStructures((prev) => {
+      const list = prev ?? [];
+      const existing = list.find((s) => s.kind === kind);
+      if (existing) {
+        setOpenStructure((o) => (o === kind ? null : o));
+        return list.filter((s) => s.kind !== kind);
+      }
+      setOpenStructure(kind);
+      return [...list, defaultAccessoryStructure(kind)];
+    });
+    setEdited(true);
+  }
+
+  function updateStructure(kind: AccessoryStructureKind, patch: Partial<AccessoryStructure>) {
+    setStructures((prev) =>
+      (prev ?? []).map((s) => (s.kind === kind ? { ...s, ...patch } : s)),
+    );
+    setEdited(true);
+  }
+
   function handleSelectProject(type: ProjectType) {
     if (type === activeProject && chosen.project) return;
     const sub = defaultSubtypeFor(type);
@@ -926,7 +999,10 @@ export function EstimateCalculator({
     // Changing the project invalidates the layout and finish choices made under
     // the previous one, so the visitor picks those again rather than inheriting.
     allChosenScrolled.current = false;
-    setChosen({ project: true, subtype: false, finish: false });
+    /* `stage` is carried rather than reset: the planning stage is a fact about
+       the person, not about the project they just picked, and clearing it would
+       bounce them back to question one for changing their mind. */
+    setChosen((p) => ({ ...p, project: true, subtype: false, finish: false }));
     fireEstimatorEngagement();
     /* Advance to the next step (address) directly from the tap, so it fires
        even when the visitor confirms the already-active default project. */
@@ -1108,10 +1184,21 @@ export function EstimateCalculator({
     }
   }, [gateOpen]);
 
+  /*
+   * "Asked, none wanted" is a real answer, so reaching the structures step is
+   * what records it. Without this the array stays null, allChosen never becomes
+   * true for the large majority who want only a house, and the estimator would
+   * refuse to produce a range until somebody ticked a barn.
+   */
+  useEffect(() => {
+    if (chosen.subtype && structures === null) setStructures([]);
+  }, [chosen.subtype, structures]);
+
   /* Numbers are derived, never hardcoded, so a hidden step cannot leave a gap
      in the sequence the visitor reads. "address" is step 2 -- it appears early
      so the property lookup can pre-fill the size slider. */
   const visibleSteps: string[] = [
+    "stage",
     "project",
     "address",
     "layout",
@@ -1119,6 +1206,7 @@ export function EstimateCalculator({
     "upgrades",
     ...(showBathCount ? ["bathcount"] : []),
     ...(showKitchenIncluded ? ["kitchen"] : []),
+    "structures",
     "finish",
   ];
   const stepNo = (id: string) => visibleSteps.indexOf(id) + 1;
@@ -1128,10 +1216,15 @@ export function EstimateCalculator({
      Cabinetry and systems scope are pre-selected from the finish profile, so
      they always hold a value and never block completion. */
   const allChosen =
+    chosen.stage &&
     chosen.project &&
     chosen.subtype &&
     chosen.finish &&
     (!showBathCount || bathCount !== null) &&
+    /* Structures are answered by reaching the step, not by ticking one: an empty
+       array means "asked, none wanted" and is a complete answer. Only null,
+       meaning the step was never rendered, blocks completion. */
+    structures !== null &&
     (!showKitchenIncluded || kitchenIn !== null);
 
   /* ── Persist to sessionStorage, but only once the visitor has actually
@@ -1458,9 +1551,55 @@ export function EstimateCalculator({
      SECTIONS
   ══════════════════════════════ */
 
-  /* Step 1 - Project type: prominent card grid (matches the other inputs) */
-  const projectGrid = (
+  /*
+   * Step 1 - Planning stage.
+   *
+   * Full-width rows rather than the two-up grid the other steps use, because
+   * these four answers are sentences rather than labels and a 2-column layout
+   * truncates them on a phone, which is where most of this traffic is.
+   */
+  const planningStageStep = (
     <div className="mb-6">
+      {renderStepLabel("stage", "Where are you in the process?")}
+      <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
+        We build every home from scratch, so this tells us which questions are
+        worth asking and how precise a range we can honestly give you.
+      </p>
+      <div className="grid gap-2.5" role="radiogroup" aria-label="Planning stage">
+        {PLANNING_STAGES.map((stage) => {
+          const meta = PLANNING_STAGE_LABELS[stage];
+          const active = chosen.stage && planningStage === stage;
+          return (
+            <button
+              key={stage}
+              type="button"
+              role="radio"
+              aria-checked={active}
+              onClick={() => handleSelectStage(stage)}
+              data-testid={`calc-stage-${stage}`}
+              className={cn(darkCard(active), "flex items-center gap-3 px-4 py-3.5 text-left min-h-[58px]")}
+            >
+              <div className="min-w-0 flex-1">
+                <span className="block text-[15px] text-inverse-foreground leading-tight">
+                  {meta.label}
+                </span>
+                <span className="block text-[12.5px] text-inverse-muted mt-0.5">{meta.sub}</span>
+              </div>
+              {active && (
+                <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-accent-legible flex-shrink-0">
+                  <Check className="h-3 w-3 text-inverse" />
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  /* Step 2 - Project type: prominent card grid (matches the other inputs) */
+  const projectGrid = (
+    <div className="mb-6" ref={projectGridRef}>
       {renderStepLabel("project", "Choose your project")}
       <div
         className="grid grid-cols-2 sm:grid-cols-3 gap-2.5"
@@ -1944,6 +2083,201 @@ export function EstimateCalculator({
   );
 
   /* Finish level (options tied to effectiveProject) */
+  /*
+   * Additional structures, and the follow-ups each one opens.
+   *
+   * Ticking a structure is not enough to price it: a 1,600 SF cold shop with a
+   * sub-panel and a 1,600 SF heated shop with a bathroom are different
+   * buildings at materially different money. So each tick expands its own small
+   * set of questions, and only the ones that apply - "attached" is not offered
+   * for a barn, because there is no such thing.
+   */
+  const structuresStep = (
+    <div className="mb-6" ref={structuresRef}>
+      {renderStepLabel("structures", "Any other structures?")}
+      <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
+        Buildings other than the house. Each one is priced as its own structure,
+        not as extra house square footage. Skip this if you only need the home.
+      </p>
+      <div className="grid grid-cols-2 gap-2.5">
+        {(Object.keys(ACCESSORY_STRUCTURE_LABELS) as AccessoryStructureKind[])
+          .filter((kind) => {
+            /*
+             * A shop home IS a house with a shop: the shop area is already
+             * priced from the subtype preset through refinements.shopSize.
+             * Offering the shop chip as well would let a visitor add a second
+             * shop that the rule set has already charged them for, and the two
+             * price through different paths so nothing downstream would catch
+             * the duplication.
+             */
+            if (kind === "shop" && effectiveProject === "shop-home") return false;
+            return true;
+          })
+          .map((kind) => {
+          const meta = ACCESSORY_STRUCTURE_LABELS[kind];
+          const picked = (structures ?? []).find((s) => s.kind === kind);
+          return (
+            <button
+              key={kind}
+              type="button"
+              aria-pressed={Boolean(picked)}
+              onClick={() => toggleStructure(kind)}
+              data-testid={`calc-structure-${kind}`}
+              className={cn(darkChoice(Boolean(picked)), "px-3.5 py-3 text-left min-h-[54px]")}
+            >
+              <span className="block text-[14px] text-inverse-foreground leading-tight">
+                {meta.label}
+              </span>
+              <span className="block text-[11.5px] text-inverse-muted mt-0.5">{meta.sub}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {(structures ?? []).map((s) => {
+        const meta = ACCESSORY_STRUCTURE_LABELS[s.kind];
+        const open = openStructure === s.kind;
+        return (
+          <div
+            key={s.kind}
+            className="mt-3 rounded-md border border-accent-legible/30 bg-inverse-foreground/[0.05] p-4"
+          >
+            <button
+              type="button"
+              onClick={() => setOpenStructure(open ? null : s.kind)}
+              className="flex w-full items-center justify-between text-left"
+              aria-expanded={open}
+            >
+              <span className="text-[14px] text-inverse-foreground">
+                {meta.label} · {s.sqft.toLocaleString("en-US")} sq ft
+              </span>
+              <span className="text-[12px] text-accent-legible">{open ? "Done" : "Edit"}</span>
+            </button>
+
+            {open && (
+              <div className="mt-4 space-y-4">
+                <div>
+                  <label
+                    htmlFor={`as-sqft-${s.kind}`}
+                    className="block text-[12px] uppercase tracking-[0.12em] text-inverse-muted mb-2"
+                  >
+                    Size · {s.sqft.toLocaleString("en-US")} sq ft
+                  </label>
+                  <input
+                    id={`as-sqft-${s.kind}`}
+                    type="range"
+                    min={200}
+                    max={s.kind === "barn" ? 6000 : 3000}
+                    step={50}
+                    value={s.sqft}
+                    onChange={(e) => updateStructure(s.kind, { sqft: Number(e.target.value) })}
+                    data-testid={`calc-structure-sqft-${s.kind}`}
+                    className="w-full accent-[hsl(var(--accent-legible))]"
+                  />
+                </div>
+
+                {meta.canAttach && (
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { v: false, label: "Detached" },
+                      { v: true, label: "Attached to the house" },
+                    ].map((o) => (
+                      <button
+                        key={String(o.v)}
+                        type="button"
+                        aria-pressed={s.attached === o.v}
+                        onClick={() => updateStructure(s.kind, { attached: o.v })}
+                        className={cn(darkChoice(s.attached === o.v), "px-3 py-2 text-[13px]")}
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { k: "heated" as const, label: "Heated and insulated" },
+                    { k: "plumbing" as const, label: "Plumbing" },
+                  ].map((o) => (
+                    <button
+                      key={o.k}
+                      type="button"
+                      aria-pressed={s[o.k]}
+                      onClick={() => updateStructure(s.kind, { [o.k]: !s[o.k] })}
+                      data-testid={`calc-structure-${o.k}-${s.kind}`}
+                      className={cn(darkChoice(s[o.k]), "px-3 py-2 text-[13px]")}
+                    >
+                      {o.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div>
+                  <span className="block text-[12px] uppercase tracking-[0.12em] text-inverse-muted mb-2">
+                    Power
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {(
+                      [
+                        { v: "none", label: "None" },
+                        { v: "standard", label: "Lights and outlets" },
+                        { v: "heavy", label: "Sub-panel / shop equipment" },
+                      ] as const
+                    ).map((o) => (
+                      <button
+                        key={o.v}
+                        type="button"
+                        aria-pressed={s.power === o.v}
+                        onClick={() => updateStructure(s.kind, { power: o.v })}
+                        className={cn(darkChoice(s.power === o.v), "px-3 py-2 text-[13px]")}
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <span className="block text-[12px] uppercase tracking-[0.12em] text-inverse-muted mb-2">
+                    Finish level
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      aria-pressed={s.finish === null}
+                      onClick={() => updateStructure(s.kind, { finish: null })}
+                      className={cn(darkChoice(s.finish === null), "px-3 py-2 text-[13px]")}
+                    >
+                      Match the house
+                    </button>
+                    {availFinish.map((f) => (
+                      <button
+                        key={f}
+                        type="button"
+                        aria-pressed={s.finish === f}
+                        onClick={() => updateStructure(s.kind, { finish: f })}
+                        className={cn(darkChoice(s.finish === f), "px-3 py-2 text-[13px]")}
+                      >
+                        {finishLabels[f].label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {structures !== null && structures.length === 0 && (
+        <p className="mt-3 text-[12.5px] text-inverse-muted">
+          No additional structures selected. You can add one later.
+        </p>
+      )}
+    </div>
+  );
+
   const finishRow = (
     <div className="mt-5 scroll-mt-20" ref={finishRef}>
       {renderStepLabel("finish", "Finish level")}
@@ -2573,16 +2907,21 @@ export function EstimateCalculator({
   const flow = (
     <>
       {intro}
-      {projectGrid}
+      {/* Planning stage comes before the project grid: it is the question a
+          builder actually asks first, and it decides how wide the resulting
+          range can honestly be. */}
+      {planningStageStep}
       {/* Each step appears only once the one before it has been answered, so a
           visitor is never presented with a pre-filled choice they did not make
           and cannot reach an estimate without selecting every input. */}
+      {chosen.stage && projectGrid}
       {chosen.project && addressStep}
       {chosen.project && subtypeGrid}
       {chosen.subtype && sizeGrid}
       {chosen.subtype && chipsRow}
       {chosen.subtype && showBathCount && bathCountRow}
       {chosen.subtype && showKitchenIncluded && kitchenRow}
+      {chosen.subtype && structuresStep}
       {chosen.subtype && finishRow}
       {chosen.finish && typicalPanel}
       {allChosen &&
