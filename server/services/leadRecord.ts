@@ -19,6 +19,8 @@ import {
   getOnsiteNotice,
   PROJECT_LABELS,
   FINISH_LABELS,
+  PLANNING_STAGE_LABELS,
+  ACCESSORY_STRUCTURE_LABELS,
 } from "@/shared/estimateEngine";
 
 /**
@@ -273,6 +275,27 @@ export function buildProjectGoals(est: VerifiedEstimate | null): string | undefi
     `${FINISH_LABELS[est.finish].label} finish`,
   ];
   if (est.upgradeLabels?.length) bits.push(`Upgrading: ${est.upgradeLabels.join(", ")}`);
+  /*
+   * Planning stage and structures ride in the goals string because the CRM's
+   * field schema is not known from this repository (see the note on
+   * renderLeadRecord) and inventing custom fields that may not exist would drop
+   * the data silently. Goals is free text and is read by a human, which is
+   * exactly who needs to know whether this person has drawings.
+   */
+  if (est.refinements.planningStage) {
+    bits.push(PLANNING_STAGE_LABELS[est.refinements.planningStage].label);
+  }
+  const structures = est.refinements.accessoryStructures;
+  if (structures?.length) {
+    bits.push(
+      `Plus: ${structures
+        .map(
+          (s) =>
+            `${ACCESSORY_STRUCTURE_LABELS[s.kind].label} ${s.sqft.toLocaleString("en-US")} sq ft`,
+        )
+        .join(", ")}`,
+    );
+  }
   return bits.join(" | ");
 }
 

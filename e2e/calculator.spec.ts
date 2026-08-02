@@ -31,18 +31,37 @@ const PUBLIC_PROJECTS = [
 /** Retired from the public calculator; must not reappear as tabs. */
 const REMODEL_PROJECTS = ["kitchen", "bathroom", "whole-home", "basement"] as const;
 
+/** The four planning stages, which are now the estimator's first question. */
+const PLANNING_STAGES = [
+  "have-plans",
+  "plans-in-progress",
+  "need-plans",
+  "exploring",
+] as const;
+
 async function openCalculator(page: Page) {
   await page.goto("/#calculator");
   await page.locator("#calculator").scrollIntoViewIfNeeded();
 }
 
 /**
+ * Answer question one. Nothing else in the estimator renders until this is
+ * done, so almost every test needs it.
+ */
+async function chooseStage(page: Page, stage: string = "have-plans") {
+  await page.getByTestId(`calc-stage-${stage}`).click();
+}
+
+/**
  * Drive the estimator to the point where every required input is answered.
  *
  * Bath count and kitchen inclusion are conditional on the project, so they are
- * answered only when present rather than assumed either way.
+ * answered only when present rather than assumed either way. The structures
+ * step needs no interaction: reaching it records "asked, none wanted", which is
+ * a complete answer.
  */
-async function completeInputs(page: Page, project: string) {
+async function completeInputs(page: Page, project: string, stage = "have-plans") {
+  await chooseStage(page, stage);
   await page.getByTestId(`calc-tab-${project}`).click();
 
   const subtype = page.locator('[data-testid^="calc-subtype-"]:visible').first();
@@ -59,8 +78,24 @@ async function completeInputs(page: Page, project: string) {
 }
 
 test.describe("New construction estimator", () => {
-  test("offers only new-construction projects, and no range before any input", async ({ page }) => {
+  test("opens on planning stage, and offers nothing else until it is answered", async ({ page }) => {
     await openCalculator(page);
+
+    // Question one is present, unanswered, and is the ONLY thing on offer.
+    for (const stage of PLANNING_STAGES) {
+      await expect(page.getByTestId(`calc-stage-${stage}`)).toBeVisible();
+    }
+    await expect(page.locator('[data-testid^="calc-stage-"][aria-checked="true"]')).toHaveCount(0);
+    await expect(page.locator('[data-testid^="calc-tab-"]')).toHaveCount(0);
+
+    // No price is shown, and nothing is persisted, before the visitor chooses.
+    await expect(page.locator('[data-testid="estimate-range"]')).toHaveCount(0);
+    expect(await page.evaluate(() => sessionStorage.getItem("brc_estimate"))).toBeNull();
+  });
+
+  test("offers only new-construction projects once a stage is chosen", async ({ page }) => {
+    await openCalculator(page);
+    await chooseStage(page);
 
     for (const project of PUBLIC_PROJECTS) {
       await expect(page.getByTestId(`calc-tab-${project}`)).toBeVisible();
@@ -71,14 +106,11 @@ test.describe("New construction estimator", () => {
 
     // Nothing is preselected, so no tab reports itself as the current one.
     await expect(page.locator('[data-testid^="calc-tab-"][aria-selected="true"]')).toHaveCount(0);
-
-    // No price is shown, and nothing is persisted, before the visitor chooses.
-    await expect(page.locator('[data-testid="estimate-range"]')).toHaveCount(0);
-    expect(await page.evaluate(() => sessionStorage.getItem("brc_estimate"))).toBeNull();
   });
 
   test("reveals each step only once the one before it is answered", async ({ page }) => {
     await openCalculator(page);
+    await chooseStage(page);
 
     // Before a project: no layout cards, no size slider, no finish levels.
     await expect(page.locator('[data-testid^="calc-subtype-"]')).toHaveCount(0);
@@ -103,6 +135,7 @@ test.describe("New construction estimator", () => {
 
   test("square footage is settable and survives a layout change", async ({ page }) => {
     await openCalculator(page);
+    await chooseStage(page);
     await page.getByTestId("calc-tab-custom-home").click();
     await page.locator('[data-testid^="calc-subtype-"]:visible').first().click();
 
@@ -121,6 +154,7 @@ test.describe("New construction estimator", () => {
 
   test("switching project swaps in that project's own layout options", async ({ page }) => {
     await openCalculator(page);
+    await chooseStage(page);
 
     await page.getByTestId("calc-tab-custom-home").click();
     const customSubtypes = await page
@@ -135,6 +169,76 @@ test.describe("New construction estimator", () => {
 
     expect(shopSubtypes.length).toBeGreaterThan(0);
     expect(shopSubtypes).not.toEqual(customSubtypes);
+  });
+});
+
+/** The stored estimate is what both emails and the CRM record are built from. */
+async function storedEstimate(page: Page) {
+  return page.evaluate(() => {
+    const raw = sessionStorage.getItem("brc_estimate");
+    return raw ? JSON.parse(raw) : null;
+  });
+}
+
+test.describe("Accessory structures", () => {
+  /**
+   * A control that changes no number is worse than no control: it teaches
+   * people the estimator is decorative. Both the structure and its follow-ups
+   * must move the range.
+   */
+  test("ticking a shop raises the range, and heating it raises it again", async ({ page }) => {
+    await openCalculator(page);
+    await completeInputs(page, "custom-home");
+
+    const before = await storedEstimate(page);
+    expect(before).not.toBeNull();
+    expect(before.refinements.accessoryStructures).toEqual([]);
+
+    await page.getByTestId("calc-structure-shop").click();
+    const withShop = await storedEstimate(page);
+    expect(withShop.priceLow).toBeGreaterThan(before.priceLow);
+    expect(withShop.refinements.accessoryStructures).toHaveLength(1);
+
+    await page.getByTestId("calc-structure-heated-shop").click();
+    const heated = await storedEstimate(page);
+    expect(heated.priceLow).toBeGreaterThan(withShop.priceLow);
+    expect(heated.refinements.accessoryStructures[0].heated).toBe(true);
+  });
+
+  /**
+   * A shop home already carries its shop through the subtype preset, and the
+   * two price through different paths, so offering the chip as well would let a
+   * visitor be charged twice with nothing downstream to catch it.
+   */
+  test("the shop chip is not offered on a shop home", async ({ page }) => {
+    await openCalculator(page);
+    await completeInputs(page, "shop-home");
+    await expect(page.locator('[data-testid="calc-structure-shop"]')).toHaveCount(0);
+    // The other structures are still on offer.
+    await expect(page.locator('[data-testid="calc-structure-barn"]:visible')).toBeVisible();
+  });
+});
+
+test.describe("Planning stage", () => {
+  /**
+   * Completed drawings earn a tighter band than idle curiosity. Before this the
+   * two were quoted identically, which overstated one and understated the other.
+   */
+  test("a visitor with plans is quoted a narrower band than one still exploring", async ({ page }) => {
+    await openCalculator(page);
+    await completeInputs(page, "custom-home", "have-plans");
+    const withPlans = await storedEstimate(page);
+
+    await openCalculator(page);
+    await completeInputs(page, "custom-home", "exploring");
+    const exploring = await storedEstimate(page);
+
+    const width = (e: { priceLow: number; priceHigh: number }) =>
+      (e.priceHigh - e.priceLow) / (e.priceHigh + e.priceLow);
+
+    expect(withPlans.refinements.planningStage).toBe("have-plans");
+    expect(exploring.refinements.planningStage).toBe("exploring");
+    expect(width(withPlans)).toBeLessThan(width(exploring));
   });
 });
 

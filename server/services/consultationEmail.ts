@@ -22,6 +22,8 @@ import {
   PROJECT_LABELS,
   getFinishLabels,
   isNewConstructionProject,
+  PLANNING_STAGE_LABELS,
+  ACCESSORY_STRUCTURE_LABELS,
   type EstimateRefinements,
   type ProjectType,
   type FinishLevel,
@@ -128,9 +130,23 @@ export function buildSelectionRows(
 
   // Ordered to mirror the estimator itself, so the email reads back exactly the
   // sequence of choices the visitor made and nothing they picked is missing.
-  const rows: { label: string; value: string }[] = [
-    { label: "Project type", value: PROJECT_LABELS[project].label },
-  ];
+  const rows: { label: string; value: string }[] = [];
+
+  /*
+   * Planning stage leads, because it is the first thing the visitor answered
+   * and the first thing whoever picks up this lead needs to know. Someone with
+   * stamped drawings and someone still deciding whether to build are entirely
+   * different conversations, and that is not recoverable from the rest of the
+   * rows.
+   */
+  if (r.planningStage) {
+    rows.push({
+      label: "Planning stage",
+      value: PLANNING_STAGE_LABELS[r.planningStage].label,
+    });
+  }
+
+  rows.push({ label: "Project type", value: PROJECT_LABELS[project].label });
 
   if (layoutLabel) rows.push({ label: "Layout / type", value: layoutLabel });
 
@@ -209,6 +225,32 @@ export function buildSelectionRows(
       label: "ADU configuration",
       value: r.aduConfig === "attached" ? "Attached unit" : "Detached unit",
     });
+  }
+
+  /*
+   * One row per structure rather than a count, because "Shop" alone tells the
+   * estimator nothing: a cold 1,600 SF shell and a heated, plumbed one with a
+   * sub-panel differ by tens of thousands, and those are exactly the answers
+   * the visitor just gave. An empty array is stated explicitly rather than
+   * omitted, so "they were asked and said no" is distinguishable from "an older
+   * estimate that never asked".
+   */
+  if (r.accessoryStructures && r.accessoryStructures.length > 0) {
+    for (const s of r.accessoryStructures) {
+      const meta = ACCESSORY_STRUCTURE_LABELS[s.kind];
+      const bits = [
+        `${s.sqft.toLocaleString("en-US")} sq ft`,
+        s.attached && meta.canAttach ? "attached" : "detached",
+      ];
+      if (s.heated) bits.push("heated");
+      if (s.plumbing) bits.push("plumbing");
+      if (s.power === "heavy") bits.push("sub-panel");
+      else if (s.power === "none") bits.push("no power");
+      if (s.finish) bits.push(`${getFinishLabels(project)[s.finish].label.toLowerCase()} finish`);
+      rows.push({ label: meta.label, value: bits.join(", ") });
+    }
+  } else if (r.accessoryStructures) {
+    rows.push({ label: "Other structures", value: "None" });
   }
 
   return rows;
