@@ -76,6 +76,191 @@ export type LotServices = "city" | "well-septic" | "unsure";
 
 export type SiteDifficulty = "simple" | "moderate" | "steep";
 
+/* ------------------------------------------------------ planning stage */
+
+/**
+ * HOW FAR ALONG THE CLIENT IS, and the first thing the estimator asks.
+ *
+ * A custom builder's first qualifying question is not "what do you want to
+ * build" or "do you own a lot": every home here is drawn from scratch, so the
+ * product is the same in all four cases. What actually differs is how much is
+ * already decided, and that governs two separate things:
+ *
+ *   WHICH QUESTIONS ARE WORTH ASKING. Someone holding stamped drawings can tell
+ *   us storeys, bath count and garage bays exactly, so we ask for them. Someone
+ *   still deciding whether to build at all cannot, and asking anyway produces
+ *   invented answers that make the estimate look precise while being worse.
+ *
+ *   HOW WIDE THE RANGE HONESTLY IS. See PLANNING_STAGE_BAND. A range built on
+ *   completed plans deserves to be tighter than one built on a square-foot
+ *   guess, and saying so is the difference between a planning tool and a
+ *   number generator.
+ */
+export type PlanningStage =
+  /** Stamped or near-final architectural drawings in hand. */
+  | "have-plans"
+  /** Working with an architect or designer; drawings are in progress. */
+  | "plans-in-progress"
+  /** Knows roughly what they want; needs design help to get there. */
+  | "need-plans"
+  /** Early. May not have a lot, a budget or a decision to build yet. */
+  | "exploring";
+
+export const PLANNING_STAGES: PlanningStage[] = [
+  "have-plans",
+  "plans-in-progress",
+  "need-plans",
+  "exploring",
+];
+
+export const PLANNING_STAGE_LABELS: Record<
+  PlanningStage,
+  { label: string; sub: string }
+> = {
+  "have-plans": {
+    label: "I have completed plans",
+    sub: "Architectural drawings are finished",
+  },
+  "plans-in-progress": {
+    label: "My plans are being developed",
+    sub: "Working with an architect or designer now",
+  },
+  "need-plans": {
+    label: "I have an idea, not plans",
+    sub: "I know roughly what I want to build",
+  },
+  exploring: {
+    label: "I am still exploring",
+    sub: "Working out whether and what to build",
+  },
+};
+
+/**
+ * Half-width of the quoted band, by how much is actually known.
+ *
+ * `start` is the band before the client answers anything optional; `floor` is
+ * the tightest it may ever close to for that stage, however many questions are
+ * answered. The floor is what stops detail alone from manufacturing confidence:
+ * answering ten questions about a house that has not been drawn yet does not
+ * make the drawings exist, so "exploring" never reaches the precision that
+ * completed plans earn.
+ *
+ * The completed-plans floor of 0.10 is deliberately not tighter. Even with
+ * drawings in hand, site conditions, engineering, permit conditions, allowance
+ * decisions and the subcontract market are all still open, and the back-test
+ * behind MIN_BAND in costs/pricing.ts found roughly one job in five landing
+ * above a 15 percent ceiling. A number tighter than plus or minus 10 percent
+ * would be claiming an accuracy this engine has never demonstrated.
+ */
+export const PLANNING_STAGE_BAND: Record<
+  PlanningStage,
+  { start: number; floor: number }
+> = {
+  "have-plans": { start: 0.12, floor: 0.1 },
+  "plans-in-progress": { start: 0.16, floor: 0.13 },
+  "need-plans": { start: 0.21, floor: 0.17 },
+  exploring: { start: 0.26, floor: 0.22 },
+};
+
+/* -------------------------------------------------- accessory structures */
+
+/**
+ * Buildings other than the house itself.
+ *
+ * These are priced as separate structures rather than as square feet added to
+ * the home, because they do not cost what a house costs. A detached shop is a
+ * slab, a clear-span shell and a big door; a guest house is a small home with
+ * its own everything. Folding either into the main square-foot figure is how an
+ * estimator ends up quoting a pole barn at kitchen rates.
+ */
+export type AccessoryStructureKind =
+  | "adu"
+  | "detached-garage"
+  | "shop"
+  | "rv-garage"
+  | "guest-house"
+  | "pool-house"
+  | "barn"
+  | "other";
+
+export const ACCESSORY_STRUCTURE_LABELS: Record<
+  AccessoryStructureKind,
+  { label: string; sub: string; defaultSqft: number; canAttach: boolean }
+> = {
+  adu: {
+    label: "ADU",
+    sub: "Accessory dwelling unit, attached or detached",
+    defaultSqft: 800,
+    canAttach: true,
+  },
+  "detached-garage": {
+    label: "Detached garage",
+    sub: "Separate from the house",
+    defaultSqft: 720,
+    canAttach: false,
+  },
+  shop: {
+    label: "Shop",
+    sub: "Working shop or hobby space",
+    defaultSqft: 1600,
+    canAttach: true,
+  },
+  "rv-garage": {
+    label: "RV or oversized garage",
+    sub: "Tall doors, deeper bays",
+    defaultSqft: 1200,
+    canAttach: true,
+  },
+  "guest-house": {
+    label: "Guest house",
+    sub: "Separate living quarters",
+    defaultSqft: 900,
+    canAttach: false,
+  },
+  "pool-house": {
+    label: "Pool house",
+    sub: "Changing, bath, covered lounge",
+    defaultSqft: 400,
+    canAttach: false,
+  },
+  barn: {
+    label: "Barn or outbuilding",
+    sub: "Livestock, equipment or storage",
+    defaultSqft: 2400,
+    canAttach: false,
+  },
+  other: {
+    label: "Something else",
+    sub: "Tell us at consultation",
+    defaultSqft: 600,
+    canAttach: true,
+  },
+};
+
+/** How much power a structure needs, which is a real cost fork, not a detail. */
+export type StructurePower = "none" | "standard" | "heavy";
+
+/**
+ * One additional structure and everything about it that moves its price.
+ *
+ * `finish` is nullable and means "match the house" rather than "unknown", since
+ * that is the honest default for an ADU or guest house and the common case for
+ * a shop is emphatically not to match.
+ */
+export interface AccessoryStructure {
+  kind: AccessoryStructureKind;
+  sqft: number;
+  /** null means "same specification as the house". */
+  finish: FinishLevel | null;
+  /** Shares a wall and foundation with the house. Detached carries its own. */
+  attached: boolean;
+  /** Full bath, kitchen or laundry rough-in and fixtures. */
+  plumbing: boolean;
+  power: StructurePower;
+  /** Insulated and conditioned rather than a cold shell. */
+  heated: boolean;
+}
+
 export interface PriceData {
   low: number;
   high: number;
@@ -134,8 +319,27 @@ export interface EstimateRefinements {
   siteDifficulty: SiteDifficulty | null;
   /** Covered patio or covered deck, in square feet. */
   coveredOutdoor: number | null;
-  /** Working shop area on a shop home, in square feet. */
+  /**
+   * Working shop area on a shop home, in square feet.
+   *
+   * @deprecated Superseded by an "shop" entry in `accessoryStructures`, which
+   * carries the finish, power, plumbing and attachment that a bare area cannot.
+   * Retained so estimates stored before the change still parse, and still read
+   * by the shop-home rule set.
+   */
   shopSize: number | null;
+
+  /**
+   * How far along the client's planning is. Governs which questions are asked
+   * and how wide the quoted band is; see PLANNING_STAGE_BAND.
+   */
+  planningStage: PlanningStage | null;
+
+  /**
+   * Additional buildings on the property. Empty array means "asked, none
+   * wanted"; null means "not asked yet" and is priced as none.
+   */
+  accessoryStructures: AccessoryStructure[] | null;
 }
 
 /* ----------------------------- construction selection to engine quantities */
@@ -741,7 +945,38 @@ export const EMPTY_REFINEMENTS: EstimateRefinements = {
   siteDifficulty: null,
   coveredOutdoor: null,
   shopSize: null,
+  planningStage: null,
+  accessoryStructures: null,
 };
+
+/** Default spec for a structure the visitor has just ticked but not detailed. */
+export function defaultAccessoryStructure(
+  kind: AccessoryStructureKind,
+): AccessoryStructure {
+  const meta = ACCESSORY_STRUCTURE_LABELS[kind];
+  return {
+    kind,
+    sqft: meta.defaultSqft,
+    // An ADU, guest house or pool house is habitable space and matches the
+    // house unless told otherwise. A shop, barn or garage emphatically does
+    // not, so those open at the lowest tier and are raised deliberately.
+    finish:
+      kind === "adu" || kind === "guest-house" || kind === "pool-house"
+        ? null
+        : "refresh",
+    attached: false,
+    plumbing: kind === "adu" || kind === "guest-house" || kind === "pool-house",
+    power:
+      kind === "adu" || kind === "guest-house"
+        ? "standard"
+        : kind === "shop" || kind === "rv-garage"
+          ? "heavy"
+          : kind === "barn"
+            ? "none"
+            : "standard",
+    heated: kind === "adu" || kind === "guest-house" || kind === "pool-house",
+  };
+}
 
 /** Estimator starting state: nothing selected, no implicit defaults. */
 export const EMPTY_ESTIMATE_INPUT: PartialEstimateInput = {

@@ -19,7 +19,24 @@ import { buildInternalEstimate, type QualityLevel, type ScopeSelections } from "
 import { buildPlanningRange } from "./pricing";
 import { buildAdminView } from "./outputs";
 import { RULES_BY_PROJECT } from "./scopeRules";
-import { GARAGE_BAY_SQFT, type GarageBays, type ProjectType } from "../estimateEngine";
+import {
+  ACCESSORY_STRUCTURE_LABELS,
+  GARAGE_BAY_SQFT,
+  PLANNING_STAGE_BAND,
+  type AccessoryStructure,
+  type AccessoryStructureKind,
+  type FinishLevel,
+  type GarageBays,
+  type PlanningStage,
+  type ProjectType,
+} from "../estimateEngine";
+
+/** Narrow an unknown to a PlanningStage, or null when it is not one. */
+function toPlanningStage(raw: unknown): PlanningStage | null {
+  return typeof raw === "string" && raw in PLANNING_STAGE_BAND
+    ? (raw as PlanningStage)
+    : null;
+}
 
 /** The refinement shape both the calculator and the API routes hold. */
 export interface ResolverRefinements {
@@ -38,6 +55,8 @@ export interface ResolverRefinements {
   siteDifficulty?: unknown;
   coveredOutdoor?: number | null;
   shopSize?: number | null;
+  planningStage?: unknown;
+  accessoryStructures?: unknown;
 }
 
 function toSelections(
@@ -86,7 +105,53 @@ function toSelections(
     siteDifficulty: (refinements.siteDifficulty ?? null) as ScopeSelections["siteDifficulty"],
     coveredOutdoorSqft: refinements.coveredOutdoor ?? null,
     shopSqft: refinements.shopSize ?? null,
+    /*
+     * Passed through untouched and NOT added to `sqft`. Accessory structures
+     * are priced from their own rate table in accessoryStructures.ts; putting
+     * their area into the finished-area figure would price a barn at house
+     * rates and simultaneously inflate the roof, HVAC and interior finish of
+     * the house itself.
+     */
+    accessoryStructures: normalizeAccessoryStructures(refinements.accessoryStructures),
   };
+}
+
+/**
+ * Trust nothing from the wire.
+ *
+ * These arrive from sessionStorage and from the request body of two public API
+ * routes, so a malformed or hostile payload must degrade to "no structures"
+ * rather than reaching the pricing table. A negative or absurd square footage
+ * is the one that matters: unclamped, it would subtract from the estimate.
+ */
+function normalizeAccessoryStructures(raw: unknown): AccessoryStructure[] | null {
+  if (!Array.isArray(raw)) return null;
+  const out: AccessoryStructure[] = [];
+  for (const entry of raw) {
+    if (!entry || typeof entry !== "object") continue;
+    const e = entry as Record<string, unknown>;
+    const kind = e.kind as AccessoryStructureKind;
+    if (!ACCESSORY_STRUCTURE_LABELS[kind]) continue;
+    const sqft = Number(e.sqft);
+    if (!Number.isFinite(sqft) || sqft <= 0) continue;
+    const finish = e.finish as FinishLevel | null;
+    const power = e.power as AccessoryStructure["power"];
+    out.push({
+      kind,
+      // 20,000 SF is far beyond any residential accessory structure and well
+      // past the point where this estimator is the right tool at all.
+      sqft: Math.min(20000, Math.round(sqft)),
+      finish:
+        finish === "refresh" || finish === "mid-range" || finish === "high-end" || finish === "luxury"
+          ? finish
+          : null,
+      attached: e.attached === true,
+      plumbing: e.plumbing === true,
+      power: power === "none" || power === "standard" || power === "heavy" ? power : "none",
+      heated: e.heated === true,
+    });
+  }
+  return out;
 }
 
 /**
@@ -106,7 +171,14 @@ export function resolveQuotedRange(
   if (!rules) return null;
   const selections = toSelections(finish, sqft, refinements);
   const internal = buildInternalEstimate(rules, selections, project);
-  const range = buildPlanningRange(internal, project, selections.quality, sqft, detailRatio);
+  const range = buildPlanningRange(
+    internal,
+    project,
+    selections.quality,
+    sqft,
+    detailRatio,
+    toPlanningStage(refinements.planningStage),
+  );
   return { priceLow: range.low, priceHigh: range.high };
 }
 
@@ -122,6 +194,13 @@ export function resolveInternalEstimate(
   if (!rules) return null;
   const selections = toSelections(finish, sqft, refinements);
   const internal = buildInternalEstimate(rules, selections, project);
-  const range = buildPlanningRange(internal, project, selections.quality, sqft, detailRatio);
+  const range = buildPlanningRange(
+    internal,
+    project,
+    selections.quality,
+    sqft,
+    detailRatio,
+    toPlanningStage(refinements.planningStage),
+  );
   return { internal, range, admin: buildAdminView(internal, range) };
 }

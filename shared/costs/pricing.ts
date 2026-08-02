@@ -27,10 +27,14 @@ import {
 import {
   calculateEstimate,
   normalizeFinishLevel,
+  PLANNING_STAGE_BAND,
   type FinishLevel,
+  type PlanningStage,
   type ProjectType,
 } from "../estimateEngine";
 import { EMPTY_REFINEMENTS } from "../estimateEngine";
+import { CONTINGENCY_RATE } from "./engine";
+import { ACCESSORY_DIVISION } from "./accessoryStructures";
 
 /* ------------------------------------------------------------ market guard */
 
@@ -156,6 +160,42 @@ const MIN_BAND = 0.15;
 /** How much of the band detail can remove. Zero while MIN_BAND equals BASE_BAND. */
 const BAND_TIGHTENING = 0.5;
 
+/**
+ * Band width when the client's planning stage is known.
+ *
+ * This SUPERSEDES the flat BASE_BAND/MIN_BAND pair above for new construction,
+ * and the reason is that those two constants were set equal, which pinned every
+ * range at plus or minus 15 percent no matter what was known. That was
+ * defensible for remodels, where the unknowns are behind walls we have not
+ * opened and no amount of client detail resolves them. It is not defensible for
+ * a new build, where the single largest unknown is simply whether the house has
+ * been drawn yet.
+ *
+ * Quoting a client with stamped drawings the same +/-15% as someone who has not
+ * decided to build understates one and overstates the other. See
+ * PLANNING_STAGE_BAND in estimateEngine.ts for the per-stage figures and why
+ * the tightest floor is 10 percent rather than lower.
+ */
+function bandForStage(stage: PlanningStage | null | undefined, detailRatio: number): number {
+  if (!stage) return Math.max(MIN_BAND, BASE_BAND * (1 - BAND_TIGHTENING * detailRatio));
+  const { start, floor } = PLANNING_STAGE_BAND[stage];
+  return Math.max(floor, start - (start - floor) * detailRatio);
+}
+
+/**
+ * The accessory-structure share of the internal cost, including its slice of
+ * the contingency reserve.
+ *
+ * Read back off the priced lines rather than passed in, so it cannot drift out
+ * of step with what the takeoff actually contains.
+ */
+function accessoryInternalCost(estimate: InternalEstimate): number {
+  const direct = estimate.lines
+    .filter((l) => l.division === ACCESSORY_DIVISION)
+    .reduce((s, l) => s + l.cost, 0);
+  return direct * (1 + CONTINGENCY_RATE);
+}
+
 export interface PlanningRange {
   low: number;
   high: number;
@@ -164,6 +204,15 @@ export interface PlanningRange {
   band: number;
   appliedMargin: number;
   marginTrimmed: boolean;
+  /**
+   * The share of `centre` attributable to accessory structures, at the applied
+   * margin. Zero when there are none. Carried so an admin can see how much of a
+   * large number is house and how much is shop, which is the first question
+   * asked of any six-figure jump.
+   */
+  accessoryCustomerAmount: number;
+  /** The stage the band was derived from; null falls back to the flat band. */
+  planningStage: PlanningStage | null;
   warnings: EstimateWarning[];
 }
 
@@ -199,12 +248,34 @@ export function buildPlanningRange(
   quality: QualityLevel,
   sqft: number,
   detailRatio = 0,
+  planningStage: PlanningStage | null = null,
 ): PlanningRange {
-  const decision = decideMargin(estimate.totalInternalCost, project, quality, sqft);
-  const clamped = Math.min(1, Math.max(0, detailRatio));
-  const band = Math.max(MIN_BAND, BASE_BAND * (1 - BAND_TIGHTENING * clamped));
+  /*
+   * THE CEILING IS A HOUSE CEILING, so only the house is measured against it.
+   *
+   * marketCeiling() asks the guide matrix what a home of this type, size and
+   * finish is worth. It knows nothing about a 2,400 SF shop, so sending it a
+   * total that includes one guarantees the guard fires: it reads a normal house
+   * plus a barn as a wildly overpriced house, trims margin to the 22 percent
+   * floor and attaches a warning telling the owner to go re-check quantities
+   * that were never wrong.
+   *
+   * So the house is priced against the ceiling on its own, and the accessory
+   * structures are priced separately at whatever margin that decision landed
+   * on. They stay subject to the same margin, just not to a ceiling that was
+   * never drawn to cover them.
+   */
+  const accessoryCost = accessoryInternalCost(estimate);
+  const houseCost = Math.max(0, estimate.totalInternalCost - accessoryCost);
 
-  const centre = decision.price;
+  const decision = decideMargin(houseCost, project, quality, sqft);
+  const clamped = Math.min(1, Math.max(0, detailRatio));
+  const band = bandForStage(planningStage, clamped);
+
+  const centre =
+    accessoryCost > 0
+      ? decision.price + priceAtMargin(accessoryCost, decision.appliedMargin)
+      : decision.price;
   const step = stepFor(centre);
   return {
     centre,
@@ -213,6 +284,9 @@ export function buildPlanningRange(
     band,
     appliedMargin: decision.appliedMargin,
     marginTrimmed: decision.trimmed,
+    accessoryCustomerAmount:
+      accessoryCost > 0 ? priceAtMargin(accessoryCost, decision.appliedMargin) : 0,
+    planningStage,
     warnings: [...estimate.warnings, ...decision.warnings],
   };
 }

@@ -19,6 +19,11 @@
  * risk and are not additive in the same place.
  */
 import { LINE_ITEMS, item, type CostType, type LineItem, type Uom } from "./lineItemCatalog";
+import {
+  accessoryStructureCostLines,
+  describeAccessoryStructures,
+} from "./accessoryStructures";
+import type { AccessoryStructure, FinishLevel } from "../estimateEngine";
 
 /* ------------------------------------------------------------------ inputs */
 
@@ -67,6 +72,15 @@ export interface ScopeSelections {
   siteDifficulty?: "simple" | "moderate" | "steep" | null;
   /** Covered outdoor living area in SF (covered patio, deck under roof). */
   coveredOutdoorSqft?: number | null;
+  /**
+   * Additional buildings on the property: ADU, shop, detached garage, barn.
+   *
+   * Deliberately NOT added into `sqft`. That figure drives the whole house
+   * takeoff, so folding a barn into it would price the barn at house rates and
+   * simultaneously inflate the roof, HVAC and interior finish of the home
+   * itself. These are priced separately in accessoryStructures.ts.
+   */
+  accessoryStructures?: AccessoryStructure[] | null;
   /**
    * Working shop area in SF on a shop home or barndominium, kept separate from
    * both finished area and the garage because it is a different building. A shop
@@ -662,7 +676,29 @@ export function buildInternalEstimate(
     if (rule.assumption && !assumptions.includes(rule.assumption)) assumptions.push(rule.assumption);
   }
 
-  const lines = [...byCode.values()];
+  /*
+   * Accessory structures join the same line array the rules produced, rather
+   * than being added to the total afterwards. Everything downstream - the
+   * contingency reserve, the margin guard, the trade rollup, the admin view -
+   * reads `lines`, so appending here is what makes a detached shop appear as a
+   * parent cost category instead of an unexplained increase in the total.
+   *
+   * They are appended after the byCode dedupe deliberately: their codes are
+   * generated per structure (AS-1-shop, AS-2-shop) so that two of the same kind
+   * both survive. Routing them through the dedupe would keep the larger and
+   * silently drop the second shop.
+   */
+  const accessoryLines = isNewBuild
+    ? accessoryStructureCostLines(
+        selections.accessoryStructures,
+        selections.quality as FinishLevel,
+      )
+    : [];
+  for (const note of describeAccessoryStructures(selections.accessoryStructures)) {
+    if (isNewBuild && !assumptions.includes(note)) assumptions.push(note);
+  }
+
+  const lines = [...byCode.values(), ...accessoryLines];
   const directCost = lines.reduce((s, l) => s + l.cost, 0);
   const contingency = directCost * CONTINGENCY_RATE;
   const totalInternalCost = directCost + contingency;
