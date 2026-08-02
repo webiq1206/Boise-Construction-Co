@@ -84,113 +84,19 @@ export class MemStorage implements IStorage {
   }
 
   private seedData() {
-    // Seed gallery photos
-    const sampleGalleryPhotos: GalleryPhoto[] = [
-      {
-        id: randomUUID(),
-        serviceType: 'kitchen-remodel',
-        city: 'boise',
-        beforeImageUrl: '/images/gallery/gallery-kitchen-before.png',
-        afterImageUrl: '/images/gallery/gallery-kitchen-after.png',
-        title: 'Modern Kitchen Transformation',
-        description: 'Full kitchen remodel with custom cabinets, quartz countertops, and new layout in Boise',
-        createdAt: new Date(),
-      },
-      {
-        id: randomUUID(),
-        serviceType: 'bathroom-remodel',
-        city: 'meridian',
-        beforeImageUrl: '/images/gallery/gallery-bathroom-before.png',
-        afterImageUrl: '/images/gallery/gallery-bathroom-after.png',
-        title: 'Primary Bathroom Renovation',
-        description: 'Luxury primary bathroom remodel with walk-in shower, freestanding tub, and heated floors in Meridian',
-        createdAt: new Date(),
-      },
-      {
-        id: randomUUID(),
-        serviceType: 'whole-home-remodel',
-        city: 'eagle',
-        beforeImageUrl: '/images/gallery/gallery-whole-home-before.png',
-        afterImageUrl: '/images/gallery/gallery-whole-home-after.png',
-        title: 'Whole-Home Remodel',
-        description: 'Complete interior renovation of a 1990s Eagle home with open floor plan, new kitchen, and three updated bathrooms',
-        createdAt: new Date(),
-      },
-      {
-        id: randomUUID(),
-        serviceType: 'room-addition',
-        city: 'nampa',
-        beforeImageUrl: '/images/gallery/gallery-addition-before.png',
-        afterImageUrl: '/images/gallery/gallery-addition-after.png',
-        title: 'Master Suite Addition',
-        description: '600 sq ft master suite addition with ensuite bath and walk-in closet in Nampa',
-        createdAt: new Date(),
-      },
-      {
-        id: randomUUID(),
-        serviceType: 'basement-finish',
-        city: 'boise',
-        beforeImageUrl: '/images/gallery/gallery-basement-before.png',
-        afterImageUrl: '/images/gallery/gallery-basement-after.png',
-        title: 'Basement Finish',
-        description: 'Unfinished basement transformed into a family room, home office, and full bath in Boise',
-        createdAt: new Date(),
-      },
-      {
-        id: randomUUID(),
-        serviceType: 'outdoor-living',
-        city: 'star',
-        beforeImageUrl: '/images/gallery/gallery-outdoor-before.png',
-        afterImageUrl: '/images/gallery/gallery-outdoor-after.png',
-        title: 'Outdoor Living Space',
-        description: 'Covered patio with outdoor kitchen and pergola for year-round entertaining in Star',
-        createdAt: new Date(),
-      },
-    ];
-
-    sampleGalleryPhotos.forEach(photo => this.galleryPhotos.set(photo.id, photo));
-
-    // Seed testimonials
-    const sampleTestimonials: Testimonial[] = [
-      {
-        id: randomUUID(),
-        customerName: 'Sarah M.',
-        serviceType: 'kitchen-remodel',
-        city: 'boise',
-        rating: '5',
-        testimonial: 'Boise Remodeling Co did an amazing job on our kitchen. On time, clear communication throughout, and the results were stunning.',
-        createdAt: new Date(),
-      },
-      {
-        id: randomUUID(),
-        customerName: 'Mike R.',
-        serviceType: 'bathroom-remodel',
-        city: 'meridian',
-        rating: '5',
-        testimonial: 'Our master bath went from builder-grade to magazine-worthy. The team was professional and communicated throughout the entire project.',
-        createdAt: new Date(),
-      },
-      {
-        id: randomUUID(),
-        customerName: 'Jennifer K.',
-        serviceType: 'whole-home-remodel',
-        city: 'eagle',
-        rating: '5',
-        testimonial: 'We stayed in our home through a full renovation and the team made it as painless as possible. Absolutely love the result.',
-        createdAt: new Date(),
-      },
-      {
-        id: randomUUID(),
-        customerName: 'David L.',
-        serviceType: 'room-addition',
-        city: 'nampa',
-        rating: '5',
-        testimonial: 'Fantastic craftsmanship and reliable timeline. Our new master suite addition exceeded every expectation.',
-        createdAt: new Date(),
-      },
-    ];
-
-    sampleTestimonials.forEach(testimonial => this.testimonials.set(testimonial.id, testimonial));
+    /*
+     * No gallery photos and no testimonials are seeded.
+     *
+     * Both used to be: six before/after remodels and four five-star reviews with
+     * invented names. None of it was real, and the /gallery and /testimonials
+     * pages were retired for that reason during the repositioning. Seeding the
+     * same fiction into the in-memory store would put it back on any surface
+     * that reads from storage rather than from the content layer.
+     *
+     * These stay empty until there are finished homes to photograph and reviews
+     * with a name attached to them. See AggregateRating in lib/schema.ts, which
+     * is gated on the same condition.
+     */
 
     // Seed blog posts from blogContent.ts
     const blogPostsFromContent: BlogPost[] = BLOG_POSTS.map(post => ({
@@ -745,17 +651,15 @@ export class DBStorage implements IStorage {
 
   private async seedDataIfEmpty(): Promise<void> {
     try {
-      // Check if gallery photos table is empty
-      const existingPhotos = await db.select().from(galleryPhotos).limit(1);
-      if (existingPhotos.length === 0) {
-        await this.seedGalleryPhotos();
-      }
-
-      // Check if testimonials table is empty
-      const existingTestimonials = await db.select().from(testimonials).limit(1);
-      if (existingTestimonials.length === 0) {
-        await this.seedTestimonials();
-      }
+      /*
+       * Gallery photos and testimonials are deliberately not seeded.
+       *
+       * This used to insert six invented before/after remodels and four
+       * five-star reviews under invented names into the real database on first
+       * boot. That is worse than the in-memory version of the same fiction,
+       * because once written it looks like data somebody entered. Both pages
+       * were retired during the repositioning for exactly this reason.
+       */
 
       // Sync blog posts from blogContent.ts (adds any new posts that don't exist)
       await this.syncBlogPosts();
@@ -767,110 +671,6 @@ export class DBStorage implements IStorage {
       }
     } catch (error) {
       console.error("Error seeding data:", error);
-    }
-  }
-
-  private async seedGalleryPhotos(): Promise<void> {
-    const sampleGalleryPhotos = [
-      {
-        serviceType: 'kitchen-remodel',
-        city: 'boise',
-        beforeImageUrl: '/images/gallery/gallery-kitchen-before.png',
-        afterImageUrl: '/images/gallery/gallery-kitchen-after.png',
-        title: 'Modern Kitchen Transformation',
-        description: 'Full kitchen remodel with custom cabinets, quartz countertops, and new layout in Boise',
-        createdAt: new Date(),
-      },
-      {
-        serviceType: 'bathroom-remodel',
-        city: 'meridian',
-        beforeImageUrl: '/images/gallery/gallery-bathroom-before.png',
-        afterImageUrl: '/images/gallery/gallery-bathroom-after.png',
-        title: 'Primary Bathroom Renovation',
-        description: 'Luxury primary bathroom remodel with walk-in shower, freestanding tub, and heated floors in Meridian',
-        createdAt: new Date(),
-      },
-      {
-        serviceType: 'whole-home-remodel',
-        city: 'eagle',
-        beforeImageUrl: '/images/gallery/gallery-whole-home-before.png',
-        afterImageUrl: '/images/gallery/gallery-whole-home-after.png',
-        title: 'Whole-Home Remodel',
-        description: 'Complete interior renovation of a 1990s Eagle home with open floor plan, new kitchen, and three updated bathrooms',
-        createdAt: new Date(),
-      },
-      {
-        serviceType: 'room-addition',
-        city: 'nampa',
-        beforeImageUrl: '/images/gallery/gallery-addition-before.png',
-        afterImageUrl: '/images/gallery/gallery-addition-after.png',
-        title: 'Master Suite Addition',
-        description: '600 sq ft master suite addition with ensuite bath and walk-in closet in Nampa',
-        createdAt: new Date(),
-      },
-      {
-        serviceType: 'basement-finish',
-        city: 'boise',
-        beforeImageUrl: '/images/gallery/gallery-basement-before.png',
-        afterImageUrl: '/images/gallery/gallery-basement-after.png',
-        title: 'Basement Finish',
-        description: 'Unfinished basement transformed into a family room, home office, and full bath in Boise',
-        createdAt: new Date(),
-      },
-      {
-        serviceType: 'outdoor-living',
-        city: 'star',
-        beforeImageUrl: '/images/gallery/gallery-outdoor-before.png',
-        afterImageUrl: '/images/gallery/gallery-outdoor-after.png',
-        title: 'Outdoor Living Space',
-        description: 'Covered patio with outdoor kitchen and pergola for year-round entertaining in Star',
-        createdAt: new Date(),
-      },
-    ];
-
-    for (const photo of sampleGalleryPhotos) {
-      await db.insert(galleryPhotos).values(photo);
-    }
-  }
-
-  private async seedTestimonials(): Promise<void> {
-    const sampleTestimonials = [
-      {
-        customerName: 'Sarah M.',
-        serviceType: 'kitchen-remodel',
-        city: 'boise',
-        rating: '5',
-        testimonial: 'Boise Remodeling Co did an amazing job on our kitchen. On time, clear communication throughout, and the results were stunning.',
-        createdAt: new Date(),
-      },
-      {
-        customerName: 'Mike R.',
-        serviceType: 'bathroom-remodel',
-        city: 'meridian',
-        rating: '5',
-        testimonial: 'Our master bath went from builder-grade to magazine-worthy. The team was professional and communicated throughout the entire project.',
-        createdAt: new Date(),
-      },
-      {
-        customerName: 'Jennifer K.',
-        serviceType: 'whole-home-remodel',
-        city: 'eagle',
-        rating: '5',
-        testimonial: 'We stayed in our home through a full renovation and the team made it as painless as possible. Absolutely love the result.',
-        createdAt: new Date(),
-      },
-      {
-        customerName: 'David L.',
-        serviceType: 'room-addition',
-        city: 'nampa',
-        rating: '5',
-        testimonial: 'Fantastic craftsmanship and reliable timeline. Our new master suite addition exceeded every expectation.',
-        createdAt: new Date(),
-      },
-    ];
-
-    for (const testimonial of sampleTestimonials) {
-      await db.insert(testimonials).values(testimonial);
     }
   }
 

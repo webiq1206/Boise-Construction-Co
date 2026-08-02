@@ -771,13 +771,9 @@ export function getCityServiceSections(
               service.costGuidance.paragraphs[1],
             ],
             links: [
-              // Slug is renamed to boise-home-building-cost-guide during the
-              // guide migration, with a redirect from this path. Links built
-              // here are not picked up by links:generate, so audit:links will
-              // not catch this reference if the slug moves without a redirect.
               {
                 label: 'Boise Home Building Cost Guide',
-                href: '/guides/boise-remodeling-cost-guide',
+                href: '/guides/boise-home-building-cost-guide',
               },
             ],
           },
