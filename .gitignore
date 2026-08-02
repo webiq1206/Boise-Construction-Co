@@ -25,3 +25,7 @@ tsconfig.tsbuildinfo
 # Machine-local Claude Code settings (tool permissions). Specific to one
 # developer's machine, so it must not follow the repo to Replit or a teammate.
 .claude/settings.local.json
+
+# Rasterised brand previews. Throwaway output of `npm run brand:preview`, used to
+# eyeball a generated mark before committing the real assets in public/brand.
+scripts/brand/preview/
