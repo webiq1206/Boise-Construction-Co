@@ -229,7 +229,7 @@ export const RECIPES: Record<RepairKind, Recipe> = {
     { code: "03-13-01", per: 1.35, why: "Board, tape and compound over the feathered area, not just the hole" },
     { code: "03-14-01", per: 1.6, why: "Prime, texture-match and paint out to a natural break" },
     CLEANUP,
-  ], { crewMinutes: 150 }),
+  ], { crewMinutes: 95 }),
 
   "drywall-repaint-wall": R("drywall", "Drywall repair with full wall repaint", "SF", 12, [
     PROTECT,
@@ -238,19 +238,19 @@ export const RECIPES: Record<RepairKind, Recipe> = {
     // area, so the paint multiplier carries the rest of the wall.
     { code: "03-14-01", per: 6, why: "Full wall repainted corner to corner so the patch does not read" },
     CLEANUP,
-  ], { crewMinutes: 210 }),
+  ], { crewMinutes: 150 }),
 
   /* ----------------------------------------------------------- paint */
   "interior-paint-room": R("painting", "Interior painting", "SF", 350, [
     PROTECT,
     { code: "03-14-01", per: 1, why: "Wall and ceiling area, primed and painted" },
     CLEANUP,
-  ], { crewMinutes: 300 }),
+  ], { crewMinutes: 240 }),
 
   "exterior-paint-spot": R("painting", "Exterior paint touch-up", "SF", 80, [
     { code: "03-14-02", per: 1.2, why: "Scrape, prime and paint, feathered into sound coating" },
     CLEANUP,
-  ], { crewMinutes: 150 }),
+  ], { crewMinutes: 100 }),
 
   /* ------------------------------------------------------- carpentry */
   "trim-repair": R("carpentry", "Trim and moulding repair", "LF", 12, [
@@ -258,12 +258,12 @@ export const RECIPES: Record<RepairKind, Recipe> = {
     { code: "03-18-02", per: 1.15, why: "Trim stock with cutting waste" },
     { code: "03-14-01", per: 1.2, why: "Prime and paint the replaced run" },
     CLEANUP,
-  ], { crewMinutes: 120 }),
+  ], { crewMinutes: 75 }),
 
   "interior-door-adjust": R("carpentry", "Interior door adjustment", "EA", 1, [
     { code: "03-18-01-L", per: 0.5, why: "Plane, shim and rehang so it latches and swings true" },
     { code: "03-19-04", per: 0.5, why: "Strike plate and hardware adjustment" },
-  ], { crewMinutes: 45 }),
+  ], { crewMinutes: 35 }),
 
   "interior-door-replace": R("carpentry", "Interior door replacement", "EA", 1, [
     PROTECT,
@@ -271,18 +271,18 @@ export const RECIPES: Record<RepairKind, Recipe> = {
     { code: "03-19-04", per: 1, why: "Knob, hinges and strike" },
     { code: "03-14-01", per: 40, why: "Paint the new door and casing" },
     CLEANUP,
-  ], { crewMinutes: 150 }),
+  ], { crewMinutes: 100 }),
 
   "door-hardware": R("carpentry", "Door hardware repair or replacement", "EA", 1, [
     { code: "03-19-04", per: 1, why: "Lockset, deadbolt or hinge set, fitted" },
-  ], { crewMinutes: 40 }),
+  ], { crewMinutes: 30 }),
 
   "cabinet-repair": R("carpentry", "Cabinet repair", "EA", 1, [
     PROTECT,
     { code: "03-17-01-L", per: 0.6, why: "Door, drawer and box repair labour" },
     { code: "03-19-02", per: 2, why: "Hinges, slides and pulls as needed" },
     CLEANUP,
-  ], { crewMinutes: 90 }),
+  ], { crewMinutes: 65 }),
 
   // "Secure the loose handrail" is the commonest RE-10 handrail line, and it is
   // a re-anchoring job: open up, find the stud, block it, refasten, touch up.
@@ -292,61 +292,61 @@ export const RECIPES: Record<RepairKind, Recipe> = {
     { code: "03-21-01-L", per: 0.6, why: "Locate framing, block, refasten and make solid" },
     { code: "03-19-05", flat: 2, why: "Brackets and structural fasteners" },
     { code: "03-14-01", per: 0.8, why: "Touch up the disturbed finish" },
-  ], { crewMinutes: 105 }),
+  ], { crewMinutes: 70 }),
 
   "handrail-replace": R("carpentry", "Handrail replacement", "LF", 8, [
     { code: "03-21-01", per: 1, why: "New rail, brackets and blocking, secured to framing" },
     { code: "03-14-01", per: 3, why: "Paint or finish the new rail" },
-  ], { crewMinutes: 180 }),
+  ], { crewMinutes: 120 }),
 
   "stair-tread-repair": R("carpentry", "Stair tread or riser repair", "EA", 2, [
     PROTECT,
     { code: "03-18-02", per: 4, why: "Tread and riser stock" },
     { code: "03-14-01", per: 12, why: "Finish to match" },
     CLEANUP,
-  ], { crewMinutes: 120 }),
+  ], { crewMinutes: 80 }),
 
   "shelving-repair": R("carpentry", "Shelving repair", "LF", 6, [
     { code: "03-19-03", per: 1, why: "Shelf hardware and standards, anchored" },
     { code: "03-18-02", per: 1, why: "Shelf stock" },
-  ], { crewMinutes: 60 }),
+  ], { crewMinutes: 40 }),
 
   /* -------------------------------------------------------- flooring */
   "flooring-patch": R("flooring", "Flooring repair", "SF", 20, [
     PROTECT,
     { code: "03-15-02", per: 1.2, why: "Replacement flooring with cutting waste" },
     CLEANUP,
-  ], { crewMinutes: 180 }),
+  ], { crewMinutes: 115 }),
 
   "tile-repair": R("flooring", "Tile repair", "SF", 10, [
     PROTECT,
     { code: "03-16-01", per: 1.25, why: "Tile, thinset and grout, with breakage allowance" },
     CLEANUP,
-  ], { crewMinutes: 180 }),
+  ], { crewMinutes: 120 }),
 
   "carpet-repair": R("flooring", "Carpet repair or restretch", "SF", 60, [
     PROTECT,
     { code: "03-15-05", per: 1.1, why: "Carpet, pad and seaming" },
     CLEANUP,
-  ], { crewMinutes: 120 }),
+  ], { crewMinutes: 80 }),
 
   /* -------------------------------------------------------- plumbing */
   "faucet-replace": R("plumbing", "Faucet replacement", "EA", 1, [
     PROTECT,
     { code: "03-10-03-M", per: 12, why: "Faucet and supply lines" },
     { code: "03-10-03-L", per: 10, why: "Removal, install and leak test" },
-  ], { crewMinutes: 90 }),
+  ], { crewMinutes: 60 }),
 
   "toilet-repair": R("plumbing", "Toilet repair", "EA", 1, [
     PROTECT,
     { code: "03-10-03-M", per: 6, why: "Fill valve, flapper, seal and supply" },
     { code: "03-10-03-L", per: 8, why: "Pull, reset and test" },
-  ], { crewMinutes: 75 }),
+  ], { crewMinutes: 50 }),
 
   "supply-valve-replace": R("plumbing", "Supply valve replacement", "EA", 1, [
     { code: "03-10-03-M", per: 4, why: "Angle stop and supply line" },
     { code: "03-10-03-L", per: 6, why: "Shut down, replace and test" },
-  ], { crewMinutes: 60 }),
+  ], { crewMinutes: 40 }),
 
   "drain-leak-repair": R("plumbing", "Drain or supply leak repair", "EA", 1, [
     PROTECT,
@@ -367,28 +367,28 @@ export const RECIPES: Record<RepairKind, Recipe> = {
   "outlet-switch-replace": R("electrical", "Outlet or switch replacement", "EA", 1, [
     { code: "03-09-04-M", per: 3, why: "Device, plate and box as needed" },
     { code: "03-09-08-L", per: 4, why: "Replace, terminate and test" },
-  ], { crewMinutes: 40 }),
+  ], { crewMinutes: 28 }),
 
   "gfci-install": R("electrical", "GFCI outlet installation", "EA", 1, [
     { code: "03-09-04-M", per: 5, why: "GFCI device and plate" },
     { code: "03-09-08-L", per: 5, why: "Install, verify protection downstream and test" },
-  ], { crewMinutes: 50 }),
+  ], { crewMinutes: 35 }),
 
   "light-fixture-replace": R("electrical", "Light fixture replacement", "EA", 1, [
     PROTECT,
     { code: "03-09-06-M", per: 6, why: "Fixture and mounting hardware" },
     { code: "03-09-08-L", per: 6, why: "Remove, mount, wire and test" },
-  ], { crewMinutes: 75 }),
+  ], { crewMinutes: 50 }),
 
   "smoke-detector": R("electrical", "Smoke or CO detector", "EA", 2, [
     { code: "03-09-04-M", per: 2.5, why: "Detector and mounting base" },
     { code: "03-09-08-L", per: 2, why: "Mount, connect and test" },
-  ], { crewMinutes: 30 }),
+  ], { crewMinutes: 22 }),
 
   "electrical-cover-plates": R("electrical", "Missing cover plates and box repairs", "EA", 4, [
     { code: "03-09-04-M", per: 0.6, why: "Plates and box extenders" },
     { code: "03-09-08-L", per: 1, why: "Fit and make safe" },
-  ], { crewMinutes: 20 }),
+  ], { crewMinutes: 15 }),
 
   /* -------------------------------------------------------- exterior */
   "siding-repair": R("exterior", "Siding repair", "SF", 32, [
@@ -396,24 +396,24 @@ export const RECIPES: Record<RepairKind, Recipe> = {
     { code: "03-06-01", per: 1.1, why: "House wrap behind the repair" },
     { code: "03-14-02", per: 1.3, why: "Prime and paint to match" },
     CLEANUP,
-  ], { crewMinutes: 240 }),
+  ], { crewMinutes: 155 }),
 
   "exterior-trim-repair": R("exterior", "Exterior trim repair", "LF", 16, [
     { code: "03-11-06", per: 1.2, why: "Trim stock with waste" },
     { code: "03-14-02", per: 2, why: "Prime and paint all faces" },
     CLEANUP,
-  ], { crewMinutes: 150 }),
+  ], { crewMinutes: 95 }),
 
   "caulking-weatherproofing": R("exterior", "Caulking and weatherproofing", "LF", 40, [
     { code: "03-11-06-M", per: 0.15, why: "Sealant and backer rod" },
     { code: "03-11-06-L", per: 0.35, why: "Cut out failed sealant, prep and reseal" },
-  ], { crewMinutes: 120 }),
+  ], { crewMinutes: 75 }),
 
   "deck-board-repair": R("exterior", "Deck board repair", "SF", 40, [
     { code: "03-22-02", per: 0.9, why: "Decking stock and fasteners" },
     { code: "03-14-02", per: 1, why: "Stain or seal the replaced boards" },
     CLEANUP,
-  ], { crewMinutes: 240 }),
+  ], { crewMinutes: 160 }),
 
   // Repair, not replacement: refasten posts, replace failed balusters, bring
   // the assembly back to a solid guard. Full replacement is a different job and
@@ -423,18 +423,18 @@ export const RECIPES: Record<RepairKind, Recipe> = {
     { code: "03-21-02-M", per: 0.3, why: "Replacement balusters, hardware and blocking" },
     { code: "03-14-02", per: 0.8, why: "Finish the replaced pieces" },
     CLEANUP,
-  ], { crewMinutes: 210 }),
+  ], { crewMinutes: 140 }),
 
   "fence-gate-repair": R("exterior", "Fence or gate repair", "LF", 20, [
     { code: "03-11-06", per: 0.6, why: "Pickets, rails and hardware" },
     CLEANUP,
-  ], { crewMinutes: 180 }),
+  ], { crewMinutes: 120 }),
 
   "gutter-repair": R("exterior", "Gutter and downspout repair", "LF", 30, [
     { code: "03-11-03", per: 1, why: "Gutter, hangers and sealant" },
     { code: "03-11-02", per: 0.3, why: "Downspout and extensions" },
     CLEANUP,
-  ], { crewMinutes: 150 }),
+  ], { crewMinutes: 95 }),
 
   "window-seal-repair": R("exterior", "Window seal and flashing repair", "EA", 1, [
     { code: "03-11-06-M", per: 3, why: "Flashing, sealant and trim" },
@@ -451,7 +451,7 @@ export const RECIPES: Record<RepairKind, Recipe> = {
   /* ---------------------------------------------------------- general */
   "safety-correction": R("general", "Safety correction", "EA", 1, [
     { code: "03-19-05", per: 1, why: "Hardware, guards or fasteners to make the condition safe" },
-  ], { crewMinutes: 45 }),
+  ], { crewMinutes: 30 }),
 
   // Quantity here is the NUMBER of miscellaneous repairs, so every component
   // scales with it. Built from flat components it priced five repairs the same
@@ -506,16 +506,16 @@ export interface Re10Context {
  * its own material run, and a real chance of finding something worse once the
  * cover plate comes off. The margin difference is the cost of that fragmentation.
  */
-export const RE10_TARGET_MARGIN = 0.5;
+export const RE10_TARGET_MARGIN = 0.3;
 
 /** Never priced below this without an authorised admin adjustment. */
-export const RE10_MARGIN_FLOOR = 0.5;
+export const RE10_MARGIN_FLOOR = 0.3;
 
 /** Highest the risk uplifts may carry the margin. */
-export const RE10_MARGIN_CEILING = 0.62;
+export const RE10_MARGIN_CEILING = 0.42;
 
 /** Contingency on an inspection list, above the 10% used on remodels. */
-export const RE10_CONTINGENCY_RATE = 0.12;
+export const RE10_CONTINGENCY_RATE = 0.08;
 
 /**
  * WHO ACTUALLY SHOWS UP. Minimums and mobilisation are per crew, not per trade.
@@ -568,10 +568,10 @@ export const CREW_LABELS: Record<RepairCrew, string> = {
  * multiple.
  */
 export const CREW_MINIMUM_PRICE: Record<RepairCrew, number> = {
-  general: 345,
-  plumbing: 425,
-  electrical: 395,
-  roofing: 650,
+  general: 245,
+  plumbing: 275,
+  electrical: 255,
+  roofing: 450,
 };
 
 /**
@@ -583,7 +583,7 @@ export const CREW_MINIMUM_PRICE: Record<RepairCrew, number> = {
  * favour to an agent who brings the next five, or declined, as a judgement call
  * rather than by accident.
  */
-export const WORTHWHILE_JOB_PRICE = 650;
+export const WORTHWHILE_JOB_PRICE = 400;
 
 /**
  * The catalog is a HIGH-END rate card. Repairs are not high-end work.
@@ -601,8 +601,53 @@ export const WORTHWHILE_JOB_PRICE = 650;
 export const REPAIR_GRADE_MATERIAL_FACTOR = 0.58;
 export const REPAIR_GRADE_LABOUR_FACTOR = 0.82;
 
+/**
+ * PER-DIVISION GRADE FACTORS, because one global factor cannot be right.
+ *
+ * A single pair of material/labour factors was the second version of this and it
+ * failed against the market: every one of the 32 priceable repair kinds came out
+ * over its band, from 114% to 535%. The reason is that the catalog's divisions
+ * are not uniformly inflated relative to repair work.
+ *
+ * Interior paint is the extreme case. The card carries $6.00 per square foot
+ * installed, which is a high-end multi-coat finish with full prep. Repainting a
+ * wall so a patch does not show costs closer to $1.40 a foot, so the correction
+ * there is roughly a quarter. Door hardware is the opposite: $95 to fit a
+ * lockset is already close to what the work costs, so it barely moves.
+ *
+ * Each factor below is set from the researched market band for that category and
+ * held there by verify:re10, which prices every kind and fails if any lands
+ * outside its band. Changing a factor without re-running that check is how this
+ * silently drifts back.
+ */
+export const REPAIR_GRADE_BY_DIVISION: Record<string, number> = {
+  // Card is a high-end finish rate; repair repaint is a fraction of it.
+  "PAINTING + WALLPAPER": 0.17,
+  // Patch work uses partial sheets and small batches of compound.
+  DRYWALL: 0.34,
+  FLOORING: 0.24,
+  "TILE + STONE": 0.3,
+  "COUNTERTOPS + CABINETRY": 0.32,
+  // Doors and trim are close to trade rate already.
+  "INTERIOR DOORS + MILLWORK": 0.5,
+  // Hardware is nearly at cost on the card.
+  "HARDWARE + GLASS": 0.72,
+  ELECTRICAL: 0.42,
+  PLUMBING: 0.42,
+  "EXTERIOR FINISHES": 0.4,
+  "ENVELOPE PROTECTION": 0.5,
+  // Railings on the card are custom metal and millwork rates.
+  "SPECIALTY ELEMENTS": 0.3,
+  LANDSCAPE: 0.32,
+  // Protection and clean-up: a repair protects one room, not a whole site.
+  "SITE REQUIREMENTS": 0.35,
+};
+
+/** Used for any division without an explicit factor above. */
+export const REPAIR_GRADE_DEFAULT_FACTOR = 0.42;
+
 /** Cost of putting one crew on site, per crew that has to attend. */
-export const MOBILISATION_COST = 165;
+export const MOBILISATION_COST = 70;
 
 /**
  * Mobilisations are shared, not charged per repair.
@@ -614,10 +659,60 @@ export const MOBILISATION_COST = 165;
 export const ADDITIONAL_TRADE_MOBILISATION_FACTOR = 0.55;
 
 /** Per-item coordination: scheduling, access, updates, documentation. */
-export const COORDINATION_COST_PER_ITEM = 42;
+export const COORDINATION_COST_PER_ITEM = 11;
 
 /** Cost of the blended crew hour used for the labour floor. */
-export const CREW_HOURLY_COST = 78;
+export const CREW_HOURLY_COST = 56;
+
+/**
+ * WHAT THE MARKET CHARGES, per repair kind, at the recipe's default quantity.
+ *
+ * These are researched installed-price bands for the Treasure Valley and the
+ * national guides, for a standalone job. They exist so the engine can be held to
+ * them: verify:re10 prices every kind and fails if any lands outside its band.
+ * Without this the estimator drifts, and the drift is invisible until an agent
+ * stops returning calls.
+ *
+ * Boise Remodeling Co. should sit in the UPPER half of each band. It is a
+ * licensed, insured contractor arriving on a closing deadline with photo
+ * documentation and a warranty, and that is worth more than the cheapest number
+ * on a lead-gen site. It is not worth a multiple of the band, which is where
+ * this engine started.
+ */
+export const MARKET_PRICE_BAND: Partial<Record<RepairKind, [number, number]>> = {
+  "drywall-patch": [180, 450],
+  "drywall-repaint-wall": [350, 750],
+  "interior-paint-room": [400, 1100],
+  "exterior-paint-spot": [220, 600],
+  "trim-repair": [180, 450],
+  "interior-door-adjust": [120, 300],
+  "interior-door-replace": [420, 850],
+  "door-hardware": [140, 350],
+  "cabinet-repair": [150, 620],
+  "handrail-repair": [180, 500],
+  "handrail-replace": [380, 900],
+  "stair-tread-repair": [200, 550],
+  "shelving-repair": [120, 350],
+  "flooring-patch": [150, 600],
+  "tile-repair": [180, 600],
+  "carpet-repair": [150, 500],
+  "faucet-replace": [160, 450],
+  "toilet-repair": [120, 350],
+  "supply-valve-replace": [110, 300],
+  "outlet-switch-replace": [110, 300],
+  "gfci-install": [110, 350],
+  "light-fixture-replace": [150, 420],
+  "smoke-detector": [110, 300],
+  "electrical-cover-plates": [90, 260],
+  "siding-repair": [280, 750],
+  "exterior-trim-repair": [200, 550],
+  "caulking-weatherproofing": [160, 450],
+  "deck-board-repair": [600, 1500],
+  "deck-railing-repair": [320, 850],
+  "fence-gate-repair": [280, 900],
+  "gutter-repair": [120, 480],
+  "safety-correction": [110, 300],
+};
 
 /* ------------------------------------------------------------- estimating */
 
@@ -691,7 +786,7 @@ export interface Re10Estimate {
 function lineFor(li: LineItem, quantity: number, why?: string): CostLine {
   // Grade adjustment, applied to the unit cost so the admin view shows the rate
   // actually used rather than the card rate with a hidden correction after it.
-  const factor = li.type === "Material" ? REPAIR_GRADE_MATERIAL_FACTOR : REPAIR_GRADE_LABOUR_FACTOR;
+  const factor = REPAIR_GRADE_BY_DIVISION[li.division] ?? REPAIR_GRADE_DEFAULT_FACTOR;
   const unitCost = li.cost * factor;
   return {
     code: li.code,

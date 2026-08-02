@@ -18,6 +18,7 @@ import {
   CREW_FOR_TRADE,
   CREW_MINIMUM_PRICE,
   WORTHWHILE_JOB_PRICE,
+  MARKET_PRICE_BAND,
   TRADE_LABELS,
   REVIEW_REASON_TEXT,
   RE10_MARGIN_FLOOR,
@@ -187,7 +188,13 @@ for (const ctx of CONTEXTS) {
       check(near(realised, est.realisedMargin, 1e-6), `${label}: reported realised margin does not match profit/price`);
       check(realised >= RE10_MARGIN_FLOOR - 1e-9, `${label}: realised margin ${realised} below the 50% floor`);
       check(near(est.sellingPrice - est.totalInternalCost, est.grossProfit, 0.01), `${label}: gross profit does not reconcile`);
-      check(est.sellingPrice >= est.totalInternalCost * 2 - 0.01, `${label}: 50% margin must at least double cost`);
+      // Derived from the floor, not hardcoded: a 50% floor doubles cost, a 30%
+      // floor multiplies it by 1/0.7. Hardcoding the multiple meant this check
+      // asserted a policy that had already changed.
+      check(
+        est.sellingPrice >= est.totalInternalCost / (1 - RE10_MARGIN_FLOOR) - 0.01,
+        `${label}: price does not clear the ${(RE10_MARGIN_FLOOR * 100).toFixed(0)}% margin floor over cost`,
+      );
 
       // (c) NO DOUBLE COUNTING. The total must be exactly the sum of its parts.
       const parts = est.directCost + est.mobilisation + est.coordination + est.contingency;
@@ -251,12 +258,59 @@ for (const kind of ALL_KINDS) {
     `${kind}: single-item job priced at ${Math.round(est.sellingPrice)}, under the ${crew} minimum ${CREW_MINIMUM_PRICE[crew]}`,
   );
 
-  // ...and it must not be absurd in the other direction either. A single small
-  // repair that prices past this is the failure mode that started this rework.
+}
+
+/* ------------------------------- 6b. THE MARKET BAND. The competitiveness guard.
+
+   Every priceable repair kind is quoted standalone and must land inside its
+   researched market band. This is the check that matters commercially: the
+   engine shipped its first version with all 32 kinds between 114% and 535% over
+   band, which is the difference between winning RE-10 work and never hearing
+   back. A margin floor protects profit; only this protects the revenue.        */
+
+const bandCtx: Re10Context = {
+  occupancy: "vacant",
+  access: "standard",
+  daysToDeadline: 45,
+  hasInspectionReport: true,
+};
+
+let inBand = 0;
+for (const [kind, band] of Object.entries(MARKET_PRICE_BAND)) {
+  const [lo, hi] = band as [number, number];
+  const est = estimateRe10([{ id: "1", kind: kind as RepairKind, description: "", hasPhoto: true }], bandCtx);
+  if (est.priced.length === 0) continue;
+  const price = est.sellingPrice;
+
+  check(price <= hi, `${kind}: quoted ${Math.round(price)} against a market ceiling of ${hi} - priced out of the job`);
+  check(price >= lo, `${kind}: quoted ${Math.round(price)} against a market floor of ${lo} - leaving money on the table`);
+  if (price >= lo && price <= hi) inBand++;
+
+  // Margin must survive the whole recalibration. Competitiveness that costs the
+  // margin floor is not competitiveness, it is a discount.
   check(
-    est.sellingPrice <= 2600,
-    `${kind}: single small repair priced at ${Math.round(est.sellingPrice)}, which will not survive contact with the market`,
+    est.realisedMargin >= RE10_MARGIN_FLOOR - 1e-9,
+    `${kind}: landed in band but at ${(est.realisedMargin * 100).toFixed(1)}% margin, under the floor`,
   );
+}
+check(inBand === Object.keys(MARKET_PRICE_BAND).length, `only ${inBand}/${Object.keys(MARKET_PRICE_BAND).length} kinds are inside their market band`);
+
+/* --------------- 6c. bundled work must be cheaper per item than standalone */
+
+for (const kind of ALL_KINDS) {
+  if (RECIPES[kind].alwaysReview) continue;
+  const solo = estimateRe10([{ id: "1", kind, description: "", hasPhoto: true }], bandCtx).sellingPrice;
+  const base = Array.from({ length: 6 }, (_, i) => ({
+    id: "b" + i, kind: "drywall-patch" as RepairKind, description: "", quantity: 10, hasPhoto: true,
+  }));
+  const basePrice = estimateRe10(base, bandCtx).sellingPrice;
+  const marginal = estimateRe10([...base, { id: "x", kind, description: "", hasPhoto: true }], bandCtx).sellingPrice - basePrice;
+
+  // Adding a repair to a visit already happening must cost less than sending
+  // someone out for it alone. If it does not, bundling is not being rewarded and
+  // the whole "one company for the whole list" pitch is hollow.
+  check(marginal < solo, `${kind}: costs ${Math.round(marginal)} inside a bundle vs ${Math.round(solo)} standalone - bundling is not cheaper`);
+  check(marginal > 0, `${kind}: adds nothing to the price when bundled`);
 }
 
 // A list whose own work exceeds every minimum must not receive a top-up, so the
