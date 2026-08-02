@@ -112,7 +112,7 @@ export const REVIEW_REASON_TEXT: Record<ReviewReason, string> = {
   concealed: "The extent is concealed. What is behind the finish decides the cost.",
   allowance: "Priced as a typical allowance for this kind of repair. The document does not state the extent, so the final figure is confirmed on site.",
   "incomplete-info": "The request does not say enough to price. More detail or a photo would settle it.",
-  "out-of-scope": "Outside what Boise Remodeling Co. performs. We can help point you to the right trade.",
+  "out-of-scope": "Outside what Boise Construction Co. performs. We can help point you to the right trade.",
 };
 
 /**
@@ -649,7 +649,7 @@ export const CREW_LABELS: Record<RepairCrew, string> = {
  * the margin, not before it.
  *
  * These sit deliberately above the handyman market, which runs $75-200 for a
- * minimum call. Boise Remodeling Co. is a licensed, insured contractor turning
+ * minimum call. Boise Construction Co. is a licensed, insured contractor turning
  * up on a transaction deadline with photo documentation and a warranty, and that
  * is not the same product as an hourly handyman. But it is a premium, not a
  * multiple.
@@ -763,7 +763,7 @@ export const CREW_HOURLY_COST = 56;
  * Without this the estimator drifts, and the drift is invisible until an agent
  * stops returning calls.
  *
- * Boise Remodeling Co. should sit in the UPPER half of each band. It is a
+ * Boise Construction Co. should sit in the UPPER half of each band. It is a
  * licensed, insured contractor arriving on a closing deadline with photo
  * documentation and a warranty, and that is worth more than the cheapest number
  * on a lead-gen site. It is not worth a multiple of the band, which is where

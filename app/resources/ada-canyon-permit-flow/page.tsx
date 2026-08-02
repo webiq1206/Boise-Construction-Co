@@ -14,12 +14,12 @@ import {
 } from '@/lib/schema';
 
 const PERMIT_FLOW_DESCRIPTION =
-  'Visual guide to remodeling permits in Ada and Canyon County - jurisdiction, review steps, and inspections for Treasure Valley homeowners.';
+  'Visual guide to new home construction permits in Ada and Canyon County - jurisdiction, plan review, and the inspection sequence for Treasure Valley builds.';
 
 export const metadata: Metadata = buildPageMetadata({
   kind: 'blog',
   path: '/resources/ada-canyon-permit-flow',
-  titleOverride: 'Ada vs Canyon County Permit Flow | Boise Remodeling Co',
+  titleOverride: 'Ada vs Canyon County Permit Flow | Boise Construction Co',
   descriptionOverride: PERMIT_FLOW_DESCRIPTION,
 });
 
@@ -38,15 +38,15 @@ export default function AdaCanyonPermitFlowPage() {
       pathPrefix: 'resources',
     }),
     generateHowToSchema({
-      name: 'How remodeling permits move through Ada and Canyon County',
+      name: 'How new home construction permits move through Ada and Canyon County',
       description: PERMIT_FLOW_DESCRIPTION,
       url: '/resources/ada-canyon-permit-flow',
       steps: [
-        { name: 'Confirm jurisdiction', text: 'Determine whether your address falls under Ada County, Canyon County, or a specific city building department.' },
-        { name: 'Prepare and submit plans', text: 'Submit construction documents - including structural and MEP sheets for layout changes - through the correct county or city portal.' },
-        { name: 'Plan review', text: 'The building department reviews plans for code compliance; layout and structural remodels often need several weeks of review.' },
-        { name: 'Permit issuance', text: 'Pay fees and receive approved permits before covered construction begins.' },
-        { name: 'Inspections', text: 'Schedule required inspections at framing, rough-in, and final stages as construction progresses.' },
+        { name: 'Confirm jurisdiction', text: 'Determine whether your lot falls under Ada County, Canyon County, or a specific city building department, and whether it sits inside an impact fee or highway district boundary.' },
+        { name: 'Prepare and submit plans', text: 'Submit a full construction set - architectural, structural, energy compliance and site plan - through the correct county or city portal, along with any required plot plan and grading detail.' },
+        { name: 'Plan review', text: 'The building department reviews the set for code compliance. A custom home carries a longer review than a stock plan, and a comment cycle is normal rather than a setback.' },
+        { name: 'Permit issuance', text: 'Pay plan review, permit, impact and utility connection fees, then receive approved permits before any work begins on site.' },
+        { name: 'Inspections', text: 'Schedule inspections in sequence through the build: footing and foundation, framing, rough-in for mechanical, electrical and plumbing, insulation, and a final before occupancy.' },
       ],
     }),
   ];
@@ -71,8 +71,9 @@ export default function AdaCanyonPermitFlowPage() {
             Ada vs Canyon County permit flow
           </h1>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl">
-            A step-by-step view of how remodeling permits move through review and inspections in
-            the Treasure Valley. Timelines vary by project scope.
+            A step-by-step view of how a new home permit moves through plan review and
+            inspections in the Treasure Valley. Timelines vary by jurisdiction and by how
+            complete the submitted set is.
           </p>
 
           <div className="flex flex-wrap gap-3 mb-10">
@@ -116,7 +117,7 @@ export default function AdaCanyonPermitFlowPage() {
               href="/guides/boise-home-building-process-guide"
               className="inline-flex items-center text-sm text-accent-legible hover:underline"
             >
-              Remodeling process guide
+              Home building process guide
             </Link>
           </div>
         </div>

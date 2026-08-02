@@ -219,8 +219,12 @@ export function Footer() {
                 (manifest.blogByCategory as Record<
                   string,
                   Array<{ slug: string; title: string }>
-                >)?.['remodeling-costs'] ??
-                BLOG_POSTS.filter((p) => p.hubSlug === 'remodeling-costs')
+                /* 'remodeling-costs' was the pre-repositioning hub slug. It now
+                   exists only as a legacy redirect on individual posts, not as a
+                   hub, so both lookups missed and this footer column rendered
+                   empty rather than erroring. */
+                >)?.['home-building-costs'] ??
+                BLOG_POSTS.filter((p) => p.hubSlug === 'home-building-costs')
                   .slice(0, 1)
                   .map((p) => ({ slug: p.slug, title: p.title }))
               )

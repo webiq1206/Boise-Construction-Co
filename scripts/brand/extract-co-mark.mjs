@@ -19,7 +19,7 @@ import { fileURLToPath } from "url";
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 
 const svg = fs.readFileSync(
-  path.join(root, "public/brand/logos/boise-remodeling-co-wordmark.svg"),
+  path.join(root, "public/brand/logos/boise-construction-co-wordmark.svg"),
   "utf8",
 );
 const glyphs = svg.match(/<path d="([^"]+)" fill="#2C302F"/)[1].trim().split(/\s+(?=M)/);

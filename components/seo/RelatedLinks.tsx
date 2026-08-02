@@ -26,10 +26,12 @@ const SERVICE_GUIDE: Record<string, { href: string; label: string }> = {};
  */
 function ExploreFurther({ serviceSlug }: { serviceSlug?: string }) {
   const guide = serviceSlug ? SERVICE_GUIDE[serviceSlug] : undefined;
-  // Guide hrefs still resolve to the legacy guide slugs; they are relabelled
-  // and repointed together during the guide migration so no link dangles.
+  /* Points at the canonical guide slug, not the legacy one. The old href still
+     resolved, but only through a 308, so every landing page on the site spent
+     an internal link on a redirect hop - which is what scripts/internal-links
+     audits for. */
   const links: { href: string; label: string }[] = [
-    guide ?? { href: '/guides/treasure-valley-remodeling-guide', label: 'Treasure Valley Building Guide' },
+    guide ?? { href: '/guides/treasure-valley-home-building-guide', label: 'Treasure Valley Building Guide' },
     { href: '/services', label: 'Compare how we build' },
     { href: '/resources', label: 'Free home building planning worksheets' },
     { href: '/estimate', label: 'Estimate your build cost' },
@@ -146,7 +148,7 @@ export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksPro
               All {SERVICES.find((s) => s.slug === serviceSlug)?.name} areas →
             </Link>
             <Link href={areaPath(citySlug)} className="block text-sm font-normal text-foreground hover:text-foreground/70">
-              Remodeling in {CITIES.find((c) => c.slug === citySlug)?.name} →
+              Home building in {CITIES.find((c) => c.slug === citySlug)?.name} →
             </Link>
           </div>
         </div>
