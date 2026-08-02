@@ -23,6 +23,7 @@ import {
 import {
   CUSTOM_HOME_RULES,
   SEMI_CUSTOM_HOME_RULES,
+  SHOP_HOME_RULES,
   BUILD_ON_YOUR_LOT_RULES,
   newBuildMonths,
 } from "../shared/costs/newConstructionRules";
@@ -251,6 +252,82 @@ const perSf = (s: ScopeSelections, rules = CUSTOM_HOME_RULES, project = "custom-
     `$${perSf(base({ quality: "luxury" })).toFixed(0)}/sf`);
 
   void high;
+}
+
+/* ================================= 4b. SHOP HOMES AGREE WITH PUBLISHED COPY */
+/*
+ * A shop home is the one project whose headline number is quoted per BLENDED
+ * square foot, living plus shop, while the estimator's slider is living area
+ * only. That mismatch is exactly the kind of thing that goes wrong silently, so
+ * the published claims are asserted directly here.
+ *
+ * The first version of these rules priced the shop at $19/sf and plateaued as
+ * the shop grew, because the market ceiling was set below the takeoff and was
+ * clamping every result. Nothing caught it: the resolver sweep only checks that
+ * a range comes back and lands inside a wide per-sf band, and a clamped price
+ * satisfies both. The marginal check below is what would have caught it.
+ */
+{
+  const shop = (
+    livingSqft: number,
+    shopSqft: number,
+    quality: ScopeSelections["quality"] = "refresh",
+  ) =>
+    price(
+      base({ quality, sqft: livingSqft, shopSqft, garageSqft: 0, coveredOutdoorSqft: 0 }),
+      SHOP_HOME_RULES,
+      "shop-home",
+    );
+
+  // The shop has to cost real money per square foot, and the same money whether
+  // it is the second 600 SF or the fifth. A flat marginal cost is the signature
+  // of a clamp.
+  const noShop = shop(1600, 0);
+  const marginals = [600, 1200, 1800, 2400, 3200].map(
+    (sf) => (shop(1600, sf) - noShop) / sf,
+  );
+  for (const [i, m] of marginals.entries()) {
+    t(`shop/marginal-cost-realistic-${[600, 1200, 1800, 2400, 3200][i]}sf`,
+      m >= 40 && m <= 90, `$${m.toFixed(0)}/sf of shop`);
+  }
+  const spread = Math.max(...marginals) - Math.min(...marginals);
+  t("shop/marginal-cost-stable-across-sizes", spread < 12, `$${spread.toFixed(0)}/sf spread`);
+
+  // A shop square foot must cost meaningfully less than a living square foot,
+  // which is the entire premise of the product and of the published copy.
+  const livingPerSf = noShop / 1600;
+  t("shop/shop-cheaper-than-living", marginals[2] < livingPerSf * 0.45,
+    `shop $${marginals[2].toFixed(0)}/sf vs living $${livingPerSf.toFixed(0)}/sf`);
+
+  // "A 1,600 square foot living area with an attached 1,200 square foot shop
+  // commonly lands between $385,000 and $630,000 excluding land."
+  const publishedLow = shop(1600, 1200, "refresh");
+  const publishedHigh = shop(1600, 1200, "mid-range");
+  t("shop/published-example-low", publishedLow >= 360_000 && publishedLow <= 470_000, usd(publishedLow));
+  t("shop/published-example-high", publishedHigh >= 500_000 && publishedHigh <= 660_000, usd(publishedHigh));
+
+  // "between $140 and $250 per square foot, blended across finished and shop
+  // space". Checked across the four configurations the estimator offers, at the
+  // tiers most shop homes are actually built to.
+  for (const [living, shopSf] of [[1200, 1200], [1700, 1600], [1600, 2400], [2400, 1800]]) {
+    for (const q of ["refresh", "mid-range"] as const) {
+      const blended = shop(living, shopSf, q) / (living + shopSf);
+      t(`shop/blended-inside-published-band-${living}-${shopSf}-${q}`,
+        blended >= 125 && blended <= 250, `$${blended.toFixed(0)}/sf blended`);
+    }
+  }
+
+  // Ordering against the other new-construction types, on the same living area.
+  // A shop home's living half is a house, so it must not come out cheaper than
+  // a semi-custom home of the same living area with no shop at all.
+  const shopHomeNoShop = shop(2000, 0, "mid-range");
+  const semiCustom = price(
+    base({ quality: "mid-range", sqft: 2000, garageSqft: 0, coveredOutdoorSqft: 0 }),
+    SEMI_CUSTOM_HOME_RULES,
+    "semi-custom-home",
+  );
+  t("shop/living-half-priced-like-a-house", shopHomeNoShop >= semiCustom * 0.95,
+    `${usd(shopHomeNoShop)} vs semi-custom ${usd(semiCustom)}`);
 }
 
 /* ===================================================== 5. ROBUSTNESS */

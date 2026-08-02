@@ -140,7 +140,7 @@ export const GBP_SERVICES: GbpService[] = [
     name: 'Shop homes and barndominiums',
     description:
       'Post-frame and steel-framed homes pairing finished living space with working shop square footage on rural acreage.',
-    startingPrice: '$265,000',
+    startingPrice: '$330,000',
   },
   {
     name: 'Energy-efficient home building',
@@ -227,7 +227,7 @@ export const GBP_PRODUCTS: GbpProduct[] = [
   {
     category: 'Home Building Services',
     name: 'Shop Homes & Barndominiums',
-    price: 'From $265,000',
+    price: 'From $330,000',
     url: `${SITE}/services/shop-homes-barndominiums`,
     description:
       'Post-frame and steel-framed homes pairing finished living space with working shop square footage.',

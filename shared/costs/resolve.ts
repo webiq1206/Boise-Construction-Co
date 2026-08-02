@@ -37,6 +37,7 @@ export interface ResolverRefinements {
   lotServices?: unknown;
   siteDifficulty?: unknown;
   coveredOutdoor?: number | null;
+  shopSize?: number | null;
 }
 
 function toSelections(
@@ -84,6 +85,7 @@ function toSelections(
     wellSeptic: refinements.lotServices === "well-septic",
     siteDifficulty: (refinements.siteDifficulty ?? null) as ScopeSelections["siteDifficulty"],
     coveredOutdoorSqft: refinements.coveredOutdoor ?? null,
+    shopSqft: refinements.shopSize ?? null,
   };
 }
 

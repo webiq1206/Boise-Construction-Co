@@ -81,7 +81,7 @@ export const SERVICES: ServiceData[] = [
     slug: 'shop-homes-barndominiums',
     name: 'Shop Homes & Barndominiums',
     shortDescription: 'Post-frame and steel-framed homes that pair finished living space with real working shop square footage.',
-    planningFrom: '$265k',
+    planningFrom: '$330k',
     secondary: true,
   },
   {

@@ -281,8 +281,10 @@ function envelopeRules(): ScopeRule[] {
     {
       code: "03-11-07", // Exterior brick / stone, SF
       qty: (d, s) =>
-        house(d).cladArea * (s.quality === "high-end" || s.quality === "luxury" ? 0.35 : 0.12),
-      assumption: "Stone or brick accent on standard homes, a major elevation material above that.",
+        (house(d).cladArea - house(d).shopWallArea) *
+        (s.quality === "high-end" || s.quality === "luxury" ? 0.35 : 0.12),
+      assumption:
+        "Stone or brick accent on standard homes, a major elevation material above that. Applied to the living elevation only: the shop end of a shop home is clad in the same metal or siding as the rest of the box.",
     },
     {
       code: "03-11-05", // Timbers + accents, SF
@@ -316,8 +318,10 @@ function envelopeRules(): ScopeRule[] {
     },
     {
       code: "03-12-01", // Insulation + foam, SF
-      qty: (d) => house(d).exteriorWallArea + house(d).footprint,
-      assumption: "Walls plus the attic plane above the top storey.",
+      qty: (d) =>
+        house(d).exteriorWallArea - house(d).shopWallArea * 0.5 + house(d).footprint,
+      assumption:
+        "Walls plus the attic plane above the top storey. A shop is insulated to keep it workable rather than to living-space standard, so it carries half the wall rate.",
     },
   ];
 }
@@ -587,6 +591,66 @@ function closeoutRules(): ScopeRule[] {
   ];
 }
 
+/* --------------------------------------------------------------- shop homes */
+
+/**
+ * What a working shop adds on top of the house.
+ *
+ * The shared rule sets above already carry the shop through everything it
+ * genuinely shares with the house, because `shopSqft` is folded into
+ * `foundationArea`: the slab, the excavation, the footings, the trusses, the
+ * roof and the wall envelope all size themselves correctly for a barndominium
+ * without a special case. Two of them are deliberately net of the shop instead
+ * (stone veneer and full-depth insulation), for the reasons stated there.
+ *
+ * What is left is what a shop has that a house does not, and it is short:
+ * structure over a clear span, doors big enough to drive through, a slab thick
+ * enough to park on, and power for tools.
+ *
+ * These rules are keyed off `house.shopSqft`, which is zero on every project
+ * except a shop home, so including them in another rule set would price nothing.
+ * They are kept out of the shared builders anyway, because a reader of
+ * `shellRules()` should not have to know what a barndominium is.
+ */
+function shopRules(): ScopeRule[] {
+  return [
+    {
+      code: "03-05-02", // Framing, SF
+      qty: (d) => house(d).shopSqft * 0.45,
+      when: (s) => (s.shopSqft ?? 0) > 0,
+      assumption:
+        "Post-frame or steel shop structure at about 45% of the stick-framing rate per square foot. A clear-span shop has posts on 8ft centers and girts between them rather than studs at 16 inches, no interior partitions, and no second floor to carry.",
+    },
+    {
+      code: "03-04-03", // Slab / flatwork, SF of concrete poured
+      qty: (d) => house(d).shopSqft * 0.35,
+      when: (s) => (s.shopSqft ?? 0) > 0,
+      assumption:
+        "A shop slab is thicker and more heavily reinforced than a house slab so it can carry vehicles and equipment. Priced as a 35% uplift on the shop's share of the pour, which is already counted once at house rate.",
+    },
+    {
+      code: "03-07-01", // Overhead doors, EA
+      qty: (d) => Math.max(1, Math.round(house(d).shopSqft / 800)),
+      when: (s) => (s.shopSqft ?? 0) > 0,
+      assumption:
+        "One overhead door per 800 SF of shop, minimum one. Shop doors are taller and wider than a residential garage door, which offsets the smaller count.",
+    },
+    {
+      code: "03-09-08-L", // Electrical labor, SF
+      qty: (d) => house(d).shopSqft * 0.4,
+      when: (s) => (s.shopSqft ?? 0) > 0,
+      assumption:
+        "Shop power: a subpanel, 240V circuits for equipment, outlets on the walls and high-bay lighting. Well below a house rate per square foot because there are no devices in partitions and no finish fixtures.",
+    },
+    {
+      code: "03-09-04-M", // Standard interior fixtures, SF
+      qty: (d) => house(d).shopSqft * 0.4,
+      when: (s) => (s.shopSqft ?? 0) > 0,
+      assumption: "High-bay shop lighting, outlets and switches.",
+    },
+  ];
+}
+
 /* ------------------------------------------------------------- assembled sets */
 
 /** A fully custom home: design from a blank page, every division at full scope. */
@@ -634,4 +698,33 @@ export const BUILD_ON_YOUR_LOT_RULES: ScopeRule[] = [
   ...flooringRules(),
   ...kitchenAndBathRules(),
   ...closeoutRules(),
+];
+
+/**
+ * A shop home or barndominium: finished living space and a working shop under
+ * one roof, on one slab.
+ *
+ * The living half is built and priced exactly like a house, because it is one.
+ * What makes the blended per-square-foot figure land near half a custom home's
+ * is not a cheaper house, it is that a large fraction of the square footage is
+ * shop, and shop square footage costs a fraction of living square footage. That
+ * falls out of the geometry rather than being asserted: `shopSqft` sits in the
+ * foundation and roof but never in `finishedArea`, so nothing that prices living
+ * space ever sees it.
+ *
+ * Design sits between semi-custom and custom. These are rarely stock plans, but
+ * they are simple rectangles with a straightforward roof, so the drawings and
+ * engineering are less work than a custom home on a hillside.
+ */
+export const SHOP_HOME_RULES: ScopeRule[] = [
+  ...designRules(0.55),
+  ...siteAndOverheadRules(),
+  ...shellRules(),
+  ...envelopeRules(),
+  ...systemsRules(),
+  ...interiorRules(),
+  ...flooringRules(),
+  ...kitchenAndBathRules(),
+  ...closeoutRules(),
+  ...shopRules(),
 ];

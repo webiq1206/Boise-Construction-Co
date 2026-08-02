@@ -12,7 +12,8 @@
 export type NewConstructionProjectType =
   | "custom-home"
   | "semi-custom-home"
-  | "build-on-your-lot";
+  | "build-on-your-lot"
+  | "shop-home";
 
 export type RemodelProjectType =
   | "kitchen"
@@ -29,6 +30,7 @@ export const NEW_CONSTRUCTION_PROJECT_TYPES: NewConstructionProjectType[] = [
   "custom-home",
   "semi-custom-home",
   "build-on-your-lot",
+  "shop-home",
 ];
 
 export function isNewConstructionProject(
@@ -56,7 +58,8 @@ export type UserRefinementKey =
   | "basementType"
   | "lotServices"
   | "siteDifficulty"
-  | "coveredOutdoor";
+  | "coveredOutdoor"
+  | "shopSize";
 
 /** Garage size, asked as bays because that is how buyers think about it. */
 export type GarageBays = "none" | "two" | "three" | "four";
@@ -131,6 +134,8 @@ export interface EstimateRefinements {
   siteDifficulty: SiteDifficulty | null;
   /** Covered patio or covered deck, in square feet. */
   coveredOutdoor: number | null;
+  /** Working shop area on a shop home, in square feet. */
+  shopSize: number | null;
 }
 
 /* ----------------------------- construction selection to engine quantities */
@@ -378,6 +383,13 @@ const PROJECT_UPGRADES: Record<ProjectType, string[]> = {
     "A high-performance envelope package, which pays back faster on a rural site",
     "Landscaping and irrigation beyond the front yard",
   ],
+  "shop-home": [
+    "A taller shop for an RV or a lift, which changes the door and the wall height",
+    "Heating the shop, and insulating it well enough to be worth heating",
+    "A floor drain, compressed air lines, or a wash bay",
+    "A mezzanine or office inside the shop footprint",
+    "Finishing the shop interior rather than leaving the structure exposed",
+  ],
   kitchen: [
     "Island addition or expansion",
     "Panel-ready or integrated appliance fronts",
@@ -576,6 +588,42 @@ const PROFILE_SUMMARY: Record<ProjectType, Record<FinishLevel, string[]>> = {
       "Every room specified individually",
     ],
   },
+  /*
+   * The tiers describe the living half. The shop is the same shop at every
+   * tier: a slab, a clear-span structure, doors and power. Nobody specifies a
+   * luxury shop, and pretending the tier changes it would be a way of charging
+   * for nothing.
+   */
+  "shop-home": {
+    refresh: [
+      "Living space and a working shop under one roof",
+      "Insulated shop with an overhead door and 240V power",
+      "LVP and carpet in the living space, tile in wet areas",
+      "Painted stock cabinetry with quartz counters",
+      "Metal or siding elevation on both halves",
+    ],
+    "mid-range": [
+      "Living space and a working shop under one roof",
+      "Insulated shop with an overhead door and 240V power",
+      "Engineered hardwood in living areas, tile in baths",
+      "Semi-custom cabinetry with quartz throughout",
+      "Mixed siding and stone on the living elevation",
+    ],
+    "high-end": [
+      "Living space finished to a custom standard beside the shop",
+      "Insulated shop with an overhead door and 240V power",
+      "Wide-plank hardwood and large-format tile",
+      "Custom cabinetry and built-ins",
+      "Stone-forward living elevation with timber accents",
+    ],
+    luxury: [
+      "Living space specified room by room beside the shop",
+      "Insulated shop with an overhead door and 240V power",
+      "Stone and hardwood throughout the living space",
+      "Fully custom millwork and cabinetry",
+      "Timber, stone and standing-seam on the living elevation",
+    ],
+  },
   kitchen: {
     refresh: ["Stock cabinetry", "Laminate or entry quartz counters", "Existing layout kept", "Plumbing stays where it is", "LVP or tile flooring"],
     "mid-range": ["Semi-custom cabinetry", "Quartz counters", "Tile backsplash", "Existing layout kept", "Plumbing stays where it is"],
@@ -661,6 +709,13 @@ export const PROJECT_SIZE_CONFIG: Record<ProjectType, ProjectSizeConfig> = {
   "custom-home": { min: 1200, max: 7000, step: 100, baselineSqft: 2400 },
   "semi-custom-home": { min: 1200, max: 4500, step: 100, baselineSqft: 2200 },
   "build-on-your-lot": { min: 1200, max: 6000, step: 100, baselineSqft: 2400 },
+  /*
+   * Living area only; the shop is sized separately. The range starts lower and
+   * tops out lower than a conventional house because a shop home splits the
+   * budget: someone spending on 2,000 SF of shop is usually not also building
+   * 5,000 SF of house.
+   */
+  "shop-home": { min: 800, max: 3500, step: 100, baselineSqft: 1700 },
   kitchen: { min: 100, max: 600, step: 25, baselineSqft: 250 },
   bathroom: { min: 40, max: 200, step: 10, baselineSqft: 80 },
   "whole-home": { min: 800, max: 8000, step: 100, baselineSqft: 1800 },
@@ -685,6 +740,7 @@ export const EMPTY_REFINEMENTS: EstimateRefinements = {
   lotServices: null,
   siteDifficulty: null,
   coveredOutdoor: null,
+  shopSize: null,
 };
 
 /** Estimator starting state: nothing selected, no implicit defaults. */
@@ -812,6 +868,7 @@ export const PROJECT_LABELS: Record<ProjectType, { label: string; sub: string }>
   "custom-home": { label: "Custom Home", sub: "Designed from scratch for you" },
   "semi-custom-home": { label: "Semi-Custom Home", sub: "An existing plan, your choices" },
   "build-on-your-lot": { label: "Build on My Lot", sub: "You already own the land" },
+  "shop-home": { label: "Shop Home", sub: "A house and a shop, one roof" },
   kitchen: { label: "Kitchen", sub: "Cabinets, counters, layout" },
   bathroom: { label: "Bathroom", sub: "Tile, fixtures, vanity" },
   "whole-home": { label: "Whole-Home", sub: "Multi-room renovation" },
@@ -1021,6 +1078,34 @@ const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>>
     luxury: {
       low: 1470000, high: 2280000, roi: 0,
       included: ["Architect-led design responding to the site", "Stone, hardwood and specialty metals", "Fully custom millwork", "Every room specified individually"],
+    },
+  },
+  /*
+   * Shop homes sit well below the other three, and the reason is arithmetic
+   * rather than a cheaper house: the ceiling is quoted against LIVING area, and
+   * a shop home's living area is typically 1,400 to 2,200 SF where a custom home
+   * is 2,400 to 4,000. The shop is real money but it is not living area, so it
+   * lands in the takeoff without inflating the ceiling basis.
+   *
+   * Same 15% headroom above the baseline takeoff as the other new-construction
+   * cells, and the same `high` inflation for PLANNING_RANGE_ADJUSTMENT_HIGH.
+   */
+  "shop-home": {
+    refresh: {
+      low: 470000, high: 760000, roi: 0,
+      included: ["Living space and a working shop under one roof", "Insulated shop with an overhead door and 240V power", "Production-grade specification", "Permits and inspections"],
+    },
+    "mid-range": {
+      low: 590000, high: 950000, roi: 0,
+      included: ["Living space and a working shop under one roof", "Insulated shop with an overhead door and 240V power", "Semi-custom cabinetry and quartz throughout", "Mixed siding and stone on the living elevation"],
+    },
+    "high-end": {
+      low: 850000, high: 1370000, roi: 0,
+      included: ["Living space at a custom specification", "Insulated shop with an overhead door and 240V power", "Custom cabinetry and built-ins", "Stone-forward living elevation"],
+    },
+    luxury: {
+      low: 1200000, high: 1950000, roi: 0,
+      included: ["Living space specified room by room", "Insulated shop with an overhead door and 240V power", "Fully custom millwork", "Timber, stone and standing-seam on the living elevation"],
     },
   },
   kitchen: {
@@ -1301,6 +1386,10 @@ const SIZE_ELASTICITY: Record<ProjectType, number> = {
   "custom-home": 0.92,
   "semi-custom-home": 0.92,
   "build-on-your-lot": 0.92,
+  // Lower than the others because the basis is living area only. Growing the
+  // living half of a shop home leaves the shop, the site work and the slab where
+  // they were, so the marginal square foot moves the total less.
+  "shop-home": 0.85,
   kitchen: 0.55, // cabinet runs + appliance count dominate, not floor area
   bathroom: 0.6, // fixture count and tile area, not floor area
   'whole-home': 0.85, // more area genuinely means more rooms to touch

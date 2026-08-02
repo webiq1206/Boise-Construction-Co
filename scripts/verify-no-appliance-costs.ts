@@ -57,7 +57,7 @@ for (const [project, rules] of Object.entries(RULES_BY_PROJECT)) {
  * takeoff must exclude them exactly as a kitchen remodel does.
  */
 const PROJECTS: ProjectType[] = [
-  "custom-home", "semi-custom-home", "build-on-your-lot",
+  "custom-home", "semi-custom-home", "build-on-your-lot", "shop-home",
   "kitchen", "bathroom", "whole-home", "addition", "adu", "basement",
 ];
 const FINISHES: FinishLevel[] = ["refresh", "mid-range", "high-end", "luxury"];

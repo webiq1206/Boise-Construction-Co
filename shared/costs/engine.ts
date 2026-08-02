@@ -67,6 +67,14 @@ export interface ScopeSelections {
   siteDifficulty?: "simple" | "moderate" | "steep" | null;
   /** Covered outdoor living area in SF (covered patio, deck under roof). */
   coveredOutdoorSqft?: number | null;
+  /**
+   * Working shop area in SF on a shop home or barndominium, kept separate from
+   * both finished area and the garage because it is a different building. A shop
+   * is clear-span post-frame or steel with a slab, big doors and its own power,
+   * and it costs a fraction of finished living space per square foot. Folding it
+   * into either of the other two numbers would price it as something it is not.
+   */
+  shopSqft?: number | null;
 }
 
 /* ------------------------------------------------------- derived dimensions */
@@ -146,6 +154,14 @@ export interface HouseDimensions {
   garageSqft: number;
   basementSqft: number;
   coveredOutdoorSqft: number;
+  /** Working shop area on a shop home, SF. Zero on every other project. */
+  shopSqft: number;
+  /**
+   * The shop's share of the exterior wall, SF. Broken out so a rule can price
+   * the living envelope and the shop envelope differently: nobody puts stone
+   * veneer on the shop end of a barndominium.
+   */
+  shopWallArea: number;
   stories: number;
 }
 
@@ -224,9 +240,14 @@ export function deriveHouseDimensions(s: ScopeSelections): HouseDimensions {
   const garageSqft = Math.max(0, s.garageSqft ?? 0);
   const basementSqft = Math.max(0, s.basementSqft ?? 0);
   const coveredOutdoorSqft = Math.max(0, s.coveredOutdoorSqft ?? 0);
+  const shopSqft = Math.max(0, s.shopSqft ?? 0);
 
   const footprint = finishedArea / stories;
-  const foundationArea = footprint + garageSqft;
+  // The shop shares the slab and the roofline on a barndominium, so it belongs
+  // in the foundation area alongside the garage. It is excluded from finished
+  // area everywhere else, because nothing that prices living space applies to
+  // it.
+  const foundationArea = footprint + garageSqft + shopSqft;
 
   const long = Math.sqrt(foundationArea * HOUSE_ASPECT_RATIO);
   const short = Math.sqrt(foundationArea / HOUSE_ASPECT_RATIO);
@@ -238,7 +259,15 @@ export function deriveHouseDimensions(s: ScopeSelections): HouseDimensions {
   const exteriorWallArea =
     foundationPerimeter * STOREY_HEIGHT * (livingPerimeterShare * stories + (1 - livingPerimeterShare));
 
-  const windowArea = exteriorWallArea * GLAZING_RATIO;
+  // The shop is single-storey and takes its share of the perimeter, so its wall
+  // is that share of the ground-floor wall band.
+  const shopWallArea =
+    foundationArea > 0 ? foundationPerimeter * STOREY_HEIGHT * (shopSqft / foundationArea) : 0;
+
+  // A shop is a mostly blind box: a few windows and the overhead doors, nothing
+  // like the glazing ratio of living space. Excluding it from the glazing basis
+  // keeps a large shop from inventing tens of thousands of dollars of window.
+  const windowArea = (exteriorWallArea - shopWallArea) * GLAZING_RATIO;
 
   return {
     finishedArea,
@@ -259,6 +288,8 @@ export function deriveHouseDimensions(s: ScopeSelections): HouseDimensions {
     garageSqft,
     basementSqft,
     coveredOutdoorSqft,
+    shopSqft,
+    shopWallArea,
     stories,
   };
 }

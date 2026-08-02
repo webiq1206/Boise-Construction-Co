@@ -578,7 +578,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does a barndominium cost to build in Idaho?',
         answer:
-          'Shop homes generally plan between $150 and $250 per square foot in 2026, blended across finished and shop space. A 1,600 square foot living area with an attached 1,200 square foot shop commonly lands between $265,000 and $500,000 excluding land.',
+          'Shop homes generally plan between $140 and $250 per square foot in 2026, blended across finished and shop space. A 1,600 square foot living area with an attached 1,200 square foot shop commonly lands between $385,000 and $630,000 excluding land. The shop itself runs about $55 to $60 per square foot insulated, with a slab, an overhead door and power.',
       },
       {
         question: 'Why is a shop home cheaper per square foot than a conventional house?',
@@ -609,7 +609,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Shop home and barndominium cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, shop homes in the Treasure Valley plan between $150 and $250 per square foot blended across finished and shop space. A 1,600 square foot living area with an attached 1,200 square foot shop commonly runs $265,000 to $500,000 excluding land and site work.',
+        'As of 2026, shop homes in the Treasure Valley plan between $140 and $250 per square foot blended across finished and shop space. A 1,600 square foot living area with an attached 1,200 square foot shop commonly runs $385,000 to $630,000 excluding land and site work.',
         'These are planning ranges, not bids. The ratio of finished space to shop space moves the blended cost more than any other variable, which we settle before design begins.',
       ],
     },

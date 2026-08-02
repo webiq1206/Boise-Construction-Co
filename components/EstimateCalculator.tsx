@@ -76,6 +76,7 @@ const PROJECT_ICONS: Record<ProjectType, LucideIcon> = {
   "custom-home": HardHat,
   "semi-custom-home": Ruler,
   "build-on-your-lot": MapPin,
+  "shop-home": Warehouse,
   kitchen: UtensilsCrossed,
   bathroom: Droplets,
   "whole-home": Home,
@@ -152,6 +153,18 @@ const SUBTYPE_DATA: Record<ProjectType, Record<string, SubtypeData>> = {
     "acreage":         { sqft: 2600, refinements: { stories: 1, garageBays: "three", siteDifficulty: "moderate", lotServices: "well-septic" } },
     "foothills":       { sqft: 3000, refinements: { stories: 2, garageBays: "three", siteDifficulty: "steep" } },
     "riverfront":      { sqft: 3200, refinements: { stories: 2, garageBays: "three", siteDifficulty: "moderate" } },
+  },
+  /*
+   * A shop home is sized by two numbers, not one: the living half on the slider
+   * and the shop in a chip. The subtypes seed both, because "1,400 living with a
+   * 1,200 shop" is how someone building one describes it, and asking for a
+   * single blended figure would make them do arithmetic to answer.
+   */
+  "shop-home": {
+    "compact":         { sqft: 1200, refinements: { stories: 1, garageBays: "none", shopSize: 1200 } },
+    "standard":        { sqft: 1700, refinements: { stories: 1, garageBays: "none", shopSize: 1600 } },
+    "large-shop":      { sqft: 1600, refinements: { stories: 1, garageBays: "none", shopSize: 2400 } },
+    "family-acreage":  { sqft: 2400, refinements: { stories: 1, garageBays: "two", shopSize: 1800, lotServices: "well-septic", siteDifficulty: "moderate" } },
   },
   kitchen: {
     galley:      { sqft: 175, refinements: { layoutChanges: "none" } },
@@ -281,6 +294,27 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
       { id: "well-septic",    icon: Waves,     label: "WELL + SEPTIC" },
     ],
     footerAccent: "build",
+  },
+  "shop-home": {
+    tabLabel: "Shop Home",
+    headlinePrefix: "Price your", headlineAccent: "shop home", headlineSuffix: "build",
+    // The slider is living area only. The shop is a separate chip below, because
+    // a blended figure hides the ratio that decides the whole budget.
+    gridLabel: "HOW MUCH HOUSE, HOW MUCH SHOP?",
+    subtypes: [
+      { id: "compact",        icon: Warehouse, title: "Compact",     subtitle: "1,200 living, 1,200 shop" },
+      { id: "standard",       icon: Home,      title: "Standard",    subtitle: "1,700 living, 1,600 shop" },
+      { id: "large-shop",     icon: Car,       title: "Shop-Forward", subtitle: "1,600 living, 2,400 shop" },
+      { id: "family-acreage", icon: Trees,     title: "Acreage",     subtitle: "2,400 living, 1,800 shop" },
+    ],
+    chipsLabel: "WHAT ELSE ARE YOU INCLUDING?",
+    chips: [
+      { id: "bigger-shop",    icon: Warehouse, label: "BIGGER SHOP" },
+      { id: "basement",       icon: Layers,    label: "BASEMENT" },
+      { id: "covered-patio",  icon: Sun,       label: "COVERED PATIO" },
+      { id: "well-septic",    icon: Waves,     label: "WELL + SEPTIC" },
+    ],
+    footerAccent: "shop home",
   },
   kitchen: {
     tabLabel: "Kitchen",
@@ -413,7 +447,7 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
  * what the company does. Add a type here only when it is genuinely for sale.
  */
 const PROJECT_TYPE_ORDER: ProjectType[] = [
-  "custom-home", "semi-custom-home", "build-on-your-lot",
+  "custom-home", "semi-custom-home", "build-on-your-lot", "shop-home",
 ];
 
 /** The project the estimator opens on. */
@@ -472,6 +506,14 @@ function buildRefinements(
     }
     ref.coveredOutdoor = addOns.includes("covered-patio") ? 300 : 0;
     ref.lotServices = addOns.includes("well-septic") ? "well-septic" : "city";
+  }
+
+  if (effectiveProject === "shop-home") {
+    // Every shop home has a shop, so this floors at the preset rather than at
+    // zero. The chip enlarges it; unticking returns it to what the subtype
+    // implied instead of removing the shop, which would make it a house.
+    const preset = subtypeRef.shopSize ?? 1600;
+    ref.shopSize = addOns.includes("bigger-shop") ? Math.round(preset * 1.5) : preset;
   }
 
   if (effectiveProject === "whole-home" && addOns.includes("layout")) {
@@ -987,6 +1029,7 @@ export function EstimateCalculator({
     "custom-home": [],
     "semi-custom-home": [],
     "build-on-your-lot": [],
+    "shop-home": [],
     kitchen: ["counters", "lighting"],
     bathroom: ["shower", "vanity", "tub"],
     "whole-home": ["kitchen", "baths", "layout"],
@@ -998,7 +1041,7 @@ export function EstimateCalculator({
      Asking a new-home buyer whether plumbing is "staying put" is meaningless:
      there is nothing there yet, so every system is new by definition. */
   const ALWAYS_HAS_SYSTEMS: ProjectType[] = [
-    "custom-home", "semi-custom-home", "build-on-your-lot", "addition", "adu",
+    "custom-home", "semi-custom-home", "build-on-your-lot", "shop-home", "addition", "adu",
   ];
 
   const showCabinetry = effectiveProject === "kitchen" && addOns.includes("cabinets");

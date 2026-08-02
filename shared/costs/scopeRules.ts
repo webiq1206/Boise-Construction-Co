@@ -23,6 +23,7 @@ import {
   BUILD_ON_YOUR_LOT_RULES,
   CUSTOM_HOME_RULES,
   SEMI_CUSTOM_HOME_RULES,
+  SHOP_HOME_RULES,
 } from "./newConstructionRules";
 
 /* ------------------------------------------------------ shared derivations */
@@ -30,6 +31,9 @@ import {
 export const BASELINE_SQFT: Record<string, number> = {
   "custom-home": 2400,
   "semi-custom-home": 2200,
+  // Living area only. A shop home's living half is typically smaller than a
+  // conventional house because the budget is split with the shop.
+  "shop-home": 1700,
   "build-on-your-lot": 2400,
   kitchen: 250,
   bathroom: 80,
@@ -900,6 +904,7 @@ export const RULES_BY_PROJECT: Record<string, ScopeRule[]> = {
   // of newConstructionRules.ts for why, and for the per-SF basis trap.
   "custom-home": CUSTOM_HOME_RULES,
   "semi-custom-home": SEMI_CUSTOM_HOME_RULES,
+  "shop-home": SHOP_HOME_RULES,
   "build-on-your-lot": BUILD_ON_YOUR_LOT_RULES,
   kitchen: KITCHEN_RULES,
   bathroom: BATHROOM_RULES,

@@ -190,6 +190,7 @@ const DIRECT_COMPONENTS: Record<ProjectType, ComponentDef[]> = {
   "custom-home": NEW_HOME_COMPONENTS,
   "semi-custom-home": NEW_HOME_COMPONENTS,
   "build-on-your-lot": NEW_HOME_COMPONENTS,
+  "shop-home": NEW_HOME_COMPONENTS,
   kitchen: [
     { id: "cabinetry", label: "Cabinetry", unit: "linear foot", share: 0.24, quantity: { kind: "per-sqft", factor: 0.11 }, group: "direct", note: "Boxes, doors, drawers, and installation." },
     { id: "countertops", label: "Countertops", unit: "square foot", share: 0.09, quantity: { kind: "per-sqft", factor: 0.21 }, group: "direct", note: "Material, fabrication, templating, and install." },

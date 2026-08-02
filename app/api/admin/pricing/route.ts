@@ -44,6 +44,7 @@ const PROJECTS: ProjectType[] = [
   "custom-home",
   "semi-custom-home",
   "build-on-your-lot",
+  "shop-home",
   "kitchen",
   "bathroom",
   "whole-home",
