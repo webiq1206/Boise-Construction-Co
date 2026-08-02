@@ -284,5 +284,14 @@ export const RE10_SERVICE_AREAS = [
  * quote, and the difference matters when the reader is under a contractual
  * deadline.
  */
+/**
+ * Rewritten when the estimator moved from a range to a firm price.
+ *
+ * The old wording ("a planning range, not a contract price") would now
+ * contradict the number beside it. A price an agent cannot rely on is not
+ * worth quoting, so this commits to the figure and is precise about the two
+ * things that can move it: an item we said needed an onsite look, and damage
+ * nobody could see. Both are named up front rather than discovered later.
+ */
 export const RE10_PRICING_DISCLAIMER =
-  "Any figure we give before an onsite visit is a planning range, not a contract price. Final pricing follows a scope confirmation, verified measurements, and review of any concealed or additional damage. No work is scheduled or authorized until a scope and agreement are approved.";
+  "This price is firm for the repairs listed, at the quantities shown, and is held for 30 days. Items we have flagged for an onsite look are not included and are priced separately once we see them. If concealed damage turns up behind a finish, we stop and agree the change with you in writing before any extra work happens. No work is scheduled or authorized until a scope and agreement are approved.";

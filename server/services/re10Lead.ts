@@ -99,7 +99,7 @@ function buildRe10Notes(input: Re10DeliveryInput): string {
     contact.closingDate ? `Closing: ${contact.closingDate}` : "",
     contact.occupancy && contact.occupancy !== "unknown" ? `Property is ${contact.occupancy}` : "",
     ``,
-    `Quoted range: ${usd(estimate.low)} to ${usd(estimate.high)} (${estimate.confidence} confidence)`,
+    `QUOTED FIRM: ${usd(estimate.quotedPrice)}, held ${estimate.quoteValidDays} days (${estimate.confidence} confidence; internal band ${usd(estimate.low)}-${usd(estimate.high)})`,
     `${estimate.priced.length} repairs priced, ${estimate.review.length} need an onsite look`,
     ``,
     `REPAIRS PRICED`,
@@ -160,6 +160,8 @@ function buildRe10CrmRecord(input: Re10DeliveryInput) {
       preferredContact: contact.preferredContact,
     },
     quoted: {
+      price: estimate.quotedPrice,
+      validDays: estimate.quoteValidDays,
       low: estimate.low,
       high: estimate.high,
       confidence: estimate.confidence,
@@ -227,8 +229,8 @@ export async function deliverRe10Lead(input: Re10DeliveryInput): Promise<Re10Del
         projectType: "RE-10 repairs",
         message: notes,
         estimateProject: "re-10",
-        estimateLow: String(estimate.low),
-        estimateHigh: String(estimate.high),
+        estimateLow: String(estimate.quotedPrice),
+        estimateHigh: String(estimate.quotedPrice),
         estimateConfidence: estimate.confidence,
       });
       result.stored = true;
@@ -247,15 +249,15 @@ export async function deliverRe10Lead(input: Re10DeliveryInput): Promise<Re10Del
     phone: contact.phone || undefined,
     propertyAddress: contact.propertyAddress,
     projectTypes: ["RE-10 repairs"],
-    projectScope: `RE-10 repair list - ${usd(estimate.low)} to ${usd(estimate.high)} (${estimate.priced.length} priced, ${estimate.review.length} need onsite)`,
+    projectScope: `RE-10 repair list - ${usd(estimate.quotedPrice)} firm (${estimate.priced.length} priced, ${estimate.review.length} need onsite)`,
     projectGoals: contact.repairDeadline
       ? `Repairs complete by ${contact.repairDeadline}`
       : "Inspection repairs before closing",
     finalNotes: contact.notes || undefined,
     estimateSummary: notes,
-    estimateLow: estimate.low,
-    estimateHigh: estimate.high,
-    estimateRange: `${usd(estimate.low)} to ${usd(estimate.high)}`,
+    estimateLow: estimate.quotedPrice,
+    estimateHigh: estimate.quotedPrice,
+    estimateRange: usd(estimate.quotedPrice),
     // Passthrough: the dashboard stores this whole object as JSON rather than
     // stripping fields it does not recognise.
     estimate: buildRe10CrmRecord(input) as never,

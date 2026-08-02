@@ -72,9 +72,9 @@ function transactionRows(c: Re10Contact): string {
 export function buildRe10CustomerEmail(
   contact: Re10Contact,
   view: {
-    low: number;
-    high: number;
-    categories: { trade: string; itemCount: number; items: { description: string; quantityAssumed: boolean }[] }[];
+    price: number;
+    validDays: number;
+    categories: { trade: string; itemCount: number; items: { description: string; quantityAssumed: boolean; quantity?: number; unit?: string }[] }[];
     needsOnsite: { description: string; why: string }[];
     uncertainty: string[];
     assumptions: string[];
@@ -90,7 +90,7 @@ export function buildRe10CustomerEmail(
             TRADE_LABELS[c.trade as keyof typeof TRADE_LABELS] ?? c.trade,
           )} <span style="color:${EMAIL_BRAND.textMuted};">(${c.itemCount} ${c.itemCount === 1 ? "item" : "items"})</span></p>
           <ul style="margin:0;padding-left:18px;color:${EMAIL_BRAND.textMuted};font-size:13px;line-height:1.6;">
-            ${c.items.map((i) => `<li>${escapeHtml(i.description)}${i.quantityAssumed ? " (typical size assumed)" : ""}</li>`).join("")}
+            ${c.items.map((i) => `<li>${escapeHtml(i.description)}${i.quantityAssumed && i.quantity ? ` (priced for ${i.quantity} ${escapeHtml(String(i.unit ?? ""))})` : ""}</li>`).join("")}
           </ul>
         </div>`,
     )
@@ -100,7 +100,7 @@ export function buildRe10CustomerEmail(
     view.needsOnsite.length > 0
       ? `<div style="margin:28px 0;border:1px solid ${EMAIL_BRAND.hairline};border-radius:6px;padding:18px;">
           <p style="${SECTION_TITLE}">Not included: needs an onsite look</p>
-          <p style="margin:0 0 10px;color:${EMAIL_BRAND.textMuted};font-size:13px;line-height:1.6;">These are not in the range above. We would rather tell you that now than have it appear at the walkthrough.</p>
+          <p style="margin:0 0 10px;color:${EMAIL_BRAND.textMuted};font-size:13px;line-height:1.6;">These are not in the price above. We would rather tell you that now than have it appear at the walkthrough.</p>
           <ul style="margin:0;padding-left:18px;color:${EMAIL_BRAND.textMuted};font-size:13px;line-height:1.6;">
             ${view.needsOnsite.map((n) => `<li><span style="color:${EMAIL_BRAND.text};">${escapeHtml(n.description)}</span> - ${escapeHtml(n.why)}</li>`).join("")}
           </ul>
@@ -110,7 +110,7 @@ export function buildRe10CustomerEmail(
   const narrowing =
     view.uncertainty.length > 0
       ? `<div style="margin:28px 0;">
-          <p style="${SECTION_TITLE}">What would narrow this range</p>
+          <p style="${SECTION_TITLE}">What could change this price</p>
           <ul style="margin:0;padding-left:18px;color:${EMAIL_BRAND.textMuted};font-size:13px;line-height:1.6;">
             ${view.uncertainty.map((u) => `<li>${escapeHtml(u)}</li>`).join("")}
           </ul>
@@ -121,8 +121,9 @@ export function buildRe10CustomerEmail(
     <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">Thanks, ${escapeHtml(firstName)}. Here is the repair range from the RE-10 you sent.</p>
 
     <div style="background:${EMAIL_BRAND.raised};border-left:3px solid ${EMAIL_BRAND.accent};padding:24px;margin:24px 0;border-radius:4px;">
-      <p style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:0.14em;color:${EMAIL_BRAND.textMuted};">Estimated repair range</p>
-      <p style="margin:0;font-family:'Fraunces',Georgia,serif;font-size:30px;line-height:1.15;color:${EMAIL_BRAND.text};">${usd(view.low)} to ${usd(view.high)}</p>
+      <p style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:0.14em;color:${EMAIL_BRAND.textMuted};">Price for the repairs below</p>
+      <p style="margin:0;font-family:'Fraunces',Georgia,serif;font-size:30px;line-height:1.15;color:${EMAIL_BRAND.text};">${usd(view.price)}</p>
+      <p style="margin:8px 0 0;font-size:13px;color:${EMAIL_BRAND.textMuted};">Held for ${view.validDays} days.</p>
     </div>
 
     <div style="margin:28px 0;">

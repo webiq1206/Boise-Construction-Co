@@ -226,7 +226,8 @@ export type RepairKind =
   | "crawlspace-vapor-barrier"
   | "crawlspace-insulation"
   | "crawlspace-cleanout"
-  | "irrigation-repair";
+  | "irrigation-repair"
+  | "hose-bib-repair";
 
 const R = (
   trade: RepairTrade,
@@ -536,6 +537,14 @@ export const RECIPES: Record<RepairKind, Recipe> = {
     CLEANUP,
   ], { crewMinutes: 240 }),
 
+  // A vacuum breaker or a replacement hose bib is a known, bounded job. It was
+  // landing in the catch-all, which is a worse answer than naming it.
+  "hose-bib-repair": R("plumbing", "Exterior hose bib or vacuum breaker", "EA", 2, [
+    { code: "03-10-03-M", per: 5, why: "Vacuum breaker or replacement bib and fittings" },
+    { code: "03-10-03-L", per: 6, why: "Fit, test for backflow and check for leaks" },
+    CLEANUP,
+  ], { crewMinutes: 70 }),
+
   "irrigation-repair": R("exterior", "Irrigation system repair", "EA", 1, [
     { code: "03-22-03-M", per: 0.11, why: "Pump, valves, heads and fittings as needed" },
     { code: "03-02-04", flat: 150, why: "Locate the fault, fit and commission" },
@@ -663,6 +672,9 @@ export const CREW_MINIMUM_PRICE: Record<RepairCrew, number> = {
  */
 export const WORTHWHILE_JOB_PRICE = 400;
 
+/** How long a quoted figure is held. Long enough to clear a repair deadline. */
+export const QUOTE_VALID_DAYS = 30;
+
 /**
  * The catalog is a HIGH-END rate card. Repairs are not high-end work.
  *
@@ -776,6 +788,7 @@ export const MARKET_PRICE_BAND: Partial<Record<RepairKind, [number, number]>> = 
   "carpet-repair": [150, 500],
   "faucet-replace": [160, 450],
   "toilet-repair": [120, 350],
+  "hose-bib-repair": [150, 450],
   "chimney-repair": [400, 950],
   "bath-exhaust-vent": [350, 750],
   "crawlspace-vapor-barrier": [600, 1500],
@@ -854,6 +867,9 @@ export interface Re10Estimate {
   /** Reasons the margin sits above the 50% floor. */
   marginUplifts: string[];
   sellingPrice: number;
+  /** The firm figure shown to the customer. See the note where it is set. */
+  quotedPrice: number;
+  quoteValidDays: number;
   grossProfit: number;
   /** Customer-facing planning range. */
   low: number;
@@ -1273,6 +1289,30 @@ export function estimateRe10(
     marginUplifts: uplifts,
     sellingPrice,
     grossProfit,
+    /**
+     * THE NUMBER WE ACTUALLY QUOTE.
+     *
+     * A range lost both ways. An agent writing a repair addendum anchored on
+     * the low end and treated it as the price, while the high end made us look
+     * expensive to anyone comparing - so we earned the bottom of the range and
+     * were judged on the top of it. And a spread of that width is not usable:
+     * nobody can put "$3,800 to $7,800" in a counteroffer, which is the whole
+     * job the agent is trying to do.
+     *
+     * The width was never uncertainty about PRICE anyway. It was uncertainty
+     * about SCOPE, and scope is answered by naming what is excluded, not by
+     * padding a number. So the excluded items are listed explicitly, the
+     * assumed quantities are stated inline where the price depends on them,
+     * and what is left is a firm figure.
+     *
+     * Deliberately NOT uplifted for the risk of quoting firm. We are already
+     * better off than a range whose low end was doing the anchoring, and the
+     * protection belongs in the stated assumptions rather than in padding that
+     * would push us out of the market bands.
+     */
+    quotedPrice: roundTo(sellingPrice, stepFor(sellingPrice)),
+    /** Held this long, so the quote bounds our exposure and their deadline. */
+    quoteValidDays: QUOTE_VALID_DAYS,
     low,
     high,
     bandWidth: band,

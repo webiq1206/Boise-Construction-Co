@@ -40,7 +40,8 @@ interface EditableRepair extends ExtractedRepair {
 }
 
 interface EstimateResponse {
-  range: { low: number; high: number };
+  price: number;
+  validDays: number;
   confidence: "high" | "medium" | "low";
   propertyAddress: string;
   closingDate: string | null;
@@ -75,7 +76,7 @@ const STEP_LABELS: Record<Step, string> = {
   upload: "Upload",
   review: "Confirm repairs",
   contact: "Your details",
-  result: "Your range",
+  result: "Your price",
 };
 const STEP_ORDER: Step[] = ["upload", "review", "contact", "result"];
 
@@ -280,7 +281,7 @@ export function Re10Wizard() {
   async function submit() {
     const included = repairs.filter((r) => r.included);
     if (included.length === 0) {
-      setError("Keep at least one repair in the list to get a range.");
+      setError("Keep at least one repair in the list to get a price.");
       return;
     }
     if (!name.trim() || !address.trim()) {
@@ -347,7 +348,7 @@ export function Re10Wizard() {
         setError(
           detail.length > 0
             ? detail.join(" ")
-            : (data.message ?? "We could not build your range."),
+            : (data.message ?? "We could not build your price."),
         );
         // Tracked, because a validation failure at the gate looks exactly like
         // someone changing their mind unless it is recorded as a failure.
@@ -361,7 +362,7 @@ export function Re10Wizard() {
       setResult(estimate);
 
       trackEvent(RE10_EVENTS.estimateGenerated, {
-        value: Math.round((estimate.range.low + estimate.range.high) / 2),
+        value: estimate.price,
         currency: "USD",
         confidence: estimate.confidence,
         priced_items: estimate.priced,
@@ -373,7 +374,7 @@ export function Re10Wizard() {
         "Lead",
         {
           content_name: "RE-10 repair estimate",
-          value: Math.round((estimate.range.low + estimate.range.high) / 2),
+          value: estimate.price,
           currency: "USD",
         },
         { email: email.trim() || undefined, phone: phone.trim() || undefined },
@@ -602,7 +603,7 @@ export function Re10Wizard() {
             </h2>
             <p className="text-sm text-inverse-foreground/80 leading-relaxed mb-7">
               Remove anything that should not be included, and add a measurement where we did not
-              find one. The more you correct here, the narrower your range.
+              find one. The more you correct here, the more exact your price.
             </p>
 
             {!extraction.looksLikeRe10 && (
@@ -876,11 +877,11 @@ export function Re10Wizard() {
             >
               {busy ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Building your range...
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Building your price...
                 </>
               ) : (
                 <>
-                  See my estimated repair range <ArrowRight className="ml-2 h-4 w-4" />
+                  See my repair price <ArrowRight className="ml-2 h-4 w-4" />
                 </>
               )}
             </Button>
@@ -891,13 +892,14 @@ export function Re10Wizard() {
         {step === "result" && result && (
           <div data-testid="re10-result">
             <p className="text-[12px] tracking-[0.14em] uppercase text-inverse-muted mb-2">
-              Estimated repair range
+              Price for the repairs below
             </p>
             <div className="brc-display-num tabular-nums leading-none text-inverse-foreground text-[clamp(30px,7vw,48px)]">
-              {usd(result.range.low)}
-              <span className="text-inverse-muted/90 mx-2 text-xl">to</span>
-              {usd(result.range.high)}
+              {usd(result.price)}
             </div>
+            <p className="mt-2 text-[13px] text-accent-legible">
+              Held for {result.validDays} days
+            </p>
             <p className="mt-3 text-[13px] text-inverse-muted">
               {result.propertyAddress}
               {result.repairDeadline ? ` · repairs due ${result.repairDeadline}` : ""}

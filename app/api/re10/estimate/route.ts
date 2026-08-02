@@ -158,8 +158,8 @@ export async function POST(request: NextRequest) {
   // CUSTOMER-FACING SHAPE. Range, categories, scope, caveats. No cost, no
   // margin, no line item, no mention of what anything cost us.
   const customerView = {
-    low: estimate.low,
-    high: estimate.high,
+    price: estimate.quotedPrice,
+    validDays: estimate.quoteValidDays,
     categories: estimate.trades.map((t) => ({
       trade: t.trade,
       label: TRADE_LABELS[t.trade],
@@ -169,6 +169,8 @@ export async function POST(request: NextRequest) {
         label: p.recipe.label,
         location: p.input.location ?? null,
         quantityAssumed: p.quantityAssumed,
+        quantity: p.quantity,
+        unit: p.recipe.unit,
       })),
     })),
     // Unpriced items are listed alongside the ones that need an onsite visit,
@@ -219,7 +221,8 @@ export async function POST(request: NextRequest) {
   });
 
   return NextResponse.json({
-    range: { low: estimate.low, high: estimate.high },
+    price: estimate.quotedPrice,
+    validDays: estimate.quoteValidDays,
     confidence: estimate.confidence,
     propertyAddress: body.propertyAddress,
     closingDate: body.closingDate ?? null,

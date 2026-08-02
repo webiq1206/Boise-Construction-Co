@@ -67,8 +67,8 @@ for (const contact of CONTACTS) {
   for (const ctx of CONTEXTS) {
     const est = estimateRe10(SAMPLE_ITEMS, ctx);
     const view = {
-      low: est.low,
-      high: est.high,
+      price: est.quotedPrice,
+      validDays: est.quoteValidDays,
       categories: est.trades.map((t) => ({
         trade: t.trade,
         itemCount: t.repairs.length,
@@ -110,10 +110,22 @@ for (const contact of CONTACTS) {
     }
 
     // (d) The customer email must still do its job.
-    check(ct.includes("$" + est.low.toLocaleString("en-US")), `${label}: customer email is missing the range low`);
-    check(ct.includes("$" + est.high.toLocaleString("en-US")), `${label}: customer email is missing the range high`);
+    check(
+      ct.includes("$" + est.quotedPrice.toLocaleString("en-US")),
+      `${label}: customer email is missing the quoted price`,
+    );
+    // A firm price is only firm if its terms travel with it.
+    check(/firm for the repairs listed/i.test(ct), `${label}: customer email is missing the firm-price terms`);
+    check(/held for \d+ days/i.test(ct), `${label}: customer email does not say how long the price is held`);
+    // The internal band must never appear now that we quote one number - two
+    // figures on the page is exactly the ambiguity this change removes.
+    check(!ct.includes("$" + est.low.toLocaleString("en-US")), `${label}: customer email leaks the internal band low`);
+    check(!ct.includes("$" + est.high.toLocaleString("en-US")), `${label}: customer email leaks the internal band high`);
     check(ct.includes(contact.propertyAddress), `${label}: customer email is missing the property address`);
-    check(/not a (contract price|quote)/i.test(ct), `${label}: customer email is missing the planning-range disclaimer`);
+    check(
+      /priced separately once we see them/i.test(ct),
+      `${label}: customer email does not say the onsite items are excluded`,
+    );
     if (est.review.length > 0) {
       check(
         est.review.every((r) => ct.includes(r.input.description)),
