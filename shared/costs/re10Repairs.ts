@@ -506,13 +506,13 @@ export interface Re10Context {
  * its own material run, and a real chance of finding something worse once the
  * cover plate comes off. The margin difference is the cost of that fragmentation.
  */
-export const RE10_TARGET_MARGIN = 0.3;
+export const RE10_TARGET_MARGIN = 0.5;
 
 /** Never priced below this without an authorised admin adjustment. */
-export const RE10_MARGIN_FLOOR = 0.3;
+export const RE10_MARGIN_FLOOR = 0.5;
 
 /** Highest the risk uplifts may carry the margin. */
-export const RE10_MARGIN_CEILING = 0.42;
+export const RE10_MARGIN_CEILING = 0.62;
 
 /** Contingency on an inspection list, above the 10% used on remodels. */
 export const RE10_CONTINGENCY_RATE = 0.08;

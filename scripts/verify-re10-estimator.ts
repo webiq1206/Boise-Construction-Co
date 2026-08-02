@@ -295,6 +295,37 @@ for (const [kind, band] of Object.entries(MARKET_PRICE_BAND)) {
 }
 check(inBand === Object.keys(MARKET_PRICE_BAND).length, `only ${inBand}/${Object.keys(MARKET_PRICE_BAND).length} kinds are inside their market band`);
 
+/* ------------- 6b-ii. urgency may cost more, but it may not run away.
+
+   The bands above are for STANDARD conditions, so holding a rush job to them
+   would not be like for like: an occupied house on a two-day deadline with
+   difficult access legitimately costs more, and every trade charges for it.
+   What must not happen is the uplifts compounding into a number that reads as
+   opportunism to an agent who is already under pressure. This caps the premium
+   the worst realistic case may carry over the market ceiling.                 */
+
+const MAX_URGENCY_PREMIUM = 0.3;
+const worstCtx: Re10Context = {
+  occupancy: "occupied",
+  access: "difficult",
+  daysToDeadline: 1,
+  hasInspectionReport: false,
+};
+
+for (const [kind, band] of Object.entries(MARKET_PRICE_BAND)) {
+  const [, hi] = band as [number, number];
+  const est = estimateRe10([{ id: "1", kind: kind as RepairKind, description: "", hasPhoto: true }], worstCtx);
+  if (est.priced.length === 0) continue;
+  check(
+    est.sellingPrice <= hi * (1 + MAX_URGENCY_PREMIUM),
+    `${kind}: worst-case rush price ${Math.round(est.sellingPrice)} is more than ` +
+      `${(MAX_URGENCY_PREMIUM * 100).toFixed(0)}% over the ${hi} market ceiling`,
+  );
+  // And urgency must actually cost more, or the uplifts are decorative.
+  const standard = estimateRe10([{ id: "1", kind: kind as RepairKind, description: "", hasPhoto: true }], bandCtx);
+  check(est.sellingPrice >= standard.sellingPrice, `${kind}: a rush job priced at or below a relaxed one`);
+}
+
 /* --------------- 6c. bundled work must be cheaper per item than standalone */
 
 for (const kind of ALL_KINDS) {
