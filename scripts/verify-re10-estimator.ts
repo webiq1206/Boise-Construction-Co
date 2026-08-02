@@ -365,6 +365,47 @@ for (const kind of ALL_KINDS) {
   );
 }
 
+/* ------------- 6d. no internal vocabulary in customer-facing strings.
+
+   Everything the estimator returns as prose - assumptions, uncertainty, review
+   reasons, trade and recipe labels - can end up in front of a real estate agent
+   via the wizard or the customer email. Cost structure, margin, and trade
+   jargon do not belong there. This caught "Work is done in one mobilization per
+   trade", which was neither a cost disclosure nor comprehensible to an agent.
+
+   `warnings` is excluded on purpose: it is the internal channel, and its
+   worthwhile-threshold and minimum-price notes are explicitly for the team.   */
+
+const FORBIDDEN_CUSTOMER_WORDS = [
+  "mobilization", "mobilisation", "margin", "markup", "gross profit",
+  "internal cost", "direct cost", "unit cost", "our cost", "crew rate",
+  "cost code", "overhead",
+];
+
+for (const ctx of CONTEXTS) {
+  for (const pool of KIND_POOLS) {
+    const est = estimateRe10(sampleList(8, pool), ctx);
+    if (est.priced.length === 0) continue;
+    const customerText = [
+      ...est.assumptions,
+      ...est.uncertainty,
+      ...est.review.map((r) => r.text),
+      ...est.trades.map((t) => t.label),
+      ...est.priced.map((p) => p.recipe.label),
+      ...est.priced.flatMap((p) => p.lines.map((l) => l.assumption ?? "")),
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    for (const word of FORBIDDEN_CUSTOMER_WORDS) {
+      check(
+        !customerText.includes(word),
+        `customer-facing text contains internal vocabulary "${word}"`,
+      );
+    }
+  }
+}
+
 /* ------------------------- 7. more information must never widen the range */
 
 const vague: RepairItemInput[] = [

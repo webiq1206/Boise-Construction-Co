@@ -1123,7 +1123,10 @@ export function estimateRe10(
       `Repairs across ${activeTrades.length} trades are scheduled together where possible, so travel and set-up are shared rather than charged per item.`,
     );
   }
-  assumptions.push("Work is done in one mobilization per trade, with normal access during working hours.");
+  // "One mobilization per trade" is what this means internally, and it is what
+  // this line used to say. It is trade jargon to an agent, and it points at our
+  // cost structure rather than at anything they can act on.
+  assumptions.push("Each trade completes its work in a single visit, with normal access during working hours.");
   assumptions.push("Finishes are matched as closely as stock allows; an exact match to aged paint or flooring is not guaranteed.");
   if (ctx.occupancy === "occupied") {
     assumptions.push("The property is occupied, so areas are protected and reset each day.");

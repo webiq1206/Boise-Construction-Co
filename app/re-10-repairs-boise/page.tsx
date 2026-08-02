@@ -29,6 +29,7 @@ import {
   RE10_SERVICES,
 } from "@/shared/content/re10Content";
 import { Re10Faqs } from "@/components/re10/Re10Faqs";
+import { Re10Wizard } from "@/components/re10/Re10Wizard";
 
 const PATH = "/re-10-repairs-boise";
 
@@ -111,8 +112,8 @@ export default function Re10RepairsPage() {
         </p>
         <div className="flex flex-col sm:flex-row gap-3">
           <Button variant="brand" asChild>
-            <Link href="#submit">
-              Submit an RE-10 for review <ArrowRight className="ml-2 h-4 w-4" />
+            <Link href="#re10-estimator">
+              Upload your RE-10 and get an instant estimate <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button variant="brandInverseOutline" asChild>
@@ -135,6 +136,8 @@ export default function Re10RepairsPage() {
           </p>
         </div>
       </Section>
+
+      <Re10Wizard />
 
       {/* ------------------------------------------- realtor trust statement */}
       <Section variant="greige" divider>
