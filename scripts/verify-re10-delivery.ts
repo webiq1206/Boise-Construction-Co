@@ -185,6 +185,52 @@ for (const r of EXTRACTION_REVIEW_REASONS) {
   check(schema.properties.repairs.items.properties.needsReview.enum.includes(r), `review reason "${r}" missing from the schema`);
 }
 
+/* ------------------------------ 3b. items we could not categorise */
+
+/**
+ * Found by running a real Idaho RE-10 through the live extractor: seven of its
+ * twenty requests had no matching category, and they stopped dead at the review
+ * screen. Not in the range, not in the customer's copy, not in the internal
+ * estimate, not in the CRM. The agent saw a number that looked like the whole
+ * job. These checks are here so that cannot come back quietly.
+ */
+{
+  const est = estimateRe10(SAMPLE_ITEMS, CONTEXTS[1]);
+  const unmapped = [
+    { verbatim: "Repair severe cracking on chimney cap", reason: "No category matched." },
+    { verbatim: "Install vapor barrier in crawlspace" },
+  ];
+  const notes = ["Seller has not signed, so the list is not yet mutually accepted."];
+
+  const admin = strip(buildRe10AdminEmail(CONTACTS[0], est, { unmapped, documentNotes: notes }));
+  for (const u of unmapped) {
+    check(admin.includes(u.verbatim), `admin email omits an uncategorised request: "${u.verbatim}"`);
+  }
+  check(/NOT in the range/i.test(admin), "admin email does not flag uncategorised items as excluded from the price");
+  check(admin.includes(notes[0]), "admin email omits what the extractor noticed about the document");
+
+  // And the wizard must actually send them, or none of the above ever runs.
+  check(
+    /unmapped:\s*extraction\?\.unmapped/.test(wizard),
+    "the wizard does not forward unmapped items to the estimate - they die at the review screen",
+  );
+  check(
+    /documentNotes:\s*extraction\?\.documentNotes/.test(wizard),
+    "the wizard does not forward the extractor's document notes",
+  );
+  // Zero priceable repairs must stop at the upload step with an explanation,
+  // not push someone onto a review screen whose only button refuses to work.
+  check(
+    /extracted\.repairs\.length === 0/.test(wizard),
+    "the wizard still advances to review with no priceable repairs - a dead end",
+  );
+  // The document states the address; making someone retype it reads as broken.
+  check(
+    /setAddress\(\(a\) => a \|\| extracted\.propertyAddress/.test(wizard),
+    "the wizard does not prefill the property address the extractor already found",
+  );
+}
+
 /* ------------------------------------------- 4. the upload contract */
 
 /**

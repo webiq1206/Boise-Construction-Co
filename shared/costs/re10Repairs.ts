@@ -91,6 +91,7 @@ export type ReviewReason =
   | "engineering"
   | "permit-uncertain"
   | "concealed"
+  | "allowance"
   | "incomplete-info"
   | "out-of-scope";
 
@@ -109,9 +110,31 @@ export const REVIEW_REASON_TEXT: Record<ReviewReason, string> = {
   engineering: "Requires an engineer's letter or stamped detail.",
   "permit-uncertain": "May require a permit and inspection. Timeline depends on the jurisdiction.",
   concealed: "The extent is concealed. What is behind the finish decides the cost.",
+  allowance: "Priced as a typical allowance for this kind of repair. The document does not state the extent, so the final figure is confirmed on site.",
   "incomplete-info": "The request does not say enough to price. More detail or a photo would settle it.",
   "out-of-scope": "Outside what Boise Remodeling Co. performs. We can help point you to the right trade.",
 };
+
+/**
+ * Reasons that are priced anyway, with the caveat travelling alongside.
+ *
+ * MEASURED AGAINST A REAL RE-10. On an actual Idaho RE-10 with twenty requests,
+ * routing every one of these to "needs an onsite visit" left six items priced
+ * and the range covering under a third of the job. A tool that answers "come
+ * and look" to most of a normal repair list is not an instant estimate.
+ *
+ * "concealed" was always in this set: a planning range for "some drywall behind
+ * the leak" is useful as long as the caveat travels with it. The same logic
+ * applies to a plainly ordinary repair whose extent nobody wrote down - a
+ * hose-bib vacuum breaker is a known job whether or not the form says how many.
+ *
+ * NOTE the deliberate asymmetry: this covers a RECIPE that carries the reason
+ * because its own scope is loose. It does NOT cover an item the extractor
+ * flagged, which is the model saying "this text is not a defined repair" -
+ * "ensure the lights work" is a diagnosis, not a job, and pricing it blind
+ * would be inventing a scope the document never stated.
+ */
+export const PRICED_WITH_CAVEAT: readonly ReviewReason[] = ["concealed", "allowance"];
 
 /**
  * A recipe component: one catalog code and how much of it a repair consumes.
@@ -197,7 +220,13 @@ export type RepairKind =
   | "roof-minor-repair"
   // safety / misc
   | "safety-correction"
-  | "general-minor-repair";
+  | "general-minor-repair"
+  | "chimney-repair"
+  | "bath-exhaust-vent"
+  | "crawlspace-vapor-barrier"
+  | "crawlspace-insulation"
+  | "crawlspace-cleanout"
+  | "irrigation-repair";
 
 const R = (
   trade: RepairTrade,
@@ -462,7 +491,56 @@ export const RECIPES: Record<RepairKind, Recipe> = {
     { code: "03-02-04", per: 60, why: "Protection of each work area" },
     { code: "03-02-04", per: 25, why: "Materials allowance per small repair" },
     { code: "03-02-07", per: 0.12, why: "Clean-up and haul-out" },
-  ], { crewMinutes: 60, alwaysReview: "incomplete-info" }),
+  ], { crewMinutes: 60, alwaysReview: "allowance" }),
+
+  /* ------------------------------------------------------------------
+     ADDED AFTER TESTING AGAINST A REAL IDAHO RE-10.
+
+     Seven of that document's twenty requests had no category and were
+     dropped: chimney crown cracking, chimney cleaning, bathroom exhausts
+     terminating in the attic instead of outside, crawlspace debris, a
+     missing vapor barrier, uninsulated crawlspace floor, and an irrigation
+     pump. None of these are exotic - three of them are the crawlspace, and
+     nearly every older Boise house has one.
+     ------------------------------------------------------------------ */
+
+  "chimney-repair": R("exterior", "Chimney masonry repair", "SF", 18, [
+    { code: "03-11-07-M", per: 1, why: "Mortar, crown patch and sealant" },
+    { code: "03-11-07-L", per: 1.15, why: "Cut out failed mortar, repoint and reseal the crown" },
+    { code: "03-02-04", flat: 90, why: "Roof access and staging" },
+    CLEANUP,
+  ], { crewMinutes: 210 }),
+
+  "bath-exhaust-vent": R("general", "Bathroom exhaust vented outside", "EA", 1, [
+    { code: "03-08-02", per: 1, why: "Duct, insulated run and exterior cap" },
+    { code: "03-11-06", per: 4, why: "Cut in the exterior termination and make the siding good" },
+    { code: "03-14-02", per: 6, why: "Patch and paint where the duct was opened up" },
+    CLEANUP,
+  ], { crewMinutes: 180 }),
+
+  "crawlspace-vapor-barrier": R("general", "Crawlspace vapor barrier", "SF", 900, [
+    { code: "03-12-01-M", per: 0.35, why: "6-mil sheeting, seam tape and fasteners" },
+    { code: "03-12-01-L", per: 1, why: "Lay, lap and seal to piers and stem wall" },
+    { code: "03-02-04", flat: 70, why: "Crawlspace access and protection" },
+  ], { crewMinutes: 300 }),
+
+  "crawlspace-insulation": R("general", "Crawlspace floor insulation", "SF", 900, [
+    { code: "03-12-01-M", per: 1, why: "Batt insulation and supports" },
+    { code: "03-12-01-L", per: 1.2, why: "Install between joists and retain" },
+    { code: "03-02-04", flat: 70, why: "Crawlspace access and protection" },
+  ], { crewMinutes: 330 }),
+
+  "crawlspace-cleanout": R("general", "Crawlspace debris removal", "SF", 900, [
+    { code: "03-03-04", per: 0.06, why: "Collect, bag and haul out debris" },
+    { code: "03-02-04", flat: 70, why: "Crawlspace access, lighting and protection" },
+    CLEANUP,
+  ], { crewMinutes: 240 }),
+
+  "irrigation-repair": R("exterior", "Irrigation system repair", "EA", 1, [
+    { code: "03-22-03-M", per: 0.11, why: "Pump, valves, heads and fittings as needed" },
+    { code: "03-02-04", flat: 150, why: "Locate the fault, fit and commission" },
+    CLEANUP,
+  ], { crewMinutes: 180, alwaysReview: "allowance" }),
 };
 
 /* ------------------------------------------------------------ the request */
@@ -698,6 +776,12 @@ export const MARKET_PRICE_BAND: Partial<Record<RepairKind, [number, number]>> = 
   "carpet-repair": [150, 500],
   "faucet-replace": [160, 450],
   "toilet-repair": [120, 350],
+  "chimney-repair": [400, 950],
+  "bath-exhaust-vent": [350, 750],
+  "crawlspace-vapor-barrier": [600, 1500],
+  "crawlspace-insulation": [1200, 2800],
+  "crawlspace-cleanout": [400, 1100],
+  "irrigation-repair": [250, 700],
   "supply-valve-replace": [110, 300],
   "outlet-switch-replace": [110, 300],
   "gfci-install": [110, 350],
@@ -983,11 +1067,10 @@ export function estimateRe10(
       continue;
     }
     const p = priceRepair(input);
-    // An item flagged for review is reported, never silently priced. Items whose
-    // reason is only that the extent is concealed still get priced, because a
-    // planning range for "some drywall behind the leak" is useful as long as the
-    // caveat travels with it.
-    if (p.reviewReason && p.reviewReason !== "concealed") {
+    // An item flagged for review is reported, never silently priced - unless its
+    // reason is one that prices anyway with the caveat attached. See
+    // PRICED_WITH_CAVEAT for why that set is what it is.
+    if (p.reviewReason && !PRICED_WITH_CAVEAT.includes(p.reviewReason)) {
       review.push({ input, reason: p.reviewReason, text: REVIEW_REASON_TEXT[p.reviewReason] });
       continue;
     }
@@ -1116,6 +1199,15 @@ export function estimateRe10(
   if (assumedCount > 0) {
     assumptions.push(
       `${assumedCount} repair${assumedCount === 1 ? "" : "s"} had no measurement in the documents, so a typical size for that repair was assumed.`,
+    );
+  }
+  // Items priced despite carrying a caveat have to say so. Pricing something
+  // whose extent the document never defined and then presenting it like a
+  // measured item is worse than refusing to price it at all.
+  const allowanceCount = priced.filter((p) => p.reviewReason).length;
+  if (allowanceCount > 0) {
+    assumptions.push(
+      `${allowanceCount} repair${allowanceCount === 1 ? " is" : "s are"} included at a typical allowance because the documents do not state the extent. ${allowanceCount === 1 ? "It is" : "They are"} confirmed at the walkthrough.`,
     );
   }
   if (activeTrades.length > 1) {

@@ -64,6 +64,23 @@ const bodySchema = z
       .array(z.object({ filename: z.string().max(300), url: z.string().url().max(2000) }))
       .max(12)
       .optional(),
+    /**
+     * Repairs the extractor could not map to a priceable category.
+     *
+     * THESE USED TO STOP AT THE REVIEW SCREEN. They were shown once, then never
+     * sent here - so they were absent from the range, from the customer's copy,
+     * from the internal estimate and from the CRM. On a real Idaho RE-10 that
+     * was seven of twenty requests, including a chimney, a crawlspace vapor
+     * barrier and floor insulation. The agent got a range that looked like the
+     * whole job and quietly was not, and nobody on our side ever saw the
+     * missing items. They travel now.
+     */
+    unmapped: z
+      .array(z.object({ verbatim: z.string().max(2000), reason: z.string().max(1000).optional() }))
+      .max(40)
+      .optional(),
+    /** Extractor observations worth putting in front of the estimator. */
+    documentNotes: z.array(z.string().max(1000)).max(20).optional(),
   })
   .refine((b) => (b.preferredContact === "email" ? Boolean(b.email) : true), {
     message: "An email address is required when email is the preferred contact method.",
@@ -132,10 +149,22 @@ export async function POST(request: NextRequest) {
         quantityAssumed: p.quantityAssumed,
       })),
     })),
-    needsOnsite: estimate.review.map((r) => ({
-      description: r.input.description,
-      why: r.text,
-    })),
+    // Unpriced items are listed alongside the ones that need an onsite visit,
+    // because from the customer's side they are the same fact: this is in your
+    // document, it is NOT in this number, and here is why. Splitting them into
+    // two lists would only make one of them easier to miss.
+    needsOnsite: [
+      ...estimate.review.map((r) => ({
+        description: r.input.description,
+        why: r.text,
+      })),
+      ...(body.unmapped ?? []).map((u) => ({
+        description: u.verbatim,
+        why:
+          u.reason ??
+          "This one does not fit the categories we price automatically, so we price it after seeing it.",
+      })),
+    ],
     uncertainty: estimate.uncertainty,
     assumptions: estimate.assumptions,
   };
@@ -163,6 +192,8 @@ export async function POST(request: NextRequest) {
     estimate,
     customerView,
     documents: body.documents ?? [],
+    unmapped: body.unmapped ?? [],
+    documentNotes: body.documentNotes ?? [],
   });
 
   return NextResponse.json({
@@ -176,7 +207,7 @@ export async function POST(request: NextRequest) {
     uncertainty: estimate.uncertainty,
     assumptions: estimate.assumptions,
     priced: estimate.priced.length,
-    unpriced: estimate.review.length,
+    unpriced: customerView.needsOnsite.length,
     emailed: delivery.customerEmailed,
   });
 }

@@ -165,7 +165,43 @@ export function buildRe10CustomerEmail(
  * every warning. The first line an estimator needs is not the price, it is
  * whether the deadline is survivable, so the transaction block leads.
  */
-export function buildRe10AdminEmail(contact: Re10Contact, est: Re10Estimate): string {
+/**
+ * Extra context the estimate object cannot carry.
+ *
+ * `unmapped` is the gap between what we quoted and what the document asked
+ * for, so it belongs in the internal copy even though - especially though -
+ * it is absent from the price.
+ */
+export interface Re10AdminExtras {
+  unmapped?: { verbatim: string; reason?: string }[];
+  documentNotes?: string[];
+}
+
+export function buildRe10AdminEmail(
+  contact: Re10Contact,
+  est: Re10Estimate,
+  extras: Re10AdminExtras = {},
+): string {
+  const unmappedBlock =
+    extras.unmapped && extras.unmapped.length > 0
+      ? `<div style="margin:20px 0;padding:12px 14px;border:1px solid #b45309;background:#fffbeb;">
+          <p style="${SECTION_TITLE}color:#92400e;">Asked for, NOT in the range (${extras.unmapped.length})</p>
+          <ul style="margin:0;padding-left:18px;font-size:13px;">
+            ${extras.unmapped.map((u) => `<li style="margin:4px 0;color:${EMAIL_BRAND.text};">${escapeHtml(u.verbatim)}${u.reason ? ` <span style="color:${EMAIL_BRAND.textMuted};">- ${escapeHtml(u.reason)}</span>` : ""}</li>`).join("")}
+          </ul>
+        </div>`
+      : "";
+
+  const notesBlock =
+    extras.documentNotes && extras.documentNotes.length > 0
+      ? `<div style="margin:20px 0;">
+          <p style="${SECTION_TITLE}">What we noticed in the document</p>
+          <ul style="margin:0;padding-left:18px;font-size:13px;">
+            ${extras.documentNotes.map((n) => `<li style="margin:4px 0;color:${EMAIL_BRAND.textMuted};">${escapeHtml(n)}</li>`).join("")}
+          </ul>
+        </div>`
+      : "";
+
   const trades = est.trades
     .map(
       (t) =>
@@ -265,6 +301,8 @@ export function buildRe10AdminEmail(contact: Re10Contact, est: Re10Estimate): st
     </div>
 
     ${review}
+    ${unmappedBlock}
+    ${notesBlock}
     ${warnings}
   `;
 

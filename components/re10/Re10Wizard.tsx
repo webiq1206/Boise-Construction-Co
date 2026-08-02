@@ -228,6 +228,12 @@ export function Re10Wizard() {
       setExtraction(extracted);
       setDocuments(Array.isArray(data.stored) ? data.stored : []);
       setAttachedOnly(Array.isArray(data.attachedOnly) ? data.attachedOnly : []);
+      // The RE-10 states the property and often the dates. Making someone
+      // retype what they just uploaded is the kind of friction that reads as
+      // the form not working. Prefill, and leave every field editable.
+      if (extracted.propertyAddress) setAddress((a) => a || extracted.propertyAddress!);
+      if (extracted.closingDate) setClosingDate((d) => d || extracted.closingDate!);
+      if (extracted.repairDeadline) setRepairDeadline((d) => d || extracted.repairDeadline!);
       trackEvent(RE10_EVENTS.analysisCompleted, {
         repairs_found: extracted.repairs.length,
         unmapped: extracted.unmapped.length,
@@ -235,6 +241,33 @@ export function Re10Wizard() {
       setRepairs(
         extracted.repairs.map((r, i) => ({ ...r, id: `r${i}`, included: true })),
       );
+
+      // NOTHING TO REVIEW IS A DEAD END, NOT A STEP. Sending someone to the
+      // review screen with an empty list puts them in front of one button that
+      // refuses to work ("keep at least one repair"), with no way forward and
+      // no idea what went wrong. Uploading an inspection AGREEMENT instead of
+      // the RE-10 does exactly this, and it is an easy mistake - the two files
+      // sit next to each other in the same transaction folder.
+      // The estimate needs at least one priceable repair, so zero of them is a
+      // dead end whatever the reason - including the case where we read plenty
+      // of requests but none of them fit a category we price.
+      if (extracted.repairs.length === 0) {
+        const reason = !extracted.looksLikeRe10
+          ? "not-a-re10"
+          : extracted.unmapped.length > 0
+            ? "none-priceable"
+            : "no-repairs-found";
+        setError(
+          reason === "not-a-re10"
+            ? "This does not look like an RE-10 or an inspection response - we could not find a repair list in it. Send the RE-10 itself, or the inspection report pages that list the repairs, and we will read those."
+            : reason === "none-priceable"
+              ? `We read ${extracted.unmapped.length} request${extracted.unmapped.length === 1 ? "" : "s"}, but none of them are the kind we can price automatically. Call us and we will price this list by hand - it is the sort of thing we do every week.`
+              : "We read the document but could not find any repair requests in it. If the repair list is on another page, add that page and try again.",
+        );
+        trackEvent(RE10_EVENTS.analysisFailed, { reason });
+        return;
+      }
+
       goTo("review");
     } catch {
       setError("Something went wrong sending those files. Try again.");
@@ -292,6 +325,12 @@ export function Re10Wizard() {
           occupancy,
           hasInspectionReport: files.length > 1,
           documents,
+          // The items we could not categorise. They are excluded from the
+          // range, which is exactly why they have to travel: without them the
+          // customer sees a number that looks like the whole job, and nobody
+          // on our side ever learns the rest of the list exists.
+          unmapped: extraction?.unmapped ?? [],
+          documentNotes: extraction?.documentNotes ?? [],
           notes: notes.trim() || undefined,
         }),
       });

@@ -50,6 +50,17 @@ export interface Re10DeliveryInput {
   customerView: Parameters<typeof buildRe10CustomerEmail>[1];
   /** Uploaded originals, so the team has the actual RE-10. */
   documents: { filename: string; url: string }[];
+  /**
+   * Requests the extractor could not map to a priceable category.
+   *
+   * These are real repairs the document asked for. They are excluded from the
+   * range, which makes putting them in front of the estimator more important
+   * rather than less - the gap between the quoted range and the actual job is
+   * exactly this list.
+   */
+  unmapped?: { verbatim: string; reason?: string }[];
+  /** What the extractor noticed about the document itself. */
+  documentNotes?: string[];
 }
 
 export interface Re10DeliveryResult {
@@ -89,6 +100,18 @@ function buildRe10Notes(input: Re10DeliveryInput): string {
   if (estimate.review.length > 0) {
     lines.push(``, `NEEDS ONSITE`);
     for (const r of estimate.review) lines.push(`  ${r.input.description} - ${r.text}`);
+  }
+
+  // Loud, and above the documents, because this is the difference between the
+  // number we quoted and the job we were actually asked to do.
+  if (input.unmapped && input.unmapped.length > 0) {
+    lines.push(``, `NOT IN THE RANGE - NO CATEGORY MATCHED (${input.unmapped.length})`);
+    for (const u of input.unmapped) lines.push(`  ${u.verbatim}${u.reason ? ` - ${u.reason}` : ""}`);
+  }
+
+  if (input.documentNotes && input.documentNotes.length > 0) {
+    lines.push(``, `WHAT WE NOTICED IN THE DOCUMENT`);
+    for (const n of input.documentNotes) lines.push(`  ${n}`);
   }
 
   if (input.documents.length > 0) {
@@ -163,6 +186,11 @@ function buildRe10CrmRecord(input: Re10DeliveryInput) {
       reason: r.reason,
       explanation: r.text,
     })),
+    notInRange: (input.unmapped ?? []).map((u) => ({
+      description: u.verbatim,
+      reason: u.reason ?? null,
+    })),
+    documentNotes: input.documentNotes ?? [],
     assumptions: estimate.assumptions,
     uncertainty: estimate.uncertainty,
     warnings: estimate.warnings,
@@ -237,7 +265,10 @@ export async function deliverRe10Lead(input: Re10DeliveryInput): Promise<Re10Del
       console.warn("[re10Lead] email transport is a no-op here; reporting nothing as sent.");
     }
 
-    const adminHtml = buildRe10AdminEmail(contact, estimate);
+    const adminHtml = buildRe10AdminEmail(contact, estimate, {
+      unmapped: input.unmapped,
+      documentNotes: input.documentNotes,
+    });
     for (const to of await getAdminRecipientEmails(SITE_CONFIG.email)) {
       const sent = await client.emails.send({
         from,
