@@ -172,12 +172,32 @@ test.describe("New construction estimator", () => {
   });
 });
 
-/** The stored estimate is what both emails and the CRM record are built from. */
-async function storedEstimate(page: Page) {
-  return page.evaluate(() => {
-    const raw = sessionStorage.getItem("brc_estimate");
-    return raw ? JSON.parse(raw) : null;
-  });
+/**
+ * The stored estimate is what both emails and the CRM record are built from.
+ *
+ * Polled rather than read once. The estimator writes this from an effect, so a
+ * bare read races the write, and because sessionStorage survives a same-page
+ * navigation the loser of that race is not null - it is the PREVIOUS flow's
+ * estimate, which reads as a real answer and makes the assertion fail in a way
+ * that looks like a pricing bug. Passing `want` makes the wait specific.
+ */
+async function storedEstimate(
+  page: Page,
+  want: (e: any) => boolean = (e) => Boolean(e),
+) {
+  const read = () =>
+    page.evaluate(() => {
+      const raw = sessionStorage.getItem("brc_estimate");
+      return raw ? JSON.parse(raw) : null;
+    });
+
+  await expect.poll(async () => want(await read()), { timeout: 15_000 }).toBe(true);
+  return read();
+}
+
+/** Drop any estimate left over from an earlier flow in the same page. */
+async function clearStoredEstimate(page: Page) {
+  await page.evaluate(() => sessionStorage.removeItem("brc_estimate"));
 }
 
 test.describe("Accessory structures", () => {
@@ -190,19 +210,24 @@ test.describe("Accessory structures", () => {
     await openCalculator(page);
     await completeInputs(page, "custom-home");
 
-    const before = await storedEstimate(page);
-    expect(before).not.toBeNull();
-    expect(before.refinements.accessoryStructures).toEqual([]);
+    const before = await storedEstimate(
+      page,
+      (e) => e?.refinements?.accessoryStructures?.length === 0,
+    );
 
     await page.getByTestId("calc-structure-shop").click();
-    const withShop = await storedEstimate(page);
+    const withShop = await storedEstimate(
+      page,
+      (e) => e?.refinements?.accessoryStructures?.length === 1,
+    );
     expect(withShop.priceLow).toBeGreaterThan(before.priceLow);
-    expect(withShop.refinements.accessoryStructures).toHaveLength(1);
 
     await page.getByTestId("calc-structure-heated-shop").click();
-    const heated = await storedEstimate(page);
+    const heated = await storedEstimate(
+      page,
+      (e) => e?.refinements?.accessoryStructures?.[0]?.heated === true,
+    );
     expect(heated.priceLow).toBeGreaterThan(withShop.priceLow);
-    expect(heated.refinements.accessoryStructures[0].heated).toBe(true);
   });
 
   /**
@@ -227,17 +252,25 @@ test.describe("Planning stage", () => {
   test("a visitor with plans is quoted a narrower band than one still exploring", async ({ page }) => {
     await openCalculator(page);
     await completeInputs(page, "custom-home", "have-plans");
-    const withPlans = await storedEstimate(page);
+    const withPlans = await storedEstimate(
+      page,
+      (e) => e?.refinements?.planningStage === "have-plans",
+    );
 
+    /* sessionStorage survives this navigation, so without the clear the next
+       read can return the have-plans estimate above and the comparison silently
+       becomes a range against itself. */
     await openCalculator(page);
+    await clearStoredEstimate(page);
     await completeInputs(page, "custom-home", "exploring");
-    const exploring = await storedEstimate(page);
+    const exploring = await storedEstimate(
+      page,
+      (e) => e?.refinements?.planningStage === "exploring",
+    );
 
     const width = (e: { priceLow: number; priceHigh: number }) =>
       (e.priceHigh - e.priceLow) / (e.priceHigh + e.priceLow);
 
-    expect(withPlans.refinements.planningStage).toBe("have-plans");
-    expect(exploring.refinements.planningStage).toBe("exploring");
     expect(width(withPlans)).toBeLessThan(width(exploring));
   });
 });
