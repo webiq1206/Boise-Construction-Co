@@ -10,22 +10,22 @@ const PRIVACY_CANONICAL = buildCanonical("/privacy-policy");
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Boise Remodeling Co privacy policy. How we protect your data when you request remodeling services across Boise and the Treasure Valley.",
+  description: "Boise Construction Co privacy policy. How we protect your data when you request home building services across Boise and the Treasure Valley.",
   alternates: {
     canonical: PRIVACY_CANONICAL,
       types: FEED_ALTERNATES,
   },
   openGraph: {
-    title: "Privacy Policy | Boise Remodeling Co",
-    description: "How we protect your data when you use Boise Remodeling Co remodeling and renovation services in Idaho.",
+    title: "Privacy Policy | Boise Construction Co",
+    description: "How we protect your data when you use Boise Construction Co home building services in Idaho.",
     url: PRIVACY_CANONICAL,
     type: "website",
-    images: [{ url: "/images/og-default.png", width: 1200, height: 630, alt: "Boise Remodeling Co" }],
+    images: [{ url: "/images/og-default.png", width: 1200, height: 630, alt: "Boise Construction Co" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Privacy Policy | Boise Remodeling Co",
-    description: "How we protect your data when you use Boise Remodeling Co remodeling and renovation services in Idaho.",
+    title: "Privacy Policy | Boise Construction Co",
+    description: "How we protect your data when you use Boise Construction Co home building services in Idaho.",
   },
 };
 
@@ -36,7 +36,7 @@ export default function PrivacyPolicyPage() {
   ]);
   const webPageSchema = generateWebPageSchema({
     title: "Privacy Policy",
-    description: "Privacy policy for Boise Remodeling Co. How we collect, use, and protect your personal information.",
+    description: "Privacy policy for Boise Construction Co. How we collect, use, and protect your personal information.",
     url: "/privacy-policy",
   });
 
@@ -53,14 +53,14 @@ export default function PrivacyPolicyPage() {
       <section className="py-16 md:py-24">
         <div className="container px-4">
           <div className="max-w-3xl mx-auto blog-content prose-measure">
-            <h1>Privacy Policy for Boise Remodeling Co Services</h1>
+            <h1>Privacy Policy for Boise Construction Co Services</h1>
             <p className="lead text-muted-foreground">
               Last updated: January 2024
             </p>
 
             <h2>Introduction</h2>
             <p>
-              Boise Remodeling Co ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
+              Boise Construction Co ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
             </p>
 
             <h2>Information We Collect</h2>

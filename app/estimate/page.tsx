@@ -11,6 +11,7 @@ import { buildCanonical } from "@/lib/page-metadata";
 import { generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/schema";
 import { SITE_IMAGES } from "@/shared/siteImages";
 import { CONSULT_BULLETS } from "@/shared/siteContent";
+import { SITE_CONFIG } from "@/shared/siteConfig";
 import { CTA_SECONDARY } from "@/shared/ctaCopy";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
@@ -27,12 +28,13 @@ const EstimateCalculator = dynamic(
   },
 );
 
-const TITLE = "Remodel Cost Estimator | Treasure Valley";
+// 34 chars, so the branded title below lands at 58 with the 24-char suffix.
+const TITLE = "Home Build Cost Estimator, Idaho";
 const DESCRIPTION =
-  "Get an instant planning range for kitchen, bathroom, whole-home, addition, ADU, and basement remodels in Boise, Meridian, Eagle, Nampa, and the Treasure Valley. Free, no obligation.";
+  "Get an instant cost range for building a new home in Boise, Meridian, Eagle, Nampa, and the Treasure Valley. Covers size, finish level, and site costs. Free, no obligation.";
 
 export const metadata: Metadata = {
-  title: { absolute: `${TITLE} | Boise Remodeling Co` },
+  title: { absolute: `${TITLE} | ${SITE_CONFIG.name}` },
   description: DESCRIPTION,
   alternates: { canonical: buildCanonical("/estimate") },
   openGraph: {
@@ -40,7 +42,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: buildCanonical("/estimate"),
     type: "website",
-    images: [{ url: "/images/og-default.png", width: 1200, height: 630, alt: "Boise Remodeling Co" }],
+    images: [{ url: "/images/og-default.png", width: 1200, height: 630, alt: SITE_CONFIG.name }],
   },
   twitter: {
     card: "summary_large_image",

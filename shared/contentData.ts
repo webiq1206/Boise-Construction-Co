@@ -1,4 +1,4 @@
-// Content Data for Boise Remodeling Co
+// Content Data for Boise Construction Co
 // Serves the Treasure Valley: Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton
 
 export interface ServiceData {
@@ -13,10 +13,10 @@ export interface ServiceData {
    */
   planningFrom: string;
   /**
-   * Secondary services expand keyword coverage (basement, outdoor living,
-   * aging-in-place). They get full service + city pages, nav, and sitemap
-   * entries, but are kept off the homepage grid so the primary five stay
-   * front-and-center. Shown in full on /services.
+   * Secondary services expand keyword coverage (lot evaluation, shop homes,
+   * high-performance builds). They get full service + city pages, nav, and
+   * sitemap entries, but are kept off the homepage grid so the primary five
+   * stay front-and-center. Shown in full on /services.
    */
   secondary?: boolean;
 }
@@ -28,56 +28,67 @@ export interface CityData {
   isPrimary: boolean;
 }
 
+/**
+ * Each service maps to a distinct buyer intent rather than a keyword variation,
+ * so the service and service+city pages do not compete with each other. Generic
+ * "new home construction {city}" intent is carried by the location pages, which
+ * is why there is no separate generic new-construction service page.
+ *
+ * planningFrom figures are budget floors for a modest build of that type in the
+ * Treasure Valley, derived from the 2026 local range of roughly $225 to $400
+ * per finished square foot excluding land. They are deliberately conservative:
+ * the real number comes from the estimator and a site visit.
+ */
 export const SERVICES: ServiceData[] = [
   {
-    slug: 'kitchen-remodel',
-    name: 'Kitchen Remodel',
-    shortDescription: 'Custom kitchen renovations from cabinet refreshes to full gut-and-rebuild.',
-    planningFrom: '$15k',
+    slug: 'custom-home-builder',
+    name: 'Custom Home Building',
+    shortDescription: 'A home drawn from a blank page around your lot, your budget, and how you actually live.',
+    planningFrom: '$525k',
   },
   {
-    slug: 'bathroom-remodel',
-    name: 'Bathroom Remodel',
-    shortDescription: 'Spa-quality bathroom transformations designed around how you actually live.',
-    planningFrom: '$10k',
+    slug: 'semi-custom-homes',
+    name: 'Semi-Custom Homes',
+    shortDescription: 'Start from a proven floor plan and personalize it, for a shorter timeline and a tighter budget range.',
+    planningFrom: '$425k',
   },
   {
-    slug: 'whole-home-remodel',
-    name: 'Whole-Home Remodel',
-    shortDescription: 'Cohesive whole-home renovations with a single project manager start to finish.',
-    planningFrom: '$40k',
+    slug: 'build-on-your-lot',
+    name: 'Build on Your Lot',
+    shortDescription: 'You already own the land. We handle feasibility, design, permits, and construction from there.',
+    planningFrom: '$475k',
   },
   {
-    slug: 'room-addition',
-    name: 'Room Addition',
-    shortDescription: 'Thoughtfully designed additions that feel like they were always part of your home.',
-    planningFrom: '$95k',
+    slug: 'design-build',
+    name: 'Design-Build',
+    shortDescription: 'Design and construction under one contract, so the drawings and the budget never drift apart.',
+    planningFrom: '$525k',
   },
   {
-    slug: 'adu',
-    name: 'ADU / Guest House',
-    shortDescription: 'Detached or attached accessory dwelling units designed to maximize your property value.',
-    planningFrom: '$165k',
+    slug: 'home-plans-design',
+    name: 'Home Design & Plans',
+    shortDescription: 'Architectural design, engineering, and permit-ready drawings for a home built to your site.',
+    planningFrom: '$9k',
   },
   {
-    slug: 'basement-remodel',
-    name: 'Basement Remodeling',
-    shortDescription: 'Finished basements and lower-level living space, from egress and framing to a fully finished suite.',
-    planningFrom: '$35k',
+    slug: 'lot-evaluation',
+    name: 'Lot Evaluation & Feasibility',
+    shortDescription: 'Soils, utilities, access, setbacks, and slope reviewed before you commit to a parcel.',
+    planningFrom: '$950',
     secondary: true,
   },
   {
-    slug: 'outdoor-living',
-    name: 'Outdoor Living & Decks',
-    shortDescription: 'Decks, covered patios, and outdoor kitchens that extend your living space into the yard.',
-    planningFrom: '$25k',
+    slug: 'shop-homes-barndominiums',
+    name: 'Shop Homes & Barndominiums',
+    shortDescription: 'Post-frame and steel-framed homes that pair finished living space with real working shop square footage.',
+    planningFrom: '$265k',
     secondary: true,
   },
   {
-    slug: 'aging-in-place',
-    name: 'Aging-in-Place Remodeling',
-    shortDescription: 'Accessible, safe, and stylish remodels that let you stay in the home you love for the long term.',
-    planningFrom: '$20k',
+    slug: 'energy-efficient-homes',
+    name: 'Energy-Efficient Homes',
+    shortDescription: 'High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.',
+    planningFrom: '$575k',
     secondary: true,
   },
 ];

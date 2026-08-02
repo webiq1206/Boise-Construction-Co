@@ -50,7 +50,7 @@ export function ValueOverheadSection() {
             <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-sm">
               <Image
                 src={SITE_IMAGES.process}
-                alt="Remodel plans and finish material samples on a kitchen table during design review"
+                alt="Home plans and finish material samples laid out during a design review"
                 fill
                 sizes="(max-width: 768px) 100vw, 40vw"
                 className="object-cover img-brand-grade"

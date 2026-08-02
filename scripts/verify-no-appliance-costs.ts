@@ -49,7 +49,17 @@ for (const [project, rules] of Object.entries(RULES_BY_PROJECT)) {
 
 /* 2. Belt and braces: price every project and assert no appliance money lands
       in the internal estimate, whatever route the rules took to get there. */
-const PROJECTS: ProjectType[] = ["kitchen", "bathroom", "whole-home", "addition", "adu", "basement"];
+/*
+ * New construction is included deliberately. A new home is the easiest place for
+ * an appliance package to creep back in, because the catalog carries a $10,000
+ * appliance line and a complete house plausibly "needs" one. The company's
+ * published position is that appliances are client-supplied, so a new-build
+ * takeoff must exclude them exactly as a kitchen remodel does.
+ */
+const PROJECTS: ProjectType[] = [
+  "custom-home", "semi-custom-home", "build-on-your-lot",
+  "kitchen", "bathroom", "whole-home", "addition", "adu", "basement",
+];
 const FINISHES: FinishLevel[] = ["refresh", "mid-range", "high-end", "luxury"];
 let priced = 0;
 

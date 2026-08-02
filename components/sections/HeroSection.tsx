@@ -36,7 +36,7 @@ export function HeroSection() {
       <section className="relative min-h-[85vh] md:min-h-screen flex items-center overflow-hidden bg-inverse">
         <Image
           src={SITE_IMAGES.hero}
-          alt="Modern luxury home interior remodel in Boise Idaho Treasure Valley"
+          alt="Great room in a newly built custom home in the Treasure Valley, Idaho"
           fill
           priority
           sizes="(max-width: 768px) 100vw, 1400px"
@@ -70,7 +70,7 @@ export function HeroSection() {
                   behind it would only widen that gap. */}
               <div className="brc-label brc-label-on-photo mb-6">{HERO_EYEBROW}</div>
               <h1 className="font-sans font-light text-inverse-foreground text-display tracking-tight mb-6">
-                Boise remodeling with{" "}
+                Build your Boise home with{" "}
                 <em className="brc-accent">clarity</em> and confidence.
               </h1>
               {/* Full opacity, not /90: over the lightened scrim the subhead

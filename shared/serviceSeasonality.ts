@@ -13,49 +13,28 @@ interface ServiceSeasonConfig {
   recurringLeadPrice?: number;
 }
 
+/**
+ * New home construction runs year-round in the Treasure Valley. Winter slows
+ * foundation and flatwork rather than stopping the job, and design, permitting,
+ * and interior work continue regardless of season, so every service carries a
+ * full-year window. None are recurring by nature.
+ */
+const YEAR_ROUND: ServiceSeasonConfig = {
+  seasons: [{ startMonth: 1, startDay: 1, endMonth: 12, endDay: 31 }],
+  nearSeasonBufferDays: 0,
+  isRecurringEligible: false,
+  maxFrequency: null,
+};
+
 const SERVICE_SEASON_CONFIG: Record<string, ServiceSeasonConfig> = {
-  "kitchen-remodel": {
-    seasons: [{ startMonth: 1, startDay: 1, endMonth: 12, endDay: 31 }],
-    nearSeasonBufferDays: 0,
-    isRecurringEligible: false,
-    maxFrequency: null,
-  },
-  "bathroom-remodel": {
-    seasons: [{ startMonth: 1, startDay: 1, endMonth: 12, endDay: 31 }],
-    nearSeasonBufferDays: 0,
-    isRecurringEligible: false,
-    maxFrequency: null,
-  },
-  "whole-home-remodel": {
-    seasons: [{ startMonth: 1, startDay: 1, endMonth: 12, endDay: 31 }],
-    nearSeasonBufferDays: 0,
-    isRecurringEligible: false,
-    maxFrequency: null,
-  },
-  "room-addition": {
-    seasons: [{ startMonth: 1, startDay: 1, endMonth: 12, endDay: 31 }],
-    nearSeasonBufferDays: 0,
-    isRecurringEligible: false,
-    maxFrequency: null,
-  },
-  "adu": {
-    seasons: [{ startMonth: 1, startDay: 1, endMonth: 12, endDay: 31 }],
-    nearSeasonBufferDays: 0,
-    isRecurringEligible: false,
-    maxFrequency: null,
-  },
-  "basement-finish": {
-    seasons: [{ startMonth: 1, startDay: 1, endMonth: 12, endDay: 31 }],
-    nearSeasonBufferDays: 0,
-    isRecurringEligible: false,
-    maxFrequency: null,
-  },
-  "outdoor-living": {
-    seasons: [{ startMonth: 3, startDay: 1, endMonth: 10, endDay: 31 }],
-    nearSeasonBufferDays: 60,
-    isRecurringEligible: false,
-    maxFrequency: null,
-  },
+  "custom-home-builder": YEAR_ROUND,
+  "semi-custom-homes": YEAR_ROUND,
+  "build-on-your-lot": YEAR_ROUND,
+  "design-build": YEAR_ROUND,
+  "home-plans-design": YEAR_ROUND,
+  "lot-evaluation": YEAR_ROUND,
+  "shop-homes-barndominiums": YEAR_ROUND,
+  "energy-efficient-homes": YEAR_ROUND,
 };
 
 function dateToYearDay(month: number, day: number): number {

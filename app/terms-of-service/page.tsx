@@ -8,22 +8,22 @@ import { buildCanonical, FEED_ALTERNATES } from "@/lib/page-metadata";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "Terms of service for Boise Remodeling Co. Your rights when using our remodeling and renovation services across Boise and the Treasure Valley.",
+  description: "Terms of service for Boise Construction Co. Your rights when using our home building services across Boise and the Treasure Valley.",
   alternates: {
     canonical: buildCanonical("/terms-of-service"),
     types: FEED_ALTERNATES,
   },
   openGraph: {
-    title: "Terms of Service | Boise Remodeling Co",
-    description: "Your rights when using Boise Remodeling Co remodeling and renovation services in Idaho's Treasure Valley.",
-    url: "https://boiseremodeling.co/terms-of-service",
+    title: "Terms of Service | Boise Construction Co",
+    description: "Your rights when using Boise Construction Co home building services in Idaho's Treasure Valley.",
+    url: buildCanonical("/terms-of-service"),
     type: "website",
-    images: [{ url: "/images/og-default.png", width: 1200, height: 630, alt: "Boise Remodeling Co" }],
+    images: [{ url: "/images/og-default.png", width: 1200, height: 630, alt: "Boise Construction Co" }],
   },
   twitter: {
     card: "summary",
-    title: "Terms of Service | Boise Remodeling Co",
-    description: "Your rights when using Boise Remodeling Co remodeling and renovation services in Idaho's Treasure Valley.",
+    title: "Terms of Service | Boise Construction Co",
+    description: "Your rights when using Boise Construction Co home building services in Idaho's Treasure Valley.",
   },
 };
 
@@ -34,7 +34,7 @@ export default function TermsOfServicePage() {
   ]);
   const webPageSchema = generateWebPageSchema({
     title: "Terms of Service",
-    description: "Terms of service for Boise Remodeling Co. Your rights and responsibilities when using our services.",
+    description: "Terms of service for Boise Construction Co. Your rights and responsibilities when using our services.",
     url: "/terms-of-service",
   });
 
@@ -51,19 +51,19 @@ export default function TermsOfServicePage() {
       <section className="py-16 md:py-24">
         <div className="container px-4">
           <div className="max-w-3xl mx-auto blog-content prose-measure">
-            <h1>Terms of Service for Boise Remodeling Co</h1>
+            <h1>Terms of Service for Boise Construction Co</h1>
             <p className="lead text-muted-foreground">
               Last updated: January 2024
             </p>
 
             <h2>Agreement to Terms</h2>
             <p>
-              By accessing or using the services provided by Boise Remodeling Co ("Company," "we," "us," or "our"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
+              By accessing or using the services provided by Boise Construction Co ("Company," "we," "us," or "our"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
             </p>
 
             <h2>Services</h2>
             <p>
-              Boise Remodeling Co provides remodeling and renovation services to residential and commercial customers in the Treasure Valley area of Idaho.
+              Boise Construction Co provides new residential construction services, including custom and semi-custom home building, design-build services, and builds on client-owned land, to customers in the Treasure Valley area of Idaho.
             </p>
 
             <h2>Service Estimates and Pricing</h2>
@@ -97,12 +97,12 @@ export default function TermsOfServicePage() {
 
             <h2>Subcontracting</h2>
             <p>
-              Boise Remodeling Co reserves the right to subcontract services as needed to ensure quality service delivery and timely completion of work.
+              Boise Construction Co reserves the right to subcontract services as needed to ensure quality service delivery and timely completion of work.
             </p>
 
             <h2>Limitation of Liability</h2>
             <p>
-              While we take great care in providing our services, Boise Remodeling Co's liability for any claims arising from our services is limited to the amount paid for the specific service in question. We are not liable for pre-existing conditions, normal wear, or conditions outside our control.
+              While we take great care in providing our services, Boise Construction Co's liability for any claims arising from our services is limited to the amount paid for the specific service in question. We are not liable for pre-existing conditions, normal wear, or conditions outside our control.
             </p>
 
             <h2>Satisfaction Guarantee</h2>

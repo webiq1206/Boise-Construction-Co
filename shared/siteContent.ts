@@ -8,23 +8,23 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-export const SITE_TAGLINE = "Treasure Valley design-build, built on clarity and craftsmanship";
+export const SITE_TAGLINE = "Treasure Valley home building, built on clarity and craftsmanship";
 
-export const HERO_EYEBROW = "Boise Remodeling Contractor · Treasure Valley";
+export const HERO_EYEBROW = "Boise Home Builder · Treasure Valley";
 
 export const HERO_SUBHEAD =
-  "One accountable design-build team from first visit to final walkthrough.";
+  "One accountable design-build team from raw land to the keys in your hand.";
 
 export const HERO_STATS = [
-  { num: "60 sec", label: "Instant planning range" },
-  { num: "Free", label: "In-home visit" },
-  { num: "Written", label: "Scope before build" },
+  { num: "60 sec", label: "Instant build cost range" },
+  { num: "Free", label: "Planning consultation" },
+  { num: "Line-item", label: "Budget before we break ground" },
 ] as const;
 
-export const DIFFERENTIATORS_HEADLINE = "Built for homeowners who want clarity, not chaos";
+export const DIFFERENTIATORS_HEADLINE = "Built for people who want a real number, not a moving target";
 
 export const DIFFERENTIATORS_INTRO =
-  "Many homeowners we meet have lived through a remodel where the scope shifted, the budget grew, the house became unlivable, or nobody returned their calls. We built our process around the opposite: one accountable team, a written plan before construction, a job site that respects your home, and proactive updates every Friday.";
+  "Most people we meet have heard the same stories: a build that started at one price and finished at another, allowances set so low they were guaranteed to be blown, months of silence between updates. We built our process around the opposite. One accountable team, a line-item budget before we break ground, allowances set at what things actually cost here, and a written update every Friday.";
 
 export interface Differentiator {
   title: string;
@@ -37,102 +37,106 @@ export const HOMEPAGE_DIFFERENTIATOR_INDICES = [0, 1, 2, 3, 4] as const;
 
 export const DIFFERENTIATORS: Differentiator[] = [
   {
+    title: "A line-item budget before we break ground",
+    contrast: "Instead of a price per square foot that quietly changes once the foundation is in,",
+    body: "you get a line-item budget covering every division of the build, from excavation to final grade. You can see what each part of your home costs, which means you can decide where to spend and where to pull back while it is still just a drawing.",
+  },
+  {
+    title: "Allowances set at what things actually cost",
+    contrast: "Rather than lowball allowances that make an early bid look competitive and then surface as overages,",
+    body: "we set flooring, cabinetry, plumbing, and lighting allowances at real Treasure Valley pricing for the finish level you chose. If you spend to your allowance, you pay what the budget said.",
+  },
+  {
     title: "Your budget builds your home, not our overhead",
-    contrast: "Instead of paying for big offices, showrooms, and fleets of trucks that quietly get built into your price,",
-    body: "you get a company that runs lean on purpose. We put more of every dollar into the materials, labor, and finish of your project, so more of what you spend ends up in your home.",
+    contrast: "Instead of paying for big offices, model home parks, and fleets of trucks that quietly get built into your price,",
+    body: "you get a company that runs lean on purpose. We put more of every dollar into the framing, the envelope, and the finishes, so more of what you spend ends up standing on your lot.",
   },
   {
     title: "One team, one point of accountability",
-    contrast: "Instead of coordinating a designer, a contractor, and multiple subs who may point fingers when something goes wrong,",
-    body: "you work with a single design-build team. Design, permitting, and construction stay under one roof, with the same dedicated project manager from your first visit through final walkthrough.",
-  },
-  {
-    title: "A written plan before we swing a hammer",
-    contrast: "Rather than relying on a verbal estimate that shifts once work begins,",
-    body: "you receive a clear written scope with design direction and finish selections before construction starts. Any change mid-project requires a written change order with your approval first.",
+    contrast: "Instead of coordinating a designer, an architect, a builder, and a dozen subs who point at each other when something is wrong,",
+    body: "you work with a single design-build team. Design, engineering, permitting, and construction stay under one roof, with the same project manager from your first consultation through the final walkthrough.",
   },
   {
     title: "Proactive communication, not radio silence",
-    contrast: "Instead of wondering what happened on your project this week,",
-    body: "you receive a written update every Friday: what was completed, what is next, and any decisions needed from you. We also flag budget impacts early, before they become surprises.",
+    contrast: "Instead of driving by your lot to find out what happened this week,",
+    body: "you receive a written update every Friday: what was completed, what is next, what your selections deadline looks like, and any decisions we need from you. Cost and schedule impacts get flagged early, while there is still room to react.",
   },
   {
-    title: "Local permit and schedule expertise",
-    contrast: "Rather than chasing paperwork or guessing at timelines,",
-    body: "we handle Ada and Canyon County permits in-house and build realistic schedules into your project plan from day one. You always know where the project stands.",
+    title: "Land and permit expertise before you commit",
+    contrast: "Rather than discovering after closing that a parcel needs a well, a septic system, and three hundred feet of driveway,",
+    body: "we evaluate lots before you buy. We handle Ada and Canyon County permitting in-house and build realistic approval timelines into your schedule from day one, rather than treating them as an afterthought.",
+  },
+  {
+    title: "We work with your lender, not around them",
+    contrast: "Instead of leaving you to translate between your bank and your builder,",
+    body: "we provide the budgets, plans, and draw documentation construction-to-permanent lenders ask for, and we schedule inspections to match your draw milestones so financing does not become the thing that stalls your build.",
   },
   {
     title: "Confidence that outlasts the project",
     contrast: "Beyond a quick sign-off and goodbye,",
-    body: "we stand behind our craftsmanship with a written workmanship guarantee. Optional 3D visualizations are available for clients who want extra confidence in major layout and finish decisions before construction begins.",
-  },
-  {
-    title: "A job site that respects your home",
-    contrast: "Instead of living with open dust, damaged floors, and crews working at all hours,",
-    body: "we use dust barriers and floor protection daily, schedule disruptive work during reasonable hours, and plan the project so most kitchen and bath remodels remain livable while we work.",
-  },
-  {
-    title: "No high-pressure sales, no going dark",
-    contrast: "Rather than a commission-driven pitch to sign on the spot or a project manager who stops returning calls,",
-    body: "your free in-home visit is focused on planning guidance and an honest range. You work with the same dedicated project manager throughout, with weekly written updates so you are never left wondering who to contact or what is happening.",
+    body: "we stand behind our work with a written workmanship warranty and pass through every manufacturer warranty on what we install. Optional 3D visualization is available for clients who want certainty on layout and finish decisions before framing starts.",
   },
   {
     title: "Schedule changes communicated early",
     contrast: "Instead of finding out a milestone slipped after the fact,",
-    body: "we build realistic timelines into your plan from day one and update you in writing when anything affects your schedule. Permit timelines for Ada and Canyon County are accounted for upfront, not treated as an afterthought.",
+    body: "we build realistic timelines into your plan from day one, including the weather windows that genuinely affect foundation and flatwork in Idaho. When something moves, you hear it from us in writing.",
   },
   {
     title: "Craftsmanship you review before we close out",
-    contrast: "Rather than rushing to the next job before you have a chance to inspect the work,",
-    body: "we walk every finished detail with you at a final walkthrough. Finish selections are documented in your written scope before construction so what we build matches what you approved.",
+    contrast: "Rather than rushing to the next job before you have had a chance to inspect the work,",
+    body: "we walk the finished home with you and build a punch list together. Your selections are documented in the contract before construction, so what gets built matches what you approved.",
   },
 ];
 
 /**
  * Headline credibility stats. Owner-provided facts about the business - keep
  * these accurate and update in one place. `established` is the founding year
- * (see shared/gbpProfile.ts GBP_NAP.founded); `projectsCompleted` is a rounded
- * completed-project count.
+ * (see shared/gbpProfile.ts GBP_NAP.founded).
+ *
+ * A completed-project count was deliberately removed in the move to new
+ * construction: the prior "100+" figure reflected remodeling work and would
+ * misrepresent home building experience. Add a count back only when there is a
+ * real number of completed homes to cite.
  */
 export const PROOF_STATS = {
   established: "2020",
-  projectsCompleted: "100+",
 } as const;
 
 /**
- * Post-hero proof bar. Leads with the two credibility stats, then the genuine
- * trust signals the business carries. No review counts or ratings until real
- * ones exist. Keep labels concise so the strip stays on one desktop row.
+ * Post-hero proof bar. Leads with the founding year, then the genuine trust
+ * signals the business carries. No review counts, ratings, or project counts
+ * until real ones exist. Keep labels concise and keep this at six entries so
+ * the strip fills the six-column desktop grid in HeroSection.
  */
 export const TRUST_ITEMS = [
   `Est. ${PROOF_STATS.established}`,
-  `${PROOF_STATS.projectsCompleted} Projects`,
+  "Design-Build",
   "Bonded · Insured",
   "Permits In-House",
-  "Workmanship Guarantee",
-  "Free In-Home Visit",
+  "Workmanship Warranty",
+  "Free Consultation",
 ];
 
 export const PROMISE_ITEMS = [
   {
     num: "01",
-    title: "Clear budget guidance",
-    body: "You receive honest planning ranges, written scope, and proactive updates so you always know where your project stands.",
+    title: "A budget you can actually read",
+    body: "A line-item budget before we break ground, with allowances set at real local pricing, so you know what your home costs and where the money goes.",
   },
   {
     num: "02",
     title: "Proactive communication",
-    body: "Every Friday: what was completed, what is next, and any decisions needed from you. One dedicated project manager start to finish.",
+    body: "Every Friday: what was completed, what is next, and any decisions needed from you. One project manager from first consultation to final walkthrough.",
   },
   {
     num: "03",
-    title: "Schedule you can plan around",
-    body: "We build realistic timelines into your project from day one and update you when anything changes, before it becomes a surprise.",
+    title: "A schedule you can plan around",
+    body: "Realistic timelines built in from day one, including permitting and weather windows, with written notice when anything moves.",
   },
   {
     num: "04",
-    title: "The workmanship guarantee",
-    body: "We stand behind our craftsmanship with a written workmanship guarantee, long after the final walkthrough.",
+    title: "The workmanship warranty",
+    body: "We stand behind the home we build with a written workmanship warranty, long after you have moved in.",
   },
 ];
 
@@ -145,32 +149,32 @@ export interface ClientPriority {
 export const CLIENT_PRIORITIES: ClientPriority[] = [
   {
     title: "Trust and credibility",
-    body: "Licensed, bonded, and insured with permits handled in-house and a written scope before work begins.",
+    body: "Bonded and insured, permits handled in-house, and a signed scope and budget before anyone breaks ground.",
     icon: ShieldCheck,
   },
   {
-    title: "Quality craftsmanship",
-    body: "Skilled trades, careful finishes, and a final walkthrough on every project we build.",
+    title: "Quality construction",
+    body: "A tight building envelope, skilled trades, and a walkthrough of every finished detail before we hand over the keys.",
     icon: Hammer,
   },
   {
     title: "Clear communication",
-    body: "Weekly written updates and one project manager who knows your home from first visit to completion.",
+    body: "Weekly written updates and one project manager who knows your build from the first consultation to closing.",
     icon: MessageSquare,
   },
   {
     title: "Staying on budget",
-    body: "Planning ranges upfront, written change orders before extra work, and proactive budget guidance throughout.",
+    body: "Line-item budgets, honest allowances, and written change orders before any additional work is performed.",
     icon: Wallet,
   },
   {
     title: "Staying on schedule",
-    body: "Realistic timelines built into your project plan with permit and construction milestones you can follow.",
+    body: "Permitting, inspection, and construction milestones you can follow, with weather windows accounted for upfront.",
     icon: CalendarClock,
   },
   {
-    title: "A stress-free process",
-    body: "Dust barriers, floor protection, and a team that respects your home while you live through the remodel.",
+    title: "A process without the stress",
+    body: "We coordinate the lender draws, the inspections, and the trades, so building a home does not become your second job.",
     icon: HeartHandshake,
   },
 ];
@@ -178,115 +182,115 @@ export const CLIENT_PRIORITIES: ClientPriority[] = [
 export const HOW_WE_BUILD_STEPS = [
   {
     number: "01",
-    title: "Free in-home visit",
-    desc: "We walk your space, hear your goals, and give you a planning range on the spot. No obligation.",
+    title: "Free planning consultation",
+    desc: "We talk through what you want to build, where, and what it should cost. You leave with a realistic budget band and clear next steps. No obligation.",
   },
   {
     number: "02",
-    title: "Detailed scope and design direction",
-    desc: "You receive a clear written scope with design direction and finish selections before construction begins.",
+    title: "Land and feasibility review",
+    desc: "Before you commit, we look at the lot: utilities, septic and well, slope, access, setbacks, and what the site work will realistically cost.",
   },
   {
     number: "03",
-    title: "Permits handled for you",
-    desc: "We know the Ada and Canyon County offices. Permits are built into your schedule from day one.",
+    title: "Design, selections, and a line-item budget",
+    desc: "We develop plans and finish selections together, then price them line by line so you approve a real number before construction starts.",
   },
   {
     number: "04",
-    title: "Weekly progress updates",
-    desc: "Every Friday you get a written update: what was done, what is next, and any decisions needed from you.",
+    title: "Permits and construction",
+    desc: "We pull Ada and Canyon County permits in-house, coordinate inspections and lender draws, and send a written update every Friday.",
   },
   {
     number: "05",
-    title: "Final walkthrough and workmanship guarantee",
-    desc: "We walk every inch with you. If we built it and it fails due to workmanship, we fix it free.",
+    title: "Walkthrough and workmanship warranty",
+    desc: "We walk the finished home with you and build the punch list together. If we built it and it fails from workmanship, we come back and fix it.",
   },
 ];
 
 export const PRINCIPLES = [
   {
-    title: "Written scope before we build",
-    desc: "Every project starts with a clear written scope so you know exactly what to expect before construction begins.",
+    title: "A real budget before we build",
+    desc: "Every home starts with a line-item budget and documented selections, so you know exactly what you are buying before ground is broken.",
   },
   {
     title: "Written change orders only",
-    desc: "If scope changes mid-project, you get a written change order before any additional work begins. Always.",
+    desc: "If the scope changes mid-build, you get a written change order with a price before any additional work begins. Always.",
   },
   {
-    title: "Proactive budget guidance",
-    desc: "We communicate early when selections or conditions may affect your budget. No surprises at invoice time.",
+    title: "Allowances you can actually hit",
+    desc: "We set allowances at what materials genuinely cost in this market, because an allowance you are guaranteed to blow is just a hidden overage.",
   },
   {
-    title: "We respect your time",
-    desc: "Noisy work during reasonable hours. Dust barriers every day. Your home stays as livable as possible.",
+    title: "The site stays under control",
+    desc: "Materials stored properly, the envelope protected from weather, and the lot kept clean. How a site is run shows up in the finished house.",
   },
   {
     title: "One PM, start to finish",
-    desc: "Your project manager is the same person from design day to final walkthrough. You always know who to call.",
+    desc: "Your project manager is the same person from the first consultation to the final walkthrough. You always know who to call.",
   },
   {
-    title: "Workmanship guarantee",
-    desc: "We stand behind what we build with a written workmanship guarantee, because we build things meant to last.",
+    title: "Workmanship warranty",
+    desc: "We stand behind what we build with a written workmanship warranty, because we build homes meant to outlast us.",
   },
 ];
 
 export const STANDARD_INCLUSIONS = [
   "All permits pulled in-house",
   "Dedicated project manager",
+  "Line-item budget before construction",
   "Weekly written progress updates",
-  "Dust barriers and floor protection daily",
-  "Written workmanship guarantee",
-  "Manufacturer warranties passed through",
+  "Lender draw and inspection coordination",
+  "Written workmanship warranty",
 ];
 
 export const OPTIONAL_ENHANCEMENTS = {
   title: "3D renderings and visualizations",
-  body: "Optional design upgrade that helps you visualize your finished space before construction begins. Adds to project investment and design timeline, but gives many clients confidence in major layout and finish decisions.",
+  body: "An optional design upgrade that lets you see the finished home before framing starts. It adds to the project investment and the design timeline, but for many clients it is what makes committing to a layout, a roofline, or a finish package feel like a decision rather than a gamble.",
   note: "Available on request during your design consultation.",
 };
 
 export const BUDGET_GUIDANCE_POINTS = [
   {
-    title: "Planning ranges, not firm bids",
-    body: "Our online estimator and in-home visit provide planning ranges based on project type, size, finish level, and market conditions. Your detailed project evaluation happens at consultation.",
+    title: "Planning ranges, then a real budget",
+    body: "Our online estimator and your planning consultation produce a range based on size, finish level, site conditions, and current market pricing. That range narrows into a line-item budget once we have plans and selections.",
   },
   {
-    title: "Written scope before construction",
-    body: "Before work begins, you receive a written scope outlining what is included, key finish selections, and your project investment. This is your roadmap, not a line-item materials list.",
+    title: "A line-item budget before construction",
+    body: "Before we break ground, you receive a budget broken down by division, with allowances stated in writing. You can see what the foundation costs, what the cabinets cost, and where you have room to adjust.",
   },
   {
-    title: "Proactive budget updates",
-    body: "If selections, site conditions, or scope changes affect your budget, we communicate early and in writing before proceeding.",
+    title: "Site costs called out separately",
+    body: "Driveways, well and septic, utility runs, retaining, and rock excavation vary enormously between lots. We price them as their own lines rather than burying them in a square-foot number.",
   },
   {
     title: "Change orders in writing",
-    body: "Any scope change mid-project requires a written change order with your approval before additional work begins.",
+    body: "Any change during construction requires a written change order with a price and a schedule impact, approved by you before the work is performed.",
   },
 ];
 
 export const LEADERSHIP_COPY = {
   label: "Our commitment",
-  headline: "Remodeling should feel clear, not chaotic.",
+  headline: "Building a home should feel clear, not chaotic.",
   paragraphs: [
-    "Boise Remodeling Co was built on a simple belief: homeowners in the Treasure Valley deserve a design-build partner who communicates clearly, plans carefully, and treats their home with respect.",
-    "We know how most firms are compared: separate designers and contractors, vague scopes, inconsistent updates, and pressure to sign before you have real answers. Our process was designed around what comparison shoppers actually need.",
-    "That means one accountable team, written scope before we build, weekly updates while we work, and a team that picks up the phone when you have a question.",
+    "Boise Construction Co was built on a simple belief: people building a home in the Treasure Valley deserve a builder who prices honestly, communicates without being chased, and treats the process as something you should be able to understand.",
+    "We know how builders usually get compared: a square-foot number, a glossy plan book, and allowances that quietly guarantee an overage. None of that tells you what your home will actually cost.",
+    "So we do it the other way around. One accountable team, a line-item budget before we break ground, allowances set at real local pricing, weekly written updates while we build, and a team that answers the phone.",
   ],
   closing: "That is not a marketing promise. Every detail, every decision - handled with intention.",
 };
 
 export const FINANCING_BULLETS = [
-  "Terms from 12 to 144 months",
-  "Soft credit check to view offers",
-  "No prepayment penalties",
-  "Same-day approval decisions",
-  "Works alongside cash, check, or wire",
+  "Construction-to-permanent lender coordination",
+  "Budgets and plans formatted for underwriting",
+  "Draw schedules matched to build milestones",
+  "Inspections scheduled around your draws",
+  "Works alongside cash, lot equity, or wire",
 ];
 
 export const CONSULT_BULLETS = [
   "No commission-driven salespeople",
   "No pressure to decide on the spot",
-  "Honest planning ranges, in writing",
+  "An honest budget band, in writing",
   "Response within one business day",
 ];
 
@@ -300,7 +304,7 @@ export const STATEMENT_BAND = {
   statement: "Every detail, every decision, handled with",
   accentWord: "intention",
   support:
-    "One accountable team, a written plan before we build, and proactive updates every week, from your first in-home visit to the final walkthrough.",
+    "One accountable team, a line-item budget before we break ground, and a written update every week, from your first consultation to the day you get the keys.",
 } as const;
 
 /**
@@ -314,10 +318,10 @@ export const VALUE_MODEL = {
   headlineA: "Don't pay for our overhead.",
   headlineB: "Pay for your",
   accentWord: "home",
-  costs: "Big offices. Fancy showrooms. Fleets of trucks. Layers of management.",
-  costsBody: "Those costs don't disappear, they get built into your project.",
+  costs: "Model home parks. Glossy plan books. Fleets of trucks. Layers of management.",
+  costsBody: "Those costs don't disappear, they get built into your price per square foot.",
   reframe:
-    "So we built our company differently. Every dollar you invest should go toward your home, not toward paying our bills.",
+    "So we built our company differently. Every dollar you invest should end up standing on your lot, not covering our bills.",
   taglineLead: "Get more home for",
   taglineAccent: "what you spend",
 } as const;

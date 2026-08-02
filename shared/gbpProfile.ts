@@ -5,13 +5,14 @@
  */
 
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { CITIES } from '@/shared/contentData';
 
 const SITE = SITE_CONFIG.siteUrl.replace(/\/$/, '');
 
 /** Canonical NAP - use verbatim on GBP and all citations. */
 export const GBP_NAP = {
-  name: 'Boise Remodeling Co',
-  legalName: 'Boise Remodeling Co LLC',
+  name: 'Boise Construction Co',
+  legalName: 'Boise Construction Co LLC',
   phone: SITE_CONFIG.phone,
   email: SITE_CONFIG.email,
   website: SITE,
@@ -40,19 +41,22 @@ export const GBP_SERVICE_AREAS = [
   'Caldwell, ID',
 ] as const;
 
+// Primary category drives which local pack a listing competes in. "Home
+// builder" is the category for new residential construction; "Remodeler" would
+// keep the profile ranking for the wrong intent.
 export const GBP_CATEGORIES = {
-  primary: 'Remodeler',
+  primary: 'Home builder',
   secondary: [
-    'Kitchen remodeler',
-    'Bathroom remodeler',
+    'Custom home builder',
     'Construction company',
     'General contractor',
-    'Home builder',
+    'Home designer',
+    'Building consultant',
   ],
 } as const;
 
 export const GBP_DESCRIPTION =
-  'Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles design, Ada and Canyon County permits, and construction for kitchen remodels, bathroom remodels, whole-home renovations, room additions, ADUs, garage conversions, and basement finishing. Every project includes a written scope before construction, a dedicated project manager, weekly written progress updates, and a written workmanship guarantee. Founded in 2020. Bonded and insured. Schedule a free 60 to 90 minute in-home visit and leave with a planning range and design direction - no pressure, no obligation.';
+  'Boise Construction Co is a design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles feasibility, design, Ada and Canyon County permits, and construction for custom homes, semi-custom homes, builds on land you already own, and shop homes. Every project includes a line-item budget before construction, a dedicated project manager, weekly written cost and schedule updates, and a written workmanship warranty. We also offer lot evaluation and permit-ready home design as standalone services. Founded in 2020. Bonded and insured. Book a free planning consultation and leave with a realistic budget band and clear next steps.';
 
 export const GBP_LINKS = {
   website: SITE,
@@ -62,6 +66,15 @@ export const GBP_LINKS = {
   review: `${SITE}/review`,
 } as const;
 
+/**
+ * Canonical social profiles. These feed `sameAs` in the LocalBusiness schema,
+ * where a wrong URL actively misidentifies the business to search engines, so
+ * they must point at profiles that genuinely belong to the company.
+ *
+ * NEEDS OWNER CONFIRMATION: these still use the legacy `boiseremodeling`
+ * handles. If the profiles are renamed as part of the rebrand, update both
+ * URLs here and nowhere else - the footer and schema both read from this.
+ */
 export const GBP_SOCIAL = {
   facebook: 'https://www.facebook.com/boiseremodeling',
   instagram: 'https://www.instagram.com/boiseremodeling',
@@ -72,12 +85,12 @@ export const GBP_ATTRIBUTES = {
   onsiteServices: true,
   payments: ['Cash', 'Check', 'Credit cards', 'Financing available'],
   planning: 'Appointment required (for consultations)',
-  serviceOptions: 'Free estimates (in-home visit + online estimator)',
+  serviceOptions: 'Free estimates (planning consultation + online estimator)',
 } as const;
 
 export const GBP_MESSAGING = {
   welcomeMessage:
-    'Thanks for reaching out to Boise Remodeling Co. We respond within one business day. For faster help, call (208) 477-1169 or schedule a visit at boiseremodeling.co/contact',
+    'Thanks for reaching out to Boise Construction Co. We respond within one business day. For faster help, call (208) 477-1169 or book a planning consultation at boiseremodeling.co/contact',
 } as const;
 
 export interface GbpService {
@@ -88,71 +101,62 @@ export interface GbpService {
 
 export const GBP_SERVICES: GbpService[] = [
   {
-    name: 'Kitchen remodeling',
+    name: 'Custom home building',
     description:
-      'Custom kitchen renovations from cabinet refreshes to full gut-and-rebuild. Written scope, permits, and weekly updates included.',
-    startingPrice: '$15,000',
+      'Fully custom homes designed from a blank page around your lot and budget. Line-item budget, permits, and weekly updates included.',
+    startingPrice: '$525,000',
   },
   {
-    name: 'Bathroom remodeling',
+    name: 'Semi-custom home building',
     description:
-      'Spa-quality bathroom transformations designed around how you actually live. Guest and primary baths.',
-    startingPrice: '$18,000',
+      'Start from a proven engineered floor plan and personalize it. Shorter timeline and a tighter budget range than fully custom.',
+    startingPrice: '$425,000',
   },
   {
-    name: 'Whole-home remodeling',
+    name: 'Build on your lot',
     description:
-      'Cohesive whole-home renovations with a single project manager start to finish. Phased options available.',
-    startingPrice: '$180,000',
+      'You own the land. We handle feasibility, site design, permits, and construction, with site costs priced before design begins.',
+    startingPrice: '$475,000',
   },
   {
-    name: 'Room additions',
+    name: 'Design-build home construction',
     description:
-      'Thoughtfully designed additions that feel like they were always part of your home. Bump-outs to second-story additions.',
-    startingPrice: '$80,000',
+      'Design and construction under one contract, with the design priced continuously so the drawings never outrun the budget.',
+    startingPrice: '$525,000',
   },
   {
-    name: 'ADU construction',
+    name: 'Custom home design and plans',
     description:
-      'Detached or attached accessory dwelling units designed to maximize your property value. Boise ordinance guidance included.',
-    startingPrice: '$90,000',
+      'Permit-ready architectural drawings with structural engineering and Idaho energy compliance. You own the plans.',
+    startingPrice: '$9,000',
   },
   {
-    name: 'Garage conversion',
+    name: 'Lot evaluation and site feasibility',
     description:
-      'Convert an existing garage into livable ADU or guest space. Feasibility and utility strategy included.',
-    startingPrice: '$90,000',
+      'Soils, utilities, access, setbacks, and slope reviewed before you buy. Written site cost summary. Credited toward design.',
+    startingPrice: '$950',
   },
   {
-    name: 'Basement finishing',
+    name: 'Shop homes and barndominiums',
     description:
-      'Finish or reconfigure basement space for living, storage, or rental-ready layouts.',
-    startingPrice: 'Contact for range',
+      'Post-frame and steel-framed homes pairing finished living space with working shop square footage on rural acreage.',
+    startingPrice: '$265,000',
   },
   {
-    name: 'Design-build remodeling',
+    name: 'Energy-efficient home building',
     description:
-      'One team handles design direction, selections, permits, and construction. No separate architect required for most projects.',
+      'High-performance envelopes with blower-door verified air tightness and sealed ducts inside conditioned space.',
+    startingPrice: '$575,000',
   },
   {
-    name: 'Remodeling permit management',
+    name: 'New construction permit management',
     description:
-      'Ada and Canyon County permits pulled in-house. Inspection scheduling coordinated by your project manager.',
+      'Ada and Canyon County building permits, plan review, and impact fees handled in-house, including septic and well permitting.',
   },
   {
-    name: 'Home renovation consultation',
+    name: 'Home building consultation',
     description:
-      'Free 60 to 90 minute in-home visit. Leave with a planning range and design direction. No obligation.',
-  },
-  {
-    name: 'Primary suite additions',
-    description:
-      "Master bedroom and bathroom additions designed to match your home's architecture.",
-  },
-  {
-    name: 'Kitchen cabinet refresh',
-    description:
-      'Reface or replace cabinets, counters, and backsplash without full gut. Lower planning band entry point.',
+      'Free planning consultation. Leave with a realistic budget band and clear next steps. No obligation.',
   },
 ];
 
@@ -165,7 +169,7 @@ export interface GbpProduct {
 }
 
 export const GBP_PRODUCT_CATEGORIES = [
-  'Remodeling Services',
+  'Home Building Services',
   'Free Planning Resources',
   'Consultation & Tools',
   'Areas We Serve',
@@ -173,60 +177,60 @@ export const GBP_PRODUCT_CATEGORIES = [
 
 export const GBP_PRODUCTS: GbpProduct[] = [
   {
-    category: 'Remodeling Services',
-    name: 'Kitchen Remodel',
-    price: 'From $15,000',
-    url: `${SITE}/services/kitchen-remodel`,
+    category: 'Home Building Services',
+    name: 'Custom Home Building',
+    price: 'From $525,000',
+    url: `${SITE}/services/custom-home-builder`,
     description:
-      'Design-build kitchen remodels in the Treasure Valley. Cabinet refresh to full gut-and-rebuild. Free in-home planning visit.',
+      'Fully custom homes designed around your lot and budget. Line-item budget before construction. Free planning consultation.',
   },
   {
-    category: 'Remodeling Services',
-    name: 'Bathroom Remodel',
-    price: 'From $18,000',
-    url: `${SITE}/services/bathroom-remodel`,
+    category: 'Home Building Services',
+    name: 'Semi-Custom Homes',
+    price: 'From $425,000',
+    url: `${SITE}/services/semi-custom-homes`,
     description:
-      'Guest and primary bathroom remodels with written scope before construction. Ada and Canyon County permits handled in-house.',
+      'Proven engineered plans adapted to your lot. Shorter timeline and a tighter budget range than fully custom.',
   },
   {
-    category: 'Remodeling Services',
-    name: 'Whole-Home Remodel',
-    price: 'From $180,000',
-    url: `${SITE}/services/whole-home-remodel`,
+    category: 'Home Building Services',
+    name: 'Build on Your Lot',
+    price: 'From $475,000',
+    url: `${SITE}/services/build-on-your-lot`,
     description:
-      'Single project manager from design through final walkthrough. Weekly written updates and workmanship guarantee included.',
+      'Already own land? We handle feasibility, design, permits, and construction, with site costs priced before design begins.',
   },
   {
-    category: 'Remodeling Services',
-    name: 'Room Addition',
-    price: 'From $80,000',
-    url: `${SITE}/services/room-addition`,
+    category: 'Home Building Services',
+    name: 'Design-Build',
+    price: 'From $525,000',
+    url: `${SITE}/services/design-build`,
     description:
-      'Bump-outs, primary suites, and second-story additions that look original to your home.',
+      'Design and construction under one contract. The design is priced as it develops, so it never outruns your budget.',
   },
   {
-    category: 'Remodeling Services',
-    name: 'ADU / Guest House',
-    price: 'From $90,000',
-    url: `${SITE}/services/adu`,
+    category: 'Home Building Services',
+    name: 'Home Design & Plans',
+    price: 'From $9,000',
+    url: `${SITE}/services/home-plans-design`,
     description:
-      'Attached, detached, and garage-conversion ADUs. Feasibility review and Boise ordinance guidance.',
+      'Permit-ready drawings with structural engineering and Idaho energy compliance. You own the plans.',
   },
   {
-    category: 'Remodeling Services',
-    name: 'Garage Conversion',
-    price: 'From $90,000',
-    url: `${SITE}/services/adu`,
+    category: 'Home Building Services',
+    name: 'Lot Evaluation',
+    price: 'From $950',
+    url: `${SITE}/services/lot-evaluation`,
     description:
-      'Convert existing garage space into livable ADU or guest quarters.',
+      'Soils, utilities, access, and setbacks reviewed before you buy. Written site cost summary, credited toward design.',
   },
   {
-    category: 'Remodeling Services',
-    name: 'Basement Finishing',
-    price: 'Contact for quote',
-    url: `${SITE}/contact`,
+    category: 'Home Building Services',
+    name: 'Shop Homes & Barndominiums',
+    price: 'From $265,000',
+    url: `${SITE}/services/shop-homes-barndominiums`,
     description:
-      'Basement finishing and reconfiguration for living space or rental-ready layouts in Ada and Canyon County.',
+      'Post-frame and steel-framed homes pairing finished living space with working shop square footage.',
   },
   {
     category: 'Free Planning Resources',
@@ -262,91 +266,36 @@ export const GBP_PRODUCTS: GbpProduct[] = [
   },
   {
     category: 'Consultation & Tools',
-    name: 'Free In-Home Consultation',
+    name: 'Free Planning Consultation',
     price: 'Free',
     url: `${SITE}/contact`,
     description:
-      '60 to 90 minute visit at your home. Planning range and design direction on the spot. No pressure, no obligation.',
+      'Talk through your lot, your program, and a realistic budget band. No pressure, no obligation.',
   },
   {
     category: 'Consultation & Tools',
-    name: 'Online Planning Range Estimator',
+    name: 'New Home Construction Estimator',
     price: 'Free',
     url: `${SITE}/#calculator`,
     description:
-      'Instant planning range in 60 seconds. Kitchen, bath, whole-home, addition, or ADU. Not a bid - a starting point for conversation.',
+      'Instant planning range for a new build. Size, finish level, and site conditions. Not a bid - a starting point for conversation.',
   },
   {
     category: 'Consultation & Tools',
-    name: 'Remodel Planning Resources Hub',
+    name: 'Home Building Resources Hub',
     price: 'Free',
     url: `${SITE}/resources`,
     description: 'All free PDFs and guides in one place.',
   },
-  {
+  // Generated from the canonical city list so GBP area products cannot drift
+  // out of sync with the /areas routes.
+  ...CITIES.map((city) => ({
     category: 'Areas We Serve',
-    name: 'Remodeling in Boise, ID',
+    name: `Home Builder in ${city.name}, ID`,
     price: 'Free consultation',
-    url: `${SITE}/areas/boise`,
-    description:
-      'Design-build remodeling contractor serving Boise, Idaho. Kitchen, bath, whole-home, additions, ADUs, and basement finishing.',
-  },
-  {
-    category: 'Areas We Serve',
-    name: 'Remodeling in Meridian, ID',
-    price: 'Free consultation',
-    url: `${SITE}/areas/meridian`,
-    description:
-      'Design-build remodeling contractor serving Meridian, Idaho. Kitchen, bath, whole-home, additions, ADUs, and basement finishing.',
-  },
-  {
-    category: 'Areas We Serve',
-    name: 'Remodeling in Eagle, ID',
-    price: 'Free consultation',
-    url: `${SITE}/areas/eagle`,
-    description:
-      'Design-build remodeling contractor serving Eagle, Idaho. Kitchen, bath, whole-home, additions, ADUs, and basement finishing.',
-  },
-  {
-    category: 'Areas We Serve',
-    name: 'Remodeling in Nampa, ID',
-    price: 'Free consultation',
-    url: `${SITE}/areas/nampa`,
-    description:
-      'Design-build remodeling contractor serving Nampa, Idaho. Kitchen, bath, whole-home, additions, ADUs, and basement finishing.',
-  },
-  {
-    category: 'Areas We Serve',
-    name: 'Remodeling in Kuna, ID',
-    price: 'Free consultation',
-    url: `${SITE}/areas/kuna`,
-    description:
-      'Design-build remodeling contractor serving Kuna, Idaho. Kitchen, bath, whole-home, additions, ADUs, and basement finishing.',
-  },
-  {
-    category: 'Areas We Serve',
-    name: 'Remodeling in Star, ID',
-    price: 'Free consultation',
-    url: `${SITE}/areas/star`,
-    description:
-      'Design-build remodeling contractor serving Star, Idaho. Kitchen, bath, whole-home, additions, ADUs, and basement finishing.',
-  },
-  {
-    category: 'Areas We Serve',
-    name: 'Remodeling in Middleton, ID',
-    price: 'Free consultation',
-    url: `${SITE}/areas/middleton`,
-    description:
-      'Design-build remodeling contractor serving Middleton, Idaho. Kitchen, bath, whole-home, additions, ADUs, and basement finishing.',
-  },
-  {
-    category: 'Areas We Serve',
-    name: 'Remodeling in Caldwell, ID',
-    price: 'Free consultation',
-    url: `${SITE}/areas/caldwell`,
-    description:
-      'Design-build remodeling contractor serving Caldwell, Idaho. Kitchen, bath, whole-home, additions, ADUs, and basement finishing.',
-  },
+    url: `${SITE}/areas/${city.slug}`,
+    description: `Design-build home builder serving ${city.name}, Idaho. Custom homes, semi-custom homes, builds on your lot, and shop homes.`,
+  })),
 ];
 
 export interface GbpQaEntry {
@@ -357,7 +306,7 @@ export interface GbpQaEntry {
 export const GBP_QA_SEED: GbpQaEntry[] = [
   {
     question: 'Do you provide free estimates?',
-    answer: `Yes. We offer a free 60 to 90 minute in-home visit where we walk your space and share an honest planning range and design direction - no pressure, no obligation. You can also get an instant planning range online at ${SITE}/#calculator`,
+    answer: `Yes. We offer a free planning consultation where we talk through your lot, your program, and a realistic budget band - no pressure, no obligation. You can also get an instant planning range online at ${SITE}/#calculator`,
   },
   {
     question: 'What areas do you serve?',
@@ -365,46 +314,45 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
       'Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho - all of Ada and Canyon County in the Treasure Valley.',
   },
   {
+    question: 'How much does it cost to build a house in Boise?',
+    answer: `As of 2026, most Treasure Valley new homes plan $225–$400 per finished square foot excluding land. A 2,400 square foot custom home commonly runs $600,000–$960,000, with site work budgeted separately. These are planning ranges, not bids.`,
+  },
+  {
     question: 'Do you handle permits?',
-    answer: `Yes. We pull Ada and Canyon County permits in-house and coordinate inspections through your dedicated project manager. See our permit guide: ${SITE}/resources/ada-canyon-permit-flow`,
+    answer: `Yes. We pull Ada and Canyon County building permits in-house, manage plan review, and coordinate inspections through your project manager. On rural parcels that includes septic through Central District Health and well permitting through IDWR. Permit guide: ${SITE}/resources/ada-canyon-permit-flow`,
   },
   {
-    question: 'How much does a kitchen remodel cost in Boise?',
-    answer: `As of 2026, planning ranges run roughly $16,000–$21,000 for a cosmetic refresh, $37,000–$47,000 for mid-range scope, and $85,000–$166,000 for high-end and luxury gut renovations with layout changes. These are planning ranges, not bids. Full breakdown: ${SITE}/guides/boise-kitchen-remodeling-guide`,
+    question: 'How long does it take to build a new home?',
+    answer: `Plan on 10–14 months for a custom home and 7–10 months for a semi-custom home, measured from the start of design to move-in. County plan review is the most common source of delay.`,
   },
   {
-    question: 'How much does a bathroom remodel cost?',
-    answer: `Guest baths typically plan $18,000–$45,000; primary baths $35,000–$85,000+ depending on layout and finishes. Written scope after your free visit confirms the number. Guide: ${SITE}/guides/boise-bathroom-remodeling-guide`,
+    question: 'Do I need to own land before I contact you?',
+    answer: `No, and it is often better if you have not bought yet. We evaluate candidate lots for soils, utilities, access, and setbacks before you commit, because the parcel drives a large share of the budget: ${SITE}/services/lot-evaluation`,
   },
   {
     question: 'Are you licensed and insured?',
     answer:
-      'Yes. Boise Remodeling Co is bonded and insured for residential remodeling across the Treasure Valley. Idaho contractor license details are available upon request.',
+      'Yes. Boise Construction Co is bonded and insured for residential construction across the Treasure Valley. Idaho contractor registration details are available upon request.',
   },
   {
-    question: 'Do you build ADUs?',
-    answer: `Yes - attached, detached, and garage-conversion ADUs. Planning ranges from $90,000 for garage conversions to $180,000–$300,000+ for detached new builds. Guide: ${SITE}/guides/boise-adu-guide`,
+    question: 'Can you build on land I already own?',
+    answer: `Yes. That is one of our core services. We start with a lot walkthrough and a written summary of site work and permitting costs before any design work begins: ${SITE}/services/build-on-your-lot`,
   },
   {
-    question: 'Do you finish basements?',
-    answer: `Yes. We finish and reconfigure basement space for living areas, guest suites, or rental-ready layouts. Schedule a free consultation to review feasibility: ${SITE}/contact`,
+    question: 'What is the difference between custom and semi-custom?',
+    answer: `A custom home starts from a blank page. A semi-custom home starts from a proven engineered plan and adapts it to your lot. Semi-custom is typically 2–4 months faster with a narrower budget range; custom gives you full control over layout and massing.`,
   },
   {
-    question: 'What is design-build remodeling?',
-    answer: `One accountable team handles design direction, selections, permits, and construction - so you are not coordinating separate architect and contractor contracts. Learn more: ${SITE}/about`,
+    question: 'Do you build barndominiums or shop homes?',
+    answer: `Yes - post-frame and steel-framed homes pairing finished living space with working shop square footage, mostly on rural Ada and Canyon County acreage. Planning from $150–$250 per square foot blended: ${SITE}/services/shop-homes-barndominiums`,
   },
   {
-    question: 'Do you offer financing?',
-    answer:
-      'Yes. Financing is available through partners including GreenSky and Mosaic with terms from 12 to 144 months. Soft credit check with same-day decisions in many cases.',
-  },
-  {
-    question: 'How long does a kitchen remodel take?',
-    answer: `Timelines depend on scope. A refresh may take 4–6 weeks; a full gut with layout changes often runs 10–16 weeks. We provide a week-by-week schedule before demo day. Process guide: ${SITE}/guides/boise-remodeling-process-guide`,
+    question: 'What is design-build?',
+    answer: `Design and construction sit under one contract with one company, and the design is priced continuously as it develops rather than bid after it is finished. That prevents the most expensive failure in home building: a completed design that comes in far over budget. Learn more: ${SITE}/about`,
   },
   {
     question: 'How do I get started?',
-    answer: `Call (208) 477-1169, text us at the same number, or schedule online: ${SITE}/contact. We respond within one business day.`,
+    answer: `Call (208) 477-1169, text us at the same number, or book online: ${SITE}/contact. We respond within one business day.`,
   },
 ];
 
@@ -420,49 +368,49 @@ export interface GbpPost {
 export const GBP_POSTS_STARTER: GbpPost[] = [
   {
     week: 1,
-    headline: 'Kitchen clarity in Boise',
-    body: 'North End kitchen remodel - written scope before demo, weekly Friday updates, final walkthrough with workmanship guarantee.',
+    headline: 'Custom home building in Boise',
+    body: 'Line-item budget before construction, weekly written cost and schedule updates, and a written workmanship warranty.',
     buttonLabel: 'Learn more',
-    buttonUrl: `${SITE}/services/kitchen-remodel/boise`,
-    photoHint: 'Best kitchen after photo',
+    buttonUrl: `${SITE}/services/custom-home-builder/boise`,
+    photoHint: 'Best completed home exterior',
   },
   {
     week: 2,
-    headline: '2026 kitchen planning ranges',
-    body: 'Most Treasure Valley kitchen remodels plan $35K–$75K mid-range. Refresh from ~$15K. Use our free budget worksheet to compare bids apples-to-apples.',
-    buttonLabel: 'Get the worksheet',
-    buttonUrl: `${SITE}/downloads/remodel-budget-worksheet.pdf`,
-    photoHint: 'Budget worksheet cover',
+    headline: '2026 Treasure Valley build costs',
+    body: 'Most new homes plan $225–$400 per finished square foot excluding land. Use our estimator to get a planning range in about a minute.',
+    buttonLabel: 'Get a range',
+    buttonUrl: `${SITE}/#calculator`,
+    photoHint: 'Estimator screenshot or budget worksheet',
   },
   {
     week: 3,
-    headline: 'ADU options in the Treasure Valley',
-    body: 'Garage conversions from ~$90K. Detached ADUs $180K–$300K+. We handle feasibility, permits, and build. Free in-home visit.',
-    buttonLabel: 'ADU guide',
-    buttonUrl: `${SITE}/guides/boise-adu-guide`,
-    photoHint: 'ADU or garage conversion project',
+    headline: 'Thinking about a lot? Check it first.',
+    body: 'Soils, utilities, access, and setbacks reviewed before you buy. Written site cost summary from $950, credited toward design.',
+    buttonLabel: 'Lot evaluation',
+    buttonUrl: `${SITE}/services/lot-evaluation`,
+    photoHint: 'Site walkthrough or raw lot photo',
   },
   {
     week: 4,
-    headline: 'Free in-home visit - no pressure',
-    body: '60 to 90 minutes at your home. Leave with a planning range and design direction. One team from first visit to final walkthrough.',
-    buttonLabel: 'Schedule visit',
+    headline: 'Free planning consultation',
+    body: 'Talk through your lot, your program, and a realistic budget band. One team from feasibility to final walkthrough.',
+    buttonLabel: 'Book a consultation',
     buttonUrl: `${SITE}/contact`,
     photoHint: 'Team or consultation photo',
   },
 ];
 
 export const GBP_PHOTO_CHECKLIST = [
-  { type: 'Logo', spec: 'Square, 720×720+', filename: 'boise-remodeling-co-logo.jpg' },
+  { type: 'Logo', spec: 'Square, 720×720+', filename: 'boise-construction-co-logo.jpg' },
   {
     type: 'Cover',
     spec: 'Landscape 1200×900+',
-    filename: 'design-build-remodeling-treasure-valley-cover.jpg',
+    filename: 'custom-home-builder-treasure-valley-cover.jpg',
   },
   {
-    type: 'Project photos (10+)',
-    spec: 'Before/after, captioned by city + type',
-    filename: 'kitchen-remodel-boise-north-end-after.jpg',
+    type: 'Completed homes (10+)',
+    spec: 'Exteriors and interiors, captioned by city + home type',
+    filename: 'custom-home-eagle-idaho-exterior.jpg',
   },
   {
     type: 'Team/founder',
@@ -471,13 +419,13 @@ export const GBP_PHOTO_CHECKLIST = [
   },
   {
     type: 'Work-in-progress',
-    spec: 'Dust barriers / floor protection',
-    filename: 'job-site-protection-daily-cleanup.jpg',
+    spec: 'Framing, envelope detailing, or blower-door testing',
+    filename: 'framing-envelope-detail-meridian.jpg',
   },
   {
     type: 'Trust',
-    spec: 'Branded vehicle or signage',
-    filename: 'boise-remodeling-co-vehicle.jpg',
+    spec: 'Branded vehicle or job site signage',
+    filename: 'boise-construction-co-vehicle.jpg',
   },
 ] as const;
 
@@ -510,7 +458,7 @@ export const GBP_CITATION_FIXES = [
 ] as const;
 
 export const GBP_PARALLEL_LISTINGS = [
-  { platform: 'Bing Places', url: 'https://www.bingplaces.com', category: 'Remodeler / General Contractor' },
+  { platform: 'Bing Places', url: 'https://www.bingplaces.com', category: 'Home builder / General Contractor' },
   {
     platform: 'Apple Business Connect',
     url: 'https://businessconnect.apple.com',

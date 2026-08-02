@@ -1,4 +1,41 @@
-export type ProjectType = "kitchen" | "bathroom" | "whole-home" | "addition" | "adu" | "basement";
+/**
+ * PROJECT TYPES SPAN TWO BUSINESSES, AND ONLY ONE IS SOLD.
+ *
+ * The first three are new residential construction and are what the estimator
+ * offers the public (see PROJECT_TYPE_ORDER in EstimateCalculator, which is the
+ * list a visitor actually sees). The remodel types below them are retained
+ * because the company still takes RE-10 repair work, because the guide engine's
+ * market ceiling for new construction is derived from them, and because they
+ * carry a large calibrated invariant suite that is worth keeping rather than
+ * deleting. They are not offered on the public calculator.
+ */
+export type NewConstructionProjectType =
+  | "custom-home"
+  | "semi-custom-home"
+  | "build-on-your-lot";
+
+export type RemodelProjectType =
+  | "kitchen"
+  | "bathroom"
+  | "whole-home"
+  | "addition"
+  | "adu"
+  | "basement";
+
+export type ProjectType = NewConstructionProjectType | RemodelProjectType;
+
+/** The projects the public estimator offers. */
+export const NEW_CONSTRUCTION_PROJECT_TYPES: NewConstructionProjectType[] = [
+  "custom-home",
+  "semi-custom-home",
+  "build-on-your-lot",
+];
+
+export function isNewConstructionProject(
+  project: ProjectType,
+): project is NewConstructionProjectType {
+  return (NEW_CONSTRUCTION_PROJECT_TYPES as ProjectType[]).includes(project);
+}
 export type FinishLevel = "refresh" | "mid-range" | "high-end" | "luxury";
 export type LayoutChanges = "none" | "moderate" | "major";
 export type PlumbingElectrical = "cosmetic" | "partial" | "full";
@@ -14,7 +51,27 @@ export type UserRefinementKey =
   | "bathroomCount"
   | "kitchenIncluded"
   | "stories"
-  | "aduConfig";
+  | "aduConfig"
+  | "garageBays"
+  | "basementType"
+  | "lotServices"
+  | "siteDifficulty"
+  | "coveredOutdoor";
+
+/** Garage size, asked as bays because that is how buyers think about it. */
+export type GarageBays = "none" | "two" | "three" | "four";
+
+/** Basement, asked in the three forms a Treasure Valley buyer actually chooses between. */
+export type BasementType = "none" | "unfinished" | "finished";
+
+/**
+ * Whether the lot is on city water and sewer or needs its own well and septic.
+ * This is the single largest site-cost swing in a Treasure Valley build, so it is
+ * asked explicitly rather than assumed.
+ */
+export type LotServices = "city" | "well-septic" | "unsure";
+
+export type SiteDifficulty = "simple" | "moderate" | "steep";
 
 export interface PriceData {
   low: number;
@@ -61,7 +118,33 @@ export interface EstimateRefinements {
    * permits, project management) stays in regardless. See UPGRADE_SCOPE_WEIGHTS.
    */
   upgradeScope: string[] | null;
+
+  /* ------------------------------------------- new residential construction */
+
+  /** Attached garage, asked in bays. */
+  garageBays: GarageBays | null;
+  /** Basement, and whether it is finished living space or shell only. */
+  basementType: BasementType | null;
+  /** City water and sewer, or a well and septic system. */
+  lotServices: LotServices | null;
+  /** How much earthwork and access the site needs. */
+  siteDifficulty: SiteDifficulty | null;
+  /** Covered patio or covered deck, in square feet. */
+  coveredOutdoor: number | null;
 }
+
+/* ----------------------------- construction selection to engine quantities */
+
+/**
+ * Garage bays to square feet. A bay is about 240 SF including circulation, which
+ * matches the 480 SF two-car and 720 SF three-car garages built here.
+ */
+export const GARAGE_BAY_SQFT: Record<GarageBays, number> = {
+  none: 0,
+  two: 480,
+  three: 720,
+  four: 960,
+};
 
 /** A fully-specified estimate input. Required before any range is calculated. */
 export interface EstimateInput {
@@ -195,6 +278,27 @@ const UNIVERSAL_DECREASES = [
 ];
 
 const PROJECT_UPGRADES: Record<ProjectType, string[]> = {
+  "custom-home": [
+    "A finished basement, which is the cheapest square footage you will ever add",
+    "A larger garage or a shop bay with its own overhead door",
+    "Covered outdoor living with a fireplace and heaters",
+    "A high-performance envelope package for lower running costs",
+    "A primary suite with a wet room or a soaking alcove",
+  ],
+  "semi-custom-home": [
+    "Structural options the plan already supports, such as a bonus room over the garage",
+    "Upgrading the elevation to more stone or timber",
+    "A third or fourth garage bay",
+    "Extending the covered patio across the rear elevation",
+    "A finished basement under the existing footprint",
+  ],
+  "build-on-your-lot": [
+    "A shop or detached garage alongside the house",
+    "A finished basement where the soils and water table allow",
+    "Covered outdoor living oriented to the view",
+    "A high-performance envelope package, which pays back faster on a rural site",
+    "Landscaping and irrigation beyond the front yard",
+  ],
   kitchen: [
     "Island addition or expansion",
     "Panel-ready or integrated appliance fronts",
@@ -295,6 +399,104 @@ const FINISH_PROFILES: Record<FinishLevel, Omit<TypicalSelections, "summary">> =
 };
 
 const PROFILE_SUMMARY: Record<ProjectType, Record<FinishLevel, string[]>> = {
+  /*
+   * All four tiers are offered on a new home, because a new build genuinely
+   * spans from production-grade specification to fully bespoke. What the tiers
+   * mean is different from a remodel, though: on a new home the shell is the
+   * same shell at every tier, and the tier describes the specification level of
+   * everything inside and on the elevation. See NEW_CONSTRUCTION_FINISH_LABELS
+   * for the names a visitor sees, which are not the internal keys.
+   */
+  "custom-home": {
+    refresh: [
+      "Production-grade specification, custom plan",
+      "LVP and carpet throughout, tile in wet areas",
+      "Painted stock cabinetry with quartz counters",
+      "Siding elevation with a stone accent",
+      "Front-yard landscaping and irrigation",
+    ],
+    "mid-range": [
+      "Custom plan drawn for your lot and how you live",
+      "Engineered hardwood in living areas, tile in baths",
+      "Semi-custom cabinetry with quartz throughout",
+      "Mixed siding and stone elevation",
+      "Gas fireplace and covered patio",
+    ],
+    "high-end": [
+      "Fully bespoke plan with structural steel for open spans",
+      "Wide-plank hardwood and large-format tile",
+      "Custom cabinetry, built-ins and a custom vent hood",
+      "Stone-forward elevation with timber accents",
+      "Designer lighting and custom closet systems",
+    ],
+    luxury: [
+      "Architect-led design with no repeated detail",
+      "Stone, hardwood and specialty metals throughout",
+      "Fully custom millwork and cabinetry",
+      "Timber, stone and standing-seam elevation",
+      "Every room specified individually",
+    ],
+  },
+  "semi-custom-home": {
+    refresh: [
+      "An existing plan built as drawn",
+      "LVP and carpet throughout, tile in wet areas",
+      "Painted stock cabinetry with quartz counters",
+      "Siding elevation with a stone accent",
+      "Front-yard landscaping and irrigation",
+    ],
+    "mid-range": [
+      "An existing plan with the options you choose",
+      "Engineered hardwood in living areas, tile in baths",
+      "Semi-custom cabinetry with quartz throughout",
+      "Mixed siding and stone elevation",
+      "Gas fireplace and covered patio",
+    ],
+    "high-end": [
+      "An existing plan taken to a custom specification",
+      "Wide-plank hardwood and large-format tile",
+      "Custom cabinetry and built-ins",
+      "Stone-forward elevation",
+      "Designer lighting and custom closets",
+    ],
+    luxury: [
+      "An existing plan finished to a bespoke standard",
+      "Stone and hardwood throughout",
+      "Fully custom millwork",
+      "Upgraded elevation in every material",
+      "Specified room by room",
+    ],
+  },
+  "build-on-your-lot": {
+    refresh: [
+      "Built on land you already own",
+      "Production-grade specification",
+      "LVP and carpet throughout, tile in wet areas",
+      "Siding elevation with a stone accent",
+      "Front-yard landscaping and irrigation",
+    ],
+    "mid-range": [
+      "Built on land you already own, sited for the views and the sun",
+      "Engineered hardwood in living areas, tile in baths",
+      "Semi-custom cabinetry with quartz throughout",
+      "Mixed siding and stone elevation",
+      "Gas fireplace and covered patio",
+    ],
+    "high-end": [
+      "Sited and designed specifically for your parcel",
+      "Wide-plank hardwood and large-format tile",
+      "Custom cabinetry, built-ins and a custom vent hood",
+      "Stone-forward elevation with timber accents",
+      "Designer lighting and custom closet systems",
+    ],
+    luxury: [
+      "Architect-led design responding to the site",
+      "Stone, hardwood and specialty metals throughout",
+      "Fully custom millwork and cabinetry",
+      "Timber, stone and standing-seam elevation",
+      "Every room specified individually",
+    ],
+  },
   kitchen: {
     refresh: ["Stock cabinetry", "Laminate or entry quartz counters", "Existing layout kept", "Plumbing stays where it is", "LVP or tile flooring"],
     "mid-range": ["Semi-custom cabinetry", "Quartz counters", "Tile backsplash", "Existing layout kept", "Plumbing stays where it is"],
@@ -362,6 +564,20 @@ export function buildEstimateDisclosure(input: EstimateInput): EstimateDisclosur
 }
 
 export const PROJECT_SIZE_CONFIG: Record<ProjectType, ProjectSizeConfig> = {
+  /*
+   * New construction sizes are FINISHED LIVING AREA, excluding the garage and
+   * any unfinished basement, because that is the number on a plan and the number
+   * a buyer quotes. The garage and basement are asked separately and priced on
+   * top, so a visitor who enters 2,400 is not silently charged for 3,000.
+   *
+   * The 1,200 floor is a small single-level plan; 7,000 covers the largest
+   * foothills homes built here. The baseline of 2,400 is the median new home in
+   * the Treasure Valley and is the size every published cost figure is quoted
+   * against (see shared/seoContent.ts).
+   */
+  "custom-home": { min: 1200, max: 7000, step: 100, baselineSqft: 2400 },
+  "semi-custom-home": { min: 1200, max: 4500, step: 100, baselineSqft: 2200 },
+  "build-on-your-lot": { min: 1200, max: 6000, step: 100, baselineSqft: 2400 },
   kitchen: { min: 100, max: 600, step: 25, baselineSqft: 250 },
   bathroom: { min: 40, max: 200, step: 10, baselineSqft: 80 },
   "whole-home": { min: 800, max: 8000, step: 100, baselineSqft: 1800 },
@@ -381,6 +597,11 @@ export const EMPTY_REFINEMENTS: EstimateRefinements = {
   kitchenIncluded: null,
   aduConfig: null,
   upgradeScope: null,
+  garageBays: null,
+  basementType: null,
+  lotServices: null,
+  siteDifficulty: null,
+  coveredOutdoor: null,
 };
 
 /** Estimator starting state: nothing selected, no implicit defaults. */
@@ -505,6 +726,9 @@ export function getPlumbingElectricalOptions(project: ProjectType) {
 }
 
 export const PROJECT_LABELS: Record<ProjectType, { label: string; sub: string }> = {
+  "custom-home": { label: "Custom Home", sub: "Designed from scratch for you" },
+  "semi-custom-home": { label: "Semi-Custom Home", sub: "An existing plan, your choices" },
+  "build-on-your-lot": { label: "Build on My Lot", sub: "You already own the land" },
   kitchen: { label: "Kitchen", sub: "Cabinets, counters, layout" },
   bathroom: { label: "Bathroom", sub: "Tile, fixtures, vanity" },
   "whole-home": { label: "Whole-Home", sub: "Multi-room renovation" },
@@ -520,12 +744,40 @@ export const FINISH_LABELS: Record<FinishLevel, { label: string; sub: string }> 
   luxury: { label: "Luxury", sub: "No constraints" },
 };
 
+/**
+ * The same four internal tiers, named for someone building a house.
+ *
+ * "Refresh" and "Mid-Range" are remodeling words: there is nothing to refresh in
+ * a house that does not exist yet, and a buyer choosing a specification level
+ * for a new home is not choosing how much of it to replace. The internal keys
+ * stay as they are, because the entire calibrated rate ladder and its invariant
+ * suite are keyed on them; only the display names change.
+ */
+export const NEW_CONSTRUCTION_FINISH_LABELS: Record<FinishLevel, { label: string; sub: string }> = {
+  refresh: { label: "Essential", sub: "Well built, efficiently specified" },
+  "mid-range": { label: "Signature", sub: "Our standard specification" },
+  "high-end": { label: "Premium", sub: "Custom cabinetry, stone, hardwood" },
+  luxury: { label: "Bespoke", sub: "Specified room by room" },
+};
+
+export function getFinishLabels(project: ProjectType): Record<FinishLevel, { label: string; sub: string }> {
+  return isNewConstructionProject(project) ? NEW_CONSTRUCTION_FINISH_LABELS : FINISH_LABELS;
+}
+
+export function getFinishLabel(project: ProjectType, finish: FinishLevel): { label: string; sub: string } {
+  return getFinishLabels(project)[finish];
+}
+
 const ALL_FINISH_LEVELS: FinishLevel[] = ["refresh", "mid-range", "high-end", "luxury"];
 
 /**
  * Finish levels available for a given project type. "Refresh" (cosmetic
- * upgrades / repaint) is meaningless for new construction, so additions and
- * ADUs / guest houses start at "mid-range".
+ * upgrades / repaint) is meaningless for an addition or a basement build-out, so
+ * those start at "mid-range".
+ *
+ * New construction keeps all four, because the tier there describes
+ * specification level rather than how much is being replaced, and a new home
+ * genuinely spans from production-grade to bespoke.
  */
 export function getAvailableFinishLevels(project: ProjectType): FinishLevel[] {
   if (project === "addition" || project === "adu" || project === "basement") {
@@ -612,6 +864,82 @@ const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>>
    * NOTE none of the reference estimates state square footage, so the 250 sq ft
    * baseline is assumed rather than measured. See ESTIMATOR-CALIBRATION.md.
    */
+  /*
+   * NEW CONSTRUCTION. These cells serve a narrower purpose than the remodel ones.
+   *
+   * The number a visitor sees comes from the line-item takeoff in
+   * shared/costs/newConstructionRules.ts, not from here. What these do is feed
+   * `marketCeiling`, the guard that stops the takeoff quoting above what the
+   * business is willing to charge. They are therefore set with deliberate
+   * headroom above the takeoff at baseline size, roughly 15 percent, so the guard
+   * stays out of the way at ordinary configurations and only fires on genuinely
+   * extreme scope (a steep foothills lot, a well and septic, and a bespoke
+   * specification all at once). Setting them tight to the takeoff would trim
+   * margin on normal homes and freeze the price against every further input.
+   *
+   * `high` is multiplied by PLANNING_RANGE_ADJUSTMENT_HIGH (0.8) before use, so
+   * a ceiling of $815,000 is written here as $1,019,000.
+   *
+   * ROI IS ZERO ON PURPOSE, and the results panel hides the resale line when it
+   * is. "Typical resale return for this project type" is a remodeling measure: it
+   * compares what you spent against what it added to an existing house. A new
+   * home has no before, and quoting a percentage would be inventing a claim we
+   * cannot support.
+   */
+  "custom-home": {
+    refresh: {
+      low: 560000, high: 840000, roi: 0,
+      included: ["Custom plan drawn for your lot", "Production-grade specification", "Permits and inspections", "Front-yard landscaping and irrigation"],
+    },
+    "mid-range": {
+      low: 680000, high: 1020000, roi: 0,
+      included: ["Custom plan and engineering", "Semi-custom cabinetry and quartz throughout", "Mixed siding and stone elevation", "Gas fireplace and covered patio"],
+    },
+    "high-end": {
+      low: 980000, high: 1500000, roi: 0,
+      included: ["Fully bespoke plan with steel for open spans", "Custom cabinetry and built-ins", "Stone-forward elevation with timber", "Designer lighting and custom closets"],
+    },
+    luxury: {
+      low: 1450000, high: 2240000, roi: 0,
+      included: ["Architect-led design", "Stone, hardwood and specialty metals", "Fully custom millwork", "Every room specified individually"],
+    },
+  },
+  "semi-custom-home": {
+    refresh: {
+      low: 520000, high: 800000, roi: 0,
+      included: ["An existing plan built as drawn", "Production-grade specification", "Permits and inspections", "Front-yard landscaping and irrigation"],
+    },
+    "mid-range": {
+      low: 640000, high: 980000, roi: 0,
+      included: ["An existing plan with your options", "Semi-custom cabinetry and quartz throughout", "Mixed siding and stone elevation", "Gas fireplace and covered patio"],
+    },
+    "high-end": {
+      low: 930000, high: 1440000, roi: 0,
+      included: ["An existing plan at custom specification", "Custom cabinetry and built-ins", "Stone-forward elevation", "Designer lighting and custom closets"],
+    },
+    luxury: {
+      low: 1380000, high: 2150000, roi: 0,
+      included: ["An existing plan finished bespoke", "Stone and hardwood throughout", "Fully custom millwork", "Specified room by room"],
+    },
+  },
+  "build-on-your-lot": {
+    refresh: {
+      low: 560000, high: 850000, roi: 0,
+      included: ["Built on land you already own", "Lot feasibility and siting", "Production-grade specification", "Permits and inspections"],
+    },
+    "mid-range": {
+      low: 690000, high: 1040000, roi: 0,
+      included: ["Sited for views, sun and drainage", "Semi-custom cabinetry and quartz throughout", "Mixed siding and stone elevation", "Well and septic coordination where needed"],
+    },
+    "high-end": {
+      low: 990000, high: 1530000, roi: 0,
+      included: ["Designed specifically for your parcel", "Custom cabinetry and built-ins", "Stone-forward elevation with timber", "Designer lighting and custom closets"],
+    },
+    luxury: {
+      low: 1470000, high: 2280000, roi: 0,
+      included: ["Architect-led design responding to the site", "Stone, hardwood and specialty metals", "Fully custom millwork", "Every room specified individually"],
+    },
+  },
   kitchen: {
     refresh: {
       low: 15900, high: 26600, roi: 72,
@@ -882,6 +1210,14 @@ export function getSetRefinementKeys(refinements: EstimateRefinements): UserRefi
  * 1.0 = perfectly linear with area. Lower = more of the cost is fixed.
  */
 const SIZE_ELASTICITY: Record<ProjectType, number> = {
+  // A new home is close to linear in size: more square feet is more foundation,
+  // more roof, more framing and more finish. It is not fully linear, because the
+  // kitchen, the mechanical plant, the permit and the site work are largely
+  // fixed, which is why a 4,500 sq ft home costs less per square foot than a
+  // 1,600 sq ft one. 0.92 reproduces the line-item takeoff's own size curve.
+  "custom-home": 0.92,
+  "semi-custom-home": 0.92,
+  "build-on-your-lot": 0.92,
   kitchen: 0.55, // cabinet runs + appliance count dominate, not floor area
   bathroom: 0.6, // fixture count and tile area, not floor area
   'whole-home': 0.85, // more area genuinely means more rooms to touch

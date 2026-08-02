@@ -6,11 +6,13 @@
 const DEFAULT_PHONE = "(208) 477-1169";
 const DEFAULT_PHONE_TEL = "2084771169";
 const DEFAULT_EMAIL = "hello@boiseremodeling.co";
+// The domain is unchanged by the rename; boiseremodeling.co stays canonical so
+// the existing search authority and inbound links are preserved.
 const DEFAULT_SITE_URL = "https://boiseremodeling.co";
 
 export const SITE_CONFIG = {
-  name: "Boise Remodeling Co",
-  legalName: "Boise Remodeling Co LLC",
+  name: "Boise Construction Co",
+  legalName: "Boise Construction Co LLC",
   phone: process.env.NEXT_PUBLIC_PHONE ?? DEFAULT_PHONE,
   phoneTel: process.env.NEXT_PUBLIC_PHONE_TEL ?? DEFAULT_PHONE_TEL,
   phoneHref: `tel:${process.env.NEXT_PUBLIC_PHONE_TEL ?? DEFAULT_PHONE_TEL}`,

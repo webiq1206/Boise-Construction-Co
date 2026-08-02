@@ -50,6 +50,10 @@ export function ProjectGallerySection({
     (p) => !excludeServiceTypes.includes(p.serviceType),
   ).slice(0, limit);
 
+  // Render nothing rather than an empty grid and a "see more" button pointing
+  // at an equally empty page. Returns automatically once real homes are added.
+  if (projects.length === 0) return null;
+
   // 4 or fewer reads best as a 2-up grid of larger cards; 5+ uses 3 columns.
   const lgCols = projects.length <= 4 ? "lg:grid-cols-2" : "lg:grid-cols-3";
 
@@ -58,8 +62,8 @@ export function ProjectGallerySection({
       <div className="container px-4">
         <SectionHeader
           eyebrow="Our work"
-          title="Transformations across the Treasure Valley"
-          description="Explore recent kitchen, bathroom, whole-home, and addition projects. Drag any slider to compare before and after."
+          title="Homes across the Treasure Valley"
+          description="Recent homes we have designed and built across Boise, Meridian, Eagle, Nampa, and the surrounding valley."
           className="mb-10 max-w-3xl"
         />
         <div className={`grid sm:grid-cols-2 ${lgCols} gap-6`}>

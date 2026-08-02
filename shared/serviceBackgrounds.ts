@@ -6,15 +6,22 @@ export interface ServiceBackgroundConfig {
 
 const DEFAULT_BACKGROUND = SITE_IMAGES.hero;
 
+/**
+ * Interim mapping. Dedicated new-construction photography has not been
+ * generated yet, so each service points at an existing whole-home or process
+ * image that is at least topically honest. Replace with per-service
+ * construction imagery during the image regeneration pass; do not point these
+ * at files that do not exist, since nothing validates these paths at build time.
+ */
 export const SERVICE_BACKGROUNDS: ServiceBackgroundConfig = {
-  "kitchen-remodel": "/images/services/kitchen-remodel.webp",
-  "bathroom-remodel": "/images/services/bathroom-remodel.webp",
-  "whole-home-remodel": "/images/services/whole-home-remodel.webp",
-  "room-addition": "/images/services/room-addition.webp",
-  adu: "/images/services/adu.webp",
-  "basement-remodel": "/images/services/basement-remodel.webp",
-  "outdoor-living": "/images/services/outdoor-living.webp",
-  "aging-in-place": "/images/services/aging-in-place.webp",
+  "custom-home-builder": SITE_IMAGES.statementBand,
+  "semi-custom-homes": SITE_IMAGES.hero,
+  "build-on-your-lot": SITE_IMAGES.statementBand,
+  "design-build": SITE_IMAGES.process,
+  "home-plans-design": SITE_IMAGES.process,
+  "lot-evaluation": SITE_IMAGES.process,
+  "shop-homes-barndominiums": SITE_IMAGES.statementBand,
+  "energy-efficient-homes": SITE_IMAGES.hero,
 };
 
 export const DEFAULT_SERVICE_BACKGROUND = DEFAULT_BACKGROUND;
@@ -39,45 +46,45 @@ export interface LandingImageSet {
  * panel each show a different relevant photo (finished room, detail, in-progress).
  */
 const SERVICE_IMAGE_SETS: Record<string, LandingImageSet> = {
-  "kitchen-remodel": {
-    hero: "/images/services/kitchen-remodel.webp",
-    breather: GALLERY_IMAGES.kitchen.after,
-    process: SITE_IMAGES.processInProgress,
-  },
-  "bathroom-remodel": {
-    hero: "/images/services/bathroom-remodel.webp",
-    breather: GALLERY_IMAGES.bathroom.after,
-    process: GALLERY_IMAGES.bathroom.before,
-  },
-  "whole-home-remodel": {
-    hero: "/images/services/whole-home-remodel.webp",
+  "custom-home-builder": {
+    hero: SITE_IMAGES.statementBand,
     breather: GALLERY_IMAGES.wholeHome.after,
-    process: GALLERY_IMAGES.wholeHome.before,
+    process: SITE_IMAGES.process,
   },
-  "room-addition": {
-    hero: "/images/services/room-addition.webp",
-    breather: GALLERY_IMAGES.addition.after,
-    process: GALLERY_IMAGES.addition.before,
+  "semi-custom-homes": {
+    hero: SITE_IMAGES.hero,
+    breather: GALLERY_IMAGES.wholeHome.after,
+    process: SITE_IMAGES.process,
   },
-  adu: {
-    hero: "/images/services/adu.webp",
-    breather: GALLERY_IMAGES.addition.after,
+  "build-on-your-lot": {
+    hero: SITE_IMAGES.statementBand,
+    breather: SITE_IMAGES.hero,
+    process: SITE_IMAGES.process,
+  },
+  "design-build": {
+    hero: SITE_IMAGES.process,
+    breather: SITE_IMAGES.statementBand,
     process: SITE_IMAGES.processInProgress,
   },
-  "basement-remodel": {
-    hero: "/images/services/basement-remodel.webp",
-    breather: GALLERY_IMAGES.basement.before,
-    process: GALLERY_IMAGES.basement.after,
+  "home-plans-design": {
+    hero: SITE_IMAGES.process,
+    breather: SITE_IMAGES.hero,
+    process: SITE_IMAGES.processInProgress,
   },
-  "outdoor-living": {
-    hero: "/images/services/outdoor-living.webp",
-    breather: GALLERY_IMAGES.outdoor.before,
-    process: GALLERY_IMAGES.outdoor.after,
+  "lot-evaluation": {
+    hero: SITE_IMAGES.process,
+    breather: SITE_IMAGES.statementBand,
+    process: SITE_IMAGES.processInProgress,
   },
-  "aging-in-place": {
-    hero: "/images/services/aging-in-place.webp",
-    breather: GALLERY_IMAGES.bathroom.before,
-    process: "/images/services/aging-in-place.webp",
+  "shop-homes-barndominiums": {
+    hero: SITE_IMAGES.statementBand,
+    breather: SITE_IMAGES.hero,
+    process: SITE_IMAGES.processInProgress,
+  },
+  "energy-efficient-homes": {
+    hero: SITE_IMAGES.hero,
+    breather: GALLERY_IMAGES.wholeHome.after,
+    process: SITE_IMAGES.processInProgress,
   },
 };
 

@@ -6,40 +6,17 @@ export interface TestimonialItem {
   testimonial: string;
 }
 
-export const TESTIMONIALS: TestimonialItem[] = [
-  {
-    customerName: "Sarah M.",
-    serviceType: "kitchen-remodel",
-    city: "boise",
-    rating: "5",
-    testimonial:
-      "Boise Remodeling Co did an amazing job on our kitchen. On time, clear communication throughout, and the results were stunning.",
-  },
-  {
-    customerName: "Mike R.",
-    serviceType: "bathroom-remodel",
-    city: "meridian",
-    rating: "5",
-    testimonial:
-      "Our master bath went from builder-grade to a space we actually enjoy every morning. The team was professional and communicated throughout the entire project.",
-  },
-  {
-    customerName: "Jennifer K.",
-    serviceType: "whole-home-remodel",
-    city: "eagle",
-    rating: "5",
-    testimonial:
-      "We stayed in our home through a full renovation and the team made it as painless as possible. Absolutely love the result.",
-  },
-  {
-    customerName: "David L.",
-    serviceType: "room-addition",
-    city: "nampa",
-    rating: "5",
-    testimonial:
-      "Fantastic craftsmanship and reliable timeline. Our new master suite addition exceeded every expectation.",
-  },
-];
+/**
+ * Empty until real, attributable client reviews exist for Boise Construction Co.
+ *
+ * The previous entries were placeholder remodeling testimonials with invented
+ * customer names. Carrying them onto a new-construction site would misrepresent
+ * work that was never performed, so they are retired rather than reworded.
+ * Populate this from genuine reviews only; AggregateRating in lib/schema.ts is
+ * separately gated on BUSINESS_INFO.reviewCount, which must also reflect real
+ * counts before any review markup is emitted.
+ */
+export const TESTIMONIALS: TestimonialItem[] = [];
 
 /**
  * Return testimonials that match a specific service + city, used to embed

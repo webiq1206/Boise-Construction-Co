@@ -20,7 +20,7 @@ export default function StyleGuidePage() {
         <div className="container px-4 max-w-4xl">
           <PageHeader
             eyebrow="Internal reference"
-            title="Boise Remodeling Co - Design System"
+            title="Boise Construction Co - Design System"
             description="Tokens, typography, buttons, cards, and article styles for all marketing pages."
             align="left"
           />

@@ -21,6 +21,7 @@ import { CTA_PRIMARY } from "@/shared/ctaCopy";
 import { HomePageSchema } from "@/components/seo/HomePageSchema";
 import { buildCanonical } from "@/lib/page-metadata";
 import { SITE_IMAGES } from "@/shared/siteImages";
+import { SITE_CONFIG } from "@/shared/siteConfig";
 
 const EstimateCalculator = dynamic(
   () =>
@@ -38,27 +39,29 @@ const EstimateCalculator = dynamic(
 );
 
 export const metadata: Metadata = {
-  title: { absolute: "Remodeling Contractor in Boise, ID | Boise Remodeling Co" },
+  // 55 chars. Leads with the primary term ("custom home builder Boise") rather
+  // than the brand, which the suffix carries anyway.
+  title: { absolute: `Custom Home Builder in Boise, ID | ${SITE_CONFIG.name}` },
   description:
-    "Design-build remodeling for Boise, Meridian, Eagle, Nampa & the Treasure Valley. Clear expectations and budget guidance. Schedule a free in-home consultation.",
+    "Design-build home builder for Boise, Meridian, Eagle, Nampa & the Treasure Valley. Custom and semi-custom homes, or build on your own lot, with a line-item budget before we break ground.",
   alternates: {
     canonical: buildCanonical("/"),
     // Setting `alternates` replaces the root declaration, so the feed link has
     // to be repeated here or the homepage loses feed discovery entirely.
     types: {
       "application/rss+xml": [
-        { url: "/feed.xml", title: "Boise Remodeling Co | Remodeling Guides and Insights" },
+        { url: "/feed.xml", title: `${SITE_CONFIG.name} | Home Building Guides and Insights` },
       ],
     },
   },
   openGraph: {
-    title: "Boise Remodeling Co | Treasure Valley Design-Build",
+    title: `${SITE_CONFIG.name} | Treasure Valley Home Builder`,
     description:
-      `${SITE_TAGLINE}. Kitchen, bathroom, whole-home, and addition remodeling across the Treasure Valley.`,
+      `${SITE_TAGLINE}. Custom homes, semi-custom homes, build-on-your-lot, and design-build across the Treasure Valley.`,
     type: "website",
     url: buildCanonical("/"),
-    siteName: "Boise Remodeling Co",
-    images: [{ url: "/images/og-default.png", width: 1200, height: 630, alt: "Boise Remodeling Co" }],
+    siteName: SITE_CONFIG.name,
+    images: [{ url: "/images/og-default.png", width: 1200, height: 630, alt: SITE_CONFIG.name }],
   },
 };
 
@@ -97,18 +100,18 @@ export default function HomePage() {
       <ProjectGallerySection limit={6} showViewAll={true} />
 
       <EstimatePromptBand
-        eyebrow="Still comparing options"
+        eyebrow="Still comparing builders"
         title={
           <>
-            Get your number without leaving{' '}
-            <em className="brc-accent">home</em>
+            Find out what your home will{' '}
+            <em className="brc-accent">cost</em>
           </>
         }
-        description="If you scrolled past the estimator above, come back anytime - or book a free in-home visit and we'll walk through scope, design direction, and a written project range together."
+        description="If you scrolled past the estimator above, come back anytime - or book a free planning consultation and we'll walk through your lot, your plan, and a realistic budget band together."
         variant="tint"
         bullets={[
-          "Instant range based on real Treasure Valley costs",
-          "Free in-home visit when you're ready for detail",
+          "Instant range based on real Treasure Valley build costs",
+          "Free planning consultation when you're ready for detail",
           "No obligation - we email you a copy of your estimate",
         ]}
       />
@@ -139,13 +142,13 @@ export default function HomePage() {
               <Reveal>
                 <div className="brc-label mb-5">Begin a conversation</div>
                 <h2 className="font-sans font-light text-[2rem] md:text-[2.75rem] lg:text-[3.25rem] leading-[1.08] tracking-tight mb-4 text-foreground">
-                  Tell us about your{" "}
-                  <em className="brc-accent">home</em>.
+                  Tell us what you want to{" "}
+                  <em className="brc-accent">build</em>.
                 </h2>
                 <p className="text-base leading-relaxed mb-8 text-muted-foreground">
                   We will reach out within one business day to schedule your free
-                  60 to 90 minute in-home visit. You will leave with planning guidance,
-                  design direction, and no obligation.
+                  60 to 90 minute planning consultation. You will leave with a realistic
+                  budget band, a view of your lot options, and no obligation.
                 </p>
                 <div className="space-y-3">
                   {CONSULT_BULLETS.map((item) => (

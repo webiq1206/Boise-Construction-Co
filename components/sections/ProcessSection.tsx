@@ -12,7 +12,7 @@ export function ProcessSection() {
         <div className="relative min-h-[220px] md:min-h-[560px] overflow-hidden">
           <Image
             src={SITE_IMAGES.processInProgress}
-            alt="Kitchen remodel in progress with cabinets being installed by the Boise Remodeling Co team"
+            alt="New home under construction in the Treasure Valley with the Boise Construction Co team on site"
             fill
             loading="lazy"
             sizes="(max-width: 768px) 100vw, 50vw"
@@ -26,9 +26,9 @@ export function ProcessSection() {
           <div className="absolute bottom-0 left-0 p-8 md:p-12">
             <div className="brc-label mb-3 text-inverse-muted">How We Build</div>
             <p className="font-sans font-light text-xl md:text-2xl text-inverse-foreground">
-              Free in-home visit
+              Free consultation
               <br />
-              to final walkthrough
+              to the keys in your hand
             </p>
           </div>
         </div>
@@ -37,8 +37,8 @@ export function ProcessSection() {
           <Reveal>
             <div className="brc-label mb-5">Our process</div>
             <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] lg:text-[2.75rem] leading-[1.08] tracking-tight mb-10 text-foreground">
-              From first visit to{" "}
-              <em className="brc-accent">final walkthrough</em>
+              From bare lot to{" "}
+              <em className="brc-accent">move-in day</em>
             </h2>
             <div className="space-y-0">
               {HOW_WE_BUILD_STEPS.map((step, i) => (

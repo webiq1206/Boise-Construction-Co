@@ -44,6 +44,29 @@ export interface ScopeSelections {
   kitchenIncluded?: boolean | null;
   /** Which components the homeowner is actually redoing. Empty/null = everything. */
   upgradeScope?: string[] | null;
+
+  /* ------------------------------------------- new residential construction */
+
+  /**
+   * Storeys of finished living space. Drives footprint, and therefore the
+   * foundation, roof and site work, all of which a second storey halves per
+   * square foot of finished area.
+   */
+  stories?: number | null;
+  /** Attached garage area in SF. 0 or null means no attached garage. */
+  garageSqft?: number | null;
+  /** Unfinished basement area in SF, priced as shell only. */
+  basementSqft?: number | null;
+  /**
+   * Whether the parcel needs its own well and/or septic rather than connecting
+   * to city services. Rural Treasure Valley parcels routinely do, and it is one
+   * of the largest single swings in a new-build budget.
+   */
+  wellSeptic?: boolean | null;
+  /** Rough site difficulty. Flat serviced lots are "simple". */
+  siteDifficulty?: "simple" | "moderate" | "steep" | null;
+  /** Covered outdoor living area in SF (covered patio, deck under roof). */
+  coveredOutdoorSqft?: number | null;
 }
 
 /* ------------------------------------------------------- derived dimensions */
@@ -66,6 +89,64 @@ export interface Dimensions {
   /** SF of wall + ceiling, which is what drywall and paint actually cover. */
   wallAndCeilingArea: number;
   ceilingHeight: number;
+
+  /**
+   * Whole-house quantities, present only for new-construction projects (see
+   * deriveHouseDimensions). A remodel rule must never read these; a
+   * new-construction rule should use these in preference to the room fields,
+   * because the room fields treat the entire house as one large room.
+   */
+  house?: HouseDimensions;
+}
+
+/**
+ * Quantities a whole-house takeoff needs.
+ *
+ * The critical difference from room geometry: a two-storey home puts half its
+ * finished area on the ground, so the footprint, and with it the excavation,
+ * footings, slab and roof, is halved. Deriving these from total finished area as
+ * if the house were a single room overstates the foundation and roof by 100%
+ * on a two-storey plan.
+ */
+export interface HouseDimensions {
+  /** Finished living area, all storeys, SF. */
+  finishedArea: number;
+  /** Ground-floor footprint of living space, SF. */
+  footprint: number;
+  /** Footprint including an attached garage, which shares the foundation. */
+  foundationArea: number;
+  /** LF around the foundation. */
+  foundationPerimeter: number;
+  /** SF of exterior wall, all storeys. */
+  exteriorWallArea: number;
+  /** SF of glazing. */
+  windowArea: number;
+  /** SF of siding, stone and trim: exterior wall less glazing. */
+  cladArea: number;
+  /** SF of roof surface, allowing for pitch and overhang. */
+  roofArea: number;
+  /**
+   * SF of board a house of this size actually hangs: ceilings, both faces of
+   * partitions, inner face of exterior walls. Reported in the takeoff for
+   * context. NOT a pricing basis - the catalog's drywall rate is a
+   * per-finished-square-foot whole-dwelling average, so pricing against this
+   * surface area overstates drywall roughly threefold.
+   */
+  drywallArea: number;
+  /** LF of baseboard, casing and window trim. */
+  trimLf: number;
+  /** Interior door leaves, including closets. */
+  interiorDoors: number;
+  /** Bathrooms implied by the size of the home. */
+  bathrooms: number;
+  /** LF of kitchen cabinet run. */
+  kitchenCabinetLf: number;
+  /** LF of countertop. */
+  countertopLf: number;
+  garageSqft: number;
+  basementSqft: number;
+  coveredOutdoorSqft: number;
+  stories: number;
 }
 
 /**
@@ -91,6 +172,94 @@ export function deriveDimensions(sqft: number, ceilingHeight = DEFAULT_CEILING_H
     wallArea,
     wallAndCeilingArea: wallArea + sqft,
     ceilingHeight,
+  };
+}
+
+/* -------------------------------------------- whole-house geometry constants */
+
+/**
+ * Houses are longer than they are deep, more so than a single room. 1.6:1 is
+ * typical of Treasure Valley production and semi-custom plans.
+ */
+const HOUSE_ASPECT_RATIO = 1.6;
+
+/** Plate height per storey in new construction. 9ft main floors are standard now. */
+const STOREY_HEIGHT = 9;
+
+/**
+ * Roof surface against footprint. A 6:12 pitch is 1.118 by geometry; overhangs,
+ * hips and valleys add roughly another 12%.
+ */
+const ROOF_PITCH_FACTOR = 1.25;
+
+/**
+ * Drywall against finished floor area. Covers ceilings, both faces of interior
+ * partitions and the inner face of exterior walls. 3.5 is the long-standing
+ * residential takeoff multiplier; 4.0 suits tall or heavily partitioned plans.
+ */
+const DRYWALL_MULTIPLIER = 3.5;
+
+/** Window-to-wall ratio. 15% is a normal residential fenestration ratio. */
+const GLAZING_RATIO = 0.15;
+
+/** Baseboard, casing and window trim, in LF per SF of finished area. */
+const TRIM_LF_PER_SF = 0.35;
+
+/** One interior door leaf, including closets, per this many SF of finished area. */
+const SF_PER_INTERIOR_DOOR = 180;
+
+/** One bathroom per this many SF of finished area, clamped to a sane range. */
+const SF_PER_BATHROOM = 900;
+
+/**
+ * Derive a whole-house takeoff geometry from what a buyer can actually tell us.
+ *
+ * Every multiplier is a named constant above rather than an inline number, so a
+ * disagreement about, say, how much drywall a house carries is a one-line change
+ * with a stated rationale rather than an archaeology exercise.
+ */
+export function deriveHouseDimensions(s: ScopeSelections): HouseDimensions {
+  const finishedArea = Math.max(1, s.sqft);
+  const stories = Math.max(1, Math.round(s.stories ?? 1));
+  const garageSqft = Math.max(0, s.garageSqft ?? 0);
+  const basementSqft = Math.max(0, s.basementSqft ?? 0);
+  const coveredOutdoorSqft = Math.max(0, s.coveredOutdoorSqft ?? 0);
+
+  const footprint = finishedArea / stories;
+  const foundationArea = footprint + garageSqft;
+
+  const long = Math.sqrt(foundationArea * HOUSE_ASPECT_RATIO);
+  const short = Math.sqrt(foundationArea / HOUSE_ASPECT_RATIO);
+  const foundationPerimeter = 2 * (long + short);
+
+  // Only the living space is storeys tall; the garage is single-storey, so its
+  // share of the perimeter carries one storey of wall rather than two.
+  const livingPerimeterShare = foundationArea > 0 ? footprint / foundationArea : 1;
+  const exteriorWallArea =
+    foundationPerimeter * STOREY_HEIGHT * (livingPerimeterShare * stories + (1 - livingPerimeterShare));
+
+  const windowArea = exteriorWallArea * GLAZING_RATIO;
+
+  return {
+    finishedArea,
+    footprint,
+    foundationArea,
+    foundationPerimeter,
+    exteriorWallArea,
+    windowArea,
+    cladArea: exteriorWallArea - windowArea,
+    roofArea: foundationArea * ROOF_PITCH_FACTOR,
+    drywallArea: finishedArea * DRYWALL_MULTIPLIER,
+    trimLf: finishedArea * TRIM_LF_PER_SF,
+    interiorDoors: Math.max(6, Math.round(finishedArea / SF_PER_INTERIOR_DOOR)),
+    bathrooms: Math.min(5, Math.max(1, Math.round(finishedArea / SF_PER_BATHROOM))),
+    // A kitchen does not grow linearly with the house; it widens somewhat.
+    kitchenCabinetLf: 22 + Math.min(14, Math.max(0, (finishedArea - 1800) / 250)),
+    countertopLf: (22 + Math.min(14, Math.max(0, (finishedArea - 1800) / 250))) * 0.8,
+    garageSqft,
+    basementSqft,
+    coveredOutdoorSqft,
+    stories,
   };
 }
 
@@ -380,6 +549,17 @@ function resolveCodes(code: string): LineItem[] {
  * rules both pull drywall, the larger quantity wins and a warning is recorded.
  * Silently adding them is how a scope graph double charges.
  */
+/**
+ * Projects that are a whole new dwelling built from bare ground, and therefore
+ * take whole-house geometry rather than room geometry.
+ */
+export const NEW_CONSTRUCTION_PROJECTS = new Set([
+  "custom-home",
+  "semi-custom-home",
+  "build-on-your-lot",
+  "shop-home",
+]);
+
 export function buildInternalEstimate(
   rules: ScopeRule[],
   selections: ScopeSelections,
@@ -393,7 +573,11 @@ export function buildInternalEstimate(
   // the quoted range never moved when the visitor changed the count.
   const instances =
     project === "bathroom" ? Math.max(1, selections.bathroomCount ?? 1) : 1;
-  const dims = deriveDimensions(selections.sqft, selections.ceilingHeight);
+  const isNewBuild = project ? NEW_CONSTRUCTION_PROJECTS.has(project) : false;
+  const dims: Dimensions = {
+    ...deriveDimensions(selections.sqft, selections.ceilingHeight ?? (isNewBuild ? STOREY_HEIGHT : undefined)),
+    ...(isNewBuild ? { house: deriveHouseDimensions(selections) } : {}),
+  };
   const warnings: EstimateWarning[] = [];
   const assumptions: string[] = [];
   if (instances > 1) {

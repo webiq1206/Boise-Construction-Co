@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { Providers } from '@/components/Providers'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import { SITE_TAGLINE } from '@/shared/siteContent'
+import { SITE_CONFIG } from '@/shared/siteConfig'
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
 import { MetaPixel } from '@/components/MetaPixel'
 import { MicrosoftClarity } from '@/components/MicrosoftClarity'
@@ -29,23 +30,23 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Boise Remodeling Co | Treasure Valley Design-Build',
-    template: '%s | Boise Remodeling Co',
+    default: `${SITE_CONFIG.name} | Treasure Valley Home Builder`,
+    template: `%s | ${SITE_CONFIG.name}`,
   },
-  description: `Design-build remodeling for Boise, Meridian, Eagle, Nampa & the Treasure Valley. Clear expectations and budget guidance. Schedule a free in-home consultation.`,
+  description: `Design-build home builder for Boise, Meridian, Eagle, Nampa & the Treasure Valley. Custom homes, semi-custom homes, and builds on your lot, with a line-item budget before we break ground. Book a free planning consultation.`,
   manifest: '/site.webmanifest',
   // Feed discovery for readers, aggregators, and AI/answer-engine crawlers.
   alternates: {
     types: {
       'application/rss+xml': [
-        { url: '/feed.xml', title: 'Boise Remodeling Co | Remodeling Guides and Insights' },
+        { url: '/feed.xml', title: `${SITE_CONFIG.name} | Home Building Guides and Insights` },
       ],
     },
   },
-  authors: [{ name: 'Boise Remodeling Co' }],
-  creator: 'Boise Remodeling Co',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://boiseremodeling.co'),
-  // Favicon set built from the Maker's Seal (boise-remodeling-co-seal-dark).
+  authors: [{ name: SITE_CONFIG.name }],
+  creator: SITE_CONFIG.name,
+  metadataBase: new URL(SITE_CONFIG.siteUrl),
+  // Favicon set built from the Maker's Seal (boise-construction-co-seal-dark).
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
@@ -59,15 +60,15 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: '/',
-    siteName: 'Boise Remodeling Co',
-    title: 'Boise Remodeling Co | Treasure Valley Design-Build',
-    description: `${SITE_TAGLINE}. Kitchen, bathroom, whole-home, and addition remodeling across the Treasure Valley.`,
-    images: [{ url: '/images/og-default.png', width: 1200, height: 630, alt: 'Boise Remodeling Co' }],
+    siteName: SITE_CONFIG.name,
+    title: `${SITE_CONFIG.name} | Treasure Valley Home Builder`,
+    description: `${SITE_TAGLINE}. Custom homes, semi-custom homes, build-on-your-lot, and design-build across the Treasure Valley.`,
+    images: [{ url: '/images/og-default.png', width: 1200, height: 630, alt: SITE_CONFIG.name }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Boise Remodeling Co | Treasure Valley Design-Build',
-    description: `${SITE_TAGLINE}. Design-build remodeling for Boise and the Treasure Valley.`,
+    title: `${SITE_CONFIG.name} | Treasure Valley Home Builder`,
+    description: `${SITE_TAGLINE}. Design-build home building for Boise and the Treasure Valley.`,
     images: ['/images/og-default.png'],
   },
   robots: {

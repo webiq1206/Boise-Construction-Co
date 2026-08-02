@@ -3,6 +3,7 @@ import { CITIES, SERVICES } from "@/shared/contentData";
 import { SITE_TAGLINE } from "@/shared/siteContent";
 import { areaPath, servicePath } from "@/lib/seo-routes";
 import { SITE_CONFIG } from "@/shared/siteConfig";
+import { GBP_SOCIAL } from "@/shared/gbpProfile";
 import { EmailLink } from "@/components/EmailLink";
 import { BusinessPhoneContact } from "@/components/BusinessPhoneContact";
 import { FooterCTAs } from "@/components/modals/FooterCTAs";
@@ -26,18 +27,19 @@ export function Footer() {
                   corners so its dark ground reads as a seamless medallion on
                   the dark footer band */}
               <img
-                src="/brand/icons/boise-remodeling-co-seal-dark.svg"
+                src="/brand/icons/boise-construction-co-seal-dark.svg"
                 alt=""
                 aria-hidden="true"
                 width={56}
                 height={56}
                 className="h-14 w-14 shrink-0 rounded-full"
               />
-              {/* Reverse (white) primary logo with tagline */}
+              {/* Reverse (white) primary logo with tagline. Intrinsic size is
+                  1671x420, so 45px tall renders 179px wide. */}
               <img
-                src="/brand/logos/boise-remodeling-co-logo-primary-reverse.svg"
-                alt="Boise Remodeling Co"
-                width={168}
+                src="/brand/logos/boise-construction-co-logo-primary-reverse.svg"
+                alt={SITE_CONFIG.name}
+                width={179}
                 height={45}
                 className="h-[45px] w-auto"
               />
@@ -65,7 +67,7 @@ export function Footer() {
               </p>
               <div className="flex gap-4 pt-2">
                 <a
-                  href="https://www.facebook.com/boiseremodeling"
+                  href={GBP_SOCIAL.facebook}
                   className="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -73,7 +75,7 @@ export function Footer() {
                   Facebook
                 </a>
                 <a
-                  href="https://www.instagram.com/boiseremodeling"
+                  href={GBP_SOCIAL.instagram}
                   className="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -112,7 +114,7 @@ export function Footer() {
                   href="/guides"
                   className="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
                 >
-                  Remodeling Guides
+                  Home Building Guides
                 </Link>
               </li>
               <li>
@@ -281,7 +283,7 @@ export function Footer() {
 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs text-inverse-muted">
           <div className="flex flex-wrap gap-4">
-            <span>&copy; {currentYear} Boise Remodeling Co. All rights reserved.</span>
+            <span>&copy; {currentYear} {SITE_CONFIG.name}. All rights reserved.</span>
             <span>License details available upon request</span>
           </div>
           <div className="flex gap-4">

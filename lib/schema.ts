@@ -57,7 +57,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     '@type': 'GeneralContractor',
     name: BUSINESS_INFO.name,
     legalName: BUSINESS_INFO.legalName,
-    description: `Design-build remodeling contractor serving ${city || 'Boise'} and the Treasure Valley, Idaho. Kitchen remodels, bathrooms, additions & whole-home renovations.`,
+    description: `Design-build home builder serving ${city || 'Boise'} and the Treasure Valley, Idaho. Custom homes, semi-custom homes, build-on-your-lot, and shop homes.`,
     image: `${baseUrl}/images/hero-great-room.webp`,
     logo: LOGO_URL,
     '@id': LOCALBUSINESS_ID,
@@ -101,12 +101,12 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
         }
       : {}),
     foundingDate: BUSINESS_INFO.founded,
-    slogan: 'Boise\'s Design-Build Remodeling Company',
+    slogan: 'Boise\'s Design-Build Home Builder',
     paymentAccepted: 'Cash, Credit Card, Check, Financing',
     currenciesAccepted: 'USD',
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
-      name: 'Remodeling Services',
+      name: 'Home Building Services',
       itemListElement: SERVICES.map((s) => ({
         '@type': 'Offer',
         url: `${baseUrl}/services/${s.slug}`,
@@ -132,7 +132,7 @@ export function generateWebSiteSchema(): SchemaContext {
     name: BUSINESS_INFO.name,
     url: baseUrl,
     description:
-      'Design-build remodeling contractor serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and the Treasure Valley, Idaho.',
+      'Design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and the Treasure Valley, Idaho.',
     publisher: { '@id': ORG_ID },
     // NOTE: SearchAction intentionally omitted. The previous target
     // (/blog?q={search_term_string}) had no search handler, which advertised a
@@ -215,7 +215,7 @@ export function generateOrganizationSchema(): SchemaContext {
       '@type': 'ImageObject',
       url: LOGO_URL,
     },
-    description: 'Design-build remodeling contractor serving the Treasure Valley since 2020. Kitchen remodels, bathrooms, additions, and whole-home renovations. Licensed, insured, and committed to excellence.',
+    description: 'Design-build home builder serving the Treasure Valley since 2020. Custom homes, semi-custom homes, builds on client-owned land, and shop homes. Bonded, insured, and committed to line-item budgets before construction.',
     foundingDate: BUSINESS_INFO.founded,
     // founder is gated: only emitted once a real named founder is supplied in
     // BUSINESS_INFO.founderName (see seo-audit/trust-signal-map.md).
@@ -238,12 +238,15 @@ export function generateOrganizationSchema(): SchemaContext {
       addressCountry: BUSINESS_INFO.address.country,
     },
     knowsAbout: [
-      'kitchen remodeling',
-      'bathroom remodeling',
-      'whole-home renovation',
-      'room additions',
-      'accessory dwelling units',
+      'custom home building',
+      'semi-custom home building',
+      'build on your lot',
       'design-build construction',
+      'residential home design',
+      'lot evaluation and feasibility',
+      'shop homes and barndominiums',
+      'energy-efficient home construction',
+      'construction-to-permanent financing',
       'Ada County building permits',
       'Canyon County building permits',
     ],
@@ -494,7 +497,7 @@ export function generateHomePageSchemaGraph(
       stripSchemaContext(
         generateSpeakableSchema({
           path: '/',
-          name: 'Boise Remodeling Co, Design-Build Remodeling in the Treasure Valley',
+          name: 'Boise Construction Co, Design-Build Home Builder in the Treasure Valley',
         }),
       ),
     ],

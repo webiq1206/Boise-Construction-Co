@@ -37,11 +37,11 @@ export function BudgetInclusionsSection() {
             size="display"
             title={
               <>
-                Clear guidance on what to{" "}
-                <em className="brc-accent">expect</em>
+                What your number actually{" "}
+                <em className="brc-accent">covers</em>
               </>
             }
-            description="Planning ranges upfront, a written scope before construction, and standard inclusions on every project, so you always know where things stand."
+            description="A planning range upfront, a line-item budget before we break ground, and the same standard inclusions on every home, so you always know where things stand."
             className="mb-0"
           />
 
@@ -64,7 +64,7 @@ export function BudgetInclusionsSection() {
             <Reveal delay={60}>
               <div className="md:border-l md:border-inverse-foreground/15 md:pl-16">
                 <h3 className="font-sans font-normal text-sm mb-5 text-inverse-foreground">
-                  Included on every project
+                  Included on every home we build
                 </h3>
                 <ul className="space-y-3 mb-10">
                   {STANDARD_INCLUSIONS.map((item) => (

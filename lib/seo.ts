@@ -1,5 +1,5 @@
 /**
- * SEO Utilities for Boise Remodeling Co
+ * SEO Utilities for Boise Construction Co
  * Generates optimized meta tags, titles, and descriptions
  * for service and location pages
  */
@@ -57,71 +57,74 @@ function truncateServiceName(serviceName: string, maxLength: number): string {
   return shortened;
 }
 
+/** Brand suffix used in title budgeting; read from config so it stays in sync. */
+const BRAND = SITE_CONFIG.name;
+
 /**
  * Generate SEO-optimized page title
- * Format: "[Service] in [City], ID | Boise Remodeling Co | Free Quotes"
+ * Format: "[Service] in [City], ID | Boise Construction Co | Free Quotes"
  * Max 60 characters for optimal Google display
  * GUARANTEED ≤60 chars through intelligent truncation
  */
 export function generatePageTitle(params: ServiceSEOParams): string {
   const { serviceName, city, isHomePage } = params;
-  
+
   if (isHomePage) {
-    return "Boise Remodeling Co | Remodeling & Design";
+    return `${BRAND} | Custom Home Builder`;
   }
-  
+
   if (city && serviceName) {
-    // Full formula: "[Service] in [City], ID | Boise Remodeling Co | Free Quotes"
-    const fullTitle = `${serviceName} in ${city}, ID | Boise Remodeling Co | Free Quotes`;
-    
+    // Full formula: "[Service] in [City], ID | Boise Construction Co | Free Quotes"
+    const fullTitle = `${serviceName} in ${city}, ID | ${BRAND} | Free Quotes`;
+
     if (fullTitle.length <= 60) {
       return fullTitle;
     }
-    
+
     // Level 2: Drop "Free Quotes"
-    const mediumTitle = `${serviceName} in ${city}, ID | Boise Remodeling Co`;
+    const mediumTitle = `${serviceName} in ${city}, ID | ${BRAND}`;
     if (mediumTitle.length <= 60) {
       return mediumTitle;
     }
-    
+
     // Level 3: Shorten brand
-    const shortTitle = `${serviceName} in ${city}, ID | Remodeling`;
+    const shortTitle = `${serviceName} in ${city}, ID | Home Builder`;
     if (shortTitle.length <= 60) {
       return shortTitle;
     }
-    
-    const maxServiceLength = 60 - ` in ${city}, ID | Remodeling`.length;
+
+    const maxServiceLength = 60 - ` in ${city}, ID | Home Builder`.length;
     const truncatedService = truncateServiceName(serviceName, maxServiceLength);
-    return `${truncatedService} in ${city}, ID | Remodeling`;
+    return `${truncatedService} in ${city}, ID | Home Builder`;
   }
-  
+
   if (city) {
-    const fullTitle = `Remodeling in ${city}, ID | Boise Remodeling Co`;
+    const fullTitle = `Home Builder in ${city}, ID | ${BRAND}`;
     if (fullTitle.length <= 60) {
       return fullTitle;
     }
-    return `Remodeling Contractor ${city}, ID`;
+    return `Home Builder in ${city}, ID`;
   }
-  
+
   // Service-only title (defaults to Kuna as home base)
   if (!serviceName) {
-    return "Boise Remodeling Co | Remodeling & Design";
+    return `${BRAND} | Custom Home Builder`;
   }
-  
-  const fullTitle = `${serviceName} | Boise Remodeling Co | Free Quotes`;
+
+  const fullTitle = `${serviceName} | ${BRAND} | Free Quotes`;
   if (fullTitle.length <= 60) {
     return fullTitle;
   }
-  
-  const mediumTitle = `${serviceName} | Boise Remodeling Co`;
+
+  const mediumTitle = `${serviceName} | ${BRAND}`;
   if (mediumTitle.length <= 60) {
     return mediumTitle;
   }
-  
+
   // Truncate service name intelligently
-  const maxServiceLength = 60 - ' | Boise Remodeling Co'.length;
+  const maxServiceLength = 60 - ` | ${BRAND}`.length;
   const truncatedService = truncateServiceName(serviceName, maxServiceLength);
-  return `${truncatedService} | Boise Remodeling Co`;
+  return `${truncatedService} | ${BRAND}`;
 }
 
 const CITY_DESCRIPTION_VARIANTS: Record<string, string> = {
@@ -136,14 +139,14 @@ const CITY_DESCRIPTION_VARIANTS: Record<string, string> = {
 };
 
 const CITY_CTA_VARIANTS: Record<string, string> = {
-  Kuna: "Free in-home consultation",
+  Kuna: "Free planning consultation",
   Boise: "Treasure Valley design-build",
-  Meridian: "Licensed & insured",
-  Eagle: "Clear written scope",
-  Star: "Weekly project updates",
-  Middleton: "Workmanship guarantee",
+  Meridian: "Bonded & insured",
+  Eagle: "Line-item budget upfront",
+  Star: "Weekly written updates",
+  Middleton: "Workmanship warranty",
   Nampa: "Ada & Canyon County permits",
-  Caldwell: "Design-build remodeling",
+  Caldwell: "Design-build home building",
 };
 
 /**
@@ -156,39 +159,67 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
   const phone = SITE_CONFIG.phone;
   
   if (params.isHomePage) {
-    return `Design-build remodeling contractor serving Boise, Meridian, Eagle & the Treasure Valley. Licensed, insured, top-rated. Call ${phone} for your free consultation!`;
+    return `Design-build home builder serving Boise, Meridian, Eagle & the Treasure Valley. Bonded, insured, line-item budgets. Call ${phone} for a free planning consultation!`;
   }
   
   if (city && serviceName) {
     const serviceLC = serviceName.toLowerCase();
     const cityVariant = CITY_DESCRIPTION_VARIANTS[city] || `${city}'s trusted`;
     const ctaVariant = CITY_CTA_VARIANTS[city] || "Satisfaction guaranteed";
-    return `${cityVariant} ${serviceLC} team. Licensed & insured. ${ctaVariant}. Call ${phone} for a free consultation!`;
+    return `${cityVariant} ${serviceLC} team. Bonded & insured. ${ctaVariant}. Call ${phone} for a free consultation!`;
   }
   
   if (city) {
-    return `Remodeling contractor in ${city}, Idaho. Licensed, insured & locally owned. Call ${phone} for a free in-home consultation in ${city}!`;
+    return `Home builder in ${city}, Idaho. Bonded, insured & locally owned. Call ${phone} for a free planning consultation in ${city}!`;
   }
   
   if (!serviceName) {
-    return `Professional remodeling contractor in Boise & Treasure Valley. Licensed, insured. Call ${phone} for a free consultation. Residential design-build services!`;
+    return `New home builder in Boise & the Treasure Valley. Bonded, insured, design-build. Call ${phone} for a free planning consultation and a realistic budget band!`;
   }
   
   const serviceLC = serviceName.toLowerCase();
-  return `Expert ${serviceLC} in Boise & the Treasure Valley. Licensed, insured & satisfaction guaranteed. Call ${phone} for a free consultation!`;
+  return `${serviceLC} in Boise & the Treasure Valley. Bonded, insured, with a line-item budget before we build. Call ${phone} for a free consultation!`;
 }
 
 /**
  * Generate varied city-service title (used for page metadata title field)
- * Does NOT include brand name since layout template appends "| Boise Remodeling Co"
- * Target: under 40 chars so final rendered title stays under 60 chars
+ * Does NOT include brand name since layout template appends "| Boise Construction Co"
+ * Target: under 36 chars so final rendered title stays under 60 chars
  */
+
+/**
+ * Shorter display names for the longest services, used only when the full name
+ * would push a city-service title past the budget. Keyed by the `name` values
+ * in shared/contentData.ts.
+ */
+const SERVICE_SHORT_NAMES: Record<string, string> = {
+  'Custom Home Building': 'Custom Homes',
+  'Lot Evaluation & Feasibility': 'Lot Evaluation',
+  'Shop Homes & Barndominiums': 'Shop Homes',
+  'Home Design & Plans': 'Home Plans',
+  'Energy-Efficient Homes': 'Efficient Homes',
+};
+
+/** Budget after the layout template appends " | Boise Construction Co" (24). */
+const CITY_SERVICE_TITLE_BUDGET = 36;
+
 export function generateCityServiceTitle(serviceName: string, cityName: string): string {
-  const short = `${serviceName} in ${cityName}, Idaho`;
-  if (short.length <= 40) {
-    return short;
-  }
-  return `${serviceName} in ${cityName}, ID`;
+  const short = SERVICE_SHORT_NAMES[serviceName] ?? serviceName;
+
+  // Degrade in steps rather than truncating mid-word: full name with "Idaho",
+  // then the short name, then the "ID" abbreviation. Every service/city pair in
+  // the current matrix resolves at one of these levels.
+  const candidates = [
+    `${serviceName} in ${cityName}, Idaho`,
+    `${short} in ${cityName}, Idaho`,
+    `${short} in ${cityName}, ID`,
+    `${short}, ${cityName}`,
+  ];
+
+  return (
+    candidates.find((c) => c.length <= CITY_SERVICE_TITLE_BUDGET) ??
+    candidates[candidates.length - 1]
+  );
 }
 
 /**
@@ -207,28 +238,28 @@ export function generateCityServiceDescription(
   const neighborhood = cityData?.neighborhoods?.[0];
 
   if (neighborhood) {
-    const withNeighborhood = `${cityVariant} ${serviceLC}. Serving ${neighborhood} & all ${cityName}. Licensed & insured. Call ${phone}!`;
+    const withNeighborhood = `${cityVariant} ${serviceLC}. Serving ${neighborhood} & all ${cityName}. Bonded & insured. Call ${phone}!`;
     if (withNeighborhood.length <= 160) return withNeighborhood;
   }
 
   if (shortDescription) {
-    const desc = `${cityVariant} ${serviceLC}. ${shortDescription}. Licensed & insured. Call ${phone}!`;
+    const desc = `${cityVariant} ${serviceLC}. ${shortDescription}. Bonded & insured. Call ${phone}!`;
     if (desc.length <= 160) return desc;
   }
 
-  const base = `${cityVariant} ${serviceLC} in ${cityName}, ID. Licensed & insured. Call ${phone} for a free quote!`;
+  const base = `${cityVariant} ${serviceLC} in ${cityName}, ID. Bonded & insured. Call ${phone} for a free consultation!`;
   if (base.length <= 160) return base;
 
-  return `${serviceLC} in ${cityName}, ID. Licensed & insured pros. Call ${phone} for a free quote today!`;
+  return `${serviceLC} in ${cityName}, ID. Bonded & insured builder. Call ${phone} for a free consultation!`;
 }
 
 /**
  * Generate a page title for any service or area page
- * Ensures final rendered title (with layout template " | Boise Remodeling Co")
+ * Ensures final rendered title (with layout template " | Boise Construction Co")
  * stays under 60 characters
  */
 export function generateSafePageTitle(primary: string, suffix?: string): string {
-  const templateSuffix = " | Boise Remodeling Co";
+  const templateSuffix = ` | ${BRAND}`;
   const maxLen = 60 - templateSuffix.length;
 
   if (suffix) {
@@ -249,7 +280,7 @@ export function generateSafePageTitle(primary: string, suffix?: string): string 
   }
 
   // A word-boundary cut can still land on a dangling connector, producing
-  // titles like "Aging-in-Place Remodeling in the". Drop trailing connectors so
+  // titles like "Energy-Efficient Homes in the". Drop trailing connectors so
   // an overflowing title degrades to a clean phrase instead of a broken one.
   const DANGLING = new Set(['in', 'the', 'a', 'an', 'of', 'for', 'and', '&', 'to', 'at', 'on', 'with']);
   let cleaned = truncated.trim();
@@ -294,7 +325,7 @@ export function getBaseUrl(): string {
     }
   }
   // Default to production URL for SSR/build time
-  return 'https://boiseremodeling.co';
+  return SITE_CONFIG.siteUrl;
 }
 
 /**
@@ -305,26 +336,26 @@ export function generateLogoAltTag(params: ServiceSEOParams): string {
   const { serviceName, city, isHomePage } = params;
   
   if (isHomePage) {
-    return "Boise Remodeling Co logo - Design-build remodeling contractor in Boise, Idaho";
+    return `${BRAND} logo - Design-build home builder in Boise, Idaho`;
   }
   
   if (city && serviceName) {
     // City-specific alt tag with service context
-    return `Boise Remodeling Co logo - ${serviceName} services in ${city} Idaho - Licensed remodeling professionals`;
+    return `${BRAND} logo - ${serviceName} in ${city} Idaho - Bonded and insured home builder`;
   }
   
   if (city) {
     // City page alt tag without service
-    return `Boise Remodeling Co logo - Professional remodeling services in ${city} Idaho`;
+    return `${BRAND} logo - New home construction in ${city} Idaho`;
   }
   
   if (!serviceName) {
     // Fallback for pages without service
-    return `Boise Remodeling Co logo - Design-build remodeling contractor serving the Treasure Valley, Idaho`;
+    return `${BRAND} logo - Design-build home builder serving the Treasure Valley, Idaho`;
   }
   
   // Service-specific alt tag
-  return `Boise Remodeling Co logo - Professional ${serviceName.toLowerCase()} services in Treasure Valley Idaho`;
+  return `${BRAND} logo - ${serviceName.toLowerCase()} in the Treasure Valley, Idaho`;
 }
 
 /**
@@ -452,7 +483,7 @@ export const CITY_SEO_DATA: Record<string, {
 export const BUSINESS_INFO = {
   name: SITE_CONFIG.name,
   legalName: SITE_CONFIG.legalName,
-  alternateName: ['Boise Remodeling', 'BRC'],
+  alternateName: ['Boise Construction', 'BCC'],
   /**
    * No named individual is published on the site by request. Left empty so the
    * Organization schema omits the `founder` Person entity (the emit is gated on
@@ -483,8 +514,11 @@ export const BUSINESS_INFO = {
   serviceArea: ['Boise', 'Meridian', 'Eagle', 'Nampa', 'Kuna', 'Star', 'Middleton', 'Caldwell'],
   serviceRadius: '35 miles',
   licenses: ['License details available upon request'],
-  certifications: ['Design-Build Remodeling', 'Bonded & Insured'],
-  insurance: 'Fully Licensed & Insured',
+  certifications: ['Design-Build Home Building', 'Bonded & Insured'],
+  // Kept consistent with GBP and the `licenses` field above: the business
+  // publishes bonded/insured status and provides registration details on
+  // request, so nothing here should assert a specific license.
+  insurance: 'Bonded & Insured',
   rating: 0,
   reviewCount: 0,
   yearlyServicesCompleted: 0,

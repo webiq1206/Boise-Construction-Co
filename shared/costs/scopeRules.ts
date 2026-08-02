@@ -19,10 +19,18 @@
  * area. Every factor is named, defaulted to 1, and justified where it is not.
  */
 import type { Dimensions, ScopeRule, ScopeSelections } from "./engine";
+import {
+  BUILD_ON_YOUR_LOT_RULES,
+  CUSTOM_HOME_RULES,
+  SEMI_CUSTOM_HOME_RULES,
+} from "./newConstructionRules";
 
 /* ------------------------------------------------------ shared derivations */
 
 export const BASELINE_SQFT: Record<string, number> = {
+  "custom-home": 2400,
+  "semi-custom-home": 2200,
+  "build-on-your-lot": 2400,
   kitchen: 250,
   bathroom: 80,
   "whole-home": 1800,
@@ -887,6 +895,12 @@ export const BASEMENT_RULES: ScopeRule[] = [
 ];
 
 export const RULES_BY_PROJECT: Record<string, ScopeRule[]> = {
+  // New residential construction. These live in their own module because a
+  // ground-up home shares almost no scope logic with a remodel; see the header
+  // of newConstructionRules.ts for why, and for the per-SF basis trap.
+  "custom-home": CUSTOM_HOME_RULES,
+  "semi-custom-home": SEMI_CUSTOM_HOME_RULES,
+  "build-on-your-lot": BUILD_ON_YOUR_LOT_RULES,
   kitchen: KITCHEN_RULES,
   bathroom: BATHROOM_RULES,
   "whole-home": WHOLE_HOME_RULES,

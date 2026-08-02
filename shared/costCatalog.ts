@@ -131,7 +131,7 @@ const SOFT_COSTS: ComponentDef[] = [
     share: 0.05,
     quantity: { kind: "lot" },
     group: "soft",
-    note: "Held for conditions found once walls are open. Unused contingency is not spent.",
+    note: "Held for conditions found once work is underway. Unused contingency is not spent.",
   },
   {
     id: "overhead-profit",
@@ -149,7 +149,47 @@ const SOFT_COSTS: ComponentDef[] = [
  * ratios: a 250 sq ft kitchen yields about 28 linear feet of cabinet, 52 sq ft
  * of countertop, and 6 recessed cans, which is what an estimator would carry.
  */
+/*
+ * NEW CONSTRUCTION COMPONENTS.
+ *
+ * Shares are the trade distribution the line-item takeoff actually produces for
+ * a mid-range custom home (see the rollup printed by verify:new-construction),
+ * regrouped into the headings a buyer recognises rather than the catalog's own
+ * divisions. Framing and foundation genuinely dominate a new build at about a
+ * quarter of direct cost between them, which is the clearest structural
+ * difference from a remodel, where cabinetry and tile lead.
+ *
+ * Design, permits, project management and contingency are deliberately absent:
+ * they are in SOFT_COSTS and adding them here would double count.
+ *
+ * These must sum to exactly 0.72. verify:estimate asserts the breakdown sums
+ * back to the quoted price on every project, finish and size.
+ */
+const NEW_HOME_COMPONENTS: ComponentDef[] = [
+  { id: "framing", label: "Framing, trusses and structure", unit: "square foot", share: 0.11, quantity: { kind: "per-sqft", factor: 1.0 }, group: "direct", note: "Lumber, engineered beams, trusses and the crew to stand it all up." },
+  { id: "foundation", label: "Excavation and foundation", unit: "square foot", share: 0.085, quantity: { kind: "per-sqft", factor: 1.0 }, group: "direct", note: "Site cut, footings, stem walls, slab, waterproofing and a passive radon system." },
+  { id: "drywall-paint", label: "Drywall and paint", unit: "square foot", share: 0.055, quantity: { kind: "per-sqft", factor: 1.0 }, group: "direct", note: "Hung, taped, textured and painted throughout." },
+  { id: "cabinetry-countertops", label: "Cabinetry and countertops", unit: "linear foot", share: 0.05, quantity: { kind: "per-sqft", factor: 0.02 }, group: "direct", note: "Kitchen, vanities and countertops, fabricated and installed." },
+  { id: "site-work", label: "Site work and utilities", unit: "allowance", share: 0.045, quantity: { kind: "lot" }, group: "direct", note: "Staking, grading, erosion control and permanent water, sewer, gas and power." },
+  { id: "exterior-finishes", label: "Siding, stone and exterior trim", unit: "square foot", share: 0.045, quantity: { kind: "per-sqft", factor: 1.1 }, group: "direct", note: "The elevation: siding, stone or brick, soffit, fascia and gutters." },
+  { id: "flooring-tile", label: "Flooring and tile", unit: "square foot", share: 0.04, quantity: { kind: "per-sqft", factor: 1.0 }, group: "direct", note: "Hardwood, tile, carpet and vinyl plank, in the mix your specification calls for." },
+  { id: "plumbing", label: "Plumbing", unit: "allowance", share: 0.035, quantity: { kind: "lot" }, group: "direct", note: "Rough-in, water heater, gas lines, fixtures and trim." },
+  { id: "electrical", label: "Electrical", unit: "allowance", share: 0.035, quantity: { kind: "lot" }, group: "direct", note: "Panel, rough-in, devices, data and every light fixture." },
+  { id: "roofing", label: "Roofing", unit: "square foot", share: 0.03, quantity: { kind: "per-sqft", factor: 1.25 }, group: "direct", note: "Underlayment, shingles or metal, flashing and venting." },
+  { id: "windows-doors", label: "Windows and exterior doors", unit: "each", share: 0.03, quantity: { kind: "per-sqft-count", divisor: 140 }, group: "direct", note: "Windows, patio sliders, the front door and the garage service door." },
+  { id: "hvac", label: "Heating and cooling", unit: "allowance", share: 0.03, quantity: { kind: "lot" }, group: "direct", note: "Furnace, air conditioning, ducting, bath fans and the range hood run." },
+  { id: "interior-trim", label: "Interior doors, trim and millwork", unit: "linear foot", share: 0.03, quantity: { kind: "per-sqft", factor: 0.35 }, group: "direct", note: "Doors, casing, baseboard, stair railing and closet systems." },
+  { id: "fixtures-hardware", label: "Fixtures, hardware and glass", unit: "allowance", share: 0.025, quantity: { kind: "lot" }, group: "direct", note: "Door hardware, bath hardware, shower glass and mirrors." },
+  { id: "insulation", label: "Insulation and air sealing", unit: "square foot", share: 0.02, quantity: { kind: "per-sqft", factor: 1.8 }, group: "direct", note: "Walls, attic and rim joists, sealed to pass a blower-door test." },
+  { id: "flatwork", label: "Driveway, walks and garage slab", unit: "square foot", share: 0.02, quantity: { kind: "per-sqft", factor: 0.4 }, group: "direct", note: "Approach, driveway, front walk and porch flatwork." },
+  { id: "landscape", label: "Front-yard landscaping", unit: "allowance", share: 0.02, quantity: { kind: "lot" }, group: "direct", note: "Topsoil, sod, irrigation and plantings to the front. Rear yard is quoted separately." },
+  { id: "final-clean", label: "Fit, finish and final clean", unit: "square foot", share: 0.015, quantity: { kind: "per-sqft", factor: 1.0 }, group: "direct", note: "Punch list, touch-up, detail and a construction clean before you walk it." },
+];
+
 const DIRECT_COMPONENTS: Record<ProjectType, ComponentDef[]> = {
+  "custom-home": NEW_HOME_COMPONENTS,
+  "semi-custom-home": NEW_HOME_COMPONENTS,
+  "build-on-your-lot": NEW_HOME_COMPONENTS,
   kitchen: [
     { id: "cabinetry", label: "Cabinetry", unit: "linear foot", share: 0.24, quantity: { kind: "per-sqft", factor: 0.11 }, group: "direct", note: "Boxes, doors, drawers, and installation." },
     { id: "countertops", label: "Countertops", unit: "square foot", share: 0.09, quantity: { kind: "per-sqft", factor: 0.21 }, group: "direct", note: "Material, fabrication, templating, and install." },

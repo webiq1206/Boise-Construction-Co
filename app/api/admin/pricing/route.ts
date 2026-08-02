@@ -35,7 +35,15 @@ import {
 
 export const UNIT_COST_SETTINGS_KEY = "pricing.unitCostOverrides";
 
+/*
+ * Admin pricing covers new construction first, since that is what the company
+ * sells, and keeps the remodel types below it because RE-10 repair work and
+ * legacy leads still price against them.
+ */
 const PROJECTS: ProjectType[] = [
+  "custom-home",
+  "semi-custom-home",
+  "build-on-your-lot",
   "kitchen",
   "bathroom",
   "whole-home",

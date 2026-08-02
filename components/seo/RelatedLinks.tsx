@@ -9,14 +9,15 @@ interface RelatedLinksProps {
   variant: 'service' | 'area' | 'city-service';
 }
 
-/** Map each service to the pillar guide it should link "up" to. */
-const SERVICE_GUIDE: Record<string, { href: string; label: string }> = {
-  'kitchen-remodel': { href: '/guides/boise-kitchen-remodeling-guide', label: 'Boise Kitchen Remodeling Guide' },
-  'bathroom-remodel': { href: '/guides/boise-bathroom-remodeling-guide', label: 'Boise Bathroom Remodeling Guide' },
-  'whole-home-remodel': { href: '/guides/whole-home-remodeling-guide', label: 'Whole-Home Remodeling Guide' },
-  'room-addition': { href: '/guides/boise-home-addition-guide', label: 'Boise Home Addition Guide' },
-  adu: { href: '/guides/boise-home-addition-guide', label: 'Boise Home Addition Guide' },
-};
+/**
+ * Map each service to the pillar guide it should link "up" to.
+ *
+ * Intentionally empty until the new-construction pillar guides are published.
+ * The old entries pointed at remodeling guides, and relabelling those as home
+ * building guides would misdescribe what a reader lands on. Services fall back
+ * to the generic guide below until their real pillar exists.
+ */
+const SERVICE_GUIDE: Record<string, { href: string; label: string }> = {};
 
 /**
  * Shared cross-link block rendered on every landing page. Links "up" to the most
@@ -25,11 +26,13 @@ const SERVICE_GUIDE: Record<string, { href: string; label: string }> = {
  */
 function ExploreFurther({ serviceSlug }: { serviceSlug?: string }) {
   const guide = serviceSlug ? SERVICE_GUIDE[serviceSlug] : undefined;
+  // Guide hrefs still resolve to the legacy guide slugs; they are relabelled
+  // and repointed together during the guide migration so no link dangles.
   const links: { href: string; label: string }[] = [
-    guide ?? { href: '/guides/treasure-valley-remodeling-guide', label: 'Treasure Valley Remodeling Guide' },
-    { href: '/testimonials', label: 'See recent projects & homeowner reviews' },
-    { href: '/resources', label: 'Free remodel planning worksheets' },
-    { href: '/guides/boise-remodeling-cost-guide', label: 'Boise Remodeling Cost Guide' },
+    guide ?? { href: '/guides/treasure-valley-remodeling-guide', label: 'Treasure Valley Building Guide' },
+    { href: '/services', label: 'Compare how we build' },
+    { href: '/resources', label: 'Free home building planning worksheets' },
+    { href: '/estimate', label: 'Estimate your build cost' },
   ];
   return (
     <div className="border-t border-border pt-8">
@@ -81,7 +84,7 @@ export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksPro
       <div className="space-y-10">
         <div>
           <h2 className="font-sans font-light text-section-title mb-6 text-foreground">
-            Remodeling services in {city?.name}
+            Home building services in {city?.name}
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {SERVICES.map((service) => (

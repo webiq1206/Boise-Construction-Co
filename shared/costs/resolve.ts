@@ -19,7 +19,7 @@ import { buildInternalEstimate, type QualityLevel, type ScopeSelections } from "
 import { buildPlanningRange } from "./pricing";
 import { buildAdminView } from "./outputs";
 import { RULES_BY_PROJECT } from "./scopeRules";
-import type { ProjectType } from "../estimateEngine";
+import { GARAGE_BAY_SQFT, type GarageBays, type ProjectType } from "../estimateEngine";
 
 /** The refinement shape both the calculator and the API routes hold. */
 export interface ResolverRefinements {
@@ -30,6 +30,13 @@ export interface ResolverRefinements {
   bathroomCount?: number | null;
   kitchenIncluded?: boolean | null;
   upgradeScope?: string[] | null;
+  /* New construction. */
+  stories?: number | null;
+  garageBays?: unknown;
+  basementType?: unknown;
+  lotServices?: unknown;
+  siteDifficulty?: unknown;
+  coveredOutdoor?: number | null;
 }
 
 function toSelections(
@@ -37,9 +44,23 @@ function toSelections(
   sqft: number,
   refinements: ResolverRefinements,
 ): ScopeSelections {
+  const basementType = refinements.basementType as "none" | "unfinished" | "finished" | null;
+  /*
+   * A FINISHED basement is living space, so its area belongs in finished area and
+   * is priced at the full interior specification. An UNFINISHED basement is shell
+   * only: concrete, framing and a rough-in, at a fraction of the cost. Folding
+   * the two together would either charge shell rates for living space or living
+   * rates for a bare shell.
+   */
+  const basementSqft =
+    basementType === "unfinished" || basementType === "finished"
+      ? // A basement follows the ground-floor footprint.
+        sqft / Math.max(1, Math.round(refinements.stories ?? 1))
+      : 0;
+
   return {
     quality: finish as QualityLevel,
-    sqft,
+    sqft: basementType === "finished" ? sqft + basementSqft : sqft,
     layoutChanges: (refinements.layoutChanges ?? null) as ScopeSelections["layoutChanges"],
     plumbingElectrical: (refinements.plumbingElectrical ?? null) as ScopeSelections["plumbingElectrical"],
     cabinetTier: (refinements.cabinetTier ?? null) as ScopeSelections["cabinetTier"],
@@ -48,6 +69,21 @@ function toSelections(
     kitchenIncluded: refinements.kitchenIncluded ?? null,
     upgradeScope: refinements.upgradeScope ?? null,
     // The company does not sell or install appliances; see APPLIANCE_DISCLAIMER.
+
+    stories: refinements.stories ?? null,
+    garageSqft:
+      refinements.garageBays == null
+        ? null
+        : (GARAGE_BAY_SQFT[refinements.garageBays as GarageBays] ?? null),
+    // Only an unfinished basement is carried as basement shell area; a finished
+    // one has already been added to finished area above.
+    basementSqft: basementType === "unfinished" ? basementSqft : 0,
+    // "unsure" is treated as city services rather than assuming the expensive
+    // case: quoting a well and septic to someone who does not need one loses the
+    // lead, and the consultation resolves it before anything is committed.
+    wellSeptic: refinements.lotServices === "well-septic",
+    siteDifficulty: (refinements.siteDifficulty ?? null) as ScopeSelections["siteDifficulty"],
+    coveredOutdoorSqft: refinements.coveredOutdoor ?? null,
   };
 }
 

@@ -24,12 +24,13 @@ const NAV_LINKS = [
 
 function Logo() {
   return (
-    <Link href="/" className="flex items-center" aria-label="Boise Remodeling Co - home">
-      {/* Reverse (white) wordmark for the dark ground */}
+    <Link href="/" className="flex items-center" aria-label={`${SITE_CONFIG.name} - home`}>
+      {/* Reverse (white) wordmark for the dark ground. Intrinsic size is
+          1817x200, so 26px tall renders 236px wide. */}
       <img
-        src="/brand/logos/boise-remodeling-co-wordmark-reverse.svg"
-        alt="Boise Remodeling Co"
-        width={216}
+        src="/brand/logos/boise-construction-co-wordmark-reverse.svg"
+        alt={SITE_CONFIG.name}
+        width={236}
         height={26}
         className="h-[26px] w-auto"
       />

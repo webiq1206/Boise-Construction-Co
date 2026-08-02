@@ -35,589 +35,663 @@ export interface ServiceSEOContent {
   costGuidance?: { heading: string; paragraphs: string[] };
 }
 
+/**
+ * Cost figures below are 2026 Treasure Valley planning ranges for new
+ * residential construction, quoted per finished square foot and excluding land
+ * unless stated. They are anchored to the local market range of roughly $225
+ * to $400 per square foot and must stay consistent with the estimator engine
+ * and the pillar cost guides.
+ */
 export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
-  'kitchen-remodel': {
-    slug: 'kitchen-remodel',
-    name: 'Kitchen Remodel',
-    headline: 'Kitchen Remodeling in the Treasure Valley',
-    primaryKeyword: 'kitchen remodeling boise idaho',
+  'custom-home-builder': {
+    slug: 'custom-home-builder',
+    name: 'Custom Home Building',
+    headline: 'Custom Home Builder in the Treasure Valley',
+    primaryKeyword: 'custom home builder boise idaho',
     overview:
-      'A well-planned kitchen remodel improves how your family cooks, gathers, and moves through the home. Boise Remodeling Co handles design, permitting, and construction under one roof so layout, cabinetry, lighting, and finishes stay aligned from first visit to final walkthrough.',
+      'A custom home starts from a blank page rather than a catalog. Boise Construction Co handles feasibility, design, engineering, permitting, and construction under one contract, so the drawings, the budget, and the schedule stay tied together from the first sketch to the day you get the keys.',
     benefits: [
-      'Single design-build team, no juggling separate designers and contractors',
-      'Written scope and finish selections before construction begins',
-      'Ada and Canyon County permits handled in-house',
-      'Weekly written schedule updates every Friday',
+      'One team and one contract from feasibility through final walkthrough',
+      'Line-item budget you can see, not a single lump-sum number',
+      'Allowance amounts set from real local pricing, not placeholder figures',
+      'Written weekly schedule and cost updates for the life of the build',
     ],
     inclusions: [
-      'Layout planning and design direction',
-      'Cabinetry, countertops, and backsplash coordination',
-      'Lighting and electrical updates as needed',
-      'Plumbing adjustments for sinks and fixtures',
-      'Dust barriers, floor protection, and daily cleanup',
+      'Site and soils review before design begins',
+      'Architectural design, structural engineering, and permit-ready drawings',
+      'Ada or Canyon County plan review, permits, and impact fees',
+      'Full construction with a dedicated project manager on your build',
+      'Blower-door test, final inspections, and a written workmanship warranty',
     ],
-    timeline: 'Most kitchen remodels run 6 to 10 weeks from permit approval, depending on layout changes and custom lead times.',
+    timeline:
+      'Plan on 10 to 14 months end to end: roughly 3 to 5 months for design, engineering, and permitting, then 7 to 10 months of construction depending on size and site complexity.',
     processSteps: [
-      { title: 'In-home consultation', description: 'We walk your space, discuss goals, and share a planning range on the spot.' },
-      { title: 'Design and scope', description: 'You receive selections guidance and a written scope with your project investment.' },
-      { title: 'Permits and scheduling', description: 'We file permits and build a week-by-week schedule before demo day.' },
-      { title: 'Construction and walkthrough', description: 'Our crew executes the plan; you receive a final walkthrough and workmanship guarantee.' },
+      {
+        title: 'Planning consultation',
+        description: 'We talk through your lot, your program, and a realistic budget band before anyone draws anything.',
+      },
+      {
+        title: 'Feasibility and site review',
+        description: 'Soils, utilities, access, setbacks, and slope get checked so the design suits the ground it sits on.',
+      },
+      {
+        title: 'Design and fixed scope',
+        description: 'Drawings, selections, and a line-item budget are locked together before we submit for permit.',
+      },
+      {
+        title: 'Build and handover',
+        description: 'Weekly updates through construction, then testing, walkthrough, and your warranty documents.',
+      },
     ],
     faqs: [
       {
-        question: 'How much does a kitchen remodel cost in the Treasure Valley?',
+        question: 'How much does it cost to build a custom home in Boise?',
         answer:
-          'Investment depends on size, layout changes, and finish level. Use our project estimator for a planning range, then schedule a free in-home visit for a written scope tailored to your home.',
+          'Most Treasure Valley custom homes plan between $250 and $400 per finished square foot in 2026, excluding land. A 2,400 square foot custom home commonly lands between $600,000 and $960,000. Foothills lots and highly detailed designs run above that range.',
       },
       {
-        question: 'Can I use my kitchen during the remodel?',
+        question: 'How long does it take to build a custom home in the Treasure Valley?',
         answer:
-          'For many projects, yes with temporary setups. We install dust barriers and protect adjacent rooms. We will be honest about timeline impacts during your consultation.',
+          'Budget 10 to 14 months from the start of design to move-in. Design, engineering, and permitting take 3 to 5 months, and construction runs 7 to 10 months. Plan review timelines in Ada and Canyon County are the most common source of delay.',
       },
       {
-        question: 'Do you handle permits for kitchen remodels?',
+        question: 'Do I need to own land before I contact a builder?',
         answer:
-          'Yes. Permits are included and managed in-house for Ada and Canyon County jurisdictions.',
+          'No, and it is often better if you have not bought yet. We review candidate lots for soils, utilities, access, and setback constraints before you commit, because the parcel drives a large share of the final budget.',
       },
       {
-        question: 'How long does a kitchen remodel take in Boise?',
+        question: 'What is not included in a per-square-foot price?',
         answer:
-          'Most kitchen remodels run 6 to 10 weeks of construction after permit approval. Cabinet lead times can add several weeks before demo, so design lock is the real schedule driver.',
+          'Per-square-foot figures cover vertical construction. Land, site work, well and septic on rural parcels, impact fees, landscaping, fencing, and window coverings sit outside that number. We itemize each one so nothing surfaces late.',
       },
       {
-        question: 'Do I need a permit to remodel a kitchen in Idaho?',
+        question: 'How do you handle budget changes during construction?',
         answer:
-          'Cosmetic updates like paint and counters usually do not. Layout changes, new circuits, moved plumbing, or structural work require permits through Ada or Canyon County. We confirm the permit path during your consultation and handle submissions in-house.',
+          'Every change is priced and approved in writing before the work happens. You see the running cost against the original line-item budget in your weekly update, so there is no reconciliation surprise at the end.',
       },
       {
-        question: 'Should I move walls or keep my existing kitchen layout?',
+        question: 'Do you build on rural acreage outside city limits?',
         answer:
-          'Keeping plumbing and walls in place saves meaningful budget. We recommend layout changes only when they solve a real problem, like isolation from the living space or unworkable traffic flow, and we price both paths so you can decide.',
+          'Yes. Rural parcels in Ada and Canyon County usually need a well, a septic system permitted through Central District Health, and sometimes private road or power extension. That work commonly adds $80,000 to $150,000 before a foundation is poured, so we price it during feasibility.',
       },
       {
-        question: 'Do you supply appliances?',
+        question: 'Can I supply my own plans?',
         answer:
-          'Appliances are client-supplied. We guide selection, coordinate rough-in dimensions, and schedule around delivery, but we do not purchase or install appliances.',
-      },
-      {
-        question: 'What kitchen upgrades add the most resale value in the Treasure Valley?',
-        answer:
-          'Mid-range kitchen updates aligned with your neighborhood comps deliver the most reliable return: quality cabinetry, quartz counters, and improved lighting. Over-improving beyond your street rarely pays back at sale.',
+          'Yes. We will review them for constructability, code compliance, and cost, then tell you plainly where the drawings and your budget disagree before we contract to build.',
       },
     ],
     costGuidance: {
-      heading: 'Kitchen remodel cost in the Treasure Valley',
+      heading: 'Custom home building cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, most Treasure Valley kitchen remodels plan between $37,000 and $47,000 for mid-range scope: new cabinetry, quartz or granite counters, tile backsplash, and updated plumbing and electrical. Cosmetic refreshes run $16,000 to $21,000, while full gut renovations with layout changes, custom cabinetry, and premium finishes commonly run $85,000 to $166,000.',
-        'These are planning ranges, not bids. Size, layout changes, and finish level drive the final number, which we confirm with a written scope after your free in-home visit.',
+        'As of 2026, most Treasure Valley custom homes plan between $250 and $400 per finished square foot excluding land, which puts a 2,400 square foot home between $600,000 and $960,000. Simpler single-level designs on flat valley lots can come in near $225 per square foot, while foothills sites, steep grades, and highly detailed interiors regularly exceed $450.',
+        'These are planning ranges, not bids. Lot conditions, home size, roof and wall complexity, and finish level drive the final number, which we confirm with a line-item budget after a lot walkthrough.',
       ],
     },
   },
-  'bathroom-remodel': {
-    slug: 'bathroom-remodel',
-    name: 'Bathroom Remodel',
-    headline: 'Bathroom Remodeling in the Treasure Valley',
-    primaryKeyword: 'bathroom remodeling boise idaho',
+
+  'semi-custom-homes': {
+    slug: 'semi-custom-homes',
+    name: 'Semi-Custom Homes',
+    headline: 'Semi-Custom Home Building in the Treasure Valley',
+    primaryKeyword: 'semi custom home builder boise idaho',
     overview:
-      'Bathroom remodels should feel calm, functional, and built to last. We design primary baths, guest baths, and powder rooms with clear expectations, proactive communication, and finishes chosen for Idaho homes.',
+      'A semi-custom home starts from a floor plan that has already been drawn, engineered, and built, then adapts it to your lot and your selections. You give up some layout freedom and get back a shorter timeline, a narrower budget range, and far fewer decisions.',
     benefits: [
-      'Design-build accountability from layout through tile and fixtures',
-      'Waterproofing and plumbing scope defined in writing',
-      'Transparent project investment, no surprise line-item games',
-      'Written workmanship guarantee on our labor',
+      'Proven plans with known costs, so the budget band is tighter from day one',
+      'Two to four months shorter than an equivalent fully custom build',
+      'Structural engineering already complete on the base plan',
+      'Curated finish packages that keep selections from stalling the schedule',
     ],
     inclusions: [
-      'Vanity, shower, and tub planning',
-      'Tile, flooring, and fixture selections guidance',
-      'Ventilation and lighting improvements',
-      'Plumbing and electrical updates as scoped',
-      'Daily protection of adjacent living spaces',
+      'Plan selection and adaptation to your lot and orientation',
+      'Structural updates required by your site and snow or wind loads',
+      'Permit-ready drawing set and county submission',
+      'Finish package selection with fixed allowance amounts',
+      'Full construction, final inspections, and written workmanship warranty',
     ],
-    timeline: 'Typical bathroom remodels complete in 3 to 5 weeks after permits, depending on custom materials and layout changes.',
+    timeline:
+      'Most semi-custom homes run 7 to 10 months total: 6 to 10 weeks for plan adaptation and permitting, then 6 to 8 months of construction.',
     processSteps: [
-      { title: 'Consultation', description: 'We assess your bath, discuss storage and accessibility needs, and outline a planning range.' },
-      { title: 'Selections and scope', description: 'Finishes and fixtures are documented before demolition.' },
-      { title: 'Build', description: 'Licensed trades coordinate waterproofing, tile, and trim with weekly updates.' },
-      { title: 'Final walkthrough', description: 'We review every detail with you before sign-off.' },
+      {
+        title: 'Plan and lot match',
+        description: 'We walk your lot and identify which base plans actually fit the setbacks, slope, and views.',
+      },
+      {
+        title: 'Adaptation and pricing',
+        description: 'Structural and layout changes are drawn and priced against a fixed base, so you see what each change costs.',
+      },
+      {
+        title: 'Selections',
+        description: 'You choose from finish packages with real allowance figures rather than open-ended placeholders.',
+      },
+      {
+        title: 'Build and handover',
+        description: 'Construction on a published schedule, then inspections, walkthrough, and warranty documents.',
+      },
     ],
     faqs: [
       {
-        question: 'How long does a bathroom remodel take?',
-        answer: 'Most projects run 3 to 5 weeks from permit approval. Larger primary baths with layout changes may take longer.',
-      },
-      {
-        question: 'Can you remodel a bathroom without moving plumbing?',
-        answer: 'Yes. Cosmetic and mid-scope updates can keep existing plumbing locations. We will recommend layout changes only when they add real value.',
-      },
-      {
-        question: 'Do you work in both Ada and Canyon County?',
-        answer: 'Yes. We serve Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and surrounding Treasure Valley communities.',
-      },
-      {
-        question: 'How much does a bathroom remodel cost in Boise?',
+        question: 'How much does a semi-custom home cost in the Treasure Valley?',
         answer:
-          'Guest and hall bath remodels often plan $18,000 to $45,000; primary baths with curbless showers, double vanities, or layout changes commonly run $35,000 to $85,000 or more. Your written scope confirms the number after an in-home visit.',
+          'Semi-custom homes generally plan between $225 and $300 per finished square foot in 2026, excluding land. A 2,000 square foot home commonly lands between $450,000 and $600,000.',
       },
       {
-        question: 'Do I need a permit for a bathroom remodel in Idaho?',
+        question: 'What is the difference between semi-custom and fully custom?',
         answer:
-          'Like-for-like fixture swaps usually do not require permits. Moving plumbing, adding circuits, changing layout, or altering structure does. We confirm the permit path for your address and handle Ada or Canyon County submissions in-house.',
+          'Semi-custom starts from an existing engineered plan and modifies it. Fully custom starts from a blank page. Semi-custom is faster and the budget band is narrower; fully custom gives you complete control over layout and massing.',
       },
       {
-        question: 'What is a curbless shower and is it worth it?',
+        question: 'How much can I change a semi-custom plan?',
         answer:
-          'A curbless shower has no step or threshold, which looks cleaner and works for aging-in-place. It requires recessing the floor and careful waterproofing and slope, so it is easiest to plan during a full remodel rather than as a retrofit.',
+          'Finishes, cabinetry, elevations, and non-structural walls are straightforward. Moving load-bearing walls, changing the roof structure, or altering the foundation footprint triggers re-engineering, and at that point a custom design is often the better value.',
       },
       {
-        question: 'How do you prevent water damage and mold in a remodeled bathroom?',
+        question: 'Is a semi-custom home lower quality than a custom home?',
         answer:
-          'Waterproofing membrane systems behind tile, correct shower slope, and properly sized ventilation are all defined in the written scope and inspected during construction. Ventilation matters in our dry climate more than most homeowners expect.',
+          'No. The framing, envelope, mechanical systems, and workmanship standards are identical. The difference is how much of the design work has already been done.',
       },
       {
-        question: 'Can you make a bathroom work for aging in place without looking clinical?',
+        question: 'Can a semi-custom plan work on a sloped or irregular lot?',
         answer:
-          'Yes. Curbless entries, blocking for future grab bars, comfort-height vanities, and slip-resistant tile can be designed into a bathroom that looks like a spa, not a hospital.',
+          'Sometimes, with a daylight basement or a revised foundation. We check this during the lot match step, because forcing an unsuitable plan onto a difficult site erases the cost advantage that made it appealing.',
+      },
+      {
+        question: 'How long does a semi-custom home take to build?',
+        answer:
+          'Typically 7 to 10 months from contract to move-in, compared with 10 to 14 months for a fully custom home of similar size.',
       },
     ],
     costGuidance: {
-      heading: 'Bathroom remodel cost in the Treasure Valley',
+      heading: 'Semi-custom home cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, guest bathroom remodels in the Boise area typically plan $18,000 to $45,000. Primary bathroom remodels with walk-in or curbless showers, double vanities, and tile work commonly plan $35,000 to $85,000 or more depending on layout changes and finish level.',
-        'These are planning ranges, not bids. Waterproofing scope, plumbing relocations, and fixture selections drive the final number, which we confirm in a written scope after your free in-home visit.',
+        'As of 2026, semi-custom homes in the Treasure Valley plan between $225 and $300 per finished square foot excluding land, putting a 2,000 square foot home between $450,000 and $600,000. The savings against a fully custom build come from design and engineering work that is already complete, not from cheaper construction.',
+        'These are planning ranges, not bids. Lot conditions, plan modifications, and finish level move the number, which we confirm with a line-item budget once a plan and lot are matched.',
       ],
     },
   },
-  'whole-home-remodel': {
-    slug: 'whole-home-remodel',
-    name: 'Whole-Home Remodel',
-    headline: 'Whole-Home Remodeling in the Treasure Valley',
-    primaryKeyword: 'whole home remodeling boise idaho',
+
+  'build-on-your-lot': {
+    slug: 'build-on-your-lot',
+    name: 'Build on Your Lot',
+    headline: 'Build on Your Lot in the Treasure Valley',
+    primaryKeyword: 'build on your lot boise idaho',
     overview:
-      'Whole-home remodeling brings multiple rooms into one cohesive plan, open concepts, updated systems, new finishes, and better flow. Our design-build approach keeps one team accountable across phases so your home feels intentional, not piecemeal.',
+      'You already own the land, whether it is family acreage, an infill parcel, or a lot in a master-planned community. Boise Construction Co takes it from there: feasibility, design that suits the ground, permits, and construction, with the site constraints priced before you commit to a plan.',
     benefits: [
-      'Phased scheduling to balance livability and progress',
-      'Unified design language across rooms',
-      'Single point of contact for scope, budget, and schedule',
-      'Experience with Treasure Valley homes from ranchers to new construction',
+      'Site constraints identified and priced before design money is spent',
+      'Design shaped around your existing parcel, views, and orientation',
+      'Well, septic, and utility extension scoped up front on rural land',
+      'HOA and architectural committee submissions handled for you',
     ],
     inclusions: [
-      'Whole-home planning and prioritization',
-      'Structural and layout changes as scoped',
-      'Flooring, paint, and trim packages',
-      'Kitchen and bath updates within the master plan',
-      'Permit coordination across trades',
+      'Soils, utility, access, and setback review on your parcel',
+      'Site plan, grading, and drainage design',
+      'Architectural design and permit-ready drawings',
+      'County or city permits, impact fees, and HOA design approval',
+      'Full construction with a dedicated project manager',
     ],
-    timeline: 'Whole-home renovations typically run 3 to 6 months depending on scope, phasing, and permit timelines.',
+    timeline:
+      'Plan on 9 to 13 months end to end. Serviced lots inside city limits move fastest; rural parcels needing a well, septic approval, or power extension add 6 to 12 weeks before construction can start.',
     processSteps: [
-      { title: 'Discovery', description: 'We map goals room by room and identify must-haves vs. nice-to-haves.' },
-      { title: 'Master scope', description: 'A written plan sequences work to minimize disruption.' },
-      { title: 'Phased construction', description: 'Trades follow an agreed schedule with Friday written updates.' },
-      { title: 'Completion', description: 'Final walkthrough covers every space in the scope.' },
+      {
+        title: 'Lot walkthrough',
+        description: 'We walk the parcel with you and flag what will drive cost: slope, soils, access, and utility distance.',
+      },
+      {
+        title: 'Feasibility report',
+        description: 'You get a written summary of site work, utility, and permitting costs before committing to a design.',
+      },
+      {
+        title: 'Design and permits',
+        description: 'Drawings tuned to the lot, then submission to the county, city, and any HOA committee.',
+      },
+      {
+        title: 'Build and handover',
+        description: 'Construction on a published schedule, then inspections, walkthrough, and warranty documents.',
+      },
     ],
     faqs: [
       {
-        question: 'Can we live in the home during a whole-home remodel?',
+        question: 'What does it cost to build on land I already own?',
         answer:
-          'Sometimes yes, sometimes no. We will give you an honest assessment based on HVAC, electrical, and dust exposure during your consultation.',
+          'Vertical construction plans between $225 and $400 per finished square foot in 2026. Site work is separate and varies enormously: a serviced lot in a Meridian subdivision might need $25,000 to $50,000, while rural acreage requiring a well, septic, and access can run $80,000 to $150,000.',
       },
       {
-        question: 'How do you keep a large project on budget?',
+        question: 'How do I know if my lot is actually buildable?',
         answer:
-          'Written scope, documented selections, and change orders for any additional work, all approved before we proceed.',
+          'Buildability comes down to soils, utility access, legal access, setbacks, slope, and floodplain status. We review all six before design begins, and we will tell you if a parcel is not worth building on.',
       },
       {
-        question: 'Is design-build better than hiring separate contractors?',
+        question: 'Do I need a well and septic on rural Ada or Canyon County land?',
         answer:
-          'For multi-room work, design-build reduces coordination risk and keeps design intent intact through construction.',
+          'If municipal water and sewer are not at the property line, yes. Septic systems are permitted through Central District Health and wells through the Idaho Department of Water Resources. Together they commonly add $35,000 to $70,000, more if the well has to go deep.',
       },
       {
-        question: 'How much does a whole-home remodel cost in the Treasure Valley?',
+        question: 'Can you build in a subdivision with an HOA?',
         answer:
-          'Whole-home programs commonly plan $180,000 to $425,000 or more depending on square footage, structural changes, and finish level. Phasing can spread the investment; a written master scope keeps phases cohesive.',
+          'Yes. Master-planned communities in Meridian, Eagle, Star, and Kuna typically have architectural committees governing elevations, materials, and colors. We prepare and submit those packages as part of the design phase.',
       },
       {
-        question: 'Should I remodel everything at once or in phases?',
+        question: 'What if my lot has a slope?',
         answer:
-          'One mobilization is usually cheaper and faster overall, but phasing can fit cash flow and livability. We price both approaches against one master plan so finishes and systems stay consistent either way.',
+          'Slope is not a problem, it is a design input. A daylight basement can turn grade change into usable square footage at a lower cost per foot than above-grade space. Steep sites do require engineered foundations and retaining, which we price during feasibility.',
       },
       {
-        question: 'How long does a whole-home remodel take?',
+        question: 'Can you help before I buy the land?',
         answer:
-          'Most run 3 to 6 months of construction; large structural programs can run longer. Design, engineering, and permits add 6 to 12 weeks before construction starts.',
-      },
-      {
-        question: 'Is it better to remodel or move in the Boise market?',
-        answer:
-          'Compare total cost of ownership: selling costs, moving costs, and current mortgage rates against the remodel investment. Many Treasure Valley homeowners with low locked-in rates find remodeling wins. We help you run that math honestly.',
-      },
-      {
-        question: 'Do older Boise homes have surprises behind the walls?',
-        answer:
-          'Pre-1990 homes, especially in the North End and on the Bench, often reveal wiring, plumbing, or framing conditions once drywall opens. We recommend holding a 10 to 15 percent contingency and we flag known risk areas during design.',
+          'Yes, and that is the better sequence. Our lot evaluation service reviews a parcel before purchase so you are not discovering a $90,000 access problem after closing.',
       },
     ],
     costGuidance: {
-      heading: 'Whole-home remodel cost in the Treasure Valley',
+      heading: 'Build on your lot cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, whole-home remodels in the Boise area commonly plan $180,000 to $425,000 or more, driven by square footage, structural and layout changes, and finish level. Per-square-foot planning shorthand runs roughly $40 to $236 depending on scope depth.',
-        'These are planning ranges, not bids. A written master scope after your free in-home visit defines the real number, and phasing options can spread the investment across stages.',
+        'As of 2026, vertical construction on an owned lot plans between $225 and $400 per finished square foot, and site work is budgeted separately. Serviced lots inside city limits commonly need $25,000 to $50,000 of site work, while rural parcels requiring a well, septic system, and access improvements run $80,000 to $150,000 before the foundation is poured.',
+        'These are planning ranges, not bids. Because the parcel drives so much of the number, we produce a written feasibility summary for your specific lot before design begins.',
       ],
     },
   },
-  'adu': {
-    slug: 'adu',
-    name: 'ADU / Guest House',
-    headline: 'ADU & Guest House Construction in the Treasure Valley',
-    primaryKeyword: 'adu construction boise idaho',
+
+  'design-build': {
+    slug: 'design-build',
+    name: 'Design-Build',
+    headline: 'Design-Build Home Construction in the Treasure Valley',
+    primaryKeyword: 'design build home builder boise idaho',
     overview:
-      'Accessory dwelling units add livable square footage, rental income potential, and long-term property value without leaving your lot. Boise Remodeling Co designs and builds detached and attached ADUs with full permit handling, structural planning, and interior finishes under one accountable design-build team.',
+      'Design-build puts the drawings and the construction under one contract. Instead of hiring an architect, bidding the finished plans, and discovering the design costs 40 percent more than you budgeted, the design is priced continuously as it develops.',
     benefits: [
-      'Single team from design through certificate of occupancy, no coordinating separate trades',
-      'Ada and Canyon County ADU permitting and setback requirements handled in-house',
-      'Rental-ready finish packages designed for durability and appeal',
-      'Exterior materials and rooflines planned to complement your existing home',
+      'Design priced as it develops, so the drawings never outrun the budget',
+      'One contract and one point of accountability instead of two',
+      'No re-drawing cycle after bids come back over budget',
+      'Constructability reviewed by the people who will actually build it',
     ],
     inclusions: [
-      'Site feasibility evaluation and setback review',
-      'Foundation, framing, and structural engineering',
-      'Plumbing, electrical, and HVAC for a fully self-contained unit',
-      'Kitchen and bath fit-out with finish selections guidance',
-      'Permit coordination and final inspection through certificate of occupancy',
+      'Programming and budget alignment before design begins',
+      'Architectural design with continuous cost feedback',
+      'Structural, mechanical, and energy compliance engineering',
+      'Permit submission and plan review management',
+      'Construction, inspections, and written workmanship warranty',
     ],
-    timeline: 'Most ADU projects run 4 to 7 months from design through certificate of occupancy, depending on unit size, site conditions, and permit timelines.',
+    timeline:
+      'Design-build projects generally run 10 to 14 months end to end. The design phase overlaps with permitting and long-lead ordering, which typically saves 4 to 8 weeks against a design-bid-build sequence.',
     processSteps: [
-      { title: 'Site visit and feasibility', description: 'We review your lot, setbacks, utility access, and HOA rules to confirm the ADU approach that works best.' },
-      { title: 'Design and engineering', description: 'Plans are drawn to meet code, match your property, and maximize livability within your investment target.' },
-      { title: 'Permitting and construction', description: 'We file permits and manage every trade from foundation through finish with weekly written updates.' },
-      { title: 'Inspections and closeout', description: 'Final inspections are coordinated and we walk through every detail before handoff.' },
+      {
+        title: 'Programming and budget',
+        description: 'We agree on the target budget and what the home has to do before a single line is drawn.',
+      },
+      {
+        title: 'Schematic design with live pricing',
+        description: 'Each design iteration comes back with a cost, so trade-offs are made with real numbers in hand.',
+      },
+      {
+        title: 'Documentation and permits',
+        description: 'Construction documents, engineering, and county submission, with long-lead items ordered in parallel.',
+      },
+      {
+        title: 'Build and handover',
+        description: 'Construction by the team that priced the design, then testing, walkthrough, and warranty.',
+      },
     ],
     faqs: [
       {
-        question: 'How much does an ADU cost in the Treasure Valley?',
+        question: 'What does design-build mean for a new home?',
         answer:
-          'ADU investment typically ranges from $120,000 to $350,000 depending on size, detached or attached configuration, and finish level. Use our project estimator for a planning range, then schedule a free in-home visit for a written scope.',
+          'Design and construction sit under one contract with one company. You have a single point of accountability, and the design is priced continuously rather than bid once it is finished.',
       },
       {
-        question: 'Do I need a permit for an ADU in Boise or Ada County?',
+        question: 'Is design-build cheaper than hiring an architect separately?',
         answer:
-          'Yes. ADUs require permits in all Treasure Valley jurisdictions. Requirements vary by city and lot. We handle permitting as part of our design-build scope and are current on local ADU ordinances.',
+          'Not automatically, but it removes the most expensive failure mode in home building: a completed design that comes in far over budget and has to be re-drawn. Continuous pricing catches that at the sketch stage instead of after construction documents.',
       },
       {
-        question: 'Can an ADU be rented out as a long-term or short-term rental?',
+        question: 'Do I lose design quality by not hiring an architect directly?',
         answer:
-          'In many cases yes, subject to local zoning and HOA rules. We can discuss what your city allows during your consultation so you can plan your unit accordingly.',
+          'No. Design-build teams include licensed design professionals. What changes is who holds the contract and whether cost feedback arrives during design or after it.',
       },
       {
-        question: 'How big can an ADU be in Boise?',
+        question: 'Can I bring my own architect into a design-build contract?',
         answer:
-          'Boise generally allows ADUs up to 900 square feet under its current zoning code, though setbacks and lot coverage on your specific lot often set the practical limit. We confirm the buildable envelope during feasibility.',
+          'Yes. We work alongside an owner-selected architect regularly, providing pricing during design so the drawings stay inside your budget.',
       },
       {
-        question: 'Is a garage conversion cheaper than building a detached ADU?',
+        question: 'How much does the design phase cost?',
         answer:
-          'Usually yes. Garage conversions reuse the existing foundation and shell, typically planning $90,000 to $180,000, versus $180,000 to $300,000+ for a detached new build. The tradeoff is losing garage storage and parking.',
+          'Design, engineering, and permit-ready documents typically run 5 to 12 percent of construction cost, which is roughly $9,000 to $35,000 for most Treasure Valley homes. On a design-build contract a portion of that credits toward construction.',
       },
       {
-        question: 'Does an ADU need separate utilities?',
+        question: 'What happens if the design comes in over budget anyway?',
         answer:
-          'It depends on the city and design. Many units share the main house\'s water and sewer with properly sized lines; electrical usually needs a panel evaluation. We resolve the utility strategy during design, before pricing is final.',
-      },
-      {
-        question: 'How long does an ADU take to build?',
-        answer:
-          'Plan 4 to 7 months from design through certificate of occupancy: 6 to 10 weeks of design and engineering, plan review that varies by jurisdiction, then 3 to 5 months of construction for a detached unit.',
-      },
-      {
-        question: 'Will an ADU increase my property value?',
-        answer:
-          'A permitted ADU adds appraisable square footage and rental income potential that Treasure Valley buyers increasingly search for. Unpermitted units do the opposite, creating disclosure and insurance problems at sale.',
+          'With live pricing it rarely gets far off, but when it does we present specific trade-offs with costs attached rather than asking you to cut blindly.',
       },
     ],
     costGuidance: {
-      heading: 'ADU cost in the Treasure Valley',
+      heading: 'Design-build cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, garage conversions in the Boise area typically plan $90,000 to $180,000. Attached ADUs and basement conversions plan $120,000 to $250,000, and detached new-build ADUs plan $180,000 to $300,000 or more depending on size, utility connections, and finish level.',
-        'These are planning ranges, not bids. Site conditions and utility strategy drive ADU budgets more than any other project type, which is why feasibility review comes first in our process.',
+        'As of 2026, design-build homes in the Treasure Valley plan between $250 and $400 per finished square foot excluding land. The design and engineering portion typically represents 5 to 12 percent of construction cost, or about $9,000 to $35,000 for a typical home, and is folded into a single contract rather than billed separately.',
+        'These are planning ranges, not bids. The advantage of design-build is that your number gets more precise at every design milestone instead of arriving all at once when drawings go out to bid.',
       ],
     },
   },
-  'room-addition': {
-    slug: 'room-addition',
-    name: 'Room Addition',
-    headline: 'Home Additions in the Treasure Valley',
-    primaryKeyword: 'home additions boise idaho',
+
+  'home-plans-design': {
+    slug: 'home-plans-design',
+    name: 'Home Design & Plans',
+    headline: 'Custom Home Design and Plans in the Treasure Valley',
+    primaryKeyword: 'custom home plans boise idaho',
     overview:
-      'Room additions expand living space without moving. We design attached additions, in-law suites, and bonus rooms that match your roof lines, foundation, and interior architecture, with permits and structural scope handled professionally.',
+      'Permit-ready drawings for a home designed around your actual lot. We produce architectural design, structural engineering, and the energy compliance documentation Ada and Canyon County require, whether or not you ultimately build with us.',
     benefits: [
-      'Structural and architectural planning before breaking ground',
-      'Exterior materials matched to your existing home',
-      'Clear permit path for Ada and Canyon County',
-      'Integrated HVAC and electrical planning',
+      'Drawings designed for your specific lot, orientation, and views',
+      'Structural engineering and energy compliance included in the set',
+      'Costed as it is drawn, so the design matches your budget',
+      'Plans you own outright and can build with any licensed contractor',
     ],
     inclusions: [
-      'Feasibility and site evaluation',
-      'Foundation and framing',
-      'Roof tie-in and exterior finish',
-      'Interior finish to match existing home',
-      'Permit and inspection coordination',
+      'Programming session and site measurement',
+      'Schematic floor plans and exterior elevations',
+      'Construction documents and building sections',
+      'Structural engineering and Idaho energy code compliance',
+      'Permit submission support for Ada or Canyon County',
     ],
-    timeline: 'Additions vary widely; many projects run 3 to 5 months from design through certificate of occupancy.',
+    timeline:
+      'A complete permit-ready set typically takes 8 to 16 weeks depending on home size and how quickly design decisions are made. County plan review adds a further 3 to 8 weeks.',
     processSteps: [
-      { title: 'Site visit', description: 'We review setbacks, access, and structural implications.' },
-      { title: 'Design and engineering', description: 'Plans address code, loads, and aesthetic match.' },
-      { title: 'Construction', description: 'Foundation through finish with weekly communication.' },
-      { title: 'Inspections and closeout', description: 'We coordinate final inspections and walkthrough.' },
+      {
+        title: 'Programming',
+        description: 'We document how you want to live in the home and what the budget will actually support.',
+      },
+      {
+        title: 'Schematic design',
+        description: 'Floor plans and elevations, revised with cost feedback at each round.',
+      },
+      {
+        title: 'Construction documents',
+        description: 'Full drawing set with structural engineering and energy compliance calculations.',
+      },
+      {
+        title: 'Permit submission',
+        description: 'We submit to the county or city and manage plan review comments through approval.',
+      },
     ],
     faqs: [
       {
-        question: 'Do I need a permit for a room addition in Idaho?',
-        answer: 'Yes. Additions require permits in Ada and Canyon County. We handle permitting as part of our scope.',
-      },
-      {
-        question: 'Will an addition match my existing home?',
-        answer: 'That is a core part of our design process, roof lines, siding, and interior trim are planned to blend, not bolt on.',
-      },
-      {
-        question: 'How do additions affect property taxes?',
-        answer: 'Added square footage may affect assessed value. We can discuss timing and scope during planning; consult your tax advisor for specifics.',
-      },
-      {
-        question: 'How much does a room addition cost in Boise?',
+        question: 'How much do custom home plans cost in Idaho?',
         answer:
-          'Most Treasure Valley additions plan $80,000 to $250,000 or more depending on size, foundation work, and whether bathrooms or kitchens are included. Second-story additions trend higher due to structural scope.',
+          'A permit-ready set with structural engineering typically runs 5 to 12 percent of construction cost, roughly $9,000 to $35,000 for most Treasure Valley homes. Small or simple homes sit at the low end; large or architecturally complex homes sit above it.',
       },
       {
-        question: 'How long does a room addition take?',
+        question: 'Do I own the plans when they are finished?',
         answer:
-          'Many additions run 3 to 5 months of construction after design and permits. Engineering and plan review add 6 to 12 weeks up front, and HOA design review in communities like Eagle can add more.',
+          'Yes. You own the drawings and can build them with any licensed contractor. We would like to be that contractor, but the plans are yours either way.',
       },
       {
-        question: 'Is a second-story addition possible on my home?',
+        question: 'Can I buy a stock plan online instead?',
         answer:
-          'It depends on your foundation and framing capacity, which an engineer evaluates during feasibility. When the structure allows it, building up preserves yard space that Treasure Valley lots often cannot spare.',
+          'You can, but stock plans are not drawn for your lot and almost always need Idaho-specific structural engineering, energy compliance, and a site-adapted foundation before a county will permit them. Factor that rework into the comparison.',
       },
       {
-        question: 'Can I stay in my home during an addition?',
+        question: 'What does a permit-ready set actually include?',
         answer:
-          'Usually yes. Most of the work happens outside the existing envelope until tie-in, and we sequence the breakthrough phase to minimize the days your living space is open.',
+          'Floor plans, exterior elevations, building sections, foundation and framing plans, electrical and mechanical layouts, structural engineering, and Idaho energy code compliance documentation.',
       },
       {
-        question: 'Addition or ADU - which adds more value?',
+        question: 'How long does county plan review take?',
         answer:
-          'An addition grows your main living space; an ADU creates a separate rentable unit. If income potential matters, compare both paths - we build each and will price your lot honestly in either direction.',
+          'Ada County and City of Boise residential review commonly runs 3 to 6 weeks; Canyon County jurisdictions are often similar. Revision cycles add time, which is why a complete first submission matters.',
+      },
+      {
+        question: 'Can you design for a lot I have not purchased yet?',
+        answer:
+          'We recommend completing a lot evaluation first. Setbacks, slope, soils, and utility locations all shape the design, and drawing before those are known usually means drawing twice.',
       },
     ],
     costGuidance: {
-      heading: 'Room addition cost in the Treasure Valley',
+      heading: 'Home design and plan cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, room additions in the Boise area commonly plan $80,000 to $250,000 or more. Single-room bump-outs sit at the lower end; primary suite additions with bathrooms and second-story additions with structural upgrades reach the upper end.',
-        'These are planning ranges, not bids. Foundation, roof tie-in, and whether plumbing is included drive addition budgets, which we confirm in a written scope after your free in-home visit.',
+        'As of 2026, a permit-ready custom home drawing set with structural engineering and energy compliance runs roughly $9,000 to $35,000 in the Treasure Valley, or about 5 to 12 percent of construction cost. Simple single-level homes sit near the bottom of that range and large or complex designs above it.',
+        'These are planning ranges, not bids. Home size, structural complexity, and the number of design revision rounds drive the final figure, which we fix in writing after a programming session.',
       ],
     },
   },
-  'basement-remodel': {
-    slug: 'basement-remodel',
-    name: 'Basement Remodeling',
-    headline: 'Basement Remodeling & Finishing in the Treasure Valley',
-    primaryKeyword: 'basement remodel boise',
+
+  'lot-evaluation': {
+    slug: 'lot-evaluation',
+    name: 'Lot Evaluation & Feasibility',
+    headline: 'Lot Evaluation and Site Feasibility in the Treasure Valley',
+    primaryKeyword: 'lot evaluation boise idaho',
     overview:
-      'A finished basement is the most cost-effective way to add livable square footage in the Treasure Valley, turning an unused lower level into a family room, guest suite, home office, gym, or income-generating apartment. Boise Remodeling Co handles the full basement remodel under one design-build team: egress, framing, insulation, moisture control, mechanicals, and finishes, all permitted and inspected.',
+      'Before you buy a parcel, find out what it will cost to build on it. We review soils, utilities, legal access, setbacks, slope, and floodplain status, then give you a written summary of the site work and permitting costs the lot will carry.',
     benefits: [
-      'More livable square footage without changing your home\'s footprint or roofline',
-      'Egress windows, insulation, and moisture control done to code for a dry, healthy space',
-      'One accountable team for framing, mechanicals, and finishes, with no separate subs to coordinate',
-      'Flexible layouts: family room, guest suite, home theater, office, or a basement apartment',
+      'Site costs known before you close, not after',
+      'Written feasibility summary you can take to a lender or seller',
+      'Comparison across multiple candidate parcels',
+      'Credited toward design if you build with us',
     ],
     inclusions: [
-      'Design and layout planning for your lower level',
-      'Egress windows and code-compliant emergency exits where required',
-      'Framing, insulation, and vapor and moisture management',
-      'Electrical, lighting, HVAC extension, and optional wet bar or kitchenette',
-      'Flooring, drywall, trim, and finish selections guidance',
+      'Soils and drainage review, including expansive soil risk',
+      'Utility locations and connection or extension cost estimate',
+      'Legal access, easement, and right-of-way check',
+      'Zoning, setback, and floodplain confirmation',
+      'Written site work and permitting cost summary',
     ],
-    timeline: 'Most basement remodels run 6 to 12 weeks after permits, depending on square footage, egress work, and whether a bathroom or kitchenette is included.',
+    timeline:
+      'A standard lot evaluation takes 2 to 4 weeks. Parcels needing a formal geotechnical report or a septic feasibility test through Central District Health can take 4 to 8 weeks.',
     processSteps: [
-      { title: 'Assessment and moisture check', description: 'We evaluate ceiling height, moisture, existing mechanicals, and egress so the plan starts on a dry, code-ready foundation.' },
-      { title: 'Design and layout', description: 'We design the lower level around how you will use it and confirm a written scope and allowances before construction.' },
-      { title: 'Permitting and construction', description: 'We file permits and manage framing, mechanicals, and finishes with weekly written updates.' },
-      { title: 'Inspections and walkthrough', description: 'Final inspections are coordinated and we walk every detail with you before handoff.' },
+      {
+        title: 'Parcel research',
+        description: 'We pull zoning, plat, easement, and floodplain records before setting foot on the property.',
+      },
+      {
+        title: 'Site walkthrough',
+        description: 'On-site review of slope, drainage, access, vegetation, and utility proximity.',
+      },
+      {
+        title: 'Cost summary',
+        description: 'A written estimate of site work, utilities, and permitting specific to that parcel.',
+      },
+      {
+        title: 'Go or no-go',
+        description: 'A plain recommendation, including telling you when a lot is not worth what it will cost to build on.',
+      },
     ],
     faqs: [
       {
-        question: 'How much does it cost to finish a basement in Boise?',
+        question: 'How much does a lot evaluation cost?',
         answer:
-          'Finishing a basement in the Treasure Valley commonly plans $40,000 to $100,000 or more. A simple open family room sits at the lower end; adding a bathroom, kitchenette, egress windows, or a bedroom suite moves it higher. Use our estimator for a planning range, then book a free in-home visit for a written scope.',
+          'A standard Treasure Valley lot evaluation runs $950 to $3,500 depending on parcel size and whether a geotechnical report or septic feasibility test is needed. The fee is credited toward design if you go on to build with us.',
       },
       {
-        question: 'Do I need a permit to finish a basement in Idaho?',
+        question: 'What makes a lot expensive to build on?',
         answer:
-          'Yes. Finishing a basement requires building, electrical, plumbing, and mechanical permits in Ada and Canyon County. We handle permitting and inspections in-house as part of our design-build scope.',
+          'Distance to utilities, expansive or unstable soils, steep slope requiring engineered foundations and retaining, lack of legal access, floodplain status, and the need for a well or septic system. Any one of these can add tens of thousands before construction starts.',
       },
       {
-        question: 'Does my basement bedroom need an egress window?',
+        question: 'Can I get a lot evaluated before I make an offer?',
         answer:
-          'Yes. Idaho code requires an egress window or door in any basement bedroom so occupants can exit and firefighters can enter. We include egress cutting, wells, and code-compliant sizing when a bedroom is part of the plan.',
+          'Yes, and that is the point. Many buyers schedule an evaluation during the inspection contingency period so they can renegotiate or walk if the site work costs are worse than expected.',
       },
       {
-        question: 'How do you handle moisture and radon in Treasure Valley basements?',
+        question: 'Do you evaluate rural acreage in Canyon County?',
         answer:
-          'We assess moisture before framing and address it with proper drainage, vapor barriers, and sealed assemblies. Radon is common in parts of the Treasure Valley; we can plan for testing and mitigation so the finished space stays healthy.',
+          'Yes. Rural parcels are where evaluations matter most, because well depth, septic suitability, power extension distance, and private road requirements vary enormously between neighboring properties.',
       },
       {
-        question: 'Can I add a bathroom or kitchenette in my basement?',
+        question: 'What is expansive soil and why does it matter in the Treasure Valley?',
         answer:
-          'In most cases yes. Adding a basement bathroom or kitchenette depends on access to plumbing and, sometimes, a sewage ejector pump. We confirm the plumbing strategy during design so it is priced accurately.',
+          'Expansive clay soils swell when wet and shrink when dry, which moves foundations. Parts of the valley carry this risk, and it is addressed with over-excavation, engineered fill, or a deeper foundation design. It is far cheaper to know before you buy.',
       },
       {
-        question: 'Can a basement be turned into a rental or ADU?',
+        question: 'Will you tell me not to buy a lot?',
         answer:
-          'Sometimes. A basement apartment can qualify as an accessory dwelling unit if it meets egress, ceiling height, separate-entrance, and zoning requirements for your city. We review feasibility during design and can coordinate with our ADU service.',
-      },
-      {
-        question: 'How long does finishing a basement take?',
-        answer:
-          'Plan 6 to 12 weeks after permits. Open living space finishes fastest; egress cutting, a bathroom, or a kitchenette add time for rough-ins and inspections.',
+          'Yes. That recommendation is the most valuable thing an evaluation produces, and it is why we charge for the service rather than treating it as a sales call.',
       },
     ],
     costGuidance: {
-      heading: 'Basement finishing cost in the Treasure Valley',
+      heading: 'Lot evaluation cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, finishing a basement in the Boise area commonly plans $40,000 to $100,000 or more. Open family rooms sit at the lower end; egress windows, a full bathroom, a kitchenette, or a bedroom suite reach the upper end.',
-        'These are planning ranges, not bids. Egress work, plumbing access, and moisture or radon mitigation drive basement budgets, which we confirm in a written scope after your free in-home visit.',
+        'As of 2026, a written lot evaluation in the Treasure Valley runs $950 to $3,500. A standard review of a serviced subdivision lot sits near the lower end, while rural acreage requiring a geotechnical report, septic feasibility testing through Central District Health, or a well yield assessment sits at the upper end.',
+        'These are planning ranges, not bids. The fee is credited toward design if you build with us, and it routinely surfaces site costs that dwarf it.',
       ],
     },
   },
-  'outdoor-living': {
-    slug: 'outdoor-living',
-    name: 'Outdoor Living & Decks',
-    headline: 'Decks, Covered Patios & Outdoor Living in the Treasure Valley',
-    primaryKeyword: 'deck builder boise',
+
+  'shop-homes-barndominiums': {
+    slug: 'shop-homes-barndominiums',
+    name: 'Shop Homes & Barndominiums',
+    headline: 'Shop Homes and Barndominiums in the Treasure Valley',
+    primaryKeyword: 'barndominium builder idaho',
     overview:
-      'Outdoor living space is one of the highest-return ways to expand how you use your home in Idaho\'s climate. Boise Remodeling Co designs and builds decks, covered patios, pergolas, and outdoor kitchens as a single design-build project, coordinated with your home\'s architecture and permitted for Ada and Canyon County.',
+      'A shop home pairs finished living space with genuine working shop square footage under one structure. Post-frame and steel-framed construction covers large spans efficiently, which is why these builds are popular on Canyon County and rural Ada County acreage.',
     benefits: [
-      'Decks, covered patios, pergolas, and outdoor kitchens from one accountable team',
-      'Designed to match your home\'s materials, rooflines, and sightlines',
-      'Structural, footing, and permit requirements handled in-house',
-      'Durable materials chosen for Treasure Valley sun, snow, and temperature swings',
+      'Lower cost per square foot than conventional framing on large spans',
+      'Living quarters and working shop under one roof and one permit',
+      'Clear-span shop space without interior structural columns',
+      'Straightforward to expand later as needs change',
     ],
     inclusions: [
-      'Design and layout for decks, patios, or a full outdoor room',
-      'Footings, framing, and structural engineering where required',
-      'Composite, cedar, or hardwood decking and railing options',
-      'Covered structures, pergolas, and integrated lighting or electrical',
-      'Optional outdoor kitchen, fireplace, or built-in seating',
+      'Post-frame or steel structural package engineered for Idaho loads',
+      'Insulated and finished living quarters',
+      'Shop slab, overhead doors, and electrical service',
+      'County permits and, on rural parcels, well and septic coordination',
+      'Full construction and written workmanship warranty',
     ],
-    timeline: 'Most outdoor living projects run 3 to 8 weeks after permits, depending on size, covered structures, and whether utilities are extended for an outdoor kitchen.',
+    timeline:
+      'Most shop homes run 6 to 9 months from permit to move-in. The shell goes up quickly compared with conventional framing; the finished living quarters drive the schedule.',
     processSteps: [
-      { title: 'Site and design consultation', description: 'We review your yard, grade, and how you want to use the space, then design a deck or patio that fits your home.' },
-      { title: 'Engineering and permitting', description: 'We handle footings, structural details, and permits so the build is safe and code-compliant.' },
-      { title: 'Construction', description: 'Our team builds framing, decking, covers, and finishes with weekly written updates.' },
-      { title: 'Final walkthrough', description: 'We confirm every detail and finish with you before handoff.' },
+      {
+        title: 'Program and ratio',
+        description: 'We settle how much of the footprint is living space versus shop, which drives cost more than total size.',
+      },
+      {
+        title: 'Site and utility review',
+        description: 'Access, power capacity, and well or septic requirements checked on rural parcels.',
+      },
+      {
+        title: 'Design and permits',
+        description: 'Engineered structural package plus finished-space drawings, submitted to the county.',
+      },
+      {
+        title: 'Build and handover',
+        description: 'Shell erection, then interior finish, inspections, walkthrough, and warranty.',
+      },
     ],
     faqs: [
       {
-        question: 'How much does a deck cost in Boise?',
+        question: 'How much does a barndominium cost to build in Idaho?',
         answer:
-          'A new deck in the Treasure Valley commonly plans $25,000 to $60,000 or more, depending on size, height, railing, and material. Composite decking costs more upfront than wood but lasts longer with less maintenance. Use our estimator for a planning range.',
+          'Shop homes generally plan between $150 and $250 per square foot in 2026, blended across finished and shop space. A 1,600 square foot living area with an attached 1,200 square foot shop commonly lands between $265,000 and $500,000 excluding land.',
       },
       {
-        question: 'Do I need a permit to build a deck or covered patio in Ada County?',
+        question: 'Why is a shop home cheaper per square foot than a conventional house?',
         answer:
-          'Usually yes. Decks above a certain height, attached decks, and covered structures require permits in Ada and Canyon County. We handle permitting and inspections as part of our scope.',
+          'The shop portion carries far less cost than finished living space, which pulls the blended average down. Post-frame structure also spans large areas with less material. Compare finished living space directly and the gap narrows considerably.',
       },
       {
-        question: 'Composite or wood decking, which is better for Idaho?',
+        question: 'Can I get a mortgage on a barndominium?',
         answer:
-          'Both work well here. Composite resists Treasure Valley sun, snow, and moisture with almost no maintenance and lasts decades, at a higher upfront cost. Cedar and hardwood cost less to install but need regular sealing. We help you weigh lifetime cost during design.',
+          'Often yes, though fewer lenders participate and appraisals can be harder because comparable sales are thin in some areas. Talk to a lender experienced with post-frame residential construction early, before you commit to a design.',
       },
       {
-        question: 'Can you build a covered patio or pergola?',
+        question: 'Are shop homes allowed everywhere in Ada and Canyon County?',
         answer:
-          'Yes. We design and build covered patios, pergolas, and roofed outdoor rooms that tie into your home\'s roofline and provide shade and shelter through Idaho\'s seasons.',
+          'No. Zoning and subdivision covenants govern whether a shop-dominant structure is permitted and what it can look like. Rural and agricultural zoning is generally accommodating; master-planned subdivisions usually are not.',
       },
       {
-        question: 'Do you build outdoor kitchens?',
+        question: 'How well do shop homes hold up to Treasure Valley winters?',
         answer:
-          'Yes. We build outdoor kitchens with built-in grills, counters, and, where you want them, gas, water, and electrical runs. We plan the utilities during design so the space is fully functional.',
+          'Very well when the envelope is done properly. The critical details are a continuous air barrier between shop and living space, adequate insulation, and managing condensation on steel. These are the details that separate a comfortable shop home from a cold one.',
       },
       {
-        question: 'How long does a deck or patio take to build?',
+        question: 'Can I finish the living space later?',
         answer:
-          'Plan 3 to 8 weeks after permits. A straightforward deck builds fastest; covered structures, outdoor kitchens, and extended utilities add time for engineering and rough-ins.',
+          'Yes. Some owners build the shell and shop first, then finish the living quarters in a second phase. We design for that sequence when it fits your budget.',
       },
     ],
     costGuidance: {
-      heading: 'Deck and outdoor living cost in the Treasure Valley',
+      heading: 'Shop home and barndominium cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, decks and outdoor living projects in the Boise area commonly plan $25,000 to $75,000 or more. Ground-level wood decks sit at the lower end; large composite decks, covered patios, and outdoor kitchens reach the upper end.',
-        'These are planning ranges, not bids. Material choice, deck height, covered structures, and utility runs drive outdoor budgets, which we confirm in a written scope after your free in-home visit.',
+        'As of 2026, shop homes in the Treasure Valley plan between $150 and $250 per square foot blended across finished and shop space. A 1,600 square foot living area with an attached 1,200 square foot shop commonly runs $265,000 to $500,000 excluding land and site work.',
+        'These are planning ranges, not bids. The ratio of finished space to shop space moves the blended cost more than any other variable, which we settle before design begins.',
       ],
     },
   },
-  'aging-in-place': {
-    slug: 'aging-in-place',
-    name: 'Aging-in-Place Remodeling',
-    headline: 'Aging-in-Place & Accessible Remodeling in the Treasure Valley',
-    primaryKeyword: 'aging in place remodel boise',
+
+  'energy-efficient-homes': {
+    slug: 'energy-efficient-homes',
+    name: 'Energy-Efficient Homes',
+    headline: 'Energy-Efficient Home Building in the Treasure Valley',
+    primaryKeyword: 'energy efficient home builder boise idaho',
     overview:
-      'Aging-in-place remodeling makes it possible to stay safely and comfortably in the home you love as your needs change. Boise Remodeling Co designs accessible, universal-design remodels, from curbless showers and grab bars to widened doorways, zero-step entries, and main-floor living, that look like the rest of your home rather than a clinic.',
+      'A high-performance home costs less to operate and stays comfortable through Treasure Valley temperature swings. The work is unglamorous: a continuous air barrier, generous insulation, sealed ducts inside conditioned space, and verification by blower-door testing rather than assumption.',
     benefits: [
-      'Universal design that is safe and accessible without looking institutional',
-      'Curbless showers, grab bars, comfort-height fixtures, and slip-resistant surfaces',
-      'Widened doorways, zero-step entries, and single-floor living adaptations',
-      'One team handling design, structural changes, and finishes under one contract',
+      'Measurably lower heating and cooling costs for the life of the home',
+      'Even temperatures and no cold rooms in January',
+      'Blower-door and duct-leakage testing, so performance is verified',
+      'Better sound isolation and filtered air as a side effect of a tight envelope',
     ],
     inclusions: [
-      'Accessibility assessment of your home and daily routines',
-      'Curbless or roll-in showers, grab-bar blocking, and comfort-height vanities and toilets',
-      'Widened doorways and hallways, lever hardware, and improved lighting',
-      'Zero-step entries, thresholds, or ramps where needed',
-      'Main-floor bedroom or bathroom conversions for single-level living',
+      'Continuous air barrier detailing and thermal bridge reduction',
+      'Above-code wall, roof, and slab-edge insulation',
+      'High-performance windows selected by orientation',
+      'Ducts sealed and located inside conditioned space',
+      'Balanced mechanical ventilation and blower-door verification',
     ],
-    timeline: 'Aging-in-place projects range from a few days for targeted safety upgrades to several weeks for a full accessible bathroom or a main-floor suite conversion.',
+    timeline:
+      'Schedule matches a comparable custom build at 10 to 14 months, plus roughly two weeks for envelope testing and commissioning before handover.',
     processSteps: [
-      { title: 'Accessibility assessment', description: 'We review how you move through your home today and where safety, access, and comfort can improve.' },
-      { title: 'Universal-design plan', description: 'We design changes that meet your needs now and adapt for the future, with a written scope before construction.' },
-      { title: 'Construction', description: 'Our team makes structural and finish changes with minimal disruption and weekly written updates.' },
-      { title: 'Walkthrough and orientation', description: 'We confirm every detail works for you and walk through how to use new features safely.' },
+      {
+        title: 'Performance target',
+        description: 'We agree on an air-tightness and efficiency target up front, because it changes how the home is detailed.',
+      },
+      {
+        title: 'Envelope design',
+        description: 'Wall assemblies, window selection, and thermal bridge details drawn before framing, not decided on site.',
+      },
+      {
+        title: 'Verified construction',
+        description: 'Mid-build blower-door test while the air barrier is still accessible and inexpensive to correct.',
+      },
+      {
+        title: 'Commissioning',
+        description: 'Final blower-door and duct-leakage testing, ventilation balancing, and documented results.',
+      },
     ],
     faqs: [
       {
-        question: 'How much does an aging-in-place remodel cost in Boise?',
+        question: 'How much more does an energy-efficient home cost to build?',
         answer:
-          'It depends on scope. Targeted safety upgrades like grab bars and lever handles can be a few hundred to a few thousand dollars. A full accessible or curbless bathroom commonly plans $20,000 to $45,000, and main-floor living conversions run higher. Use our estimator for a planning range.',
+          'A well-executed high-performance envelope typically adds 3 to 8 percent to construction cost, roughly $20,000 to $55,000 on a mid-size Treasure Valley home. Much of that is offset by being able to install smaller heating and cooling equipment.',
       },
       {
-        question: 'What is universal design?',
+        question: 'How much will I actually save on utility bills?',
         answer:
-          'Universal design makes a home usable by people of all ages and abilities without looking specialized. Curbless showers, comfort-height fixtures, lever hardware, wider doorways, and good lighting all improve safety and access while still looking like a normal, attractive home.',
+          'Depends on the target and how the home is operated, but a 30 to 50 percent reduction against a code-minimum home of the same size is a realistic expectation in this climate. We model the specific number for your design rather than quoting a generic figure.',
       },
       {
-        question: 'Can you make a bathroom wheelchair accessible?',
+        question: 'What is a blower-door test and why does it matter?',
         answer:
-          'Yes. We build curbless roll-in showers, provide a five-foot turning radius where space allows, install grab-bar blocking and comfort-height fixtures, and widen the doorway so a bathroom works for a wheelchair or walker.',
+          'It pressurizes the house to measure how much air leaks through the envelope. It converts air-tightness from a claim into a number. We test mid-build, while leaks are still cheap to fix, and again at completion.',
       },
       {
-        question: 'What are the most important aging-in-place upgrades?',
+        question: 'Do I need solar panels for an efficient home?',
         answer:
-          'The highest-impact changes are a curbless or walk-in shower with grab bars, a zero-step entry into the home, at least one main-floor bedroom and full bathroom, wider doorways, lever hardware, and brighter, evenly distributed lighting.',
+          'No, and panels are usually the wrong first dollar. Reducing the load through the envelope and mechanical systems is cheaper per unit of energy saved. Build tight first, then add generation if you want it.',
       },
       {
-        question: 'Will Medicare or insurance pay for accessibility remodeling?',
+        question: 'Does a tight house have air quality problems?',
         answer:
-          'Generally, Medicare does not cover home modifications. Some costs may be offset through Medicaid home and community-based waivers, VA grants such as HISA or SAH for eligible veterans, or long-term-care policies. We recommend confirming with your provider; we can supply a written scope for those applications.',
+          'Only if it is built tight without ventilation. A high-performance home includes balanced mechanical ventilation with filtration, which generally delivers better indoor air quality than a leaky house that ventilates unpredictably.',
       },
       {
-        question: 'Do you widen doorways and add zero-step entries?',
+        question: 'Is this worth it in the Treasure Valley climate?',
         answer:
-          'Yes. We widen doorways and hallways, adjust thresholds, and build zero-step entries or ramps so every room and the entry itself are accessible, coordinating any structural changes in-house.',
+          'Yes. The valley sees hot dry summers and cold winters, so the envelope works in both directions. Cooling load reduction in July and heating load reduction in January come from the same investment.',
       },
     ],
     costGuidance: {
-      heading: 'Aging-in-place remodeling cost in the Treasure Valley',
+      heading: 'Energy-efficient home cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, aging-in-place work in the Boise area ranges widely: a few hundred dollars for grab bars and lever hardware, $20,000 to $45,000 for a full accessible or curbless bathroom, and more for main-floor suite conversions or zero-step entries.',
-        'These are planning ranges, not bids. Scope, structural changes, and finish level drive accessibility budgets, which we confirm in a written scope after your free in-home visit.',
+        'As of 2026, high-performance homes in the Treasure Valley plan between $275 and $425 per finished square foot excluding land. The envelope and mechanical upgrades that separate a high-performance home from a code-minimum one typically add 3 to 8 percent to construction cost, or about $20,000 to $55,000 on a mid-size home.',
+        'These are planning ranges, not bids. Part of the premium is recovered immediately through smaller heating and cooling equipment, and the rest through operating costs over the life of the home.',
       ],
     },
   },
@@ -625,8 +699,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
 
 export function getAreaIntro(city: CityData): string {
   const county = getCountyLabel(city.county);
-  const neighborhood = ''; // filled from CITY_SEO_DATA at runtime in pages
-  return `Boise Remodeling Co provides design-build remodeling for homeowners in ${city.name}, Idaho and throughout ${county}. From kitchen and bathroom renovations to whole-home remodels and room additions, you work with one accountable team from consultation through final walkthrough.`;
+  return `Boise Construction Co builds new homes for clients in ${city.name}, Idaho and throughout ${county}. From fully custom homes and semi-custom plans to building on land you already own, you work with one accountable team from feasibility through final walkthrough.`;
 }
 
 export function getCityServiceIntro(
@@ -637,8 +710,8 @@ export function getCityServiceIntro(
   const county = getCountyLabel(city.county);
   const fact = localFact
     ? ` ${localFact}`
-    : ` We understand ${county} permit requirements and typical ${city.name} home styles.`;
-  return `Looking for ${service.name.toLowerCase()} in ${city.name}, Idaho?${fact} Boise Remodeling Co offers design-build ${service.name.toLowerCase()} with clear written scope, proactive weekly updates, and a written workmanship guarantee. Schedule a free in-home consultation or use our project estimator for a planning range.`;
+    : ` We know ${county} plan review requirements, impact fees, and the lot conditions common around ${city.name}.`;
+  return `Planning ${service.name.toLowerCase()} in ${city.name}, Idaho?${fact} Boise Construction Co works design-build, with a line-item budget, weekly written updates, and a written workmanship warranty. Book a free planning consultation or use our estimator for a planning range.`;
 }
 
 export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): FAQItem[] {
@@ -652,19 +725,19 @@ export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): 
     ...(costSentence
       ? [
           {
-            question: `How much does a ${service.name.toLowerCase()} cost in ${city.name}?`,
-            answer: `${city.name} pricing tracks the broader Treasure Valley market. ${costSentence} Schedule a free in-home visit for a written scope specific to your home.`,
+            question: `How much does ${service.name.toLowerCase()} cost in ${city.name}?`,
+            answer: `${city.name} pricing tracks the broader Treasure Valley market. ${costSentence} Book a lot walkthrough for a line-item budget specific to your site.`,
           },
         ]
       : []),
     ...service.faqs.slice(0, 2),
     {
-      question: `Do you offer ${service.name.toLowerCase()} in ${city.name}?`,
-      answer: `Yes. We regularly serve ${city.name} and surrounding ${county} neighborhoods with ${service.name.toLowerCase()} projects.`,
+      question: `Do you build in ${city.name}?`,
+      answer: `Yes. We regularly build in ${city.name} and the surrounding ${county} area, and we are familiar with the local plan review process and impact fees.`,
     },
     {
-      question: `How do I get a quote for ${service.name.toLowerCase()} in ${city.name}?`,
-      answer: `Use our online project estimator for a planning range, then book a free 60 to 90 minute in-home visit. We will leave you with design direction and clear next steps.`,
+      question: `How do I get a budget for ${service.name.toLowerCase()} in ${city.name}?`,
+      answer: `Use our online estimator for a planning range, then book a free planning consultation. If you have a lot under consideration, we will walk it with you and identify what will drive the site costs.`,
     },
   ];
 }
@@ -698,8 +771,12 @@ export function getCityServiceSections(
               service.costGuidance.paragraphs[1],
             ],
             links: [
+              // Slug is renamed to boise-home-building-cost-guide during the
+              // guide migration, with a redirect from this path. Links built
+              // here are not picked up by links:generate, so audit:links will
+              // not catch this reference if the slug moves without a redirect.
               {
-                label: 'Boise Remodeling Cost Guide',
+                label: 'Boise Home Building Cost Guide',
                 href: '/guides/boise-remodeling-cost-guide',
               },
             ],
@@ -707,26 +784,26 @@ export function getCityServiceSections(
         ]
       : []),
     {
-      heading: `${service.name} across ${city.name} neighborhoods`,
+      heading: `${service.name} across ${city.name}`,
       paragraphs: [
         neighborhoods.length
-          ? `We design and build ${serviceLC} projects throughout ${city.name}, including ${neighborhoods.join(', ')}. Housing stock varies between these neighborhoods, so we tailor layouts, structural details, and finish selections to the age and style of your specific ${city.name} home.`
-          : `We design and build ${serviceLC} projects throughout ${city.name}, tailoring layouts, structural details, and finishes to the age and style of your specific home.`,
+          ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}. Lot conditions, utility access, and subdivision design standards vary between these areas, so we tailor the site plan, foundation, and elevations to the specific parcel rather than dropping a plan onto it.`
+          : `We build throughout ${city.name}, tailoring the site plan, foundation design, and elevations to the specific parcel rather than dropping a plan onto it.`,
         landmarks.length
-          ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand the character of the area and plan ${serviceLC} work that fits the neighborhood and protects resale value.`
-          : `As a local team, we plan ${serviceLC} work that fits the neighborhood and protects resale value.`,
+          ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand how the area is developing and plan ${serviceLC} that fits the neighborhood and holds its value.`
+          : `As a local team, we plan ${serviceLC} that fits the neighborhood and holds its value.`,
       ],
     },
     {
-      heading: `${service.name} permits and planning in ${county}`,
+      heading: `New construction permits and plan review in ${county}`,
       paragraphs: [
-        `${service.name} projects in ${city.name} that change layout, structure, plumbing, or electrical require permits through ${county}. We build plan review and inspection timelines into your schedule from day one and handle submissions, fees, and inspections as part of the design-build contract.`,
+        `New home construction in ${city.name} requires a building permit, plan review, and impact fees through ${county}. Residential plan review commonly runs 3 to 6 weeks, and parcels outside municipal service need septic approval through Central District Health and a well permit through the Idaho Department of Water Resources. We build those timelines into your schedule from day one and handle submissions, fees, and inspections as part of the contract.`,
         seo?.climate
-          ? `Our ${city.name} ${serviceLC} designs also account for the local ${seo.climate} - from insulation and ventilation choices to materials that hold up to Treasure Valley freeze-thaw cycles.`
-          : `Our ${city.name} ${serviceLC} designs account for the local Treasure Valley climate, including durable materials and proper insulation.`,
+          ? `Our ${city.name} designs also account for the local ${seo.climate}, from insulation and ventilation choices to frost depth, snow load, and materials that hold up to Treasure Valley freeze-thaw cycles.`
+          : `Our ${city.name} designs account for the local Treasure Valley climate, including frost depth, snow load, insulation levels, and durable exterior materials.`,
       ],
       links: [
-        { label: `${city.name} remodeling contractor overview`, href: `/areas/${city.slug}` },
+        { label: `${city.name} home builder overview`, href: `/areas/${city.slug}` },
         { label: 'Ada vs Canyon County permit timelines', href: '/resources/ada-canyon-permit-flow' },
       ],
     },
@@ -737,27 +814,32 @@ export function getCityServiceSections(
 
 export const AREA_PAGE_FAQS: FAQItem[] = [
   {
-    question: 'What remodeling services do you offer?',
+    question: 'What kinds of homes do you build?',
     answer:
-      'Kitchen remodels, bathroom remodels, whole-home renovations, and room additions, all managed design-build with one team.',
+      'Fully custom homes, semi-custom homes from adapted plans, builds on land you already own, and shop homes. We also provide design and lot evaluation as standalone services.',
   },
   {
     question: 'Are you licensed and insured?',
     answer:
-      'Yes. Boise Remodeling Co is licensed, bonded, and insured. Idaho contractor license details available upon request.',
+      'Yes. Boise Construction Co is licensed, bonded, and insured. Idaho contractor registration details are available on request.',
   },
   {
     question: 'How do I start a project?',
     answer:
-      'Call us, use our project estimator, or schedule a free in-home consultation through our website.',
+      'Call us, use our construction estimator for a planning range, or book a free planning consultation through our website.',
   },
 ];
 
 export const HOMEPAGE_FAQS_FOR_SCHEMA: FAQItem[] = [
   {
-    question: 'How are you different from other remodeling companies in the Treasure Valley?',
+    question: 'How much does it cost to build a house in the Treasure Valley?',
     answer:
-      'We operate as a true design-build firm with one accountable team from first visit to final walkthrough, not separate designers and contractors you have to coordinate.',
+      'Most Treasure Valley new homes plan between $225 and $400 per finished square foot in 2026, excluding land. A 2,400 square foot custom home commonly lands between $600,000 and $960,000, with site work budgeted separately.',
+  },
+  {
+    question: 'How are you different from other home builders in the Treasure Valley?',
+    answer:
+      'We publish our numbers. You get a line-item budget rather than a lump sum, allowance amounts based on real local pricing, and a written weekly cost and schedule update for the life of the build.',
   },
   {
     question: 'What areas do you serve?',
@@ -765,11 +847,13 @@ export const HOMEPAGE_FAQS_FOR_SCHEMA: FAQItem[] = [
       'Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and the greater Treasure Valley.',
   },
   {
-    question: 'Do you handle permits?',
-    answer: 'Yes. Permits are included in our scope and handled in-house for Ada and Canyon County.',
+    question: 'How long does it take to build a new home?',
+    answer:
+      'Plan on 10 to 14 months for a custom home and 7 to 10 months for a semi-custom home, measured from the start of design to move-in. County plan review is the most common source of delay.',
   },
   {
-    question: 'What is your workmanship guarantee?',
-    answer: 'We provide a written workmanship guarantee on our labor.',
+    question: 'Do you handle permits?',
+    answer:
+      'Yes. Building permits, plan review, impact fees, and inspections are included in our scope for Ada and Canyon County, including septic and well permitting on rural parcels.',
   },
 ];

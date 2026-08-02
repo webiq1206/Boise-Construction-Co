@@ -8,10 +8,11 @@ import { SERVICES } from "@/shared/contentData";
 import { servicePath } from "@/lib/seo-routes";
 import { CTA_SECONDARY } from "@/shared/ctaCopy";
 import { getServiceBackground } from "@/shared/serviceBackgrounds";
+import { SITE_CONFIG } from "@/shared/siteConfig";
 
 export function ServicesGrid() {
-  // Homepage shows the primary services; secondary ones (basement, outdoor,
-  // aging-in-place) live on their own pages and the full /services hub.
+  // Homepage shows the primary services; secondary ones (lot evaluation, shop
+  // homes, energy-efficient builds) live on their own pages and /services.
   const primary = SERVICES.filter((s) => !s.secondary);
   return (
     <Section id="services" divider>
@@ -21,11 +22,11 @@ export function ServicesGrid() {
           size="display"
           title={
             <>
-              Design-build expertise for every major{" "}
-              <em className="brc-accent">remodel</em>
+              Every way there is to{" "}
+              <em className="brc-accent">build</em>
             </>
           }
-          description="Full design-build coordination under one roof, not piecemeal trades managed by multiple vendors. One team handles layout, permitting, and construction so your project stays aligned from start to finish."
+          description="Design, engineering, permitting, and construction under one roof, not a designer and a builder pointing at each other. One team from the first sketch to the day you get the keys."
         />
 
         <div className="grid sm:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
@@ -35,7 +36,7 @@ export function ServicesGrid() {
                 <div className="relative aspect-[4/3] overflow-hidden rounded-sm mb-4">
                   <Image
                     src={getServiceBackground(service.slug)}
-                    alt={`${service.name} project by Boise Remodeling Co`}
+                    alt={`${service.name} by ${SITE_CONFIG.name} in the Treasure Valley, Idaho`}
                     fill
                     sizes="(max-width: 640px) 100vw, 50vw"
                     quality={70}
@@ -69,10 +70,10 @@ export function ServicesGrid() {
             <div className="h-full min-h-[220px] rounded-sm border border-card-border bg-card p-6 md:p-8 flex flex-col justify-center">
               <div className="brc-label mb-3">Not sure where to start</div>
               <h3 className="font-sans font-light text-xl md:text-2xl tracking-tight mb-2 text-foreground">
-                Tell us about your <em className="brc-accent">project</em>
+                Tell us what you want to <em className="brc-accent">build</em>
               </h3>
               <p className="text-sm leading-relaxed mb-5 text-muted-foreground">
-                Every remodel starts with a free in-home visit and an honest planning range, with no obligation.
+                Every home starts with a free planning consultation and an honest budget band, with no obligation.
               </p>
               <Button variant="brand" className="self-start" asChild>
                 <a href="#consult">{CTA_SECONDARY}</a>

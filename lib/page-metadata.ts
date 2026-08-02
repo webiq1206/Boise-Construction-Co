@@ -41,16 +41,22 @@ export interface PageMetaInput {
 }
 
 /**
- * City x service combos flagged as doorway risk in the audit. These are the ADU
- * combos for small cities that share the most generic copy, have no ADU pillar
- * support, and no local proof. Toggle entries off here once a combo earns
- * unique local content/proof. Keyed as `${serviceSlug}/${citySlug}`.
+ * City x service combos flagged as doorway risk. These are secondary services
+ * in the smallest markets, where the copy is most generic and there is no local
+ * proof or pillar support, plus shop homes in Boise proper where lot sizes and
+ * zoning make the service largely implausible. Toggle entries off here once a
+ * combo earns unique local content. Keyed as `${serviceSlug}/${citySlug}`.
  */
 export const NOINDEX_CITY_SERVICE = new Set<string>([
-  'adu/kuna',
-  'adu/star',
-  'adu/middleton',
-  'adu/caldwell',
+  'lot-evaluation/kuna',
+  'lot-evaluation/star',
+  'lot-evaluation/middleton',
+  'lot-evaluation/caldwell',
+  'energy-efficient-homes/kuna',
+  'energy-efficient-homes/star',
+  'energy-efficient-homes/middleton',
+  'energy-efficient-homes/caldwell',
+  'shop-homes-barndominiums/boise',
 ]);
 
 export function isCityServiceNoindex(serviceSlug: string, citySlug: string): boolean {
@@ -91,20 +97,22 @@ export function stripBrandSuffix(title: string): string {
 }
 
 /**
- * Concise, intentional service-parent titles. Each is <= 38 chars so the final
- * rendered title (after the layout appends " | Boise Remodeling Co") stays <= 60.
+ * Concise, intentional service-parent titles. Each is <= 36 chars so the final
+ * rendered title (after the layout appends " | Boise Construction Co", 24
+ * characters) stays <= 60.
+ *
+ * Without an override these fall back to "<name> in the Treasure Valley",
+ * which overruns the title budget and word-truncates to "... in the".
  */
 const SERVICE_TITLE_OVERRIDES: Record<string, string> = {
-  'kitchen-remodel': 'Treasure Valley Kitchen Remodeling',
-  'bathroom-remodel': 'Treasure Valley Bathroom Remodeling',
-  'whole-home-remodel': 'Treasure Valley Whole-Home Remodeling',
-  'room-addition': 'Treasure Valley Home Additions',
-  adu: 'Treasure Valley ADUs & Guest Houses',
-  // Without an override these fall back to "<name> in the Treasure Valley",
-  // which overruns the title budget and word-truncates to "... in the".
-  'basement-remodel': 'Treasure Valley Basement Remodeling',
-  'outdoor-living': 'Treasure Valley Decks & Outdoor Living',
-  'aging-in-place': 'Aging-in-Place Remodeling in Boise',
+  'custom-home-builder': 'Treasure Valley Custom Home Builder',
+  'semi-custom-homes': 'Treasure Valley Semi-Custom Homes',
+  'build-on-your-lot': 'Build on Your Lot in Idaho',
+  'design-build': 'Treasure Valley Design-Build Homes',
+  'home-plans-design': 'Custom Home Plans & Design, Idaho',
+  'lot-evaluation': 'Lot Evaluation & Feasibility, Idaho',
+  'shop-homes-barndominiums': 'Idaho Shop Homes & Barndominiums',
+  'energy-efficient-homes': 'Energy-Efficient Homes in Idaho',
 };
 
 export function buildPageMetadata(input: PageMetaInput): Metadata {
@@ -121,7 +129,7 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
       break;
     case 'service':
       // Intentional, full titles (no truncation/ellipsis). Each stays <= 60
-      // chars once the layout template appends " | Boise Remodeling Co" (22).
+      // chars once the layout template appends " | Boise Construction Co" (24).
       title =
         SERVICE_TITLE_OVERRIDES[input.serviceSlug ?? ''] ??
         generateSafePageTitle(`${input.serviceName} in the Treasure Valley`);
@@ -131,7 +139,9 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
       });
       break;
     case 'area':
-      title = generateSafePageTitle(`Remodeling Contractor in ${input.cityName}, Idaho`);
+      // "Home Builder in Middleton, Idaho" is the longest at 32 chars, so no
+      // city name pushes this past the 36-char budget or triggers truncation.
+      title = generateSafePageTitle(`Home Builder in ${input.cityName}, Idaho`);
       description = generateMetaDescription({
         serviceName: '',
         serviceSlug: '',
@@ -149,20 +159,20 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
     case 'about':
       title = 'About Us';
       description =
-        'Learn about Boise Remodeling Co, a Treasure Valley design-build remodeler. Licensed, insured, and committed to clear communication start to finish.';
+        `Learn about ${SITE_CONFIG.name}, a Treasure Valley design-build home builder. Bonded, insured, and committed to line-item budgets and clear communication.`;
       break;
     case 'contact':
       title = 'Contact Us';
       description =
-        `Contact Boise Remodeling Co for a free in-home consultation. Call ${SITE_CONFIG.phone} or schedule online. Serving Boise, Meridian, Eagle & the Treasure Valley.`;
+        `Contact ${SITE_CONFIG.name} for a free planning consultation. Call ${SITE_CONFIG.phone} or schedule online. Serving Boise, Meridian, Eagle & the Treasure Valley.`;
       break;
     case 'blog':
-      title = 'Remodeling Insights & Ideas';
+      title = 'Home Building Insights & Ideas';
       description =
-        'Honest remodeling advice for Idaho homeowners: budgeting, timelines, permits, and design-build guidance from Boise Remodeling Co.';
+        `Honest home building advice for Idaho: budgets, lot selection, permits, timelines, and design-build guidance from ${SITE_CONFIG.name}.`;
       break;
     default:
-      title = input.titleOverride || 'Boise Remodeling Co';
+      title = input.titleOverride || SITE_CONFIG.name;
       description = input.descriptionOverride || '';
   }
 

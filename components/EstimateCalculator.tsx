@@ -7,6 +7,7 @@ import {
   UtensilsCrossed, Droplets, Home, Building2, Layers, AlignLeft,
   LayoutGrid, Star, Sun, Monitor, Dumbbell, Bed, Car,
   Lightbulb, Wind, DoorOpen, GlassWater, Sofa, Frame, Triangle, Grid3x3,
+  HardHat, Ruler, MapPin, Mountain, Trees, Users, Warehouse, Waves,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StickyEstimateBar } from "@/components/estimate/StickyEstimateBar";
@@ -42,6 +43,8 @@ import {
   getKitchenQuestion,
   getTypicalSelections,
   FINISH_LABELS as ENGINE_FINISH_LABELS,
+  getFinishLabels,
+  isNewConstructionProject,
   PROJECT_SIZE_CONFIG,
   formatPlanningCurrency,
   calculateEstimate,
@@ -70,6 +73,9 @@ import {
 
 /* Project-level icons for the project-type card grid. */
 const PROJECT_ICONS: Record<ProjectType, LucideIcon> = {
+  "custom-home": HardHat,
+  "semi-custom-home": Ruler,
+  "build-on-your-lot": MapPin,
   kitchen: UtensilsCrossed,
   bathroom: Droplets,
   "whole-home": Home,
@@ -119,6 +125,34 @@ type SubtypeData = {
 ══════════════════════════════════════════════════════════════════════ */
 
 const SUBTYPE_DATA: Record<ProjectType, Record<string, SubtypeData>> = {
+  /*
+   * NEW CONSTRUCTION. The subtype seeds finished area and storeys, which are the
+   * two inputs that move a new-build number most, and the sizes are the ones
+   * actually built in the Treasure Valley rather than round numbers.
+   *
+   * Storeys matter more than they look: a two-storey plan puts half its area on
+   * the ground, so it shares one foundation and one roof and comes out cheaper
+   * per square foot than the same area on a single level. The engine derives that
+   * from `stories`, so seeding it here is what makes the difference visible.
+   */
+  "custom-home": {
+    "single-level":    { sqft: 2200, refinements: { stories: 1, garageBays: "three" } },
+    "two-story":       { sqft: 2900, refinements: { stories: 2, garageBays: "two" } },
+    "main-level-primary": { sqft: 2600, refinements: { stories: 2, garageBays: "three" } },
+    "estate":          { sqft: 4200, refinements: { stories: 2, garageBays: "four" } },
+  },
+  "semi-custom-home": {
+    "starter":         { sqft: 1600, refinements: { stories: 1, garageBays: "two" } },
+    "family":          { sqft: 2200, refinements: { stories: 2, garageBays: "two" } },
+    "single-level":    { sqft: 2000, refinements: { stories: 1, garageBays: "three" } },
+    "larger-family":   { sqft: 2900, refinements: { stories: 2, garageBays: "three" } },
+  },
+  "build-on-your-lot": {
+    "valley-flat":     { sqft: 2400, refinements: { stories: 1, garageBays: "three", siteDifficulty: "simple" } },
+    "acreage":         { sqft: 2600, refinements: { stories: 1, garageBays: "three", siteDifficulty: "moderate", lotServices: "well-septic" } },
+    "foothills":       { sqft: 3000, refinements: { stories: 2, garageBays: "three", siteDifficulty: "steep" } },
+    "riverfront":      { sqft: 3200, refinements: { stories: 2, garageBays: "three", siteDifficulty: "moderate" } },
+  },
   kitchen: {
     galley:      { sqft: 175, refinements: { layoutChanges: "none" } },
     "l-shape":   { sqft: 250, refinements: { layoutChanges: "none" } },
@@ -181,6 +215,73 @@ function defaultSubtypeFor(project: ProjectType): string {
 ══════════════════════════════════════════════════════════════════════ */
 
 const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
+  /*
+   * NEW CONSTRUCTION. The chips here are not cosmetic scope like a remodel's
+   * "what are you upgrading" - each one is a genuine, separately priced part of
+   * the build, wired through buildRefinements to a real engine input. A basement,
+   * a third garage bay, covered outdoor living and a well with septic are the
+   * four largest optional swings in a Treasure Valley build, so they are asked
+   * rather than assumed.
+   */
+  "custom-home": {
+    tabLabel: "Custom Home",
+    headlinePrefix: "Estimate your", headlineAccent: "custom home", headlineSuffix: "build cost",
+    gridLabel: "WHAT ARE YOU BUILDING?",
+    subtypes: [
+      { id: "single-level",        icon: Home,      title: "Single Level",   subtitle: "Everything on one floor" },
+      { id: "two-story",           icon: Layers,    title: "Two Story",      subtitle: "Bedrooms upstairs" },
+      { id: "main-level-primary",  icon: Bed,       title: "Main-Level Primary", subtitle: "Primary down, rest up" },
+      { id: "estate",              icon: Star,      title: "Estate",         subtitle: "4,000 sq ft and up" },
+    ],
+    chipsLabel: "WHAT ELSE ARE YOU INCLUDING?",
+    chips: [
+      { id: "basement",       icon: Layers,    label: "BASEMENT" },
+      { id: "bigger-garage",  icon: Car,       label: "3+ CAR GARAGE" },
+      { id: "covered-patio",  icon: Sun,       label: "COVERED PATIO" },
+      { id: "well-septic",    icon: Waves,     label: "WELL + SEPTIC" },
+    ],
+    footerAccent: "custom home",
+  },
+  "semi-custom-home": {
+    tabLabel: "Semi-Custom",
+    headlinePrefix: "Estimate your", headlineAccent: "semi-custom home", headlineSuffix: "build cost",
+    twoLineHeadline: true,
+    gridLabel: "WHICH PLAN SIZE FITS?",
+    subtypes: [
+      { id: "starter",       icon: Home,       title: "Starter",       subtitle: "About 1,600 sq ft" },
+      { id: "single-level",  icon: AlignLeft,  title: "Single Level",  subtitle: "About 2,000 sq ft" },
+      { id: "family",        icon: Users,      title: "Family",        subtitle: "About 2,200 sq ft" },
+      { id: "larger-family", icon: Layers,     title: "Larger Family", subtitle: "About 2,900 sq ft" },
+    ],
+    chipsLabel: "WHICH OPTIONS ARE YOU TAKING?",
+    chips: [
+      { id: "basement",       icon: Layers,    label: "BASEMENT" },
+      { id: "bigger-garage",  icon: Car,       label: "3+ CAR GARAGE" },
+      { id: "covered-patio",  icon: Sun,       label: "COVERED PATIO" },
+      { id: "well-septic",    icon: Waves,     label: "WELL + SEPTIC" },
+    ],
+    footerAccent: "semi-custom home",
+  },
+  "build-on-your-lot": {
+    tabLabel: "On My Lot",
+    headlinePrefix: "Estimate your build", headlineAccent: "on your own lot", headlineSuffix: "",
+    twoLineHeadline: true,
+    gridLabel: "WHAT IS YOUR LOT LIKE?",
+    subtypes: [
+      { id: "valley-flat", icon: Trees,     title: "Flat Valley Lot", subtitle: "In a subdivision" },
+      { id: "acreage",     icon: Warehouse, title: "Acreage",         subtitle: "Rural, likely well and septic" },
+      { id: "foothills",   icon: Mountain,  title: "Foothills",       subtitle: "Sloped, engineered" },
+      { id: "riverfront",  icon: Waves,     title: "River or Creek",  subtitle: "Setbacks and floodplain" },
+    ],
+    chipsLabel: "WHAT ELSE ARE YOU INCLUDING?",
+    chips: [
+      { id: "basement",       icon: Layers,    label: "BASEMENT" },
+      { id: "bigger-garage",  icon: Car,       label: "3+ CAR GARAGE" },
+      { id: "covered-patio",  icon: Sun,       label: "COVERED PATIO" },
+      { id: "well-septic",    icon: Waves,     label: "WELL + SEPTIC" },
+    ],
+    footerAccent: "build",
+  },
   kitchen: {
     tabLabel: "Kitchen",
     headlinePrefix: "Calculate your", headlineAccent: "kitchen", headlineSuffix: "remodel cost",
@@ -301,9 +402,22 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
 };
 
 
+/*
+ * THE LIST A VISITOR SEES, and the reason the remodel project types are still
+ * defined but absent here.
+ *
+ * Boise Construction Co builds new homes. The remodel types remain in the engine
+ * because the market-ceiling guard for new construction is derived from them and
+ * because they carry a large calibrated invariant suite worth keeping, but
+ * offering a kitchen remodel on a home builder's estimator would misrepresent
+ * what the company does. Add a type here only when it is genuinely for sale.
+ */
 const PROJECT_TYPE_ORDER: ProjectType[] = [
-  "kitchen", "bathroom", "whole-home", "addition", "adu", "basement",
+  "custom-home", "semi-custom-home", "build-on-your-lot",
 ];
+
+/** The project the estimator opens on. */
+const DEFAULT_PROJECT: ProjectType = "custom-home";
 
 /* ══════════════════════════════════════════════════════════════════════
    REFINEMENT BUILDER  (exact logic per spec)
@@ -334,6 +448,32 @@ function buildRefinements(
 ): EstimateRefinements {
   const ref: EstimateRefinements = { ...EMPTY_REFINEMENTS, ...subtypeRef };
 
+  /*
+   * NEW CONSTRUCTION CHIPS ARE PRICED, not decorative.
+   *
+   * Each maps to an input the line-item engine reads, so ticking one visibly
+   * moves the number. That is the whole point: the memory note on this codebase
+   * records that a selection wired only into the guide engine silently does
+   * nothing to the quoted range, and a chip that changes no number is worse than
+   * no chip at all because it teaches people the estimator is decorative.
+   *
+   * Note these OVERRIDE the subtype seed rather than merging with it, so a
+   * visitor who picks the acreage lot preset and then unticks "well and septic"
+   * gets a price without it.
+   */
+  if (isNewConstructionProject(effectiveProject)) {
+    if (addOns.includes("basement")) ref.basementType = "unfinished";
+    // The subtype seeds two or three bays; the chip is what takes it to three or
+    // more, and never reduces what the preset already implied.
+    if (addOns.includes("bigger-garage")) {
+      ref.garageBays = ref.garageBays === "four" ? "four" : "three";
+    } else if (ref.garageBays === "three" || ref.garageBays === "four") {
+      ref.garageBays = "two";
+    }
+    ref.coveredOutdoor = addOns.includes("covered-patio") ? 300 : 0;
+    ref.lotServices = addOns.includes("well-septic") ? "well-septic" : "city";
+  }
+
   if (effectiveProject === "whole-home" && addOns.includes("layout")) {
     ref.layoutChanges = "moderate";
   }
@@ -359,6 +499,11 @@ function buildRefinements(
    CONSTANTS
 ══════════════════════════════════════════════════════════════════════ */
 
+/**
+ * @deprecated Use `finishLabels` from getFinishLabels(activeProject) instead, so
+ * a new home shows "Signature" rather than the remodeling word "Mid-Range".
+ * Retained only until the last remaining reference is migrated.
+ */
 const FINISH_LABELS: Record<FinishLevel, string> = {
   refresh: "Refresh",
   "mid-range": "Mid-Range",
@@ -381,10 +526,10 @@ export function EstimateCalculator({
 }: EstimateCalculatorProps = {}) {
 
   /* ── State ── */
-  const [activeProject, setActiveProject] = useState<ProjectType>("kitchen");
-  const [subtype, setSubtype]             = useState<string>(() => defaultSubtypeFor("kitchen"));
+  const [activeProject, setActiveProject] = useState<ProjectType>(DEFAULT_PROJECT);
+  const [subtype, setSubtype]             = useState<string>(() => defaultSubtypeFor(DEFAULT_PROJECT));
   const [sqft, setSqft]                   = useState<number>(
-    () => SUBTYPE_DATA.kitchen[defaultSubtypeFor("kitchen")].sqft,
+    () => SUBTYPE_DATA[DEFAULT_PROJECT][defaultSubtypeFor(DEFAULT_PROJECT)].sqft,
   );
   const [addOns, setAddOns]               = useState<string[]>([]);
   const [finish, setFinish]               = useState<FinishLevel>("mid-range");
@@ -537,6 +682,11 @@ export function EstimateCalculator({
 
   /* ── Derived ── */
   const config = PROJECT_CONFIGS[activeProject];
+
+  /* Finish tier names depend on the project: a new home is specified
+     "Essential" to "Bespoke", not "Refresh" to "Luxury". */
+  const finishLabels = getFinishLabels(activeProject);
+  const isNewBuild = isNewConstructionProject(activeProject);
 
   const effectiveProject = useMemo<ProjectType>(
     () => SUBTYPE_DATA[activeProject]?.[subtype]?.projectOverride ?? activeProject,
@@ -738,7 +888,9 @@ export function EstimateCalculator({
     engagementFired.current = true;
     trackMetaEvent("InitiateCheckout", {
       content_name: effectiveProject,
-      content_category: "remodel_estimate",
+      content_category: isNewConstructionProject(effectiveProject)
+        ? "new_construction_estimate"
+        : "remodel_estimate",
     });
     trackEvent("begin_checkout", { project: effectiveProject });
   }
@@ -775,6 +927,23 @@ export function EstimateCalculator({
     if (data) {
       const c = PROJECT_SIZE_CONFIG[data.projectOverride ?? activeProject];
       setSqft(Math.max(c.min, Math.min(c.max, data.sqft)));
+      /*
+       * Pre-tick the chips a lot type implies, so the preset and the chips agree.
+       *
+       * The chips are the authority on garage, basement, patio and services (see
+       * buildRefinements), so a preset that seeded "well and septic" would
+       * otherwise be silently overridden the moment the price was computed. An
+       * acreage lot almost certainly needs a well and a septic system, and a
+       * visitor who knows better can untick it.
+       */
+      if (isNewConstructionProject(activeProject)) {
+        const implied: string[] = [];
+        if (data.refinements.lotServices === "well-septic") implied.push("well-septic");
+        if (data.refinements.garageBays === "three" || data.refinements.garageBays === "four") {
+          implied.push("bigger-garage");
+        }
+        setAddOns(implied);
+      }
     }
     fireEstimatorEngagement();
     /* Advance to the next step (size) directly from the tap, so it also fires
@@ -815,6 +984,11 @@ export function EstimateCalculator({
 
   /* Upgrade chips that imply plumbing or electrical work is in play. */
   const SYSTEMS_CHIPS: Record<ProjectType, string[]> = {
+    /* A new home is plumbed and wired from nothing, so there is no partial
+       systems scope to ask about; see ALWAYS_HAS_SYSTEMS below. */
+    "custom-home": [],
+    "semi-custom-home": [],
+    "build-on-your-lot": [],
     kitchen: ["counters", "lighting"],
     bathroom: ["shower", "vanity", "tub"],
     "whole-home": ["kitchen", "baths", "layout"],
@@ -822,8 +996,12 @@ export function EstimateCalculator({
     adu: [],
     basement: ["bath", "wet-bar", "egress"],
   };
-  /* New construction always carries its own systems, whatever else is ticked. */
-  const ALWAYS_HAS_SYSTEMS: ProjectType[] = ["addition", "adu"];
+  /* New construction always carries its own systems, whatever else is ticked.
+     Asking a new-home buyer whether plumbing is "staying put" is meaningless:
+     there is nothing there yet, so every system is new by definition. */
+  const ALWAYS_HAS_SYSTEMS: ProjectType[] = [
+    "custom-home", "semi-custom-home", "build-on-your-lot", "addition", "adu",
+  ];
 
   const showCabinetry = effectiveProject === "kitchen" && addOns.includes("cabinets");
   /* Bathrooms drive a whole-home budget more than anything else, so the count is
@@ -982,9 +1160,9 @@ export function EstimateCalculator({
       const title = config.subtypes.find((s) => s.id === subtype)?.title;
       if (title) parts.push(title);
     }
-    if (chosen.finish) parts.push(FINISH_LABELS[finish]);
+    if (chosen.finish) parts.push(finishLabels[finish].label);
     return parts.join(" · ");
-  }, [chosen.project, chosen.subtype, chosen.finish, config, subtype, finish]);
+  }, [chosen.project, chosen.subtype, chosen.finish, config, subtype, finish, finishLabels]);
 
   const handleStickyCta = () => {
     if (gateSubmitted) {
@@ -1281,7 +1459,7 @@ export function EstimateCalculator({
         {!chosen.project ? (
           /* Before a project is picked the headline must not name one. */
           <>
-            Calculate your <em className="brc-accent">remodel</em> cost
+            Estimate your <em className="brc-accent">new home</em> build cost
           </>
         ) : config.twoLineHeadline ? (
           <>
@@ -1381,7 +1559,11 @@ export function EstimateCalculator({
   const sizeGrid = (
     <div className="mt-6 scroll-mt-20" ref={sizeRef}>
       <div className="flex items-baseline justify-between mb-3">
-        {renderStepLabel("size", "About how big?", "mb-0")}
+        {renderStepLabel(
+          "size",
+          isNewBuild ? "Finished square feet?" : "About how big?",
+          "mb-0",
+        )}
         <span
           className="brc-display-num tabular-nums text-[22px] leading-none text-inverse-foreground"
           data-testid="calc-sqft-value"
@@ -1413,8 +1595,19 @@ export function EstimateCalculator({
         <span>Large ({sizeConfig.max.toLocaleString()} sq ft)</span>
       </div>
       <p className="mt-2.5 text-[12.5px] text-inverse-muted/90 leading-relaxed">
-        Not sure? The layout above sets a typical size. Drag only if your space is notably smaller or
-        larger. Size is the biggest cost driver, so a closer number means a closer estimate.
+        {isNewBuild ? (
+          <>
+            This is finished living space only. Leave out the garage and any unfinished basement,
+            because those are priced separately below. Size is the biggest cost driver, so a closer
+            number means a closer estimate.
+          </>
+        ) : (
+          <>
+            Not sure? The layout above sets a typical size. Drag only if your space is notably
+            smaller or larger. Size is the biggest cost driver, so a closer number means a closer
+            estimate.
+          </>
+        )}
       </p>
     </div>
   );
@@ -1424,9 +1617,11 @@ export function EstimateCalculator({
     <div className="mt-5 scroll-mt-20" ref={chipsRef}>
       {renderStepLabel("upgrades", config.chipsLabel)}
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
-        {effectiveProject === "kitchen" || effectiveProject === "bathroom"
-          ? "Pick only the parts you're redoing, or leave blank for a full remodel. This adjusts your range."
-          : "Select all that apply. Optional, and it helps us understand your scope."}
+        {isNewBuild
+          ? "Each of these is priced separately, so ticking one moves your range. Leave them off if you are not sure yet."
+          : effectiveProject === "kitchen" || effectiveProject === "bathroom"
+            ? "Pick only the parts you're redoing, or leave blank for a full remodel. This adjusts your range."
+            : "Select all that apply. Optional, and it helps us understand your scope."}
       </p>
       <div
         className="grid grid-cols-2 sm:grid-cols-4 gap-2.5"
@@ -1651,7 +1846,7 @@ export function EstimateCalculator({
   const typicalPanel = (
     <div className="mt-6 scroll-mt-20 rounded-md border border-accent-legible/30 bg-inverse-foreground/[0.05] p-4 shadow-[inset_0_0_0_1px_hsl(var(--accent-legible)/0.08)]" ref={typicalRef}>
       <p className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground">
-        Typical for a {FINISH_LABELS[finish]} {config.tabLabel.toLowerCase()}
+        Typical for a {finishLabels[finish].label} {config.tabLabel.toLowerCase()}
       </p>
       <p className="mt-1 text-[12px] text-inverse-muted">
         We have pre-selected what is most common. Nothing here is locked in.
@@ -1705,10 +1900,10 @@ export function EstimateCalculator({
               {/* Finish is the single biggest price driver (roughly 2x per tier),
                   so it gets the same explanatory subtitle the other cards have. */}
               <span className="text-[13.5px] text-inverse-foreground leading-tight">
-                {ENGINE_FINISH_LABELS[level].label}
+                {finishLabels[level].label}
               </span>
               <span className="text-[11px] text-inverse-muted leading-tight">
-                {ENGINE_FINISH_LABELS[level].sub}
+                {finishLabels[level].sub}
               </span>
             </button>
           );
@@ -1734,9 +1929,21 @@ export function EstimateCalculator({
               <span className="text-inverse-muted/90 mx-2 text-xl">to</span>
               {formatPlanningCurrency(result.priceHigh)}
             </div>
-            <p className="mt-2.5 text-[14px] text-inverse-muted">
-              Typical resale return for this project type: about {result.roi}%.
-            </p>
+            {/* Resale return is a remodeling measure: it compares what you spent
+                against what it added to a house that already existed. A new home
+                has no "before", so there is nothing to express a percentage
+                against and quoting one would be inventing a claim. New
+                construction carries roi: 0 in PRICE_MATRIX for exactly this
+                reason, and the line is hidden rather than showing "about 0%". */}
+            {result.roi > 0 ? (
+              <p className="mt-2.5 text-[14px] text-inverse-muted">
+                Typical resale return for this project type: about {result.roi}%.
+              </p>
+            ) : (
+              <p className="mt-2.5 text-[14px] text-inverse-muted">
+                Excludes land. Covers the home, the site work and the finishes described below.
+              </p>
+            )}
             {/* Always visible, never behind a toggle: a homeowner must not be
                 able to leave this screen thinking they were given a price. */}
             <p className="mt-3 text-[12.5px] text-inverse-foreground/90 leading-relaxed font-normal">
@@ -2145,7 +2352,7 @@ export function EstimateCalculator({
             {subtypeTitle}
           </span>
           <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-[11.5px] text-inverse-foreground">
-            {FINISH_LABELS[finish]}
+            {finishLabels[finish].label}
           </span>
         </div>
 
