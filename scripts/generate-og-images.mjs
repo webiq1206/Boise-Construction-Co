@@ -2,7 +2,7 @@
  * Generates branded Open Graph share cards for blog posts / guides.
  *
  * Each card = featured photo (full-bleed) + dark charcoal overlay + the post
- * title in brand type (Montserrat) + the Boise Remodeling Co seal, output as a
+ * title in brand type (Montserrat) + the Boise Construction Co eyebrow, output as a
  * 1200x630 PNG (best social/iMessage compatibility) at public/images/blog/{slug}-og.png.
  *
  * Usage:
@@ -31,6 +31,11 @@ const BODY = '#E6E3DE';
 const MIST = '#9AA098';
 const SAGE = '#899F95';
 const CHARCOAL = '#1C1F1E';
+
+// The domain stays boiseremodeling.co after the rebrand, so the card carries the
+// new company name beside the old address. That pairing is the point: someone
+// who knows the URL needs to see it belongs to Boise Construction Co.
+const BRAND_EYEBROW = 'BOISE CONSTRUCTION CO   ·   BOISEREMODELING.CO';
 
 const fontLight = fs.readFileSync(path.join(assets, 'Montserrat-Light.ttf'));
 const fontMedium = fs.readFileSync(path.join(assets, 'Montserrat-Medium.ttf'));
@@ -89,7 +94,7 @@ export async function generateOgCard(slug, title, sourceImage) {
       h('div', {
         display: 'flex', textAlign: 'center', fontSize: 18, fontWeight: 500, color: MIST,
         letterSpacing: '2.4px',
-      }, 'BOISE REMODELING CO   ·   BOISEREMODELING.CO'),
+      }, BRAND_EYEBROW),
     ]),
   ]);
 
@@ -107,7 +112,9 @@ export async function generateOgCard(slug, title, sourceImage) {
   const png = new Resvg(svg, { fitTo: { mode: 'width', value: W } }).render().asPng();
   // Photo-based OG cards compress far smaller as JPEG (universally supported by
   // social scrapers/iMessage) while keeping the title crisp at q88.
-  const dest = path.join(root, 'public', 'images', 'blog', `${slug}-og.jpg`);
+  const outDir = path.join(root, 'public', 'images', 'blog');
+  fs.mkdirSync(outDir, { recursive: true });
+  const dest = path.join(outDir, `${slug}-og.jpg`);
   await sharp(png).jpeg({ quality: 88, mozjpeg: true }).toFile(dest);
   return dest;
 }

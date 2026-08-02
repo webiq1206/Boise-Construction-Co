@@ -1,4 +1,4 @@
-// Blog Content for Boise Remodeling Co
+// Blog content for Boise Construction Co
 
 import { ALL_BLOG_POSTS } from './content/allBlogPosts';
 

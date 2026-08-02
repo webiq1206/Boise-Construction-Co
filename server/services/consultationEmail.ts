@@ -18,9 +18,10 @@ import {
   getPlumbingElectricalLabel,
   buildEstimateDisclosure,
   NOT_A_QUOTE_NOTICE,
-  ONSITE_REQUIRED_NOTICE,
+  getOnsiteNotice,
   PROJECT_LABELS,
-  FINISH_LABELS,
+  getFinishLabels,
+  isNewConstructionProject,
   type EstimateRefinements,
   type ProjectType,
   type FinishLevel,
@@ -119,7 +120,11 @@ export function buildSelectionRows(
   upgradeLabels?: string[]
 ): { label: string; value: string }[] {
   const visibility = getRefinementVisibility(project);
-  const isNewConstruction = project === "addition" || project === "adu";
+  // Additions and ADUs build new square footage onto an existing property, so
+  // they read the new-build wording for systems even though they are not
+  // ground-up projects.
+  const buildsNewSpace =
+    isNewConstructionProject(project) || project === "addition" || project === "adu";
 
   // Ordered to mirror the estimator itself, so the email reads back exactly the
   // sequence of choices the visitor made and nothing they picked is missing.
@@ -132,14 +137,14 @@ export function buildSelectionRows(
   rows.push({ label: "Approx. size", value: `${sqft.toLocaleString("en-US")} sq ft` });
 
   rows.push({
-    label: "Upgrading",
+    label: buildsNewSpace ? "Including" : "Upgrading",
     value:
       upgradeLabels && upgradeLabels.length > 0
         ? upgradeLabels.join(", ")
         : "None selected",
   });
 
-  rows.push({ label: "Finish level", value: FINISH_LABELS[finish].label });
+  rows.push({ label: "Finish level", value: getFinishLabels(project)[finish].label });
 
   if (visibility.layoutChanges && r.layoutChanges) {
     const map: Record<string, string> = {
@@ -161,7 +166,7 @@ export function buildSelectionRows(
       partial: "Extended (longer runs or panel work)",
       full: "Full new systems throughout",
     };
-    const value = (isNewConstruction ? newBuild : remodel)[r.plumbingElectrical];
+    const value = (buildsNewSpace ? newBuild : remodel)[r.plumbingElectrical];
     rows.push({ label: getPlumbingElectricalLabel(project), value });
   }
 
@@ -441,9 +446,10 @@ function renderBudgetHtml(est: VerifiedEstimate, audience: "admin" | "client"): 
   const reassurance =
     audience === "client" && a.state === "below"
       ? `<p style="margin:12px 0 0;color:${EMAIL_BRAND.text};font-size:13.5px;line-height:1.6;">` +
-        `We will focus on the features that matter most to you, talk through phasing the work in stages, ` +
-        `and explore options that stretch your investment further. Our job is to find the best path forward ` +
-        `for your home, never to tell you your budget is not enough.</p>`
+        `We will focus on the rooms and features that matter most to you, look at where a simpler ` +
+        `footprint or plan buys back real money, and show you what is worth spending on now versus ` +
+        `finishing later. Our job is to find the best path forward for your home, never to tell you ` +
+        `your budget is not enough.</p>`
       : "";
 
   const adminExtra =
@@ -482,7 +488,14 @@ export function buildEstimateSectionsHtml(
     est.layoutLabel,
     est.upgradeLabels,
   );
-  const roiNote = est.roi ? ` &middot; Typical resale ROI ~${Math.round(est.roi)}%` : "";
+  // Resale ROI answers "will I get this back when I sell", which is a remodel
+  // question. On a new build the house is the asset, not an improvement to one,
+  // so a recoup percentage against nothing is meaningless and invites the wrong
+  // comparison.
+  const roiNote =
+    est.roi && !isNewConstructionProject(est.project)
+      ? ` &middot; Typical resale ROI ~${Math.round(est.roi)}%`
+      : "";
   const disclosure = buildEstimateDisclosure({
     project: est.project,
     finish: est.finish,
@@ -603,7 +616,7 @@ export function buildEstimateSectionsHtml(
 
     <div style="background:#2a2a1c;border-left:3px solid #c9a227;padding:18px;margin:24px 0;border-radius:4px;">
       <p style="margin:0 0 10px;color:#e8dca6;font-size:13px;line-height:1.55;"><strong>${escapeHtml(NOT_A_QUOTE_NOTICE)}</strong></p>
-      <p style="margin:0;color:#e8dca6;font-size:13px;line-height:1.55;">${escapeHtml(ONSITE_REQUIRED_NOTICE)}</p>
+      <p style="margin:0;color:#e8dca6;font-size:13px;line-height:1.55;">${escapeHtml(getOnsiteNotice(est.project))}</p>
     </div>
   `;
 }
@@ -763,7 +776,7 @@ export function buildCustomerEmailHtml(
   // it and generic reassurance is the honest most we can offer.
   const budgetNote =
     lead.budget && !estimate?.statedBudget
-    ? `<p style="margin:16px 0;color:${EMAIL_BRAND.text};line-height:1.6;">Your stated project budget is <strong>${escapeHtml(lead.budget)}</strong>. We will do everything we can to recommend solutions that fit within that budget while helping you achieve the goals you have shared. If your ideal scope runs beyond it, we will focus on the features that matter most to you, talk through phasing the work in stages, and explore materials and design options that stretch your investment further. Our job is to find the best path forward for your home, never to tell you your budget is not enough.</p>`
+    ? `<p style="margin:16px 0;color:${EMAIL_BRAND.text};line-height:1.6;">Your stated project budget is <strong>${escapeHtml(lead.budget)}</strong>. We will do everything we can to recommend solutions that fit within that budget while helping you achieve the goals you have shared. If your ideal scope runs beyond it, we will focus on the rooms and features that matter most to you, look at where a simpler footprint or a different plan buys back real money, and show you what is worth spending on now versus finishing later. Our job is to find the best path forward for your home, never to tell you your budget is not enough.</p>`
     : "";
 
   const content = estimate

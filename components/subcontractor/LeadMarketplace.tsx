@@ -2108,7 +2108,7 @@ function SubcontractorPortalContent() {
                 </li>
                 <li>
                   <strong>Professional Conduct:</strong> You agree to conduct yourself professionally when 
-                  contacting customers. You represent your own business, not Boise Remodeling Co.
+                  contacting customers. You represent your own business, not Boise Construction Co.
                 </li>
                 <li>
                   <strong>No Resale:</strong> You may not resell, share, or transfer leads to any third party.

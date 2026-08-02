@@ -43,7 +43,7 @@ function imageForUrl(url: string): { src: string; alt: string } | null {
 
   const csImage = getCityServiceImage(url);
   if (csImage) {
-    return { src: csImage, alt: "Boise Remodeling Co project photography" };
+    return { src: csImage, alt: "Boise Construction Co new home construction" };
   }
 
   return null;

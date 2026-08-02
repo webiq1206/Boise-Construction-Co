@@ -181,6 +181,24 @@ const SERVICE_SLUG_REDIRECTS = {
   'basement-finishing': 'custom-home-builder',
   'aging-in-place': 'custom-home-builder',
   'outdoor-living': 'custom-home-builder',
+
+  // Slug variants the old site never used as canonicals but that appear in
+  // inbound links, directory listings and citations. Cheap to cover, and each
+  // one is otherwise a 404 on a URL someone else controls.
+  'kitchen-remodeling': 'custom-home-builder',
+  'bathroom-remodeling': 'custom-home-builder',
+  'whole-home-remodeling': 'custom-home-builder',
+  'home-remodeling': 'custom-home-builder',
+  'basement-remodel': 'custom-home-builder',
+  'basement-remodeling': 'custom-home-builder',
+  'home-additions': 'build-on-your-lot',
+  'home-addition': 'build-on-your-lot',
+  'room-additions': 'build-on-your-lot',
+  'adu-builder': 'build-on-your-lot',
+  'adu-guest-house': 'build-on-your-lot',
+  'aging-in-place-remodeling': 'custom-home-builder',
+  'outdoor-living-spaces': 'custom-home-builder',
+  'decks-patios': 'custom-home-builder',
 };
 
 module.exports = {

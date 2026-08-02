@@ -194,6 +194,21 @@ export const NOT_A_QUOTE_NOTICE =
 export const ONSITE_REQUIRED_NOTICE =
   "Every home is different, and the things that move a remodel budget most (what is behind the walls, the age and condition of existing systems, access, and structural realities) cannot be assessed from a web form. A firm, itemized proposal follows an on-site consultation and assessment.";
 
+/**
+ * The new-construction counterpart. On a remodel the unknowns are inside the
+ * house; on a build they are under it. Same promise, different unknowns, and
+ * saying "what is behind the walls" to someone with a bare lot reads as
+ * boilerplate written for a different company.
+ */
+export const NEW_CONSTRUCTION_ONSITE_NOTICE =
+  "Every lot is different, and the things that move a build budget most (soils and how deep we have to dig, slope, how far utilities have to run, access for concrete and framing trucks, and what the jurisdiction requires) cannot be assessed from a web form. A firm, itemized proposal follows a site visit and a lot review.";
+
+export function getOnsiteNotice(project: ProjectType): string {
+  return isNewConstructionProject(project)
+    ? NEW_CONSTRUCTION_ONSITE_NOTICE
+    : ONSITE_REQUIRED_NOTICE;
+}
+
 export interface EstimateDisclosure {
   /** Work the range is intended to cover. */
   includes: string[];
@@ -275,6 +290,70 @@ const UNIVERSAL_DECREASES = [
   "Reusing sound cabinet boxes, flooring, or fixtures where practical",
   "A flexible timeline that lets us schedule efficiently",
   "Combining adjacent rooms into a single mobilization",
+];
+
+/* --------------------------------------------------------------------------
+ * New-construction disclosure lists.
+ *
+ * The lists above describe a remodel: demolition, what is behind the walls,
+ * knob-and-tube, reusing cabinet boxes. None of that applies to a bare lot, and
+ * these lists are the bulk of the confirmation email and the on-page scope
+ * panel, so getting them wrong is the most visible way the estimate can read as
+ * a remodeler's form with the words swapped.
+ *
+ * Same editing discipline as the remodel lists: every distinct fact a lead needs
+ * is here, said in as few words as it can be said in. Nothing was dropped for
+ * length.
+ * ------------------------------------------------------------------------ */
+
+const NC_INCLUDES = [
+  "Architectural design, engineering, and permit-ready drawings",
+  "Building permits and plan review",
+  "Foundation, framing, envelope, and finishes",
+  "Labor and materials",
+  "One dedicated point of contact from start to finish",
+  "Standard warranties",
+];
+
+const NC_EXCLUDES = [
+  "The land itself, and closing costs on the lot",
+  "Appliances, cookware, and small-appliance storage. Appliances are client-supplied: we guide selection but do not purchase or install",
+  "Impact fees, utility connection and meter fees, and district assessments, which are set by the jurisdiction and vary by address",
+  "Well drilling and septic design or installation where no municipal service exists",
+  "Unknown subsurface conditions: rock, high groundwater, expansive or unstable soils, buried debris",
+  "Off-site work a jurisdiction may require: road frontage, curb and gutter, sidewalk, or utility extension",
+  "Landscaping, fencing, and irrigation beyond the finish grade around the home",
+  "Furniture, decor, window coverings, and art",
+  "Temporary housing, storage, or moving costs",
+];
+
+const NC_ASSUMPTIONS = [
+  "The lot is buildable, legally platted, and has recorded access",
+  "Soils are typical for the area and support a conventional foundation",
+  "Power, water, and sewer are available at or near the property line",
+  "Work runs in one continuous phase with normal site access",
+  "Standard lead times, with no expedited or special-order surcharges",
+  "Finishes come from the allowances set during design",
+  "2025 Boise-area labor and material costs",
+];
+
+const NC_INCREASES = [
+  "A sloped lot, or one needing significant cut, fill, or retaining",
+  "Rock, high groundwater, or soils that require an engineered foundation",
+  "Long utility runs, a shared or new well, or a septic system",
+  "Daylight or walkout basements, and tall or complex rooflines",
+  "Custom millwork, imported stone, or specialty-order materials",
+  "A compressed schedule, or a winter foundation pour",
+  "Difficult access: narrow county roads, tight infill lots, limited staging",
+];
+
+const NC_DECREASES = [
+  "Starting from a proven plan instead of a fully custom design",
+  "A flat, rectangular lot with utilities already at the line",
+  "A simpler footprint and roofline, which cuts framing and envelope labor",
+  "Stock or semi-custom cabinetry instead of fully custom",
+  "A single-story plan on a slab or crawlspace rather than a basement",
+  "A flexible timeline that lets us schedule efficiently",
 ];
 
 const PROJECT_UPGRADES: Record<ProjectType, string[]> = {
@@ -553,12 +632,16 @@ export function getTypicalSelections(
 }
 
 export function buildEstimateDisclosure(input: EstimateInput): EstimateDisclosure {
+  const nc = isNewConstructionProject(input.project);
   return {
-    includes: [...UNIVERSAL_INCLUDES, ...buildDynamicScope(input)],
-    excludes: [...UNIVERSAL_EXCLUDES, ...(PROJECT_EXCLUDES[input.project] ?? [])],
-    assumptions: UNIVERSAL_ASSUMPTIONS,
-    increases: UNIVERSAL_INCREASES,
-    decreases: UNIVERSAL_DECREASES,
+    includes: [...(nc ? NC_INCLUDES : UNIVERSAL_INCLUDES), ...buildDynamicScope(input)],
+    excludes: [
+      ...(nc ? NC_EXCLUDES : UNIVERSAL_EXCLUDES),
+      ...(PROJECT_EXCLUDES[input.project] ?? []),
+    ],
+    assumptions: nc ? NC_ASSUMPTIONS : UNIVERSAL_ASSUMPTIONS,
+    increases: nc ? NC_INCREASES : UNIVERSAL_INCREASES,
+    decreases: nc ? NC_DECREASES : UNIVERSAL_DECREASES,
     upgrades: PROJECT_UPGRADES[input.project],
   };
 }

@@ -16,7 +16,7 @@ import {
 import {
   buildEstimateDisclosure,
   NOT_A_QUOTE_NOTICE,
-  ONSITE_REQUIRED_NOTICE,
+  getOnsiteNotice,
   PROJECT_LABELS,
   FINISH_LABELS,
 } from "@/shared/estimateEngine";
@@ -131,7 +131,7 @@ export function buildLeadEstimateRecord(
     increasesCost: disclosure.increases,
     decreasesCost: disclosure.decreases,
     optionalUpgrades: disclosure.upgrades,
-    disclaimers: [NOT_A_QUOTE_NOTICE, ONSITE_REQUIRED_NOTICE, TAKEOFF_BASIS_NOTICE],
+    disclaimers: [NOT_A_QUOTE_NOTICE, getOnsiteNotice(est.project), TAKEOFF_BASIS_NOTICE],
     takeoff: {
       catalogVersion: takeoff.catalogVersion,
       fullyMeasured: takeoff.fullyMeasured,

@@ -24,7 +24,7 @@ export function getBlogImageForSlug(
 }
 
 export function getBlogImageAlt(slug: string): string {
-  return BLOG_IMAGE_REGISTRY[slug]?.alt ?? 'Boise Remodeling Co project photography';
+  return BLOG_IMAGE_REGISTRY[slug]?.alt ?? 'Boise Construction Co new home construction';
 }
 
 export function getBlogHeroImage(
@@ -47,7 +47,7 @@ export function getHubHeroImage(hubSlug: string): string {
 
 /** True for cost guides, cost hub articles, and slug/topic-tagged cost content. */
 export function isCostRelatedContent(slug: string, hubSlug?: string): boolean {
-  if (hubSlug === 'remodeling-costs') return true;
+  if (hubSlug === 'home-building-costs') return true;
   const entry = BLOG_IMAGE_REGISTRY[slug];
   if (entry?.topicTags.includes('cost')) return true;
   return slug.includes('cost');
@@ -95,8 +95,8 @@ export function getArticleInlineFigures(
       figures.push({
         afterSectionIndex: Math.floor(sectionCount / 2),
         src: hubHero,
-        alt: `Treasure Valley ${hubSlug.replace(/-/g, ' ')} remodeling project`,
-        caption: 'Project photography from a recent Treasure Valley remodel.',
+        alt: `Treasure Valley ${hubSlug.replace(/-/g, ' ')}`,
+        caption: 'New home construction in the Treasure Valley.',
       });
     }
   }

@@ -69,7 +69,12 @@ export function buildCanonical(path: string): string {
   return `${base}${normalized}`;
 }
 
-const BRAND_SUFFIX = 'Boise Remodeling Co';
+/**
+ * Both the current brand and the pre-rebrand one. The old name is still in the
+ * list because a title override that predates the rebrand would otherwise slip
+ * the wrong brand into a rendered <title> alongside the appended right one.
+ */
+const BRAND_SUFFIXES = [SITE_CONFIG.name, 'Boise Remodeling Co'];
 
 /**
  * Site-wide feed discovery. Declared beside the canonical because Next replaces
@@ -78,20 +83,27 @@ const BRAND_SUFFIX = 'Boise Remodeling Co';
  */
 export const FEED_ALTERNATES = {
   'application/rss+xml': [
-    { url: '/feed.xml', title: 'Boise Remodeling Co | Remodeling Guides and Insights' },
+    { url: '/feed.xml', title: `${SITE_CONFIG.name} | Home Building Guides and Insights` },
   ],
 };
 
 /**
- * Remove a trailing "| Boise Remodeling Co" (one or more times) from a title.
- * The root layout template appends the brand exactly once, so child titles
- * must not carry it themselves or it doubles in the rendered <title>.
+ * Remove a trailing brand suffix (one or more times) from a title. The root
+ * layout template appends the brand exactly once, so child titles must not
+ * carry it themselves or it doubles in the rendered <title>.
  */
 export function stripBrandSuffix(title: string): string {
   let result = title.trim();
-  const suffix = `| ${BRAND_SUFFIX}`;
-  while (result.endsWith(suffix)) {
-    result = result.slice(0, -suffix.length).trim();
+  let stripped = true;
+  while (stripped) {
+    stripped = false;
+    for (const brand of BRAND_SUFFIXES) {
+      const suffix = `| ${brand}`;
+      if (result.endsWith(suffix)) {
+        result = result.slice(0, -suffix.length).trim();
+        stripped = true;
+      }
+    }
   }
   return result;
 }
@@ -179,8 +191,8 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
   if (input.titleOverride) title = input.titleOverride;
   if (input.descriptionOverride) description = input.descriptionOverride;
 
-  // The root layout template appends "| Boise Remodeling Co"; ensure the child
-  // title never carries the brand itself (prevents duplicated brand in <title>).
+  // The root layout template appends the brand; ensure the child title never
+  // carries it itself (prevents a duplicated brand in the rendered <title>).
   title = stripBrandSuffix(title);
 
   const ogImage = getDefaultOgImage();
@@ -195,7 +207,7 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
       description,
       url: canonical,
       type: 'website',
-      images: [{ url: ogImage, width: 1200, height: 630, alt: 'Boise Remodeling Co' }],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: SITE_CONFIG.name }],
     },
     twitter: {
       card: 'summary_large_image',

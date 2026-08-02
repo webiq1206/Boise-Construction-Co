@@ -1,106 +1,107 @@
-# Boise Remodeling Co - Full Reference
+# Boise Construction Co - Full Reference
 
-> Design-build remodeling for kitchens, bathrooms, whole-home renovations, room additions, and ADUs in Boise, Idaho and the Treasure Valley. One accountable team handles design, estimating, permits, and construction under a single contract.
+> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build, founded 2020. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell. Phone (208) 477-1169.
 
 ## About
 
-Boise Remodeling Co is a residential design-build remodeling company serving the Treasure Valley since 2020. Design-build means design, permitting, and construction are delivered by one team under one contract, which removes the handoffs between a separate designer and general contractor and keeps each project on a single coordinated schedule. Every project includes a written scope before construction, clear allowances for selections, proactive communication throughout the build, and a workmanship guarantee at completion.
+Boise Construction Co is a residential design-build home builder serving the Treasure Valley since 2020. We build new homes: custom homes drawn from a blank page, semi-custom homes personalized from a proven plan, and build-on-your-lot projects for families who already own land. Design-build means design, engineering, permitting, and construction are delivered by one team under one contract, which removes the handoff between an architect and a general contractor and keeps the drawings and the budget on the same schedule. Every project includes a written line-item scope before construction, named allowances for selections, and a workmanship warranty at completion.
 
-- Business type: Design-build remodeling contractor (residential)
+- Business type: Residential design-build home builder (new construction)
 - Founded: 2020
-- Service model: Single accountable team for design, permits, and construction
+- Service model: One accountable team for design, permits, and construction
 - Contact: https://boiseremodeling.co/contact
-- Project estimator: https://boiseremodeling.co/#calculator
+- Build estimator: https://boiseremodeling.co/estimate
 
 ## Service area
 
-We serve the following Treasure Valley cities across Ada and Canyon County:
+We build in the following Treasure Valley cities across Ada and Canyon County:
 
 - Ada County: Boise, Meridian, Eagle, Kuna, Star
-- Canyon County: Nampa, Caldwell, Middleton
+- Canyon County: Nampa, Middleton, Caldwell
 
-Permit paths differ between Ada County and Canyon County; we coordinate submissions, fees, and inspections as part of the design-build contract.
+Permit paths, impact fees, and inspection sequencing differ between Ada County and Canyon County, and again between incorporated city limits and county jurisdiction. We coordinate submissions, fees, and inspections as part of the design-build contract.
 
 ## Services
 
-- Kitchen Remodel: /services/kitchen-remodel
-- Bathroom Remodel: /services/bathroom-remodel
-- Whole-Home Remodel: /services/whole-home-remodel
-- Room Addition: /services/room-addition
-- ADU / Guest House: /services/adu
+- Custom Home Building: /services/custom-home-builder - A home drawn from a blank page around your lot, your budget, and how you actually live.
+- Semi-Custom Homes: /services/semi-custom-homes - Start from a proven floor plan and personalize it, for a shorter timeline and a tighter budget range.
+- Build on Your Lot: /services/build-on-your-lot - You already own the land. We handle feasibility, design, permits, and construction from there.
+- Design-Build: /services/design-build - Design and construction under one contract, so the drawings and the budget never drift apart.
+- Home Design & Plans: /services/home-plans-design - Architectural design, engineering, and permit-ready drawings for a home built to your site.
+- Lot Evaluation & Feasibility: /services/lot-evaluation - Soils, utilities, access, setbacks, and slope reviewed before you commit to a parcel.
+- Shop Homes & Barndominiums: /services/shop-homes-barndominiums - Post-frame and steel-framed homes that pair finished living space with real working shop square footage.
+- Energy-Efficient Homes: /services/energy-efficient-homes - High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.
 
-Each service has a dedicated page per city at /services/{service-slug}/{city-slug} for boise, meridian, eagle, nampa, kuna, star, middleton, and caldwell. City service-area hubs live at /areas/{city-slug}.
+Each service has a dedicated page per city at /services/{service-slug}/{city-slug} for boise, meridian, eagle, nampa, kuna, star, middleton, caldwell. City service-area hubs live at /areas/{city-slug}.
 
 ## Authoritative guides (https://boiseremodeling.co/guides)
 
 Pillar guides (own the head terms):
 
-- Treasure Valley Remodeling Guide: /guides/treasure-valley-remodeling-guide
-- Boise Remodeling Cost Guide (2026 planning ranges): /guides/boise-remodeling-cost-guide
-- Boise Kitchen Remodeling Guide: /guides/boise-kitchen-remodeling-guide
-- Boise Bathroom Remodeling Guide: /guides/boise-bathroom-remodeling-guide
-- Boise Home Addition Guide: /guides/boise-home-addition-guide
-- Whole Home Remodeling Guide: /guides/whole-home-remodeling-guide
-- Choose a Remodeling Contractor Boise: /guides/choose-remodeling-contractor-boise
-- Boise Remodeling Process Guide: /guides/boise-remodeling-process-guide
-- Best Remodeling ROI Boise: /guides/best-remodeling-roi-boise
-- Outdoor Living Remodeling Guide: /guides/outdoor-living-remodeling-guide
+- Boise Home Building Cost Guide: /guides/boise-home-building-cost-guide
+- The Boise Home Building Process: /guides/boise-home-building-process-guide
+- Buying Land to Build On in the Treasure Valley: /guides/buying-land-to-build-boise
+- How to Choose a Home Builder in Boise: /guides/choose-home-builder-boise
+- Designing a Custom Home in the Treasure Valley: /guides/custom-home-design-guide
+- Treasure Valley Home Building Guide: /guides/treasure-valley-home-building-guide
 
 City guides:
 
-- /guides/boise-remodeling-guide
-- /guides/meridian-remodeling-guide
-- /guides/eagle-remodeling-guide
-- /guides/kuna-remodeling-guide
-- /guides/star-remodeling-guide
-- /guides/middleton-remodeling-guide
-- /guides/nampa-remodeling-guide
-- /guides/caldwell-remodeling-guide
+- /guides/boise-home-building-guide
+- /guides/meridian-home-building-guide
+- /guides/eagle-home-building-guide
+- /guides/kuna-home-building-guide
+- /guides/star-home-building-guide
+- /guides/middleton-home-building-guide
+- /guides/nampa-home-building-guide
+- /guides/caldwell-home-building-guide
 
 Neighborhood guides:
 
-- /guides/north-end-remodeling-guide
-- /guides/boise-bench-remodeling-guide
-- /guides/harris-ranch-remodeling-guide
-- /guides/east-boise-remodeling-guide
-- /guides/hidden-springs-remodeling-guide
-- /guides/eagle-foothills-remodeling-guide
+- /guides/eagle-foothills-home-building-guide
+- /guides/hidden-springs-home-building-guide
+- /guides/harris-ranch-home-building-guide
 
 ## Blog category hubs (long-tail questions support the pillars)
 
-- Remodeling costs: /blog/category/remodeling-costs
-- Kitchen remodeling: /blog/category/kitchen-remodeling
-- Bathroom remodeling: /blog/category/bathroom-remodeling
-- Home additions: /blog/category/home-additions
-- Whole-home remodeling: /blog/category/whole-home-remodeling
-- Contractor selection: /blog/category/contractor-selection
-- Remodeling process: /blog/category/remodeling-process
-- ROI & home value: /blog/category/remodeling-roi
-- Outdoor living: /blog/category/outdoor-living
+- Home Building Costs: /blog/category/home-building-costs
+- Choosing a Builder: /blog/category/choosing-a-builder
+- The Building Process: /blog/category/home-building-process
+- Land & Lots: /blog/category/land-and-lots
+- Design & Floor Plans: /blog/category/home-design-and-plans
+- Treasure Valley Locations: /blog/category/treasure-valley-locations
+
+35 articles across these hubs. Index: /blog
 
 ## Planning resources
 
-- Remodel planning resources (free PDFs and visual guides): /resources
+- Home building planning resources (free PDFs and visual guides): /resources
+- New home budget worksheet: /downloads/new-home-budget-worksheet.pdf
+- Lot evaluation checklist: /downloads/lot-evaluation-checklist.pdf
 - Ada vs Canyon County permit flow (visual guide): /resources/ada-canyon-permit-flow
 
 ## Common questions
 
-- How long does a remodel take? Most projects run several weeks of design and permitting followed by weeks to months of construction, depending on scope and whether layout or structural changes trigger plan review.
-- Do I need permits? Cosmetic updates often do not, but layout, structural, plumbing, or electrical changes require permits through Ada or Canyon County.
-- How do I keep a remodel on budget? Define scope in writing, lock selections before construction, hold a 10-15% contingency for concealed conditions in older homes, and compare bids only when allowances and permits match.
+- How long does it take to build a house in the Treasure Valley? Design and engineering typically run two to four months, plan review and permitting another one to three depending on jurisdiction, and construction ten to fourteen months for a custom home. Semi-custom plans compress the design phase because the drawings already exist.
+- What does a new home cost per square foot here? A blended rate is the wrong unit, because site work, foundation type, and specification level move the number more than area does. The estimator prices geometry and scope instead, then reports a range.
+- Can I build on land I already own? Yes, that is the build-on-your-lot path. Before design starts we review soils, utilities, access, setbacks, easements, and slope, because those determine what the parcel can actually carry and what the site work will cost.
+- Do I need a construction loan? Most owners use a construction-to-permanent loan that draws against completed milestones and converts to a mortgage at occupancy. The draw schedule has to match the build schedule, which is something we set up with the lender.
+- How do I compare two builder bids? Only when the allowances, site work assumptions, and permit responsibilities match. Most of the spread between two bids on the same house is scope that one of them left out, not margin.
 
 ## Key pages
 
 - Home: https://boiseremodeling.co/
 - About: https://boiseremodeling.co/about
+- Services: https://boiseremodeling.co/services
 - Service areas: https://boiseremodeling.co/areas
-- Projects & reviews: https://boiseremodeling.co/testimonials
+- Build estimator: https://boiseremodeling.co/estimate
 - Blog: https://boiseremodeling.co/blog
 - Guides: https://boiseremodeling.co/guides
+- Resources: https://boiseremodeling.co/resources
 - Contact: https://boiseremodeling.co/contact
-
-Last updated: 2026-06-05. Full sitemap: https://boiseremodeling.co/sitemap.xml
 
 ## RE-10 / Inspection Repairs
 
-Boise Remodeling Co completes RE-10 and home inspection repairs for real estate agents, buyers and sellers across Boise and the Treasure Valley. An RE-10 is the Idaho inspection response form: after a home inspection the buyer requests specific repairs before closing. We review the RE-10 and inspection report, provide a written scope and pricing, coordinate access, complete the approved work across multiple trades, and supply photo documentation, invoices and receipts for the transaction file. Structural, foundation, mould and asbestos abatement, main electrical service, sewer and septic, HVAC replacement, gas lines and full roof replacement are coordinated to licensed specialists rather than performed in house. Details: https://boiseremodeling.co/re-10-repairs-boise
+Boise Construction Co also completes RE-10 and home inspection repairs for real estate agents, buyers and sellers across Boise and the Treasure Valley. An RE-10 is the Idaho inspection response form: after a home inspection the buyer requests specific repairs before closing. We review the RE-10 and inspection report, provide a written scope and pricing, coordinate access, complete the approved work across multiple trades, and supply photo documentation, invoices and receipts for the transaction file. Structural, foundation, mold and asbestos abatement, main electrical service, sewer and septic, HVAC replacement, gas lines and full roof replacement are coordinated to licensed specialists rather than performed in house. We take this work because an inspection repair is a deadline problem rather than a construction problem, and sequencing trades against a date that will not move is the same thing we do on every build. Details: https://boiseremodeling.co/re-10-repairs-boise
+
+Last updated: 2026-08-02. Full sitemap: https://boiseremodeling.co/sitemap.xml

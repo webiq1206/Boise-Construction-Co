@@ -3,6 +3,6 @@
  * (no named individual), so the Article schema emits an Organization author.
  */
 export const CONTENT_AUTHOR = {
-  name: 'Boise Remodeling Co',
+  name: 'Boise Construction Co',
   url: '/about',
 } as const;

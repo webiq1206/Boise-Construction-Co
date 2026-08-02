@@ -234,19 +234,19 @@ export const GBP_PRODUCTS: GbpProduct[] = [
   },
   {
     category: 'Free Planning Resources',
-    name: 'Remodel Budget Worksheet',
+    name: 'New Home Budget Worksheet',
     price: 'Free',
-    url: `${SITE}/downloads/remodel-budget-worksheet.pdf`,
+    url: `${SITE}/downloads/new-home-budget-worksheet.pdf`,
     description:
-      'Printable 2026 Treasure Valley planning ranges, budget buckets, and bid comparison checks.',
+      'Printable 2026 Treasure Valley build ranges, budget buckets, and the site costs most people forget.',
   },
   {
     category: 'Free Planning Resources',
-    name: 'Kitchen & Bath Planning Checklist',
+    name: 'Lot Evaluation Checklist',
     price: 'Free',
-    url: `${SITE}/downloads/kitchen-bath-planning-checklist.pdf`,
+    url: `${SITE}/downloads/lot-evaluation-checklist.pdf`,
     description:
-      'Room-by-room checklist for layouts, selections, permits, and construction. Bring to your consultation.',
+      'What to check on a parcel before you make an offer: soils, utilities, access, setbacks, and slope.',
   },
   {
     category: 'Free Planning Resources',
@@ -476,7 +476,7 @@ export const GBP_MONTHLY_SYNC = [
 ] as const;
 
 export const GBP_QUARTERLY_SYNC = [
-  'Search "Boise Remodeling Co" (208) 405-8425 - old phone should return nothing',
+  'Search "Boise Remodeling Co" - the old brand should resolve to Boise Construction Co',
   'Audit for duplicate GBP listings',
   'Update product/post links if new guides publish',
   'Append new citation URLs to BUSINESS_INFO.sameAs via env vars',

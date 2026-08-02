@@ -36,9 +36,9 @@ function GuideCardStats({ guide }: { guide: GuidePageData }) {
 export const metadata: Metadata = buildPageMetadata({
   kind: 'blog',
   path: '/guides',
-  titleOverride: 'Remodeling Guides | Boise Remodeling Co',
+  titleOverride: 'Home Building Guides | Boise Construction Co',
   descriptionOverride:
-    'Definitive Treasure Valley remodeling guides: costs, kitchens, baths, additions, contractor selection, ROI, outdoor living, and local city resources.',
+    'In-depth Treasure Valley home building guides: what a custom home costs, how the build process runs, buying land, choosing a builder, design decisions, and construction financing.',
 });
 
 const PILLAR_TYPES = new Set(['hub-pillar', 'master']);
@@ -51,9 +51,9 @@ export default function GuidesIndexPage() {
   const sortedHubs = [...CONTENT_HUBS].sort((a, b) => a.priorityTier - b.priorityTier);
 
   const webPageSchema = generateWebPageSchema({
-    title: 'Remodeling Guides',
+    title: 'Home Building Guides',
     description:
-      'Definitive Treasure Valley remodeling guides: costs, kitchens, baths, additions, contractor selection, ROI, outdoor living, and local city resources.',
+      'In-depth Treasure Valley home building guides: what a custom home costs, how the build process runs, buying land, choosing a builder, design decisions, and construction financing.',
     url: '/guides',
   });
 
@@ -74,16 +74,16 @@ export default function GuidesIndexPage() {
       />
 
       <PageHeroBand
-        imageSrc={getBlogHeroImage('boise-remodeling-cost-guide')}
-        imageAlt={getBlogImageAlt('boise-remodeling-cost-guide')}
+        imageSrc={getBlogHeroImage('what-drives-home-building-costs-boise')}
+        imageAlt={getBlogImageAlt('what-drives-home-building-costs-boise')}
       >
         <div className="brc-label text-inverse-muted mb-3">Treasure Valley authority</div>
         <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
-          Remodeling Guides
+          Home Building Guides
         </h1>
         <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-4">
-          In-depth guides for Boise, Meridian, Eagle, Nampa, and the entire Treasure Valley - costs,
-          process, locations, and planning resources from Boise Remodeling Co.
+          In-depth guides for Boise, Meridian, Eagle, Nampa, and the rest of the Treasure Valley. What
+          building costs here, how the process runs, which lots work, and how to pay for it.
         </p>
         <Link
           href="/resources"

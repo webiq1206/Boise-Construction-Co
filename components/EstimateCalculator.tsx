@@ -888,9 +888,7 @@ export function EstimateCalculator({
     engagementFired.current = true;
     trackMetaEvent("InitiateCheckout", {
       content_name: effectiveProject,
-      content_category: isNewConstructionProject(effectiveProject)
-        ? "new_construction_estimate"
-        : "remodel_estimate",
+      content_category: "new_construction_estimate",
     });
     trackEvent("begin_checkout", { project: effectiveProject });
   }

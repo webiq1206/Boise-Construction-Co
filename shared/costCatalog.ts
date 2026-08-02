@@ -624,7 +624,7 @@ export const TAKEOFF_BASIS_NOTICE =
  * quantities the range was actually built from.
  */
 export const TAKEOFF_SCOPE_NOTICE =
-  "These are the trades and quantities your range was built from. Exact quantities are confirmed during your in-home visit, and the final proposal prices each item individually.";
+  "These are the trades and quantities your range was built from. Exact quantities are confirmed once we have walked your lot and the plans are drawn, and the final proposal prices each item individually.";
 
 /** Shares must sum to 1 per project or the takeoff cannot reconcile. */
 export function shareSum(project: ProjectType): number {

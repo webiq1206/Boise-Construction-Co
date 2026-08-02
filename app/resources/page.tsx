@@ -14,9 +14,9 @@ import {
 export const metadata: Metadata = buildPageMetadata({
   kind: 'blog',
   path: '/resources',
-  titleOverride: 'Remodel Planning Resources | Boise Remodeling Co',
+  titleOverride: 'Home Building Planning Resources | Boise Construction Co',
   descriptionOverride:
-    'Free PDF worksheets and visual guides for Treasure Valley remodeling: budget worksheet, kitchen & bath checklist, Ada vs Canyon permits.',
+    'Free PDF worksheets and visual guides for building in the Treasure Valley: new home budget worksheet, lot evaluation checklist, and the Ada vs Canyon County permit flow.',
 });
 
 export default function ResourcesIndexPage() {
@@ -29,9 +29,9 @@ export default function ResourcesIndexPage() {
       { name: 'Resources', url: '/resources' },
     ]),
     generateCollectionPageSchema({
-      title: 'Remodel Planning Resources',
+      title: 'Home Building Planning Resources',
       description:
-        'Free PDF worksheets and visual guides for Treasure Valley remodeling: budget worksheet, kitchen & bath checklist, Ada vs Canyon permits.',
+        'Free PDF worksheets and visual guides for building in the Treasure Valley: new home budget worksheet, lot evaluation checklist, and the Ada vs Canyon County permit flow.',
       url: '/resources',
       items: ALL_RESOURCES_LIST.map((r) => ({
         name: r.title,
@@ -48,29 +48,29 @@ export default function ResourcesIndexPage() {
           Free downloads
         </p>
         <h1 className="text-3xl md:text-4xl font-sans font-light tracking-tight text-foreground mb-4">
-          Remodel planning resources
+          Home building planning resources
         </h1>
         <p className="text-lg text-muted-foreground mb-5 max-w-2xl">
           Printable PDFs and visual guides to use alongside our{' '}
           <Link href="/guides" className="text-accent-legible hover:underline">
-            remodeling guides
+            home building guides
           </Link>
           . These are planning tools - not quotes or contracts.
         </p>
         <p className="text-base text-muted-foreground mb-4 max-w-2xl leading-relaxed">
-          We built these worksheets from the same process we use on real Treasure Valley
-          projects: a budget worksheet to pressure-test your planning range before you talk to
-          anyone, a scope checklist so nothing gets missed between design and construction, and a
-          visual walkthrough of the Ada and Canyon County permit flow so you know what approvals a
-          Boise, Meridian, Eagle or Nampa remodel actually needs.
+          These come from the same worksheets we use on real Treasure Valley builds. The budget
+          worksheet pressure-tests your number before you talk to anyone, including the site costs
+          most people forget until the excavator shows up. The lot evaluation checklist is what we
+          walk with when a client asks us to look at a parcel before they make an offer. And the
+          permit walkthrough shows how approvals actually run in Ada versus Canyon County, which
+          are not the same process or the same timeline.
         </p>
         <p className="text-base text-muted-foreground mb-12 max-w-2xl leading-relaxed">
-          Download any of them for free, no email required. When you are ready, you can bring your
-          notes to a{' '}
+          All free, no email required. When you are ready, bring your notes to a{' '}
           <Link href="/contact" className="text-accent-legible hover:underline">
-            free in-home consultation
+            free planning consultation
           </Link>{' '}
-          and we will turn them into a written scope and an honest planning range for your home.
+          and we will turn them into a written scope and an honest build range for your lot.
         </p>
 
         <h2 className="text-sm font-normal uppercase tracking-wider text-muted-foreground mb-4">
@@ -115,7 +115,7 @@ export default function ResourcesIndexPage() {
         </div>
 
         <p className="text-sm text-muted-foreground mt-12 text-center">
-          <Link href="/guides/boise-remodeling-cost-guide" className="text-accent-legible hover:underline">
+          <Link href="/guides/boise-home-building-cost-guide" className="text-accent-legible hover:underline">
             Start with the cost guide
           </Link>
           {' · '}

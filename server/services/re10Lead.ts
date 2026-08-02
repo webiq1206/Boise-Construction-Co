@@ -26,7 +26,7 @@ import {
  * WHICH CRM, AND WHY. This site has two lead stores that look similar and are
  * not. `leads` is the Lead Marketplace - leads get priced, admin-reviewed, and
  * bought by outside contractors through Stripe. An RE-10 belongs in neither
- * half of that: the whole page exists so Boise Remodeling Co does the work, so
+ * half of that: the whole page exists so Boise Construction Co does the work, so
  * selling the lead on would be the opposite of the point. `consultationRequests`
  * is where every estimator and consultation lead on this site already lands,
  * and the lead dashboard is where the team actually works them. An RE-10 goes
