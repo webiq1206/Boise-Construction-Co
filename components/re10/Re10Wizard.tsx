@@ -400,7 +400,12 @@ export function Re10Wizard() {
 
   return (
     <Section id="re10-estimator" variant="inverse" divider>
-      <div className="container px-4 max-w-3xl mx-auto" ref={topRef}>
+      {/* scroll-mt clears the sticky header. Without it every step change
+          scrolls this element to y=0, which is UNDER the 61px header - so the
+          step's own heading, and the range on the final step, land behind the
+          navigation. Found on the live site: the words "estimated repair
+          range" were half hidden at the moment they mattered most. */}
+      <div className="container px-4 max-w-3xl mx-auto scroll-mt-24" ref={topRef}>
         {/* Progress. Named steps, not just dots: on a phone a bare dot row does
             not tell you what is left to do. */}
         <ol className="flex flex-wrap gap-x-2 gap-y-1 mb-8" aria-label="Progress">

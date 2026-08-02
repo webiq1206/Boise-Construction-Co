@@ -264,6 +264,13 @@ check(
   /errors\?\.fieldErrors/.test(wizard),
   "the wizard does not surface field-level validation errors - a rejected submission reads as a dead form",
 );
+// Every step change scrolls this element to the top of the viewport, which is
+// underneath a sticky header unless it carries a scroll margin. Seen live: the
+// range on the final step was half hidden behind the navigation.
+check(
+  /scroll-mt-\d+[\s"]/.test(wizard) && /scroll-mt-\d+[^"]*"\s+ref=\{topRef\}/.test(wizard),
+  "the wizard's scroll target has no scroll-mt - step headings will land behind the sticky header",
+);
 
 /* ------------------------------------------- 4. the upload contract */
 
