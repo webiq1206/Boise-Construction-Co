@@ -33,7 +33,8 @@
     "verify:budget": "tsx scripts/verify-budget.ts",
     "verify:no-appliance-costs": "tsx scripts/verify-no-appliance-costs.ts",
     "verify:re10": "tsx scripts/verify-re10-estimator.ts",
-    "verify:re10-delivery": "tsx scripts/verify-re10-delivery.ts"
+    "verify:re10-delivery": "tsx scripts/verify-re10-delivery.ts",
+    "check:re10-extraction": "tsx --env-file-if-exists=.env.local scripts/check-re10-extraction.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
