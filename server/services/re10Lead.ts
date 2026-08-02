@@ -10,6 +10,7 @@ import {
 import { formatLeadReplyTo } from "@/server/services/consultationEmail";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import { SITE_CONFIG } from "@/shared/siteConfig";
+import { readLocalFile, isLocalUrl, extractLocalKey } from "@/lib/storage/blob";
 import { TRADE_LABELS, type Re10Estimate } from "@/shared/costs/re10Repairs";
 import {
   buildRe10AdminEmail,
@@ -81,6 +82,42 @@ const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
 function absoluteDocUrl(url: string): string {
   if (/^https?:\/\//.test(url)) return url;
   return `${SITE_CONFIG.siteUrl.replace(/\/$/, "")}${url.startsWith("/") ? "" : "/"}${url}`;
+}
+
+/**
+ * Put the actual RE-10 in the team's inbox, not a link to it.
+ *
+ * FOUND LIVE: an RE-10 uploaded half an hour earlier returned 404. Without a
+ * BLOB_READ_WRITE_TOKEN the store writes to the container filesystem, and this
+ * app runs on ephemeral containers - so every uploaded document dies at the
+ * next deploy or scale-to-zero, and the "here is the RE-10" link on the lead
+ * goes with it. The team would open a lead about a document nobody can read.
+ *
+ * An attachment cannot rot. The bytes are pulled at delivery time, minutes
+ * after the upload, while they are still there, and from then on they live in
+ * an inbox instead of in a container. Setting the blob token is still the right
+ * durable fix for the link; this makes the lead survive without it.
+ *
+ * Failure is reported, never silent: a document we could not attach is named
+ * in the email so nobody assumes it was included.
+ */
+async function collectAttachments(
+  documents: { filename: string; url: string }[],
+): Promise<{ attachments: { filename: string; content: Buffer }[]; missing: string[] }> {
+  const attachments: { filename: string; content: Buffer }[] = [];
+  const missing: string[] = [];
+  for (const doc of documents) {
+    if (!isLocalUrl(doc.url)) continue; // A real blob URL outlives us; link it.
+    try {
+      const content = await readLocalFile(extractLocalKey(doc.url));
+      if (content) attachments.push({ filename: doc.filename, content });
+      else missing.push(doc.filename);
+    } catch (err) {
+      console.error("[re10Lead] could not attach document:", doc.filename, err);
+      missing.push(doc.filename);
+    }
+  }
+  return { attachments, missing };
 }
 
 /**
@@ -279,9 +316,12 @@ export async function deliverRe10Lead(input: Re10DeliveryInput): Promise<Re10Del
       console.warn("[re10Lead] email transport is a no-op here; reporting nothing as sent.");
     }
 
+    const { attachments, missing } = await collectAttachments(input.documents);
     const adminHtml = buildRe10AdminEmail(contact, estimate, {
       unmapped: input.unmapped,
       documentNotes: input.documentNotes,
+      attached: attachments.map((a) => a.filename),
+      missingDocuments: missing,
     });
     for (const to of await getAdminRecipientEmails(SITE_CONFIG.email)) {
       const sent = await client.emails.send({
@@ -291,6 +331,9 @@ export async function deliverRe10Lead(input: Re10DeliveryInput): Promise<Re10Del
         subject: buildRe10AdminSubject(contact, estimate),
         html: adminHtml,
         text: htmlToPlainText(adminHtml),
+        // The RE-10 itself, so the lead is workable even after the upload
+        // store has been recycled out from under the link.
+        attachments: attachments.length > 0 ? attachments : undefined,
       });
       if (sent?.error) console.error(`[re10Lead] admin email to ${to} failed:`, JSON.stringify(sent.error));
       else if (!isNoop) result.adminEmailed = true;

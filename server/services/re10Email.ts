@@ -64,7 +64,7 @@ function transactionRows(c: Re10Contact): string {
 /**
  * The homeowner's copy.
  *
- * Takes the range and the scope, never the estimate object. Items that need an
+ * Takes the price and the scope, never the estimate object. Items that need an
  * onsite visit are listed separately and plainly rather than folded into the
  * number, because an agent who discovers at the walkthrough that the foundation
  * was never in the price has been misled by omission.
@@ -118,7 +118,7 @@ export function buildRe10CustomerEmail(
       : "";
 
   const content = `
-    <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">Thanks, ${escapeHtml(firstName)}. Here is the repair range from the RE-10 you sent.</p>
+    <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">Thanks, ${escapeHtml(firstName)}. Here is the price for the repairs on the RE-10 you sent.</p>
 
     <div style="background:${EMAIL_BRAND.raised};border-left:3px solid ${EMAIL_BRAND.accent};padding:24px;margin:24px 0;border-radius:4px;">
       <p style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:0.14em;color:${EMAIL_BRAND.textMuted};">Price for the repairs below</p>
@@ -132,7 +132,7 @@ export function buildRe10CustomerEmail(
     </div>
 
     <div style="margin:28px 0;">
-      <p style="${SECTION_TITLE}">What the range covers</p>
+      <p style="${SECTION_TITLE}">What this price covers</p>
       ${categories}
     </div>
 
@@ -148,12 +148,12 @@ export function buildRe10CustomerEmail(
       <p style="margin:0;color:#e8dca6;font-size:13px;line-height:1.55;">${escapeHtml(RE10_PRICING_DISCLAIMER)}</p>
     </div>
 
-    <p style="color:${EMAIL_BRAND.text};line-height:1.6;">Next step is an onsite evaluation, which turns this into a firm scope and price. Reply here or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> and we will get it scheduled against your deadline.</p>
+    <p style="color:${EMAIL_BRAND.text};line-height:1.6;">Next step is a short onsite visit to confirm the scope, price the items listed below as needing a look, and get you on the schedule. Reply here or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> and we will get it scheduled against your deadline.</p>
     <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The Boise Remodeling Co team</p>
   `;
 
   return wrapEmailHtml({
-    title: "Your RE-10 repair range",
+    title: "Your RE-10 repair price",
     subtitle: escapeHtml(contact.propertyAddress),
     content,
   });
@@ -174,6 +174,10 @@ export function buildRe10CustomerEmail(
  * it is absent from the price.
  */
 export interface Re10AdminExtras {
+  /** Files travelling with this email. */
+  attached?: string[];
+  /** Files we could NOT attach, named so nobody assumes they are here. */
+  missingDocuments?: string[];
   unmapped?: { verbatim: string; reason?: string }[];
   documentNotes?: string[];
 }
@@ -189,6 +193,20 @@ export function buildRe10AdminEmail(
           <p style="${SECTION_TITLE}color:#92400e;">Asked for, NOT in the range (${extras.unmapped.length})</p>
           <ul style="margin:0;padding-left:18px;font-size:13px;">
             ${extras.unmapped.map((u) => `<li style="margin:4px 0;color:${EMAIL_BRAND.text};">${escapeHtml(u.verbatim)}${u.reason ? ` <span style="color:${EMAIL_BRAND.textMuted};">- ${escapeHtml(u.reason)}</span>` : ""}</li>`).join("")}
+          </ul>
+        </div>`
+      : "";
+
+  // What actually travelled with this email, and what did not. The upload
+  // store is ephemeral without a blob token, so "we have your RE-10" has to be
+  // a statement about this inbox rather than about a link.
+  const docsBlock =
+    (extras.attached?.length ?? 0) + (extras.missingDocuments?.length ?? 0) > 0
+      ? `<div style="margin:20px 0;">
+          <p style="${SECTION_TITLE}">Documents</p>
+          <ul style="margin:0;padding-left:18px;font-size:13px;">
+            ${(extras.attached ?? []).map((n) => `<li style="margin:4px 0;color:${EMAIL_BRAND.text};">${escapeHtml(n)} <span style="color:${EMAIL_BRAND.textMuted};">- attached to this email</span></li>`).join("")}
+            ${(extras.missingDocuments ?? []).map((n) => `<li style="margin:4px 0;color:#b45309;">${escapeHtml(n)} - COULD NOT BE ATTACHED. Ask the sender to resend it.</li>`).join("")}
           </ul>
         </div>`
       : "";
@@ -303,6 +321,7 @@ export function buildRe10AdminEmail(
 
     ${review}
     ${unmappedBlock}
+    ${docsBlock}
     ${notesBlock}
     ${warnings}
   `;

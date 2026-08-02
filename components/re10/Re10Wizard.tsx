@@ -50,7 +50,7 @@ interface EstimateResponse {
     trade: string;
     label: string;
     itemCount: number;
-    items: { description: string; label: string; location: string | null; quantityAssumed: boolean }[];
+    items: { description: string; label: string; location: string | null; quantityAssumed: boolean; quantity?: number; unit?: string }[];
   }[];
   needsOnsite: { description: string; why: string }[];
   uncertainty: string[];
@@ -935,7 +935,11 @@ export function Re10Wizard() {
                       {c.items.map((i, n) => (
                         <li key={n} className="text-[12.5px] text-inverse-muted leading-relaxed">
                           {i.description}
-                          {i.quantityAssumed ? " (typical size assumed)" : ""}
+                          {/* The extent the firm price assumes. "Typical size assumed" told them
+                              a number existed without saying what it was; a firm price
+                              they cannot check against their own document is one they
+                              have to take on faith. */}
+                          {i.quantityAssumed && i.quantity ? ` (priced for ${i.quantity} ${i.unit ?? ""})` : ""}
                         </li>
                       ))}
                     </ul>
