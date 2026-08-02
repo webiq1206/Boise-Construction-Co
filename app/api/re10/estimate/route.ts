@@ -9,6 +9,8 @@ import {
   type ReviewReason,
 } from "@/shared/costs/re10Repairs";
 import { EXTRACTABLE_KINDS, EXTRACTION_REVIEW_REASONS } from "@/shared/re10/extraction";
+import { deliverRe10Lead } from "@/server/services/re10Lead";
+import type { Re10Contact } from "@/server/services/re10Email";
 
 /**
  * The gated step: contact details in, planning range out.
@@ -57,6 +59,11 @@ const bodySchema = z
     access: z.enum(["standard", "limited", "difficult"]).optional(),
     hasInspectionReport: z.boolean().optional(),
     notes: z.string().max(4000).optional(),
+    // Uploaded originals from the analyze step, so the lead carries the actual RE-10.
+    documents: z
+      .array(z.object({ filename: z.string().max(300), url: z.string().url().max(2000) }))
+      .max(12)
+      .optional(),
   })
   .refine((b) => (b.preferredContact === "email" ? Boolean(b.email) : true), {
     message: "An email address is required when email is the preferred contact method.",
@@ -111,12 +118,9 @@ export async function POST(request: NextRequest) {
 
   // CUSTOMER-FACING SHAPE. Range, categories, scope, caveats. No cost, no
   // margin, no line item, no mention of what anything cost us.
-  return NextResponse.json({
-    range: { low: estimate.low, high: estimate.high },
-    confidence: estimate.confidence,
-    propertyAddress: body.propertyAddress,
-    closingDate: body.closingDate ?? null,
-    repairDeadline: body.repairDeadline ?? null,
+  const customerView = {
+    low: estimate.low,
+    high: estimate.high,
     categories: estimate.trades.map((t) => ({
       trade: t.trade,
       label: TRADE_LABELS[t.trade],
@@ -134,7 +138,45 @@ export async function POST(request: NextRequest) {
     })),
     uncertainty: estimate.uncertainty,
     assumptions: estimate.assumptions,
+  };
+
+  const contact: Re10Contact = {
+    name: body.name,
+    email: body.email || undefined,
+    phone: body.phone || undefined,
+    preferredContact: body.preferredContact,
+    role: body.role,
+    brokerage: body.brokerage,
+    propertyAddress: body.propertyAddress,
+    closingDate: body.closingDate,
+    repairDeadline: body.repairDeadline,
+    occupancy: body.occupancy,
+    notes: body.notes,
+  };
+
+  // Awaited so the response can report honestly whether the copy was sent -
+  // the wizard says "we have emailed you a copy" and should only say it when
+  // that is true. Delivery never throws; a failure is logged and reported as
+  // false rather than surfaced as an error on a request that already succeeded.
+  const delivery = await deliverRe10Lead({
+    contact,
+    estimate,
+    customerView,
+    documents: body.documents ?? [],
+  });
+
+  return NextResponse.json({
+    range: { low: estimate.low, high: estimate.high },
+    confidence: estimate.confidence,
+    propertyAddress: body.propertyAddress,
+    closingDate: body.closingDate ?? null,
+    repairDeadline: body.repairDeadline ?? null,
+    categories: customerView.categories,
+    needsOnsite: customerView.needsOnsite,
+    uncertainty: estimate.uncertainty,
+    assumptions: estimate.assumptions,
     priced: estimate.priced.length,
     unpriced: estimate.review.length,
+    emailed: delivery.customerEmailed,
   });
 }

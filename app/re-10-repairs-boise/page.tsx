@@ -30,6 +30,7 @@ import {
 } from "@/shared/content/re10Content";
 import { Re10Faqs } from "@/components/re10/Re10Faqs";
 import { Re10Wizard } from "@/components/re10/Re10Wizard";
+import { Re10ContactTracking } from "@/components/re10/Re10ContactTracking";
 
 const PATH = "/re-10-repairs-boise";
 
@@ -90,6 +91,7 @@ export default function Re10RepairsPage() {
   return (
     <>
       <JsonLd data={schemas} />
+      <Re10ContactTracking />
 
       {/* ------------------------------------------------------------ hero */}
       <PageHeroBand

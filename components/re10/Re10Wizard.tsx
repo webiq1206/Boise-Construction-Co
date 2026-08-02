@@ -1,12 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Upload, Check, X, AlertTriangle, ArrowRight, Loader2, Plus } from "lucide-react";
 import { Section } from "@/components/marketing/Section";
 import { Button } from "@/components/ui/button";
 import { RECIPES, TRADE_LABELS, type RepairKind } from "@/shared/costs/re10Repairs";
 import { RE10_PRICING_DISCLAIMER } from "@/shared/content/re10Content";
 import type { ExtractedRepair, ExtractionResult } from "@/shared/re10/extraction";
+import { RE10_EVENTS } from "@/shared/re10/analyticsEvents";
+import { trackEvent, trackMetaEvent } from "@/lib/analytics";
 
 /**
  * The RE-10 estimator wizard.
@@ -47,6 +49,8 @@ interface EstimateResponse {
   assumptions: string[];
   priced: number;
   unpriced: number;
+  /** True only when the server confirms the customer copy actually sent. */
+  emailed: boolean;
 }
 
 const usd = (n: number) => "$" + Math.round(n).toLocaleString("en-US");
@@ -76,6 +80,7 @@ export function Re10Wizard() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [extraction, setExtraction] = useState<ExtractionResult | null>(null);
+  const [documents, setDocuments] = useState<{ filename: string; url: string }[]>([]);
   const [repairs, setRepairs] = useState<EditableRepair[]>([]);
 
   const [name, setName] = useState("");
@@ -91,6 +96,12 @@ export function Re10Wizard() {
   const [notes, setNotes] = useState("");
 
   const [result, setResult] = useState<EstimateResponse | null>(null);
+
+  // Fires once on mount. The denominator for every other stage, so it must
+  // not re-fire when React re-renders or when a step changes.
+  useEffect(() => {
+    trackEvent(RE10_EVENTS.started);
+  }, []);
 
   function goTo(next: Step) {
     setStep(next);
@@ -113,16 +124,25 @@ export function Re10Wizard() {
       const data = await res.json();
       if (!res.ok) {
         setError(data.message ?? "We could not read those documents.");
+        // Tracked so a drop-off here reads as a failure rather than as the
+        // homeowner losing interest.
+        trackEvent(RE10_EVENTS.analysisFailed, { reason: String(data.error ?? res.status) });
         return;
       }
       const extracted = data as ExtractionResult;
       setExtraction(extracted);
+      setDocuments(Array.isArray(data.stored) ? data.stored : []);
+      trackEvent(RE10_EVENTS.analysisCompleted, {
+        repairs_found: extracted.repairs.length,
+        unmapped: extracted.unmapped.length,
+      });
       setRepairs(
         extracted.repairs.map((r, i) => ({ ...r, id: `r${i}`, included: true })),
       );
       goTo("review");
     } catch {
       setError("Something went wrong sending those files. Try again.");
+      trackEvent(RE10_EVENTS.analysisFailed, { reason: "network" });
     } finally {
       setBusy(false);
     }
@@ -149,6 +169,7 @@ export function Re10Wizard() {
 
     setBusy(true);
     setError(null);
+    trackEvent(RE10_EVENTS.contactSubmitted, { preferred_contact: preferredContact, role });
     try {
       const res = await fetch("/api/re10/estimate", {
         method: "POST",
@@ -174,6 +195,7 @@ export function Re10Wizard() {
           repairDeadline: repairDeadline || undefined,
           occupancy,
           hasInspectionReport: files.length > 1,
+          documents,
           notes: notes.trim() || undefined,
         }),
       });
@@ -182,7 +204,31 @@ export function Re10Wizard() {
         setError(data.message ?? "We could not build your range.");
         return;
       }
-      setResult(data as EstimateResponse);
+      const estimate = data as EstimateResponse;
+      setResult(estimate);
+
+      trackEvent(RE10_EVENTS.estimateGenerated, {
+        value: Math.round((estimate.range.low + estimate.range.high) / 2),
+        currency: "USD",
+        confidence: estimate.confidence,
+        priced_items: estimate.priced,
+        onsite_items: estimate.unpriced,
+      });
+      // The conversion Meta optimizes against. Email and phone go server-side
+      // only, hashed there, and are never handed to the browser Pixel.
+      trackMetaEvent(
+        "Lead",
+        {
+          content_name: "RE-10 repair estimate",
+          value: Math.round((estimate.range.low + estimate.range.high) / 2),
+          currency: "USD",
+        },
+        { email: email.trim() || undefined, phone: phone.trim() || undefined },
+      );
+      // Only when the server confirms it actually sent, so this stage is not
+      // inflated by leads who chose phone contact and got no email at all.
+      if (estimate.emailed) trackEvent(RE10_EVENTS.estimateEmailed);
+
       goTo("result");
     } catch {
       setError("Something went wrong. Try again.");
@@ -190,6 +236,12 @@ export function Re10Wizard() {
       setBusy(false);
     }
   }
+
+  // The gate's own impression. Without it, abandonment at the contact step is
+  // indistinguishable from abandonment at the review step before it.
+  useEffect(() => {
+    if (step === "contact") trackEvent(RE10_EVENTS.contactViewed);
+  }, [step]);
 
   const stepIndex = STEP_ORDER.indexOf(step);
 
@@ -258,8 +310,12 @@ export function Re10Wizard() {
                 className="sr-only"
                 data-testid="input-re10-files"
                 onChange={(e) => {
-                  setFiles(Array.from(e.target.files ?? []));
+                  const chosen = Array.from(e.target.files ?? []);
+                  setFiles(chosen);
                   setError(null);
+                  if (chosen.length > 0) {
+                    trackEvent(RE10_EVENTS.documentUploaded, { file_count: chosen.length });
+                  }
                 }}
               />
             </label>
@@ -414,10 +470,26 @@ export function Re10Wizard() {
             )}
 
             <div className="mt-7 flex flex-col sm:flex-row gap-3">
-              <Button variant="brand" onClick={() => goTo("contact")} data-testid="button-re10-confirm">
+              <Button
+                variant="brand"
+                onClick={() => {
+                  trackEvent(RE10_EVENTS.repairsConfirmed, {
+                    kept: repairs.filter((r) => r.included).length,
+                    removed: repairs.filter((r) => !r.included).length,
+                  });
+                  goTo("contact");
+                }}
+                data-testid="button-re10-confirm"
+              >
                 These look right <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-              <Button variant="brandInverseOutline" onClick={() => goTo("upload")}>
+              <Button
+                variant="brandInverseOutline"
+                onClick={() => {
+                  trackEvent(RE10_EVENTS.additionalDocuments, { from: "review" });
+                  goTo("upload");
+                }}
+              >
                 Add more documents
               </Button>
             </div>
@@ -576,6 +648,14 @@ export function Re10Wizard() {
               {result.closingDate ? ` · closing ${result.closingDate}` : ""}
             </p>
 
+            {/* Claimed only when the server confirms it sent. Telling an agent
+                we emailed a copy that never arrived is worse than saying nothing. */}
+            {result.emailed && (
+              <p className="mt-4 text-[13px] text-inverse-foreground/85">
+                A copy is on its way to your inbox.
+              </p>
+            )}
+
             <p className="mt-5 text-[12.5px] text-inverse-foreground/90 leading-relaxed">
               {RE10_PRICING_DISCLAIMER}
             </p>
@@ -638,11 +718,21 @@ export function Re10Wizard() {
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <Button variant="brand" asChild>
-                <a href="/contact#consult">
+                <a
+                  href="/contact#consult"
+                  onClick={() => trackEvent(RE10_EVENTS.onsiteRequested)}
+                  data-testid="link-re10-onsite"
+                >
                   Request an onsite evaluation <ArrowRight className="ml-2 h-4 w-4" />
                 </a>
               </Button>
-              <Button variant="brandInverseOutline" onClick={() => goTo("upload")}>
+              <Button
+                variant="brandInverseOutline"
+                onClick={() => {
+                  trackEvent(RE10_EVENTS.additionalDocuments, { from: "result" });
+                  goTo("upload");
+                }}
+              >
                 Upload more documents
               </Button>
             </div>

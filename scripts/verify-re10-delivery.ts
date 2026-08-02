@@ -1,0 +1,192 @@
+/**
+ * Invariants for the RE-10 delivery layer: emails, CRM record, funnel events.
+ *
+ * The pricing engine has its own suite. This one guards the boundary where the
+ * estimate turns into things people receive - and where the expensive mistakes
+ * are disclosure mistakes, not arithmetic ones. A leaked margin in a customer
+ * email is not a rounding error, it is a negotiating position handed to the
+ * other side of a transaction.
+ */
+import {
+  buildRe10CustomerEmail,
+  buildRe10AdminEmail,
+  buildRe10CustomerSubject,
+  buildRe10AdminSubject,
+  type Re10Contact,
+} from "../server/services/re10Email";
+import { estimateRe10, type RepairItemInput, type RepairKind } from "../shared/costs/re10Repairs";
+import { findForbiddenPhrase } from "../shared/costCatalog";
+import { RE10_EVENTS, RE10_FUNNEL_ORDER } from "../shared/re10/analyticsEvents";
+import { EXTRACTABLE_KINDS, EXTRACTION_SCHEMA, EXTRACTION_REVIEW_REASONS } from "../shared/re10/extraction";
+import fs from "fs";
+
+let checks = 0;
+let failures = 0;
+const fail = (m: string) => {
+  failures++;
+  if (failures <= 25) console.log("  FAIL: " + m);
+};
+const check = (c: boolean, m: string) => {
+  checks++;
+  if (!c) fail(m);
+};
+
+const strip = (h: string) =>
+  h.replace(/<(style|script)[\s\S]*?<\/\1>/gi, " ").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ");
+
+/* ------------------------------------------------ 1. the disclosure wall */
+
+const SAMPLE_ITEMS: RepairItemInput[] = [
+  { id: "1", kind: "drywall-repaint-wall", description: "Repair drywall in garage and repaint", quantity: 12 },
+  { id: "2", kind: "gfci-install", description: "GFCI at kitchen counter", quantity: 2 },
+  { id: "3", kind: "toilet-repair", description: "Running toilet, guest bath" },
+  { id: "4", kind: "caulking-weatherproofing", description: "Re-caulk exterior windows", quantity: 60 },
+  { id: "5", kind: "general-minor-repair", description: "Foundation crack in crawlspace", needsReview: "foundation" },
+];
+
+const CONTACTS: Re10Contact[] = [
+  { name: "Dana Smith", email: "d@e.com", phone: "2085550000", preferredContact: "email", role: "buyer-agent", brokerage: "Valley Realty", propertyAddress: "742 Elm St, Boise ID", repairDeadline: "2026-08-14", closingDate: "2026-08-28", occupancy: "occupied", notes: "Before the walkthrough." },
+  { name: "Pat Jones", phone: "2085551111", preferredContact: "text", role: "seller", propertyAddress: "12 Oak Ave, Meridian ID" },
+  { name: "Sam Lee", email: "s@e.com", preferredContact: "email", role: "coordinator", propertyAddress: "9 Pine Rd, Nampa ID" },
+];
+
+/** Words that must never reach a customer email. */
+const FORBIDDEN_IN_CUSTOMER = [
+  "margin", "markup", "gross profit", "our cost", "internal", "mobiliz",
+  "contingency", "direct cost", "unit cost", "crew rate", "worthwhile",
+];
+
+const CONTEXTS = [
+  { occupancy: "occupied" as const, access: "limited" as const, daysToDeadline: 5, hasInspectionReport: true },
+  { occupancy: "vacant" as const, access: "standard" as const, daysToDeadline: 45, hasInspectionReport: true },
+  { occupancy: "unknown" as const, access: "difficult" as const, daysToDeadline: 1, hasInspectionReport: false },
+];
+
+for (const contact of CONTACTS) {
+  for (const ctx of CONTEXTS) {
+    const est = estimateRe10(SAMPLE_ITEMS, ctx);
+    const view = {
+      low: est.low,
+      high: est.high,
+      categories: est.trades.map((t) => ({
+        trade: t.trade,
+        itemCount: t.repairs.length,
+        items: t.repairs.map((p) => ({ description: p.input.description, quantityAssumed: p.quantityAssumed })),
+      })),
+      needsOnsite: est.review.map((r) => ({ description: r.input.description, why: r.text })),
+      uncertainty: est.uncertainty,
+      assumptions: est.assumptions,
+    };
+
+    const cust = buildRe10CustomerEmail(contact, view);
+    const admin = buildRe10AdminEmail(contact, est);
+    const ct = strip(cust);
+    const at = strip(admin);
+    const label = `${contact.name}/${ctx.daysToDeadline}d`;
+
+    // (a) The shared lead-vocabulary detector.
+    check(findForbiddenPhrase(cust) === null, `${label}: customer email tripped the leak detector`);
+
+    // (b) Internal vocabulary, checked directly.
+    for (const w of FORBIDDEN_IN_CUSTOMER) {
+      check(!new RegExp(w, "i").test(ct), `${label}: customer email contains "${w}"`);
+    }
+
+    // (c) INTERNAL FIGURES. The detector above is word-based; this catches a
+    //     number that leaked without an incriminating label next to it.
+    for (const [name, value] of [
+      ["totalInternalCost", est.totalInternalCost],
+      ["grossProfit", est.grossProfit],
+      ["directCost", est.directCost],
+      ["mobilization", est.mobilization],
+      ["contingency", est.contingency],
+      ["sellingPrice", est.sellingPrice],
+    ] as const) {
+      const rendered = "$" + Math.round(value).toLocaleString("en-US");
+      // The selling price legitimately equals nothing the customer sees (the
+      // range is rounded off it), so a bare match is a real leak.
+      check(!ct.includes(rendered), `${label}: customer email exposes ${name} (${rendered})`);
+    }
+
+    // (d) The customer email must still do its job.
+    check(ct.includes("$" + est.low.toLocaleString("en-US")), `${label}: customer email is missing the range low`);
+    check(ct.includes("$" + est.high.toLocaleString("en-US")), `${label}: customer email is missing the range high`);
+    check(ct.includes(contact.propertyAddress), `${label}: customer email is missing the property address`);
+    check(/not a (contract price|quote)/i.test(ct), `${label}: customer email is missing the planning-range disclaimer`);
+    if (est.review.length > 0) {
+      check(
+        est.review.every((r) => ct.includes(r.input.description)),
+        `${label}: an item needing an onsite visit was not disclosed to the customer`,
+      );
+    }
+
+    // (e) The admin email must carry the economics, or it is decoration.
+    for (const must of ["Internal breakdown", "Our cost", "Gross profit", "Total cost", "realised margin"]) {
+      check(at.includes(must), `${label}: admin email missing "${must}"`);
+    }
+    check(
+      at.includes("$" + Math.round(est.grossProfit).toLocaleString("en-US")),
+      `${label}: admin email does not show gross profit`,
+    );
+    if (!est.worthwhile) {
+      check(/below the worthwhile threshold/i.test(at), `${label}: admin email did not flag a sub-threshold job`);
+    }
+
+    // (f) Subjects carry the facts a phone-screen preview needs.
+    check(buildRe10CustomerSubject(contact).includes(contact.propertyAddress), `${label}: customer subject lacks the address`);
+    const adminSubject = buildRe10AdminSubject(contact, est);
+    check(adminSubject.includes(contact.propertyAddress), `${label}: admin subject lacks the address`);
+    if (contact.repairDeadline) {
+      check(adminSubject.includes(contact.repairDeadline), `${label}: admin subject lacks the deadline`);
+    }
+  }
+}
+
+/* ------------------------------------------- 2. the funnel is complete */
+
+const uniqueEvents = new Set(Object.values(RE10_EVENTS));
+check(uniqueEvents.size === Object.keys(RE10_EVENTS).length, "duplicate analytics event names");
+for (const name of uniqueEvents) {
+  check(/^re10_[a-z_]+$/.test(name), `event "${name}" does not follow the re10_snake_case convention`);
+}
+for (const stage of RE10_FUNNEL_ORDER) {
+  check(uniqueEvents.has(stage), `funnel stage "${stage}" is not in RE10_EVENTS`);
+}
+
+// Every event must actually be fired somewhere, or it is a reporting promise
+// nothing keeps. This is the check that catches an event defined and forgotten.
+const wizard = fs.readFileSync("components/re10/Re10Wizard.tsx", "utf8");
+const tracking = fs.readFileSync("components/re10/Re10ContactTracking.tsx", "utf8");
+const source = wizard + tracking;
+for (const [key, name] of Object.entries(RE10_EVENTS)) {
+  check(source.includes(`RE10_EVENTS.${key}`), `event ${key} ("${name}") is defined but never fired`);
+}
+
+/* ------------------------- 3. the extraction schema stays a closed door */
+
+const schema = EXTRACTION_SCHEMA as unknown as {
+  additionalProperties: boolean;
+  properties: { repairs: { items: { additionalProperties: boolean; properties: { kind: { enum: string[] }; needsReview: { enum: string[] } } } } };
+};
+check(schema.additionalProperties === false, "extraction schema allows additional top-level properties");
+check(
+  schema.properties.repairs.items.additionalProperties === false,
+  "extraction schema allows additional properties on a repair - a model could smuggle a field past the estimator",
+);
+check(
+  schema.properties.repairs.items.properties.kind.enum.length === EXTRACTABLE_KINDS.length,
+  "the schema's kind enum has drifted from the recipe catalog",
+);
+for (const k of EXTRACTABLE_KINDS) {
+  check(schema.properties.repairs.items.properties.kind.enum.includes(k), `kind "${k}" is missing from the extraction schema`);
+}
+for (const r of EXTRACTION_REVIEW_REASONS) {
+  check(schema.properties.repairs.items.properties.needsReview.enum.includes(r), `review reason "${r}" missing from the schema`);
+}
+
+console.log(
+  failures === 0
+    ? `verify:re10-delivery: OK (${checks} checks across emails, funnel events and the extraction schema)`
+    : `verify:re10-delivery: FAILED with ${failures} problem(s) across ${checks} checks`,
+);
+process.exit(failures === 0 ? 0 : 1);
