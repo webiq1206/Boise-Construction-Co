@@ -26,8 +26,8 @@ export function BudgetInclusionsSection() {
           sizes="100vw"
           className="object-cover opacity-[0.10] img-brand-grade"
         />
-        <div className="absolute inset-0 bg-inverse/85" />
-        <div className="absolute inset-0 bg-gradient-to-b from-inverse via-inverse/70 to-inverse" />
+        <div className="absolute inset-0 bg-inverse/75" />
+        <div className="absolute inset-0 bg-gradient-to-b from-inverse/90 via-inverse/55 to-inverse/90" />
       </div>
       <div className="container px-4 relative z-10">
         <div className="max-w-5xl mx-auto">

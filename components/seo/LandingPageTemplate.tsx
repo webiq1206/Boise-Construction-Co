@@ -87,7 +87,7 @@ export interface LandingProof {
 function HeroBreadcrumbs({ items }: { items: BreadcrumbItem[] }) {
   return (
     <nav aria-label="Breadcrumb">
-      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-inverse-muted">
+      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-inverse-foreground/80">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
           return (
@@ -100,7 +100,7 @@ function HeroBreadcrumbs({ items }: { items: BreadcrumbItem[] }) {
                   {item.name}
                 </Link>
               ) : (
-                <span className={isLast ? 'text-inverse-foreground/90 font-normal' : ''}>
+                <span className={isLast ? 'text-inverse-foreground font-normal' : ''}>
                   {item.name}
                 </span>
               )}
@@ -182,9 +182,9 @@ export function LandingPageTemplate({
             priority
           />
         )}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-inverse via-inverse/60 to-inverse/10" />
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/70 via-inverse/20 to-transparent" />
-        <div className="absolute inset-x-0 top-0 h-32 pointer-events-none bg-gradient-to-b from-inverse/70 via-inverse/30 to-transparent" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-inverse/90 via-inverse/60 to-transparent" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/60 via-inverse/15 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-44 pointer-events-none bg-gradient-to-b from-inverse/70 via-inverse/30 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-24 pointer-events-none bg-gradient-to-t from-background via-background/40 to-transparent" />
         <div
           className="absolute inset-0 pointer-events-none"
@@ -197,7 +197,7 @@ export function LandingPageTemplate({
             {speakableSummary}
           </p>
           {eyebrow && (
-            <div className="brc-label text-inverse-muted mt-6 mb-5">{eyebrow}</div>
+            <div className="brc-label brc-label-on-photo mt-6 mb-5">{eyebrow}</div>
           )}
           <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-4xl mb-6">
             {h1}
@@ -214,7 +214,7 @@ export function LandingPageTemplate({
             </Button>
           </div>
           {planningFrom && (
-            <p className="mt-6 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm text-inverse-muted">
+            <p className="mt-6 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm text-inverse-foreground/80">
               <span className="uppercase tracking-[0.12em] text-[11px]">Planning from</span>
               <span className="brc-display-num text-inverse-foreground text-lg leading-none">
                 {planningFrom}
@@ -271,7 +271,7 @@ export function LandingPageTemplate({
             sizes="100vw"
             className="object-cover img-brand-grade"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-inverse/20 to-background/90" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-inverse/10 to-background/80" />
           <div
             className="absolute inset-0 pointer-events-none"
             style={{ backgroundImage: GRAIN_URL, backgroundRepeat: 'repeat', opacity: 0.03 }}
@@ -325,13 +325,13 @@ export function LandingPageTemplate({
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-inverse via-inverse/70 to-inverse/40" />
+              <div className="absolute inset-0 bg-gradient-to-t from-inverse/90 via-inverse/55 to-inverse/30" />
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{ backgroundImage: GRAIN_URL, backgroundRepeat: 'repeat', opacity: 0.03 }}
               />
               <div className="relative h-full flex flex-col justify-end p-8 md:p-12 lg:p-14">
-                <div className="brc-label text-inverse-muted mb-4">How it works</div>
+                <div className="brc-label brc-label-on-photo mb-4">How it works</div>
                 <h2 className="font-sans font-light text-[2rem] md:text-[2.75rem] leading-[1.06] tracking-tight text-inverse-foreground">
                   Our <em className="brc-accent">process</em>,
                   <br />

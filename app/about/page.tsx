@@ -37,7 +37,7 @@ function HeroBreadcrumbs() {
 
   return (
     <nav aria-label="Breadcrumb">
-      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-inverse-muted">
+      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-inverse-foreground/80">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
           return (
@@ -50,7 +50,7 @@ function HeroBreadcrumbs() {
                   {item.name}
                 </Link>
               ) : (
-                <span className={isLast ? 'text-inverse-foreground/90 font-normal' : ''}>
+                <span className={isLast ? 'text-inverse-foreground font-normal' : ''}>
                   {item.name}
                 </span>
               )}
@@ -67,11 +67,11 @@ function HeroBreadcrumbs() {
 
 function StatCard({ num, label }: { num: string; label: string }) {
   return (
-    <div className="px-3 py-3 md:px-6 md:py-5 rounded-sm bg-inverse-foreground/10 border border-inverse-foreground/15 backdrop-blur-sm">
+    <div className="px-3 py-3 md:px-6 md:py-5 rounded-sm bg-inverse/50 border border-inverse-foreground/20 backdrop-blur-md">
       <DisplayNum className="text-inverse-foreground text-lg md:text-3xl leading-none">
         {num}
       </DisplayNum>
-      <div className="mt-1 md:mt-1.5 text-[9px] md:text-[11px] tracking-[0.08em] md:tracking-[0.1em] uppercase text-inverse-muted leading-snug">
+      <div className="mt-1 md:mt-1.5 text-[9px] md:text-[11px] tracking-[0.08em] md:tracking-[0.1em] uppercase text-inverse-foreground/85 leading-snug">
         {label}
       </div>
     </div>
@@ -113,9 +113,9 @@ export default function AboutPage() {
             sizes="100vw"
             priority
           />
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-inverse via-inverse/60 to-inverse/10" />
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/70 via-inverse/20 to-transparent" />
-          <div className="absolute inset-x-0 top-0 h-32 pointer-events-none bg-gradient-to-b from-inverse/70 via-inverse/30 to-transparent" />
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-inverse/90 via-inverse/60 to-transparent" />
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/60 via-inverse/15 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-44 pointer-events-none bg-gradient-to-b from-inverse/70 via-inverse/30 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 h-24 pointer-events-none bg-gradient-to-t from-background via-background/40 to-transparent" />
           <div
             className="absolute inset-0 pointer-events-none"
@@ -127,7 +127,7 @@ export default function AboutPage() {
             <p data-speakable="summary" className="sr-only">
               {SPEAKABLE_SUMMARY}
             </p>
-            <div className="brc-label text-inverse-muted mt-6 mb-5">About us</div>
+            <div className="brc-label brc-label-on-photo mt-6 mb-5">About us</div>
             <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-4xl mb-6">
               About Boise Remodeling{' '}
               <em className="brc-accent">Co</em>
@@ -169,13 +169,13 @@ export default function AboutPage() {
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover img-brand-grade"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-primary/70" />
+              <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-primary/60" />
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{ backgroundImage: GRAIN_URL, backgroundRepeat: 'repeat', opacity: 0.028 }}
               />
               <div className="absolute bottom-0 left-0 p-8 md:p-12">
-                <div className="brc-label mb-3 text-inverse-muted">Design-build, explained</div>
+                <div className="brc-label brc-label-on-photo mb-3">Design-build, explained</div>
                 <p className="font-sans font-light text-xl md:text-2xl text-inverse-foreground">
                   One team from
                   <br />

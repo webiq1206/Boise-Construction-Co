@@ -13,7 +13,7 @@ interface PageHeroBandProps {
 export function PageHeroBand({
   imageSrc,
   imageAlt,
-  scrim = 0.78,
+  scrim = 0.66,
   children,
 }: PageHeroBandProps) {
   return (
@@ -24,13 +24,13 @@ export function PageHeroBand({
         fill
         priority
         sizes="100vw"
-        className="object-cover opacity-[0.82] img-brand-grade"
+        className="object-cover opacity-[0.9] img-brand-grade"
       />
       <div
         className="absolute inset-0 pointer-events-none bg-gradient-to-t from-inverse via-inverse/60 to-inverse/20"
         style={{ opacity: scrim }}
       />
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/80 via-inverse/30 to-transparent" />
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/70 via-inverse/20 to-transparent" />
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ backgroundImage: GRAIN_URL, backgroundRepeat: "repeat", opacity: 0.03 }}

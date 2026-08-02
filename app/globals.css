@@ -400,6 +400,15 @@ html, body {
 .brc-label.text-inverse-muted {
   color: hsl(var(--inverse-muted));
 }
+/* Labels sitting directly on a PHOTO, where inverse-muted is not enough.
+   Measured over the home hero, the muted label came out at 2.3:1 against the
+   4.5:1 small-text minimum - and that was before the scrim was lightened.
+   A compound selector because `.brc-label` is declared after the utilities
+   layer and beats a plain text-* class on source order, which is the same
+   reason the muted rule above has to exist. */
+.brc-label.brc-label-on-photo {
+  color: hsl(var(--inverse-foreground) / 0.92);
+}
 /* The sage tick is intentional on every band, but keep the label TEXT muted. */
 
 /* ─── Calculator range slider ─── */

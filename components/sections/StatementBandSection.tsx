@@ -14,7 +14,7 @@ export function StatementBandSection() {
         sizes="100vw"
         className="object-cover img-brand-grade"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-inverse/20 to-background/80" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-inverse/10 to-background/70" />
     </section>
   );
 }

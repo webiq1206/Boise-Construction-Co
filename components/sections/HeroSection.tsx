@@ -20,7 +20,10 @@ function StatCard({ num, label }: { num: string; label: string }) {
       <DisplayNum className="text-inverse-foreground text-lg md:text-3xl leading-none">
         {num}
       </DisplayNum>
-      <div className="mt-1 md:mt-1.5 text-[10px] md:text-[11px] tracking-[0.06em] md:tracking-[0.1em] uppercase text-inverse-muted leading-snug">
+      {/* Was text-inverse-muted. At 10-11px over the photo that measured 3.4:1,
+          already under the 4.5:1 AA needs before the scrim above it was
+          lightened, which would have taken it lower still. */}
+      <div className="mt-1 md:mt-1.5 text-[10px] md:text-[11px] tracking-[0.06em] md:tracking-[0.1em] uppercase text-inverse-foreground/85 leading-snug">
         {label}
       </div>
     </div>
@@ -37,16 +40,22 @@ export function HeroSection() {
           fill
           priority
           sizes="(max-width: 768px) 100vw, 1400px"
-          className="object-cover opacity-[0.72] img-brand-grade"
+          className="object-cover opacity-[0.86] img-brand-grade"
         />
-        {/* Ends at /30 rather than /15. The stat cards live in the last third
+        {/* Ends at /25 rather than /15. The stat cards live in the last third
             of this gradient, and at /15 the photo was effectively unscrimmed
-            behind them. /30 steadies that side without flattening the image. */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/90 via-inverse/55 to-inverse/30" />
+            behind them. /25 steadies that side without flattening the image.
+
+            If you change these, HARD-RESTART the dev server and confirm the
+            gradient still computes. Editing a scrim opacity can leave Next's
+            Tailwind pass stale, and an ungenerated class is not an error - the
+            rule is simply absent, the scrim vanishes, and the page looks like
+            someone deleted it. */}
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/85 via-inverse/45 to-inverse/25" />
         {/* Mobile: text + stat cards span full width over the bright image centre,
             so add a vertical scrim that the desktop horizontal gradient doesn't cover. */}
-        <div className="md:hidden absolute inset-0 pointer-events-none bg-gradient-to-t from-inverse/95 via-inverse/70 to-inverse/45" />
-        <div className="absolute inset-x-0 top-0 h-40 pointer-events-none bg-gradient-to-b from-inverse/80 via-inverse/45 to-transparent" />
+        <div className="md:hidden absolute inset-0 pointer-events-none bg-gradient-to-t from-inverse/90 via-inverse/60 to-inverse/35" />
+        <div className="absolute inset-x-0 top-0 h-40 pointer-events-none bg-gradient-to-b from-inverse/70 via-inverse/35 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-32 pointer-events-none bg-gradient-to-t from-background via-background/50 to-transparent" />
         <div
           className="absolute inset-0 pointer-events-none"
@@ -56,14 +65,21 @@ export function HeroSection() {
         <div className="relative z-10 container px-4 md:px-8 py-20 md:py-32 pb-16 md:pb-28">
           <div className="grid md:grid-cols-[1.4fr_1fr] gap-10 md:gap-16 items-center">
             <Reveal>
-              <div className="brc-label mb-6 text-inverse-muted">{HERO_EYEBROW}</div>
+              {/* Not text-inverse-muted: at 11px over the photo it measured
+                  3.15:1, under the 4.5:1 AA needs, and lightening the scrim
+                  behind it would only widen that gap. */}
+              <div className="brc-label brc-label-on-photo mb-6">{HERO_EYEBROW}</div>
               <h1 className="font-sans font-light text-inverse-foreground text-display tracking-tight mb-6">
                 Boise remodeling with{" "}
                 <em className="brc-accent">clarity</em> and confidence.
               </h1>
+              {/* Full opacity, not /90: over the lightened scrim the subhead
+                  measured 4.28:1 against the 4.5:1 minimum. Buying the
+                  difference back from the TEXT rather than from the scrim
+                  keeps the photograph as visible as it now is. */}
               <p
                 data-speakable="summary"
-                className="text-lg md:text-xl leading-relaxed mb-8 max-w-xl text-inverse-foreground/90"
+                className="text-lg md:text-xl leading-relaxed mb-8 max-w-xl text-inverse-foreground"
               >
                 {HERO_SUBHEAD}
               </p>

@@ -28,7 +28,7 @@ export function BrandStatementBand() {
       />
       {/* Legibility scrims: darken left (where the text sits) and blend the top
           and bottom edges into the page ground so the band reads as one piece. */}
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse via-inverse/75 to-inverse/25" />
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/90 via-inverse/60 to-inverse/20" />
       <div className="absolute inset-x-0 top-0 h-28 pointer-events-none bg-gradient-to-b from-background via-background/40 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-28 pointer-events-none bg-gradient-to-t from-background via-background/40 to-transparent" />
       <div
@@ -38,7 +38,7 @@ export function BrandStatementBand() {
 
       <div className="relative z-10 container px-4 py-24 md:py-36 lg:py-40">
         <Reveal className="max-w-3xl">
-          <div className="brc-label text-inverse-muted mb-6">{STATEMENT_BAND.eyebrow}</div>
+          <div className="brc-label brc-label-on-photo mb-6">{STATEMENT_BAND.eyebrow}</div>
           <p
             id="statement-band-heading"
             className="font-sans font-light text-[2rem] md:text-[3rem] lg:text-[3.5rem] leading-[1.08] tracking-tight text-inverse-foreground"
