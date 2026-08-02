@@ -1,28 +1,23 @@
 /**
- * Unique, custom photorealistic images for every service × city combination
- * (5 services × 8 cities = 40 total) plus per-city hero images for the
- * /areas/[city] pages and per-service fallback images.
+ * Imagery for service pages, service-in-city pages, and area pages.
  *
- * All images are local static assets under `public/images/`. Each service has a
- * coherent look, subtly varied per city with regional cues. No two pages share
- * the same image.
+ * The previous version pointed at forty per-service-per-city renders of
+ * remodeled kitchens and bathrooms. Those describe work the company no longer
+ * does, so the mapping is rebuilt against the construction image library in
+ * public/images/construction.
+ *
+ * Each service has a primary image that matches what the service actually is.
+ * City variants rotate through a per-service shortlist so that no two city
+ * pages for the same service open with the same photograph, which keeps the
+ * eight variants of a service page from looking like one page printed eight
+ * times. The rotation is deterministic, so a given city always gets the same
+ * image and the pages are stable between builds.
  *
  * Key format for CITY_SERVICE_IMAGES: "service-slug/city-slug"
  */
 
-import { GALLERY_IMAGES, SITE_IMAGES } from "./siteImages";
-import {
-  getServiceBackground,
-  type LandingImageSet,
-} from "./serviceBackgrounds";
-
-const SERVICE_SLUGS = [
-  "kitchen-remodel",
-  "bathroom-remodel",
-  "whole-home-remodel",
-  "room-addition",
-  "adu",
-] as const;
+import { CONSTRUCTION_IMAGES, SITE_IMAGES } from "./siteImages";
+import { type LandingImageSet } from "./serviceBackgrounds";
 
 const CITY_SLUGS = [
   "boise",
@@ -35,21 +30,108 @@ const CITY_SLUGS = [
   "caldwell",
 ] as const;
 
+/**
+ * Per-service rotation. The first entry is the service's primary image and is
+ * what the service overview page uses; the rest supply the city variants.
+ * Every shortlist is at least as long as it needs to be to avoid repeats
+ * within a service.
+ */
+const SERVICE_ROTATION: Record<string, readonly string[]> = {
+  "custom-home-builder": [
+    CONSTRUCTION_IMAGES.customHome,
+    CONSTRUCTION_IMAGES.interior,
+    CONSTRUCTION_IMAGES.framing,
+    CONSTRUCTION_IMAGES.kitchen,
+    CONSTRUCTION_IMAGES.foundation,
+    CONSTRUCTION_IMAGES.outdoor,
+    CONSTRUCTION_IMAGES.meeting,
+    CONSTRUCTION_IMAGES.foothills,
+  ],
+  "semi-custom-homes": [
+    CONSTRUCTION_IMAGES.semiCustom,
+    CONSTRUCTION_IMAGES.kitchen,
+    CONSTRUCTION_IMAGES.framing,
+    CONSTRUCTION_IMAGES.interior,
+    CONSTRUCTION_IMAGES.plans,
+    CONSTRUCTION_IMAGES.foundation,
+    CONSTRUCTION_IMAGES.customHome,
+    CONSTRUCTION_IMAGES.meeting,
+  ],
+  "build-on-your-lot": [
+    CONSTRUCTION_IMAGES.lot,
+    CONSTRUCTION_IMAGES.foundation,
+    CONSTRUCTION_IMAGES.ruralSite,
+    CONSTRUCTION_IMAGES.framing,
+    CONSTRUCTION_IMAGES.customHome,
+    CONSTRUCTION_IMAGES.foothills,
+    CONSTRUCTION_IMAGES.semiCustom,
+    CONSTRUCTION_IMAGES.meeting,
+  ],
+  "design-build": [
+    CONSTRUCTION_IMAGES.meeting,
+    CONSTRUCTION_IMAGES.plans,
+    CONSTRUCTION_IMAGES.framing,
+    CONSTRUCTION_IMAGES.budget,
+    CONSTRUCTION_IMAGES.roughIn,
+    CONSTRUCTION_IMAGES.interior,
+    CONSTRUCTION_IMAGES.customHome,
+    CONSTRUCTION_IMAGES.foundation,
+  ],
+  "home-plans-design": [
+    CONSTRUCTION_IMAGES.plans,
+    CONSTRUCTION_IMAGES.interior,
+    CONSTRUCTION_IMAGES.kitchen,
+    CONSTRUCTION_IMAGES.meeting,
+    CONSTRUCTION_IMAGES.outdoor,
+    CONSTRUCTION_IMAGES.customHome,
+    CONSTRUCTION_IMAGES.semiCustom,
+    CONSTRUCTION_IMAGES.framing,
+  ],
+  "lot-evaluation": [
+    CONSTRUCTION_IMAGES.lot,
+    CONSTRUCTION_IMAGES.ruralSite,
+    CONSTRUCTION_IMAGES.foothills,
+    CONSTRUCTION_IMAGES.foundation,
+    CONSTRUCTION_IMAGES.plans,
+    CONSTRUCTION_IMAGES.meeting,
+    CONSTRUCTION_IMAGES.budget,
+    CONSTRUCTION_IMAGES.customHome,
+  ],
+  "shop-homes-barndominiums": [
+    CONSTRUCTION_IMAGES.shopHome,
+    CONSTRUCTION_IMAGES.framing,
+    CONSTRUCTION_IMAGES.lot,
+    CONSTRUCTION_IMAGES.interior,
+    CONSTRUCTION_IMAGES.foundation,
+    CONSTRUCTION_IMAGES.ruralSite,
+    CONSTRUCTION_IMAGES.customHome,
+    CONSTRUCTION_IMAGES.meeting,
+  ],
+  "energy-efficient-homes": [
+    CONSTRUCTION_IMAGES.insulation,
+    CONSTRUCTION_IMAGES.roughIn,
+    CONSTRUCTION_IMAGES.framing,
+    CONSTRUCTION_IMAGES.interior,
+    CONSTRUCTION_IMAGES.customHome,
+    CONSTRUCTION_IMAGES.plans,
+    CONSTRUCTION_IMAGES.semiCustom,
+    CONSTRUCTION_IMAGES.foundation,
+  ],
+};
+
 function buildCityServiceImages(): Record<string, string> {
   const map: Record<string, string> = {};
-  for (const service of SERVICE_SLUGS) {
-    for (const city of CITY_SLUGS) {
-      map[`${service}/${city}`] = `/images/city-service/${service}__${city}.webp`;
-    }
+  for (const [service, rotation] of Object.entries(SERVICE_ROTATION)) {
+    CITY_SLUGS.forEach((city, i) => {
+      map[`${service}/${city}`] = rotation[i % rotation.length];
+    });
   }
   return map;
 }
 
 export const CITY_SERVICE_IMAGES: Record<string, string> = buildCityServiceImages();
 
-/**
- * Distinct neighborhood-style hero images for each city area page.
- */
+/** Neighborhood-style hero images for each city area page. */
 export const CITY_HERO_IMAGES: Record<string, string> = {
   boise: "/images/areas/boise.webp",
   meridian: "/images/areas/meridian.webp",
@@ -61,21 +143,14 @@ export const CITY_HERO_IMAGES: Record<string, string> = {
   caldwell: "/images/areas/caldwell.webp",
 };
 
-/**
- * Service-category fallback images (used when no city match is available).
- * Each is visually distinct from the others.
- */
-export const SERVICE_FALLBACK_IMAGES: Record<string, string> = {
-  "kitchen-remodel": "/images/services/kitchen-remodel.webp",
-  "bathroom-remodel": "/images/services/bathroom-remodel.webp",
-  "whole-home-remodel": "/images/services/whole-home-remodel.webp",
-  "room-addition": "/images/services/room-addition.webp",
-  "adu": "/images/services/adu.webp",
-};
+/** The primary image for each service, used when no city applies. */
+export const SERVICE_FALLBACK_IMAGES: Record<string, string> = Object.fromEntries(
+  Object.entries(SERVICE_ROTATION).map(([service, rotation]) => [service, rotation[0]]),
+);
 
 /**
  * Resolve the dedicated hero image for a specific service-in-city page.
- * Falls back to the service hero image, then undefined.
+ * Falls back to the service primary image, then undefined.
  */
 export function getCityServiceBackground(
   serviceSlug: string,
@@ -88,49 +163,47 @@ export function getCityServiceBackground(
 }
 
 /**
- * Per-service "finished room" gallery photos, used for the breather band on
- * city-service pages so it differs from the city-specific hero render.
- */
-const SERVICE_GALLERY_AFTER: Record<string, string> = {
-  "kitchen-remodel": GALLERY_IMAGES.kitchen.after,
-  "bathroom-remodel": GALLERY_IMAGES.bathroom.after,
-  "whole-home-remodel": GALLERY_IMAGES.wholeHome.after,
-  "room-addition": GALLERY_IMAGES.addition.after,
-  adu: GALLERY_IMAGES.basement.after,
-};
-
-/**
- * Three distinct images for a service-in-city page: the unique city-service
- * render as the hero, a finished-room gallery photo for the breather band, and
- * the generic service photo for the process panel. Each slot falls back to the
- * hero image when a dedicated photo is unavailable.
+ * Three distinct images for a service-in-city page: the city variant as the
+ * hero, a different image from the same service rotation for the breather
+ * band, and the service primary for the process panel.
  */
 export function getCityServiceImageSet(
   serviceSlug: string,
   citySlug: string,
 ): LandingImageSet {
+  const rotation = SERVICE_ROTATION[serviceSlug];
+  const cityIndex = CITY_SLUGS.indexOf(citySlug as (typeof CITY_SLUGS)[number]);
   const hero =
     CITY_SERVICE_IMAGES[`${serviceSlug}/${citySlug}`] ??
     SERVICE_FALLBACK_IMAGES[serviceSlug] ??
-    getServiceBackground(serviceSlug);
+    SITE_IMAGES.hero;
+
+  if (!rotation || cityIndex < 0) {
+    return { hero, breather: hero, process: hero };
+  }
+
   return {
     hero,
-    breather: SERVICE_GALLERY_AFTER[serviceSlug] ?? hero,
-    process: SERVICE_FALLBACK_IMAGES[serviceSlug] ?? hero,
+    // Offset by three rather than one so the two images on a page are visually
+    // unrelated instead of adjacent stages of the same build.
+    breather: rotation[(cityIndex + 3) % rotation.length],
+    process: rotation[0],
   };
 }
 
 /**
- * Three distinct images for an area (city) page: the neighborhood hero, plus
- * two different service renders set in that same city for the breather band and
- * process panel. Each slot falls back to the hero image when unavailable.
+ * Three distinct images for an area (city) page: the city hero, plus two
+ * construction images that vary by city so neighbouring area pages do not
+ * open with the same pair.
  */
 export function getAreaImageSet(citySlug: string): LandingImageSet {
   const hero = CITY_HERO_IMAGES[citySlug] ?? SITE_IMAGES.hero;
+  const rotation = SERVICE_ROTATION["custom-home-builder"];
+  const i = Math.max(0, CITY_SLUGS.indexOf(citySlug as (typeof CITY_SLUGS)[number]));
   return {
     hero,
-    breather: CITY_SERVICE_IMAGES[`kitchen-remodel/${citySlug}`] ?? hero,
-    process: CITY_SERVICE_IMAGES[`whole-home-remodel/${citySlug}`] ?? hero,
+    breather: rotation[i % rotation.length],
+    process: rotation[(i + 4) % rotation.length],
   };
 }
 
@@ -144,7 +217,6 @@ export function getCityServiceImage(url: string): string | undefined {
   const pathname = url.split("?")[0].split("#")[0];
   const segments = pathname.split("/").filter(Boolean);
 
-  // /services/:service or /services/:service/:city
   if (segments[0] === "services" && segments[1]) {
     const service = segments[1];
     const city = segments[2];
@@ -155,7 +227,6 @@ export function getCityServiceImage(url: string): string | undefined {
     if (SERVICE_FALLBACK_IMAGES[service]) return SERVICE_FALLBACK_IMAGES[service];
   }
 
-  // /areas/:city
   if (segments[0] === "areas" && segments[1]) {
     const city = segments[1];
     if (CITY_HERO_IMAGES[city]) return CITY_HERO_IMAGES[city];

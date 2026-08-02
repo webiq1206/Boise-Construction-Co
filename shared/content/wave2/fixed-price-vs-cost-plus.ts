@@ -2,116 +2,143 @@ import type { BlogPostData } from '../../blogContent';
 
 export const fixedPriceVsCostPlus: BlogPostData = {
   slug: 'fixed-price-vs-cost-plus',
-  title: 'Fixed-Price vs. Cost-Plus Remodeling Contracts: Which Is Better?',
-  seoTitle: 'Fixed-Price vs Cost-Plus Remodeling',
+  title: 'Fixed Price vs Cost Plus for a New Home Build',
+  seoTitle: 'Fixed Price vs Cost Plus for a New Home',
   metaDescription:
-    'Fixed-price vs. cost-plus remodeling contracts explained: how each works, the pros and cons, who carries the risk, and which contract type is right for your Boise remodel.',
+    'Fixed price vs cost plus for a new home build: who carries the risk over nine to fourteen months, why allowances matter, GMP contracts, and how draws work.',
   excerpt:
-    'Fixed-price and cost-plus contracts allocate risk and transparency very differently. Here is how each works, their pros and cons, and which fits your Boise remodel.',
-  category: 'Contractor Selection',
-  hubSlug: 'contractor-selection',
-  author: 'Boise Remodeling Co',
-  publishedAt: '2026-05-17',
-  updatedAt: '2026-07-11',
-  tags: ['contractor', 'contracts', 'boise', 'pricing'],
+    'On a nine to fourteen month house build, the contract structure decides who pays when something costs more than expected. Here is how each one behaves over that long.',
+  category: 'Choosing a Builder',
+  hubSlug: 'choosing-a-builder',
+  author: 'Boise Construction Co',
+  publishedAt: '2026-07-12',
+  tags: ['choosing a builder', 'contracts', 'boise', 'new construction'],
   heroImage: '/images/blog/fixed-price-vs-cost-plus.webp',
   primaryKeyword: 'fixed price vs cost plus',
   secondaryKeywords: [
-    'fixed price vs cost plus remodel',
-    'cost plus contract remodeling',
-    'best contract type for remodeling',
+    'cost plus contract new home',
+    'guaranteed maximum price home build',
+    'best contract type for building a house',
   ],
   searchIntent: 'informational',
-  featuredSnippetTargets: ['fixed price vs cost plus', 'cost plus vs fixed price contract'],
+  featuredSnippetTargets: [
+    'fixed price vs cost plus',
+    'guaranteed maximum price contract',
+  ],
   wordCountTarget: 'cluster',
   quickAnswer:
-    'A fixed-price (lump-sum) remodeling contract sets one agreed price for a defined scope, so the contractor carries the risk of cost overruns; a cost-plus contract charges the actual cost of labor and materials plus a fee, so the homeowner carries that risk but sees full cost transparency. Fixed-price offers budget certainty and is best for well-defined projects; cost-plus offers transparency and flexibility for open-ended or highly custom work.',
+    'A fixed price sets one number for a defined house, so the builder carries the risk of overruns. Cost plus bills the actual cost plus a fee, so you carry it and see every invoice. A guaranteed maximum price sits between them. Over a nine to fourteen month build, the allowances decide how much either promise is worth.',
   keyTakeaways: [
-    'Fixed-price sets one agreed price for a defined scope - budget certainty for you.',
-    'Cost-plus bills actual costs plus a fee - transparency, but you carry overrun risk.',
-    'Fixed-price shifts risk to the contractor; cost-plus shifts it to the homeowner.',
-    'Fixed-price suits well-defined projects; cost-plus suits open-ended, custom, or unknown scope.',
-    'Either can work with a trustworthy contractor and a clear, detailed scope.',
+    'Fixed price moves overrun risk to the builder; cost plus keeps it with you.',
+    'A fixed price on a vague scope is not fixed, it is a number with a change order attached.',
+    'Allowances matter more on a whole house because there are dozens of them running for a year.',
+    'A guaranteed maximum price gives you cost visibility with a ceiling, and is often the honest middle.',
+    'Draws are tied to milestones under a fixed price and to invoices under cost plus, which changes how your lender behaves.',
   ],
   relatedLinks: [
-    { url: '/guides/choose-remodeling-contractor-boise', anchor: 'How to Choose a Remodeling Contractor' },
-    { url: '/blog/why-remodeling-bids-vary', anchor: 'Why Remodeling Bids Vary' },
-    { url: '/blog/how-to-compare-remodeling-estimates', anchor: 'How to Compare Estimates' },
+    { url: '/guides/choose-home-builder-boise', anchor: 'How to Choose a Home Builder in Boise' },
+    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to Compare Home Builder Bids' },
+    { url: '/blog/why-home-building-bids-vary', anchor: 'Why Home Building Bids Vary' },
     { url: '/blog/design-build-vs-general-contractor', anchor: 'Design-Build vs General Contractor' },
-    { url: '/blog/how-to-budget-remodel-boise', anchor: 'How to Budget for a Remodel' },
+    { url: '/blog/construction-loan-basics-idaho', anchor: 'How Construction Loans Work in Idaho' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [
     {
-      question: 'What is the difference between fixed-price and cost-plus?',
+      question: 'What is the difference between fixed price and cost plus?',
       answer:
-        'A fixed-price contract sets one agreed price for a defined scope of work, so the contractor absorbs cost overruns. A cost-plus contract charges the actual cost of labor and materials plus a set fee or percentage, so the homeowner pays the real cost and carries the risk of overruns, in exchange for full transparency.',
+        'A fixed price contract sets one agreed number for a defined scope, so the builder absorbs an overrun that falls inside that scope. A cost plus contract bills you the actual cost of labor, materials and subcontracts, plus a stated fee, so you pay what the house actually costs and see the invoices. The difference is who holds the risk of the unknown.',
     },
     {
-      question: 'Which is better, fixed-price or cost-plus?',
+      question: 'Which contract is better for building a custom home?',
       answer:
-        'Neither is universally better. Fixed-price is best when the scope is well defined and you want budget certainty; cost-plus is best for open-ended, highly custom, or hard-to-predict projects where transparency and flexibility matter more. The contractor’s trustworthiness matters more than the contract type.',
+        'For most people building a house in the Treasure Valley, a fixed price or a guaranteed maximum on a fully specified plan is the better fit, because a construction loan and a family budget both want a number. Cost plus fits when the scope genuinely cannot be pinned down, or when an owner wants full visibility and can absorb an overrun.',
     },
     {
-      question: 'Is cost-plus more expensive than fixed-price?',
+      question: 'Is cost plus cheaper than fixed price?',
       answer:
-        'Not necessarily. Fixed-price includes a contingency the contractor builds in to cover risk, so you may pay for surprises that never happen. Cost-plus can be lower if a project goes smoothly, but higher if it does not - you pay the actual cost either way, which is why trust and clear scope are essential.',
+        'Sometimes, and it is not the way to bet. A fixed price carries a contingency for risk that may never occur, so a smooth build under cost plus can finish lower. A difficult one finishes higher, and you pay the difference. Over nine to fourteen months there is a lot of room for both outcomes, which is the whole point of the distinction.',
     },
     {
-      question: 'Who carries the risk in each contract type?',
+      question: 'What is a guaranteed maximum price?',
       answer:
-        'In a fixed-price contract, the contractor carries the risk of overruns beyond the agreed scope. In a cost-plus contract, the homeowner carries that risk because they pay actual costs. A well-defined scope and a good contractor reduce risk under either structure.',
+        'A guaranteed maximum price, or GMP, bills actual cost like cost plus but caps the total for the defined scope. You see where the money goes and the builder absorbs anything above the ceiling. Many GMP agreements share savings if the project finishes under the cap. It is the structure that gives an owner both transparency and a floor to stand on.',
     },
     {
-      question: 'What contract type do most residential remodelers use?',
+      question: 'How do draws work when building a house?',
       answer:
-        'Many residential design-build remodelers use a fixed-price or guaranteed-maximum approach for defined projects because homeowners value budget certainty, while reserving cost-plus for truly open-ended or unusually complex work. The key in any case is a detailed written scope and clear change-order process.',
+        'Under a fixed price, draws are usually tied to milestones such as foundation, framing, dry-in, mechanical rough-in, drywall, and completion, with a lender inspection before each release. Under cost plus, draws follow actual invoices and payroll for the period. Milestone draws are easier for a lender to verify; invoice draws give you more detail about where the money went.',
     },
     {
-      question: 'What is a guaranteed maximum price contract?',
+      question: 'What happens if material prices rise during my build?',
       answer:
-        'A guaranteed maximum price (GMP) is a hybrid: you see actual costs like cost-plus, but the contractor guarantees the total will not exceed an agreed ceiling for the defined scope, like fixed-price. Some arrangements even share any savings if the project finishes under the cap. For homeowners who want both cost transparency and a firm safety net, a GMP is often the most reassuring structure.',
+        'It depends on the escalation language, which is the clause to read most carefully. Under a true fixed price the builder absorbs it. Many contracts include an escalation clause that shares or passes through increases above a stated threshold on named materials. Under cost plus, you pay the higher price directly. Ask which of these applies before you sign.',
     },
   ],
   content: `
-<h2 id="overview">Fixed-price vs. cost-plus: the short answer</h2>
-<p><strong>A fixed-price contract sets one agreed price for a defined scope, so the contractor carries the risk of overruns; a cost-plus contract charges actual labor and material costs plus a fee, so the homeowner carries that risk but sees full cost transparency.</strong> The choice is really about who holds the risk of the unknown and how much visibility you want into the numbers. Both can work well with the right contractor and a clear scope. This article is part of our guide on <a href="/guides/choose-remodeling-contractor-boise">choosing a remodeling contractor</a>, and it explains each structure so you can decide which fits your project.</p>
+<h2 id="the-short-answer">The short answer</h2>
+<p><strong>A fixed price puts the risk of an overrun on the builder; cost plus puts it on you and shows you every invoice; a guaranteed maximum does both.</strong> On a small job that distinction is academic because the job is over before the unknowns arrive. On a house it is the central financial decision you make, because a build runs nine to fourteen months, touches thirty trades and hundreds of selections, and there is a lot of time for the world to change. This article is part of our guide to <a href="/guides/choose-home-builder-boise">choosing a home builder in Boise</a>.</p>
 
-<h2 id="fixed-price">What is a fixed-price contract?</h2>
-<p>A fixed-price contract - also called lump-sum - is what most homeowners picture when they think of hiring a contractor. You and the contractor agree on a defined scope of work, and the contractor commits to completing it for one set price. If the project costs more than the contractor estimated due to their own miscalculation or inefficiency, that is their problem, not yours; the price you agreed to is the price you pay. To protect themselves against this risk, contractors build a contingency into a fixed-price number. The defining benefit for you is certainty: you know the cost of the agreed scope up front, which makes budgeting and financing straightforward.</p>
+<h2 id="fixed-price">What a fixed price means on a whole house</h2>
+<p><strong>One number, one defined scope, and the builder eats the difference if their estimate was low.</strong> That is the promise, and it is a real one when the scope behind it is real.</p>
+<p>The important qualifier is what "defined scope" covers. A fixed price is fixed against the drawings, the specification and the allowance schedule that were attached to the contract. It is not fixed against the house you end up wanting. If the plans change, if a selection lands above its allowance, if the ground turns out to hold something nobody expected, the price moves through a change order. That is not a loophole, it is how the structure works, and it is why the quality of the specification behind a fixed price matters more than the word fixed.</p>
+<p>To carry that risk, a builder prices a contingency into the number. You pay for it whether or not it is used, unless the contract says otherwise. That is the honest cost of certainty, and for most people building a house it is worth paying.</p>
 
-<h2 id="cost-plus">What is a cost-plus contract?</h2>
-<p>A cost-plus contract works differently. Instead of one set price, you pay the actual cost of labor and materials as the project proceeds, plus a fee for the contractor - either a fixed amount or a percentage of the cost. You see the real invoices and receipts, so there is complete transparency into where every dollar goes. The trade-off is that you carry the risk: if the project costs more than expected, you pay the difference, because you are paying actual costs rather than a locked price. Cost-plus is common on highly custom, open-ended, or hard-to-predict projects where pinning down a fixed scope in advance is genuinely difficult.</p>
+<h2 id="cost-plus">What cost plus means on a whole house</h2>
+<p><strong>You pay the actual cost of labor, materials and subcontracts as the house is built, plus a fee, and you see the invoices.</strong> There is no contingency buried in the number because there is no number.</p>
+<p>What people find surprising about cost plus on a full build is the volume of paper. A house generates hundreds of invoices, and reviewing them monthly for a year is a real commitment. The transparency is genuine, but it is transparency you have to consume. The other structural point is the fee: a fixed dollar fee keeps the builder neutral about cost, while a percentage fee means every dollar of overrun increases the builder's income. That is not an accusation, it is an incentive, and it is worth naming out loud before you sign.</p>
+<p>Cost plus fits a specific situation: an owner who is deeply involved, a scope that genuinely cannot be pinned down, an unusual site, or a relationship with a builder that already has years behind it.</p>
 
-<h2 id="risk">Who carries the risk?</h2>
-<p>The core difference between the two is risk allocation. In a fixed-price contract, the <strong>contractor</strong> carries the risk of overruns within the agreed scope - they eat the cost if their estimate was low. In a cost-plus contract, the <strong>homeowner</strong> carries that risk - you pay whatever the work actually costs. This is the lens to view everything else through. If budget certainty helps you sleep at night, you want the risk on the contractor, which points to fixed-price. If you value transparency and are comfortable that a smoothly run custom project might cost less without a padded contingency - accepting that a rough one could cost more - cost-plus may appeal.</p>
+<h2 id="the-long-build">Why nine to fourteen months changes the calculation</h2>
+<p><strong>Duration is what makes this decision different on a house than on any smaller project.</strong> A long build gives every uncertainty room to develop.</p>
+<p>Over a year, material prices move. Trade availability moves. Your own preferences move, because you will stand in the framed shell in month five and see the house differently than you did on paper. Interest accrues on a construction loan against the drawn balance, so a schedule slip has a direct financial cost to you regardless of who caused it. And the discovery risks are front-loaded: excavation, soils, groundwater and utility conditions all reveal themselves in the first eight weeks, before you have much information about how the rest of the project will go.</p>
+<p>Under a fixed price, most of that volatility is somebody else's problem, which is what you are buying. Under cost plus, all of it is yours, which is what you are accepting in return for seeing the numbers. Understanding <a href="/blog/how-long-does-it-take-to-build-a-house-boise">how long a build actually takes here</a> is part of judging how much that exposure is worth.</p>
 
-<h2 id="transparency">Transparency and the contingency question</h2>
-<p>A subtle point drives a lot of the fixed-price-versus-cost-plus debate: the contingency. Because a fixed-price contractor must protect against overruns, they build a buffer into the price - and if the project goes smoothly and that buffer is not needed, you paid for risk that never materialized. Cost-plus removes that buffer; you pay only for what actually happens, with full visibility into costs. The counterpoint is that cost-plus offers less incentive for the contractor to control costs, since they are reimbursed for them, which is why a fixed fee (rather than a percentage) and a trustworthy contractor matter so much. Neither structure is inherently cheaper; they simply distribute the cost of uncertainty differently.</p>
+<h2 id="allowances">Allowances: why they matter more on a house</h2>
+<p><strong>On a full house build the allowance schedule, not the contract type, is what determines whether your final number resembles your first one.</strong> A whole house carries allowances for flooring, cabinetry, countertops, tile, lighting, plumbing fixtures, hardware, exterior stone, appliances and landscape, and each one runs for months.</p>
+<p>Under a fixed price, every allowance is a hole in the fixed price, sized by how wrong the allowance is. A builder who set the cabinetry allowance to win the bid has handed you a fixed price that is guaranteed to be exceeded. Under cost plus, the allowance schedule is only a forecast to begin with, so a low one misleads you about the total without breaking any promise.</p>
+<p>This is why we set allowances at what things cost at Boise suppliers rather than at a number that makes the total attractive, and why the question to ask any builder is how each allowance was derived, not what it is. The mechanics of checking this across competing proposals are in <a href="/blog/how-to-compare-builder-bids">how to compare home builder bids</a>.</p>
 
-<h2 id="pros-cons-fixed">Fixed-price pros and cons</h2>
-<p><strong>Pros:</strong> budget certainty, easy financing, a clear number to compare against other bids, and strong incentive for the contractor to work efficiently. <strong>Cons:</strong> you pay a built-in contingency whether or not it is used; changes to scope require change orders; and a fixed price is only as good as the scope it is tied to - a fixed price on a vague scope is not really fixed. Fixed-price shines when the project is well defined and you want to know the cost before you start, which describes most kitchen, bath, and defined remodel projects.</p>
+<h2 id="gmp">Guaranteed maximum price</h2>
+<p><strong>A guaranteed maximum price bills like cost plus and caps like fixed price, and on a custom home it is often the most honest structure available.</strong> You see the actual costs. The builder guarantees the total will not exceed a stated ceiling for the defined scope. Many agreements share savings below the cap between owner and builder.</p>
+<p>The catch is that a GMP requires a well-developed design before the cap can be set responsibly. A ceiling produced from schematic drawings is a guess dressed as a guarantee, and the builder will price the uncertainty into the cap, which removes most of the benefit. This is one of the practical advantages of pricing during design rather than after it, discussed in <a href="/blog/design-build-vs-general-contractor">design-build versus general contractor</a>. Ask three questions of any GMP: what scope the cap covers, what happens to savings, and what specifically is excluded from the guarantee.</p>
 
-<h2 id="pros-cons-cost">Cost-plus pros and cons</h2>
-<p><strong>Pros:</strong> full transparency into actual costs, flexibility to change direction as the project evolves, no padded contingency, and a good fit for open-ended or highly custom work where scope genuinely cannot be pinned down in advance. <strong>Cons:</strong> no guaranteed final price, so budgeting is harder; the homeowner carries overrun risk; and it requires a high level of trust because you are relying on the contractor's honesty with costs. Cost-plus works best on large custom projects with an involved owner and a contractor they deeply trust.</p>
+<h2 id="draws">How draws work under each</h2>
+<p><strong>The payment mechanics differ, and if you are financing the build your lender cares about the difference.</strong></p>
+<table>
+<thead>
+<tr><th></th><th>Fixed price</th><th>Cost plus</th></tr>
+</thead>
+<tbody>
+<tr><td>Draw trigger</td><td>Completed milestone</td><td>Invoices and payroll for the period</td></tr>
+<tr><td>Typical milestones</td><td>Foundation, framing, dry-in, rough-ins, drywall, completion</td><td>Monthly billing cycle</td></tr>
+<tr><td>Lender verification</td><td>Inspection confirms the stage is built</td><td>Review of backup documentation</td></tr>
+<tr><td>What you see</td><td>Percentage complete</td><td>Every invoice</td></tr>
+<tr><td>Overrun visible</td><td>At the change order</td><td>In the monthly billing</td></tr>
+<tr><td>Retainage</td><td>Common, released at closeout</td><td>Less common</td></tr>
+</tbody>
+</table>
+<p>Milestone draws are easier for a construction lender to inspect and release, which is one reason fixed price dominates residential lending. Cost plus draws give you more information and require more administration from everyone, including you. Either way, check draws against what is physically standing on the lot before you approve one. Our overview of <a href="/blog/construction-loan-basics-idaho">how construction loans work in Idaho</a> covers the financing side.</p>
 
-<h2 id="hybrid">Guaranteed maximum price: a middle path</h2>
-<p>Many contractors offer a hybrid that captures the best of both: a guaranteed maximum price, sometimes with cost transparency underneath. In this structure you get the transparency of cost-plus - seeing actual costs - but with a ceiling the contractor cannot exceed for the agreed scope, so you also get the certainty of fixed-price. If the project comes in under the maximum, some arrangements share the savings. For homeowners who want both visibility and a safety net, a guaranteed-maximum approach is often the most reassuring, and it is worth asking any contractor whether they offer it.</p>
+<h2 id="discovery">What happens when something turns up in the ground</h2>
+<p><strong>Discovery is the moment the two structures behave most differently, and it usually happens in the first month.</strong> Rock at the excavation depth, soft soils requiring over-excavation and structural fill, groundwater higher than expected, or a utility not where the plat said it was.</p>
+<p>Under a fixed price, this is a change order: the builder documents the condition, prices the remedy, and you approve it before work continues. The base price protects you from the ordinary risks the builder priced, not from a condition nobody could have priced. Under cost plus, the additional cost simply appears in the next billing, which is faster but gives you no decision point.</p>
+<p>The way to reduce this exposure under either structure is to know the lot before you sign. A written lot evaluation runs $950 to $3,500 and typically pays for itself the first time it tells you the site work on a rural parcel is closer to $80,000 to $150,000 than the $25,000 to $50,000 a serviced subdivision lot would need.</p>
 
-<h2 id="which">Which is right for your remodel?</h2>
-<p>Choose <strong>fixed-price</strong> when your scope is well defined, when budget certainty is a priority, and when you want a clean number to compare and finance - the situation for the majority of residential remodels. Choose <strong>cost-plus</strong> when the project is genuinely open-ended or highly custom, when you want full cost transparency, and when you have a contractor you trust completely and the flexibility to absorb overruns. Consider a <strong>guaranteed maximum</strong> when you want transparency and a ceiling. In every case, the contract type matters less than two things: a detailed written scope and a trustworthy contractor. A fixed price on a vague scope offers false comfort, and cost-plus with the wrong contractor invites overruns.</p>
+<h2 id="escalation">Escalation and who owns a price increase</h2>
+<p><strong>Read the escalation clause before you read the price.</strong> Over a nine to fourteen month build, a category of material can move meaningfully, and contracts handle that in three different ways.</p>
+<p>A true fixed price with no escalation clause means the builder absorbs it, and they will have priced accordingly. Many contracts include a clause that passes through or shares increases above a stated threshold on named materials, which is a reasonable compromise and should be reciprocal, meaning decreases come back to you too. Under cost plus you pay the market price on the day it is bought. What you want to avoid is an escalation clause that is open-ended and one-directional, since that converts a fixed price into cost plus without telling you.</p>
 
-<h2 id="change-orders">How change orders work under each contract</h2>
-<p>Change orders - documented, priced changes to the agreed scope - behave differently under each structure, and understanding this prevents budget surprises. Under a <strong>fixed-price</strong> contract, anything you add or change beyond the original scope generates a change order priced separately, because the fixed price only covers what was defined; this keeps the base price honest but means late additions cost extra and should be approved in writing before the work proceeds. Under <strong>cost-plus</strong>, changes are more fluid because you are already paying actual costs - but that fluidity can quietly grow the total if changes are not tracked, which is why even cost-plus projects benefit from documenting scope changes. In both cases, the principle is the same and non-negotiable: any change to the work should be written down, priced, and approved by you before it happens. A contractor who handles changes casually, under either contract type, is a warning sign regardless of which structure you chose.</p>
+<h2 id="which-suits">Which structure suits which owner</h2>
+<p><strong>Take a fixed price or a GMP if you have a construction loan, a fixed budget, and a life that does not have room for a surprise.</strong> That describes most people building a family home in Meridian, Eagle, Star or Caldwell, and there is no shame in wanting a number you can plan around.</p>
+<p>Take cost plus if you are building something genuinely unusual, if you want to see every dollar and have the time to look at it, if you can absorb an overrun without it changing your life, and if you have a builder you already trust rather than one you are hoping to trust. Also consider it if you plan to be heavily involved in selections and want the freedom to change direction mid-build without negotiating each change.</p>
+<p>If you are unsure which describes you, the tiebreaker is simple. Ask yourself what happens if the house costs fifteen percent more than the estimate. If the answer is a difficult year, you want the risk on the builder.</p>
 
-<h2 id="questions">Questions to ask about a contract</h2>
-<p>Before signing any remodeling contract, ask a few questions that reveal how it really works. <em>Is this fixed-price, cost-plus, or guaranteed-maximum, and why do you recommend it for my project? What exactly does the price include, and what would generate a change order? How are progress payments structured, and are they tied to milestones? How do you document and approve changes? What contingency, if any, is built into the number?</em> The answers tell you not just about the contract but about the contractor's transparency. A professional explains their pricing structure clearly and puts everything in writing; one who is vague about how the money works, or who resists documenting the scope and change process, is telling you something important no matter how attractive the headline price looks. The contract structure is a tool - it is only as good as the honesty and clarity of the contractor using it.</p>
+<h2 id="what-matters-more">What matters more than the structure</h2>
+<p><strong>The specification and the change order process will affect your build more than the choice between these three structures.</strong> A fixed price on thin drawings with generous allowances and a casual approach to changes will drift further than a cost plus arrangement with a detailed scope and a disciplined builder.</p>
+<p>So spend your attention there: on whether the allowances trace back to real quotes, on whether the exclusions are complete, on whether every change stops work until it is signed, and on whether the builder writes things down without being asked. Those are the questions in our list of <a href="/blog/questions-to-ask-a-home-builder">questions to ask a home builder</a>, and they are worth more than winning the argument about contract type.</p>
 
-<h2 id="scope-matters">Why scope matters more than structure</h2>
-<p>Whatever the contract type, its value depends entirely on the scope behind it. A well-written scope - listing the work, the allowances, the responsibilities, and the change-order process - is what makes a fixed price trustworthy and a cost-plus arrangement predictable. This is where a thorough design and preconstruction phase earns its keep: by nailing down decisions before construction, it lets a fixed price be truly fixed and keeps a cost-plus project on track. It also connects to how the work is delivered; a <a href="/blog/design-build-vs-general-contractor">design-build team</a> that prices during design can offer a firm number with confidence because the scope is clear. Read <a href="/blog/how-to-compare-remodeling-estimates">how to compare estimates</a> and <a href="/blog/why-remodeling-bids-vary">why bids vary</a> for more on reading the numbers.</p>
-<p>This is also why the debate over contract type can be overblown. Homeowners sometimes agonize over fixed-price versus cost-plus as if the structure alone determines the outcome, when in reality the quality of the scope and the integrity of the contractor matter far more. A trustworthy contractor with a detailed written scope will treat you fairly under any structure, documenting changes and controlling costs because that is how they operate. An untrustworthy one will find ways to increase the total regardless of the contract on paper. So while it is worth understanding the trade-offs and choosing the structure that fits your project and comfort level, do not let the contract type distract you from the two things that actually protect you: a clear, detailed scope, and a contractor whose words and documents consistently line up.</p>
-
-<h2 id="next-steps">Talk through the right contract for your project</h2>
-<p>We are happy to explain how our contracts and pricing work and to recommend the structure that fits your project and comfort level - always built on a detailed written scope. Our free in-home visit, anywhere in Boise and the wider Treasure Valley, is the place to have that conversation. When you are ready, <a href="/contact">schedule a consultation</a> or read the full <a href="/guides/choose-remodeling-contractor-boise">guide to choosing a remodeling contractor</a>.</p>
+<h2 id="next-steps">Work out which one fits your build</h2>
+<p>We are happy to explain how we structure our agreements and to tell you when a different structure would serve you better than ours. If you want to talk it through with a real plan and a real lot in front of us, <a href="/contact">get in touch</a>, or start with the <a href="/#calculator">build cost calculator</a> to see the band your project is likely to sit in. If competing proposals are what prompted the question, read <a href="/blog/why-home-building-bids-vary">why home building bids vary so much</a> first.</p>
 `.trim(),
 };

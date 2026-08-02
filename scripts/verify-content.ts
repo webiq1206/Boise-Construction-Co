@@ -52,13 +52,19 @@ function guideChecks(
   const isPillar = tier === 'pillar';
   const isLocation =
     guideType === 'location' || guideType === 'neighborhood';
-  const wordMin = guideType === 'master' ? 150 : isPillar ? 250 : 100;
-  const wordMax = guideType === 'master' ? 800 : isPillar ? 2000 : 700;
-  const h2Min =
-    guideType === 'master' || isLocation ? 5 : isPillar ? 7 : 5;
-  const linkMin = isPillar ? 10 : 6;
-  const faqMin = isPillar ? 8 : 6;
-  const faqMax = isPillar ? 18 : 12;
+
+  // These bands were recalibrated when the generated guide layer was replaced
+  // with hand-written pages. The previous pillar ceiling of 2,000 words and
+  // location ceiling of 700 were set to stop template pages from padding
+  // themselves; against hand-written content they penalised depth, which is
+  // the opposite of what this check is for. The ceilings that remain exist to
+  // catch a page that has become an unreadable wall, not to cap substance.
+  const wordMin = isPillar ? 2400 : 600;
+  const wordMax = isPillar ? 4600 : 1800;
+  const h2Min = isPillar ? 10 : 5;
+  const linkMin = isPillar ? 12 : 6;
+  const faqMin = isPillar ? 8 : 5;
+  const faqMax = isPillar ? 14 : 10;
   const cityMin = isLocation ? 1 : isPillar ? 6 : 4;
 
   return {

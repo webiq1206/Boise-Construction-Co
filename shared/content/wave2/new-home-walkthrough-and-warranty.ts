@@ -5,7 +5,7 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
   title: 'The Final Walkthrough and What the Warranty Covers',
   seoTitle: 'Final Walkthrough and New Home Warranty',
   metaDescription:
-    'How the pre-drywall and final walkthrough work, how a punch list is handled, what a one-year workmanship warranty covers, and how to tell a defect from settling.',
+    'How the pre-drywall and final walkthrough work, how a punch list is handled, what a one-year warranty covers, and how to tell a defect from settling.',
   excerpt:
     'The walkthrough is a working inspection, not a ceremony. Here is what we look at, how the punch list is closed, and where the warranty line actually falls.',
   category: 'The Building Process',
@@ -119,8 +119,12 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
 <p>For anything urgent, call first and write afterward. Active water, no heat in a Boise January, no cooling in July with a vulnerable person in the house, an electrical problem, or a gas smell are all call-immediately items, and a gas smell means leave the house and call the utility before you call us. For everything else, we confirm receipt, tell you whether it is a workmanship item or a manufacturer item, and give you a scheduled time rather than a vague promise to get to it.</p>
 <p>One practical tip: keep a running note during your first year rather than reporting each small thing individually. Cosmetic drywall touch-up in particular is best batched and handled near the end of the first year, once seasonal movement has done what it is going to do, so it gets fixed once instead of three times.</p>
 
+<h2 id="first-year">How the first year is meant to go</h2>
+<p><strong>A well-run warranty year has a rhythm to it: urgent items handled immediately, routine items batched, and a deliberate look at the house before the year is up.</strong> The pattern we see is that the first two months produce a handful of small adjustment items, the middle of the year is usually quiet, and the last quarter is when the seasonal movement items become visible.</p>
+<p>Plan on a review before the twelve months expire rather than on the day they do. Walk the house the same way you walked it before possession, with the same discipline and the same low-angle light, and write down anything that has changed. Doors that have shifted, trim joints that have opened, grout or caulk that has cracked, and drywall touch-up all belong in that pass. It is also worth checking the exterior grading after a full year of watering and a spring runoff, because settlement in backfilled areas can change how water moves near the foundation, and that is worth catching early whether or not it is a warranty item.</p>
+
 <h2 id="next-steps">Ask about this before you sign, not after</h2>
 <p><strong>The time to understand a builder's walkthrough and warranty process is while you are choosing them, because every builder sounds accommodating before the contract and the difference shows up afterward.</strong> Ask whether a pre-drywall walkthrough is standard, how the punch list is documented, what exactly the warranty covers, and how a claim is reported and tracked. Ask what happens if an item cannot be fixed before possession.</p>
-<p><a href="/blog/questions-to-ask-a-home-builder">Questions to ask a home builder</a> covers the rest of that conversation, and <a href="/blog/first-meeting-with-a-home-builder">what happens at a first meeting</a> explains where it starts. If you want to see how we document a punch list and handle the first year, <a href="/contact">ask us</a> and we will show you the actual paperwork rather than describe it.</p>
+<p><a href="/blog/questions-to-ask-a-home-builder">Questions to ask a home builder</a> covers the rest of that conversation, and <a href="/blog/first-meeting-with-a-home-builder">what happens at a first meeting</a> explains where it starts. The <a href="/guides/boise-home-building-process-guide">building process guide</a> puts the walkthrough in the context of everything that precedes it, and <a href="/guides/choose-home-builder-boise">how to choose a home builder</a> is the wider version of the vetting question. If you want to see how we document a punch list and handle the first year, <a href="/contact">ask us</a> and we will show you the actual paperwork rather than describe it.</p>
 `.trim(),
 };

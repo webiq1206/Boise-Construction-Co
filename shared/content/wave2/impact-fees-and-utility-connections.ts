@@ -5,7 +5,7 @@ export const impactFeesAndUtilityConnections: BlogPostData = {
   title: 'Impact Fees and Utility Connections in Ada and Canyon County',
   seoTitle: 'Impact Fees and Utility Connections',
   metaDescription:
-    'Impact fees, connection fees, and meter fees are different charges from different agencies. What each pays for in Ada and Canyon County, and why we quote them late.',
+    'Impact fees, connection fees, and meter fees are separate charges from separate agencies. What each pays for in Ada and Canyon County, and why amounts vary.',
   excerpt:
     'Impact fees and connection fees are separate charges levied by separate bodies. Here is what each one is, who charges it, and why nobody should quote you a number early.',
   category: 'Land & Lots',
@@ -28,7 +28,7 @@ export const impactFeesAndUtilityConnections: BlogPostData = {
   keyTakeaways: [
     'Impact fees fund public capacity. Connection and meter fees buy a physical hookup.',
     'Several bodies can levy fees on one house: city, highway district, school district, sewer district.',
-    'Fees are set per jurisdiction and get revised, so last year\u2019s number is not this year\u2019s number.',
+    'Fees are set per jurisdiction and get revised, so a schedule from last year may not apply now.',
     'We confirm every fee at feasibility for your specific parcel rather than quoting a remembered figure.',
     'Rural parcels often trade fees for infrastructure, which is usually the more expensive trade.',
   ],

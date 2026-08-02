@@ -5,7 +5,7 @@ export const boiseBuildingPermitGuide: BlogPostData = {
   title: 'Building Permits in Boise: What a New Home Needs',
   seoTitle: 'Building Permits in Boise: New Home Guide',
   metaDescription:
-    'What a new-home building permit in Boise actually contains: site plan, architectural set, structural engineering, energy compliance, utility approvals, inspections.',
+    'What a new-home building permit in Boise actually contains: site plan, architectural set, structural engineering, energy compliance, and utility approvals.',
   excerpt:
     'A new-home permit is a package, not a form. Here is what goes into it, who submits it, what plan review looks for, and how inspections run through the build.',
   category: 'The Building Process',
@@ -115,6 +115,16 @@ export const boiseBuildingPermitGuide: BlogPostData = {
 <h2 id="fees">Fees, and why we do not quote them from memory</h2>
 <p><strong>Permit fees and impact fees are set by each jurisdiction, revised periodically, and calculated from house size and valuation, so a number quoted from memory is a number that will be wrong.</strong> We pull the current published schedule for your specific address and put the real figure in your line-item budget before you sign anything.</p>
 <p>What we can generalize: fees are a small share of a new-home budget compared with construction, but they are not trivial, and impact fees in particular differ meaningfully between jurisdictions. Design and engineering, which is separate from jurisdiction fees, commonly runs 5 to 12 percent of construction cost, or roughly $9,000 to $35,000, excluding land. Both belong in the budget from the start rather than appearing as a surprise later.</p>
+
+<h2 id="other-permits">The permits that are not the building permit</h2>
+<p><strong>A new house usually needs several approvals that are issued by other agencies and run on their own schedules.</strong> People assume the building permit is one document that covers everything, and then discover a separate application sitting in the critical path.</p>
+<p>The common ones are a septic permit through Central District Health on any parcel without city sewer, a well permit and driller coordination on the same parcels, a driveway or approach permit from the road authority, an irrigation district review where a lateral or easement crosses the property, a floodplain review on parcels near a waterway, and a design review from a homeowners association where covenants require one. A homeowners association review is not a government process and has no obligation to be quick, which surprises people who have budgeted for the city and forgotten the neighborhood.</p>
+<p>The way to keep these from becoming delays is to identify them at the lot stage, not the permit stage. Every one of them is knowable before you buy.</p>
+
+<h2 id="early-submittal">What happens while the permit is in review</h2>
+<p><strong>Plan review is not dead time, and a builder who treats it as a pause is wasting weeks you already paid for.</strong> While the set is in the queue, there is real work available that does not require an issued permit.</p>
+<p>We use that window to finalize the selection schedule, price and place orders for long-lead items such as windows and cabinets, confirm subcontractor availability against a start date, complete utility applications, and line up any early site work the jurisdiction allows separately. We also use it to resolve the small design questions that were deferred so the set could be submitted on time, because those questions do not go away and are much cheaper to answer now than during framing.</p>
+<p>What we do not do is order anything that a correction cycle could change. A window schedule that gets revised after the glass has been fabricated is an expensive lesson in enthusiasm.</p>
 
 <h2 id="inspections">The inspection sequence during construction</h2>
 <p><strong>Inspections are checkpoints that gate the work behind them, which is why a failed one costs schedule rather than just a re-visit.</strong> The typical sequence for a new house runs like this.</p>

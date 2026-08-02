@@ -5,7 +5,7 @@ export const luxuryHomeBuildingCostBoise: BlogPostData = {
   title: 'What a Luxury Home Costs to Build in Boise',
   seoTitle: 'What a Luxury Home Costs to Build in Boise',
   metaDescription:
-    'Luxury builds in the Boise area regularly exceed $450 per square foot. Here is exactly what separates them from a $300 home, and which of that spend you notice.',
+    'Luxury builds in the Boise area regularly exceed $450 per square foot. Here is what separates them from a $300 home, and which of that spend you notice.',
   excerpt:
     'The gap between a $300 and a $450 per square foot home is glazing, roof geometry, millwork, stone, mechanical systems, and site. Some of it shows. Some of it does not.',
   category: 'Home Building Costs',
@@ -90,6 +90,7 @@ export const luxuryHomeBuildingCostBoise: BlogPostData = {
 
 <h2 id="millwork">Millwork and cabinetry</h2>
 <p><strong>Custom millwork is the most visible luxury spend in a house and one of the largest.</strong> The distance between good stock cabinetry and fully custom cabinetry built to the room can be a factor of three, and in a high-end home the cabinetry does not stop at the kitchen. It runs through the primary closet, the pantry, the laundry, the mudroom, the office, and often a bar or a library wall. Add panelled walls, coffered or beamed ceilings, wide trim profiles, solid interior doors, and a stair with anything other than standard balusters, and you have a millwork package that rivals the framing bill. This is real craft, it is done by people who are good at it, and it takes shop time. It is also the category clients most consistently say they would spend on again.</p>
+<p>Lead time is the hidden cost here. Custom cabinetry has to be measured against the framed and drywalled space, drawn, approved, built, finished, and delivered, and that sequence does not compress. A client who is still choosing a door profile when the drywall is going up has already added weeks to the schedule, and on a financed build weeks cost money. If millwork is central to your house, treat those decisions as early decisions rather than finish decisions.</p>
 
 <h2 id="stone">Stone and tile</h2>
 <p><strong>Natural stone costs more than engineered material to buy, and considerably more to install.</strong> A slab has to be selected, templated, fabricated, and set, and unlike a manufactured product it has veining that has to be matched across seams. Full-height stone backsplashes, waterfall ends, book-matched slabs, and stone fireplace surrounds each add fabrication labour. Tile behaves the same way: the material price is only part of it, and large-format tile, mosaic patterns, curbless shower details, and heated floors are all labour-intensive installs. In a house with five bathrooms this line grows quickly. It is worth saying plainly that a well-installed engineered surface will outlast a badly installed stone one, so the installer matters at least as much as the material.</p>
@@ -102,6 +103,7 @@ export const luxuryHomeBuildingCostBoise: BlogPostData = {
 
 <h2 id="what-shows">What shows</h2>
 <p><strong>Some luxury money announces itself the moment you walk in, and it tends to be the money spent on light, volume, and surfaces you touch.</strong> Large glazing and the view it frames. Ceiling height and the way a room feels because of it. Cabinetry that fits its space exactly instead of approximately, with drawers that close properly and no filler strips. Stone with continuous veining. A stair that was designed rather than assembled. Solid doors with weight to them. These are the things visitors notice without being able to name, and they are the things that make a house feel expensive rather than merely large. If your budget forces a choice, this group is where the visible return lives.</p>
+<p>Two smaller things belong in this list because they punch above their cost. Proportion, which costs nothing except attention during design and is the difference between a room that feels right and one that feels almost right. And lighting design, which is not the same as expensive fixtures: layered light, dimming that works, and fittings placed for what the room does rather than in a grid. Both are cheap relative to a stone package and both change how the house feels every single evening.</p>
 
 <h2 id="what-doesnt">What does not show, and whether it is still worth it</h2>
 <p><strong>Some of the best money in a high-end home is completely invisible once the drywall is up, and it is still usually worth spending.</strong> Better air sealing and insulation. Proper flashing and drainage detailing at every penetration. Oversized structure that will never be tested. Sound isolation between floors and around bedrooms. A mechanical room laid out so a technician can actually service the equipment in fifteen years. None of this photographs. All of it determines whether the house is comfortable and quiet and dry in year twelve.</p>

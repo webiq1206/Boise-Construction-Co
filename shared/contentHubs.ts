@@ -189,6 +189,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('luxury-home-building-cost-boise', 'What a Luxury Home Costs to Build in Boise', 'home-building-costs', PUBLISHED, 'luxury-remodel-cost-boise'),
   cluster('build-vs-buy-boise', 'Building vs Buying a Home in the Treasure Valley', 'home-building-costs', PUBLISHED, 'remodeling-vs-moving'),
   cluster('construction-loan-basics-idaho', 'How Construction Loans Work in Idaho', 'home-building-costs'),
+  cluster('allowances-explained-new-home', 'How Allowances Work in a New Home Contract', 'home-building-costs'),
 
   // Hub 2 - Choosing a builder
   { slug: 'choose-home-builder-boise', title: 'How to Choose a Home Builder in Boise', ...hubPillar('choosing-a-builder'), status: PUBLISHED },

@@ -54,7 +54,7 @@ export const homeBuilderRedFlags: BlogPostData = {
     {
       question: 'What if a builder will not put something in writing?',
       answer:
-        'Treat it as though the promise does not exist, because legally it mostly does not. Builders who intend to honour a commitment have no reason to keep it verbal. The refusal is rarely about paperwork burden; it is about preserving room to reinterpret the commitment later, which is exactly the situation the writing would prevent.',
+        'Treat it as though the promise does not exist, because legally it mostly does not. Builders who intend to honor a commitment have no reason to keep it verbal. The refusal is rarely about paperwork burden; it is about preserving room to reinterpret the commitment later, which is exactly the situation the writing would prevent.',
     },
     {
       question: 'How do I check that a builder is bonded and insured?',
@@ -77,7 +77,7 @@ export const homeBuilderRedFlags: BlogPostData = {
 <p><strong>Every red flag on this list is a red flag because it predicts a specific later problem, not because it feels unprofessional.</strong> That distinction matters. A builder with a messy truck and a slow email habit may build a very good house. A builder with a clean presentation and no written change order process will cost you money, reliably, at about month five. What follows is grouped into the signs you can see before you sign and the ones that only appear once the build is running, with the mechanism spelled out in each case. It sits inside our guide to <a href="/guides/choose-home-builder-boise">choosing a home builder in Boise</a>.</p>
 
 <h2 id="low-bid">A bid far below the others</h2>
-<p><strong>A bid substantially below the rest is nearly always a shorter scope rather than a better price.</strong> The trades are the same trades. Lumber costs what lumber costs. Nobody in the Treasure Valley has access to a secret concrete supplier. When a number comes in well under two other numbers on the same plan, the difference is almost always in what the bid does not say: site work excluded, allowances set low, design and engineering carried outside the price, the driveway and landscape missing.</p>
+<p><strong>A bid substantially below the rest is nearly always a shorter scope rather than a better price.</strong> The trades are the same trades. Lumber costs what lumber costs. Nobody building in Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton or Caldwell has access to a secret concrete supplier. When a number comes in well under two other numbers on the same plan, the difference is almost always in what the bid does not say: site work excluded, allowances set low, design and engineering carried outside the price, the driveway and landscape missing.</p>
 <p>The mechanism is straightforward. The low bid wins the contract, and then the missing scope reappears as change orders once you are committed and have no competing option. You end up at or above the number the honest builder gave you, having spent the build arguing. Our article on <a href="/blog/why-home-building-bids-vary">why home building bids vary so much</a> separates the legitimate reasons for a gap from the illegitimate ones.</p>
 
 <h2 id="vague-scope">A scope you cannot argue with</h2>
@@ -102,10 +102,10 @@ export const homeBuilderRedFlags: BlogPostData = {
 
 <h2 id="bond-insurance">No proof of bond and insurance</h2>
 <p><strong>Ask for certificates, not assurances, and check that general liability and workers compensation are both current.</strong> Idaho registers residential contractors rather than licensing them, so a builder claiming to be "licensed" is either being loose with the word or hoping you will not check what it means here. Ask instead for the contractor registration, the bond, and current insurance certificates from the insurer.</p>
-<p>The exposure is real rather than theoretical. If an uninsured worker is hurt on your lot, or an uninsured crew damages a neighbouring property, the claim can find its way to you as the property owner. A builder who is slow to produce a certificate is usually slow because the coverage lapsed, and coverage lapses when a company is short of money.</p>
+<p>The exposure is real rather than theoretical. If an uninsured worker is hurt on your lot, or an uninsured crew damages a neighboring property, the claim can find its way to you as the property owner. A builder who is slow to produce a certificate is usually slow because the coverage lapsed, and coverage lapses when a company is short of money.</p>
 
 <h2 id="going-quiet">Going quiet</h2>
-<p><strong>Once the build is running, silence is the warning sign to act on fastest.</strong> Builders do not go quiet because everything is fine. They go quiet because the schedule has slipped, because a cost problem has appeared that they have not worked out how to explain, or because they are short of cash and prioritising a different job.</p>
+<p><strong>Once the build is running, silence is the warning sign to act on fastest.</strong> Builders do not go quiet because everything is fine. They go quiet because the schedule has slipped, because a cost problem has appeared that they have not worked out how to explain, or because they are short of cash and prioritizing a different job.</p>
 <p>The reason this one is urgent is that all three causes compound. A slipped schedule that nobody discusses becomes two slipped schedules. A cost problem left unspoken becomes a closeout dispute. The right response is not to wait politely; it is to put dated questions in writing and keep the thread. A written record changes the tone of the conversation immediately, and it is the thing you will want if the relationship ends badly. It is also why we send a written update every week whether or not the week was interesting.</p>
 
 <h2 id="draws">Draws that run ahead of the work</h2>

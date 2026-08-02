@@ -5,7 +5,7 @@ export const aduCostBoise: BlogPostData = {
   title: 'ADU Cost in Boise',
   seoTitle: 'ADU Cost in Boise: What It Costs to Build',
   metaDescription:
-    'What an ADU costs to build in Boise: detached vs attached, size and zoning limits, utility connections, septic capacity on rural parcels, and real per square foot numbers.',
+    'What an ADU costs to build in Boise: detached vs attached, size and zoning limits, utility connections, septic capacity, and real per square foot costs.',
   excerpt:
     'An accessory dwelling unit is a small house, and it prices like one. Here is what a detached or attached ADU costs to build in Ada and Canyon County, and what the zoning, utility, and septic questions do to the number.',
   category: 'Design & Floor Plans',

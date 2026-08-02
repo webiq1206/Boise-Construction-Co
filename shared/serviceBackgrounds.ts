@@ -1,27 +1,25 @@
-import { GALLERY_IMAGES, SITE_IMAGES } from "./siteImages";
+import { CONSTRUCTION_IMAGES, SITE_IMAGES } from "./siteImages";
 
 export interface ServiceBackgroundConfig {
   [key: string]: string;
 }
 
-const DEFAULT_BACKGROUND = SITE_IMAGES.hero;
+const DEFAULT_BACKGROUND = CONSTRUCTION_IMAGES.customHome;
 
 /**
- * Interim mapping. Dedicated new-construction photography has not been
- * generated yet, so each service points at an existing whole-home or process
- * image that is at least topically honest. Replace with per-service
- * construction imagery during the image regeneration pass; do not point these
- * at files that do not exist, since nothing validates these paths at build time.
+ * Hero background per service. Each points at a photograph of the thing the
+ * service actually is: the lot services show ground, the design services show
+ * drawings, the build services show a house.
  */
 export const SERVICE_BACKGROUNDS: ServiceBackgroundConfig = {
-  "custom-home-builder": SITE_IMAGES.statementBand,
-  "semi-custom-homes": SITE_IMAGES.hero,
-  "build-on-your-lot": SITE_IMAGES.statementBand,
-  "design-build": SITE_IMAGES.process,
-  "home-plans-design": SITE_IMAGES.process,
-  "lot-evaluation": SITE_IMAGES.process,
-  "shop-homes-barndominiums": SITE_IMAGES.statementBand,
-  "energy-efficient-homes": SITE_IMAGES.hero,
+  "custom-home-builder": CONSTRUCTION_IMAGES.customHome,
+  "semi-custom-homes": CONSTRUCTION_IMAGES.semiCustom,
+  "build-on-your-lot": CONSTRUCTION_IMAGES.lot,
+  "design-build": CONSTRUCTION_IMAGES.meeting,
+  "home-plans-design": CONSTRUCTION_IMAGES.plans,
+  "lot-evaluation": CONSTRUCTION_IMAGES.ruralSite,
+  "shop-homes-barndominiums": CONSTRUCTION_IMAGES.shopHome,
+  "energy-efficient-homes": CONSTRUCTION_IMAGES.insulation,
 };
 
 export const DEFAULT_SERVICE_BACKGROUND = DEFAULT_BACKGROUND;
@@ -42,49 +40,50 @@ export interface LandingImageSet {
 }
 
 /**
- * Three distinct images per service so the hero, breather band, and process
- * panel each show a different relevant photo (finished room, detail, in-progress).
+ * Three images per service, chosen so a visitor scrolling one page sees the
+ * finished result, the work in progress, and the planning behind it rather
+ * than three angles of the same thing.
  */
 const SERVICE_IMAGE_SETS: Record<string, LandingImageSet> = {
   "custom-home-builder": {
-    hero: SITE_IMAGES.statementBand,
-    breather: GALLERY_IMAGES.wholeHome.after,
-    process: SITE_IMAGES.process,
+    hero: CONSTRUCTION_IMAGES.customHome,
+    breather: CONSTRUCTION_IMAGES.interior,
+    process: CONSTRUCTION_IMAGES.framing,
   },
   "semi-custom-homes": {
-    hero: SITE_IMAGES.hero,
-    breather: GALLERY_IMAGES.wholeHome.after,
-    process: SITE_IMAGES.process,
+    hero: CONSTRUCTION_IMAGES.semiCustom,
+    breather: CONSTRUCTION_IMAGES.kitchen,
+    process: CONSTRUCTION_IMAGES.plans,
   },
   "build-on-your-lot": {
-    hero: SITE_IMAGES.statementBand,
-    breather: SITE_IMAGES.hero,
-    process: SITE_IMAGES.process,
+    hero: CONSTRUCTION_IMAGES.lot,
+    breather: CONSTRUCTION_IMAGES.customHome,
+    process: CONSTRUCTION_IMAGES.foundation,
   },
   "design-build": {
-    hero: SITE_IMAGES.process,
-    breather: SITE_IMAGES.statementBand,
-    process: SITE_IMAGES.processInProgress,
+    hero: CONSTRUCTION_IMAGES.meeting,
+    breather: CONSTRUCTION_IMAGES.interior,
+    process: CONSTRUCTION_IMAGES.roughIn,
   },
   "home-plans-design": {
-    hero: SITE_IMAGES.process,
-    breather: SITE_IMAGES.hero,
+    hero: CONSTRUCTION_IMAGES.plans,
+    breather: CONSTRUCTION_IMAGES.outdoor,
     process: SITE_IMAGES.processInProgress,
   },
   "lot-evaluation": {
-    hero: SITE_IMAGES.process,
-    breather: SITE_IMAGES.statementBand,
-    process: SITE_IMAGES.processInProgress,
+    hero: CONSTRUCTION_IMAGES.ruralSite,
+    breather: CONSTRUCTION_IMAGES.foothills,
+    process: CONSTRUCTION_IMAGES.lot,
   },
   "shop-homes-barndominiums": {
-    hero: SITE_IMAGES.statementBand,
-    breather: SITE_IMAGES.hero,
-    process: SITE_IMAGES.processInProgress,
+    hero: CONSTRUCTION_IMAGES.shopHome,
+    breather: CONSTRUCTION_IMAGES.interior,
+    process: CONSTRUCTION_IMAGES.framing,
   },
   "energy-efficient-homes": {
-    hero: SITE_IMAGES.hero,
-    breather: GALLERY_IMAGES.wholeHome.after,
-    process: SITE_IMAGES.processInProgress,
+    hero: CONSTRUCTION_IMAGES.insulation,
+    breather: CONSTRUCTION_IMAGES.interior,
+    process: CONSTRUCTION_IMAGES.roughIn,
   },
 };
 
@@ -92,8 +91,8 @@ export function getServiceImageSet(serviceSlug: string): LandingImageSet {
   return (
     SERVICE_IMAGE_SETS[serviceSlug] ?? {
       hero: DEFAULT_SERVICE_BACKGROUND,
-      breather: DEFAULT_SERVICE_BACKGROUND,
-      process: SITE_IMAGES.process,
+      breather: CONSTRUCTION_IMAGES.interior,
+      process: CONSTRUCTION_IMAGES.framing,
     }
   );
 }

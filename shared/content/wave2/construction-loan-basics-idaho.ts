@@ -5,7 +5,7 @@ export const constructionLoanBasicsIdaho: BlogPostData = {
   title: 'How Construction Loans Work in Idaho',
   seoTitle: 'How Construction Loans Work in Idaho',
   metaDescription:
-    'How construction loans work in Idaho: draw schedules, interest-only periods, appraisals from plans and specs, land as equity, and what a lender needs from a builder.',
+    'How construction loans work in Idaho: draw schedules, appraisals from plans and specs, land as equity, and what a lender needs from your builder.',
   excerpt:
     'A construction loan funds a house that does not exist yet, so it works nothing like a mortgage. Here are the mechanics, explained by the builder rather than the lender.',
   category: 'Home Building Costs',
@@ -88,6 +88,7 @@ export const constructionLoanBasicsIdaho: BlogPostData = {
 <h2 id="two-structures">Two common structures</h2>
 <p><strong>Most Idaho buyers encounter either a construction-to-permanent loan or a construction loan followed by a separate mortgage.</strong> A construction-to-permanent loan is one facility with one closing. It funds the build in draws, then converts to long-term financing when the house is complete. The appeal is that you close once and you know at the outset what the permanent financing looks like.</p>
 <p>The two-loan approach separates them. A short-term construction loan funds the build, and when the house is finished you take out a mortgage that pays it off. That means a second closing with its own costs and its own approval, based on conditions at that time rather than today. Some borrowers prefer it because it keeps the permanent financing decision open. Which structure a lender offers, and on what basis, differs from lender to lender.</p>
+<p>Whichever you use, understand that the construction phase and the permanent phase are underwritten against different things. The construction phase is underwritten against a project: drawings, a contract, a budget, and a builder. The permanent phase is underwritten against a finished house and your ability to carry it long term. Some borrowers sail through the first and are surprised by the second, or the reverse. Asking a lender to walk you through both sets of requirements at the outset avoids that.</p>
 
 <h2 id="appraisal">The appraisal is done from plans and specifications</h2>
 <p><strong>An appraiser values your finished house using the drawings, the specification, the allowance schedule, and the lot, compared against completed homes in the area.</strong> This is the step that surprises people, and it has a direct consequence for how you should prepare. If your plans are incomplete or your specification is vague, the appraiser has nothing to value. A drawing set that says "tile" tells them less than one that says what tile, where, and to what standard, backed by an allowance that reflects real local prices.</p>
@@ -118,6 +119,7 @@ export const constructionLoanBasicsIdaho: BlogPostData = {
 <h2 id="interest">Interest during construction</h2>
 <p><strong>You typically pay interest only on the amount drawn so far, so payments start small and grow as the house goes up.</strong> After the first draw you are paying interest on a fraction of the loan. By the final draw you are paying on nearly all of it. Once the loan converts or is refinanced, you move to ordinary principal and interest payments on the full balance.</p>
 <p>The part to plan for is that you are usually paying for somewhere else to live at the same time, whether that is rent or an existing mortgage. That double carry runs for the whole construction period and it is a real budget line, not a footnote. It is one of the reasons we treat schedule discipline as a financial issue rather than a convenience issue: every additional month costs a client money that produces no additional house.</p>
+<p>There is a planning consequence too. Because interest accrues on what has been drawn, the back half of a build carries more monthly cost than the front half. Homeowners who model their carrying cost using the first month's payment consistently understate it. Ask your lender to show you an illustration across the whole construction period rather than a single figure, and build the total into the budget as its own line alongside land, site work, and construction.</p>
 
 <h2 id="builder-requirements">What the lender needs from your builder</h2>
 <p><strong>Lenders underwrite the builder as well as the borrower, because a half-finished house is poor collateral.</strong> The usual package is a signed contract with a clearly defined scope, a detailed line-item cost breakdown, evidence of insurance and bonding, Idaho contractor registration, a draw schedule the lender can administer, and some demonstration that the builder finishes what they start. Some lenders want to see the allowance schedule in detail, because thin allowances create a real risk of the project running out of money before completion, which is a risk the lender carries too.</p>

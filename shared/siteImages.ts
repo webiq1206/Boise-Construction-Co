@@ -9,8 +9,8 @@ export const SITE_IMAGES = {
   hero: "/images/hero-great-room.webp",
   /** Design-build / plan review split panels. */
   process: "/images/process-design-review.webp",
-  /** Kitchen remodel in progress - process sections. */
-  processInProgress: "/images/kitchen-in-progress.webp",
+  /** A house being framed - process sections. */
+  processInProgress: "/images/framing-in-progress.webp",
   /** Full-bleed brand statement band. */
   statementBand: "/images/statement-great-room.webp",
   /** About/contact split panels and about hero. */
@@ -21,85 +21,33 @@ export const SITE_IMAGES = {
   budgetDetail: "/images/budget-kitchen-detail.webp",
 } as const;
 
-export const GALLERY_IMAGES = {
-  kitchen: {
-    before: "/images/gallery/gallery-kitchen-before.webp",
-    after: "/images/gallery/gallery-kitchen-after.webp",
-  },
-  bathroom: {
-    before: "/images/gallery/gallery-bathroom-before.webp",
-    after: "/images/gallery/gallery-bathroom-after.webp",
-  },
-  wholeHome: {
-    before: "/images/gallery/gallery-whole-home-before.webp",
-    after: "/images/gallery/gallery-whole-home-after.webp",
-  },
-  addition: {
-    before: "/images/gallery/gallery-addition-before.webp",
-    after: "/images/gallery/gallery-addition-after.webp",
-  },
-  basement: {
-    before: "/images/gallery/gallery-basement-before.webp",
-    after: "/images/gallery/gallery-basement-after.webp",
-  },
-  outdoor: {
-    before: "/images/gallery/gallery-outdoor-before.webp",
-    after: "/images/gallery/gallery-outdoor-after.webp",
-  },
-  aduBoise: {
-    before: "/images/gallery/gallery-adu-boise-before.webp",
-    after: "/images/gallery/gallery-adu-boise-after.webp",
-  },
-  agingBoise: {
-    before: "/images/gallery/gallery-aging-boise-before.webp",
-    after: "/images/gallery/gallery-aging-boise-after.webp",
-  },
-  kitchenMeridian: {
-    before: "/images/gallery/gallery-kitchen-meridian-before.webp",
-    after: "/images/gallery/gallery-kitchen-meridian-after.webp",
-  },
-  kitchenEagle: {
-    before: "/images/gallery/gallery-kitchen-eagle-before.webp",
-    after: "/images/gallery/gallery-kitchen-eagle-after.webp",
-  },
-  hallBathBoise: {
-    before: "/images/gallery/gallery-hall-bath-boise-before.webp",
-    after: "/images/gallery/gallery-hall-bath-boise-after.webp",
-  },
-  bathroomNampa: {
-    before: "/images/gallery/gallery-bathroom-nampa-before.webp",
-    after: "/images/gallery/gallery-bathroom-nampa-after.webp",
-  },
-  wholeHomeMeridian: {
-    before: "/images/gallery/gallery-whole-home-meridian-before.webp",
-    after: "/images/gallery/gallery-whole-home-meridian-after.webp",
-  },
-  additionEagle: {
-    before: "/images/gallery/gallery-addition-eagle-before.webp",
-    after: "/images/gallery/gallery-addition-eagle-after.webp",
-  },
-  additionMeridian: {
-    before: "/images/gallery/gallery-addition-meridian-before.webp",
-    after: "/images/gallery/gallery-addition-meridian-after.webp",
-  },
-  basementMeridian: {
-    before: "/images/gallery/gallery-basement-meridian-before.webp",
-    after: "/images/gallery/gallery-basement-meridian-after.webp",
-  },
-  basementNampa: {
-    before: "/images/gallery/gallery-basement-nampa-before.webp",
-    after: "/images/gallery/gallery-basement-nampa-after.webp",
-  },
-  outdoorEagle: {
-    before: "/images/gallery/gallery-outdoor-eagle-before.webp",
-    after: "/images/gallery/gallery-outdoor-eagle-after.webp",
-  },
-  outdoorMeridian: {
-    before: "/images/gallery/gallery-outdoor-meridian-before.webp",
-    after: "/images/gallery/gallery-outdoor-meridian-after.webp",
-  },
-  agingMeridian: {
-    before: "/images/gallery/gallery-aging-meridian-before.webp",
-    after: "/images/gallery/gallery-aging-meridian-after.webp",
-  },
+/**
+ * The construction image library in public/images/construction, keyed by what
+ * each photograph actually shows.
+ *
+ * Service pages, city-service pages, and the blog and guide hero registry all
+ * draw from this one set, so a page never ends up illustrated with a stage of
+ * construction it is not about. It lives here rather than beside either
+ * consumer because both serviceBackgrounds and cityServiceImages need it and
+ * they already depend on this module.
+ */
+const c = (name: string) => `/images/construction/${name}.webp`;
+
+export const CONSTRUCTION_IMAGES = {
+  customHome: c("custom-home-exterior"),
+  semiCustom: c("semi-custom-home"),
+  framing: c("home-under-framing"),
+  foundation: c("foundation-and-excavation"),
+  roughIn: c("mechanical-rough-in"),
+  insulation: c("insulation-and-air-sealing"),
+  interior: c("new-home-interior"),
+  kitchen: c("new-home-kitchen"),
+  lot: c("buildable-lot"),
+  foothills: c("foothills-building-site"),
+  ruralSite: c("rural-site-work"),
+  plans: c("plans-and-selections"),
+  budget: c("line-item-budget"),
+  meeting: c("site-meeting"),
+  outdoor: c("covered-outdoor-living"),
+  shopHome: c("shop-home-barndominium"),
 } as const;

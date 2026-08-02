@@ -141,6 +141,38 @@ marketing department. Specifically:
     another post in the same hub, and one to `/contact` or `/#calculator` in the
     closing section.
 
+## Pillar guides
+
+A pillar guide is a different object from a cluster post. It lives at
+`shared/content/pillars/<slug>.ts`, exports a single named const typed
+`GuidePageData` imported from `'../../guideContent'`, and is collected by
+`shared/content/pillars/index.ts` (generated - run
+`node scripts/generate-pillar-index.mjs`).
+
+Differences from a cluster post:
+
+- **No `category` field.** Instead `guideType: 'hub-pillar'` (or `'master'` for
+  the locations pillar).
+- Extra fields: `linkedClusterSlugs` (every cluster slug in the hub, from the
+  manifest in `shared/contentHubs.ts`), `linkedServices` (service slugs, no
+  leading path), and optionally `linkedCities`.
+- **`content` is 2,800 to 4,000 words**, 12 to 18 `<h2 id="...">` sections.
+  This is the definitive page on its subject. It should be the most complete
+  thing on the local web about it.
+- **`faqs` 8 to 12 entries.**
+- **`keyTakeaways` 5 to 7 items.**
+- **Internal links: 12 to 20 in the body.** Every cluster post in the hub must
+  be linked at least once from the pillar, in prose, with a descriptive anchor.
+  That is what makes it a hub. Also link the relevant service pages and at
+  least two other pillars.
+- `wordCountTarget` does not exist on `GuidePageData`. Do not add it.
+- Include a short table of contents is **not** needed; the page template
+  generates one from the `<h2 id="...">` attributes, so those ids are load
+  bearing and must be unique and kebab-case.
+
+Everything else in this brief - voice, forbidden claims, cost figures, no
+em-dashes, answer-first sections - applies identically.
+
 ## Hubs
 
 | hubSlug | categoryLabel | pillar guide path |

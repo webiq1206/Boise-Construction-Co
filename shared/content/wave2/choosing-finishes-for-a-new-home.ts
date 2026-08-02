@@ -5,7 +5,7 @@ export const choosingFinishesForANewHome: BlogPostData = {
   title: 'Choosing Finishes for a New Home Without Blowing the Budget',
   seoTitle: 'Choosing Finishes Without Blowing the Budget',
   metaDescription:
-    'How selections really work in a new build: the selection schedule, what to decide before framing, long-lead items, how allowances work, and where money is worth spending.',
+    'How selections work in a new build: selection schedule, what to decide before framing, long-lead items, allowances, and where finish money is worth spending.',
   excerpt:
     'Selections are a schedule problem before they are a taste problem. Here is when each decision is due, how allowances behave, and where finish money actually earns its keep.',
   category: 'The Building Process',
@@ -136,6 +136,6 @@ export const choosingFinishesForANewHome: BlogPostData = {
 
 <h2 id="next-steps">Getting a realistic finish budget</h2>
 <p><strong>The most useful thing you can do before selections start is to know what your finish level actually costs, in this market, for the house you are planning.</strong> Custom homes here commonly plan at $250 to $400 per finished square foot excluding land, and where you land inside that band is largely a finish and complexity question rather than a size question.</p>
-<p>Our <a href="/#calculator">cost calculator</a> will get you a planning range in a few minutes, and <a href="/blog/how-to-budget-a-new-home-boise">how to budget for a new home</a> covers how to hold that number once the selections start. If you would rather talk it through against a specific plan and a specific lot, we are happy to do that instead.</p>
+<p>Our <a href="/#calculator">cost calculator</a> will get you a planning range in a few minutes, and <a href="/blog/how-to-budget-a-new-home-boise">how to budget for a new home</a> covers how to hold that number once the selections start. The <a href="/guides/custom-home-design-guide">custom home design guide</a> explains which of these decisions belong at schematic design rather than at the selections table, and <a href="/blog/allowances-explained-new-home">how allowances work in a new home contract</a> is worth reading before you sign anything with an allowance in it. If you would rather talk it through against a specific plan and a specific lot, <a href="/contact">tell us about the project</a> and we will do that instead.</p>
 `.trim(),
 };

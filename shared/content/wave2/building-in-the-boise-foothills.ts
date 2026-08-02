@@ -5,7 +5,7 @@ export const buildingInTheBoiseFoothills: BlogPostData = {
   title: 'What It Costs to Build in the Boise Foothills',
   seoTitle: 'What It Costs to Build in the Boise Foothills',
   metaDescription:
-    'Foothills homes regularly run above $450 per square foot. Here is exactly what slope, excavation, retaining, access, geotech, and wind exposure add to the build.',
+    'Foothills homes regularly run above $450 per square foot. Here is what slope, excavation, retaining, access, geotech, and wind exposure add to the build.',
   excerpt:
     'The view has a price, and it is mostly paid below grade. Here is what pushes a Boise foothills build above $450 per square foot and which drivers you control.',
   category: 'Land & Lots',

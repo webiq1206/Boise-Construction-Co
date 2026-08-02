@@ -5,7 +5,7 @@ export const stagesOfBuildingAHouse: BlogPostData = {
   title: 'The Stages of Building a House, in Order',
   seoTitle: 'The Stages of Building a House, in Order',
   metaDescription:
-    'Every stage of building a house in order, from feasibility to final walkthrough: what each looks like, roughly how long it takes, and what you decide beforehand.',
+    'Every stage of building a house in order, from feasibility to final walkthrough: what each looks like, how long it takes, and what you decide beforehand.',
   excerpt:
     'A house gets built in a fixed order, and each stage waits on the one before it. Here is the whole sequence with durations and the decisions each stage needs from you.',
   category: 'The Building Process',
