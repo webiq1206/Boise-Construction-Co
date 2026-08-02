@@ -72,6 +72,18 @@ export interface Re10DeliveryResult {
 const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
 
 /**
+ * Document links have to survive leaving the building.
+ *
+ * The blob store returns a root-relative path on the local driver. That is a
+ * fine link inside the app and a dead one inside an email or a CRM record,
+ * where there is no page to be relative to.
+ */
+function absoluteDocUrl(url: string): string {
+  if (/^https?:\/\//.test(url)) return url;
+  return `${SITE_CONFIG.siteUrl.replace(/\/$/, "")}${url.startsWith("/") ? "" : "/"}${url}`;
+}
+
+/**
  * A readable summary for the CRM's notes field.
  *
  * Written for a person opening the lead cold: what property, what deadline,
@@ -116,7 +128,7 @@ function buildRe10Notes(input: Re10DeliveryInput): string {
 
   if (input.documents.length > 0) {
     lines.push(``, `DOCUMENTS`);
-    for (const d of input.documents) lines.push(`  ${d.filename}: ${d.url}`);
+    for (const d of input.documents) lines.push(`  ${d.filename}: ${absoluteDocUrl(d.url)}`);
   }
 
   if (contact.notes) lines.push(``, `THEIR NOTE`, `  ${contact.notes}`);

@@ -9,6 +9,7 @@ import {
   type ReviewReason,
 } from "@/shared/costs/re10Repairs";
 import { EXTRACTABLE_KINDS, EXTRACTION_REVIEW_REASONS } from "@/shared/re10/extraction";
+import { isStoredDocumentUrl } from "@/shared/re10/uploads";
 import { deliverRe10Lead } from "@/server/services/re10Lead";
 import type { Re10Contact } from "@/server/services/re10Email";
 
@@ -59,9 +60,30 @@ const bodySchema = z
     access: z.enum(["standard", "limited", "difficult"]).optional(),
     hasInspectionReport: z.boolean().optional(),
     notes: z.string().max(4000).optional(),
-    // Uploaded originals from the analyze step, so the lead carries the actual RE-10.
+    /**
+     * Uploaded originals from the analyze step, so the lead carries the RE-10.
+     *
+     * THIS FIELD BROKE THE ENTIRE FUNNEL. It required z.string().url(), and the
+     * blob store hands back a ROOT-RELATIVE path ("/api/documents/local/...")
+     * whenever it is running on the local driver - which production is. So
+     * every submission that carried an uploaded file failed validation, and the
+     * agent got "Invalid request" at the last step, after typing their contact
+     * details, with nothing to act on. Uploading a document is the entire point
+     * of the page, so this was not an edge case; it was the path.
+     *
+     * Both shapes are accepted now. A relative path is what our own storage
+     * returns and is perfectly valid as a link; it is made absolute downstream,
+     * where it needs to survive being opened out of an email.
+     */
     documents: z
-      .array(z.object({ filename: z.string().max(300), url: z.string().url().max(2000) }))
+      .array(
+        z.object({
+          filename: z.string().max(300),
+          url: z.string().max(2000).refine(isStoredDocumentUrl, {
+            message: "Must be an absolute URL or a root-relative path.",
+          }),
+        }),
+      )
       .max(12)
       .optional(),
     /**

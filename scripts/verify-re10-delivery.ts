@@ -18,7 +18,7 @@ import { estimateRe10, type RepairItemInput, type RepairKind } from "../shared/c
 import { findForbiddenPhrase } from "../shared/costCatalog";
 import { RE10_EVENTS, RE10_FUNNEL_ORDER } from "../shared/re10/analyticsEvents";
 import { EXTRACTABLE_KINDS, EXTRACTION_SCHEMA, EXTRACTION_REVIEW_REASONS } from "../shared/re10/extraction";
-import { classifyUpload, resolveMimeType, UPLOAD_ACCEPT } from "../shared/re10/uploads";
+import { classifyUpload, resolveMimeType, UPLOAD_ACCEPT, isStoredDocumentUrl } from "../shared/re10/uploads";
 import fs from "fs";
 
 let checks = 0;
@@ -230,6 +230,40 @@ for (const r of EXTRACTION_REVIEW_REASONS) {
     "the wizard does not prefill the property address the extractor already found",
   );
 }
+
+/* ----------------- 3c. stored document links must stay acceptable */
+
+/**
+ * The bug that broke the whole funnel. The estimate endpoint validated stored
+ * document links as strict absolute URLs; the blob store returns a
+ * root-relative path on the local driver, which is what production runs. Every
+ * submission carrying an uploaded file was rejected, and the agent hit
+ * "Invalid request" at the final step after typing their contact details.
+ */
+for (const [url, ok] of [
+  ["/api/documents/local/re10%2Fabc%2F0-RE-10.pdf", true],
+  ["/uploads/re10/x.pdf", true],
+  ["https://blob.example.com/re10/x.pdf", true],
+  ["http://localhost:3000/api/documents/x.pdf", true],
+  ["", false],
+  ["javascript:alert(1)", false],
+  ["//evil.example.com/x.pdf", false],
+  ["not a url at all", false],
+] as const) {
+  check(
+    isStoredDocumentUrl(url) === ok,
+    `isStoredDocumentUrl(${JSON.stringify(url)}) should be ${ok} - a wrong answer here either breaks every upload submission or accepts a hostile link`,
+  );
+}
+check(
+  /isStoredDocumentUrl/.test(fs.readFileSync("app/api/re10/estimate/route.ts", "utf8")),
+  "the estimate route no longer validates document links with the shared predicate",
+);
+// A bare "Invalid request" names nothing the reader can change.
+check(
+  /errors\?\.fieldErrors/.test(wizard),
+  "the wizard does not surface field-level validation errors - a rejected submission reads as a dead form",
+);
 
 /* ------------------------------------------- 4. the upload contract */
 

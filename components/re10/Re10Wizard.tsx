@@ -336,7 +336,25 @@ export function Re10Wizard() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.message ?? "We could not build your range.");
+        // A bare "Invalid request" is what the server says and it is useless to
+        // the person reading it - it names nothing they can change. When the
+        // response carries field errors, show those instead; they are written
+        // for a human because the schema's messages are.
+        const fieldErrors: Record<string, string[] | undefined> = data.errors?.fieldErrors ?? {};
+        const detail = Object.values(fieldErrors)
+          .flatMap((messages) => messages ?? [])
+          .filter(Boolean);
+        setError(
+          detail.length > 0
+            ? detail.join(" ")
+            : (data.message ?? "We could not build your range."),
+        );
+        // Tracked, because a validation failure at the gate looks exactly like
+        // someone changing their mind unless it is recorded as a failure.
+        trackEvent(RE10_EVENTS.analysisFailed, {
+          reason: "estimate-rejected",
+          fields: Object.keys(fieldErrors).join(",") || String(res.status),
+        });
         return;
       }
       const estimate = data as EstimateResponse;

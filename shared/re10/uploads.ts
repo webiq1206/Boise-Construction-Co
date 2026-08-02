@@ -110,3 +110,25 @@ export const UPLOAD_ACCEPT = [
 
 /** Human-readable, for the message shown when a file is turned away. */
 export const READABLE_FORMATS_LABEL = "PDF, JPG, PNG, WEBP or GIF";
+
+/**
+ * Is this a link our own storage could have produced?
+ *
+ * THE BUG THIS EXISTS TO PREVENT. The estimate endpoint validated stored
+ * document links with a strict absolute-URL rule, while the blob store returns
+ * a ROOT-RELATIVE path on its local driver - which is what production runs. So
+ * every submission carrying an uploaded file was rejected, and the agent hit
+ * "Invalid request" at the final step, after typing their contact details.
+ * Uploading a document is the whole point of the page, so that was not an edge
+ * case, it was the main path.
+ *
+ * Lives here, next to the upload rules, so the check the client reasons about
+ * and the check the server enforces are the same function rather than two
+ * regular expressions that agree until one of them is edited.
+ */
+export function isStoredDocumentUrl(url: string): boolean {
+  if (typeof url !== "string" || url.length === 0 || url.length > 2000) return false;
+  // Root-relative is what our own storage hands back.
+  if (url.startsWith("/") && !url.startsWith("//")) return true;
+  return /^https?:\/\/[^\s]+$/i.test(url);
+}
