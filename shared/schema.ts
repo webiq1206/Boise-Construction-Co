@@ -651,3 +651,31 @@ export const complianceReminderLog = pgTable("compliance_reminder_log", {
 }, (table) => ({
   dedupeIdx: index("compliance_reminder_log_dedupe_idx").on(table.userId, table.documentType, table.reminderType, table.sentAt),
 }));
+
+/**
+ * File bytes, kept in the database.
+ *
+ * WHY NOT AN OBJECT STORE. The blob helper falls back to the container
+ * filesystem when no BLOB_READ_WRITE_TOKEN is set, and this app runs on
+ * ephemeral containers - so an uploaded RE-10 was surviving until the next
+ * deploy and then 404ing, taking the document link on the lead with it.
+ * Postgres is already here, already backed up, and already private. A few
+ * hundred kilobytes per lead is nothing next to what it costs to lose the
+ * document an agent sent us.
+ *
+ * Base64 text rather than bytea: it survives every driver and serializer in
+ * this stack unchanged, and at this size the ~33% overhead is irrelevant.
+ */
+export const storedFiles = pgTable("stored_files", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  /** Storage key, e.g. "re10/<uuid>/0-RE-10.pdf". Unguessable by construction. */
+  key: text("key").notNull().unique(),
+  fileName: text("file_name").notNull(),
+  mimeType: text("mime_type").notNull(),
+  fileSize: integer("file_size").notNull(),
+  /** The file itself, base64 encoded. */
+  data: text("data").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type StoredFile = typeof storedFiles.$inferSelect;
