@@ -55,7 +55,7 @@ import {
   INCLUDED_SCOPE_NOTE,
   buildEstimateDisclosure,
   NOT_A_QUOTE_NOTICE,
-  ONSITE_REQUIRED_NOTICE,
+  getOnsiteNotice,
   APPLIANCE_DISCLAIMER,
   type PlanningStage,
   type AccessoryStructure,
@@ -2619,7 +2619,11 @@ export function EstimateCalculator({
               {NOT_A_QUOTE_NOTICE}
             </p>
             <p className="mt-1.5 text-[12.5px] text-inverse-muted/90 leading-relaxed">
-              {ONSITE_REQUIRED_NOTICE}
+              {/* Project-aware: a new-home build gets the lot-and-site version, not
+                  the remodel "what is behind the walls" line. The email already
+                  branched here; the on-page panel did not, so a custom-home
+                  estimate was showing remodel language at the very bottom. */}
+              {getOnsiteNotice(effectiveProject)}
             </p>
           </div>
 
