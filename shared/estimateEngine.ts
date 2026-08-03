@@ -883,17 +883,178 @@ export function getTypicalSelections(
   };
 }
 
-export function buildEstimateDisclosure(input: EstimateInput): EstimateDisclosure {
-  const nc = isNewConstructionProject(input.project);
+const GARAGE_BAY_WORD: Record<GarageBays, string> = {
+  none: "",
+  two: "two",
+  three: "three",
+  four: "four",
+};
+
+function dedupe(items: string[]): string[] {
+  const seen = new Set<string>();
+  return items.filter((i) => {
+    const k = i.trim();
+    if (!k || seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+}
+
+/**
+ * A new-construction disclosure built from the ACTUAL selections, not a template.
+ *
+ * The static NC_* lists above are the right vocabulary for a ground-up home, but
+ * showing all of them on every estimate is the thing the brief calls out: a
+ * homeowner who picked city water should not read a well-and-septic exclusion,
+ * someone who added an ADU should see it INCLUDED rather than excluded, and a
+ * cost driver already priced in (a steep lot, a private well) is not also an
+ * "increase". So each list here is filtered and generated against the refinements
+ * rather than pasted.
+ *
+ * The discipline from the static lists carries over: nothing a lead genuinely
+ * needs is dropped, only the lines that do not apply to THIS project. And no
+ * remodel language ever appears - no demolition, nothing behind walls, no
+ * reusing existing cabinets - because none of it is true of a bare lot. Those
+ * conditions (demolition, an existing structure, connecting to existing utilities)
+ * are shown only when a project actually carries them, and this estimator does
+ * not yet collect that, so it correctly shows none.
+ */
+function buildNewConstructionDisclosure(input: EstimateInput): EstimateDisclosure {
+  const r = input.refinements;
+  const finishLabel = getFinishLabel(input.project, input.finish).label;
+  const sqft = Math.round(input.sqft).toLocaleString("en-US");
+  const stories = r.stories ?? null;
+  const structures = (r.accessoryStructures ?? []).filter((s) => s.sqft > 0);
+  const ownsLot = input.project === "build-on-your-lot";
+  const cityUtilities = r.lotServices === "city";
+  const wellSeptic = r.lotServices === "well-septic";
+  const utilitiesUnknown = r.lotServices == null || r.lotServices === "unsure";
+
+  /* ---- ASSUMPTIONS: a plain description of the exact project priced ---- */
+  const assumptions: string[] = [];
+  assumptions.push(
+    `An approximately ${sqft} sq ft ${
+      stories && stories > 1 ? "two-story " : stories === 1 ? "single-story " : ""
+    }home`.replace(/\s+/g, " "),
+  );
+  assumptions.push(`${finishLabel} finishes, with material and fixture allowances set to that level`);
+  if (r.garageBays && r.garageBays !== "none") {
+    assumptions.push(`An attached ${GARAGE_BAY_WORD[r.garageBays]}-car garage`);
+  }
+  if (r.basementType === "finished") assumptions.push("A finished basement, counted as living space");
+  else if (r.basementType === "unfinished") assumptions.push("An unfinished (shell) basement");
+  else if (r.basementType === "none") assumptions.push("A slab or crawlspace foundation, no basement");
+
+  if (cityUtilities) assumptions.push("Municipal water and sewer available at the lot line");
+  else if (wellSeptic)
+    assumptions.push("A private well and septic system, with design and installation allowances included");
+  else assumptions.push("Municipal water and sewer, to be confirmed against the actual lot");
+
+  if (r.siteDifficulty === "steep")
+    assumptions.push("A sloped lot needing significant site work and an engineered foundation");
+  else if (r.siteDifficulty === "moderate")
+    assumptions.push("Moderate site work: some cut, fill, and grading");
+  else assumptions.push("A flat, buildable lot supporting a conventional foundation");
+
+  if (r.coveredOutdoor && r.coveredOutdoor > 0)
+    assumptions.push(`About ${r.coveredOutdoor.toLocaleString("en-US")} sq ft of covered outdoor living`);
+
+  for (const s of structures) {
+    // Label kept as-is so acronyms stay right ("ADU", "RV or oversized garage").
+    const label = ACCESSORY_STRUCTURE_LABELS[s.kind].label;
+    assumptions.push(
+      `${s.attached ? "An attached" : "A detached"} ${label} of about ${Math.round(s.sqft).toLocaleString("en-US")} sq ft`,
+    );
+  }
+  assumptions.push("Standard lead times and 2025 Boise-area labor and material costs");
+
+  /* ---- INCLUDES: baseline plus everything actually selected ---- */
+  const includes = [...NC_INCLUDES];
+  if (r.basementType === "finished") includes.push("The basement, finished as living space");
+  else if (r.basementType === "unfinished") includes.push("The basement structure and shell");
+  if (r.coveredOutdoor && r.coveredOutdoor > 0) includes.push("Covered outdoor living");
+  if (wellSeptic) includes.push("Well and septic design and installation allowances");
+  for (const s of structures) {
+    const label = ACCESSORY_STRUCTURE_LABELS[s.kind].label;
+    includes.push(
+      `${label} (${s.attached ? "attached" : "detached"}, about ${Math.round(s.sqft).toLocaleString("en-US")} sq ft)`,
+    );
+  }
+
+  /* ---- EXCLUDES: only the ones that apply to THIS project ---- */
+  const excludes: string[] = [];
+  // Build-on-your-lot clients already own the land, so a land exclusion is noise.
+  if (!ownsLot) excludes.push("The land itself, and closing costs on the lot");
+  excludes.push(
+    "Appliances, cookware, and small-appliance storage. Appliances are client-supplied: we guide selection but do not purchase or install",
+  );
+  excludes.push(
+    "Impact fees, utility connection and meter fees, and district assessments, which are set by the jurisdiction and vary by address",
+  );
+  // Only relevant when we do not yet know the utility situation. Priced in when
+  // well-septic is chosen; irrelevant when city service is confirmed.
+  if (utilitiesUnknown)
+    excludes.push("Well drilling and septic design or installation where no municipal service exists");
+  excludes.push(
+    "Unknown subsurface conditions: rock, high groundwater, expansive or unstable soils, buried debris",
+  );
+  excludes.push(
+    "Off-site work a jurisdiction may require: road frontage, curb and gutter, sidewalk, or utility extension",
+  );
+  excludes.push("Landscaping, fencing, and irrigation beyond the finish grade around the home");
+  excludes.push("Furniture, decor, window coverings, and art");
+  // Only worth saying when nothing extra was added; once a structure is on the
+  // estimate, listing "structures you did not add" reads as a contradiction.
+  if (structures.length === 0)
+    excludes.push(
+      "Detached shops, ADUs, guest houses, or other accessory structures, unless added to the estimate",
+    );
+
+  /* ---- INCREASES: only the unknowns still on the table ---- */
+  const increases: string[] = [];
+  if (r.siteDifficulty !== "steep")
+    increases.push("A sloped lot, or one needing significant cut, fill, or retaining");
+  increases.push("Rock, high groundwater, or soils that require an engineered foundation");
+  // The utility risk depends on what is already known. A private well and septic
+  // is priced in, so it is not an increase. City service still carries the risk
+  // of a long run to a distant main, but not of a well. Only an unknown lot
+  // carries the full range.
+  if (wellSeptic) {
+    // priced in; not listed as an increase
+  } else if (cityUtilities) {
+    increases.push("A long connection if the city mains sit far from the building site");
+  } else {
+    increases.push("Long utility runs, a shared or new well, or a septic system");
+  }
+  if (r.basementType !== "finished")
+    increases.push("A daylight or walkout basement, and tall or complex rooflines");
+  increases.push("Custom millwork, imported stone, or specialty-order materials");
+  increases.push("A compressed schedule, or a winter foundation pour");
+  increases.push("Difficult access: narrow county roads, tight infill lots, limited staging");
+
   return {
-    includes: [...(nc ? NC_INCLUDES : UNIVERSAL_INCLUDES), ...buildDynamicScope(input)],
-    excludes: [
-      ...(nc ? NC_EXCLUDES : UNIVERSAL_EXCLUDES),
-      ...(PROJECT_EXCLUDES[input.project] ?? []),
-    ],
-    assumptions: nc ? NC_ASSUMPTIONS : UNIVERSAL_ASSUMPTIONS,
-    increases: nc ? NC_INCREASES : UNIVERSAL_INCREASES,
-    decreases: nc ? NC_DECREASES : UNIVERSAL_DECREASES,
+    includes: dedupe([...includes, ...buildDynamicScope(input)]),
+    excludes: dedupe(excludes),
+    assumptions: dedupe(assumptions),
+    increases: dedupe(increases),
+    decreases: [...NC_DECREASES],
+    upgrades: PROJECT_UPGRADES[input.project],
+  };
+}
+
+export function buildEstimateDisclosure(input: EstimateInput): EstimateDisclosure {
+  if (isNewConstructionProject(input.project)) {
+    return buildNewConstructionDisclosure(input);
+  }
+  // Remodel project types (kitchen, bathroom, whole-home, addition, adu,
+  // basement) are no longer offered on the public estimator, but the engine
+  // still prices them, so they keep the remodel-appropriate lists.
+  return {
+    includes: dedupe([...UNIVERSAL_INCLUDES, ...buildDynamicScope(input)]),
+    excludes: dedupe([...UNIVERSAL_EXCLUDES, ...(PROJECT_EXCLUDES[input.project] ?? [])]),
+    assumptions: UNIVERSAL_ASSUMPTIONS,
+    increases: UNIVERSAL_INCREASES,
+    decreases: UNIVERSAL_DECREASES,
     upgrades: PROJECT_UPGRADES[input.project],
   };
 }
