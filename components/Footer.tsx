@@ -1,11 +1,15 @@
 import Link from "next/link";
+import { Facebook } from "lucide-react";
 import { CITIES, SERVICES } from "@/shared/contentData";
 import { SITE_TAGLINE } from "@/shared/siteContent";
 import { areaPath, servicePath } from "@/lib/seo-routes";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { GBP_SOCIAL } from "@/shared/gbpProfile";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 import { EmailLink } from "@/components/EmailLink";
-import { BusinessPhoneContact } from "@/components/BusinessPhoneContact";
+import { BusinessPhoneLink } from "@/components/BusinessPhoneContact";
+import { SaveContactLink } from "@/components/SaveContactLink";
 import { FooterCTAs } from "@/components/modals/FooterCTAs";
 import { CONTENT_HUBS, categoryHubPath, guidePath } from "@/shared/contentHubs";
 import { BLOG_POSTS } from "@/shared/blogContent";
@@ -48,11 +52,9 @@ export function Footer() {
               {SITE_TAGLINE}.
             </p>
             <div className="space-y-2">
-              <BusinessPhoneContact
-                layout="stack"
-                phoneClassName="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
-                saveClassName="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
-                phoneTestId="link-footer-phone"
+              <BusinessPhoneLink
+                className="block text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
+                data-testid="link-footer-phone"
               />
               <a
                 href={SITE_CONFIG.phoneSmsHref}
@@ -65,22 +67,27 @@ export function Footer() {
               <p className="text-sm text-inverse-muted">
                 {SITE_CONFIG.address.cityState} · {SITE_CONFIG.address.serviceArea}
               </p>
-              <div className="flex gap-4 pt-2">
+              {/* Save to Contacts is a button here, not a text link: it is a
+                  deliberate action (download the vCard), and a button reads as
+                  one where the surrounding lines are passive contact details. */}
+              <div className="pt-3">
+                <SaveContactLink
+                  showIcon
+                  className={cn(buttonVariants({ variant: "heroGhost" }), "text-sm")}
+                >
+                  Save to Contacts
+                </SaveContactLink>
+              </div>
+              {/* Facebook only, as an icon in the brand accent. Instagram removed. */}
+              <div className="flex gap-4 pt-3">
                 <a
                   href={GBP_SOCIAL.facebook}
-                  className="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
+                  className="text-accent-legible hover:text-inverse-foreground transition-colors"
                   rel="noopener noreferrer"
                   target="_blank"
+                  aria-label={`${SITE_CONFIG.name} on Facebook`}
                 >
-                  Facebook
-                </a>
-                <a
-                  href={GBP_SOCIAL.instagram}
-                  className="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Instagram
+                  <Facebook className="h-5 w-5" strokeWidth={1.75} aria-hidden />
                 </a>
               </div>
             </div>
@@ -249,11 +256,11 @@ export function Footer() {
             <ul className="space-y-2.5">
               <FooterCTAs />
               <li>
-                <BusinessPhoneContact
-                  layout="stack"
-                  phoneClassName="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
-                  saveClassName="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
-                  phoneTestId="link-footer-column-phone"
+                {/* Phone only here; "Save to Contacts" lives as a button in the
+                    contact column, so a second text link would just duplicate it. */}
+                <BusinessPhoneLink
+                  className="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
+                  data-testid="link-footer-column-phone"
                 />
               </li>
               <li>

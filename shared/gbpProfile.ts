@@ -445,11 +445,7 @@ export const GBP_CITATION_FIXES = [
     action: 'Confirm NAP matches canonical record',
     url: GBP_SOCIAL.facebook,
   },
-  {
-    platform: 'Instagram',
-    action: 'Confirm NAP in bio matches canonical record',
-    url: GBP_SOCIAL.instagram,
-  },
+  // Instagram dropped from the site, so no NAP to verify there.
   {
     platform: 'MapQuest',
     action: 'Submit correction after Yelp is fixed',
