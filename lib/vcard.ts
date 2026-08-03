@@ -35,10 +35,10 @@ export function buildBusinessVCard(): string {
     .map(([day, hours]) => `${day[0].toUpperCase()}${day.slice(1)} ${hours}`)
     .join("; ");
 
-  const socialLines = BUSINESS_INFO.sameAs
-    .filter((url) => /facebook|instagram/i.test(url))
-    .map((url) => foldLine(`URL;TYPE=${/instagram/i.test(url) ? "instagram" : "facebook"}:${escapeVCard(url)}`));
-
+  // Social profiles are intentionally left off the vCard for now: the Facebook
+  // and Instagram handles still carry the old `boiseremodeling` slug, and until
+  // it is confirmed whether the profiles were renamed, a saved contact should
+  // not ship a link that may point at the wrong or a defunct account.
   const note = [
     "Treasure Valley design-build home builder.",
     SITE_CONFIG.address.serviceArea,
@@ -59,7 +59,6 @@ export function buildBusinessVCard(): string {
     ),
     foldLine(`LABEL;TYPE=WORK:${escapeVCard(`${SITE_CONFIG.address.cityState} · ${SITE_CONFIG.address.serviceArea}`)}`),
     foldLine(`NOTE:${escapeVCard(note)}`),
-    ...socialLines,
     "END:VCARD",
   ];
 

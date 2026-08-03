@@ -90,7 +90,7 @@ export const GBP_ATTRIBUTES = {
 
 export const GBP_MESSAGING = {
   welcomeMessage:
-    'Thanks for reaching out to Boise Construction Co. We respond within one business day. For faster help, call (208) 477-1169 or book a planning consultation at boiseremodeling.co/contact',
+    'Thanks for reaching out to Boise Construction Co. We respond within one business day. For faster help, call (208) 477-1169 or book a planning consultation at boiseconstruction.co/contact',
 } as const;
 
 export interface GbpService {

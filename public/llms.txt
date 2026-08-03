@@ -6,57 +6,57 @@ Design-build means one accountable team handles architectural design, engineerin
 
 ## Services
 
-- [Custom Home Building](https://boiseremodeling.co/services/custom-home-builder): A home drawn from a blank page around your lot, your budget, and how you actually live.
-- [Semi-Custom Homes](https://boiseremodeling.co/services/semi-custom-homes): Start from a proven floor plan and personalize it, for a shorter timeline and a tighter budget range.
-- [Build on Your Lot](https://boiseremodeling.co/services/build-on-your-lot): You already own the land. We handle feasibility, design, permits, and construction from there.
-- [Design-Build](https://boiseremodeling.co/services/design-build): Design and construction under one contract, so the drawings and the budget never drift apart.
-- [Home Design & Plans](https://boiseremodeling.co/services/home-plans-design): Architectural design, engineering, and permit-ready drawings for a home built to your site.
-- [Lot Evaluation & Feasibility](https://boiseremodeling.co/services/lot-evaluation): Soils, utilities, access, setbacks, and slope reviewed before you commit to a parcel.
-- [Shop Homes & Barndominiums](https://boiseremodeling.co/services/shop-homes-barndominiums): Post-frame and steel-framed homes that pair finished living space with real working shop square footage.
-- [Energy-Efficient Homes](https://boiseremodeling.co/services/energy-efficient-homes): High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.
-- [RE-10 / Inspection Repairs](https://boiseremodeling.co/re-10-repairs-boise): repairs from an Idaho RE-10 inspection response, completed and documented before closing, for real estate agents, buyers and sellers.
-- [All Services](https://boiseremodeling.co/services): plus city pages at /services/{service}/{city} and [Service Areas](https://boiseremodeling.co/areas).
+- [Custom Home Building](https://boiseconstruction.co/services/custom-home-builder): A home drawn from a blank page around your lot, your budget, and how you actually live.
+- [Semi-Custom Homes](https://boiseconstruction.co/services/semi-custom-homes): Start from a proven floor plan and personalize it, for a shorter timeline and a tighter budget range.
+- [Build on Your Lot](https://boiseconstruction.co/services/build-on-your-lot): You already own the land. We handle feasibility, design, permits, and construction from there.
+- [Design-Build](https://boiseconstruction.co/services/design-build): Design and construction under one contract, so the drawings and the budget never drift apart.
+- [Home Design & Plans](https://boiseconstruction.co/services/home-plans-design): Architectural design, engineering, and permit-ready drawings for a home built to your site.
+- [Lot Evaluation & Feasibility](https://boiseconstruction.co/services/lot-evaluation): Soils, utilities, access, setbacks, and slope reviewed before you commit to a parcel.
+- [Shop Homes & Barndominiums](https://boiseconstruction.co/services/shop-homes-barndominiums): Post-frame and steel-framed homes that pair finished living space with real working shop square footage.
+- [Energy-Efficient Homes](https://boiseconstruction.co/services/energy-efficient-homes): High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.
+- [RE-10 / Inspection Repairs](https://boiseconstruction.co/re-10-repairs-boise): repairs from an Idaho RE-10 inspection response, completed and documented before closing, for real estate agents, buyers and sellers.
+- [All Services](https://boiseconstruction.co/services): plus city pages at /services/{service}/{city} and [Service Areas](https://boiseconstruction.co/areas).
 
 ## Authoritative guides
 
-- [Boise Home Building Cost Guide](https://boiseremodeling.co/guides/boise-home-building-cost-guide)
-- [The Boise Home Building Process](https://boiseremodeling.co/guides/boise-home-building-process-guide)
-- [Buying Land to Build On in the Treasure Valley](https://boiseremodeling.co/guides/buying-land-to-build-boise)
-- [How to Choose a Home Builder in Boise](https://boiseremodeling.co/guides/choose-home-builder-boise)
-- [Designing a Custom Home in the Treasure Valley](https://boiseremodeling.co/guides/custom-home-design-guide)
-- [Treasure Valley Home Building Guide](https://boiseremodeling.co/guides/treasure-valley-home-building-guide)
+- [Boise Home Building Cost Guide](https://boiseconstruction.co/guides/boise-home-building-cost-guide)
+- [The Boise Home Building Process](https://boiseconstruction.co/guides/boise-home-building-process-guide)
+- [Buying Land to Build On in the Treasure Valley](https://boiseconstruction.co/guides/buying-land-to-build-boise)
+- [How to Choose a Home Builder in Boise](https://boiseconstruction.co/guides/choose-home-builder-boise)
+- [Designing a Custom Home in the Treasure Valley](https://boiseconstruction.co/guides/custom-home-design-guide)
+- [Treasure Valley Home Building Guide](https://boiseconstruction.co/guides/treasure-valley-home-building-guide)
 
 ## Local permit and location resources
 
-- [Ada County vs Canyon County permit flow](https://boiseremodeling.co/resources/ada-canyon-permit-flow)
-- City guides: [Building a Home in Boise](https://boiseremodeling.co/guides/boise-home-building-guide), [Building a Home in Meridian](https://boiseremodeling.co/guides/meridian-home-building-guide), [Building a Home in Eagle](https://boiseremodeling.co/guides/eagle-home-building-guide), [Building a Home in Kuna](https://boiseremodeling.co/guides/kuna-home-building-guide), [Building a Home in Star](https://boiseremodeling.co/guides/star-home-building-guide), [Building a Home in Middleton](https://boiseremodeling.co/guides/middleton-home-building-guide), [Building a Home in Nampa](https://boiseremodeling.co/guides/nampa-home-building-guide), [Building a Home in Caldwell](https://boiseremodeling.co/guides/caldwell-home-building-guide)
-- Neighborhood guides: [Building in the Eagle Foothills](https://boiseremodeling.co/guides/eagle-foothills-home-building-guide), [Building in Hidden Springs](https://boiseremodeling.co/guides/hidden-springs-home-building-guide), [Building in Harris Ranch](https://boiseremodeling.co/guides/harris-ranch-home-building-guide)
+- [Ada County vs Canyon County permit flow](https://boiseconstruction.co/resources/ada-canyon-permit-flow)
+- City guides: [Building a Home in Boise](https://boiseconstruction.co/guides/boise-home-building-guide), [Building a Home in Meridian](https://boiseconstruction.co/guides/meridian-home-building-guide), [Building a Home in Eagle](https://boiseconstruction.co/guides/eagle-home-building-guide), [Building a Home in Kuna](https://boiseconstruction.co/guides/kuna-home-building-guide), [Building a Home in Star](https://boiseconstruction.co/guides/star-home-building-guide), [Building a Home in Middleton](https://boiseconstruction.co/guides/middleton-home-building-guide), [Building a Home in Nampa](https://boiseconstruction.co/guides/nampa-home-building-guide), [Building a Home in Caldwell](https://boiseconstruction.co/guides/caldwell-home-building-guide)
+- Neighborhood guides: [Building in the Eagle Foothills](https://boiseconstruction.co/guides/eagle-foothills-home-building-guide), [Building in Hidden Springs](https://boiseconstruction.co/guides/hidden-springs-home-building-guide), [Building in Harris Ranch](https://boiseconstruction.co/guides/harris-ranch-home-building-guide)
 
 ## Blog category hubs
 
-- [Home Building Costs](https://boiseremodeling.co/blog/category/home-building-costs)
-- [Choosing a Builder](https://boiseremodeling.co/blog/category/choosing-a-builder)
-- [The Building Process](https://boiseremodeling.co/blog/category/home-building-process)
-- [Land & Lots](https://boiseremodeling.co/blog/category/land-and-lots)
-- [Design & Floor Plans](https://boiseremodeling.co/blog/category/home-design-and-plans)
-- [Treasure Valley Locations](https://boiseremodeling.co/blog/category/treasure-valley-locations)
+- [Home Building Costs](https://boiseconstruction.co/blog/category/home-building-costs)
+- [Choosing a Builder](https://boiseconstruction.co/blog/category/choosing-a-builder)
+- [The Building Process](https://boiseconstruction.co/blog/category/home-building-process)
+- [Land & Lots](https://boiseconstruction.co/blog/category/land-and-lots)
+- [Design & Floor Plans](https://boiseconstruction.co/blog/category/home-design-and-plans)
+- [Treasure Valley Locations](https://boiseconstruction.co/blog/category/treasure-valley-locations)
 
 ## About and contact
 
-- [About Boise Construction Co](https://boiseremodeling.co/about): design-build home building across the Treasure Valley since 2020.
-- [Contact](https://boiseremodeling.co/contact)
-- [Free build estimator](https://boiseremodeling.co/estimate)
-- [Planning resources and worksheets](https://boiseremodeling.co/resources)
+- [About Boise Construction Co](https://boiseconstruction.co/about): design-build home building across the Treasure Valley since 2020.
+- [Contact](https://boiseconstruction.co/contact)
+- [Free build estimator](https://boiseconstruction.co/estimate)
+- [Planning resources and worksheets](https://boiseconstruction.co/resources)
 
 ## Optional
 
-- [Blog](https://boiseremodeling.co/blog)
+- [Blog](https://boiseconstruction.co/blog)
 
 ## Machine-readable endpoints
 
-- [Sitemap](https://boiseremodeling.co/sitemap.xml): every indexable page.
-- [Image sitemap](https://boiseremodeling.co/sitemap-images.xml): guide and article imagery with titles and captions.
-- [RSS feed](https://boiseremodeling.co/feed.xml): guides and articles, newest first, with publication and revision dates.
-- [Full text for LLMs](https://boiseremodeling.co/llms-full.txt): expanded reference copy of the core facts.
+- [Sitemap](https://boiseconstruction.co/sitemap.xml): every indexable page.
+- [Image sitemap](https://boiseconstruction.co/sitemap-images.xml): guide and article imagery with titles and captions.
+- [RSS feed](https://boiseconstruction.co/feed.xml): guides and articles, newest first, with publication and revision dates.
+- [Full text for LLMs](https://boiseconstruction.co/llms-full.txt): expanded reference copy of the core facts.
 
 Last updated: 2026-08-03.

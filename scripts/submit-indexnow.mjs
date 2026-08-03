@@ -5,15 +5,15 @@
  *
  * Environment (or defaults):
  *   INDEXNOW_KEY    (default: f9e329f80c1a4609bd70d590f64e0544)
- *   HOST            (default: boiseremodeling.co)
- *   SITEMAP_URL     (default: https://boiseremodeling.co/sitemap.xml)
- *   KEY_LOCATION    (default: https://boiseremodeling.co/f9e329f80c1a4609bd70d590f64e0544.txt)
+ *   HOST            (default: boiseconstruction.co)
+ *   SITEMAP_URL     (default: https://boiseconstruction.co/sitemap.xml)
+ *   KEY_LOCATION    (default: https://boiseconstruction.co/f9e329f80c1a4609bd70d590f64e0544.txt)
  */
 
 const INDEXNOW_KEY = process.env.INDEXNOW_KEY ?? 'f9e329f80c1a4609bd70d590f64e0544';
-const HOST = process.env.HOST ?? 'boiseremodeling.co';
-const SITEMAP_URL = process.env.SITEMAP_URL ?? 'https://boiseremodeling.co/sitemap.xml';
-const KEY_LOCATION = process.env.KEY_LOCATION ?? 'https://boiseremodeling.co/f9e329f80c1a4609bd70d590f64e0544.txt';
+const HOST = process.env.HOST ?? 'boiseconstruction.co';
+const SITEMAP_URL = process.env.SITEMAP_URL ?? 'https://boiseconstruction.co/sitemap.xml';
+const KEY_LOCATION = process.env.KEY_LOCATION ?? 'https://boiseconstruction.co/f9e329f80c1a4609bd70d590f64e0544.txt';
 const INDEXNOW_API = 'https://api.indexnow.org/indexnow';
 
 /**

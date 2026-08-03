@@ -1370,7 +1370,7 @@ export const PLANNING_STAGE_RANGE_LABELS: Record<PlanningStage, string> = {
  * Base ranges per project x finish AT THE PROJECT'S BASELINE SIZE, before any
  * size scaling or refinement multipliers.
  *
- * SOURCE: the 2025 Boise Remodeling Cost Guide (owner-supplied), which states
+ * SOURCE: the 2025 owner-supplied cost guide (owner-supplied), which states
  * per-square-foot ranges against a reference size for each project type. Those
  * reference sizes match `PROJECT_SIZE_CONFIG` baselines exactly (kitchen 250,
  * bathroom 80, whole-home 1,800, addition 400, ADU 600, basement 900), so each

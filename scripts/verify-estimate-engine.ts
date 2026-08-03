@@ -423,7 +423,7 @@ for (const project of ["addition", "adu"] as ProjectType[]) {
 
 // 7. SOURCE FIDELITY. At its baseline size with no refinements, every project
 //    and finish must reproduce its reference pricing exactly. That reference is
-//    the 2025 Boise Remodeling Cost Guide for every category except ADU, which
+//    the 2025 owner-supplied cost guide for every category except ADU, which
 //    is calibrated to a real closed job (see the note on the adu entry below).
 //    This is the check that keeps the estimator honest to the published
 //    pricing: any future edit to PRICE_MATRIX, the band model, or the size

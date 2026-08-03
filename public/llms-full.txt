@@ -9,8 +9,8 @@ Boise Construction Co is a residential design-build home builder serving the Tre
 - Business type: Residential design-build home builder (new construction)
 - Founded: 2020
 - Service model: One accountable team for design, permits, and construction
-- Contact: https://boiseremodeling.co/contact
-- Build estimator: https://boiseremodeling.co/estimate
+- Contact: https://boiseconstruction.co/contact
+- Build estimator: https://boiseconstruction.co/estimate
 
 ## Service area
 
@@ -34,7 +34,7 @@ Permit paths, impact fees, and inspection sequencing differ between Ada County a
 
 Each service has a dedicated page per city at /services/{service-slug}/{city-slug} for boise, meridian, eagle, nampa, kuna, star, middleton, caldwell. City service-area hubs live at /areas/{city-slug}.
 
-## Authoritative guides (https://boiseremodeling.co/guides)
+## Authoritative guides (https://boiseconstruction.co/guides)
 
 Pillar guides (own the head terms):
 
@@ -90,18 +90,18 @@ Neighborhood guides:
 
 ## Key pages
 
-- Home: https://boiseremodeling.co/
-- About: https://boiseremodeling.co/about
-- Services: https://boiseremodeling.co/services
-- Service areas: https://boiseremodeling.co/areas
-- Build estimator: https://boiseremodeling.co/estimate
-- Blog: https://boiseremodeling.co/blog
-- Guides: https://boiseremodeling.co/guides
-- Resources: https://boiseremodeling.co/resources
-- Contact: https://boiseremodeling.co/contact
+- Home: https://boiseconstruction.co/
+- About: https://boiseconstruction.co/about
+- Services: https://boiseconstruction.co/services
+- Service areas: https://boiseconstruction.co/areas
+- Build estimator: https://boiseconstruction.co/estimate
+- Blog: https://boiseconstruction.co/blog
+- Guides: https://boiseconstruction.co/guides
+- Resources: https://boiseconstruction.co/resources
+- Contact: https://boiseconstruction.co/contact
 
 ## RE-10 / Inspection Repairs
 
-Boise Construction Co also completes RE-10 and home inspection repairs for real estate agents, buyers and sellers across Boise and the Treasure Valley. An RE-10 is the Idaho inspection response form: after a home inspection the buyer requests specific repairs before closing. We review the RE-10 and inspection report, provide a written scope and pricing, coordinate access, complete the approved work across multiple trades, and supply photo documentation, invoices and receipts for the transaction file. Structural, foundation, mold and asbestos abatement, main electrical service, sewer and septic, HVAC replacement, gas lines and full roof replacement are coordinated to licensed specialists rather than performed in house. We take this work because an inspection repair is a deadline problem rather than a construction problem, and sequencing trades against a date that will not move is the same thing we do on every build. Details: https://boiseremodeling.co/re-10-repairs-boise
+Boise Construction Co also completes RE-10 and home inspection repairs for real estate agents, buyers and sellers across Boise and the Treasure Valley. An RE-10 is the Idaho inspection response form: after a home inspection the buyer requests specific repairs before closing. We review the RE-10 and inspection report, provide a written scope and pricing, coordinate access, complete the approved work across multiple trades, and supply photo documentation, invoices and receipts for the transaction file. Structural, foundation, mold and asbestos abatement, main electrical service, sewer and septic, HVAC replacement, gas lines and full roof replacement are coordinated to licensed specialists rather than performed in house. We take this work because an inspection repair is a deadline problem rather than a construction problem, and sequencing trades against a date that will not move is the same thing we do on every build. Details: https://boiseconstruction.co/re-10-repairs-boise
 
-Last updated: 2026-08-03. Full sitemap: https://boiseremodeling.co/sitemap.xml
+Last updated: 2026-08-03. Full sitemap: https://boiseconstruction.co/sitemap.xml

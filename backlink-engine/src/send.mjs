@@ -25,7 +25,7 @@ const queue = existsSync(QUEUE) ? JSON.parse(readFileSync(QUEUE, "utf8")) : [];
 
 const SEND = process.env.BACKLINK_SEND_ENABLED === "true";
 const KEY = process.env.RESEND_API_KEY;
-const FROM = process.env.OUTREACH_FROM || "Boise Remodeling Co <hello@boiseremodeling.co>";
+const FROM = process.env.OUTREACH_FROM || "Boise Construction Co <hello@boiseconstruction.co>";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 function sendable(it) {

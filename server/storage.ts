@@ -121,7 +121,7 @@ export class MemStorage implements IStorage {
     const testUsers: User[] = [
       {
         id: "admin-temp-id",
-        email: "hello@boiseremodeling.co",
+        email: "hello@boiseconstruction.co",
         firstName: "Admin",
         lastName: "User",
         phone: null,
@@ -729,7 +729,7 @@ export class DBStorage implements IStorage {
     const testUsers = [
       {
         id: "admin-temp-id",
-        email: "hello@boiseremodeling.co",
+        email: "hello@boiseconstruction.co",
         firstName: "Admin",
         lastName: "User",
         phone: null,

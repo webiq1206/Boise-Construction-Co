@@ -32,10 +32,8 @@ const MIST = '#9AA098';
 const SAGE = '#899F95';
 const CHARCOAL = '#1C1F1E';
 
-// The domain stays boiseremodeling.co after the rebrand, so the card carries the
-// new company name beside the old address. That pairing is the point: someone
-// who knows the URL needs to see it belongs to Boise Construction Co.
-const BRAND_EYEBROW = 'BOISE CONSTRUCTION CO   ·   BOISEREMODELING.CO';
+// Company name and its own domain, now that the site runs at boiseconstruction.co.
+const BRAND_EYEBROW = 'BOISE CONSTRUCTION CO   ·   BOISECONSTRUCTION.CO';
 
 const fontLight = fs.readFileSync(path.join(assets, 'Montserrat-Light.ttf'));
 const fontMedium = fs.readFileSync(path.join(assets, 'Montserrat-Medium.ttf'));

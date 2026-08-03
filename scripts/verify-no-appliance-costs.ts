@@ -1,5 +1,5 @@
 /**
- * Appliances must never be priced. Boise Remodeling Co does not supply or
+ * Appliances must never be priced. Boise Construction Co does not supply or
  * install them, and every public page says so.
  *
  * This is a standing rule rather than a one-time cleanup, which is why it is a

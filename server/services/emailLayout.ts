@@ -3,7 +3,7 @@ import { SITE_CONFIG } from "@/shared/siteConfig";
 /**
  * Dark-brand email tokens - the site's actual palette (app/globals.css). Every
  * outbound email renders on the charcoal ground with bone text and sage accents
- * so it matches boiseremodeling.co. Key names are semantic (bg/surface/text/...)
+ * so it matches boiseconstruction.co. Key names are semantic (bg/surface/text/...)
  * so both the shared CSS here and the inline styles in emailNotifications.ts
  * pull the same colors.
  */

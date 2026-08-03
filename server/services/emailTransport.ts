@@ -4,7 +4,7 @@ import { PLATFORM_EMAIL } from './emailLayout';
 /**
  * Outbound email transport backed by Resend. The API key is read from the
  * RESEND_API_KEY secret, falling back to the Replit "resend" connector. The
- * visible From address is the verified Resend sender (hello@boiseremodeling.co).
+ * visible From address is the verified Resend sender (hello@boiseconstruction.co).
  */
 
 async function getResendApiKey(): Promise<string> {

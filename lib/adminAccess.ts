@@ -18,6 +18,10 @@
 const BASE_ADMIN_EMAILS = [
   'webiq.co@gmail.com',
   'info@webiq.co',
+  // The new company email. The old one is kept alongside it so admin access
+  // does not break if the owner still authenticates with the remodeling address
+  // during the switchover; remove it once sign-in is confirmed on the new one.
+  'hello@boiseconstruction.co',
   'hello@boiseremodeling.co',
   'hello@boisecabinet.co',
   'hello@p5homeco.com',

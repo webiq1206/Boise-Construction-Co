@@ -5,10 +5,12 @@
 
 const DEFAULT_PHONE = "(208) 477-1169";
 const DEFAULT_PHONE_TEL = "2084771169";
-const DEFAULT_EMAIL = "hello@boiseremodeling.co";
-// The domain is unchanged by the rename; boiseremodeling.co stays canonical so
-// the existing search authority and inbound links are preserved.
-const DEFAULT_SITE_URL = "https://boiseremodeling.co";
+const DEFAULT_EMAIL = "hello@boiseconstruction.co";
+// This site now lives on its own domain. boiseremodeling.co was duplicated and
+// rebuilt as Boise Construction Co, which runs at boiseconstruction.co;
+// boiseremodeling.co remains the separate remodeling business. Every canonical,
+// sitemap entry, OG URL, schema @id, and absolute link is built from this value.
+const DEFAULT_SITE_URL = "https://boiseconstruction.co";
 
 export const SITE_CONFIG = {
   name: "Boise Construction Co",

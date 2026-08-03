@@ -197,7 +197,7 @@ function useEnvironment() {
   return useMemo(() => {
     if (typeof window === 'undefined') return { isProduction: false, environmentLabel: 'Development', hostname: '' };
     const hostname = window.location.hostname;
-    const isProduction = hostname === 'boiseremodeling.co' || hostname === 'www.boiseremodeling.co';
+    const isProduction = hostname === 'boiseconstruction.co' || hostname === 'www.boiseconstruction.co';
     return {
       isProduction,
       environmentLabel: isProduction ? 'Production' : 'Development',
@@ -1617,12 +1617,12 @@ function AdminDashboardContent({ embedded = false }: { embedded?: boolean }) {
               <p className="text-sm text-amber-700 dark:text-amber-300">
                 You&apos;re viewing the development database. For production leads, visit{" "}
                 <a 
-                  href="https://boiseremodeling.co/admin" 
+                  href="https://boiseconstruction.co/admin" 
                   className="underline font-medium hover:no-underline"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  boiseremodeling.co/admin
+                  boiseconstruction.co/admin
                 </a>
               </p>
             </div>

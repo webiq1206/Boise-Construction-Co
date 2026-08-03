@@ -94,7 +94,7 @@ export function forwardToLeadDashboard(payload: ForwardPayload): void {
       : undefined,
   };
 
-  fetch("https://leads.boiseremodeling.co/api/external/leads", {
+  fetch("https://leads.boiseconstruction.co/api/external/leads", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -1,5 +1,5 @@
 /**
- * Extracts the italic "Co." lockup from the legacy Boise Remodeling Co
+ * Extracts the italic "Co." lockup from the Boise Construction Co
  * wordmark and stores it, normalised, as reusable outline data.
  *
  * "Co." is unchanged by the rename, so reusing the original outlines keeps the

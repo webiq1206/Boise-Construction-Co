@@ -34,9 +34,7 @@ const MIST = '#9AA098';
 const SAGE = '#899F95';
 const CHARCOAL = '#1C1F1E';
 
-// The domain stays boiseremodeling.co, so the card carries the new company name
-// above the old address. That pairing is deliberate: someone who recognises the
-// URL needs to see it now belongs to Boise Construction Co.
+// Company name and its own domain, now that the site runs at boiseconstruction.co.
 //
 // Set entirely in Montserrat, matching the per-post cards in
 // generate-og-images.mjs. The on-page wordmark italicises "Co." in Fraunces, but
@@ -46,7 +44,7 @@ const CHARCOAL = '#1C1F1E';
 const COMPANY = 'BOISE CONSTRUCTION CO';
 const SUBTITLE = 'CUSTOM HOME BUILDER';
 const LOCALE = 'TREASURE VALLEY · IDAHO';
-const DOMAIN = 'BOISEREMODELING.CO';
+const DOMAIN = 'BOISECONSTRUCTION.CO';
 
 const fontLight = fs.readFileSync(path.join(assets, 'Montserrat-Light.ttf'));
 const fontMedium = fs.readFileSync(path.join(assets, 'Montserrat-Medium.ttf'));

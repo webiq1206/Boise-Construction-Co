@@ -112,7 +112,7 @@ export default function PrivacyPolicyPage() {
               If you have questions about this Privacy Policy, please contact us at:
             </p>
             <ul>
-              <li>Email: <ObfuscatedEmail user="hello" domain="boiseremodeling.co" className="text-primary hover:underline inline-flex items-center gap-1" showIcon={false} /></li>
+              <li>Email: <ObfuscatedEmail user="hello" domain="boiseconstruction.co" className="text-primary hover:underline inline-flex items-center gap-1" showIcon={false} /></li>
               <li>
                 Phone: <BusinessPhoneLink className="text-primary hover:underline" />{" "}
                 <span className="text-muted-foreground">·</span>{" "}

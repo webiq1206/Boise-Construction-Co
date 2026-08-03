@@ -20,7 +20,7 @@ const AI_BOTS = [
 ];
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boiseremodeling.co';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://boiseconstruction.co';
   const disallow = ['/api/', '/admin/', '/subcontractor/'];
 
   return {

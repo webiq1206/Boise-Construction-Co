@@ -13,7 +13,7 @@
  * Two cost codes present in the schedule are DELIBERATELY EXCLUDED here:
  *   F-01-02  Phase 1 + 2 Design-Build Fees   25%
  *   F-03-00  Phase 3 Design-Build Fees       25%
- * Those are the source firm's own fee structure. Boise Remodeling Co applies its
+ * Those are the source firm's own fee structure. Boise Construction Co applies its
  * own gross-margin target instead, so carrying both would double-count margin.
  *
  * Two source rows carry a BLANK unit-of-measure cell. They are defaulted to EA
