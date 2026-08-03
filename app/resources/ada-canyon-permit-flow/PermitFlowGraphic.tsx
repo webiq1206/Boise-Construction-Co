@@ -93,7 +93,7 @@ export function PermitFlowGraphic() {
         <div className="grid md:grid-cols-2 gap-4">
           <CountyColumn
             title="Ada County"
-            subtitle="Most Boise metro remodels"
+            subtitle="Most Boise metro new builds"
             cities={['Boise', 'Meridian', 'Eagle', 'Kuna', 'Star']}
             accentClass="border-accent/40 bg-accent/5"
           />

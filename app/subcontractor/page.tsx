@@ -54,7 +54,7 @@ export default function SubcontractorPage() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h2 className="text-4xl md:text-5xl font-sans font-light tracking-tight text-foreground">
-              Grow Your Remodeling Business
+              Grow Your Construction Business
             </h2>
             <p className="text-lg text-muted-foreground">
               Join our network of trusted subcontractors and get access to verified leads in the Kuna, Meridian, and Boise areas. Only pay for the leads you want.
@@ -158,7 +158,7 @@ export default function SubcontractorPage() {
           <CardContent className="py-12 text-center">
             <h3 className="text-2xl font-sans font-light mb-4">Ready to Grow Your Business?</h3>
             <p className="text-inverse-muted mb-8 max-w-2xl mx-auto">
-              Join our network today and start receiving high-quality remodeling leads. No monthly fees, no commitments: only pay for the leads you want.
+              Join our network today and start receiving high-quality new-construction leads. No monthly fees, no commitments: only pay for the leads you want.
             </p>
             <Button 
               variant="brand"

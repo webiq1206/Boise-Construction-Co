@@ -75,13 +75,16 @@ interface Lead {
   }>;
 }
 
+// Friendly display names for the service a lead carries, shown in the
+// subcontractor purchases view. Mirrors the live service slugs in
+// shared/seoContent.ts; anything not listed falls back to a title-cased slug.
 const PRIORITY_SERVICES = [
-  { slug: "kitchen-remodel", name: "Kitchen Remodel" },
-  { slug: "bathroom-remodel", name: "Bathroom Remodel" },
-  { slug: "whole-home-remodel", name: "Whole-Home Remodel" },
-  { slug: "room-addition", name: "Room Addition" },
-  { slug: "basement-finish", name: "Basement Finish" },
-  { slug: "outdoor-living", name: "Outdoor Living" },
+  { slug: "custom-home-builder", name: "Custom Home Building" },
+  { slug: "semi-custom-homes", name: "Semi-Custom Homes" },
+  { slug: "build-on-your-lot", name: "Build on Your Lot" },
+  { slug: "design-build", name: "Design-Build" },
+  { slug: "home-plans-design", name: "Home Design & Plans" },
+  { slug: "shop-homes-barndominiums", name: "Shop Homes & Barndominiums" },
 ];
 
 function calculateQuoteRange(finalQuote: string | number, variance: number = 0.15) {

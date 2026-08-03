@@ -37,7 +37,7 @@ export async function generateMetadata({
   }
 
   // Strip any brand the author baked into seoTitle, then enforce the budget so
-  // the layout template's " | Boise Remodeling Co" keeps the rendered <title>
+  // the layout template's " | Boise Construction Co" keeps the rendered <title>
   // under ~60 chars. OG/Twitter use the same title (no extra "| ... Blog"
   // suffix, which previously doubled the brand and diverged from <title>).
   const rawTitle = post.seoTitle || post.title;
