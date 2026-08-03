@@ -12,8 +12,13 @@ export const SITE_TAGLINE = "Treasure Valley home building, built on clarity and
 
 export const HERO_EYEBROW = "Boise Home Builder · Treasure Valley";
 
+// Avoids the old remodeling subhead's shape ("One accountable design-build team
+// from first visit to final walkthrough") and does not repeat the H1's "to the
+// keys". Leads instead with the actual differentiator - a real budget before any
+// dirt moves - which is what separates this builder from both a remodeler and a
+// production builder.
 export const HERO_SUBHEAD =
-  "One accountable design-build team from raw land to the keys in your hand.";
+  "A custom home builder for Boise and the Treasure Valley, with a line-item budget before we break ground and weekly cost updates through the build.";
 
 export const HERO_STATS = [
   { num: "60 sec", label: "Instant build cost range" },

@@ -30,10 +30,19 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: `${SITE_CONFIG.name} | Treasure Valley Home Builder`,
+    /*
+     * Leads with the primary commercial term rather than the brand. Ahrefs
+     * (US, 2026-08): "custom home builder boise" ~150/mo and low difficulty is
+     * the strongest buy-intent phrase for what the company does, and it was
+     * absent from the homepage title, which led with "Treasure Valley Home
+     * Builder". "Treasure Valley" still carries the 200/mo regional term through
+     * the description, the service title, and every location page, so nothing is
+     * lost by putting Boise + the service first here. 58 chars incl. the brand.
+     */
+    default: `Custom Home Builder in Boise, Idaho | ${SITE_CONFIG.name}`,
     template: `%s | ${SITE_CONFIG.name}`,
   },
-  description: `Design-build home builder for Boise, Meridian, Eagle, Nampa & the Treasure Valley. Custom homes, semi-custom homes, and builds on your lot, with a line-item budget before we break ground. Book a free planning consultation.`,
+  description: `Boise custom home builder and new home construction across Meridian, Eagle, Nampa, Kuna & the Treasure Valley. Custom and semi-custom homes, design-build, and builds on your lot, with a line-item budget before we break ground.`,
   manifest: '/site.webmanifest',
   // Feed discovery for readers, aggregators, and AI/answer-engine crawlers.
   alternates: {
