@@ -55,7 +55,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
             heading: content.costGuidance.heading,
             paragraphs: content.costGuidance.paragraphs,
             links: [
-              { label: 'Boise Home Building Cost Guide', href: '/guides/boise-remodeling-cost-guide' },
+              { label: 'Boise Home Building Cost Guide', href: '/guides/boise-home-building-cost-guide' },
               { label: 'Get your build cost range', href: '/#calculator' },
             ],
           },
