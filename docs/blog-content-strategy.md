@@ -109,7 +109,7 @@ backyard-transformations-boise
 
 - Clear "Start here" orientation + visible table of contents / jump chips.
 - Linear beginning→end flow (definitive resource).
-- **Strategic sage** for callouts, key-takeaway boxes, checklists, tips, warnings, dividers, buttons —
+- **Strategic ochre** for callouts, key-takeaway boxes, checklists, tips, warnings, dividers, buttons —
   built as reusable content-block components so every guide is consistent.
 
 ## Production notes

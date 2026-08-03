@@ -28,9 +28,9 @@ const H = 630;
 // Brand tokens
 const BONE = '#F7F5F3';
 const BODY = '#E6E3DE';
-const MIST = '#9AA098';
-const SAGE = '#899F95';
-const CHARCOAL = '#1C1F1E';
+const MIST = '#9F9C97';
+const OCHRE = '#D09A5C';
+const CHARCOAL = '#201E1D';
 
 // Company name and its own domain, now that the site runs at boiseconstruction.co.
 const BRAND_EYEBROW = 'BOISE CONSTRUCTION CO   ·   BOISECONSTRUCTION.CO';
@@ -87,7 +87,7 @@ export async function generateOgCard(slug, title, sourceImage) {
         lineHeight: 1.14, letterSpacing: '-0.5px', maxWidth: 760,
       }, title),
       // Sage rule
-      h('div', { width: 56, height: 2, backgroundColor: SAGE, marginTop: 32, marginBottom: 20, display: 'flex' }),
+      h('div', { width: 56, height: 2, backgroundColor: OCHRE, marginTop: 32, marginBottom: 20, display: 'flex' }),
       // Eyebrow - brand + domain, centered
       h('div', {
         display: 'flex', textAlign: 'center', fontSize: 18, fontWeight: 500, color: MIST,

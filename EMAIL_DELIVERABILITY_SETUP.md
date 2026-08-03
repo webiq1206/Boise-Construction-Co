@@ -177,7 +177,7 @@ If you're starting to send emails from a new domain:
 ## Current Status: Email Branding Unified
 
 ### What Was Fixed:
-1. **Shared email layout** in `server/services/emailLayout.ts` — text-based logo matching the public site (charcoal + sage palette)
+1. **Shared email layout** in `server/services/emailLayout.ts` — text-based logo matching the public site (charcoal + ochre palette)
 2. **Plain-text parts** added to all Resend sends for deliverability and accessibility
 3. **HTML escaping** applied to user-provided content in templates
 4. **From / reply-to / admin notifications** use `hello@boiseremodeling.co` (`PLATFORM_EMAIL` in `emailLayout.ts`)

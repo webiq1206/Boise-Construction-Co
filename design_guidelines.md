@@ -1,21 +1,25 @@
-# Boise Remodeling Co Design Guidelines
+# Boise Construction Co Design Guidelines
 
 ## Design Approach
 
-**Premium, Clear, Trustworthy** — Design-build remodeling with a calm, editorial feel: warm neutrals, confident typography, and generous whitespace.
+**Premium, Clear, Trustworthy** - Design-build custom home construction with a calm, editorial feel: warm neutrals, confident typography, and generous whitespace.
 
 **Core principles:**
 - Clarity over clutter: one primary action per section
-- Bone primary CTAs; **sage is the brand accent** — strategic, not decorative
+- Bone primary CTAs; **ochre is the brand accent** - strategic, not decorative
 - Mobile-first conversion (estimator, consult CTA)
-- Shared tokens in `app/globals.css` — no one-off page styles
+- Shared tokens in `app/globals.css` - no one-off page styles
 
-**Sage usage (two tones, used where each reads best):**
-- **Lifted sage `#899F95` (`--accent-legible`) = all sage TEXT:** heading accent
+**Ochre usage (two tones, used where each reads best):**
+- **Ochre `#D09A5C` (`--accent-legible`) = all accent TEXT:** heading accent
   words (`.brc-accent`), eyebrow ticks, text-link hover, focus rings, step
-  numerals. AA-legible (5.9:1) on the charcoal ground at any size.
-- **Deep sage `#5D6561` (`--accent`) = graphic fills only:** chips, tints,
+  numerals. AA-legible (5.38:1) on the charcoal ground at any size. Never set
+  ochre text on bone (2.28:1, decorative only).
+- **Deep ochre `#7E6344` (`--accent`) = graphic fills only:** chips, tints,
   slider track, icon grounds (always with bone text on top). Too dark for text.
+
+The seal carries ochre on its outer ring and dots; the wordmark carries it on
+the italic "Co." only. Never recolor marks outside charcoal, bone, and `#D09A5C`.
 
 ---
 
@@ -29,14 +33,14 @@
 | Ink | `--foreground` | Body text (AA) |
 | Meta | `--muted-foreground` | Eyebrows, captions only |
 | Anchor | `--inverse` | Dark bands, footer |
-| Accent | `--accent` (sage) | `.brc-accent` in headings, slider thumb — not filled buttons |
+| Accent | `--accent` (deep ochre) | `.brc-accent` in headings, slider thumb - not filled buttons |
 
 ---
 
 ## Typography
 
 - **UI & body:** Montserrat (`font-sans`)
-- **Accent word:** Fraunces italic in lifted sage via `.brc-accent` (max one word per heading)
+- **Accent word:** Fraunces italic in ochre via `.brc-accent` (max one word per heading)
 - **Numerals:** Fraunces via `.brc-display-num` / `<DisplayNum>`
 - **Eyebrows:** `.brc-label` — 11px, uppercase, 0.14em tracking
 

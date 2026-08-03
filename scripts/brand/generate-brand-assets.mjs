@@ -32,12 +32,15 @@ const BRAND = {
 };
 
 const COLOR = {
-  ink: "#2C302F",
-  bone: "#F7F5F3",
-  rule: "#C9C4BC",
-  sage: "#5D6561",
-  sageLight: "#9AA098",
-  sealRing: "#565B58",
+  ink: "#2C302F",         // charcoal (shared brand ink)
+  bone: "#F7F5F3",        // bone (shared brand light)
+  rule: "#C9C4BC",        // hairline rule on light grounds
+  accent: "#D09A5C",      // Ochre - the one brand-distinct color. Per the brand
+                          // kit it appears ONLY on the seal's outer ring + dots
+                          // and on the wordmark's "Co." (AA on charcoal, 5.38:1).
+  accentDeep: "#7E6344",  // deep ochre for graphic fills on light grounds
+  mist: "#9F9C97",        // warm neutral grey for secondary tagline/region text
+  ringMuted: "#5E5A55",   // warm neutral hairline for the reverse primary-logo rule
 };
 
 const loadFont = (file) =>
@@ -149,7 +152,7 @@ function layout(font, text, { size, trackEm = 0, x = 0, y = 0 }) {
 }
 
 /** Lay out text along a circular arc, one rotated glyph at a time. */
-function layoutArc(font, text, { size, trackEm = 0, cx, cy, radius, centerDeg, flip = false }) {
+function layoutArc(font, text, { size, trackEm = 0, cx, cy, radius, centerDeg, flip = false, ink = COLOR.bone }) {
   const tracking = trackEm * size;
 
   const widths = [...text].map((ch) => ({
@@ -178,7 +181,7 @@ function layoutArc(font, text, { size, trackEm = 0, cx, cy, radius, centerDeg, f
       const d = toPath(font.getPath(ch, -halfInk, 0, size));
       const rot = flip ? midDeg + 180 : midDeg;
       parts.push(
-        `<path d="${d}" fill="${COLOR.bone}" transform="translate(${px.toFixed(2)} ${py.toFixed(
+        `<path d="${d}" fill="${ink}" transform="translate(${px.toFixed(2)} ${py.toFixed(
           2,
         )}) rotate(${rot.toFixed(3)})"/>`,
       );
@@ -194,7 +197,7 @@ const svgHeader = (w, h, label, desc) =>
 /* ------------------------------------------------------------------ *
  * Wordmark - "BOISE CONSTRUCTION Co."
  * ------------------------------------------------------------------ */
-function buildWordmark(fill) {
+function buildWordmark(fill, coFill = fill) {
   const CAP_HEIGHT = 78.4;
   const size = capSize(montserrat, CAP_HEIGHT);
   const baseline = 132;
@@ -207,11 +210,12 @@ function buildWordmark(fill) {
     y: baseline,
   });
 
+  // The italic "Co." is the wordmark's single accent moment (brand kit rule).
   const co = coMark({
     capHeight: CAP_HEIGHT,
     x: caps.maxX + size * 0.34,
     y: baseline,
-    fill,
+    fill: coFill,
   });
 
   const width = Math.round(co.maxX + startX);
@@ -229,7 +233,7 @@ function buildWordmark(fill) {
 /* ------------------------------------------------------------------ *
  * Primary logo - wordmark over rule, tagline, and region line
  * ------------------------------------------------------------------ */
-function buildPrimaryLogo(fill, ruleColor, taglineColor, regionColor) {
+function buildPrimaryLogo(fill, ruleColor, taglineColor, regionColor, coFill = fill) {
   const CAP_HEIGHT = 72.8;
   const size = capSize(montserrat, CAP_HEIGHT);
   const baseline = 196;
@@ -245,7 +249,7 @@ function buildPrimaryLogo(fill, ruleColor, taglineColor, regionColor) {
     capHeight: CAP_HEIGHT,
     x: caps.maxX + size * 0.34,
     y: baseline,
-    fill,
+    fill: coFill,
   });
 
   const width = Math.round(co.maxX + startX);
@@ -290,7 +294,7 @@ function buildPrimaryLogo(fill, ruleColor, taglineColor, regionColor) {
 /* ------------------------------------------------------------------ *
  * Seal - circular maker's mark
  * ------------------------------------------------------------------ */
-function buildSeal(background) {
+function buildSeal({ background, ink = COLOR.bone, ring = COLOR.accent, dotColor = COLOR.accent }) {
   const S = 1024;
   const cx = S / 2;
   const cy = S / 2;
@@ -304,6 +308,7 @@ function buildSeal(background) {
     cy,
     radius: arcRadius,
     centerDeg: 0,
+    ink,
   });
   const bottomArc = layoutArc(montserrat, BRAND.established, {
     size: arcSize,
@@ -313,6 +318,7 @@ function buildSeal(background) {
     radius: arcRadius,
     centerDeg: 180,
     flip: true,
+    ink,
   });
 
   // "BOISE" centred above the script.
@@ -351,10 +357,11 @@ function buildSeal(background) {
     y: 642,
   });
 
+  // Tick hairlines follow the ink; dots carry the ochre accent.
   const tick = (x1, x2, y) =>
-    `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${COLOR.sageLight}" stroke-width="1.3"/>`;
+    `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${ink}" stroke-width="1.3"/>`;
   const dot = (x, y, r = 2.1) =>
-    `<circle cx="${x}" cy="${y}" r="${r}" fill="${COLOR.sageLight}"/>`;
+    `<circle cx="${x}" cy="${y}" r="${r}" fill="${dotColor}"/>`;
 
   const boiseRuleGap = 26;
   const boiseLeftEnd = boise.minX - boiseRuleGap;
@@ -365,26 +372,27 @@ function buildSeal(background) {
   const label = `${BRAND.name} seal`;
   const desc = `Circular maker's seal for ${BRAND.name}, custom home builder in Boise and the Treasure Valley, Idaho.`;
 
+  // Outer ring carries the ochre accent; inner ring + all lettering are ink.
   return (
     svgHeader(S, S, label, desc) +
     `<rect width="${S}" height="${S}" fill="${background}"/>` +
-    `<circle cx="${cx}" cy="${cy}" r="500" fill="none" stroke="${COLOR.sealRing}" stroke-width="2.3"/>` +
-    `<circle cx="${cx}" cy="${cy}" r="487" fill="none" stroke="${COLOR.sealRing}" stroke-width="1.5"/>` +
+    `<circle cx="${cx}" cy="${cy}" r="500" fill="none" stroke="${ring}" stroke-width="2.3"/>` +
+    `<circle cx="${cx}" cy="${cy}" r="487" fill="none" stroke="${ink}" stroke-width="1.5"/>` +
     topArc +
     bottomArc +
     dot(66, cy, 4) +
-    `<line x1="66" y1="499" x2="66" y2="481" stroke="${COLOR.sageLight}" stroke-width="1.3"/>` +
-    `<line x1="66" y1="525" x2="66" y2="543" stroke="${COLOR.sageLight}" stroke-width="1.3"/>` +
+    `<line x1="66" y1="499" x2="66" y2="481" stroke="${ink}" stroke-width="1.3"/>` +
+    `<line x1="66" y1="525" x2="66" y2="543" stroke="${ink}" stroke-width="1.3"/>` +
     dot(958, cy, 4) +
-    `<line x1="958" y1="499" x2="958" y2="481" stroke="${COLOR.sageLight}" stroke-width="1.3"/>` +
-    `<line x1="958" y1="525" x2="958" y2="543" stroke="${COLOR.sageLight}" stroke-width="1.3"/>` +
+    `<line x1="958" y1="499" x2="958" y2="481" stroke="${ink}" stroke-width="1.3"/>` +
+    `<line x1="958" y1="525" x2="958" y2="543" stroke="${ink}" stroke-width="1.3"/>` +
     tick(boiseLeftEnd - 78, boiseLeftEnd, 410) +
     tick(boiseRightStart, boiseRightStart + 78, 410) +
     dot(boiseLeftEnd - 78, 410) +
     dot(boiseRightStart + 78, 410) +
-    `<path d="${boise.d}" fill="${COLOR.bone}"/>` +
-    `<path d="${scriptPlaced.d}" fill="${COLOR.bone}"/>` +
-    `<path d="${co.d}" fill="${COLOR.sageLight}"/>` +
+    `<path d="${boise.d}" fill="${ink}"/>` +
+    `<path d="${scriptPlaced.d}" fill="${ink}"/>` +
+    `<path d="${co.d}" fill="${ink}"/>` +
     tick(coLeftEnd - 78, coLeftEnd, 634) +
     tick(coRightStart, coRightStart + 78, 634) +
     dot(coLeftEnd - 78, 634) +
@@ -396,7 +404,7 @@ function buildSeal(background) {
 /* ------------------------------------------------------------------ *
  * Emblem - compact monogram for favicons and small surfaces
  * ------------------------------------------------------------------ */
-function buildEmblem(background, markColor, hairline) {
+function buildEmblem(background, markColor, hairline, coFill = markColor) {
   const S = 400;
   const cx = S / 2;
   const MAX_LINE_WIDTH = 290;
@@ -425,7 +433,7 @@ function buildEmblem(background, markColor, hairline) {
     capHeight: CO_CAP,
     x: cx - (CO_MARK.width * CO_CAP) / CO_MARK.capHeight / 2,
     y: 269,
-    fill: markColor,
+    fill: coFill,
   });
 
   const tag = capLine(BRAND.tagline, 7, 0.32, 329);
@@ -457,26 +465,40 @@ const write = (rel, contents) => {
 };
 
 const files = {
+  // Light-ground marks keep lettering in ink; the "Co." stays ink because the
+  // brand rule forbids accent-coloured text on bone (2.28:1). Reverse (on-dark)
+  // marks carry the ochre "Co.".
   [`public/brand/logos/${BRAND.slug}-wordmark.svg`]: buildWordmark(COLOR.ink),
-  [`public/brand/logos/${BRAND.slug}-wordmark-reverse.svg`]: buildWordmark(COLOR.bone),
+  [`public/brand/logos/${BRAND.slug}-wordmark-reverse.svg`]: buildWordmark(COLOR.bone, COLOR.accent),
   [`public/brand/logos/${BRAND.slug}-logo-primary.svg`]: buildPrimaryLogo(
     COLOR.ink,
     COLOR.rule,
-    COLOR.sage,
-    COLOR.sageLight,
+    COLOR.ink,
+    COLOR.ink,
+    COLOR.ink,
   ),
   [`public/brand/logos/${BRAND.slug}-logo-primary-reverse.svg`]: buildPrimaryLogo(
     COLOR.bone,
-    COLOR.sealRing,
-    COLOR.sageLight,
-    COLOR.sage,
+    COLOR.ringMuted,
+    COLOR.mist,
+    COLOR.mist,
+    COLOR.accent,
   ),
-  [`public/brand/icons/${BRAND.slug}-seal-dark.svg`]: buildSeal(COLOR.ink),
-  [`public/brand/icons/${BRAND.slug}-seal-light.svg`]: buildSeal(COLOR.sage),
+  // Seal: charcoal disc, bone lettering, ochre outer ring + dots (brand kit).
+  [`public/brand/icons/${BRAND.slug}-seal-dark.svg`]: buildSeal({ background: COLOR.ink }),
+  // Light seal: charcoal ink on a transparent ground with a deep-ochre ring/dots
+  // for placement on bone or photography.
+  [`public/brand/icons/${BRAND.slug}-seal-light.svg`]: buildSeal({
+    background: "none",
+    ink: COLOR.ink,
+    ring: COLOR.accentDeep,
+    dotColor: COLOR.accentDeep,
+  }),
   [`public/brand/icons/${BRAND.slug}-emblem-dark.svg`]: buildEmblem(
     COLOR.ink,
     COLOR.bone,
     "rgba(247,245,243,0.30)",
+    COLOR.accent,
   ),
   [`public/brand/icons/${BRAND.slug}-emblem-light.svg`]: buildEmblem(
     COLOR.bone,

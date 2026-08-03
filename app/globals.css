@@ -42,14 +42,18 @@ html, body {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   BOISE REMODELING CO - DARK-ONLY BRAND IDENTITY
-   Committed dark ground (#1C1F1E). :root and .dark carry IDENTICAL
+   BOISE CONSTRUCTION CO - DARK-ONLY BRAND IDENTITY
+   Committed warm charcoal ground. :root and .dark carry IDENTICAL
    values so there is no light-mode leak whether or not the .dark class
-   is present. This is the identity, not a toggle. Palette:
-     --bg #1C1F1E · --bg-2 #222624 · --surface #262B29 · hairline #39403D
-     bone #F7F5F3 · body #E6E3DE · mist #9AA098 · faint #6E756F
-     deep sage #5D6561 = graphic fills/chips/tints · lifted sage #899F95 =
-     ALL sage text (accent WORDS, eyebrow ticks, links/hover, focus, numerals)
+   is present. This is the identity, not a toggle. The whole neutral ramp
+   is OCHRE-TINTED (hue 32) - there is no sage/green anywhere. Palette:
+     --bg #201E1D · --bg-2 #262320 · --surface #2B2724 · hairline #413C39
+     bone #F7F5F3 · body #E6E3DE · mist #9F9C97 · faint #767370
+     Accent = Ochre #D09A5C (the one brand-distinct color; charcoal +
+     bone are shared unchanged). deep ochre #7E6344 = graphic fills/
+     chips/tints · ochre #D09A5C = ALL accent text (accent WORDS,
+     eyebrow ticks, links/hover, focus, numerals). AA on the ground.
+     Never recolor outside charcoal, bone, and #D09A5C.
    ═══════════════════════════════════════════════════════════════════ */
 :root, .dark {
   --button-outline: rgba(255,255,255, .08);
@@ -59,77 +63,78 @@ html, body {
   --elevate-2: rgba(255,255,255, .07);
 
   /* Page base - charcoal #1C1F1E */
-  --background: 160 5% 12%;
+  --background: 32 5% 12%;
   --foreground: 37 14% 89%;        /* body text #E6E3DE */
   --heading: 30 20% 96%;           /* bone #F7F5F3 */
-  --border: 154 6% 24%;            /* hairline #39403D */
-  --card: 156 6% 16%;              /* surface #262B29 */
+  --border: 32 6% 24%;            /* hairline #39403D */
+  --card: 32 6% 16%;              /* surface #262B29 */
   --card-foreground: 37 14% 89%;
-  --card-border: 154 6% 24%;
+  --card-border: 32 6% 24%;
 
   /* Elevated band - #222624 (footer, statement bands) */
-  --inverse: 150 6% 14%;
+  --inverse: 32 6% 14%;
   --inverse-foreground: 30 20% 96%;   /* bone */
-  --inverse-muted: 105 4% 61%;        /* mist #9AA098 */
+  --inverse-muted: 32 4% 61%;        /* mist #9AA098 */
 
-  --surface-muted: 150 6% 14%;        /* #222624 */
-  --surface-greige: 156 6% 16%;       /* #262B29 */
+  --surface-muted: 32 6% 14%;        /* #222624 */
+  --surface-greige: 32 6% 16%;       /* #262B29 */
 
   /* Section tints - subtle hued dark panels */
   --tint-warm: 36 8% 15%;
-  --tint-cool: 186 8% 15%;
+  --tint-cool: 210 8% 15%;
   --tint-blush: 8 10% 16%;
 
   /* Sidebar - admin/portal (a touch below page base) */
-  --sidebar: 160 5% 10%;
+  --sidebar: 32 5% 10%;
   --sidebar-foreground: 37 14% 89%;
-  --sidebar-border: 154 6% 24%;
-  --sidebar-primary: 152 10% 58%;      /* sage */
-  --sidebar-primary-foreground: 165 4% 18%;
-  --sidebar-accent: 156 6% 16%;
+  --sidebar-border: 32 6% 24%;
+  --sidebar-primary: 32 55% 59%;       /* ochre #D09A5C */
+  --sidebar-primary-foreground: 32 4% 18%;
+  --sidebar-accent: 32 6% 16%;
   --sidebar-accent-foreground: 37 14% 89%;
-  --sidebar-ring: 152 10% 58%;
+  --sidebar-ring: 32 55% 59%;          /* ochre #D09A5C */
 
-  --popover: 156 6% 16%;
+  --popover: 32 6% 16%;
   --popover-foreground: 37 14% 89%;
-  --popover-border: 154 6% 24%;
+  --popover-border: 32 6% 24%;
 
   /* Primary CTA - bone #F7F5F3 fill, charcoal #2C302F text */
   --primary: 30 20% 96%;
-  --primary-foreground: 165 4% 18%;
+  --primary-foreground: 32 4% 18%;
 
-  --secondary: 156 6% 16%;
+  --secondary: 32 6% 16%;
   --secondary-foreground: 37 14% 89%;
 
-  --muted: 156 6% 16%;
-  --muted-foreground: 105 4% 61%;     /* mist #9AA098 */
-  --faint: 129 3% 45%;                /* #6E756F */
+  --muted: 32 6% 16%;
+  --muted-foreground: 32 4% 61%;     /* mist #9AA098 */
+  --faint: 32 3% 45%;                 /* warm faint #767370 */
 
-  /* Small accents use the brand-system slate-sage #5D6561 (dots, marks, pills,
-     tints, icons). Text on a sage fill uses bone. Accent WORDS render bone via
-     .brc-accent; links + focus rings keep the lifted sage --accent-legible. */
-  --accent: 150 4% 38%;               /* #5D6561 */
-  --accent-foreground: 30 20% 96%;    /* bone text on a sage fill */
+  /* Small accents use a deep, muted ochre #7E6344 (dots, marks, pills,
+     tints, icons). Text on an ochre fill uses bone (5.3:1, AA). Accent WORDS
+     render bone via .brc-accent; links + focus rings keep the legible ochre
+     --accent-legible. Never recolor outside charcoal, bone, and #D09A5C. */
+  --accent: 32 30% 38%;               /* deep ochre #7E6344 */
+  --accent-foreground: 30 20% 96%;    /* bone text on an ochre fill */
 
-  --brass: 150 4% 38%;
+  --brass: 32 30% 38%;                /* deep ochre #7E6344 */
   --brass-foreground: 30 20% 96%;
 
-  /* Lifted sage for anything that must stay legible on the dark ground:
-     text links (hover) and focus rings. AA on #1C1F1E (5.9:1). */
-  --accent-legible: 152 10% 58%;      /* #899F95 */
+  /* Ochre for anything that must stay legible on the dark ground:
+     text links (hover) and focus rings. AA on the warm charcoal ground (5.38:1). */
+  --accent-legible: 32 55% 59%;       /* ochre #D09A5C */
 
   /* Danger - muted terracotta #C77B6B */
   --destructive: 10 45% 60%;
   --destructive-foreground: 30 20% 96%;
 
-  --input: 150 6% 13%;                /* #1F2321 */
-  --ring: 152 10% 58%;
+  --input: 32 6% 13%;                 /* warm input #241F1D */
+  --ring: 32 55% 59%;                  /* ochre #D09A5C */
 
-  --chart-1: 152 10% 58%;
-  --chart-2: 156 6% 16%;
+  --chart-1: 32 55% 59%;               /* ochre #D09A5C */
+  --chart-2: 32 6% 16%;
   --chart-3: 30 20% 96%;
-  --chart-4: 105 4% 61%;
-  --chart-5: 160 5% 12%;
+  --chart-4: 32 4% 61%;
+  --chart-5: 32 5% 12%;
 
   --radius: 0.125rem;
 
@@ -360,10 +365,10 @@ html, body {
   font-family: var(--font-fraunces, Georgia, serif);
   font-style: italic;
   font-optical-sizing: auto;
-  /* Accent WORDS are the serif grace note AND the brand's sage moment. We use
-     the lifted sage (#899F95), not the deep #5D6561, because deep sage fails
-     legibility as text on the charcoal ground - the lifted tone stays AA
-     (5.9:1) at any size while reading unmistakably as the same sage family.
+  /* Accent WORDS are the serif grace note AND the brand's ochre moment. We use
+     the legible ochre (#D09A5C), not the deep #7E6344, because the deep tone
+     fails legibility as text on the charcoal ground - the ochre stays AA
+     (5.38:1) at any size while reading unmistakably as the same brand accent.
      Overrides any text-accent on the same element. */
   color: hsl(var(--accent-legible));
 }
@@ -391,7 +396,7 @@ html, body {
   content: "";
   width: 24px;
   height: 1px;
-  /* Sage tick: the eyebrow's brand accent. Lifted sage so the 1px hairline
+  /* Ochre tick: the eyebrow's brand accent. Legible ochre so the 1px hairline
      actually reads on the dark ground. */
   background: hsl(var(--accent-legible));
   flex-shrink: 0;
@@ -409,7 +414,7 @@ html, body {
 .brc-label.brc-label-on-photo {
   color: hsl(var(--inverse-foreground) / 0.92);
 }
-/* The sage tick is intentional on every band, but keep the label TEXT muted. */
+/* The ochre tick is intentional on every band, but keep the label TEXT muted. */
 
 /* ─── Calculator range slider ─── */
 /* The size slider is the estimator's primary measurement control, and on a
@@ -597,7 +602,7 @@ html, body {
 }
 
 /* ===================================================================
-   Guide callouts - sage-forward tips, key points, checklists, warnings,
+   Guide callouts - ochre-forward tips, key points, checklists, warnings,
    and budget snapshots. Opt-in via markup (.callout.<variant>) inside
    .blog-content, so blog posts are unaffected unless they use them.
    =================================================================== */
@@ -634,13 +639,13 @@ html, body {
   transform: rotate(45deg);
 }
 
-/* Tip - lifted sage, soft sage wash */
+/* Tip - legible ochre, soft ochre wash */
 .blog-content .callout.tip {
   border-left-color: hsl(var(--accent-legible));
   background: hsl(var(--accent) / 0.07);
 }
 
-/* Key point - deep sage, heavier bar */
+/* Key point - deep ochre, heavier bar */
 .blog-content .callout.note {
   border-left-width: 4px;
   border-left-color: hsl(var(--accent));
@@ -654,16 +659,17 @@ html, body {
 }
 .blog-content .callout.cost strong { color: hsl(var(--accent-legible)); font-weight: 500; }
 
-/* Warning / important - restrained clay tone that pairs with sage,
-   used sparingly so caution reads distinctly from tips. */
+/* Warning / important - a redder terracotta than the ochre accent (hue ~15 vs
+   ~32) so caution reads distinctly and never mistakes itself for a brand accent.
+   Used sparingly so caution reads distinctly from tips. */
 .blog-content .callout.warning {
-  border-left-color: #c07f4a;
-  background: hsl(28 45% 46% / 0.10);
+  border-left-color: hsl(15 50% 55%);
+  background: hsl(15 45% 46% / 0.10);
 }
-.blog-content .callout.warning .callout-label { color: #d1936b; }
-.blog-content .callout.warning .callout-label::before { background: #d1936b; }
+.blog-content .callout.warning .callout-label { color: hsl(15 55% 66%); }
+.blog-content .callout.warning .callout-label::before { background: hsl(15 55% 66%); }
 
-/* Checklist - sage checkboxes with a checkmark */
+/* Checklist - ochre checkboxes with a checkmark */
 .blog-content .callout.checklist ul {
   list-style: none;
   margin: 0.35rem 0 0;
@@ -697,7 +703,7 @@ html, body {
   transform: rotate(45deg);
 }
 
-/* Decorative lead paragraph + inline sage accent for eye-draw */
+/* Decorative lead paragraph + inline ochre accent for eye-draw */
 .blog-content .guide-lead {
   font-size: 1.15rem;
   line-height: 1.7;
@@ -708,7 +714,7 @@ html, body {
   font-weight: 500;
 }
 
-/* Numbered step flow - sage numerals draw the eye through a sequence */
+/* Numbered step flow - ochre numerals draw the eye through a sequence */
 .blog-content ol.steps {
   list-style: none;
   counter-reset: step;
@@ -771,19 +777,21 @@ html, body {
   gap: 0.25rem 1rem;
 }
 
-/* Marketing text link (tertiary action) - reveals sage on hover */
+/* Marketing text link (tertiary action) - reveals ochre on hover */
 .brc-text-link {
   @apply inline-flex items-center gap-2 text-sm font-normal text-foreground underline-offset-2 hover:underline hover:text-accent-legible transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm;
 }
-/* Arrow in text links picks up the sage on hover too */
+/* Arrow in text links picks up the ochre on hover too */
 .brc-text-link:hover svg {
   color: hsl(var(--accent-legible));
 }
 
 /* ─── Semantic status tokens (badges, confidence labels) - dark ground ─── */
 :root, .dark {
-  --success: 136 21% 53%;       /* #6FA17C */
-  --success-soft: 136 21% 53%;
+  /* Clean, saturated success green - deliberately clear of the muted grey-green
+     (sage) family so status never reads as a brand tone. */
+  --success: 142 40% 46%;       /* #46A469 */
+  --success-soft: 142 40% 46%;
   --warning: 38 51% 57%;        /* #C9A15A */
   --warning-soft: 38 51% 57%;
 }

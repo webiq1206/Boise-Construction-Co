@@ -30,9 +30,9 @@ const H = 630;
 
 // Brand tokens, identical to generate-og-images.mjs.
 const BONE = '#F7F5F3';
-const MIST = '#9AA098';
-const SAGE = '#899F95';
-const CHARCOAL = '#1C1F1E';
+const MIST = '#9F9C97';
+const OCHRE = '#D09A5C';
+const CHARCOAL = '#201E1D';
 
 // Company name and its own domain, now that the site runs at boiseconstruction.co.
 //
@@ -58,8 +58,8 @@ function corner(top, left) {
   const len = 46;
   const thick = 2;
   const inset = 48;
-  const vert = { position: 'absolute', width: thick, height: len, backgroundColor: SAGE, display: 'flex' };
-  const horiz = { position: 'absolute', width: len, height: thick, backgroundColor: SAGE, display: 'flex' };
+  const vert = { position: 'absolute', width: thick, height: len, backgroundColor: OCHRE, display: 'flex' };
+  const horiz = { position: 'absolute', width: len, height: thick, backgroundColor: OCHRE, display: 'flex' };
   const y = top ? { top: inset } : { bottom: inset };
   const x = left ? { left: inset } : { right: inset };
   return h('div', { position: 'absolute', width: len, height: len, ...y, ...x, display: 'flex' }, [
@@ -69,7 +69,7 @@ function corner(top, left) {
 }
 
 function rule(mt, mb) {
-  return h('div', { width: 64, height: 2, backgroundColor: SAGE, marginTop: mt, marginBottom: mb, display: 'flex' });
+  return h('div', { width: 64, height: 2, backgroundColor: OCHRE, marginTop: mt, marginBottom: mb, display: 'flex' });
 }
 
 async function build() {
@@ -78,7 +78,7 @@ async function build() {
     alignItems: 'center', justifyContent: 'center', fontFamily: 'Montserrat',
     // Radial highlight over charcoal, matching the original card's soft centre glow.
     backgroundColor: CHARCOAL,
-    backgroundImage: 'radial-gradient(circle at 50% 42%, #262A28 0%, #1C1F1E 60%)',
+    backgroundImage: 'radial-gradient(circle at 50% 42%, #2B2825 0%, #201E1D 60%)',
   }, [
     corner(true, true), corner(true, false), corner(false, true), corner(false, false),
     h('div', {
@@ -100,7 +100,7 @@ async function build() {
       }, LOCALE),
       rule(40, 40),
       h('div', {
-        display: 'flex', fontSize: 20, fontWeight: 500, color: SAGE, letterSpacing: '4px',
+        display: 'flex', fontSize: 20, fontWeight: 500, color: OCHRE, letterSpacing: '4px',
       }, DOMAIN),
     ]),
   ]);

@@ -8,14 +8,14 @@ import { SITE_CONFIG } from "@/shared/siteConfig";
  * pull the same colors.
  */
 export const EMAIL_BRAND = {
-  bg: "#1C1F1E",         // page background (charcoal)
-  surface: "#262B29",    // content card
-  raised: "#2E3331",     // highlighted boxes, footer, badges
-  hairline: "#39403D",   // borders + dividers
+  bg: "#201E1D",         // page background (warm charcoal)
+  surface: "#2B2724",    // content card
+  raised: "#33312E",     // highlighted boxes, footer, badges
+  hairline: "#413D3A",   // borders + dividers
   text: "#F7F5F3",       // primary text (bone)
-  textMuted: "#9AA098",  // secondary text (mist)
-  accent: "#899F95",     // legible sage - links, bars, ticks
-  accentDeep: "#5D6561", // deep sage fill
+  textMuted: "#9F9C97",  // secondary text (warm mist)
+  accent: "#D09A5C",     // ochre - links, bars, ticks (AA on charcoal)
+  accentDeep: "#7E6344", // deep ochre fill
 } as const;
 
 export const SITE_BASE_URL = SITE_CONFIG.siteUrl;

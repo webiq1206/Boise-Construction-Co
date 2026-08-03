@@ -24,7 +24,12 @@ const baseUrl = getBaseUrl();
 export const ORG_ID = `${baseUrl}/#organization`;
 export const LOCALBUSINESS_ID = `${baseUrl}/#localbusiness`;
 export const WEBSITE_ID = `${baseUrl}/#website`;
-const LOGO_URL = `${baseUrl}/images/brc-logo.png`;
+// Organization logo for knowledge-panel / rich-result use. The self-contained
+// Maker's Seal (charcoal disc, bone lettering, ochre ring) is square and stays
+// legible on any background, unlike the reverse wordmark which vanished on
+// Google's white panels. Served at its native 512px with explicit dimensions.
+const LOGO_URL = `${baseUrl}/brand/seal/boise-construction-co-seal-dark-512.png`;
+const LOGO_SIZE = 512;
 
 /**
  * Generate LocalBusiness schema for homepage and location pages
@@ -214,6 +219,8 @@ export function generateOrganizationSchema(): SchemaContext {
     logo: {
       '@type': 'ImageObject',
       url: LOGO_URL,
+      width: LOGO_SIZE,
+      height: LOGO_SIZE,
     },
     description: 'Design-build home builder serving the Treasure Valley since 2020. Custom homes, semi-custom homes, builds on client-owned land, and shop homes. Bonded, insured, and committed to line-item budgets before construction.',
     foundingDate: BUSINESS_INFO.founded,
@@ -371,7 +378,7 @@ export function generateArticleSchema(article: {
       '@type': 'Organization',
       '@id': ORG_ID,
       name: BUSINESS_INFO.name,
-      logo: { '@type': 'ImageObject', url: LOGO_URL },
+      logo: { '@type': 'ImageObject', url: LOGO_URL, width: LOGO_SIZE, height: LOGO_SIZE },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',

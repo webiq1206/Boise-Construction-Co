@@ -386,7 +386,7 @@ export function generateSEOMetadata(params: ServiceSEOParams): SEOMetaData {
     canonical,
     ogTitle: title,
     ogDescription: description,
-    ogImage: `${baseUrl}/images/brc-logo.png`,
+    ogImage: `${baseUrl}/images/og-default.png`,
     twitterCard: 'summary_large_image',
   };
 }
