@@ -115,6 +115,8 @@ interface ChipOption {
 
 interface ProjectUIConfig {
   tabLabel: string;
+  /** One-line clarifier under the project card label (step 2). */
+  tabSub?: string;
   headlinePrefix: string;
   headlineAccent: string;
   headlineSuffix: string;
@@ -249,6 +251,7 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
    */
   "custom-home": {
     tabLabel: "Custom Home",
+    tabSub: "A one-of-a-kind design",
     headlinePrefix: "Estimate your", headlineAccent: "custom home", headlineSuffix: "build cost",
     gridLabel: "WHAT ARE YOU BUILDING?",
     subtypes: [
@@ -268,6 +271,7 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
   },
   "semi-custom-home": {
     tabLabel: "Semi-Custom",
+    tabSub: "Start from our proven plans",
     headlinePrefix: "Estimate your", headlineAccent: "semi-custom home", headlineSuffix: "build cost",
     twoLineHeadline: true,
     gridLabel: "WHICH PLAN SIZE FITS?",
@@ -287,7 +291,8 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
     footerAccent: "semi-custom home",
   },
   "build-on-your-lot": {
-    tabLabel: "On My Lot",
+    tabLabel: "Build on My Lot",
+    tabSub: "You already own the land",
     headlinePrefix: "Estimate your build", headlineAccent: "on your own lot", headlineSuffix: "",
     twoLineHeadline: true,
     gridLabel: "WHAT IS YOUR LOT LIKE?",
@@ -308,6 +313,7 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
   },
   "shop-home": {
     tabLabel: "Shop Home",
+    tabSub: "A home plus a big workshop",
     headlinePrefix: "Price your", headlineAccent: "shop home", headlineSuffix: "build",
     // The slider is living area only. The shop is a separate chip below, because
     // a blended figure hides the ratio that decides the whole budget.
@@ -655,6 +661,26 @@ export function EstimateCalculator({
   const [planUnresolved, setPlanUnresolved] = useState<string[]>([]);
   const [planStored, setPlanStored] = useState<{ filename: string; url: string }[]>([]);
   const [planIsRemodel, setPlanIsRemodel] = useState(false);
+  /* Answers the plans overwrote AFTER the visitor had already given them. A
+     value silently changing under someone is alarming; each rewrite is stated
+     back so nothing moves without being called out. */
+  const [planChanged, setPlanChanged] = useState<string[]>([]);
+  /* Which questions the drawings answered. Those steps collapse into a
+     one-line "from your plans" summary with an Edit affordance rather than
+     re-asking; editing clears the mark and hands authority back to the
+     visitor. */
+  const [planFilled, setPlanFilled] = useState<{
+    size?: boolean;
+    baths?: boolean;
+    structures?: boolean;
+  }>({});
+  /* The size as read off the drawings, before any project clamp. The upload
+     now happens before a project is chosen, so clamping at upload time would
+     bake the DEFAULT project's bounds into the number and a later project
+     choice could never recover the real figure (a 900 SF shop-home plan would
+     become 1,200 SF forever). The raw reading is kept here and re-clamped to
+     the actual project's range each time one is picked. */
+  const planSqftRaw = useRef<number | null>(null);
   /**
    * Refinements the drawings settled, applied over the subtype seed.
    *
@@ -751,6 +777,13 @@ export function EstimateCalculator({
     if (!el || typeof window === "undefined") return;
     const header = document.querySelector("header");
     const headerH = header ? header.getBoundingClientRect().height : 64;
+    /* Do not move the page when the target is already comfortably in view:
+       a scroll that lands where the visitor already is reads as a jump for
+       nothing, and on mobile (instant behaviour) it is disorienting. "In
+       view" means the heading sits below the sticky header and in the top
+       ~55% of the viewport, so the section's content is visible too. */
+    const rect = el.getBoundingClientRect();
+    if (rect.top >= headerH + 8 && rect.top <= window.innerHeight * 0.55) return;
     const top = el.getBoundingClientRect().top + window.scrollY - headerH - 16;
     const isDesktop = window.innerWidth >= 768;
     const prefersReducedMotion = window.matchMedia?.(
@@ -1000,7 +1033,10 @@ export function EstimateCalculator({
     setPlanningStage(stage);
     setChosen((p) => ({ ...p, stage: true }));
     fireEstimatorEngagement();
-    scheduleScroll(() => projectGridRef.current);
+    /* A visitor with drawings goes straight to the upload -- that is the whole
+       point of asking the stage first. Everyone else advances to the project. */
+    const hasDrawings = stage === "have-plans" || stage === "plans-in-progress";
+    scheduleScroll(() => (hasDrawings ? planUploadRef.current : projectGridRef.current));
   }
 
   /** Tick or untick a structure, keeping the per-structure detail on re-tick. */
@@ -1015,6 +1051,7 @@ export function EstimateCalculator({
       setOpenStructure(kind);
       return [...list, defaultAccessoryStructure(kind)];
     });
+    setPlanFilled((p) => (p.structures ? { ...p, structures: false } : p));
     setEdited(true);
   }
 
@@ -1070,16 +1107,51 @@ export function EstimateCalculator({
         return;
       }
 
-      const change = applyPlanToEstimate(plan, { min: sizeConfig.min, max: sizeConfig.max });
+      /* Before a project is chosen, clamp only to the union of every offered
+         project's range -- the visitor has not told us which bounds apply yet,
+         and the default project's must not be baked in. */
+      const bounds = chosen.project
+        ? { min: sizeConfig.min, max: sizeConfig.max }
+        : PROJECT_TYPE_ORDER.reduce(
+            (acc, t) => ({
+              min: Math.min(acc.min, PROJECT_SIZE_CONFIG[t].min),
+              max: Math.max(acc.max, PROJECT_SIZE_CONFIG[t].max),
+            }),
+            { min: Infinity, max: -Infinity },
+          );
+      const change = applyPlanToEstimate(plan, bounds);
 
-      if (change.sqft !== undefined) setSqft(change.sqft);
+      /* Anything the plans rewrite over an answer the visitor already gave is
+         stated back explicitly -- see planChanged. */
+      const changed: string[] = [];
+      const filled: typeof planFilled = {};
+      if (change.sqft !== undefined) {
+        if (chosen.subtype && change.sqft !== sqft) {
+          changed.push(
+            `Finished size updated from ${sqft.toLocaleString()} to ${change.sqft.toLocaleString()} sq ft`,
+          );
+        }
+        setSqft(change.sqft);
+        planSqftRaw.current = change.sqft;
+        filled.size = true;
+      }
       if (change.bathroomCount !== undefined) {
+        if (bathCount !== null && bathCount !== change.bathroomCount) {
+          changed.push(`Bathrooms updated from ${bathCount} to ${change.bathroomCount}`);
+        }
         setBathCount(change.bathroomCount);
         setBathCountConfirmed(true);
+        filled.baths = true;
       }
       if (change.accessoryStructures !== undefined) {
+        if (structures !== null && structures.length > 0) {
+          changed.push("Other structures updated to match your plans");
+        }
         setStructures(change.accessoryStructures);
+        filled.structures = true;
       }
+      setPlanChanged(changed);
+      setPlanFilled((prev) => ({ ...prev, ...filled }));
       /* stories, garage bays, covered outdoor and basement live in the subtype
          seed rather than in their own state, so they are carried as an override
          that buildRefinements applies last. Only fields the drawings settled are
@@ -1098,6 +1170,9 @@ export function EstimateCalculator({
       setPlanUnderstood(change.understood);
       setPlanUnresolved(change.unresolved);
       setEdited(true);
+      /* Land on the review summary rather than past it: the visitor reads what
+         the drawings settled before moving on. */
+      scheduleScroll(() => planUploadRef.current);
       trackEvent("estimator_plan_uploaded", {
         applied: change.applied.length,
         understood: change.understood.length,
@@ -1115,14 +1190,30 @@ export function EstimateCalculator({
     const sub = defaultSubtypeFor(type);
     setActiveProject(type);
     setSubtype(sub);
-    setSqft(SUBTYPE_DATA[type][sub].sqft);
+    /* A size read from the visitor's drawings outranks a card's preset: the
+       upload now happens before the project is picked, so this reset must not
+       clobber a plan-settled figure. Clamped to the new project's range. */
+    if (planFilled.size) {
+      const c = PROJECT_SIZE_CONFIG[type];
+      /* Re-clamp from the RAW plan reading, not the currently clamped value,
+         so switching projects can recover the figure the drawings stated. */
+      setSqft((s) => Math.max(c.min, Math.min(c.max, planSqftRaw.current ?? s)));
+    } else {
+      setSqft(SUBTYPE_DATA[type][sub].sqft);
+    }
     setAddOns([]);
     const avail = getAvailableFinishLevels(type);
     if (!avail.includes(finish)) setFinish("mid-range");
     setPeScope(null);
     setCabTier(null);
-    setBathCount(null);
-    setBathCountConfirmed(false);
+    /* A bathroom count read from the drawings is a fact about the home, not
+       about which project card is active -- same rule as plan-settled size
+       above. Clearing it here would silently discard the uploaded answer
+       before the bathroom step ever rendered its "from your plans" card. */
+    if (!planFilled.baths) {
+      setBathCount(null);
+      setBathCountConfirmed(false);
+    }
     setKitchenIn(null);
     // Changing the project invalidates the layout and finish choices made under
     // the previous one, so the visitor picks those again rather than inheriting.
@@ -1144,7 +1235,13 @@ export function EstimateCalculator({
     const data = SUBTYPE_DATA[activeProject]?.[id];
     if (data) {
       const c = PROJECT_SIZE_CONFIG[data.projectOverride ?? activeProject];
-      setSqft(Math.max(c.min, Math.min(c.max, data.sqft)));
+      /* Same rule as handleSelectProject: the layout preset must not overwrite
+         a size read from the drawings. */
+      if (planFilled.size) {
+        setSqft((s) => Math.max(c.min, Math.min(c.max, planSqftRaw.current ?? s)));
+      } else {
+        setSqft(Math.max(c.min, Math.min(c.max, data.sqft)));
+      }
       /*
        * Pre-tick the chips a lot type implies, so the preset and the chips agree.
        *
@@ -1206,6 +1303,9 @@ export function EstimateCalculator({
 
   function handleSqft(value: number) {
     setSqft(value);
+    /* Dragging the slider is the visitor taking the answer back from the
+       plans: their edit is authoritative from here on. */
+    setPlanFilled((p) => (p.size ? { ...p, size: false } : p));
     fireEstimatorEngagement();
   }
 
@@ -1278,6 +1378,34 @@ export function EstimateCalculator({
     () => getTypicalSelections(effectiveProject, finish),
     [effectiveProject, finish],
   );
+
+  /* Sizing the engine bakes in without asking: garage bays map to fixed areas,
+     a basement follows the main-floor footprint, a covered patio prices at a
+     set area, and front-yard landscaping with a driveway is always included.
+     Stated plainly so the estimate never rests on an assumption the visitor
+     was never shown. Mirrors resolve.ts (GARAGE_BAY_SQFT, basement footprint)
+     and newConstructionRules (landscape and driveway scope). */
+  const bakedAssumptions = useMemo(() => {
+    if (!isNewBuild) return [] as string[];
+    const a: string[] = [];
+    const bayAreas: Record<string, { word: string; sf: number }> = {
+      two: { word: "2", sf: 480 },
+      three: { word: "3", sf: 720 },
+      four: { word: "4", sf: 960 },
+    };
+    const bay = refinements.garageBays ? bayAreas[refinements.garageBays] : undefined;
+    if (bay) a.push(`An attached ${bay.word}-car garage, priced at about ${bay.sf} sq ft`);
+    if (refinements.basementType === "unfinished") {
+      a.push("An unfinished basement sized to the main-floor footprint");
+    } else if (refinements.basementType === "finished") {
+      a.push("A finished basement sized to the main-floor footprint, counted as living space");
+    }
+    if (refinements.coveredOutdoor && refinements.coveredOutdoor > 0) {
+      a.push(`A covered patio priced at about ${refinements.coveredOutdoor} sq ft`);
+    }
+    a.push("Driveway, walkways and front-yard landscaping (topsoil, sod, irrigation, plantings)");
+    return a;
+  }, [isNewBuild, refinements.garageBays, refinements.basementType, refinements.coveredOutdoor]);
 
   useEffect(() => {
     if (!chosen.finish || edited) return;
@@ -1357,14 +1485,17 @@ export function EstimateCalculator({
     planningStage === "have-plans" || planningStage === "plans-in-progress";
 
   /* Numbers are derived, never hardcoded, so a hidden step cannot leave a gap
-     in the sequence the visitor reads. "address" is step 2 -- it appears early
-     so the property lookup can pre-fill the size slider. */
+     in the sequence the visitor reads. Plan upload sits directly after the
+     stage question: a visitor who says "I have completed plans" hands them
+     over first, so the drawings answer questions before they are ever asked.
+     Address appears early so the property lookup can pre-fill the size
+     slider. */
   const visibleSteps: string[] = [
     "stage",
+    ...(showPlanUpload ? ["plans"] : []),
     "project",
     "address",
     "layout",
-    ...(showPlanUpload ? ["plans"] : []),
     "size",
     "upgrades",
     ...(showBathCount ? ["bathcount"] : []),
@@ -1729,10 +1860,12 @@ export function EstimateCalculator({
    */
   const planningStageStep = (
     <div className="mb-6">
-      {renderStepLabel("stage", "Where are you in the process?")}
+      {renderStepLabel("stage", "How far along are you?")}
       <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
-        We build every home from scratch, so this tells us which questions are
-        worth asking and how precise a range we can honestly give you.
+        This is about your planning, not the home itself -- you will pick the
+        type of build next. The further along you are, the tighter the range we
+        can honestly give you. If you already have drawings, you can hand them
+        over right after this and skip most of the questions.
       </p>
       <div className="grid gap-2.5" role="radiogroup" aria-label="Planning stage">
         {PLANNING_STAGES.map((stage) => {
@@ -1769,9 +1902,13 @@ export function EstimateCalculator({
   /* Step 2 - Project type: prominent card grid (matches the other inputs) */
   const projectGrid = (
     <div className="mb-6" ref={projectGridRef}>
-      {renderStepLabel("project", "Choose your project")}
+      {renderStepLabel("project", "What are we building?")}
+      <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
+        Now the home itself. Every one of these is a new build -- they differ in
+        how the design starts and where it goes.
+      </p>
       <div
-        className="grid grid-cols-2 sm:grid-cols-3 gap-2.5"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-2.5"
         role="tablist"
         aria-label="Project type"
       >
@@ -1792,7 +1929,12 @@ export function EstimateCalculator({
               <Icon
                 className={cn("h-5 w-5 flex-shrink-0", active ? "text-accent-legible" : "text-inverse-muted")}
               />
-              <span className="text-[15px] text-inverse-foreground leading-tight">{pc.tabLabel}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-[15px] text-inverse-foreground leading-tight">{pc.tabLabel}</span>
+                {pc.tabSub && (
+                  <span className="block text-[12px] text-inverse-muted mt-0.5">{pc.tabSub}</span>
+                )}
+              </span>
               {active && (
                 <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-accent-legible flex-shrink-0">
                   <Check className="h-3 w-3 text-inverse" />
@@ -1819,7 +1961,7 @@ export function EstimateCalculator({
               Free
             </span>
             <span className="opacity-40" aria-hidden>·</span>
-            <span>About 60 seconds</span>
+            <span>About 2 minutes</span>
             <span className="opacity-40" aria-hidden>·</span>
             <span>No obligation</span>
           </div>
@@ -1929,7 +2071,48 @@ export function EstimateCalculator({
   /* Step 4 - Size: a precise sqft slider (cost is very size-sensitive). The chosen
      layout pre-sets a smart default; the slider fine-tunes for accuracy. */
   const sizePct = ((sqft - sizeConfig.min) / (sizeConfig.max - sizeConfig.min)) * 100;
-  const sizeGrid = (
+  /* One-line "answered by your plans" card. Collapsing rather than hiding: the
+     visitor sees the answer is recorded, where it came from, and how to take
+     it back. Editing clears the plan mark, which re-expands the control and
+     makes the visitor's input authoritative from then on. */
+  const planFilledCard = (
+    label: string,
+    value: string,
+    onEdit: () => void,
+    testId: string,
+  ) => (
+    <div
+      className="flex items-center gap-3 rounded-md border border-accent-legible/40 bg-accent/10 px-4 py-3.5"
+      data-testid={testId}
+    >
+      <Check className="h-4 w-4 flex-shrink-0 text-accent-legible" />
+      <div className="min-w-0 flex-1">
+        <span className="block text-[14px] text-inverse-foreground leading-tight">
+          {label}: {value}
+        </span>
+        <span className="block text-[11.5px] text-inverse-muted mt-0.5">From your plans</span>
+      </div>
+      <button
+        type="button"
+        onClick={onEdit}
+        className="flex-shrink-0 text-[12.5px] text-inverse-foreground underline underline-offset-2 hover:opacity-80"
+        data-testid={`${testId}-edit`}
+      >
+        Edit
+      </button>
+    </div>
+  );
+  const sizeGrid = planFilled.size ? (
+    <div className="mt-6 scroll-mt-20" ref={sizeRef}>
+      {renderStepLabel("size", isNewBuild ? "Finished square feet?" : "About how big?")}
+      {planFilledCard(
+        "Finished size",
+        `${sqft.toLocaleString()} sq ft`,
+        () => setPlanFilled((p) => ({ ...p, size: false })),
+        "calc-planfilled-size",
+      )}
+    </div>
+  ) : (
     <div className="mt-6 scroll-mt-20" ref={sizeRef}>
       <div className="flex items-baseline justify-between mb-3">
         {renderStepLabel(
@@ -2103,7 +2286,17 @@ export function EstimateCalculator({
 
   /* Whole-home: bathroom count. The published whole-home rate already assumes
      two, so this prices the difference rather than the whole thing. */
-  const bathCountRow = (
+  const bathCountRow = planFilled.baths && bathCount !== null ? (
+    <div className="mt-5 scroll-mt-20" ref={bathRef}>
+      {renderStepLabel("bathcount", "How many bathrooms?")}
+      {planFilledCard(
+        "Bathrooms",
+        String(bathCount),
+        () => setPlanFilled((p) => ({ ...p, baths: false })),
+        "calc-planfilled-baths",
+      )}
+    </div>
+  ) : (
     <div className="mt-5 scroll-mt-20" ref={bathRef}>
       {renderStepLabel("bathcount", "How many bathrooms?")}
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
@@ -2132,6 +2325,8 @@ export function EstimateCalculator({
               onClick={() => {
                 setBathCount(n);
                 setBathCountConfirmed(true);
+                /* Tapping a count takes the answer back from the plans. */
+                setPlanFilled((p) => (p.baths ? { ...p, baths: false } : p));
                 fireEstimatorEngagement();
                 /* Advance to the next step in sequence: kitchen if that
                    question is shown and unanswered, otherwise finish level. */
@@ -2232,6 +2427,25 @@ export function EstimateCalculator({
           </li>
         ))}
       </ul>
+      {bakedAssumptions.length > 0 && (
+        <>
+          <p className="mt-4 text-[12px] tracking-[0.1em] uppercase text-inverse-muted">
+            Sizing we assumed
+          </p>
+          <ul className="mt-1.5 space-y-1.5" data-testid="baked-assumptions">
+            {bakedAssumptions.map((item, i) => (
+              <li key={i} className="flex items-start gap-2 text-[13px] text-inverse-muted leading-snug">
+                <span className="mt-0.5 text-inverse-muted/90" aria-hidden>•</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-1.5 text-[11.5px] text-inverse-muted/90 leading-relaxed">
+            These are typical figures, not questions we skipped on purpose --
+            your plans or a site visit refine them.
+          </p>
+        </>
+      )}
       <button
         type="button"
         onClick={() => setEditOpen((v) => !v)}
@@ -2261,7 +2475,19 @@ export function EstimateCalculator({
    * set of questions, and only the ones that apply - "attached" is not offered
    * for a barn, because there is no such thing.
    */
-  const structuresStep = (
+  const structuresStep = planFilled.structures ? (
+    <div className="mb-6" ref={structuresRef}>
+      {renderStepLabel("structures", "Any other structures?")}
+      {planFilledCard(
+        "Other structures",
+        (structures ?? []).length > 0
+          ? (structures ?? []).map((s) => ACCESSORY_STRUCTURE_LABELS[s.kind].label).join(", ")
+          : "None",
+        () => setPlanFilled((p) => ({ ...p, structures: false })),
+        "calc-planfilled-structures",
+      )}
+    </div>
+  ) : (
     <div className="mb-6" ref={structuresRef}>
       {renderStepLabel("structures", "Any other structures?")}
       <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
@@ -2452,9 +2678,10 @@ export function EstimateCalculator({
       {renderStepLabel("plans", "Upload your plans")}
       <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
         {planningStage === "have-plans"
-          ? "We will read the cover sheet and floor plans and fill in the rest of this form. It also tightens your range, because size and layout stop being assumptions."
+          ? "We will read them and fill in most of the questions below for you -- size, bathrooms and other structures stop being questions and start being facts. It also tightens your range."
           : "Even a working set helps. We will read what is settled and leave the rest to you."}{" "}
-        Optional, and your team gets the files either way.
+        The cover sheet, floor plans and elevations are the most useful pages.
+        Optional -- you can skip this and answer the questions instead.
       </p>
 
       <label
@@ -2478,10 +2705,15 @@ export function EstimateCalculator({
           }}
         />
         <span className="text-[14px] text-inverse-foreground">
-          {planBusy ? "Reading your plans..." : "Choose files"}
+          {planBusy ? "Uploading and reading your plans..." : "Choose files"}
         </span>
         <span className="text-[12px] text-inverse-muted">{READABLE_FORMATS_LABEL}</span>
       </label>
+      {planBusy && (
+        <p className="mt-2 text-[12px] text-inverse-muted" role="status" data-testid="calc-plan-busy">
+          This usually takes under half a minute. Your files are saved either way.
+        </p>
+      )}
 
       {planStored.length > 0 && (
         <p className="mt-2 text-[12px] text-inverse-muted" data-testid="calc-plan-stored">
@@ -2530,8 +2762,24 @@ export function EstimateCalculator({
               </p>
             </>
           )}
+          {planChanged.length > 0 && (
+            <div className="mt-3 rounded-sm border border-accent-legible/50 bg-accent/15 px-3 py-2.5" data-testid="calc-plan-changed">
+              <p className="text-[12px] uppercase tracking-[0.12em] text-accent-legible mb-1.5">
+                Changed from your earlier answers
+              </p>
+              <ul className="space-y-1">
+                {planChanged.map((line) => (
+                  <li key={line} className="text-[13px] text-inverse-foreground">
+                    {line}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <p className="mt-2.5 text-[12px] text-inverse-muted">
-            Everything below is still yours to change.
+            Review what we filled in, then continue below -- anything the plans
+            answered shows as pre-filled with an Edit link, and everything is
+            still yours to change.
           </p>
         </div>
       )}
@@ -2609,9 +2857,26 @@ export function EstimateCalculator({
                 Typical resale return for this project type: about {result.roi}%.
               </p>
             ) : (
-              <p className="mt-2.5 text-[14px] text-inverse-muted">
-                Excludes land. Covers the home, the site work and the finishes described below.
-              </p>
+              <div className="mt-2.5 space-y-1" data-testid="range-included-excluded">
+                <p className="text-[13.5px] text-inverse-muted leading-relaxed">
+                  <span className="text-inverse-foreground/90">Includes:</span>{" "}
+                  the home and attached garage, foundation and site work,
+                  complete plumbing, electrical and HVAC, driveway, walkways and
+                  front-yard landscaping.
+                </p>
+                <p className="text-[13.5px] text-inverse-muted leading-relaxed">
+                  <span className="text-inverse-foreground/90">Excludes:</span>{" "}
+                  land, appliances, impact and utility connection fees, and
+                  landscaping beyond the front yard -- full list below.
+                </p>
+                {(refinements.accessoryStructures?.length ?? 0) > 0 && (
+                  <p className="text-[12.5px] text-inverse-muted/90 leading-relaxed" data-testid="accessory-allowance-note">
+                    Detached structures in this range are priced as a rough
+                    market allowance, not builder-verified pricing -- they are
+                    the least firm part of this number until we see the site.
+                  </p>
+                )}
+              </div>
             )}
             {/* Always visible, never behind a toggle: a homeowner must not be
                 able to leave this screen thinking they were given a price. */}
@@ -3011,7 +3276,8 @@ export function EstimateCalculator({
               Your estimate is ready
             </p>
             <p className="text-[13px] text-inverse-muted mt-0.5">
-              Enter your info below to see it
+              Tell us where to send it -- we show it here and email you a copy.
+              Your details go to our team, never to lists or third parties.
             </p>
           </div>
         </div>
@@ -3092,7 +3358,7 @@ export function EstimateCalculator({
             <div className="rounded-md border border-inverse-foreground/15 bg-inverse-foreground/[0.04] px-4 py-3">
               <p className="text-[11px] text-inverse-muted/90 mb-0.5 uppercase tracking-wide">Property address</p>
               <p className="text-[13.5px] text-inverse-foreground leading-snug">{gateAddress}</p>
-              <p className="mt-1 text-[11px] text-inverse-muted/90">Scroll to step 2 to update.</p>
+              <p className="mt-1 text-[11px] text-inverse-muted/90">Scroll up to the address step to update.</p>
             </div>
           ) : (
             <div>
@@ -3188,10 +3454,10 @@ export function EstimateCalculator({
       {/* Each step appears only once the one before it has been answered, so a
           visitor is never presented with a pre-filled choice they did not make
           and cannot reach an estimate without selecting every input. */}
+      {chosen.stage && showPlanUpload && planUploadStep}
       {chosen.stage && projectGrid}
       {chosen.project && addressStep}
       {chosen.project && subtypeGrid}
-      {chosen.subtype && showPlanUpload && planUploadStep}
       {chosen.subtype && sizeGrid}
       {chosen.subtype && chipsRow}
       {chosen.subtype && showBathCount && bathCountRow}

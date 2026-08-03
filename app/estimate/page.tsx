@@ -82,7 +82,7 @@ export default function EstimatePage() {
         </h1>
         <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed">
           Answer a few questions about the home you want to build and get an instant planning range
-          based on real Treasure Valley construction costs - takes about 60 seconds, no obligation.
+          based on real Treasure Valley construction costs - takes about 2 minutes, no obligation.
         </p>
       </PageHeroBand>
 
