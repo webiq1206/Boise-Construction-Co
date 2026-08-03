@@ -59,4 +59,4 @@ Design-build means one accountable team handles architectural design, engineerin
 - [RSS feed](https://boiseremodeling.co/feed.xml): guides and articles, newest first, with publication and revision dates.
 - [Full text for LLMs](https://boiseremodeling.co/llms-full.txt): expanded reference copy of the core facts.
 
-Last updated: 2026-08-02.
+Last updated: 2026-08-03.
