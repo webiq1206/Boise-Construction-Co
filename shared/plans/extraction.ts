@@ -111,6 +111,16 @@ export interface ExtractedStructure {
  * so "the drawings do not say" has a representation that is not zero. Zero and
  * null are different answers here: a cover sheet stating COVERED EXT. SPACE 0 SF
  * is a fact, and a set that never mentions covered space is not.
+ *
+ * CONFORMS TO WHAT THE ANTHROPIC STRUCTURED-OUTPUT VALIDATOR ACCEPTS, which is
+ * narrower than JSON Schema at large and is the reason this file mirrors the
+ * shape of the working RE-10 schema rather than the richer form it started as.
+ * Two constructs it rejects, learned the hard way against the live API: an array
+ * typed `["array","null"]` (arrays are a plain `"array"` and made required, so
+ * "none" is an empty array, never null), and `null` listed inside an `enum`
+ * (nullable-by-omission instead - the field is left out of `required` and simply
+ * absent when unknown). A schema using either fails the request in about a
+ * second, before the model reads a single page.
  */
 export const PLAN_EXTRACTION_SCHEMA = {
   type: "object",
@@ -129,9 +139,9 @@ export const PLAN_EXTRACTION_SCHEMA = {
         "Conditioned living area in square feet, as printed. Usually labelled LIVABLE, HEATED, or FINISHED. Excludes garage and covered outdoor space. Null if not stated.",
     },
     floorAreas: {
-      type: ["array", "null"],
+      type: "array",
       items: { type: "number" },
-      description: "Per-floor living areas in order, ground floor first, only when the set states them separately.",
+      description: "Per-floor living areas in order, ground floor first, only when the set states them separately. Empty array if only a total is given.",
     },
     storiesAboveGrade: { type: ["number", "null"], description: "Count of storeys of living space above grade. A basement does not count." },
     mainCeilingHeightFt: {
@@ -156,39 +166,39 @@ export const PLAN_EXTRACTION_SCHEMA = {
     fullBathrooms: { type: ["number", "null"], description: "Bathrooms with a shower or tub." },
     halfBathrooms: { type: ["number", "null"], description: "Powder rooms: toilet and basin only." },
     rooms: {
-      type: ["array", "null"],
+      type: "array",
       items: { type: "string" },
       description:
         "Notable rooms beyond bedrooms and bathrooms, exactly as labelled on the floor plans: office, den, bonus room, loft, flex, mudroom, pantry, gym, theater, wine room, shop, RV bay. List every one you can read. Empty array if the plans are unlabelled.",
     },
     specialFeatures: {
-      type: ["array", "null"],
+      type: "array",
       items: { type: "string" },
       description:
         "Cost- or scope-relevant features drawn or scheduled: each fireplace, uncovered deck, porch, patio, outdoor kitchen, pool, vaulted or tall ceiling, elevator, solar. Free text as read. Empty array if none.",
     },
 
     basement: {
-      type: ["string", "null"],
-      enum: ["none", "unfinished", "finished", null],
+      type: "string",
+      enum: ["none", "unfinished", "finished"],
       description:
-        "'finished' when the basement is drawn as living space, 'unfinished' when it is shell or storage, 'none' for slab or crawlspace. Null if the drawings do not show the foundation type.",
+        "'finished' when the basement is drawn as living space, 'unfinished' when it is shell or storage, 'none' for slab or crawlspace. OMIT this field entirely if the drawings do not show the foundation type.",
     },
 
     accessoryStructures: {
-      type: ["array", "null"],
+      type: "array",
       items: {
         type: "object",
         properties: {
           label: { type: "string", description: "As labelled on the drawings: SHOP, DETACHED GARAGE, ADU, BARN, POOL HOUSE." },
           sqft: { type: ["number", "null"] },
-          attached: { type: ["boolean", "null"], description: "True if it shares a wall with the house." },
+          attached: { type: "boolean", description: "True if it shares a wall with the house. Omit if the drawings do not make it clear." },
         },
         required: ["label"],
         additionalProperties: false,
       },
       description:
-        "Separate buildings drawn on the site plan. Do NOT include the attached garage here; that is garageSqft. Omit structures the plans note as existing and not part of this work.",
+        "Separate buildings drawn on the site plan. Empty array if there are none. Do NOT include the attached garage here; that is garageSqft. Omit structures the plans note as existing and not part of this work.",
     },
 
     confidence: {
@@ -203,7 +213,19 @@ export const PLAN_EXTRACTION_SCHEMA = {
       description: "Anything a human should know: pages that would not render, conflicting area figures, a set that stops at schematic.",
     },
   },
-  required: ["isNewConstruction", "confidence", "notes"],
+  // Arrays are required and non-nullable, matching the working RE-10 schema: the
+  // model always returns them, empty when there is nothing to report, so "none"
+  // is [] rather than a missing or null field. Scalars stay optional and
+  // nullable, which the validator does accept.
+  required: [
+    "isNewConstruction",
+    "floorAreas",
+    "rooms",
+    "specialFeatures",
+    "accessoryStructures",
+    "confidence",
+    "notes",
+  ],
   additionalProperties: false,
 } as const;
 
