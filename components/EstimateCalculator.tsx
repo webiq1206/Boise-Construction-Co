@@ -1079,12 +1079,16 @@ export function EstimateCalculator({
       }
       /* stories, garage bays, covered outdoor and basement live in the subtype
          seed rather than in their own state, so they are carried as an override
-         that buildRefinements applies last. */
-      setPlanOverrides({
-        stories: change.stories,
-        garageBays: change.garageBays,
-        coveredOutdoor: change.coveredOutdoor,
-        basementType: change.basementType,
+         that buildRefinements applies last. Only fields the drawings settled are
+         written: a second, sparser upload must not blank what the first one
+         read, so undefined values are dropped rather than assigned. */
+      setPlanOverrides((prev) => {
+        const next = { ...prev };
+        if (change.stories !== undefined) next.stories = change.stories;
+        if (change.garageBays !== undefined) next.garageBays = change.garageBays;
+        if (change.coveredOutdoor !== undefined) next.coveredOutdoor = change.coveredOutdoor;
+        if (change.basementType !== undefined) next.basementType = change.basementType;
+        return next;
       });
 
       setPlanApplied(change.applied);
