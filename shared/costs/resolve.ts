@@ -50,7 +50,9 @@ export interface ResolverRefinements {
   /* New construction. */
   stories?: number | null;
   garageBays?: unknown;
+  garageSqft?: number | null;
   basementType?: unknown;
+  basementSqft?: number | null;
   lotServices?: unknown;
   siteDifficulty?: unknown;
   utilitiesAtLot?: unknown;
@@ -74,10 +76,22 @@ function toSelections(
    * the two together would either charge shell rates for living space or living
    * rates for a bare shell.
    */
+  const footprint = sqft / Math.max(1, Math.round(refinements.stories ?? 1));
+  /*
+   * A stated partial-basement size outranks the full-footprint assumption, but
+   * is clamped to the footprint: a basement cannot be larger than the floor it
+   * sits under, and an unclamped wire value would multiply concrete rates.
+   */
+  const statedBasement =
+    typeof refinements.basementSqft === "number" &&
+    Number.isFinite(refinements.basementSqft) &&
+    refinements.basementSqft > 0
+      ? Math.min(footprint, Math.round(refinements.basementSqft))
+      : null;
   const basementSqft =
     basementType === "unfinished" || basementType === "finished"
-      ? // A basement follows the ground-floor footprint.
-        sqft / Math.max(1, Math.round(refinements.stories ?? 1))
+      ? // A basement follows the ground-floor footprint unless a size is given.
+        (statedBasement ?? footprint)
       : 0;
 
   return {
@@ -93,10 +107,19 @@ function toSelections(
     // The company does not sell or install appliances; see APPLIANCE_DISCLAIMER.
 
     stories: refinements.stories ?? null,
+    // A stated approximate garage size outranks the per-bay preset; clamped
+    // because it multiplies shell rates in the takeoff. Only applies when a
+    // garage is actually selected, so a stray size cannot invent one.
     garageSqft:
-      refinements.garageBays == null
-        ? null
-        : (GARAGE_BAY_SQFT[refinements.garageBays as GarageBays] ?? null),
+      refinements.garageBays == null || refinements.garageBays === "none"
+        ? refinements.garageBays === "none"
+          ? 0
+          : null
+        : typeof refinements.garageSqft === "number" &&
+            Number.isFinite(refinements.garageSqft) &&
+            refinements.garageSqft > 0
+          ? Math.min(2400, Math.round(refinements.garageSqft))
+          : (GARAGE_BAY_SQFT[refinements.garageBays as GarageBays] ?? null),
     // Only an unfinished basement is carried as basement shell area; a finished
     // one has already been added to finished area above.
     basementSqft: basementType === "unfinished" ? basementSqft : 0,

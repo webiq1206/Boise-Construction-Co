@@ -82,6 +82,12 @@ export const refinementsSchema = z
 
     /* --------------------------------------- new residential construction */    garageBays: z.enum(["none", "two", "three", "four"]).nullable().optional(),
     basementType: z.enum(["none", "unfinished", "finished"]).nullable().optional(),
+    // Approximate garage / partial-basement sizes. Bounded like coveredOutdoor
+    // below: both multiply a rate in the takeoff, so an absurd figure from the
+    // wire must not move the estimate. 2,400 SF is an 8+ bay garage; 6,000 SF
+    // outruns any residential footprint this estimator prices.
+    garageSqft: z.number().int().min(0).max(2_400).nullable().optional(),
+    basementSqft: z.number().int().min(0).max(6_000).nullable().optional(),
     lotServices: z.enum(["city", "well-septic", "unsure"]).nullable().optional(),
     siteDifficulty: z.enum(["simple", "moderate", "steep"]).nullable().optional(),
     utilitiesAtLot: z.boolean().nullable().optional(),

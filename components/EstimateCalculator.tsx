@@ -501,6 +501,17 @@ const DEFAULT_PROJECT: ProjectType = "custom-home";
  * The one inference kept is the whole-home "Layout" chip, because that chip
  * literally says layout: ticking it is a direct statement, not a guess.
  */
+/**
+ * A typed "about how big" square footage, or null when blank or nonsense.
+ * Clamped because every one of these multiplies a rate in the takeoff, so a
+ * stray extra zero must widen the range plausibly rather than absurdly.
+ */
+function parseApproxSqft(raw: string, min: number, max: number): number | null {
+  const n = Number(raw.replace(/[,\s]/g, ""));
+  if (!Number.isFinite(n) || n <= 0) return null;
+  return Math.max(min, Math.min(max, Math.round(n)));
+}
+
 /* The paths where the visitor already owns the land, so site conditions are a
    question we can genuinely ask rather than infer from a lot-type card. */
 function isLotOwnedProject(project: ProjectType): boolean {
@@ -632,6 +643,20 @@ export function EstimateCalculator({
   const [siteWater, setSiteWater]         = useState<"city" | "well-septic" | "unsure" | null>(null);
   const [siteUtilities, setSiteUtilities] = useState<"yes" | "no" | "unsure" | null>(null);
   const [siteDriveway, setSiteDriveway]   = useState<"short" | "medium" | "long" | "unsure" | null>(null);
+  /*
+   * SIZE FINE-TUNING, new-construction paths.
+   *
+   * Garage bays used to be settled silently by the layout preset and the
+   * "3+ car garage" chip, the basement was silently assumed to match the
+   * ground-floor footprint, and the patio was silently 300 SF. These let the
+   * visitor state what they actually want; null / "" means "not stated" and
+   * keeps the previous assumption, so nothing moves until they type or tap.
+   */
+  const [garageBaysChoice, setGarageBaysChoice] = useState<"two" | "three" | "four" | null>(null);
+  const [garageSqftInput, setGarageSqftInput]   = useState<string>("");
+  const [basementSize, setBasementSize]         = useState<"full" | "partial">("full");
+  const [basementSqftInput, setBasementSqftInput] = useState<string>("");
+  const [patioSqftInput, setPatioSqftInput]     = useState<string>("");
   const [finish, setFinish]               = useState<FinishLevel>("mid-range");
   const [budgetInput, setBudgetInput]     = useState<string>("");
   /* Nothing is pre-selected for the visitor. The state above still holds
@@ -938,6 +963,30 @@ export function EstimateCalculator({
        statement about their land, so they outrank both the layout card and
        anything read off drawings (plans do not know the lot). Unanswered
        questions stay null and price the simple/city case. */
+    /* Size fine-tuning lands LAST on new-build paths: an explicitly picked bay
+       count or typed square footage is the visitor's own statement, so it
+       outranks the layout preset, the chips, and anything read off drawings.
+       Untouched controls contribute null and change nothing. */
+    if (isNewConstructionProject(effectiveProject)) {
+      if (garageBaysChoice) merged.garageBays = garageBaysChoice;
+      merged.garageSqft =
+        merged.garageBays && merged.garageBays !== "none"
+          ? parseApproxSqft(garageSqftInput, 100, 2400)
+          : null;
+      /* "Partial" must always price as partial: with no size typed yet it
+         defaults to half the ground-floor footprint (disclosed in the input's
+         placeholder and the assumptions list), so the tap itself moves the
+         range instead of silently falling back to the full-footprint preset. */
+      const footprintSf = Math.round(sqft / Math.max(1, Math.round(merged.stories ?? 1)));
+      merged.basementSqft =
+        merged.basementType && merged.basementType !== "none" && basementSize === "partial"
+          ? (parseApproxSqft(basementSqftInput, 100, 6000) ?? Math.max(100, Math.round(footprintSf / 2)))
+          : null;
+      if (merged.coveredOutdoor && merged.coveredOutdoor > 0) {
+        const patio = parseApproxSqft(patioSqftInput, 50, 4000);
+        if (patio !== null) merged.coveredOutdoor = patio;
+      }
+    }
     if (isLotOwnedProject(effectiveProject)) {
       merged.siteDifficulty =
         siteSlope === "flat" ? "simple"
@@ -958,6 +1007,8 @@ export function EstimateCalculator({
     effectiveProject, activeProject, subtype, addOns, peScope, cabTier, bathCount, kitchenIn,
     planningStage, structures, planOverrides,
     siteSlope, siteWater, siteUtilities, siteDriveway,
+    garageBaysChoice, garageSqftInput, basementSize, basementSqftInput, patioSqftInput,
+    sqft,
   ]);
 
   const userRefinementCount = useMemo(
@@ -1269,6 +1320,13 @@ export function EstimateCalculator({
       setSqft(SUBTYPE_DATA[type][sub].sqft);
     }
     setAddOns([]);
+    /* Size fine-tuning answers describe the previous project's garage,
+       basement and patio, so they reset with the chips they refine. */
+    setGarageBaysChoice(null);
+    setGarageSqftInput("");
+    setBasementSize("full");
+    setBasementSqftInput("");
+    setPatioSqftInput("");
     const avail = getAvailableFinishLevels(type);
     if (!avail.includes(finish)) setFinish("mid-range");
     setPeScope(null);
@@ -1324,6 +1382,9 @@ export function EstimateCalculator({
           implied.push("bigger-garage");
         }
         setAddOns(implied);
+        /* The chips just got re-seeded from the card, so an explicit bay count
+           picked under the previous layout no longer describes this one. */
+        setGarageBaysChoice(null);
       }
     }
     fireEstimatorEngagement();
@@ -1364,6 +1425,34 @@ export function EstimateCalculator({
         return next;
       });
     }
+    /* Tapping a chip is the more recent statement than the fine-tuning it
+       governs, so the fine-tuning resets rather than silently overriding it. */
+    if (id === "bigger-garage") setGarageBaysChoice(null);
+    if (id === "basement") {
+      setBasementSize("full");
+      setBasementSqftInput("");
+    }
+    if (id === "covered-patio") setPatioSqftInput("");
+    fireEstimatorEngagement();
+  }
+
+  /** An explicit bay count: outranks the preset and the chip, and keeps the
+      "3+ car garage" chip visually consistent with what was picked. */
+  function handlePickGarageBays(bays: "two" | "three" | "four") {
+    setGarageBaysChoice(bays);
+    setAddOns((prev) => {
+      const has = prev.includes("bigger-garage");
+      if (bays === "two") return has ? prev.filter((c) => c !== "bigger-garage") : prev;
+      return has ? prev : [...prev, "bigger-garage"];
+    });
+    /* Same rule as CHIP_SUPERSEDES: the tap is more recent than the drawings. */
+    setPlanOverrides((prev) => {
+      if (prev.garageBays === undefined) return prev;
+      const next = { ...prev };
+      delete next.garageBays;
+      return next;
+    });
+    setEdited(true);
     fireEstimatorEngagement();
   }
 
@@ -1460,18 +1549,28 @@ export function EstimateCalculator({
       four: { word: "4", sf: 960 },
     };
     const bay = refinements.garageBays ? bayAreas[refinements.garageBays] : undefined;
-    if (bay) a.push(`An attached ${bay.word}-car garage, priced at about ${bay.sf} sq ft`);
+    if (bay) {
+      const sf = refinements.garageSqft && refinements.garageSqft > 0 ? refinements.garageSqft : bay.sf;
+      a.push(`An attached ${bay.word}-car garage, priced at about ${sf} sq ft`);
+    }
+    const basementSized =
+      refinements.basementSqft && refinements.basementSqft > 0
+        ? `partial basement of about ${refinements.basementSqft.toLocaleString()} sq ft`
+        : "basement sized to the main-floor footprint";
     if (refinements.basementType === "unfinished") {
-      a.push("An unfinished basement sized to the main-floor footprint");
+      a.push(`An unfinished ${basementSized}`);
     } else if (refinements.basementType === "finished") {
-      a.push("A finished basement sized to the main-floor footprint, counted as living space");
+      a.push(`A finished ${basementSized}, counted as living space`);
     }
     if (refinements.coveredOutdoor && refinements.coveredOutdoor > 0) {
       a.push(`A covered patio priced at about ${refinements.coveredOutdoor} sq ft`);
     }
     a.push("Driveway, walkways and front-yard landscaping (topsoil, sod, irrigation, plantings)");
     return a;
-  }, [isNewBuild, refinements.garageBays, refinements.basementType, refinements.coveredOutdoor]);
+  }, [
+    isNewBuild, refinements.garageBays, refinements.garageSqft,
+    refinements.basementType, refinements.basementSqft, refinements.coveredOutdoor,
+  ]);
 
   useEffect(() => {
     if (!chosen.finish || edited) return;
@@ -2341,6 +2440,132 @@ export function EstimateCalculator({
     </div>
   );
 
+  /* Size fine-tuning for new builds: garage bays, basement size and patio size
+     were hidden presets (480/720/960 SF bays, full-footprint basement, 300 SF
+     patio). These controls state them and let the visitor adjust; every value
+     feeds the line-item engine, so changing one visibly moves the range. */
+  const approxInputClass =
+    "w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-3 py-2.5 text-[16px] text-inverse-foreground placeholder:text-[13px] placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors";
+  const GARAGE_PRESET_SF: Record<string, number> = { two: 480, three: 720, four: 960 };
+  const sizeFineTuning = (
+    <div className="mt-4 space-y-4">
+      <div>
+        <p className="mb-2 text-[12px] tracking-[0.08em] uppercase text-inverse-muted/90">
+          Garage size
+        </p>
+        <div className="grid grid-cols-3 gap-2">
+          {([
+            { value: "two" as const, label: "2-car", sub: "About 480 sq ft" },
+            { value: "three" as const, label: "3-car", sub: "About 720 sq ft" },
+            { value: "four" as const, label: "4-car +", sub: "About 960 sq ft" },
+          ]).map((opt) => {
+            const active = refinements.garageBays === opt.value;
+            return (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => handlePickGarageBays(opt.value)}
+                data-testid={`calc-garage-bays-${opt.value}`}
+                aria-pressed={active}
+                className={cn(
+                  darkChoice(active),
+                  "py-2.5 px-2 min-h-[56px] flex flex-col items-center justify-center gap-0.5",
+                )}
+              >
+                <span className="text-[13px] text-inverse-foreground leading-tight">{opt.label}</span>
+                <span className="text-[10.5px] text-inverse-muted leading-tight">{opt.sub}</span>
+              </button>
+            );
+          })}
+        </div>
+        {refinements.garageBays && refinements.garageBays !== "none" && (
+          <div className="mt-2">
+            <input
+              type="text"
+              inputMode="numeric"
+              autoComplete="off"
+              value={garageSqftInput}
+              onChange={(e) => setGarageSqftInput(e.target.value.replace(/[^\d,]/g, ""))}
+              placeholder={`Know the size? About ${GARAGE_PRESET_SF[refinements.garageBays] ?? 480} sq ft assumed (optional)`}
+              className={approxInputClass}
+              data-testid="calc-garage-sqft"
+              aria-label="Approximate garage size in square feet (optional)"
+            />
+          </div>
+        )}
+      </div>
+      {refinements.basementType && refinements.basementType !== "none" && (
+        <div>
+          <p className="mb-2 text-[12px] tracking-[0.08em] uppercase text-inverse-muted/90">
+            Basement size
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {([
+              { value: "full" as const, label: "Full", sub: "Matches the main floor" },
+              { value: "partial" as const, label: "Partial", sub: "Under part of the home" },
+            ]).map((opt) => {
+              const active = basementSize === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => {
+                    setBasementSize(opt.value);
+                    if (opt.value === "full") setBasementSqftInput("");
+                    setEdited(true);
+                    fireEstimatorEngagement();
+                  }}
+                  data-testid={`calc-basement-size-${opt.value}`}
+                  aria-pressed={active}
+                  className={cn(
+                    darkChoice(active),
+                    "py-2.5 px-2 min-h-[56px] flex flex-col items-center justify-center gap-0.5",
+                  )}
+                >
+                  <span className="text-[13px] text-inverse-foreground leading-tight">{opt.label}</span>
+                  <span className="text-[10.5px] text-inverse-muted leading-tight">{opt.sub}</span>
+                </button>
+              );
+            })}
+          </div>
+          {basementSize === "partial" && (
+            <div className="mt-2">
+              <input
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                value={basementSqftInput}
+                onChange={(e) => setBasementSqftInput(e.target.value.replace(/[^\d,]/g, ""))}
+                placeholder={`About how many sq ft? Half the main floor (about ${Math.max(100, Math.round(sqft / Math.max(1, Math.round(refinements.stories ?? 1)) / 2)).toLocaleString()} sq ft) assumed until you say`}
+                className={approxInputClass}
+                data-testid="calc-basement-sqft"
+                aria-label="Approximate basement size in square feet"
+              />
+            </div>
+          )}
+        </div>
+      )}
+      {refinements.coveredOutdoor != null && refinements.coveredOutdoor > 0 && (
+        <div>
+          <p className="mb-2 text-[12px] tracking-[0.08em] uppercase text-inverse-muted/90">
+            Covered patio size
+          </p>
+          <input
+            type="text"
+            inputMode="numeric"
+            autoComplete="off"
+            value={patioSqftInput}
+            onChange={(e) => setPatioSqftInput(e.target.value.replace(/[^\d,]/g, ""))}
+            placeholder="About 300 sq ft assumed. Know yours? (optional)"
+            className={approxInputClass}
+            data-testid="calc-patio-sqft"
+            aria-label="Approximate covered patio size in square feet (optional)"
+          />
+        </div>
+      )}
+    </div>
+  );
+
   /* Step 4 - Upgrades (optional add-ons) */
   const chipsRow = (
     <div className="mt-5 scroll-mt-20" ref={chipsRef}>
@@ -2380,6 +2605,7 @@ export function EstimateCalculator({
           );
         })}
       </div>
+      {isNewBuild && sizeFineTuning}
     </div>
   );
 

@@ -313,8 +313,20 @@ export interface EstimateRefinements {
 
   /** Attached garage, asked in bays. */
   garageBays: GarageBays | null;
+  /**
+   * Approximate garage size in square feet, when the visitor knows it. null
+   * falls back to the per-bay preset (GARAGE_BAY_SQFT), so the bays question
+   * alone still prices; a stated size simply outranks the preset.
+   */
+  garageSqft: number | null;
   /** Basement, and whether it is finished living space or shell only. */
   basementType: BasementType | null;
+  /**
+   * Approximate basement size in square feet for a PARTIAL basement. null
+   * means the basement follows the full ground-floor footprint, which was the
+   * only (silent) option before this field existed.
+   */
+  basementSqft: number | null;
   /** City water and sewer, or a well and septic system. */
   lotServices: LotServices | null;
   /** How much earthwork and access the site needs. */
@@ -951,10 +963,18 @@ function buildNewConstructionDisclosure(input: EstimateInput): EstimateDisclosur
   );
   assumptions.push(`${finishLabel} finishes, with material and fixture allowances set to that level`);
   if (r.garageBays && r.garageBays !== "none") {
-    assumptions.push(`An attached ${GARAGE_BAY_WORD[r.garageBays]}-car garage`);
+    assumptions.push(
+      r.garageSqft && r.garageSqft > 0
+        ? `An attached ${GARAGE_BAY_WORD[r.garageBays]}-car garage of about ${Math.round(r.garageSqft).toLocaleString("en-US")} sq ft`
+        : `An attached ${GARAGE_BAY_WORD[r.garageBays]}-car garage`,
+    );
   }
-  if (r.basementType === "finished") assumptions.push("A finished basement, counted as living space");
-  else if (r.basementType === "unfinished") assumptions.push("An unfinished (shell) basement");
+  const basementSize =
+    r.basementSqft && r.basementSqft > 0
+      ? `partial basement of about ${Math.round(r.basementSqft).toLocaleString("en-US")} sq ft`
+      : "basement sized to the main-floor footprint";
+  if (r.basementType === "finished") assumptions.push(`A finished ${basementSize}, counted as living space`);
+  else if (r.basementType === "unfinished") assumptions.push(`An unfinished (shell) ${basementSize}`);
   else if (r.basementType === "none") assumptions.push("A slab or crawlspace foundation, no basement");
 
   if (cityUtilities) assumptions.push("Municipal water and sewer available at the lot line");
@@ -1121,7 +1141,9 @@ export const EMPTY_REFINEMENTS: EstimateRefinements = {
   aduConfig: null,
   upgradeScope: null,
   garageBays: null,
+  garageSqft: null,
   basementType: null,
+  basementSqft: null,
   lotServices: null,
   siteDifficulty: null,
   utilitiesAtLot: null,

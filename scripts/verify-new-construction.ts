@@ -418,6 +418,32 @@ const perSf = (s: ScopeSelections, rules = CUSTOM_HOME_RULES, project = "custom-
   t("resolver/well-septic-adds", quote("custom-home", { lotServices: "well-septic" })!.priceLow > baseQuote.priceLow);
   t("resolver/steep-adds", quote("custom-home", { siteDifficulty: "steep" })!.priceLow > baseQuote.priceLow);
 
+  // Size fine-tuning must reach the line-item engine, not just the UI.
+  // A stated approximate garage size outranks the per-bay preset.
+  t("resolver/garage-sqft-overrides-preset",
+    quote("custom-home", { garageBays: "three", garageSqft: 1400 })!.priceLow >
+      quote("custom-home", { garageBays: "three" })!.priceLow);
+  // A partial basement (explicit SF below the footprint) must price BELOW the
+  // full-footprint assumption it replaces, for both shell and finished.
+  t("resolver/partial-basement-prices-below-full",
+    quote("custom-home", { basementType: "unfinished", basementSqft: 800 })!.priceLow <
+      quote("custom-home", { basementType: "unfinished" })!.priceLow);
+  t("resolver/partial-finished-basement-prices-below-full",
+    quote("custom-home", { basementType: "finished", basementSqft: 800 })!.priceLow <
+      quote("custom-home", { basementType: "finished" })!.priceLow);
+  // But still above no basement at all.
+  t("resolver/partial-basement-still-adds",
+    quote("custom-home", { basementType: "unfinished", basementSqft: 800 })!.priceLow >
+      baseQuote.priceLow);
+  // A stated basement size cannot exceed the ground-floor footprint.
+  t("resolver/basement-clamped-to-footprint",
+    quote("custom-home", { basementType: "unfinished", basementSqft: 50_000 })!.priceLow ===
+      quote("custom-home", { basementType: "unfinished" })!.priceLow);
+  // Patio size is a real input: a bigger patio must quote higher.
+  t("resolver/patio-size-moves-the-price",
+    quote("custom-home", { coveredOutdoor: 800 })!.priceLow >
+      quote("custom-home", { coveredOutdoor: 300 })!.priceLow);
+
   // A finished basement is living space and must cost more than the same
   // basement left as a shell.
   t("resolver/finished-basement-beats-unfinished",
