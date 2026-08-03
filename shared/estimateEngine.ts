@@ -1181,6 +1181,26 @@ export const PLANNING_DETAIL_LABELS: Record<ConfidenceLevel, string> = {
 export const CONFIDENCE_LABELS = PLANNING_DETAIL_LABELS;
 
 /**
+ * What the range is called, by how much is actually known.
+ *
+ * PLANNING_DETAIL_LABELS above is derived from how many questions were
+ * answered, which stopped being the right basis once the band came from the
+ * planning stage. The two disagreed in the worst direction: someone still
+ * deciding whether to build, who answered everything, read "Detailed planning
+ * range" above the widest band on the site, while someone holding stamped
+ * drawings who answered little read "Starting guidance" above the tightest.
+ *
+ * The label is what a visitor uses to judge how far to trust the number, so it
+ * follows the band rather than their diligence in filling in a form.
+ */
+export const PLANNING_STAGE_RANGE_LABELS: Record<PlanningStage, string> = {
+  "have-plans": "Detailed planning range",
+  "plans-in-progress": "Refined planning range",
+  "need-plans": "Early planning range",
+  exploring: "Starting guidance",
+};
+
+/**
  * Base ranges per project x finish at baseline size. Disallowed combinations
  * (refresh for new construction) are intentionally absent; always resolve
  * prices through `getPriceData`, which normalizes the finish first.
@@ -2184,7 +2204,13 @@ export function calculateEstimate(input: EstimateInput, userRefinementCount = 0)
     roi: base.roi,
     included: buildDynamicScope(safeInput),
     confidence: level,
-    confidenceLabel: PLANNING_DETAIL_LABELS[level],
+    /* Stage first: it is what sets the band, and the label has to agree with the
+       band or it is telling the visitor the opposite of what the number does.
+       Falls back to the answer-count label for estimates with no stage, which
+       is everything stored before the estimator asked. */
+    confidenceLabel: input.refinements.planningStage
+      ? PLANNING_STAGE_RANGE_LABELS[input.refinements.planningStage]
+      : PLANNING_DETAIL_LABELS[level],
     confidencePercent: percent,
     refinementsApplied: userRefinementCount,
   };
