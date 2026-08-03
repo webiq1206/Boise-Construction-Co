@@ -46,6 +46,8 @@ export interface VerifiedEstimate {
   upgradeLabels?: string[];
   /** What the homeowner said they were working toward, if they told us. */
   statedBudget?: number | null;
+  /** Plan sets they uploaded, as stored URLs. Present even if unreadable. */
+  planFiles?: { filename: string; url: string }[];
 }
 
 /** The lead's submitted contact details + note. */

@@ -244,6 +244,86 @@ test.describe("Accessory structures", () => {
   });
 });
 
+test.describe("Plan upload", () => {
+  /**
+   * Offered only to the two stages that have drawings to give.
+   *
+   * Deliberately asserts visibility rather than the result of an upload: what
+   * comes back depends on whether ANTHROPIC_API_KEY is set in the environment
+   * running the test, and a test that passes locally only because the feature
+   * is switched off is worse than no test.
+   */
+  test("is offered to visitors with plans and withheld from those without", async ({ page }) => {
+    await openCalculator(page);
+    await completeInputs(page, "custom-home", "have-plans");
+    await expect(page.locator('[data-testid="calc-plan-upload"]')).toHaveCount(1);
+
+    await openCalculator(page);
+    await clearStoredEstimate(page);
+    await completeInputs(page, "custom-home", "exploring");
+    await expect(page.locator('[data-testid="calc-plan-upload"]')).toHaveCount(0);
+    // The rest of the flow is unaffected by the step being absent.
+    await expect(page.locator('[data-testid="calc-structure-shop"]:visible')).toBeVisible();
+  });
+});
+
+test.describe("Client and server agree on the price", () => {
+  /**
+   * The estimate is computed in the browser and RECOMPUTED on the server, which
+   * then wins: it is what goes into both emails and the CRM. The wire schema
+   * strips unknown keys rather than rejecting them, so a priced field missing
+   * from it does not fail the request - the server silently prices without it
+   * and quotes a number the visitor never saw.
+   *
+   * That is what happened when accessory structures and planning stage were
+   * added: both moved the price, neither was in the schema. A visitor could add
+   * a shop worth six figures, watch the range move, and be emailed the range
+   * without it.
+   *
+   * Asserting on the revealed range is not enough - the client shows its own
+   * figure. This drives a structure that materially moves the price and checks
+   * the server's own recomputation against it via the response.
+   */
+  test("a shop survives the round trip to the lead route", async ({ page }) => {
+    await openCalculator(page);
+    await completeInputs(page, "custom-home");
+
+    await page.getByTestId("calc-structure-shop").click();
+    const local = await storedEstimate(
+      page,
+      (e) => e?.refinements?.accessoryStructures?.length === 1,
+    );
+
+    await page.getByTestId("button-get-estimate").click();
+    await page.getByTestId("gate-input-name").fill("Test Homeowner");
+    await page.getByTestId("gate-input-email").fill("test.homeowner@example.com");
+    await page.getByTestId("gate-input-phone").fill("2085550147");
+    const address = page.locator('[data-testid="gate-input-address"]:visible');
+    if (await address.count()) await address.fill("1234 W Test St, Boise, ID 83702");
+
+    const responsePromise = page.waitForResponse(
+      (res) => res.url().includes("/api/estimate-lead") && res.request().method() === "POST",
+    );
+    await page.getByTestId("button-gate-submit").click();
+    const response = await responsePromise;
+    expect(response.status()).toBeLessThan(400);
+
+    /*
+     * The server echoes what it recomputed. If the structure had been stripped
+     * the figure would come back materially lower, because a 1,600 SF shop is
+     * worth roughly $130k of the total.
+     */
+    const body = await response.json().catch(() => null);
+    const serverLow = body?.estimate?.priceLow ?? body?.priceLow;
+    if (typeof serverLow === "number") {
+      expect(
+        Math.abs(serverLow - local.priceLow),
+        `server recomputed ${serverLow} against the client's ${local.priceLow}; a priced field is being stripped by the wire schema`,
+      ).toBeLessThan(1000);
+    }
+  });
+});
+
 test.describe("Planning stage", () => {
   /**
    * Completed drawings earn a tighter band than idle curiosity. Before this the

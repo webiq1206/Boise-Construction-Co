@@ -59,6 +59,14 @@ export interface LeadEstimateRecord {
   /** The disclaimers shown on screen and in the email, verbatim. */
   disclaimers: string[];
   /**
+   * Plan sets the visitor uploaded, as stored URLs.
+   *
+   * On a lead from someone holding drawings this is the most useful thing in
+   * the whole record: it is the difference between a first call that starts
+   * from a square-foot band and one that starts from the actual house.
+   */
+  planFiles: { filename: string; url: string }[];
+  /**
    * Component breakdown of the range midpoint: what work, what quantity, what
    * it typically costs. Lets the team compare the estimate against a real bid
    * line by line instead of arguing about one total.
@@ -116,6 +124,7 @@ export function buildLeadEstimateRecord(
     projectType: est.project,
     projectLabel: PROJECT_LABELS[est.project].label,
     layout: est.layoutLabel,
+    planFiles: est.planFiles ?? [],
     sizeSqft: est.sqft,
     finishLevel: est.finish,
     finishLabel: FINISH_LABELS[est.finish].label,

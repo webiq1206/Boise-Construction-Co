@@ -2205,6 +2205,15 @@ export interface StoredEstimate extends EstimateInput {
    */
   layoutLabel?: string;
   upgradeLabels?: string[];
+  /**
+   * Plan sets the visitor uploaded, as stored blob URLs.
+   *
+   * Present whenever files were attached, including when the extractor could
+   * not read them or read them as a remodel: the team wants the drawings on the
+   * lead either way, and losing them because the automatic read failed would be
+   * the worst outcome of a feature meant to save everybody a phone call.
+   */
+  planFiles?: { filename: string; url: string }[];
 }
 
 export function buildStoredEstimate(input: EstimateInput, userRefinementCount = 0): StoredEstimate {

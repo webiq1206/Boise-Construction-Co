@@ -21,6 +21,7 @@ import type {
   ProjectType,
   FinishLevel,
   UserRefinementKey,
+  EstimateRefinements,
 } from "./estimateEngine";
 
 /**
@@ -89,6 +90,46 @@ export const refinementsSchema = z
     // build would specify.
     coveredOutdoor: z.number().int().min(0).max(4_000).nullable().optional(),
     shopSize: z.number().int().min(0).max(20_000).nullable().optional(),
+
+    /*
+     * BOTH OF THESE MOVE THE PRICE, so both must be listed here.
+     *
+     * Zod strips unknown keys rather than rejecting them, which is the exact
+     * trap described at the top of this file. Omitting these would not fail a
+     * request: the server would quietly recompute without them and quote a
+     * different number than the visitor was shown. planningStage sets the width
+     * of the band, and a single accessory structure is routinely six figures.
+     */
+    planningStage: z
+      .enum(["have-plans", "plans-in-progress", "need-plans", "exploring"])
+      .nullable()
+      .optional(),
+    accessoryStructures: z
+      .array(
+        z.object({
+          kind: z.enum([
+            "adu",
+            "detached-garage",
+            "shop",
+            "rv-garage",
+            "guest-house",
+            "pool-house",
+            "barn",
+            "other",
+          ]),
+          // Bounded for the same reason coveredOutdoor is: this is a square
+          // footage the takeoff multiplies a rate by.
+          sqft: z.number().int().min(0).max(20_000),
+          finish: finishLevelSchema.nullable().optional(),
+          attached: z.boolean().optional(),
+          plumbing: z.boolean().optional(),
+          power: z.enum(["none", "standard", "heavy"]).optional(),
+          heated: z.boolean().optional(),
+        }),
+      )
+      .max(8)
+      .nullable()
+      .optional(),
   })
   .optional()
   .nullable();
@@ -103,6 +144,22 @@ type AcceptedRefinementKey = keyof NonNullable<
 >;
 type MissingRefinement = Exclude<UserRefinementKey, AcceptedRefinementKey>;
 const _allRefinementsCovered: MissingRefinement extends never ? true : never = true;
+
+/**
+ * The stronger check, and the one that would have caught the last omission.
+ *
+ * UserRefinementKey above covers the things the estimator counts toward its
+ * detail score, which is not the same set as the things that move the price.
+ * planningStage and accessoryStructures are both priced and neither is a
+ * UserRefinementKey, so they were added to EstimateRefinements and silently
+ * stripped here - the server recomputing a range without the shop the visitor
+ * had just added.
+ *
+ * This asserts against the engine's own refinement shape instead, so any field
+ * added there fails the build until it is accepted over the wire.
+ */
+type UnacceptedRefinement = Exclude<keyof EstimateRefinements, AcceptedRefinementKey>;
+const _everyEngineRefinementCovered: UnacceptedRefinement extends never ? true : never = true;
 
 /** The estimate object shared by both lead routes. */
 export const estimateSchema = z.object({
@@ -121,6 +178,16 @@ export const estimateSchema = z.object({
   // selection verbatim without trusting the client.
   layoutLabel: z.string().max(60).optional(),
   upgradeLabels: z.array(z.string().max(40)).max(12).optional(),
+  /*
+   * Plan sets the visitor uploaded. Accepted loosely here and then checked for
+   * provenance in the route: this schema's job is to let a well-formed payload
+   * through, and deciding whether a URL is one we issued is not something a
+   * shape check can do.
+   */
+  planFiles: z
+    .array(z.object({ filename: z.string().max(200), url: z.string().max(2000) }))
+    .max(12)
+    .optional(),
 });
 
 export type EstimatePayload = z.infer<typeof estimateSchema>;
@@ -129,3 +196,4 @@ export type EstimatePayload = z.infer<typeof estimateSchema>;
 void _allProjectsCovered;
 void _allFinishesCovered;
 void _allRefinementsCovered;
+void _everyEngineRefinementCovered;

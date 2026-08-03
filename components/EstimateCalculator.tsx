@@ -66,6 +66,9 @@ import {
   ACCESSORY_STRUCTURE_LABELS,
   defaultAccessoryStructure,
 } from "@/shared/estimateEngine";
+import type { ExtractedPlan } from "@/shared/plans/extraction";
+import { applyPlanToEstimate } from "@/shared/plans/applyToEstimate";
+import { UPLOAD_ACCEPT, READABLE_FORMATS_LABEL } from "@/shared/re10/uploads";
 import { trackEvent, trackMetaEvent } from "@/lib/analytics";
 import { GRAIN_URL } from "@/lib/grain";
 import {
@@ -634,6 +637,36 @@ export function EstimateCalculator({
   const [structures, setStructures] = useState<AccessoryStructure[] | null>(null);
   /** Which structure's follow-up questions are expanded. */
   const [openStructure, setOpenStructure] = useState<AccessoryStructureKind | null>(null);
+
+  /*
+   * PLAN UPLOAD, offered only to the two stages that have drawings.
+   *
+   * `planStored` is kept even when extraction fails, because the files are
+   * filed against the lead either way and the team wants the drawings whatever
+   * the model made of them. `planApplied` is what the visitor is shown: a form
+   * that silently rewrites six of its own answers while they watch is alarming
+   * even when every new value is correct.
+   */
+  const [planBusy, setPlanBusy] = useState(false);
+  const [planError, setPlanError] = useState<string | null>(null);
+  const [planApplied, setPlanApplied] = useState<string[] | null>(null);
+  const [planUnresolved, setPlanUnresolved] = useState<string[]>([]);
+  const [planStored, setPlanStored] = useState<{ filename: string; url: string }[]>([]);
+  const [planIsRemodel, setPlanIsRemodel] = useState(false);
+  /**
+   * Refinements the drawings settled, applied over the subtype seed.
+   *
+   * Storeys, garage bays, covered outdoor area and basement type have no state
+   * of their own - they are implied by the layout card and the add-on chips - so
+   * a plan reading cannot simply call a setter. They are held here and merged
+   * last, which means they outrank the subtype seed, which is correct: a fact
+   * read off the visitor's own drawings should beat the layout card's guess.
+   *
+   * Because they merge last they would also outrank the CHIPS, which is not
+   * correct, so handleToggleChip drops the matching override when one is tapped.
+   * See CHIP_SUPERSEDES.
+   */
+  const [planOverrides, setPlanOverrides] = useState<Partial<EstimateRefinements>>({});
   /* Bathroom count and kitchen inclusion are REQUIRED wherever they are shown.
      Leaving them optional meant a skipped answer silently priced at whatever
      the published rate happens to assume, which is an assumption made on the
@@ -685,6 +718,7 @@ export function EstimateCalculator({
      smooth-scroll is unreliable); smooth on desktop. */
   const projectGridRef = useRef<HTMLDivElement>(null);
   const structuresRef  = useRef<HTMLDivElement>(null);
+  const planUploadRef  = useRef<HTMLDivElement>(null);
   const addressStepRef = useRef<HTMLDivElement>(null);
   const layoutRef      = useRef<HTMLDivElement>(null);
   const sizeRef        = useRef<HTMLDivElement>(null);
@@ -808,13 +842,20 @@ export function EstimateCalculator({
     const base = data
       ? buildRefinements(effectiveProject, subtype, addOns, data.refinements, peScope, cabTier, bathCount, kitchenIn)
       : { ...EMPTY_REFINEMENTS };
+    /* Plan overrides land on top of the subtype seed but BELOW nothing else:
+       they are facts read off the visitor's own drawings, so they outrank the
+       layout card's assumptions. Undefined keys are stripped first so an
+       override that the plans did not settle cannot blank a seeded value. */
+    const overrides = Object.fromEntries(
+      Object.entries(planOverrides).filter(([, v]) => v !== undefined),
+    );
     /* Attached to every estimate, including the incomplete one, so the band and
        the structure pricing follow the visitor's answers rather than lagging a
        step behind them. */
-    return { ...base, planningStage, accessoryStructures: structures };
+    return { ...base, ...overrides, planningStage, accessoryStructures: structures };
   }, [
     effectiveProject, activeProject, subtype, addOns, peScope, cabTier, bathCount, kitchenIn,
-    planningStage, structures,
+    planningStage, structures, planOverrides,
   ]);
 
   const userRefinementCount = useMemo(
@@ -982,6 +1023,84 @@ export function EstimateCalculator({
     setEdited(true);
   }
 
+  /**
+   * Send the drawings up, then apply whatever they settled.
+   *
+   * Nothing here overwrites a value the visitor set unless the plans actually
+   * state it: applyPlanToEstimate returns only the fields the drawings
+   * answered, and every key is checked for undefined before it is used. A
+   * schematic set that states no areas leaves the form exactly as it was.
+   */
+  async function handlePlanUpload(fileList: FileList | null) {
+    if (!fileList || fileList.length === 0) return;
+    setPlanBusy(true);
+    setPlanError(null);
+    setPlanApplied(null);
+    setPlanUnresolved([]);
+    setPlanIsRemodel(false);
+
+    const body = new FormData();
+    for (const f of Array.from(fileList)) body.append("files", f);
+
+    try {
+      const res = await fetch("/api/plans/analyze", { method: "POST", body });
+      const data = await res.json();
+
+      // Files are stored before analysis, so a failed read still leaves the
+      // team holding the drawings. Record them whatever the status was.
+      if (Array.isArray(data.stored)) setPlanStored(data.stored);
+
+      if (!res.ok) {
+        setPlanError(data.message ?? "We could not read that plan set.");
+        return;
+      }
+
+      const plan = data.plan as ExtractedPlan;
+
+      /* A remodel set read as a new build would price an entire house the
+         client never asked for, so this stops rather than applying anything. */
+      if (!plan.isNewConstruction) {
+        setPlanIsRemodel(true);
+        setPlanError(
+          "Those drawings look like a remodel or addition rather than a new home, so we have not changed your answers. We have kept the files and can price that work separately.",
+        );
+        return;
+      }
+
+      const change = applyPlanToEstimate(plan, { min: sizeConfig.min, max: sizeConfig.max });
+
+      if (change.sqft !== undefined) setSqft(change.sqft);
+      if (change.bathroomCount !== undefined) {
+        setBathCount(change.bathroomCount);
+        setBathCountConfirmed(true);
+      }
+      if (change.accessoryStructures !== undefined) {
+        setStructures(change.accessoryStructures);
+      }
+      /* stories, garage bays, covered outdoor and basement live in the subtype
+         seed rather than in their own state, so they are carried as an override
+         that buildRefinements applies last. */
+      setPlanOverrides({
+        stories: change.stories,
+        garageBays: change.garageBays,
+        coveredOutdoor: change.coveredOutdoor,
+        basementType: change.basementType,
+      });
+
+      setPlanApplied(change.applied);
+      setPlanUnresolved(change.unresolved);
+      setEdited(true);
+      trackEvent("estimator_plan_uploaded", {
+        applied: change.applied.length,
+        files: fileList.length,
+      });
+    } catch {
+      setPlanError("Could not reach the plan review service. Try again in a moment.");
+    } finally {
+      setPlanBusy(false);
+    }
+  }
+
   function handleSelectProject(type: ProjectType) {
     if (type === activeProject && chosen.project) return;
     const sub = defaultSubtypeFor(type);
@@ -1047,8 +1166,32 @@ export function EstimateCalculator({
     fireEstimatorEngagement();
   }
 
+  /**
+   * Which plan reading a chip supersedes.
+   *
+   * The chips and the plan overrides both write the same refinements, and the
+   * overrides merge last so they would otherwise win permanently: someone whose
+   * drawings showed a two-bay garage could tap "bigger garage" and watch
+   * nothing happen. Tapping a chip is the more recent statement of intent, so
+   * it drops the plan's reading of that one field and leaves the rest alone.
+   */
+  const CHIP_SUPERSEDES: Record<string, keyof EstimateRefinements> = {
+    basement: "basementType",
+    "bigger-garage": "garageBays",
+    "covered-patio": "coveredOutdoor",
+  };
+
   function handleToggleChip(id: string) {
     setAddOns((prev) => (prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]));
+    const superseded = CHIP_SUPERSEDES[id];
+    if (superseded) {
+      setPlanOverrides((prev) => {
+        if (prev[superseded] === undefined) return prev;
+        const next = { ...prev };
+        delete next[superseded];
+        return next;
+      });
+    }
     fireEstimatorEngagement();
   }
 
@@ -1194,6 +1337,16 @@ export function EstimateCalculator({
     if (chosen.subtype && structures === null) setStructures([]);
   }, [chosen.subtype, structures]);
 
+  /*
+   * Plan upload is offered only to the two stages that have drawings to give.
+   *
+   * Declared here rather than beside the section it renders, because
+   * visibleSteps below reads it and the step numbering would hit a temporal
+   * dead zone otherwise.
+   */
+  const showPlanUpload =
+    planningStage === "have-plans" || planningStage === "plans-in-progress";
+
   /* Numbers are derived, never hardcoded, so a hidden step cannot leave a gap
      in the sequence the visitor reads. "address" is step 2 -- it appears early
      so the property lookup can pre-fill the size slider. */
@@ -1202,6 +1355,7 @@ export function EstimateCalculator({
     "project",
     "address",
     "layout",
+    ...(showPlanUpload ? ["plans"] : []),
     "size",
     "upgrades",
     ...(showBathCount ? ["bathcount"] : []),
@@ -1271,11 +1425,17 @@ export function EstimateCalculator({
         statedBudget: budgetValue,
         layoutLabel: selectedLayoutLabel,
         upgradeLabels: selectedUpgradeLabels,
+        /* Carried so the lead record and the internal email can link the
+           drawings. Stored even when extraction failed or the set turned out to
+           be a remodel: the files are filed against the lead either way, and a
+           builder wants to open them before the first call regardless of what
+           the extractor made of them. */
+        planFiles: planStored,
       }),
     );
     window.dispatchEvent(new CustomEvent("brc_estimate_updated"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allChosen, effectiveProject, finish, sqft, refinements, userRefinementCount]);
+  }, [allChosen, effectiveProject, finish, sqft, refinements, userRefinementCount, planStored]);
 
   /* Scroll to the gate CTA (or result panel for returning visitors) the first
      time all required choices are made. Must live after allChosen is defined.
@@ -2278,6 +2438,97 @@ export function EstimateCalculator({
     </div>
   );
 
+  const planUploadStep = (
+    <div className="mb-6" ref={planUploadRef}>
+      {renderStepLabel("plans", "Upload your plans")}
+      <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
+        {planningStage === "have-plans"
+          ? "We will read the cover sheet and floor plans and fill in the rest of this form. It also tightens your range, because size and layout stop being assumptions."
+          : "Even a working set helps. We will read what is settled and leave the rest to you."}{" "}
+        Optional, and your team gets the files either way.
+      </p>
+
+      <label
+        className={cn(
+          darkChoice(false),
+          "flex items-center justify-center gap-3 px-4 py-6 cursor-pointer text-center",
+          planBusy && "opacity-60 pointer-events-none",
+        )}
+      >
+        <input
+          type="file"
+          multiple
+          accept={UPLOAD_ACCEPT}
+          className="sr-only"
+          disabled={planBusy}
+          data-testid="calc-plan-upload"
+          onChange={(e) => {
+            void handlePlanUpload(e.target.files);
+            // Cleared so re-picking the same file fires change again.
+            e.target.value = "";
+          }}
+        />
+        <span className="text-[14px] text-inverse-foreground">
+          {planBusy ? "Reading your plans..." : "Choose files"}
+        </span>
+        <span className="text-[12px] text-inverse-muted">{READABLE_FORMATS_LABEL}</span>
+      </label>
+
+      {planStored.length > 0 && (
+        <p className="mt-2 text-[12px] text-inverse-muted" data-testid="calc-plan-stored">
+          Attached: {planStored.map((f) => f.filename).join(", ")}
+        </p>
+      )}
+
+      {planError && (
+        <p
+          className={cn(
+            "mt-3 text-[13px] rounded-md px-3 py-2.5",
+            planIsRemodel
+              ? "text-inverse-foreground bg-accent/10 border border-accent-legible/40"
+              : "text-inverse-muted bg-inverse-foreground/[0.06] border border-accent-legible/20",
+          )}
+          role="status"
+          data-testid="calc-plan-error"
+        >
+          {planError}
+        </p>
+      )}
+
+      {planApplied && planApplied.length > 0 && (
+        <div
+          className="mt-3 rounded-md border border-accent-legible/40 bg-accent/10 px-3.5 py-3"
+          role="status"
+          data-testid="calc-plan-applied"
+        >
+          <p className="text-[12px] uppercase tracking-[0.12em] text-accent-legible mb-2">
+            Read from your plans
+          </p>
+          <ul className="space-y-1">
+            {planApplied.map((line) => (
+              <li key={line} className="text-[13px] text-inverse-foreground">
+                {line}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2.5 text-[12px] text-inverse-muted">
+            Everything below is still yours to change.
+          </p>
+        </div>
+      )}
+
+      {planUnresolved.length > 0 && (
+        <ul className="mt-2 space-y-1" data-testid="calc-plan-unresolved">
+          {planUnresolved.map((line) => (
+            <li key={line} className="text-[12px] text-inverse-muted">
+              {line}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+
   const finishRow = (
     <div className="mt-5 scroll-mt-20" ref={finishRef}>
       {renderStepLabel("finish", "Finish level")}
@@ -2917,6 +3168,7 @@ export function EstimateCalculator({
       {chosen.stage && projectGrid}
       {chosen.project && addressStep}
       {chosen.project && subtypeGrid}
+      {chosen.subtype && showPlanUpload && planUploadStep}
       {chosen.subtype && sizeGrid}
       {chosen.subtype && chipsRow}
       {chosen.subtype && showBathCount && bathCountRow}

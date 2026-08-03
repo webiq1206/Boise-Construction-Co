@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { MAX_UPLOAD_FILES } from "@/shared/re10/uploads";
 import { db } from "@/lib/db";
 import { consultationRequests } from "@/shared/schema";
 import { getUncachableEmailClient } from "@/server/services/emailTransport";
@@ -112,7 +113,43 @@ function verifyEstimate(
     included: recomputed.included,
     layoutLabel: estimate.layoutLabel,
     upgradeLabels: estimate.upgradeLabels,
+    planFiles: verifyPlanFiles(estimate.planFiles),
   };
+}
+
+/**
+ * Keep plan links to URLs this application actually issued.
+ *
+ * The rest of verifyEstimate exists because a client-supplied estimate cannot
+ * be trusted, and a list of URLs is the same class of problem one step further
+ * on: these are rendered into the internal email and the lead record, so an
+ * arbitrary link here puts an attacker-chosen destination in front of whoever
+ * opens the lead.
+ *
+ * Deliberately NOT isStoredDocumentUrl from shared/re10/uploads. Despite the
+ * name that function accepts any well-formed http(s) URL - it exists to stop a
+ * malformed value failing the request, not to establish provenance. The two
+ * shapes below are the only things lib/storage/blob.ts returns: a root-relative
+ * path into our own document route, or a Vercel Blob host.
+ */
+function verifyPlanFiles(raw: unknown): { filename: string; url: string }[] {
+  if (!Array.isArray(raw)) return [];
+  const out: { filename: string; url: string }[] = [];
+  for (const f of raw) {
+    if (!f || typeof f !== "object") continue;
+    const { filename, url } = f as { filename?: unknown; url?: unknown };
+    if (typeof filename !== "string" || typeof url !== "string") continue;
+    if (url.length > 2000) continue;
+
+    const ours =
+      url.startsWith("/api/documents/") ||
+      /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\//i.test(url);
+    if (!ours) continue;
+
+    out.push({ filename: filename.slice(0, 200), url });
+    if (out.length >= MAX_UPLOAD_FILES) break;
+  }
+  return out;
 }
 
 export async function POST(request: NextRequest) {
