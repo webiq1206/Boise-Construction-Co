@@ -1334,10 +1334,13 @@ export const FINISH_LABELS: Record<FinishLevel, { label: string; sub: string }> 
  * suite are keyed on them; only the display names change.
  */
 export const NEW_CONSTRUCTION_FINISH_LABELS: Record<FinishLevel, { label: string; sub: string }> = {
-  refresh: { label: "Essential", sub: "Well built, efficiently specified" },
-  "mid-range": { label: "Signature", sub: "Our standard specification" },
-  "high-end": { label: "Premium", sub: "Custom cabinetry, stone, hardwood" },
-  luxury: { label: "Bespoke", sub: "Specified room by room" },
+  /* The subs state concretely what each tier includes: finish level is a
+     major cost driver no plan set can state, so it is always asked, and the
+     cards must make the roughly 2x-per-tier swing understandable. */
+  refresh: { label: "Essential", sub: "Well built, value finishes: laminate counters, LVP and carpet, painted trim" },
+  "mid-range": { label: "Signature", sub: "Our standard spec: quartz counters, tile showers, solid-core doors" },
+  "high-end": { label: "Premium", sub: "Custom cabinetry, stone and hardwood, tall ceilings, upgraded windows" },
+  luxury: { label: "Bespoke", sub: "Specified room by room with your designer, no allowances" },
 };
 
 export function getFinishLabels(project: ProjectType): Record<FinishLevel, { label: string; sub: string }> {

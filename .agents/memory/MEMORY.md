@@ -3,3 +3,4 @@
 - [Address field validation](address-field-validation.md) — never store raw geocoder formattedAddress in the regex-validated form field; always run buildCleanAddress first.
 - [Two pricing engines](two-pricing-engines.md) — the quoted range comes from the line-item engine in shared/costs, not estimateEngine; new pricing inputs must be wired there or they silently do nothing.
 - [Catalog per-SF basis](catalog-per-sf-basis.md) — catalog SF rates are sometimes whole-dwelling per-finished-SF budgets and sometimes real per-surface trade rates; mixing them up silently triples a trade.
+- [Playwright on Nix](playwright-on-nix.md) — downloaded chromium can't load shared libs; run e2e with PLAYWRIGHT_CHROMIUM_PATH pointing at the Nix-built chrome.

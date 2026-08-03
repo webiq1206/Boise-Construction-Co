@@ -478,8 +478,26 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
  * what the company does. Add a type here only when it is genuinely for sale.
  */
 const PROJECT_TYPE_ORDER: ProjectType[] = [
-  "custom-home", "semi-custom-home", "build-on-your-lot", "shop-home",
+  /* "Build on My Lot" is deliberately absent: owning land is a situation, not
+     a kind of home, so it is asked as its own early question. A landowner who
+     picks "Custom Home" is priced through the build-on-your-lot rule set via
+     resolveProjectType below, so the grid shows only genuine home types while
+     the quoted range stays exactly what the old BOL card produced. */
+  "custom-home", "semi-custom-home", "shop-home",
 ];
+
+/** The card a given internal project type belongs to on the grid. */
+function cardTypeOf(p: ProjectType): ProjectType {
+  return p === "build-on-your-lot" ? "custom-home" : p;
+}
+
+/** Land ownership + tapped card -> the internal project type the engine prices. */
+function resolveProjectType(
+  card: ProjectType,
+  ownership: "own" | "not-yet" | null,
+): ProjectType {
+  return ownership === "own" && card === "custom-home" ? "build-on-your-lot" : card;
+}
 
 /** The project the estimator opens on. */
 const DEFAULT_PROJECT: ProjectType = "custom-home";
@@ -512,12 +530,6 @@ function parseApproxSqft(raw: string, min: number, max: number): number | null {
   return Math.max(min, Math.min(max, Math.round(n)));
 }
 
-/* The paths where the visitor already owns the land, so site conditions are a
-   question we can genuinely ask rather than infer from a lot-type card. */
-function isLotOwnedProject(project: ProjectType): boolean {
-  return project === "build-on-your-lot" || project === "shop-home";
-}
-
 function buildRefinements(
   effectiveProject: ProjectType,
   _subtype: string,
@@ -527,6 +539,10 @@ function buildRefinements(
   cabinetTier: CabinetTier | null,
   bathroomCount: number | null,
   kitchenIncluded: boolean | null,
+  /* Whether the visitor already owns the land. When they do, the site
+     questions (asked on every owned-land path, whatever the home type) are
+     the authority on water and sewer, so the chip must not fight them. */
+  ownsLand: boolean,
 ): EstimateRefinements {
   const ref: EstimateRefinements = { ...EMPTY_REFINEMENTS, ...subtypeRef };
 
@@ -553,10 +569,10 @@ function buildRefinements(
       ref.garageBays = "two";
     }
     ref.coveredOutdoor = addOns.includes("covered-patio") ? 300 : 0;
-    /* Lot-owned paths ask about water and sewer in the site questions instead
+    /* Owned-land paths ask about water and sewer in the site questions instead
        of a chip, and those answers are merged after this function runs. For
        the other new-build paths the chip remains the authority. */
-    if (isLotOwnedProject(effectiveProject)) {
+    if (ownsLand) {
       ref.lotServices = null;
     } else {
       ref.lotServices = addOns.includes("well-septic") ? "well-septic" : "city";
@@ -684,6 +700,7 @@ export function EstimateCalculator({
   const [editOpen, setEditOpen] = useState(false);
   const [chosen, setChosen] = useState({
     stage: false,
+    land: false,
     project: false,
     subtype: false,
     finish: false,
@@ -700,6 +717,18 @@ export function EstimateCalculator({
    * PLANNING_STAGE_BAND.
    */
   const [planningStage, setPlanningStage] = useState<PlanningStage | null>(null);
+
+  /*
+   * LAND OWNERSHIP, asked as its own early question rather than inferred from
+   * a "Build on My Lot" project card. Owning the lot is a situation, not a
+   * kind of home: it decides whether the street address and property lookup
+   * make sense to ask, whether the site questions apply, and which pricing
+   * rule set a custom home runs through (see resolveProjectType).
+   */
+  const [landOwnership, setLandOwnership] = useState<"own" | "not-yet" | null>(null);
+  /* Where a non-landowner plans to build. A city or area name -- never a
+     street address for land they do not own. */
+  const [buildArea, setBuildArea] = useState("");
 
   /*
    * Additional buildings. null until the question has been shown, so "not asked"
@@ -811,6 +840,7 @@ export function EstimateCalculator({
      is fully painted before the browser scrolls. Instant on mobile (iOS
      smooth-scroll is unreliable); smooth on desktop. */
   const projectGridRef = useRef<HTMLDivElement>(null);
+  const landStepRef    = useRef<HTMLDivElement>(null);
   const structuresRef  = useRef<HTMLDivElement>(null);
   const planUploadRef  = useRef<HTMLDivElement>(null);
   const addressStepRef = useRef<HTMLDivElement>(null);
@@ -906,6 +936,12 @@ export function EstimateCalculator({
     [activeProject, subtype],
   );
 
+  /* Land ownership gates the address step, the site questions and which
+     pricing rules a custom home runs through. Every rule set prices the site
+     inputs (they share siteAndOverheadRules), so gating on ownership rather
+     than on project type is safe and correct. */
+  const ownsLand = landOwnership === "own";
+
   /* Finish options MUST come from effectiveProject to stay consistent with the engine */
   const availFinish = useMemo(
     () => getAvailableFinishLevels(effectiveProject),
@@ -941,7 +977,7 @@ export function EstimateCalculator({
   const refinements = useMemo<EstimateRefinements>(() => {
     const data = SUBTYPE_DATA[activeProject]?.[subtype];
     const base = data
-      ? buildRefinements(effectiveProject, subtype, addOns, data.refinements, peScope, cabTier, bathCount, kitchenIn)
+      ? buildRefinements(effectiveProject, subtype, addOns, data.refinements, peScope, cabTier, bathCount, kitchenIn, ownsLand)
       : { ...EMPTY_REFINEMENTS };
     /* Plan overrides land on top of the subtype seed but BELOW nothing else:
        they are facts read off the visitor's own drawings, so they outrank the
@@ -987,7 +1023,7 @@ export function EstimateCalculator({
         if (patio !== null) merged.coveredOutdoor = patio;
       }
     }
-    if (isLotOwnedProject(effectiveProject)) {
+    if (ownsLand && isNewConstructionProject(effectiveProject)) {
       merged.siteDifficulty =
         siteSlope === "flat" ? "simple"
         : siteSlope === "moderate" ? "moderate"
@@ -1005,7 +1041,7 @@ export function EstimateCalculator({
     return merged;
   }, [
     effectiveProject, activeProject, subtype, addOns, peScope, cabTier, bathCount, kitchenIn,
-    planningStage, structures, planOverrides,
+    ownsLand, planningStage, structures, planOverrides,
     siteSlope, siteWater, siteUtilities, siteDriveway,
     garageBaysChoice, garageSqftInput, basementSize, basementSqftInput, patioSqftInput,
     sqft,
@@ -1152,9 +1188,47 @@ export function EstimateCalculator({
     setChosen((p) => ({ ...p, stage: true }));
     fireEstimatorEngagement();
     /* A visitor with drawings goes straight to the upload -- that is the whole
-       point of asking the stage first. Everyone else advances to the project. */
+       point of asking the stage first. Everyone else advances to the land
+       question, which now precedes the project grid. */
     const hasDrawings = stage === "have-plans" || stage === "plans-in-progress";
-    scheduleScroll(() => (hasDrawings ? planUploadRef.current : projectGridRef.current));
+    scheduleScroll(() => (hasDrawings ? planUploadRef.current : landStepRef.current));
+  }
+
+  /**
+   * The land-ownership answer. Asked before the project because it reshapes
+   * what follows: owners get the street address + property lookup and the
+   * site questions; everyone else gets a light "where do you plan to build"
+   * question and no site interrogation about land they do not have.
+   *
+   * If a project is already chosen, changing the answer re-resolves the
+   * internal project type (own + Custom Home prices through the
+   * build-on-your-lot rule set) via the same full reset a fresh card tap runs,
+   * so subtype seeds, chips and finish options can never describe the old path.
+   */
+  function handleSelectLand(v: "own" | "not-yet") {
+    const changed = landOwnership !== v;
+    setLandOwnership(v);
+    setChosen((p) => ({ ...p, land: true }));
+    /* When land is owned the site questions are the authority on water and
+       sewer, and the chip is hidden -- a ticked one must not keep pricing. */
+    if (v === "own") setAddOns((prev) => prev.filter((c) => c !== "well-septic"));
+    /* Flipping away from ownership must forget the property: a street address
+       and county profile describe land the visitor just said they do not own,
+       and leaving them in state would silently attach an unrelated property
+       to the lead payload. */
+    if (v !== "own") {
+      setGateAddress("");
+      setGateProfile(null);
+    }
+    fireEstimatorEngagement();
+    if (chosen.project && changed) {
+      const resolved = resolveProjectType(cardTypeOf(activeProject), v);
+      if (resolved !== activeProject) {
+        applyProjectSelection(resolved);
+        return;
+      }
+    }
+    scheduleScroll(() => projectGridRef.current);
   }
 
   /** Tick or untick a structure, keeping the per-structure detail on re-tick. */
@@ -1283,6 +1357,19 @@ export function EstimateCalculator({
         if (change.basementType !== undefined) next.basementType = change.basementType;
         return next;
       });
+      /* The drawings are the newer statement than any fine-tuning made before
+         the upload, and their steps collapse into "from your plans" cards, so
+         a stale manual pick must not silently outrank what was just read
+         (the fine-tuning controls merge LAST in the refinements memo). */
+      if (change.garageBays !== undefined) {
+        setGarageBaysChoice(null);
+        setGarageSqftInput("");
+      }
+      if (change.basementType !== undefined) {
+        setBasementSize("full");
+        setBasementSqftInput("");
+      }
+      if (change.coveredOutdoor !== undefined) setPatioSqftInput("");
 
       setPlanApplied(change.applied);
       setPlanUnderstood(change.understood);
@@ -1303,8 +1390,16 @@ export function EstimateCalculator({
     }
   }
 
-  function handleSelectProject(type: ProjectType) {
+  /* The grid card tap. The card names a home type; land ownership decides the
+     internal project type the engine prices (own + Custom Home runs the
+     build-on-your-lot rules, exactly as the old BOL card did). */
+  function handleSelectProject(cardType: ProjectType) {
+    const type = resolveProjectType(cardType, landOwnership);
     if (type === activeProject && chosen.project) return;
+    applyProjectSelection(type);
+  }
+
+  function applyProjectSelection(type: ProjectType) {
     const sub = defaultSubtypeFor(type);
     setActiveProject(type);
     setSubtype(sub);
@@ -1649,6 +1744,36 @@ export function EstimateCalculator({
   const showPlanUpload =
     planningStage === "have-plans" || planningStage === "plans-in-progress";
 
+  /* ── Which questions the drawings have already answered ──────────────────
+     Each flag collapses its step into a one-line "from your plans" card; the
+     Edit affordance drops the plan's authority (the override) and re-expands
+     the manual control. Partial plan sets degrade gracefully: only the facts
+     the extraction actually returned suppress anything.
+
+     Layout is suppressed only for the custom-home card, whose layout cards
+     literally ask how many levels the home has -- a fact a plan set states.
+     The owned-land layout cards describe the LOT and the shop-home cards
+     describe the house/shop ratio; drawings settle neither, so those stay
+     open. Finish level is deliberately never suppressed: it is a major cost
+     driver no plan set can state. */
+  const planAnsweredLayout =
+    activeProject === "custom-home" && planOverrides.stories !== undefined;
+  const planAnsweredGarage = planOverrides.garageBays !== undefined;
+  const planAnsweredBasement = planOverrides.basementType !== undefined;
+  const planAnsweredPatio = planOverrides.coveredOutdoor !== undefined;
+
+  /* When the drawings answered the layout question, the step is a collapsed
+     card rather than a grid, so reaching it must record the answer the same
+     way tapping a card would -- otherwise everything below stays hidden. The
+     subtype is set to the card the stories imply so its seed and labels agree
+     with the drawings (the plan override still outranks the seed). */
+  useEffect(() => {
+    if (!chosen.project || chosen.subtype || !planAnsweredLayout) return;
+    setSubtype((planOverrides.stories ?? 1) >= 2 ? "two-story" : "single-level");
+    setChosen((p) => ({ ...p, subtype: true }));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chosen.project, chosen.subtype, planAnsweredLayout]);
+
   /* Numbers are derived, never hardcoded, so a hidden step cannot leave a gap
      in the sequence the visitor reads. Plan upload sits directly after the
      stage question: a visitor who says "I have completed plans" hands them
@@ -1658,11 +1783,14 @@ export function EstimateCalculator({
   const visibleSteps: string[] = [
     "stage",
     ...(showPlanUpload ? ["plans"] : []),
+    "land",
     "project",
+    /* One slot, two shapes: street address + property lookup for landowners,
+       a light "where do you plan to build" question for everyone else. */
     "address",
     "layout",
     "size",
-    ...(isLotOwnedProject(effectiveProject) ? ["site"] : []),
+    ...(ownsLand && isNewConstructionProject(effectiveProject) ? ["site"] : []),
     "upgrades",
     ...(showBathCount ? ["bathcount"] : []),
     ...(showKitchenIncluded ? ["kitchen"] : []),
@@ -1677,6 +1805,7 @@ export function EstimateCalculator({
      they always hold a value and never block completion. */
   const allChosen =
     chosen.stage &&
+    chosen.land &&
     chosen.project &&
     chosen.subtype &&
     chosen.finish &&
@@ -1894,8 +2023,16 @@ export function EstimateCalculator({
       setGateError("Please enter a valid 10-digit phone number.");
       return;
     }
-    if (!gateAddress.trim() || !HOUSE_NUMBER_REGEX.test(gateAddress.trim())) {
-      setGateError("Please scroll up and enter your property address (must include a house number).");
+    /* A street address is only demanded of someone who has one: landowners
+       get the house-number check; everyone else just needs to name the city
+       or area they plan to build in. */
+    if (ownsLand) {
+      if (!gateAddress.trim() || !HOUSE_NUMBER_REGEX.test(gateAddress.trim())) {
+        setGateError("Please scroll up and enter your property address (must include a house number).");
+        return;
+      }
+    } else if (buildArea.trim().length < 2) {
+      setGateError("Please scroll up and tell us the city or area you plan to build in.");
       return;
     }
     /* Budget is optional: an extra required field before the number is friction
@@ -1907,7 +2044,9 @@ export function EstimateCalculator({
       name: gateName.trim(),
       email: gateEmail.trim(),
       phone: gatePhone.trim(),
-      address: gateAddress.trim(),
+      /* Only a real street address is worth prefilling into other forms; a
+         build area is not an address and must not masquerade as one. */
+      address: ownsLand ? gateAddress.trim() : undefined,
       zip: gateProfile?.zip?.slice(0, 5) || extractZip(gateAddress) || undefined,
     });
 
@@ -1924,9 +2063,19 @@ export function EstimateCalculator({
          API treats budget as optional but rejects "". */
       budget: budgetValue ? `$${budgetValue.toLocaleString("en-US")}` : undefined,
       projectType: effectiveProject,
-      address: gateAddress.trim(),
-      zip: gateProfile?.zip?.slice(0, 5) || extractZip(gateAddress) || undefined,
-      propertyProfile: gateProfile,
+      /* Landowners send their street address; everyone else sends the area
+         they plan to build in. Never both -- the API records whichever the
+         visitor's situation makes true. */
+      address: ownsLand ? gateAddress.trim() : undefined,
+      buildArea: ownsLand ? undefined : buildArea.trim(),
+      landOwnership: landOwnership ?? undefined,
+      /* Zip and property profile describe a specific parcel, so they only
+         travel with an owner's lead: for anyone else they would be leftovers
+         from a property they just said they do not have. */
+      zip: ownsLand
+        ? gateProfile?.zip?.slice(0, 5) || extractZip(gateAddress) || undefined
+        : undefined,
+      propertyProfile: ownsLand ? gateProfile : null,
       estimate: {
         project: effectiveProject,
         finish,
@@ -2065,7 +2214,49 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Step 2 - Project type: prominent card grid (matches the other inputs) */
+  /* Land ownership -- a situation question, before the home itself. */
+  const landStep = (
+    <div className="mb-6 scroll-mt-20" ref={landStepRef}>
+      {renderStepLabel("land", "Do you already own the land?")}
+      <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
+        Owning the lot changes which questions matter: we will ask about your
+        property and site instead of guessing at them.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5" role="radiogroup" aria-label="Land ownership">
+        {([
+          { value: "own" as const, label: "Yes, I own the lot", sub: "Or are under contract on it", icon: Trees },
+          { value: "not-yet" as const, label: "Not yet", sub: "Still looking or deciding", icon: MapPin },
+        ]).map((opt) => {
+          const active = chosen.land && landOwnership === opt.value;
+          const Icon = opt.icon;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              role="radio"
+              aria-checked={active}
+              onClick={() => handleSelectLand(opt.value)}
+              data-testid={`calc-land-${opt.value}`}
+              className={cn(darkCard(active), "flex items-center gap-3 px-4 py-3.5 min-h-[58px]")}
+            >
+              <Icon className={cn("h-5 w-5 flex-shrink-0", active ? "text-accent-legible" : "text-inverse-muted")} />
+              <span className="min-w-0 flex-1">
+                <span className="block text-[15px] text-inverse-foreground leading-tight">{opt.label}</span>
+                <span className="block text-[12px] text-inverse-muted mt-0.5">{opt.sub}</span>
+              </span>
+              {active && (
+                <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-accent-legible flex-shrink-0">
+                  <Check className="h-3 w-3 text-inverse" />
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  /* Step - Project type: prominent card grid (matches the other inputs) */
   const projectGrid = (
     <div className="mb-6" ref={projectGridRef}>
       {renderStepLabel("project", "What are we building?")}
@@ -2081,7 +2272,9 @@ export function EstimateCalculator({
         {PROJECT_TYPE_ORDER.map((type) => {
           const pc = PROJECT_CONFIGS[type];
           const Icon = PROJECT_ICONS[type];
-          const active = chosen.project && activeProject === type;
+          /* A landowner's custom home is priced internally as build-on-your-lot,
+             so the Custom Home card must read as selected for either type. */
+          const active = chosen.project && cardTypeOf(activeProject) === type;
           return (
             <button
               key={type}
@@ -2158,15 +2351,46 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Step 2 - Address (early, so property data pre-fills the size slider and
-     the gate form never has to ask for it again). Optional here; required when
-     the gate form is submitted. The onProfileResolved handler snaps sqft to the
-     home's measured interior square footage, bounded by the project range. */
+  /* Shared input class for the plain-text inputs in the flow. */
+  const flowInputClass =
+    "w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-3 py-2.5 text-[16px] text-inverse-foreground placeholder:text-[13px] placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors";
+
+  /* The non-landowner's version of the address slot: a city or area is enough
+     to confirm the service area, and asking for a street address for land they
+     do not own reads as either a mistake or a trap. */
+  const areaStep = (
+    <div className="mt-6 scroll-mt-20" ref={addressStepRef}>
+      {renderStepLabel("address", "Where do you plan to build?")}
+      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
+        A city or general area is plenty -- it confirms we serve where you are headed.
+      </p>
+      <input
+        type="text"
+        autoComplete="off"
+        value={buildArea}
+        onChange={(e) => setBuildArea(e.target.value)}
+        placeholder="e.g. Meridian, Eagle, Kuna, or somewhere in the Treasure Valley"
+        className={flowInputClass}
+        maxLength={120}
+        data-testid="early-input-build-area"
+        aria-label="City or area where you plan to build"
+      />
+      <p className="mt-2 text-[12px] text-inverse-muted/90 leading-relaxed">
+        You can skip ahead and fill it in later.
+      </p>
+    </div>
+  );
+
+  /* Step - Address, landowners only (so property data pre-fills the size
+     slider and the gate form never has to ask for it again). Optional here;
+     required when the gate form is submitted. The onProfileResolved handler
+     snaps sqft to the home's measured interior square footage, bounded by the
+     project range. */
   const addressStep = (
     <div className="mt-6 scroll-mt-20" ref={addressStepRef}>
-      {renderStepLabel("address", "Your property address")}
+      {renderStepLabel("address", "Where is your lot?")}
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
-        Confirms we serve your area and auto-fills your home size if we find a match.
+        Confirms we serve your area and auto-fills details if we find a match.
       </p>
       <AddressAutocomplete
         variant="inverse"
@@ -2196,8 +2420,60 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Step 3 - Layout / type (drives refinement complexity) */
-  const subtypeGrid = (
+  /* One-line "answered by your plans" card. Collapsing rather than hiding: the
+     visitor sees the answer is recorded, where it came from, and how to take
+     it back. Editing clears the plan mark, which re-expands the control and
+     makes the visitor's input authoritative from then on. Declared before the
+     first section that uses it (the layout step). */
+  const planFilledCard = (
+    label: string,
+    value: string,
+    onEdit: () => void,
+    testId: string,
+  ) => (
+    <div
+      className="flex items-center gap-3 rounded-md border border-accent-legible/40 bg-accent/10 px-4 py-3.5"
+      data-testid={testId}
+    >
+      <Check className="h-4 w-4 flex-shrink-0 text-accent-legible" />
+      <div className="min-w-0 flex-1">
+        <span className="block text-[14px] text-inverse-foreground leading-tight">
+          {label}: {value}
+        </span>
+        <span className="block text-[11.5px] text-inverse-muted mt-0.5">From your plans</span>
+      </div>
+      <button
+        type="button"
+        onClick={onEdit}
+        className="flex-shrink-0 text-[12.5px] text-inverse-foreground underline underline-offset-2 hover:opacity-80"
+        data-testid={`${testId}-edit`}
+      >
+        Edit
+      </button>
+    </div>
+  );
+
+  /* Step 3 - Layout / type (drives refinement complexity). Collapses when the
+     drawings stated how many levels the home has; Edit drops the plan's
+     authority on stories and re-opens the grid. */
+  const subtypeGrid = planAnsweredLayout ? (
+    <div className="scroll-mt-20" ref={layoutRef}>
+      {renderStepLabel("layout", config.gridLabel)}
+      {planFilledCard(
+        "Layout",
+        (planOverrides.stories ?? 1) >= 2
+          ? `${Math.round(planOverrides.stories ?? 2)}-story`
+          : "Single level",
+        () =>
+          setPlanOverrides((prev) => {
+            const next = { ...prev };
+            delete next.stories;
+            return next;
+          }),
+        "calc-planfilled-layout",
+      )}
+    </div>
+  ) : (
     <div className="scroll-mt-20" ref={layoutRef}>
       {renderStepLabel("layout", config.gridLabel)}
       <div className="grid grid-cols-2 gap-2.5" role="group" aria-label={config.gridLabel}>
@@ -2237,37 +2513,6 @@ export function EstimateCalculator({
   /* Step 4 - Size: a precise sqft slider (cost is very size-sensitive). The chosen
      layout pre-sets a smart default; the slider fine-tunes for accuracy. */
   const sizePct = ((sqft - sizeConfig.min) / (sizeConfig.max - sizeConfig.min)) * 100;
-  /* One-line "answered by your plans" card. Collapsing rather than hiding: the
-     visitor sees the answer is recorded, where it came from, and how to take
-     it back. Editing clears the plan mark, which re-expands the control and
-     makes the visitor's input authoritative from then on. */
-  const planFilledCard = (
-    label: string,
-    value: string,
-    onEdit: () => void,
-    testId: string,
-  ) => (
-    <div
-      className="flex items-center gap-3 rounded-md border border-accent-legible/40 bg-accent/10 px-4 py-3.5"
-      data-testid={testId}
-    >
-      <Check className="h-4 w-4 flex-shrink-0 text-accent-legible" />
-      <div className="min-w-0 flex-1">
-        <span className="block text-[14px] text-inverse-foreground leading-tight">
-          {label}: {value}
-        </span>
-        <span className="block text-[11.5px] text-inverse-muted mt-0.5">From your plans</span>
-      </div>
-      <button
-        type="button"
-        onClick={onEdit}
-        className="flex-shrink-0 text-[12.5px] text-inverse-foreground underline underline-offset-2 hover:opacity-80"
-        data-testid={`${testId}-edit`}
-      >
-        Edit
-      </button>
-    </div>
-  );
   const sizeGrid = planFilled.size ? (
     <div className="mt-6 scroll-mt-20" ref={sizeRef}>
       {renderStepLabel("size", isNewBuild ? "Finished square feet?" : "About how big?")}
@@ -2447,8 +2692,51 @@ export function EstimateCalculator({
   const approxInputClass =
     "w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-3 py-2.5 text-[16px] text-inverse-foreground placeholder:text-[13px] placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors";
   const GARAGE_PRESET_SF: Record<string, number> = { two: 480, three: 720, four: 960 };
+  /* Collapsed "from your plans" lines for garage, basement and patio. Each
+     Edit drops that one plan override, which re-shows the chip and the manual
+     control and hands authority back to the visitor's own taps. */
+  const dropOverride = (key: keyof EstimateRefinements) => () =>
+    setPlanOverrides((prev) => {
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+  const planFilledSizingCards = (planAnsweredGarage || planAnsweredBasement || planAnsweredPatio) && (
+    <div className="mt-4 space-y-2">
+      {planAnsweredGarage &&
+        planFilledCard(
+          "Garage",
+          planOverrides.garageBays === "none"
+            ? "None"
+            : `${planOverrides.garageBays === "four" ? "4" : planOverrides.garageBays === "three" ? "3" : "2"}-car`,
+          dropOverride("garageBays"),
+          "calc-planfilled-garage",
+        )}
+      {planAnsweredBasement &&
+        planFilledCard(
+          "Basement",
+          planOverrides.basementType === "finished"
+            ? "Finished"
+            : planOverrides.basementType === "unfinished"
+              ? "Unfinished"
+              : "None",
+          dropOverride("basementType"),
+          "calc-planfilled-basement",
+        )}
+      {planAnsweredPatio &&
+        planFilledCard(
+          "Covered patio",
+          planOverrides.coveredOutdoor && planOverrides.coveredOutdoor > 0
+            ? `About ${planOverrides.coveredOutdoor.toLocaleString()} sq ft`
+            : "None",
+          dropOverride("coveredOutdoor"),
+          "calc-planfilled-patio",
+        )}
+    </div>
+  );
   const sizeFineTuning = (
     <div className="mt-4 space-y-4">
+      {!planAnsweredGarage && (
       <div>
         <p className="mb-2 text-[12px] tracking-[0.08em] uppercase text-inverse-muted/90">
           Garage size
@@ -2494,7 +2782,8 @@ export function EstimateCalculator({
           </div>
         )}
       </div>
-      {refinements.basementType && refinements.basementType !== "none" && (
+      )}
+      {!planAnsweredBasement && refinements.basementType && refinements.basementType !== "none" && (
         <div>
           <p className="mb-2 text-[12px] tracking-[0.08em] uppercase text-inverse-muted/90">
             Basement size
@@ -2545,7 +2834,7 @@ export function EstimateCalculator({
           )}
         </div>
       )}
-      {refinements.coveredOutdoor != null && refinements.coveredOutdoor > 0 && (
+      {!planAnsweredPatio && refinements.coveredOutdoor != null && refinements.coveredOutdoor > 0 && (
         <div>
           <p className="mb-2 text-[12px] tracking-[0.08em] uppercase text-inverse-muted/90">
             Covered patio size
@@ -2582,7 +2871,19 @@ export function EstimateCalculator({
         role="group"
         aria-label={config.chipsLabel}
       >
-        {config.chips.map((chip) => {
+        {config.chips
+          .filter((chip) => {
+            /* A chip whose answer is already settled elsewhere disappears:
+               owned-land paths ask about water and sewer in the site
+               questions, and plan-answered garage/basement/patio show as
+               collapsed cards below rather than as tickable options. */
+            if (chip.id === "well-septic" && ownsLand) return false;
+            if (chip.id === "bigger-garage" && planAnsweredGarage) return false;
+            if (chip.id === "basement" && planAnsweredBasement) return false;
+            if (chip.id === "covered-patio" && planAnsweredPatio) return false;
+            return true;
+          })
+          .map((chip) => {
           const Icon = chip.icon;
           const active = addOns.includes(chip.id);
           return (
@@ -2605,6 +2906,7 @@ export function EstimateCalculator({
           );
         })}
       </div>
+      {isNewBuild && planFilledSizingCards}
       {isNewBuild && sizeFineTuning}
     </div>
   );
@@ -3750,29 +4052,56 @@ export function EstimateCalculator({
             autoComplete="tel"
           />
 
-          {/* Address was collected in step 2. Show a read-only confirmation when
-              already filled. When skipped, show a minimal fallback input so the
-              visitor can still submit without scrolling back up. */}
-          {gateAddress.trim() ? (
+          {/* Location was collected earlier in the flow: the property address
+              for landowners, the planned build area for everyone else. Show a
+              read-only confirmation when already filled; when skipped, show a
+              minimal fallback input so the visitor can still submit without
+              scrolling back up. Never a street-address prompt for land the
+              visitor does not own. */}
+          {ownsLand ? (
+            gateAddress.trim() ? (
+              <div className="rounded-md border border-inverse-foreground/15 bg-inverse-foreground/[0.04] px-4 py-3">
+                <p className="text-[11px] text-inverse-muted/90 mb-0.5 uppercase tracking-wide">Property address</p>
+                <p className="text-[13.5px] text-inverse-foreground leading-snug">{gateAddress}</p>
+                <p className="mt-1 text-[11px] text-inverse-muted/90">Scroll up to the address step to update.</p>
+              </div>
+            ) : (
+              <div>
+                <input
+                  type="text"
+                  placeholder="Property address (house number + street)"
+                  value={gateAddress}
+                  onChange={(e) => setGateAddress(e.target.value)}
+                  className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors"
+                  data-testid="gate-input-address"
+                  aria-label="Property address"
+                  autoComplete="street-address"
+                />
+                <p className="mt-1.5 text-[11.5px] text-inverse-muted/90">
+                  So we can confirm we serve your area and check county records before your visit.
+                </p>
+              </div>
+            )
+          ) : buildArea.trim() ? (
             <div className="rounded-md border border-inverse-foreground/15 bg-inverse-foreground/[0.04] px-4 py-3">
-              <p className="text-[11px] text-inverse-muted/90 mb-0.5 uppercase tracking-wide">Property address</p>
-              <p className="text-[13.5px] text-inverse-foreground leading-snug">{gateAddress}</p>
-              <p className="mt-1 text-[11px] text-inverse-muted/90">Scroll up to the address step to update.</p>
+              <p className="text-[11px] text-inverse-muted/90 mb-0.5 uppercase tracking-wide">Planned build area</p>
+              <p className="text-[13.5px] text-inverse-foreground leading-snug">{buildArea}</p>
+              <p className="mt-1 text-[11px] text-inverse-muted/90">Scroll up to the build-area step to update.</p>
             </div>
           ) : (
             <div>
               <input
                 type="text"
-                placeholder="Property address (house number + street)"
-                value={gateAddress}
-                onChange={(e) => setGateAddress(e.target.value)}
+                placeholder="City or area you plan to build in"
+                value={buildArea}
+                onChange={(e) => setBuildArea(e.target.value)}
+                maxLength={120}
                 className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors"
-                data-testid="gate-input-address"
-                aria-label="Property address"
-                autoComplete="street-address"
+                data-testid="gate-input-build-area"
+                aria-label="City or area you plan to build in"
               />
               <p className="mt-1.5 text-[11.5px] text-inverse-muted/90">
-                So we can confirm we serve your area and check county records before your visit.
+                So we can confirm we serve the area you are headed to.
               </p>
             </div>
           )}
@@ -3854,12 +4183,17 @@ export function EstimateCalculator({
           visitor is never presented with a pre-filled choice they did not make
           and cannot reach an estimate without selecting every input. */}
       {chosen.stage && showPlanUpload && planUploadStep}
-      {chosen.stage && projectGrid}
-      {chosen.project && addressStep}
+      {/* Land ownership is a situation, not a project type, so it is asked
+          before the home itself and reshapes what follows. */}
+      {chosen.stage && landStep}
+      {chosen.land && projectGrid}
+      {/* Street address + property lookup for landowners; a light build-area
+          question for everyone else. */}
+      {chosen.project && (ownsLand ? addressStep : areaStep)}
       {chosen.project && subtypeGrid}
       {chosen.subtype && sizeGrid}
       {/* Site conditions, only when the visitor already owns the land. */}
-      {chosen.subtype && isLotOwnedProject(effectiveProject) && siteSection}
+      {chosen.subtype && ownsLand && isNewConstructionProject(effectiveProject) && siteSection}
       {chosen.subtype && chipsRow}
       {chosen.subtype && showBathCount && bathCountRow}
       {chosen.subtype && showKitchenIncluded && kitchenRow}

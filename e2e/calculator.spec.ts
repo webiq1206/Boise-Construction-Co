@@ -20,11 +20,14 @@
  */
 import { expect, test, type Page } from "@playwright/test";
 
-/** The four projects the public estimator offers. */
+/**
+ * The three project cards the public estimator offers. "Build on My Lot" is no
+ * longer a card: land ownership is asked as its own early question, and a
+ * landowner's Custom Home is priced internally as build-on-your-lot.
+ */
 const PUBLIC_PROJECTS = [
   "custom-home",
   "semi-custom-home",
-  "build-on-your-lot",
   "shop-home",
 ] as const;
 
@@ -53,6 +56,14 @@ async function chooseStage(page: Page, stage: string = "have-plans") {
 }
 
 /**
+ * Answer the land-ownership question, which now sits between the stage and
+ * the project grid. Nothing past it renders until it is answered.
+ */
+async function chooseLand(page: Page, ownership: "own" | "not-yet" = "not-yet") {
+  await page.getByTestId(`calc-land-${ownership}`).click();
+}
+
+/**
  * Drive the estimator to the point where every required input is answered.
  *
  * Bath count and kitchen inclusion are conditional on the project, so they are
@@ -60,8 +71,14 @@ async function chooseStage(page: Page, stage: string = "have-plans") {
  * step needs no interaction: reaching it records "asked, none wanted", which is
  * a complete answer.
  */
-async function completeInputs(page: Page, project: string, stage = "have-plans") {
+async function completeInputs(
+  page: Page,
+  project: string,
+  stage = "have-plans",
+  ownership: "own" | "not-yet" = "not-yet",
+) {
   await chooseStage(page, stage);
+  await chooseLand(page, ownership);
   await page.getByTestId(`calc-tab-${project}`).click();
 
   const subtype = page.locator('[data-testid^="calc-subtype-"]:visible').first();
@@ -93,16 +110,24 @@ test.describe("New construction estimator", () => {
     expect(await page.evaluate(() => sessionStorage.getItem("brc_estimate"))).toBeNull();
   });
 
-  test("offers only new-construction projects once a stage is chosen", async ({ page }) => {
+  test("asks land ownership after the stage, then offers only public project cards", async ({ page }) => {
     await openCalculator(page);
     await chooseStage(page);
 
+    // The land question is next, and the project grid waits behind it.
+    await expect(page.getByTestId("calc-land-own")).toBeVisible();
+    await expect(page.getByTestId("calc-land-not-yet")).toBeVisible();
+    await expect(page.locator('[data-testid^="calc-tab-"]')).toHaveCount(0);
+
+    await chooseLand(page);
     for (const project of PUBLIC_PROJECTS) {
       await expect(page.getByTestId(`calc-tab-${project}`)).toBeVisible();
     }
     for (const project of REMODEL_PROJECTS) {
       await expect(page.getByTestId(`calc-tab-${project}`)).toHaveCount(0);
     }
+    // "Build on My Lot" is no longer a public card.
+    await expect(page.getByTestId("calc-tab-build-on-your-lot")).toHaveCount(0);
 
     // Nothing is preselected, so no tab reports itself as the current one.
     await expect(page.locator('[data-testid^="calc-tab-"][aria-selected="true"]')).toHaveCount(0);
@@ -111,6 +136,7 @@ test.describe("New construction estimator", () => {
   test("reveals each step only once the one before it is answered", async ({ page }) => {
     await openCalculator(page);
     await chooseStage(page);
+    await chooseLand(page);
 
     // Before a project: no layout cards, no size slider, no finish levels.
     await expect(page.locator('[data-testid^="calc-subtype-"]')).toHaveCount(0);
@@ -136,6 +162,7 @@ test.describe("New construction estimator", () => {
   test("square footage is settable and survives a layout change", async ({ page }) => {
     await openCalculator(page);
     await chooseStage(page);
+    await chooseLand(page);
     await page.getByTestId("calc-tab-custom-home").click();
     await page.locator('[data-testid^="calc-subtype-"]:visible').first().click();
 
@@ -155,6 +182,7 @@ test.describe("New construction estimator", () => {
   test("switching project swaps in that project's own layout options", async ({ page }) => {
     await openCalculator(page);
     await chooseStage(page);
+    await chooseLand(page);
 
     await page.getByTestId("calc-tab-custom-home").click();
     const customSubtypes = await page
@@ -300,6 +328,8 @@ test.describe("Client and server agree on the price", () => {
     await page.getByTestId("gate-input-phone").fill("2085550147");
     const address = page.locator('[data-testid="gate-input-address"]:visible');
     if (await address.count()) await address.fill("1234 W Test St, Boise, ID 83702");
+    const area = page.locator('[data-testid="gate-input-build-area"]:visible');
+    if (await area.count()) await area.fill("Meridian");
 
     const responsePromise = page.waitForResponse(
       (res) => res.url().includes("/api/estimate-lead") && res.request().method() === "POST",
@@ -355,6 +385,52 @@ test.describe("Planning stage", () => {
   });
 });
 
+test.describe("Land ownership", () => {
+  /**
+   * A landowner's Custom Home IS the old Build on My Lot: same lot-type layout
+   * cards, same pricing rules. If this drifts, owners are silently quoted a
+   * spec-lot number for a bare-lot build.
+   */
+  test("owning land turns Custom Home into the lot-owned path", async ({ page }) => {
+    await openCalculator(page);
+    await chooseStage(page);
+    await chooseLand(page, "own");
+    await page.getByTestId("calc-tab-custom-home").click();
+
+    // The layout cards describe the LOT, not the house.
+    await expect(page.locator('[data-testid="calc-subtype-valley-flat"]:visible')).toBeVisible();
+    // Owners get the street-address lookup, and the well/septic chip is gone:
+    // the site questions are the authority on water and sewer.
+    await expect(page.locator('[data-testid="calc-chip-well-septic"]')).toHaveCount(0);
+
+    await page.locator('[data-testid^="calc-subtype-"]:visible').first().click();
+    const baths = page.locator('[data-testid^="calc-baths-"]:visible').first();
+    if (await baths.count()) await baths.click();
+    const kitchen = page.locator('[data-testid="calc-kitchen-yes"]:visible');
+    if (await kitchen.count()) await kitchen.click();
+    await page.getByTestId("calc-finish-mid-range").click();
+
+    // The stored estimate prices through the build-on-your-lot rules.
+    const estimate = await storedEstimate(page, (e) => Boolean(e?.project));
+    expect(estimate.project).toBe("build-on-your-lot");
+  });
+
+  /**
+   * Flipping to "not yet" after choosing a project must forget the property:
+   * the address describes land the visitor just said they do not own.
+   */
+  test("flipping ownership away swaps the address step for a build-area question", async ({ page }) => {
+    await openCalculator(page);
+    await chooseStage(page);
+    await chooseLand(page, "own");
+    await page.getByTestId("calc-tab-custom-home").click();
+    await expect(page.locator('[data-testid="early-input-address"]:visible')).toBeVisible();
+
+    await chooseLand(page, "not-yet");
+    await expect(page.locator('[data-testid="early-input-build-area"]:visible')).toBeVisible();
+  });
+});
+
 test.describe("Lead gate", () => {
   /**
    * Every project the calculator offers must be accepted by the lead route.
@@ -372,9 +448,12 @@ test.describe("Lead gate", () => {
       await page.getByTestId("gate-input-email").fill("test.homeowner@example.com");
       await page.getByTestId("gate-input-phone").fill("2085550147");
 
-      // Collected at step 2 when filled; the gate falls back to its own input.
+      // Collected earlier in the flow when filled; the gate falls back to its
+      // own input: a street address for owners, a build area otherwise.
       const address = page.locator('[data-testid="gate-input-address"]:visible');
       if (await address.count()) await address.fill("1234 W Test St, Boise, ID 83702");
+      const area = page.locator('[data-testid="gate-input-build-area"]:visible');
+      if (await area.count()) await area.fill("Meridian");
 
       const responsePromise = page.waitForResponse(
         (res) => res.url().includes("/api/estimate-lead") && res.request().method() === "POST",

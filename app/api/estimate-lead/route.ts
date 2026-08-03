@@ -54,6 +54,10 @@ const bodySchema = z.object({
   // this field still submits successfully rather than 400ing, but the gate now
   // requires it, and the team needs it to confirm service area.
   address: z.string().max(300).optional(),
+  // Where a non-landowner plans to build: a city or area, never a street
+  // address. Sent instead of `address` when the visitor does not own land.
+  buildArea: z.string().max(160).optional(),
+  landOwnership: z.enum(["own", "not-yet"]).optional(),
   zip: z.string().max(10).optional(),
   propertyProfile: z
     .object({ formattedAddress: z.string(), city: z.string(), state: z.string(), zip: z.string() })
@@ -167,6 +171,19 @@ export async function POST(request: NextRequest) {
     const data = parsed.data;
     const estimate = verifyEstimate(data.estimate);
 
+    /* What the team should read as "where": the street address when the lead
+       owns land, otherwise the area they plan to build in, labelled so nobody
+       mistakes it for a property we can look up. */
+    const displayAddress =
+      data.address ||
+      (data.buildArea ? `${data.buildArea} (planned area - lot not owned yet)` : "");
+    const ownershipNote =
+      data.landOwnership === "own"
+        ? "Owns the lot"
+        : data.landOwnership === "not-yet"
+          ? "Does not own land yet"
+          : null;
+
     if (db) {
       try {
         await db.insert(consultationRequests).values({
@@ -174,13 +191,28 @@ export async function POST(request: NextRequest) {
           phone: data.phone,
           email: data.email,
           zip: data.zip || "",
-          address: data.address || "",
+          /* displayAddress, not data.address: for a non-landowner the lead
+             record's location IS the planned build area, labelled so nobody
+             mistakes it for a parcel we can look up. */
+          address: displayAddress,
           city: (data.propertyProfile as { city?: string } | null)?.city || null,
-          propertyProfile: (data.propertyProfile as PropertyProfile | null) ?? null,
+          /* Omit the column entirely when there is no profile: passing a JS
+             null through the neon-http driver serializes the jsonb parameter
+             as an empty string, which Postgres rejects as invalid JSON and
+             the whole lead insert fails. Non-owner leads never have a profile,
+             so they always hit this path. */
+          ...(data.propertyProfile
+            ? { propertyProfile: data.propertyProfile as PropertyProfile }
+            : {}),
           projectType: data.projectType,
-          message: data.budget
-            ? `Submitted via estimate gate | Budget: ${data.budget}`
-            : "Submitted via estimate gate",
+          message: [
+            "Submitted via estimate gate",
+            data.budget ? `Budget: ${data.budget}` : null,
+            ownershipNote,
+            data.buildArea ? `Planned build area: ${data.buildArea}` : null,
+          ]
+            .filter(Boolean)
+            .join(" | "),
           estimateProject: estimate?.project || null,
           estimateFinish: estimate?.finish || null,
           estimateLow: estimate?.priceLow?.toString() || null,
@@ -201,7 +233,7 @@ export async function POST(request: NextRequest) {
       name: data.name,
       phone: data.phone,
       email: data.email,
-      address: data.address || "",
+      address: displayAddress,
       zip: data.zip,
       projectType: data.projectType,
       budget: data.budget,
@@ -230,7 +262,12 @@ export async function POST(request: NextRequest) {
       projectGoals: buildProjectGoals(estimate),
       // The homeowner's own words stay in finalNotes; the estimate record goes
       // to estimateSummary, which the dashboard sizes for it (20k vs 2k).
-      finalNotes: undefined,
+      finalNotes:
+        ownershipNote || data.buildArea
+          ? [ownershipNote, data.buildArea ? `Planned build area: ${data.buildArea}` : null]
+              .filter(Boolean)
+              .join(". ")
+          : undefined,
       estimate: estimate ? buildLeadEstimateRecord(estimate, unitCostOverrides) : undefined,
       // Zoning, lot size, assessed value, owner and occupancy as structured
       // fields, alongside the same rows the admin email renders.
@@ -255,7 +292,7 @@ export async function POST(request: NextRequest) {
         name: data.name,
         phone: data.phone,
         email: data.email,
-        address: data.address || "",
+        address: displayAddress,
         zip: data.zip,
         projectType: data.projectType,
         budget: data.budget,

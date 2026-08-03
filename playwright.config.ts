@@ -8,6 +8,13 @@ export default defineConfig({
   use: {
     baseURL: process.env.E2E_BASE_URL || "http://127.0.0.1:3456",
     trace: "on-first-retry",
+    /* On NixOS (the Replit workspace) the chromium Playwright downloads cannot
+       load its shared libraries, so point at a Nix-built chromium instead by
+       exporting PLAYWRIGHT_CHROMIUM_PATH. Left unset (CI, local machines) the
+       stock download is used. */
+    ...(process.env.PLAYWRIGHT_CHROMIUM_PATH
+      ? { launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH } }
+      : {}),
   },
   webServer: process.env.E2E_NO_WEBSERVER
     ? undefined
