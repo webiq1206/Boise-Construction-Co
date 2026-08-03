@@ -84,6 +84,9 @@ export const refinementsSchema = z
     basementType: z.enum(["none", "unfinished", "finished"]).nullable().optional(),
     lotServices: z.enum(["city", "well-septic", "unsure"]).nullable().optional(),
     siteDifficulty: z.enum(["simple", "moderate", "steep"]).nullable().optional(),
+    utilitiesAtLot: z.boolean().nullable().optional(),
+    // Feet of driveway, bounded because it multiplies a flatwork rate.
+    drivewayLength: z.number().int().min(0).max(2_000).nullable().optional(),
     // Bounded rather than unbounded: these feed square-footage takeoffs, and a
     // client-supplied 10,000 SF covered patio would price a garden shed like a
     // hotel. The caps are generous against anything a real Treasure Valley

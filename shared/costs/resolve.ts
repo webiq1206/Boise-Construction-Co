@@ -53,6 +53,8 @@ export interface ResolverRefinements {
   basementType?: unknown;
   lotServices?: unknown;
   siteDifficulty?: unknown;
+  utilitiesAtLot?: unknown;
+  drivewayLength?: number | null;
   coveredOutdoor?: number | null;
   shopSize?: number | null;
   planningStage?: unknown;
@@ -103,6 +105,17 @@ function toSelections(
     // lead, and the consultation resolves it before anything is committed.
     wellSeptic: refinements.lotServices === "well-septic",
     siteDifficulty: (refinements.siteDifficulty ?? null) as ScopeSelections["siteDifficulty"],
+    // Only an explicit "no" prices the extension; unknown assumes utilities at
+    // the lot for the same reason "unsure" services price as city above.
+    utilitiesAtLot: refinements.utilitiesAtLot === false ? false : null,
+    // Clamped: this feeds a square-footage takeoff, and an absurd or negative
+    // length from the wire must not move the estimate.
+    drivewayLengthFt:
+      typeof refinements.drivewayLength === "number" &&
+      Number.isFinite(refinements.drivewayLength) &&
+      refinements.drivewayLength > 0
+        ? Math.min(2000, Math.round(refinements.drivewayLength))
+        : null,
     coveredOutdoorSqft: refinements.coveredOutdoor ?? null,
     shopSqft: refinements.shopSize ?? null,
     /*

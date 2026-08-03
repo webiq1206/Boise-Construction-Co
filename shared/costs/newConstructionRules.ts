@@ -184,9 +184,9 @@ function siteAndOverheadRules(): ScopeRule[] {
     },
     {
       code: "03-03-09", // Permanent gas + electrical, EA
-      qty: (_d, s) => (isRural(s) ? 2.2 : 1),
+      qty: (_d, s) => (isRural(s) ? 2.2 : s.utilitiesAtLot === false ? 1.8 : 1),
       assumption:
-        "Rural power runs are longer, often need transformers or additional poles, and frequently replace natural gas with propane.",
+        "Rural power runs are longer, often need transformers or additional poles, and frequently replace natural gas with propane. A city-serviced lot where power and gas have not yet been brought to the lot line carries a similar (slightly smaller) extension allowance.",
     },
     {
       code: "L-03-00", // Design-build team labor, HR
@@ -547,9 +547,17 @@ function closeoutRules(): ScopeRule[] {
   return [
     {
       code: "03-22-01", // Flatwork (driveway, walks), SF
-      qty: (d, s) => (400 + house(d).garageSqft * 1.5) * siteFactor(s),
+      // When the visitor told us the driveway length, take it off at a 12 ft
+      // width plus a 150 SF walk allowance instead of the fixed 400 SF
+      // subdivision assumption. The garage apron term stays either way.
+      qty: (d, s) =>
+        ((s.drivewayLengthFt != null && s.drivewayLengthFt > 0
+          ? s.drivewayLengthFt * 12 + 150
+          : 400) +
+          house(d).garageSqft * 1.5) *
+        siteFactor(s),
       assumption:
-        "Driveway, approach and walks. A steeper or longer-access site carries proportionally more.",
+        "Driveway, approach and walks. Uses the stated driveway length at a 12 ft width when given, otherwise a short subdivision driveway; a steeper site carries proportionally more.",
     },
     // LANDSCAPE IS FRONT-YARD ONLY, and that is a real exclusion rather than an
     // oversight. Builders here typically finish the front to satisfy the

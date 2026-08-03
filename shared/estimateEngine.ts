@@ -58,6 +58,8 @@ export type UserRefinementKey =
   | "basementType"
   | "lotServices"
   | "siteDifficulty"
+  | "utilitiesAtLot"
+  | "drivewayLength"
   | "coveredOutdoor"
   | "shopSize";
 
@@ -317,6 +319,16 @@ export interface EstimateRefinements {
   lotServices: LotServices | null;
   /** How much earthwork and access the site needs. */
   siteDifficulty: SiteDifficulty | null;
+  /**
+   * Whether power and gas are already at the lot line. When they are not, the
+   * service runs get longer and more expensive; asked only on lot-owned paths.
+   */
+  utilitiesAtLot: boolean | null;
+  /**
+   * Approximate driveway length in feet, asked in plain buckets on lot-owned
+   * paths. Drives the flatwork takeoff instead of a fixed allowance.
+   */
+  drivewayLength: number | null;
   /** Covered patio or covered deck, in square feet. */
   coveredOutdoor: number | null;
   /**
@@ -956,6 +968,14 @@ function buildNewConstructionDisclosure(input: EstimateInput): EstimateDisclosur
     assumptions.push("Moderate site work: some cut, fill, and grading");
   else assumptions.push("A flat, buildable lot supporting a conventional foundation");
 
+  if (r.utilitiesAtLot === false)
+    assumptions.push("Power and gas not yet at the lot, with extended service runs allowed for");
+
+  if (r.drivewayLength != null && r.drivewayLength > 0)
+    assumptions.push(
+      `Roughly ${Math.round(r.drivewayLength).toLocaleString("en-US")} ft of driveway and approach`,
+    );
+
   if (r.coveredOutdoor && r.coveredOutdoor > 0)
     assumptions.push(`About ${r.coveredOutdoor.toLocaleString("en-US")} sq ft of covered outdoor living`);
 
@@ -1104,6 +1124,8 @@ export const EMPTY_REFINEMENTS: EstimateRefinements = {
   basementType: null,
   lotServices: null,
   siteDifficulty: null,
+  utilitiesAtLot: null,
+  drivewayLength: null,
   coveredOutdoor: null,
   shopSize: null,
   planningStage: null,

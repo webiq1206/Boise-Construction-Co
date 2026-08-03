@@ -161,11 +161,19 @@ const SUBTYPE_DATA: Record<ProjectType, Record<string, SubtypeData>> = {
     "single-level":    { sqft: 2000, refinements: { stories: 1, garageBays: "three" } },
     "larger-family":   { sqft: 2900, refinements: { stories: 2, garageBays: "three" } },
   },
+  /*
+   * BUILD ON YOUR LOT. The cards seed only size and shape. They used to also
+   * seed siteDifficulty and lotServices, which meant picking "Acreage" silently
+   * priced a well and septic and picking "Foothills" silently tripled the
+   * earthwork - assumptions the visitor never saw. Those now come from the site
+   * questions (see siteSection), which ask about slope, utilities, water and
+   * driveway in plain language and feed the same pricing inputs explicitly.
+   */
   "build-on-your-lot": {
-    "valley-flat":     { sqft: 2400, refinements: { stories: 1, garageBays: "three", siteDifficulty: "simple" } },
-    "acreage":         { sqft: 2600, refinements: { stories: 1, garageBays: "three", siteDifficulty: "moderate", lotServices: "well-septic" } },
-    "foothills":       { sqft: 3000, refinements: { stories: 2, garageBays: "three", siteDifficulty: "steep" } },
-    "riverfront":      { sqft: 3200, refinements: { stories: 2, garageBays: "three", siteDifficulty: "moderate" } },
+    "valley-flat":     { sqft: 2400, refinements: { stories: 1, garageBays: "three" } },
+    "acreage":         { sqft: 2600, refinements: { stories: 1, garageBays: "three" } },
+    "foothills":       { sqft: 3000, refinements: { stories: 2, garageBays: "three" } },
+    "riverfront":      { sqft: 3200, refinements: { stories: 2, garageBays: "three" } },
   },
   /*
    * A shop home is sized by two numbers, not one: the living half on the slider
@@ -177,7 +185,8 @@ const SUBTYPE_DATA: Record<ProjectType, Record<string, SubtypeData>> = {
     "compact":         { sqft: 1200, refinements: { stories: 1, garageBays: "none", shopSize: 1200 } },
     "standard":        { sqft: 1700, refinements: { stories: 1, garageBays: "none", shopSize: 1600 } },
     "large-shop":      { sqft: 1600, refinements: { stories: 1, garageBays: "none", shopSize: 2400 } },
-    "family-acreage":  { sqft: 2400, refinements: { stories: 1, garageBays: "two", shopSize: 1800, lotServices: "well-septic", siteDifficulty: "moderate" } },
+    // Site conditions come from the site questions, not the card; see above.
+    "family-acreage":  { sqft: 2400, refinements: { stories: 1, garageBays: "two", shopSize: 1800 } },
   },
   kitchen: {
     galley:      { sqft: 175, refinements: { layoutChanges: "none" } },
@@ -297,17 +306,21 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
     twoLineHeadline: true,
     gridLabel: "WHAT IS YOUR LOT LIKE?",
     subtypes: [
-      { id: "valley-flat", icon: Trees,     title: "Flat Valley Lot", subtitle: "In a subdivision" },
-      { id: "acreage",     icon: Warehouse, title: "Acreage",         subtitle: "Rural, likely well and septic" },
-      { id: "foothills",   icon: Mountain,  title: "Foothills",       subtitle: "Sloped, engineered" },
-      { id: "riverfront",  icon: Waves,     title: "River or Creek",  subtitle: "Setbacks and floodplain" },
+      /* Descriptive only. Subtitles used to hint at pricing ("likely well and
+         septic", "Sloped, engineered") that the card silently applied; the site
+         questions below now ask those things outright. */
+      { id: "valley-flat", icon: Trees,     title: "Flat Valley Lot", subtitle: "In a neighborhood" },
+      { id: "acreage",     icon: Warehouse, title: "Acreage",         subtitle: "A larger rural parcel" },
+      { id: "foothills",   icon: Mountain,  title: "Foothills",       subtitle: "Up in the hills" },
+      { id: "riverfront",  icon: Waves,     title: "River or Creek",  subtitle: "Near the water" },
     ],
     chipsLabel: "WHAT ELSE ARE YOU INCLUDING?",
+    /* No well+septic chip here: the site questions ask about water and sewer
+       directly on this lot-owned path, and two controls for one input fight. */
     chips: [
       { id: "basement",       icon: Layers,    label: "BASEMENT" },
       { id: "bigger-garage",  icon: Car,       label: "3+ CAR GARAGE" },
       { id: "covered-patio",  icon: Sun,       label: "COVERED PATIO" },
-      { id: "well-septic",    icon: Waves,     label: "WELL + SEPTIC" },
     ],
     footerAccent: "build",
   },
@@ -325,11 +338,12 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
       { id: "family-acreage", icon: Trees,     title: "Acreage",     subtitle: "2,400 living, 1,800 shop" },
     ],
     chipsLabel: "WHAT ELSE ARE YOU INCLUDING?",
+    /* No well+septic chip: shop homes are a lot-owned path, so the site
+       questions ask about water and sewer directly. */
     chips: [
       { id: "bigger-shop",    icon: Warehouse, label: "BIGGER SHOP" },
       { id: "basement",       icon: Layers,    label: "BASEMENT" },
       { id: "covered-patio",  icon: Sun,       label: "COVERED PATIO" },
-      { id: "well-septic",    icon: Waves,     label: "WELL + SEPTIC" },
     ],
     footerAccent: "shop home",
   },
@@ -487,6 +501,12 @@ const DEFAULT_PROJECT: ProjectType = "custom-home";
  * The one inference kept is the whole-home "Layout" chip, because that chip
  * literally says layout: ticking it is a direct statement, not a guess.
  */
+/* The paths where the visitor already owns the land, so site conditions are a
+   question we can genuinely ask rather than infer from a lot-type card. */
+function isLotOwnedProject(project: ProjectType): boolean {
+  return project === "build-on-your-lot" || project === "shop-home";
+}
+
 function buildRefinements(
   effectiveProject: ProjectType,
   _subtype: string,
@@ -522,7 +542,14 @@ function buildRefinements(
       ref.garageBays = "two";
     }
     ref.coveredOutdoor = addOns.includes("covered-patio") ? 300 : 0;
-    ref.lotServices = addOns.includes("well-septic") ? "well-septic" : "city";
+    /* Lot-owned paths ask about water and sewer in the site questions instead
+       of a chip, and those answers are merged after this function runs. For
+       the other new-build paths the chip remains the authority. */
+    if (isLotOwnedProject(effectiveProject)) {
+      ref.lotServices = null;
+    } else {
+      ref.lotServices = addOns.includes("well-septic") ? "well-septic" : "city";
+    }
   }
 
   if (effectiveProject === "shop-home") {
@@ -591,6 +618,20 @@ export function EstimateCalculator({
     () => SUBTYPE_DATA[DEFAULT_PROJECT][defaultSubtypeFor(DEFAULT_PROJECT)].sqft,
   );
   const [addOns, setAddOns]               = useState<string[]>([]);
+  /*
+   * SITE QUESTIONS, lot-owned paths only (Build on My Lot, Shop Home).
+   *
+   * These used to be inferred from the lot-type card ("Acreage" silently
+   * priced a well and septic, "Foothills" silently tripled the earthwork).
+   * They are now asked outright in plain language and feed the same pricing
+   * inputs. null means "not answered", and "unsure"/null price the
+   * inexpensive case for the same reason resolve.ts treats unknown services
+   * as city: quoting a well to someone who does not need one loses the lead.
+   */
+  const [siteSlope, setSiteSlope]         = useState<"flat" | "moderate" | "steep" | "unsure" | null>(null);
+  const [siteWater, setSiteWater]         = useState<"city" | "well-septic" | "unsure" | null>(null);
+  const [siteUtilities, setSiteUtilities] = useState<"yes" | "no" | "unsure" | null>(null);
+  const [siteDriveway, setSiteDriveway]   = useState<"short" | "medium" | "long" | "unsure" | null>(null);
   const [finish, setFinish]               = useState<FinishLevel>("mid-range");
   const [budgetInput, setBudgetInput]     = useState<string>("");
   /* Nothing is pre-selected for the visitor. The state above still holds
@@ -887,10 +928,36 @@ export function EstimateCalculator({
     /* Attached to every estimate, including the incomplete one, so the band and
        the structure pricing follow the visitor's answers rather than lagging a
        step behind them. */
-    return { ...base, ...overrides, planningStage, accessoryStructures: structures };
+    const merged: EstimateRefinements = {
+      ...base,
+      ...overrides,
+      planningStage,
+      accessoryStructures: structures,
+    };
+    /* Site answers land LAST on lot-owned paths: they are the visitor's own
+       statement about their land, so they outrank both the layout card and
+       anything read off drawings (plans do not know the lot). Unanswered
+       questions stay null and price the simple/city case. */
+    if (isLotOwnedProject(effectiveProject)) {
+      merged.siteDifficulty =
+        siteSlope === "flat" ? "simple"
+        : siteSlope === "moderate" ? "moderate"
+        : siteSlope === "steep" ? "steep"
+        : null;
+      merged.lotServices = siteWater;
+      merged.utilitiesAtLot =
+        siteUtilities === "yes" ? true : siteUtilities === "no" ? false : null;
+      merged.drivewayLength =
+        siteDriveway === "short" ? 40
+        : siteDriveway === "medium" ? 120
+        : siteDriveway === "long" ? 350
+        : null;
+    }
+    return merged;
   }, [
     effectiveProject, activeProject, subtype, addOns, peScope, cabTier, bathCount, kitchenIn,
     planningStage, structures, planOverrides,
+    siteSlope, siteWater, siteUtilities, siteDriveway,
   ]);
 
   const userRefinementCount = useMemo(
@@ -1253,7 +1320,6 @@ export function EstimateCalculator({
        */
       if (isNewConstructionProject(activeProject)) {
         const implied: string[] = [];
-        if (data.refinements.lotServices === "well-septic") implied.push("well-septic");
         if (data.refinements.garageBays === "three" || data.refinements.garageBays === "four") {
           implied.push("bigger-garage");
         }
@@ -1497,6 +1563,7 @@ export function EstimateCalculator({
     "address",
     "layout",
     "size",
+    ...(isLotOwnedProject(effectiveProject) ? ["site"] : []),
     "upgrades",
     ...(showBathCount ? ["bathcount"] : []),
     ...(showKitchenIncluded ? ["kitchen"] : []),
@@ -2165,6 +2232,112 @@ export function EstimateCalculator({
           </>
         )}
       </p>
+    </div>
+  );
+
+  /* Site questions, lot-owned paths only. Each answer feeds a real pricing
+     input (site-difficulty multiplier, well/septic, utility runs, flatwork),
+     which is why every question offers "Not sure": an unanswered or unsure
+     question prices the simple case rather than guessing the expensive one. */
+  const siteQuestion = <T extends string>(
+    label: string,
+    hint: string,
+    value: T | null,
+    setValue: (v: T) => void,
+    options: { value: T; label: string; sub?: string }[],
+    testPrefix: string,
+  ) => (
+    <div className="mb-4 last:mb-0">
+      <p className="text-[12.5px] tracking-[0.06em] uppercase text-inverse-foreground/90 mb-0.5">{label}</p>
+      <p className="text-[12px] text-inverse-muted/90 mb-2">{hint}</p>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2" role="group" aria-label={label}>
+        {options.map((opt) => {
+          const active = value === opt.value;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => {
+                setValue(opt.value);
+                setEdited(true);
+                fireEstimatorEngagement();
+              }}
+              data-testid={`calc-site-${testPrefix}-${opt.value}`}
+              aria-pressed={active}
+              className={cn(
+                darkChoice(active),
+                "py-2.5 px-2 min-h-[52px] flex flex-col items-center justify-center gap-0.5 text-center",
+              )}
+            >
+              <span className="text-[13px] text-inverse-foreground leading-tight">{opt.label}</span>
+              {opt.sub && (
+                <span className="text-[10.5px] text-inverse-muted leading-tight">{opt.sub}</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const siteSection = (
+    <div className="mt-5">
+      {renderStepLabel("site", "A few things about your lot")}
+      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
+        Site work is one of the biggest swings in a build on your own land, so these four
+        answers move your range more than almost anything else. "Not sure" is a fine answer;
+        it prices the typical case and we confirm it at the site visit.
+      </p>
+      {siteQuestion(
+        "How is the ground?",
+        "Slope decides how much digging, grading and engineering the site needs.",
+        siteSlope,
+        setSiteSlope,
+        [
+          { value: "flat", label: "Mostly flat", sub: "Easy to build on" },
+          { value: "moderate", label: "Some slope", sub: "Needs cut and fill" },
+          { value: "steep", label: "Steep", sub: "Likely engineered" },
+          { value: "unsure", label: "Not sure" },
+        ],
+        "slope",
+      )}
+      {siteQuestion(
+        "Water and sewer?",
+        "A private well and septic system is the single largest site cost on a rural parcel.",
+        siteWater,
+        setSiteWater,
+        [
+          { value: "city", label: "City water + sewer", sub: "Connections at the street" },
+          { value: "well-septic", label: "Well + septic", sub: "No city services" },
+          { value: "unsure", label: "Not sure" },
+        ],
+        "water",
+      )}
+      {siteQuestion(
+        "Power and gas at the lot?",
+        "If service has not been brought to the lot line yet, the runs get longer and pricier.",
+        siteUtilities,
+        setSiteUtilities,
+        [
+          { value: "yes", label: "At the lot", sub: "Poles or boxes at the line" },
+          { value: "no", label: "Not there yet", sub: "Needs to be brought in" },
+          { value: "unsure", label: "Not sure" },
+        ],
+        "utilities",
+      )}
+      {siteQuestion(
+        "About how long a driveway?",
+        "From the road to where the house will sit. Longer drives mean more concrete or gravel.",
+        siteDriveway,
+        setSiteDriveway,
+        [
+          { value: "short", label: "Short", sub: "Under 75 ft, typical subdivision" },
+          { value: "medium", label: "Medium", sub: "75 to 200 ft" },
+          { value: "long", label: "Long", sub: "200 ft or more" },
+          { value: "unsure", label: "Not sure" },
+        ],
+        "driveway",
+      )}
     </div>
   );
 
@@ -3459,6 +3632,8 @@ export function EstimateCalculator({
       {chosen.project && addressStep}
       {chosen.project && subtypeGrid}
       {chosen.subtype && sizeGrid}
+      {/* Site conditions, only when the visitor already owns the land. */}
+      {chosen.subtype && isLotOwnedProject(effectiveProject) && siteSection}
       {chosen.subtype && chipsRow}
       {chosen.subtype && showBathCount && bathCountRow}
       {chosen.subtype && showKitchenIncluded && kitchenRow}

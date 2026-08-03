@@ -70,6 +70,16 @@ export interface ScopeSelections {
   wellSeptic?: boolean | null;
   /** Rough site difficulty. Flat serviced lots are "simple". */
   siteDifficulty?: "simple" | "moderate" | "steep" | null;
+  /**
+   * Whether power and gas already reach the lot line. False means longer
+   * service runs and a bigger permanent-utilities line; null prices as at-lot.
+   */
+  utilitiesAtLot?: boolean | null;
+  /**
+   * Approximate driveway length in feet. Replaces the fixed flatwork allowance
+   * when known; null keeps the standard subdivision-length assumption.
+   */
+  drivewayLengthFt?: number | null;
   /** Covered outdoor living area in SF (covered patio, deck under roof). */
   coveredOutdoorSqft?: number | null;
   /**
