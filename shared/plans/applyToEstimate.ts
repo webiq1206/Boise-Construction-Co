@@ -39,6 +39,14 @@ export interface PlanApplication {
   accessoryStructures?: AccessoryStructure[];
   /** Plain-language list of what changed, for display. */
   applied: string[];
+  /**
+   * Scope the plans revealed that the estimator does not price on its own -
+   * bedroom count, named rooms, fireplaces, ceiling height, decks. Shown back to
+   * the homeowner so an uploaded set visibly registers in full, not just as a
+   * square-foot number. This is what "we read your whole plan" looks like; it
+   * does not move the range unless it also lands in `applied`.
+   */
+  understood: string[];
   /** Things the drawings did not settle, worth saying out loud. */
   unresolved: string[];
 }
@@ -62,6 +70,21 @@ function baysForArea(sqft: number): GarageBays {
     }
   }
   return best;
+}
+
+/**
+ * A stated car-bay count mapped onto the estimator's bay enum.
+ *
+ * Preferred over baysForArea when the plans label the bays, because a count is
+ * exact where an area has to be bucketed. The estimator has no one-car option,
+ * so a single bay rounds up to the smallest garage it can express rather than
+ * disappearing.
+ */
+function baysForCount(n: number): GarageBays {
+  if (n <= 0) return "none";
+  if (n <= 2) return "two";
+  if (n === 3) return "three";
+  return "four";
 }
 
 /**
@@ -115,7 +138,7 @@ export function applyPlanToEstimate(
   plan: ExtractedPlan,
   bounds: { min: number; max: number },
 ): PlanApplication {
-  const out: PlanApplication = { applied: [], unresolved: [] };
+  const out: PlanApplication = { applied: [], understood: [], unresolved: [] };
 
   /*
    * A remodel set changes nothing, checked here as well as at the call site.
@@ -160,7 +183,16 @@ export function applyPlanToEstimate(
     out.applied.push(out.stories > 1 ? `${out.stories} storeys` : "Single storey");
   }
 
-  if (plan.garageSqft != null && plan.garageSqft > 0) {
+  // A stated bay count wins over an area: "3-CAR GARAGE" is exact, an area is
+  // bucketed and a deep or tall bay throws the bucket off.
+  if (plan.garageBays != null && plan.garageBays > 0) {
+    out.garageBays = baysForCount(plan.garageBays);
+    out.applied.push(
+      `${plan.garageBays}-car garage${
+        plan.garageSqft ? ` (${Math.round(plan.garageSqft).toLocaleString("en-US")} sq ft)` : ""
+      }`,
+    );
+  } else if (plan.garageSqft != null && plan.garageSqft > 0) {
     out.garageBays = baysForArea(plan.garageSqft);
     out.applied.push(
       `Garage read as ${out.garageBays === "none" ? "none" : out.garageBays} (${Math.round(plan.garageSqft).toLocaleString("en-US")} sq ft drawn)`,
@@ -217,6 +249,30 @@ export function applyPlanToEstimate(
         .map((s) => `${ACCESSORY_STRUCTURE_LABELS[s.kind].label} (${s.sqft.toLocaleString("en-US")} sq ft)`)
         .join(", ")}`,
     );
+  }
+
+  /*
+   * The rest of the scope: read and shown back, but not priced on its own.
+   *
+   * Bedroom count, named rooms, fireplaces, decks and ceiling height do not each
+   * have an estimator input - the range scales on area, finish and the big
+   * structural choices above. Listing them anyway is the point of the upload:
+   * the homeowner sees their actual plan reflected back in full, which is what
+   * makes "we read your plans" true rather than "we read your square footage".
+   */
+  if (plan.bedrooms != null && plan.bedrooms > 0) {
+    out.understood.push(`${plan.bedrooms} bedroom${plan.bedrooms === 1 ? "" : "s"}`);
+  }
+  if (plan.mainCeilingHeightFt != null && plan.mainCeilingHeightFt > 0) {
+    out.understood.push(`${plan.mainCeilingHeightFt} ft main-floor ceilings`);
+  }
+  for (const room of plan.rooms ?? []) {
+    const r = room.trim();
+    if (r) out.understood.push(r);
+  }
+  for (const feature of plan.specialFeatures ?? []) {
+    const f = feature.trim();
+    if (f) out.understood.push(f);
   }
 
   for (const note of plan.notes ?? []) out.unresolved.push(note);

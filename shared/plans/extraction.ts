@@ -50,8 +50,17 @@ export interface ExtractedPlan {
   /** Per-floor areas when stated, first floor first. */
   floorAreas?: number[] | null;
   storiesAboveGrade?: number | null;
+  /** Main-floor plate/ceiling height in feet, when the plans note it (8, 9, 10, 12). */
+  mainCeilingHeightFt?: number | null;
 
   garageSqft?: number | null;
+  /**
+   * Car bays when the plans LABEL them ("3-CAR GARAGE", "RV BAY"), independent
+   * of area. Preferred over garageSqft when both are present: a stated bay count
+   * is exact, whereas an area has to be bucketed and a deep or tall bay throws
+   * the bucket off.
+   */
+  garageBays?: number | null;
   /** Covered patio, covered deck, covered entry: roofed but not conditioned. */
   coveredOutdoorSqft?: number | null;
 
@@ -59,6 +68,22 @@ export interface ExtractedPlan {
   /** Full bathrooms. Half baths are counted separately. */
   fullBathrooms?: number | null;
   halfBathrooms?: number | null;
+
+  /**
+   * Notable rooms beyond bedrooms and bathrooms, as labelled: office, den,
+   * bonus, loft, flex, mudroom, pantry, gym, theater, wine room. Carried for a
+   * COMPLETE picture of the scope, not for pricing: the estimate scales on area
+   * and finish, not on a room list. Empty when the plans are unlabelled.
+   */
+  rooms?: string[] | null;
+
+  /**
+   * Cost- or scope-relevant features drawn or scheduled: fireplaces, uncovered
+   * decks, porches, patios, an outdoor kitchen, a pool, tall or vaulted
+   * ceilings, an elevator. Free text as read. Informational for the builder;
+   * only the ones with their own estimator input change the number.
+   */
+  specialFeatures?: string[] | null;
 
   /** "none" when the drawings show a slab or crawlspace and no basement. */
   basement?: "none" | "unfinished" | "finished" | null;
@@ -109,17 +134,39 @@ export const PLAN_EXTRACTION_SCHEMA = {
       description: "Per-floor living areas in order, ground floor first, only when the set states them separately.",
     },
     storiesAboveGrade: { type: ["number", "null"], description: "Count of storeys of living space above grade. A basement does not count." },
+    mainCeilingHeightFt: {
+      type: ["number", "null"],
+      description:
+        "Main-floor plate or ceiling height in feet if the plans note it (commonly 8, 9, 10, or 12). Null if not stated.",
+    },
 
     garageSqft: { type: ["number", "null"], description: "Garage area in square feet as printed. Null if not stated." },
+    garageBays: {
+      type: ["number", "null"],
+      description:
+        "Number of car bays when the plans LABEL them, e.g. a '3-CAR GARAGE' title is 3. Report this whenever a bay count is stated, even if you also give garageSqft. Null if only an area or nothing is given.",
+    },
     coveredOutdoorSqft: {
       type: ["number", "null"],
       description:
-        "Roofed but unconditioned outdoor area: covered patio, covered deck, covered entry. Use 0 only if the set explicitly states zero.",
+        "Roofed but unconditioned outdoor area: covered patio, covered deck, covered entry, covered porch. Sum them if several are stated. Use 0 only if the set explicitly states zero.",
     },
 
     bedrooms: { type: ["number", "null"], description: "Count rooms labelled as bedrooms on the floor plans." },
     fullBathrooms: { type: ["number", "null"], description: "Bathrooms with a shower or tub." },
     halfBathrooms: { type: ["number", "null"], description: "Powder rooms: toilet and basin only." },
+    rooms: {
+      type: ["array", "null"],
+      items: { type: "string" },
+      description:
+        "Notable rooms beyond bedrooms and bathrooms, exactly as labelled on the floor plans: office, den, bonus room, loft, flex, mudroom, pantry, gym, theater, wine room, shop, RV bay. List every one you can read. Empty array if the plans are unlabelled.",
+    },
+    specialFeatures: {
+      type: ["array", "null"],
+      items: { type: "string" },
+      description:
+        "Cost- or scope-relevant features drawn or scheduled: each fireplace, uncovered deck, porch, patio, outdoor kitchen, pool, vaulted or tall ceiling, elevator, solar. Free text as read. Empty array if none.",
+    },
 
     basement: {
       type: ["string", "null"],
@@ -168,7 +215,10 @@ export const PLAN_EXTRACTION_SCHEMA = {
  * the drawings never stated. Here it would set the square footage that the
  * entire estimate scales from, so a scaled-off guess is worse than a null.
  */
-export const PLAN_EXTRACTION_SYSTEM_PROMPT = `You read residential architectural plan sets and permit drawings, and you extract the facts a home builder needs to produce a construction budget.
+export const PLAN_EXTRACTION_SYSTEM_PROMPT = `You read residential architectural plan sets and permit drawings, and you extract the facts a home builder needs to produce a construction budget. Your job is to capture the COMPLETE scope of the project, not just its headline square footage.
+
+READ THE ENTIRE SET FIRST
+Look at every page you were given before you answer: the cover sheet and its PROJECT INFORMATION / SCOPE / area block, the site plan, every floor plan, the roof plan, and any door, window, or room schedule. A plan set describes one building across many sheets, and the thing that is easy to miss - a second storey, a bonus room over the garage, a detached shop on the site plan, a covered patio on the rear elevation - is exactly what a budget cannot afford to miss. Be exhaustive: it is better to list a room or structure and be corrected than to overlook it.
 
 WHERE THE NUMBERS USUALLY ARE
 Most residential sets state areas outright on the cover sheet, in a PROJECT INFORMATION or SCOPE block, in roughly this form:
@@ -183,16 +233,24 @@ NEVER INVENT A NUMBER
 - Do not scale, estimate, or infer square footage from the look of a drawing. Square footage is what the whole budget scales from, so a plausible guess is far worse than no answer: it produces a confident price for a house that was never drawn.
 - Do not add floor areas together to produce a total the set does not state. Report the floors you found and leave the total null.
 - 0 and null are different answers. Use 0 only when the drawings explicitly say zero.
+- The one thing you MAY count rather than read off a schedule is discrete, labelled items: bedrooms, bathrooms, garage bays ("3-CAR GARAGE" is 3), fireplaces, and named rooms. Counting labels on the plan is reading, not inventing.
 
 NEW CONSTRUCTION VERSUS REMODEL - READ THIS CAREFULLY
 Set isNewConstruction to FALSE if the set is for a remodel, addition, or alteration. Tell-tale signs: sheet series named EXISTING, DEMO, or NEW; a site plan labelled REMODEL SITE; notes such as "GARAGE NOT ALTERED DURING PROJECT" or "BASEMENT TO REMAIN UNCHANGED"; areas broken into EXISTING and NEW ADDITION; hatching that indicates existing construction to be demolished.
 
 This matters more than anything else you report. These drawings are being used to budget a ground-up home, so a remodel set read as a new build would price an entire house that nobody asked for.
 
+CAPTURE THE WHOLE SCOPE, not just the totals
+- garageSqft AND garageBays: give the bay count whenever the plans label it, even alongside an area. A stated "3-CAR" is more reliable than an area.
+- coveredOutdoorSqft: sum every roofed-but-unconditioned space - covered patio, covered deck, covered porch, covered entry.
+- rooms: list every notable room beyond bedrooms and baths that the floor plans label - office, den, bonus, loft, flex, mudroom, pantry, gym, theater, wine room. This is how the homeowner knows you read their actual plans.
+- specialFeatures: list each fireplace, uncovered deck, porch, patio, outdoor kitchen, pool, vaulted or tall ceiling, elevator, or solar array that is drawn or scheduled.
+- mainCeilingHeightFt: report it if a plate height or ceiling height is noted.
+
 ACCESSORY STRUCTURES
-Report separate buildings drawn on the site plan - shop, detached garage, ADU, guest house, barn, pool house - with their areas if stated. Do not put the attached garage here. If the drawings mark a structure as existing and outside the scope of this work, leave it out and say so in notes.
+Walk the site plan and report EVERY separate building - shop, detached garage, RV garage, ADU, guest house, barn, pool house, workshop - with its area if stated and whether it is attached to or detached from the house. Do not put the attached garage here; that is garageSqft and garageBays. If the drawings mark a structure as existing and outside the scope of this work, leave it out and say so in notes.
 
 CONFIDENCE AND NOTES
-Use "high" only when a titleblock or schedule stated the key areas outright. Use "low" when pages would not render, the set is schematic, or you had to interpret. Put anything odd in notes: conflicting area figures, missing sheets, a set that is clearly partial. A builder reads notes before trusting the numbers.
+Use "high" only when a titleblock or schedule stated the key areas outright. Use "low" when pages would not render, the set is schematic, or you had to interpret. Put anything a builder should know in notes: conflicting area figures, missing sheets, a set that is clearly partial, or scope you saw but could not measure. A builder reads notes before trusting the numbers.
 
 If the upload is not an architectural plan set at all, set isNewConstruction to false, leave the areas null, and say what it appears to be in notes.`;

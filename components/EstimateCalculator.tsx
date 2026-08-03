@@ -650,6 +650,8 @@ export function EstimateCalculator({
   const [planBusy, setPlanBusy] = useState(false);
   const [planError, setPlanError] = useState<string | null>(null);
   const [planApplied, setPlanApplied] = useState<string[] | null>(null);
+  /** Scope the plans revealed that is shown back but does not move the range. */
+  const [planUnderstood, setPlanUnderstood] = useState<string[]>([]);
   const [planUnresolved, setPlanUnresolved] = useState<string[]>([]);
   const [planStored, setPlanStored] = useState<{ filename: string; url: string }[]>([]);
   const [planIsRemodel, setPlanIsRemodel] = useState(false);
@@ -1036,6 +1038,7 @@ export function EstimateCalculator({
     setPlanBusy(true);
     setPlanError(null);
     setPlanApplied(null);
+    setPlanUnderstood([]);
     setPlanUnresolved([]);
     setPlanIsRemodel(false);
 
@@ -1092,10 +1095,12 @@ export function EstimateCalculator({
       });
 
       setPlanApplied(change.applied);
+      setPlanUnderstood(change.understood);
       setPlanUnresolved(change.unresolved);
       setEdited(true);
       trackEvent("estimator_plan_uploaded", {
         applied: change.applied.length,
+        understood: change.understood.length,
         files: fileList.length,
       });
     } catch {
@@ -2515,6 +2520,16 @@ export function EstimateCalculator({
               </li>
             ))}
           </ul>
+          {planUnderstood.length > 0 && (
+            <>
+              <p className="mt-3 text-[12px] uppercase tracking-[0.12em] text-inverse-muted mb-1.5">
+                Also read from your plans
+              </p>
+              <p className="text-[12px] text-inverse-muted leading-relaxed" data-testid="calc-plan-understood">
+                {planUnderstood.join(" · ")}
+              </p>
+            </>
+          )}
           <p className="mt-2.5 text-[12px] text-inverse-muted">
             Everything below is still yours to change.
           </p>

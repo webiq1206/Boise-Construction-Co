@@ -102,12 +102,28 @@ export async function extractPlan(files: PlanExtractionInput[]): Promise<PlanExt
   }
 
   const total = usable.reduce((sum, f) => sum + f.data.byteLength, 0);
-  if (total > MAX_TOTAL_UPLOAD_BYTES) {
+  /*
+   * TWO CEILINGS, and the tighter one is the one that matters here.
+   *
+   * MAX_TOTAL_UPLOAD_BYTES (24 MB) is the shared upload cap. But these bytes are
+   * base64-encoded into the request body, which inflates them by a third, and
+   * the Anthropic PDF request limit is 32 MB. A 24 MB set therefore encodes to
+   * ~32 MB and can fail the API call with an opaque size error AFTER the visitor
+   * has waited through the upload. So the effective ceiling for a set we are
+   * about to send the model is lower, and crossing it returns the same friendly
+   * "send the cover sheet and floor plans" guidance rather than a raw failure.
+   *
+   * A permit set that large is almost always mostly structural and detail
+   * sheets, which carry no scope the budget needs; the cover sheet, site plan
+   * and floor plans do, and they are a small fraction of the page count.
+   */
+  const API_SAFE_BYTES = 22 * 1024 * 1024; // ~29 MB base64, comfortably under 32
+  if (total > Math.min(MAX_TOTAL_UPLOAD_BYTES, API_SAFE_BYTES)) {
     return {
       ok: false,
       reason: "failed",
       message:
-        "That plan set is too large to read in one go. The cover sheet and floor plans are usually enough; the full structural and detail sheets rarely add anything to a budget.",
+        "That plan set is too large to read in one go. Send the cover sheet, site plan and floor plans - they carry everything a budget needs. The structural and detail sheets, which are most of a large set, do not.",
     };
   }
 
