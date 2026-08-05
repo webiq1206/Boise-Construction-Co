@@ -13,7 +13,6 @@ export const buildingInTheBoiseFoothills: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-17',
   tags: ['foothills', 'land', 'boise', 'cost', 'slope'],
-  heroImage: '/images/blog/building-in-the-boise-foothills.webp',
   primaryKeyword: 'building in the boise foothills',
   secondaryKeywords: [
     'boise foothills home building cost',

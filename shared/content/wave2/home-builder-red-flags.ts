@@ -13,7 +13,6 @@ export const homeBuilderRedFlags: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-12',
   tags: ['choosing a builder', 'contracts', 'boise', 'new construction'],
-  heroImage: '/images/blog/home-builder-red-flags.webp',
   primaryKeyword: 'home builder red flags',
   secondaryKeywords: [
     'warning signs bad home builder',

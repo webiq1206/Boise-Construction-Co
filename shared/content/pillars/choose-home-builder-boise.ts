@@ -20,9 +20,7 @@ export const chooseHomeBuilderBoise: GuidePageData = {
     'boise',
     'treasure valley',
     'new construction',
-  ],
-  heroImage: '/images/guides/choose-home-builder-boise.webp',
-  primaryKeyword: 'how to choose a home builder boise',
+  ],  primaryKeyword: 'how to choose a home builder boise',
   quickAnswer:
     'Choose a Boise home builder by comparing scope, not price. Confirm they are bonded and insured and will show Idaho contractor registration on request, read the exclusions page of every bid, reprice allowances at real local costs, check three references including one difficult build, and read the contract before the brochure.',
   keyTakeaways: [

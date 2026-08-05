@@ -19,9 +19,7 @@ export const customHomeDesignGuide: GuidePageData = {
     'new construction',
     'treasure valley',
     'boise',
-  ],
-  heroImage: '/images/guides/custom-home-design-guide.webp',
-  primaryKeyword: 'custom home design boise',
+  ],  primaryKeyword: 'custom home design boise',
   quickAnswer:
     'Design a custom home here by starting with the lot rather than the plan, because sun, slope, and the buildable envelope set the footprint. Then settle plan geometry, storey count, and building performance, since those are fixed once framing starts. Finishes can move later. Custom homes run $250 to $400 per finished square foot, excluding land.',
   keyTakeaways: [

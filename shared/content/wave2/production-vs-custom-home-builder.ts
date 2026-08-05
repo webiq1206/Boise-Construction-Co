@@ -13,7 +13,6 @@ export const productionVsCustomHomeBuilder: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-22',
   tags: ['choosing a builder', 'custom homes', 'boise', 'new construction'],
-  heroImage: '/images/blog/production-vs-custom-home-builder.webp',
   primaryKeyword: 'production builder vs custom builder',
   secondaryKeywords: [
     'production home builder boise',

@@ -13,7 +13,6 @@ export const buildVsBuyBoise: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-06',
   tags: ['build vs buy', 'planning', 'treasure valley', 'cost'],
-  heroImage: '/images/blog/build-vs-buy-boise.webp',
   primaryKeyword: 'build vs buy a home Boise',
   secondaryKeywords: [
     'is it cheaper to build or buy a house in Idaho',

@@ -13,7 +13,6 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-24',
   tags: ['permits', 'ada county', 'canyon county', 'building process'],
-  heroImage: '/images/blog/ada-vs-canyon-county-permit-timelines.webp',
   primaryKeyword: 'ada vs canyon county building permits',
   secondaryKeywords: [
     'canyon county building permit',

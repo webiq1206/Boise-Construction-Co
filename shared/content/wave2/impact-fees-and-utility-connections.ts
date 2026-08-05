@@ -13,7 +13,6 @@ export const impactFeesAndUtilityConnections: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-28',
   tags: ['impact fees', 'permits', 'utilities', 'ada county', 'canyon county'],
-  heroImage: '/images/blog/impact-fees-and-utility-connections.webp',
   primaryKeyword: 'impact fees ada county',
   secondaryKeywords: [
     'building permit fees canyon county',

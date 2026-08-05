@@ -13,7 +13,6 @@ export const agingInPlaceHomeDesign: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-08',
   tags: ['aging in place', 'accessibility', 'home design', 'floor plans', 'new construction'],
-  heroImage: '/images/blog/aging-in-place-home-design.webp',
   primaryKeyword: 'aging in place home design',
   secondaryKeywords: [
     'universal design new home',

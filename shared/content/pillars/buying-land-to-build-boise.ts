@@ -21,9 +21,7 @@ export const buyingLandToBuildBoise: GuidePageData = {
     'ada county',
     'canyon county',
     'new construction',
-  ],
-  heroImage: '/images/guides/buying-land-to-build-boise.webp',
-  primaryKeyword: 'buying land to build a house boise',
+  ],  primaryKeyword: 'buying land to build a house boise',
   quickAnswer:
     'A parcel being for sale does not make it buildable. Before buying land in Ada or Canyon County, confirm recorded legal access, zoning that permits a house, a buildable envelope left after setbacks, a water and sewer answer, and stable soil. Site work runs $25,000 to $50,000 on a serviced lot and $80,000 to $150,000 on rural acreage, excluding land.',
   keyTakeaways: [

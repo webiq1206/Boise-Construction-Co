@@ -13,7 +13,6 @@ export const costToBuildAHouseBoise: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-02',
   tags: ['cost', 'custom home', 'boise', 'new construction'],
-  heroImage: '/images/blog/cost-to-build-a-house-boise.webp',
   primaryKeyword: 'cost to build a house in Boise',
   secondaryKeywords: [
     'how much does it cost to build a house in Boise',

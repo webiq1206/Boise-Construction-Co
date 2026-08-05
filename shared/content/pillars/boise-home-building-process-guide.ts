@@ -19,9 +19,7 @@ export const boiseHomeBuildingProcessGuide: GuidePageData = {
     'permits',
     'treasure valley',
     'construction timeline',
-  ],
-  heroImage: '/images/guides/boise-home-building-process-guide.webp',
-  primaryKeyword: 'home building process boise',
+  ],  primaryKeyword: 'home building process boise',
   quickAnswer:
     'Building a home in the Treasure Valley runs through five stretches: a first meeting and feasibility, design, engineering and permitting, construction, and handover. It commonly takes 12 to 18 months from the first design meeting to keys, with 7 to 11 months of that on site. Custom homes plan at $250 to $400 per finished square foot, excluding land.',
   keyTakeaways: [

@@ -13,7 +13,6 @@ export const choosingFinishesForANewHome: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-10',
   tags: ['finishes', 'selections', 'new construction', 'budget'],
-  heroImage: '/images/blog/choosing-finishes-for-a-new-home.webp',
   primaryKeyword: 'choosing finishes for a new home',
   secondaryKeywords: [
     'new home selections process',

@@ -13,7 +13,6 @@ export const customHomeCostPerSquareFootBoise: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-09',
   tags: ['cost', 'cost per square foot', 'boise', 'custom home'],
-  heroImage: '/images/blog/custom-home-cost-per-square-foot-boise.webp',
   primaryKeyword: 'custom home cost per square foot Boise',
   secondaryKeywords: [
     'cost per square foot to build a house Idaho',

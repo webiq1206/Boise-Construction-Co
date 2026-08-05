@@ -689,7 +689,11 @@ function buildLocationGuide(p: PlaceGuide): GuidePageData {
     guideType: p.guideType,
     tags: [p.citySlug, p.name.toLowerCase(), 'idaho', 'new construction'],
     publishedAt: '2026-06-20',
-    heroImage: `/images/guides/${p.slug}.webp`,
+    // Hero imagery comes from the blog image registry (see
+    // scripts/generate-blog-image-registry.ts), which maps each location guide
+    // to its own city streetscape. An explicit override here used to point at
+    // /images/guides/<slug>.webp, files that never existed, so every location
+    // guide rendered a broken hero. Omit the override and let the registry win.
     quickAnswer: p.quickAnswer,
     keyTakeaways: p.takeaways,
     faqs: p.faqs,

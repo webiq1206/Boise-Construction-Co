@@ -13,7 +13,6 @@ export const energyEfficientHomeBuildingBoise: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-15',
   tags: ['energy efficiency', 'high performance', 'hvac', 'insulation', 'new construction'],
-  heroImage: '/images/blog/energy-efficient-home-building-boise.webp',
   primaryKeyword: 'energy efficient home building boise',
   secondaryKeywords: [
     'high performance home idaho',

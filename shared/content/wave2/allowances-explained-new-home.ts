@@ -13,7 +13,6 @@ export const allowancesExplainedNewHome: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-20',
   tags: ['allowances', 'contracts', 'budget', 'new construction'],
-  heroImage: '/images/blog/allowances-explained-new-home.webp',
   primaryKeyword: 'allowances in a new home contract',
   secondaryKeywords: [
     'what is a builder allowance',

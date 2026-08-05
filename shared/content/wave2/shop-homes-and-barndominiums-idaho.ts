@@ -13,7 +13,6 @@ export const shopHomesAndBarndominiumsIdaho: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-22',
   tags: ['barndominium', 'shop home', 'post frame', 'new construction', 'idaho'],
-  heroImage: '/images/blog/shop-homes-and-barndominiums-idaho.webp',
   primaryKeyword: 'shop homes and barndominiums idaho',
   secondaryKeywords: [
     'barndominium cost idaho',

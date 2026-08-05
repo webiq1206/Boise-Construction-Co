@@ -13,7 +13,6 @@ export const customHomeFloorPlanIdeasBoise: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-15',
   tags: ['floor plans', 'home design', 'new construction', 'boise', 'treasure valley'],
-  heroImage: '/images/blog/custom-home-floor-plan-ideas-boise.webp',
   primaryKeyword: 'custom home floor plan ideas boise',
   secondaryKeywords: [
     'treasure valley floor plans',

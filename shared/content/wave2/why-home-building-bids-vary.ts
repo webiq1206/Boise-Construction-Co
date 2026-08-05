@@ -13,7 +13,6 @@ export const whyHomeBuildingBidsVary: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-03',
   tags: ['choosing a builder', 'budgeting', 'boise', 'new construction'],
-  heroImage: '/images/blog/why-home-building-bids-vary.webp',
   primaryKeyword: 'why home building bids vary',
   secondaryKeywords: [
     'why are builder quotes so different',

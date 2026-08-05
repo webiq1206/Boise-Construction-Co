@@ -13,7 +13,6 @@ export const howToBudgetANewHomeBoise: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-23',
   tags: ['budget', 'cost', 'planning', 'boise'],
-  heroImage: '/images/blog/how-to-budget-a-new-home-boise.webp',
   primaryKeyword: 'how to budget for a new home',
   secondaryKeywords: [
     'new home construction budget Boise',

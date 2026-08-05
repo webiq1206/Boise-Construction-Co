@@ -13,7 +13,6 @@ export const luxuryHomeBuildingCostBoise: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-30',
   tags: ['luxury', 'cost', 'custom home', 'boise'],
-  heroImage: '/images/blog/luxury-home-building-cost-boise.webp',
   primaryKeyword: 'luxury home building cost Boise',
   secondaryKeywords: [
     'luxury custom home cost Idaho',

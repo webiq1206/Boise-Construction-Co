@@ -24,6 +24,9 @@ import {
   getCityServiceImageSet,
 } from '../shared/cityServiceImages';
 import { CITIES, SERVICES } from '../shared/contentData';
+import { BLOG_POSTS } from '../shared/blogContent';
+import { GUIDE_PAGES } from '../shared/guideContent';
+import { getBlogHeroImage } from '../shared/blogImages';
 
 const root = path.join(__dirname, '..');
 const missing: string[] = [];
@@ -79,6 +82,22 @@ for (const city of CITIES) {
   check(`getAreaImageSet(${city.slug}).hero`, set.hero);
   check(`getAreaImageSet(${city.slug}).breather`, set.breather);
   check(`getAreaImageSet(${city.slug}).process`, set.process);
+}
+
+// Blog posts and guides resolve their hero through the registry, but a per-item
+// `heroImage` override wins over it (see getBlogImageForSlug). Overrides that
+// pointed at files which were never created - /images/blog/<slug>.webp and
+// /images/guides/<slug>.webp - silently shadowed valid registry images and 404'd
+// in production while the alt text (which comes from the registry) still looked
+// correct. Validate both the raw override, if any, and the *resolved* hero that
+// the page actually requests, for every post and guide.
+for (const post of BLOG_POSTS) {
+  check(`BLOG_POSTS["${post.slug}"].heroImage`, post.heroImage);
+  check(`resolved hero for post "${post.slug}"`, getBlogHeroImage(post.slug, post.heroImage));
+}
+for (const guide of GUIDE_PAGES) {
+  check(`GUIDE_PAGES["${guide.slug}"].heroImage`, guide.heroImage);
+  check(`resolved hero for guide "${guide.slug}"`, getBlogHeroImage(guide.slug, guide.heroImage));
 }
 
 if (missing.length > 0) {

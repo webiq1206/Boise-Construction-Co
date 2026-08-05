@@ -13,7 +13,6 @@ export const designBuildVsGeneralContractor: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-19',
   tags: ['choosing a builder', 'design-build', 'boise', 'new construction'],
-  heroImage: '/images/blog/design-build-vs-general-contractor.webp',
   primaryKeyword: 'design build vs general contractor',
   secondaryKeywords: [
     'design build home builder boise',

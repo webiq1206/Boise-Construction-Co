@@ -13,7 +13,6 @@ export const stagesOfBuildingAHouse: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-02',
   tags: ['new construction', 'building process', 'boise', 'construction stages'],
-  heroImage: '/images/blog/stages-of-building-a-house.webp',
   primaryKeyword: 'stages of building a house',
   secondaryKeywords: [
     'house construction phases in order',

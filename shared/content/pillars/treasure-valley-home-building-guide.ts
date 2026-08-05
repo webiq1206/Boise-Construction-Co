@@ -19,9 +19,7 @@ export const treasureValleyHomeBuildingGuide: GuidePageData = {
     'canyon county',
     'home building',
     'locations',
-  ],
-  heroImage: '/images/guides/treasure-valley-home-building-guide.webp',
-  primaryKeyword: 'treasure valley home builder',
+  ],  primaryKeyword: 'treasure valley home builder',
   quickAnswer:
     'What it costs to build a new home in the Treasure Valley depends mostly on the parcel, not the city name. A simple single level on a flat, serviced valley lot runs near $225 per square foot excluding land, while steep foothills sites regularly exceed $450. Ada and Canyon County permit separately.',
   keyTakeaways: [

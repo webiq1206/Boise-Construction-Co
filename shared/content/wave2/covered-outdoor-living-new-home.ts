@@ -13,7 +13,6 @@ export const coveredOutdoorLivingNewHome: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-28',
   tags: ['outdoor living', 'covered patio', 'home design', 'new construction', 'treasure valley'],
-  heroImage: '/images/blog/covered-outdoor-living-new-home.webp',
   primaryKeyword: 'covered outdoor living new home',
   secondaryKeywords: [
     'covered patio new construction boise',

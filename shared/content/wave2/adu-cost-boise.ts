@@ -13,7 +13,6 @@ export const aduCostBoise: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-24',
   tags: ['adu', 'accessory dwelling unit', 'new construction', 'cost', 'boise'],
-  heroImage: '/images/blog/adu-cost-boise.webp',
   primaryKeyword: 'adu cost boise',
   secondaryKeywords: [
     'how much does an adu cost to build',

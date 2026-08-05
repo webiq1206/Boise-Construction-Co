@@ -13,7 +13,6 @@ export const firstMeetingWithAHomeBuilder: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-25',
   tags: ['consultation', 'new construction', 'boise', 'getting started'],
-  heroImage: '/images/blog/first-meeting-with-a-home-builder.webp',
   primaryKeyword: 'first meeting with a home builder',
   secondaryKeywords: [
     'home builder consultation boise',

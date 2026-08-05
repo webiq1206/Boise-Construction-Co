@@ -13,7 +13,6 @@ export const constructionLoanBasicsIdaho: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-13',
   tags: ['financing', 'construction loan', 'idaho', 'planning'],
-  heroImage: '/images/blog/construction-loan-basics-idaho.webp',
   primaryKeyword: 'construction loan Idaho',
   secondaryKeywords: [
     'construction to permanent loan Idaho',

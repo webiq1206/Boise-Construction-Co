@@ -13,7 +13,6 @@ export const questionsToAskAHomeBuilder: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-05',
   tags: ['choosing a builder', 'contracts', 'boise', 'new construction'],
-  heroImage: '/images/blog/questions-to-ask-a-home-builder.webp',
   primaryKeyword: 'questions to ask a home builder',
   secondaryKeywords: [
     'what to ask a custom home builder',

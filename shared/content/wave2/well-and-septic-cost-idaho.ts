@@ -13,7 +13,6 @@ export const wellAndSepticCostIdaho: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-24',
   tags: ['land', 'well', 'septic', 'rural', 'site work'],
-  heroImage: '/images/blog/well-and-septic-cost-idaho.webp',
   primaryKeyword: 'well and septic cost idaho',
   secondaryKeywords: [
     'cost to drill a well idaho',

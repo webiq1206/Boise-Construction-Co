@@ -13,7 +13,6 @@ export const howToCompareBuilderBids: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-26',
   tags: ['choosing a builder', 'budgeting', 'boise', 'new construction'],
-  heroImage: '/images/blog/how-to-compare-builder-bids.webp',
   primaryKeyword: 'how to compare home builder bids',
   secondaryKeywords: [
     'comparing custom home bids',

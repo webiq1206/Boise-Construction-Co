@@ -13,7 +13,6 @@ export const fixedPriceVsCostPlus: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-12',
   tags: ['choosing a builder', 'contracts', 'boise', 'new construction'],
-  heroImage: '/images/blog/fixed-price-vs-cost-plus.webp',
   primaryKeyword: 'fixed price vs cost plus',
   secondaryKeywords: [
     'cost plus contract new home',

@@ -13,7 +13,6 @@ export const multigenerationalHomeDesign: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-01',
   tags: ['multigenerational', 'home design', 'floor plans', 'accessibility', 'new construction'],
-  heroImage: '/images/blog/multigenerational-home-design.webp',
   primaryKeyword: 'multigenerational home design',
   secondaryKeywords: [
     'multigenerational house plans',

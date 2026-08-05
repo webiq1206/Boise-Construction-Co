@@ -13,7 +13,6 @@ export const boiseBuildingPermitGuide: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-15',
   tags: ['permits', 'new construction', 'boise', 'building process'],
-  heroImage: '/images/blog/boise-building-permit-guide.webp',
   primaryKeyword: 'boise building permit new home',
   secondaryKeywords: [
     'new home building permit boise',

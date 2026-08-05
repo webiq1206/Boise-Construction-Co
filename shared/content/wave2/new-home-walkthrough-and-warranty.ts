@@ -13,7 +13,6 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-18',
   tags: ['warranty', 'walkthrough', 'punch list', 'new construction'],
-  heroImage: '/images/blog/new-home-walkthrough-and-warranty.webp',
   primaryKeyword: 'new home final walkthrough and warranty',
   secondaryKeywords: [
     'new construction punch list',

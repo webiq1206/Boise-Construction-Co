@@ -13,7 +13,6 @@ export const whatDrivesHomeBuildingCostsBoise: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-16',
   tags: ['cost', 'new construction', 'boise', 'planning'],
-  heroImage: '/images/blog/what-drives-home-building-costs-boise.webp',
   primaryKeyword: 'what drives home building costs',
   secondaryKeywords: [
     'new home cost factors Boise',

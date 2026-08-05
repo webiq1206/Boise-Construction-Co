@@ -13,7 +13,6 @@ export const howLongDoesItTakeToBuildAHouseBoise: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-08',
   tags: ['new construction', 'timeline', 'boise', 'building process'],
-  heroImage: '/images/blog/how-long-does-it-take-to-build-a-house-boise.webp',
   primaryKeyword: 'how long does it take to build a house in Boise',
   secondaryKeywords: [
     'home building timeline boise',

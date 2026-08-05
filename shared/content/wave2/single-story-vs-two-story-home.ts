@@ -13,7 +13,6 @@ export const singleStoryVsTwoStoryHome: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-19',
   tags: ['floor plans', 'home design', 'cost', 'new construction', 'treasure valley'],
-  heroImage: '/images/blog/single-story-vs-two-story-home.webp',
   primaryKeyword: 'single story vs two story home',
   secondaryKeywords: [
     'is a two story home cheaper to build',

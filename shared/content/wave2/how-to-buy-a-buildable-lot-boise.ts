@@ -13,7 +13,6 @@ export const howToBuyABuildableLotBoise: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-12',
   tags: ['land', 'lots', 'boise', 'site work', 'due diligence'],
-  heroImage: '/images/blog/how-to-buy-a-buildable-lot-boise.webp',
   primaryKeyword: 'buildable lot boise',
   secondaryKeywords: [
     'is this lot buildable',

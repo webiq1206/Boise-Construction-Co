@@ -13,7 +13,6 @@ export const lotEvaluationChecklist: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-06',
   tags: ['land', 'lots', 'checklist', 'due diligence', 'treasure valley'],
-  heroImage: '/images/blog/lot-evaluation-checklist.webp',
   primaryKeyword: 'lot evaluation checklist',
   secondaryKeywords: [
     'what to check before buying land',
