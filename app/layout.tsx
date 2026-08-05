@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   creator: SITE_CONFIG.name,
   metadataBase: new URL(SITE_CONFIG.siteUrl),
   // Favicon set built from the approved small-size brand icon (ochre field, the
-  // script "C" initial) — the mark the brand kit specifies for favicons and app
+  // script "C" initial), the mark the brand kit specifies for favicons and app
   // icons, since the seal's arc text stops reading below ~160px.
   icons: {
     icon: [
