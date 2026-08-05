@@ -193,11 +193,27 @@ export function Re10Wizard() {
   const phoneRef = useRef<HTMLInputElement>(null);
   const addressRef = useRef<HTMLInputElement>(null);
   const restoredRef = useRef(false);
+  /** Pending auto-advance timer, and a live mirror of the answers it reads. */
+  const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const stateRef = useRef({
+    step: "upload" as Step,
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    preferredContact: "email" as "email" | "phone" | "text",
+    returnTo: null as Step | null,
+    busy: false,
+  });
 
   // Fires once on mount. The denominator for every other stage, so it must
   // not re-fire when React re-renders or when a step changes.
   useEffect(() => {
     trackEvent(RE10_EVENTS.started);
+    // Clear any pending auto-advance if the wizard unmounts mid-countdown.
+    return () => {
+      if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
+    };
   }, []);
 
   /* ---------------------------------------------------------- persistence */
@@ -404,6 +420,12 @@ export function Re10Wizard() {
   }
 
   const goTo = useCallback((next: Step) => {
+    // Any navigation cancels a pending auto-advance, so a lingering timer can
+    // never fire a step after the user has already moved or gone back.
+    if (autoAdvanceRef.current) {
+      clearTimeout(autoAdvanceRef.current);
+      autoAdvanceRef.current = null;
+    }
     setStep(next);
     setError(null);
     setFieldErrors({});
@@ -412,6 +434,49 @@ export function Re10Wizard() {
       topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
     );
   }, []);
+
+  /**
+   * Auto-advance, done conservatively so it helps rather than hijacks.
+   *
+   * It only ever arms from an explicit single-choice tap (a role, an occupancy),
+   * and only when that tap leaves the step actually complete - so it can never
+   * skip a required field or move on incomplete data. A short delay lets the
+   * selection register visibly first; any later edit, a re-tap, Back, Continue,
+   * or a step change cancels it; and it stays off entirely while the user is
+   * editing one answer from the Review or results screen. Back is always there,
+   * so nothing it does is a trap.
+   */
+  function stepComplete(s: Step, cur: typeof stateRef.current): boolean {
+    if (s === "about") return cur.name.trim().length >= 2;
+    if (s === "property") return cur.address.trim().length >= 4;
+    if (s === "reach") {
+      return cur.preferredContact === "email"
+        ? EMAIL_RE.test(cur.email.trim())
+        : cur.phone.replace(/\D/g, "").length >= 10;
+    }
+    return false;
+  }
+
+  function cancelAutoAdvance() {
+    if (autoAdvanceRef.current) {
+      clearTimeout(autoAdvanceRef.current);
+      autoAdvanceRef.current = null;
+    }
+  }
+
+  function armAutoAdvance() {
+    cancelAutoAdvance();
+    const cur = stateRef.current;
+    // Never while editing a single answer, mid-request, or on an incomplete step.
+    if (cur.returnTo || cur.busy || !stepComplete(cur.step, cur)) return;
+    autoAdvanceRef.current = setTimeout(() => {
+      const c = stateRef.current;
+      if (c.returnTo || c.busy || !stepComplete(c.step, c)) return;
+      const idx = FLOW.indexOf(c.step);
+      const next = FLOW[idx + 1];
+      if (next) goTo(next);
+    }, 420);
+  }
 
   async function analyze() {
     if (files.length === 0) {
@@ -727,6 +792,10 @@ export function Re10Wizard() {
   }
 
   const currentIndex = FLOW.indexOf(step);
+
+  // A live mirror the auto-advance timer reads, so it always acts on the latest
+  // answers rather than a snapshot captured when the timer was armed.
+  stateRef.current = { step, name, email, phone, address, preferredContact, returnTo, busy };
 
   return (
     <Section id="re10-estimator" variant="inverse" divider>
@@ -1079,11 +1148,26 @@ export function Re10Wizard() {
                 label="Full name"
                 required
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  cancelAutoAdvance();
+                }}
                 error={fieldErrors.name}
                 autoComplete="name"
                 data-testid="input-re10-name"
               />
+              <WizardField
+                tone="inverse"
+                label="Brokerage or company (optional)"
+                value={brokerage}
+                onChange={(e) => {
+                  setBrokerage(e.target.value);
+                  cancelAutoAdvance();
+                }}
+                autoComplete="organization"
+              />
+              {/* Role sits last and is a single tap, so selecting it can safely
+                  auto-continue once a name is present. */}
               <div>
                 <span className="mb-2 block text-[12.5px] text-inverse-muted">Your role</span>
                 <div role="radiogroup" aria-label="Your role" className="grid grid-cols-2 gap-2.5">
@@ -1093,19 +1177,15 @@ export function Re10Wizard() {
                       tone="inverse"
                       control="radio"
                       selected={role === r.value}
-                      onSelect={() => setRole(r.value)}
+                      onSelect={() => {
+                        setRole(r.value);
+                        armAutoAdvance();
+                      }}
                       title={r.label}
                     />
                   ))}
                 </div>
               </div>
-              <WizardField
-                tone="inverse"
-                label="Brokerage or company (optional)"
-                value={brokerage}
-                onChange={(e) => setBrokerage(e.target.value)}
-                autoComplete="organization"
-              />
             </div>
           </WizardStep>
         )}
@@ -1173,17 +1253,25 @@ export function Re10Wizard() {
                 label="Property address"
                 required
                 value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                onChange={(e) => {
+                  setAddress(e.target.value);
+                  cancelAutoAdvance();
+                }}
                 error={fieldErrors.address}
                 hint={extraction?.propertyAddress ? "Read from your document - edit if needed." : undefined}
                 autoComplete="street-address"
                 data-testid="input-re10-address"
               />
+              {/* Occupancy is the step's last decision and a single tap, so it
+                  auto-continues once an address is present. */}
               <WizardChoiceGroup
                 tone="inverse"
                 label="Property is"
                 value={occupancy}
-                onChange={(v) => setOccupancy(v)}
+                onChange={(v) => {
+                  setOccupancy(v);
+                  armAutoAdvance();
+                }}
                 options={[
                   { value: "vacant", label: "Vacant" },
                   { value: "occupied", label: "Occupied" },
