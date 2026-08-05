@@ -208,7 +208,7 @@ export const HOW_WE_BUILD_STEPS = [
   {
     number: "05",
     title: "Walkthrough and workmanship warranty",
-    desc: "We walk the finished home with you and build the punch list together. If we built it and it fails from workmanship, we come back and fix it.",
+    desc: "We tour the finished home together and write the punch list side by side before you take the keys. Anything that later fails because of how we built it, we come back and make right under the workmanship warranty.",
   },
 ];
 
@@ -293,10 +293,10 @@ export const FINANCING_BULLETS = [
 ];
 
 export const CONSULT_BULLETS = [
-  "No commission-driven salespeople",
-  "No pressure to decide on the spot",
-  "An honest budget band, in writing",
-  "Response within one business day",
+  "Nobody in the room works on commission",
+  "No pressure to sign anything on the spot",
+  "A written budget band that is yours to keep",
+  "We reply within one business day",
 ];
 
 /**

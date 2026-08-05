@@ -107,12 +107,12 @@ export default function HomePage() {
             <em className="brc-accent">cost</em>
           </>
         }
-        description="If you scrolled past the estimator above, come back anytime - or book a free planning consultation and we'll walk through your lot, your plan, and a realistic budget band together."
+        description="Missed the estimator higher up the page? It stays open whenever you are ready - or book a free planning consultation and we will work through your lot, your plan, and a realistic budget band in person."
         variant="tint"
         bullets={[
-          "Instant range based on real Treasure Valley build costs",
-          "Free planning consultation when you're ready for detail",
-          "No obligation - we email you a copy of your estimate",
+          "A ballpark range built from current Treasure Valley build costs",
+          "A free planning consultation when you want the detail",
+          "No strings - a copy of whatever the estimator returns lands in your inbox",
         ]}
       />
 
@@ -146,9 +146,10 @@ export default function HomePage() {
                   <em className="brc-accent">build</em>.
                 </h2>
                 <p className="text-base leading-relaxed mb-8 text-muted-foreground">
-                  We will reach out within one business day to schedule your free
-                  60 to 90 minute planning consultation. You will leave with a realistic
-                  budget band, a view of your lot options, and no obligation.
+                  Send a few details and we will set up a free 60 to 90 minute
+                  planning session, usually within one business day. By the end you
+                  will have a realistic budget band, a clear-eyed read on your lot,
+                  and no expectation to go any further.
                 </p>
                 <div className="space-y-3">
                   {CONSULT_BULLETS.map((item) => (

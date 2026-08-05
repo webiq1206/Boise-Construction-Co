@@ -26,7 +26,7 @@ export function ServicesGrid() {
               <em className="brc-accent">build</em>
             </>
           }
-          description="Design, engineering, permitting, and construction under one roof, not a designer and a builder pointing at each other. One team from the first sketch to the day you get the keys."
+          description="One firm carries the entire build - the drawings, the engineering, the permit set, and the field work - so nothing slips through the gap between a designer and a contractor. The same team stays with you from the first sketch to the day the keys are in your hand."
         />
 
         <div className="grid sm:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
@@ -68,12 +68,12 @@ export function ServicesGrid() {
               leaves a lonely card, and gives the section a clear next step. */}
           <Reveal delay={primary.length * 40}>
             <div className="h-full min-h-[220px] rounded-sm border border-card-border bg-card p-6 md:p-8 flex flex-col justify-center">
-              <div className="brc-label mb-3">Not sure where to start</div>
+              <div className="brc-label mb-3">Not sure of the first step</div>
               <h3 className="font-sans font-light text-xl md:text-2xl tracking-tight mb-2 text-foreground">
                 Tell us what you want to <em className="brc-accent">build</em>
               </h3>
               <p className="text-sm leading-relaxed mb-5 text-muted-foreground">
-                Every home starts with a free planning consultation and an honest budget band, with no obligation.
+                Every build begins the same way - a free planning consultation and a candid budget band, with nothing owed and no pressure to continue.
               </p>
               <Button variant="brand" className="self-start" asChild>
                 <a href="#consult">{CTA_SECONDARY}</a>
