@@ -319,6 +319,10 @@ html, body {
     @apply py-24 md:py-32;
   }
 
+  .section-y-lg {
+    @apply py-28 md:py-40;
+  }
+
   .section-y-sm {
     @apply py-16 md:py-20;
   }

@@ -8,6 +8,7 @@ interface BusinessPhoneLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorEl
   display?: boolean;
   showIcon?: boolean;
   iconClassName?: string;
+  "data-testid"?: string;
 }
 
 /** Click-to-call link using canonical site phone. */

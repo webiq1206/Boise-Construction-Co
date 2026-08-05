@@ -202,7 +202,7 @@ export async function POST(request: NextRequest) {
              the whole lead insert fails. Non-owner leads never have a profile,
              so they always hit this path. */
           ...(data.propertyProfile
-            ? { propertyProfile: data.propertyProfile as PropertyProfile }
+            ? { propertyProfile: data.propertyProfile as unknown as PropertyProfile }
             : {}),
           projectType: data.projectType,
           message: [

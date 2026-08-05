@@ -13,7 +13,7 @@ const variantClasses: Record<SectionVariant, string> = {
 export interface SectionProps extends React.HTMLAttributes<HTMLElement> {
   variant?: SectionVariant;
   divider?: boolean;
-  spacing?: "default" | "sm" | "none";
+  spacing?: "default" | "lg" | "sm" | "none";
 }
 
 export function Section({
@@ -29,6 +29,7 @@ export function Section({
       className={cn(
         variantClasses[variant],
         spacing === "default" && "section-y",
+        spacing === "lg" && "section-y-lg",
         spacing === "sm" && "section-y-sm",
         divider && "section-divider",
         className

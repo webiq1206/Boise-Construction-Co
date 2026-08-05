@@ -272,7 +272,7 @@ export default function AdminProjectDetailPage() {
                         size="sm"
                         variant="outline"
                         onClick={() => createContractMutation.mutate(
-                          (a as { subcontractorId: string }).subcontractorId
+                          (a as unknown as { subcontractorId: string }).subcontractorId
                         )}
                       >
                         Send Contract

@@ -8,7 +8,7 @@ import { SERVICES } from '@/shared/contentData';
 
 interface SchemaContext {
   '@context': string;
-  '@type': string | string[];
+  '@type'?: string | string[];
   [key: string]: unknown;
 }
 

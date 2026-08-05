@@ -37,6 +37,9 @@ const buttonVariants = cva(
         /** @deprecated Use brandOutline on light backgrounds. */
         brandInverseOutline:
           "rounded-sm border border-border bg-transparent text-foreground shadow-xs min-h-11 px-6 py-3.5",
+        /** Text-only link-style button (no fill or border), for inline navigation actions. */
+        link:
+          "border border-transparent text-primary underline-offset-4 hover:underline",
       },
       // Heights are set as "min" heights, because sometimes Ai will place large amount of content
       // inside buttons. With a min-height they will look appropriate with small amounts of content,
