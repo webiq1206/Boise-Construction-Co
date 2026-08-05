@@ -2,7 +2,7 @@
 
 Treasure Valley residential new construction: custom and semi-custom homes, design-build, and pre-construction planning. Also runs a separate RE-10 inspection-repair service for real estate transactions.
 
-The operating brand is **Boise Construction Co**. The domain remains `boiseremodeling.co` (kept to preserve search authority), so the two names appearing together is expected, not a mistake.
+The operating brand is **Boise Construction Co** and the site runs on its own domain, `boiseconstruction.co` (the canonical value in `shared/siteConfig.ts`, which every canonical URL, sitemap entry, OG URL, and schema `@id` is built from). It was created by duplicating and rebuilding the separate `boiseremodeling.co` remodeling site, so shared code and some internal notes still reference that origin. Those references are expected, not a mistake.
 
 ## Development
 
