@@ -141,8 +141,8 @@ export default function AboutPage() {
             <p className="text-base md:text-lg text-inverse-foreground/75 max-w-2xl leading-relaxed mb-8">
               Our focus is clarity: a line-item budget before we break ground, a published draw
               schedule, a written update every week, permits handled in-house for Ada and Canyon
-              County, and a one-year workmanship warranty. Every detail, every decision - handled
-              with intention.
+              County, and a one-year workmanship warranty. The point of all of it is simple - you
+              always know what your home costs and where the build stands.
             </p>
             <div className="flex flex-wrap gap-3 mb-8">
               <ConsultCTA variant="brand">
