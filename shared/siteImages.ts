@@ -9,6 +9,9 @@ export const SITE_IMAGES = {
   hero: "/images/hero-great-room.webp",
   /** Design-build / plan review split panels. */
   process: "/images/process-design-review.webp",
+  /** "Where your money goes" value band - a carpenter setting custom cabinetry,
+   *  reinforcing that the budget is spent on craftsmanship, not overhead. */
+  valueCraft: "/images/value-craftsmanship-cabinetry.webp",
   /** A house being framed - process sections. */
   processInProgress: "/images/framing-in-progress.webp",
   /** Full-bleed brand statement band. */

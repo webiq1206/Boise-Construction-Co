@@ -49,9 +49,10 @@ export function ValueOverheadSection() {
           <Reveal delay={80}>
             <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-sm">
               <Image
-                src={SITE_IMAGES.process}
-                alt="Home plans and finish material samples laid out during a design review"
+                src={SITE_IMAGES.valueCraft}
+                alt="Boise Construction Co carpenter leveling custom white oak cabinetry above a quartz counter in a new Treasure Valley home"
                 fill
+                loading="lazy"
                 sizes="(max-width: 768px) 100vw, 40vw"
                 className="object-cover img-brand-grade"
               />
