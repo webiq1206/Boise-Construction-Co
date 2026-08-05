@@ -240,24 +240,24 @@ export const PRINCIPLES = [
 ];
 
 export const STANDARD_INCLUSIONS = [
-  "All permits pulled in-house",
-  "Dedicated project manager",
-  "Line-item budget before construction",
-  "Weekly written progress updates",
-  "Lender draw and inspection coordination",
-  "Written workmanship warranty",
+  "Permits handled in-house, start to finish",
+  "One project manager who owns your build",
+  "A line-item budget approved before ground breaks",
+  "A written progress note every Friday",
+  "Lender draw and inspection scheduling",
+  "A written workmanship warranty",
 ];
 
 export const OPTIONAL_ENHANCEMENTS = {
-  title: "3D renderings and visualizations",
+  title: "3D renderings before framing starts",
   body: "An optional design upgrade that lets you see the finished home before framing starts. It adds to the project investment and the design timeline, but for many clients it is what makes committing to a layout, a roofline, or a finish package feel like a decision rather than a gamble.",
   note: "Available on request during your design consultation.",
 };
 
 export const BUDGET_GUIDANCE_POINTS = [
   {
-    title: "Planning ranges, then a real budget",
-    body: "Our online estimator and your planning consultation produce a range based on size, finish level, site conditions, and current market pricing. That range narrows into a line-item budget once we have plans and selections.",
+    title: "A range first, then a real budget",
+    body: "The estimator here and your planning consultation give you an early band that reflects size, finish level, the specifics of your lot, and where prices sit today. Once plans and selections are set, that band resolves into a line-item budget you approve.",
   },
   {
     title: "A line-item budget before construction",
@@ -268,8 +268,8 @@ export const BUDGET_GUIDANCE_POINTS = [
     body: "Driveways, well and septic, utility runs, retaining, and rock excavation vary enormously between lots. We price them as their own lines rather than burying them in a square-foot number.",
   },
   {
-    title: "Change orders in writing",
-    body: "Any change during construction requires a written change order with a price and a schedule impact, approved by you before the work is performed.",
+    title: "Changes priced before they happen",
+    body: "If something shifts once we are building, it becomes a written change order with a price and a schedule effect that you approve first. Nothing extra gets built on a handshake.",
   },
 ];
 
@@ -281,7 +281,7 @@ export const LEADERSHIP_COPY = {
     "We know how builders usually get compared: a square-foot number, a glossy plan book, and allowances that quietly guarantee an overage. None of that tells you what your home will actually cost.",
     "So we do it the other way around. One accountable team, a line-item budget before we break ground, allowances set at real local pricing, weekly written updates while we build, and a team that answers the phone.",
   ],
-  closing: "That is not a marketing promise. Every detail, every decision - handled with intention.",
+  closing: "That is not a slogan. It is how we would want the job run if the house were ours.",
 };
 
 export const FINANCING_BULLETS = [
