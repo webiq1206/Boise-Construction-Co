@@ -23,7 +23,7 @@ Preferred communication style: Simple, everyday language.
 - **FAQ Section**: Client component (`FAQSection.tsx`) — Radix Accordion with 9 Q&As.
 - **Lead Distribution System**: B2B lead marketplace with admin dashboard, subcontractor portal, privacy protection, automated lead pricing, legal agreement flow, and in-app notifications. Integrates with Stripe for payments and supports an account credits system.
 - **Blog System**: Infrastructure kept but no posts yet — `shared/blogContent.ts` has empty `BLOG_POSTS` array.
-- **Email**: Resend. From/Reply-To = `hello@boiseremodeling.co` (must be a verified domain/sender in the Resend account). Transport: `server/services/emailTransport.ts` — `getUncachableEmailClient()` returns a Resend client; API key from `RESEND_API_KEY` secret, falling back to the `resend` connector. Dev without a key returns a no-op client. Gmail/Google Workspace approach was abandoned (the connected Google account could not send from the alias).
+- **Email**: Resend. From/Reply-To = `hello@boiseconstruction.co` (a verified domain/sender in the Resend account). Transport: `server/services/emailTransport.ts` — `getUncachableEmailClient()` returns a Resend client; API key from `RESEND_API_KEY` secret, falling back to the `resend` connector. Dev without a key returns a no-op client. Gmail/Google Workspace approach was abandoned (the connected Google account could not send from the alias).
 - **Service Areas**: Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton (Ada + Canyon County).
 - **Services**: Kitchen Remodel, Bathroom Remodel, Whole-Home Remodel, Room Addition.
 

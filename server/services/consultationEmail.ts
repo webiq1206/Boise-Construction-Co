@@ -88,7 +88,7 @@ export interface PropertyEnrichment {
  * guess that could land on a 404. Swap in a per-lead URL once both are settled.
  */
 export const LEADS_DASHBOARD_URL =
-  process.env.NEXT_PUBLIC_LEADS_DASHBOARD_URL ?? "https://leads.boiseconstruction.co";
+  process.env.NEXT_PUBLIC_LEADS_DASHBOARD_URL ?? "https://leads.boiseremodeling.co";
 
 export function formatUsd(n: number): string {
   return `$${Math.round(n).toLocaleString("en-US")}`;
