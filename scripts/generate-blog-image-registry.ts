@@ -24,6 +24,7 @@ import { CONTENT_HUBS } from '../shared/contentHubs';
 const root = path.join(__dirname, '..');
 
 const img = (name: string) => `/images/construction/${name}.webp`;
+const area = (name: string) => `/images/areas/${name}.webp`;
 
 /** The construction image library, with the alt text each image warrants. */
 const LIBRARY = {
@@ -139,6 +140,38 @@ const LIBRARY = {
     src: img('rural-acreage-parcel'),
     alt: 'Vacant rural acreage building parcel in Canyon County, Idaho with a survey stake and desert mountains on the horizon',
   },
+  boiseArea: {
+    src: area('boise'),
+    alt: 'Established Boise, Idaho neighborhood of craftsman homes with covered porches and the Boise foothills rising behind the street',
+  },
+  meridianArea: {
+    src: area('meridian'),
+    alt: 'Newly built craftsman two-story home lit at dusk on a landscaped subdivision lot in Meridian, Idaho',
+  },
+  eagleArea: {
+    src: area('eagle'),
+    alt: 'Luxury custom home on a landscaped Eagle, Idaho acreage lot at sunset with the foothills in the distance',
+  },
+  kunaArea: {
+    src: area('kuna'),
+    alt: 'Modern farmhouse custom home on rural Kuna, Idaho acreage bordered by sagebrush and open farmland',
+  },
+  starArea: {
+    src: area('star'),
+    alt: 'Riverfront custom home in Star, Idaho with a lawn running down to the Boise River and shade trees along the bank',
+  },
+  middletonArea: {
+    src: area('middleton'),
+    alt: 'White farmhouse with a wraparound porch on a Middleton, Idaho parcel surrounded by wheat fields at sunset',
+  },
+  nampaArea: {
+    src: area('nampa'),
+    alt: 'Established brick ranch home on a landscaped corner lot in Nampa, Idaho with farmland behind',
+  },
+  caldwellArea: {
+    src: area('caldwell'),
+    alt: 'Stucco custom home overlooking the vineyards of the Sunnyslope wine district near Caldwell, Idaho at sunset',
+  },
 } as const;
 
 type LibraryKey = keyof typeof LIBRARY;
@@ -208,15 +241,16 @@ const BY_SLUG: Record<string, LibraryKey> = {
   'custom-home-design-guide': 'blueprints',
   'treasure-valley-home-building-guide': 'subdivision',
 
-  // Location guides
-  'boise-home-building-guide': 'customHome',
-  'meridian-home-building-guide': 'semiCustom',
-  'eagle-home-building-guide': 'interior',
-  'kuna-home-building-guide': 'ruralSite',
-  'star-home-building-guide': 'lot',
-  'middleton-home-building-guide': 'foundation',
-  'nampa-home-building-guide': 'semiCustom',
-  'caldwell-home-building-guide': 'acreage',
+  // Location guides - each city guide gets its own city streetscape so the
+  // imagery is locally specific and no two location guides repeat a hero.
+  'boise-home-building-guide': 'boiseArea',
+  'meridian-home-building-guide': 'meridianArea',
+  'eagle-home-building-guide': 'eagleArea',
+  'kuna-home-building-guide': 'kunaArea',
+  'star-home-building-guide': 'starArea',
+  'middleton-home-building-guide': 'middletonArea',
+  'nampa-home-building-guide': 'nampaArea',
+  'caldwell-home-building-guide': 'caldwellArea',
   'eagle-foothills-home-building-guide': 'foothills',
   'hidden-springs-home-building-guide': 'customHome',
   'harris-ranch-home-building-guide': 'greatRoom',
