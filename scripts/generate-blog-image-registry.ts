@@ -222,6 +222,7 @@ const BY_SLUG: Record<string, LibraryKey> = {
   'well-and-septic-cost-idaho': 'ruralSite',
   'building-in-the-boise-foothills': 'foothills',
   'impact-fees-and-utility-connections': 'ruralSite',
+  'lot-evaluation-checklist': 'acreage',
 
   // Design and plans
   'single-story-vs-two-story-home': 'twoStory',
@@ -230,7 +231,7 @@ const BY_SLUG: Record<string, LibraryKey> = {
   'covered-outdoor-living-new-home': 'outdoor',
   'custom-home-floor-plan-ideas-boise': 'blueprints',
   'aging-in-place-home-design': 'accessibleBath',
-  'multigenerational-home-design': 'twoStory',
+  'multigenerational-home-design': 'interior',
   'adu-cost-boise': 'semiCustom',
 
   // Pillars

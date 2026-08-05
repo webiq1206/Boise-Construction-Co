@@ -156,8 +156,8 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'construction',
   },
   'lot-evaluation-checklist': {
-    hero: '/images/construction/buildable-lot.webp',
-    alt: 'Vacant buildable lot on the Treasure Valley floor with a survey stake, power line, and irrigation ditch',
+    hero: '/images/construction/rural-acreage-parcel.webp',
+    alt: 'Vacant rural acreage building parcel in Canyon County, Idaho with a survey stake and desert mountains on the horizon',
     topicTags: ["land","lots","checklist","due diligence","treasure valley"],
     source: 'construction',
   },
@@ -168,8 +168,8 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'construction',
   },
   'multigenerational-home-design': {
-    hero: '/images/construction/two-story-home-exterior.webp',
-    alt: 'Newly built two-story craftsman home with stone wainscot and a covered front porch on a Meridian, Idaho lot',
+    hero: '/images/construction/new-home-interior.webp',
+    alt: 'Finished great room in a new custom home with vaulted ceiling, stone fireplace, and foothills views',
     topicTags: ["multigenerational","home design","floor plans","accessibility","new construction"],
     source: 'construction',
   },
