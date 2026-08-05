@@ -8,6 +8,7 @@ import {
   LayoutGrid, Star, Sun, Monitor, Dumbbell, Bed, Car,
   Lightbulb, Wind, DoorOpen, GlassWater, Sofa, Frame, Triangle, Grid3x3,
   HardHat, Ruler, MapPin, Mountain, Trees, Users, Warehouse, Waves,
+  Sparkles, Printer, Copy,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StickyEstimateBar } from "@/components/estimate/StickyEstimateBar";
@@ -807,6 +808,8 @@ export function EstimateCalculator({
   const [unitCostOverrides, setUnitCostOverrides] = useState<UnitCostOverrides>({});
   const [legalOpen, setLegalOpen]         = useState(false);
   const [limitsOpen, setLimitsOpen]       = useState(false);
+  /* Result-screen "copied to clipboard" acknowledgement. */
+  const [summaryCopied, setSummaryCopied] = useState(false);
   /* Lead-gate three-state flow:
      gateOpen=false  gateSubmitted=false -> show "Get estimate" CTA
      gateOpen=true   gateSubmitted=false -> show contact form (gate)
@@ -1566,6 +1569,41 @@ export function EstimateCalculator({
     } else {
       document.getElementById("consult")?.scrollIntoView({ behavior: "smooth" });
     }
+  }
+
+  /**
+   * "Edit Your Project Scope" from the results. Every answer already lives in
+   * state and the range recalculates live as it changes, so editing the scope
+   * is just returning the visitor to the top of their selections - nothing to
+   * re-enter, and the refreshed range is waiting when they scroll back down.
+   */
+  function handleEditScope() {
+    scheduleScroll(() => projectGridRef.current ?? layoutRef.current);
+  }
+
+  /** A plain-text summary of the planning estimate, for the clipboard. */
+  function handleCopySummary() {
+    const lines = [
+      "Boise Construction Co - planning estimate",
+      `${PROJECT_CONFIGS[effectiveProject]?.tabLabel ?? effectiveProject}${selectedLayoutLabel ? ` - ${selectedLayoutLabel}` : ""}`,
+      `Planning range: ${formatPlanningCurrency(result.priceLow)} to ${formatPlanningCurrency(result.priceHigh)}`,
+      `About ${sqft.toLocaleString("en-US")} sq ft - ${getFinishLabels(effectiveProject)[finish]?.label ?? finish} finish`,
+      selectedUpgradeLabels.length > 0 ? `Upgrades: ${selectedUpgradeLabels.join(", ")}` : "",
+      "",
+      "Typically included:",
+      ...result.included.map((i) => `- ${i}`),
+      "",
+      NOT_A_QUOTE_NOTICE,
+    ].filter(Boolean);
+    navigator.clipboard?.writeText(lines.join("\n")).then(
+      () => {
+        setSummaryCopied(true);
+        setTimeout(() => setSummaryCopied(false), 2000);
+      },
+      () => {
+        /* Clipboard blocked; the on-screen numbers remain the source of truth. */
+      },
+    );
   }
 
   /* ── Which questions are worth asking ──────────────────────────────────
@@ -3929,6 +3967,48 @@ export function EstimateCalculator({
             </div>
           )}
 
+          {/* Edit the scope after seeing the range. Reassuring wording, not a
+              "you got it wrong" - every answer is preserved and the range
+              re-solves live, so this simply returns them to their selections. */}
+          <div className="rounded-sm border border-inverse-foreground/[0.18] bg-inverse-foreground/[0.05] p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <p className="text-[13.5px] text-inverse-foreground flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-accent-legible flex-shrink-0" aria-hidden="true" />
+              Not what you expected?
+            </p>
+            <Button
+              type="button"
+              variant="brandOutline"
+              onClick={handleEditScope}
+              data-testid="button-edit-scope"
+              className="w-full sm:w-auto min-h-12 border-inverse-foreground/30 text-inverse-foreground"
+            >
+              Edit Your Project Scope
+            </Button>
+          </div>
+
+          {/* Keep or share the numbers. */}
+          <div className="flex flex-wrap gap-2.5">
+            <Button
+              type="button"
+              variant="brandOutline"
+              onClick={() => window.print()}
+              className="min-h-11 border-inverse-foreground/25 text-inverse-foreground text-[12.5px]"
+              data-testid="button-print-estimate"
+            >
+              <Printer className="mr-2 h-4 w-4" aria-hidden="true" /> Print or save as PDF
+            </Button>
+            <Button
+              type="button"
+              variant="brandOutline"
+              onClick={handleCopySummary}
+              className="min-h-11 border-inverse-foreground/25 text-inverse-foreground text-[12.5px]"
+              data-testid="button-copy-estimate"
+            >
+              <Copy className="mr-2 h-4 w-4" aria-hidden="true" />
+              {summaryCopied ? "Copied" : "Copy summary"}
+            </Button>
+          </div>
+
           {/* Single primary CTA - book the free visit (recommended next step) */}
           <Button
             onClick={handleBookVisit}
@@ -3938,6 +4018,35 @@ export function EstimateCalculator({
             Book Free Visit
             <ArrowRight className="h-4 w-4" />
           </Button>
+
+          {/* Print-only clean copy so a saved PDF is a formatted estimate, not
+              the dark on-screen panel. */}
+          <div className="estimate-print-only" aria-hidden="true">
+            <h1 style={{ fontSize: 22, marginBottom: 4 }}>Planning Estimate</h1>
+            <p style={{ margin: "0 0 2px" }}>
+              {PROJECT_CONFIGS[effectiveProject]?.tabLabel ?? effectiveProject}
+              {selectedLayoutLabel ? ` - ${selectedLayoutLabel}` : ""}
+            </p>
+            <p style={{ fontSize: 26, fontWeight: 700, margin: "8px 0 2px" }}>
+              {formatPlanningCurrency(result.priceLow)} to {formatPlanningCurrency(result.priceHigh)}
+            </p>
+            <p style={{ margin: 0, color: "#555" }}>
+              About {sqft.toLocaleString("en-US")} sq ft &middot;{" "}
+              {getFinishLabels(effectiveProject)[finish]?.label ?? finish} finish
+            </p>
+            {selectedUpgradeLabels.length > 0 && (
+              <p style={{ marginTop: 6, fontSize: 12 }}>Upgrades: {selectedUpgradeLabels.join(", ")}</p>
+            )}
+            <h2 style={{ fontSize: 15, marginTop: 14 }}>Typically included</h2>
+            <ul style={{ margin: 0, paddingLeft: 18 }}>
+              {result.included.map((i, n) => (
+                <li key={n} style={{ fontSize: 12 }}>
+                  {i}
+                </li>
+              ))}
+            </ul>
+            <p style={{ marginTop: 12, fontSize: 11 }}>{NOT_A_QUOTE_NOTICE}</p>
+          </div>
       </div>
     </div>
   );
