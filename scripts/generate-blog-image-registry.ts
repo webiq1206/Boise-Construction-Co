@@ -140,6 +140,34 @@ const LIBRARY = {
     src: img('rural-acreage-parcel'),
     alt: 'Vacant rural acreage building parcel in Canyon County, Idaho with a survey stake and desert mountains on the horizon',
   },
+  buildVsBuy: {
+    src: img('build-vs-buy-comparison'),
+    alt: 'An existing finished resale home with a yard sign next to a new home under wood framing on a Treasure Valley subdivision street',
+  },
+  permitPlacard: {
+    src: img('building-permit-placard'),
+    alt: 'A residential building-permit placard posted on a stake at a new-home construction site with the framed house and stacked lumber behind it',
+  },
+  constructionLoan: {
+    src: img('construction-loan-draw'),
+    alt: 'A construction loan draw schedule and bank statement on a desk with a calculator and a hard hat, a new home visible through the window',
+  },
+  bidSpreadsheet: {
+    src: img('builder-bid-spreadsheet'),
+    alt: 'A laptop showing a builder-bid comparison chart beside two printed proposal folders and a notepad on a desk',
+  },
+  bidsVary: {
+    src: img('cost-breakdown-variance'),
+    alt: 'A detailed construction cost breakdown with a magnifying glass and highlighters showing how widely line-item prices vary',
+  },
+  utilityTrench: {
+    src: img('utility-connections-trench'),
+    alt: 'An open utility trench running water, sewer, and power conduit to a new home foundation on a subdivision lot with a meter pedestal',
+  },
+  costDrivers: {
+    src: img('framing-materials-onsite'),
+    alt: 'A new home under wood framing surrounded by stacked lumber, roof trusses, and wrapped material pallets on an Idaho job site',
+  },
   boiseArea: {
     src: area('boise'),
     alt: 'Established Boise, Idaho neighborhood of craftsman homes with covered porches and the Boise foothills rising behind the street',
@@ -195,10 +223,11 @@ const BY_SLUG: Record<string, LibraryKey> = {
   // Costs
   'cost-to-build-a-house-boise': 'customHome',
   'custom-home-cost-per-square-foot-boise': 'framing',
-  'what-drives-home-building-costs-boise': 'foundation',
+  'what-drives-home-building-costs-boise': 'costDrivers',
   'luxury-home-building-cost-boise': 'greatRoom',
-  'build-vs-buy-boise': 'subdivision',
+  'build-vs-buy-boise': 'buildVsBuy',
   'allowances-explained-new-home': 'selections',
+  'construction-loan-basics-idaho': 'constructionLoan',
 
   // Choosing a builder
   'questions-to-ask-a-home-builder': 'plans',
@@ -206,13 +235,13 @@ const BY_SLUG: Record<string, LibraryKey> = {
   'production-vs-custom-home-builder': 'subdivision',
   'fixed-price-vs-cost-plus': 'bidCompare',
   'home-builder-red-flags': 'consultTable',
-  'how-to-compare-builder-bids': 'bidCompare',
-  'why-home-building-bids-vary': 'bidCompare',
+  'how-to-compare-builder-bids': 'bidSpreadsheet',
+  'why-home-building-bids-vary': 'bidsVary',
 
   // Process
   'stages-of-building-a-house': 'foundation',
   'boise-building-permit-guide': 'permitDocs',
-  'ada-vs-canyon-county-permit-timelines': 'permitDocs',
+  'ada-vs-canyon-county-permit-timelines': 'permitPlacard',
   'choosing-finishes-for-a-new-home': 'kitchen',
   'new-home-walkthrough-and-warranty': 'staircase',
   'first-meeting-with-a-home-builder': 'meeting',
@@ -221,7 +250,7 @@ const BY_SLUG: Record<string, LibraryKey> = {
   // Land and lots
   'well-and-septic-cost-idaho': 'ruralSite',
   'building-in-the-boise-foothills': 'foothills',
-  'impact-fees-and-utility-connections': 'ruralSite',
+  'impact-fees-and-utility-connections': 'utilityTrench',
   'lot-evaluation-checklist': 'acreage',
 
   // Design and plans

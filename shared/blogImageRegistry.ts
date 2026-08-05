@@ -18,8 +18,8 @@ export interface BlogImageEntry {
 
 export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
   'ada-vs-canyon-county-permit-timelines': {
-    hero: '/images/construction/building-permit-documents.webp',
-    alt: 'Residential building permit packet with stamped site and floor plans, an application, and an approval stamp on a desk',
+    hero: '/images/construction/building-permit-placard.webp',
+    alt: 'A residential building-permit placard posted on a stake at a new-home construction site with the framed house and stacked lumber behind it',
     topicTags: ["permits","ada county","canyon county","building process","home"],
     source: 'construction',
   },
@@ -48,8 +48,8 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'construction',
   },
   'build-vs-buy-boise': {
-    hero: '/images/construction/new-neighborhood-street.webp',
-    alt: 'Street of recently finished new-construction homes with young trees and fresh sidewalks in a Treasure Valley subdivision',
+    hero: '/images/construction/build-vs-buy-comparison.webp',
+    alt: 'An existing finished resale home with a yard sign next to a new home under wood framing on a Treasure Valley subdivision street',
     topicTags: ["build vs buy","planning","treasure valley","cost","home"],
     source: 'construction',
   },
@@ -66,8 +66,8 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'construction',
   },
   'construction-loan-basics-idaho': {
-    hero: '/images/construction/line-item-budget.webp',
-    alt: 'Line-item construction budget and draw schedule on a desk beside a wooden architectural model',
+    hero: '/images/construction/construction-loan-draw.webp',
+    alt: 'A construction loan draw schedule and bank statement on a desk with a calculator and a hard hat, a new home visible through the window',
     topicTags: ["financing","construction loan","idaho","planning","home"],
     source: 'construction',
   },
@@ -144,14 +144,14 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'construction',
   },
   'how-to-compare-builder-bids': {
-    hero: '/images/construction/builder-bid-comparison.webp',
-    alt: 'Three residential construction bids fanned out on a desk with a highlighter marking line items for comparison',
+    hero: '/images/construction/builder-bid-spreadsheet.webp',
+    alt: 'A laptop showing a builder-bid comparison chart beside two printed proposal folders and a notepad on a desk',
     topicTags: ["choosing a builder","budgeting","boise","new construction","choosing"],
     source: 'construction',
   },
   'impact-fees-and-utility-connections': {
-    hero: '/images/construction/rural-site-work.webp',
-    alt: 'Well drilling rig and septic drainfield excavation underway on a rural Idaho building site',
+    hero: '/images/construction/utility-connections-trench.webp',
+    alt: 'An open utility trench running water, sewer, and power conduit to a new home foundation on a subdivision lot with a meter pedestal',
     topicTags: ["impact fees","permits","utilities","ada county","canyon county"],
     source: 'construction',
   },
@@ -216,14 +216,14 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
     source: 'construction',
   },
   'what-drives-home-building-costs-boise': {
-    hero: '/images/construction/foundation-and-excavation.webp',
-    alt: 'Freshly poured concrete foundation and stem walls outlining a new home on a flat valley lot',
+    hero: '/images/construction/framing-materials-onsite.webp',
+    alt: 'A new home under wood framing surrounded by stacked lumber, roof trusses, and wrapped material pallets on an Idaho job site',
     topicTags: ["cost","new construction","boise","planning","home"],
     source: 'construction',
   },
   'why-home-building-bids-vary': {
-    hero: '/images/construction/builder-bid-comparison.webp',
-    alt: 'Three residential construction bids fanned out on a desk with a highlighter marking line items for comparison',
+    hero: '/images/construction/cost-breakdown-variance.webp',
+    alt: 'A detailed construction cost breakdown with a magnifying glass and highlighters showing how widely line-item prices vary',
     topicTags: ["choosing a builder","budgeting","boise","new construction","choosing"],
     source: 'construction',
   },
