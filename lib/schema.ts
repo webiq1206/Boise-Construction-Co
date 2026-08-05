@@ -24,11 +24,11 @@ const baseUrl = getBaseUrl();
 export const ORG_ID = `${baseUrl}/#organization`;
 export const LOCALBUSINESS_ID = `${baseUrl}/#localbusiness`;
 export const WEBSITE_ID = `${baseUrl}/#website`;
-// Organization logo for knowledge-panel / rich-result use. The self-contained
-// Maker's Seal (charcoal disc, bone lettering, ochre ring) is square and stays
-// legible on any background, unlike the reverse wordmark which vanished on
-// Google's white panels. Served at its native 512px with explicit dimensions.
-const LOGO_URL = `${baseUrl}/brand/seal/boise-construction-co-seal-dark-512.png`;
+// Organization logo for knowledge-panel / rich-result use. The approved seal on
+// a charcoal disc (bone lettering, ochre ring) is square and stays legible on
+// any background, unlike the reverse wordmark which vanished on Google's white
+// panels. Served at its native 512px with explicit dimensions.
+const LOGO_URL = `${baseUrl}/brand/png/seal/any/boise-construction-co-seal-on-charcoal-accent-512px.png`;
 const LOGO_SIZE = 512;
 
 /**

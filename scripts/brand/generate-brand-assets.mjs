@@ -1,14 +1,14 @@
 /**
- * Generates the Boise Construction Co brand marks.
+ * SUPERSEDED - kept for reference only. Do not run against public/brand.
  *
- * The original Boise Remodeling Co marks were typeset and converted to
- * outlines, so the wordmark text is not editable. This script rebuilds the
- * same marks from the source fonts using the geometry recovered from the
- * originals (Montserrat Light at cap-height-derived sizes with 13/112 em
- * tracking, Fraunces italic for the script elements), so the new marks keep
- * the established proportions, colours, and layout.
+ * The approved Boise Construction Co brand kit (professionally drawn, outlined
+ * artwork in svg/ + png/, favicon.ico, BRAND.md) now lives in public/brand and
+ * is the single source of truth for every mark. Regenerating from fonts here
+ * would overwrite that approved artwork, so this script is no longer wired into
+ * the build. It historically rebuilt the marks from the source fonts (Montserrat
+ * Light for the lettering, Libre Baskerville italic for the script elements).
  *
- * Usage:
+ * Usage (legacy):
  *   node scripts/brand/generate-brand-assets.mjs          # write assets
  *   node scripts/brand/generate-brand-assets.mjs --preview # also write previews
  */

@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 export type DisplayNumProps = HTMLAttributes<HTMLSpanElement>;
 
-/** Fraunces display numerals for prominent numbers (stats, prices, step markers). */
+/** Libre Baskerville display numerals for prominent numbers (stats, prices, step markers). */
 export function DisplayNum({ className, children, ...props }: DisplayNumProps) {
   return (
     <span className={cn("brc-display-num tabular-nums", className)} {...props}>

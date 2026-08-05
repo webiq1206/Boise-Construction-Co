@@ -43,16 +43,19 @@ html, body {
 
 /* ═══════════════════════════════════════════════════════════════════
    BOISE CONSTRUCTION CO - DARK-ONLY BRAND IDENTITY
-   Committed warm charcoal ground. :root and .dark carry IDENTICAL
-   values so there is no light-mode leak whether or not the .dark class
-   is present. This is the identity, not a toggle. The whole neutral ramp
-   is OCHRE-TINTED (hue 32) - there is no sage/green anywhere. Palette:
-     --bg #201E1D · --bg-2 #262320 · --surface #2B2724 · hairline #413C39
+   Committed charcoal ground. :root and .dark carry IDENTICAL values so
+   there is no light-mode leak whether or not the .dark class is present.
+   This is the identity, not a toggle. The approved brand kit defines just
+   three colors - charcoal, bone, ochre - so the dark neutral ramp is a
+   cool, near-neutral charcoal family (hue ~163) drawn from the brand ink
+   #2C302F; the light/text tones stay warm to match bone. No sage/green
+   as a brand tone. Palette:
+     charcoal (ink / dark ground) #2C302F · surface/bands stepped from it
      bone #F7F5F3 · body #E6E3DE · mist #9F9C97 · faint #767370
      Accent = Ochre #D09A5C (the one brand-distinct color; charcoal +
      bone are shared unchanged). deep ochre #7E6344 = graphic fills/
      chips/tints · ochre #D09A5C = ALL accent text (accent WORDS,
-     eyebrow ticks, links/hover, focus, numerals). AA on the ground.
+     eyebrow ticks, links/hover, focus, numerals). AA on charcoal (5.38:1).
      Never recolor outside charcoal, bone, and #D09A5C.
    ═══════════════════════════════════════════════════════════════════ */
 :root, .dark {
@@ -62,22 +65,22 @@ html, body {
   --elevate-1: rgba(255,255,255, .03);
   --elevate-2: rgba(255,255,255, .07);
 
-  /* Page base - charcoal #1C1F1E */
-  --background: 32 5% 12%;
-  --foreground: 37 14% 89%;        /* body text #E6E3DE */
+  /* Page base - charcoal, brand ink family #2C302F */
+  --background: 163 5% 12%;
+  --foreground: 37 14% 89%;        /* body text #E6E3DE (warm bone) */
   --heading: 30 20% 96%;           /* bone #F7F5F3 */
-  --border: 32 6% 24%;            /* hairline #39403D */
-  --card: 32 6% 16%;              /* surface #262B29 */
+  --border: 163 5% 24%;            /* hairline */
+  --card: 163 5% 16%;              /* surface */
   --card-foreground: 37 14% 89%;
-  --card-border: 32 6% 24%;
+  --card-border: 163 5% 24%;
 
-  /* Elevated band - #222624 (footer, statement bands) */
-  --inverse: 32 6% 14%;
+  /* Elevated band (footer, statement bands) */
+  --inverse: 163 6% 14%;
   --inverse-foreground: 30 20% 96%;   /* bone */
-  --inverse-muted: 32 4% 61%;        /* mist #9AA098 */
+  --inverse-muted: 32 4% 61%;        /* mist */
 
-  --surface-muted: 32 6% 14%;        /* #222624 */
-  --surface-greige: 32 6% 16%;       /* #262B29 */
+  --surface-muted: 163 6% 14%;
+  --surface-greige: 163 6% 16%;
 
   /* Section tints - subtle hued dark panels */
   --tint-warm: 36 8% 15%;
@@ -85,29 +88,29 @@ html, body {
   --tint-blush: 8 10% 16%;
 
   /* Sidebar - admin/portal (a touch below page base) */
-  --sidebar: 32 5% 10%;
+  --sidebar: 163 5% 10%;
   --sidebar-foreground: 37 14% 89%;
-  --sidebar-border: 32 6% 24%;
+  --sidebar-border: 163 6% 24%;
   --sidebar-primary: 32 55% 59%;       /* ochre #D09A5C */
-  --sidebar-primary-foreground: 32 4% 18%;
-  --sidebar-accent: 32 6% 16%;
+  --sidebar-primary-foreground: 163 5% 18%;  /* charcoal #2C302F */
+  --sidebar-accent: 163 6% 16%;
   --sidebar-accent-foreground: 37 14% 89%;
   --sidebar-ring: 32 55% 59%;          /* ochre #D09A5C */
 
-  --popover: 32 6% 16%;
+  --popover: 163 6% 16%;
   --popover-foreground: 37 14% 89%;
-  --popover-border: 32 6% 24%;
+  --popover-border: 163 6% 24%;
 
   /* Primary CTA - bone #F7F5F3 fill, charcoal #2C302F text */
   --primary: 30 20% 96%;
-  --primary-foreground: 32 4% 18%;
+  --primary-foreground: 163 5% 18%;   /* charcoal #2C302F */
 
-  --secondary: 32 6% 16%;
+  --secondary: 163 6% 16%;
   --secondary-foreground: 37 14% 89%;
 
-  --muted: 32 6% 16%;
-  --muted-foreground: 32 4% 61%;     /* mist #9AA098 */
-  --faint: 32 3% 45%;                 /* warm faint #767370 */
+  --muted: 163 6% 16%;
+  --muted-foreground: 32 4% 61%;     /* mist */
+  --faint: 32 3% 45%;                 /* faint */
 
   /* Small accents use a deep, muted ochre #7E6344 (dots, marks, pills,
      tints, icons). Text on an ochre fill uses bone (5.3:1, AA). Accent WORDS
@@ -127,14 +130,14 @@ html, body {
   --destructive: 10 45% 60%;
   --destructive-foreground: 30 20% 96%;
 
-  --input: 32 6% 13%;                 /* warm input #241F1D */
+  --input: 163 6% 13%;                /* input */
   --ring: 32 55% 59%;                  /* ochre #D09A5C */
 
   --chart-1: 32 55% 59%;               /* ochre #D09A5C */
-  --chart-2: 32 6% 16%;
+  --chart-2: 163 6% 16%;
   --chart-3: 30 20% 96%;
   --chart-4: 32 4% 61%;
-  --chart-5: 32 5% 12%;
+  --chart-5: 163 5% 12%;
 
   --radius: 0.125rem;
 
@@ -360,9 +363,9 @@ html, body {
   filter: saturate(0.86) contrast(1.04) brightness(0.9);
 }
 
-/* ─── Decorative accent (Fraunces italic emphasis) ─── */
+/* ─── Decorative accent (Libre Baskerville italic emphasis) ─── */
 .brc-accent {
-  font-family: var(--font-fraunces, Georgia, serif);
+  font-family: var(--font-libre-baskerville, Georgia, serif);
   font-style: italic;
   font-optical-sizing: auto;
   /* Accent WORDS are the serif grace note AND the brand's ochre moment. We use
@@ -373,10 +376,10 @@ html, body {
   color: hsl(var(--accent-legible));
 }
 
-/* ─── Decorative display numerals (Fraunces: stats, prices, step markers) ─── */
+/* ─── Decorative display numerals (Libre Baskerville: stats, prices, step markers) ─── */
 .brc-display-num {
-  font-family: var(--font-fraunces, Georgia, serif);
-  font-weight: 300;
+  font-family: var(--font-libre-baskerville, Georgia, serif);
+  font-weight: 400;
   font-style: normal;
   font-optical-sizing: auto;
   font-variant-numeric: tabular-nums;
@@ -566,7 +569,7 @@ html, body {
 .blog-content > *:first-child { margin-top: 0; }
 
 .blog-content .pull-quote {
-  font-family: var(--font-fraunces, Georgia, serif);
+  font-family: var(--font-libre-baskerville, Georgia, serif);
   font-style: italic;
   font-size: 1.25rem;
   line-height: 1.5;

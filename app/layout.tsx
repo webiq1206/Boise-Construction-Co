@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Montserrat, Fraunces } from 'next/font/google'
+import { Montserrat, Libre_Baskerville } from 'next/font/google'
 import { Navigation } from '@/components/Navigation'
 import { ConditionalFooter } from '@/components/ConditionalFooter'
 import { Toaster } from '@/components/ui/toaster'
@@ -20,11 +20,14 @@ const montserrat = Montserrat({
   display: 'swap',
 })
 
-const fraunces = Fraunces({
+// Libre Baskerville Italic is the brand's accent typeface (the italic "Co." in
+// the wordmark and "Construction" in the seal). It carries every decorative
+// serif moment on the site so type matches the approved marks. Only 400/700 ship.
+const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
-  weight: ['300', '400', '500'],
+  weight: ['400', '700'],
   style: ['normal', 'italic'],
-  variable: '--font-fraunces',
+  variable: '--font-libre-baskerville',
   display: 'swap',
 })
 
@@ -55,7 +58,9 @@ export const metadata: Metadata = {
   authors: [{ name: SITE_CONFIG.name }],
   creator: SITE_CONFIG.name,
   metadataBase: new URL(SITE_CONFIG.siteUrl),
-  // Favicon set built from the Maker's Seal (boise-construction-co-seal-dark).
+  // Favicon set built from the approved small-size brand icon (ochre field, the
+  // script "C" initial) — the mark the brand kit specifies for favicons and app
+  // icons, since the seal's arc text stops reading below ~160px.
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
@@ -94,7 +99,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#201E1D',
+  themeColor: '#2C302F',
   colorScheme: 'dark',
   width: 'device-width',
   initialScale: 1,
@@ -109,7 +114,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`dark ${montserrat.variable} ${fraunces.variable}`} style={{ colorScheme: 'dark' }} suppressHydrationWarning>
+    <html lang="en" className={`dark ${montserrat.variable} ${libreBaskerville.variable}`} style={{ colorScheme: 'dark' }} suppressHydrationWarning>
       <head suppressHydrationWarning>
         <script
           dangerouslySetInnerHTML={{

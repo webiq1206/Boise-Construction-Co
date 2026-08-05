@@ -4,8 +4,8 @@
   "description": "Design-build home builder for custom homes, semi-custom homes, and builds on your lot in the Treasure Valley, Idaho.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1C1F1E",
-  "theme_color": "#1C1F1E",
+  "background_color": "#2C302F",
+  "theme_color": "#2C302F",
   "icons": [
     {
       "src": "/icons/icon-192.png",

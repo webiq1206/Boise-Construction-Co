@@ -122,7 +122,7 @@ export function buildRe10CustomerEmail(
 
     <div style="background:${EMAIL_BRAND.raised};border-left:3px solid ${EMAIL_BRAND.accent};padding:24px;margin:24px 0;border-radius:4px;">
       <p style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:0.14em;color:${EMAIL_BRAND.textMuted};">Price for the repairs below</p>
-      <p style="margin:0;font-family:'Fraunces',Georgia,serif;font-size:30px;line-height:1.15;color:${EMAIL_BRAND.text};">${usd(view.price)}</p>
+      <p style="margin:0;font-family:'Libre Baskerville',Georgia,serif;font-size:30px;line-height:1.15;color:${EMAIL_BRAND.text};">${usd(view.price)}</p>
       <p style="margin:8px 0 0;font-size:13px;color:${EMAIL_BRAND.textMuted};">Held for ${view.validDays} days.</p>
     </div>
 
@@ -273,7 +273,7 @@ export function buildRe10AdminEmail(
 
     <div style="background:${EMAIL_BRAND.raised};border-left:3px solid ${EMAIL_BRAND.accent};padding:20px;margin:24px 0;border-radius:4px;">
       <p style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:0.14em;color:${EMAIL_BRAND.textMuted};">Quoted range</p>
-      <p style="margin:0;font-family:'Fraunces',Georgia,serif;font-size:26px;line-height:1.15;color:${EMAIL_BRAND.text};">${usd(est.low)} to ${usd(est.high)}</p>
+      <p style="margin:0;font-family:'Libre Baskerville',Georgia,serif;font-size:26px;line-height:1.15;color:${EMAIL_BRAND.text};">${usd(est.low)} to ${usd(est.high)}</p>
       <p style="margin:8px 0 0;font-size:13px;color:${EMAIL_BRAND.textMuted};">
         ${(est.realisedMargin * 100).toFixed(1)}% realised margin &middot; ${est.confidence} confidence
         ${est.worthwhile ? "" : ` &middot; <span style="color:#D98A3A;">below the worthwhile threshold</span>`}

@@ -40,7 +40,7 @@ No CrUX data exists yet (traffic too low). Lab snapshot should be taken post-dep
 ```bash
 npx lighthouse https://boiseremodeling.co --preset=perf --form-factor=mobile --view
 ```
-Watch: LCP on image-heavy landing pages (hero is `priority`-loaded - correct), INP on the estimator (client component, heavy interaction), CLS on font swap (Montserrat/Fraunces via next/font - should be fine). Re-audit when GBP launch drives measurable traffic.
+Watch: LCP on image-heavy landing pages (hero is `priority`-loaded - correct), INP on the estimator (client component, heavy interaction), CLS on font swap (Montserrat/Libre Baskerville via next/font - should be fine). Re-audit when GBP launch drives measurable traffic.
 
 ### T8 - Deploy-target check (carried over)
 `images.unoptimized` was removed June 5 - verify the production host actually serves optimized AVIF/WebP (check response content-type on any `/_next/image` URL in production).

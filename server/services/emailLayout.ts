@@ -2,18 +2,18 @@ import { SITE_CONFIG } from "@/shared/siteConfig";
 
 /**
  * Dark-brand email tokens - the site's actual palette (app/globals.css). Every
- * outbound email renders on the charcoal ground with bone text and sage accents
+ * outbound email renders on the charcoal ground with bone text and ochre accents
  * so it matches boiseconstruction.co. Key names are semantic (bg/surface/text/...)
  * so both the shared CSS here and the inline styles in emailNotifications.ts
  * pull the same colors.
  */
 export const EMAIL_BRAND = {
-  bg: "#201E1D",         // page background (warm charcoal)
-  surface: "#2B2724",    // content card
-  raised: "#33312E",     // highlighted boxes, footer, badges
-  hairline: "#413D3A",   // borders + dividers
+  bg: "#2C302F",         // page background (brand charcoal)
+  surface: "#333836",    // content card
+  raised: "#3B403E",     // highlighted boxes, footer, badges
+  hairline: "#454B49",   // borders + dividers
   text: "#F7F5F3",       // primary text (bone)
-  textMuted: "#9F9C97",  // secondary text (warm mist)
+  textMuted: "#9F9C97",  // secondary text (mist)
   accent: "#D09A5C",     // ochre - links, bars, ticks (AA on charcoal)
   accentDeep: "#7E6344", // deep ochre fill
 } as const;
@@ -57,7 +57,7 @@ export function htmlToPlainText(html: string): string {
  */
 export function buildLogoImage(width = 210): string {
   return `
-    <img src="${SITE_BASE_URL}/brand/logos/boise-construction-co-wordmark-reverse-1660w.png"
+    <img src="${SITE_BASE_URL}/brand/png/wordmark/dark/boise-construction-co-wordmark-bone-accent-1200w.png"
       alt="${escapeHtml(SITE_CONFIG.name)}" width="${width}"
       style="display:block;margin:0 auto;width:${width}px;max-width:72%;height:auto;border:0;outline:none;text-decoration:none;" />
   `;
@@ -67,7 +67,7 @@ export function buildLogoImage(width = 210): string {
 export function buildTextLogo(): string {
   return `
     <div style="margin-bottom:16px;">
-      <div style="font-family:'Fraunces',Georgia,'Times New Roman',serif;font-size:20px;font-weight:400;color:${EMAIL_BRAND.text};line-height:1.2;">
+      <div style="font-family:'Libre Baskerville',Georgia,'Times New Roman',serif;font-size:20px;font-weight:400;color:${EMAIL_BRAND.text};line-height:1.2;">
         Boise Construction <span style="color:${EMAIL_BRAND.accent};font-style:italic;">Co.</span>
       </div>
       <div style="font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:${EMAIL_BRAND.textMuted};margin-top:6px;">
@@ -99,7 +99,7 @@ export const emailStyles = `
   }
   .header h1 {
     margin: 20px 0 0 0;
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: 'Libre Baskerville', Georgia, serif;
     font-size: 26px;
     font-weight: 400;
     letter-spacing: -0.01em;
@@ -238,7 +238,7 @@ export function wrapEmailHtml(options: {
   <div class="email-wrapper" style="max-width:600px;margin:0 auto;background-color:${EMAIL_BRAND.surface};">
     <div class="header" style="background-color:${EMAIL_BRAND.bg};padding:36px 30px 28px;text-align:center;border-bottom:1px solid ${EMAIL_BRAND.hairline};">
       ${buildLogoImage()}
-      <h1 style="margin:20px 0 0 0;font-family:'Fraunces',Georgia,serif;font-size:26px;font-weight:400;color:${EMAIL_BRAND.text};">${escapeHtml(title)}</h1>
+      <h1 style="margin:20px 0 0 0;font-family:'Libre Baskerville',Georgia,serif;font-size:26px;font-weight:400;color:${EMAIL_BRAND.text};">${escapeHtml(title)}</h1>
       ${subtitle ? `<p style="margin:8px 0 0 0;font-size:14px;color:${EMAIL_BRAND.textMuted};">${escapeHtml(subtitle)}</p>` : ""}
     </div>
     <div class="content" style="padding:36px 30px;background-color:${EMAIL_BRAND.surface};color:${EMAIL_BRAND.text};">

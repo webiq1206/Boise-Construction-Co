@@ -27,25 +27,24 @@ export function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-10 mb-12 lg:gap-0 lg:divide-x lg:divide-inverse-foreground/10 [&>*]:lg:px-6 [&>*:first-child]:lg:pl-0 [&>*:last-child]:lg:pr-0">
           <div className="lg:col-span-2">
             <div className="mb-5 flex items-center gap-4">
-              {/* Dark-background brand seal; circular clip drops the square
-                  corners so its dark ground reads as a seamless medallion on
-                  the dark footer band */}
+              {/* Bone seal with the ochre ring - reads as a medallion on the
+                  dark footer band (transparent artwork, no clip needed). */}
               <img
-                src="/brand/icons/boise-construction-co-seal-dark.svg"
+                src="/brand/svg/seal/dark/boise-construction-co-seal-bone-accent.svg"
                 alt=""
                 aria-hidden="true"
                 width={56}
                 height={56}
-                className="h-14 w-14 shrink-0 rounded-full"
+                className="h-14 w-14 shrink-0"
               />
-              {/* Reverse (white) primary logo with tagline. Intrinsic size is
-                  1671x420, so 45px tall renders 179px wide. */}
+              {/* Bone wordmark with the ochre "Co." Intrinsic size is
+                  1765.71x159.96, so 26px tall renders ~287px wide. */}
               <img
-                src="/brand/logos/boise-construction-co-logo-primary-reverse.svg"
+                src="/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg"
                 alt={SITE_CONFIG.name}
-                width={179}
-                height={45}
-                className="h-[45px] w-auto"
+                width={287}
+                height={26}
+                className="h-[26px] w-auto"
               />
             </div>
             <p className="text-sm mb-6 text-inverse-muted font-sans">
