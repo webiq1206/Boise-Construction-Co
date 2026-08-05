@@ -33,15 +33,16 @@ the italic "Co." only. Never recolor marks outside charcoal, bone, and `#D09A5C`
 | Ink | `--foreground` | Body text (AA) |
 | Meta | `--muted-foreground` | Eyebrows, captions only |
 | Anchor | `--inverse` | Dark bands, footer |
-| Accent | `--accent` (deep ochre) | `.brc-accent` in headings, slider thumb - not filled buttons |
+| Accent | `--accent-legible` (ochre #D09A5C) | `.brc-accent` accent words, links, focus, eyebrow ticks |
+| Graphic fill | `--accent` (deep ochre #7E6344) | chips, tints, slider thumb, icon grounds - not text |
 
 ---
 
 ## Typography
 
 - **UI & body:** Montserrat (`font-sans`)
-- **Accent word:** Fraunces italic in ochre via `.brc-accent` (max one word per heading)
-- **Numerals:** Fraunces via `.brc-display-num` / `<DisplayNum>`
+- **Accent word:** Libre Baskerville italic in ochre via `.brc-accent` (max one word per heading)
+- **Numerals:** Libre Baskerville via `.brc-display-num` / `<DisplayNum>`
 - **Eyebrows:** `.brc-label` — 11px, uppercase, 0.14em tracking
 
 Living reference: `/style-guide` (noindex).

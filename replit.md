@@ -9,8 +9,8 @@ Preferred communication style: Simple, everyday language.
 ## System Architecture
 
 ### UI/UX Decisions
-- **Design System**: Mobile-first responsive design. Montserrat (`font-sans`) for all headings and body text; the serif (Fraunces, `font-serif`) is reserved exclusively for decorative accents — italic emphasis words via `.brc-accent` and display numerals via `.brc-display-num`. Do not apply `font-serif` to heading elements.
-- **Color Palette**: Warm cream background (`36 30% 97%`), warm dark charcoal foreground (`24 18% 12%`), terracotta/sienna primary (`18 56% 40%`), warm sand secondary, soft sage accent.
+- **Design System**: Mobile-first responsive design, dark-only. Montserrat (`font-sans`) for all headings and body text; the serif (Libre Baskerville, `font-serif`) is reserved exclusively for decorative accents — italic emphasis words via `.brc-accent` and display numerals via `.brc-display-num`. Do not apply `font-serif` to heading elements.
+- **Color Palette**: Boise Construction Co brand kit — charcoal ground/ink `#2C302F`, bone `#F7F5F3`, ochre accent `#D09A5C` (with deep ochre `#7E6344` for graphic fills). These three brand colors only; never recolor outside them.
 - **Component Library**: shadcn/ui (Radix UI primitives) with custom Tailwind CSS.
 - **Homepage**: 12-section single-page marketing layout: Hero → Trust Strip → Founder Note → Inspiration Gallery → Estimate Calculator → Below-Calculator Cards → How We Build → Principles → Financing/Guarantee → Founding Clients → FAQ Accordion → Consultation Form.
 - **Founding Spots**: `FOUNDING_SPOTS_REMAINING` constant in `shared/contentData.ts` — update manually as spots fill.
@@ -44,4 +44,4 @@ Preferred communication style: Simple, everyday language.
 - **nanoid**: Unique ID generation.
 - **Resend**: Transactional email via the Resend SDK (`RESEND_API_KEY` secret or `resend` connector).
 - **Stripe**: Payments for the lead marketplace.
-- **Playfair Display** + **Montserrat**: Google Fonts (loaded via `next/font/google`).
+- **Montserrat** + **Libre Baskerville**: Google Fonts (loaded via `next/font/google`).

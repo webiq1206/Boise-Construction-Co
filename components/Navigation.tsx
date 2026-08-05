@@ -24,12 +24,12 @@ const NAV_LINKS = [
 function Logo() {
   return (
     <Link href="/" className="flex items-center" aria-label={`${SITE_CONFIG.name} - home`}>
-      {/* Reverse (white) wordmark for the dark ground. Intrinsic size is
-          1817x200, so 26px tall renders 236px wide. */}
+      {/* Bone wordmark with the ochre "Co." for the dark ground. Intrinsic
+          size is 1765.71x159.96, so 26px tall renders ~287px wide. */}
       <img
-        src="/brand/logos/boise-construction-co-wordmark-reverse.svg"
+        src="/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg"
         alt={SITE_CONFIG.name}
-        width={236}
+        width={287}
         height={26}
         className="h-[26px] w-auto"
       />

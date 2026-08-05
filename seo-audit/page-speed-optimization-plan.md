@@ -52,7 +52,7 @@ images: {
 
 ## Fonts — PASS
 
-Montserrat + Fraunces with `display: swap`. Consider `preload` for the primary weight only.
+Montserrat + Libre Baskerville with `display: swap`. Consider `preload` for the primary weight only.
 
 ## Build flags (process risk)
 

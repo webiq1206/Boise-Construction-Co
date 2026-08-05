@@ -130,7 +130,7 @@ export default {
       },
       fontFamily: {
         sans: ["var(--font-montserrat)", "Helvetica Neue", "system-ui", "sans-serif"],
-        serif: ["var(--font-fraunces)", "Georgia", "serif"],
+        serif: ["var(--font-libre-baskerville)", "Georgia", "serif"],
         mono: ["Menlo", "Monaco", "monospace"],
       },
       fontSize: {

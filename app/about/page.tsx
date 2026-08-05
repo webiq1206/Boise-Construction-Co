@@ -264,10 +264,10 @@ export default function AboutPage() {
         {/* ─── Principles ─── */}
         <Section variant="inverse" divider>
           <div className="container px-4 max-w-5xl">
-            {/* Stacked emblem - bright badge on the dark band */}
+            {/* Brand icon (ochre field) - bright badge on the dark band */}
             <img
-              src="/brand/icons/boise-construction-co-emblem-light.svg"
-              alt="Boise Construction Co emblem"
+              src="/brand/svg/icon/boise-construction-co-icon-accent.svg"
+              alt="Boise Construction Co"
               width={72}
               height={72}
               className="h-16 w-16 md:h-[72px] md:w-[72px] mb-8"

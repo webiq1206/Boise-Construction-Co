@@ -551,7 +551,7 @@ export function buildEstimateSectionsHtml(
   return `
     <div style="background:${EMAIL_BRAND.raised};border-left:3px solid ${EMAIL_BRAND.accent};padding:24px;margin:24px 0;border-radius:4px;">
       <p style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:0.14em;color:${EMAIL_BRAND.textMuted};">Planning range</p>
-      <p style="margin:0;font-family:'Fraunces',Georgia,serif;font-size:30px;line-height:1.15;color:${EMAIL_BRAND.text};">${rangeText}</p>
+      <p style="margin:0;font-family:'Libre Baskerville',Georgia,serif;font-size:30px;line-height:1.15;color:${EMAIL_BRAND.text};">${rangeText}</p>
       <p style="margin:10px 0 0;font-size:13px;color:${EMAIL_BRAND.textMuted};">${escapeHtml(est.confidence)}${roiNote}</p>
     </div>
 
