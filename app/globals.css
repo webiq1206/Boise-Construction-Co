@@ -823,7 +823,8 @@ body[data-hide-mobile-nav-bar="true"] [data-mobile-nav-bar] {
    as an unformatted dump. Instead we keep a hidden, structured print-only copy
    in the DOM and, when printing, hide everything else and reveal just that copy
    so a saved PDF preserves the same organisation the screen shows. */
-.re10-print-only {
+.re10-print-only,
+.estimate-print-only {
   display: none;
 }
 @media print {
@@ -831,10 +832,13 @@ body[data-hide-mobile-nav-bar="true"] [data-mobile-nav-bar] {
     visibility: hidden;
   }
   .re10-print-only,
-  .re10-print-only * {
+  .re10-print-only *,
+  .estimate-print-only,
+  .estimate-print-only * {
     visibility: visible;
   }
-  .re10-print-only {
+  .re10-print-only,
+  .estimate-print-only {
     display: block;
     position: absolute;
     left: 0;
