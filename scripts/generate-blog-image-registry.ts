@@ -91,6 +91,54 @@ const LIBRARY = {
     src: img('shop-home-barndominium'),
     alt: 'Shop home combining a finished living wing with an attached shop under one metal roof on Idaho acreage',
   },
+  customHomeDusk: {
+    src: img('custom-home-dusk-exterior'),
+    alt: 'Newly completed modern farmhouse custom home glowing at dusk on a Treasure Valley lot with the Boise foothills behind',
+  },
+  twoStory: {
+    src: img('two-story-home-exterior'),
+    alt: 'Newly built two-story craftsman home with stone wainscot and a covered front porch on a Meridian, Idaho lot',
+  },
+  subdivision: {
+    src: img('new-neighborhood-street'),
+    alt: 'Street of recently finished new-construction homes with young trees and fresh sidewalks in a Treasure Valley subdivision',
+  },
+  greatRoom: {
+    src: img('great-room-evening'),
+    alt: 'Finished great room in a new Idaho home at dusk with a tile fireplace, beamed ceiling, and a steel-frame window wall',
+  },
+  accessibleBath: {
+    src: img('accessible-primary-bathroom'),
+    alt: 'Accessible primary bathroom in a new Idaho home with a curbless walk-in shower, fold-down bench, and a floating vanity',
+  },
+  staircase: {
+    src: img('staircase-foyer'),
+    alt: 'Finished entry staircase in a new Idaho home with white oak treads, black metal balusters, and a two-story foyer',
+  },
+  blueprints: {
+    src: img('blueprints-drafting'),
+    alt: 'Rolled residential blueprints, an architect\'s scale, and a basswood study model on a drafting desk',
+  },
+  selections: {
+    src: img('finish-selections-board'),
+    alt: 'Flat-lay of new-home finish selections: quartz and wood samples, tile, cabinet doors, a paint deck, and matte black hardware',
+  },
+  permitDocs: {
+    src: img('building-permit-documents'),
+    alt: 'Residential building permit packet with stamped site and floor plans, an application, and an approval stamp on a desk',
+  },
+  consultTable: {
+    src: img('planning-consultation-table'),
+    alt: 'New-home planning consultation at a kitchen table with printed floor plans and a tablet showing a 3D house model',
+  },
+  bidCompare: {
+    src: img('builder-bid-comparison'),
+    alt: 'Three residential construction bids fanned out on a desk with a highlighter marking line items for comparison',
+  },
+  acreage: {
+    src: img('rural-acreage-parcel'),
+    alt: 'Vacant rural acreage building parcel in Canyon County, Idaho with a survey stake and desert mountains on the horizon',
+  },
 } as const;
 
 type LibraryKey = keyof typeof LIBRARY;
@@ -115,22 +163,25 @@ const BY_SLUG: Record<string, LibraryKey> = {
   'cost-to-build-a-house-boise': 'customHome',
   'custom-home-cost-per-square-foot-boise': 'framing',
   'what-drives-home-building-costs-boise': 'foundation',
-  'luxury-home-building-cost-boise': 'interior',
-  'build-vs-buy-boise': 'semiCustom',
-  'allowances-explained-new-home': 'kitchen',
+  'luxury-home-building-cost-boise': 'greatRoom',
+  'build-vs-buy-boise': 'subdivision',
+  'allowances-explained-new-home': 'selections',
 
   // Choosing a builder
   'questions-to-ask-a-home-builder': 'plans',
-  'design-build-vs-general-contractor': 'customHome',
-  'production-vs-custom-home-builder': 'semiCustom',
-  'fixed-price-vs-cost-plus': 'budget',
+  'design-build-vs-general-contractor': 'customHomeDusk',
+  'production-vs-custom-home-builder': 'subdivision',
+  'fixed-price-vs-cost-plus': 'bidCompare',
+  'home-builder-red-flags': 'consultTable',
+  'how-to-compare-builder-bids': 'bidCompare',
+  'why-home-building-bids-vary': 'bidCompare',
 
   // Process
   'stages-of-building-a-house': 'foundation',
-  'boise-building-permit-guide': 'plans',
-  'ada-vs-canyon-county-permit-timelines': 'plans',
+  'boise-building-permit-guide': 'permitDocs',
+  'ada-vs-canyon-county-permit-timelines': 'permitDocs',
   'choosing-finishes-for-a-new-home': 'kitchen',
-  'new-home-walkthrough-and-warranty': 'interior',
+  'new-home-walkthrough-and-warranty': 'staircase',
   'first-meeting-with-a-home-builder': 'meeting',
   'how-long-does-it-take-to-build-a-house-boise': 'roughIn',
 
@@ -140,22 +191,22 @@ const BY_SLUG: Record<string, LibraryKey> = {
   'impact-fees-and-utility-connections': 'ruralSite',
 
   // Design and plans
-  'single-story-vs-two-story-home': 'semiCustom',
+  'single-story-vs-two-story-home': 'twoStory',
   'energy-efficient-home-building-boise': 'insulation',
   'shop-homes-and-barndominiums-idaho': 'shopHome',
   'covered-outdoor-living-new-home': 'outdoor',
-  'custom-home-floor-plan-ideas-boise': 'plans',
-  'aging-in-place-home-design': 'interior',
-  'multigenerational-home-design': 'customHome',
+  'custom-home-floor-plan-ideas-boise': 'blueprints',
+  'aging-in-place-home-design': 'accessibleBath',
+  'multigenerational-home-design': 'twoStory',
   'adu-cost-boise': 'semiCustom',
 
   // Pillars
   'boise-home-building-cost-guide': 'budget',
   'choose-home-builder-boise': 'meeting',
   'boise-home-building-process-guide': 'framing',
-  'buying-land-to-build-boise': 'lot',
-  'custom-home-design-guide': 'plans',
-  'treasure-valley-home-building-guide': 'customHome',
+  'buying-land-to-build-boise': 'acreage',
+  'custom-home-design-guide': 'blueprints',
+  'treasure-valley-home-building-guide': 'subdivision',
 
   // Location guides
   'boise-home-building-guide': 'customHome',
@@ -165,10 +216,10 @@ const BY_SLUG: Record<string, LibraryKey> = {
   'star-home-building-guide': 'lot',
   'middleton-home-building-guide': 'foundation',
   'nampa-home-building-guide': 'semiCustom',
-  'caldwell-home-building-guide': 'lot',
+  'caldwell-home-building-guide': 'acreage',
   'eagle-foothills-home-building-guide': 'foothills',
   'hidden-springs-home-building-guide': 'customHome',
-  'harris-ranch-home-building-guide': 'interior',
+  'harris-ranch-home-building-guide': 'greatRoom',
 };
 
 const HUB_HERO: Record<string, LibraryKey> = HUB_DEFAULT;
