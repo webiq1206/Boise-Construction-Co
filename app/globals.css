@@ -818,6 +818,34 @@ body[data-hide-mobile-nav-bar="true"] [data-mobile-nav-bar] {
   display: none;
 }
 
+/* ─── Print: a clean, black-on-white estimate ───
+   The estimator lives in a dark band, which prints as a wall of ink and reads
+   as an unformatted dump. Instead we keep a hidden, structured print-only copy
+   in the DOM and, when printing, hide everything else and reveal just that copy
+   so a saved PDF preserves the same organisation the screen shows. */
+.re10-print-only {
+  display: none;
+}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .re10-print-only,
+  .re10-print-only * {
+    visibility: visible;
+  }
+  .re10-print-only {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 24px;
+    color: #111;
+    background: #fff;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
