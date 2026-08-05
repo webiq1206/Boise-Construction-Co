@@ -52,19 +52,19 @@ export const DIFFERENTIATORS: Differentiator[] = [
     body: "we set flooring, cabinetry, plumbing, and lighting allowances at real Treasure Valley pricing for the finish level you chose. If you spend to your allowance, you pay what the budget said.",
   },
   {
-    title: "Your budget builds your home, not our overhead",
-    contrast: "Instead of paying for big offices, model home parks, and fleets of trucks that quietly get built into your price,",
-    body: "you get a company that runs lean on purpose. We put more of every dollar into the framing, the envelope, and the finishes, so more of what you spend ends up standing on your lot.",
+    title: "A leaner operation, spent on your build",
+    contrast: "Rather than spreading your budget across the cost of running a large company,",
+    body: "we keep the team small and the overhead honest, then reinvest the difference into the parts of a house that outlast everything else: the structure, the envelope, the mechanical systems, and the finishes you selected. You notice it in the quality on site, not in a line item you were never shown.",
   },
   {
-    title: "One team, one point of accountability",
-    contrast: "Instead of coordinating a designer, an architect, a builder, and a dozen subs who point at each other when something is wrong,",
-    body: "you work with a single design-build team. Design, engineering, permitting, and construction stay under one roof, with the same project manager from your first consultation through the final walkthrough.",
+    title: "One team, accountable from sketch to keys",
+    contrast: "Rather than refereeing a designer, an architect, a builder, and a rotating cast of subcontractors who trade blame when a detail slips,",
+    body: "you have a single design-build team carrying the project the whole way. Drawing, engineering, permitting, and field work live with the same people, and the same project manager stays with you from the first plan to the day you move in.",
   },
   {
-    title: "Proactive communication, not radio silence",
-    contrast: "Instead of driving by your lot to find out what happened this week,",
-    body: "you receive a written update every Friday: what was completed, what is next, what your selections deadline looks like, and any decisions we need from you. Cost and schedule impacts get flagged early, while there is still room to react.",
+    title: "A written update lands every Friday",
+    contrast: "Rather than driving past the lot to guess at the week's progress,",
+    body: "you get a short written report each Friday: what got finished, what comes next, which selections are coming due, and any decision we need from you. When a cost or a date shifts, you hear it while there is still room to respond.",
   },
   {
     title: "Land and permit expertise before you commit",
@@ -305,11 +305,11 @@ export const CONSULT_BULLETS = [
  * `accentWord` renders as the ochre Libre Baskerville italic accent (keep it to one word).
  */
 export const STATEMENT_BAND = {
-  eyebrow: "Our commitment",
-  statement: "Every detail, every decision, handled with",
-  accentWord: "intention",
+  eyebrow: "The standard we build to",
+  statement: "Nothing about your home is left to",
+  accentWord: "chance",
   support:
-    "One accountable team, a line-item budget before we break ground, and a written update every week, from your first consultation to the day you get the keys.",
+    "One team owns the result, the budget is settled on paper before we break ground, and a plain-language update reaches you every week - from the first time we walk your lot to the morning we hand you the keys.",
 } as const;
 
 /**
@@ -319,14 +319,14 @@ export const STATEMENT_BAND = {
  * confident (not a "what you're not paying for" list).
  */
 export const VALUE_MODEL = {
-  eyebrow: "Where your money goes",
-  headlineA: "Don't pay for our overhead.",
-  headlineB: "Pay for your",
-  accentWord: "home",
-  costs: "Model home parks. Glossy plan books. Fleets of trucks. Layers of management.",
-  costsBody: "Those costs don't disappear, they get built into your price per square foot.",
+  eyebrow: "Where the budget lands",
+  headlineA: "Put the money where",
+  headlineB: "you will actually",
+  accentWord: "live",
+  costs: "A corner office. A showroom stocked with finishes you never picked. Wrapped trucks. A tier of managers who never set foot on your lot.",
+  costsBody: "None of it is free. It gets folded quietly into a price per square foot and handed to the next buyer, whether that buyer wanted any of it or not.",
   reframe:
-    "So we built our company differently. Every dollar you invest should end up standing on your lot, not covering our bills.",
-  taglineLead: "Get more home for",
-  taglineAccent: "what you spend",
+    "We built the company to leave that out. A small, deliberate team keeps our carrying costs low, so the budget you approve goes into your foundation, your framing, and the finishes you chose - not into keeping the lights on somewhere you will never visit.",
+  taglineLead: "More of your budget,",
+  taglineAccent: "standing on your lot",
 } as const;

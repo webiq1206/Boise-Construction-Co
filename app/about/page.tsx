@@ -241,15 +241,16 @@ export default function AboutPage() {
                   </p>
                 </div>
                 <div className="mt-8 pt-8 border-t border-border">
-                  <div className="brc-label text-muted-foreground mb-3">Where your money goes</div>
+                  <div className="brc-label text-muted-foreground mb-3">Where the budget lands</div>
                   <h3 className="font-sans font-normal text-base text-foreground mb-2">
-                    Don't pay for a contractor's overhead
+                    Your budget builds the house, not the company
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Big offices, showrooms, and fleets of trucks do not disappear. They get built
-                    into your price. We run lean on purpose and put more of every dollar into the
-                    materials, labor, and finish of your project, so more of what you spend ends up
-                    in your home.
+                    A larger builder's offices, model homes, and branded trucks are real costs, and
+                    they are quietly recovered inside the price per square foot you are quoted. We keep
+                    our footprint small on purpose, so a bigger share of what you spend goes into the
+                    foundation, the framing, the envelope, and the finishes you chose - the parts of
+                    the home you actually live with.
                   </p>
                 </div>
               </Reveal>
