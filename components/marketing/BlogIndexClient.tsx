@@ -13,6 +13,7 @@ import {
   categoryHubPath,
   isCategoryHubIndexable,
 } from "@/shared/contentHubs";
+import { trackEvent } from "@/lib/analytics";
 
 function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString("en-US", {
@@ -76,14 +77,23 @@ export function BlogIndexClient() {
               <>
                 {indexableHubs.length >= 2 && (
                   <div className="flex flex-wrap gap-2 justify-center mb-6">
-                    <Chip active={!activeHub} onClick={() => setActiveHub(null)}>
+                    <Chip
+                      active={!activeHub}
+                      onClick={() => {
+                        setActiveHub(null);
+                        trackEvent("resource_filtered", { topic: "all" });
+                      }}
+                    >
                       All topics
                     </Chip>
                     {indexableHubs.map((hub) => (
                       <Chip
                         key={hub.hubSlug}
                         active={activeHub === hub.hubSlug}
-                        onClick={() => setActiveHub(hub.hubSlug)}
+                        onClick={() => {
+                          setActiveHub(hub.hubSlug);
+                          trackEvent("resource_filtered", { topic: hub.hubSlug });
+                        }}
                       >
                         {hub.title}
                       </Chip>

@@ -5,21 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, Phone, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CTA_QUOTE } from "@/shared/ctaCopy";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { NavEstimateButton } from "@/components/modals/NavEstimateButton";
 import { SaveContactLink } from "@/components/SaveContactLink";
-
-const NAV_LINKS = [
-  { label: "Services", href: "/services" },
-  { label: "Areas", href: "/areas" },
-  { label: "About", href: "/about" },
-  { label: "Guides", href: "/guides" },
-  { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/contact" },
-];
+import { NAV_LINKS } from "@/shared/navConfig";
 
 function Logo() {
   return (
@@ -114,7 +106,7 @@ export function Navigation() {
             >
               Text us
             </a>
-            <NavEstimateButton variant="brand" size="sm" className="min-h-11">
+            <NavEstimateButton variant="brand" size="sm" className="min-h-11" trackingLocation="nav_desktop">
               {CTA_QUOTE}
             </NavEstimateButton>
           </div>
@@ -219,6 +211,7 @@ export function Navigation() {
                       variant="brand"
                       className="w-full"
                       onExtraClick={() => setMobileOpen(false)}
+                      trackingLocation="nav_mobile_menu"
                     >
                       {CTA_QUOTE}
                     </NavEstimateButton>
@@ -230,30 +223,28 @@ export function Navigation() {
         </nav>
       </header>
 
-      {/* Sticky bottom bar */}
+      {/* Sticky bottom bar: one primary conversion action (Get an estimate)
+          plus one secondary utility action (Call). Text remains reachable in
+          the header and mobile menu, but doesn't compete for space here -
+          three equal actions diluted which one visitors actually tap. */}
       <div
         data-mobile-nav-bar=""
         className="fixed left-0 right-0 bottom-0 z-[100] md:hidden pb-safe border-t bg-background/97 backdrop-blur-md border-border"
       >
-        <div className="grid grid-cols-3 divide-x divide-border">
+        <div className="flex items-stretch gap-2 p-2">
           <a
             href={SITE_CONFIG.phoneHref}
-            className="flex items-center justify-center gap-2 py-4 text-sm font-normal text-foreground"
+            className="flex min-h-14 w-14 shrink-0 items-center justify-center rounded-sm border border-border text-foreground hover-elevate active-elevate-2"
+            aria-label={`Call ${SITE_CONFIG.phone}`}
             data-testid="button-call-mobile"
           >
-            Call
-          </a>
-          <a
-            href={SITE_CONFIG.phoneSmsHref}
-            className="flex items-center justify-center gap-2 py-4 text-sm font-normal text-foreground"
-            data-testid="button-text-mobile"
-          >
-            Text
+            <Phone className="h-5 w-5" strokeWidth={1.5} />
           </a>
           <NavEstimateButton
-            asLink
-            className="flex items-center justify-center gap-2 py-4 text-sm font-normal text-foreground"
+            variant="brand"
+            className="min-h-14 flex-1 text-base"
             data-testid="button-begin-conversation-mobile"
+            trackingLocation="mobile_sticky_bar"
           >
             {CTA_QUOTE}
           </NavEstimateButton>

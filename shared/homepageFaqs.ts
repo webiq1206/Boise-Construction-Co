@@ -4,6 +4,15 @@ export interface HomepageFaq {
 }
 
 /**
+ * How many FAQs FAQSection renders by default before "Show all" - the
+ * FAQPage schema (components/seo/HomePageSchema.tsx) must mark up only this
+ * many, since the rest aren't in the page's HTML until that button is
+ * clicked. Lives here (not in the client component) so a server component can
+ * import it without crossing the client/server boundary.
+ */
+export const INITIAL_FAQ_COUNT = 8;
+
+/**
  * Homepage FAQ set. These feed FAQPage schema, so answers lead with the direct
  * response before adding context.
  *

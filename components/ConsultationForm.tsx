@@ -48,16 +48,48 @@ import {
  */
 const LAND_SEARCH_PROJECT_TYPE = "looking-for-land";
 
+/**
+ * How the visitor wants us to reach back out. Only the chosen method is
+ * required - asking for both a phone number and an email up front is one
+ * more decision than the enquiry needs. Mirrors the same pattern already
+ * shipped in the RE-10 wizard (components/re10/Re10Wizard.tsx).
+ */
+const CONTACT_METHODS = [
+  { value: "email", label: "Email" },
+  { value: "phone", label: "Phone call" },
+  { value: "text", label: "Text" },
+] as const;
+
 const formSchema = z
   .object({
     name: z.string().min(2, "Please enter your full name"),
-    phone: z.string().min(10, "Please enter a valid phone number"),
-    email: z.string().email("Please enter a valid email"),
+    preferredContact: z.enum(["email", "phone", "text"]),
+    phone: z.string(),
+    email: z.string(),
     address: z.string(),
     projectType: z.string().min(1, "Please select a project type"),
     message: z.string().optional(),
   })
   .superRefine((data, ctx) => {
+    if (data.preferredContact === "email") {
+      if (!z.string().email().safeParse(data.email).success) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["email"],
+          message: "Please enter a valid email address",
+        });
+      }
+    } else if (data.phone.replace(/\D/g, "").length < 10) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["phone"],
+        message:
+          data.preferredContact === "text"
+            ? "Please enter a valid mobile number"
+            : "Please enter a valid phone number",
+      });
+    }
+
     if (data.projectType === LAND_SEARCH_PROJECT_TYPE) return;
     const address = data.address.trim();
     if (address.length < 5) {
@@ -134,6 +166,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
     mode: "onTouched",
     defaultValues: {
       name: "",
+      preferredContact: "email",
       phone: "",
       email: "",
       address: "",
@@ -141,6 +174,8 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
       message: "",
     },
   });
+
+  const preferredContact = form.watch("preferredContact");
 
   const searchingForLand = form.watch("projectType") === LAND_SEARCH_PROJECT_TYPE;
 
@@ -376,9 +411,11 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
               phoneTestId="link-consult-success-phone"
             />
           </p>
-          <p className="text-xs text-muted-foreground">
-            A confirmation email is on its way to your inbox.
-          </p>
+          {submitted?.email && (
+            <p className="text-xs text-muted-foreground">
+              A confirmation email is on its way to your inbox.
+            </p>
+          )}
         </div>
       </div>
     );
@@ -536,29 +573,72 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
           />
         )}
 
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className={labelClass}>
+                Full name
+                <RequiredMark />
+              </FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Jane Smith"
+                  autoComplete="name"
+                  aria-required="true"
+                  data-testid="input-name"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="preferredContact"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className={labelClass}>
+                How should we reach you?
+                <RequiredMark />
+              </FormLabel>
+              <FormControl>
+                <div
+                  role="radiogroup"
+                  aria-label="Preferred contact method"
+                  className="grid grid-cols-3 gap-2"
+                >
+                  {CONTACT_METHODS.map((method) => {
+                    const selected = field.value === method.value;
+                    return (
+                      <button
+                        key={method.value}
+                        type="button"
+                        role="radio"
+                        aria-checked={selected}
+                        onClick={() => field.onChange(method.value)}
+                        className={cn(
+                          "min-h-11 rounded-sm border px-3 py-2.5 text-sm font-normal transition-colors hover-elevate active-elevate-2",
+                          selected
+                            ? "border-foreground bg-foreground text-background"
+                            : "border-border bg-transparent text-foreground",
+                        )}
+                        data-testid={`button-preferred-contact-${method.value}`}
+                      >
+                        {method.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
         <div className="grid sm:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className={labelClass}>
-                  Full name
-                  <RequiredMark />
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Jane Smith"
-                    autoComplete="name"
-                    aria-required="true"
-                    data-testid="input-name"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="phone"
@@ -566,14 +646,17 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
               <FormItem>
                 <FormLabel className={labelClass}>
                   Phone
-                  <RequiredMark />
+                  {preferredContact !== "email" && <RequiredMark />}
+                  {preferredContact === "email" && (
+                    <span className="normal-case text-muted-foreground"> (optional)</span>
+                  )}
                 </FormLabel>
                 <FormControl>
                   <Input
                     type="tel"
                     placeholder="(208) 555-0000"
                     autoComplete="tel"
-                    aria-required="true"
+                    aria-required={preferredContact !== "email"}
                     data-testid="input-phone"
                     {...field}
                   />
@@ -582,31 +665,33 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className={labelClass}>
+                  Email
+                  {preferredContact === "email" && <RequiredMark />}
+                  {preferredContact !== "email" && (
+                    <span className="normal-case text-muted-foreground"> (optional)</span>
+                  )}
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="jane@example.com"
+                    autoComplete="email"
+                    aria-required={preferredContact === "email"}
+                    data-testid="input-email"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
-
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className={labelClass}>
-                Email
-                <RequiredMark />
-              </FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="jane@example.com"
-                  autoComplete="email"
-                  aria-required="true"
-                  data-testid="input-email"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
         <FormField
           control={form.control}

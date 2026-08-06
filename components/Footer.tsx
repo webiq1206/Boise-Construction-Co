@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Facebook } from "lucide-react";
+import { ChevronDown, Facebook } from "lucide-react";
 import { CITIES, SERVICES } from "@/shared/contentData";
 import { SITE_TAGLINE } from "@/shared/siteContent";
 import { areaPath, servicePath } from "@/lib/seo-routes";
@@ -17,6 +17,36 @@ import { GUIDE_PAGES } from "@/shared/guideContent";
 import manifest from "@/data/internal-links.json";
 
 const PUBLISHED_GUIDE_SLUGS = new Set(GUIDE_PAGES.map((g) => g.slug));
+
+/**
+ * A footer link group. Renders as a native <details>/<summary> disclosure so
+ * it's a collapsed accordion on mobile (no JS, keyboard/AT accessible for
+ * free) but always open on desktop - the summary's click/toggle is disabled
+ * at lg+ via pointer-events-none rather than switching markup, so there's no
+ * hydration mismatch between server and client.
+ */
+function FooterGroup({
+  title,
+  children,
+}: {
+  title: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <details open className="group/fg">
+      <summary
+        className="flex cursor-pointer select-none items-center justify-between gap-2 py-1 font-sans text-[11px] font-normal uppercase tracking-[0.12em] text-inverse-muted marker:hidden [&::-webkit-details-marker]:hidden lg:pointer-events-none lg:cursor-default lg:py-0 lg:mb-5"
+      >
+        {title}
+        <ChevronDown
+          className="h-4 w-4 shrink-0 text-inverse-muted transition-transform duration-200 group-open/fg:rotate-180 lg:hidden"
+          aria-hidden="true"
+        />
+      </summary>
+      <div className="pb-5 pt-3 lg:pb-0 lg:pt-0">{children}</div>
+    </details>
+  );
+}
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -92,10 +122,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div>
-            <h3 className="font-sans font-normal text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
-              Services
-            </h3>
+          <FooterGroup title="Services">
             <ul className="space-y-2.5">
               {SERVICES.map((service) => (
                 <li key={service.slug}>
@@ -108,12 +135,9 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </FooterGroup>
 
-          <div>
-            <h3 className="font-sans font-normal text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
-              Resources
-            </h3>
+          <FooterGroup title="Resources">
             <ul className="space-y-2.5">
               <li>
                 <Link
@@ -146,23 +170,19 @@ export function Footer() {
                   </li>
                 ))}
             </ul>
-          </div>
+          </FooterGroup>
 
-          <div>
-            <h3 className="font-sans font-normal text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
-              Studio
-            </h3>
+          <FooterGroup title="Company">
             <ul className="space-y-2.5">
               {[
                 { label: "About", href: "/about" },
-                { label: "Guides", href: "/guides" },
                 // Sitewide link so the RE-10 page is reachable from every page
                 // and never ships orphaned.
                 { label: "RE-10 Repairs", href: "/re-10-repairs-boise" },
                 { label: "Contact", href: "/contact" },
                 { label: "Why Choose Us", href: "/#why-choose-us" },
                 { label: "How We Build", href: "/#how-we-build" },
-                { label: "Blog", href: "/blog" },
+                // Guides/Blog already have their own columns; not repeated here.
               ].map((link) => (
                 <li key={link.label}>
                   <Link
@@ -174,14 +194,15 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </FooterGroup>
 
-          <div>
-            <h3 className="font-sans font-normal text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
+          <FooterGroup
+            title={
               <Link href="/areas" className="hover:text-inverse-foreground transition-colors">
                 Service Areas
               </Link>
-            </h3>
+            }
+          >
             <ul className="space-y-2.5">
               {CITIES.map((city) => (
                 <li key={city.slug}>
@@ -194,12 +215,9 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </FooterGroup>
 
-          <div>
-            <h3 className="font-sans font-normal text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
-              From the Blog
-            </h3>
+          <FooterGroup title="From the Blog">
             <ul className="space-y-2.5">
               <li>
                 <Link
@@ -246,12 +264,9 @@ export function Footer() {
                   </li>
                 ))}
             </ul>
-          </div>
+          </FooterGroup>
 
-          <div>
-            <h3 className="font-sans font-normal text-[11px] tracking-[0.12em] uppercase mb-5 text-inverse-muted">
-              Start a Conversation
-            </h3>
+          <FooterGroup title="Start a Conversation">
             <ul className="space-y-2.5">
               <FooterCTAs />
               <li>
@@ -282,7 +297,7 @@ export function Footer() {
                 Subcontractor Login
               </a>
             </div>
-          </div>
+          </FooterGroup>
         </div>
 
         <div className="py-5 border-t border-b border-inverse-foreground/10 mb-5">

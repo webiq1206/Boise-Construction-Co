@@ -87,7 +87,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does it cost to build a custom home in Boise?',
         answer:
-          'Most Treasure Valley custom homes plan between $250 and $400 per finished square foot in 2026, excluding land. A 2,400 square foot custom home commonly lands between $600,000 and $960,000. Foothills lots and highly detailed designs run above that range.',
+          'Most Treasure Valley custom homes plan between $250 and $400 per finished square foot in 2026, excluding land, with our simplest single-level designs starting near $525,000. A common 2,400 square foot custom home lands between $600,000 and $960,000. Foothills lots and highly detailed designs run above that range.',
       },
       {
         question: 'How long does it take to build a custom home in the Treasure Valley?',
@@ -123,7 +123,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Custom home building cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, most Treasure Valley custom homes plan between $250 and $400 per finished square foot excluding land, which puts a 2,400 square foot home between $600,000 and $960,000. Simpler single-level designs on flat valley lots can come in near $225 per square foot, while foothills sites, steep grades, and highly detailed interiors regularly exceed $450.',
+        'As of 2026, most Treasure Valley custom homes plan between $250 and $400 per finished square foot excluding land. Our published planning-from figure of $525,000 reflects the simplest single-level designs on flat valley lots, near $225 per square foot; a common 2,400 square foot home lands between $600,000 and $960,000, and foothills sites, steep grades, and highly detailed interiors regularly exceed $450 per square foot.',
         'These are planning ranges, not bids. Lot conditions, home size, roof and wall complexity, and finish level drive the final number, which we confirm with a line-item budget after a lot walkthrough.',
       ],
     },
@@ -173,7 +173,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does a semi-custom home cost in the Treasure Valley?',
         answer:
-          'Semi-custom homes generally plan between $225 and $300 per finished square foot in 2026, excluding land. A 2,000 square foot home commonly lands between $450,000 and $600,000.',
+          'Semi-custom homes generally plan between $225 and $300 per finished square foot in 2026, excluding land, with our simplest plans starting near $425,000. A common 2,000 square foot home lands between $450,000 and $600,000.',
       },
       {
         question: 'What is the difference between semi-custom and fully custom?',
@@ -204,7 +204,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Semi-custom home cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, semi-custom homes in the Treasure Valley plan between $225 and $300 per finished square foot excluding land, putting a 2,000 square foot home between $450,000 and $600,000. The savings against a fully custom build come from design and engineering work that is already complete, not from cheaper construction.',
+        'As of 2026, semi-custom homes in the Treasure Valley plan between $225 and $300 per finished square foot excluding land. Our published planning-from figure of $425,000 reflects the simplest plans; a common 2,000 square foot home lands between $450,000 and $600,000. The savings against a fully custom build come from design and engineering work that is already complete, not from cheaper construction.',
         'These are planning ranges, not bids. Lot conditions, plan modifications, and finish level move the number, which we confirm with a line-item budget once a plan and lot are matched.',
       ],
     },
@@ -578,7 +578,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does a barndominium cost to build in Idaho?',
         answer:
-          'Shop homes generally plan between $140 and $250 per square foot in 2026, blended across finished and shop space. A 1,600 square foot living area with an attached 1,200 square foot shop commonly lands between $385,000 and $630,000 excluding land. The shop itself runs about $55 to $60 per square foot insulated, with a slab, an overhead door and power.',
+          'Shop homes generally plan between $140 and $250 per square foot in 2026, blended across finished and shop space. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio, since the shop portion costs far less per square foot. A 1,600 square foot living area with an attached 1,200 square foot shop commonly lands between $385,000 and $630,000 excluding land. The shop itself runs about $55 to $60 per square foot insulated, with a slab, an overhead door and power.',
       },
       {
         question: 'Why is a shop home cheaper per square foot than a conventional house?',
@@ -609,7 +609,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Shop home and barndominium cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, shop homes in the Treasure Valley plan between $140 and $250 per square foot blended across finished and shop space. A 1,600 square foot living area with an attached 1,200 square foot shop commonly runs $385,000 to $630,000 excluding land and site work.',
+        'As of 2026, shop homes in the Treasure Valley plan between $140 and $250 per square foot blended across finished and shop space. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio; a 1,600 square foot living area with an attached 1,200 square foot shop commonly runs $385,000 to $630,000 excluding land and site work.',
         'These are planning ranges, not bids. The ratio of finished space to shop space moves the blended cost more than any other variable, which we settle before design begins.',
       ],
     },
@@ -690,7 +690,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Energy-efficient home cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, high-performance homes in the Treasure Valley plan between $275 and $425 per finished square foot excluding land. The envelope and mechanical upgrades that separate a high-performance home from a code-minimum one typically add 3 to 8 percent to construction cost, or about $20,000 to $55,000 on a mid-size home.',
+        'As of 2026, high-performance homes in the Treasure Valley plan between $275 and $425 per finished square foot excluding land. Our published planning-from figure of $575,000 reflects a smaller or simpler high-performance home; the envelope and mechanical upgrades that separate it from a code-minimum build typically add 3 to 8 percent on top of your base home cost, or about $20,000 to $55,000 on a mid-size home.',
         'These are planning ranges, not bids. Part of the premium is recovered immediately through smaller heating and cooling equipment, and the rest through operating costs over the life of the home.',
       ],
     },

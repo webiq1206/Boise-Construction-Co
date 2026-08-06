@@ -3,6 +3,7 @@
 import { useId, useRef, useState } from "react";
 import Image from "next/image";
 import { MoveHorizontal } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 
 interface BeforeAfterSliderProps {
   beforeSrc: string;
@@ -32,6 +33,12 @@ export function BeforeAfterSlider({
   const movedRef = useRef(false);
   const [pos, setPos] = useState(50);
   const instructionsId = useId();
+  const trackedRef = useRef(false);
+  const trackInteraction = () => {
+    if (trackedRef.current) return;
+    trackedRef.current = true;
+    trackEvent("before_after_interaction", { title: beforeAlt });
+  };
 
   const updateFromClientX = (clientX: number) => {
     const el = containerRef.current;
@@ -46,6 +53,7 @@ export function BeforeAfterSlider({
       ref={containerRef}
       className={`relative w-full overflow-hidden select-none touch-pan-y cursor-ew-resize ${aspectClass} ${className}`}
       onPointerDown={(e) => {
+        trackInteraction();
         movedRef.current = false;
         if (e.pointerType === "mouse") {
           // Mouse has no scroll-gesture conflict: capture and jump immediately.
@@ -156,6 +164,7 @@ export function BeforeAfterSlider({
           aria-valuemax={100}
           aria-valuenow={Math.round(pos)}
           onKeyDown={(e) => {
+            trackInteraction();
             if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
               e.preventDefault();
               setPos((p) => Math.max(0, p - 4));

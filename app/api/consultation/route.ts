@@ -59,26 +59,43 @@ const propertyProfileSchema = z
 // straight to the contact page), so the shared object is wrapped as optional.
 const optionalEstimateSchema = estimateSchema.optional().nullable();
 
-const bodySchema = z.object({
-  name: z.string().min(2),
-  phone: z.string().min(10),
-  email: z.string().email(),
-  /**
-   * Optional because a new-build enquiry from someone who has not bought land
-   * yet has no site to name. The client requires a locatable site for every
-   * other project type; see LAND_SEARCH_PROJECT_TYPE in ConsultationForm.
-   */
-  address: z.string().max(300).optional().default(""),
-  zip: z.string().optional(),
-  projectType: z.string().min(1),
-  message: z.string().optional(),
-  propertyProfile: propertyProfileSchema,
-  estimate: optionalEstimateSchema,
-  /* Set by the client when the visitor already submitted the estimate gate,
-     which already sent admin + customer emails via /api/estimate-lead.
-     Prevents duplicate email sends when the same person submits both forms. */
-  skipEmail: z.boolean().optional(),
-});
+const bodySchema = z
+  .object({
+    name: z.string().min(2),
+    /**
+     * Only the visitor's chosen contact method is required (see superRefine
+     * below) - matches the same preferred-contact pattern already shipped in
+     * the RE-10 wizard. Defaults to "email" so older cached client bundles
+     * that never send this field behave exactly as before (email required).
+     */
+    preferredContact: z.enum(["email", "phone", "text"]).optional().default("email"),
+    phone: z.string().optional().default(""),
+    email: z.string().optional().default(""),
+    /**
+     * Optional because a new-build enquiry from someone who has not bought land
+     * yet has no site to name. The client requires a locatable site for every
+     * other project type; see LAND_SEARCH_PROJECT_TYPE in ConsultationForm.
+     */
+    address: z.string().max(300).optional().default(""),
+    zip: z.string().optional(),
+    projectType: z.string().min(1),
+    message: z.string().optional(),
+    propertyProfile: propertyProfileSchema,
+    estimate: optionalEstimateSchema,
+    /* Set by the client when the visitor already submitted the estimate gate,
+       which already sent admin + customer emails via /api/estimate-lead.
+       Prevents duplicate email sends when the same person submits both forms. */
+    skipEmail: z.boolean().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.preferredContact === "email") {
+      if (!z.string().email().safeParse(data.email).success) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["email"], message: "Valid email required" });
+      }
+    } else if (data.phone.replace(/\D/g, "").length < 10) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["phone"], message: "Valid phone required" });
+    }
+  });
 
 /**
  * Recomputes the planning range server-side from the submitted inputs so a
@@ -264,7 +281,9 @@ export async function POST(request: NextRequest) {
         for (const adminEmail of adminEmails) {
           const adminResult = await client.emails.send({
             from,
-            replyTo: formatLeadReplyTo(data.name, data.email),
+            // No reply-to-the-lead shortcut when they didn't leave an email -
+            // the admin email body still shows their preferred contact method.
+            replyTo: data.email ? formatLeadReplyTo(data.name, data.email) : undefined,
             to: adminEmail,
             subject: buildAdminSubject(lead, estimate),
             html: adminHtml,
@@ -280,21 +299,24 @@ export async function POST(request: NextRequest) {
 
         // ---- Customer / lead email ------------------------------------------
         // Includes the full estimate + every selection so the lead has it in
-        // writing without ever logging in.
-        const customerHtml = buildCustomerEmailHtml(lead, estimate, unitCostOverrides);
-        const customerResult = await client.emails.send({
-          from,
-          replyTo: getReplyToAddress(),
-          to: data.email,
-          subject: buildCustomerSubject(lead, estimate),
-          html: customerHtml,
-          text: htmlToPlainText(customerHtml),
-        });
-        if (customerResult?.error) {
-          console.error(
-            `[consultation] Customer email to ${data.email} failed:`,
-            JSON.stringify(customerResult.error)
-          );
+        // writing without ever logging in. Skipped entirely when the visitor
+        // chose to be reached by phone/text and never gave an email address.
+        if (data.email) {
+          const customerHtml = buildCustomerEmailHtml(lead, estimate, unitCostOverrides);
+          const customerResult = await client.emails.send({
+            from,
+            replyTo: getReplyToAddress(),
+            to: data.email,
+            subject: buildCustomerSubject(lead, estimate),
+            html: customerHtml,
+            text: htmlToPlainText(customerHtml),
+          });
+          if (customerResult?.error) {
+            console.error(
+              `[consultation] Customer email to ${data.email} failed:`,
+              JSON.stringify(customerResult.error)
+            );
+          }
         }
       } catch (emailErr) {
         console.error("[consultation] Email send failed:", emailErr);

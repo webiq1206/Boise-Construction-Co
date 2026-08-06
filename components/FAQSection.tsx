@@ -11,11 +11,9 @@ import { Section } from "@/components/marketing/Section";
 import { SectionHeader } from "@/components/marketing/SectionHeader";
 import { Button } from "@/components/ui/button";
 import { CTA_PRIMARY, CTA_SECONDARY } from "@/shared/ctaCopy";
-import { HOMEPAGE_FAQS } from "@/shared/homepageFaqs";
+import { HOMEPAGE_FAQS, INITIAL_FAQ_COUNT } from "@/shared/homepageFaqs";
 
 export { HOMEPAGE_FAQS };
-
-const INITIAL_FAQ_COUNT = 8;
 
 export function FAQSection() {
   const [showAll, setShowAll] = useState(false);
