@@ -11,6 +11,7 @@ import { GoogleAnalytics } from '@/components/GoogleAnalytics'
 import { MetaPixel } from '@/components/MetaPixel'
 import { MicrosoftClarity } from '@/components/MicrosoftClarity'
 import { ConversionTracking } from '@/components/ConversionTracking'
+import { AssistantWidget } from '@/components/assistant/AssistantWidget'
 import './globals.css'
 
 const montserrat = Montserrat({
@@ -142,6 +143,7 @@ export default function RootLayout({
             <ConditionalFooter />
           </div>
           <Toaster />
+          <AssistantWidget />
         </Providers>
         <GoogleAnalytics />
         <MetaPixel />
