@@ -139,6 +139,16 @@ function humanSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+/** Formats a phone number as (208) 555-0147 while typing - same treatment as
+    the standard estimator's contact step, so the two tools feel like one. */
+function formatPhoneInput(raw: string): string {
+  const d = raw.replace(/\D/g, "").slice(0, 10);
+  if (d.length === 0) return "";
+  if (d.length < 4) return d;
+  if (d.length < 7) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
+  return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`;
+}
+
 const isImage = (type: string, name: string) =>
   type.startsWith("image/") || /\.(jpe?g|png|webp|gif)$/i.test(name);
 
@@ -157,6 +167,10 @@ export function Re10Wizard() {
   const pickerRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
+  /** Upload progress (0-100) while the documents are being sent; null when no
+      upload is in flight. 100 with `busy` still true means "uploaded, being
+      read" - the processing phase gets its own wording. */
+  const [uploadPct, setUploadPct] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [extraction, setExtraction] = useState<ExtractionResult | null>(null);
@@ -488,12 +502,32 @@ export function Re10Wizard() {
       return;
     }
     setBusy(true);
+    setUploadPct(0);
     setError(null);
     try {
       const form = new FormData();
       files.forEach((f) => form.append("files", f));
-      const res = await fetch("/api/re10/analyze", { method: "POST", body: form });
-      const data = await res.json();
+      /* XMLHttpRequest rather than fetch, for one reason: real upload
+         progress. A 25 MB scan on a phone connection can take a while, and a
+         spinner that says nothing reads as a hang. The percentage below feeds
+         the progress bar on the upload step and the action bar's busy label. */
+      const res = await new Promise<{ ok: boolean; status: number; body: string }>(
+        (resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open("POST", "/api/re10/analyze");
+          xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+              setUploadPct(Math.min(100, Math.round((e.loaded / e.total) * 100)));
+            }
+          };
+          xhr.upload.onload = () => setUploadPct(100);
+          xhr.onload = () =>
+            resolve({ ok: xhr.status >= 200 && xhr.status < 300, status: xhr.status, body: xhr.responseText });
+          xhr.onerror = () => reject(new Error("network"));
+          xhr.send(form);
+        },
+      );
+      const data = JSON.parse(res.body || "null") ?? {};
       if (!res.ok) {
         setError(data.message ?? "We could not read those documents.");
         trackEvent(RE10_EVENTS.analysisFailed, { reason: String(data.error ?? res.status) });
@@ -540,6 +574,7 @@ export function Re10Wizard() {
       trackEvent(RE10_EVENTS.analysisFailed, { reason: "network" });
     } finally {
       setBusy(false);
+      setUploadPct(null);
     }
   }
 
@@ -925,6 +960,22 @@ export function Re10Wizard() {
               />
             </div>
 
+            {busy && (
+              <div className="mt-4" role="status" data-testid="re10-upload-progress">
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-inverse-foreground/15">
+                  <div
+                    className="h-full rounded-full bg-accent-legible transition-[width] duration-200 ease-out"
+                    style={{ width: `${uploadPct ?? 0}%` }}
+                  />
+                </div>
+                <p className="mt-1.5 text-[12px] text-inverse-muted">
+                  {uploadPct !== null && uploadPct < 100
+                    ? `Uploading your documents - ${uploadPct}%`
+                    : "Upload complete - reading the repair list. This usually takes under half a minute."}
+                </p>
+              </div>
+            )}
+
             {displayFiles.length > 0 && (
               <ul className="mt-4 space-y-2" data-testid="list-re10-files">
                 {displayFiles.map((f) => {
@@ -1229,7 +1280,7 @@ export function Re10Wizard() {
                 type="tel"
                 required={preferredContact !== "email"}
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => setPhone(formatPhoneInput(e.target.value))}
                 error={fieldErrors.phone}
                 autoComplete="tel"
                 data-testid="input-re10-phone"
@@ -1443,7 +1494,13 @@ export function Re10Wizard() {
                     : "Continue"
             }
             busyLabel={
-              step === "upload" ? "Reading your documents..." : step === "summary" ? "Building your price..." : undefined
+              step === "upload"
+                ? uploadPct !== null && uploadPct < 100
+                  ? `Uploading... ${uploadPct}%`
+                  : "Reading your documents..."
+                : step === "summary"
+                  ? "Building your price..."
+                  : undefined
             }
             data-testid="button-re10-analyze"
           />

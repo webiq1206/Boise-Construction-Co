@@ -12,6 +12,12 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StickyEstimateBar } from "@/components/estimate/StickyEstimateBar";
+import {
+  WizardProgress,
+  WizardActionBar,
+  ReviewSection,
+  type WizardStepMeta,
+} from "@/components/estimate/wizard";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/marketing";
 import { AddressAutocomplete } from "@/components/AddressAutocomplete";
@@ -625,6 +631,9 @@ const FINISH_LABELS: Record<FinishLevel, string> = {
   luxury: "Luxury",
 };
 
+/** sessionStorage key for the wizard draft (answers + current step). */
+const WIZ_DRAFT_KEY = "brc_estimate_wizard_v1";
+
 /* ══════════════════════════════════════════════════════════════════════
    MAIN COMPONENT
 ══════════════════════════════════════════════════════════════════════ */
@@ -810,17 +819,35 @@ export function EstimateCalculator({
   const [limitsOpen, setLimitsOpen]       = useState(false);
   /* Result-screen "copied to clipboard" acknowledgement. */
   const [summaryCopied, setSummaryCopied] = useState(false);
-  /* Lead-gate three-state flow:
-     gateOpen=false  gateSubmitted=false -> show "Get estimate" CTA
-     gateOpen=true   gateSubmitted=false -> show contact form (gate)
-     gateSubmitted=true (any gateOpen)   -> show full result panel */
-  const [gateOpen,      setGateOpen]      = useState(false);
+  /* ── Wizard step machine ──
+     The estimator is a guided, one-decision-at-a-time flow:
+       questions → review → contact → results.
+     `view` decides which surface is on screen; `wizStep` names the current
+     question while `view === "steps"`. gateSubmitted stays the single source
+     of truth for "contact has been captured": while it is false the results
+     view is unreachable and no price is rendered anywhere. */
+  const [view, setView] = useState<"steps" | "results">("steps");
+  /* True after the first client effect: the server HTML renders the wizard's
+     buttons before React has attached their handlers, and a tap in that gap
+     does nothing. Exposed as data-hydrated so tests (and any automation) can
+     wait for the estimator to actually be interactive. */
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+  const [wizStep, setWizStep] = useState<string>("stage");
+  /* Where Continue should return after a single-section edit: "review" when
+     the visitor jumped back from the review screen, "results" when they are
+     editing their scope after the reveal. */
+  const [wizReturnTo, setWizReturnTo] = useState<"review" | "results" | null>(null);
   const [gateSubmitted, setGateSubmitted] = useState(false);
   const [gateName,      setGateName]      = useState("");
   const [gateEmail,     setGateEmail]     = useState("");
   const [gatePhone,     setGatePhone]     = useState("");
   const [gateLoading,   setGateLoading]   = useState(false);
   const [gateError,     setGateError]     = useState<string | null>(null);
+  /* Per-field validation messages, set only on a submit attempt so nobody is
+     scolded for a field they have not reached yet. Keyed by field name; the
+     first offending field also receives focus. */
+  const [gateFieldErrors, setGateFieldErrors] = useState<Record<string, string>>({});
   /* Property address. Collected here as well as on the consultation form: this
      gate is the path most leads arrive through, and without it the team cannot
      confirm the property is inside the service area, and the county property
@@ -838,92 +865,43 @@ export function EstimateCalculator({
   /* Guards the estimator-completion conversion event so it fires at most once
      per mount even if the visitor recalculates after editing. */
   const engagementFired   = useRef(false);
-  /* Scroll refs - each targets the top of the section that appears when the
-     visitor completes a step. scheduleScroll() uses double-rAF so the DOM
-     is fully painted before the browser scrolls. Instant on mobile (iOS
-     smooth-scroll is unreliable); smooth on desktop. */
-  const projectGridRef = useRef<HTMLDivElement>(null);
-  const landStepRef    = useRef<HTMLDivElement>(null);
-  const structuresRef  = useRef<HTMLDivElement>(null);
-  const planUploadRef  = useRef<HTMLDivElement>(null);
-  const addressStepRef = useRef<HTMLDivElement>(null);
-  const layoutRef      = useRef<HTMLDivElement>(null);
-  const sizeRef        = useRef<HTMLDivElement>(null);
-  const chipsRef       = useRef<HTMLDivElement>(null);
-  const bathRef        = useRef<HTMLDivElement>(null);
-  const kitchenRef     = useRef<HTMLDivElement>(null);
-  const finishRef      = useRef<HTMLDivElement>(null);
-  const typicalRef     = useRef<HTMLDivElement>(null);
-  const ctaAreaRef     = useRef<HTMLDivElement>(null);
-  const gateFormRef    = useRef<HTMLDivElement>(null);
+  const gateFormRef    = useRef<HTMLFormElement>(null);
+  const gateNameRef    = useRef<HTMLInputElement>(null);
+  const gateEmailRef   = useRef<HTMLInputElement>(null);
+  const gatePhoneRef   = useRef<HTMLInputElement>(null);
   const resultRef      = useRef<HTMLDivElement>(null);
   const sectionRef     = useRef<HTMLDivElement>(null);
-  const allChosenScrolled  = useRef(false);
-  const pendingScrollTarget = useRef<(() => HTMLElement | null) | null>(null);
+  /** The wizard card itself: every step change scrolls its top into view. */
+  const wizardTopRef   = useRef<HTMLDivElement>(null);
+  /** Pending auto-advance timer for single-choice steps. */
+  const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /** True once the saved wizard draft (if any) has been restored. */
+  const wizRestoredRef = useRef(false);
 
-  /* Auto-scroll runs on every viewport. As each step completes the page
-     advances to the next section so the visitor is not left hunting for what
-     appeared below the fold. The position is computed manually (not
-     scrollIntoView) so the step heading always lands just below the sticky
-     site header: we measure the real header height at scroll time, which holds
-     on iOS Safari where fixed offsets are unreliable.
-
-     Behaviour differs only in feel: instant on mobile, where iOS smooth-scroll
-     is janky and a moving page under a thumb is disorienting, and smooth on
-     desktop, where a gentle glide reads as guidance rather than a jump. A user
-     who prefers no motion (prefers-reduced-motion) gets instant everywhere. */
-  function scrollToStep(el: HTMLElement | null) {
+  /* One scroll behaviour for the whole wizard: each step change puts the top
+     of the wizard card just below the sticky site header, so the progress bar
+     and the new question are both on screen. Instant under
+     prefers-reduced-motion and on mobile, where iOS smooth-scroll is janky. */
+  function scrollWizardTop() {
+    const el = wizardTopRef.current;
     if (!el || typeof window === "undefined") return;
     const header = document.querySelector("header");
     const headerH = header ? header.getBoundingClientRect().height : 64;
-    /* Do not move the page when the target is already comfortably in view:
-       a scroll that lands where the visitor already is reads as a jump for
-       nothing, and on mobile (instant behaviour) it is disorienting. "In
-       view" means the heading sits below the sticky header and in the top
-       ~55% of the viewport, so the section's content is visible too. */
     const rect = el.getBoundingClientRect();
-    if (rect.top >= headerH + 8 && rect.top <= window.innerHeight * 0.55) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - headerH - 16;
-    const isDesktop = window.innerWidth >= 768;
+    /* Already comfortably in view: leave the page alone. */
+    if (rect.top >= 0 && rect.top <= headerH + 24) return;
     const prefersReducedMotion = window.matchMedia?.(
       "(prefers-reduced-motion: reduce)",
     ).matches;
     const behavior: ScrollBehavior =
-      isDesktop && !prefersReducedMotion ? "smooth" : "instant";
-    window.scrollTo({ top: Math.max(0, top), behavior });
-  }
-  /* Coalesces all scrolls requested in the same frame into exactly ONE scroll.
-     The FIRST requested target wins: effects for earlier steps schedule first,
-     so a race can only ever resolve to the earliest (next) step in sequence --
-     it can never skip ahead past a step the visitor still needs to complete. */
-  function scheduleScroll(getEl: () => HTMLElement | null): boolean {
-    if (pendingScrollTarget.current !== null) return false;
-    pendingScrollTarget.current = getEl;
-
-    // Fire exactly once, whichever timer wins. The double-rAF path waits for
-    // the new section to paint before measuring, which is what keeps the step
-    // heading landing in the right place. But rAF is throttled or suspended in
-    // background tabs and under load on some mobile browsers, and if it never
-    // fired the scroll would silently fail AND leave pendingScrollTarget stuck,
-    // disabling every later scroll. The setTimeout is the floor: it guarantees
-    // the scroll runs and the sentinel clears even when rAF does not.
-    let done = false;
-    const run = () => {
-      if (done) return;
-      done = true;
-      const getTarget = pendingScrollTarget.current;
-      pendingScrollTarget.current = null;
-      if (getTarget) scrollToStep(getTarget());
-    };
-
-    if (typeof requestAnimationFrame === "function") {
-      requestAnimationFrame(() => requestAnimationFrame(run));
+      window.innerWidth >= 768 && !prefersReducedMotion ? "smooth" : "instant";
+    /* In the modal the dialog is the scroll container, not the window. */
+    if (inModal) {
+      el.scrollIntoView({ behavior, block: "start" });
+      return;
     }
-    // 80ms comfortably clears a normal two-frame paint (~32ms), so on a healthy
-    // browser rAF still wins and this never runs; it only takes over when rAF
-    // is being throttled.
-    setTimeout(run, 80);
-    return true;
+    const top = rect.top + window.scrollY - headerH - 12;
+    window.scrollTo({ top: Math.max(0, top), behavior });
   }
 
   /* ── Derived ── */
@@ -1190,11 +1168,8 @@ export function EstimateCalculator({
     setPlanningStage(stage);
     setChosen((p) => ({ ...p, stage: true }));
     fireEstimatorEngagement();
-    /* A visitor with drawings goes straight to the upload -- that is the whole
-       point of asking the stage first. Everyone else advances to the land
-       question, which now precedes the project grid. */
-    const hasDrawings = stage === "have-plans" || stage === "plans-in-progress";
-    scheduleScroll(() => (hasDrawings ? planUploadRef.current : landStepRef.current));
+    /* Single-choice step: the tap is the answer, so advance after a beat. */
+    armAutoAdvance("stage");
   }
 
   /**
@@ -1227,11 +1202,12 @@ export function EstimateCalculator({
     if (chosen.project && changed) {
       const resolved = resolveProjectType(cardTypeOf(activeProject), v);
       if (resolved !== activeProject) {
+        /* The project re-resolves under the new ownership; the land tap still
+           advances the wizard exactly like any other single-choice answer. */
         applyProjectSelection(resolved);
-        return;
       }
     }
-    scheduleScroll(() => projectGridRef.current);
+    armAutoAdvance("land");
   }
 
   /** Tick or untick a structure, keeping the per-structure detail on re-tick. */
@@ -1378,9 +1354,8 @@ export function EstimateCalculator({
       setPlanUnderstood(change.understood);
       setPlanUnresolved(change.unresolved);
       setEdited(true);
-      /* Land on the review summary rather than past it: the visitor reads what
-         the drawings settled before moving on. */
-      scheduleScroll(() => planUploadRef.current);
+      /* Stay on the upload step: the visitor reads what the drawings settled
+         (the applied-summary card below) before choosing to continue. */
       trackEvent("estimator_plan_uploaded", {
         applied: change.applied.length,
         understood: change.understood.length,
@@ -1438,17 +1413,14 @@ export function EstimateCalculator({
       setBathCountConfirmed(false);
     }
     setKitchenIn(null);
-    // Changing the project invalidates the layout and finish choices made under
-    // the previous one, so the visitor picks those again rather than inheriting.
-    allChosenScrolled.current = false;
     /* `stage` is carried rather than reset: the planning stage is a fact about
        the person, not about the project they just picked, and clearing it would
        bounce them back to question one for changing their mind. */
     setChosen((p) => ({ ...p, project: true, subtype: false, finish: false }));
     fireEstimatorEngagement();
-    /* Advance to the next step (address) directly from the tap, so it fires
-       even when the visitor confirms the already-active default project. */
-    scheduleScroll(() => addressStepRef.current);
+    /* Advance from the tap itself, so it also fires when the visitor confirms
+       the already-active default project. */
+    armAutoAdvance("project");
   }
 
   /* Selecting a layout sets a smart default size, which the slider fine-tunes. */
@@ -1486,9 +1458,9 @@ export function EstimateCalculator({
       }
     }
     fireEstimatorEngagement();
-    /* Advance to the next step (size) directly from the tap, so it also fires
-       when the visitor re-picks a different layout later. */
-    scheduleScroll(() => sizeRef.current);
+    /* Advance from the tap itself, so it also fires when the visitor re-picks
+       a different layout later. */
+    armAutoAdvance("layout");
   }
 
   function handleSelectFinish(level: FinishLevel) {
@@ -1574,11 +1546,13 @@ export function EstimateCalculator({
   /**
    * "Edit Your Project Scope" from the results. Every answer already lives in
    * state and the range recalculates live as it changes, so editing the scope
-   * is just returning the visitor to the top of their selections - nothing to
-   * re-enter, and the refreshed range is waiting when they scroll back down.
+   * returns the visitor to the review screen - every section is one Edit tap
+   * away, nothing is re-entered, and contact is never asked again: Continue
+   * from review goes straight back to the refreshed results.
    */
   function handleEditScope() {
-    scheduleScroll(() => projectGridRef.current ?? layoutRef.current);
+    setWizReturnTo(null);
+    goToStep("review");
   }
 
   /** A plain-text summary of the planning estimate, for the clipboard. */
@@ -1737,30 +1711,9 @@ export function EstimateCalculator({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kitchenChipAnswersQuestion]);
 
-  /* Address scroll fires directly from handleSelectProject (see above), so it
-     also works when the visitor confirms the already-active default project. */
-
-  /* Size scroll fires directly from handleSelectSubtype (see above). */
-
-  /* NOTE: sections that mount (bath count, kitchen, finish) never scroll by
-     themselves anymore. Auto-scroll advances only in direct response to a
-     user tap, from the click handlers below -- each tap moves to exactly the
-     next step in visual sequence and can never skip an incomplete one. */
-
-  /* Scroll to the typical-selections panel when finish is chosen. */
-  useEffect(() => {
-    if (chosen.finish) {
-      scheduleScroll(() => typicalRef.current);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chosen.finish]);
-
-  /* Scroll to the gate form when it opens. */
-  useEffect(() => {
-    if (gateOpen) {
-      scheduleScroll(() => gateFormRef.current);
-    }
-  }, [gateOpen]);
+  /* NOTE: the wizard advances only in direct response to a user action: a tap
+     on a single-choice step arms a short auto-advance, and everything else
+     moves via the Continue button. A step can never be skipped incomplete. */
 
   /*
    * "Asked, none wanted" is a real answer, so reaching the structures step is
@@ -1835,7 +1788,6 @@ export function EstimateCalculator({
     "structures",
     "finish",
   ];
-  const stepNo = (id: string) => visibleSteps.indexOf(id) + 1;
 
   /* Only the things a homeowner actually knows are required: their project,
      layout, size, finish, bathroom count and whether the kitchen is in scope.
@@ -1853,6 +1805,286 @@ export function EstimateCalculator({
        meaning the step was never rendered, blocks completion. */
     structures !== null &&
     (!showKitchenIncluded || kitchenIn !== null);
+
+  /* ── Wizard step machine ─────────────────────────────────────────────────
+     The ordered flow is `visibleSteps` (already derived from the answers, so
+     conditional steps appear and disappear for free) plus the review screen
+     and - until contact has been captured - the contact step. The results are
+     an outcome, not a step, so they never appear in the rail. */
+  const WIZ_LABELS: Record<string, string> = {
+    stage: "Planning",
+    plans: "Your plans",
+    land: "Land",
+    project: "Project",
+    address: "Location",
+    layout: "Layout",
+    size: "Size",
+    site: "Your lot",
+    upgrades: "Options",
+    bathcount: "Bathrooms",
+    kitchen: "Kitchen",
+    structures: "Structures",
+    finish: "Finish",
+    review: "Review",
+    contact: "Contact",
+  };
+  const wizSteps: string[] = [
+    ...visibleSteps,
+    "review",
+    ...(gateSubmitted ? [] : ["contact"]),
+  ];
+  const wizStepMeta: WizardStepMeta[] = wizSteps.map((id) => ({
+    id,
+    label: WIZ_LABELS[id] ?? id,
+  }));
+  const wizIndex = Math.max(0, wizSteps.indexOf(wizStep));
+
+  /* Whether the current step is answered well enough to leave. Optional steps
+     (plans, address, site, options) are always passable: skipping them prices
+     the disclosed simple case rather than blocking the flow, and nothing a
+     homeowner cannot know is ever required. */
+  function stepDone(id: string): boolean {
+    switch (id) {
+      case "stage":      return chosen.stage;
+      case "plans":      return !planBusy;
+      case "land":       return chosen.land;
+      case "project":    return chosen.project;
+      case "address":    return true;
+      case "layout":     return chosen.subtype;
+      case "size":       return true;
+      case "site":       return true;
+      case "upgrades":   return true;
+      case "bathcount":  return !showBathCount || bathCount !== null;
+      case "kitchen":    return !showKitchenIncluded || kitchenIn !== null;
+      case "structures": return structures !== null;
+      case "finish":     return chosen.finish;
+      case "review":     return allChosen;
+      case "contact":    return true; // validated by the submit itself
+      default:           return true;
+    }
+  }
+
+  /* A live mirror for the auto-advance timer, so it acts on the answers as
+     they are at fire time rather than a snapshot from when it was armed. */
+  const wizRef = useRef({ wizStep, wizReturnTo, wizSteps, view });
+  wizRef.current = { wizStep, wizReturnTo, wizSteps, view };
+
+  function cancelAutoAdvance() {
+    if (autoAdvanceRef.current) {
+      clearTimeout(autoAdvanceRef.current);
+      autoAdvanceRef.current = null;
+    }
+  }
+
+  function goToStep(id: string) {
+    cancelAutoAdvance();
+    setView("steps");
+    setWizStep(id);
+  }
+
+  /* Single-choice steps advance on the tap itself, after a short beat so the
+     selected state is seen to register. Only ever armed from an explicit tap
+     that completes the step, so it can never skip a required answer. A tap
+     made while editing from the review screen returns there instead. */
+  function armAutoAdvance(fromStep: string) {
+    cancelAutoAdvance();
+    autoAdvanceRef.current = setTimeout(() => {
+      autoAdvanceRef.current = null;
+      const w = wizRef.current;
+      if (w.view !== "steps" || w.wizStep !== fromStep) return;
+      if (w.wizReturnTo === "review") {
+        setWizReturnTo(null);
+        goToStep("review");
+        return;
+      }
+      const next = w.wizSteps[w.wizSteps.indexOf(fromStep) + 1];
+      if (next) goToStep(next);
+    }, 380);
+  }
+  useEffect(() => () => cancelAutoAdvance(), []);
+
+  /** Continue. On review: forward to contact, or straight to the results for
+      a visitor whose contact we already hold. On contact: submit the form. */
+  function advanceStep() {
+    cancelAutoAdvance();
+    if (!stepDone(wizStep)) return;
+    if (wizStep === "contact") {
+      const form = gateFormRef.current;
+      if (form) {
+        /* requestSubmit is missing on older Safari; a dispatched submit event
+           reaches React's onSubmit the same way. */
+        if (typeof form.requestSubmit === "function") form.requestSubmit();
+        else form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+      }
+      return;
+    }
+    if (wizStep === "review") {
+      if (gateSubmitted) {
+        setWizReturnTo(null);
+        setView("results");
+        return;
+      }
+      goToStep("contact");
+      return;
+    }
+    if (wizReturnTo === "review") {
+      setWizReturnTo(null);
+      goToStep("review");
+      return;
+    }
+    const next = wizSteps[wizIndex + 1];
+    if (next) goToStep(next);
+  }
+
+  function backStep() {
+    cancelAutoAdvance();
+    if (wizReturnTo === "review") {
+      setWizReturnTo(null);
+      goToStep("review");
+      return;
+    }
+    const prev = wizSteps[wizIndex - 1];
+    if (prev) goToStep(prev);
+  }
+
+  /** Jump from the review screen into one section; Continue/Back return here. */
+  function editFromReview(id: string) {
+    setWizReturnTo("review");
+    goToStep(id);
+  }
+
+  /* A conditional step can disappear from under the visitor when an earlier
+     answer changes (e.g. the kitchen question). Land on the first incomplete
+     step rather than a step that no longer exists. */
+  useEffect(() => {
+    if (view !== "steps") return;
+    if (!wizSteps.includes(wizStep)) {
+      setWizStep(wizSteps.find((s) => !stepDone(s)) ?? "review");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, wizStep, wizSteps.join("|")]);
+
+  /* The results view is unreachable until contact has been captured. This is
+     the last line of defence: whatever state restoration or navigation does,
+     a gate that has not been passed always lands back on the questions. */
+  useEffect(() => {
+    if (view === "results" && !gateSubmitted) setView("steps");
+  }, [view, gateSubmitted]);
+
+  /* Each step change scrolls the wizard card back to the top, after paint. */
+  const firstStepRenderRef = useRef(true);
+  useEffect(() => {
+    if (firstStepRenderRef.current) {
+      firstStepRenderRef.current = false;
+      return;
+    }
+    if (typeof requestAnimationFrame === "function") {
+      requestAnimationFrame(() => scrollWizardTop());
+    } else {
+      scrollWizardTop();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wizStep, view]);
+
+  /* ── Draft persistence ──
+     Every answer plus the current step, so an accidental refresh or a
+     temporary exit never costs the visitor their progress. sessionStorage on
+     purpose (matches the RE-10 wizard): it survives refreshes and same-tab
+     navigation without following the visitor around for weeks. The final
+     price is deliberately NOT stored here - it is recomputed from the
+     answers, and the results view stays gated behind gateSubmitted. */
+  useEffect(() => {
+    if (wizRestoredRef.current) return;
+    wizRestoredRef.current = true;
+    try {
+      const raw = sessionStorage.getItem(WIZ_DRAFT_KEY);
+      if (!raw) return;
+      const s = JSON.parse(raw);
+      if (s.planningStage) setPlanningStage(s.planningStage);
+      if (s.landOwnership) setLandOwnership(s.landOwnership);
+      if (typeof s.buildArea === "string") setBuildArea(s.buildArea);
+      if (s.activeProject && PROJECT_CONFIGS[s.activeProject as ProjectType]) {
+        setActiveProject(s.activeProject);
+      }
+      if (typeof s.subtype === "string") setSubtype(s.subtype);
+      if (typeof s.sqft === "number") setSqft(s.sqft);
+      if (Array.isArray(s.addOns)) setAddOns(s.addOns);
+      if (s.siteSlope) setSiteSlope(s.siteSlope);
+      if (s.siteWater) setSiteWater(s.siteWater);
+      if (s.siteUtilities) setSiteUtilities(s.siteUtilities);
+      if (s.siteDriveway) setSiteDriveway(s.siteDriveway);
+      if (s.garageBaysChoice) setGarageBaysChoice(s.garageBaysChoice);
+      if (typeof s.garageSqftInput === "string") setGarageSqftInput(s.garageSqftInput);
+      if (s.basementSize === "full" || s.basementSize === "partial") setBasementSize(s.basementSize);
+      if (typeof s.basementSqftInput === "string") setBasementSqftInput(s.basementSqftInput);
+      if (typeof s.patioSqftInput === "string") setPatioSqftInput(s.patioSqftInput);
+      if (s.finish) setFinish(s.finish);
+      if (typeof s.budgetInput === "string") setBudgetInput(s.budgetInput);
+      if (s.peScope) setPeScope(s.peScope);
+      if (s.cabTier) setCabTier(s.cabTier);
+      if (typeof s.bathCount === "number") setBathCount(s.bathCount);
+      if (s.bathCountConfirmed) setBathCountConfirmed(true);
+      if (typeof s.kitchenIn === "boolean") setKitchenIn(s.kitchenIn);
+      if (Array.isArray(s.structures)) setStructures(s.structures);
+      if (s.edited) setEdited(true);
+      if (s.chosen && typeof s.chosen === "object") {
+        setChosen((p) => ({ ...p, ...s.chosen }));
+      }
+      if (s.planOverrides && typeof s.planOverrides === "object") setPlanOverrides(s.planOverrides);
+      if (s.planFilled && typeof s.planFilled === "object") setPlanFilled(s.planFilled);
+      if (typeof s.planSqftRaw === "number") planSqftRaw.current = s.planSqftRaw;
+      if (Array.isArray(s.planStored)) setPlanStored(s.planStored);
+      if (Array.isArray(s.planApplied) && s.planApplied.length > 0) setPlanApplied(s.planApplied);
+      if (Array.isArray(s.planUnderstood)) setPlanUnderstood(s.planUnderstood);
+      if (typeof s.gateAddress === "string" && s.gateAddress) setGateAddress(s.gateAddress);
+      if (typeof s.wizStep === "string") setWizStep(s.wizStep);
+      /* The results view is only restorable for a visitor who has passed the
+         gate; the guard effect above enforces it even if storage says
+         otherwise. */
+      if (s.view === "results") setView("results");
+    } catch {
+      /* A corrupt draft must never break the estimator - start fresh. */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!wizRestoredRef.current) return;
+    try {
+      if (!chosen.stage) {
+        /* Nothing answered yet: keep storage clean so a fresh visitor is not
+           carrying an empty draft around. */
+        sessionStorage.removeItem(WIZ_DRAFT_KEY);
+        return;
+      }
+      sessionStorage.setItem(
+        WIZ_DRAFT_KEY,
+        JSON.stringify({
+          planningStage, landOwnership, buildArea,
+          activeProject, subtype, sqft, addOns,
+          siteSlope, siteWater, siteUtilities, siteDriveway,
+          garageBaysChoice, garageSqftInput, basementSize, basementSqftInput, patioSqftInput,
+          finish, budgetInput, peScope, cabTier,
+          bathCount, bathCountConfirmed, kitchenIn,
+          structures, edited, chosen,
+          planOverrides, planFilled, planSqftRaw: planSqftRaw.current,
+          planStored, planApplied, planUnderstood,
+          gateAddress,
+          wizStep, view,
+        }),
+      );
+    } catch {
+      /* Storage full or unavailable: the wizard still works, it just cannot
+         survive a refresh. */
+    }
+  }, [
+    planningStage, landOwnership, buildArea, activeProject, subtype, sqft, addOns,
+    siteSlope, siteWater, siteUtilities, siteDriveway,
+    garageBaysChoice, garageSqftInput, basementSize, basementSqftInput, patioSqftInput,
+    finish, budgetInput, peScope, cabTier, bathCount, bathCountConfirmed, kitchenIn,
+    structures, edited, chosen, planOverrides, planFilled, planStored, planApplied,
+    planUnderstood, gateAddress, wizStep, view,
+  ]);
 
   /* ── Persist to sessionStorage, but only once the visitor has actually
      answered every question ──
@@ -1910,27 +2142,9 @@ export function EstimateCalculator({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allChosen, effectiveProject, finish, sqft, refinements, userRefinementCount, planStored]);
 
-  /* Scroll to the gate CTA (or result panel for returning visitors) the first
-     time all required choices are made. Must live after allChosen is defined.
-     Auto-scroll must only ever follow an explicit user tap: a bath count
-     pre-filled from property data counts toward allChosen (the estimate can
-     price it) but does NOT count for scrolling until the visitor confirms it
-     with a tap (bathCountConfirmed). Without this, assessor data arriving in
-     the background could yank the page to the CTA past unvisited steps. */
-  const bathConfirmedForScroll = !showBathCount || bathCountConfirmed;
-  useEffect(() => {
-    if (allChosen && bathConfirmedForScroll && !allChosenScrolled.current) {
-      /* Only burn the one-shot sentinel if this scroll was actually queued.
-         If an earlier step's scroll already claimed this frame (first wins),
-         that earlier step is the correct target and the CTA stays reachable. */
-      if (scheduleScroll(() => ctaAreaRef.current ?? resultRef.current)) {
-        allChosenScrolled.current = true;
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allChosen, bathConfirmedForScroll]);
-
-  /* Mobile sticky bar: visible while the inline estimator section is on screen. */
+  /* Mobile sticky bar (results view only): visible while the estimator section
+     is on screen. During the question flow the WizardActionBar owns the bottom
+     edge instead, and no price exists to summarise. */
   const [sectionVisible, setSectionVisible] = useState(true);
   useEffect(() => {
     if (inModal) return;
@@ -1954,26 +2168,6 @@ export function EstimateCalculator({
     if (chosen.finish) parts.push(finishLabels[finish].label);
     return parts.join(" · ");
   }, [chosen.project, chosen.subtype, chosen.finish, config, subtype, finish, finishLabels]);
-
-  const handleStickyCta = () => {
-    if (gateSubmitted) {
-      document.getElementById("consult")?.scrollIntoView({ behavior: "smooth" });
-      onBookVisitProp?.();
-      return;
-    }
-    if (allChosen) {
-      setGateOpen(true);
-      scheduleScroll(() => gateFormRef.current ?? ctaAreaRef.current);
-      return;
-    }
-    if (!chosen.project) {
-      scheduleScroll(() => layoutRef.current);
-    } else if (!chosen.subtype) {
-      scheduleScroll(() => layoutRef.current);
-    } else if (!chosen.finish) {
-      scheduleScroll(() => finishRef.current);
-    }
-  };
 
   /* Identity of the current estimate. Used to tell whether the visitor has
      actually changed something since we last told the team about it. */
@@ -2025,12 +2219,13 @@ export function EstimateCalculator({
     }
   }
 
-  /* Let the visitor correct details we hold. Reopens the gate prefilled, rather
-     than wiping it, so editing is a change and not a re-registration. */
+  /* Let the visitor correct details we hold. Returns them to the contact step
+     prefilled, rather than wiping it, so editing is a change and not a
+     re-registration. */
   function handleEditIdentity() {
     setGateSubmitted(false);
-    setGateOpen(true);
     setResendState("idle");
+    goToStep("contact");
   }
 
   /* Forget this visitor on this device (shared computers, wrong person). */
@@ -2038,39 +2233,50 @@ export function EstimateCalculator({
     clearStoredIdentity();
     setSavedIdentity(null);
     setGateSubmitted(false);
-    setGateOpen(false);
     setLastSentKey(null);
     setResendState("idle");
     setGateName(""); setGateEmail(""); setGatePhone("");
+    goToStep("contact");
   }
 
   async function handleGateSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    /* Explicit client-side validation before touching the API */
+    /* Explicit client-side validation before touching the API. Errors name the
+       exact field, appear only on a submit attempt, and move focus to the
+       first thing that needs fixing - nothing already entered is touched. */
+    const errors: Record<string, string> = {};
     if (!gateName.trim() || gateName.trim().length < 2) {
-      setGateError("Please enter your first name.");
-      return;
+      errors.name = "Please enter your first name.";
     }
     const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!gateEmail.trim() || !emailRe.test(gateEmail.trim())) {
-      setGateError("Please enter a valid email address.");
-      return;
+      errors.email = "Please enter a valid email address.";
     }
     if (gatePhone.replace(/\D/g, "").length < 10) {
-      setGateError("Please enter a valid 10-digit phone number.");
-      return;
+      errors.phone = "Please enter a valid 10-digit phone number.";
     }
     /* A street address is only demanded of someone who has one: landowners
        get the house-number check; everyone else just needs to name the city
-       or area they plan to build in. */
+       or area they plan to build in. Both are editable right here. */
     if (ownsLand) {
       if (!gateAddress.trim() || !HOUSE_NUMBER_REGEX.test(gateAddress.trim())) {
-        setGateError("Please scroll up and enter your property address (must include a house number).");
-        return;
+        errors.address = "Please enter your property address, including the house number.";
       }
     } else if (buildArea.trim().length < 2) {
-      setGateError("Please scroll up and tell us the city or area you plan to build in.");
+      errors.address = "Please tell us the city or area you plan to build in.";
+    }
+    setGateFieldErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      setGateError(null);
+      const focusTarget = errors.name
+        ? gateNameRef.current
+        : errors.email
+          ? gateEmailRef.current
+          : errors.phone
+            ? gatePhoneRef.current
+            : null;
+      requestAnimationFrame(() => focusTarget?.focus());
       return;
     }
     /* Budget is optional: an extra required field before the number is friction
@@ -2148,12 +2354,18 @@ export function EstimateCalculator({
         writeLastSentKey(estimateKey);
         setResendState("idle");
         setGateSubmitted(true);
-        scheduleScroll(() => resultRef.current);
+        setWizReturnTo(null);
+        setView("results");
       } else if (res.status >= 500) {
-        /* Server/infra error: not the user's fault; reveal so they aren't hard-blocked */
-        console.warn("[gate] Server error", res.status, "- revealing estimate anyway");
-        markGatePassed();
-        setGateSubmitted(true);
+        /* Server trouble is not the visitor's fault, but the estimate stays
+           gated until the lead actually lands: every answer is preserved and
+           the same button retries. Nothing is lost and nothing is re-typed. */
+        console.warn("[gate] Server error", res.status);
+        setGateError(
+          "We could not save your details just now - it's on our side, not yours. Everything you entered is safe. Please try again in a moment.",
+        );
+        setGateLoading(false);
+        return;
       } else {
         /* 4xx: our client validation should have caught this; show error, keep gate */
         console.warn("[gate] API returned", res.status);
@@ -2162,10 +2374,13 @@ export function EstimateCalculator({
         return;
       }
     } catch (err) {
-      /* Network failure: reveal so infra issues never block a real user */
+      /* Network failure: same rule - preserve everything, offer retry. */
       console.warn("[gate] Network error:", err);
-      markGatePassed();
-      setGateSubmitted(true);
+      setGateError(
+        "We could not reach our server - check your connection and try again. Everything you entered is safe.",
+      );
+      setGateLoading(false);
+      return;
     }
 
     setGateLoading(false);
@@ -2181,14 +2396,19 @@ export function EstimateCalculator({
     );
   }
 
-  const renderStepLabel = (stepKey: Parameters<typeof stepNo>[0], label: string, className?: string) => (
-    <p className={cn("block text-[13px] tracking-[0.12em] uppercase mb-3", className)}>
-      <span className="text-accent-legible">{stepNo(stepKey)}</span>
-      <span className="text-inverse-muted/50 mx-2" aria-hidden>
-        ·
-      </span>
-      <span className="text-inverse-foreground/90">{label}</span>
-    </p>
+  /* Each step's one clear question, styled as the step heading. The wizard's
+     progress bar already numbers the step, so the heading carries only the
+     question itself. `stepKey` is kept so every call site still names which
+     step it belongs to. */
+  const renderStepLabel = (_stepKey: string, label: string, className?: string) => (
+    <h3
+      className={cn(
+        "font-sans font-light tracking-tight text-xl md:text-2xl text-inverse-foreground mb-3",
+        className,
+      )}
+    >
+      {label}
+    </h3>
   );
 
   function darkChoice(active: boolean) {
@@ -2254,7 +2474,7 @@ export function EstimateCalculator({
 
   /* Land ownership -- a situation question, before the home itself. */
   const landStep = (
-    <div className="mb-6 scroll-mt-20" ref={landStepRef}>
+    <div className="mb-6 scroll-mt-20">
       {renderStepLabel("land", "Do you already own the land?")}
       <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
         Owning the lot changes which questions matter: we will ask about your
@@ -2296,7 +2516,7 @@ export function EstimateCalculator({
 
   /* Step - Project type: prominent card grid (matches the other inputs) */
   const projectGrid = (
-    <div className="mb-6" ref={projectGridRef}>
+    <div className="mb-6">
       {renderStepLabel("project", "What are we building?")}
       <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
         Now the home itself. Every one of these is a new build -- they differ in
@@ -2397,7 +2617,7 @@ export function EstimateCalculator({
      to confirm the service area, and asking for a street address for land they
      do not own reads as either a mistake or a trap. */
   const areaStep = (
-    <div className="mt-6 scroll-mt-20" ref={addressStepRef}>
+    <div className="mt-6 scroll-mt-20">
       {renderStepLabel("address", "Where do you plan to build?")}
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
         A city or general area is plenty -- it confirms we serve where you are headed.
@@ -2425,7 +2645,7 @@ export function EstimateCalculator({
      snaps sqft to the home's measured interior square footage, bounded by the
      project range. */
   const addressStep = (
-    <div className="mt-6 scroll-mt-20" ref={addressStepRef}>
+    <div className="mt-6 scroll-mt-20">
       {renderStepLabel("address", "Where is your lot?")}
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
         Confirms we serve your area and auto-fills details if we find a match.
@@ -2495,7 +2715,7 @@ export function EstimateCalculator({
      drawings stated how many levels the home has; Edit drops the plan's
      authority on stories and re-opens the grid. */
   const subtypeGrid = planAnsweredLayout ? (
-    <div className="scroll-mt-20" ref={layoutRef}>
+    <div className="scroll-mt-20">
       {renderStepLabel("layout", config.gridLabel)}
       {planFilledCard(
         "Layout",
@@ -2512,7 +2732,7 @@ export function EstimateCalculator({
       )}
     </div>
   ) : (
-    <div className="scroll-mt-20" ref={layoutRef}>
+    <div className="scroll-mt-20">
       {renderStepLabel("layout", config.gridLabel)}
       <div className="grid grid-cols-2 gap-2.5" role="group" aria-label={config.gridLabel}>
         {config.subtypes.map((opt) => {
@@ -2552,7 +2772,7 @@ export function EstimateCalculator({
      layout pre-sets a smart default; the slider fine-tunes for accuracy. */
   const sizePct = ((sqft - sizeConfig.min) / (sizeConfig.max - sizeConfig.min)) * 100;
   const sizeGrid = planFilled.size ? (
-    <div className="mt-6 scroll-mt-20" ref={sizeRef}>
+    <div className="mt-6 scroll-mt-20">
       {renderStepLabel("size", isNewBuild ? "Finished square feet?" : "About how big?")}
       {planFilledCard(
         "Finished size",
@@ -2562,7 +2782,7 @@ export function EstimateCalculator({
       )}
     </div>
   ) : (
-    <div className="mt-6 scroll-mt-20" ref={sizeRef}>
+    <div className="mt-6 scroll-mt-20">
       <div className="flex items-baseline justify-between mb-3">
         {renderStepLabel(
           "size",
@@ -2895,7 +3115,7 @@ export function EstimateCalculator({
 
   /* Step 4 - Upgrades (optional add-ons) */
   const chipsRow = (
-    <div className="mt-5 scroll-mt-20" ref={chipsRef}>
+    <div className="mt-5 scroll-mt-20">
       {renderStepLabel("upgrades", config.chipsLabel)}
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
         {isNewBuild
@@ -3026,7 +3246,7 @@ export function EstimateCalculator({
   /* Whole-home: bathroom count. The published whole-home rate already assumes
      two, so this prices the difference rather than the whole thing. */
   const bathCountRow = planFilled.baths && bathCount !== null ? (
-    <div className="mt-5 scroll-mt-20" ref={bathRef}>
+    <div className="mt-5 scroll-mt-20">
       {renderStepLabel("bathcount", "How many bathrooms?")}
       {planFilledCard(
         "Bathrooms",
@@ -3036,7 +3256,7 @@ export function EstimateCalculator({
       )}
     </div>
   ) : (
-    <div className="mt-5 scroll-mt-20" ref={bathRef}>
+    <div className="mt-5 scroll-mt-20">
       {renderStepLabel("bathcount", "How many bathrooms?")}
       <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
         {effectiveProject === "whole-home"
@@ -3067,13 +3287,7 @@ export function EstimateCalculator({
                 /* Tapping a count takes the answer back from the plans. */
                 setPlanFilled((p) => (p.baths ? { ...p, baths: false } : p));
                 fireEstimatorEngagement();
-                /* Advance to the next step in sequence: kitchen if that
-                   question is shown and unanswered, otherwise finish level. */
-                if (showKitchenIncluded && kitchenIn === null) {
-                  scheduleScroll(() => kitchenRef.current);
-                } else if (!chosen.finish) {
-                  scheduleScroll(() => finishRef.current);
-                }
+                armAutoAdvance("bathcount");
               }}
               data-testid={`calc-baths-${n}`}
               aria-pressed={active}
@@ -3112,7 +3326,7 @@ export function EstimateCalculator({
             { value: false, label: "No", sub: "Leaving the kitchen as is" },
           ];
     return (
-      <div className="mt-5 scroll-mt-20" ref={kitchenRef}>
+      <div className="mt-5 scroll-mt-20">
         {renderStepLabel("kitchen", label)}
         <div className="grid grid-cols-2 gap-2">
           {opts.map((opt) => {
@@ -3124,10 +3338,7 @@ export function EstimateCalculator({
                 onClick={() => {
                   setKitchenIn(opt.value);
                   fireEstimatorEngagement();
-                  /* Advance to the finish-level step if not yet chosen. */
-                  if (!chosen.finish) {
-                    scheduleScroll(() => finishRef.current);
-                  }
+                  armAutoAdvance("kitchen");
                 }}
                 data-testid={`calc-kitchen-${opt.value ? "yes" : "no"}`}
                 aria-pressed={active}
@@ -3151,7 +3362,7 @@ export function EstimateCalculator({
      competence rather than as a form: the estimator already understands the
      project. Editing is one tap away for the minority who want it. */
   const typicalPanel = (
-    <div className="mt-6 scroll-mt-20 rounded-md border border-accent-legible/30 bg-inverse-foreground/[0.05] p-4 shadow-[inset_0_0_0_1px_hsl(var(--accent-legible)/0.08)]" ref={typicalRef}>
+    <div className="mt-6 scroll-mt-20 rounded-md border border-accent-legible/30 bg-inverse-foreground/[0.05] p-4 shadow-[inset_0_0_0_1px_hsl(var(--accent-legible)/0.08)]">
       <p className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground">
         Typical for a {finishLabels[finish].label} {config.tabLabel.toLowerCase()}
       </p>
@@ -3215,7 +3426,7 @@ export function EstimateCalculator({
    * for a barn, because there is no such thing.
    */
   const structuresStep = planFilled.structures ? (
-    <div className="mb-6" ref={structuresRef}>
+    <div className="mb-6">
       {renderStepLabel("structures", "Any other structures?")}
       {planFilledCard(
         "Other structures",
@@ -3227,7 +3438,7 @@ export function EstimateCalculator({
       )}
     </div>
   ) : (
-    <div className="mb-6" ref={structuresRef}>
+    <div className="mb-6">
       {renderStepLabel("structures", "Any other structures?")}
       <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
         Buildings other than the house. Each one is priced as its own structure,
@@ -3413,7 +3624,7 @@ export function EstimateCalculator({
   );
 
   const planUploadStep = (
-    <div className="mb-6" ref={planUploadRef}>
+    <div className="mb-6">
       {renderStepLabel("plans", "Upload your plans")}
       <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
         {planningStage === "have-plans"
@@ -3536,7 +3747,7 @@ export function EstimateCalculator({
   );
 
   const finishRow = (
-    <div className="mt-5 scroll-mt-20" ref={finishRef}>
+    <div className="mt-5 scroll-mt-20">
       {renderStepLabel("finish", "Finish level")}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {availFinish.map((level) => {
@@ -4052,29 +4263,254 @@ export function EstimateCalculator({
   );
 
   /* CTA shown after user configures their estimate -- clicking opens the gate form */
-  const calculateCta = (
-    <div className="mt-8 scroll-mt-20 border-t border-inverse-foreground/15 pt-6" ref={ctaAreaRef}>
-      <Button
-        type="button"
-        onClick={() => setGateOpen(true)}
-        data-testid="button-get-estimate"
-        className="w-full h-14 bg-inverse-foreground text-inverse text-[14px] tracking-[0.12em] uppercase"
-      >
-        Get My Estimate Range
-        <ArrowRight className="h-4 w-4" />
-      </Button>
-      <p className="text-[12px] text-inverse-muted/90 text-center mt-3 leading-relaxed">
-        Takes 30 seconds. We will email you a copy too.
-      </p>
-    </div>
-  );
+  /* Formats a phone number as (208) 555-0147 while the visitor types. Kept to
+     ten digits; validation and the API count digits, so the decoration is
+     purely for readability. */
+  function formatPhoneInput(raw: string): string {
+    const d = raw.replace(/\D/g, "").slice(0, 10);
+    if (d.length === 0) return "";
+    if (d.length < 4) return d;
+    if (d.length < 7) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
+    return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`;
+  }
 
-  /* Lead-gate panel - shown in place of the result until contact info is submitted */
   const subtypeTitle =
     config.subtypes.find((s) => s.id === subtype)?.title ?? config.tabLabel;
 
-  const leadsGatePanel = (
-    <div className="mt-8 scroll-mt-20 border-t border-inverse-foreground/15 pt-6" ref={gateFormRef} aria-label="Unlock your estimate">
+  /* ── Review screen ──
+     Confirms what the visitor entered - never the outcome. The price, the
+     range and every derived number are deliberately absent: the estimate is
+     revealed only after contact has been captured. Each section's Edit jumps
+     straight to that step and returns here, with every other answer intact. */
+  const SITE_REVIEW_LABELS = {
+    slope: {
+      flat: "Mostly flat ground",
+      moderate: "Some slope",
+      steep: "Steep ground",
+      unsure: "Slope: not sure",
+    } as Record<string, string>,
+    water: {
+      city: "City water and sewer",
+      "well-septic": "Well and septic",
+      unsure: "Water/sewer: not sure",
+    } as Record<string, string>,
+    utilities: {
+      yes: "Power and gas at the lot",
+      no: "Utilities not at the lot yet",
+      unsure: "Utilities: not sure",
+    } as Record<string, string>,
+    driveway: {
+      short: "Short driveway",
+      medium: "Medium driveway",
+      long: "Long driveway",
+      unsure: "Driveway length: not sure",
+    } as Record<string, string>,
+  };
+  const siteReviewLines = [
+    siteSlope ? SITE_REVIEW_LABELS.slope[siteSlope] : null,
+    siteWater ? SITE_REVIEW_LABELS.water[siteWater] : null,
+    siteUtilities ? SITE_REVIEW_LABELS.utilities[siteUtilities] : null,
+    siteDriveway ? SITE_REVIEW_LABELS.driveway[siteDriveway] : null,
+  ].filter((l): l is string => l !== null);
+
+  const sizeReviewExtras: string[] = [];
+  if (isNewBuild) {
+    const bayWord: Record<string, string> = { two: "2-car", three: "3-car", four: "4-car" };
+    if (refinements.garageBays && refinements.garageBays !== "none") {
+      sizeReviewExtras.push(`${bayWord[refinements.garageBays] ?? ""} garage`.trim());
+    }
+    if (refinements.basementType && refinements.basementType !== "none") {
+      sizeReviewExtras.push(
+        `${refinements.basementType === "finished" ? "Finished" : "Unfinished"} basement`,
+      );
+    }
+    if (refinements.coveredOutdoor && refinements.coveredOutdoor > 0) {
+      sizeReviewExtras.push(`Covered patio, about ${refinements.coveredOutdoor.toLocaleString()} sq ft`);
+    }
+    if (refinements.shopSize && refinements.shopSize > 0) {
+      sizeReviewExtras.push(`Shop, about ${refinements.shopSize.toLocaleString()} sq ft`);
+    }
+  }
+
+  const reviewStep = (
+    <div>
+      {renderStepLabel("review", "Review your project")}
+      <p className="text-[13px] text-inverse-muted -mt-1 mb-4 max-w-prose">
+        A quick check before we build your estimate. Tap Edit to change
+        anything - every other answer stays exactly as you left it.
+      </p>
+      <div className="space-y-3">
+        <ReviewSection
+          tone="inverse"
+          title="Planning stage"
+          onEdit={() => editFromReview("stage")}
+          data-testid="review-stage"
+        >
+          {planningStage ? PLANNING_STAGE_LABELS[planningStage].label : "-"}
+        </ReviewSection>
+
+        {showPlanUpload && (
+          <ReviewSection
+            tone="inverse"
+            title="Your plans"
+            onEdit={() => editFromReview("plans")}
+            data-testid="review-plans"
+          >
+            {planStored.length > 0
+              ? `${planStored.length} file${planStored.length === 1 ? "" : "s"} attached: ${planStored
+                  .map((f) => f.filename)
+                  .join(", ")}`
+              : "No plans uploaded - answers entered by hand"}
+          </ReviewSection>
+        )}
+
+        <ReviewSection
+          tone="inverse"
+          title="Land"
+          onEdit={() => editFromReview("land")}
+          data-testid="review-land"
+        >
+          {ownsLand ? "Owns the lot (or under contract on it)" : "Still looking for land"}
+        </ReviewSection>
+
+        <ReviewSection
+          tone="inverse"
+          title="Project and layout"
+          onEdit={() => editFromReview("layout")}
+          data-testid="review-project"
+        >
+          {config.tabLabel} &middot; {subtypeTitle}
+        </ReviewSection>
+
+        <ReviewSection
+          tone="inverse"
+          title={ownsLand ? "Property address" : "Where you plan to build"}
+          onEdit={() => editFromReview("address")}
+          data-testid="review-location"
+        >
+          {ownsLand
+            ? gateAddress.trim() || "Not provided yet - you can add it on the next step"
+            : buildArea.trim() || "Not provided yet - you can add it on the next step"}
+        </ReviewSection>
+
+        <ReviewSection
+          tone="inverse"
+          title="Size"
+          onEdit={() => editFromReview("size")}
+          data-testid="review-size"
+        >
+          About {sqft.toLocaleString()} finished sq ft
+          {sizeReviewExtras.length > 0 && (
+            <span className="mt-1 block text-[12.5px] text-inverse-muted">
+              {sizeReviewExtras.join(" · ")}
+            </span>
+          )}
+        </ReviewSection>
+
+        {visibleSteps.includes("site") && (
+          <ReviewSection
+            tone="inverse"
+            title="Your lot"
+            onEdit={() => editFromReview("site")}
+            data-testid="review-site"
+          >
+            {siteReviewLines.length > 0
+              ? siteReviewLines.join(" · ")
+              : "Not answered - priced as the typical case"}
+          </ReviewSection>
+        )}
+
+        <ReviewSection
+          tone="inverse"
+          title="Options"
+          onEdit={() => editFromReview("upgrades")}
+          data-testid="review-options"
+        >
+          {selectedUpgradeLabels.length > 0 ? selectedUpgradeLabels.join(", ") : "None selected"}
+        </ReviewSection>
+
+        {showBathCount && (
+          <ReviewSection
+            tone="inverse"
+            title="Bathrooms"
+            onEdit={() => editFromReview("bathcount")}
+            data-testid="review-baths"
+          >
+            {bathCount === null ? "-" : bathCount === 0 ? "None" : String(bathCount)}
+          </ReviewSection>
+        )}
+
+        {showKitchenIncluded && (
+          <ReviewSection
+            tone="inverse"
+            title="Kitchen"
+            onEdit={() => editFromReview("kitchen")}
+            data-testid="review-kitchen"
+          >
+            {kitchenIn === null ? "-" : kitchenIn ? "Included in the project" : "Not included"}
+          </ReviewSection>
+        )}
+
+        <ReviewSection
+          tone="inverse"
+          title="Other structures"
+          onEdit={() => editFromReview("structures")}
+          data-testid="review-structures"
+        >
+          {(structures ?? []).length > 0
+            ? (structures ?? [])
+                .map(
+                  (s) =>
+                    `${ACCESSORY_STRUCTURE_LABELS[s.kind].label} (${s.sqft.toLocaleString()} sq ft)`,
+                )
+                .join(", ")
+            : "None - just the home"}
+        </ReviewSection>
+
+        <ReviewSection
+          tone="inverse"
+          title="Finish level"
+          onEdit={() => editFromReview("finish")}
+          data-testid="review-finish"
+        >
+          {finishLabels[finish].label}
+          <span className="mt-1 block text-[12.5px] text-inverse-muted">
+            {finishLabels[finish].sub}
+          </span>
+        </ReviewSection>
+      </div>
+    </div>
+  );
+
+  /* ── Contact step ──
+     The one thing standing between the visitor and their number, so it earns
+     its place: it says exactly what they get, shows what they chose, and asks
+     only for what the team genuinely needs. The estimate itself appears
+     nowhere here - not blurred, not teased, not in the DOM - until the lead
+     has actually been captured. */
+  const gateInputClass = (invalid: boolean) =>
+    cn(
+      "w-full bg-inverse-foreground/[0.07] border rounded-md px-4 py-3 text-[16px] text-inverse-foreground placeholder:text-[14px] placeholder:text-inverse-muted/90 outline-none transition-colors",
+      invalid
+        ? "border-red-400/70 focus:border-red-400"
+        : "border-inverse-foreground/20 focus:border-inverse-foreground/50",
+    );
+  const gateFieldError = (key: string) =>
+    gateFieldErrors[key] ? (
+      <p role="alert" id={`gate-err-${key}`} className="mt-1.5 text-[12px] text-red-400">
+        {gateFieldErrors[key]}
+      </p>
+    ) : null;
+  const clearGateFieldError = (key: string) =>
+    setGateFieldErrors((prev) => {
+      if (!prev[key]) return prev;
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+
+  const contactStep = (
+    <div aria-label="Unlock your estimate">
       <div className="space-y-5">
         {/* Header */}
         <div className="flex items-start gap-3">
@@ -4082,17 +4518,18 @@ export function EstimateCalculator({
             <Lock className="h-4 w-4 text-accent-legible" />
           </div>
           <div>
-            <p className="text-[18px] font-light text-inverse-foreground leading-tight">
+            <h3 className="font-sans font-light tracking-tight text-xl md:text-2xl text-inverse-foreground leading-tight">
               Your estimate is ready
-            </p>
-            <p className="text-[13px] text-inverse-muted mt-0.5">
-              Tell us where to send it -- we show it here and email you a copy.
-              Your details go to our team, never to lists or third parties.
+            </h3>
+            <p className="text-[13px] text-inverse-muted mt-1">
+              Enter your info to see your personalized planning range here and
+              get a copy by email for your records. Your details go to our
+              team, never to lists or third parties.
             </p>
           </div>
         </div>
 
-        {/* Project summary chips */}
+        {/* Project summary chips - what they chose, never what it costs */}
         <div className="flex flex-wrap gap-2">
           <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-[11.5px] text-inverse-foreground">
             {config.tabLabel}
@@ -4103,117 +4540,156 @@ export function EstimateCalculator({
           <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-[11.5px] text-inverse-foreground">
             {finishLabels[finish].label}
           </span>
-        </div>
-
-        {/* Blurred price teaser */}
-        <div className="relative select-none">
-          <div
-            className="brc-display-num tabular-nums leading-none text-inverse-foreground text-[clamp(32px,8vw,52px)] blur-sm pointer-events-none"
-            aria-hidden="true"
-          >
-            {formatPlanningCurrency(result.priceLow)}
-            <span className="text-inverse-muted/90 mx-2 text-xl">to</span>
-            {formatPlanningCurrency(result.priceHigh)}
-          </div>
-          <div className="absolute inset-0 flex items-center">
-            <span className="inline-flex items-center gap-1.5 text-[12px] text-inverse-muted bg-inverse px-3 py-1.5 rounded-full border border-inverse-foreground/15">
-              <Lock className="h-3 w-3" />
-              Enter your info to unlock
-            </span>
-          </div>
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-[11.5px] text-inverse-foreground">
+            {sqft.toLocaleString()} sq ft
+          </span>
         </div>
 
         {/* Contact form */}
-        <form onSubmit={handleGateSubmit} className="space-y-3">
-          <input
-            type="text"
-            placeholder="First name"
-            value={gateName}
-            onChange={(e) => setGateName(e.target.value)}
-            required
-            minLength={2}
-            className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors"
-            data-testid="gate-input-name"
-            aria-label="First name"
-            autoComplete="given-name"
-          />
-          <input
-            type="email"
-            placeholder="Email address"
-            value={gateEmail}
-            onChange={(e) => setGateEmail(e.target.value)}
-            required
-            className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors"
-            data-testid="gate-input-email"
-            aria-label="Email address"
-            autoComplete="email"
-          />
-          <input
-            type="tel"
-            placeholder="Phone number"
-            value={gatePhone}
-            onChange={(e) => setGatePhone(e.target.value)}
-            required
-            minLength={10}
-            className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors"
-            data-testid="gate-input-phone"
-            aria-label="Phone number"
-            autoComplete="tel"
-          />
+        <form ref={gateFormRef} onSubmit={handleGateSubmit} className="space-y-3.5" noValidate>
+          <div>
+            <label
+              htmlFor="gate-name"
+              className="mb-1.5 block text-[12px] tracking-[0.06em] uppercase text-inverse-muted"
+            >
+              First name
+            </label>
+            <input
+              id="gate-name"
+              ref={gateNameRef}
+              type="text"
+              placeholder="First name"
+              value={gateName}
+              onChange={(e) => {
+                setGateName(e.target.value);
+                clearGateFieldError("name");
+              }}
+              className={gateInputClass(Boolean(gateFieldErrors.name))}
+              data-testid="gate-input-name"
+              autoComplete="given-name"
+              aria-invalid={gateFieldErrors.name ? true : undefined}
+              aria-describedby={gateFieldErrors.name ? "gate-err-name" : undefined}
+            />
+            {gateFieldError("name")}
+          </div>
+
+          <div>
+            <label
+              htmlFor="gate-email"
+              className="mb-1.5 block text-[12px] tracking-[0.06em] uppercase text-inverse-muted"
+            >
+              Email
+            </label>
+            <input
+              id="gate-email"
+              ref={gateEmailRef}
+              type="email"
+              inputMode="email"
+              placeholder="you@example.com"
+              value={gateEmail}
+              onChange={(e) => {
+                setGateEmail(e.target.value);
+                clearGateFieldError("email");
+              }}
+              className={gateInputClass(Boolean(gateFieldErrors.email))}
+              data-testid="gate-input-email"
+              autoComplete="email"
+              aria-invalid={gateFieldErrors.email ? true : undefined}
+              aria-describedby={gateFieldErrors.email ? "gate-err-email" : undefined}
+            />
+            {gateFieldError("email")}
+          </div>
+
+          <div>
+            <label
+              htmlFor="gate-phone"
+              className="mb-1.5 block text-[12px] tracking-[0.06em] uppercase text-inverse-muted"
+            >
+              Phone
+            </label>
+            <input
+              id="gate-phone"
+              ref={gatePhoneRef}
+              type="tel"
+              inputMode="tel"
+              placeholder="(208) 555-0147"
+              value={gatePhone}
+              onChange={(e) => {
+                setGatePhone(formatPhoneInput(e.target.value));
+                clearGateFieldError("phone");
+              }}
+              className={gateInputClass(Boolean(gateFieldErrors.phone))}
+              data-testid="gate-input-phone"
+              autoComplete="tel"
+              aria-invalid={gateFieldErrors.phone ? true : undefined}
+              aria-describedby={gateFieldErrors.phone ? "gate-err-phone" : undefined}
+            />
+            {gateFieldError("phone")}
+          </div>
 
           {/* Location was collected earlier in the flow: the property address
-              for landowners, the planned build area for everyone else. Show a
-              read-only confirmation when already filled; when skipped, show a
-              minimal fallback input so the visitor can still submit without
-              scrolling back up. Never a street-address prompt for land the
-              visitor does not own. */}
+              for landowners, the planned build area for everyone else. Shown
+              here prefilled and editable, so nobody has to leave the step to
+              fix it. Never a street-address prompt for land the visitor does
+              not own. */}
           {ownsLand ? (
-            gateAddress.trim() ? (
-              <div className="rounded-md border border-inverse-foreground/15 bg-inverse-foreground/[0.04] px-4 py-3">
-                <p className="text-[11px] text-inverse-muted/90 mb-0.5 uppercase tracking-wide">Property address</p>
-                <p className="text-[13.5px] text-inverse-foreground leading-snug">{gateAddress}</p>
-                <p className="mt-1 text-[11px] text-inverse-muted/90">Scroll up to the address step to update.</p>
-              </div>
-            ) : (
-              <div>
-                <input
-                  type="text"
-                  placeholder="Property address (house number + street)"
-                  value={gateAddress}
-                  onChange={(e) => setGateAddress(e.target.value)}
-                  className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors"
-                  data-testid="gate-input-address"
-                  aria-label="Property address"
-                  autoComplete="street-address"
-                />
-                <p className="mt-1.5 text-[11.5px] text-inverse-muted/90">
-                  So we can confirm we serve your area and check county records before your visit.
-                </p>
-              </div>
-            )
-          ) : buildArea.trim() ? (
-            <div className="rounded-md border border-inverse-foreground/15 bg-inverse-foreground/[0.04] px-4 py-3">
-              <p className="text-[11px] text-inverse-muted/90 mb-0.5 uppercase tracking-wide">Planned build area</p>
-              <p className="text-[13.5px] text-inverse-foreground leading-snug">{buildArea}</p>
-              <p className="mt-1 text-[11px] text-inverse-muted/90">Scroll up to the build-area step to update.</p>
+            <div>
+              <label
+                htmlFor="gate-address"
+                className="mb-1.5 block text-[12px] tracking-[0.06em] uppercase text-inverse-muted"
+              >
+                Property address
+              </label>
+              <input
+                id="gate-address"
+                type="text"
+                placeholder="Property address (house number + street)"
+                value={gateAddress}
+                onChange={(e) => {
+                  setGateAddress(e.target.value);
+                  clearGateFieldError("address");
+                }}
+                className={gateInputClass(Boolean(gateFieldErrors.address))}
+                data-testid="gate-input-address"
+                autoComplete="street-address"
+                aria-invalid={gateFieldErrors.address ? true : undefined}
+                aria-describedby={gateFieldErrors.address ? "gate-err-address" : "gate-help-address"}
+              />
+              {gateFieldError("address")}
+              <p id="gate-help-address" className="mt-1.5 text-[11.5px] text-inverse-muted/90">
+                So we can confirm we serve your area and check county records before your visit.
+              </p>
             </div>
           ) : (
             <div>
+              <label
+                htmlFor="gate-build-area"
+                className="mb-1.5 block text-[12px] tracking-[0.06em] uppercase text-inverse-muted"
+              >
+                City or area you plan to build in
+              </label>
               <input
+                id="gate-build-area"
                 type="text"
-                placeholder="City or area you plan to build in"
+                placeholder="e.g. Meridian, Eagle, Kuna"
                 value={buildArea}
-                onChange={(e) => setBuildArea(e.target.value)}
+                onChange={(e) => {
+                  setBuildArea(e.target.value);
+                  clearGateFieldError("address");
+                }}
                 maxLength={120}
-                className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-4 py-3 text-[14px] text-inverse-foreground placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors"
+                className={gateInputClass(Boolean(gateFieldErrors.address))}
                 data-testid="gate-input-build-area"
-                aria-label="City or area you plan to build in"
+                aria-invalid={gateFieldErrors.address ? true : undefined}
+                aria-describedby={gateFieldErrors.address ? "gate-err-address" : "gate-help-area"}
               />
-              <p className="mt-1.5 text-[11.5px] text-inverse-muted/90">
+              {gateFieldError("address")}
+              <p id="gate-help-area" className="mt-1.5 text-[11.5px] text-inverse-muted/90">
                 So we can confirm we serve the area you are headed to.
               </p>
             </div>
           )}
+
           {/* THE ONE BUDGET ASK. Asked here, before the range, so the estimate
               we hand back can be framed against it straight away and so the
               team has a real number for every lead who gets this far, not only
@@ -4225,6 +4701,13 @@ export function EstimateCalculator({
               the range - an extra required field here reads as a
               bait-and-switch. */}
           <div>
+            <label
+              htmlFor="gate-budget"
+              className="mb-1.5 block text-[12px] tracking-[0.06em] uppercase text-inverse-muted"
+            >
+              Budget you are working toward{" "}
+              <span className="normal-case tracking-normal text-inverse-muted/80">(optional)</span>
+            </label>
             <div className="relative">
               <span
                 className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[16px] text-inverse-muted/90"
@@ -4233,17 +4716,17 @@ export function EstimateCalculator({
                 $
               </span>
               <input
+                id="gate-budget"
                 type="text"
                 inputMode="numeric"
                 autoComplete="off"
                 value={budgetInput}
                 onChange={(e) => setBudgetInput(e.target.value.replace(/[^\d,]/g, ""))}
-                placeholder="Budget you are working toward (optional)"
+                placeholder="e.g. 650,000"
                 /* 16px: iOS Safari zooms the page when a focused input renders
                    below 16px and does not zoom back out. */
-                className="w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md pl-8 pr-4 py-3 text-[16px] text-inverse-foreground placeholder:text-[14px] placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors"
+                className={cn(gateInputClass(false), "pl-8")}
                 data-testid="gate-input-budget"
-                aria-label="Budget you are working toward (optional)"
                 aria-describedby="brc-gate-budget-help"
               />
             </div>
@@ -4252,21 +4735,26 @@ export function EstimateCalculator({
               It never changes what we charge.
             </p>
           </div>
+
           {gateError && (
-            // role="alert" so a screen reader announces the validation message
-            // the moment it appears; native required-field errors are announced
-            // by the browser, but these format checks are ours to surface.
-            <p role="alert" className="text-[12px] text-red-400">{gateError}</p>
+            // role="alert" so a screen reader announces the failure the moment
+            // it appears. Submission failures preserve every answer: the same
+            // Continue button retries, and nothing is ever re-typed.
+            <div
+              role="alert"
+              className="rounded-md border border-red-400/40 bg-red-400/10 px-3.5 py-3 text-[13px] text-red-300"
+              data-testid="gate-error"
+            >
+              {gateError}
+            </div>
           )}
-          <Button
-            type="submit"
-            disabled={gateLoading}
-            data-testid="button-gate-submit"
-            className="w-full h-14 bg-inverse-foreground text-inverse text-[14px] tracking-[0.12em] uppercase"
-          >
-            {gateLoading ? "Sending..." : "Reveal My Estimate"}
-            {!gateLoading && <ArrowRight className="h-4 w-4" />}
-          </Button>
+
+          {/* Native form semantics: Enter submits, and the wizard's Continue
+              triggers requestSubmit() on this form. The visible primary action
+              lives in the sticky action bar, consistent with every step. */}
+          <button type="submit" className="sr-only" tabIndex={-1} data-testid="button-gate-submit">
+            Reveal My Estimate
+          </button>
           <p className="text-[12px] text-inverse-muted/90 text-center leading-relaxed">
             We will email you a copy too. No spam, ever.
           </p>
@@ -4279,53 +4767,101 @@ export function EstimateCalculator({
      LAYOUTS
   ══════════════════════════════ */
 
-  /* Ordered input flow. Size / upgrades / finish reveal once a layout is chosen
-     so the form grows naturally (no dead space, minimal scrolling). */
-  const flow = (
-    <>
-      {intro}
-      {/* Planning stage comes before the project grid: it is the question a
-          builder actually asks first, and it decides how wide the resulting
-          range can honestly be. */}
-      {planningStageStep}
-      {/* Each step appears only once the one before it has been answered, so a
-          visitor is never presented with a pre-filled choice they did not make
-          and cannot reach an estimate without selecting every input. */}
-      {chosen.stage && showPlanUpload && planUploadStep}
-      {/* Land ownership is a situation, not a project type, so it is asked
-          before the home itself and reshapes what follows. */}
-      {chosen.stage && landStep}
-      {chosen.land && projectGrid}
-      {/* Street address + property lookup for landowners; a light build-area
-          question for everyone else. */}
-      {chosen.project && (ownsLand ? addressStep : areaStep)}
-      {chosen.project && subtypeGrid}
-      {chosen.subtype && sizeGrid}
-      {/* Site conditions, only when the visitor already owns the land. */}
-      {chosen.subtype && ownsLand && isNewConstructionProject(effectiveProject) && siteSection}
-      {chosen.subtype && chipsRow}
-      {chosen.subtype && showBathCount && bathCountRow}
-      {chosen.subtype && showKitchenIncluded && kitchenRow}
-      {chosen.subtype && structuresStep}
-      {chosen.subtype && finishRow}
-      {chosen.finish && typicalPanel}
-      {allChosen &&
-        (gateSubmitted ? resultPanel : gateOpen ? leadsGatePanel : calculateCta)}
-    </>
+  /* One step on screen at a time. The switch keys off the wizard's current
+     step; every section keeps its own state, so stepping back and forth loses
+     nothing and the estimate re-solves live as answers change. */
+  const stepBody = (() => {
+    switch (wizStep) {
+      case "stage":      return planningStageStep;
+      case "plans":      return planUploadStep;
+      case "land":       return landStep;
+      case "project":    return projectGrid;
+      case "address":    return ownsLand ? addressStep : areaStep;
+      case "layout":     return subtypeGrid;
+      case "size":       return sizeGrid;
+      case "site":       return siteSection;
+      case "upgrades":   return chipsRow;
+      case "bathcount":  return bathCountRow;
+      case "kitchen":    return kitchenRow;
+      case "structures": return structuresStep;
+      case "finish":
+        return (
+          <>
+            {finishRow}
+            {chosen.finish && typicalPanel}
+          </>
+        );
+      case "review":     return reviewStep;
+      case "contact":    return contactStep;
+      default:           return null;
+    }
+  })();
+
+  const continueLabel =
+    wizStep === "contact"
+      ? "Reveal My Estimate"
+      : wizStep === "review"
+        ? gateSubmitted
+          ? "See My Updated Range"
+          : "Get My Estimate Range"
+        : wizReturnTo === "review"
+          ? "Save and Return to Review"
+          : "Continue";
+
+  const wizardSurface = (
+    <div ref={wizardTopRef} className="scroll-mt-20" data-hydrated={hydrated || undefined}>
+      {wizStep === "stage" && intro}
+      <WizardProgress steps={wizStepMeta} currentIndex={wizIndex} tone="inverse" />
+      {/* A stable minimum height keeps the sticky action bar from jumping
+          between short and tall questions. Keyed so each step change remounts
+          the body and the entrance transition runs. */}
+      <div key={wizStep} className="min-h-[260px] brc-wizard-step-enter">
+        {stepBody}
+      </div>
+      <WizardActionBar
+        tone="inverse"
+        onBack={wizIndex > 0 || wizReturnTo !== null ? backStep : undefined}
+        onPrimary={advanceStep}
+        primaryLabel={continueLabel}
+        primaryDisabled={!stepDone(wizStep)}
+        busy={wizStep === "contact" ? gateLoading : wizStep === "plans" && planBusy}
+        busyLabel={wizStep === "contact" ? "Sending..." : "Reading your plans..."}
+      />
+    </div>
   );
+
+  /* The results surface is reachable ONLY once the gate has been passed - the
+     render guard below and the effect above both enforce it. */
+  const resultsSurface = (
+    <div ref={wizardTopRef} className="scroll-mt-20" data-hydrated={hydrated || undefined}>
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <p className="brc-label text-inverse-muted">Your estimate</p>
+        <span className="inline-flex items-center gap-1.5 text-[11.5px] tracking-[0.08em] uppercase text-accent-legible">
+          <Check className="h-3.5 w-3.5" aria-hidden="true" />
+          Estimate complete
+        </span>
+      </div>
+      {resultPanel}
+    </div>
+  );
+
+  const surface = view === "results" && gateSubmitted ? resultsSurface : wizardSurface;
+  const showResultBar = view === "results" && gateSubmitted;
 
   /* inModal: compact card without full-viewport constraint */
   if (inModal) {
     return (
       <div className="relative bg-inverse text-inverse-foreground rounded-lg p-5 sm:p-6">
-        {flow}
-        <StickyEstimateBar
-          mode="modal"
-          result={allChosen ? result : null}
-          summary={stickySummary}
-          ctaLabel={gateSubmitted ? "Book Free Visit" : allChosen ? "Get My Range" : "Continue"}
-          onCta={handleStickyCta}
-        />
+        {surface}
+        {showResultBar && (
+          <StickyEstimateBar
+            mode="modal"
+            result={result}
+            summary={stickySummary}
+            ctaLabel="Book Free Visit"
+            onCta={handleBookVisit}
+          />
+        )}
       </div>
     );
   }
@@ -4338,7 +4874,11 @@ export function EstimateCalculator({
         id="calculator"
         variant="inverse"
         divider
-        className="scroll-mt-16 relative overflow-hidden border-y-2 border-accent-legible/40"
+        /* overflow-CLIP, not overflow-hidden: hidden turns this section into
+           the sticky containing scroller and silently un-sticks the wizard's
+           bottom action bar on mobile; clip contains the decorative layers the
+           same way without breaking position: sticky. */
+        className="scroll-mt-16 relative overflow-clip border-y-2 border-accent-legible/40"
       >
         <div className="absolute inset-x-0 top-0 h-1 bg-accent-legible z-10" aria-hidden />
         <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-accent-legible/15" aria-hidden />
@@ -4348,26 +4888,28 @@ export function EstimateCalculator({
           aria-hidden
         />
         <div ref={sectionRef} className="container px-4 sm:px-6 py-2 md:py-4 relative z-[1]">
-          <div className="mx-auto w-full max-w-5xl">
+          <div className="mx-auto w-full max-w-3xl">
             <div className="relative rounded-sm border border-accent-legible/45 bg-inverse-foreground/[0.04] shadow-[0_0_0_1px_hsl(var(--accent-legible)/0.1),0_24px_60px_-20px_rgba(0,0,0,0.55)]">
               <div className="absolute inset-y-0 left-0 w-1 bg-accent-legible/80 rounded-l-sm" aria-hidden />
               <div
                 className="absolute inset-x-6 sm:inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-accent-legible/50 to-transparent"
                 aria-hidden
               />
-              <div className="relative px-5 sm:px-7 md:px-9 py-8 md:py-10 lg:py-12">{flow}</div>
+              <div className="relative px-5 sm:px-7 md:px-9 py-8 md:py-10 lg:py-12">{surface}</div>
             </div>
           </div>
         </div>
       </Section>
-      <StickyEstimateBar
-        mode="inline"
-        visible={sectionVisible}
-        result={allChosen ? result : null}
-        summary={stickySummary}
-        ctaLabel={gateSubmitted ? "Book Free Visit" : allChosen ? "Get My Range" : "Continue"}
-        onCta={handleStickyCta}
-      />
+      {showResultBar && (
+        <StickyEstimateBar
+          mode="inline"
+          visible={sectionVisible}
+          result={result}
+          summary={stickySummary}
+          ctaLabel="Book Free Visit"
+          onCta={handleBookVisit}
+        />
+      )}
     </>
   );
 }
