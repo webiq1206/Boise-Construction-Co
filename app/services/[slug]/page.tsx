@@ -48,19 +48,21 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
   const featuredProject = getFeaturedGalleryProject(service.slug);
   const serviceLC = service.name.toLowerCase();
 
+  /* Cost guidance is no longer one of the long-form sections: it renders as
+     the template's dedicated cost-and-timeline band directly after the hero,
+     where the visitor's first question gets answered first. */
+  const costGuidance = content.costGuidance
+    ? {
+        heading: content.costGuidance.heading,
+        paragraphs: content.costGuidance.paragraphs,
+        links: [
+          { label: 'Boise Home Building Cost Guide', href: '/guides/boise-home-building-cost-guide' },
+          { label: 'Get your build cost range', href: '/#calculator' },
+        ],
+      }
+    : undefined;
+
   const sections: LandingSection[] = [
-    ...(content.costGuidance
-      ? [
-          {
-            heading: content.costGuidance.heading,
-            paragraphs: content.costGuidance.paragraphs,
-            links: [
-              { label: 'Boise Home Building Cost Guide', href: '/guides/boise-home-building-cost-guide' },
-              { label: 'Get your build cost range', href: '/#calculator' },
-            ],
-          },
-        ]
-      : []),
     {
       heading: `${service.name} across the Treasure Valley`,
       paragraphs: [
@@ -109,6 +111,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         processImageUrl={images.process}
         manifestPath={path}
         planningFrom={service.planningFrom}
+        costGuidance={costGuidance}
         breadcrumbs={[
           { name: 'Home', href: '/' },
           { name: 'Services', href: '/services' },

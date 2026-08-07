@@ -40,6 +40,18 @@ interface LandingPageTemplateProps {
   benefits?: string[];
   inclusions?: string[];
   timeline?: string;
+  /**
+   * Cost-and-timeline expectation, rendered directly AFTER THE HERO: the
+   * first question a visitor researches is what this costs and how long it
+   * takes, so it must not sit below inclusions and process. When provided,
+   * the `timeline` card renders alongside it instead of in the lower
+   * planning-details block.
+   */
+  costGuidance?: {
+    heading: string;
+    paragraphs: string[];
+    links?: { label: string; href: string }[];
+  };
   processSteps?: { title: string; description: string }[];
   localNote?: string;
   /**
@@ -150,6 +162,7 @@ export function LandingPageTemplate({
   benefits,
   inclusions,
   timeline,
+  costGuidance,
   processSteps,
   localNote,
   sections,
@@ -225,6 +238,61 @@ export function LandingPageTemplate({
           )}
         </div>
       </section>
+
+      {/* ─── Cost and timeline expectation ───
+          Position 2 by design: cost is the question that brought the visitor
+          here, so it answers before benefits, inclusions, or process. */}
+      {costGuidance && (
+        <Section divider>
+          <div className="container px-4 max-w-5xl">
+            <Reveal>
+              <div className="brc-label mb-5">Cost and timeline</div>
+              <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-8">
+                {costGuidance.heading}
+              </h2>
+            </Reveal>
+            <div className={`grid gap-8 items-start ${timeline ? 'md:grid-cols-[3fr_2fr]' : ''}`}>
+              <Reveal>
+                <div className="prose-measure">
+                  {costGuidance.paragraphs.map((p, i) => (
+                    <p
+                      key={i}
+                      className="text-sm md:text-base text-muted-foreground leading-relaxed mb-4"
+                    >
+                      {p}
+                    </p>
+                  ))}
+                  {costGuidance.links && costGuidance.links.length > 0 && (
+                    <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
+                      {costGuidance.links.map((link) => (
+                        <li key={link.href} className="list-none">
+                          <Link
+                            href={link.href}
+                            className="inline-flex min-h-6 items-center text-sm text-accent-legible hover:underline font-normal"
+                          >
+                            {link.label}
+                            <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </Reveal>
+              {timeline && (
+                <Reveal delay={90}>
+                  <div className="marketing-card p-6">
+                    <p className="text-xs font-normal uppercase tracking-wider text-muted-foreground mb-2">
+                      Typical timeline
+                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{timeline}</p>
+                  </div>
+                </Reveal>
+              )}
+            </div>
+          </div>
+        </Section>
+      )}
 
       {/* ─── Benefits ─── */}
       {benefits && benefits.length > 0 && (
@@ -363,14 +431,16 @@ export function LandingPageTemplate({
         </Section>
       )}
 
-      {/* ─── Timeline & local notes ─── */}
-      {(timeline || localNote) && (
+      {/* ─── Timeline & local notes ───
+          The timeline card renders up in the cost-and-timeline section when
+          costGuidance hoisted it; showing it twice would be noise. */}
+      {((timeline && !costGuidance) || localNote) && (
         <Section divider>
           <div className="container px-4 max-w-5xl">
             <div
-              className={`grid gap-6 ${timeline && localNote ? 'md:grid-cols-2' : 'max-w-2xl'}`}
+              className={`grid gap-6 ${timeline && !costGuidance && localNote ? 'md:grid-cols-2' : 'max-w-2xl'}`}
             >
-              {timeline && (
+              {timeline && !costGuidance && (
                 <Reveal>
                   <MarketingCard className="p-6 md:p-8 h-full">
                     <div className="flex gap-4">
@@ -387,7 +457,7 @@ export function LandingPageTemplate({
                 </Reveal>
               )}
               {localNote && (
-                <Reveal delay={timeline ? 90 : 0}>
+                <Reveal delay={timeline && !costGuidance ? 90 : 0}>
                   <MarketingCard className="p-6 md:p-8 h-full">
                     <div className="flex gap-4">
                       <div className="w-0.5 bg-accent/50 flex-shrink-0 rounded-full" />

@@ -42,8 +42,8 @@ export function ArticleSidebarCta({ description }: { description: string }) {
         <BusinessPhoneContact
           layout="compact"
           className="justify-center"
-          phoneClassName="text-xs text-inverse-muted hover:text-inverse-foreground transition-colors"
-          saveClassName="text-xs text-inverse-muted hover:text-inverse-foreground transition-colors"
+          phoneClassName="inline-flex min-h-6 items-center text-xs text-inverse-muted hover:text-inverse-foreground transition-colors"
+          saveClassName="inline-flex min-h-6 items-center text-xs text-inverse-muted hover:text-inverse-foreground transition-colors"
           showPhoneIcon
           iconClassName="h-3 w-3"
           phoneTestId="link-sidebar-phone"

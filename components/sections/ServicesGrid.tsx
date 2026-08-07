@@ -57,8 +57,11 @@ export function ServicesGrid() {
                     {service.planningFrom}
                   </span>
                 </div>
-                <TextLink href={servicePath(service.slug)} showArrow ariaLabel={`Learn more about ${service.name}`}>
-                  Learn more
+                {/* Specific visible label, not "Learn more": generic link text
+                    fails Lighthouse's link-text audit (which reads visible
+                    text, not aria-label) and the CTA-copy rule alike. */}
+                <TextLink href={servicePath(service.slug)} showArrow>
+                  {`Explore ${service.name.toLowerCase()}`}
                 </TextLink>
               </article>
             </Reveal>

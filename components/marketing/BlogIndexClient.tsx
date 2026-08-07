@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { PenLine } from "lucide-react";
+import { PenLine, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/marketing/Section";
 import { BlogCard } from "@/components/marketing/BlogCard";
@@ -44,10 +44,38 @@ export function BlogIndexClient() {
   );
 
   const [activeHub, setActiveHub] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
 
-  const filtered = activeHub
+  /* Debounced search analytics: the query text is content search terms, not
+     personal data, but only settled queries (600ms idle, 2+ chars) are worth
+     an event. */
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+    const q = query.trim();
+    if (q.length < 2) return;
+    searchTimerRef.current = setTimeout(() => {
+      trackEvent("resource_searched", { query: q.slice(0, 60).toLowerCase() });
+    }, 600);
+    return () => {
+      if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+    };
+  }, [query]);
+
+  const byHub = activeHub
     ? sortedPosts.filter((p) => p.hubSlug === activeHub)
     : sortedPosts;
+
+  const q = query.trim().toLowerCase();
+  const filtered =
+    q.length < 2
+      ? byHub
+      : byHub.filter((p) =>
+          [p.title, p.excerpt, ...(p.tags ?? [])]
+            .join(" ")
+            .toLowerCase()
+            .includes(q),
+        );
 
   const activeHubMeta = activeHub
     ? CONTENT_HUBS.find((h) => h.hubSlug === activeHub)
@@ -75,6 +103,34 @@ export function BlogIndexClient() {
               </div>
             ) : (
               <>
+                {/* Search: text-base = 16px so iOS doesn't zoom the field. */}
+                <div className="relative max-w-md mx-auto mb-5">
+                  <Search
+                    className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                    aria-hidden="true"
+                  />
+                  <input
+                    type="search"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search articles..."
+                    aria-label="Search articles"
+                    className="h-11 w-full rounded-sm border border-border bg-input pl-9 pr-9 text-base text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-search-cancel-button]:hidden"
+                    data-testid="input-blog-search"
+                  />
+                  {query && (
+                    <button
+                      type="button"
+                      onClick={() => setQuery("")}
+                      aria-label="Clear search"
+                      className="absolute right-1 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-sm text-muted-foreground hover:text-foreground"
+                      data-testid="button-blog-search-clear"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+
                 {indexableHubs.length >= 2 && (
                   <div className="flex flex-wrap gap-2 justify-center mb-6">
                     <Chip
@@ -112,6 +168,32 @@ export function BlogIndexClient() {
                       View topic hub
                     </Link>
                   </p>
+                )}
+
+                {filtered.length === 0 && (
+                  <div
+                    className="text-center py-16 space-y-4"
+                    data-testid="blog-search-empty"
+                  >
+                    <p className="text-foreground">
+                      No articles match{q.length >= 2 ? ` "${query.trim()}"` : ""}
+                      {activeHub ? " in this topic" : ""}.
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Try a different phrase, or browse everything.
+                    </p>
+                    <Button
+                      variant="brandOutline"
+                      type="button"
+                      onClick={() => {
+                        setQuery("");
+                        setActiveHub(null);
+                      }}
+                      data-testid="button-blog-search-reset"
+                    >
+                      Show all articles
+                    </Button>
+                  </div>
                 )}
 
                 {featured && (
