@@ -819,9 +819,10 @@ html, body {
   gap: 0.25rem 1rem;
 }
 
-/* Marketing text link (tertiary action) - reveals ochre on hover */
+/* Marketing text link (tertiary action) - reveals ochre on hover.
+   min-h-6 = the 24px WCAG 2.2 target-size floor for standalone links. */
 .brc-text-link {
-  @apply inline-flex items-center gap-2 text-sm font-normal text-foreground underline-offset-2 hover:underline hover:text-accent-legible transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm;
+  @apply inline-flex min-h-6 items-center gap-2 text-sm font-normal text-foreground underline-offset-2 hover:underline hover:text-accent-legible transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm;
 }
 /* Arrow in text links picks up the ochre on hover too */
 .brc-text-link:hover svg {

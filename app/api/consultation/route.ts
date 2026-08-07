@@ -34,7 +34,7 @@ import {
 import { estimateSchema } from "@/shared/estimatePayload";
 import { resolveQuotedRange } from "@/shared/costs/resolve";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
-import { readUnitCostOverrides } from "@/app/api/admin/pricing/route";
+import { readUnitCostOverrides } from "@/server/services/unitCostOverrides";
 import {
   buildCrmIntakeFields,
   buildLeadPropertyRecord,

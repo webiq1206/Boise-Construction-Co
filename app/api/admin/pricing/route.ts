@@ -33,7 +33,10 @@ import {
   type ProjectType,
 } from "@/shared/estimateEngine";
 
-export const UNIT_COST_SETTINGS_KEY = "pricing.unitCostOverrides";
+import {
+  readUnitCostOverrides,
+  UNIT_COST_SETTINGS_KEY,
+} from "@/server/services/unitCostOverrides";
 
 /*
  * Admin pricing covers new construction first, since that is what the company
@@ -66,27 +69,6 @@ async function requireAdmin() {
     return { error: NextResponse.json({ error: "Database unavailable" }, { status: 503 }) };
   }
   return { userId: session.userId };
-}
-
-export async function readUnitCostOverrides(): Promise<UnitCostOverrides> {
-  if (!db) return {};
-  try {
-    const rows = await db
-      .select()
-      .from(siteSettings)
-      .where(eq(siteSettings.key, UNIT_COST_SETTINGS_KEY));
-    if (rows.length === 0) return {};
-    const parsed = JSON.parse(rows[0].value) as unknown;
-    if (!parsed || typeof parsed !== "object") return {};
-    const out: UnitCostOverrides = {};
-    for (const [id, value] of Object.entries(parsed as Record<string, unknown>)) {
-      if (typeof value === "number" && Number.isFinite(value) && value >= 0) out[id] = value;
-    }
-    return out;
-  } catch {
-    // A malformed blob must not take pricing down; fall back to derived costs.
-    return {};
-  }
 }
 
 /** The full pricing model, with what each component currently costs and why. */

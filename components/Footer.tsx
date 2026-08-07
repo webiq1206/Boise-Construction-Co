@@ -35,7 +35,7 @@ function FooterGroup({
   return (
     <details open className="group/fg">
       <summary
-        className="flex cursor-pointer select-none items-center justify-between gap-2 py-1 font-sans text-[11px] font-normal uppercase tracking-[0.12em] text-inverse-muted marker:hidden [&::-webkit-details-marker]:hidden lg:pointer-events-none lg:cursor-default lg:py-0 lg:mb-5"
+        className="flex min-h-11 cursor-pointer select-none items-center justify-between gap-2 py-1 font-sans text-[11px] font-normal uppercase tracking-[0.12em] text-inverse-muted marker:hidden [&::-webkit-details-marker]:hidden lg:pointer-events-none lg:min-h-0 lg:cursor-default lg:py-0 lg:mb-5"
       >
         {title}
         <ChevronDown
@@ -187,14 +187,19 @@ export function Footer() {
             </ul>
           </FooterGroup>
 
-          <FooterGroup
-            title={
-              <Link href="/areas" className="hover:text-inverse-foreground transition-colors">
-                Service Areas
-              </Link>
-            }
-          >
+          {/* Plain-text title: a link inside <summary> is a nested interactive
+              control (axe: nested-interactive) - the index link lives in the
+              list instead. */}
+          <FooterGroup title="Service Areas">
             <ul className="space-y-2.5">
+              <li>
+                <Link
+                  href="/areas"
+                  className="text-sm text-inverse-muted hover:text-inverse-foreground transition-colors"
+                >
+                  All service areas
+                </Link>
+              </li>
               {CITIES.map((city) => (
                 <li key={city.slug}>
                   <Link

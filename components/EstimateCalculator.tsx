@@ -1871,6 +1871,46 @@ export function EstimateCalculator({
   const wizRef = useRef({ wizStep, wizReturnTo, wizSteps, view });
   wizRef.current = { wizStep, wizReturnTo, wizSteps, view };
 
+  /* Funnel analytics. One effect on the step id catches every way a step can
+     be left - Continue, tap auto-advance, review edits - and only a FORWARD
+     move counts as completing the step it left. Step ids only; no answers,
+     no PII. */
+  const prevWizStepRef = useRef<string | null>(null);
+  useEffect(() => {
+    const prev = prevWizStepRef.current;
+    prevWizStepRef.current = wizStep;
+    if (!prev || prev === wizStep) return;
+    const from = wizSteps.indexOf(prev);
+    const to = wizSteps.indexOf(wizStep);
+    if (from !== -1 && to > from) {
+      trackEvent("estimator_step_completed", { step: prev });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wizStep]);
+
+  /* form_start fires once per mount, on the first real interaction with the
+     contact gate - the funnel edge between "saw the gate" and "engaged it". */
+  const gateStartedRef = useRef(false);
+  function trackGateStart() {
+    if (gateStartedRef.current) return;
+    gateStartedRef.current = true;
+    trackEvent("form_start", { form: "estimate_gate" });
+  }
+
+  /* The reveal itself, fired on every entry to the results view (first gate
+     success and every edit-and-recalculate return). */
+  const resultsViewedRef = useRef(false);
+  useEffect(() => {
+    if (view !== "results") {
+      resultsViewedRef.current = false;
+      return;
+    }
+    if (resultsViewedRef.current) return;
+    resultsViewedRef.current = true;
+    trackEvent("estimator_results_viewed", { project: effectiveProject });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view]);
+
   function cancelAutoAdvance() {
     if (autoAdvanceRef.current) {
       clearTimeout(autoAdvanceRef.current);
@@ -2255,8 +2295,11 @@ export function EstimateCalculator({
     if (!gateEmail.trim() || !emailRe.test(gateEmail.trim())) {
       errors.email = "Please enter a valid email address.";
     }
-    if (gatePhone.replace(/\D/g, "").length < 10) {
-      errors.phone = "Please enter a valid 10-digit phone number.";
+    /* Phone is optional - the estimate is delivered by email, so email is the
+       one contact field the gate genuinely needs. A phone that IS entered
+       still has to be a real one. */
+    if (gatePhone.trim() && gatePhone.replace(/\D/g, "").length < 10) {
+      errors.phone = "Please enter a valid 10-digit phone number, or leave it blank.";
     }
     /* A street address is only demanded of someone who has one: landowners
        get the house-number check; everyone else just needs to name the city
@@ -2270,6 +2313,11 @@ export function EstimateCalculator({
     }
     setGateFieldErrors(errors);
     if (Object.keys(errors).length > 0) {
+      // Field NAMES only - never values.
+      trackEvent("form_error", {
+        form: "estimate_gate",
+        fields: Object.keys(errors).sort().join(","),
+      });
       setGateError(null);
       const focusTarget = errors.name
         ? gateNameRef.current
@@ -4548,7 +4596,13 @@ export function EstimateCalculator({
         </div>
 
         {/* Contact form */}
-        <form ref={gateFormRef} onSubmit={handleGateSubmit} className="space-y-3.5" noValidate>
+        <form
+          ref={gateFormRef}
+          onSubmit={handleGateSubmit}
+          onFocusCapture={trackGateStart}
+          className="space-y-3.5"
+          noValidate
+        >
           <div>
             <label
               htmlFor="gate-name"
@@ -4607,7 +4661,7 @@ export function EstimateCalculator({
               htmlFor="gate-phone"
               className="mb-1.5 block text-[12px] tracking-[0.06em] uppercase text-inverse-muted"
             >
-              Phone
+              Phone <span className="normal-case tracking-normal">(optional)</span>
             </label>
             <input
               id="gate-phone"

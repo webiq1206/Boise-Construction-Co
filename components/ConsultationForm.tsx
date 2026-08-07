@@ -343,7 +343,19 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
         { email: variables.email, phone: variables.phone },
       );
     },
+    onError: () => {
+      trackEvent("form_error", { form: "consultation", reason: "submit_failed" });
+    },
   });
+
+  /* form_start fires once, on the first real interaction - the funnel edge
+     between seeing the form and engaging it. */
+  const formStartedRef = useRef(false);
+  function trackFormStart() {
+    if (formStartedRef.current) return;
+    formStartedRef.current = true;
+    trackEvent("form_start", { form: "consultation" });
+  }
 
   if (success) {
     const submittedProject = submitted
@@ -428,10 +440,20 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data) => {
-          setSubmitted(data);
-          mutation.mutate(data);
-        })}
+        onSubmit={form.handleSubmit(
+          (data) => {
+            setSubmitted(data);
+            mutation.mutate(data);
+          },
+          // Validation failure: field NAMES only - never values.
+          (errors) => {
+            trackEvent("form_error", {
+              form: "consultation",
+              fields: Object.keys(errors).sort().join(","),
+            });
+          },
+        )}
+        onFocusCapture={trackFormStart}
         className="space-y-4"
       >
         {showTrust && (

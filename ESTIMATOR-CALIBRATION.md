@@ -1,5 +1,15 @@
 # Estimator calibration
 
+> **Read this first (2026-08).** Much of this document calibrates the six
+> remodel categories (kitchen, bathroom, whole-home, addition, ADU, basement).
+> Those are **not offered on the public estimator** - the live calculator sells
+> custom-home, semi-custom-home, shop-home, and build-on-your-lot, priced by
+> the line-item takeoff engine in `shared/costs/`. The remodel `PRICE_MATRIX`
+> remains load-bearing in three narrower places: RE-10 repair pricing, the
+> market-price ceiling that trims new-construction margins, and the invariant
+> suite. Calibrate against real closed jobs exactly as described below, but
+> know which surface you are moving before you move it.
+
 ## What is guaranteed, and what is not
 
 There are two separate questions about the estimator, and they have very

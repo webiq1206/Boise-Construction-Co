@@ -65,6 +65,7 @@ export function WizardProgress({
       {/* The accessible source of truth. The visual rail below is decorative. */}
       <div
         role="progressbar"
+        aria-label="Estimator progress"
         aria-valuemin={1}
         aria-valuemax={total}
         aria-valuenow={humanStep}
@@ -92,11 +93,15 @@ export function WizardProgress({
                 ? strong
                 : i < clamped
                   ? "text-accent-legible"
-                  : cn(muted, "opacity-60"),
+                  : /* Plain muted, no opacity dim: the muted tone alone sits at
+                       ~6:1 (AA), while dimming it to 60% fell to ~3.6:1 at 11px.
+                       De-emphasis still reads via the strong current step and
+                       the ochre check on completed ones. */
+                    muted,
             )}
           >
             {i > 0 && (
-              <span className={cn("mr-2", muted, "opacity-50")} aria-hidden="true">
+              <span className={cn("mr-2", muted)} aria-hidden="true">
                 /
               </span>
             )}

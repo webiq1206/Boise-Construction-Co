@@ -938,6 +938,7 @@ export function Re10Wizard() {
                 multiple
                 accept={UPLOAD_ACCEPT}
                 className="sr-only"
+                aria-label="Choose documents to upload"
                 data-testid="input-re10-files"
                 onChange={(e) => {
                   addFiles(Array.from(e.target.files ?? []), "picker");
@@ -952,6 +953,7 @@ export function Re10Wizard() {
                 accept="image/*"
                 capture="environment"
                 className="sr-only"
+                aria-label="Take photos of the documents"
                 data-testid="input-re10-camera"
                 onChange={(e) => {
                   addFiles(Array.from(e.target.files ?? []), "camera");

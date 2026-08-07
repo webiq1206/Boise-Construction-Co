@@ -30,7 +30,9 @@ export function GuideResourceDownloads({ resources }: GuideResourceDownloadsProp
       </ul>
       <p className="text-xs text-muted-foreground mt-4">
         All resources are planning aids, not quotes or contracts.{' '}
-        <Link href="/resources" className="text-accent-legible hover:underline">
+        {/* Always underlined: inside a text block, color alone can't be the
+            only thing distinguishing a link (WCAG 1.4.1). */}
+        <Link href="/resources" className="text-accent-legible underline underline-offset-2">
           View all resources
         </Link>
       </p>
@@ -50,8 +52,9 @@ function ResourceRow({ resource }: { resource: GuideResource }) {
       <div className="flex-1 min-w-0">
         <p className="text-sm font-normal text-foreground">{resource.title}</p>
         <p className="text-xs text-muted-foreground mt-0.5">{resource.description}</p>
+        {/* Full muted tone: at 80% opacity this 12px meta line fell below AA. */}
         {resource.fileLabel && (
-          <p className="text-xs text-muted-foreground/80 mt-1">{resource.fileLabel}</p>
+          <p className="text-xs text-muted-foreground mt-1">{resource.fileLabel}</p>
         )}
       </div>
       {isExternalPdf ? (

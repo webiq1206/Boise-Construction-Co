@@ -107,13 +107,13 @@ async function driveToReview(
 }
 
 /** From review, open the contact step and submit the lead. */
-async function submitGate(page: Page) {
+async function submitGate(page: Page, { withPhone = true }: { withPhone?: boolean } = {}) {
   await continueBtn(page).click(); // review -> contact
   await expect(page.getByTestId("gate-input-name")).toBeVisible();
 
   await page.getByTestId("gate-input-name").fill("Test Homeowner");
   await page.getByTestId("gate-input-email").fill("test.homeowner@example.com");
-  await page.getByTestId("gate-input-phone").fill("2085550147");
+  if (withPhone) await page.getByTestId("gate-input-phone").fill("2085550147");
   const address = page.locator('[data-testid="gate-input-address"]:visible');
   if (await address.count()) await address.fill("1234 W Test St, Boise, ID 83702");
   const area = page.locator('[data-testid="gate-input-build-area"]:visible');
@@ -582,6 +582,19 @@ test.describe("Lead gate", () => {
       await expect(page.getByTestId("button-edit-scope")).toBeVisible();
     });
   }
+
+  /**
+   * Phone is optional at the gate: the estimate is delivered by email, so
+   * email is the one contact field genuinely required. A lead without a
+   * phone number must be accepted end to end.
+   */
+  test("submitting the gate without a phone number is accepted", async ({ page }) => {
+    await openCalculator(page);
+    await driveToReview(page);
+    const response = await submitGate(page, { withPhone: false });
+    expect(response.status()).toBeLessThan(400);
+    await expect(page.locator('[data-testid="estimate-range"]:visible')).toBeVisible();
+  });
 
   test("editing scope after the reveal recalculates without asking for contact again", async ({ page }) => {
     await openCalculator(page);

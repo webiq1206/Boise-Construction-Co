@@ -22,6 +22,10 @@ export function ConversionTracking() {
         trackEvent('contact_click', { method: 'sms', link_url: href });
       } else if (href.startsWith('mailto:')) {
         trackEvent('contact_click', { method: 'email', link_url: href });
+      } else if (href === '#consult' || href.endsWith('/#consult')) {
+        // The secondary CTA ("Schedule a consultation") is a plain anchor in
+        // several sections; one delegated branch covers every instance.
+        trackEvent('cta_click', { cta: 'secondary', location: window.location.pathname });
       }
     };
     document.addEventListener('click', onClick, { capture: true });

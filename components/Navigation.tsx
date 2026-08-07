@@ -95,7 +95,9 @@ export function Navigation() {
                 </span>
                 {SITE_CONFIG.phone}
               </a>
-              <SaveContactLink className="text-[11px] text-muted-foreground hover:text-foreground transition-colors">
+              {/* min-h-6 = the 24px WCAG 2.2 target-size floor for a
+                  standalone 11px utility link. */}
+              <SaveContactLink className="inline-flex min-h-6 items-center text-[11px] text-muted-foreground hover:text-foreground transition-colors">
                 Save to contacts
               </SaveContactLink>
             </div>

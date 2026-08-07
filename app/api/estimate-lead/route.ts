@@ -32,7 +32,7 @@ import {
 import { estimateSchema } from "@/shared/estimatePayload";
 import { resolveQuotedRange } from "@/shared/costs/resolve";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
-import { readUnitCostOverrides } from "@/app/api/admin/pricing/route";
+import { readUnitCostOverrides } from "@/server/services/unitCostOverrides";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
   buildCrmIntakeFields,
@@ -47,7 +47,16 @@ import { formatUsd, type PropertyEnrichment } from "@/server/services/consultati
 const bodySchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
-  phone: z.string().min(10),
+  /* Optional to match the gate: the estimate is delivered by email, so email
+     is the required channel. A phone that IS sent must still look like one
+     (10+ digits once formatting is stripped). */
+  phone: z
+    .string()
+    .optional()
+    .default("")
+    .refine((v) => v === "" || v.replace(/\D/g, "").length >= 10, {
+      message: "Phone must be a valid 10-digit number when provided",
+    }),
   budget: z.string().min(1).optional(),
   projectType: z.string().min(1),
   // Property address. Optional in the schema so an older client that predates
