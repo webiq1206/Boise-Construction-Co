@@ -3,6 +3,18 @@ export async function register() {
     const dbUrl = process.env.DATABASE_URL;
     if (!dbUrl) return;
 
+    /* Fire-and-forget ON PURPOSE. Next awaits register() before serving the
+       first request, and this block sweeps the whole leads table against
+       Neon on every instance boot - on a cold DB that held the healthcheck
+       past its retry budget and failed the deploy's Promote step. The
+       cleanup work is idempotent housekeeping; nothing about serving a page
+       depends on it having finished. */
+    void runStartupDbTasks(dbUrl);
+  }
+}
+
+async function runStartupDbTasks(dbUrl: string) {
+  {
     const GARY_USER_ID = "55074230";
 
     const UNRESOLVED_PURCHASES = [
