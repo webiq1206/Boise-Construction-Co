@@ -61,7 +61,7 @@ export function GuideJumpChips({ headings }: GuideJumpChipsProps) {
           <Link
             key={h.id}
             href={`#${h.id}`}
-            className="inline-flex items-center rounded-full border border-border bg-muted/40 px-3 py-1 text-xs text-foreground hover:bg-muted transition-colors"
+            className="inline-flex min-h-9 items-center rounded-full border border-border bg-muted/40 px-3.5 py-1.5 text-xs text-foreground hover:bg-muted transition-colors"
           >
             {h.text.length > 42 ? `${h.text.slice(0, 40)}…` : h.text}
           </Link>
@@ -71,37 +71,6 @@ export function GuideJumpChips({ headings }: GuideJumpChipsProps) {
   );
 }
 
-interface GuideSidebarTocProps {
-  headings: TocHeading[];
-}
-
-export function GuideSidebarToc({ headings }: GuideSidebarTocProps) {
-  if (!headings || headings.length < 2) return null;
-
-  return (
-    <nav
-      className="rounded-lg border border-border p-4 mb-4 max-h-[min(50vh,20rem)] overflow-y-auto"
-      aria-label="Table of contents"
-      data-testid="guide-toc"
-    >
-      <p className="text-xs font-normal uppercase tracking-wider text-muted-foreground mb-3">
-        On this page
-      </p>
-      <ol className="space-y-1 text-sm">
-        {headings.map((h) => (
-          <li
-            key={h.id}
-            className={h.level === 3 ? 'ml-3 list-[circle]' : 'list-decimal ml-4'}
-          >
-            <a
-              href={`#${h.id}`}
-              className="text-muted-foreground hover:text-foreground transition-colors leading-snug"
-            >
-              {h.text}
-            </a>
-          </li>
-        ))}
-      </ol>
-    </nav>
-  );
-}
+/* The sidebar TOC now lives in its own client component (scroll-spy needs an
+   IntersectionObserver); re-exported here so existing imports keep working. */
+export { GuideSidebarToc } from './GuideSidebarToc';

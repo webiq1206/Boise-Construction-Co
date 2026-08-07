@@ -24,11 +24,12 @@ export function BrandStatementBand() {
         loading="lazy"
         quality={65}
         sizes="(max-width: 768px) 100vw, 1400px"
-        className="object-cover opacity-[0.55] img-brand-grade"
+        className="object-cover opacity-[0.68] img-brand-grade"
       />
       {/* Legibility scrims: darken left (where the text sits) and blend the top
-          and bottom edges into the page ground so the band reads as one piece. */}
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/90 via-inverse/60 to-inverse/20" />
+          and bottom edges into the page ground so the band reads as one piece.
+          The right half stays open so the photograph keeps its impact. */}
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/85 via-inverse/50 to-inverse/10" />
       <div className="absolute inset-x-0 top-0 h-28 pointer-events-none bg-gradient-to-b from-background via-background/40 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-28 pointer-events-none bg-gradient-to-t from-background via-background/40 to-transparent" />
       <div

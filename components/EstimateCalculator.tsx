@@ -888,8 +888,10 @@ export function EstimateCalculator({
     const header = document.querySelector("header");
     const headerH = header ? header.getBoundingClientRect().height : 64;
     const rect = el.getBoundingClientRect();
-    /* Already comfortably in view: leave the page alone. */
-    if (rect.top >= 0 && rect.top <= headerH + 24) return;
+    /* Already comfortably in view: leave the page alone. "In view" starts
+       BELOW the sticky header - a top between 0 and headerH is hidden
+       behind it and must still trigger the corrective scroll. */
+    if (rect.top >= headerH - 4 && rect.top <= headerH + 32) return;
     const prefersReducedMotion = window.matchMedia?.(
       "(prefers-reduced-motion: reduce)",
     ).matches;

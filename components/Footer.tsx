@@ -56,19 +56,10 @@ export function Footer() {
       <div className="container px-4 py-16 md:py-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-10 mb-12 lg:gap-0 lg:divide-x lg:divide-inverse-foreground/10 [&>*]:lg:px-6 [&>*:first-child]:lg:pl-0 [&>*:last-child]:lg:pr-0">
           <div className="lg:col-span-2">
-            <div className="mb-5 flex items-center gap-4">
-              {/* Bone seal with the ochre ring - reads as a medallion on the
-                  dark footer band (transparent artwork, no clip needed). */}
-              <img
-                src="/brand/svg/seal/dark/boise-construction-co-seal-bone-accent.svg"
-                alt=""
-                aria-hidden="true"
-                width={56}
-                height={56}
-                className="h-14 w-14 shrink-0"
-              />
-              {/* Bone wordmark with the ochre "Co." Intrinsic size is
-                  1765.71x159.96, so 26px tall renders ~287px wide. */}
+            <div className="mb-5">
+              {/* Wordmark only - the seal reads as clutter at footer scale, so
+                  the brand column leads with the primary mark alone. Intrinsic
+                  size is 1765.71x159.96, so 26px tall renders ~287px wide. */}
               <img
                 src="/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg"
                 alt={SITE_CONFIG.name}

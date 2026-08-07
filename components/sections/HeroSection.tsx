@@ -116,19 +116,25 @@ export function HeroSection() {
         </div>
       </section>
 
-      <div className="bg-background border-t border-border/60 py-8 md:py-10">
+      {/* Trust bar. A restrained wash of the brand ochre separates it from the
+          hero above and the canvas below - the same accent family the estimator
+          band uses (border-accent-legible/40), kept quieter here. Labels sit at
+          12px/0.14em in near-full foreground with an ochre tick each, so the
+          bar reads as one deliberate branded element rather than six faint
+          strings of tracking-blown microtype. */}
+      <div className="border-y border-accent-legible/25 bg-gradient-to-b from-accent/[0.14] to-accent/[0.05] py-8 md:py-10">
         <div className="container px-4">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 max-w-5xl mx-auto border-l border-t border-border/70">
-            {TRUST_ITEMS.map((item, i) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 max-w-5xl mx-auto border-l border-t border-border/60">
+            {TRUST_ITEMS.map((item) => (
               <div
                 key={item}
-                className="flex items-center justify-center px-4 py-5 md:py-4 text-center border-r border-b border-border/70"
+                className="flex items-center justify-center gap-2 px-4 py-5 md:py-4 text-center border-r border-b border-border/60"
               >
                 <span
-                  className={`text-[11px] leading-snug tracking-[0.2em] uppercase ${
-                    i < 2 ? "text-foreground" : "text-muted-foreground"
-                  }`}
-                >
+                  className="h-1 w-1 shrink-0 rounded-full bg-accent-legible"
+                  aria-hidden="true"
+                />
+                <span className="text-xs leading-snug tracking-[0.14em] uppercase text-foreground/90">
                   {item}
                 </span>
               </div>

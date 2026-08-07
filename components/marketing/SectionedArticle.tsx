@@ -6,6 +6,7 @@ import {
   ArticleInlineFigure,
   type ArticleInlineFigureProps,
 } from './ArticleInlineFigure';
+import { ExpandDetailsOnAnchor } from './ExpandDetailsOnAnchor';
 
 export interface ArticleInlineFigurePlacement extends ArticleInlineFigureProps {
   /** Insert figure after this 0-based section index. */
@@ -98,6 +99,9 @@ export function SectionedArticle({
 
   return (
     <article className="prose-measure space-y-0" data-testid={testId}>
+      {/* TOC and jump-chip anchors may target headings inside closed
+          sections; this opens the right section before the jump. */}
+      <ExpandDetailsOnAnchor />
       {sections.map((section, index) => {
         const isOpen = index < defaultOpenCount;
 
@@ -121,7 +125,7 @@ export function SectionedArticle({
                 dangerouslySetInnerHTML={{ __html: section.headingHtml }}
               />
               <span className="text-xs text-muted-foreground mt-1 block group-open:hidden">
-                Tap to expand
+                Expand section
               </span>
             </summary>
             <div className="blog-content pb-8 pt-0">

@@ -518,6 +518,46 @@ test.describe("Mobile layout", () => {
     );
     expect(overflow).toBe(false);
   });
+
+  /**
+   * Step changes scroll the wizard card into place, and "into place" means
+   * BELOW the sticky header - a card top between 0 and the header's height is
+   * hidden behind it. That guard read `rect.top >= 0` once, which treated
+   * behind-the-header as in-view and left the progress bar buried.
+   */
+  test("each step change lands the wizard top below the sticky header", async ({ page }) => {
+    await openCalculator(page);
+
+    const wizardClearsHeader = async () => {
+      // Wait out the smooth scroll before measuring.
+      await page.waitForTimeout(700);
+      return page.evaluate(() => {
+        const header = document.querySelector("header");
+        const wizard = document.querySelector("#calculator [data-hydrated]");
+        if (!header || !wizard) return { ok: false, top: -1, headerBottom: -1 };
+        const top = wizard.getBoundingClientRect().top;
+        const headerBottom = header.getBoundingClientRect().bottom;
+        return { ok: top >= headerBottom - 2, top, headerBottom };
+      });
+    };
+
+    await page.getByTestId("calc-stage-need-plans").click();
+    let pos = await wizardClearsHeader();
+    expect(pos.ok, `after stage step: wizard top ${pos.top} vs header bottom ${pos.headerBottom}`).toBe(true);
+
+    await page.getByTestId("calc-land-not-yet").click();
+    pos = await wizardClearsHeader();
+    expect(pos.ok, `after land step: wizard top ${pos.top} vs header bottom ${pos.headerBottom}`).toBe(true);
+
+    await page.getByTestId("calc-tab-custom-home").click();
+    pos = await wizardClearsHeader();
+    expect(pos.ok, `after project step: wizard top ${pos.top} vs header bottom ${pos.headerBottom}`).toBe(true);
+
+    // Back navigation must obey the same rule.
+    await page.getByTestId("wizard-back").click();
+    pos = await wizardClearsHeader();
+    expect(pos.ok, `after back: wizard top ${pos.top} vs header bottom ${pos.headerBottom}`).toBe(true);
+  });
 });
 
 test.describe("Lead gate", () => {

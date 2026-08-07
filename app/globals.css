@@ -501,6 +501,16 @@ html, body {
   line-height: 1.8;
   font-size: 1rem;
 }
+/* Long-form body reads more comfortably a step above UI text on larger
+   screens; 16px stays correct on phones. */
+@media (min-width: 768px) {
+  .blog-content { font-size: 1.0625rem; }
+}
+/* Jump links and the sidebar TOC target these headings - the scroll margin
+   keeps each one from landing hidden behind the 60px sticky header. */
+.blog-content h2, .blog-content h3, .blog-content h4 {
+  scroll-margin-top: 5rem;
+}
 .blog-content h2 {
   font-size: 1.75rem;
   font-weight: 400;
@@ -508,21 +518,21 @@ html, body {
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid hsl(var(--border));
-  color: hsl(var(--foreground));
+  color: hsl(var(--heading));
 }
 .blog-content h3 {
   font-size: 1.35rem;
   font-weight: 400;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
-  color: hsl(var(--foreground));
+  color: hsl(var(--heading));
 }
 .blog-content h4 {
   font-size: 1.05rem;
   font-weight: 400;
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;
-  color: hsl(var(--foreground));
+  color: hsl(var(--heading));
 }
 .blog-content p {
   margin-bottom: 1.25rem;
@@ -546,9 +556,13 @@ html, body {
   color: hsl(var(--foreground));
   line-height: 1.7;
 }
-.blog-content li strong { color: hsl(var(--foreground)); }
-/* Emphasis via brighter bone tone, not weight (brand rule: never above 400) */
-.blog-content strong { color: hsl(var(--heading)); font-weight: 400; }
+.blog-content li strong { color: hsl(var(--heading)); }
+/* Emphasis carries the brighter bone tone plus a half-step of weight. The
+   original brand rule capped everything at 400, but tone alone left bolded
+   key phrases nearly indistinguishable from body copy in long articles -
+   owner-requested readability pass (2026-08). 500 in Montserrat is still far
+   from heavy. */
+.blog-content strong { color: hsl(var(--heading)); font-weight: 500; }
 .blog-content blockquote {
   border-left: 2px solid hsl(var(--primary));
   padding: 1rem 1.25rem;
@@ -577,7 +591,9 @@ html, body {
 .blog-content td {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid hsl(var(--border));
-  color: hsl(var(--muted-foreground));
+  /* Table cells are data the reader came for, not metadata - full body tone,
+     not muted. */
+  color: hsl(var(--foreground));
 }
 .blog-content tr:last-child td { border-bottom: none; }
 .blog-content img {

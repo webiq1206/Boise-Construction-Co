@@ -16,13 +16,18 @@ export function slugifyHeading(text: string): string {
 
 export function extractHeadingsFromHtml(html: string): TocHeading[] {
   const headings: TocHeading[] = [];
-  const regex = /<h([23])[^>]*>(.*?)<\/h\1>/gi;
+  const regex = /<h([23])([^>]*)>(.*?)<\/h\1>/gi;
   let match: RegExpExecArray | null;
   while ((match = regex.exec(html)) !== null) {
     const level = Number(match[1]) as 2 | 3;
-    const text = match[2].replace(/<[^>]+>/g, '').trim();
+    const text = match[3].replace(/<[^>]+>/g, '').trim();
     if (!text) continue;
-    headings.push({ id: slugifyHeading(text), text, level });
+    /* Prefer the id actually on the heading. injectHeadingIds leaves authored
+       ids alone, so re-slugifying from text here produced TOC links aimed at
+       ids that never existed - every jump link on an authored-id article was
+       dead until this matched. */
+    const attrId = /\bid=["']([^"']+)["']/.exec(match[2])?.[1];
+    headings.push({ id: attrId ?? slugifyHeading(text), text, level });
   }
   return headings;
 }
