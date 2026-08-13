@@ -48,7 +48,7 @@ ADMIN_EMAILS = "webiq.co@gmail.com,info@webiq.co,hello@boisecabinet.co,hello@boi
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY = "pk_live_51LGm9XKmgtIDVx8lrH27gaoWAdwf1F0O7Gxx2RkNqICfBvPslxV7IJCdufiFDHnNxaCKgr3IcOZokNdmNaxy3z6z000ipOzjOv"
 NODE_OPTIONS = "--max-old-space-size=1536"
 NEXT_PUBLIC_GA_MEASUREMENT_ID = "G-VTVTQZ8JCD"
-NEXT_PUBLIC_META_PIXEL_ID = "2461987544292871"
+NEXT_PUBLIC_META_PIXEL_ID = "925837669911613"
 
 [postMerge]
 path = "scripts/post-merge.sh"
