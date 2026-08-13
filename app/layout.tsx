@@ -58,6 +58,18 @@ export const metadata: Metadata = {
   },
   authors: [{ name: SITE_CONFIG.name }],
   creator: SITE_CONFIG.name,
+  /*
+   * Bing Webmaster Tools site verification.
+   *
+   * Kept here rather than as a one-off file in public/ so it travels with the
+   * rest of the head metadata and survives a rebuild. Bing re-checks this tag
+   * periodically, not just once: removing it after verification succeeds
+   * un-verifies the site, which is why it is a permanent part of the layout
+   * rather than something to clean up later.
+   */
+  verification: {
+    other: { 'msvalidate.01': '3AE4F733FD62C188FB58F0DD6F2C8D23' },
+  },
   metadataBase: new URL(SITE_CONFIG.siteUrl),
   // Favicon set built from the approved small-size brand icon (ochre field, the
   // script "C" initial), the mark the brand kit specifies for favicons and app
