@@ -5,8 +5,8 @@
  */
 
 export const SITE_IMAGES = {
-  /** Homepage hero - great room with kitchen visible; distinct from whole-home after. */
-  hero: "/images/hero-great-room.webp",
+  /** Homepage hero - modern farmhouse exterior at dusk (owner-supplied photo). */
+  hero: "/images/hero-custom-home.webp",
   /** Design-build / plan review split panels. */
   process: "/images/process-design-review.webp",
   /** "Where your money goes" value band - a carpenter setting custom cabinetry,
