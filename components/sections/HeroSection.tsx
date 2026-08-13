@@ -76,7 +76,7 @@ export function HeroSection() {
                   confidence") almost word for word - the same company with a noun
                   swapped, which is the resemblance the repositioning has to lose. */}
               <h1 className="font-sans font-light text-inverse-foreground text-display tracking-tight mb-6">
-                Your Boise custom home,{" "}
+                Your Boise custom home builder,{" "}
                 <em className="brc-accent">from bare lot to the keys</em>.
               </h1>
               {/* Full opacity, not /90: over the lightened scrim the subhead
