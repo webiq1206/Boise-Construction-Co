@@ -1,6 +1,26 @@
 import Script from 'next/script';
 
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID ?? '2461987544292871';
+/**
+ * Meta dataset "Boise Construction Co" (925837669911613).
+ *
+ * This used to default to 2461987544292871, which is the "Boise Remodeling Co"
+ * dataset - the third and last of the analytics identifiers this site
+ * inherited when it was duplicated from boiseremodeling.co, after GA4 and
+ * Clarity. Confirmed in Events Manager: that dataset is named "Boise
+ * Remodeling Co", lists boiseremodeling.co among its websites, and was still
+ * receiving PageView events from here.
+ *
+ * A dataset ID is public (it ships in the page source), so a literal default
+ * is safe; the bug was that the literal named someone else's dataset.
+ *
+ * THE SERVER SIDE MUST MATCH. app/api/meta-capi/route.ts falls back to this
+ * same env var for its dataset id, and its META_CAPI_ACCESS_TOKEN is scoped to
+ * a specific dataset. Changing the pixel without reissuing that token sends
+ * browser events to the new dataset while server events keep going to the old
+ * one - worse than either, because the two halves of the same conversion land
+ * in different places and deduplication silently stops working.
+ */
+const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID ?? '925837669911613';
 
 /**
  * Loads the Meta (Facebook) Pixel with strategy="afterInteractive" so the
