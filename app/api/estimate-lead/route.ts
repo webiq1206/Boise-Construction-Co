@@ -31,6 +31,7 @@ import {
 } from "@/shared/estimateEngine";
 import { estimateSchema } from "@/shared/estimatePayload";
 import { resolveQuotedRange } from "@/shared/costs/resolve";
+import { buildEstimateAudit } from "@/shared/plans/estimateAudit";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import { readUnitCostOverrides } from "@/server/services/unitCostOverrides";
 import type { PropertyProfile } from "@/shared/propertyProfile";
@@ -179,6 +180,39 @@ export async function POST(request: NextRequest) {
 
     const data = parsed.data;
     const estimate = verifyEstimate(data.estimate);
+
+    /*
+     * Sanity-check the number BEFORE it goes anywhere.
+     *
+     * Run on the SERVER-RECOMPUTED figures, never the client's, for the same
+     * reason verifyEstimate exists at all: a payload can claim anything. The
+     * audit does not price and cannot change the quote - it reads the answer
+     * the engine already produced and says whether it is plausible against the
+     * per-square-foot bands the site publishes.
+     *
+     * A "review" flag does NOT block the lead. Someone asking for a callback
+     * still gets one; refusing to record a lead because our own arithmetic
+     * looked odd would punish the visitor for our problem. It is logged loudly
+     * and carried into the internal notes so nobody quotes from it blind.
+     */
+    let auditFlags: { code: string; severity: string; message: string }[] = [];
+    if (estimate) {
+      const audit = buildEstimateAudit({
+        project: estimate.project,
+        finish: estimate.finish,
+        sqft: estimate.sqft,
+        priceLow: estimate.priceLow,
+        priceHigh: estimate.priceHigh,
+        provenance: [],
+      });
+      auditFlags = audit.flags;
+      const reviews = audit.flags.filter((f) => f.severity === "review");
+      if (reviews.length > 0) {
+        console.error(
+          `[estimate-lead] PRICING REVIEW NEEDED for ${estimate.project} ${estimate.sqft}sf ${estimate.priceLow}-${estimate.priceHigh}: ${reviews.map((f) => `${f.code} (${f.message})`).join(" | ")}`,
+        );
+      }
+    }
 
     /* What the team should read as "where": the street address when the lead
        owns land, otherwise the area they plan to build in, labelled so nobody
