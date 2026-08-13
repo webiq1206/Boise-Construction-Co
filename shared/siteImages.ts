@@ -5,8 +5,9 @@
  */
 
 export const SITE_IMAGES = {
-  /** Homepage hero - modern farmhouse exterior at dusk (owner-supplied photo). */
-  hero: "/images/hero-custom-home.webp",
+  /** Homepage hero - modern farmhouse exterior at golden hour; same photo the
+      Custom Home Building service card uses (owner picked it for the hero). */
+  hero: "/images/construction/custom-home-exterior.webp",
   /** Design-build / plan review split panels. */
   process: "/images/process-design-review.webp",
   /** "Where your money goes" value band - a carpenter setting custom cabinetry,
