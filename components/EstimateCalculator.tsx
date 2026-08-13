@@ -770,6 +770,25 @@ export function EstimateCalculator({
      value silently changing under someone is alarming; each rewrite is stated
      back so nothing moves without being called out. */
   const [planChanged, setPlanChanged] = useState<string[]>([]);
+  /* The server's verdict on whether a plan-derived estimate may be treated as
+     final, plus the questions that would unblock it. Decided server-side and
+     only rendered here: the browser must not be able to talk itself into
+     finalizing a set the server judged incomplete. Null means no documents
+     were used, which is the ordinary estimator path and is never gated. */
+  const [planGate, setPlanGate] = useState<{
+    canFinalize: boolean;
+    blockers: { code: string; severity: "block" | "warn"; message: string }[];
+    questions: { id: string; question: string; why: string }[];
+  } | null>(null);
+  /** Per-sheet coverage, so we can say "112 of 118 sheets read" rather than imply all. */
+  const [planCoverage, setPlanCoverage] = useState<{
+    totalPages: number;
+    processed: number;
+    unreadable: number;
+    missing: number;
+    complete: boolean;
+    attention: { sheet: string; status: string; reason?: string }[];
+  } | null>(null);
   /* Which questions the drawings answered. Those steps collapse into a
      one-line "from your plans" summary with an Edit affordance rather than
      re-asking; editing clears the mark and hands authority back to the
@@ -1269,6 +1288,12 @@ export function EstimateCalculator({
       }
 
       const plan = data.plan as ExtractedPlan;
+
+      /* Captured BEFORE the remodel bail-out below, because a set that stops
+         early still has coverage worth showing: "we read 118 sheets and they
+         describe a remodel" is a very different message from silence. */
+      if (data.gate) setPlanGate(data.gate as typeof planGate);
+      if (data.coverage) setPlanCoverage(data.coverage as typeof planCoverage);
 
       /* A remodel set read as a new build would price an entire house the
          client never asked for, so this stops rather than applying anything. */
@@ -3776,6 +3801,53 @@ export function EstimateCalculator({
               </ul>
             </div>
           )}
+          {/* Sheet-level coverage. Stated whenever documents were read, not
+              only when something went wrong: "118 of 118 sheets" is the claim
+              that makes "112 of 118" believable when it happens. */}
+          {planCoverage && planCoverage.totalPages > 0 && (
+            <p className="mt-3 text-[12px] text-inverse-muted" data-testid="calc-plan-coverage">
+              {planCoverage.processed} of {planCoverage.totalPages} sheet
+              {planCoverage.totalPages === 1 ? "" : "s"} read
+              {planCoverage.complete ? "." : `, ${planCoverage.missing + planCoverage.unreadable} not readable.`}
+            </p>
+          )}
+
+          {/* A blocked estimate says so plainly and says what would unblock it.
+              Deliberately not styled as an error: nothing has gone wrong, we
+              simply will not price scope we have not seen. */}
+          {planGate && !planGate.canFinalize && (
+            <div
+              className="mt-3 rounded-sm border border-accent-legible/50 bg-accent/15 px-3 py-2.5"
+              data-testid="calc-plan-gate"
+            >
+              <p className="text-[12px] uppercase tracking-[0.12em] text-accent-legible mb-1.5">
+                Needs a quick confirmation before we price it
+              </p>
+              <ul className="space-y-1">
+                {planGate.blockers
+                  .filter((b) => b.severity === "block")
+                  .map((b) => (
+                    <li key={b.code} className="text-[13px] text-inverse-foreground">
+                      {b.message}
+                    </li>
+                  ))}
+              </ul>
+              {planGate.questions.length > 0 && (
+                <ul className="mt-2.5 space-y-1.5 border-t border-accent-legible/25 pt-2.5">
+                  {planGate.questions.map((q) => (
+                    <li key={q.id} className="text-[13px] text-inverse-foreground">
+                      {q.question}
+                      <span className="block text-[12px] text-inverse-muted">{q.why}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <p className="mt-2.5 text-[12px] text-inverse-muted">
+                You can still continue and see a range - it will be marked provisional until these are settled.
+              </p>
+            </div>
+          )}
+
           <p className="mt-2.5 text-[12px] text-inverse-muted">
             Review what we filled in, then continue below -- anything the plans
             answered shows as pre-filled with an Edit link, and everything is

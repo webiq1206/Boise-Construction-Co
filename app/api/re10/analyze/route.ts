@@ -8,6 +8,7 @@ import {
   READABLE_FORMATS_LABEL,
 } from "@/shared/re10/uploads";
 import { uploadFile } from "@/lib/storage/blob";
+import { summarizeCoverage } from "@/server/services/documents/coverage";
 import { randomUUID } from "crypto";
 
 /**
@@ -151,11 +152,31 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  console.log(
+    `[re10/analyze] batch=${batch} ${summarizeCoverage(outcome.coverage)}; repairs=${outcome.result.repairs.length}; dupes-removed=${outcome.duplicatesRemoved.length}; possible-dupes=${outcome.possibleDuplicates.length}; qty-conflicts=${outcome.quantityConflicts.length}`,
+  );
+
   return NextResponse.json({
     batch,
     stored,
     // Named back so nobody believes a file was analysed when it was only filed.
     attachedOnly,
     ...outcome.result,
+    coverage: {
+      totalPages: outcome.coverage.totalPages,
+      processed: outcome.coverage.processed,
+      unreadable: outcome.coverage.unreadable,
+      missing: outcome.coverage.missing,
+      complete: outcome.coverage.complete,
+      attention: outcome.coverage.pages
+        .filter((p) => p.status !== "processed")
+        .map((p) => ({ page: `${p.filename} p.${p.pageNumber}`, status: p.status, reason: p.reason })),
+    },
+    /* Surfaced, not hidden. A repair kept because it MIGHT restate another, and
+       a count that differed between pages, are both things an estimator must
+       lay eyes on before the number goes out - silently resolving either is how
+       a quote ends up double-counting work or missing it. */
+    possibleDuplicates: outcome.possibleDuplicates,
+    quantityConflicts: outcome.quantityConflicts,
   });
 }

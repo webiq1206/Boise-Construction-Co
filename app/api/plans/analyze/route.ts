@@ -9,6 +9,7 @@ import {
 } from "@/shared/re10/uploads";
 import { uploadFile } from "@/lib/storage/blob";
 import { summarizeCoverage } from "@/server/services/documents/coverage";
+import { gatePlanEstimate } from "@/shared/plans/gating";
 import { randomUUID } from "crypto";
 
 /**
@@ -168,7 +169,26 @@ export async function POST(request: NextRequest) {
     `[plans/analyze] batch=${batch} ${summarizeCoverage(outcome.coverage)}; conflicts=${outcome.conflicts.length}; provenance=${JSON.stringify(outcome.provenance)}`,
   );
 
+  /* Decided on the SERVER so the answer is authoritative. The client renders
+     the blockers and questions, but it does not get to decide whether a set it
+     dislikes the look of is finalizable - that call is made once, here, from
+     the same coverage and conflict data the audit trail was written from. */
+  const gate = gatePlanEstimate({
+    plan: outcome.result,
+    coverage: outcome.coverage,
+    conflicts: outcome.conflicts,
+  });
+  if (!gate.canFinalize) {
+    console.log(
+      `[plans/analyze] batch=${batch} NOT FINALIZABLE: ${gate.blockers
+        .filter((b) => b.severity === "block")
+        .map((b) => b.code)
+        .join(", ")}`,
+    );
+  }
+
   return NextResponse.json({
+    gate,
     batch,
     stored,
     // Named back so nobody believes a file was read when it was only filed.
