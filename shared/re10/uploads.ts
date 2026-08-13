@@ -18,6 +18,27 @@
 export const MAX_UPLOAD_FILES = 12;
 export const MAX_TOTAL_UPLOAD_BYTES = 24 * 1024 * 1024;
 
+/**
+ * Plan sets get their own, much larger ceiling.
+ *
+ * WHY NOT JUST RAISE THE SHARED ONE. The RE-10 path still sends its whole
+ * upload to the model in a single request, so its ceiling is bounded by the
+ * API's 32MB request limit and raising it would only convert a clear "too
+ * large" message into an opaque API error. The plan path no longer works that
+ * way: it splits an upload into single pages and reads them in bounded passes,
+ * so its real limits are the HTTP body and process memory, not one request.
+ *
+ * 96MB covers essentially every vector permit set (a 200-sheet architectural
+ * PDF is typically 10-40MB) and a good share of scanned ones. Beyond that the
+ * blocker is no longer the model but the upload itself: buffering the body and
+ * then holding one PDF per page costs roughly twice the upload in memory, and
+ * a browser POSTing hundreds of megabytes over a domestic connection fails for
+ * its own reasons. Sets larger than this want direct-to-storage upload, which
+ * is a different piece of plumbing rather than a bigger number here.
+ */
+export const MAX_PLAN_UPLOAD_BYTES = 96 * 1024 * 1024;
+export const MAX_PLAN_UPLOAD_FILES = 30;
+
 /** Types the extractor can send to the model: PDF and the four image formats. */
 const READABLE_MIME = new Set([
   "application/pdf",

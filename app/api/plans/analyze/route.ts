@@ -3,11 +3,12 @@ import { extractPlan, isPlanExtractionConfigured, type PlanExtractionInput } fro
 import {
   classifyUpload,
   resolveMimeType,
-  MAX_UPLOAD_FILES,
-  MAX_TOTAL_UPLOAD_BYTES,
+  MAX_PLAN_UPLOAD_FILES,
+  MAX_PLAN_UPLOAD_BYTES,
   READABLE_FORMATS_LABEL,
 } from "@/shared/re10/uploads";
 import { uploadFile } from "@/lib/storage/blob";
+import { summarizeCoverage } from "@/server/services/documents/coverage";
 import { randomUUID } from "crypto";
 
 /**
@@ -61,9 +62,9 @@ export async function POST(request: NextRequest) {
   if (uploaded.length === 0) {
     return NextResponse.json({ error: "failed", message: "No files were attached." }, { status: 400 });
   }
-  if (uploaded.length > MAX_UPLOAD_FILES) {
+  if (uploaded.length > MAX_PLAN_UPLOAD_FILES) {
     return NextResponse.json(
-      { error: "failed", message: `Please send at most ${MAX_UPLOAD_FILES} files at a time.` },
+      { error: "failed", message: `Please send at most ${MAX_PLAN_UPLOAD_FILES} files at a time.` },
       { status: 400 },
     );
   }
@@ -79,13 +80,25 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  /*
+   * PAGE COUNT IS NO LONGER THE PROBLEM, SIZE STILL IS.
+   *
+   * This used to cap at 24MB and tell people to send the cover sheet and floor
+   * plans instead, because the extractor read an entire upload in one request.
+   * It now reads page by page, so a 150-sheet set is simply more passes and the
+   * old advice would actively throw away scope we can now capture.
+   *
+   * What remains bounded is the upload itself: the body is buffered and then
+   * held as one PDF per page. So the ceiling is about memory and HTTP, and the
+   * message says so rather than implying the sheets do not matter.
+   */
   const total = uploaded.reduce((sum, f) => sum + f.size, 0);
-  if (total > MAX_TOTAL_UPLOAD_BYTES) {
+  if (total > MAX_PLAN_UPLOAD_BYTES) {
+    const mb = Math.round(MAX_PLAN_UPLOAD_BYTES / (1024 * 1024));
     return NextResponse.json(
       {
         error: "failed",
-        message:
-          "That plan set is too large. The cover sheet and floor plans are usually enough - the structural and detail sheets rarely change a budget.",
+        message: `That upload is over ${mb}MB, which is more than we can take in one go. Send it in a couple of batches - we read every sheet either way - or email the set over and we will load it ourselves.`,
       },
       { status: 400 },
     );
@@ -146,11 +159,38 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  /* The audit trail is logged, not returned: provenance names internal sheet
+     ids and is for the team reconstructing how a number was reached, not for
+     the visitor's browser. Coverage and conflicts DO go back, because the UI
+     has to be able to say "we could not read 4 of your 118 sheets" and to stop
+     an estimate being treated as final when it should not be. */
+  console.log(
+    `[plans/analyze] batch=${batch} ${summarizeCoverage(outcome.coverage)}; conflicts=${outcome.conflicts.length}; provenance=${JSON.stringify(outcome.provenance)}`,
+  );
+
   return NextResponse.json({
     batch,
     stored,
     // Named back so nobody believes a file was read when it was only filed.
     attachedOnly,
     plan: outcome.result,
+    coverage: {
+      totalPages: outcome.coverage.totalPages,
+      processed: outcome.coverage.processed,
+      unreadable: outcome.coverage.unreadable,
+      missing: outcome.coverage.missing,
+      complete: outcome.coverage.complete,
+      /* Only the pages needing attention are sent. A clean 200-sheet set would
+         otherwise ship 200 redundant "processed" rows to the browser. */
+      attention: outcome.coverage.pages
+        .filter((p) => p.status !== "processed")
+        .map((p) => ({
+          sheet: `${p.filename} p.${p.pageNumber}`,
+          status: p.status,
+          reason: p.reason,
+        })),
+      skippedFiles: outcome.coverage.skippedFiles,
+    },
+    conflicts: outcome.conflicts,
   });
 }
