@@ -734,11 +734,44 @@ export function buildPropertyRows(
  * details, the lead's note, property enrichment, and one-click reply/call
  * affordances. The send layer sets Reply-To to the lead (see formatLeadReplyTo).
  */
+/**
+ * Pricing checks that need a human before anyone quotes from this range.
+ *
+ * ADMIN EMAIL ONLY, and placed ABOVE the numbers on purpose. A flag buried
+ * under the estimate is a flag read after the estimator has already anchored
+ * on the total. These were previously written to the server log, which is a
+ * place nobody looks before returning a call.
+ *
+ * Renders nothing when there is nothing to say. An advisory box that appears
+ * on every lead is one people stop seeing, and the whole value of this block
+ * is that its presence means something.
+ */
+function buildPricingFlagsHtml(flags: { code: string; severity: string; message: string }[]): string {
+  if (!flags || flags.length === 0) return "";
+  const review = flags.filter((f) => f.severity === "review");
+  const warn = flags.filter((f) => f.severity !== "review");
+  const rows = [...review, ...warn]
+    .map(
+      (f) =>
+        `<li style="margin:0 0 6px;color:${EMAIL_BRAND.text};line-height:1.5;"><strong>${f.severity === "review" ? "Check" : "Note"}:</strong> ${escapeHtml(f.message)}</li>`,
+    )
+    .join("");
+
+  return `
+      <div style="background:${EMAIL_BRAND.raised};border-left:3px solid ${EMAIL_BRAND.accent};padding:20px;margin:24px 0;border-radius:4px;">
+        <p style="margin:0 0 10px;font-weight:400;color:${EMAIL_BRAND.text};">
+          ${review.length > 0 ? "Review this range before quoting" : "Worth a glance before quoting"}
+        </p>
+        <ul style="margin:0;padding-left:18px;">${rows}</ul>
+      </div>`;
+}
+
 export function buildAdminEmailHtml(
   lead: LeadContact,
   estimate: VerifiedEstimate | null,
   profile?: PropertyEnrichment | null,
-  overrides?: UnitCostOverrides
+  overrides?: UnitCostOverrides,
+  pricingFlags?: { code: string; severity: string; message: string }[]
 ): string {
   const firstName = firstNameOf(lead.name);
   const telHref = telHrefOf(lead.phone);
@@ -780,6 +813,8 @@ export function buildAdminEmailHtml(
           ${lead.budget ? `<tr><td style="${LABEL_CELL}">Desired budget</td><td style="${VALUE_CELL};font-weight:600;">${escapeHtml(lead.budget)}</td></tr>` : ""}
         </table>
       </div>
+
+      ${buildPricingFlagsHtml(pricingFlags ?? [])}
 
       ${
         estimate

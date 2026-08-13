@@ -345,7 +345,7 @@ export async function POST(request: NextRequest) {
       // the admin email cannot quote different unit costs than the panel that
       // set them. Was omitted here while the sibling consultation route passed
       // them, which made the two lead paths disagree.
-      const adminHtml = buildAdminEmailHtml(lead, estimate, crmProfile, unitCostOverrides);
+      const adminHtml = buildAdminEmailHtml(lead, estimate, crmProfile, unitCostOverrides, auditFlags);
       const adminEmails = await getAdminRecipientEmails(SITE_CONFIG.email);
       for (const adminEmail of adminEmails) {
         const adminResult = await client.emails.send({
