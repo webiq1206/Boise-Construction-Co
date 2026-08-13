@@ -19,9 +19,10 @@ export function ValueOverheadSection() {
           <Reveal>
             <div className="brc-label mb-6">{VALUE_MODEL.eyebrow}</div>
             <h2 className="font-sans font-light text-[2rem] md:text-[3rem] lg:text-[3.25rem] leading-[1.06] tracking-tight text-foreground">
-              {VALUE_MODEL.headlineA}
-              <br />
-              {VALUE_MODEL.headlineB}{" "}
+              {/* No forced <br />: the hard break stacked awkwardly with the
+                  browser's own wrapping at narrow widths ("where" stranded on
+                  its own line). Let the text wrap naturally instead. */}
+              {VALUE_MODEL.headlineA} {VALUE_MODEL.headlineB}{" "}
               <em className="brc-accent">{VALUE_MODEL.accentWord}</em>.
             </h2>
 
