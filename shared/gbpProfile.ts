@@ -71,13 +71,21 @@ export const GBP_LINKS = {
  * where a wrong URL actively misidentifies the business to search engines, so
  * they must point at profiles that genuinely belong to the company.
  *
- * NEEDS OWNER CONFIRMATION: these still use the legacy `boiseremodeling`
- * handles. If the profiles are renamed as part of the rebrand, update both
- * URLs here and nowhere else - the footer and schema both read from this.
+ * RESOLVED 2026-08-14. This previously held the legacy `boiseremodeling`
+ * handles, carried over when this site was duplicated from that one - the same
+ * inheritance that sent GA4, Clarity and the Meta Pixel to the remodeling
+ * company. Here the damage was subtler but the same in kind: `sameAs` is a
+ * direct statement to search engines that this business IS that profile, so
+ * the schema was telling Google the construction company and the remodeling
+ * company were one entity.
+ *
+ * Owner confirmed this Facebook page is the only social channel that currently
+ * belongs to Boise Construction Co. Instagram is deliberately absent rather
+ * than left pointing somewhere wrong: no entry is neutral, a wrong entry is a
+ * false claim. Add it here (and nowhere else) if an account is created.
  */
 export const GBP_SOCIAL = {
-  facebook: 'https://www.facebook.com/boiseremodeling',
-  instagram: 'https://www.instagram.com/boiseremodeling',
+  facebook: 'https://www.facebook.com/profile.php?id=61592885025074',
 } as const;
 
 export const GBP_ATTRIBUTES = {
