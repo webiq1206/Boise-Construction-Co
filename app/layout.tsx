@@ -67,7 +67,25 @@ export const metadata: Metadata = {
    * un-verifies the site, which is why it is a permanent part of the layout
    * rather than something to clean up later.
    */
+  /*
+   * Search engine site verification.
+   *
+   * Both live here rather than as loose files in public/ so they travel with
+   * the head metadata and survive rebuilds. Both engines RE-CHECK their tag
+   * periodically, not just once, so removing either un-verifies the site -
+   * these are permanent, not scaffolding.
+   *
+   * Google's own recommendation is to verify via the Analytics snippet, and
+   * that was tried first. It FAILS here, and the failure is correct: the
+   * verifier requires the gtag snippet inside <head> of the served HTML,
+   * while components/GoogleAnalytics.tsx loads it with next/script
+   * strategy="lazyOnload" specifically to keep ~150KB off the mobile critical
+   * path. Moving it into <head> would trade a real Speed Index / LCP win for
+   * a one-off verification convenience, so the meta tag is used instead and
+   * the loading strategy is left alone.
+   */
   verification: {
+    google: 'KraqWG0Ul9yeBBH4NNL2UGMhkKK7-b-tYo9uvs4DT9I',
     other: { 'msvalidate.01': '3AE4F733FD62C188FB58F0DD6F2C8D23' },
   },
   metadataBase: new URL(SITE_CONFIG.siteUrl),
