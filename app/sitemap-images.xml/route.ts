@@ -2,6 +2,7 @@ import { BLOG_POSTS } from '@/shared/blogContent';
 import { GUIDE_PAGES } from '@/shared/guideContent';
 import { GALLERY_PROJECTS } from '@/shared/galleryData';
 import { guidePath } from '@/shared/contentHubs';
+import { getBlogHeroImage, getBlogImageAlt } from '@/shared/blogImages';
 import { getBaseUrl } from '@/lib/seo';
 
 /**
@@ -12,6 +13,17 @@ import { getBaseUrl } from '@/lib/seo';
  *
  * Only images that genuinely appear on the referenced page are listed, and each
  * page appears exactly once with its images nested, per the sitemap spec.
+ *
+ * Hero images MUST be resolved through getBlogHeroImage(), not read off
+ * post.heroImage / guide.heroImage directly. Those fields are optional
+ * per-item OVERRIDES and are currently unset on all 52 posts and guides; the
+ * image each page actually renders comes from BLOG_IMAGE_REGISTRY, keyed by
+ * slug. Reading the raw field skipped every single entry, which is how this
+ * sitemap shipped as an empty <urlset> - it served HTTP 200 with valid XML, so
+ * nothing failed loudly, and Google Search Console reported only "Couldn't
+ * fetch" against 0 discovered pages. app/blog/[slug] and app/guides/[slug]
+ * both call the resolver, so going through it is also what keeps the sitemap
+ * agreeing with the rendered page and with the Article schema's `image`.
  */
 export const dynamic = 'force-static';
 
@@ -64,20 +76,21 @@ export async function GET() {
   }
 
   for (const guide of GUIDE_PAGES) {
-    if (!guide.heroImage) continue;
     add(`${baseUrl}${guidePath(guide.slug)}`, {
-      loc: absolute(guide.heroImage, baseUrl),
+      loc: absolute(getBlogHeroImage(guide.slug, guide.heroImage), baseUrl),
       title: guide.title,
-      caption: guide.excerpt,
+      // The registry alt describes the photograph; the excerpt describes the
+      // article. <image:caption> is about the image, so the alt text is the
+      // honest value here and the one already shown to assistive tech.
+      caption: getBlogImageAlt(guide.slug),
     });
   }
 
   for (const post of BLOG_POSTS) {
-    if (!post.heroImage) continue;
     add(`${baseUrl}/blog/${post.slug}`, {
-      loc: absolute(post.heroImage, baseUrl),
+      loc: absolute(getBlogHeroImage(post.slug, post.heroImage), baseUrl),
       title: post.title,
-      caption: post.excerpt,
+      caption: getBlogImageAlt(post.slug),
     });
   }
 
