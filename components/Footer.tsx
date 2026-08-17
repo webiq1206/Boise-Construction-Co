@@ -306,6 +306,17 @@ export function Footer() {
           <div className="flex flex-wrap gap-4">
             <span>&copy; {currentYear} {SITE_CONFIG.name}. All rights reserved.</span>
             <span>License details available upon request</span>
+            <span>
+              Built by{" "}
+              <a
+                href="https://webiq.co"
+                target="_blank"
+                rel="noopener"
+                className="underline underline-offset-2 transition-colors hover:text-inverse-foreground"
+              >
+                webIQ
+              </a>
+            </span>
           </div>
           <div className="flex gap-4">
             <Link href="/privacy-policy" className="transition-colors hover:text-inverse-foreground">
