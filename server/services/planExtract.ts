@@ -93,7 +93,25 @@ function pageLabel(filename: string, pageNumber: number): string {
  * The per-chunk schema: the plan fields, plus the page accounting that makes
  * coverage checkable. pagesRead is REQUIRED so a pass cannot omit it and leave
  * coverage ambiguous; a pass that read nothing must say so with an empty array.
+ *
+ * DELIVERED AS A TOOL, NOT AS output_config.format.
+ *
+ * This used to go out as `output_config: { format: { type: "json_schema" } }`
+ * and the API rejected it outright: 400 invalid_request_error, "Schema is too
+ * complex." Every plan upload therefore failed - not slowly, not partially, but
+ * every single one, and the failure surfaced to the visitor as the generic "We
+ * could not read that plan set", which reads like a problem with their
+ * drawings. Measured, not guessed: the base schema alone was refused, and even
+ * the trimmed variants that were accepted took 30-60 SECONDS just to compile,
+ * which is unusable when a 200-sheet set makes ~50 of these calls.
+ *
+ * The same schema passed as a tool's input_schema is accepted and returns in
+ * ~6 seconds. `additionalProperties: false` is dropped because the tool
+ * compiler does not need it and it was part of what made the constraint
+ * expensive; unknown keys are harmless here since every field is read by name.
  */
+export const PLAN_TOOL_NAME = "report_sheets";
+
 function buildChunkSchema(): Record<string, unknown> {
   const base = PLAN_EXTRACTION_SCHEMA as unknown as {
     properties: Record<string, unknown>;
@@ -124,8 +142,20 @@ function buildChunkSchema(): Record<string, unknown> {
       },
     },
     required: [...base.required, "pagesRead", "pagesUnreadable"],
-    additionalProperties: false,
   };
+}
+
+
+/** The tool call every pass is forced to make, so a pass cannot answer in prose. */
+function planTool(schema: Record<string, unknown>): Anthropic.Messages.ToolUnion[] {
+  return [
+    {
+      name: PLAN_TOOL_NAME,
+      description:
+        "Report exactly what the supplied sheets state about the project. Leave anything the sheets do not state unset.",
+      input_schema: schema as Anthropic.Messages.Tool.InputSchema,
+    },
+  ];
 }
 
 const CHUNK_SYSTEM_PROMPT = `${PLAN_EXTRACTION_SYSTEM_PROMPT}
@@ -138,7 +168,114 @@ You are reading ONE BATCH of sheets from a larger plan set, not the whole set.
 - Each sheet is introduced by a line reading "PAGE ID: <id>". List every id you genuinely examined in pagesRead, using the id exactly as given.
 - If a sheet will not render, is blank, or is too degraded to read, put it in pagesUnreadable with a short reason instead of silently ignoring it. A sheet nobody reports on becomes a hole in the estimate, so saying "I could not read this" is far more useful than saying nothing.
 - Scanned, photographed, and hand-annotated sheets are normal. Read handwriting, redlines, and stamps as carefully as printed text, and say so in notes when a figure is handwritten rather than printed.
-- Do not carry a figure over from a previous batch. You have not seen one.`;
+- Do not carry a figure over from a previous batch. You have not seen one.
+
+READING SCANNED SHEETS ACCURATELY
+
+Most large sets arrive as scans, not vector PDFs. Read them the way a takeoff estimator does, not the way a search engine does:
+
+- Start at the TITLE BLOCK. Sheet number, sheet name, discipline, scale and revision date are the sheet's identity; quote the sheet number in notes when a figure comes from a drawing rather than a schedule.
+- SCHEDULES ARE THE HIGHEST-VALUE CONTENT on a set. Door, window, finish, fixture, equipment and casework schedules state quantities and sizes explicitly. When a schedule spans two sheets, read both halves before reporting a count.
+- Read DIMENSION STRINGS and the numbers on them, not just the shapes. A dimension you cannot resolve is a null, never a guess from the apparent geometry.
+- Note the SCALE and never infer a measurement by eye from a scaled drawing. Report what is written.
+- KEYNOTES AND LEGENDS carry material and assembly information that the plan view only references by symbol. Resolve the symbol before reporting the material.
+- Handwriting, redlines, clouds and stamps are real content. Read them as carefully as printed text and say in notes when a figure is handwritten or clouded as revised.
+- If a sheet is skewed, low-contrast, or cut off, say so in pagesUnreadable rather than reporting a half-read figure. A named gap is useful; a confident wrong number is not.`;
+
+/**
+ * Fold the customer's own instruction into the pass.
+ *
+ * WHY IT GOES IN THE SYSTEM PROMPT AND NOT A USER TURN. The instruction has to
+ * survive every one of a 200-sheet set's passes identically, and a user-turn
+ * instruction competes with the sheets for attention in a way a standing rule
+ * does not. It is quoted rather than paraphrased so the model is steered by
+ * what the customer actually wrote.
+ *
+ * IT STEERS, IT DOES NOT OVERRIDE. "Millwork only" should make the pass report
+ * casework thoroughly and skip the roof assembly - it must not license
+ * inventing a millwork figure the sheets never stated, and it must not stop the
+ * page accounting. Those two rules are restated here because a scope
+ * instruction is exactly the kind of prompt that quietly erodes them.
+ */
+function buildChunkSystemPrompt(instructions?: string | null): string {
+  const trimmed = (instructions ?? "").trim();
+  if (!trimmed) return CHUNK_SYSTEM_PROMPT;
+  return `${CHUNK_SYSTEM_PROMPT}
+
+WHAT THE CUSTOMER ASKED FOR
+
+The customer sent these drawings with a specific request:
+
+"""
+${trimmed}
+"""
+
+Let that request decide WHERE YOU SPEND YOUR ATTENTION on these sheets - which schedules you read closely, which details matter, and what belongs in notes. Record what they asked about in the notes field so the team sees it against the sheets it came from.
+
+Three things it does NOT change:
+- Never state a figure the sheets do not state. A narrower scope is not permission to estimate; it is permission to ignore what is out of scope.
+- Still report pagesRead and pagesUnreadable for every sheet in this batch. Scope narrows what you EXTRACT, never what you ACCOUNT FOR.
+- Still record any figure that scales the whole project (overall area, storeys, unit count) if a sheet states it, even when it sits outside the request. Those numbers are how the rest of the estimate stays sane.`;
+}
+
+
+/**
+ * Coerce a pass's answer into the shapes the merge actually expects.
+ *
+ * WHY THIS IS NOT PARANOIA. A tool's input_schema is a strong hint, not a
+ * validator: on a real 4-sheet batch the model returned `notes` as ONE STRING
+ * where the schema declares string[]. Downstream that is not a cosmetic
+ * problem - mergeChunks does `[...plan.notes]`, and spreading a string yields
+ * an array of single CHARACTERS, so a builder's estimate would have carried a
+ * few hundred one-letter notes.
+ *
+ * Everything here is shape-only. A string becomes a one-item array; a number
+ * that arrived as "11,326" becomes 11326; anything genuinely absent stays
+ * absent. Nothing is invented, because a field the sheets never stated must
+ * still come back null - that discipline is the whole reason this extractor is
+ * worth trusting.
+ */
+function normalizeChunkPlan<T extends Record<string, unknown>>(parsed: T): T {
+  const out: Record<string, unknown> = { ...parsed };
+
+  const asArray = (v: unknown): unknown[] | undefined => {
+    if (v === null || v === undefined) return undefined;
+    if (Array.isArray(v)) return v;
+    return [v];
+  };
+
+  for (const key of ["rooms", "specialFeatures", "notes"]) {
+    const arr = asArray(out[key]);
+    if (arr) out[key] = arr.filter((x) => typeof x === "string" && x.trim().length > 0);
+  }
+
+  for (const key of ["floorAreas"]) {
+    const arr = asArray(out[key]);
+    if (arr) {
+      out[key] = arr
+        .map((x) => (typeof x === "number" ? x : Number(String(x).replace(/[^0-9.]/g, ""))))
+        .filter((n) => Number.isFinite(n) && n > 0);
+    }
+  }
+
+  const structures = asArray(out.accessoryStructures);
+  if (structures) {
+    out.accessoryStructures = structures.filter((x) => x !== null && typeof x === "object");
+  }
+
+  for (const key of ["pagesRead"]) {
+    const arr = asArray(out[key]);
+    out[key] = (arr ?? []).filter((x) => typeof x === "string");
+  }
+
+  const unreadable = asArray(out.pagesUnreadable);
+  out.pagesUnreadable = (unreadable ?? []).filter(
+    (x): x is { id: string; reason: string } =>
+      Boolean(x) && typeof x === "object" && typeof (x as { id?: unknown }).id === "string",
+  );
+
+  return out as T;
+}
 
 function buildChunkContent(chunk: PageChunk): Anthropic.ContentBlockParam[] {
   const blocks: Anthropic.ContentBlockParam[] = [];
@@ -202,7 +339,10 @@ function classifyError(err: unknown): { reason: PlanExtractionFailure; message: 
   return { reason: "failed", message: "That batch of sheets could not be read." };
 }
 
-export async function extractPlan(files: PlanExtractionInput[]): Promise<PlanExtractionOutcome> {
+export async function extractPlan(
+  files: PlanExtractionInput[],
+  instructions?: string | null,
+): Promise<PlanExtractionOutcome> {
   if (!isPlanExtractionConfigured()) {
     return {
       ok: false,
@@ -250,8 +390,9 @@ export async function extractPlan(files: PlanExtractionInput[]): Promise<PlanExt
           max_tokens: 8000,
           betas: ["server-side-fallback-2026-07-01"],
           fallbacks: "default",
-          system: CHUNK_SYSTEM_PROMPT,
-          output_config: { format: { type: "json_schema", schema: chunkSchema } },
+          system: buildChunkSystemPrompt(instructions),
+          tools: planTool(chunkSchema),
+          tool_choice: { type: "tool", name: PLAN_TOOL_NAME },
           messages: [{ role: "user", content: buildChunkContent(chunk) }],
         } as Anthropic.Beta.Messages.MessageCreateParamsStreaming);
 
@@ -267,15 +408,17 @@ export async function extractPlan(files: PlanExtractionInput[]): Promise<PlanExt
           return { ok: false, reason: "refused", message: "Declined to read these sheets." };
         }
 
-        const text = message.content.find((b) => b.type === "text");
-        if (!text || text.type !== "text") {
+        const call = message.content.find((b) => b.type === "tool_use");
+        if (!call || call.type !== "tool_use") {
           return { ok: false, reason: "failed", message: "That batch came back empty." };
         }
 
-        const parsed = JSON.parse(text.text) as Partial<ExtractedPlan> & {
-          pagesRead?: string[];
-          pagesUnreadable?: { id: string; reason: string }[];
-        };
+        const parsed = normalizeChunkPlan(
+          call.input as Partial<ExtractedPlan> & {
+            pagesRead?: string[];
+            pagesUnreadable?: { id: string; reason: string }[];
+          },
+        );
 
         const readIds = parsed.pagesRead ?? [];
         const byId = new Map(chunk.pages.map((p) => [p.id, p]));
@@ -362,4 +505,108 @@ export async function extractPlan(files: PlanExtractionInput[]): Promise<PlanExt
     provenance: merged.provenance,
     usage: { inputTokens, outputTokens },
   };
+}
+
+/**
+ * Read ONE batch of sheets. The unit the stepped, resumable path is built from.
+ *
+ * extractPlan() above still exists for the small single-request uploads that
+ * genuinely finish in one go. This is the same read, exposed so a large set can
+ * be worked through across many short requests instead of one long one that a
+ * proxy would kill halfway. Both share the schema, the prompt and the error
+ * classification, because two copies of a plan-reading prompt is how the small
+ * path and the large path start disagreeing about what a sheet said.
+ */
+export interface ReadableChunkPage {
+  id: string;
+  filename: string;
+  pageNumber: number;
+  mimeType: string;
+  data: Buffer;
+}
+
+export type ReadChunkOutcome =
+  | { ok: true; contribution: PlanChunkContribution; unreadable: { id: string; reason: string }[]; usage: { inputTokens: number; outputTokens: number } }
+  | { ok: false; reason: PlanExtractionFailure; message: string };
+
+export async function readPlanChunk(
+  pages: ReadableChunkPage[],
+  instructions?: string | null,
+): Promise<ReadChunkOutcome> {
+  if (!isPlanExtractionConfigured()) {
+    return { ok: false, reason: "not-configured", message: "Plan review is not configured." };
+  }
+  if (pages.length === 0) {
+    return { ok: false, reason: "failed", message: "No sheets in this batch." };
+  }
+
+  const client = new Anthropic();
+  const chunk: PageChunk = {
+    index: 0,
+    pages: pages.map((p) => ({
+      id: p.id,
+      filename: p.filename,
+      pageNumber: p.pageNumber,
+      mimeType: p.mimeType,
+      data: p.data,
+      byteLength: p.data.byteLength,
+    })),
+    byteLength: pages.reduce((n, p) => n + p.data.byteLength, 0),
+  };
+
+  try {
+    const stream = client.beta.messages.stream({
+      model: "claude-opus-5",
+      max_tokens: 8000,
+      betas: ["server-side-fallback-2026-07-01"],
+      fallbacks: "default",
+      system: buildChunkSystemPrompt(instructions),
+      tools: planTool(buildChunkSchema()),
+      tool_choice: { type: "tool", name: PLAN_TOOL_NAME },
+      messages: [{ role: "user", content: buildChunkContent(chunk) }],
+    } as Anthropic.Beta.Messages.MessageCreateParamsStreaming);
+
+    const message = await stream.finalMessage();
+
+    if (message.stop_reason === "refusal") {
+      return { ok: false, reason: "refused", message: "Declined to read these sheets." };
+    }
+    const call = message.content.find((b) => b.type === "tool_use");
+    if (!call || call.type !== "tool_use") {
+      return { ok: false, reason: "failed", message: "That batch came back empty." };
+    }
+
+    const parsed = normalizeChunkPlan(
+      call.input as Partial<ExtractedPlan> & {
+        pagesRead?: string[];
+        pagesUnreadable?: { id: string; reason: string }[];
+      },
+    );
+
+    /* Only ids this batch actually owns are credited. A pass that names a sheet
+       from another batch must not be able to mark it read - coverage is the one
+       number nobody should be able to inflate. */
+    const owned = new Set(pages.map((p) => p.id));
+    const readIds = (parsed.pagesRead ?? []).filter((id) => owned.has(id));
+    const byId = new Map(pages.map((p) => [p.id, p]));
+
+    return {
+      ok: true,
+      contribution: {
+        plan: parsed,
+        pageIds: readIds,
+        pageLabels: readIds
+          .map((id) => byId.get(id))
+          .filter((p): p is ReadableChunkPage => Boolean(p))
+          .map((p) => pageLabel(p.filename, p.pageNumber)),
+      },
+      unreadable: (parsed.pagesUnreadable ?? []).filter((u) => owned.has(u.id)),
+      usage: {
+        inputTokens: message.usage.input_tokens,
+        outputTokens: message.usage.output_tokens,
+      },
+    };
+  } catch (err) {
+    return { ok: false, ...classifyError(err) };
+  }
 }

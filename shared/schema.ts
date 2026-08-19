@@ -679,3 +679,95 @@ export const storedFiles = pgTable("stored_files", {
 });
 
 export type StoredFile = typeof storedFiles.$inferSelect;
+
+/**
+ * Plan-set uploads that are too big to be one HTTP request.
+ *
+ * THE BUG THESE EXIST TO FIX. A 103-sheet scanned restaurant set (123.8MB)
+ * could not be estimated at all. It failed the 96MB cap in shared/re10/uploads,
+ * and raising that number would not have helped: scanned sets run ~1.5MB per
+ * sheet, so the 200-sheet sets we promise to handle are ~300MB. Three separate
+ * ceilings bind long before the model does - the HTTP body, the process heap
+ * holding one PDF per page, and the wall clock on a single request.
+ *
+ * So the unit of transfer is now ONE PAGE, not one upload. The browser splits
+ * the PDF and posts pages individually, which means no request is larger than a
+ * sheet, the server never holds the whole set, and neon-http never sees a row
+ * anywhere near its payload limit. Reading is likewise incremental: the client
+ * drives `step` calls that each process a bounded slice and persist what they
+ * learned, so a 200-sheet set is many short requests instead of one long one
+ * that a proxy would kill halfway through.
+ */
+export const planUploadPages = pgTable(
+  "plan_upload_pages",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    /** Groups every page of one upload. Unguessable by construction. */
+    uploadId: varchar("upload_id").notNull(),
+    /** Index of the source file within the upload, for multi-file sets. */
+    fileIndex: integer("file_index").notNull(),
+    filename: text("filename").notNull(),
+    /** 1-based page number within its own source file. */
+    pageNumber: integer("page_number").notNull(),
+    mimeType: text("mime_type").notNull(),
+    byteLength: integer("byte_length").notNull(),
+    /** The single-page PDF, base64 encoded. ~1.5MB raw for a scanned sheet. */
+    data: text("data").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (t) => ({
+    /* Pages are always fetched as "the pages of one upload, in order", never by
+       id, and the step runner does that repeatedly. */
+    byUpload: index("plan_upload_pages_upload_idx").on(t.uploadId, t.fileIndex, t.pageNumber),
+    /* A retried page upload must not create a duplicate sheet: the browser
+       retries on a flaky connection, and a set that silently gained a second
+       copy of p.47 would double-count whatever that sheet states. */
+    uniquePage: uniqueIndex("plan_upload_pages_unique").on(t.uploadId, t.fileIndex, t.pageNumber),
+  }),
+);
+
+export type PlanUploadPage = typeof planUploadPages.$inferSelect;
+
+/**
+ * One plan-reading job, and the partial work it has accumulated so far.
+ *
+ * `result` is written after EVERY step rather than only at the end. A visitor
+ * who closes the tab on sheet 150, or a step that dies on a bad connection,
+ * must not throw away the 149 sheets already read - the job is resumable
+ * because the merged state is durable, not because anything retries in memory.
+ */
+export const planJobs = pgTable(
+  "plan_jobs",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    uploadId: varchar("upload_id").notNull(),
+    /** queued | running | complete | failed */
+    status: text("status").notNull().default("queued"),
+    /**
+     * What the customer asked us to focus on, verbatim.
+     *
+     * Steers the read AND is shown to the team, because "millwork only" is both
+     * an instruction to the model and the single most important thing a builder
+     * needs to know before opening the drawings.
+     */
+    instructions: text("instructions"),
+    totalPages: integer("total_pages").notNull().default(0),
+    /** Chunks finished. The client renders progress from this, not from a guess. */
+    chunksDone: integer("chunks_done").notNull().default(0),
+    totalChunks: integer("total_chunks").notNull().default(0),
+    /** Merged extraction so far. Rewritten each step so partial work survives. */
+    result: jsonb("result"),
+    /** Per-page ledger: which sheets were read, which could not be. */
+    coverage: jsonb("coverage"),
+    conflicts: jsonb("conflicts"),
+    /** Set only when the whole job failed, not when individual sheets did. */
+    error: text("error"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (t) => ({
+    byUpload: index("plan_jobs_upload_idx").on(t.uploadId),
+  }),
+);
+
+export type PlanJob = typeof planJobs.$inferSelect;

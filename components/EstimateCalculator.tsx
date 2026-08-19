@@ -79,6 +79,11 @@ import { UPLOAD_ACCEPT, READABLE_FORMATS_LABEL } from "@/shared/re10/uploads";
 import { trackEvent, trackMetaEvent } from "@/lib/analytics";
 import { GRAIN_URL } from "@/lib/grain";
 import {
+  uploadAndReadPlanSet,
+  type PlanUploadProgress,
+} from "@/lib/plans/uploadPlanSet";
+import { MAX_PLAN_PAGES, MAX_INSTRUCTIONS_CHARS } from "@/shared/plans/upload";
+import {
   applyLeadParams,
   writeStoredPrefill,
   readStoredPrefill,
@@ -759,6 +764,17 @@ export function EstimateCalculator({
    * even when every new value is correct.
    */
   const [planBusy, setPlanBusy] = useState(false);
+  /**
+   * What the customer wants us to look for, in their words.
+   *
+   * This is not a note to the team - it is fed into the per-sheet reading
+   * prompt, which is why it sits next to the file picker rather than in the
+   * contact step. Someone uploading a 103-sheet restaurant set to price the
+   * millwork needs to say so BEFORE we read 103 sheets looking for a house.
+   */
+  const [planInstructions, setPlanInstructions] = useState("");
+  const [planProgress, setPlanProgress] = useState<PlanUploadProgress | null>(null);
+  const [planSkippedSheets, setPlanSkippedSheets] = useState<string[]>([]);
   const [planError, setPlanError] = useState<string | null>(null);
   const [planApplied, setPlanApplied] = useState<string[] | null>(null);
   /** Scope the plans revealed that is shown back but does not move the range. */
@@ -1271,21 +1287,40 @@ export function EstimateCalculator({
     setPlanUnresolved([]);
     setPlanIsRemodel(false);
 
-    const body = new FormData();
-    for (const f of Array.from(fileList)) body.append("files", f);
+    setPlanProgress(null);
+    setPlanSkippedSheets([]);
 
     try {
-      const res = await fetch("/api/plans/analyze", { method: "POST", body });
-      const data = await res.json();
+      /* Split in the browser, upload sheet by sheet, then drive the read across
+         several short requests. A 123MB scanned set cannot go up as one POST -
+         see lib/plans/uploadPlanSet for why every ceiling that used to bind
+         stops binding once the unit of transfer is a single sheet. */
+      const outcome = await uploadAndReadPlanSet(
+        Array.from(fileList),
+        planInstructions,
+        (p) => setPlanProgress(p),
+      );
 
-      // Files are stored before analysis, so a failed read still leaves the
-      // team holding the drawings. Record them whatever the status was.
-      if (Array.isArray(data.stored)) setPlanStored(data.stored);
-
-      if (!res.ok) {
-        setPlanError(data.message ?? "We could not read that plan set.");
+      if (!outcome.ok) {
+        setPlanError(outcome.message);
         return;
       }
+
+      const data = outcome.result as Record<string, any>;
+
+      /* Sheets that never made it up are NAMED, not swallowed. A set silently
+         short by nine drawings reads as a thin estimate rather than as a
+         partial upload, and nobody would know which nine. */
+      if (outcome.failedSheets.length > 0) setPlanSkippedSheets(outcome.failedSheets);
+
+      /* The drawings are held server-side against this job, so the lead still
+         carries a pointer to the set the team can open. */
+      setPlanStored([
+        {
+          filename: `${data.totalPages ?? outcome.result.totalPages} sheet plan set`,
+          url: `/api/plans/job/${outcome.jobId}`,
+        },
+      ]);
 
       const plan = data.plan as ExtractedPlan;
 
@@ -1392,6 +1427,7 @@ export function EstimateCalculator({
       setPlanError("Could not reach the plan review service. Try again in a moment.");
     } finally {
       setPlanBusy(false);
+      setPlanProgress(null);
     }
   }
 
@@ -3709,6 +3745,38 @@ export function EstimateCalculator({
         Optional -- you can skip this and answer the questions instead.
       </p>
 
+      {/* Asked BEFORE the upload, because it steers the read rather than
+          annotating it. On a large set the difference is material: "millwork
+          only" tells every one of ~50 reading passes where to spend its
+          attention, and it cannot do that if it arrives afterwards. */}
+      <div className="mb-3">
+        <label
+          htmlFor="plan-instructions"
+          className="block text-[13px] text-inverse-foreground mb-1.5"
+        >
+          Anything specific you want priced?{" "}
+          <span className="text-inverse-muted">(optional)</span>
+        </label>
+        <textarea
+          id="plan-instructions"
+          value={planInstructions}
+          onChange={(e) => setPlanInstructions(e.target.value.slice(0, MAX_INSTRUCTIONS_CHARS))}
+          disabled={planBusy}
+          rows={2}
+          data-testid="calc-plan-instructions"
+          placeholder="e.g. millwork and casework only, or just the kitchen build-out"
+          className={cn(
+            "w-full rounded-md bg-inverse-foreground/[0.06] border border-accent-legible/20",
+            "px-3 py-2 text-[13px] text-inverse-foreground placeholder:text-inverse-muted",
+            "focus:outline-none focus:border-accent-legible/60 disabled:opacity-60",
+          )}
+        />
+        <p className="mt-1 text-[12px] text-inverse-muted">
+          We read every sheet either way - this tells us what to look at
+          hardest, and goes to the team with your drawings.
+        </p>
+      </div>
+
       <label
         className={cn(
           darkChoice(false),
@@ -3736,7 +3804,34 @@ export function EstimateCalculator({
       </label>
       {planBusy && (
         <p className="mt-2 text-[12px] text-inverse-muted" role="status" data-testid="calc-plan-busy">
-          This usually takes under half a minute. Your files are saved either way.
+          {/* Counts of things that actually happened, not a spinner guessing.
+              A 200-sheet set takes minutes, and a bar that claims "under half a
+              minute" for the fourth minute running reads as a hang. */}
+          {!planProgress && "Preparing your drawings..."}
+          {planProgress?.phase === "preparing" &&
+            (planProgress.totalPages > 0
+              ? `Reading your file: ${planProgress.totalPages} sheets found...`
+              : "Opening your file...")}
+          {planProgress?.phase === "uploading" &&
+            `Uploading sheet ${planProgress.uploadedPages} of ${planProgress.totalPages}...`}
+          {planProgress?.phase === "reading" &&
+            (planProgress.totalChunks > 0
+              ? `Reading your drawings: pass ${planProgress.chunksDone} of ${planProgress.totalChunks}...`
+              : "Reading your drawings...")}
+          {planProgress?.phase === "done" && "Finishing up..."}
+          {" Your files are saved either way."}
+        </p>
+      )}
+
+      {planSkippedSheets.length > 0 && (
+        <p
+          className="mt-2 text-[12px] text-inverse-muted"
+          role="status"
+          data-testid="calc-plan-skipped"
+        >
+          {planSkippedSheets.length} sheet(s) could not be uploaded and are not
+          reflected in the numbers: {planSkippedSheets.slice(0, 5).join(", ")}
+          {planSkippedSheets.length > 5 ? ` and ${planSkippedSheets.length - 5} more` : ""}.
         </p>
       )}
 
