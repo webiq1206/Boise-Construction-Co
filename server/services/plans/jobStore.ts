@@ -135,6 +135,7 @@ export async function listPageRefs(uploadId: string) {
 export async function createJob(params: {
   uploadId: string;
   instructions: string | null;
+  scope: string;
   totalPages: number;
   totalChunks: number;
 }): Promise<PlanJob> {
@@ -145,6 +146,7 @@ export async function createJob(params: {
     .values({
       uploadId: params.uploadId,
       instructions: params.instructions,
+      scope: params.scope,
       totalPages: params.totalPages,
       totalChunks: params.totalChunks,
       status: "queued",
@@ -162,7 +164,7 @@ export async function getJob(jobId: string): Promise<PlanJob | null> {
 
 export async function updateJob(
   jobId: string,
-  patch: Partial<Pick<PlanJob, "status" | "chunksDone" | "result" | "coverage" | "conflicts" | "error">>,
+  patch: Partial<Pick<PlanJob, "status" | "chunksDone" | "result" | "coverage" | "conflicts" | "error" | "answers">>,
 ): Promise<void> {
   const database = requireDb();
   if (!database) throw new Error("no-database");

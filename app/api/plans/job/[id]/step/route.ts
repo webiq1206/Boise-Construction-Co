@@ -5,6 +5,9 @@ import { mergePlanChunks, type PlanChunkContribution } from "@/shared/plans/merg
 import { buildCoverageLedger } from "@/server/services/documents/coverage";
 import { gatePlanEstimate } from "@/shared/plans/gating";
 import { CHUNKS_PER_STEP, planChunkRanges } from "@/shared/plans/upload";
+import { readMillworkChunk, mergeMillworkChunks, type MillworkChunkResult } from "@/server/services/plans/millwork";
+import { priceMillworkTakeoff } from "@/shared/plans/millwork/pricing";
+import { selectNextQuestion, type QuestionAnswer } from "@/shared/plans/millwork/dialogue";
 
 export const runtime = "nodejs";
 
@@ -28,6 +31,13 @@ export const runtime = "nodejs";
  * that retries a step it already completed re-reads those sheets rather than
  * skipping ahead or double-counting them into the merge.
  */
+
+interface MillworkAccumulated {
+  chunks: MillworkChunkResult[];
+  reportedRead: string[];
+  reportedUnreadable: { id: string; reason: string }[];
+  failedChunks: { index: number; pageIds: string[]; reason: string }[];
+}
 
 interface Accumulated {
   contributions: PlanChunkContribution[];
@@ -53,6 +63,14 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
 
   const refs = await listPageRefs(job.uploadId);
   const ranges = planChunkRanges(refs.map((r) => r.byteLength));
+
+  /* A millwork job asks the sheets an entirely different question, so it runs
+     its own reader, its own merge and its own pricing. Everything upstream -
+     the page manifest, the chunking, the stepping - is indifferent to which. */
+  if (job.scope === "millwork") {
+    return stepMillwork(job, refs, ranges);
+  }
+
   const acc: Accumulated = (job.result as Accumulated | null) ?? emptyAccumulator();
 
   let done = job.chunksDone;
@@ -188,5 +206,121 @@ export async function POST(_request: NextRequest, { params }: { params: { id: st
     chunksDone: done,
     totalChunks: ranges.length,
     totalPages: ledger.totalPages,
+  });
+}
+
+
+/* ------------------------------------------------------------------ millwork */
+
+type Job = NonNullable<Awaited<ReturnType<typeof getJob>>>;
+type Refs = Awaited<ReturnType<typeof listPageRefs>>;
+type Ranges = ReturnType<typeof planChunkRanges>;
+
+async function stepMillwork(job: Job, refs: Refs, ranges: Ranges) {
+  const acc: MillworkAccumulated =
+    (job.result as MillworkAccumulated | null) ?? {
+      chunks: [],
+      reportedRead: [],
+      reportedUnreadable: [],
+      failedChunks: [],
+    };
+  const answers = (job.answers as QuestionAnswer[] | null) ?? [];
+
+  let done = job.chunksDone;
+  const target = Math.min(done + CHUNKS_PER_STEP, ranges.length);
+
+  for (let i = done; i < target; i++) {
+    const range = ranges[i];
+    const pages = await loadPageWindow(job.uploadId, range.start, range.count);
+
+    const outcome = await readMillworkChunk(
+      pages.map((p) => ({
+        id: p.id,
+        filename: p.filename,
+        pageNumber: p.pageNumber,
+        mimeType: p.mimeType,
+        data: p.data,
+      })),
+      job.instructions,
+      answers,
+    );
+
+    if (outcome.ok) {
+      acc.chunks.push(outcome.result);
+      acc.reportedRead.push(...outcome.result.pagesRead);
+      acc.reportedUnreadable.push(...outcome.result.pagesUnreadable);
+    } else {
+      acc.failedChunks.push({
+        index: range.index,
+        pageIds: pages.map((p) => p.id),
+        reason: outcome.message,
+      });
+    }
+    done = i + 1;
+  }
+
+  const finished = done >= ranges.length;
+
+  if (!finished) {
+    await updateJob(job.id, { status: "running", chunksDone: done, result: acc });
+    return NextResponse.json({
+      status: "running",
+      scope: "millwork",
+      chunksDone: done,
+      totalChunks: ranges.length,
+      totalPages: job.totalPages,
+    });
+  }
+
+  if (acc.chunks.length === 0) {
+    await updateJob(job.id, {
+      status: "failed",
+      chunksDone: done,
+      result: acc,
+      error: "We could not read that plan set.",
+    });
+    return NextResponse.json({ status: "failed", message: "We could not read that plan set." }, { status: 422 });
+  }
+
+  const takeoff = mergeMillworkChunks(acc.chunks);
+  const pricing = priceMillworkTakeoff(takeoff);
+
+  const ledger = buildCoverageLedger({
+    allPages: refs.map((r) => ({
+      id: `${r.fileIndex}:${r.pageNumber}`,
+      filename: r.filename,
+      pageNumber: r.pageNumber,
+    })),
+    manifestUnreadable: [],
+    reportedRead: acc.reportedRead,
+    reportedUnreadable: acc.reportedUnreadable,
+    skippedFiles: [],
+    failedChunks: acc.failedChunks,
+  });
+
+  /* The conversation starts here: the highest-impact open question is chosen
+     now, so the customer is asked something useful the moment the read lands
+     rather than being handed a list to work through. */
+  const nextQuestion = selectNextQuestion(takeoff.questions, answers);
+
+  await updateJob(job.id, {
+    status: "complete",
+    chunksDone: done,
+    result: { takeoff, pricing, raw: acc },
+    coverage: ledger,
+    conflicts: [],
+  });
+
+  console.log(
+    `[plans/job/step] job=${job.id} MILLWORK COMPLETE pages=${ledger.totalPages} items=${takeoff.items.length} priced=${pricing.priced.length} unpriced=${pricing.unpriced.length} questions=${takeoff.questions.length} bidReady=${pricing.bidReady}`,
+  );
+
+  return NextResponse.json({
+    status: "complete",
+    scope: "millwork",
+    chunksDone: done,
+    totalChunks: ranges.length,
+    totalPages: ledger.totalPages,
+    nextQuestion,
   });
 }

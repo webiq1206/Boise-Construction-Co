@@ -83,6 +83,7 @@ import {
   type PlanUploadProgress,
 } from "@/lib/plans/uploadPlanSet";
 import { MAX_PLAN_PAGES, MAX_INSTRUCTIONS_CHARS } from "@/shared/plans/upload";
+import { MillworkPanel } from "@/components/MillworkPanel";
 import {
   applyLeadParams,
   writeStoredPrefill,
@@ -775,6 +776,14 @@ export function EstimateCalculator({
   const [planInstructions, setPlanInstructions] = useState("");
   const [planProgress, setPlanProgress] = useState<PlanUploadProgress | null>(null);
   const [planSkippedSheets, setPlanSkippedSheets] = useState<string[]>([]);
+  /**
+   * A millwork job answers a different question and must not be poured into the
+   * house form. Kept as its own state so the residential path stays exactly as
+   * it was rather than growing conditionals through every field.
+   */
+  const [millwork, setMillwork] = useState<any | null>(null);
+  const [millworkJobId, setMillworkJobId] = useState<string | null>(null);
+  const [answering, setAnswering] = useState(false);
   const [planError, setPlanError] = useState<string | null>(null);
   const [planApplied, setPlanApplied] = useState<string[] | null>(null);
   /** Scope the plans revealed that is shown back but does not move the range. */
@@ -1278,6 +1287,37 @@ export function EstimateCalculator({
    * answered, and every key is checked for undefined before it is used. A
    * schematic set that states no areas leaves the form exactly as it was.
    */
+  /**
+   * Answer one clarifying question and take back a tighter price.
+   *
+   * One question at a time, highest impact first. A takeoff read off drawings
+   * always has holes, and the alternative to asking is pricing around them
+   * silently - one confident number resting on assumptions nobody stated. Each
+   * answer visibly moves the range, which is the only honest argument for
+   * answering the next one.
+   */
+  async function handleMillworkAnswer(questionId: string, answer: string) {
+    if (!millworkJobId || !answer.trim()) return;
+    setAnswering(true);
+    try {
+      const res = await fetch(`/api/plans/job/${millworkJobId}/answer`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ questionId, answer }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setPlanError(data.message ?? "We could not apply that answer.");
+        return;
+      }
+      setMillwork((prev: any) => ({ ...prev, ...data }));
+    } catch {
+      setPlanError("We could not reach plan review. Your answer was not saved.");
+    } finally {
+      setAnswering(false);
+    }
+  }
+
   async function handlePlanUpload(fileList: FileList | null) {
     if (!fileList || fileList.length === 0) return;
     setPlanBusy(true);
@@ -1321,6 +1361,16 @@ export function EstimateCalculator({
           url: `/api/plans/job/${outcome.jobId}`,
         },
       ]);
+
+      /* A trade-scoped read is not a house. Applying its result through
+         applyPlanToEstimate would pour nulls over the visitor's answers and
+         then price a home nobody asked for, so it stops here and renders its
+         own panel instead. */
+      if (data.scope === "millwork") {
+        setMillwork(data);
+        setMillworkJobId(outcome.jobId);
+        return;
+      }
 
       const plan = data.plan as ExtractedPlan;
 
@@ -3833,6 +3883,14 @@ export function EstimateCalculator({
           reflected in the numbers: {planSkippedSheets.slice(0, 5).join(", ")}
           {planSkippedSheets.length > 5 ? ` and ${planSkippedSheets.length - 5} more` : ""}.
         </p>
+      )}
+
+      {millwork && (
+        <MillworkPanel
+          data={millwork}
+          busy={answering}
+          onAnswer={handleMillworkAnswer}
+        />
       )}
 
       {planStored.length > 0 && (

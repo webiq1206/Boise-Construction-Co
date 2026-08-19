@@ -751,6 +751,24 @@ export const planJobs = pgTable(
      * needs to know before opening the drawings.
      */
     instructions: text("instructions"),
+    /**
+     * Which extraction target this job runs: "residential" or "millwork".
+     *
+     * Decided from the customer's own instruction, once, at job creation. It
+     * has to be a stored decision rather than something re-derived per step,
+     * because a set half-read as a house and half-read as joinery merges into
+     * an answer that is neither.
+     */
+    scope: text("scope").notNull().default("residential"),
+    /**
+     * Answers to the clarifying questions, in the order they were given.
+     *
+     * The estimator asks one question at a time and re-prices after each, so
+     * this is the record that makes the conversation resumable - a customer who
+     * answers two questions and comes back tomorrow must not be asked those two
+     * again.
+     */
+    answers: jsonb("answers"),
     totalPages: integer("total_pages").notNull().default(0),
     /** Chunks finished. The client renders progress from this, not from a guess. */
     chunksDone: integer("chunks_done").notNull().default(0),

@@ -45,3 +45,7 @@ CREATE TABLE IF NOT EXISTS "plan_jobs" (
 );
 
 CREATE INDEX IF NOT EXISTS "plan_jobs_upload_idx" ON "plan_jobs" ("upload_id");
+
+-- Trade-scoped reads and the clarifying-question conversation.
+ALTER TABLE "plan_jobs" ADD COLUMN IF NOT EXISTS "scope" text NOT NULL DEFAULT 'residential';
+ALTER TABLE "plan_jobs" ADD COLUMN IF NOT EXISTS "answers" jsonb;

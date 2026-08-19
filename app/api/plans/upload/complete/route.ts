@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createJob, listPageRefs } from "@/server/services/plans/jobStore";
+import { detectPlanScope } from "@/server/services/plans/scopeDetect";
 import {
   MAX_INSTRUCTIONS_CHARS,
   MAX_PLAN_PAGES,
@@ -53,18 +54,25 @@ export async function POST(request: NextRequest) {
 
   const chunks = planChunkRanges(refs.map((r) => r.byteLength));
 
+  /* Decided ONCE, here, and stored. Re-deriving it per step would let a set be
+     read half as a house and half as joinery, which merges into an answer that
+     is neither. */
+  const scope = await detectPlanScope(instructions);
+
   try {
     const job = await createJob({
       uploadId,
       instructions,
+      scope,
       totalPages: refs.length,
       totalChunks: chunks.length,
     });
     console.log(
-      `[plans/upload/complete] job=${job.id} pages=${refs.length} chunks=${chunks.length} instructions=${instructions ? "yes" : "no"}`,
+      `[plans/upload/complete] job=${job.id} scope=${scope} pages=${refs.length} chunks=${chunks.length} instructions=${instructions ? "yes" : "no"}`,
     );
     return NextResponse.json({
       jobId: job.id,
+      scope,
       totalPages: refs.length,
       totalChunks: chunks.length,
     });
