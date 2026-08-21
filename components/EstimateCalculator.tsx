@@ -275,7 +275,13 @@ const PROJECT_CONFIGS: Record<ProjectType, ProjectUIConfig> = {
     tabLabel: "Custom Home",
     tabSub: "A one-of-a-kind design",
     headlinePrefix: "Estimate your", headlineAccent: "custom home", headlineSuffix: "build cost",
-    gridLabel: "WHAT ARE YOU BUILDING?",
+    /* Was "WHAT ARE YOU BUILDING?", which is the same question step 3 already
+       asked ("What are we building?") two steps earlier. The answers here are
+       layouts - Single Level, Two Story, Estate - not project types, so the
+       repeat read as either a mistake or a step the visitor had already done.
+       Phrased to match the semi-custom path's "WHICH PLAN SIZE FITS?" so the
+       whole flow asks in one voice. */
+    gridLabel: "WHICH LAYOUT FITS?",
     subtypes: [
       { id: "single-level",        icon: Home,      title: "Single Level",   subtitle: "Everything on one floor" },
       { id: "two-story",           icon: Layers,    title: "Two Story",      subtitle: "Bedrooms upstairs" },

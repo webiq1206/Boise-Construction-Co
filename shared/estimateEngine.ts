@@ -125,7 +125,9 @@ export const PLANNING_STAGE_LABELS: Record<
   },
   "plans-in-progress": {
     label: "My plans are being developed",
-    sub: "Working with an architect or designer now",
+    /* "now" dropped: it added nothing and wrapped this option to a second
+       line on narrow phones, making one card 20px taller than its siblings. */
+    sub: "Working with an architect or designer",
   },
   "need-plans": {
     label: "I have an idea, not plans",
