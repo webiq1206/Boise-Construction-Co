@@ -180,7 +180,16 @@ Most large sets arrive as scans, not vector PDFs. Read them the way a takeoff es
 - Note the SCALE and never infer a measurement by eye from a scaled drawing. Report what is written.
 - KEYNOTES AND LEGENDS carry material and assembly information that the plan view only references by symbol. Resolve the symbol before reporting the material.
 - Handwriting, redlines, clouds and stamps are real content. Read them as carefully as printed text and say in notes when a figure is handwritten or clouded as revised.
-- If a sheet is skewed, low-contrast, or cut off, say so in pagesUnreadable rather than reporting a half-read figure. A named gap is useful; a confident wrong number is not.`;
+- If a sheet is skewed, low-contrast, or cut off, say so in pagesUnreadable rather than reporting a half-read figure. A named gap is useful; a confident wrong number is not.
+
+CITING OTHER SHEETS
+
+A drawing index tempts you to describe the whole set from one sheet, and a wrong sheet reference is as damaging as a wrong number: it sends a takeoff to a sheet that does not exist and lets a real one go unread.
+
+- NEVER name a sheet number or sheet title you have not literally read. Not from the index, not from a section cut, not from what a set like this usually contains.
+- When you do transcribe a drawing index, copy each row EXACTLY as printed - number and title together, in the printed order. Do not renumber, do not tidy a title, and do not fill in a row you cannot resolve. If the index is only partly legible, transcribe the legible rows and say which ones you could not read.
+- The index states titles, not contents. "A603 FINISH SCHEDULE" means a sheet is titled that; it does not tell you what is drawn on it. Say what the index states, never what you expect the sheet to contain.
+- If you are reasoning about where something probably lives in the rest of the set, mark it plainly as an expectation - "not on these sheets; likely on the interior elevations" - rather than naming a sheet number you did not read.`;
 
 /**
  * Fold the customer's own instruction into the pass.
