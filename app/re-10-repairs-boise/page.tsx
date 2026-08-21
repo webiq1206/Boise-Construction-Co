@@ -115,7 +115,13 @@ export default function Re10RepairsPage() {
         <div className="flex flex-col sm:flex-row gap-3">
           <Button variant="brand" asChild>
             <Link href="#re10-estimator">
-              Upload your RE-10 and get an instant estimate <ArrowRight className="ml-2 h-4 w-4" />
+              {/* Shortened from "Upload your RE-10 and get an instant estimate".
+                  The Button primitive is whitespace-nowrap, and at 375px that
+                  label needed 361px in a 341px box - it clipped at BOTH ends,
+                  reading "load your RE-10 and get an instant esti". A button
+                  should name the next action anyway; the estimate is promised
+                  by the copy directly above it. */}
+              Upload your RE-10 <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button variant="brandInverseOutline" asChild>

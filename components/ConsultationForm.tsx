@@ -745,7 +745,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
                 onClick={() => setShowAddrInfo((v) => !v)}
                 aria-expanded={showAddrInfo}
                 aria-controls="address-info"
-                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mt-1"
+                className="inline-flex min-h-11 items-center gap-1 py-2 text-xs text-muted-foreground hover:text-foreground"
                 data-testid="button-address-info"
               >
                 Why we ask for your address
@@ -794,7 +794,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
           <button
             type="button"
             onClick={() => setShowNote(true)}
-            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+            className="inline-flex min-h-11 items-center gap-1.5 py-2 text-xs text-muted-foreground hover:text-foreground"
             data-testid="button-add-note"
           >
             <Plus className="h-3.5 w-3.5" />
