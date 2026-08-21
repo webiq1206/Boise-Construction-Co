@@ -46,7 +46,7 @@ export function WizardProgress({
   const trackBg = inverse ? "bg-inverse-foreground/15" : "bg-foreground/10";
 
   return (
-    <div className={cn("mb-7", className)} data-testid="wizard-progress">
+    <div className={cn("mb-4 sm:mb-7", className)} data-testid="wizard-progress">
       <div className="flex items-center justify-between gap-3 mb-2">
         <p className={cn("text-caption tracking-[0.08em] uppercase", strong)}>
           <span className="brc-display-num">{humanStep}</span>

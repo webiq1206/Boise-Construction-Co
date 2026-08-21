@@ -71,7 +71,7 @@ export function WizardActionBar({
       data-wizard-action-bar=""
       style={keyboardInset > 0 ? { transform: `translateY(-${keyboardInset}px)` } : undefined}
       className={cn(
-        "sticky bottom-0 z-30 -mx-4 mt-8 border-t px-4 pb-safe pt-3 backdrop-blur-md transition-transform duration-150",
+        "sticky bottom-0 z-30 -mx-4 mt-5 sm:mt-8 border-t px-4 pb-safe pt-3 backdrop-blur-md transition-transform duration-150",
         inverse
           ? "border-inverse-foreground/15 bg-[hsl(var(--inverse))]/95"
           : "border-border bg-background/95",

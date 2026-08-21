@@ -2747,13 +2747,15 @@ export function EstimateCalculator({
           <Calculator className="h-5 w-5" strokeWidth={1.5} aria-hidden />
         </div>
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 mb-1.5 md:mb-3 text-xs tracking-[0.1em] md:tracking-[0.14em] uppercase text-inverse-muted">
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 mb-1.5 md:mb-3 text-xs tracking-[0.06em] md:tracking-[0.14em] uppercase text-inverse-muted">
             <span className="inline-flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-accent-legible" aria-hidden />
               Free
             </span>
             <span className="opacity-40" aria-hidden>·</span>
-            <span>About 2 minutes</span>
+            {/* "About 2 minutes" wrapped this row to two lines at 375px, which
+                cost ~25px of the first step's height for one hedging word. */}
+            <span>2 minutes</span>
             <span className="opacity-40" aria-hidden>·</span>
             <span>No obligation</span>
           </div>
@@ -2909,7 +2911,13 @@ export function EstimateCalculator({
   ) : (
     <div className="scroll-mt-20">
       {renderStepLabel("layout", config.gridLabel)}
-      <div className="grid grid-cols-2 gap-2.5" role="group" aria-label={config.gridLabel}>
+      {/* ONE COLUMN ON A PHONE.
+          Two columns leaves each card 150px, and after the icon and the 20px
+          gutter the check mark needs, the subtitle gets 64px of text width -
+          measured, not guessed. "Everything on one floor" needs 76px, so it
+          spilled outside its own card. A single column gives the same card
+          309px and the subtitle reads on one line. */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5" role="group" aria-label={config.gridLabel}>
         {config.subtypes.map((opt) => {
           const Icon = opt.icon;
           const active = chosen.subtype && subtype === opt.id;
@@ -2920,7 +2928,7 @@ export function EstimateCalculator({
               onClick={() => handleSelectSubtype(opt.id)}
               data-testid={`calc-subtype-${opt.id}`}
               aria-pressed={active}
-              className={cn(darkCard(active), "flex items-start gap-3 p-4 min-h-[76px]")}
+              className={cn(darkCard(active), "flex items-start gap-3 p-3.5 sm:p-4 min-h-[68px] sm:min-h-[76px]")}
             >
               {active && (
                 <span className="absolute top-3 right-3 flex h-5 w-5 items-center justify-center rounded-full bg-accent-legible flex-shrink-0">
