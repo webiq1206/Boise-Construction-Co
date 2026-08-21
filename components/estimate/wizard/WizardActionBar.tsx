@@ -68,6 +68,7 @@ export function WizardActionBar({
   return (
     <div
       data-testid={testId}
+      data-wizard-action-bar=""
       style={keyboardInset > 0 ? { transform: `translateY(-${keyboardInset}px)` } : undefined}
       className={cn(
         "sticky bottom-0 z-30 -mx-4 mt-8 border-t px-4 pb-safe pt-3 backdrop-blur-md transition-transform duration-150",
@@ -100,7 +101,7 @@ export function WizardActionBar({
           onClick={onPrimary}
           disabled={primaryDisabled || busy}
           aria-busy={busy}
-          className="min-h-12 flex-1 text-[15px]"
+          className="min-h-12 flex-1 text-base"
           data-testid="wizard-continue"
         >
           {busy ? (

@@ -676,7 +676,7 @@ export async function sendContractorNewLeadAvailable(
 ): Promise<void> {
   const displayTitle = getEmailLeadDisplayTitle(leadData);
   const serviceCount = leadData.selectedServices?.length || 1;
-  const subject = `${displayTitle} in ${leadData.city} -- $${formatQuoteForDisplay(leadData.currentLeadPrice, true)} lead, first come first served`;
+  const subject = `${displayTitle} in ${leadData.city} - $${formatQuoteForDisplay(leadData.currentLeadPrice, true)} lead, first come first served`;
   const leadValue = formatLeadValueRange(leadData.finalQuote);
   const portalUrl = subcontractorLeadUrl(leadData.id);
   const lineItemsHtml = renderLineItemsTable(leadData.lineItems);
@@ -700,7 +700,7 @@ export async function sendContractorNewLeadAvailable(
         <div class="header">
           ${buildTextLogo()}
           <h1>${displayTitle}</h1>
-          <p>${leadData.city} -- ${leadValue.display} project</p>
+          <p>${leadData.city} - ${leadValue.display} project</p>
         </div>
         <div class="content">
           <p class="greeting">A customer in <strong>${leadData.city}</strong> just requested service and is ready to get started.</p>

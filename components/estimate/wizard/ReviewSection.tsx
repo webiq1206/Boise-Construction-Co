@@ -44,7 +44,7 @@ export function ReviewSection({
       <div className="mb-2.5 flex items-center justify-between gap-3">
         <h3
           className={cn(
-            "text-[12px] tracking-[0.08em] uppercase",
+            "text-caption tracking-[0.08em] uppercase",
             inverse ? "text-inverse-foreground" : "text-foreground",
           )}
         >
@@ -55,7 +55,7 @@ export function ReviewSection({
             type="button"
             onClick={onEdit}
             className={cn(
-              "inline-flex min-h-11 items-center gap-1.5 rounded-sm px-2 -mr-2 text-[13px] transition-colors",
+              "inline-flex min-h-11 items-center gap-1.5 rounded-sm px-2 -mr-2 text-sm transition-colors",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-legible",
               "text-accent-legible hover:underline",
             )}
@@ -68,7 +68,7 @@ export function ReviewSection({
       </div>
       <div
         className={cn(
-          "text-[13.5px] leading-relaxed",
+          "text-sm leading-relaxed",
           inverse ? "text-inverse-foreground/85" : "text-muted-foreground",
         )}
       >

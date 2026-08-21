@@ -133,10 +133,61 @@ export default {
         serif: ["var(--font-libre-baskerville)", "Georgia", "serif"],
         mono: ["Menlo", "Monaco", "monospace"],
       },
+      /*
+       * THE TYPE SCALE.
+       *
+       * WHAT WAS WRONG. The site had three named sizes (display and two section
+       * titles) and nothing for the text people actually read, so 320 hardcoded
+       * `text-[Npx]` values grew to fill the gap across fifteen different sizes
+       * - 9, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14, 14.5, 15, 16, 20, 22.
+       * The most common body text on the site was 11-13px. That is not a style
+       * preference, it is below the size at which sustained reading is
+       * comfortable for most people, and it is why the site "looked fine" while
+       * being tiring to actually use.
+       *
+       * THE TWO DEFAULT OVERRIDES BELOW DO MOST OF THE WORK. text-xs and
+       * text-sm account for 624 usages between them; moving them up one step
+       * lifts more of the site than every hand-edit combined, and it lifts the
+       * shadcn primitives too, which is where a lot of the small text lives.
+       *
+       * LINE HEIGHT TRAVELS WITH SIZE. It was previously left to Tailwind's
+       * defaults, which are tuned tight for UI chrome, not for paragraphs. Every
+       * entry here carries its own, so a size change cannot silently ship
+       * cramped leading.
+       *
+       * 13px IS THE FLOOR. Nothing on the site should be smaller, including
+       * eyebrows and legal text. Uppercase tracked labels read smaller than
+       * their nominal size, which is exactly why the old 9-10px ones were
+       * illegible.
+       */
       fontSize: {
+        /* --- overrides of Tailwind defaults (highest leverage) ------------ */
+        xs: ["0.8125rem", { lineHeight: "1.5" }],      // 13px, was 12
+        sm: ["0.9375rem", { lineHeight: "1.55" }],     // 15px, was 14
+        base: ["1rem", { lineHeight: "1.65" }],        // 16px, looser leading
+        lg: ["1.125rem", { lineHeight: "1.55" }],      // 18px
+        xl: ["1.25rem", { lineHeight: "1.45" }],       // 20px
+
+        /* --- semantic tokens, for the text people read ------------------- */
+        /** Uppercase tracked kicker above a heading. The 13px floor. */
+        eyebrow: ["0.8125rem", { lineHeight: "1.4", letterSpacing: "0.12em", fontWeight: "600" }],
+        /** Timestamps, fine print, helper text under a field. */
+        caption: ["0.875rem", { lineHeight: "1.5" }],  // 14px
+        /** Form labels, chips, table headers. */
+        label: ["0.9375rem", { lineHeight: "1.4", fontWeight: "500" }], // 15px
+        /** Dense supporting copy that is still meant to be read. */
+        "body-sm": ["0.9375rem", { lineHeight: "1.6" }], // 15px
+        /** Default reading size. Nudges up on wider screens, never below 16px. */
+        body: ["clamp(1rem, 0.97rem + 0.15vw, 1.0625rem)", { lineHeight: "1.65" }],
+        /** Lead paragraph under a page title. */
+        "body-lg": ["clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem)", { lineHeight: "1.6" }],
+        /** Card and sub-section titles. */
+        "title-sm": ["1.125rem", { lineHeight: "1.35", letterSpacing: "-0.01em", fontWeight: "600" }],
+        title: ["clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem)", { lineHeight: "1.3", letterSpacing: "-0.015em", fontWeight: "600" }],
+
         display: ["clamp(2.5rem,6vw,5rem)", { lineHeight: "1.04", letterSpacing: "-0.025em" }],
-        "section-title": ["1.875rem", { lineHeight: "1.15", letterSpacing: "-0.025em" }],
-        "section-title-lg": ["2.25rem", { lineHeight: "1.15", letterSpacing: "-0.025em" }],
+        "section-title": ["clamp(1.625rem, 1.4rem + 1vw, 1.875rem)", { lineHeight: "1.2", letterSpacing: "-0.025em" }],
+        "section-title-lg": ["clamp(1.875rem, 1.5rem + 1.6vw, 2.25rem)", { lineHeight: "1.18", letterSpacing: "-0.025em" }],
       },
       keyframes: {
         "accordion-down": {

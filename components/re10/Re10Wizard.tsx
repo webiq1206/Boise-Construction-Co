@@ -841,7 +841,7 @@ export function Re10Wizard() {
         {step !== "result" && (
           <>
             <WizardProgress steps={STEP_META} currentIndex={currentIndex} tone="inverse" />
-            <p className="mb-6 -mt-4 flex items-center gap-1.5 text-[11px] text-inverse-muted">
+            <p className="mb-6 -mt-4 flex items-center gap-1.5 text-xs text-inverse-muted">
               <Check className="h-3 w-3 text-accent-legible" aria-hidden="true" /> Your answers save
               as you go
             </p>
@@ -851,7 +851,7 @@ export function Re10Wizard() {
         {error && (
           <div
             role="alert"
-            className="mb-6 rounded-sm border border-red-400/40 bg-red-500/10 p-4 text-[13.5px] text-inverse-foreground leading-relaxed"
+            className="mb-6 rounded-sm border border-red-400/40 bg-red-500/10 p-4 text-sm text-inverse-foreground leading-relaxed"
           >
             {error}
           </div>
@@ -888,14 +888,14 @@ export function Re10Wizard() {
             >
               <Upload className="h-6 w-6 mx-auto mb-3 text-inverse-muted" aria-hidden="true" />
 
-              <span className="hidden [@media(pointer:fine)]:block text-[15px] text-inverse-foreground mb-1">
+              <span className="hidden [@media(pointer:fine)]:block text-base text-inverse-foreground mb-1">
                 {isDragging ? "Drop them here" : "Drag your files here"}
               </span>
-              <span className="[@media(pointer:fine)]:hidden block text-[15px] text-inverse-foreground mb-1">
+              <span className="[@media(pointer:fine)]:hidden block text-base text-inverse-foreground mb-1">
                 Add your RE-10
               </span>
 
-              <span className="block text-[12.5px] text-inverse-muted mb-5">
+              <span className="block text-caption text-inverse-muted mb-5">
                 {READABLE_FORMATS_LABEL}. Up to {MAX_UPLOAD_FILES} files,{" "}
                 {Math.round(MAX_TOTAL_UPLOAD_BYTES / (1024 * 1024))} MB total. A phone photo of a
                 printed form works.
@@ -970,7 +970,7 @@ export function Re10Wizard() {
                     style={{ width: `${uploadPct ?? 0}%` }}
                   />
                 </div>
-                <p className="mt-1.5 text-[12px] text-inverse-muted">
+                <p className="mt-1.5 text-caption text-inverse-muted">
                   {uploadPct !== null && uploadPct < 100
                     ? `Uploading your documents - ${uploadPct}%`
                     : "Upload complete - reading the repair list. This usually takes under half a minute."}
@@ -1000,11 +1000,11 @@ export function Re10Wizard() {
                         )}
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="flex items-center gap-1.5 text-[13.5px] text-inverse-foreground">
+                        <span className="flex items-center gap-1.5 text-sm text-inverse-foreground">
                           <Check className="h-3.5 w-3.5 flex-shrink-0 text-accent-legible" aria-hidden="true" />
                           <span className="truncate">{f.name}</span>
                         </span>
-                        <span className="block text-[11.5px] text-inverse-muted">
+                        <span className="block text-xs text-inverse-muted">
                           {humanSize(f.size)}
                           {!original && files.length === 0 ? " - re-add to read" : ""}
                         </span>
@@ -1032,7 +1032,7 @@ export function Re10Wizard() {
               areas help but are optional. You can add more later.
             </HelpNote>
 
-            <p className="mt-5 text-[12px] text-inverse-muted leading-relaxed">
+            <p className="mt-5 text-caption text-inverse-muted leading-relaxed">
               No contact details needed yet. You will see the repairs we found first.
             </p>
           </WizardStep>
@@ -1049,7 +1049,7 @@ export function Re10Wizard() {
             {!extraction.looksLikeRe10 && (
               <div className="mb-5 flex items-start gap-2.5 rounded-sm border border-inverse-foreground/20 bg-inverse-foreground/[0.06] p-4">
                 <AlertTriangle className="h-4 w-4 flex-shrink-0 text-accent-legible mt-0.5" aria-hidden="true" />
-                <p className="text-[13.5px] text-inverse-foreground leading-relaxed">
+                <p className="text-sm text-inverse-foreground leading-relaxed">
                   This did not read like an RE-10 or inspection response. Check you sent the right
                   pages, or carry on and we will review it by hand.
                 </p>
@@ -1061,7 +1061,7 @@ export function Re10Wizard() {
                 className="mb-5 rounded-sm border border-inverse-foreground/20 bg-inverse-foreground/[0.06] p-4"
                 data-testid="notice-re10-attached-only"
               >
-                <p className="text-[13.5px] text-inverse-foreground leading-relaxed">
+                <p className="text-sm text-inverse-foreground leading-relaxed">
                   {attachedOnly.join(", ")} {attachedOnly.length === 1 ? "is" : "are"} attached for
                   our team but {attachedOnly.length === 1 ? "was" : "were"} not read automatically.
                   Mention anything in {attachedOnly.length === 1 ? "it" : "them"} in the notes, or we
@@ -1070,7 +1070,7 @@ export function Re10Wizard() {
               </div>
             )}
 
-            <p className="mb-3 text-[12px] uppercase tracking-[0.08em] text-inverse-muted">
+            <p className="mb-3 text-caption uppercase tracking-[0.08em] text-inverse-muted">
               {includedCount} of {repairs.length} repairs included
             </p>
 
@@ -1087,8 +1087,8 @@ export function Re10Wizard() {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-[14.5px] text-inverse-foreground leading-relaxed">{r.verbatim}</p>
-                      <p className="mt-1 text-[12.5px] text-inverse-muted">
+                      <p className="text-sm text-inverse-foreground leading-relaxed">{r.verbatim}</p>
+                      <p className="mt-1 text-caption text-inverse-muted">
                         {RECIPES[r.kind]?.label ?? r.kind}
                         {r.location ? ` \u00b7 ${r.location}` : ""}
                         {r.confidence !== "high" ? ` \u00b7 ${r.confidence} confidence` : ""}
@@ -1110,7 +1110,7 @@ export function Re10Wizard() {
                   </div>
 
                   {r.needsReview && (
-                    <p className="mt-2.5 flex items-start gap-2 text-[12.5px] text-inverse-foreground/75 leading-relaxed">
+                    <p className="mt-2.5 flex items-start gap-2 text-caption text-inverse-foreground/75 leading-relaxed">
                       <AlertTriangle className="h-3.5 w-3.5 text-accent-legible flex-shrink-0 mt-0.5" aria-hidden="true" />
                       Needs an onsite look. We will list it separately rather than guess at a price.
                     </p>
@@ -1120,7 +1120,7 @@ export function Re10Wizard() {
                     <div className="mt-3 flex items-center gap-2">
                       <label
                         htmlFor={`qty-${r.id}`}
-                        className="text-[12.5px] text-inverse-muted whitespace-nowrap"
+                        className="text-caption text-inverse-muted whitespace-nowrap"
                       >
                         {r.quantity == null ? "Add a measurement" : "Measurement"}
                       </label>
@@ -1141,9 +1141,9 @@ export function Re10Wizard() {
                             ),
                           );
                         }}
-                        className="w-24 min-h-11 rounded-sm border border-inverse-foreground/25 bg-inverse-foreground/5 px-3 text-[16px] text-inverse-foreground placeholder:text-inverse-muted/60 focus:outline-none focus:ring-2 focus:ring-accent-legible"
+                        className="w-24 min-h-11 rounded-sm border border-inverse-foreground/25 bg-inverse-foreground/5 px-3 text-base text-inverse-foreground placeholder:text-inverse-muted/60 focus:outline-none focus:ring-2 focus:ring-accent-legible"
                       />
-                      <span className="text-[12.5px] text-inverse-muted">
+                      <span className="text-caption text-inverse-muted">
                         {RECIPES[r.kind]?.unit === "SF"
                           ? "sq ft"
                           : RECIPES[r.kind]?.unit === "LF"
@@ -1158,12 +1158,12 @@ export function Re10Wizard() {
 
             {extraction.unmapped.length > 0 && (
               <div className="mt-6 rounded-sm border border-inverse-foreground/15 p-4">
-                <p className="text-[13px] text-inverse-foreground mb-2">
+                <p className="text-sm text-inverse-foreground mb-2">
                   We could not categorise these, so a person will look at them:
                 </p>
                 <ul className="space-y-1.5">
                   {extraction.unmapped.map((u) => (
-                    <li key={u.verbatim} className="text-[12.5px] text-inverse-muted leading-relaxed">
+                    <li key={u.verbatim} className="text-caption text-inverse-muted leading-relaxed">
                       {u.verbatim} <span className="text-inverse-muted/70">({u.reason})</span>
                     </li>
                   ))}
@@ -1222,7 +1222,7 @@ export function Re10Wizard() {
               {/* Role sits last and is a single tap, so selecting it can safely
                   auto-continue once a name is present. */}
               <div>
-                <span className="mb-2 block text-[12.5px] text-inverse-muted">Your role</span>
+                <span className="mb-2 block text-caption text-inverse-muted">Your role</span>
                 <div role="radiogroup" aria-label="Your role" className="grid grid-cols-2 gap-2.5">
                   {ROLES.map((r) => (
                     <SelectableCard
@@ -1542,7 +1542,7 @@ function ResultView({
   return (
     <>
       {/* -------- estimate overview: the most important information first */}
-      <p className="text-[12px] tracking-[0.14em] uppercase text-inverse-muted mb-2">
+      <p className="text-caption tracking-[0.14em] uppercase text-inverse-muted mb-2">
         Price for the repairs below
       </p>
       <div
@@ -1551,20 +1551,20 @@ function ResultView({
       >
         {usd(result.price)}
       </div>
-      <p className="mt-2 text-[13px] text-accent-legible">Held for {result.validDays} days</p>
-      <p className="mt-3 text-[13px] text-inverse-muted">
+      <p className="mt-2 text-sm text-accent-legible">Held for {result.validDays} days</p>
+      <p className="mt-3 text-sm text-inverse-muted">
         {result.propertyAddress}
         {result.repairDeadline ? ` \u00b7 repairs due ${result.repairDeadline}` : ""}
         {result.closingDate ? ` \u00b7 closing ${result.closingDate}` : ""}
       </p>
 
       {result.emailed && (
-        <p className="mt-4 text-[13px] text-inverse-foreground/85">A copy is on its way to your inbox.</p>
+        <p className="mt-4 text-sm text-inverse-foreground/85">A copy is on its way to your inbox.</p>
       )}
 
       {/* Prominent, reassuring scope-editing CTA, right by the price. */}
       <div className="mt-6 flex flex-col gap-3 rounded-sm border border-accent-legible/40 bg-accent-legible/10 p-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="flex items-center gap-2 text-[14px] text-inverse-foreground">
+        <p className="flex items-center gap-2 text-sm text-inverse-foreground">
           <Sparkles className="h-4 w-4 flex-shrink-0 text-accent-legible" aria-hidden="true" />
           Not what you expected?
         </p>
@@ -1578,19 +1578,19 @@ function ResultView({
         </Button>
       </div>
 
-      <p className="mt-5 text-[12.5px] text-inverse-foreground/90 leading-relaxed">
+      <p className="mt-5 text-caption text-inverse-foreground/90 leading-relaxed">
         {RE10_PRICING_DISCLAIMER}
       </p>
 
       {/* -------- scope summary, itemised by trade in the document's order */}
       <div className="mt-8">
-        <p className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground mb-3">
+        <p className="text-sm tracking-[0.06em] uppercase text-inverse-foreground mb-3">
           What this covers
         </p>
         <ul className="space-y-3">
           {result.categories.map((c) => (
             <li key={c.trade} className="rounded-sm bg-inverse-foreground/[0.05] p-4">
-              <p className="text-[14px] text-inverse-foreground mb-1.5">
+              <p className="text-sm text-inverse-foreground mb-1.5">
                 {c.label}{" "}
                 <span className="text-inverse-muted">
                   ({c.itemCount} {c.itemCount === 1 ? "item" : "items"})
@@ -1598,7 +1598,7 @@ function ResultView({
               </p>
               <ul className="space-y-1">
                 {c.items.map((i, n) => (
-                  <li key={n} className="text-[12.5px] text-inverse-muted leading-relaxed">
+                  <li key={n} className="text-caption text-inverse-muted leading-relaxed">
                     {i.description}
                     {i.quantityAssumed && i.quantity ? ` (priced for ${i.quantity} ${i.unit ?? ""})` : ""}
                   </li>
@@ -1612,12 +1612,12 @@ function ResultView({
       {/* -------- exclusions: what needs an onsite look, said plainly */}
       {result.needsOnsite.length > 0 && (
         <div className="mt-6 rounded-sm border border-inverse-foreground/20 p-4">
-          <p className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground mb-3">
+          <p className="text-sm tracking-[0.06em] uppercase text-inverse-foreground mb-3">
             Not included - needs an onsite evaluation
           </p>
           <ul className="space-y-2.5">
             {result.needsOnsite.map((n, i) => (
-              <li key={i} className="text-[12.5px] text-inverse-muted leading-relaxed">
+              <li key={i} className="text-caption text-inverse-muted leading-relaxed">
                 <span className="text-inverse-foreground/90">{n.description}</span> - {n.why}
               </li>
             ))}
@@ -1628,12 +1628,12 @@ function ResultView({
       {/* -------- assumptions used to reach the price, in plain language */}
       {result.assumptions.length > 0 && (
         <div className="mt-6">
-          <p className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground mb-2">
+          <p className="text-sm tracking-[0.06em] uppercase text-inverse-foreground mb-2">
             What we assumed
           </p>
           <ul className="space-y-1.5">
             {result.assumptions.map((a, i) => (
-              <li key={i} className="flex items-start gap-2 text-[12.5px] text-inverse-muted leading-relaxed">
+              <li key={i} className="flex items-start gap-2 text-caption text-inverse-muted leading-relaxed">
                 <Check className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-accent-legible" aria-hidden="true" />
                 {a}
               </li>
@@ -1645,12 +1645,12 @@ function ResultView({
       {/* -------- pricing notes / what would firm this up */}
       {result.uncertainty.length > 0 && (
         <div className="mt-6">
-          <p className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground mb-2">
+          <p className="text-sm tracking-[0.06em] uppercase text-inverse-foreground mb-2">
             What would firm this up
           </p>
           <ul className="space-y-1.5">
             {result.uncertainty.map((u, i) => (
-              <li key={i} className="text-[12.5px] text-inverse-muted leading-relaxed">
+              <li key={i} className="text-caption text-inverse-muted leading-relaxed">
                 {u}
               </li>
             ))}
@@ -1661,12 +1661,12 @@ function ResultView({
       {/* -------- uploaded files, so the user can confirm we received them */}
       {documents.length > 0 && (
         <div className="mt-6">
-          <p className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground mb-2">
+          <p className="text-sm tracking-[0.06em] uppercase text-inverse-foreground mb-2">
             Documents you sent
           </p>
           <ul className="space-y-1.5">
             {documents.map((f) => (
-              <li key={`${f.name}:${f.size}`} className="flex items-center gap-2 text-[12.5px] text-inverse-muted">
+              <li key={`${f.name}:${f.size}`} className="flex items-center gap-2 text-caption text-inverse-muted">
                 <FileText className="h-3.5 w-3.5 flex-shrink-0" aria-hidden="true" />
                 <span className="truncate">{f.name}</span>
               </li>
@@ -1697,7 +1697,7 @@ function ResultView({
       </div>
 
       {/* -------- sticky next-step actions: one primary, one scope edit */}
-      <div className="sticky bottom-0 z-30 -mx-4 mt-8 border-t border-inverse-foreground/15 bg-[hsl(var(--inverse))]/95 px-4 pb-safe pt-3 backdrop-blur-md">
+      <div data-wizard-action-bar="" className="sticky bottom-0 z-30 -mx-4 mt-8 border-t border-inverse-foreground/15 bg-[hsl(var(--inverse))]/95 px-4 pb-safe pt-3 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl items-center gap-3 pb-3">
           <Button
             variant="heroGhost"

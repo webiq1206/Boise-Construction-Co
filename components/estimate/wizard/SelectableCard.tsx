@@ -88,7 +88,7 @@ export function SelectableCard({
       <span className="min-w-0 flex-1">
         <span
           className={cn(
-            "block text-[15px] leading-tight",
+            "block text-base leading-tight",
             inverse ? "text-inverse-foreground" : "text-foreground",
           )}
         >
@@ -97,7 +97,7 @@ export function SelectableCard({
         {description && (
           <span
             className={cn(
-              "mt-1 block text-[12.5px] leading-snug",
+              "mt-1 block text-caption leading-snug",
               inverse ? "text-inverse-muted" : "text-muted-foreground",
             )}
           >

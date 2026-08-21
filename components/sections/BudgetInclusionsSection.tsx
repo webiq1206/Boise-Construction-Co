@@ -83,7 +83,7 @@ export function BudgetInclusionsSection() {
                 </ul>
 
                 <div className="pt-8 border-t border-inverse-foreground/15">
-                  <p className="text-[11px] tracking-[0.12em] uppercase font-normal text-inverse-muted mb-3">
+                  <p className="text-xs tracking-[0.12em] uppercase font-normal text-inverse-muted mb-3">
                     Optional enhancement
                   </p>
                   <h3 className="font-sans font-normal text-sm mb-2 text-inverse-foreground">

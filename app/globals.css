@@ -404,7 +404,11 @@ html, body {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 11px;
+  /* 13px, not 11px. Uppercase text tracked at 0.14em reads visually smaller
+     than its nominal size, so this was the least legible text on the site
+     while also being the label that introduces most sections. 13px is the
+     floor the type scale sets; nothing should sit under it. */
+  font-size: 0.8125rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: hsl(var(--muted-foreground));
@@ -578,7 +582,7 @@ html, body {
   width: 100%;
   border-collapse: collapse;
   margin: 1.5rem 0;
-  font-size: 0.9rem;
+  font-size: 0.9375rem;
 }
 .blog-content th {
   background: hsl(var(--primary) / 0.08);
@@ -637,7 +641,7 @@ html, body {
 }
 
 .blog-content figcaption {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   color: hsl(var(--muted-foreground));
   margin-top: 0.5rem;
   text-align: center;
@@ -665,7 +669,7 @@ html, body {
   align-items: center;
   gap: 0.5rem;
   margin: 0 0 0.55rem;
-  font-size: 0.68rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -901,5 +905,32 @@ body[data-hide-mobile-nav-bar="true"] [data-mobile-nav-bar] {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/*
+ * Keep the assistant launcher off the wizard's Continue button.
+ *
+ * Measured on a 375px screen: the estimator's sticky action bar occupies
+ * x17-358 / y731-812, and the launcher sits at x307-359 / y744-796 with a
+ * higher stacking order - so the floating bubble landed directly on top of the
+ * primary action of every step. On the one screen where there is exactly one
+ * thing to tap, something else was covering it.
+ *
+ * :has() rather than state passed between two unrelated component trees. The
+ * bar and the launcher have no common owner, and threading a flag through
+ * context to solve a positioning problem would be a lot of machinery for a
+ * rule CSS can express directly. Browsers without :has() simply keep the old
+ * position, which is the pre-existing behaviour rather than a broken one.
+ */
+body:has([data-wizard-action-bar]) .brc-assistant-launcher {
+  bottom: 6.75rem;
+}
+
+/* Desktop centres the wizard card at max-w-3xl, so the bar never reaches the
+   viewport corner the launcher lives in and no offset is needed. */
+@media (min-width: 768px) {
+  body:has([data-wizard-action-bar]) .brc-assistant-launcher {
+    bottom: 1.5rem;
   }
 }

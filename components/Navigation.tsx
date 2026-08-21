@@ -69,7 +69,7 @@ export function Navigation() {
                   href={link.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "relative px-4 py-2 text-[13px] font-normal transition-colors rounded-sm hover-elevate",
+                    "relative px-4 py-2 text-sm font-normal transition-colors rounded-sm hover-elevate",
                     active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
                   )}
                 >
@@ -86,7 +86,7 @@ export function Navigation() {
             <div className="flex flex-col items-end gap-0.5">
               <a
                 href={SITE_CONFIG.phoneHref}
-                className="flex items-center gap-2 text-[13px] font-normal transition-colors text-muted-foreground hover:text-foreground"
+                className="flex items-center gap-2 text-sm font-normal transition-colors text-muted-foreground hover:text-foreground"
                 data-testid="link-phone-desktop"
               >
                 <span className="relative flex h-2 w-2">
@@ -97,13 +97,13 @@ export function Navigation() {
               </a>
               {/* min-h-6 = the 24px WCAG 2.2 target-size floor for a
                   standalone 11px utility link. */}
-              <SaveContactLink className="inline-flex min-h-6 items-center text-[11px] text-muted-foreground hover:text-foreground transition-colors">
+              <SaveContactLink className="inline-flex min-h-6 items-center text-xs text-muted-foreground hover:text-foreground transition-colors">
                 Save to contacts
               </SaveContactLink>
             </div>
             <a
               href={SITE_CONFIG.phoneSmsHref}
-              className="text-[13px] font-normal transition-colors text-muted-foreground hover:text-foreground"
+              className="text-sm font-normal transition-colors text-muted-foreground hover:text-foreground"
               data-testid="link-text-desktop"
             >
               Text us

@@ -39,7 +39,7 @@ export function HelpNote({
         aria-controls={id}
         data-testid={testId}
         className={cn(
-          "inline-flex min-h-11 items-center gap-1.5 text-[13px] transition-colors",
+          "inline-flex min-h-11 items-center gap-1.5 text-sm transition-colors",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-legible focus-visible:ring-offset-2 rounded-sm",
           inverse
             ? "text-accent-legible focus-visible:ring-offset-[hsl(var(--inverse))]"
@@ -57,7 +57,7 @@ export function HelpNote({
         <div
           id={id}
           className={cn(
-            "mt-2 rounded-sm border p-3.5 text-[13px] leading-relaxed",
+            "mt-2 rounded-sm border p-3.5 text-sm leading-relaxed",
             inverse
               ? "border-inverse-foreground/15 bg-inverse-foreground/[0.05] text-inverse-foreground/85"
               : "border-border bg-surface-greige text-muted-foreground",

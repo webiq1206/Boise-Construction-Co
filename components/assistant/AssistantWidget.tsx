@@ -169,7 +169,7 @@ export function AssistantWidget() {
           }}
           aria-label="Chat with our estimating assistant"
           data-testid="button-assistant-open"
-          className="fixed bottom-4 right-4 z-40 flex h-13 w-13 min-h-11 min-w-11 items-center justify-center rounded-full bg-accent-legible text-background shadow-lg transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-legible md:bottom-6 md:right-6"
+          className="brc-assistant-launcher fixed bottom-4 right-4 z-40 flex h-13 w-13 min-h-11 min-w-11 items-center justify-center rounded-full bg-accent-legible text-background shadow-lg transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-legible md:bottom-6 md:right-6"
           style={{ height: 52, width: 52 }}
         >
           <MessageCircle className="h-6 w-6" strokeWidth={1.75} />

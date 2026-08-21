@@ -16,14 +16,22 @@ function StatCard({ num, label }: { num: string; label: string }) {
        uppercase labels close to invisible. Tinting with the dark inverse colour
        instead gives the light text something to sit on wherever the photo
        happens to be bright. */
-    <div className="px-3 py-3 md:px-6 md:py-5 rounded-sm bg-inverse/55 border border-inverse-foreground/20 backdrop-blur-md">
-      <DisplayNum className="text-inverse-foreground text-lg md:text-3xl leading-none">
+    /* MOBILE LAYS THESE OUT SIDEWAYS ON PURPOSE.
+       Three of these in a row on a 375px screen leaves each card about 106px
+       wide, and "Budget before we break ground" does not fit in 106px at a
+       readable size - it wrapped to four lines and then clipped. Stacking the
+       cards and running the number and label on ONE LINE gives the label the
+       full column width, so it reads at a comfortable size in one or two lines
+       instead of being squeezed into a column that was never wide enough.
+       Desktop keeps the stacked card, where there is room for it. */
+    <div className="flex items-baseline gap-3 md:block px-3.5 py-3 md:px-6 md:py-5 rounded-sm bg-inverse/55 border border-inverse-foreground/20 backdrop-blur-md">
+      <DisplayNum className="shrink-0 text-inverse-foreground text-lg md:text-3xl leading-none">
         {num}
       </DisplayNum>
       {/* Was text-inverse-muted. At 10-11px over the photo that measured 3.4:1,
           already under the 4.5:1 AA needs before the scrim above it was
           lightened, which would have taken it lower still. */}
-      <div className="mt-1 md:mt-1.5 text-[10px] md:text-[11px] tracking-[0.06em] md:tracking-[0.1em] uppercase text-inverse-foreground/85 leading-snug">
+      <div className="md:mt-1.5 text-caption md:text-xs tracking-[0.04em] md:tracking-[0.1em] uppercase text-inverse-foreground/85 leading-snug">
         {label}
       </div>
     </div>
@@ -98,7 +106,7 @@ export function HeroSection() {
                 </Button>
               </div>
 
-              <div className="grid grid-cols-3 gap-3 md:hidden">
+              <div className="grid grid-cols-1 gap-2 md:hidden">
                 {HERO_STATS.map((stat) => (
                   <StatCard key={stat.num} num={stat.num} label={stat.label} />
                 ))}

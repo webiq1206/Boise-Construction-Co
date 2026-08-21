@@ -742,7 +742,7 @@ export function EstimateCalculator({
    * rule set a custom home runs through (see resolveProjectType).
    */
   const [landOwnership, setLandOwnership] = useState<"own" | "not-yet" | null>(null);
-  /* Where a non-landowner plans to build. A city or area name -- never a
+  /* Where a non-landowner plans to build. A city or area name - never a
      street address for land they do not own. */
   const [buildArea, setBuildArea] = useState("");
 
@@ -1234,7 +1234,7 @@ export function EstimateCalculator({
     setLandOwnership(v);
     setChosen((p) => ({ ...p, land: true }));
     /* When land is owned the site questions are the authority on water and
-       sewer, and the chip is hidden -- a ticked one must not keep pricing. */
+       sewer, and the chip is hidden - a ticked one must not keep pricing. */
     if (v === "own") setAddOns((prev) => prev.filter((c) => c !== "well-septic"));
     /* Flipping away from ownership must forget the property: a street address
        and county profile describe land the visitor just said they do not own,
@@ -1391,7 +1391,7 @@ export function EstimateCalculator({
       }
 
       /* Before a project is chosen, clamp only to the union of every offered
-         project's range -- the visitor has not told us which bounds apply yet,
+         project's range - the visitor has not told us which bounds apply yet,
          and the default project's must not be baked in. */
       const bounds = chosen.project
         ? { min: sizeConfig.min, max: sizeConfig.max }
@@ -1405,7 +1405,7 @@ export function EstimateCalculator({
       const change = applyPlanToEstimate(plan, bounds);
 
       /* Anything the plans rewrite over an answer the visitor already gave is
-         stated back explicitly -- see planChanged. */
+         stated back explicitly - see planChanged. */
       const changed: string[] = [];
       const filled: typeof planFilled = {};
       if (change.sqft !== undefined) {
@@ -1518,7 +1518,7 @@ export function EstimateCalculator({
     setPeScope(null);
     setCabTier(null);
     /* A bathroom count read from the drawings is a fact about the home, not
-       about which project card is active -- same rule as plan-settled size
+       about which project card is active - same rule as plan-settled size
        above. Clearing it here would silently discard the uploaded answer
        before the bathroom step ever rendered its "from your plans" card. */
     if (!planFilled.baths) {
@@ -1855,7 +1855,7 @@ export function EstimateCalculator({
      the extraction actually returned suppress anything.
 
      Layout is suppressed only for the custom-home card, whose layout cards
-     literally ask how many levels the home has -- a fact a plan set states.
+     literally ask how many levels the home has - a fact a plan set states.
      The owned-land layout cards describe the LOT and the shop-home cards
      describe the house/shop ratio; drawings settle neither, so those stay
      open. Finish level is deliberately never suppressed: it is a major cost
@@ -1868,7 +1868,7 @@ export function EstimateCalculator({
 
   /* When the drawings answered the layout question, the step is a collapsed
      card rather than a grid, so reaching it must record the answer the same
-     way tapping a card would -- otherwise everything below stays hidden. The
+     way tapping a card would - otherwise everything below stays hidden. The
      subtype is set to the card the stories imply so its seed and labels agree
      with the drawings (the plan override still outranks the seed). */
   useEffect(() => {
@@ -2469,7 +2469,7 @@ export function EstimateCalculator({
       budget: budgetValue ? `$${budgetValue.toLocaleString("en-US")}` : undefined,
       projectType: effectiveProject,
       /* Landowners send their street address; everyone else sends the area
-         they plan to build in. Never both -- the API records whichever the
+         they plan to build in. Never both - the API records whichever the
          visitor's situation makes true. */
       address: ownsLand ? gateAddress.trim() : undefined,
       buildArea: ownsLand ? undefined : buildArea.trim(),
@@ -2595,11 +2595,9 @@ export function EstimateCalculator({
   const planningStageStep = (
     <div className="mb-6">
       {renderStepLabel("stage", "How far along are you?")}
-      <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
-        This is about your planning, not the home itself -- you will pick the
-        type of build next. The further along you are, the tighter the range we
-        can honestly give you. If you already have drawings, you can hand them
-        over right after this and skip most of the questions.
+      <p className="text-sm text-inverse-muted -mt-1 mb-3 max-w-prose">
+        You will pick the type of build next. The further along you are, the
+        tighter the range we can give you.
       </p>
       <div className="grid gap-2.5" role="radiogroup" aria-label="Planning stage">
         {PLANNING_STAGES.map((stage) => {
@@ -2616,10 +2614,10 @@ export function EstimateCalculator({
               className={cn(darkCard(active), "flex items-center gap-3 px-4 py-3.5 text-left min-h-[58px]")}
             >
               <div className="min-w-0 flex-1">
-                <span className="block text-[15px] text-inverse-foreground leading-tight">
+                <span className="block text-base text-inverse-foreground leading-tight">
                   {meta.label}
                 </span>
-                <span className="block text-[12.5px] text-inverse-muted mt-0.5">{meta.sub}</span>
+                <span className="block text-caption text-inverse-muted mt-0.5">{meta.sub}</span>
               </div>
               {active && (
                 <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-accent-legible flex-shrink-0">
@@ -2633,11 +2631,11 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Land ownership -- a situation question, before the home itself. */
+  /* Land ownership - a situation question, before the home itself. */
   const landStep = (
     <div className="mb-6 scroll-mt-20">
       {renderStepLabel("land", "Do you already own the land?")}
-      <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
+      <p className="text-sm text-inverse-muted -mt-1 mb-3 max-w-prose">
         Owning the lot changes which questions matter: we will ask about your
         property and site instead of guessing at them.
       </p>
@@ -2660,8 +2658,8 @@ export function EstimateCalculator({
             >
               <Icon className={cn("h-5 w-5 flex-shrink-0", active ? "text-accent-legible" : "text-inverse-muted")} />
               <span className="min-w-0 flex-1">
-                <span className="block text-[15px] text-inverse-foreground leading-tight">{opt.label}</span>
-                <span className="block text-[12px] text-inverse-muted mt-0.5">{opt.sub}</span>
+                <span className="block text-base text-inverse-foreground leading-tight">{opt.label}</span>
+                <span className="block text-caption text-inverse-muted mt-0.5">{opt.sub}</span>
               </span>
               {active && (
                 <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-accent-legible flex-shrink-0">
@@ -2679,8 +2677,8 @@ export function EstimateCalculator({
   const projectGrid = (
     <div className="mb-6">
       {renderStepLabel("project", "What are we building?")}
-      <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
-        Now the home itself. Every one of these is a new build -- they differ in
+      <p className="text-sm text-inverse-muted -mt-1 mb-3 max-w-prose">
+        Now the home itself. Every one of these is a new build - they differ in
         how the design starts and where it goes.
       </p>
       <div
@@ -2708,9 +2706,9 @@ export function EstimateCalculator({
                 className={cn("h-5 w-5 flex-shrink-0", active ? "text-accent-legible" : "text-inverse-muted")}
               />
               <span className="min-w-0 flex-1">
-                <span className="block text-[15px] text-inverse-foreground leading-tight">{pc.tabLabel}</span>
+                <span className="block text-base text-inverse-foreground leading-tight">{pc.tabLabel}</span>
                 {pc.tabSub && (
-                  <span className="block text-[12px] text-inverse-muted mt-0.5">{pc.tabSub}</span>
+                  <span className="block text-caption text-inverse-muted mt-0.5">{pc.tabSub}</span>
                 )}
               </span>
               {active && (
@@ -2725,15 +2723,31 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* Intro - eyebrow + dynamic per-project headline */
+  /* Intro - eyebrow + dynamic per-project headline.
+   *
+   * MOBILE GETS A MUCH SHORTER VERSION OF THIS, on purpose.
+   *
+   * Measured on a 375x812 screen, the full-width intro was 325px tall - the
+   * icon tile, a wrapped "Free / About 2 minutes / No obligation" row, a
+   * "Cost estimator" eyebrow and a headline that clamped to 30px and ran to
+   * two lines. Added to the four answer cards it made the first step 1,047px
+   * on an 812px screen, so a visitor arriving at the estimator saw a heading,
+   * a paragraph and a Continue button with the actual CHOICES below the fold.
+   *
+   * None of that chrome helps someone answer the question. The reassurance
+   * ("free", "two minutes", "no obligation") is worth saying once, so it stays
+   * as one compact line; the icon and the separate eyebrow are decoration and
+   * are desktop-only; and the headline drops a size class on mobile. Desktop is
+   * unchanged - it has the room, and the big headline is doing real work there.
+   */
   const intro = (
-    <div className="mb-7">
-      <div className="flex items-start gap-4 mb-5">
-        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-sm bg-accent-legible/15 border border-accent-legible/30 text-accent-legible">
+    <div className="mb-4 md:mb-7">
+      <div className="flex items-start gap-4 mb-3 md:mb-5">
+        <div className="hidden md:flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-sm bg-accent-legible/15 border border-accent-legible/30 text-accent-legible">
           <Calculator className="h-5 w-5" strokeWidth={1.5} aria-hidden />
         </div>
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-3 text-[10px] md:text-[11px] tracking-[0.14em] uppercase text-inverse-muted">
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 mb-1.5 md:mb-3 text-xs tracking-[0.1em] md:tracking-[0.14em] uppercase text-inverse-muted">
             <span className="inline-flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-accent-legible" aria-hidden />
               Free
@@ -2743,12 +2757,12 @@ export function EstimateCalculator({
             <span className="opacity-40" aria-hidden>·</span>
             <span>No obligation</span>
           </div>
-          <p className="text-[12px] tracking-[0.16em] uppercase text-accent-legible/90 mb-2">
+          <p className="hidden md:block text-caption tracking-[0.16em] uppercase text-accent-legible/90 mb-2">
             Cost estimator
           </p>
         </div>
       </div>
-      <h2 className="font-sans font-light text-[clamp(1.875rem,4.5vw,3.25rem)] leading-[1.06] tracking-tight text-inverse-foreground pb-6 border-b border-accent-legible/25">
+      <h2 className="font-sans font-light text-[clamp(1.5rem,4.5vw,3.25rem)] leading-[1.1] md:leading-[1.06] tracking-tight text-inverse-foreground pb-4 md:pb-6 border-b border-accent-legible/25">
         {!chosen.project ? (
           /* Before a project is picked the headline must not name one. */
           <>
@@ -2772,7 +2786,7 @@ export function EstimateCalculator({
 
   /* Shared input class for the plain-text inputs in the flow. */
   const flowInputClass =
-    "w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-3 py-2.5 text-[16px] text-inverse-foreground placeholder:text-[13px] placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors";
+    "w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-3 py-2.5 text-base text-inverse-foreground placeholder:text-sm placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors";
 
   /* The non-landowner's version of the address slot: a city or area is enough
      to confirm the service area, and asking for a street address for land they
@@ -2780,8 +2794,8 @@ export function EstimateCalculator({
   const areaStep = (
     <div className="mt-6 scroll-mt-20">
       {renderStepLabel("address", "Where do you plan to build?")}
-      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
-        A city or general area is plenty -- it confirms we serve where you are headed.
+      <p className="-mt-2 mb-3 text-caption text-inverse-muted/90">
+        A city or general area is plenty - it confirms we serve where you are headed.
       </p>
       <input
         type="text"
@@ -2794,7 +2808,7 @@ export function EstimateCalculator({
         data-testid="early-input-build-area"
         aria-label="City or area where you plan to build"
       />
-      <p className="mt-2 text-[12px] text-inverse-muted/90 leading-relaxed">
+      <p className="mt-2 text-caption text-inverse-muted/90 leading-relaxed">
         You can skip ahead and fill it in later.
       </p>
     </div>
@@ -2808,7 +2822,7 @@ export function EstimateCalculator({
   const addressStep = (
     <div className="mt-6 scroll-mt-20">
       {renderStepLabel("address", "Where is your lot?")}
-      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
+      <p className="-mt-2 mb-3 text-caption text-inverse-muted/90">
         Confirms we serve your area and auto-fills details if we find a match.
       </p>
       <AddressAutocomplete
@@ -2833,8 +2847,8 @@ export function EstimateCalculator({
         }}
         data-testid="early-input-address"
       />
-      <p className="mt-2 text-[12px] text-inverse-muted/90 leading-relaxed">
-        Optional here -- you can skip ahead and fill it in later.
+      <p className="mt-2 text-caption text-inverse-muted/90 leading-relaxed">
+        Optional here - you can skip ahead and fill it in later.
       </p>
     </div>
   );
@@ -2856,15 +2870,15 @@ export function EstimateCalculator({
     >
       <Check className="h-4 w-4 flex-shrink-0 text-accent-legible" />
       <div className="min-w-0 flex-1">
-        <span className="block text-[14px] text-inverse-foreground leading-tight">
+        <span className="block text-sm text-inverse-foreground leading-tight">
           {label}: {value}
         </span>
-        <span className="block text-[11.5px] text-inverse-muted mt-0.5">From your plans</span>
+        <span className="block text-xs text-inverse-muted mt-0.5">From your plans</span>
       </div>
       <button
         type="button"
         onClick={onEdit}
-        className="flex-shrink-0 text-[12.5px] text-inverse-foreground underline underline-offset-2 hover:opacity-80"
+        className="flex-shrink-0 text-caption text-inverse-foreground underline underline-offset-2 hover:opacity-80"
         data-testid={`${testId}-edit`}
       >
         Edit
@@ -2915,10 +2929,10 @@ export function EstimateCalculator({
               )}
               <Icon className="h-5 w-5 flex-shrink-0 mt-0.5 text-accent-legible" />
               <span className="min-w-0 pr-5">
-                <span className="block text-[15px] text-inverse-foreground leading-tight">
+                <span className="block text-base text-inverse-foreground leading-tight">
                   {opt.title}
                 </span>
-                <span className="block text-[12.5px] italic text-inverse-muted leading-snug mt-1">
+                <span className="block text-caption italic text-inverse-muted leading-snug mt-1">
                   {opt.subtitle}
                 </span>
               </span>
@@ -2951,11 +2965,11 @@ export function EstimateCalculator({
           "mb-0",
         )}
         <span
-          className="brc-display-num tabular-nums text-[22px] leading-none text-inverse-foreground"
+          className="brc-display-num tabular-nums text-title leading-none text-inverse-foreground"
           data-testid="calc-sqft-value"
         >
           {sqft.toLocaleString()}
-          <span className="text-[13px] text-inverse-muted ml-1">sq ft</span>
+          <span className="text-sm text-inverse-muted ml-1">sq ft</span>
         </span>
       </div>
       <input
@@ -2976,11 +2990,11 @@ export function EstimateCalculator({
           backgroundImage: `linear-gradient(to right, hsl(var(--accent-legible)) 0%, hsl(var(--accent-legible)) ${sizePct}%, hsl(var(--inverse-foreground) / 0.14) ${sizePct}%, hsl(var(--inverse-foreground) / 0.14) 100%)`,
         }}
       />
-      <div className="flex justify-between mt-2 text-[12px] text-inverse-muted">
+      <div className="flex justify-between mt-2 text-caption text-inverse-muted">
         <span>Compact ({sizeConfig.min.toLocaleString()})</span>
         <span>Large ({sizeConfig.max.toLocaleString()} sq ft)</span>
       </div>
-      <p className="mt-2.5 text-[12.5px] text-inverse-muted/90 leading-relaxed">
+      <p className="mt-2.5 text-caption text-inverse-muted/90 leading-relaxed">
         {isNewBuild ? (
           <>
             This is finished living space only. Leave out the garage and any unfinished basement,
@@ -3011,8 +3025,8 @@ export function EstimateCalculator({
     testPrefix: string,
   ) => (
     <div className="mb-4 last:mb-0">
-      <p className="text-[12.5px] tracking-[0.06em] uppercase text-inverse-foreground/90 mb-0.5">{label}</p>
-      <p className="text-[12px] text-inverse-muted/90 mb-2">{hint}</p>
+      <p className="text-caption tracking-[0.06em] uppercase text-inverse-foreground/90 mb-0.5">{label}</p>
+      <p className="text-caption text-inverse-muted/90 mb-2">{hint}</p>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2" role="group" aria-label={label}>
         {options.map((opt) => {
           const active = value === opt.value;
@@ -3032,9 +3046,9 @@ export function EstimateCalculator({
                 "py-2.5 px-2 min-h-[52px] flex flex-col items-center justify-center gap-0.5 text-center",
               )}
             >
-              <span className="text-[13px] text-inverse-foreground leading-tight">{opt.label}</span>
+              <span className="text-sm text-inverse-foreground leading-tight">{opt.label}</span>
               {opt.sub && (
-                <span className="text-[10.5px] text-inverse-muted leading-tight">{opt.sub}</span>
+                <span className="text-xs text-inverse-muted leading-tight">{opt.sub}</span>
               )}
             </button>
           );
@@ -3046,7 +3060,7 @@ export function EstimateCalculator({
   const siteSection = (
     <div className="mt-5">
       {renderStepLabel("site", "A few things about your lot")}
-      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
+      <p className="-mt-2 mb-3 text-caption text-inverse-muted/90">
         Site work is one of the biggest swings in a build on your own land, so these four
         answers move your range more than almost anything else. "Not sure" is a fine answer;
         it prices the typical case and we confirm it at the site visit.
@@ -3109,7 +3123,7 @@ export function EstimateCalculator({
      patio). These controls state them and let the visitor adjust; every value
      feeds the line-item engine, so changing one visibly moves the range. */
   const approxInputClass =
-    "w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-3 py-2.5 text-[16px] text-inverse-foreground placeholder:text-[13px] placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors";
+    "w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-3 py-2.5 text-base text-inverse-foreground placeholder:text-sm placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors";
   const GARAGE_PRESET_SF: Record<string, number> = { two: 480, three: 720, four: 960 };
   /* Collapsed "from your plans" lines for garage, basement and patio. Each
      Edit drops that one plan override, which re-shows the chip and the manual
@@ -3157,7 +3171,7 @@ export function EstimateCalculator({
     <div className="mt-4 space-y-4">
       {!planAnsweredGarage && (
       <div>
-        <p className="mb-2 text-[12px] tracking-[0.08em] uppercase text-inverse-muted/90">
+        <p className="mb-2 text-caption tracking-[0.08em] uppercase text-inverse-muted/90">
           Garage size
         </p>
         <div className="grid grid-cols-3 gap-2">
@@ -3179,8 +3193,8 @@ export function EstimateCalculator({
                   "py-2.5 px-2 min-h-[56px] flex flex-col items-center justify-center gap-0.5",
                 )}
               >
-                <span className="text-[13px] text-inverse-foreground leading-tight">{opt.label}</span>
-                <span className="text-[10.5px] text-inverse-muted leading-tight">{opt.sub}</span>
+                <span className="text-sm text-inverse-foreground leading-tight">{opt.label}</span>
+                <span className="text-xs text-inverse-muted leading-tight">{opt.sub}</span>
               </button>
             );
           })}
@@ -3204,7 +3218,7 @@ export function EstimateCalculator({
       )}
       {!planAnsweredBasement && refinements.basementType && refinements.basementType !== "none" && (
         <div>
-          <p className="mb-2 text-[12px] tracking-[0.08em] uppercase text-inverse-muted/90">
+          <p className="mb-2 text-caption tracking-[0.08em] uppercase text-inverse-muted/90">
             Basement size
           </p>
           <div className="grid grid-cols-2 gap-2">
@@ -3230,8 +3244,8 @@ export function EstimateCalculator({
                     "py-2.5 px-2 min-h-[56px] flex flex-col items-center justify-center gap-0.5",
                   )}
                 >
-                  <span className="text-[13px] text-inverse-foreground leading-tight">{opt.label}</span>
-                  <span className="text-[10.5px] text-inverse-muted leading-tight">{opt.sub}</span>
+                  <span className="text-sm text-inverse-foreground leading-tight">{opt.label}</span>
+                  <span className="text-xs text-inverse-muted leading-tight">{opt.sub}</span>
                 </button>
               );
             })}
@@ -3255,7 +3269,7 @@ export function EstimateCalculator({
       )}
       {!planAnsweredPatio && refinements.coveredOutdoor != null && refinements.coveredOutdoor > 0 && (
         <div>
-          <p className="mb-2 text-[12px] tracking-[0.08em] uppercase text-inverse-muted/90">
+          <p className="mb-2 text-caption tracking-[0.08em] uppercase text-inverse-muted/90">
             Covered patio size
           </p>
           <input
@@ -3278,7 +3292,7 @@ export function EstimateCalculator({
   const chipsRow = (
     <div className="mt-5 scroll-mt-20">
       {renderStepLabel("upgrades", config.chipsLabel)}
-      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
+      <p className="-mt-2 mb-3 text-caption text-inverse-muted/90">
         {isNewBuild
           ? "Each of these is priced separately, so ticking one moves your range. Leave them off if you are not sure yet."
           : effectiveProject === "kitchen" || effectiveProject === "bathroom"
@@ -3318,7 +3332,7 @@ export function EstimateCalculator({
               )}
             >
               <Icon className={cn("h-5 w-5", active ? "text-accent-legible" : "text-inverse-muted")} />
-              <span className="text-[11.5px] tracking-[0.08em] uppercase text-inverse-foreground leading-tight">
+              <span className="text-xs tracking-[0.08em] uppercase text-inverse-foreground leading-tight">
                 {chip.label}
               </span>
             </button>
@@ -3336,7 +3350,7 @@ export function EstimateCalculator({
   const systemsRow = (
     <div className="mt-5">
       {renderStepLabel("systems", getPlumbingElectricalLabel(effectiveProject))}
-      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
+      <p className="-mt-2 mb-3 text-caption text-inverse-muted/90">
         Taking a sink out and putting it back in the same spot is routine. This is about whether pipes or circuits actually change location, which is where the cost is.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -3358,8 +3372,8 @@ export function EstimateCalculator({
                 "py-3 px-3 min-h-[64px] flex flex-col items-center justify-center gap-0.5",
               )}
             >
-              <span className="text-[13.5px] text-inverse-foreground leading-tight">{opt.label}</span>
-              <span className="text-[11px] text-inverse-muted leading-tight">{opt.sub}</span>
+              <span className="text-sm text-inverse-foreground leading-tight">{opt.label}</span>
+              <span className="text-xs text-inverse-muted leading-tight">{opt.sub}</span>
             </button>
           );
         })}
@@ -3395,8 +3409,8 @@ export function EstimateCalculator({
                 "py-3 px-3 min-h-[64px] flex flex-col items-center justify-center gap-0.5",
               )}
             >
-              <span className="text-[13.5px] text-inverse-foreground leading-tight">{opt.label}</span>
-              <span className="text-[11px] text-inverse-muted leading-tight">{opt.sub}</span>
+              <span className="text-sm text-inverse-foreground leading-tight">{opt.label}</span>
+              <span className="text-xs text-inverse-muted leading-tight">{opt.sub}</span>
             </button>
           );
         })}
@@ -3419,7 +3433,7 @@ export function EstimateCalculator({
   ) : (
     <div className="mt-5 scroll-mt-20">
       {renderStepLabel("bathcount", "How many bathrooms?")}
-      <p className="-mt-2 mb-3 text-[12px] text-inverse-muted/90">
+      <p className="-mt-2 mb-3 text-caption text-inverse-muted/90">
         {effectiveProject === "whole-home"
           ? "Bathrooms move a whole-home budget more than any other room. Count every one in the project."
           : "A bathroom is one of the largest single line items here. Count every one included."}
@@ -3454,7 +3468,7 @@ export function EstimateCalculator({
               aria-pressed={active}
               className={cn(
                 darkChoice(active),
-                "py-3 min-h-[52px] text-[15px]",
+                "py-3 min-h-[52px] text-base",
               )}
             >
               {n === 0 ? "None" : `${n}${n === 6 ? "+" : ""}`}
@@ -3508,8 +3522,8 @@ export function EstimateCalculator({
                   "py-3 px-3 min-h-[64px] flex flex-col items-center justify-center gap-0.5",
                 )}
               >
-                <span className="text-[13.5px] text-inverse-foreground leading-tight">{opt.label}</span>
-                <span className="text-[11px] text-inverse-muted leading-tight">{opt.sub}</span>
+                <span className="text-sm text-inverse-foreground leading-tight">{opt.label}</span>
+                <span className="text-xs text-inverse-muted leading-tight">{opt.sub}</span>
               </button>
             );
           })}
@@ -3524,15 +3538,15 @@ export function EstimateCalculator({
      project. Editing is one tap away for the minority who want it. */
   const typicalPanel = (
     <div className="mt-6 scroll-mt-20 rounded-md border border-accent-legible/30 bg-inverse-foreground/[0.05] p-4 shadow-[inset_0_0_0_1px_hsl(var(--accent-legible)/0.08)]">
-      <p className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground">
+      <p className="text-sm tracking-[0.06em] uppercase text-inverse-foreground">
         Typical for a {finishLabels[finish].label} {config.tabLabel.toLowerCase()}
       </p>
-      <p className="mt-1 text-[12px] text-inverse-muted">
+      <p className="mt-1 text-caption text-inverse-muted">
         We have pre-selected what is most common. Nothing here is locked in.
       </p>
       <ul className="mt-3 space-y-1.5">
         {typical.summary.map((item, i) => (
-          <li key={i} className="flex items-start gap-2 text-[13px] text-inverse-muted leading-snug">
+          <li key={i} className="flex items-start gap-2 text-sm text-inverse-muted leading-snug">
             <Check className="h-3.5 w-3.5 flex-shrink-0 mt-0.5 text-accent-legible" />
             {item}
           </li>
@@ -3540,18 +3554,18 @@ export function EstimateCalculator({
       </ul>
       {bakedAssumptions.length > 0 && (
         <>
-          <p className="mt-4 text-[12px] tracking-[0.1em] uppercase text-inverse-muted">
+          <p className="mt-4 text-caption tracking-[0.1em] uppercase text-inverse-muted">
             Sizing we assumed
           </p>
           <ul className="mt-1.5 space-y-1.5" data-testid="baked-assumptions">
             {bakedAssumptions.map((item, i) => (
-              <li key={i} className="flex items-start gap-2 text-[13px] text-inverse-muted leading-snug">
+              <li key={i} className="flex items-start gap-2 text-sm text-inverse-muted leading-snug">
                 <span className="mt-0.5 text-inverse-muted/90" aria-hidden>•</span>
                 {item}
               </li>
             ))}
           </ul>
-          <p className="mt-1.5 text-[11.5px] text-inverse-muted/90 leading-relaxed">
+          <p className="mt-1.5 text-xs text-inverse-muted/90 leading-relaxed">
             These are typical figures, not questions we skipped on purpose --
             your plans or a site visit refine them.
           </p>
@@ -3562,7 +3576,7 @@ export function EstimateCalculator({
         onClick={() => setEditOpen((v) => !v)}
         aria-expanded={editOpen}
         data-testid="button-edit-assumptions"
-        className="mt-3 inline-flex items-center gap-1.5 text-[12.5px] text-inverse-foreground underline underline-offset-2 hover:opacity-80"
+        className="mt-3 inline-flex items-center gap-1.5 text-caption text-inverse-foreground underline underline-offset-2 hover:opacity-80"
       >
         Need to adjust anything?
         <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", editOpen && "rotate-180")} />
@@ -3601,7 +3615,7 @@ export function EstimateCalculator({
   ) : (
     <div className="mb-6">
       {renderStepLabel("structures", "Any other structures?")}
-      <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
+      <p className="text-sm text-inverse-muted -mt-1 mb-3 max-w-prose">
         Buildings other than the house. Each one is priced as its own structure,
         not as extra house square footage. Skip this if you only need the home.
       </p>
@@ -3631,10 +3645,10 @@ export function EstimateCalculator({
               data-testid={`calc-structure-${kind}`}
               className={cn(darkChoice(Boolean(picked)), "px-3.5 py-3 text-left min-h-[54px]")}
             >
-              <span className="block text-[14px] text-inverse-foreground leading-tight">
+              <span className="block text-sm text-inverse-foreground leading-tight">
                 {meta.label}
               </span>
-              <span className="block text-[11.5px] text-inverse-muted mt-0.5">{meta.sub}</span>
+              <span className="block text-xs text-inverse-muted mt-0.5">{meta.sub}</span>
             </button>
           );
         })}
@@ -3654,10 +3668,10 @@ export function EstimateCalculator({
               className="flex w-full items-center justify-between text-left"
               aria-expanded={open}
             >
-              <span className="text-[14px] text-inverse-foreground">
+              <span className="text-sm text-inverse-foreground">
                 {meta.label} · {s.sqft.toLocaleString("en-US")} sq ft
               </span>
-              <span className="text-[12px] text-accent-legible">{open ? "Done" : "Edit"}</span>
+              <span className="text-caption text-accent-legible">{open ? "Done" : "Edit"}</span>
             </button>
 
             {open && (
@@ -3665,7 +3679,7 @@ export function EstimateCalculator({
                 <div>
                   <label
                     htmlFor={`as-sqft-${s.kind}`}
-                    className="block text-[12px] uppercase tracking-[0.12em] text-inverse-muted mb-2"
+                    className="block text-caption uppercase tracking-[0.12em] text-inverse-muted mb-2"
                   >
                     Size · {s.sqft.toLocaleString("en-US")} sq ft
                   </label>
@@ -3693,7 +3707,7 @@ export function EstimateCalculator({
                         type="button"
                         aria-pressed={s.attached === o.v}
                         onClick={() => updateStructure(s.kind, { attached: o.v })}
-                        className={cn(darkChoice(s.attached === o.v), "px-3 py-2 text-[13px]")}
+                        className={cn(darkChoice(s.attached === o.v), "px-3 py-2 text-sm")}
                       >
                         {o.label}
                       </button>
@@ -3712,7 +3726,7 @@ export function EstimateCalculator({
                       aria-pressed={s[o.k]}
                       onClick={() => updateStructure(s.kind, { [o.k]: !s[o.k] })}
                       data-testid={`calc-structure-${o.k}-${s.kind}`}
-                      className={cn(darkChoice(s[o.k]), "px-3 py-2 text-[13px]")}
+                      className={cn(darkChoice(s[o.k]), "px-3 py-2 text-sm")}
                     >
                       {o.label}
                     </button>
@@ -3720,7 +3734,7 @@ export function EstimateCalculator({
                 </div>
 
                 <div>
-                  <span className="block text-[12px] uppercase tracking-[0.12em] text-inverse-muted mb-2">
+                  <span className="block text-caption uppercase tracking-[0.12em] text-inverse-muted mb-2">
                     Power
                   </span>
                   <div className="flex flex-wrap gap-2">
@@ -3736,7 +3750,7 @@ export function EstimateCalculator({
                         type="button"
                         aria-pressed={s.power === o.v}
                         onClick={() => updateStructure(s.kind, { power: o.v })}
-                        className={cn(darkChoice(s.power === o.v), "px-3 py-2 text-[13px]")}
+                        className={cn(darkChoice(s.power === o.v), "px-3 py-2 text-sm")}
                       >
                         {o.label}
                       </button>
@@ -3745,7 +3759,7 @@ export function EstimateCalculator({
                 </div>
 
                 <div>
-                  <span className="block text-[12px] uppercase tracking-[0.12em] text-inverse-muted mb-2">
+                  <span className="block text-caption uppercase tracking-[0.12em] text-inverse-muted mb-2">
                     Finish level
                   </span>
                   <div className="flex flex-wrap gap-2">
@@ -3753,7 +3767,7 @@ export function EstimateCalculator({
                       type="button"
                       aria-pressed={s.finish === null}
                       onClick={() => updateStructure(s.kind, { finish: null })}
-                      className={cn(darkChoice(s.finish === null), "px-3 py-2 text-[13px]")}
+                      className={cn(darkChoice(s.finish === null), "px-3 py-2 text-sm")}
                     >
                       Match the house
                     </button>
@@ -3763,7 +3777,7 @@ export function EstimateCalculator({
                         type="button"
                         aria-pressed={s.finish === f}
                         onClick={() => updateStructure(s.kind, { finish: f })}
-                        className={cn(darkChoice(s.finish === f), "px-3 py-2 text-[13px]")}
+                        className={cn(darkChoice(s.finish === f), "px-3 py-2 text-sm")}
                       >
                         {finishLabels[f].label}
                       </button>
@@ -3777,7 +3791,7 @@ export function EstimateCalculator({
       })}
 
       {structures !== null && structures.length === 0 && (
-        <p className="mt-3 text-[12.5px] text-inverse-muted">
+        <p className="mt-3 text-caption text-inverse-muted">
           No additional structures selected. You can add one later.
         </p>
       )}
@@ -3787,12 +3801,12 @@ export function EstimateCalculator({
   const planUploadStep = (
     <div className="mb-6">
       {renderStepLabel("plans", "Upload your plans")}
-      <p className="text-[13px] text-inverse-muted -mt-1 mb-3 max-w-prose">
+      <p className="text-sm text-inverse-muted -mt-1 mb-3 max-w-prose">
         {planningStage === "have-plans"
-          ? "We will read them and fill in most of the questions below for you -- size, bathrooms and other structures stop being questions and start being facts. It also tightens your range."
+          ? "We will read them and fill in most of the questions below for you - size, bathrooms and other structures stop being questions and start being facts. It also tightens your range."
           : "Even a working set helps. We will read what is settled and leave the rest to you."}{" "}
         The cover sheet, floor plans and elevations are the most useful pages.
-        Optional -- you can skip this and answer the questions instead.
+        Optional - you can skip this and answer the questions instead.
       </p>
 
       {/* Asked BEFORE the upload, because it steers the read rather than
@@ -3802,7 +3816,7 @@ export function EstimateCalculator({
       <div className="mb-3">
         <label
           htmlFor="plan-instructions"
-          className="block text-[13px] text-inverse-foreground mb-1.5"
+          className="block text-sm text-inverse-foreground mb-1.5"
         >
           Anything specific you want priced?{" "}
           <span className="text-inverse-muted">(optional)</span>
@@ -3817,11 +3831,11 @@ export function EstimateCalculator({
           placeholder="e.g. millwork and casework only, or just the kitchen build-out"
           className={cn(
             "w-full rounded-md bg-inverse-foreground/[0.06] border border-accent-legible/20",
-            "px-3 py-2 text-[13px] text-inverse-foreground placeholder:text-inverse-muted",
+            "px-3 py-2 text-sm text-inverse-foreground placeholder:text-inverse-muted",
             "focus:outline-none focus:border-accent-legible/60 disabled:opacity-60",
           )}
         />
-        <p className="mt-1 text-[12px] text-inverse-muted">
+        <p className="mt-1 text-caption text-inverse-muted">
           We read every sheet either way - this tells us what to look at
           hardest, and goes to the team with your drawings.
         </p>
@@ -3847,13 +3861,13 @@ export function EstimateCalculator({
             e.target.value = "";
           }}
         />
-        <span className="text-[14px] text-inverse-foreground">
+        <span className="text-sm text-inverse-foreground">
           {planBusy ? "Uploading and reading your plans..." : "Choose files"}
         </span>
-        <span className="text-[12px] text-inverse-muted">{READABLE_FORMATS_LABEL}</span>
+        <span className="text-caption text-inverse-muted">{READABLE_FORMATS_LABEL}</span>
       </label>
       {planBusy && (
-        <p className="mt-2 text-[12px] text-inverse-muted" role="status" data-testid="calc-plan-busy">
+        <p className="mt-2 text-caption text-inverse-muted" role="status" data-testid="calc-plan-busy">
           {/* Counts of things that actually happened, not a spinner guessing.
               A 200-sheet set takes minutes, and a bar that claims "under half a
               minute" for the fourth minute running reads as a hang. */}
@@ -3875,7 +3889,7 @@ export function EstimateCalculator({
 
       {planSkippedSheets.length > 0 && (
         <p
-          className="mt-2 text-[12px] text-inverse-muted"
+          className="mt-2 text-caption text-inverse-muted"
           role="status"
           data-testid="calc-plan-skipped"
         >
@@ -3894,7 +3908,7 @@ export function EstimateCalculator({
       )}
 
       {planStored.length > 0 && (
-        <p className="mt-2 text-[12px] text-inverse-muted" data-testid="calc-plan-stored">
+        <p className="mt-2 text-caption text-inverse-muted" data-testid="calc-plan-stored">
           Attached: {planStored.map((f) => f.filename).join(", ")}
         </p>
       )}
@@ -3902,7 +3916,7 @@ export function EstimateCalculator({
       {planError && (
         <p
           className={cn(
-            "mt-3 text-[13px] rounded-md px-3 py-2.5",
+            "mt-3 text-sm rounded-md px-3 py-2.5",
             planIsRemodel
               ? "text-inverse-foreground bg-accent/10 border border-accent-legible/40"
               : "text-inverse-muted bg-inverse-foreground/[0.06] border border-accent-legible/20",
@@ -3920,34 +3934,34 @@ export function EstimateCalculator({
           role="status"
           data-testid="calc-plan-applied"
         >
-          <p className="text-[12px] uppercase tracking-[0.12em] text-accent-legible mb-2">
+          <p className="text-caption uppercase tracking-[0.12em] text-accent-legible mb-2">
             Read from your plans
           </p>
           <ul className="space-y-1">
             {planApplied.map((line) => (
-              <li key={line} className="text-[13px] text-inverse-foreground">
+              <li key={line} className="text-sm text-inverse-foreground">
                 {line}
               </li>
             ))}
           </ul>
           {planUnderstood.length > 0 && (
             <>
-              <p className="mt-3 text-[12px] uppercase tracking-[0.12em] text-inverse-muted mb-1.5">
+              <p className="mt-3 text-caption uppercase tracking-[0.12em] text-inverse-muted mb-1.5">
                 Also read from your plans
               </p>
-              <p className="text-[12px] text-inverse-muted leading-relaxed" data-testid="calc-plan-understood">
+              <p className="text-caption text-inverse-muted leading-relaxed" data-testid="calc-plan-understood">
                 {planUnderstood.join(" · ")}
               </p>
             </>
           )}
           {planChanged.length > 0 && (
             <div className="mt-3 rounded-sm border border-accent-legible/50 bg-accent/15 px-3 py-2.5" data-testid="calc-plan-changed">
-              <p className="text-[12px] uppercase tracking-[0.12em] text-accent-legible mb-1.5">
+              <p className="text-caption uppercase tracking-[0.12em] text-accent-legible mb-1.5">
                 Changed from your earlier answers
               </p>
               <ul className="space-y-1">
                 {planChanged.map((line) => (
-                  <li key={line} className="text-[13px] text-inverse-foreground">
+                  <li key={line} className="text-sm text-inverse-foreground">
                     {line}
                   </li>
                 ))}
@@ -3958,7 +3972,7 @@ export function EstimateCalculator({
               only when something went wrong: "118 of 118 sheets" is the claim
               that makes "112 of 118" believable when it happens. */}
           {planCoverage && planCoverage.totalPages > 0 && (
-            <p className="mt-3 text-[12px] text-inverse-muted" data-testid="calc-plan-coverage">
+            <p className="mt-3 text-caption text-inverse-muted" data-testid="calc-plan-coverage">
               {planCoverage.processed} of {planCoverage.totalPages} sheet
               {planCoverage.totalPages === 1 ? "" : "s"} read
               {planCoverage.complete ? "." : `, ${planCoverage.missing + planCoverage.unreadable} not readable.`}
@@ -3973,14 +3987,14 @@ export function EstimateCalculator({
               className="mt-3 rounded-sm border border-accent-legible/50 bg-accent/15 px-3 py-2.5"
               data-testid="calc-plan-gate"
             >
-              <p className="text-[12px] uppercase tracking-[0.12em] text-accent-legible mb-1.5">
+              <p className="text-caption uppercase tracking-[0.12em] text-accent-legible mb-1.5">
                 Needs a quick confirmation before we price it
               </p>
               <ul className="space-y-1">
                 {planGate.blockers
                   .filter((b) => b.severity === "block")
                   .map((b) => (
-                    <li key={b.code} className="text-[13px] text-inverse-foreground">
+                    <li key={b.code} className="text-sm text-inverse-foreground">
                       {b.message}
                     </li>
                   ))}
@@ -3988,21 +4002,21 @@ export function EstimateCalculator({
               {planGate.questions.length > 0 && (
                 <ul className="mt-2.5 space-y-1.5 border-t border-accent-legible/25 pt-2.5">
                   {planGate.questions.map((q) => (
-                    <li key={q.id} className="text-[13px] text-inverse-foreground">
+                    <li key={q.id} className="text-sm text-inverse-foreground">
                       {q.question}
-                      <span className="block text-[12px] text-inverse-muted">{q.why}</span>
+                      <span className="block text-caption text-inverse-muted">{q.why}</span>
                     </li>
                   ))}
                 </ul>
               )}
-              <p className="mt-2.5 text-[12px] text-inverse-muted">
+              <p className="mt-2.5 text-caption text-inverse-muted">
                 You can still continue and see a range - it will be marked provisional until these are settled.
               </p>
             </div>
           )}
 
-          <p className="mt-2.5 text-[12px] text-inverse-muted">
-            Review what we filled in, then continue below -- anything the plans
+          <p className="mt-2.5 text-caption text-inverse-muted">
+            Review what we filled in, then continue below - anything the plans
             answered shows as pre-filled with an Edit link, and everything is
             still yours to change.
           </p>
@@ -4012,7 +4026,7 @@ export function EstimateCalculator({
       {planUnresolved.length > 0 && (
         <ul className="mt-2 space-y-1" data-testid="calc-plan-unresolved">
           {planUnresolved.map((line) => (
-            <li key={line} className="text-[12px] text-inverse-muted">
+            <li key={line} className="text-caption text-inverse-muted">
               {line}
             </li>
           ))}
@@ -4041,10 +4055,10 @@ export function EstimateCalculator({
             >
               {/* Finish is the single biggest price driver (roughly 2x per tier),
                   so it gets the same explanatory subtitle the other cards have. */}
-              <span className="text-[13.5px] text-inverse-foreground leading-tight">
+              <span className="text-sm text-inverse-foreground leading-tight">
                 {finishLabels[level].label}
               </span>
-              <span className="text-[11px] text-inverse-muted leading-tight">
+              <span className="text-xs text-inverse-muted leading-tight">
                 {finishLabels[level].sub}
               </span>
             </button>
@@ -4060,7 +4074,7 @@ export function EstimateCalculator({
       <div className="space-y-5 border-t border-inverse-foreground/15 pt-6">
           {/* Price range */}
           <div>
-            <p className="text-[12px] tracking-[0.14em] uppercase text-inverse-muted mb-2">
+            <p className="text-caption tracking-[0.14em] uppercase text-inverse-muted mb-2">
               Your planning range
             </p>
             <div
@@ -4078,26 +4092,26 @@ export function EstimateCalculator({
                 construction carries roi: 0 in PRICE_MATRIX for exactly this
                 reason, and the line is hidden rather than showing "about 0%". */}
             {result.roi > 0 ? (
-              <p className="mt-2.5 text-[14px] text-inverse-muted">
+              <p className="mt-2.5 text-sm text-inverse-muted">
                 Typical resale return for this project type: about {result.roi}%.
               </p>
             ) : (
               <div className="mt-2.5 space-y-1" data-testid="range-included-excluded">
-                <p className="text-[13.5px] text-inverse-muted leading-relaxed">
+                <p className="text-sm text-inverse-muted leading-relaxed">
                   <span className="text-inverse-foreground/90">Includes:</span>{" "}
                   the home and attached garage, foundation and site work,
                   complete plumbing, electrical and HVAC, driveway, walkways and
                   front-yard landscaping.
                 </p>
-                <p className="text-[13.5px] text-inverse-muted leading-relaxed">
+                <p className="text-sm text-inverse-muted leading-relaxed">
                   <span className="text-inverse-foreground/90">Excludes:</span>{" "}
                   land, appliances, impact and utility connection fees, and
-                  landscaping beyond the front yard -- full list below.
+                  landscaping beyond the front yard - full list below.
                 </p>
                 {(refinements.accessoryStructures?.length ?? 0) > 0 && (
-                  <p className="text-[12.5px] text-inverse-muted/90 leading-relaxed" data-testid="accessory-allowance-note">
+                  <p className="text-caption text-inverse-muted/90 leading-relaxed" data-testid="accessory-allowance-note">
                     Detached structures in this range are priced as a rough
-                    market allowance, not builder-verified pricing -- they are
+                    market allowance, not builder-verified pricing - they are
                     the least firm part of this number until we see the site.
                   </p>
                 )}
@@ -4105,10 +4119,10 @@ export function EstimateCalculator({
             )}
             {/* Always visible, never behind a toggle: a homeowner must not be
                 able to leave this screen thinking they were given a price. */}
-            <p className="mt-3 text-[12.5px] text-inverse-foreground/90 leading-relaxed font-normal">
+            <p className="mt-3 text-caption text-inverse-foreground/90 leading-relaxed font-normal">
               {NOT_A_QUOTE_NOTICE}
             </p>
-            <p className="mt-1.5 text-[12.5px] text-inverse-muted/90 leading-relaxed">
+            <p className="mt-1.5 text-caption text-inverse-muted/90 leading-relaxed">
               {/* Project-aware: a new-home build gets the lot-and-site version, not
                   the remodel "what is behind the walls" line. The email already
                   branched here; the on-page panel did not, so a custom-home
@@ -4125,23 +4139,23 @@ export function EstimateCalculator({
           {budgetAssessment && (
             <div className="border-t border-inverse-foreground/10 pt-4">
               <div className="rounded-sm bg-inverse-foreground/[0.06] border border-inverse-foreground/12 p-4" data-testid="budget-assessment">
-                <p className="text-[14px] text-inverse-foreground leading-relaxed">
+                <p className="text-sm text-inverse-foreground leading-relaxed">
                   {budgetAssessment.headline}
                 </p>
                 {budgetAssessment.driver && (
-                  <p className="mt-1.5 text-[13px] text-inverse-muted leading-relaxed">
+                  <p className="mt-1.5 text-sm text-inverse-muted leading-relaxed">
                     {budgetAssessment.driver}
                   </p>
                 )}
                 {budgetGuidance(budgetAssessment) && (
-                  <p className="mt-2.5 text-[13.5px] text-inverse-foreground leading-relaxed">
+                  <p className="mt-2.5 text-sm text-inverse-foreground leading-relaxed">
                     {budgetGuidance(budgetAssessment)}
                   </p>
                 )}
                 {budgetAssessment.options.length > 1 && (
                   <ul className="mt-3 space-y-1.5">
                     {budgetAssessment.options.slice(1).map((o) => (
-                      <li key={o.label} className="text-[13px] text-inverse-muted leading-relaxed">
+                      <li key={o.label} className="text-sm text-inverse-muted leading-relaxed">
                         {/* Full dollars, not the compact form used for the
                             headline range: this list sits directly under a
                             sentence written in full dollars, and mixing
@@ -4153,7 +4167,7 @@ export function EstimateCalculator({
                     ))}
                   </ul>
                 )}
-                <p className="mt-3 text-[12px] text-inverse-muted/90 leading-relaxed">
+                <p className="mt-3 text-caption text-inverse-muted/90 leading-relaxed">
                   {BUDGET_BASIS_NOTE}
                 </p>
               </div>
@@ -4169,7 +4183,7 @@ export function EstimateCalculator({
               data-testid="button-toggle-scope"
               aria-expanded={scopeOpen}
             >
-              <span className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground">
+              <span className="text-sm tracking-[0.06em] uppercase text-inverse-foreground">
                 What&apos;s typically included ({result.included.length})
               </span>
               <ChevronDown
@@ -4181,18 +4195,18 @@ export function EstimateCalculator({
                 {result.included.map((item, i) => (
                   <div
                     key={i}
-                    className="flex items-start gap-2.5 text-[13.5px] text-inverse-muted leading-snug"
+                    className="flex items-start gap-2.5 text-sm text-inverse-muted leading-snug"
                     data-testid={`included-item-${i}`}
                   >
                     <Check className="h-3.5 w-3.5 flex-shrink-0 mt-0.5 text-accent-legible" />
                     {item}
                   </div>
                 ))}
-                <p className="text-[12px] text-inverse-muted/90 pt-1.5 leading-relaxed">
+                <p className="text-caption text-inverse-muted/90 pt-1.5 leading-relaxed">
                   {INCLUDED_SCOPE_NOTE}
                 </p>
                 {effectiveProject === "kitchen" && (
-                  <p className="text-[12px] text-inverse-muted/90 leading-relaxed">
+                  <p className="text-caption text-inverse-muted/90 leading-relaxed">
                     {APPLIANCE_DISCLAIMER}
                   </p>
                 )}
@@ -4212,7 +4226,7 @@ export function EstimateCalculator({
               data-testid="button-toggle-takeoff"
               aria-expanded={takeoffOpen}
             >
-              <span className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground">
+              <span className="text-sm tracking-[0.06em] uppercase text-inverse-foreground">
                 The work this range covers
               </span>
               <ChevronDown
@@ -4234,7 +4248,7 @@ export function EstimateCalculator({
               );
               const group = (g: "direct" | "soft") =>
                 takeoff.lines.filter((l) => l.group === g && l.cost > 0);
-              const groupLabel = "text-[11.5px] tracking-[0.1em] uppercase text-inverse-muted/90 pt-2.5 pb-1";
+              const groupLabel = "text-xs tracking-[0.1em] uppercase text-inverse-muted/90 pt-2.5 pb-1";
               // Scope and quantities only. Per-line dollars were removed from
               // every lead-facing surface: they are proportional allocations of
               // a validated total, not priced quantities, so showing them
@@ -4246,7 +4260,7 @@ export function EstimateCalculator({
                 return (
                   <div
                     key={l.id}
-                    className="text-[13.5px] text-inverse-muted leading-snug py-1"
+                    className="text-sm text-inverse-muted leading-snug py-1"
                     data-testid={`takeoff-line-${l.id}`}
                   >
                     <span>
@@ -4262,7 +4276,7 @@ export function EstimateCalculator({
                   {group("direct").map(row)}
                   <p className={groupLabel}>Running the job</p>
                   {group("soft").map(row)}
-                  <p className="text-[12px] text-inverse-muted/90 pt-3 leading-relaxed">
+                  <p className="text-caption text-inverse-muted/90 pt-3 leading-relaxed">
                     {TAKEOFF_SCOPE_NOTICE}
                   </p>
                 </div>
@@ -4281,7 +4295,7 @@ export function EstimateCalculator({
               data-testid="button-toggle-limits"
               aria-expanded={limitsOpen}
             >
-              <span className="text-[13px] tracking-[0.06em] uppercase text-inverse-foreground">
+              <span className="text-sm tracking-[0.06em] uppercase text-inverse-foreground">
                 What&apos;s not included &amp; what could change it
               </span>
               <ChevronDown
@@ -4291,14 +4305,14 @@ export function EstimateCalculator({
             {limitsOpen && (
               <div className="pt-3 space-y-5">
                 <div>
-                  <p className="text-[12px] tracking-[0.1em] uppercase text-inverse-muted mb-2">
+                  <p className="text-caption tracking-[0.1em] uppercase text-inverse-muted mb-2">
                     Not included
                   </p>
                   <ul className="space-y-1.5">
                     {disclosure.excludes.map((item, i) => (
                       <li
                         key={i}
-                        className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\00d7'] before:absolute before:left-0 before:text-inverse-muted/90"
+                        className="text-sm text-inverse-muted leading-snug pl-4 relative before:content-['\00d7'] before:absolute before:left-0 before:text-inverse-muted/90"
                         data-testid={`excluded-item-${i}`}
                       >
                         {item}
@@ -4308,12 +4322,12 @@ export function EstimateCalculator({
                 </div>
 
                 <div>
-                  <p className="text-[12px] tracking-[0.1em] uppercase text-inverse-muted mb-2">
+                  <p className="text-caption tracking-[0.1em] uppercase text-inverse-muted mb-2">
                     What we assumed
                   </p>
                   <ul className="space-y-1.5">
                     {disclosure.assumptions.map((item, i) => (
-                      <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\2022'] before:absolute before:left-0 before:text-inverse-muted/90">
+                      <li key={i} className="text-sm text-inverse-muted leading-snug pl-4 relative before:content-['\2022'] before:absolute before:left-0 before:text-inverse-muted/90">
                         {item}
                       </li>
                     ))}
@@ -4322,24 +4336,24 @@ export function EstimateCalculator({
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <p className="text-[12px] tracking-[0.1em] uppercase text-inverse-muted mb-2">
+                    <p className="text-caption tracking-[0.1em] uppercase text-inverse-muted mb-2">
                       Could raise the cost
                     </p>
                     <ul className="space-y-1.5">
                       {disclosure.increases.map((item, i) => (
-                        <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\2191'] before:absolute before:left-0 before:text-inverse-muted/90">
+                        <li key={i} className="text-sm text-inverse-muted leading-snug pl-4 relative before:content-['\2191'] before:absolute before:left-0 before:text-inverse-muted/90">
                           {item}
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <p className="text-[12px] tracking-[0.1em] uppercase text-inverse-muted mb-2">
+                    <p className="text-caption tracking-[0.1em] uppercase text-inverse-muted mb-2">
                       Could lower the cost
                     </p>
                     <ul className="space-y-1.5">
                       {disclosure.decreases.map((item, i) => (
-                        <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\2193'] before:absolute before:left-0 before:text-inverse-muted/90">
+                        <li key={i} className="text-sm text-inverse-muted leading-snug pl-4 relative before:content-['\2193'] before:absolute before:left-0 before:text-inverse-muted/90">
                           {item}
                         </li>
                       ))}
@@ -4348,12 +4362,12 @@ export function EstimateCalculator({
                 </div>
 
                 <div>
-                  <p className="text-[12px] tracking-[0.1em] uppercase text-inverse-muted mb-2">
+                  <p className="text-caption tracking-[0.1em] uppercase text-inverse-muted mb-2">
                     Optional upgrades that add cost
                   </p>
                   <ul className="space-y-1.5">
                     {disclosure.upgrades.map((item, i) => (
-                      <li key={i} className="text-[13px] text-inverse-muted leading-snug pl-4 relative before:content-['\002b'] before:absolute before:left-0 before:text-inverse-muted/90">
+                      <li key={i} className="text-sm text-inverse-muted leading-snug pl-4 relative before:content-['\002b'] before:absolute before:left-0 before:text-inverse-muted/90">
                         {item}
                       </li>
                     ))}
@@ -4368,14 +4382,14 @@ export function EstimateCalculator({
             <button
               type="button"
               onClick={() => setLegalOpen((p) => !p)}
-              className="flex items-center gap-1.5 text-[12px] text-inverse-muted/90 hover:text-inverse-muted transition-colors"
+              className="flex items-center gap-1.5 text-caption text-inverse-muted/90 hover:text-inverse-muted transition-colors"
               aria-expanded={legalOpen}
             >
               Why a range, not a fixed price?
               <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", legalOpen && "rotate-180")} />
             </button>
             {legalOpen && (
-              <p className="text-[12px] text-inverse-muted/90 leading-relaxed mt-2">
+              <p className="text-caption text-inverse-muted/90 leading-relaxed mt-2">
                 Planning estimate only, not a proposal, bid, or guaranteed cost. Ranges reflect
                 project type, size, location, and finish assumptions. Your consultation delivers a
                 detailed evaluation tailored to your home.
@@ -4391,10 +4405,10 @@ export function EstimateCalculator({
             <div className="rounded-md border border-inverse-foreground/[0.12] bg-inverse-foreground/[0.04] p-3.5">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <p className="text-[12px] text-inverse-muted">
+                  <p className="text-caption text-inverse-muted">
                     Saved on this device, so you can keep exploring without re-entering anything
                   </p>
-                  <p className="text-[13.5px] text-inverse-foreground mt-0.5 truncate">
+                  <p className="text-sm text-inverse-foreground mt-0.5 truncate">
                     {savedIdentity.name}
                     {savedIdentity.email ? ` · ${savedIdentity.email}` : ""}
                   </p>
@@ -4404,7 +4418,7 @@ export function EstimateCalculator({
                     type="button"
                     onClick={handleEditIdentity}
                     data-testid="button-edit-identity"
-                    className="text-[12px] text-inverse-foreground underline underline-offset-2 hover:opacity-80"
+                    className="text-caption text-inverse-foreground underline underline-offset-2 hover:opacity-80"
                   >
                     Edit
                   </button>
@@ -4412,7 +4426,7 @@ export function EstimateCalculator({
                     type="button"
                     onClick={handleForgetIdentity}
                     data-testid="button-forget-identity"
-                    className="text-[12px] text-inverse-muted hover:text-inverse-foreground"
+                    className="text-caption text-inverse-muted hover:text-inverse-foreground"
                   >
                     Not you?
                   </button>
@@ -4424,7 +4438,7 @@ export function EstimateCalculator({
                   inviting duplicate leads. */}
               {hasUnsentChanges && resendState !== "sent" && (
                 <div className="mt-3 pt-3 border-t border-inverse-foreground/10">
-                  <p className="text-[12px] text-inverse-muted mb-2">
+                  <p className="text-caption text-inverse-muted mb-2">
                     You have changed your project since we last heard from you.
                   </p>
                   <Button
@@ -4433,12 +4447,12 @@ export function EstimateCalculator({
                     disabled={resendState === "sending"}
                     data-testid="button-resend-estimate"
                     variant="brandOutline"
-                    className="h-10 text-[12.5px] tracking-[0.08em] uppercase"
+                    className="h-10 text-caption tracking-[0.08em] uppercase"
                   >
                     {resendState === "sending" ? "Sending…" : "Send us my updated estimate"}
                   </Button>
                   {resendState === "error" && (
-                    <p className="text-[12px] text-destructive mt-2">
+                    <p className="text-caption text-destructive mt-2">
                       That did not go through. Please try again.
                     </p>
                   )}
@@ -4446,7 +4460,7 @@ export function EstimateCalculator({
               )}
 
               {resendState === "sent" && (
-                <p className="mt-3 pt-3 border-t border-inverse-foreground/10 text-[12px] text-accent-legible">
+                <p className="mt-3 pt-3 border-t border-inverse-foreground/10 text-caption text-accent-legible">
                   Sent. We have your updated numbers and will follow up on these.
                 </p>
               )}
@@ -4457,7 +4471,7 @@ export function EstimateCalculator({
               "you got it wrong" - every answer is preserved and the range
               re-solves live, so this simply returns them to their selections. */}
           <div className="rounded-sm border border-inverse-foreground/[0.18] bg-inverse-foreground/[0.05] p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <p className="text-[13.5px] text-inverse-foreground flex items-center gap-2">
+            <p className="text-sm text-inverse-foreground flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-accent-legible flex-shrink-0" aria-hidden="true" />
               Not what you expected?
             </p>
@@ -4478,7 +4492,7 @@ export function EstimateCalculator({
               type="button"
               variant="brandOutline"
               onClick={() => window.print()}
-              className="min-h-11 border-inverse-foreground/25 text-inverse-foreground text-[12.5px]"
+              className="min-h-11 border-inverse-foreground/25 text-inverse-foreground text-caption"
               data-testid="button-print-estimate"
             >
               <Printer className="mr-2 h-4 w-4" aria-hidden="true" /> Print or save as PDF
@@ -4487,7 +4501,7 @@ export function EstimateCalculator({
               type="button"
               variant="brandOutline"
               onClick={handleCopySummary}
-              className="min-h-11 border-inverse-foreground/25 text-inverse-foreground text-[12.5px]"
+              className="min-h-11 border-inverse-foreground/25 text-inverse-foreground text-caption"
               data-testid="button-copy-estimate"
             >
               <Copy className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -4499,7 +4513,7 @@ export function EstimateCalculator({
           <Button
             onClick={handleBookVisit}
             data-testid="button-book-visit"
-            className="w-full h-14 bg-inverse-foreground text-inverse hover:bg-inverse-foreground/90 text-[14px] tracking-[0.12em] uppercase"
+            className="w-full h-14 bg-inverse-foreground text-inverse hover:bg-inverse-foreground/90 text-sm tracking-[0.12em] uppercase"
           >
             Book Free Visit
             <ArrowRight className="h-4 w-4" />
@@ -4537,7 +4551,7 @@ export function EstimateCalculator({
     </div>
   );
 
-  /* CTA shown after user configures their estimate -- clicking opens the gate form */
+  /* CTA shown after user configures their estimate - clicking opens the gate form */
   /* Formats a phone number as (208) 555-0147 while the visitor types. Kept to
      ten digits; validation and the API count digits, so the decoration is
      purely for readability. */
@@ -4610,7 +4624,7 @@ export function EstimateCalculator({
   const reviewStep = (
     <div>
       {renderStepLabel("review", "Review your project")}
-      <p className="text-[13px] text-inverse-muted -mt-1 mb-4 max-w-prose">
+      <p className="text-sm text-inverse-muted -mt-1 mb-4 max-w-prose">
         A quick check before we build your estimate. Tap Edit to change
         anything - every other answer stays exactly as you left it.
       </p>
@@ -4676,7 +4690,7 @@ export function EstimateCalculator({
         >
           About {sqft.toLocaleString()} finished sq ft
           {sizeReviewExtras.length > 0 && (
-            <span className="mt-1 block text-[12.5px] text-inverse-muted">
+            <span className="mt-1 block text-caption text-inverse-muted">
               {sizeReviewExtras.join(" · ")}
             </span>
           )}
@@ -4749,7 +4763,7 @@ export function EstimateCalculator({
           data-testid="review-finish"
         >
           {finishLabels[finish].label}
-          <span className="mt-1 block text-[12.5px] text-inverse-muted">
+          <span className="mt-1 block text-caption text-inverse-muted">
             {finishLabels[finish].sub}
           </span>
         </ReviewSection>
@@ -4765,14 +4779,14 @@ export function EstimateCalculator({
      has actually been captured. */
   const gateInputClass = (invalid: boolean) =>
     cn(
-      "w-full bg-inverse-foreground/[0.07] border rounded-md px-4 py-3 text-[16px] text-inverse-foreground placeholder:text-[14px] placeholder:text-inverse-muted/90 outline-none transition-colors",
+      "w-full bg-inverse-foreground/[0.07] border rounded-md px-4 py-3 text-base text-inverse-foreground placeholder:text-sm placeholder:text-inverse-muted/90 outline-none transition-colors",
       invalid
         ? "border-red-400/70 focus:border-red-400"
         : "border-inverse-foreground/20 focus:border-inverse-foreground/50",
     );
   const gateFieldError = (key: string) =>
     gateFieldErrors[key] ? (
-      <p role="alert" id={`gate-err-${key}`} className="mt-1.5 text-[12px] text-red-400">
+      <p role="alert" id={`gate-err-${key}`} className="mt-1.5 text-caption text-red-400">
         {gateFieldErrors[key]}
       </p>
     ) : null;
@@ -4796,7 +4810,7 @@ export function EstimateCalculator({
             <h3 className="font-sans font-light tracking-tight text-xl md:text-2xl text-inverse-foreground leading-tight">
               Your estimate is ready
             </h3>
-            <p className="text-[13px] text-inverse-muted mt-1">
+            <p className="text-sm text-inverse-muted mt-1">
               Enter your info to see your personalized planning range here and
               get a copy by email for your records. Your details go to our
               team, never to lists or third parties.
@@ -4806,16 +4820,16 @@ export function EstimateCalculator({
 
         {/* Project summary chips - what they chose, never what it costs */}
         <div className="flex flex-wrap gap-2">
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-[11.5px] text-inverse-foreground">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-xs text-inverse-foreground">
             {config.tabLabel}
           </span>
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-[11.5px] text-inverse-foreground">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-xs text-inverse-foreground">
             {subtypeTitle}
           </span>
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-[11.5px] text-inverse-foreground">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-xs text-inverse-foreground">
             {finishLabels[finish].label}
           </span>
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-[11.5px] text-inverse-foreground">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-xs text-inverse-foreground">
             {sqft.toLocaleString()} sq ft
           </span>
         </div>
@@ -4831,7 +4845,7 @@ export function EstimateCalculator({
           <div>
             <label
               htmlFor="gate-name"
-              className="mb-1.5 block text-[12px] tracking-[0.06em] uppercase text-inverse-muted"
+              className="mb-1.5 block text-caption tracking-[0.06em] uppercase text-inverse-muted"
             >
               First name
             </label>
@@ -4857,7 +4871,7 @@ export function EstimateCalculator({
           <div>
             <label
               htmlFor="gate-email"
-              className="mb-1.5 block text-[12px] tracking-[0.06em] uppercase text-inverse-muted"
+              className="mb-1.5 block text-caption tracking-[0.06em] uppercase text-inverse-muted"
             >
               Email
             </label>
@@ -4884,7 +4898,7 @@ export function EstimateCalculator({
           <div>
             <label
               htmlFor="gate-phone"
-              className="mb-1.5 block text-[12px] tracking-[0.06em] uppercase text-inverse-muted"
+              className="mb-1.5 block text-caption tracking-[0.06em] uppercase text-inverse-muted"
             >
               Phone <span className="normal-case tracking-normal">(optional)</span>
             </label>
@@ -4917,7 +4931,7 @@ export function EstimateCalculator({
             <div>
               <label
                 htmlFor="gate-address"
-                className="mb-1.5 block text-[12px] tracking-[0.06em] uppercase text-inverse-muted"
+                className="mb-1.5 block text-caption tracking-[0.06em] uppercase text-inverse-muted"
               >
                 Property address
               </label>
@@ -4937,7 +4951,7 @@ export function EstimateCalculator({
                 aria-describedby={gateFieldErrors.address ? "gate-err-address" : "gate-help-address"}
               />
               {gateFieldError("address")}
-              <p id="gate-help-address" className="mt-1.5 text-[11.5px] text-inverse-muted/90">
+              <p id="gate-help-address" className="mt-1.5 text-xs text-inverse-muted/90">
                 So we can confirm we serve your area and check county records before your visit.
               </p>
             </div>
@@ -4945,7 +4959,7 @@ export function EstimateCalculator({
             <div>
               <label
                 htmlFor="gate-build-area"
-                className="mb-1.5 block text-[12px] tracking-[0.06em] uppercase text-inverse-muted"
+                className="mb-1.5 block text-caption tracking-[0.06em] uppercase text-inverse-muted"
               >
                 City or area you plan to build in
               </label>
@@ -4965,7 +4979,7 @@ export function EstimateCalculator({
                 aria-describedby={gateFieldErrors.address ? "gate-err-address" : "gate-help-area"}
               />
               {gateFieldError("address")}
-              <p id="gate-help-area" className="mt-1.5 text-[11.5px] text-inverse-muted/90">
+              <p id="gate-help-area" className="mt-1.5 text-xs text-inverse-muted/90">
                 So we can confirm we serve the area you are headed to.
               </p>
             </div>
@@ -4984,14 +4998,14 @@ export function EstimateCalculator({
           <div>
             <label
               htmlFor="gate-budget"
-              className="mb-1.5 block text-[12px] tracking-[0.06em] uppercase text-inverse-muted"
+              className="mb-1.5 block text-caption tracking-[0.06em] uppercase text-inverse-muted"
             >
               Budget you are working toward{" "}
               <span className="normal-case tracking-normal text-inverse-muted/80">(optional)</span>
             </label>
             <div className="relative">
               <span
-                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[16px] text-inverse-muted/90"
+                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-base text-inverse-muted/90"
                 aria-hidden="true"
               >
                 $
@@ -5011,7 +5025,7 @@ export function EstimateCalculator({
                 aria-describedby="brc-gate-budget-help"
               />
             </div>
-            <p id="brc-gate-budget-help" className="mt-1.5 text-[11.5px] text-inverse-muted/90">
+            <p id="brc-gate-budget-help" className="mt-1.5 text-xs text-inverse-muted/90">
               If you share it, we will show you what fits and what to change if it does not.
               It never changes what we charge.
             </p>
@@ -5023,7 +5037,7 @@ export function EstimateCalculator({
             // Continue button retries, and nothing is ever re-typed.
             <div
               role="alert"
-              className="rounded-md border border-red-400/40 bg-red-400/10 px-3.5 py-3 text-[13px] text-red-300"
+              className="rounded-md border border-red-400/40 bg-red-400/10 px-3.5 py-3 text-sm text-red-300"
               data-testid="gate-error"
             >
               {gateError}
@@ -5036,7 +5050,7 @@ export function EstimateCalculator({
           <button type="submit" className="sr-only" tabIndex={-1} data-testid="button-gate-submit">
             Reveal My Estimate
           </button>
-          <p className="text-[12px] text-inverse-muted/90 text-center leading-relaxed">
+          <p className="text-caption text-inverse-muted/90 text-center leading-relaxed">
             We will email you a copy too. No spam, ever.
           </p>
         </form>
@@ -5117,7 +5131,7 @@ export function EstimateCalculator({
     <div ref={wizardTopRef} className="scroll-mt-20" data-hydrated={hydrated || undefined}>
       <div className="mb-2 flex items-center justify-between gap-3">
         <p className="brc-label text-inverse-muted">Your estimate</p>
-        <span className="inline-flex items-center gap-1.5 text-[11.5px] tracking-[0.08em] uppercase text-accent-legible">
+        <span className="inline-flex items-center gap-1.5 text-xs tracking-[0.08em] uppercase text-accent-legible">
           <Check className="h-3.5 w-3.5" aria-hidden="true" />
           Estimate complete
         </span>
@@ -5176,7 +5190,7 @@ export function EstimateCalculator({
                 className="absolute inset-x-6 sm:inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-accent-legible/50 to-transparent"
                 aria-hidden
               />
-              <div className="relative px-5 sm:px-7 md:px-9 py-8 md:py-10 lg:py-12">{surface}</div>
+              <div className="relative px-4 sm:px-7 md:px-9 py-5 sm:py-8 md:py-10 lg:py-12">{surface}</div>
             </div>
           </div>
         </div>

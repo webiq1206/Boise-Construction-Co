@@ -35,7 +35,7 @@ function FooterGroup({
   return (
     <details open className="group/fg">
       <summary
-        className="flex min-h-11 cursor-pointer select-none items-center justify-between gap-2 py-1 font-sans text-[11px] font-normal uppercase tracking-[0.12em] text-inverse-muted marker:hidden [&::-webkit-details-marker]:hidden lg:pointer-events-none lg:min-h-0 lg:cursor-default lg:py-0 lg:mb-5"
+        className="flex min-h-11 cursor-pointer select-none items-center justify-between gap-2 py-1 font-sans text-xs font-normal uppercase tracking-[0.12em] text-inverse-muted marker:hidden [&::-webkit-details-marker]:hidden lg:pointer-events-none lg:min-h-0 lg:cursor-default lg:py-0 lg:mb-5"
       >
         {title}
         <ChevronDown
@@ -297,7 +297,7 @@ export function Footer() {
         </div>
 
         <div className="py-5 border-t border-b border-inverse-foreground/10 mb-5">
-          <p className="text-[11px] tracking-[0.08em] text-inverse-muted">
+          <p className="text-xs tracking-[0.08em] text-inverse-muted">
             Serving {CITIES.map((c) => c.name).join(" · ")} · Ada and Canyon County, Idaho
           </p>
         </div>

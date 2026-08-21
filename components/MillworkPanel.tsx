@@ -100,21 +100,21 @@ export function MillworkPanel({
       className="mt-4 rounded-md border border-accent-legible/30 bg-inverse-foreground/[0.04] p-4"
       data-testid="calc-millwork-panel"
     >
-      <p className="text-[13px] text-inverse-foreground font-medium">
+      <p className="text-sm text-inverse-foreground font-medium">
         Millwork takeoff
       </p>
       {takeoff.projectDescription && (
-        <p className="mt-1 text-[12px] text-inverse-muted">{takeoff.projectDescription}</p>
+        <p className="mt-1 text-caption text-inverse-muted">{takeoff.projectDescription}</p>
       )}
 
       {/* ---------------------------------------------------------- number */}
       <div className="mt-3">
         {hasPrice ? (
           <>
-            <p className="text-[20px] text-inverse-foreground" data-testid="calc-millwork-range">
+            <p className="text-xl text-inverse-foreground" data-testid="calc-millwork-range">
               {money(pricing.totalLow)} - {money(pricing.totalHigh)}
             </p>
-            <p className="text-[12px] text-inverse-muted">
+            <p className="text-caption text-inverse-muted">
               {pricing.priced.length} line(s) priced from the drawings
               {pricing.unpriced.length > 0
                 ? `, ${pricing.unpriced.length} not yet priceable`
@@ -123,7 +123,7 @@ export function MillworkPanel({
             </p>
           </>
         ) : (
-          <p className="text-[13px] text-inverse-foreground">
+          <p className="text-sm text-inverse-foreground">
             We found {takeoff.items.length} millwork item(s) in your drawings, but
             none of them state a quantity we can stand behind yet.
           </p>
@@ -134,14 +134,14 @@ export function MillworkPanel({
       {q && (
         <div className="mt-4 rounded-md border border-accent-legible/40 bg-accent/10 p-3">
           <div className="flex items-baseline justify-between gap-3">
-            <p className="text-[13px] text-inverse-foreground font-medium">{q.question}</p>
+            <p className="text-sm text-inverse-foreground font-medium">{q.question}</p>
             {data.progress && data.progress.total > 0 && (
-              <span className="shrink-0 text-[11px] text-inverse-muted">
+              <span className="shrink-0 text-xs text-inverse-muted">
                 {data.progress.asked + 1} of {data.progress.total}
               </span>
             )}
           </div>
-          <p className="mt-1 text-[12px] text-inverse-muted">{q.whyItMatters}</p>
+          <p className="mt-1 text-caption text-inverse-muted">{q.whyItMatters}</p>
 
           {q.options && q.options.length > 0 ? (
             <div className="mt-2.5 flex flex-wrap gap-2">
@@ -154,7 +154,7 @@ export function MillworkPanel({
                   data-testid="calc-millwork-option"
                   className={cn(
                     "rounded-full border border-accent-legible/50 px-3 py-1.5",
-                    "text-[12px] text-inverse-foreground hover:bg-inverse-foreground/10",
+                    "text-caption text-inverse-foreground hover:bg-inverse-foreground/10",
                     "transition-colors disabled:opacity-50",
                   )}
                 >
@@ -175,7 +175,7 @@ export function MillworkPanel({
                 }}
                 className={cn(
                   "flex-1 rounded-md bg-inverse-foreground/[0.06] border border-accent-legible/20",
-                  "px-3 py-2 text-[13px] text-inverse-foreground placeholder:text-inverse-muted",
+                  "px-3 py-2 text-sm text-inverse-foreground placeholder:text-inverse-muted",
                   "focus:outline-none focus:border-accent-legible/60 disabled:opacity-60",
                 )}
               />
@@ -184,7 +184,7 @@ export function MillworkPanel({
                 disabled={busy || !draft.trim()}
                 onClick={() => onAnswer(q.id, draft)}
                 className={cn(
-                  "rounded-md border border-accent-legible/50 px-3 py-2 text-[12px]",
+                  "rounded-md border border-accent-legible/50 px-3 py-2 text-caption",
                   "text-inverse-foreground hover:bg-inverse-foreground/10 disabled:opacity-40",
                 )}
               >
@@ -193,7 +193,7 @@ export function MillworkPanel({
             </div>
           )}
           {busy && (
-            <p className="mt-2 text-[12px] text-inverse-muted" role="status">
+            <p className="mt-2 text-caption text-inverse-muted" role="status">
               Re-pricing with your answer...
             </p>
           )}
@@ -201,7 +201,7 @@ export function MillworkPanel({
       )}
 
       {!q && (
-        <p className="mt-3 text-[12px] text-inverse-muted">
+        <p className="mt-3 text-caption text-inverse-muted">
           That is everything we needed to ask. Your answers are attached to the
           drawings for our team.
         </p>
@@ -211,7 +211,7 @@ export function MillworkPanel({
       {hasPrice && (
         <ul className="mt-4 space-y-1" data-testid="calc-millwork-lines">
           {pricing.priced.slice(0, 8).map((l, i) => (
-            <li key={i} className="text-[12px] text-inverse-muted">
+            <li key={i} className="text-caption text-inverse-muted">
               {l.label} - {l.quantity} {l.unit}
               {l.sheetRef ? ` (${l.sheetRef})` : ""} - {money(l.low)} to {money(l.high)}
             </li>
@@ -221,12 +221,12 @@ export function MillworkPanel({
 
       {pricing.unpriced.length > 0 && (
         <details className="mt-3">
-          <summary className="cursor-pointer text-[12px] text-inverse-foreground">
+          <summary className="cursor-pointer text-caption text-inverse-foreground">
             {pricing.unpriced.length} item(s) we found but could not price
           </summary>
           <ul className="mt-2 space-y-1.5">
             {pricing.unpriced.slice(0, 12).map((l, i) => (
-              <li key={i} className="text-[12px] text-inverse-muted">
+              <li key={i} className="text-caption text-inverse-muted">
                 <span className="text-inverse-foreground">{l.label}</span>
                 {l.sheetRef ? ` (${l.sheetRef})` : ""} - {l.reason}
               </li>
@@ -239,7 +239,7 @@ export function MillworkPanel({
       {pricing.warnings.length > 0 && (
         <ul className="mt-3 space-y-1.5">
           {pricing.warnings.map((w, i) => (
-            <li key={i} className="text-[12px] text-inverse-muted">
+            <li key={i} className="text-caption text-inverse-muted">
               {w}
             </li>
           ))}
@@ -247,7 +247,7 @@ export function MillworkPanel({
       )}
 
       {!pricing.bidReady && hasPrice && (
-        <p className="mt-3 text-[12px] text-inverse-muted">
+        <p className="mt-3 text-caption text-inverse-muted">
           This is a planning figure, not a bid. We will confirm it against the
           schedules before quoting.
         </p>

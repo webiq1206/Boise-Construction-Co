@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 type Tone = "inverse" | "default";
 
 const inputBase =
-  "w-full min-h-12 rounded-sm border px-3.5 text-[16px] transition-colors focus:outline-none focus:ring-2 focus:ring-accent-legible";
+  "w-full min-h-12 rounded-sm border px-3.5 text-base transition-colors focus:outline-none focus:ring-2 focus:ring-accent-legible";
 
 function toneInput(tone: Tone) {
   return tone === "inverse"
@@ -51,7 +51,7 @@ export const WizardField = forwardRef<HTMLInputElement, WizardFieldProps>(
 
     return (
       <div className={cn("min-w-0", className)}>
-        <label htmlFor={id} className={cn("mb-1.5 block text-[12.5px]", toneLabel(tone))}>
+        <label htmlFor={id} className={cn("mb-1.5 block text-caption", toneLabel(tone))}>
           {label}
           {required && <span className="text-accent-legible"> *</span>}
         </label>
@@ -69,14 +69,14 @@ export const WizardField = forwardRef<HTMLInputElement, WizardFieldProps>(
           {...rest}
         />
         {hint && !error && (
-          <p id={hintId} className={cn("mt-1.5 text-[12px] leading-snug", toneLabel(tone))}>
+          <p id={hintId} className={cn("mt-1.5 text-caption leading-snug", toneLabel(tone))}>
             {hint}
           </p>
         )}
         {error && (
           <p
             id={errorId}
-            className={cn("mt-1.5 text-[12.5px] leading-snug", toneError(tone))}
+            className={cn("mt-1.5 text-caption leading-snug", toneError(tone))}
           >
             {error}
           </p>
@@ -107,20 +107,20 @@ export function WizardTextArea({
   const hintId = hint ? `${id}-hint` : undefined;
   return (
     <div className={cn("min-w-0", className)}>
-      <label htmlFor={id} className={cn("mb-1.5 block text-[12.5px]", toneLabel(tone))}>
+      <label htmlFor={id} className={cn("mb-1.5 block text-caption", toneLabel(tone))}>
         {label}
       </label>
       <textarea
         id={id}
         aria-describedby={hintId}
         className={cn(
-          "w-full rounded-sm border px-3.5 py-3 text-[16px] transition-colors focus:outline-none focus:ring-2 focus:ring-accent-legible",
+          "w-full rounded-sm border px-3.5 py-3 text-base transition-colors focus:outline-none focus:ring-2 focus:ring-accent-legible",
           toneInput(tone),
         )}
         {...rest}
       />
       {hint && (
-        <p id={hintId} className={cn("mt-1.5 text-[12px] leading-snug", toneLabel(tone))}>
+        <p id={hintId} className={cn("mt-1.5 text-caption leading-snug", toneLabel(tone))}>
           {hint}
         </p>
       )}
@@ -159,7 +159,7 @@ export function WizardChoiceGroup<T extends string>({
   const inverse = tone === "inverse";
   return (
     <div className={cn("min-w-0", className)}>
-      <span className={cn("mb-1.5 block text-[12.5px]", toneLabel(tone))}>{label}</span>
+      <span className={cn("mb-1.5 block text-caption", toneLabel(tone))}>{label}</span>
       <div role="radiogroup" aria-label={label} className="flex flex-wrap gap-2">
         {options.map((o) => {
           const selected = value === o.value;
@@ -171,7 +171,7 @@ export function WizardChoiceGroup<T extends string>({
               aria-checked={selected}
               onClick={() => onChange(o.value)}
               className={cn(
-                "min-h-11 flex-1 rounded-sm border px-3 text-[14px] transition-colors",
+                "min-h-11 flex-1 rounded-sm border px-3 text-sm transition-colors",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-legible",
                 selected
                   ? "border-accent-legible bg-accent-legible/10 " +
