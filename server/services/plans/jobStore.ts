@@ -1,6 +1,6 @@
 import { and, asc, eq, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { planJobs, planUploadPages, type PlanJob } from "@/shared/schema";
+import { planJobs, planJobChunks, planUploadPages, type PlanJob } from "@/shared/schema";
 
 /**
  * Durable state for a plan read.
@@ -182,3 +182,74 @@ export async function discardPages(uploadId: string): Promise<void> {
 }
 
 export { and, eq };
+
+/* ------------------------------------------------------- per-chunk results */
+
+export interface ChunkRecord {
+  chunkIndex: number;
+  contribution: unknown;
+  pagesRead: string[];
+  pagesUnreadable: { id: string; reason: string }[];
+  error: string | null;
+}
+
+/**
+ * Write one pass's result, replacing any previous attempt at the same index.
+ *
+ * onConflictDoUpdate rather than DoNothing: a retry of chunk 12 exists because
+ * the first attempt failed or timed out, so the newer answer is the one worth
+ * keeping. Scoped to (jobId, chunkIndex) by the unique index, so a retry can
+ * never become a second row and double-count those sheets.
+ */
+export async function saveChunk(jobId: string, rec: ChunkRecord): Promise<void> {
+  const database = requireDb();
+  if (!database) throw new Error("no-database");
+  await database
+    .insert(planJobChunks)
+    .values({
+      jobId,
+      chunkIndex: rec.chunkIndex,
+      contribution: rec.contribution ?? null,
+      pagesRead: rec.pagesRead,
+      pagesUnreadable: rec.pagesUnreadable,
+      error: rec.error,
+    })
+    .onConflictDoUpdate({
+      target: [planJobChunks.jobId, planJobChunks.chunkIndex],
+      set: {
+        contribution: rec.contribution ?? null,
+        pagesRead: rec.pagesRead,
+        pagesUnreadable: rec.pagesUnreadable,
+        error: rec.error,
+      },
+    });
+}
+
+/** Every pass recorded for a job, in manifest order. */
+export async function loadChunks(jobId: string): Promise<ChunkRecord[]> {
+  const database = requireDb();
+  if (!database) throw new Error("no-database");
+  const rows = await database
+    .select()
+    .from(planJobChunks)
+    .where(eq(planJobChunks.jobId, jobId))
+    .orderBy(asc(planJobChunks.chunkIndex));
+  return rows.map((r) => ({
+    chunkIndex: r.chunkIndex,
+    contribution: r.contribution,
+    pagesRead: (r.pagesRead as string[] | null) ?? [],
+    pagesUnreadable: (r.pagesUnreadable as { id: string; reason: string }[] | null) ?? [],
+    error: r.error,
+  }));
+}
+
+/** Which indexes are already done, so a resumed run skips them. */
+export async function completedChunkIndexes(jobId: string): Promise<number[]> {
+  const database = requireDb();
+  if (!database) throw new Error("no-database");
+  const rows = await database
+    .select({ i: planJobChunks.chunkIndex, e: planJobChunks.error })
+    .from(planJobChunks)
+    .where(eq(planJobChunks.jobId, jobId));
+  return rows.filter((r) => !r.e).map((r) => r.i);
+}

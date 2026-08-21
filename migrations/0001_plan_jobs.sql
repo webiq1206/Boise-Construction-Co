@@ -49,3 +49,18 @@ CREATE INDEX IF NOT EXISTS "plan_jobs_upload_idx" ON "plan_jobs" ("upload_id");
 -- Trade-scoped reads and the clarifying-question conversation.
 ALTER TABLE "plan_jobs" ADD COLUMN IF NOT EXISTS "scope" text NOT NULL DEFAULT 'residential';
 ALTER TABLE "plan_jobs" ADD COLUMN IF NOT EXISTS "answers" jsonb;
+
+-- One row per model pass, so passes can run in parallel without racing each
+-- other through a single accumulating column.
+CREATE TABLE IF NOT EXISTS "plan_job_chunks" (
+  "id"               varchar PRIMARY KEY DEFAULT gen_random_uuid(),
+  "job_id"           varchar NOT NULL,
+  "chunk_index"      integer NOT NULL,
+  "contribution"     jsonb,
+  "pages_read"       jsonb,
+  "pages_unreadable" jsonb,
+  "error"            text,
+  "created_at"       timestamp DEFAULT now() NOT NULL
+);
+CREATE INDEX IF NOT EXISTS "plan_job_chunks_job_idx" ON "plan_job_chunks" ("job_id", "chunk_index");
+CREATE UNIQUE INDEX IF NOT EXISTS "plan_job_chunks_unique" ON "plan_job_chunks" ("job_id", "chunk_index");

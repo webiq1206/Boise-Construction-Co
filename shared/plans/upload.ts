@@ -68,7 +68,35 @@ export const PAGE_UPLOAD_CONCURRENCY = 4;
  * Two chunks is ~16 sheets of model reading - comfortably under a minute in
  * practice, and small enough that a step that does die costs little.
  */
-export const CHUNKS_PER_STEP = 2;
+export const CHUNKS_PER_STEP = 1;
+
+/**
+ * Passes the browser runs at once.
+ *
+ * THIS IS WHY THE READ USED TO HANG. Each pass over four scanned sheets takes
+ * 35-55 seconds. The first version did two passes inside ONE request, so every
+ * request ran for 75-110 seconds - far past what the proxy in front of the app
+ * will hold open. The request was killed before it wrote anything down, so no
+ * progress persisted, the client retried, and it hung on "Reading your
+ * drawings" forever making no progress at all.
+ *
+ * Now one pass per request keeps each one around 40 seconds, and the
+ * PARALLELISM lives in the browser instead: four requests in flight turns a
+ * 26-pass set from sixteen minutes of sequential waiting into about four.
+ * Four rather than eight because these are large multimodal requests and
+ * pushing concurrency higher trades a modest wall-clock gain for rate-limit
+ * errors that cost far more than they save.
+ */
+export const CHUNK_REQUEST_CONCURRENCY = 4;
+
+/**
+ * How many times a pass may be retried before its sheets are recorded as holes.
+ *
+ * A pass that fails takes its own sheets down with it and nothing else, so the
+ * honest outcome of exhausting this is a smaller coverage number, never a
+ * failed upload.
+ */
+export const CHUNK_MAX_ATTEMPTS = 2;
 
 /** Characters of customer instruction we accept. */
 export const MAX_INSTRUCTIONS_CHARS = 2000;

@@ -789,3 +789,49 @@ export const planJobs = pgTable(
 );
 
 export type PlanJob = typeof planJobs.$inferSelect;
+
+/**
+ * One model pass over one batch of sheets, stored on its own row.
+ *
+ * WHY A ROW PER CHUNK AND NOT A GROWING BLOB ON THE JOB.
+ *
+ * The first version accumulated every pass into plan_jobs.result and rewrote
+ * the whole thing each step. That works only while exactly one request is in
+ * flight, which forced the reads to be sequential - 26 passes at ~37 seconds
+ * each is sixteen minutes of someone watching a progress bar. Running them in
+ * parallel against a single accumulating column is a read-modify-write race
+ * where the last writer wins and the other passes are silently lost, which is
+ * the worst possible failure here: a plan set that reports success having
+ * quietly dropped a third of its sheets.
+ *
+ * A row per chunk removes the race entirely. Passes can run four at a time,
+ * each writing only its own row, and the merge happens once at the end by
+ * reading them all back. It also makes a pass idempotent: a retry of chunk 12
+ * overwrites chunk 12 and nothing else.
+ */
+export const planJobChunks = pgTable(
+  "plan_job_chunks",
+  {
+    id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+    jobId: varchar("job_id").notNull(),
+    /** Position in the manifest. The identity of the pass, not just a label. */
+    chunkIndex: integer("chunk_index").notNull(),
+    /** What the pass extracted. Shape depends on the job's scope. */
+    contribution: jsonb("contribution"),
+    /** Page ids this pass genuinely read, for the coverage ledger. */
+    pagesRead: jsonb("pages_read"),
+    pagesUnreadable: jsonb("pages_unreadable"),
+    /** Set when the pass failed; its pages become holes rather than absences. */
+    error: text("error"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (t) => ({
+    /* Finalisation always reads "every chunk of this job, in order". */
+    byJob: index("plan_job_chunks_job_idx").on(t.jobId, t.chunkIndex),
+    /* A retried pass must replace its own row, never add a second one - two
+       rows for chunk 12 would double-count whatever those sheets state. */
+    uniqueChunk: uniqueIndex("plan_job_chunks_unique").on(t.jobId, t.chunkIndex),
+  }),
+);
+
+export type PlanJobChunk = typeof planJobChunks.$inferSelect;

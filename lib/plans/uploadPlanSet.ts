@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  CHUNK_MAX_ATTEMPTS,
+  CHUNK_REQUEST_CONCURRENCY,
   MAX_PAGE_BYTES,
   MAX_PLAN_FILES,
   MAX_PLAN_PAGES,
@@ -250,31 +252,88 @@ export async function uploadAndReadPlanSet(
     return { ok: false, message: "Could not start the review.", fallback: true };
   }
 
-  /* ------------------------------------------------------------- step loop */
+  /* ----------------------------------------------------------- read passes */
   progress.phase = "reading";
   emit();
 
-  /* Bounded so a server that keeps returning "running" without advancing can
-     never spin here forever. Two per chunk leaves room for a step that failed
-     its passes and made no progress, without becoming an infinite loop. */
-  const maxSteps = Math.max(4, progress.totalChunks * 2 + 4);
-  for (let step = 0; step < maxSteps; step++) {
-    if (signal?.aborted) return { ok: false, message: "Review cancelled." };
-    try {
-      const res = await fetch(`/api/plans/job/${jobId}/step`, { method: "POST", signal });
-      const data = await res.json();
-      if (typeof data.chunksDone === "number") progress.chunksDone = data.chunksDone;
-      if (typeof data.totalChunks === "number") progress.totalChunks = data.totalChunks;
-      emit();
-      if (data.status === "complete") break;
-      if (data.status === "failed" || (!res.ok && res.status !== 504)) {
-        return { ok: false, message: data.message ?? "We could not read that plan set." };
+  /*
+   * ONE PASS PER REQUEST, SEVERAL REQUESTS AT ONCE.
+   *
+   * The previous version asked the server to walk the batches itself, two per
+   * request. Each batch of four scanned sheets takes 35-55 seconds, so those
+   * requests ran for 75-110 seconds and were killed by the proxy before they
+   * wrote anything down - which is why a large set sat on "Reading your
+   * drawings" indefinitely, retrying and never advancing.
+   *
+   * Now each request does exactly one pass and persists it, and the
+   * parallelism lives here. Four in flight turns a 26-pass set from sixteen
+   * minutes into roughly four, and no request lives long enough to be killed.
+   * Order does not matter because each pass writes only its own row.
+   */
+  const total = progress.totalChunks;
+  const failedChunks: number[] = [];
+  let nextIndex = 0;
+  let completed = 0;
+
+  async function runOne(index: number): Promise<void> {
+    for (let attempt = 0; attempt < CHUNK_MAX_ATTEMPTS; attempt++) {
+      if (signal?.aborted) return;
+      try {
+        const res = await fetch(`/api/plans/job/${jobId}/chunk`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ index }),
+          signal,
+        });
+        if (res.ok) return;
+        /* 422 is a pass that genuinely could not read those sheets. Retrying
+           produces the same answer and only burns time; the server has already
+           recorded it so those pages show up as holes. */
+        if (res.status === 422) { failedChunks.push(index); return; }
+      } catch {
+        if (signal?.aborted) return;
       }
-    } catch {
-      // A step that dies loses only its own passes; the next one resumes from
-      // the persisted position. Keep going rather than discarding the set.
-      if (signal?.aborted) return { ok: false, message: "Review cancelled." };
+      await new Promise((r) => setTimeout(r, 800 * (attempt + 1)));
     }
+    failedChunks.push(index);
+  }
+
+  async function readWorker(): Promise<void> {
+    for (;;) {
+      const index = nextIndex++;
+      if (index >= total) return;
+      if (signal?.aborted) return;
+      await runOne(index);
+      completed += 1;
+      progress.chunksDone = completed;
+      emit();
+    }
+  }
+
+  await Promise.all(
+    Array.from({ length: Math.min(CHUNK_REQUEST_CONCURRENCY, Math.max(1, total)) }, readWorker),
+  );
+
+  if (signal?.aborted) return { ok: false, message: "Review cancelled." };
+
+  /* Every pass failing is a different situation from some failing, and the
+     visitor should not be shown a confident empty estimate for it. */
+  if (total > 0 && failedChunks.length >= total) {
+    return {
+      ok: false,
+      message: "We could not read those drawings. We have kept the files and our team will read them by hand.",
+      fallback: true,
+    };
+  }
+
+  try {
+    const res = await fetch(`/api/plans/job/${jobId}/finalize`, { method: "POST", signal });
+    const data = await res.json();
+    if (!res.ok) {
+      return { ok: false, message: data.message ?? "We could not finish reading that plan set." };
+    }
+  } catch {
+    return { ok: false, message: "We could not finish reading that plan set." };
   }
 
   /* ---------------------------------------------------------------- result */
