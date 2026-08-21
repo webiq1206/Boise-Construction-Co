@@ -161,6 +161,17 @@ export default function BlogCategoryHubPage({
             </p>
           )}
 
+          {/* The grid needs a heading of its own, for two reasons that happen to
+              point the same way. Structurally, BlogCard titles are H3 - correct
+              on /blog where a section H2 sits above them, but on this page they
+              followed the H1 directly, so the outline jumped H1 -> H3 and a
+              screen reader heard a level that was never opened. Visually, a bare
+              grid under three paragraphs of intro gives the eye nothing to land
+              on; naming the list is what makes the page scannable. */}
+          <h2 className="text-title font-sans text-foreground mb-5">
+            {posts.length === 1 ? "1 article in this topic" : `${posts.length} articles in this topic`}
+          </h2>
+
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((post) => (
               <BlogCard key={post.slug} post={post} formatDate={formatDate} />

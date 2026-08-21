@@ -24,7 +24,15 @@ import { generateBreadcrumbSchema } from '@/lib/schema';
 import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 
-const TITLE = 'Home Building Services | Treasure Valley';
+/*
+ * 55 characters once the layout appends " | Boise Construction Co", down from
+ * 64. Past roughly 60 Google truncates the tail, and the tail here is the
+ * brand - so the old title spent four characters of "Services" to have the
+ * company name clipped. "Services" is the one word the page can afford to
+ * lose: the URL is /services, the H1 says it, and "Home Building" is the term
+ * that actually earns the click.
+ */
+const TITLE = 'Home Building | Treasure Valley';
 const DESCRIPTION =
   'Design-build home building in Boise, Meridian, Eagle, Nampa and the Treasure Valley. Custom homes, semi-custom homes, builds on your own lot, and permit-ready design under one accountable team.';
 
