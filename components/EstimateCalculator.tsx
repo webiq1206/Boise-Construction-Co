@@ -2570,7 +2570,7 @@ export function EstimateCalculator({
   const renderStepLabel = (_stepKey: string, label: string, className?: string) => (
     <h3
       className={cn(
-        "font-sans font-light tracking-tight text-xl md:text-2xl text-inverse-foreground mb-3",
+        "font-serif tracking-tight text-xl md:text-2xl text-inverse-foreground mb-3",
         className,
       )}
     >
@@ -2770,7 +2770,7 @@ export function EstimateCalculator({
           </p>
         </div>
       </div>
-      <h2 className="font-sans font-light text-[clamp(1.5rem,4.5vw,3.25rem)] leading-[1.1] md:leading-[1.06] tracking-tight text-inverse-foreground pb-4 md:pb-6 border-b border-accent-legible/25">
+      <h2 className="font-serif text-[clamp(1.5rem,4.5vw,3.25rem)] leading-[1.1] md:leading-[1.06] tracking-tight text-inverse-foreground pb-4 md:pb-6 border-b border-accent-legible/25">
         {!chosen.project ? (
           /* Before a project is picked the headline must not name one. */
           <>
@@ -4821,7 +4821,7 @@ export function EstimateCalculator({
             <Lock className="h-4 w-4 text-accent-legible" />
           </div>
           <div>
-            <h3 className="font-sans font-light tracking-tight text-xl md:text-2xl text-inverse-foreground leading-tight">
+            <h3 className="font-serif tracking-tight text-xl md:text-2xl text-inverse-foreground leading-tight">
               Your estimate is ready
             </h3>
             <p className="text-sm text-inverse-muted mt-1">

@@ -212,7 +212,7 @@ export function LandingPageTemplate({
           {eyebrow && (
             <div className="brc-label brc-label-on-photo mt-6 mb-5">{eyebrow}</div>
           )}
-          <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-4xl mb-6">
+          <h1 className="font-serif text-display tracking-tight text-inverse-foreground max-w-4xl mb-6">
             {h1}
           </h1>
           <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-8">
@@ -247,7 +247,7 @@ export function LandingPageTemplate({
           <div className="container px-4 max-w-5xl">
             <Reveal>
               <div className="brc-label mb-5">Cost and timeline</div>
-              <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-8">
+              <h2 className="font-serif text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-8">
                 {costGuidance.heading}
               </h2>
             </Reveal>
@@ -300,7 +300,7 @@ export function LandingPageTemplate({
           <div className="container px-4 max-w-5xl">
             <Reveal>
               <div className="brc-label mb-5">Why choose us</div>
-              <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
+              <h2 className="font-serif text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
                 Why homeowners <em className="brc-accent">choose us</em>
               </h2>
             </Reveal>
@@ -353,7 +353,7 @@ export function LandingPageTemplate({
           <div className="container px-4 max-w-5xl">
             <Reveal>
               <div className="brc-label mb-5">Scope of work</div>
-              <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
+              <h2 className="font-serif text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
                 What&apos;s <em className="brc-accent">included</em>
               </h2>
             </Reveal>
@@ -400,7 +400,7 @@ export function LandingPageTemplate({
               />
               <div className="relative h-full flex flex-col justify-end p-8 md:p-12 lg:p-14">
                 <div className="brc-label brc-label-on-photo mb-4">How it works</div>
-                <h2 className="font-sans font-light text-[2rem] md:text-[2.75rem] leading-[1.06] tracking-tight text-inverse-foreground">
+                <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.06] tracking-tight text-inverse-foreground">
                   Our <em className="brc-accent">process</em>,
                   <br />
                   step by step
@@ -447,7 +447,7 @@ export function LandingPageTemplate({
                       <div className="w-0.5 bg-accent/50 flex-shrink-0 rounded-full" />
                       <div>
                         <div className="brc-label mb-3">Planning details</div>
-                        <h3 className="font-sans font-normal text-base text-foreground mt-3 mb-3">
+                        <h3 className="font-serif font-normal text-base text-foreground mt-3 mb-3">
                           Typical timeline
                         </h3>
                         <p className="text-sm text-muted-foreground leading-relaxed">{timeline}</p>
@@ -463,7 +463,7 @@ export function LandingPageTemplate({
                       <div className="w-0.5 bg-accent/50 flex-shrink-0 rounded-full" />
                       <div>
                         <div className="brc-label mb-3">Local details</div>
-                        <h3 className="font-sans font-normal text-base text-foreground mt-3 mb-3">
+                        <h3 className="font-serif font-normal text-base text-foreground mt-3 mb-3">
                           Local notes
                         </h3>
                         <p className="text-sm text-muted-foreground leading-relaxed">{localNote}</p>
@@ -484,7 +484,7 @@ export function LandingPageTemplate({
             {sections.map((section, i) => (
               <Reveal key={section.heading} delay={Math.min(i, 4) * 60}>
                 <div className="prose-measure">
-                  <h2 className="font-sans font-light text-[1.75rem] md:text-[2rem] leading-tight tracking-tight text-foreground mb-5">
+                  <h2 className="font-serif text-[1.75rem] md:text-[2rem] leading-tight tracking-tight text-foreground mb-5">
                     {section.heading}
                   </h2>
                   {section.paragraphs?.map((p, j) => (
@@ -494,7 +494,7 @@ export function LandingPageTemplate({
                   ))}
                   {section.subsections?.map((sub) => (
                     <div key={sub.heading} className="mt-6">
-                      <h3 className="font-sans font-normal text-base text-foreground mb-2">
+                      <h3 className="font-serif font-normal text-base text-foreground mb-2">
                         {sub.heading}
                       </h3>
                       {sub.paragraphs.map((p, k) => (
@@ -532,7 +532,7 @@ export function LandingPageTemplate({
           <div className="container px-4 max-w-5xl">
             <Reveal>
               <div className="brc-label mb-5">Proof of work</div>
-              <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
+              <h2 className="font-serif text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
                 {proofHeading ?? (
                   <>
                     Recent <em className="brc-accent">local work</em>
@@ -631,7 +631,7 @@ export function LandingPageTemplate({
         <div className="container px-4 max-w-3xl">
           <Reveal>
             <div className="brc-label mb-5">Common questions</div>
-            <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
+            <h2 className="font-serif text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
               Frequently asked <em className="brc-accent">questions</em>
             </h2>
             <Accordion type="single" collapsible className="w-full">
@@ -681,7 +681,7 @@ export function LandingPageTemplate({
                 <div className="brc-label text-inverse-muted justify-center mb-6">
                   Start your project
                 </div>
-                <h2 className="font-sans font-light text-[2rem] md:text-[2.5rem] leading-tight tracking-tight text-inverse-foreground mb-4">
+                <h2 className="font-serif text-[2rem] md:text-[2.5rem] leading-tight tracking-tight text-inverse-foreground mb-4">
                   Ready to <em className="brc-accent">begin</em>?
                 </h2>
                 <p className="text-inverse-muted mb-8 text-base leading-relaxed">

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Montserrat, Libre_Baskerville } from 'next/font/google'
+import localFont from 'next/font/local'
 import { Navigation } from '@/components/Navigation'
 import { ConditionalFooter } from '@/components/ConditionalFooter'
 import { Toaster } from '@/components/ui/toaster'
@@ -14,21 +14,24 @@ import { ConversionTracking } from '@/components/ConversionTracking'
 import { AssistantWidget } from '@/components/assistant/AssistantWidget'
 import './globals.css'
 
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
-  variable: '--font-montserrat',
+// P5 family typefaces, self-hosted. These are the same two files P5 Home Co
+// serves (Manrope and Cormorant Garamond, both variable-weight, both SIL Open
+// Font License), so all five sites render identical glyphs.
+const manrope = localFont({
+  src: '../public/fonts/manrope-variable.woff2',
+  weight: '200 800',
+  variable: '--font-manrope',
   display: 'swap',
 })
 
-// Libre Baskerville Italic is the brand's accent typeface (the italic "Co." in
-// the wordmark and "Construction" in the seal). It carries every decorative
-// serif moment on the site so type matches the approved marks. Only 400/700 ship.
-const libreBaskerville = Libre_Baskerville({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  style: ['normal', 'italic'],
-  variable: '--font-libre-baskerville',
+// Cormorant Garamond carries every serif moment - headings, the italic accent
+// word, display numerals, pull quotes - as it does on P5. The wordmark and seal
+// artwork remain set in Libre Baskerville; the marks and the live type share a
+// register rather than a face, which is the same relationship P5 has.
+const cormorant = localFont({
+  src: '../public/fonts/cormorant-garamond-variable.woff2',
+  weight: '300 700',
+  variable: '--font-cormorant',
   display: 'swap',
 })
 
@@ -145,7 +148,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`dark ${montserrat.variable} ${libreBaskerville.variable}`} style={{ colorScheme: 'dark' }} suppressHydrationWarning>
+    <html lang="en" className={`dark ${manrope.variable} ${cormorant.variable}`} style={{ colorScheme: 'dark' }} suppressHydrationWarning>
       <head suppressHydrationWarning>
         <script
           dangerouslySetInnerHTML={{

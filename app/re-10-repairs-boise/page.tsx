@@ -103,7 +103,7 @@ export default function Re10RepairsPage() {
         <div className="brc-label text-inverse-muted mt-6 mb-4">
           For agents, buyers and sellers
         </div>
-        <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
+        <h1 className="font-serif text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
           RE-10 repairs completed correctly and{" "}
           <em className="brc-accent">on schedule</em>
         </h1>
@@ -273,7 +273,7 @@ export default function Re10RepairsPage() {
         <div className="container px-4 max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-start">
           <div>
             <div className="brc-label mb-4">One company, whole list</div>
-            <h2 className="font-sans font-light text-2xl md:text-3xl tracking-tight text-foreground mb-4">
+            <h2 className="font-serif text-2xl md:text-3xl tracking-tight text-foreground mb-4">
               Stop calling four contractors for one repair list
             </h2>
             <div className="space-y-4 text-sm md:text-base text-muted-foreground leading-relaxed">
@@ -376,7 +376,7 @@ export default function Re10RepairsPage() {
         <div className="container px-4 max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-start">
           <div>
             <div className="brc-label mb-4">Communication</div>
-            <h2 className="font-sans font-light text-2xl md:text-3xl tracking-tight text-foreground mb-4">
+            <h2 className="font-serif text-2xl md:text-3xl tracking-tight text-foreground mb-4">
               You should never have to chase us for an update
             </h2>
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
@@ -495,7 +495,7 @@ export default function Re10RepairsPage() {
       <Section id="submit" variant="inverse">
         <div className="container px-4 max-w-3xl mx-auto text-center">
           <div className="brc-label text-inverse-muted mb-4">Send it over</div>
-          <h2 className="font-sans font-light text-2xl md:text-4xl tracking-tight text-inverse-foreground mb-5">
+          <h2 className="font-serif text-2xl md:text-4xl tracking-tight text-inverse-foreground mb-5">
             Submit your RE-10 for review
           </h2>
           <p className="text-sm md:text-base text-inverse-foreground/80 leading-relaxed mb-8 max-w-xl mx-auto">

@@ -22,9 +22,9 @@ const buttonVariants = cva(
         // Add a transparent border so that when someone toggles a border on later, it doesn't shift layout/size.
         ghost: "border border-transparent",
         brand:
-          "rounded-sm bg-primary text-primary-foreground border border-primary-border min-h-11 px-6 py-3.5",
+          "rounded-none bg-primary text-primary-foreground border border-primary-border min-h-[58px] px-8 text-[11px] font-bold uppercase tracking-[0.16em] gap-5",
         brandOutline:
-          "rounded-sm border border-border bg-transparent text-foreground shadow-xs min-h-11 px-6 py-3.5",
+          "rounded-none border border-foreground/80 bg-transparent text-foreground min-h-[58px] px-8 text-[11px] font-bold uppercase tracking-[0.16em] gap-5 hover:bg-foreground hover:text-background",
         /** Ghost CTA for use over dark hero imagery / inverse bands. */
         heroGhost:
           "rounded-sm border border-inverse-foreground/30 bg-inverse-foreground/10 text-inverse-foreground backdrop-blur-sm min-h-11 px-6 py-3.5",
@@ -33,10 +33,10 @@ const buttonVariants = cva(
           "rounded-sm border border-transparent text-foreground min-h-11 px-6 py-3.5",
         /** @deprecated Marketing uses brand (charcoal) for primary CTAs. */
         brandAccent:
-          "rounded-sm bg-primary text-primary-foreground border border-primary-border min-h-11 px-6 py-3.5",
+          "rounded-none bg-primary text-primary-foreground border border-primary-border min-h-[58px] px-8 text-[11px] font-bold uppercase tracking-[0.16em] gap-5",
         /** @deprecated Use brandOutline on light backgrounds. */
         brandInverseOutline:
-          "rounded-sm border border-border bg-transparent text-foreground shadow-xs min-h-11 px-6 py-3.5",
+          "rounded-none border border-foreground/80 bg-transparent text-foreground min-h-[58px] px-8 text-[11px] font-bold uppercase tracking-[0.16em] gap-5 hover:bg-foreground hover:text-background",
         /** Text-only link-style button (no fill or border), for inline navigation actions. */
         link:
           "border border-transparent text-primary underline-offset-4 hover:underline",
