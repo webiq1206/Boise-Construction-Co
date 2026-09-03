@@ -306,6 +306,20 @@ export function Footer() {
           <div className="flex flex-wrap gap-4">
             <span>&copy; {currentYear} {SITE_CONFIG.name}. All rights reserved.</span>
             <span>License details available upon request</span>
+            {/* Required parent-company disclosure. This brand is a DBA of
+                P5 Home Co LLC, not a separate company, and the branded link
+                gives that claim somewhere to resolve - for a reader deciding
+                who signs the contract, and for the entity graph, which
+                declares the same relationship in JSON-LD. */}
+            <span>
+              {SITE_CONFIG.name} is a DBA of{" "}
+              <a
+                href="https://p5homeco.com"
+                className="underline underline-offset-2 transition-colors hover:text-inverse-foreground"
+              >
+                P5 Home Co LLC
+              </a>
+            </span>
             <span>
               Built by{" "}
               <a

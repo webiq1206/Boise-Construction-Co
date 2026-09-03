@@ -14,7 +14,15 @@ const DEFAULT_SITE_URL = "https://boiseconstruction.co";
 
 export const SITE_CONFIG = {
   name: "Boise Construction Co",
-  legalName: "Boise Construction Co LLC",
+  /**
+   * The registered legal entity. This brand is an Idaho assumed business name
+   * (DBA) of P5 Home Co LLC - there is no separate "Boise Construction Co LLC" company.
+   * `name` above stays the DBA, which is what customers know and what belongs
+   * in a GBP business-name field; `legalName` is the entity that actually
+   * signs contracts, holds the registration and gets verified against state
+   * records, so the two are deliberately different values.
+   */
+  legalName: "P5 Home Co LLC",
   phone: process.env.NEXT_PUBLIC_PHONE ?? DEFAULT_PHONE,
   phoneTel: process.env.NEXT_PUBLIC_PHONE_TEL ?? DEFAULT_PHONE_TEL,
   phoneHref: `tel:${process.env.NEXT_PUBLIC_PHONE_TEL ?? DEFAULT_PHONE_TEL}`,
