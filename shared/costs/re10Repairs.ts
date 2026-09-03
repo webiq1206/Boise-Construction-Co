@@ -731,6 +731,11 @@ export const REPAIR_GRADE_BY_DIVISION: Record<string, number> = {
   LANDSCAPE: 0.32,
   // Protection and clean-up: a repair protects one room, not a whole site.
   "SITE REQUIREMENTS": 0.35,
+  // Present explicitly so the three sites carrying this engine stay byte-equal;
+  // these divisions resolved to REPAIR_GRADE_DEFAULT_FACTOR (0.42) already.
+  "INSULATION": 0.42,
+  "MECHANICAL (HVAC)": 0.42,
+  "SITE WORK": 0.42,
 };
 
 /** Used for any division without an explicit factor above. */
