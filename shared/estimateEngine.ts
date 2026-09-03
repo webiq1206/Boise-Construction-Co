@@ -591,7 +591,7 @@ const NC_DECREASES = [
   "A flexible timeline that lets us schedule efficiently",
 ];
 
-const PROJECT_UPGRADES: Record<ProjectType, string[]> = {
+export const PROJECT_UPGRADES: Record<ProjectType, string[]> = {
   "custom-home": [
     "A finished basement, which is the cheapest square footage you will ever add",
     "A larger garage or a shop bay with its own overhead door",
@@ -719,7 +719,7 @@ const FINISH_PROFILES: Record<FinishLevel, Omit<TypicalSelections, "summary">> =
   luxury: { cabinetTier: "custom", plumbingElectrical: "full", layoutChanges: "major" },
 };
 
-const PROFILE_SUMMARY: Record<ProjectType, Record<FinishLevel, string[]>> = {
+export const PROFILE_SUMMARY: Record<ProjectType, Record<FinishLevel, string[]>> = {
   /*
    * All four tiers are offered on a new home, because a new build genuinely
    * spans from production-grade specification to fully bespoke. What the tiers
@@ -1442,7 +1442,7 @@ export const PLANNING_STAGE_RANGE_LABELS: Record<PlanningStage, string> = {
  * behaves and is consistent with the guide's own rates falling as project size
  * rises across categories.
  */
-const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>> = {
+export const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>> = {
   /*
    * Kitchen is calibrated 2026-07 against two issued estimates, not the guide.
    *
