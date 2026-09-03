@@ -76,7 +76,7 @@ export default function EstimatePage() {
       >
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Project Estimator" }]} />
         <div className="brc-label text-inverse-muted mt-6 mb-4">Free planning tool</div>
-        <h1 className="font-sans font-light text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
+        <h1 className="font-serif text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
           Treasure Valley home build{" "}
           <em className="brc-accent">estimator</em>
         </h1>
@@ -92,7 +92,7 @@ export default function EstimatePage() {
         <div className="container px-4 max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-start">
           <div>
             <div className="brc-label mb-4">What happens next</div>
-            <h2 className="font-sans font-light text-2xl md:text-3xl tracking-tight text-foreground mb-4">
+            <h2 className="font-serif text-2xl md:text-3xl tracking-tight text-foreground mb-4">
               Your range is a starting point - not a quote
             </h2>
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6">

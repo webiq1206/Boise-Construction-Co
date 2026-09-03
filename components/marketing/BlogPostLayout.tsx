@@ -78,7 +78,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
 
           <header className="max-w-3xl mb-8 md:mb-10 mt-2">
             <Chip className="mb-4">{hub?.categoryLabel ?? post.category}</Chip>
-            <h1 className="text-3xl md:text-4xl lg:text-[2.75rem] font-sans font-light tracking-tight text-foreground mb-4">
+            <h1 className="text-3xl md:text-4xl lg:text-[2.75rem] font-serif tracking-tight text-foreground mb-4">
               {post.title}
             </h1>
             <p className="text-lg text-muted-foreground mb-5 max-w-2xl">{post.excerpt}</p>
@@ -151,7 +151,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                   <p className="text-xs font-normal uppercase tracking-wider text-muted-foreground mb-3">
                     Common questions
                   </p>
-                  <h2 className="text-xl md:text-2xl font-sans font-light tracking-tight text-foreground mb-6">
+                  <h2 className="text-xl md:text-2xl font-serif tracking-tight text-foreground mb-6">
                     Frequently asked questions
                   </h2>
                   <Accordion type="single" collapsible className="w-full">

@@ -129,8 +129,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ["var(--font-montserrat)", "Helvetica Neue", "system-ui", "sans-serif"],
-        serif: ["var(--font-libre-baskerville)", "Georgia", "serif"],
+        sans: ["var(--font-manrope)", "Helvetica Neue", "system-ui", "sans-serif"],
+        serif: ["var(--font-cormorant)", "Georgia", "serif"],
         mono: ["Menlo", "Monaco", "monospace"],
       },
       /*
@@ -170,7 +170,7 @@ export default {
 
         /* --- semantic tokens, for the text people read ------------------- */
         /** Uppercase tracked kicker above a heading. The 13px floor. */
-        eyebrow: ["0.8125rem", { lineHeight: "1.4", letterSpacing: "0.12em", fontWeight: "600" }],
+        eyebrow: ["0.8125rem", { lineHeight: "1.4", letterSpacing: "0.19em", fontWeight: "700" }],
         /** Timestamps, fine print, helper text under a field. */
         caption: ["0.875rem", { lineHeight: "1.5" }],  // 14px
         /** Form labels, chips, table headers. */
@@ -185,7 +185,7 @@ export default {
         "title-sm": ["1.125rem", { lineHeight: "1.35", letterSpacing: "-0.01em", fontWeight: "600" }],
         title: ["clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem)", { lineHeight: "1.3", letterSpacing: "-0.015em", fontWeight: "600" }],
 
-        display: ["clamp(2.5rem,6vw,5rem)", { lineHeight: "1.04", letterSpacing: "-0.025em" }],
+        display: ["clamp(3.25rem,6.4vw,6.25rem)", { lineHeight: "0.96", letterSpacing: "-0.04em" }],
         "section-title": ["clamp(1.625rem, 1.4rem + 1vw, 1.875rem)", { lineHeight: "1.2", letterSpacing: "-0.025em" }],
         "section-title-lg": ["clamp(1.875rem, 1.5rem + 1.6vw, 2.25rem)", { lineHeight: "1.18", letterSpacing: "-0.025em" }],
       },

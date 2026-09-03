@@ -67,9 +67,9 @@ html, body {
 
   /* Page base - charcoal, brand ink family #2C302F */
   --background: 163 5% 12%;
-  --foreground: 37 14% 89%;        /* body text #E6E3DE (warm bone) */
+  --foreground: 40 32% 92%;        /* body text - P5 bone #F1EDE4, the one warm neutral across the family */
   --heading: 30 20% 96%;           /* bone #F7F5F3 */
-  --border: 163 5% 24%;            /* hairline */
+  --border: 40 8% 27%;             /* hairline, warmed toward bone like P5's --line */
   --card: 163 5% 16%;              /* surface */
   --card-foreground: 37 14% 89%;
   --card-border: 163 5% 24%;
@@ -109,7 +109,7 @@ html, body {
   --secondary-foreground: 37 14% 89%;
 
   --muted: 163 6% 16%;
-  --muted-foreground: 32 4% 61%;     /* mist */
+  --muted-foreground: 147 9% 52%;    /* P5 sage #7A9184 - the family's secondary text tone */
   --faint: 32 3% 45%;                 /* faint */
 
   /* Small accents use a deep, muted ochre #7E6344 (dots, marks, pills,
@@ -180,6 +180,8 @@ html, body {
 
   html {
     scroll-behavior: smooth;
+    /* Anchors clear the fixed header (P5 does the same with scroll-padding-top). */
+    scroll-padding-top: 64px;
   }
 
   body {
@@ -188,9 +190,12 @@ html, body {
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-montserrat, "Helvetica Neue", system-ui, sans-serif);
-    font-weight: 300;
-    letter-spacing: -0.02em;
+    /* Cormorant Garamond for every heading, as on P5. It runs visually smaller
+       than the Montserrat it replaces, so weight steps to 400 and tracking
+       tightens; sizes step up in the type scale. */
+    font-family: var(--font-cormorant, Georgia, serif);
+    font-weight: 400;
+    letter-spacing: -0.03em;
     color: hsl(var(--heading));
   }
 
@@ -299,6 +304,17 @@ html, body {
     animation: pulse-accent 2s ease-in-out infinite;
   }
 
+  /* P5's hero image reveal: a slow settle from a slight zoom. The copy beside it
+     already rises in via <Reveal>, so this animates only the image. */
+  @keyframes hero-reveal {
+    from { transform: scale(1.06); opacity: .6; }
+    to   { transform: scale(1);    opacity: 1; }
+  }
+  .animate-hero-reveal { animation: hero-reveal 1300ms ease both; }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-hero-reveal { animation: none; }
+  }
+
   @keyframes fade-up {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -325,16 +341,17 @@ html, body {
     animation: wizard-step-enter 0.24s ease-out both;
   }
 
+  /* P5's section rhythm: 130px on desktop, stepping down on smaller screens. */
   .section-y {
-    @apply py-24 md:py-32;
+    @apply py-20 md:py-[130px];
   }
 
   .section-y-lg {
-    @apply py-28 md:py-40;
+    @apply py-24 md:py-[160px];
   }
 
   .section-y-sm {
-    @apply py-16 md:py-20;
+    @apply py-14 md:py-20;
   }
 
   .section-divider {
@@ -379,7 +396,8 @@ html, body {
 
 /* ─── Decorative accent (Libre Baskerville italic emphasis) ─── */
 .brc-accent {
-  font-family: var(--font-libre-baskerville, Georgia, serif);
+  font-family: var(--font-cormorant, Georgia, serif);
+  font-weight: 500;
   font-style: italic;
   font-optical-sizing: auto;
   /* Accent WORDS are the serif grace note AND the brand's ochre moment. We use
@@ -392,8 +410,8 @@ html, body {
 
 /* ─── Decorative display numerals (Libre Baskerville: stats, prices, step markers) ─── */
 .brc-display-num {
-  font-family: var(--font-libre-baskerville, Georgia, serif);
-  font-weight: 400;
+  font-family: var(--font-cormorant, Georgia, serif);
+  font-weight: 500;
   font-style: normal;
   font-optical-sizing: auto;
   font-variant-numeric: tabular-nums;
@@ -409,7 +427,9 @@ html, body {
      while also being the label that introduces most sections. 13px is the
      floor the type scale sets; nothing should sit under it. */
   font-size: 0.8125rem;
-  letter-spacing: 0.14em;
+  /* P5's eyebrow tracking and weight; the 13px floor above stays. */
+  letter-spacing: 0.19em;
+  font-weight: 700;
   text-transform: uppercase;
   color: hsl(var(--muted-foreground));
 }
@@ -612,7 +632,7 @@ html, body {
 .blog-content > *:first-child { margin-top: 0; }
 
 .blog-content .pull-quote {
-  font-family: var(--font-libre-baskerville, Georgia, serif);
+  font-family: var(--font-cormorant, Georgia, serif);
   font-style: italic;
   font-size: 1.25rem;
   line-height: 1.5;

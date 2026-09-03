@@ -136,7 +136,7 @@ export default function BlogCategoryHubPage({
 
           <HubHeroBanner src={hubHero} alt={hubAlt} />
 
-          <h1 className="text-3xl md:text-4xl font-sans font-light tracking-tight mb-4">
+          <h1 className="text-3xl md:text-4xl font-serif tracking-tight mb-4">
             {hub.title}
           </h1>
           <p className="text-lg text-muted-foreground mb-4 max-w-2xl">{hub.description}</p>
@@ -168,7 +168,7 @@ export default function BlogCategoryHubPage({
               screen reader heard a level that was never opened. Visually, a bare
               grid under three paragraphs of intro gives the eye nothing to land
               on; naming the list is what makes the page scannable. */}
-          <h2 className="text-title font-sans text-foreground mb-5">
+          <h2 className="text-title font-serif text-foreground mb-5">
             {posts.length === 1 ? "1 article in this topic" : `${posts.length} articles in this topic`}
           </h2>
 

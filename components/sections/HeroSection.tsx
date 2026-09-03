@@ -48,7 +48,7 @@ export function HeroSection() {
           fill
           priority
           sizes="(max-width: 768px) 100vw, 1400px"
-          className="object-cover opacity-[0.86] img-brand-grade"
+          className="object-cover opacity-[0.86] img-brand-grade animate-hero-reveal"
         />
         {/* Ends at /25 rather than /15. The stat cards live in the last third
             of this gradient, and at /15 the photo was effectively unscrimmed
@@ -67,7 +67,7 @@ export function HeroSection() {
         <div className="absolute inset-x-0 bottom-0 h-32 pointer-events-none bg-gradient-to-t from-background via-background/50 to-transparent" />
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ backgroundImage: GRAIN_URL, backgroundRepeat: "repeat", opacity: 0.03 }}
+          style={{ backgroundImage: GRAIN_URL, backgroundRepeat: "repeat", opacity: 0.13 }}
         />
 
         <div className="relative z-10 container px-4 md:px-8 py-20 md:py-32 pb-16 md:pb-28">
@@ -83,7 +83,7 @@ export function HeroSection() {
                   the old remodeling tagline ("Boise remodeling with clarity and
                   confidence") almost word for word - the same company with a noun
                   swapped, which is the resemblance the repositioning has to lose. */}
-              <h1 className="font-sans font-light text-inverse-foreground text-display tracking-tight mb-6">
+              <h1 className="font-serif text-inverse-foreground text-display tracking-tight mb-6">
                 Your Boise custom home builder,{" "}
                 <em className="brc-accent">from bare lot to the keys</em>.
               </h1>
