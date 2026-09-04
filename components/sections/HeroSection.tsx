@@ -103,18 +103,28 @@ export function HeroSection() {
               >
                 {HERO_SUBHEAD}
               </p>
-              <div className="flex flex-wrap gap-3 mb-6 md:mb-0">
-                <Button variant="brand" asChild>
+              {/* Phones: both CTAs full width and stacked, same height and
+                  format, so the pair reads as a pair rather than a button
+                  beside a stray outline. */}
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap mb-6 md:mb-0">
+                <Button variant="brand" className="w-full sm:w-auto" asChild>
                   <a href="#calculator">{CTA_PRIMARY}</a>
                 </Button>
-                <Button variant="heroGhost" asChild>
+                <Button variant="heroOutline" className="w-full sm:w-auto" asChild>
                   <a href="#consult">{CTA_SECONDARY}</a>
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 gap-2 md:hidden">
+              {/* Phones: one translucent strip with three hairline-divided
+                  cells, not three boxes wrapping their labels onto three lines. */}
+              <div className="grid grid-cols-3 divide-x divide-inverse-foreground/15 rounded-sm bg-inverse/55 border border-inverse-foreground/20 backdrop-blur-md md:hidden">
                 {HERO_STATS.map((stat) => (
-                  <StatCard key={stat.num} num={stat.num} label={stat.label} />
+                  <div key={stat.num} className="px-2 py-3 text-center">
+                    <DisplayNum className="text-inverse-foreground text-lg leading-none">{stat.num}</DisplayNum>
+                    <div className="mt-1.5 text-[0.625rem] leading-tight tracking-[0.08em] uppercase text-inverse-foreground/85">
+                      {stat.label}
+                    </div>
+                  </div>
                 ))}
               </div>
             </Reveal>
@@ -142,13 +152,13 @@ export function HeroSection() {
             {TRUST_ITEMS.map((item) => (
               <div
                 key={item}
-                className="flex items-center justify-center gap-2 px-4 py-5 md:py-4 text-center border-r border-b border-border/60"
+                className="flex items-center justify-start gap-2.5 px-3.5 py-3.5 text-left md:justify-center md:px-4 md:py-4 md:text-center border-r border-b border-border/60"
               >
                 <span
                   className="h-1 w-1 shrink-0 rounded-full bg-accent-legible"
                   aria-hidden="true"
                 />
-                <span className="text-xs leading-snug tracking-[0.14em] uppercase text-foreground/90">
+                <span className="text-xs leading-snug tracking-[0.12em] md:tracking-[0.14em] uppercase text-foreground/90">
                   {item}
                 </span>
               </div>

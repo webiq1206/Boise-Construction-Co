@@ -188,7 +188,7 @@ export default function ServicesIndexPage() {
         description="Use our Treasure Valley build cost estimator to see a realistic range for a custom or semi-custom home, or a build on land you already own - then book a free planning consultation when you're ready."
       />
 
-      <Section surface="deep" spacing="xl" edge>
+      <Section surface="bone" spacing="xl" edge>
         <div className="ed-shell">
           <div className="ed-split ed-split-end">
             <Reveal>
@@ -226,7 +226,7 @@ export default function ServicesIndexPage() {
               <p className="ed-body">
                 Book a free planning consultation or get an instant build cost range.
               </p>
-              <div className="mt-8 flex flex-wrap gap-4">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 [&>*]:w-full sm:[&>*]:w-auto">
                 <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
                 <Button variant="brandOutline" asChild><a href="/#consult">{CTA_SECONDARY}</a></Button>
               </div>

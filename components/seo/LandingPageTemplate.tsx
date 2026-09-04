@@ -203,11 +203,11 @@ export function LandingPageTemplate({
           )}
           <h1 className="ed-display ed-statement-display text-inverse-foreground">{h1}</h1>
           <p className="ed-lede mt-8 max-w-[44ch] text-inverse-foreground/85">{overview}</p>
-          <div className="mt-10 flex flex-wrap gap-4">
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 [&>*]:w-full sm:[&>*]:w-auto">
             <ConsultCTA variant="brand">
               {CTA_PRIMARY} <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </ConsultCTA>
-            <Button variant="heroGhost" asChild>
+            <Button variant="heroOutline" asChild>
               <a href="/#consult">{CTA_SECONDARY}</a>
             </Button>
           </div>
@@ -264,7 +264,7 @@ export function LandingPageTemplate({
 
       {/* ─── Benefits: a hairline matrix, not a card grid ─── */}
       {benefits && benefits.length > 0 && (
-        <Section surface="deep" spacing="xl" edge>
+        <Section surface="bone" spacing="xl" edge>
           <div className="ed-shell">
             <Reveal>
               <p className="ed-eyebrow">Why choose us</p>
@@ -504,7 +504,7 @@ export function LandingPageTemplate({
       )}
 
       {/* ─── FAQ: the parent site's split ─── */}
-      <Section surface="dark" spacing="xl" edge>
+      <Section surface="bone" spacing="xl" edge>
         <div className="ed-shell">
           <div className="ed-split ed-split-narrow">
             <div className="lg:sticky lg:top-28 lg:self-start">

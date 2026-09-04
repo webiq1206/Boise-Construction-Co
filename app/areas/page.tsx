@@ -62,17 +62,17 @@ export default function AreasHubPage() {
           <p className="sr-only" data-speakable="summary">
             Treasure Valley new home construction service areas.
           </p>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap [&>*]:w-full sm:[&>*]:w-auto">
             <ConsultCTA variant="brand">
               {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
             </ConsultCTA>
-            <Button variant="heroGhost" asChild>
+            <Button variant="heroOutline" asChild>
               <a href="/#consult">{CTA_SECONDARY}</a>
             </Button>
           </div>
         </PageHeroBand>
 
-        <Section surface="dark" spacing="xl">
+        <Section surface="bone" spacing="xl">
           <div className="ed-shell">
             <SectionHeader
               eyebrow="Treasure Valley"

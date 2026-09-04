@@ -111,12 +111,14 @@ function HeroBreadcrumbs() {
 }
 
 function StatCard({ num, label }: { num: string; label: string }) {
+  /* Phones: a plain cell inside the strip the container draws. Boxed and
+     three-up, the labels wrapped onto three or four lines each. */
   return (
-    <div className="px-3 py-3 md:px-6 md:py-5 rounded-sm bg-inverse/50 border border-inverse-foreground/20 backdrop-blur-md">
+    <div className="px-2 py-3 text-center md:px-6 md:py-5 md:text-left md:rounded-sm md:bg-inverse/50 md:border md:border-inverse-foreground/20 md:backdrop-blur-md">
       <DisplayNum className="text-inverse-foreground text-lg md:text-3xl leading-none">
         {num}
       </DisplayNum>
-      <div className="mt-1 md:mt-1.5 text-xs md:text-xs tracking-[0.08em] md:tracking-[0.1em] uppercase text-inverse-foreground/85 leading-snug">
+      <div className="mt-1.5 text-[0.625rem] leading-tight tracking-[0.08em] md:text-label md:tracking-[0.1em] uppercase text-inverse-foreground/85 md:leading-snug">
         {label}
       </div>
     </div>
@@ -262,7 +264,7 @@ export default function ContactPage() {
             >
               Prefer to text? Message us instead
             </a>
-            <div className="flex flex-wrap gap-3 mb-8">
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap [&>*]:w-full sm:[&>*]:w-auto mb-8">
               {/* Primary action on the contact page is the inline form below -
                   one tap from the hero. The estimator lives on the homepage. */}
               <Button variant="brand" asChild>
@@ -270,11 +272,11 @@ export default function ContactPage() {
                   Request your free visit <ArrowRight className="h-4 w-4" />
                 </a>
               </Button>
-              <Button variant="heroGhost" asChild>
+              <Button variant="heroOutline" asChild>
                 <a href="/estimate">Get an instant estimate</a>
               </Button>
             </div>
-            <div className="grid grid-cols-3 gap-3 max-w-xl">
+            <div className="grid grid-cols-3 max-w-xl divide-x divide-inverse-foreground/15 rounded-sm border border-inverse-foreground/20 bg-inverse/55 backdrop-blur-md md:gap-3 md:divide-x-0 md:rounded-none md:border-0 md:bg-transparent md:backdrop-blur-none">
               {HERO_STATS.map((stat) => (
                 <StatCard key={stat.num} num={stat.num} label={stat.label} />
               ))}
@@ -425,7 +427,7 @@ export default function ContactPage() {
         <Section id="consult" divider className="scroll-mt-24">
           <div className="container px-4">
             <div className="max-w-5xl mx-auto grid md:grid-cols-5 gap-12 items-start">
-              <div className="md:col-span-2">
+              <div className="min-w-0 md:col-span-2">
                 <Reveal>
                   <p className="ed-eyebrow">Request your consultation</p>
                   <h2 className="ed-h2 ed-statement-wide">
@@ -538,9 +540,9 @@ export default function ContactPage() {
                 >
                   Or send us a text message
                 </a>
-                <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 [&>*]:w-full sm:[&>*]:w-auto">
                   <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
-                  <Button variant="heroGhost" asChild>
+                  <Button variant="heroOutline" asChild>
                     <a href="#consult">{CTA_SECONDARY}</a>
                   </Button>
                 </div>
