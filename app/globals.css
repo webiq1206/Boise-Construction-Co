@@ -960,3 +960,7 @@ body:has([data-wizard-action-bar]) .brc-assistant-launcher {
     bottom: 1.5rem;
   }
 }
+
+@media (min-width: 768px) {
+  :root { --app-header-h: 64px; }
+}

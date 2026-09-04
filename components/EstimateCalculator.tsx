@@ -16,6 +16,7 @@ import {
   WizardProgress,
   WizardActionBar,
   ReviewSection,
+  AppFrame,
   type WizardStepMeta,
 } from "@/components/estimate/wizard";
 import { Button } from "@/components/ui/button";
@@ -653,11 +654,18 @@ const WIZ_DRAFT_KEY = "brc_estimate_wizard_v1";
 interface EstimateCalculatorProps {
   inModal?: boolean;
   onBookVisit?: () => void;
+  /**
+   * One-screen app mode for the standalone /estimate page: the wizard renders
+   * inside AppFrame, fixed to the viewport below the site header, with the step
+   * rail in the header and Back/Continue pinned in the footer. No page scroll.
+   */
+  fitViewport?: boolean;
 }
 
 export function EstimateCalculator({
   inModal = false,
   onBookVisit: onBookVisitProp,
+  fitViewport = false,
 }: EstimateCalculatorProps = {}) {
 
   /* ── State ── */
@@ -3038,10 +3046,15 @@ export function EstimateCalculator({
     options: { value: T; label: string; sub?: string }[],
     testPrefix: string,
   ) => (
-    <div className="mb-4 last:mb-0">
+    <div className={fitViewport ? "mb-3 last:mb-0" : "mb-4 last:mb-0"}>
       <p className="text-caption tracking-[0.06em] uppercase text-inverse-foreground/90 mb-0.5">{label}</p>
-      <p className="text-caption text-inverse-muted/90 mb-2">{hint}</p>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2" role="group" aria-label={label}>
+      {!fitViewport && <p className="text-caption text-inverse-muted/90 mb-2">{hint}</p>}
+      <div
+        className={fitViewport ? cn("grid gap-1.5", options.length === 3 ? "grid-cols-3" : "grid-cols-4") : "grid grid-cols-2 sm:grid-cols-4 gap-2"}
+        role="group"
+        aria-label={label}
+        title={fitViewport ? hint : undefined}
+      >
         {options.map((opt) => {
           const active = value === opt.value;
           return (
@@ -3074,7 +3087,7 @@ export function EstimateCalculator({
   const siteSection = (
     <div className="mt-5">
       {renderStepLabel("site", "A few things about your lot")}
-      <p className="-mt-2 mb-3 text-caption text-inverse-muted/90">
+      <p className={cn("-mt-2 mb-3 text-caption text-inverse-muted/90", fitViewport && "hidden")}>
         Site work is one of the biggest swings in a build on your own land, so these four
         answers move your range more than almost anything else. "Not sure" is a fine answer;
         it prices the typical case and we confirm it at the site visit.
@@ -4638,13 +4651,14 @@ export function EstimateCalculator({
   const reviewStep = (
     <div>
       {renderStepLabel("review", "Review your project")}
-      <p className="text-sm text-inverse-muted -mt-1 mb-4 max-w-prose">
+      <p className={cn("text-sm text-inverse-muted -mt-1 mb-4 max-w-prose", fitViewport && "hidden")}>
         A quick check before we build your estimate. Tap Edit to change
         anything - every other answer stays exactly as you left it.
       </p>
-      <div className="space-y-3">
+      <div className={fitViewport ? "border-t border-inverse-foreground/12" : "space-y-3"}>
         <ReviewSection
           tone="inverse"
+          compact={fitViewport}
           title="Planning stage"
           onEdit={() => editFromReview("stage")}
           data-testid="review-stage"
@@ -4655,6 +4669,7 @@ export function EstimateCalculator({
         {showPlanUpload && (
           <ReviewSection
             tone="inverse"
+            compact={fitViewport}
             title="Your plans"
             onEdit={() => editFromReview("plans")}
             data-testid="review-plans"
@@ -4669,6 +4684,7 @@ export function EstimateCalculator({
 
         <ReviewSection
           tone="inverse"
+          compact={fitViewport}
           title="Land"
           onEdit={() => editFromReview("land")}
           data-testid="review-land"
@@ -4678,6 +4694,7 @@ export function EstimateCalculator({
 
         <ReviewSection
           tone="inverse"
+          compact={fitViewport}
           title="Project and layout"
           onEdit={() => editFromReview("layout")}
           data-testid="review-project"
@@ -4687,6 +4704,7 @@ export function EstimateCalculator({
 
         <ReviewSection
           tone="inverse"
+          compact={fitViewport}
           title={ownsLand ? "Property address" : "Where you plan to build"}
           onEdit={() => editFromReview("address")}
           data-testid="review-location"
@@ -4698,6 +4716,7 @@ export function EstimateCalculator({
 
         <ReviewSection
           tone="inverse"
+          compact={fitViewport}
           title="Size"
           onEdit={() => editFromReview("size")}
           data-testid="review-size"
@@ -4713,6 +4732,7 @@ export function EstimateCalculator({
         {visibleSteps.includes("site") && (
           <ReviewSection
             tone="inverse"
+            compact={fitViewport}
             title="Your lot"
             onEdit={() => editFromReview("site")}
             data-testid="review-site"
@@ -4725,6 +4745,7 @@ export function EstimateCalculator({
 
         <ReviewSection
           tone="inverse"
+          compact={fitViewport}
           title="Options"
           onEdit={() => editFromReview("upgrades")}
           data-testid="review-options"
@@ -4735,6 +4756,7 @@ export function EstimateCalculator({
         {showBathCount && (
           <ReviewSection
             tone="inverse"
+            compact={fitViewport}
             title="Bathrooms"
             onEdit={() => editFromReview("bathcount")}
             data-testid="review-baths"
@@ -4746,6 +4768,7 @@ export function EstimateCalculator({
         {showKitchenIncluded && (
           <ReviewSection
             tone="inverse"
+            compact={fitViewport}
             title="Kitchen"
             onEdit={() => editFromReview("kitchen")}
             data-testid="review-kitchen"
@@ -4756,6 +4779,7 @@ export function EstimateCalculator({
 
         <ReviewSection
           tone="inverse"
+          compact={fitViewport}
           title="Other structures"
           onEdit={() => editFromReview("structures")}
           data-testid="review-structures"
@@ -4772,6 +4796,7 @@ export function EstimateCalculator({
 
         <ReviewSection
           tone="inverse"
+          compact={fitViewport}
           title="Finish level"
           onEdit={() => editFromReview("finish")}
           data-testid="review-finish"
@@ -4814,9 +4839,9 @@ export function EstimateCalculator({
 
   const contactStep = (
     <div aria-label="Unlock your estimate">
-      <div className="space-y-5">
-        {/* Header */}
-        <div className="flex items-start gap-3">
+      <div className={fitViewport ? "space-y-3" : "space-y-5"}>
+        {/* Header - the frame's own header carries this in one-screen mode. */}
+        <div className={cn("flex items-start gap-3", fitViewport && "hidden")}>
           <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-accent-legible/20">
             <Lock className="h-4 w-4 text-accent-legible" />
           </div>
@@ -4833,7 +4858,7 @@ export function EstimateCalculator({
         </div>
 
         {/* Project summary chips - what they chose, never what it costs */}
-        <div className="flex flex-wrap gap-2">
+        <div className={cn("flex flex-wrap gap-2", fitViewport && "hidden")}>
           <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-inverse-foreground/[0.08] border border-inverse-foreground/15 text-xs text-inverse-foreground">
             {config.tabLabel}
           </span>
@@ -4853,7 +4878,7 @@ export function EstimateCalculator({
           ref={gateFormRef}
           onSubmit={handleGateSubmit}
           onFocusCapture={trackGateStart}
-          className="space-y-3.5"
+          className={fitViewport ? "grid grid-cols-2 gap-2.5" : "space-y-3.5"}
           noValidate
         >
           <div>
@@ -4942,7 +4967,7 @@ export function EstimateCalculator({
               fix it. Never a street-address prompt for land the visitor does
               not own. */}
           {ownsLand ? (
-            <div>
+            <div className={fitViewport ? "col-span-2" : undefined}>
               <label
                 htmlFor="gate-address"
                 className="mb-1.5 block text-caption tracking-[0.06em] uppercase text-inverse-muted"
@@ -5094,10 +5119,13 @@ export function EstimateCalculator({
       case "kitchen":    return kitchenRow;
       case "structures": return structuresStep;
       case "finish":
+        /* The "typically included" panel is reading, not deciding; in the
+           one-screen frame it took the step 224px past a phone body, and the
+           review step that follows lists the same choices. */
         return (
           <>
             {finishRow}
-            {chosen.finish && typicalPanel}
+            {chosen.finish && !fitViewport && typicalPanel}
           </>
         );
       case "review":     return reviewStep;
@@ -5156,6 +5184,60 @@ export function EstimateCalculator({
 
   const surface = view === "results" && gateSubmitted ? resultsSurface : wizardSurface;
   const showResultBar = view === "results" && gateSubmitted;
+
+  /* fitViewport: the estimator as a one-screen app. The frame carries the H1,
+     the step counter and the progress rail, so the in-body WizardProgress and
+     the marketing intro are not rendered here; the action bar sits in the
+     frame's pinned footer in flow. Results reuse the frame without the rail. */
+  if (fitViewport) {
+    if (showResultBar) {
+      return (
+        <AppFrame
+          title="Your build estimate"
+          eyebrow="Estimate complete"
+          steps={wizStepMeta}
+          currentIndex={wizStepMeta.length - 1}
+          hideProgress
+          footerAccessory={
+            <StickyEstimateBar
+              mode="modal"
+              result={result}
+              summary={stickySummary}
+              ctaLabel="Book Free Visit"
+              onCta={handleBookVisit}
+            />
+          }
+        >
+          <div ref={wizardTopRef} data-hydrated={hydrated || undefined}>{resultPanel}</div>
+        </AppFrame>
+      );
+    }
+    return (
+      <AppFrame
+        title={<>Home build <em className="not-italic" style={{ color: "var(--ed-accent)" }}>estimator</em></>}
+        eyebrow="Free · 2 minutes · No obligation"
+        steps={wizStepMeta}
+        currentIndex={wizIndex}
+        footer={
+          <WizardActionBar
+            tone="inverse"
+            pinned={false}
+            ownsBottomEdge={false}
+            onBack={wizIndex > 0 || wizReturnTo !== null ? backStep : undefined}
+            onPrimary={advanceStep}
+            primaryLabel={continueLabel}
+            primaryDisabled={!stepDone(wizStep)}
+            busy={wizStep === "contact" ? gateLoading : wizStep === "plans" && planBusy}
+            busyLabel={wizStep === "contact" ? "Sending..." : "Reading your plans..."}
+          />
+        }
+      >
+        <div ref={wizardTopRef} data-hydrated={hydrated || undefined}>
+          <div key={wizStep} className="brc-wizard-step-enter">{stepBody}</div>
+        </div>
+      </AppFrame>
+    );
+  }
 
   /* inModal: compact card without full-viewport constraint */
   if (inModal) {

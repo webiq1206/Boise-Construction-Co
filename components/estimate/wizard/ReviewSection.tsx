@@ -10,6 +10,12 @@ export interface ReviewSectionProps {
   editLabel?: string;
   children: React.ReactNode;
   tone?: "inverse" | "default";
+  /**
+   * One-screen review: a single hairline row - title, value, Edit - instead of
+   * a padded card. Thirteen cards ran 874px past a phone's frame body; thirteen
+   * rows fit.
+   */
+  compact?: boolean;
   className?: string;
   "data-testid"?: string;
 }
@@ -26,10 +32,41 @@ export function ReviewSection({
   editLabel = "Edit",
   children,
   tone = "default",
+  compact = false,
   className,
   "data-testid": testId,
 }: ReviewSectionProps) {
   const inverse = tone === "inverse";
+  if (compact) {
+    return (
+      <section
+        data-testid={testId}
+        className={cn(
+          "flex items-center justify-between gap-3 border-b py-1",
+          inverse ? "border-inverse-foreground/12" : "border-border",
+          className,
+        )}
+      >
+        {/* One line per answer: the title as a muted prefix, the value after it.
+            Two lines per row put thirteen rows 69px past a phone body. */}
+        <div className={cn("min-w-0 truncate text-[0.875rem] leading-snug", inverse ? "text-inverse-foreground" : "text-foreground")}>
+          <span className={cn("mr-2 text-[0.625rem] uppercase tracking-[0.14em]", inverse ? "text-inverse-muted" : "text-muted-foreground")}>{title}</span>
+          {children}
+        </div>
+        {onEdit && (
+          <button
+            type="button"
+            onClick={onEdit}
+            className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-sm px-2 text-[0.8125rem] text-accent-legible hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-legible"
+            data-testid={testId ? `${testId}-edit` : undefined}
+          >
+            <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
+            {editLabel}
+          </button>
+        )}
+      </section>
+    );
+  }
   return (
     <section
       data-testid={testId}

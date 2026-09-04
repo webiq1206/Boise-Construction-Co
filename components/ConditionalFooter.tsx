@@ -15,6 +15,8 @@ export function ConditionalFooter() {
     pathname === "/subcontractor" ||
     pathname?.startsWith("/subcontractor/purchases");
 
-  if (hideFooter) return null;
+  // The estimator owns the whole screen as a one-page app; a footer below it
+  // would be the one thing on the page that forces a scroll.
+  if (hideFooter || pathname === "/estimate") return null;
   return <Footer />;
 }

@@ -14,6 +14,12 @@ export interface WizardStepProps {
   className?: string;
   /** Marks the heading as an h2 (default) or h3. */
   as?: "h2" | "h3";
+  /**
+   * One-screen mode: the frame header already carries the eyebrow, so it is
+   * dropped here; the heading and instruction tighten so the controls get the
+   * height.
+   */
+  compact?: boolean;
   "data-testid"?: string;
 }
 
@@ -31,6 +37,7 @@ export function WizardStep({
   tone = "default",
   className,
   as = "h2",
+  compact = false,
   "data-testid": testId,
 }: WizardStepProps) {
   const inverse = tone === "inverse";
@@ -38,7 +45,7 @@ export function WizardStep({
 
   return (
     <div className={cn(className)} data-testid={testId}>
-      {eyebrow && (
+      {eyebrow && !compact && (
         <p
           className={cn(
             "brc-label mb-3",
@@ -50,8 +57,8 @@ export function WizardStep({
       )}
       <Heading
         className={cn(
-          "font-sans font-light tracking-tight",
-          as === "h2" ? "text-2xl md:text-3xl" : "text-xl md:text-2xl",
+          "font-serif tracking-tight",
+          compact ? "text-[1.375rem] leading-tight md:text-[1.75rem]" : as === "h2" ? "text-2xl md:text-3xl" : "text-xl md:text-2xl",
           inverse ? "text-inverse-foreground" : "text-foreground",
         )}
       >
@@ -60,14 +67,14 @@ export function WizardStep({
       {instructions && (
         <p
           className={cn(
-            "mt-3 text-sm leading-relaxed",
+            compact ? "mt-1.5 text-[0.8125rem] leading-snug" : "mt-3 text-sm leading-relaxed",
             inverse ? "text-inverse-foreground/80" : "text-muted-foreground",
           )}
         >
           {instructions}
         </p>
       )}
-      <div className="mt-6">{children}</div>
+      <div className={compact ? "mt-4" : "mt-6"}>{children}</div>
     </div>
   );
 }

@@ -31,3 +31,4 @@ export type {
   ChoiceOption,
 } from "./fields";
 export { useKeyboardInset } from "./useKeyboardInset";
+export { AppFrame, type AppFrameStep } from "./AppFrame";
