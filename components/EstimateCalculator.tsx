@@ -5015,7 +5015,7 @@ export function EstimateCalculator({
               className="mb-1.5 block text-caption tracking-[0.06em] uppercase text-inverse-muted"
             >
               Budget you are working toward{" "}
-              <span className="normal-case tracking-normal text-inverse-muted/80">(optional)</span>
+              <span className="normal-case tracking-normal text-inverse-muted">(optional)</span>
             </label>
             <div className="relative">
               <span
