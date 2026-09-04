@@ -46,11 +46,11 @@ export default function BlogPage() {
         imageAlt={getBlogImageAlt("stages-of-building-a-house")}
       >
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Blog" }]} />
-        <div className="brc-label text-inverse-muted mt-6 mb-4">Blog</div>
-        <h1 className="font-serif text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
+        <p className="ed-eyebrow mt-8" style={{ color: "rgb(255 255 255 / 0.72)" }}>Blog</p>
+        <h1 className="ed-display ed-statement-display text-inverse-foreground">
           Home Building Insights
         </h1>
-        <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-4">
+        <p className="ed-lede mt-8 max-w-[44ch] text-inverse-foreground/85">
           Straight answers for Treasure Valley families building a new home. What it actually costs,
           how long each stage takes, how to compare two bids that look nothing alike, and what to
           check before you buy a lot.

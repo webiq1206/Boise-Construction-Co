@@ -75,12 +75,12 @@ export default function EstimatePage() {
         scrim={0.85}
       >
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Project Estimator" }]} />
-        <div className="brc-label text-inverse-muted mt-6 mb-4">Free planning tool</div>
-        <h1 className="font-serif text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
+        <p className="ed-eyebrow mt-8" style={{ color: "rgb(255 255 255 / 0.72)" }}>Free planning tool</p>
+        <h1 className="ed-display ed-statement-display text-inverse-foreground">
           Treasure Valley home build{" "}
           <em className="brc-accent">estimator</em>
         </h1>
-        <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed">
+        <p className="ed-lede mt-8 max-w-[44ch] text-inverse-foreground/85">
           Answer a few questions about the home you want to build and get an instant planning range
           based on real Treasure Valley construction costs - takes about 2 minutes, no obligation.
         </p>

@@ -50,12 +50,12 @@ export default function AreasHubPage() {
           imageAlt="Newly built Treasure Valley home with open kitchen and living space"
         >
           <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Service Areas" }]} />
-          <div className="brc-label text-inverse-muted mt-6 mb-4">Treasure Valley</div>
-          <h1 className="font-serif text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
+          <p className="ed-eyebrow mt-8" style={{ color: "rgb(255 255 255 / 0.72)" }}>Treasure Valley</p>
+          <h1 className="ed-display ed-statement-display text-inverse-foreground">
             Treasure Valley service{" "}
             <em className="brc-accent">areas</em>
           </h1>
-          <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-4">
+          <p className="ed-lede mt-8 max-w-[44ch] text-inverse-foreground/85">
             We build custom and semi-custom homes across {TREASURE_VALLEY_CITIES}, and the surrounding
             communities, on lots you own and lots we help you find, under one design-build team.
           </p>

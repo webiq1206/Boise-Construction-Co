@@ -100,14 +100,14 @@ export default function Re10RepairsPage() {
         scrim={0.86}
       >
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "RE-10 Repairs" }]} />
-        <div className="brc-label text-inverse-muted mt-6 mb-4">
+        <p className="ed-eyebrow mt-8" style={{ color: "rgb(255 255 255 / 0.72)" }}>
           For agents, buyers and sellers
-        </div>
-        <h1 className="font-serif text-display tracking-tight text-inverse-foreground max-w-3xl mb-4">
+        </p>
+        <h1 className="ed-display ed-statement-display text-inverse-foreground">
           RE-10 repairs completed correctly and{" "}
           <em className="brc-accent">on schedule</em>
         </h1>
-        <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-7">
+        <p className="ed-lede mt-8 max-w-[44ch] text-inverse-foreground/85">
           We complete inspection-related repairs for Boise-area real estate transactions, with one
           point of contact, clear scheduling against your closing date, and documentation you can
           put straight in the file.

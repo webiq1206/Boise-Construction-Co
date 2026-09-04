@@ -9,7 +9,14 @@ interface PageHeroBandProps {
   children: React.ReactNode;
 }
 
-/** Full-bleed photo hero band for index pages (Phase 3). */
+/**
+ * Full-bleed photo hero band for index pages.
+ *
+ * Taller than it was - clamp(380px, 48vw, 620px) rather than a flat 420 - so
+ * the photograph gets to be a composition rather than a strip, and on the
+ * family shell (1380px) rather than the old container so its text lines up
+ * with every section beneath it.
+ */
 export function PageHeroBand({
   imageSrc,
   imageAlt,
@@ -17,7 +24,7 @@ export function PageHeroBand({
   children,
 }: PageHeroBandProps) {
   return (
-    <section className="relative min-h-[320px] md:min-h-[420px] flex items-end overflow-hidden bg-inverse border-b border-border/60">
+    <section className="relative min-h-[clamp(380px,48vw,620px)] flex items-end overflow-hidden bg-inverse border-b border-border/60">
       <Image
         src={imageSrc}
         alt={imageAlt}
@@ -35,7 +42,7 @@ export function PageHeroBand({
         className="absolute inset-0 pointer-events-none"
         style={{ backgroundImage: GRAIN_URL, backgroundRepeat: "repeat", opacity: 0.03 }}
       />
-      <div className="relative z-10 w-full container px-4 pb-12 md:pb-16 pt-28 md:pt-32">
+      <div className="relative z-10 w-full ed-shell pb-12 md:pb-16 pt-28 md:pt-32">
         {children}
       </div>
     </section>

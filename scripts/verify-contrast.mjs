@@ -30,6 +30,8 @@ const ROUTES = [
   "/contact",
   "/gallery",
   "/estimate",
+  "/services/custom-home-builder",
+  "/areas/meridian",
 ];
 
 /** Viewports: a light band can pass on desktop and fail once type reflows. */
