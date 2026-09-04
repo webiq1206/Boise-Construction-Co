@@ -16,6 +16,7 @@ import {
   type UserRefinementKey,
   type FinishLevel,
   type EstimateRefinements,
+  buildDynamicScope,
 } from "../shared/estimateEngine";
 import {
   buildTakeoff,
@@ -841,6 +842,62 @@ for (const project of projects) {
   console.log(
     `  lead-facing vocabulary: ${renderedEmails} rendered customer emails clean, detector proven live against the admin email.`,
   );
+}
+
+// SCOPE LIST HONESTY. The per-tier `included` blurb describes a typical job at
+// that finish level, so it claims work the visitor has explicitly declined
+// unless it is filtered. A scope list that contradicts the answer the visitor
+// just gave is worse than no scope list at all.
+{
+  const refs = (o: Partial<typeof EMPTY_REFINEMENTS>) => ({ ...EMPTY_REFINEMENTS, ...o });
+  const scope = (project: ProjectType, finish: FinishLevel, sqft: number, r: typeof EMPTY_REFINEMENTS) =>
+    buildDynamicScope({ project, finish, sqft, refinements: r });
+
+  // New construction: a shop home with the shop sized at zero has no shop.
+  const noShop = scope("shop-home", "mid-range", 1700, refs({ shopSize: 0 }));
+  check(
+    !noShop.some((i) => /\bshop\b/i.test(i)),
+    `a shop home with no shop must not advertise one (got: ${noShop.join("; ")})`,
+  );
+
+  const withShop = scope("shop-home", "mid-range", 1700, refs({ shopSize: 1200 }));
+  check(
+    withShop.some((i) => /\bshop\b/i.test(i)),
+    `a shop home WITH a shop must still describe it (got: ${withShop.join("; ")})`,
+  );
+
+  // Silence is not an answer: an untouched refinement leaves the blurb alone.
+  const untouched = scope("shop-home", "mid-range", 1700, EMPTY_REFINEMENTS);
+  check(
+    untouched.some((i) => /\bshop\b/i.test(i)),
+    `an unanswered shop size must not filter the tier blurb (got: ${untouched.join("; ")})`,
+  );
+
+  const noLayout = scope("bathroom", "luxury", 80, refs({ layoutChanges: "none" }));
+  check(
+    !noLayout.some((i) => /layout reconfiguration/i.test(i)),
+    `no layout change must not claim a layout reconfiguration (got: ${noLayout.join("; ")})`,
+  );
+
+  const stockCabs = scope("kitchen", "high-end", 250, refs({ cabinetTier: "standard" }));
+  check(
+    !stockCabs.some((i) => /custom cabinetry/i.test(i)),
+    `standard cabinetry must not appear alongside custom cabinetry (got: ${stockCabs.join("; ")})`,
+  );
+
+  // Nothing may ever render blank or as "undefined" in a customer-facing list.
+  let scopeLists = 0;
+  for (const project of projects) {
+    for (const finish of getAvailableFinishLevels(project)) {
+      const list = scope(project, finish, getProjectSizeConfig(project).baselineSqft, EMPTY_REFINEMENTS);
+      scopeLists++;
+      check(
+        list.every((i) => typeof i === "string" && i.trim().length > 0 && i !== "undefined"),
+        `${project}/${finish}: scope list has an empty or undefined entry (${list.join("; ")})`,
+      );
+    }
+  }
+  console.log(`  scope honesty: ${scopeLists} scope lists checked, contradictions suppressed only where answered.`);
 }
 
 console.log(

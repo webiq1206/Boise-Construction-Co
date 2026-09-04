@@ -2023,12 +2023,73 @@ export function buildDynamicScope(input: EstimateInput): string[] {
     extra.push(r.aduConfig === "attached" ? "Attached ADU" : "Detached ADU");
   }
 
+  /*
+   * Drop base-scope lines the visitor has already contradicted.
+   *
+   * `base` is the static per-tier blurb for the project and finish level, written
+   * to describe a typical job at that tier - so it claims work the visitor has
+   * just declined. A shop home with the shop sized at zero still advertised
+   * "Living space and a working shop under one roof" and an insulated shop with
+   * 240V power, and a remodel answered "no layout change" was still shown "Full
+   * layout reconfiguration".
+   *
+   * Only outright contradictions are removed, and only where an answer was
+   * actually given - an unanswered refinement suppresses nothing, so the tier
+   * blurb still describes the typical job until the visitor says otherwise.
+   */
+  const kept = base.filter((item) => !isContradicted(item, r));
+
   const seen = new Set<string>();
-  return [...extra, ...base].filter((item) => {
+  return [...extra, ...kept].filter((item) => {
     if (seen.has(item)) return false;
     seen.add(item);
     return true;
   });
+}
+
+/**
+ * Base-scope lines that a given answer makes untrue. Matched on the wording the
+ * PRICE_MATRIX `included` lists actually use; anything not matched is left alone,
+ * so a new tier blurb is shown in full rather than silently filtered.
+ */
+const SCOPE_CONTRADICTIONS: ReadonlyArray<{
+  readonly when: (r: EstimateRefinements) => boolean;
+  readonly drop: RegExp;
+}> = [
+  {
+    // A shop home with no shop is still a house; it is not "a working shop".
+    when: (r) => r.shopSize === 0,
+    drop: /\bshop\b/i,
+  },
+  {
+    // No covered outdoor living means no covered patio in the elevation blurb.
+    when: (r) => r.coveredOutdoor === 0,
+    drop: /covered (?:patio|outdoor)/i,
+  },
+  {
+    // "No layout change" cannot coexist with moving walls or adding an island.
+    when: (r) => r.layoutChanges === "none",
+    drop: /layout reconfiguration|structural (?:layout )?(?:modifications?|changes?|wall)|island addition|open-concept conversion/i,
+  },
+  {
+    // Standard cabinetry excludes both custom grades.
+    when: (r) => r.cabinetTier === "standard",
+    drop: /(?:fully |custom or semi-)?custom cabinetry/i,
+  },
+  {
+    // Semi-custom excludes fully custom, but not itself.
+    when: (r) => r.cabinetTier === "semi-custom",
+    drop: /fully custom cabinetry/i,
+  },
+  {
+    // A cosmetic-only job does not re-run plumbing and electrical.
+    when: (r) => r.plumbingElectrical === "cosmetic",
+    drop: /updated plumbing and electrical|plumbing and electrical (?:updated|rerouting)/i,
+  },
+];
+
+function isContradicted(item: string, r: EstimateRefinements): boolean {
+  return SCOPE_CONTRADICTIONS.some((rule) => rule.when(r) && rule.drop.test(item));
 }
 
 /**
