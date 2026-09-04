@@ -94,7 +94,6 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
       '@type': 'PostalAddress',
       addressLocality: BUSINESS_INFO.address.city,
       addressRegion: BUSINESS_INFO.address.state,
-      postalCode: BUSINESS_INFO.address.postalCode,
       addressCountry: BUSINESS_INFO.address.country,
     },
     geo: {
@@ -262,7 +261,6 @@ export function generateOrganizationSchema(): SchemaContext {
       '@type': 'PostalAddress',
       addressLocality: BUSINESS_INFO.address.city,
       addressRegion: BUSINESS_INFO.address.state,
-      postalCode: BUSINESS_INFO.address.postalCode,
       addressCountry: BUSINESS_INFO.address.country,
     },
     knowsAbout: [
