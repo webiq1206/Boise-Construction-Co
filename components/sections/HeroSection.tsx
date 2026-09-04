@@ -83,9 +83,15 @@ export function HeroSection() {
                   the old remodeling tagline ("Boise remodeling with clarity and
                   confidence") almost word for word - the same company with a noun
                   swapped, which is the resemblance the repositioning has to lose. */}
-              <h1 className="font-serif text-inverse-foreground text-display tracking-tight mb-6">
+              {/* Display scale from the family layer: up to 92px, tight leading,
+                  negative tracking. The hero heading is the one line the whole
+                  site is judged on in the first second. */}
+              <h1 className="ed-display text-inverse-foreground mb-8 max-w-[15ch]">
                 Your Boise custom home builder,{" "}
-                <em className="brc-accent">from bare lot to the keys</em>.
+                <em className="not-italic" style={{ color: "var(--ed-accent)" }}>
+                  from bare lot to the keys
+                </em>
+                .
               </h1>
               {/* Full opacity, not /90: over the lightened scrim the subhead
                   measured 4.28:1 against the 4.5:1 minimum. Buying the

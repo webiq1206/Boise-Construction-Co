@@ -54,7 +54,8 @@
     "verify:plan-merge": "tsx scripts/verify-plan-merge.ts",
     "verify:plan-gating": "tsx scripts/verify-plan-gating.ts",
     "verify:re10-merge": "tsx scripts/verify-re10-merge.ts",
-    "verify:estimate-audit": "tsx scripts/verify-estimate-audit.ts"
+    "verify:estimate-audit": "tsx scripts/verify-estimate-audit.ts",
+    "verify:contrast": "node scripts/verify-contrast.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",

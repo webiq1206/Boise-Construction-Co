@@ -109,7 +109,7 @@ html, body {
   --secondary-foreground: 37 14% 89%;
 
   --muted: 163 6% 16%;
-  --muted-foreground: 147 9% 52%;    /* P5 sage #7A9184 - the family's secondary text tone */
+  --muted-foreground: 147 9% 60%; /* was 52%: measured 4.21:1 on this ground, under AA. Same sage, lifted to clear 4.5:1. See scripts/verify-contrast.mjs */    /* P5 sage #7A9184 - the family's secondary text tone */
   --faint: 32 3% 45%;                 /* faint */
 
   /* Small accents use a deep, muted ochre #7E6344 (dots, marks, pills,
@@ -125,6 +125,12 @@ html, body {
   /* Ochre for anything that must stay legible on the dark ground:
      text links (hover) and focus rings. AA on the warm charcoal ground (5.38:1). */
   --accent-legible: 32 55% 59%;       /* ochre #D09A5C */
+  /* The same ochre, darkened for use as TEXT on a light (bone) band. The site
+     was built dark, so the legible accent is tuned for a charcoal ground and
+     falls under AA on bone. This is the brand hue at a lightness that clears
+     7:1 there - not a new colour, the relationship --accent and its legible
+     variant already have. Read by app/family.css on light surfaces. */
+  --accent-on-light: 32 42% 30%;
 
   /* Danger - muted terracotta #C77B6B */
   --destructive: 10 45% 60%;

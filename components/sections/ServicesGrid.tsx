@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/marketing/Section";
-import { SectionHeader } from "@/components/marketing/SectionHeader";
 import { TextLink } from "@/components/marketing/TextLink";
 import { Button } from "@/components/ui/button";
 import { SERVICES } from "@/shared/contentData";
@@ -10,85 +9,160 @@ import { CTA_SECONDARY } from "@/shared/ctaCopy";
 import { getServiceBackground } from "@/shared/serviceBackgrounds";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 
+/**
+ * Services.
+ *
+ * WAS a two-column grid of equal cards: photo, a 16px service name, two lines of
+ * copy, a link. Six of them, identical. It is the arrangement the redesign brief
+ * singles out - nothing in it tells you which service matters, the type is too
+ * small to skim, and it looks assembled rather than composed.
+ *
+ * NOW a lead panel plus an index. The first service gets a full-height image and
+ * a display-size name; the rest become a bordered index whose rows carry the
+ * name, the one-line description and the planning-from figure on a single
+ * horizontal baseline, the name taking the accent on hover. A homeowner scanning for
+ * "bathroom, and what does it start at" reads one column instead of six cards,
+ * and the section still leads with a real photograph.
+ *
+ * Ground stays dark. The layout change is what fixes this section; the page is
+ * deliberately dark-dominant and spends its one light band elsewhere.
+ *
+ * Deliberately no client JavaScript: the hover states are CSS, so this stays a
+ * server component and the section costs nothing on the wire.
+ */
 export function ServicesGrid() {
   // Homepage shows the primary services; secondary ones (lot evaluation, shop
   // homes, energy-efficient builds) live on their own pages and /services.
   const primary = SERVICES.filter((s) => !s.secondary);
+  const [lead, ...rest] = primary;
+
   return (
-    <Section id="services" divider>
-      <div className="container px-4">
-        <SectionHeader
-          eyebrow="Our services"
-          size="display"
-          title={
-            <>
+    <Section id="services" surface="dark" spacing="xl" edge>
+      <div className="ed-shell">
+        <div className="ed-split ed-split-end">
+          <Reveal>
+            <p className="ed-eyebrow">Our services</p>
+            <h2 className="ed-h2 ed-statement-wide">
               Every way there is to{" "}
-              <em className="brc-accent">build</em>
-            </>
-          }
-          description="One firm carries the entire build - the drawings, the engineering, the permit set, and the field work - so nothing slips through the gap between a designer and a contractor. The same team stays with you from the first sketch to the day the keys are in your hand."
-        />
-
-        <div className="grid sm:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
-          {primary.map((service, i) => (
-            <Reveal key={service.slug} delay={i * 40}>
-              <article className="group">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-sm mb-4">
-                  <Image
-                    src={getServiceBackground(service.slug)}
-                    alt={`${service.name} by ${SITE_CONFIG.name} in the Treasure Valley, Idaho`}
-                    fill
-                    sizes="(max-width: 640px) 100vw, 50vw"
-                    quality={70}
-                    className="object-cover img-brand-grade transition-transform duration-300 ease-out group-hover:scale-[1.02]"
-                  />
-                </div>
-                <h3 className="font-serif font-normal text-base mb-2 text-foreground">
-                  {service.name}
-                </h3>
-                <p className="text-sm leading-relaxed mb-3 text-muted-foreground">
-                  {service.shortDescription}
-                </p>
-                <div className="mb-4 flex items-baseline gap-2">
-                  <span className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                    Planning from
-                  </span>
-                  <span className="brc-display-num text-foreground text-base leading-none">
-                    {service.planningFrom}
-                  </span>
-                </div>
-                {/* Specific visible label, not "Learn more": generic link text
-                    fails Lighthouse's link-text audit (which reads visible
-                    text, not aria-label) and the CTA-copy rule alike. */}
-                <TextLink href={servicePath(service.slug)} showArrow>
-                  {`Explore ${service.name.toLowerCase()}`}
-                </TextLink>
-              </article>
-            </Reveal>
-          ))}
-
-          {/* CTA card fills the final grid cell so an odd service count never
-              leaves a lonely card, and gives the section a clear next step. */}
-          <Reveal delay={primary.length * 40}>
-            <div className="h-full min-h-[220px] rounded-sm border border-card-border bg-card p-6 md:p-8 flex flex-col justify-center">
-              <div className="brc-label mb-3">Not sure of the first step</div>
-              <h3 className="font-serif text-xl md:text-2xl tracking-tight mb-2 text-foreground">
-                Tell us what you want to <em className="brc-accent">build</em>
-              </h3>
-              <p className="text-sm leading-relaxed mb-5 text-muted-foreground">
-                Every build begins the same way - a free planning consultation and a candid budget band, with nothing owed and no pressure to continue.
-              </p>
-              <Button variant="brand" className="self-start" asChild>
-                <a href="#consult">{CTA_SECONDARY}</a>
-              </Button>
-            </div>
+              <em className="not-italic" style={{ color: "var(--ed-accent)" }}>
+                build
+              </em>
+            </h2>
+          </Reveal>
+          <Reveal delay={60}>
+            <p className="ed-body">
+              One firm carries the entire build - the drawings, the engineering, the
+              permit set and the field work - so nothing slips between vendors.
+            </p>
           </Reveal>
         </div>
 
-        <div className="mt-12 flex flex-col items-center gap-4">
-          <Button variant="brandOutline" asChild>
-            <a href="/services">Explore all services</a>
-          </Button>
+        {/* LEAD SERVICE - the one large photograph in the section. */}
+        {lead && (
+          <Reveal delay={80}>
+            <a
+              href={servicePath(lead.slug)}
+              className="ed-zoom group mt-[clamp(48px,6vw,88px)] grid overflow-hidden lg:grid-cols-[1.15fr_0.85fr]"
+              style={{ border: "1px solid var(--ed-line)" }}
+            >
+              <div className="relative min-h-[clamp(280px,38vw,460px)] overflow-hidden">
+                <Image
+                  src={getServiceBackground(lead.slug)}
+                  alt={`${lead.name} by ${SITE_CONFIG.name} in the Treasure Valley, Idaho`}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 55vw"
+                  quality={72}
+                  className="object-cover img-brand-grade"
+                />
+              </div>
+              <div className="flex flex-col justify-center p-[clamp(28px,3.4vw,56px)]">
+                <p className="ed-eyebrow ed-eyebrow-accent">Most requested</p>
+                <h3 className="ed-h2-sm">{lead.name}</h3>
+                <p className="ed-body mt-5">{lead.shortDescription}</p>
+                <p className="ed-small mt-7 flex items-baseline gap-3">
+                  <span className="uppercase tracking-[0.16em]">Planning from</span>
+                  <span
+                    className="brc-display-num text-[1.75rem] leading-none"
+                    style={{ color: "var(--ed-ink)" }}
+                  >
+                    {lead.planningFrom}
+                  </span>
+                </p>
+                <span className="ed-link ed-link-accent mt-8 self-start">
+                  Explore {lead.name.toLowerCase()}
+                  <svg className="ed-arrow" viewBox="0 0 22 15" fill="none" aria-hidden="true">
+                    <path d="M0 7.5h20M14 1.5l6 6-6 6" />
+                  </svg>
+                </span>
+              </div>
+            </a>
+          </Reveal>
+        )}
+
+        {/* THE INDEX - everything else, on one scannable baseline. */}
+        <div className="ed-steps mt-[clamp(40px,5vw,72px)]">
+          {rest.map((service, i) => (
+            <Reveal key={service.slug} delay={i * 40}>
+              <a
+                href={servicePath(service.slug)}
+                className="group grid items-baseline gap-x-8 gap-y-2 py-[clamp(20px,2.4vw,30px)] transition-colors md:grid-cols-[minmax(210px,0.9fr)_1.6fr_auto_28px]"
+                style={{ borderBottom: "1px solid var(--ed-line)" }}
+              >
+                <h3 className="ed-h3 transition-colors group-hover:[color:var(--ed-accent)]">
+                  {service.name}
+                </h3>
+                <p className="ed-body max-w-none">{service.shortDescription}</p>
+                <p className="ed-small flex items-baseline gap-2 whitespace-nowrap">
+                  <span className="uppercase tracking-[0.16em]">From</span>
+                  <span
+                    className="brc-display-num text-[1.25rem] leading-none"
+                    style={{ color: "var(--ed-ink)" }}
+                  >
+                    {service.planningFrom}
+                  </span>
+                </p>
+                <svg
+                  className="ed-arrow hidden transition-transform group-hover:translate-x-1 md:block"
+                  viewBox="0 0 22 15"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path d="M0 7.5h20M14 1.5l6 6-6 6" />
+                </svg>
+              </a>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* The "not sure where to start" card no longer has to fill a stray grid
+            cell, so it becomes a proper closing statement instead of a sixth box. */}
+        <Reveal>
+          <div className="ed-inset mt-[clamp(40px,5vw,72px)] flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+            <div>
+              <p className="ed-eyebrow">Not sure of the first step</p>
+              <p className="ed-h3 max-w-[24ch]">
+                Tell us what you want to{" "}
+                <em className="not-italic" style={{ color: "var(--ed-accent)" }}>
+                  build
+                </em>
+              </p>
+              <p className="ed-body mt-4">
+                Every build begins the same way - a free planning consultation and a
+                candid budget band, with nothing owed.
+              </p>
+            </div>
+            <div className="flex flex-shrink-0 flex-col gap-4 sm:flex-row sm:items-center">
+              <Button variant="brand" asChild>
+                <a href="#consult">{CTA_SECONDARY}</a>
+              </Button>
+              <Button variant="brandOutline" asChild>
+                <a href="/services">All services</a>
+              </Button>
+            </div>
+          </div>
+        </Reveal>
+
+        <div className="mt-10 flex justify-center">
           <TextLink href="#consult">{CTA_SECONDARY}</TextLink>
         </div>
       </div>
