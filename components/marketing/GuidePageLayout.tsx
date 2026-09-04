@@ -210,11 +210,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
         </div>
       </Section>
 
-      <Section divider>
-        <div className="container px-4">
-          <BlogEndCta />
-        </div>
-      </Section>
+      <BlogEndCta />
     </div>
   );
 }

@@ -72,16 +72,15 @@ export default function AreasHubPage() {
           </div>
         </PageHeroBand>
 
-        <Section variant="greige" divider>
-          <div className="container px-4">
+        <Section surface="dark" spacing="xl">
+          <div className="ed-shell">
             <SectionHeader
               eyebrow="Treasure Valley"
               title={<>Eight cities, one design-build team</>}
               description="Custom homes, semi-custom homes, and builds on your own lot across Ada and Canyon County."
-              className="mb-10 max-w-2xl mx-auto text-center [&_.brc-label]:justify-center"
-              align="center"
+              align="left"
             />
-            <div className="grid sm:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {CITIES.map((city, i) => (
                 <Reveal key={city.slug} delay={i * 40}>
                   <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />
@@ -102,11 +101,7 @@ export default function AreasHubPage() {
           variant="tint"
         />
 
-        <Section>
-          <div className="container px-4">
-            <BlogEndCta />
-          </div>
-        </Section>
+        <BlogEndCta />
       </div>
     </>
   );

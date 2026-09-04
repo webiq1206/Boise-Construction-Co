@@ -128,7 +128,7 @@ export default function AboutPage() {
             <p data-speakable="summary" className="sr-only">
               {SPEAKABLE_SUMMARY}
             </p>
-            <div className="brc-label brc-label-on-photo mt-6 mb-5">About us</div>
+            <p className="ed-eyebrow" style={{ color: "rgb(255 255 255 / 0.72)" }}>About us</p>
             <h1 className="ed-display ed-statement-display text-inverse-foreground mb-8">
               About Boise Construction{' '}
               <em className="brc-accent">Co</em>
@@ -177,7 +177,7 @@ export default function AboutPage() {
                 style={{ backgroundImage: GRAIN_URL, backgroundRepeat: 'repeat', opacity: 0.028 }}
               />
               <div className="absolute bottom-0 left-0 p-8 md:p-12">
-                <div className="brc-label brc-label-on-photo mb-3">Design-build, explained</div>
+                <p className="ed-eyebrow" style={{ color: "rgb(255 255 255 / 0.72)" }}>Design-build, explained</p>
                 <p className="font-sans font-light text-xl md:text-2xl text-inverse-foreground">
                   One team from
                   <br />
@@ -212,8 +212,8 @@ export default function AboutPage() {
                   ))}
                 </ul>
                 <div className="mt-8 pt-8 border-t border-border">
-                  <div className="brc-label text-muted-foreground mb-3">Our commitment</div>
-                  <h3 className="font-serif font-normal text-base text-foreground mb-2">
+                  <p className="ed-eyebrow">Our commitment</p>
+                  <h3 className="ed-h4">
                     One accountable team
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
@@ -241,8 +241,8 @@ export default function AboutPage() {
                   </p>
                 </div>
                 <div className="mt-8 pt-8 border-t border-border">
-                  <div className="brc-label text-muted-foreground mb-3">Where the budget lands</div>
-                  <h3 className="font-serif font-normal text-base text-foreground mb-2">
+                  <p className="ed-eyebrow">Where the budget lands</p>
+                  <h3 className="ed-h4">
                     Your budget builds the house, not the company
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
@@ -293,7 +293,7 @@ export default function AboutPage() {
                     <DisplayNum className="text-2xl text-inverse-foreground/50 leading-none mb-4 block">
                       {formatStepNumber(i)}
                     </DisplayNum>
-                    <h3 className="font-serif font-normal text-sm mb-2 text-inverse-foreground">
+                    <h3 className="ed-h4">
                       {title}
                     </h3>
                     <p className="text-sm text-inverse-muted leading-relaxed">{desc}</p>
@@ -329,18 +329,21 @@ export default function AboutPage() {
         </Section>
 
         {/* ─── Closing CTA ─── */}
-        <Section divider spacing="sm">
-          <div className="container px-4 max-w-2xl mx-auto">
-            <MarketingCard className="cta-card-dark p-10 md:p-12 text-center">
-              <h2 className="font-serif text-section-title mb-4 text-inverse-foreground">
+        <Section surface="gradient" spacing="xl" edge>
+          <div className="ed-shell">
+            <div className="ed-split ed-split-center">
+              <h2 className="ed-h2-sm ed-statement-wide">
                 Ready to start your project?
               </h2>
-              <p className="text-base text-inverse-muted mb-8">
+              <div>
+              <p className="ed-body">
                 Schedule a free in-home visit for planning guidance, design direction, and an honest
                 project range.
               </p>
-              <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
-            </MarketingCard>
+              <div className="mt-8"><ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
+            </div>
+
+              </div></div>
           </div>
         </Section>
       </div>

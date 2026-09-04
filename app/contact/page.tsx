@@ -157,7 +157,7 @@ function ContactChannel({
           {icon}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="brc-label mb-2">{label}</p>
+          <p className="ed-eyebrow !mb-2">{label}</p>
           <div
             className={`text-foreground ${featured ? 'text-xl md:text-2xl' : 'text-base'} ${
               href ? 'group-hover:text-foreground/70 transition-colors' : ''
@@ -239,7 +239,7 @@ export default function ContactPage() {
             <p data-speakable="summary" className="sr-only">
               {SPEAKABLE_SUMMARY}
             </p>
-            <div className="brc-label brc-label-on-photo mt-6 mb-5">Get in touch</div>
+            <p className="ed-eyebrow" style={{ color: "rgb(255 255 255 / 0.72)" }}>Get in touch</p>
             <h1 className="ed-display ed-statement-display text-inverse-foreground mb-8">
               Contact Boise Construction{' '}
               <em className="brc-accent">Co</em>
@@ -377,7 +377,7 @@ export default function ContactPage() {
                 style={{ backgroundImage: GRAIN_URL, backgroundRepeat: 'repeat', opacity: 0.028 }}
               />
               <div className="absolute bottom-0 left-0 p-8 md:p-12">
-                <div className="brc-label brc-label-on-photo mb-3">Your free visit includes</div>
+                <p className="ed-eyebrow" style={{ color: "rgb(255 255 255 / 0.72)" }}>Your free visit includes</p>
                 <p className="font-sans font-light text-xl md:text-2xl text-inverse-foreground">
                   No pressure.
                   <br />
@@ -427,8 +427,8 @@ export default function ContactPage() {
             <div className="max-w-5xl mx-auto grid md:grid-cols-5 gap-12 items-start">
               <div className="md:col-span-2">
                 <Reveal>
-                  <div className="brc-label mb-5">Request your consultation</div>
-                  <h2 className="font-serif text-[2rem] md:text-[2.75rem] leading-[1.08] tracking-tight mb-4 text-foreground">
+                  <p className="ed-eyebrow">Request your consultation</p>
+                  <h2 className="ed-h2 ed-statement-wide">
                     Tell us about the home you want to{' '}
                     <em className="brc-accent">build</em>.
                   </h2>
@@ -450,8 +450,8 @@ export default function ContactPage() {
         <Section variant="greige" divider>
           <div className="container px-4 max-w-3xl">
             <Reveal>
-              <div className="brc-label mb-5">Common questions</div>
-              <h2 className="font-serif text-[2rem] md:text-[2.5rem] leading-[1.08] tracking-tight text-foreground mb-10">
+              <p className="ed-eyebrow">Common questions</p>
+              <h2 className="ed-h2 ed-statement-wide mb-10">
                 Before you <em className="brc-accent">reach out</em>
               </h2>
               <Accordion type="single" collapsible className="w-full">
@@ -512,14 +512,15 @@ export default function ContactPage() {
         </Section>
 
         {/* ─── Closing CTA ─── */}
-        <Section divider spacing="sm">
-          <div className="container px-4 max-w-2xl mx-auto">
+        <Section surface="gradient" spacing="xl" edge>
+          <div className="ed-shell">
             <Reveal>
-              <MarketingCard className="cta-card-dark p-10 md:p-12 text-center">
-                <h2 className="font-serif text-section-title mb-4 text-inverse-foreground">
+              <div className="ed-split ed-split-center">
+                <h2 className="ed-h2-sm ed-statement-wide">
                   Prefer to talk first?
                 </h2>
-                <p className="text-base text-inverse-muted mb-2">
+              <div>
+                <p className="ed-body">
                   Call us directly - no phone tree, no sales scripts.
                 </p>
                 <BusinessPhoneContact
@@ -532,18 +533,19 @@ export default function ContactPage() {
                 />
                 <a
                   href={SITE_CONFIG.phoneSmsHref}
-                  className="block text-sm text-inverse-muted hover:text-inverse-foreground transition-colors mb-8"
+                  className="ed-link mt-4 block w-fit"
                   data-testid="link-closing-text"
                 >
                   Or send us a text message
                 </a>
-                <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3">
+                <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
                   <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
                   <Button variant="heroGhost" asChild>
                     <a href="#consult">{CTA_SECONDARY}</a>
                   </Button>
                 </div>
-              </MarketingCard>
+              
+              </div></div>
             </Reveal>
           </div>
         </Section>
