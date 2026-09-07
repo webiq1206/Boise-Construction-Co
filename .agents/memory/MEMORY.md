@@ -4,3 +4,4 @@
 - [Two pricing engines](two-pricing-engines.md) — the quoted range comes from the line-item engine in shared/costs, not estimateEngine; new pricing inputs must be wired there or they silently do nothing.
 - [Catalog per-SF basis](catalog-per-sf-basis.md) — catalog SF rates are sometimes whole-dwelling per-finished-SF budgets and sometimes real per-surface trade rates; mixing them up silently triples a trade.
 - [Playwright on Nix](playwright-on-nix.md) — downloaded chromium can't load shared libs; run e2e with PLAYWRIGHT_CHROMIUM_PATH pointing at the Nix-built chrome.
+- [Neon HTTP mutation quirks](neon-http-mutations.md) — mutation returning rows may be empty after success; use rowCount, and omit absent numeric or JSON values instead of passing null.

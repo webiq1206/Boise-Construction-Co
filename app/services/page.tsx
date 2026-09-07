@@ -82,13 +82,12 @@ export default function ServicesIndexPage() {
         <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Services' }]} />
         <p className="ed-eyebrow mt-8" style={{ color: 'rgb(255 255 255 / 0.72)' }}>Our services</p>
         <h1 className="ed-display ed-statement-display text-inverse-foreground">
-          Every way to build a{' '}
-            <em className="not-italic" style={{ color: 'var(--ed-accent)' }}>new home</em> here
+          Practical ways to make{' '}
+            <em className="not-italic" style={{ color: 'var(--ed-accent)' }}>home fit</em> here
         </h1>
         <p className="ed-lede mt-8 max-w-[44ch] text-inverse-foreground/85">
-          One accountable team handles feasibility, design, engineering, Ada and Canyon County
-            permits and construction under a single contract, from the first planning
-            consultation through the day you get the keys.
+          From a new home on your lot to useful space added to the home you already live in,
+          our team coordinates planning, permits, and construction around the work in front of you.
         </p>
       </PageHeroBand>
 

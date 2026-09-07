@@ -15,6 +15,7 @@ import Script from 'next/script';
  */
 const GA_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? 'G-VTVTQZ8JCD';
+const GOOGLE_ADS_ID = 'AW-18354188204';
 
 /**
  * Loads GA4 with strategy="lazyOnload" so the ~150KB gtag payload stays off the
@@ -38,7 +39,8 @@ export function GoogleAnalytics() {
         {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', '${GA_MEASUREMENT_ID}');`}
+gtag('config', '${GA_MEASUREMENT_ID}');
+gtag('config', '${GOOGLE_ADS_ID}');`}
       </Script>
     </>
   );

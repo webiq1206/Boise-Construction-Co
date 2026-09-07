@@ -18,6 +18,8 @@
     "verify:image-paths": "tsx scripts/verify-image-paths.ts",
     "verify:section-links": "tsx scripts/verify-section-links.ts",
     "verify:lead-payload": "tsx scripts/verify-lead-payload.ts",
+    "verify:inquiry-intake": "tsx scripts/verify-inquiry-intake.ts",
+    "verify:lead-analytics": "tsx scripts/verify-lead-analytics.ts",
     "verify:redirect-collisions": "tsx scripts/verify-redirect-collisions.ts",
     "generate:llms": "tsx scripts/generate-llms-txt.ts",
     "images:og": "tsx scripts/generate-all-og-cards.mjs",

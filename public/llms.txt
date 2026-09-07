@@ -1,6 +1,6 @@
 # Boise Construction Co
 
-> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build, founded 2020. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell. Phone (208) 477-1169.
+> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build, founded 2020. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, Garden City. Phone (208) 477-1169.
 
 Design-build means one accountable team handles architectural design, engineering, estimating, Ada and Canyon County permitting, and construction under a single contract, backed by a written line-item scope before the foundation is poured. Budget ranges are produced by an on-site estimator from house geometry and specification level rather than a flat price per square foot, because the same 2,400 square feet costs very different money on a flat infill lot than on a sloped foothills parcel with a shared well. Ranges are planning estimates, not quotes; a firm proposal follows a site visit and a lot review.
 
@@ -11,6 +11,7 @@ Design-build means one accountable team handles architectural design, engineerin
 - [Build on Your Lot](https://boiseconstruction.co/services/build-on-your-lot): You already own the land. We handle feasibility, design, permits, and construction from there.
 - [Design-Build](https://boiseconstruction.co/services/design-build): Design and construction under one contract, so the drawings and the budget never drift apart.
 - [Home Design & Plans](https://boiseconstruction.co/services/home-plans-design): Architectural design, engineering, and permit-ready drawings for a home built to your site.
+- [Home Additions](https://boiseconstruction.co/services/home-additions): Useful new space added to the home you already live in, planned around the structure, utilities, and daily life already there.
 - [Lot Evaluation & Feasibility](https://boiseconstruction.co/services/lot-evaluation): Soils, utilities, access, setbacks, and slope reviewed before you commit to a parcel.
 - [Shop Homes & Barndominiums](https://boiseconstruction.co/services/shop-homes-barndominiums): Post-frame and steel-framed homes that pair finished living space with real working shop square footage.
 - [Energy-Efficient Homes](https://boiseconstruction.co/services/energy-efficient-homes): High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.
@@ -59,4 +60,4 @@ Design-build means one accountable team handles architectural design, engineerin
 - [RSS feed](https://boiseconstruction.co/feed.xml): guides and articles, newest first, with publication and revision dates.
 - [Full text for LLMs](https://boiseconstruction.co/llms-full.txt): expanded reference copy of the core facts.
 
-Last updated: 2026-08-03.
+Last updated: 2026-09-07.

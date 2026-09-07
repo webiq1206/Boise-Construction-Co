@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createHash } from "crypto";
 import { z } from "zod";
 import { MAX_UPLOAD_FILES } from "@/shared/re10/uploads";
-import { db } from "@/lib/db";
-import { consultationRequests } from "@/shared/schema";
 import { getUncachableEmailClient } from "@/server/services/emailTransport";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import {
@@ -44,22 +43,30 @@ import {
   buildProjectGoals,
 } from "@/server/services/leadRecord";
 import { formatUsd, type PropertyEnrichment } from "@/server/services/consultationEmail";
+import { createDrizzleInquiryIntake } from "@/server/services/inquiryIntake";
+import { deliverInquiryChannel, type InquiryDeliveryResult } from "@/server/services/inquiryDelivery";
+import { LeadRequestError, inspectLeadTrap, readBoundedJson } from "@/server/services/leadRequestGuard";
+import { clientKeyFrom, rateLimit } from "@/lib/rateLimit";
 
 const bodySchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
+  inquiryKey: z.string().max(124).regex(/^inq_[A-Za-z0-9_-]{16,120}$/).optional(),
+  submissionKind: z.enum(["initial", "revision"]).default("initial"),
+  formStartedAt: z.number().int().finite(),
+  website: z.string().max(200).optional().default(""),
+  name: z.string().min(2).max(160),
+  email: z.string().email().max(320),
   /* Optional to match the gate: the estimate is delivered by email, so email
      is the required channel. A phone that IS sent must still look like one
      (10+ digits once formatting is stripped). */
   phone: z
-    .string()
+    .string().max(64)
     .optional()
     .default("")
     .refine((v) => v === "" || v.replace(/\D/g, "").length >= 10, {
       message: "Phone must be a valid 10-digit number when provided",
     }),
-  budget: z.string().min(1).optional(),
-  projectType: z.string().min(1),
+  budget: z.string().min(1).max(160).optional(),
+  projectType: z.string().min(1).max(160),
   // Property address. Optional in the schema so an older client that predates
   // this field still submits successfully rather than 400ing, but the gate now
   // requires it, and the team needs it to confirm service area.
@@ -70,7 +77,12 @@ const bodySchema = z.object({
   landOwnership: z.enum(["own", "not-yet"]).optional(),
   zip: z.string().max(10).optional(),
   propertyProfile: z
-    .object({ formattedAddress: z.string(), city: z.string(), state: z.string(), zip: z.string() })
+    .object({
+      formattedAddress: z.string().max(300),
+      city: z.string().max(160),
+      state: z.string().max(80),
+      zip: z.string().max(10),
+    })
     .passthrough()
     .optional()
     .nullable(),
@@ -166,9 +178,29 @@ function verifyPlanFiles(raw: unknown): { filename: string; url: string }[] {
   return out;
 }
 
+/** Stable serialization keeps equivalent estimate selections on one revision. */
+function stableJson(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(stableJson).join(",")}]`;
+  if (value && typeof value === "object") {
+    const record = value as Record<string, unknown>;
+    return `{${Object.keys(record).sort().map((key) =>
+      `${JSON.stringify(key)}:${stableJson(record[key])}`
+    ).join(",")}}`;
+  }
+  return JSON.stringify(value);
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const raw = await request.json();
+    const limit = rateLimit(clientKeyFrom(request.headers, "estimate-lead"), 6, 10 * 60 * 1000);
+    if (!limit.ok) {
+      return NextResponse.json(
+        { message: "Too many requests" },
+        { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } },
+      );
+    }
+
+    const raw = await readBoundedJson(request);
     const parsed = bodySchema.safeParse(raw);
 
     if (!parsed.success) {
@@ -179,6 +211,18 @@ export async function POST(request: NextRequest) {
     }
 
     const data = parsed.data;
+    const trap = inspectLeadTrap(data);
+    if (trap === "honeypot") {
+      return NextResponse.json({
+        success: true,
+        accepted: false,
+        conversionEligible: false,
+      });
+    }
+    if (trap === "too-fast") {
+      return NextResponse.json({ message: "Please take a moment before submitting" }, { status: 429 });
+    }
+
     const estimate = verifyEstimate(data.estimate);
 
     /*
@@ -227,45 +271,75 @@ export async function POST(request: NextRequest) {
           ? "Does not own land yet"
           : null;
 
-    if (db) {
-      try {
-        await db.insert(consultationRequests).values({
-          name: data.name,
-          phone: data.phone,
-          email: data.email,
-          zip: data.zip || "",
-          /* displayAddress, not data.address: for a non-landowner the lead
-             record's location IS the planned build area, labelled so nobody
-             mistakes it for a parcel we can look up. */
-          address: displayAddress,
-          city: (data.propertyProfile as { city?: string } | null)?.city || null,
-          /* Omit the column entirely when there is no profile: passing a JS
-             null through the neon-http driver serializes the jsonb parameter
-             as an empty string, which Postgres rejects as invalid JSON and
-             the whole lead insert fails. Non-owner leads never have a profile,
-             so they always hit this path. */
-          ...(data.propertyProfile
-            ? { propertyProfile: data.propertyProfile as unknown as PropertyProfile }
-            : {}),
-          projectType: data.projectType,
-          message: [
-            "Submitted via estimate gate",
-            data.budget ? `Budget: ${data.budget}` : null,
-            ownershipNote,
-            data.buildArea ? `Planned build area: ${data.buildArea}` : null,
-          ]
-            .filter(Boolean)
-            .join(" | "),
-          estimateProject: estimate?.project || null,
-          estimateFinish: estimate?.finish || null,
-          estimateLow: estimate?.priceLow?.toString() || null,
-          estimateHigh: estimate?.priceHigh?.toString() || null,
-          estimateSqft: estimate?.sqft ?? null,
-          estimateConfidence: estimate?.confidence || null,
-        });
-      } catch (dbErr) {
-        console.error("[estimate-lead] DB insert failed:", dbErr);
-      }
+    /*
+     * Revision identity is entirely server derived. Contact fields and location
+     * are deliberately absent: they are PII and are not pricing inputs.
+     */
+    const deliveryRevisionKey = createHash("sha256").update(stableJson({
+      projectType: data.projectType.trim().toLowerCase(),
+      landOwnership: data.landOwnership ?? null,
+      estimate: estimate
+        ? {
+            project: estimate.project, finish: estimate.finish, sqft: estimate.sqft,
+            priceLow: estimate.priceLow, priceHigh: estimate.priceHigh, roi: estimate.roi,
+            confidence: estimate.confidence,
+            statedBudget: estimate.statedBudget,
+            refinements: estimate.refinements,
+            included: estimate.included,
+            layoutLabel: estimate.layoutLabel,
+            upgradeLabels: estimate.upgradeLabels,
+          }
+        : null,
+    })).digest("hex");
+
+    const inquiryData = {
+      name: data.name,
+      phone: data.phone,
+      email: data.email,
+      zip: data.zip || "",
+      /* displayAddress, not data.address: for a non-landowner the lead
+         record's location IS the planned build area, labelled so nobody
+         mistakes it for a parcel we can look up. */
+      address: displayAddress,
+      city: (data.propertyProfile as { city?: string } | null)?.city || null,
+      /* Omit the column entirely when there is no profile: passing a JS null
+         through neon serializes jsonb as an empty string. */
+      ...(data.propertyProfile
+        ? { propertyProfile: data.propertyProfile as unknown as PropertyProfile }
+        : {}),
+      projectType: data.projectType,
+      message: [
+        "Submitted via estimate gate",
+        data.budget ? `Budget: ${data.budget}` : null,
+        ownershipNote,
+        data.buildArea ? `Planned build area: ${data.buildArea}` : null,
+      ].filter(Boolean).join(" | "),
+      ...(estimate
+        ? {
+            estimateProject: estimate.project,
+            estimateFinish: estimate.finish,
+            estimateLow: estimate.priceLow.toString(),
+            estimateHigh: estimate.priceHigh.toString(),
+            estimateSqft: estimate.sqft,
+            estimateConfidence: estimate.confidence,
+          }
+        : {}),
+    };
+
+    let inquiryIntake: ReturnType<typeof createDrizzleInquiryIntake>;
+    let intake: Awaited<ReturnType<ReturnType<typeof createDrizzleInquiryIntake>["intake"]>>;
+    try {
+      inquiryIntake = createDrizzleInquiryIntake();
+      intake = await inquiryIntake.intake({
+        inquiryKey: data.inquiryKey,
+        flow: "estimate",
+        submissionKind: data.submissionKind,
+        deliveryRevisionKey,
+        data: inquiryData,
+      });
+    } catch (intakeError) {
+      console.error("[estimate-lead] Durable intake failed:", intakeError);
+      return NextResponse.json({ message: "Inquiry service is temporarily unavailable" }, { status: 503 });
     }
 
     // The CRM gets exactly what the homeowner saw: every selection, the range,
@@ -287,7 +361,7 @@ export async function POST(request: NextRequest) {
 
     const crmProfile = (data.propertyProfile as PropertyEnrichment | null) ?? null;
 
-    forwardToLeadDashboard({
+    const crmPayload = {
       fullName: data.name,
       email: data.email,
       phone: data.phone,
@@ -325,66 +399,67 @@ export async function POST(request: NextRequest) {
         ? `${formatUsd(estimate.priceLow)} to ${formatUsd(estimate.priceHigh)}`
         : undefined,
       source: "boiseconstruction.co",
+    };
+    const lead = {
+      name: data.name, phone: data.phone, email: data.email, address: displayAddress,
+      zip: data.zip, projectType: data.projectType, budget: data.budget,
+    };
+    const resendKey = (channel: string, recipient: string) =>
+      `inq:${intake.inquiryKey}:${deliveryRevisionKey}:${channel}:${createHash("sha256").update(recipient.trim().toLowerCase()).digest("hex")}`;
+    const send = async (
+      recipient: string,
+      channel: "adminEmail" | "customerEmail",
+      message: Parameters<(Awaited<ReturnType<typeof getUncachableEmailClient>>)["client"]["emails"]["send"]>[0],
+    ) => {
+      const { client } = await getUncachableEmailClient();
+      const result = await client.emails.send(message, { idempotencyKey: resendKey(channel, recipient) });
+      if (result.error) throw new Error(result.error.message);
+    };
+    const deliveries: InquiryDeliveryResult[] = await Promise.all([
+      deliverInquiryChannel(inquiryIntake, {
+        inquiryKey: intake.inquiryKey, revisionKey: deliveryRevisionKey, channel: "crm",
+        deliver: async () => {
+          const result = await forwardToLeadDashboard(crmPayload, {
+            idempotencyKey: `crm:${intake.inquiryKey}:${deliveryRevisionKey}`,
+          });
+          if (!result.delivered) throw new Error(result.error ?? "CRM delivery failed");
+        },
+      }),
+      deliverInquiryChannel(inquiryIntake, {
+        inquiryKey: intake.inquiryKey, revisionKey: deliveryRevisionKey, channel: "adminEmail",
+        deliver: async () => {
+          const { fromEmail } = await getUncachableEmailClient();
+          const adminHtml = buildAdminEmailHtml(lead, estimate, crmProfile, unitCostOverrides, auditFlags);
+          for (const adminEmail of await getAdminRecipientEmails(SITE_CONFIG.email)) {
+            await send(adminEmail, "adminEmail", {
+              from: formatFromAddress(fromEmail), replyTo: formatLeadReplyTo(data.name, data.email),
+              to: adminEmail, subject: buildAdminSubject(lead, estimate), html: adminHtml, text: htmlToPlainText(adminHtml),
+            });
+          }
+        },
+      }),
+      deliverInquiryChannel(inquiryIntake, {
+        inquiryKey: intake.inquiryKey, revisionKey: deliveryRevisionKey, channel: "customerEmail",
+        deliver: async () => {
+          const { fromEmail } = await getUncachableEmailClient();
+          const customerHtml = buildCustomerEmailHtml(lead, estimate, unitCostOverrides);
+          await send(data.email, "customerEmail", {
+            from: formatFromAddress(fromEmail), replyTo: getReplyToAddress(), to: data.email,
+            subject: buildCustomerSubject(lead, estimate), html: customerHtml, text: htmlToPlainText(customerHtml),
+          });
+        },
+      }),
+    ]);
+
+    return NextResponse.json({
+      success: true, accepted: true, inquiryKey: intake.inquiryKey, conversionId: intake.conversionId,
+      newInquiry: intake.inserted, conversionEligible: intake.conversionEligible,
+      deliveries: deliveries.map(({ channel, attempted, delivered }) => ({ channel, attempted, delivered })),
     });
-
-    try {
-      const { client, fromEmail } = await getUncachableEmailClient();
-      const from = formatFromAddress(fromEmail);
-
-      const lead = {
-        name: data.name,
-        phone: data.phone,
-        email: data.email,
-        address: displayAddress,
-        zip: data.zip,
-        projectType: data.projectType,
-        budget: data.budget,
-      };
-
-      // Pass the same overrides the CRM record and the customer email use, so
-      // the admin email cannot quote different unit costs than the panel that
-      // set them. Was omitted here while the sibling consultation route passed
-      // them, which made the two lead paths disagree.
-      const adminHtml = buildAdminEmailHtml(lead, estimate, crmProfile, unitCostOverrides, auditFlags);
-      const adminEmails = await getAdminRecipientEmails(SITE_CONFIG.email);
-      for (const adminEmail of adminEmails) {
-        const adminResult = await client.emails.send({
-          from,
-          replyTo: formatLeadReplyTo(data.name, data.email),
-          to: adminEmail,
-          subject: buildAdminSubject(lead, estimate),
-          html: adminHtml,
-          text: htmlToPlainText(adminHtml),
-        });
-        if (adminResult?.error) {
-          console.error(
-            `[estimate-lead] Admin email to ${adminEmail} failed:`,
-            JSON.stringify(adminResult.error)
-          );
-        }
-      }
-
-      const customerHtml = buildCustomerEmailHtml(lead, estimate, unitCostOverrides);
-      const customerResult = await client.emails.send({
-        from,
-        replyTo: getReplyToAddress(),
-        to: data.email,
-        subject: buildCustomerSubject(lead, estimate),
-        html: customerHtml,
-        text: htmlToPlainText(customerHtml),
-      });
-      if (customerResult?.error) {
-        console.error(
-          `[estimate-lead] Customer email to ${data.email} failed:`,
-          JSON.stringify(customerResult.error)
-        );
-      }
-    } catch (emailErr) {
-      console.error("[estimate-lead] Email send failed:", emailErr);
-    }
-
-    return NextResponse.json({ success: true });
   } catch (err) {
+    if (err instanceof LeadRequestError) {
+      return NextResponse.json({ message: err.message }, { status: err.status });
+    }
     console.error("[estimate-lead] Error:", err);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }

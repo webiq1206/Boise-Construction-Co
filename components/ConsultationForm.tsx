@@ -30,8 +30,13 @@ import { CTA_FORM_SEND } from "@/shared/ctaCopy";
 import { CONSULT_BULLETS } from "@/shared/siteContent";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { BusinessPhoneContact } from "@/components/BusinessPhoneContact";
-import { trackEvent, trackMetaEvent } from "@/lib/analytics";
+import { trackEvent, trackClaimedLeadConversion } from "@/lib/analytics";
 import { readStoredPrefill, PREFILL_UPDATED_EVENT, hasPassedGate } from "@/lib/leadPrefill";
+import {
+  getOrCreateInquiryTracking,
+  readInquiryTracking,
+  recordInquiryAcceptance,
+} from "@/lib/inquiryTracking";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
   isLocatableSite,
@@ -123,6 +128,7 @@ const PROJECT_OPTIONS = [
   { value: "build-on-my-lot", label: "Build on My Lot" },
   { value: "shop-home", label: "Shop Home / Barndominium" },
   { value: "plans-only", label: "Home Design & Plans Only" },
+  { value: "addition", label: "Home Addition" },
   { value: "lot-evaluation", label: "Lot Evaluation" },
   { value: "looking-for-land", label: "Still Looking for Land" },
   { value: "other", label: "Other / Not sure yet" },
@@ -156,8 +162,10 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
   const [addressInput, setAddressInput] = useState("");
   const [showNote, setShowNote] = useState(false);
   const [showAddrInfo, setShowAddrInfo] = useState(false);
+  const [website, setWebsite] = useState("");
   const lastKeyRef = useRef<string | null>(null);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
+  const formMountedAtRef = useRef(Date.now());
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -220,6 +228,15 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
       }
     }
     applyPrefill();
+    // A dedicated additions page carries its context into the existing
+    // consultation flow. This is only a form default: the homeowner can
+    // still choose a different project type before submitting.
+    if (
+      new URLSearchParams(window.location.search).get("service") === "home-additions" &&
+      !form.getValues("projectType")
+    ) {
+      form.setValue("projectType", "addition", { shouldValidate: false });
+    }
     window.addEventListener(PREFILL_UPDATED_EVENT, applyPrefill);
     return () => window.removeEventListener(PREFILL_UPDATED_EVENT, applyPrefill);
   }, [form]);
@@ -288,8 +305,17 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
 
   const mutation = useMutation({
     mutationFn: async (data: FormData) => {
+      const existingTracking = readInquiryTracking();
+      const tracking = getOrCreateInquiryTracking();
       const payload = {
         ...data,
+        inquiryKey: tracking.inquiryKey,
+        submissionKind:
+          hasPassedGate() || existingTracking?.acceptedAt
+            ? "followup"
+            : "initial",
+        formStartedAt: formMountedAtRef.current,
+        website,
         zip: deriveZip(data.address),
         propertyProfile,
         /* When the visitor already submitted the estimate gate, both the admin
@@ -323,25 +349,41 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
         const err = await res.json().catch(() => ({}));
         throw new Error(err.message || "Something went wrong");
       }
-      return res.json();
+      const response = (await res.json()) as {
+        accepted?: boolean;
+        inquiryKey?: string;
+        conversionId?: string;
+      };
+      if (
+        response.accepted !== true ||
+        typeof response.inquiryKey !== "string" ||
+        typeof response.conversionId !== "string"
+      ) {
+        throw new Error("We could not accept this request. Please try again.");
+      }
+      return { response, tracking };
     },
-    onSuccess: (_data, variables) => {
+    onSuccess: ({ response }, variables) => {
       setSuccess(true);
       sessionStorage.removeItem("brc_estimate");
-      // Conversion event: a submitted consultation request is the PRIMARY lead
-      // (estimate on the site, then submit). GA generate_lead + Meta Lead. The
-      // Meta Lead carries the visitor's email + phone, which the server-side
-      // Conversions API hashes for high match quality (best cost-per-result).
-      trackEvent("generate_lead", {
-        form: "consultation",
-        project_type: variables.projectType,
-        has_estimate: !!estimate && attached,
+      const acceptedTracking = recordInquiryAcceptance({
+        inquiryKey: response.inquiryKey!,
+        conversionId: response.conversionId!,
       });
-      trackMetaEvent(
-        "Lead",
-        { content_name: variables.projectType, content_category: "consultation_request" },
-        { email: variables.email, phone: variables.phone },
-      );
+      void trackClaimedLeadConversion({
+        inquiryKey: acceptedTracking.inquiryKey,
+        claimKey: acceptedTracking.claimKey,
+        conversionId: response.conversionId!,
+        ga4Params: {
+          form: "consultation",
+          project_type: variables.projectType,
+          has_estimate: !!estimate && attached,
+        },
+        metaParams: {
+          content_name: variables.projectType,
+          content_category: "consultation_request",
+        },
+      });
     },
     onError: () => {
       trackEvent("form_error", { form: "consultation", reason: "submit_failed" });
@@ -456,6 +498,21 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
         onFocusCapture={trackFormStart}
         className="space-y-4"
       >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-[-10000px] top-auto h-px w-px overflow-hidden"
+        >
+          <label htmlFor="consultation-website">Website</label>
+          <input
+            id="consultation-website"
+            name="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={website}
+            onChange={(event) => setWebsite(event.target.value)}
+          />
+        </div>
         {showTrust && (
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5" data-testid="consult-trust-bullets">
             {CONSULT_BULLETS.map((item) => (

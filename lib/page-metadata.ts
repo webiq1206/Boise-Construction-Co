@@ -122,6 +122,7 @@ const SERVICE_TITLE_OVERRIDES: Record<string, string> = {
   'build-on-your-lot': 'Build on Your Lot in Idaho',
   'design-build': 'Treasure Valley Design-Build Homes',
   'home-plans-design': 'Custom Home Plans & Design, Idaho',
+  'home-additions': 'Home Additions in the Treasure Valley',
   'lot-evaluation': 'Lot Evaluation & Feasibility, Idaho',
   'shop-homes-barndominiums': 'Idaho Shop Homes & Barndominiums',
   'energy-efficient-homes': 'Energy-Efficient Homes in Idaho',

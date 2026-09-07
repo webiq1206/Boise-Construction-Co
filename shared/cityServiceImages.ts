@@ -28,6 +28,7 @@ const CITY_SLUGS = [
   "star",
   "middleton",
   "caldwell",
+  "garden-city",
 ] as const;
 
 /**
@@ -87,6 +88,17 @@ const SERVICE_ROTATION: Record<string, readonly string[]> = {
     CONSTRUCTION_IMAGES.semiCustom,
     CONSTRUCTION_IMAGES.framing,
   ],
+  "home-additions": [
+    CONSTRUCTION_IMAGES.framing,
+    CONSTRUCTION_IMAGES.interior,
+    CONSTRUCTION_IMAGES.meeting,
+    CONSTRUCTION_IMAGES.foundation,
+    CONSTRUCTION_IMAGES.kitchen,
+    CONSTRUCTION_IMAGES.customHome,
+    CONSTRUCTION_IMAGES.roughIn,
+    CONSTRUCTION_IMAGES.plans,
+    CONSTRUCTION_IMAGES.outdoor,
+  ],
   "lot-evaluation": [
     CONSTRUCTION_IMAGES.lot,
     CONSTRUCTION_IMAGES.ruralSite,
@@ -141,6 +153,7 @@ export const CITY_HERO_IMAGES: Record<string, string> = {
   star: "/images/areas/star.webp",
   middleton: "/images/areas/middleton.webp",
   caldwell: "/images/areas/caldwell.webp",
+  "garden-city": "/images/areas/boise.webp",
 };
 
 /** The primary image for each service, used when no city applies. */

@@ -453,6 +453,82 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     },
   },
 
+  'home-additions': {
+    slug: 'home-additions',
+    name: 'Home Additions',
+    headline: 'Home Additions in the Treasure Valley',
+    primaryKeyword: 'home additions boise idaho',
+    overview:
+      'When your home still fits the neighborhood but no longer fits your life, an addition can make room without starting over. Boise Construction Co plans room additions around the house already standing, from the first look at structure and utilities through permits, construction, and the final walkthrough.',
+    benefits: [
+      'Make room for the way your household lives now',
+      'Plan the addition around the existing home before construction begins',
+      'Coordinate design, permits, and construction with one team',
+      'Keep decisions clear while work is happening at the home you live in',
+    ],
+    inclusions: [
+      'In-home planning conversation and existing-home review',
+      'Design and structural coordination for the new connection',
+      'Permit-ready drawings and local permit coordination',
+      'Construction planning around access, utilities, and the occupied home',
+      'Final inspections and walkthrough',
+    ],
+    timeline:
+      'The right schedule depends on the addition, the existing structure, permit review, and the work needed to connect new space to the home. We review those details with you before setting a construction plan.',
+    processSteps: [
+      {
+        title: 'Start at your home',
+        description: 'We meet at the house to understand what is not working, what space you need, and how the new room should connect to daily life.',
+      },
+      {
+        title: 'Review the existing conditions',
+        description: 'The current structure, utilities, access, and the likely connection point guide the plan before the scope is finalized.',
+      },
+      {
+        title: 'Design and permits',
+        description: 'We coordinate drawings and the local permit path so the addition is planned for the home it will join.',
+      },
+      {
+        title: 'Build with a clear plan',
+        description: 'Construction is sequenced around the work site and your household, followed by inspections and a final walkthrough.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'What kinds of home additions do you plan?',
+        answer:
+          'Room additions can create a bedroom, a larger living area, a suite, or flexible space for changing household needs. The first step is seeing how the new space can connect to the existing home.',
+      },
+      {
+        question: 'Can you add onto the home I already live in?',
+        answer:
+          'That is the purpose of this service. We start with an in-home conversation and review the existing structure, utilities, access, and the area where the addition may connect.',
+      },
+      {
+        question: 'Do home additions need permits in the Treasure Valley?',
+        answer:
+          'Most additions require plans and permit review. The exact path depends on the property and jurisdiction, so we coordinate the local requirements as the project is planned.',
+      },
+      {
+        question: 'How do I start planning a room addition?',
+        answer:
+          'Begin with a conversation at your home. Bring the problems you want the new space to solve, any photos or sketches you have, and questions about how construction may affect the household.',
+      },
+      {
+        question: 'Will the addition look connected to the rest of my home?',
+        answer:
+          'The connection between existing and new construction is a core design question. We work through the roofline, exterior materials, openings, and interior flow while the addition is being planned.',
+      },
+    ],
+    costGuidance: {
+      heading: 'Planning a home addition in the Treasure Valley',
+      paragraphs: [
+        'An addition is not priced like a blank-site home. The existing structure, the connection point, utilities, access, and the room you need all shape the scope. An in-home review is the right place to start a useful budget conversation.',
+        'We do not promise a fixed price before reviewing the existing home. The first planning conversation helps identify the work that needs to be understood before a detailed estimate is prepared.',
+      ],
+    },
+  },
+
   'lot-evaluation': {
     slug: 'lot-evaluation',
     name: 'Lot Evaluation & Feasibility',

@@ -1,8 +1,8 @@
 import type { LeadEstimateRecord, LeadPropertyRecord } from "@/server/services/leadRecord";
 
 /**
- * Fire-and-forget forwarding to the Boise Construction lead dashboard.
- * Never throws or awaits - a failure here must never affect the API response.
+ * Awaited forwarding to the Boise Construction lead dashboard. Provider
+ * failures are returned to the caller so durable intake can persist them.
  *
  * FIELD NAMES ARE A CONTRACT. The dashboard validates with a plain zod object,
  * which strips unknown keys, so a field named even slightly differently is
@@ -73,13 +73,22 @@ interface ForwardPayload {
   estimateRange?: string;
 }
 
-export function forwardToLeadDashboard(payload: ForwardPayload): void {
+export interface LeadDashboardForwardResult {
+  delivered: boolean;
+  duplicate?: boolean;
+  error?: string;
+}
+
+export async function forwardToLeadDashboard(
+  payload: ForwardPayload,
+  options?: { idempotencyKey?: string },
+): Promise<LeadDashboardForwardResult> {
   const key = process.env.LEAD_DASHBOARD_KEY;
   if (!key) {
     console.warn(
       "[lead-dashboard] LEAD_DASHBOARD_KEY is not set; lead was NOT forwarded to the CRM."
     );
-    return;
+    return { delivered: false, error: "LEAD_DASHBOARD_KEY is not configured" };
   }
 
   const body: ForwardPayload = {
@@ -94,28 +103,35 @@ export function forwardToLeadDashboard(payload: ForwardPayload): void {
       : undefined,
   };
 
-  fetch("https://leads.boiseconstruction.co/api/external/leads", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${key}`,
-    },
-    body: JSON.stringify(body),
-  })
-    .then(async (res) => {
-      // A rejected forward means the lead reached the inbox but not the CRM.
-      // 409 is the dashboard's 60-second duplicate guard and is expected when a
-      // visitor submits twice, so it is noted rather than flagged as an error.
-      if (res.status === 409) {
-        console.info("[lead-dashboard] Duplicate within 60s; CRM kept the existing lead.");
-        return;
-      }
-      if (!res.ok) {
-        const detail = await res.text().catch(() => "");
-        console.error(
-          `[lead-dashboard] Forward rejected: ${res.status} ${res.statusText} ${detail.slice(0, 300)}`
-        );
-      }
-    })
-    .catch((err) => console.error("[lead-dashboard] Forward failed:", err));
+  try {
+    const res = await fetch("https://leads.boiseconstruction.co/api/external/leads", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${key}`,
+        ...(options?.idempotencyKey
+          ? { "Idempotency-Key": options.idempotencyKey }
+          : {}),
+      },
+      body: JSON.stringify(body),
+    });
+    // 409 is the dashboard's duplicate guard: the durable inquiry is already
+    // represented there, so this is a successful idempotent outcome.
+    if (res.status === 409) {
+      console.info("[lead-dashboard] Duplicate request; CRM kept the existing lead.");
+      return { delivered: true, duplicate: true };
+    }
+    if (!res.ok) {
+      const detail = await res.text().catch(() => "");
+      const error =
+        `Forward rejected: ${res.status} ${res.statusText} ${detail.slice(0, 300)}`.trim();
+      console.error(`[lead-dashboard] ${error}`);
+      return { delivered: false, error };
+    }
+    return { delivered: true };
+  } catch (err) {
+    const error = err instanceof Error ? err.message : "CRM request failed";
+    console.error("[lead-dashboard] Forward failed:", error);
+    return { delivered: false, error };
+  }
 }

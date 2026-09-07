@@ -47,6 +47,7 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
   const images = getServiceImageSet(service.slug);
   const featuredProject = getFeaturedGalleryProject(service.slug);
   const serviceLC = service.name.toLowerCase();
+  const isAddition = service.slug === 'home-additions';
 
   /* Cost guidance is no longer one of the long-form sections: it renders as
      the template's dedicated cost-and-timeline band directly after the hero,
@@ -57,12 +58,36 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         paragraphs: content.costGuidance.paragraphs,
         links: [
           { label: 'Boise Home Building Cost Guide', href: '/guides/boise-home-building-cost-guide' },
-          { label: 'Get your build cost range', href: '/#calculator' },
+          {
+            label: isAddition ? 'Start your home addition estimate' : 'Get your build cost range',
+            href: isAddition
+              ? '/estimate?project=addition&service=home-additions'
+              : '/#calculator',
+          },
         ],
       }
     : undefined;
 
-  const sections: LandingSection[] = [
+  const sections: LandingSection[] = isAddition ? [
+    {
+      heading: 'Room additions across the Treasure Valley',
+      paragraphs: [
+        'We plan home additions in Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and Garden City. Local permit paths and the details of an existing home vary, so every project begins with the home itself.',
+        'Choose your city for local home addition guidance, or schedule an in-home planning conversation to talk through the space you need.',
+      ],
+      links: CITIES.map((c) => ({
+        label: `Home Additions in ${c.name}`,
+        href: `/services/${service.slug}/${c.slug}`,
+      })),
+    },
+    {
+      heading: 'A practical place to start',
+      paragraphs: [
+        'Useful additions start with a plain question: what would make this home work better? A bedroom, more living space, or a room that gives the household breathing room can all begin with that answer.',
+        'We then look at how the new space can meet the home already there, including structure, access, utilities, exterior continuity, and the permit path.',
+      ],
+    },
+  ] : [
     {
       heading: `${service.name} across the Treasure Valley`,
       paragraphs: [
@@ -111,6 +136,8 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
         processImageUrl={images.process}
         manifestPath={path}
         planningFrom={service.planningFrom}
+        estimateHref={isAddition ? '/estimate?project=addition&service=home-additions' : undefined}
+        consultationHref={isAddition ? '/contact?service=home-additions&project=addition#consult' : undefined}
         costGuidance={costGuidance}
         breadcrumbs={[
           { name: 'Home', href: '/' },

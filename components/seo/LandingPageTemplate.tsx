@@ -37,6 +37,10 @@ interface LandingPageTemplateProps {
   manifestPath?: string;
   /** Optional planning starting point ("$15k") shown near the hero CTAs. */
   planningFrom?: string;
+  /** Optional estimator URL that retains the service's project intent. */
+  estimateHref?: string;
+  /** Optional consultation URL for service-specific contact context. */
+  consultationHref?: string;
   /**
    * Cost-and-timeline expectation, rendered directly AFTER THE HERO: the first
    * question a visitor researches is what this costs and how long it takes, so
@@ -161,6 +165,8 @@ export function LandingPageTemplate({
   processImageUrl,
   manifestPath,
   planningFrom,
+  estimateHref,
+  consultationHref,
   costGuidance,
   benefits,
   inclusions,
@@ -204,11 +210,11 @@ export function LandingPageTemplate({
           <h1 className="ed-display ed-statement-display text-inverse-foreground">{h1}</h1>
           <p className="ed-lede mt-8 max-w-[44ch] text-inverse-foreground/85">{overview}</p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 [&>*]:w-full sm:[&>*]:w-auto">
-            <ConsultCTA variant="brand">
+            <ConsultCTA variant="brand" href={estimateHref}>
               {CTA_PRIMARY} <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </ConsultCTA>
             <Button variant="heroOutline" asChild>
-              <a href="/#consult">{CTA_SECONDARY}</a>
+              <a href={consultationHref ?? "/#consult"}>{CTA_SECONDARY}</a>
             </Button>
           </div>
           {planningFrom && (
@@ -500,6 +506,7 @@ export function LandingPageTemplate({
         <EstimatePromptBand
           title={<>What might your <em className="not-italic" style={accent}>project</em> cost?</>}
           description="Get an instant planning range based on real Treasure Valley build costs - about 60 seconds, no obligation."
+          href={estimateHref}
         />
       )}
 
@@ -548,7 +555,7 @@ export function LandingPageTemplate({
             <Reveal delay={60}>
               <p className="ed-lede">Free 60 to 90 minute in-home visit.</p>
               <p className="ed-body mt-3">Planning guidance, design direction, no obligation.</p>
-              <div className="mt-8"><ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA></div>
+              <div className="mt-8"><ConsultCTA variant="brand" href={estimateHref}>{CTA_PRIMARY}</ConsultCTA></div>
             </Reveal>
           </div>
         </div>

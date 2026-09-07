@@ -426,14 +426,51 @@ export const consultationRequests = pgTable("consultation_requests", {
   actualContractValue: decimal("actual_contract_value", { precision: 12, scale: 2 }),
   actualRecordedAt: timestamp("actual_recorded_at"),
   actualNotes: text("actual_notes"),
+  // Durable inquiry intake. All additions are nullable or have defaults so the
+  // existing RE-10 writer can continue inserting its legacy shape.
+  inquiryKey: varchar("inquiry_key", { length: 128 }),
+  inquiryFlow: varchar("inquiry_flow", { length: 32 }),
+  submissionKind: varchar("submission_kind", { length: 32 }),
+  conversionId: varchar("conversion_id", { length: 128 }).notNull().default(sql`'conv_' || gen_random_uuid()`),
+  contactFingerprint: varchar("contact_fingerprint", { length: 128 }),
+  dedupeBucket: varchar("dedupe_bucket", { length: 16 }),
+  conversionEligible: boolean("conversion_eligible").notNull().default(false),
+  conversionClaimKey: varchar("conversion_claim_key", { length: 128 }),
+  conversionClaimedAt: timestamp("conversion_claimed_at"),
+  conversionAcknowledgedAt: timestamp("conversion_acknowledged_at"),
+  deliveryRevisionKey: varchar("delivery_revision_key", { length: 128 }),
+  crmDeliveryStatus: varchar("crm_delivery_status", { length: 16 }).notNull().default("pending"),
+  crmDeliveryError: text("crm_delivery_error"),
+  crmDeliveryAttemptCount: integer("crm_delivery_attempt_count").notNull().default(0),
+  crmDeliveryAttemptedAt: timestamp("crm_delivery_attempted_at"),
+  crmDeliveredAt: timestamp("crm_delivered_at"),
+  crmDeliveryClaimKey: varchar("crm_delivery_claim_key", { length: 128 }),
+  adminEmailDeliveryStatus: varchar("admin_email_delivery_status", { length: 16 }).notNull().default("pending"),
+  adminEmailDeliveryError: text("admin_email_delivery_error"),
+  adminEmailDeliveryAttemptCount: integer("admin_email_delivery_attempt_count").notNull().default(0),
+  adminEmailDeliveryAttemptedAt: timestamp("admin_email_delivery_attempted_at"),
+  adminEmailDeliveredAt: timestamp("admin_email_delivered_at"),
+  adminEmailDeliveryClaimKey: varchar("admin_email_delivery_claim_key", { length: 128 }),
+  customerEmailDeliveryStatus: varchar("customer_email_delivery_status", { length: 16 }).notNull().default("pending"),
+  customerEmailDeliveryError: text("customer_email_delivery_error"),
+  customerEmailDeliveryAttemptCount: integer("customer_email_delivery_attempt_count").notNull().default(0),
+  customerEmailDeliveryAttemptedAt: timestamp("customer_email_delivery_attempted_at"),
+  customerEmailDeliveredAt: timestamp("customer_email_delivered_at"),
+  customerEmailDeliveryClaimKey: varchar("customer_email_delivery_claim_key", { length: 128 }),
   // Status
   status: text("status").notNull().default("new"), // new, contacted, converted, closed
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  uniqueIndex("consultation_requests_inquiry_key_unique").on(table.inquiryKey),
+  uniqueIndex("consultation_requests_conversion_id_unique").on(table.conversionId),
+  uniqueIndex("consultation_requests_contact_bucket_unique").on(table.contactFingerprint, table.dedupeBucket),
+]);
 
 export const insertConsultationRequestSchema = createInsertSchema(consultationRequests).omit({
   id: true,
   createdAt: true,
+  updatedAt: true,
 });
 
 export type ConsultationRequest = typeof consultationRequests.$inferSelect;

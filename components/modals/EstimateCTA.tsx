@@ -9,11 +9,13 @@ interface EstimateCTAProps extends Omit<ButtonProps, "onClick" | "asChild"> {
   onExtraClick?: () => void;
   /** Optional context for the cta_click event (e.g. "hero", "footer", "faq"). */
   trackingLocation?: string;
+  /** A service page can retain a specific estimator starting point. */
+  href?: string;
 }
 
-export function EstimateCTA({ onExtraClick, children, trackingLocation, ...props }: EstimateCTAProps) {
+export function EstimateCTA({ onExtraClick, children, trackingLocation, href: explicitHref, ...props }: EstimateCTAProps) {
   const pathname = usePathname();
-  const href = pathname === "/" ? "/#calculator" : "/estimate";
+  const href = explicitHref ?? (pathname === "/" ? "/#calculator" : "/estimate");
 
   return (
     <Button {...props} asChild>

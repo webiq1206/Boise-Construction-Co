@@ -71,6 +71,12 @@ export const SERVICES: ServiceData[] = [
     planningFrom: '$9k',
   },
   {
+    slug: 'home-additions',
+    name: 'Home Additions',
+    shortDescription: 'Useful new space added to the home you already live in, planned around the structure, utilities, and daily life already there.',
+    planningFrom: 'Talk with us',
+  },
+  {
     slug: 'lot-evaluation',
     name: 'Lot Evaluation & Feasibility',
     shortDescription: 'Soils, utilities, access, setbacks, and slope reviewed before you commit to a parcel.',
@@ -105,6 +111,7 @@ export const CITIES: CityData[] = [
   { slug: 'star', name: 'Star', county: 'ada', isPrimary: false },
   { slug: 'middleton', name: 'Middleton', county: 'canyon', isPrimary: false },
   { slug: 'caldwell', name: 'Caldwell', county: 'canyon', isPrimary: false },
+  { slug: 'garden-city', name: 'Garden City', county: 'ada', isPrimary: false },
 ];
 
 export const TREASURE_VALLEY_CITIES = CITIES.map((c) => c.name).join(', ');

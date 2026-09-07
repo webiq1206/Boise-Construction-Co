@@ -5,6 +5,10 @@
  */
 type GtagParams = Record<string, string | number | boolean | undefined>;
 
+const GOOGLE_ADS_LEAD_DESTINATION =
+  'AW-18354188204/LE2vCPXstO8cEKzf-q9E';
+const conversionInFlight = new Set<string>();
+
 export function trackEvent(name: string, params: GtagParams = {}): void {
   if (typeof window === 'undefined') return;
   const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
@@ -36,13 +40,19 @@ function readCookie(name: string): string | undefined {
  * but greatly improves server-side match quality; it is hashed on the server and
  * never sent to the Pixel.
  */
-export function trackMetaEvent(name: string, params: GtagParams = {}, userData?: MetaUserData): void {
+export function trackMetaEvent(
+  name: string,
+  params: GtagParams = {},
+  userData?: MetaUserData,
+  stableEventId?: string,
+): void {
   if (typeof window === 'undefined') return;
 
   const eventId =
-    typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+    stableEventId ??
+    (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
       ? crypto.randomUUID()
-      : `${name}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      : `${name}-${Date.now()}-${Math.random().toString(36).slice(2)}`);
 
   const fbq = (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq;
   if (typeof fbq === 'function') {
@@ -69,4 +79,114 @@ export function trackMetaEvent(name: string, params: GtagParams = {}, userData?:
   } catch {
     /* ignore */
   }
+}
+
+/**
+ * Sends the native Google Ads lead conversion with a stable transaction ID.
+ * The ID is opaque and server-issued, so no contact information reaches Ads.
+ */
+export function trackGoogleAdsLead(conversionId: string): void {
+  if (typeof window === 'undefined') return;
+  const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+  if (typeof gtag !== 'function') return;
+  gtag('event', 'conversion', {
+    send_to: GOOGLE_ADS_LEAD_DESTINATION,
+    transaction_id: conversionId,
+  });
+}
+
+export interface ClaimedLeadConversion {
+  inquiryKey: string;
+  claimKey: string;
+  conversionId: string;
+  ga4Params: GtagParams;
+  metaParams: GtagParams;
+}
+
+/**
+ * Claims one persisted inquiry before sending any lead analytics. The browser
+ * marks the stable conversion ID locally before calling vendors, while the
+ * server claim protects duplicate callbacks and other tabs.
+ */
+async function performClaimedLeadConversion(
+  input: ClaimedLeadConversion,
+): Promise<boolean> {
+  if (typeof window === 'undefined') return false;
+  if (conversionInFlight.has(input.conversionId)) return false;
+  conversionInFlight.add(input.conversionId);
+
+  try {
+    const tracking = await import('@/lib/inquiryTracking');
+    const current = tracking.readInquiryTracking();
+    if (
+      current?.conversionId === input.conversionId &&
+      current.conversionFiredAt
+    ) {
+      return false;
+    }
+
+    let eligible = false;
+    try {
+      const response = await fetch('/api/inquiry-conversion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          inquiryKey: input.inquiryKey,
+          claimKey: input.claimKey,
+          conversionId: input.conversionId,
+        }),
+      });
+      if (!response.ok) return false;
+      const result = (await response.json()) as {
+        eligible?: boolean;
+        conversionId?: string;
+      };
+      eligible =
+        result.eligible === true &&
+        result.conversionId === input.conversionId;
+    } catch {
+      return false;
+    }
+
+    if (!eligible) return false;
+
+    tracking.markInquiryConversionFired(input.conversionId);
+    trackEvent('generate_lead', input.ga4Params);
+    trackGoogleAdsLead(input.conversionId);
+    trackMetaEvent('Lead', input.metaParams, undefined, input.conversionId);
+
+    try {
+      await fetch('/api/inquiry-conversion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        keepalive: true,
+        body: JSON.stringify({
+          inquiryKey: input.inquiryKey,
+          claimKey: input.claimKey,
+          conversionId: input.conversionId,
+          acknowledge: true,
+        }),
+      });
+    } catch {
+      /* The stable local marker and vendor IDs still guard a browser retry. */
+    }
+
+    return true;
+  } finally {
+    conversionInFlight.delete(input.conversionId);
+  }
+}
+
+export async function trackClaimedLeadConversion(
+  input: ClaimedLeadConversion,
+): Promise<boolean> {
+  if (typeof window === 'undefined') return false;
+  const lockManager = navigator.locks;
+  if (!lockManager) {
+    return performClaimedLeadConversion(input);
+  }
+  return lockManager.request(
+    `boise-construction-lead:${input.conversionId}`,
+    () => performClaimedLeadConversion(input),
+  );
 }

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createHash } from "crypto";
 import { z } from "zod";
-import { db } from "@/lib/db";
-import { consultationRequests } from "@/shared/schema";
 import { getUncachableEmailClient } from "@/server/services/emailTransport";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import {
@@ -35,6 +34,10 @@ import { estimateSchema } from "@/shared/estimatePayload";
 import { resolveQuotedRange } from "@/shared/costs/resolve";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import { readUnitCostOverrides } from "@/server/services/unitCostOverrides";
+import { createDrizzleInquiryIntake } from "@/server/services/inquiryIntake";
+import { deliverInquiryChannel, type InquiryDeliveryResult } from "@/server/services/inquiryDelivery";
+import { inspectLeadTrap, LeadRequestError, readBoundedJson } from "@/server/services/leadRequestGuard";
+import { clientKeyFrom, rateLimit } from "@/lib/rateLimit";
 import {
   buildCrmIntakeFields,
   buildLeadPropertyRecord,
@@ -46,10 +49,10 @@ import {
 
 const propertyProfileSchema = z
   .object({
-    formattedAddress: z.string(),
-    city: z.string(),
-    state: z.string(),
-    zip: z.string(),
+    formattedAddress: z.string().max(300),
+    city: z.string().max(120),
+    state: z.string().max(60),
+    zip: z.string().max(20),
   })
   .passthrough()
   .optional()
@@ -61,7 +64,7 @@ const optionalEstimateSchema = estimateSchema.optional().nullable();
 
 const bodySchema = z
   .object({
-    name: z.string().min(2),
+    name: z.string().min(2).max(120),
     /**
      * Only the visitor's chosen contact method is required (see superRefine
      * below) - matches the same preferred-contact pattern already shipped in
@@ -69,19 +72,23 @@ const bodySchema = z
      * that never send this field behave exactly as before (email required).
      */
     preferredContact: z.enum(["email", "phone", "text"]).optional().default("email"),
-    phone: z.string().optional().default(""),
-    email: z.string().optional().default(""),
+    phone: z.string().max(50).optional().default(""),
+    email: z.string().max(254).optional().default(""),
     /**
      * Optional because a new-build enquiry from someone who has not bought land
      * yet has no site to name. The client requires a locatable site for every
      * other project type; see LAND_SEARCH_PROJECT_TYPE in ConsultationForm.
      */
     address: z.string().max(300).optional().default(""),
-    zip: z.string().optional(),
-    projectType: z.string().min(1),
-    message: z.string().optional(),
+    zip: z.string().max(20).optional(),
+    projectType: z.string().min(1).max(100),
+    message: z.string().max(5_000).optional(),
     propertyProfile: propertyProfileSchema,
     estimate: optionalEstimateSchema,
+    inquiryKey: z.string().max(124).regex(/^inq_[A-Za-z0-9_-]{16,120}$/).optional(),
+    submissionKind: z.enum(["initial", "followup"]).optional().default("initial"),
+    formStartedAt: z.number().finite().int(),
+    website: z.string().max(200).optional().default(""),
     /* Set by the client when the visitor already submitted the estimate gate,
        which already sent admin + customer emails via /api/estimate-lead.
        Prevents duplicate email sends when the same person submits both forms. */
@@ -96,6 +103,47 @@ const bodySchema = z
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["phone"], message: "Valid phone required" });
     }
   });
+
+function deliveryRevisionKey(
+  data: z.infer<typeof bodySchema>,
+  estimate: VerifiedEstimate | null,
+): string {
+  // This deliberately excludes contact fields and message text. It identifies
+  // the server-priced scope, plus only the shape of the visitor's note.
+  const message = data.message?.trim() ?? "";
+  const shape = {
+    projectType: data.projectType,
+    message: { length: message.length, lines: message ? message.split(/\r?\n/).length : 0 },
+    estimate: estimate
+      ? {
+        project: estimate.project,
+        finish: estimate.finish,
+        sqft: estimate.sqft,
+        priceLow: estimate.priceLow,
+        priceHigh: estimate.priceHigh,
+        roi: estimate.roi,
+        confidence: estimate.confidence,
+        statedBudget: estimate.statedBudget,
+        refinements: estimate.refinements,
+        included: estimate.included,
+        layoutLabel: estimate.layoutLabel,
+        upgradeLabels: estimate.upgradeLabels,
+      }
+      : null,
+  };
+  return createHash("sha256").update(JSON.stringify(shape)).digest("hex");
+}
+
+function resendIdempotencyKey(
+  inquiryKey: string,
+  revisionKey: string,
+  channel: string,
+  recipient: string,
+): string {
+  return `consultation-${createHash("sha256")
+    .update(`${inquiryKey}:${revisionKey}:${channel}:${recipient}`)
+    .digest("hex")}`;
+}
 
 /**
  * Recomputes the planning range server-side from the submitted inputs so a
@@ -164,7 +212,15 @@ function verifyEstimate(
 
 export async function POST(request: NextRequest) {
   try {
-    const raw = await request.json();
+    const limit = rateLimit(clientKeyFrom(request.headers, "consultation"), 6, 10 * 60 * 1000);
+    if (!limit.ok) {
+      return NextResponse.json(
+        { message: "Too many requests" },
+        { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } },
+      );
+    }
+
+    const raw = await readBoundedJson(request);
     const parsed = bodySchema.safeParse(raw);
 
     if (!parsed.success) {
@@ -175,33 +231,71 @@ export async function POST(request: NextRequest) {
     }
 
     const data = parsed.data;
+    const trap = inspectLeadTrap(data);
+    if (trap === "honeypot") {
+      // Pretend success so bots do not get feedback, while avoiding all work.
+      return NextResponse.json({ success: true, accepted: false });
+    }
+    if (trap === "too-fast") {
+      return NextResponse.json({ message: "Please wait before submitting" }, { status: 429 });
+    }
 
     // Server-side verification: never trust client-supplied dollar amounts.
     const estimate = data.estimate ? verifyEstimate(data.estimate) : null;
+    const revisionKey = deliveryRevisionKey(data, estimate);
+    const profile = data.propertyProfile as Record<string, unknown> | null | undefined;
 
-    if (db) {
-      try {
-        const profile = data.propertyProfile as Record<string, unknown> | null | undefined;
-        await db.insert(consultationRequests).values({
+    // Persistence is the admission control: no provider is contacted until the
+    // inquiry and its channel state have been durably recorded.
+    let intakeResult;
+    let intake;
+    try {
+      intake = createDrizzleInquiryIntake();
+      intakeResult = await intake.intake({
+        inquiryKey: data.inquiryKey,
+        flow: "consultation",
+        submissionKind: data.submissionKind,
+        deliveryRevisionKey: revisionKey,
+        data: {
           name: data.name,
           phone: data.phone,
           email: data.email,
           zip: data.zip || "",
           address: data.address,
           city: (profile?.city as string) || null,
-          propertyProfile: (data.propertyProfile as PropertyProfile | null) ?? null,
+          ...(data.propertyProfile
+            ? { propertyProfile: data.propertyProfile as unknown as PropertyProfile }
+            : {}),
           projectType: data.projectType,
           message: data.message || null,
-          estimateProject: estimate?.project || null,
-          estimateFinish: estimate?.finish || null,
-          estimateLow: estimate?.priceLow?.toString() || null,
-          estimateHigh: estimate?.priceHigh?.toString() || null,
-          estimateSqft: estimate?.sqft ?? null,
-          estimateConfidence: estimate?.confidence || null,
-        });
-      } catch (dbErr) {
-        console.error("[consultation] DB insert failed:", dbErr);
-      }
+          ...(estimate
+            ? {
+                estimateProject: estimate.project,
+                estimateFinish: estimate.finish,
+                estimateLow: estimate.priceLow.toString(),
+                estimateHigh: estimate.priceHigh.toString(),
+                estimateSqft: estimate.sqft,
+                estimateConfidence: estimate.confidence,
+              }
+            : {}),
+        },
+      });
+    } catch (dbErr) {
+      console.error("[consultation] Durable intake failed:", dbErr);
+      return NextResponse.json({ message: "Inquiry service is temporarily unavailable" }, { status: 503 });
+    }
+
+    // Followups update the existing inquiry without changing its delivery state.
+    if (data.submissionKind === "followup" && !intakeResult.inserted) {
+      return NextResponse.json({
+        success: true,
+        accepted: true,
+        inquiryKey: intakeResult.inquiryKey,
+        conversionId: intakeResult.conversionId,
+        newInquiry: intakeResult.inserted,
+        conversionEligible: intakeResult.conversionEligible,
+        delivery: [],
+      });
     }
 
     // Same complete record as the estimate-gate path, so a lead looks identical
@@ -216,16 +310,23 @@ export async function POST(request: NextRequest) {
       projectType: data.projectType,
       message: data.message,
     };
-    // Real unit costs entered in the admin pricing panel, applied to every
-    // breakdown this request renders so the panel, emails and CRM agree.
-    const unitCostOverrides = await readUnitCostOverrides();
-
     const crmProfile = (data.propertyProfile as PropertyEnrichment | null) ?? null;
-
-    forwardToLeadDashboard({
-      fullName: data.name,
-      email: data.email,
-      phone: data.phone,
+    // Share this between the claimed channels so every destination uses the
+    // same current pricing. A failure is persisted on each claimed channel.
+    const unitCostOverrides = readUnitCostOverrides();
+    const lead = {
+      name: data.name, phone: data.phone, email: data.email, address: data.address,
+      zip: data.zip, projectType: data.projectType, message: data.message,
+    };
+    const claimedRevisionKey =
+      data.submissionKind === "followup" ? null : revisionKey;
+    const delivery: InquiryDeliveryResult[] = await Promise.all([
+      deliverInquiryChannel(intake, {
+        inquiryKey: intakeResult.inquiryKey, revisionKey: claimedRevisionKey, channel: "crm",
+        deliver: async () => {
+          const costs = await unitCostOverrides;
+          const result = await forwardToLeadDashboard({
+      fullName: data.name, email: data.email, phone: data.phone,
       // Field names must match the dashboard's externalLeadSchema exactly; it
       // strips anything it does not recognise rather than erroring.
       propertyAddress: data.address || undefined,
@@ -241,42 +342,34 @@ export async function POST(request: NextRequest) {
       // The homeowner's own words stay in finalNotes; the estimate record goes
       // to estimateSummary, which the dashboard sizes for it (20k vs 2k).
       finalNotes: data.message || undefined,
-      estimate: estimate ? buildLeadEstimateRecord(estimate, unitCostOverrides) : undefined,
+      estimate: estimate ? buildLeadEstimateRecord(estimate, costs) : undefined,
       // Zoning, lot size, assessed value, owner and occupancy as structured
       // fields, alongside the same rows the admin email renders.
       property: buildLeadPropertyRecord(crmProfile),
       // Structured intake fields the estimator can answer. See
       // buildCrmIntakeFields for why the rest stay deliberately empty.
       ...buildCrmIntakeFields(estimate),
-      estimateSummary: buildLeadNotes(crmLead, estimate, crmProfile, unitCostOverrides),
+      estimateSummary: buildLeadNotes(crmLead, estimate, crmProfile, costs),
       estimateLow: estimate?.priceLow,
       estimateHigh: estimate?.priceHigh,
       estimateRange: estimate
         ? `${formatUsd(estimate.priceLow)} to ${formatUsd(estimate.priceHigh)}`
         : undefined,
       source: "boiseconstruction.co",
-    });
-
-    if (!data.skipEmail) {
-      try {
+          }, {
+            idempotencyKey: `crm:${intakeResult.inquiryKey}:${revisionKey}`,
+          });
+          if (!result.delivered) throw new Error(result.error || "CRM delivery failed");
+        },
+      }),
+      deliverInquiryChannel(intake, {
+        inquiryKey: intakeResult.inquiryKey, revisionKey: claimedRevisionKey, channel: "adminEmail",
+        deliver: async () => {
+          const costs = await unitCostOverrides;
         const { client, fromEmail } = await getUncachableEmailClient();
         const from = formatFromAddress(fromEmail);
-
-        const lead = {
-          name: data.name,
-          phone: data.phone,
-          email: data.email,
-          address: data.address,
-          zip: data.zip,
-          projectType: data.projectType,
-          message: data.message,
-        };
         const enrichment = (data.propertyProfile as PropertyEnrichment | null) ?? null;
-
-        // ---- Admin / internal-team email ------------------------------------
-        // Reply-To is the LEAD, so hitting Reply in any mail client goes straight
-        // to the customer.
-        const adminHtml = buildAdminEmailHtml(lead, estimate, enrichment, unitCostOverrides);
+        const adminHtml = buildAdminEmailHtml(lead, estimate, enrichment, costs);
         const adminEmails = await getAdminRecipientEmails(SITE_CONFIG.email);
         for (const adminEmail of adminEmails) {
           const adminResult = await client.emails.send({
@@ -288,43 +381,47 @@ export async function POST(request: NextRequest) {
             subject: buildAdminSubject(lead, estimate),
             html: adminHtml,
             text: htmlToPlainText(adminHtml),
-          });
+          }, { idempotencyKey: resendIdempotencyKey(intakeResult.inquiryKey, revisionKey, "admin", adminEmail) });
           if (adminResult?.error) {
-            console.error(
-              `[consultation] Admin email to ${adminEmail} failed:`,
-              JSON.stringify(adminResult.error)
-            );
+            throw new Error(`Admin email failed: ${adminResult.error.message}`);
           }
         }
-
-        // ---- Customer / lead email ------------------------------------------
-        // Includes the full estimate + every selection so the lead has it in
-        // writing without ever logging in. Skipped entirely when the visitor
-        // chose to be reached by phone/text and never gave an email address.
-        if (data.email) {
-          const customerHtml = buildCustomerEmailHtml(lead, estimate, unitCostOverrides);
+        },
+      }),
+      ...(data.email ? [deliverInquiryChannel(intake, {
+        inquiryKey: intakeResult.inquiryKey, revisionKey: claimedRevisionKey, channel: "customerEmail",
+        deliver: async () => {
+          const costs = await unitCostOverrides;
+          const { client, fromEmail } = await getUncachableEmailClient();
+          const customerHtml = buildCustomerEmailHtml(lead, estimate, costs);
           const customerResult = await client.emails.send({
-            from,
+            from: formatFromAddress(fromEmail),
             replyTo: getReplyToAddress(),
             to: data.email,
             subject: buildCustomerSubject(lead, estimate),
             html: customerHtml,
             text: htmlToPlainText(customerHtml),
-          });
+          }, { idempotencyKey: resendIdempotencyKey(intakeResult.inquiryKey, revisionKey, "customer", data.email) });
           if (customerResult?.error) {
-            console.error(
-              `[consultation] Customer email to ${data.email} failed:`,
-              JSON.stringify(customerResult.error)
-            );
+            throw new Error(`Customer email failed: ${customerResult.error.message}`);
           }
-        }
-      } catch (emailErr) {
-        console.error("[consultation] Email send failed:", emailErr);
-      }
-    }
+        },
+      })] : []),
+    ]);
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({
+      success: true,
+      accepted: true,
+      inquiryKey: intakeResult.inquiryKey,
+      conversionId: intakeResult.conversionId,
+      newInquiry: intakeResult.inserted,
+      conversionEligible: intakeResult.conversionEligible,
+      delivery: delivery.map(({ channel, attempted, delivered }) => ({ channel, attempted, delivered })),
+    });
   } catch (err) {
+    if (err instanceof LeadRequestError) {
+      return NextResponse.json({ message: err.message }, { status: err.status });
+    }
     console.error("[consultation] Error:", err);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }

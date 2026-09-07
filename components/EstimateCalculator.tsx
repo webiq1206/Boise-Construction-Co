@@ -77,7 +77,11 @@ import {
 import type { ExtractedPlan } from "@/shared/plans/extraction";
 import { applyPlanToEstimate } from "@/shared/plans/applyToEstimate";
 import { UPLOAD_ACCEPT, READABLE_FORMATS_LABEL } from "@/shared/re10/uploads";
-import { trackEvent, trackMetaEvent } from "@/lib/analytics";
+import {
+  trackEvent,
+  trackMetaEvent,
+  trackClaimedLeadConversion,
+} from "@/lib/analytics";
 import { GRAIN_URL } from "@/lib/grain";
 import {
   uploadAndReadPlanSet,
@@ -95,6 +99,11 @@ import {
   readLastSentKey,
   writeLastSentKey,
 } from "@/lib/leadPrefill";
+import {
+  clearInquiryTracking,
+  getOrCreateInquiryTracking,
+  recordInquiryAcceptance,
+} from "@/lib/inquiryTracking";
 
 /* Project-level icons for the project-type card grid. */
 const PROJECT_ICONS: Record<ProjectType, LucideIcon> = {
@@ -720,7 +729,7 @@ export function EstimateCalculator({
      modules against what the published rate already assumes. */
   const [bathCount, setBathCount] = useState<number | null>(null);
   /* Tracks whether the visitor explicitly tapped a bath-count button.
-     Pre-filling bathCount from property data should NOT count as confirmed --
+      Pre-filling bathCount from property data should NOT count as confirmed;
      the user must see and accept (or change) it before the finish scroll fires. */
   const [bathCountConfirmed, setBathCountConfirmed] = useState(false);
   const [kitchenIn, setKitchenIn] = useState<boolean | null>(null);
@@ -735,6 +744,24 @@ export function EstimateCalculator({
     subtype: false,
     finish: false,
   });
+
+  /*
+   * Service pages may send a homeowner here with a meaningful starting point.
+   * Keep this client-only so the server and hydration markup remain identical,
+   * then make the requested addition visible before the visitor reaches the
+   * project question. The resulting estimate and lead retain `addition` as
+   * their real project type.
+   */
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("project") !== "addition") return;
+    const additionSubtype = defaultSubtypeFor("addition");
+    setActiveProject("addition");
+    setSubtype(additionSubtype);
+    setSqft(SUBTYPE_DATA.addition[additionSubtype].sqft);
+    /* This deep link answers the project and layout questions only. Keep the
+       planning stage, land, and finish questions explicitly unchosen. */
+    setChosen((current) => ({ ...current, project: true, subtype: true }));
+  }, []);
 
   /*
    * THE FIRST QUESTION, and the reason it is not "what are you building".
@@ -900,6 +927,7 @@ export function EstimateCalculator({
   const [gateName,      setGateName]      = useState("");
   const [gateEmail,     setGateEmail]     = useState("");
   const [gatePhone,     setGatePhone]     = useState("");
+  const [gateWebsite,   setGateWebsite]   = useState("");
   const [gateLoading,   setGateLoading]   = useState(false);
   const [gateError,     setGateError]     = useState<string | null>(null);
   /* Per-field validation messages, set only on a submit attempt so nobody is
@@ -923,6 +951,7 @@ export function EstimateCalculator({
   /* Guards the estimator-completion conversion event so it fires at most once
      per mount even if the visitor recalculates after editing. */
   const engagementFired   = useRef(false);
+  const gateMountedAtRef = useRef(Date.now());
   const gateFormRef    = useRef<HTMLFormElement>(null);
   const gateNameRef    = useRef<HTMLInputElement>(null);
   const gateEmailRef   = useRef<HTMLInputElement>(null);
@@ -2354,10 +2383,15 @@ export function EstimateCalculator({
     if (!savedIdentity?.email) return;
     setResendState("sending");
     try {
+      const tracking = getOrCreateInquiryTracking();
       const res = await fetch("/api/estimate-lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          inquiryKey: tracking.inquiryKey,
+          submissionKind: "revision",
+          formStartedAt: gateMountedAtRef.current,
+          website: gateWebsite,
           name: savedIdentity.name,
           email: savedIdentity.email,
           phone: savedIdentity.phone,
@@ -2376,11 +2410,15 @@ export function EstimateCalculator({
           },
         }),
       });
-      if (!res.ok && res.status < 500) throw new Error(String(res.status));
+      const response = (await res.json().catch(() => ({}))) as {
+        accepted?: boolean;
+      };
+      if (!res.ok || response.accepted !== true) {
+        throw new Error(String(res.status));
+      }
       setLastSentKey(estimateKey);
       writeLastSentKey(estimateKey);
       setResendState("sent");
-      trackEvent("generate_lead", { project: effectiveProject, source: "estimate_resend" });
     } catch {
       setResendState("error");
     }
@@ -2398,6 +2436,7 @@ export function EstimateCalculator({
   /* Forget this visitor on this device (shared computers, wrong person). */
   function handleForgetIdentity() {
     clearStoredIdentity();
+    clearInquiryTracking();
     setSavedIdentity(null);
     setGateSubmitted(false);
     setLastSentKey(null);
@@ -2472,7 +2511,12 @@ export function EstimateCalculator({
     setGateLoading(true);
     setGateError(null);
 
+    const tracking = getOrCreateInquiryTracking();
     const payload = {
+      inquiryKey: tracking.inquiryKey,
+      submissionKind: "initial" as const,
+      formStartedAt: gateMountedAtRef.current,
+      website: gateWebsite,
       name: gateName.trim(),
       email: gateEmail.trim(),
       phone: gatePhone.trim(),
@@ -2516,13 +2560,36 @@ export function EstimateCalculator({
         body: JSON.stringify(payload),
       });
 
-      if (res.ok) {
+      const response = (await res.json().catch(() => ({}))) as {
+        accepted?: boolean;
+        inquiryKey?: string;
+        conversionId?: string;
+      };
+
+      if (
+        res.ok &&
+        response.accepted === true &&
+        typeof response.inquiryKey === "string" &&
+        typeof response.conversionId === "string"
+      ) {
         /* Happy path: contact captured, reveal result */
-        trackMetaEvent("Lead", {
-          content_name: effectiveProject,
-          content_category: "estimate_gate",
+        const acceptedTracking = recordInquiryAcceptance({
+          inquiryKey: response.inquiryKey,
+          conversionId: response.conversionId,
         });
-        trackEvent("generate_lead", { project: effectiveProject, source: "estimate_gate" });
+        void trackClaimedLeadConversion({
+          inquiryKey: acceptedTracking.inquiryKey,
+          claimKey: acceptedTracking.claimKey,
+          conversionId: response.conversionId,
+          ga4Params: {
+            project: effectiveProject,
+            source: "estimate_gate",
+          },
+          metaParams: {
+            content_name: effectiveProject,
+            content_category: "estimate_gate",
+          },
+        });
         markGatePassed();
         setSavedIdentity({ name: gateName.trim(), email: gateEmail.trim(), phone: gatePhone.trim() });
         setLastSentKey(estimateKey);
@@ -3593,7 +3660,7 @@ export function EstimateCalculator({
             ))}
           </ul>
           <p className="mt-1.5 text-xs text-inverse-muted/90 leading-relaxed">
-            These are typical figures, not questions we skipped on purpose --
+            These are typical figures, not questions we skipped on purpose;
             your plans or a site visit refine them.
           </p>
         </>
@@ -4881,6 +4948,21 @@ export function EstimateCalculator({
           className={fitViewport ? "grid grid-cols-2 gap-2.5" : "space-y-3.5"}
           noValidate
         >
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute left-[-10000px] top-auto h-px w-px overflow-hidden"
+          >
+            <label htmlFor="gate-website">Website</label>
+            <input
+              id="gate-website"
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={gateWebsite}
+              onChange={(event) => setGateWebsite(event.target.value)}
+            />
+          </div>
           <div>
             <label
               htmlFor="gate-name"

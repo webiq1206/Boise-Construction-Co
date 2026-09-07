@@ -1,6 +1,6 @@
 # Boise Construction Co - Full Reference
 
-> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build, founded 2020. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell. Phone (208) 477-1169.
+> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build, founded 2020. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, Garden City. Phone (208) 477-1169.
 
 ## About
 
@@ -16,7 +16,7 @@ Boise Construction Co is a residential design-build home builder serving the Tre
 
 We build in the following Treasure Valley cities across Ada and Canyon County:
 
-- Ada County: Boise, Meridian, Eagle, Kuna, Star
+- Ada County: Boise, Meridian, Eagle, Kuna, Star, Garden City
 - Canyon County: Nampa, Middleton, Caldwell
 
 Permit paths, impact fees, and inspection sequencing differ between Ada County and Canyon County, and again between incorporated city limits and county jurisdiction. We coordinate submissions, fees, and inspections as part of the design-build contract.
@@ -28,11 +28,12 @@ Permit paths, impact fees, and inspection sequencing differ between Ada County a
 - Build on Your Lot: /services/build-on-your-lot - You already own the land. We handle feasibility, design, permits, and construction from there.
 - Design-Build: /services/design-build - Design and construction under one contract, so the drawings and the budget never drift apart.
 - Home Design & Plans: /services/home-plans-design - Architectural design, engineering, and permit-ready drawings for a home built to your site.
+- Home Additions: /services/home-additions - Useful new space added to the home you already live in, planned around the structure, utilities, and daily life already there.
 - Lot Evaluation & Feasibility: /services/lot-evaluation - Soils, utilities, access, setbacks, and slope reviewed before you commit to a parcel.
 - Shop Homes & Barndominiums: /services/shop-homes-barndominiums - Post-frame and steel-framed homes that pair finished living space with real working shop square footage.
 - Energy-Efficient Homes: /services/energy-efficient-homes - High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.
 
-Each service has a dedicated page per city at /services/{service-slug}/{city-slug} for boise, meridian, eagle, nampa, kuna, star, middleton, caldwell. City service-area hubs live at /areas/{city-slug}.
+Each service has a dedicated page per city at /services/{service-slug}/{city-slug} for boise, meridian, eagle, nampa, kuna, star, middleton, caldwell, garden-city. City service-area hubs live at /areas/{city-slug}.
 
 ## Authoritative guides (https://boiseconstruction.co/guides)
 
@@ -104,4 +105,4 @@ Neighborhood guides:
 
 Boise Construction Co also completes RE-10 and home inspection repairs for real estate agents, buyers and sellers across Boise and the Treasure Valley. An RE-10 is the Idaho inspection response form: after a home inspection the buyer requests specific repairs before closing. We review the RE-10 and inspection report, provide a written scope and pricing, coordinate access, complete the approved work across multiple trades, and supply photo documentation, invoices and receipts for the transaction file. Structural, foundation, mold and asbestos abatement, main electrical service, sewer and septic, HVAC replacement, gas lines and full roof replacement are coordinated to licensed specialists rather than performed in house. We take this work because an inspection repair is a deadline problem rather than a construction problem, and sequencing trades against a date that will not move is the same thing we do on every build. Details: https://boiseconstruction.co/re-10-repairs-boise
 
-Last updated: 2026-08-03. Full sitemap: https://boiseconstruction.co/sitemap.xml
+Last updated: 2026-09-07. Full sitemap: https://boiseconstruction.co/sitemap.xml

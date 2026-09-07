@@ -57,21 +57,24 @@ type EmailSendResult = { data: { id: string } | null; error: { message: string }
 type EmailClient = {
   __noop?: boolean;
   emails: {
-    send: (args: {
-      from: string;
-      to: string | string[];
-      replyTo?: string;
-      subject: string;
-      html: string;
-      text?: string;
-      /**
-       * Files sent with the message. Resend takes `content` as a Buffer or a
-       * base64 string. Used so an RE-10 reaches the team as an attachment
-       * rather than as a link into an upload store that does not outlive a
-       * deploy.
-       */
-      attachments?: { filename: string; content: Buffer | string }[];
-    }) => Promise<EmailSendResult>;
+    send: (
+      args: {
+        from: string;
+        to: string | string[];
+        replyTo?: string;
+        subject: string;
+        html: string;
+        text?: string;
+        /**
+         * Files sent with the message. Resend takes `content` as a Buffer or a
+         * base64 string. Used so an RE-10 reaches the team as an attachment
+         * rather than as a link into an upload store that does not outlive a
+         * deploy.
+         */
+        attachments?: { filename: string; content: Buffer | string }[];
+      },
+      options?: { idempotencyKey?: string },
+    ) => Promise<EmailSendResult>;
   };
 };
 
