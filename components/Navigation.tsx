@@ -207,31 +207,60 @@ export function Navigation() {
                     })}
                   </nav>
 
-                  {/* Bottom contact row */}
-                  <div className="shrink-0 border-t border-border/40 px-6 py-6 space-y-3 pb-safe">
-                    <div className="space-y-1">
+                  {/* Bottom contact row: three equal actions, then the CTA. WAS a phone
+
+                      number with "Save to contacts" indented under it and a "Text us
+
+                      instead" line, which read as an afterthought. */}
+
+                  <div className="shrink-0 border-t border-border/40 px-6 py-5 pb-safe">
+
+                    <div className="grid grid-cols-3 gap-2">
+
                       <a
+
                         href={SITE_CONFIG.phoneHref}
-                        className="flex items-center gap-3 text-base font-normal text-foreground"
+
+                        className="flex min-h-[56px] flex-col items-center justify-center gap-1 border border-border/60 text-[11px] font-bold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-accent-legible hover:text-accent-legible"
+
                         data-testid="link-phone-mobile-menu"
+
                       >
-                        <span className="relative flex h-2.5 w-2.5">
-                          <span className="pulse-accent absolute inline-flex h-full w-full rounded-full bg-accent-legible opacity-75" />
-                          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-legible" />
-                        </span>
-                        {SITE_CONFIG.phone}
+
+                        <Phone className="h-4 w-4" aria-hidden="true" />
+
+                        Call
+
                       </a>
-                      <SaveContactLink className="pl-[22px] text-sm text-muted-foreground hover:text-foreground transition-colors">
-                        Save to contacts
+
+                      <a
+
+                        href={SITE_CONFIG.phoneSmsHref}
+
+                        className="flex min-h-[56px] flex-col items-center justify-center gap-1 border border-border/60 text-[11px] font-bold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-accent-legible hover:text-accent-legible"
+
+                        data-testid="link-text-mobile-menu"
+
+                      >
+
+                        <MessageSquare className="h-4 w-4" aria-hidden="true" />
+
+                        Text
+
+                      </a>
+
+                      <SaveContactLink className="flex min-h-[56px] flex-col items-center justify-center gap-1 border border-border/60 text-[11px] font-bold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-accent-legible hover:text-accent-legible">
+
+                        <Contact className="h-4 w-4" aria-hidden="true" />
+
+                        Save
+
                       </SaveContactLink>
+
                     </div>
-                    <a
-                      href={SITE_CONFIG.phoneSmsHref}
-                      className="flex items-center gap-3 text-base font-normal text-muted-foreground hover:text-foreground transition-colors"
-                      data-testid="link-text-mobile-menu"
-                    >
-                      Text us instead
-                    </a>
+
+                    <p className="mt-3 text-center text-sm text-muted-foreground">{SITE_CONFIG.phone}</p>
+
                     <NavEstimateButton
                       variant="brand"
                       className="w-full"
