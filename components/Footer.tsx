@@ -55,7 +55,7 @@ export function Footer() {
     <footer className="bg-inverse text-inverse-foreground">
       <div className="container px-4 py-16 md:py-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-10 mb-12 lg:gap-0 lg:divide-x lg:divide-inverse-foreground/10 [&>*]:lg:px-6 [&>*:first-child]:lg:pl-0 [&>*:last-child]:lg:pr-0">
-          <div className="lg:col-span-2">
+          <div className="sm:col-span-2 lg:col-span-2">
             <div className="mb-5">
               {/* Wordmark only - the seal reads as clutter at footer scale, so
                   the brand column leads with the primary mark alone. Intrinsic

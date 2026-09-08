@@ -298,7 +298,7 @@ export default function ContactPage() {
               description="Call, email, or visit - we respond within one business day and never use high-pressure sales tactics."
               className="max-w-3xl"
             />
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="ed-grid-balance grid sm:grid-cols-2 gap-4">
               <Reveal className="sm:col-span-2">
                 <ContactChannel
                   icon={<Phone className="h-5 w-5" strokeWidth={1.5} />}
@@ -502,7 +502,7 @@ export default function ContactPage() {
               description={`We serve homeowners in ${TREASURE_VALLEY_CITIES}, and surrounding communities.`}
               className="max-w-3xl"
             />
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid sm:grid-cols-3 gap-4">
               {CITIES.map((city, i) => (
                 <Reveal key={city.slug} delay={Math.min(i, 7) * 50}>
                   <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />

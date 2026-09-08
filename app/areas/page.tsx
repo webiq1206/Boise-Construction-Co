@@ -76,11 +76,11 @@ export default function AreasHubPage() {
           <div className="ed-shell">
             <SectionHeader
               eyebrow="Treasure Valley"
-              title={<>Eight cities, one design-build team</>}
+              title={<>Nine cities, one design-build team</>}
               description="Custom homes, semi-custom homes, and builds on your own lot across Ada and Canyon County."
               align="left"
             />
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-5 sm:grid-cols-3">
               {CITIES.map((city, i) => (
                 <Reveal key={city.slug} delay={i * 40}>
                   <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />

@@ -2781,7 +2781,7 @@ export function EstimateCalculator({
         how the design starts and where it goes.
       </p>
       <div
-        className="grid grid-cols-1 sm:grid-cols-2 gap-2.5"
+        className="ed-grid-balance grid grid-cols-1 sm:grid-cols-2 gap-2.5"
         role="tablist"
         aria-label="Project type"
       >

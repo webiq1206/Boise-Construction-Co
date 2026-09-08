@@ -172,7 +172,7 @@ export default function BlogCategoryHubPage({
             {posts.length === 1 ? "1 article in this topic" : `${posts.length} articles in this topic`}
           </h2>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="ed-cards-3 gap-6">
             {posts.map((post) => (
               <BlogCard key={post.slug} post={post} formatDate={formatDate} />
             ))}
