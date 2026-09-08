@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { buildCanonical } from "@/lib/page-metadata";
 import { generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/schema";
 import { SITE_CONFIG } from "@/shared/siteConfig";
+import { fitDescription } from '@/lib/page-metadata';
 
 const EstimateCalculator = dynamic(
   () =>
@@ -20,7 +21,7 @@ const EstimateCalculator = dynamic(
 // 34 chars, so the branded title below lands at 58 with the 24-char suffix.
 const TITLE = "Home Build Cost Estimator, Idaho";
 const DESCRIPTION =
-  "Get an instant cost range for building a new home in Boise, Meridian, Eagle, Nampa, and the Treasure Valley. Covers size, finish level, and site costs. Free, no obligation.";
+  fitDescription("Get an instant cost range for building a new home in Boise, Meridian, Eagle, Nampa, and the Treasure Valley. Covers size, finish level, and site costs. Free, no obligation.");
 
 export const metadata: Metadata = {
   title: { absolute: `${TITLE} | ${SITE_CONFIG.name}` },

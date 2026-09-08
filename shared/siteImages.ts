@@ -18,7 +18,9 @@ export const SITE_IMAGES = {
   /** Full-bleed brand statement band. */
   statementBand: "/images/statement-great-room.webp",
   /** About/contact split panels and about hero. */
-  leadership: "/images/leadership-team.webp",
+  // Not the shared crew photo: that one shows Boise Remodeling Co shirts, which
+  // is the wrong company on this site. A real Construction Co team photo goes here.
+  leadership: "/images/framing-in-progress.webp",
   /** Consultation section background (homepage). */
   consultBg: "/images/consult-lifestyle.webp",
   /** Budget section subtle texture - island detail crop. */

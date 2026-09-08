@@ -14,7 +14,6 @@ import { buildPageMetadata } from '@/lib/page-metadata';
 import {
   generateBreadcrumbSchema,
   generateOrganizationSchema,
-  generateSpeakableSchema,
   generateWebPageSchema,
 } from '@/lib/schema';
 import { CITIES, TREASURE_VALLEY_CITIES } from '@/shared/contentData';
@@ -94,12 +93,12 @@ export default function AboutPage() {
       description:
         'Treasure Valley design-build home builder. Bonded, insured, and committed to clear communication.',
       url: '/about',
+      speakable: true,
     }),
     generateBreadcrumbSchema([
       { name: 'Home', url: '/' },
       { name: 'About', url: '/about' },
     ]),
-    generateSpeakableSchema({ path: '/about', name: `About ${SITE_CONFIG.name}` }),
   ];
 
   return (
@@ -110,7 +109,7 @@ export default function AboutPage() {
         <section className="relative min-h-[540px] md:min-h-[78vh] flex items-end overflow-hidden bg-inverse">
           <Image
             src={SITE_IMAGES.leadership}
-            alt={`${SITE_CONFIG.name} design-build team reviewing plans on a build site`}
+            alt={`Framing in progress on a ${SITE_CONFIG.name} build site in the Treasure Valley`}
             fill
             className="object-cover opacity-[0.82] img-brand-grade"
             sizes="100vw"

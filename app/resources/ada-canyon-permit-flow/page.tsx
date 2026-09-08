@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Download } from 'lucide-react';
-import { buildPageMetadata } from '@/lib/page-metadata';
+import { buildPageMetadata, fitDescription } from '@/lib/page-metadata';
 import { Section } from '@/components/marketing/Section';
 import { PermitFlowGraphic } from './PermitFlowGraphic';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
@@ -14,7 +14,7 @@ import {
 } from '@/lib/schema';
 
 const PERMIT_FLOW_DESCRIPTION =
-  'Visual guide to new home construction permits in Ada and Canyon County - jurisdiction, plan review, and the inspection sequence for Treasure Valley builds.';
+  fitDescription('Visual guide to new home construction permits in Ada and Canyon County - jurisdiction, plan review, and the inspection sequence for Treasure Valley builds.');
 
 export const metadata: Metadata = buildPageMetadata({
   kind: 'blog',

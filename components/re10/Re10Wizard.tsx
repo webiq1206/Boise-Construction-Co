@@ -1,5 +1,8 @@
 "use client";
 
+import { EstimatorRecovery } from "@/components/estimate/recovery/EstimatorRecovery";
+import { markEstimatorCompleted } from "@/lib/estimatorSession";
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Upload,
@@ -657,6 +660,7 @@ export function Re10Wizard() {
       );
       if (estimate.emailed) trackEvent(RE10_EVENTS.estimateEmailed);
 
+      markEstimatorCompleted("re10");
       goTo("result");
     } catch {
       setError("Something went wrong. Try again.");
@@ -756,6 +760,7 @@ export function Re10Wizard() {
     }
     if (returnTo === "result" && result) {
       setReturnTo(null);
+      markEstimatorCompleted("re10");
       goTo("result");
       return;
     }
@@ -834,6 +839,16 @@ export function Re10Wizard() {
 
   return (
     <Section id="re10-estimator" variant="inverse" divider>
+      <EstimatorRecovery
+        flow="re10"
+        currentStep={step}
+        currentStepIndex={Math.max(0, STEP_META.findIndex((s) => s.id === step))}
+        totalSteps={STEP_META.length}
+        lastCompletedStep={STEP_META.findIndex((s) => s.id === step) > 0 ? STEP_META[STEP_META.findIndex((s) => s.id === step) - 1].id : undefined}
+        selections={{ role, files: files.length, repairs: repairs.length }}
+        engaged={STEP_META.findIndex((s) => s.id === step) > 0 || files.length > 0}
+        submitted={step === "result"}
+      />
       {/* scroll-mt clears the sticky header so a step heading never lands
           behind the navigation. The regex-guarded scroll-mt must sit on the
           element carrying ref={topRef}. */}

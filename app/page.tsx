@@ -22,6 +22,7 @@ import { HomePageSchema } from "@/components/seo/HomePageSchema";
 import { buildCanonical } from "@/lib/page-metadata";
 import { SITE_IMAGES } from "@/shared/siteImages";
 import { SITE_CONFIG } from "@/shared/siteConfig";
+import { fitDescription } from '@/lib/page-metadata';
 
 const EstimateCalculator = dynamic(
   () =>
@@ -43,7 +44,7 @@ export const metadata: Metadata = {
   // than the brand, which the suffix carries anyway.
   title: { absolute: `Custom Home Builder in Boise, ID | ${SITE_CONFIG.name}` },
   description:
-    "Design-build home builder for Boise, Meridian, Eagle, Nampa & the Treasure Valley. Custom and semi-custom homes, or build on your own lot, with a line-item budget before we break ground.",
+    fitDescription("Design-build home builder for Boise, Meridian, Eagle, Nampa & the Treasure Valley. Custom and semi-custom homes, or build on your own lot, with a line-item budget before we break ground."),
   alternates: {
     canonical: buildCanonical("/"),
     // Setting `alternates` replaces the root declaration, so the feed link has
@@ -131,12 +132,12 @@ export default function HomePage() {
             fill
             loading="lazy"
             sizes="100vw"
-            className="object-cover opacity-[0.42] img-brand-grade"
+            className="object-cover opacity-[0.52] img-brand-grade"
           />
           {/* Directional scrims: solid behind the left-column copy, opening up
               toward the right where the form card carries its own surface. */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/75 to-background/40" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-transparent to-background" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/68 to-background/32" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-transparent to-background" />
         </div>
         {/* The ask. Full measure, heading at h2 scale, the form kept in its
             card because a form needs a defined field to sit in - this is one of

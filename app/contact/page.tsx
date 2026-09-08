@@ -21,7 +21,6 @@ import {
   generateBreadcrumbSchema,
   generateFAQSchema,
   generateLocalBusinessSchema,
-  generateSpeakableSchema,
   generateWebPageSchema,
 } from '@/lib/schema';
 import { EmailLink } from '@/components/EmailLink';
@@ -204,13 +203,13 @@ export default function ContactPage() {
       description:
         'Schedule a free planning consultation or call our Treasure Valley design-build home building team.',
       url: '/contact',
+      speakable: true,
     }),
     generateBreadcrumbSchema([
       { name: 'Home', url: '/' },
       { name: 'Contact', url: '/contact' },
     ]),
     generateFAQSchema(CONTACT_FAQS),
-    generateSpeakableSchema({ path: '/contact', name: `Contact ${SITE_CONFIG.name}` }),
   ];
 
   return (
@@ -368,7 +367,7 @@ export default function ContactPage() {
             <div className="relative min-h-[260px] md:min-h-[520px] overflow-hidden bg-inverse order-2 md:order-1">
               <Image
                 src={SITE_IMAGES.leadership}
-                alt={`${SITE_CONFIG.name} team reviewing plans at a build site`}
+                alt={`Framing in progress on a ${SITE_CONFIG.name} build site`}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover img-brand-grade"

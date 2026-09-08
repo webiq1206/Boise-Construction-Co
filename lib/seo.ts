@@ -511,7 +511,7 @@ export const BUSINESS_INFO = {
     sunday: 'Closed',
   },
   founded: '2020',
-  serviceArea: ['Boise', 'Meridian', 'Eagle', 'Nampa', 'Kuna', 'Star', 'Middleton', 'Caldwell'],
+  serviceArea: ['Boise', 'Meridian', 'Eagle', 'Nampa', 'Kuna', 'Star', 'Middleton', 'Caldwell', 'Garden City'],
   serviceRadius: '35 miles',
   licenses: ['License details available upon request'],
   certifications: ['Design-Build Home Building', 'Bonded & Insured'],

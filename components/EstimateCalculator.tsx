@@ -21,6 +21,8 @@ import {
 } from "@/components/estimate/wizard";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/marketing";
+import { EstimatorRecovery } from "@/components/estimate/recovery/EstimatorRecovery";
+import { markEstimatorCompleted } from "@/lib/estimatorSession";
 import { AddressAutocomplete } from "@/components/AddressAutocomplete";
 import type { PropertyProfile } from "@/shared/propertyProfile";
 import {
@@ -1989,6 +1991,21 @@ export function EstimateCalculator({
     "review",
     ...(gateSubmitted ? [] : ["contact"]),
   ];
+
+  /* Partial-completion tracking and the leave-prompt (docs/estimator-recovery.md). */
+  const recoveryIndex = Math.max(0, wizSteps.indexOf(wizStep));
+  const recovery = (
+    <EstimatorRecovery
+      flow="estimate"
+      currentStep={wizStep}
+      currentStepIndex={recoveryIndex}
+      totalSteps={wizSteps.length}
+      lastCompletedStep={recoveryIndex > 0 ? wizSteps[recoveryIndex - 1] : undefined}
+      selections={{ project: activeProject, sqft, finish, land_ownership: landOwnership, stage_chosen: chosen.stage }}
+      engaged={recoveryIndex > 0 || chosen.stage}
+      submitted={gateSubmitted}
+    />
+  );
   const wizStepMeta: WizardStepMeta[] = wizSteps.map((id) => ({
     id,
     label: WIZ_LABELS[id] ?? id,
@@ -2573,6 +2590,7 @@ export function EstimateCalculator({
         typeof response.conversionId === "string"
       ) {
         /* Happy path: contact captured, reveal result */
+        markEstimatorCompleted("estimate");
         const acceptedTracking = recordInquiryAcceptance({
           inquiryKey: response.inquiryKey,
           conversionId: response.conversionId,
@@ -5291,6 +5309,7 @@ export function EstimateCalculator({
           }
         >
           <div ref={wizardTopRef} data-hydrated={hydrated || undefined}>{resultPanel}</div>
+          {recovery}
         </AppFrame>
       );
     }
@@ -5317,6 +5336,7 @@ export function EstimateCalculator({
         <div ref={wizardTopRef} data-hydrated={hydrated || undefined}>
           <div key={wizStep} className="brc-wizard-step-enter">{stepBody}</div>
         </div>
+        {recovery}
       </AppFrame>
     );
   }
@@ -5383,6 +5403,7 @@ export function EstimateCalculator({
           onCta={handleBookVisit}
         />
       )}
+      {recovery}
     </>
   );
 }

@@ -21,6 +21,7 @@ import { buildCanonical, FEED_ALTERNATES } from '@/lib/page-metadata';
 import { getBaseUrl } from '@/lib/seo';
 import { generateBreadcrumbSchema } from '@/lib/schema';
 import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
+import { fitDescription } from '@/lib/page-metadata';
 
 /*
  * 55 characters once the layout appends " | Boise Construction Co", down from
@@ -29,7 +30,7 @@ import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
  */
 const TITLE = 'Home Building | Treasure Valley';
 const DESCRIPTION =
-  'Design-build home building in Boise, Meridian, Eagle, Nampa and the Treasure Valley. Custom homes, semi-custom homes, builds on your own lot, and permit-ready plans under one accountable team.';
+  fitDescription('Design-build home building in Boise, Meridian, Eagle, Nampa and the Treasure Valley. Custom homes, semi-custom homes, builds on your own lot, and permit-ready plans under one accountable team.');
 
 export const metadata: Metadata = {
   title: { absolute: `${TITLE} | ${SITE_CONFIG.name}` },

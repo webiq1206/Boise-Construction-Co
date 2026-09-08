@@ -288,6 +288,7 @@ export function Footer() {
             <div className="mt-6 pt-6 border-t border-inverse-foreground/10">
               <a
                 href="/api/login"
+                rel="nofollow"
                 className="text-xs text-inverse-muted hover:text-inverse-foreground transition-colors"
               >
                 Subcontractor Login
