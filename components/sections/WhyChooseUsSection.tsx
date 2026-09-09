@@ -66,7 +66,7 @@ export function WhyChooseUsSection({ limit }: WhyChooseUsSectionProps) {
                 <div className="relative aspect-[4/3] overflow-hidden" style={{ border: "1px solid var(--ed-line)" }}>
                   <Image
                     src={SITE_IMAGES.processInProgress}
-                    alt="New home under construction in the Treasure Valley with the Boise Construction Co team on site"
+                    alt="Representative image of a Boise Construction Co worker checking interior framing"
                     fill
                     sizes="(min-width: 1024px) 40vw, 100vw"
                     className="object-cover img-brand-grade"

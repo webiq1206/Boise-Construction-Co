@@ -109,7 +109,7 @@ export default function AboutPage() {
         <section className="relative min-h-[540px] md:min-h-[78vh] flex items-end overflow-hidden bg-inverse">
           <Image
             src={SITE_IMAGES.leadership}
-            alt={`Framing in progress on a ${SITE_CONFIG.name} build site in the Treasure Valley`}
+            alt={`Representative framing work with a ${SITE_CONFIG.name} branded worker`}
             fill
             className="object-cover opacity-[0.82] img-brand-grade"
             sizes="100vw"

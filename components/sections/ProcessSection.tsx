@@ -24,7 +24,7 @@ export function ProcessSection() {
         <div className="ed-panel-media">
           <Image
             src={SITE_IMAGES.processInProgress}
-            alt="New home under construction in the Treasure Valley with the Boise Construction Co team on site"
+            alt="Representative image of a Boise Construction Co worker checking interior framing"
             fill
             loading="lazy"
             sizes="(max-width: 820px) 100vw, 43vw"

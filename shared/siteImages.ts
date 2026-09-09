@@ -14,13 +14,13 @@ export const SITE_IMAGES = {
    *  reinforcing that the budget is spent on craftsmanship, not overhead. */
   valueCraft: "/images/value-craftsmanship-cabinetry.webp",
   /** A house being framed - process sections. */
-  processInProgress: "/images/framing-in-progress.webp",
+  processInProgress: "/images/framing-in-progress-branded.webp",
   /** Full-bleed brand statement band. */
   statementBand: "/images/statement-great-room.webp",
   /** About/contact split panels and about hero. */
   // Not the shared crew photo: that one shows Boise Remodeling Co shirts, which
   // is the wrong company on this site. A real Construction Co team photo goes here.
-  leadership: "/images/framing-in-progress.webp",
+  leadership: "/images/framing-in-progress-branded.webp",
   /** Consultation section background (homepage). */
   consultBg: "/images/consult-lifestyle.webp",
   /** Budget section subtle texture - island detail crop. */
