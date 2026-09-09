@@ -79,11 +79,11 @@ export function WizardActionBar({
       style={pinned && keyboardInset > 0 ? { transform: `translateY(-${keyboardInset}px)` } : undefined}
       className={cn(
         pinned
-          ? "sticky bottom-0 z-30 -mx-4 mt-5 sm:mt-8 border-t px-4 pb-safe pt-3 backdrop-blur-md transition-transform duration-150"
+          ? "sticky bottom-0 z-30 -mx-4 mt-5 sm:mt-8 border-t px-4 pb-safe pt-3 shadow-[0_-4px_20px_rgba(0,0,0,0.18)] transition-transform duration-150"
           : "pt-1",
         pinned && (inverse
-          ? "border-inverse-foreground/15 bg-[hsl(var(--inverse))]/95"
-          : "border-border bg-background/95"),
+          ? "border-inverse-foreground/15 bg-inverse"
+          : "border-border bg-background"),
         className,
       )}
     >

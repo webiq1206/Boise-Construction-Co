@@ -44,7 +44,7 @@ export function HeroSection() {
       <section className="relative min-h-[85vh] md:min-h-screen flex items-center overflow-hidden bg-inverse">
         <Image
           src={SITE_IMAGES.hero}
-          alt="Great room in a newly built custom home in the Treasure Valley, Idaho"
+          alt="Exterior of a custom home with timber entry details in the Treasure Valley, Idaho"
           fill
           priority
           sizes="(max-width: 768px) 100vw, 1400px"
