@@ -176,7 +176,6 @@ export function Navigation() {
                         variant="ghost"
                         size="icon"
                         className="h-11 w-11"
-                        className="h-11 w-11"
                         aria-label="Close navigation menu"
                         data-testid="button-mobile-menu-close"
                       >
