@@ -171,7 +171,7 @@ export function AssistantWidget() {
           }}
           aria-label="Chat with our estimating assistant"
           data-testid="button-assistant-open"
-          className="brc-assistant-launcher fixed bottom-4 right-4 z-40 flex h-13 w-13 min-h-11 min-w-11 items-center justify-center rounded-full bg-accent-legible text-background shadow-lg transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-legible md:bottom-6 md:right-6"
+          className="brc-assistant-launcher fixed bottom-[calc(96px+env(safe-area-inset-bottom))] right-4 z-40 flex h-13 w-13 min-h-11 min-w-11 items-center justify-center rounded-full bg-accent-legible text-background shadow-lg transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-legible lg:bottom-6 lg:right-6"
           style={{ height: 52, width: 52 }}
         >
           <MessageCircle className="h-6 w-6" strokeWidth={1.75} />
@@ -184,7 +184,7 @@ export function AssistantWidget() {
           role="dialog"
           aria-label="Estimating assistant chat"
           data-testid="panel-assistant"
-          className="fixed inset-x-0 bottom-0 z-50 flex h-[85dvh] flex-col overflow-hidden rounded-t-md border border-card-border bg-background shadow-2xl sm:inset-x-auto sm:bottom-5 sm:right-5 sm:h-[560px] sm:max-h-[calc(100dvh-6rem)] sm:w-[380px] sm:rounded-md"
+          className="fixed inset-x-0 bottom-0 z-[150] flex h-[85dvh] flex-col overflow-hidden rounded-t-md border border-card-border bg-background shadow-2xl sm:inset-x-auto sm:bottom-5 sm:right-5 sm:h-[560px] sm:max-h-[calc(100dvh-6rem)] sm:w-[380px] sm:rounded-md"
         >
           {/* Header */}
           <div className="flex items-center justify-between gap-3 border-b border-card-border bg-card px-4 py-3">
