@@ -47,7 +47,7 @@ export default function AreasHubPage() {
       <div className="flex flex-col pb-20 md:pb-0">
         <PageHeroBand
           imageSrc={SITE_IMAGES.hero}
-          imageAlt="Newly built Treasure Valley home with open kitchen and living space"
+          imageAlt="White board-and-batten home exterior with a covered front porch"
         >
           <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Service Areas" }]} />
           <p className="ed-eyebrow mt-8" style={{ color: "rgb(255 255 255 / 0.72)" }}>Treasure Valley</p>

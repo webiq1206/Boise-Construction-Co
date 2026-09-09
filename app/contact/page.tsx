@@ -219,7 +219,7 @@ export default function ContactPage() {
         <section className="relative min-h-[520px] md:min-h-[72vh] flex items-end overflow-hidden bg-inverse">
           <Image
             src={SITE_IMAGES.hero}
-            alt="Newly built modern home interior in Boise, Idaho"
+            alt="White board-and-batten home exterior with a covered front porch"
             fill
             className="object-cover opacity-[0.82] img-brand-grade"
             sizes="100vw"
@@ -391,7 +391,7 @@ export default function ContactPage() {
             <div className="relative min-h-[260px] md:min-h-[520px] overflow-hidden bg-inverse order-2 md:order-1">
               <Image
                 src={SITE_IMAGES.leadership}
-                alt={`Framing in progress on a ${SITE_CONFIG.name} build site`}
+                alt={`Representative framing work with a ${SITE_CONFIG.name} branded worker`}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover img-brand-grade"

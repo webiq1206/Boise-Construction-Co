@@ -96,7 +96,7 @@ export default function Re10RepairsPage() {
       {/* ------------------------------------------------------------ hero */}
       <PageHeroBand
         imageSrc={SITE_IMAGES.processInProgress}
-        imageAlt={`${SITE_CONFIG.name} carpenter completing inspection repairs in a Treasure Valley home before closing`}
+        imageAlt={`Representative framing work with a ${SITE_CONFIG.name} branded worker`}
         scrim={0.86}
       >
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "RE-10 Repairs" }]} />
