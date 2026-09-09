@@ -10,6 +10,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useFormInView } from "@/hooks/use-form-in-view";
 import Link from "next/link";
 import { MessageCircle, Send, X } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
@@ -51,6 +52,7 @@ function renderMessageText(text: string) {
 
 export function AssistantWidget() {
   const pathname = usePathname();
+  const formInView = useFormInView(pathname);
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
   const [input, setInput] = useState("");
@@ -157,7 +159,7 @@ export function AssistantWidget() {
   return (
     <>
       {/* Launcher */}
-      {!open && (
+      {!open && !formInView && (
         <button
           type="button"
           onClick={() => {
@@ -195,7 +197,7 @@ export function AssistantWidget() {
               onClick={close}
               aria-label="Close chat"
               data-testid="button-assistant-close"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-legible"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-legible"
             >
               <X className="h-5 w-5" strokeWidth={1.75} />
             </button>
