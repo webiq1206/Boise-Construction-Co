@@ -13,6 +13,7 @@ interface BeforeAfterSliderProps {
   caption?: React.ReactNode;
   className?: string;
   aspectClass?: string;
+  sizes?: string;
 }
 
 export function BeforeAfterSlider({
@@ -23,9 +24,12 @@ export function BeforeAfterSlider({
   caption,
   className = "",
   aspectClass = "aspect-[4/3]",
+  sizes = "(max-width: 768px) 100vw, 1200px",
 }: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
+  const activePointerRef = useRef<number | null>(null);
+  const handleRef = useRef<HTMLButtonElement>(null);
   // Touch gesture arbitration: don't hijack a vertical page scroll. We only
   // start scrubbing once the finger moves clearly horizontally.
   const pendingRef = useRef(false);
@@ -44,6 +48,7 @@ export function BeforeAfterSlider({
     const el = containerRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
+    if (rect.width <= 0) return;
     const next = ((clientX - rect.left) / rect.width) * 100;
     setPos(Math.max(0, Math.min(100, next)));
   };
@@ -53,7 +58,10 @@ export function BeforeAfterSlider({
       ref={containerRef}
       className={`relative w-full overflow-hidden select-none touch-pan-y cursor-ew-resize ${aspectClass} ${className}`}
       onPointerDown={(e) => {
+        if (!e.isPrimary || e.button !== 0 || activePointerRef.current !== null) return;
+        activePointerRef.current = e.pointerId;
         trackInteraction();
+        handleRef.current?.focus({ preventScroll: true });
         movedRef.current = false;
         if (e.pointerType === "mouse") {
           // Mouse has no scroll-gesture conflict: capture and jump immediately.
@@ -68,6 +76,7 @@ export function BeforeAfterSlider({
         }
       }}
       onPointerMove={(e) => {
+        if (e.pointerId !== activePointerRef.current) return;
         if (draggingRef.current) {
           updateFromClientX(e.clientX);
           return;
@@ -89,10 +98,12 @@ export function BeforeAfterSlider({
         }
       }}
       onPointerUp={(e) => {
+        if (e.pointerId !== activePointerRef.current) return;
         // A tap (no drag) still positions the divider where the user tapped.
         if (pendingRef.current && !movedRef.current) {
           updateFromClientX(e.clientX);
         }
+        activePointerRef.current = null;
         draggingRef.current = false;
         pendingRef.current = false;
         if (e.currentTarget.hasPointerCapture(e.pointerId)) {
@@ -100,10 +111,12 @@ export function BeforeAfterSlider({
         }
       }}
       onPointerCancel={() => {
+        activePointerRef.current = null;
         draggingRef.current = false;
         pendingRef.current = false;
       }}
       onLostPointerCapture={() => {
+        activePointerRef.current = null;
         draggingRef.current = false;
         pendingRef.current = false;
       }}
@@ -119,7 +132,7 @@ export function BeforeAfterSlider({
         src={afterSrc}
         alt={afterAlt}
         fill
-        sizes="(max-width: 768px) 100vw, 1200px"
+        sizes={sizes}
         quality={70}
         className="object-cover pointer-events-none"
       />
@@ -135,17 +148,17 @@ export function BeforeAfterSlider({
           alt={beforeAlt}
           fill
           loading="lazy"
-          sizes="(max-width: 768px) 100vw, 1200px"
+          sizes={sizes}
           quality={70}
           className="object-cover"
         />
       </div>
 
       {/* Corner labels */}
-      <div className="absolute top-3 left-3 md:top-4 md:left-4 px-2.5 py-1 rounded-sm bg-inverse/80 text-inverse-foreground text-xs tracking-[0.12em] uppercase font-normal pointer-events-none">
+      <div className="absolute top-3 left-3 md:top-4 md:left-4 px-2.5 py-1 rounded-sm bg-inverse text-inverse-foreground text-caption tracking-[0.12em] uppercase font-normal pointer-events-none">
         Before
       </div>
-      <div className="absolute top-3 right-3 md:top-4 md:right-4 px-2.5 py-1 rounded-sm bg-inverse/80 text-inverse-foreground text-xs tracking-[0.12em] uppercase font-normal pointer-events-none">
+      <div className="absolute top-3 right-3 md:top-4 md:right-4 px-2.5 py-1 rounded-sm bg-inverse text-inverse-foreground text-caption tracking-[0.12em] uppercase font-normal pointer-events-none">
         After
       </div>
 
@@ -153,8 +166,10 @@ export function BeforeAfterSlider({
       <div
         className="absolute inset-y-0 z-10 w-px bg-inverse-foreground/90 pointer-events-none"
         style={{ left: `${pos}%`, transform: "translateX(-0.5px)" }}
-      >
+      />
         <button
+          ref={handleRef}
+          style={{ left: `clamp(24px, ${pos}%, calc(100% - 24px))` }}
           type="button"
           role="slider"
           aria-label="Compare before and after"
@@ -163,8 +178,9 @@ export function BeforeAfterSlider({
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(pos)}
+          aria-valuetext={`${Math.round(pos)}% before image visible`}
           onKeyDown={(e) => {
-            trackInteraction();
+            if (["ArrowLeft", "ArrowDown", "ArrowRight", "ArrowUp", "Home", "End"].includes(e.key)) trackInteraction();
             if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
               e.preventDefault();
               setPos((p) => Math.max(0, p - 4));
@@ -179,12 +195,11 @@ export function BeforeAfterSlider({
               setPos(100);
             }
           }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-inverse-foreground text-inverse shadow-md pointer-events-auto cursor-ew-resize focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="absolute z-20 top-1/2 -translate-x-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-inverse-foreground text-inverse shadow-md pointer-events-auto cursor-ew-resize focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           data-testid="handle-before-after"
         >
           <MoveHorizontal className="h-4 w-4" />
         </button>
-      </div>
 
       {/* Caption */}
       {caption && (
