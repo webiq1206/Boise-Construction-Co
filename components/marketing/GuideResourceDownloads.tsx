@@ -19,7 +19,7 @@ export function GuideResourceDownloads({ resources }: GuideResourceDownloadsProp
       </p>
       <h2 className="text-base font-normal text-foreground mb-2">Downloads & visual guides</h2>
       <p className="text-sm text-muted-foreground mb-4">
-        Print these worksheets or save the PDFs for your remodel planning folder.
+        Print these worksheets or save the PDFs for your home-building planning folder.
       </p>
       <ul className="space-y-3">
         {resources.map((resource) => (
