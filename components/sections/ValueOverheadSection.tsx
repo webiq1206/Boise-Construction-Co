@@ -71,14 +71,14 @@ export function ValueOverheadSection() {
                 <Image
                   src={SITE_IMAGES.valueCraft}
                   loading="lazy"
-                  alt="Boise Construction Co carpenter leveling custom white oak cabinetry above a quartz counter in a new Treasure Valley home"
+                  alt="Representative construction detail showing framing, plumbing, electrical wiring and ductwork before drywall"
                   fill
                   sizes="(max-width: 1024px) 100vw, 40vw"
                   className="object-cover img-brand-grade"
                 />
               </div>
               <figcaption className="ed-small mt-4 border-t pt-4" style={{ borderColor: "var(--ed-line)" }}>
-                On site, Treasure Valley
+                Construction details · Representative imagery
               </figcaption>
             </figure>
           </Reveal>
