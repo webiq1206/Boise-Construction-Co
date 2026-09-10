@@ -154,7 +154,7 @@ export function AssistantWidget() {
     }
   }, [input, sending, messages, pathname]);
 
-  if (pathname && EXCLUDED_PREFIXES.some((p) => pathname.startsWith(p))) return null;
+  if (pathname && (pathname.startsWith("/estimate") || EXCLUDED_PREFIXES.some((p) => pathname.startsWith(p)))) return null;
 
   return (
     <>
