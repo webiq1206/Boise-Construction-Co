@@ -4242,7 +4242,7 @@ export function EstimateCalculator({
               change a selection above. */}
           {budgetAssessment && (
             <div className="border-t border-inverse-foreground/10 pt-4">
-              <div className="rounded-sm bg-inverse-foreground/[0.06] border border-inverse-foreground/12 p-4" data-testid="budget-assessment">
+              <div className="rounded-sm bg-inverse-foreground/[0.06] border border-inverse-foreground/[0.12] p-4" data-testid="budget-assessment">
                 <p className="text-sm text-inverse-foreground leading-relaxed">
                   {budgetAssessment.headline}
                 </p>
@@ -4732,7 +4732,7 @@ export function EstimateCalculator({
         A quick check before we build your estimate. Tap Edit to change
         anything - every other answer stays exactly as you left it.
       </p>
-      <div className={fitViewport ? "border-t border-inverse-foreground/12" : "space-y-3"}>
+      <div className={fitViewport ? "border-t border-inverse-foreground/[0.12]" : "space-y-3"}>
         <ReviewSection
           tone="inverse"
           compact={fitViewport}

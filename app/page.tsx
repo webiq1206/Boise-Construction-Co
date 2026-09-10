@@ -136,7 +136,7 @@ export default function HomePage() {
           />
           {/* Directional scrims: solid behind the left-column copy, opening up
               toward the right where the form card carries its own surface. */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/68 to-background/32" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/[0.68] to-background/[0.32]" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-transparent to-background" />
         </div>
         {/* The ask. Full measure, heading at h2 scale, the form kept in its
