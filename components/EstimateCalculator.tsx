@@ -35,7 +35,7 @@ import {
 import { resolveQuotedRange, resolveInternalEstimate } from "@/shared/costs/resolve";
 import { assessBudget, budgetGuidance, BUDGET_BASIS_NOTE } from "@/shared/costs/budget";
 import type { QualityLevel, ScopeSelections } from "@/shared/costs/engine";
-import { HOUSE_NUMBER_REGEX, extractZip } from "@/shared/addressValidation";
+import { extractZip } from "@/shared/addressValidation";
 import {
   type ProjectType,
   type FinishLevel,
@@ -2534,9 +2534,7 @@ export function EstimateCalculator({
          API treats budget as optional but rejects "". */
       budget: budgetValue ? `$${budgetValue.toLocaleString("en-US")}` : undefined,
       projectType: effectiveProject,
-      /* Landowners send their street address; everyone else sends the area
-         they plan to build in. Never both - the API records whichever the
-         visitor's situation makes true. */
+      /* Preserve an optional street address and any general location supplied. */
       address: ownsLand ? gateAddress.trim() : undefined,
       buildArea: buildArea.trim() || undefined,
       landOwnership: landOwnership ?? undefined,
