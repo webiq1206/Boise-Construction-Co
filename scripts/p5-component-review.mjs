@@ -15,6 +15,7 @@ const selected=[...new Set(['/', '/contact','/about','/testimonials',...(routes.
  routes.find(r=>/^\/services\/[^/]+\/[^/]+$/.test(r)),
  routes.find(r=>/^\/guides\/[^/]+$/.test(r)),
  routes.find(r=>/^\/blog\/[^/]+$/.test(r)),
+ ...(process.env.P5_SITE==='construction'?['/services/custom-home-builder/star']:[]),
  ...(cabinet?['/catalog','/cabinets','/compare','/construction','/builders','/warranty']:[])
 ].filter(Boolean))];
 try {
@@ -41,6 +42,13 @@ try {
     assert.equal(unloadedImages.length,0,'Unloaded images: '+JSON.stringify(unloadedImages));
     await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
     await page.screenshot({path:`${out}/${width}-${route.replaceAll('/','_')}.jpg`,fullPage:true,type:'jpeg',quality:72});
+    if(route==='/services/custom-home-builder/star'){
+     const panel=page.locator('.ed-panel-media').first();await panel.scrollIntoViewIfNeeded();
+     await panel.locator('img').evaluate(i=>i.decode());await page.waitForTimeout(400);
+     rec.processImage=await panel.locator('img').evaluate(i=>({src:i.currentSrc,width:i.getBoundingClientRect().width,height:i.getBoundingClientRect().height,opacity:getComputedStyle(i).opacity}));
+     assert(rec.processImage.width>200&&rec.processImage.height>200,'Process image must occupy its panel');
+     await page.screenshot({path:`${out}/${width}-process-panel.jpg`});
+    }
     if(route==='/'){
      const menu=page.getByRole('button',{name:'Open navigation menu',exact:true});
      if(width<1440){
