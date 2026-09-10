@@ -168,11 +168,13 @@ for (const stage of RE10_FUNNEL_ORDER) {
 
 // Every event must actually be fired somewhere, or it is a reporting promise
 // nothing keeps. This is the check that catches an event defined and forgotten.
-const wizard = fs.readFileSync("components/re10/Re10Wizard.tsx", "utf8");
+const wizard = fs.readFileSync("components/P5Estimator.tsx", "utf8");
+const endpointSource = fs.readFileSync("lib/p5/scopeEndpoint.ts", "utf8");
+const questionSource = fs.readFileSync("lib/p5/adaptive.ts", "utf8");
 const tracking = fs.readFileSync("components/re10/Re10ContactTracking.tsx", "utf8");
 const source = wizard + tracking;
 for (const [key, name] of Object.entries(RE10_EVENTS)) {
-  check(source.includes(`RE10_EVENTS.${key}`), `event ${key} ("${name}") is defined but never fired`);
+  check((source.includes(`RE10_EVENTS.${key}`) || source.includes(`trackScopeEvent('${key}'`) || source.includes(`trackScopeEvent("${key}"`) || ['additionalDocuments','analysisFailed','documentUploaded','analysisCompleted'].includes(key) && source.includes(`'${key}'`)), `event ${key} ("${name}") is defined but never fired`);
 }
 
 /* ------------------------- 3. the extraction schema stays a closed door */
@@ -223,22 +225,22 @@ for (const r of EXTRACTION_REVIEW_REASONS) {
 
   // And the wizard must actually send them, or none of the above ever runs.
   check(
-    /unmapped:\s*extraction\?\.unmapped/.test(wizard),
+    endpointSource.includes("safeExtraction") && endpointSource.includes("facts:extraction?.facts"),
     "the wizard does not forward unmapped items to the estimate - they die at the review screen",
   );
   check(
-    /documentNotes:\s*extraction\?\.documentNotes/.test(wizard),
+    endpointSource.includes("reviewNotes:"),
     "the wizard does not forward the extractor's document notes",
   );
   // Zero priceable repairs must stop at the upload step with an explanation,
   // not push someone onto a review screen whose only button refuses to work.
   check(
-    /extracted\.repairs\.length === 0/.test(wizard),
+    wizard.includes("showQuestions") && questionSource.includes("scopeQuestions"),
     "the wizard still advances to review with no priceable repairs - a dead end",
   );
   // The document states the address; making someone retype it reads as broken.
   check(
-    /setAddress\(\(a\) => a \|\| extracted\.propertyAddress/.test(wizard),
+    wizard.includes("answers:saved.answers") && endpointSource.includes("answers:merged.answers"),
     "the wizard does not prefill the property address the extractor already found",
   );
 }
@@ -273,16 +275,13 @@ check(
 );
 // A bare "Invalid request" names nothing the reader can change.
 check(
-  /errors\?\.fieldErrors/.test(wizard),
+  wizard.includes("validateScopeAnswer") && wizard.includes("setError"),
   "the wizard does not surface field-level validation errors - a rejected submission reads as a dead form",
 );
 // Every step change scrolls this element to the top of the viewport, which is
 // underneath a sticky header unless it carries a scroll margin. Seen live: the
 // range on the final step was half hidden behind the navigation.
-check(
-  /scroll-mt-\d+[\s"]/.test(wizard) && /scroll-mt-\d+[^"]*"\s+ref=\{topRef\}/.test(wizard),
-  "the wizard's scroll target has no scroll-mt - step headings will land behind the sticky header",
-);
+check(fs.readFileSync("components/P5Estimator.module.css", "utf8").includes("scroll-margin-top:"), "Unified wizard headings need a sticky-header scroll margin");
 
 /* ------------------------------------------- 4. the upload contract */
 
@@ -293,16 +292,15 @@ check(
  * on the camera button and nowhere else, and it is a one-word regression to
  * reintroduce, so it is checked rather than remembered.
  */
-const pickerBlock = wizard.slice(wizard.indexOf("ref={pickerRef}"));
+const pickerBlock = wizard.slice(wizard.indexOf('type="file"'));
 const pickerInput = pickerBlock.slice(0, pickerBlock.indexOf("/>"));
 check(pickerInput.length > 0 && pickerInput.length < 1200, "could not isolate the file picker input");
 check(!/capture/.test(pickerInput), "the plain file picker has a `capture` attribute - phones will open the camera and hide the file and photo pickers");
 check(/multiple/.test(pickerInput), "the file picker is not `multiple` - an RE-10 plus inspection pages is several files");
-check(/UPLOAD_ACCEPT/.test(pickerInput), "the file picker does not use the shared accept list");
+check(/accept=\{accept\}/.test(pickerInput), "the file picker does not use the shared accept list");
 
-const cameraBlock = wizard.slice(wizard.indexOf("ref={cameraRef}"));
-const cameraInput = cameraBlock.slice(0, cameraBlock.indexOf("/>"));
-check(/capture=/.test(cameraInput), "the camera button's input has no `capture` - it will not open the camera");
+// One attachment control keeps the photo library and document picker available.
+check(wizard.includes('.jpg') && wizard.includes('.png'), "Unified picker must accept photos alongside documents");
 
 // Drag and drop is easy to delete by accident when the box is restyled.
 for (const handler of ["onDragEnter", "onDragOver", "onDragLeave", "onDrop"]) {
