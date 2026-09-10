@@ -1,4 +1,5 @@
 "use client";
+import { ScopeEstimateOption } from "@/components/ScopeEstimateOption";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
@@ -2683,6 +2684,7 @@ export function EstimateCalculator({
   const planningStageStep = (
     <div className="mb-6">
       {renderStepLabel("stage", "How far along are you?")}
+      <ScopeEstimateOption />
       <p className="text-sm text-inverse-muted -mt-1 mb-3 max-w-prose">
         You will pick the type of build next. The further along you are, the
         tighter the range we can give you.
