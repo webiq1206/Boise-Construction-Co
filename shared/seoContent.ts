@@ -806,7 +806,7 @@ export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): 
           },
         ]
       : []),
-    ...service.faqs.slice(0, 2),
+    ...service.faqs.filter((faq) => !costSentence || !/^how much\b/i.test(faq.question)).slice(0, 2),
     {
       question: `Do you build in ${city.name}?`,
       answer: `Yes. We regularly build in ${city.name} and the surrounding ${county} area, and we are familiar with the local plan review process and impact fees.`,
