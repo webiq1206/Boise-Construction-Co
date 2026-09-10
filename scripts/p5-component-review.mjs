@@ -15,6 +15,7 @@ const selected=[...new Set(['/', '/contact','/about','/testimonials',...(routes.
  routes.find(r=>/^\/services\/[^/]+\/[^/]+$/.test(r)),
  routes.find(r=>/^\/guides\/[^/]+$/.test(r)),
  routes.find(r=>/^\/blog\/[^/]+$/.test(r)),
+ ...(process.env.P5_SITE==='construction'?['/services/custom-home-builder/star']:[]),
  ...(cabinet?['/catalog','/cabinets','/compare','/construction','/builders','/warranty']:[])
 ].filter(Boolean))];
 try {
@@ -47,6 +48,13 @@ try {
     assert.equal(missingGradients.length,0,'Missing gradient overlays: '+JSON.stringify(missingGradients));
     await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
     await page.screenshot({path:`${out}/${width}-${route.replaceAll('/','_')}.jpg`,fullPage:true,type:'jpeg',quality:72});
+    if(route==='/services/custom-home-builder/star'){
+     const panel=page.locator('.ed-panel-media').first();await panel.scrollIntoViewIfNeeded();
+     await panel.locator('img').evaluate(i=>i.decode());await page.waitForTimeout(400);
+     rec.processImage=await panel.locator('img').evaluate(i=>({src:i.currentSrc,width:i.getBoundingClientRect().width,height:i.getBoundingClientRect().height,opacity:getComputedStyle(i).opacity}));
+     assert(rec.processImage.width>200&&rec.processImage.height>200,'Process image must occupy its panel');
+     await page.screenshot({path:`${out}/${width}-process-panel.jpg`});
+    }
     if(route==='/'){
      const menu=page.getByRole('button',{name:'Open navigation menu',exact:true});
      if(width<1440){
@@ -63,6 +71,10 @@ try {
      assert(await page.locator('h1.ed-display').evaluate(e=>parseFloat(getComputedStyle(e).fontSize)>=32),'Display typography must override element resets');
      assert(await page.locator('h2.ed-h2').first().evaluate(e=>parseFloat(getComputedStyle(e).fontSize)>=30),'Section typography must override element resets');
      assert.equal(await page.locator('dl.ed-hero-facts').count(),1,'Single facts group');
+    }
+    if(route.startsWith('/guides/')){
+     const related=page.getByRole('heading',{name:'Related resources',exact:true});
+     if(await related.count()){await related.scrollIntoViewIfNeeded();await page.waitForTimeout(350);await page.screenshot({path:`${out}/${width}-related-resources.jpg`});}
     }
     if(route==='/contact'){
      const form=page.getByTestId('input-name').filter({visible:true}).first();
@@ -90,7 +102,7 @@ try {
      await page.keyboard.press('End');assert.equal(await slider.getAttribute('aria-valuenow'),'100');
      await page.keyboard.press('ArrowLeft');assert.equal(await slider.getAttribute('aria-valuenow'),'96');
      await page.keyboard.press('Home');for(let i=0;i<12;i++)await page.keyboard.press('ArrowRight');
-     await slider.locator('..').locator('img').evaluateAll(es=>Promise.all(es.map(i=>i.decode())));
+     await slider.locator('..').locator('img').evaluateAll(es=>Promise.race([Promise.all(es.map(i=>i.decode())),new Promise((_,reject)=>setTimeout(()=>reject(new Error('Comparison image decoding timed out')),15000))]));
      assert(await slider.locator('..').locator('img').evaluateAll(es=>es.every(i=>i.naturalWidth>0&&i.complete)),'Both comparison images decode');
      await page.waitForTimeout(500);
      await page.screenshot({path:`${out}/${width}-kitchen-comparison.jpg`});
@@ -104,6 +116,7 @@ try {
   const rec={width,route:'component-fixture'};
   try{
    await page.goto(origin+'/p5-audit-fixture',{waitUntil:'domcontentloaded'});
+   // The temporary fixture exposes client readiness before keyboard assertions.
    await page.locator('main[data-audit-ready="true"]').waitFor();
    const slider=page.getByTestId('handle-before-after'),container=page.getByTestId('slider-before-after');
    await container.scrollIntoViewIfNeeded();await slider.focus();
