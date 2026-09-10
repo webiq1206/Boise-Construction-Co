@@ -7,11 +7,10 @@
  * public/images/construction.
  *
  * Each service has a primary image that matches what the service actually is.
- * City variants rotate through a per-service shortlist so that no two city
- * pages for the same service open with the same photograph, which keeps the
- * eight variants of a service page from looking like one page printed eight
- * times. The rotation is deterministic, so a given city always gets the same
- * image and the pages are stable between builds.
+ * City variants rotate through relevant construction stages and outcomes.
+ * Lot evaluation and shop-home pages use narrower shortlists so unrelated
+ * completed houses do not substitute for the advertised service. Related
+ * city pages may reuse appropriate representative imagery.
  *
  * Key format for CITY_SERVICE_IMAGES: "service-slug/city-slug"
  */
@@ -34,8 +33,7 @@ const CITY_SLUGS = [
 /**
  * Per-service rotation. The first entry is the service's primary image and is
  * what the service overview page uses; the rest supply the city variants.
- * Every shortlist is at least as long as it needs to be to avoid repeats
- * within a service.
+ * Relevant representative images may repeat within a service.
  */
 const SERVICE_ROTATION: Record<string, readonly string[]> = {
   "custom-home-builder": [
@@ -106,18 +104,12 @@ const SERVICE_ROTATION: Record<string, readonly string[]> = {
     CONSTRUCTION_IMAGES.foundation,
     CONSTRUCTION_IMAGES.plans,
     CONSTRUCTION_IMAGES.meeting,
-    CONSTRUCTION_IMAGES.budget,
-    CONSTRUCTION_IMAGES.customHome,
   ],
   "shop-homes-barndominiums": [
     CONSTRUCTION_IMAGES.shopHome,
     CONSTRUCTION_IMAGES.framing,
-    CONSTRUCTION_IMAGES.lot,
-    CONSTRUCTION_IMAGES.interior,
     CONSTRUCTION_IMAGES.foundation,
     CONSTRUCTION_IMAGES.ruralSite,
-    CONSTRUCTION_IMAGES.customHome,
-    CONSTRUCTION_IMAGES.meeting,
   ],
   "energy-efficient-homes": [
     CONSTRUCTION_IMAGES.insulation,
@@ -200,7 +192,9 @@ export function getCityServiceImageSet(
     // Offset by three rather than one so the two images on a page are visually
     // unrelated instead of adjacent stages of the same build.
     breather: rotation[(cityIndex + 3) % rotation.length],
-    process: rotation[0],
+    process: ["lot-evaluation", "shop-homes-barndominiums"].includes(serviceSlug)
+      ? rotation.find(src => src !== hero && src !== rotation[(cityIndex + 3) % rotation.length]) ?? rotation[0]
+      : rotation[0],
   };
 }
 
