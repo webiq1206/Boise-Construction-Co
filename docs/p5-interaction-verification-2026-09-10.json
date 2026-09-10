@@ -1,0 +1,5179 @@
+{
+  "route_source_commit": "0d5114a91df55c09b51cd13246967ff0f245cc87",
+  "route_workflow_run": 34520559493,
+  "final_product_commit": "6e40686c3aec3eeb838b4c4c87761cc730a02491",
+  "component_source_commit": "6e40686c3aec3eeb838b4c4c87761cc730a02491",
+  "component_workflow_run": 34522956694,
+  "links": [
+    {
+      "shard": "links-0",
+      "workflow_run": 34520559493,
+      "checked": 140,
+      "failures": []
+    },
+    {
+      "shard": "links-1",
+      "workflow_run": 34520559493,
+      "checked": 136,
+      "failures": []
+    },
+    {
+      "shard": "links-2",
+      "workflow_run": 34520559493,
+      "checked": 142,
+      "failures": []
+    },
+    {
+      "shard": "links-3",
+      "workflow_run": 34520559493,
+      "checked": 145,
+      "failures": []
+    },
+    {
+      "shard": "links-4",
+      "workflow_run": 34520559493,
+      "checked": 134,
+      "failures": []
+    },
+    {
+      "shard": "links-5",
+      "workflow_run": 34520559493,
+      "checked": 136,
+      "failures": []
+    },
+    {
+      "shard": "links-6",
+      "workflow_run": 34520559493,
+      "checked": 126,
+      "failures": []
+    },
+    {
+      "shard": "links-7",
+      "workflow_run": 34520559493,
+      "checked": 167,
+      "failures": []
+    },
+    {
+      "shard": "links-8",
+      "workflow_run": 34520559493,
+      "checked": 134,
+      "failures": []
+    },
+    {
+      "shard": "links-0",
+      "workflow_run": 34522525616,
+      "checked": 48,
+      "failures": []
+    }
+  ],
+  "components": [
+    {
+      "width": 320,
+      "route": "/",
+      "scrollWidth": 320,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=384&q=75",
+          "alt": "Representative construction detail showing framing, plumbing, electrical wiring and ductwork before drywall",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fbudget-kitchen-detail.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Representative custom home building work",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=384&q=75",
+          "alt": "Representative image of a Boise Construction Co worker checking interior framing",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=65",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/consult-lifestyle.webp",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 320,
+      "route": "/estimate/scope",
+      "scrollWidth": 320,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 320,
+      "route": "/contact",
+      "scrollWidth": 320,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=384&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "sticky": {
+        "background": "rgb(29, 32, 31)",
+        "padding": "0px"
+      },
+      "ok": true
+    },
+    {
+      "width": 320,
+      "route": "/about",
+      "scrollWidth": 320,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=384&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=384&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=384&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=384&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=384&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=384&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=384&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=384&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=384&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=384&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 320,
+      "route": "/testimonials",
+      "scrollWidth": 320,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=384&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=384&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=384&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=384&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=384&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=384&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=384&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=384&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=384&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=384&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 320,
+      "route": "/services",
+      "scrollWidth": 320,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=75",
+          "alt": "Newly built Treasure Valley great room with vaulted ceiling and natural light",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Custom Home Building by Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=384&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=384&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=384&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=384&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=384&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=384&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=384&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=384&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=384&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 320,
+      "route": "/services/build-on-your-lot",
+      "scrollWidth": 320,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Ffoundation-and-excavation.webp&w=384&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 320,
+      "route": "/services/build-on-your-lot/boise",
+      "scrollWidth": 320,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 320,
+      "route": "/guides/boise-home-building-cost-guide",
+      "scrollWidth": 320,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fline-item-budget.webp&w=640&q=75",
+          "alt": "Line-item construction budget and draw schedule on a desk beside a wooden architectural model",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 320,
+      "route": "/blog/ada-vs-canyon-county-permit-timelines",
+      "scrollWidth": 320,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuilding-permit-placard.webp&w=640&q=75",
+          "alt": "A residential building-permit placard posted on a stake at a new-home construction site with the framed house and stacked lumber behind it",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=640&q=75",
+          "alt": "New house under construction with wall framing and roof trusses in place on an Idaho building site",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 320,
+      "route": "/services/custom-home-builder/star",
+      "processImage": {
+        "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+        "width": 320,
+        "height": 240,
+        "opacity": "1"
+      },
+      "scrollWidth": 320,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcovered-outdoor-living.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 320,
+      "route": "component-fixture",
+      "ok": true
+    },
+    {
+      "width": 390,
+      "route": "/",
+      "scrollWidth": 390,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=640&q=75",
+          "alt": "Representative construction detail showing framing, plumbing, electrical wiring and ductwork before drywall",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fbudget-kitchen-detail.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Representative custom home building work",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative image of a Boise Construction Co worker checking interior framing",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/consult-lifestyle.webp",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 390,
+      "route": "/estimate/scope",
+      "scrollWidth": 390,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 390,
+      "route": "/contact",
+      "scrollWidth": 390,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "sticky": {
+        "background": "rgb(29, 32, 31)",
+        "padding": "0px"
+      },
+      "ok": true
+    },
+    {
+      "width": 390,
+      "route": "/about",
+      "scrollWidth": 390,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=640&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=640&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=640&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=640&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=640&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=640&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=640&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=640&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 390,
+      "route": "/testimonials",
+      "scrollWidth": 390,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=640&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=640&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=640&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=640&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=640&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=640&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=640&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=640&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 390,
+      "route": "/services",
+      "scrollWidth": 390,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=75",
+          "alt": "Newly built Treasure Valley great room with vaulted ceiling and natural light",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Custom Home Building by Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=640&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=640&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=640&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=640&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=640&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=640&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=640&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 390,
+      "route": "/services/build-on-your-lot",
+      "scrollWidth": 390,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Ffoundation-and-excavation.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 390,
+      "route": "/services/build-on-your-lot/boise",
+      "scrollWidth": 390,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 390,
+      "route": "/guides/boise-home-building-cost-guide",
+      "scrollWidth": 390,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fline-item-budget.webp&w=640&q=75",
+          "alt": "Line-item construction budget and draw schedule on a desk beside a wooden architectural model",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 390,
+      "route": "/blog/ada-vs-canyon-county-permit-timelines",
+      "scrollWidth": 390,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuilding-permit-placard.webp&w=640&q=75",
+          "alt": "A residential building-permit placard posted on a stake at a new-home construction site with the framed house and stacked lumber behind it",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=640&q=75",
+          "alt": "New house under construction with wall framing and roof trusses in place on an Idaho building site",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 390,
+      "route": "/services/custom-home-builder/star",
+      "processImage": {
+        "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+        "width": 390,
+        "height": 240,
+        "opacity": "1"
+      },
+      "scrollWidth": 390,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcovered-outdoor-living.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 390,
+      "route": "component-fixture",
+      "ok": true
+    },
+    {
+      "width": 430,
+      "route": "/",
+      "scrollWidth": 430,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=640&q=75",
+          "alt": "Representative construction detail showing framing, plumbing, electrical wiring and ductwork before drywall",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fbudget-kitchen-detail.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Representative custom home building work",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative image of a Boise Construction Co worker checking interior framing",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/consult-lifestyle.webp",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 430,
+      "route": "/estimate/scope",
+      "scrollWidth": 430,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 430,
+      "route": "/contact",
+      "scrollWidth": 430,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "sticky": {
+        "background": "rgb(29, 32, 31)",
+        "padding": "0px"
+      },
+      "ok": true
+    },
+    {
+      "width": 430,
+      "route": "/about",
+      "scrollWidth": 430,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=640&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=640&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=640&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=640&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=640&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=640&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=640&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=640&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 430,
+      "route": "/testimonials",
+      "scrollWidth": 430,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=640&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=640&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=640&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=640&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=640&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=640&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=640&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=640&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 430,
+      "route": "/services",
+      "scrollWidth": 430,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=75",
+          "alt": "Newly built Treasure Valley great room with vaulted ceiling and natural light",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Custom Home Building by Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=640&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=640&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=640&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=640&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=640&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=640&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=640&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 430,
+      "route": "/services/build-on-your-lot",
+      "scrollWidth": 430,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Ffoundation-and-excavation.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 430,
+      "route": "/services/build-on-your-lot/boise",
+      "scrollWidth": 430,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 430,
+      "route": "/guides/boise-home-building-cost-guide",
+      "scrollWidth": 430,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fline-item-budget.webp&w=640&q=75",
+          "alt": "Line-item construction budget and draw schedule on a desk beside a wooden architectural model",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 430,
+      "route": "/blog/ada-vs-canyon-county-permit-timelines",
+      "scrollWidth": 430,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuilding-permit-placard.webp&w=640&q=75",
+          "alt": "A residential building-permit placard posted on a stake at a new-home construction site with the framed house and stacked lumber behind it",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=640&q=75",
+          "alt": "New house under construction with wall framing and roof trusses in place on an Idaho building site",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 430,
+      "route": "/services/custom-home-builder/star",
+      "processImage": {
+        "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+        "width": 430,
+        "height": 240.796875,
+        "opacity": "1"
+      },
+      "scrollWidth": 430,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcovered-outdoor-living.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 430,
+      "route": "component-fixture",
+      "ok": true
+    },
+    {
+      "width": 600,
+      "route": "/",
+      "scrollWidth": 600,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=640&q=75",
+          "alt": "Representative construction detail showing framing, plumbing, electrical wiring and ductwork before drywall",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fbudget-kitchen-detail.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Representative custom home building work",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative image of a Boise Construction Co worker checking interior framing",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/consult-lifestyle.webp",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 600,
+      "route": "/estimate/scope",
+      "scrollWidth": 600,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 600,
+      "route": "/contact",
+      "scrollWidth": 600,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "sticky": {
+        "background": "rgb(29, 32, 31)",
+        "padding": "0px"
+      },
+      "ok": true
+    },
+    {
+      "width": 600,
+      "route": "/about",
+      "scrollWidth": 600,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=640&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=640&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=640&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=640&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=640&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=640&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=640&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=640&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 600,
+      "route": "/testimonials",
+      "scrollWidth": 600,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=640&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=640&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=640&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=640&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=640&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=640&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=640&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=640&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 600,
+      "route": "/services",
+      "scrollWidth": 600,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=640&q=75",
+          "alt": "Newly built Treasure Valley great room with vaulted ceiling and natural light",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Custom Home Building by Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=640&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=640&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=640&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=640&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=640&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=640&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=640&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 600,
+      "route": "/services/build-on-your-lot",
+      "scrollWidth": 600,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Ffoundation-and-excavation.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 600,
+      "route": "/services/build-on-your-lot/boise",
+      "scrollWidth": 600,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 600,
+      "route": "/guides/boise-home-building-cost-guide",
+      "scrollWidth": 600,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fline-item-budget.webp&w=640&q=75",
+          "alt": "Line-item construction budget and draw schedule on a desk beside a wooden architectural model",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 600,
+      "route": "/blog/ada-vs-canyon-county-permit-timelines",
+      "scrollWidth": 600,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuilding-permit-placard.webp&w=640&q=75",
+          "alt": "A residential building-permit placard posted on a stake at a new-home construction site with the framed house and stacked lumber behind it",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=640&q=75",
+          "alt": "New house under construction with wall framing and roof trusses in place on an Idaho building site",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 600,
+      "route": "/services/custom-home-builder/star",
+      "processImage": {
+        "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+        "width": 600,
+        "height": 336,
+        "opacity": "1"
+      },
+      "scrollWidth": 600,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcovered-outdoor-living.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 600,
+      "route": "component-fixture",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "route": "/",
+      "scrollWidth": 768,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=828&q=75",
+          "alt": "Representative construction detail showing framing, plumbing, electrical wiring and ductwork before drywall",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fbudget-kitchen-detail.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Representative custom home building work",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=828&q=75",
+          "alt": "Representative image of a Boise Construction Co worker checking interior framing",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/consult-lifestyle.webp",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 768,
+      "route": "/estimate/scope",
+      "scrollWidth": 768,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 768,
+      "route": "/contact",
+      "scrollWidth": 768,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=828&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=828&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=828&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "sticky": {
+        "background": "rgb(29, 32, 31)",
+        "padding": "0px"
+      },
+      "ok": true
+    },
+    {
+      "width": 768,
+      "route": "/about",
+      "scrollWidth": 768,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=828&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=828&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=828&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=384&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=384&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=384&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=384&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=384&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=384&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=384&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=384&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=384&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 768,
+      "route": "/testimonials",
+      "scrollWidth": 768,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=828&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=828&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=828&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=384&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=384&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=384&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=384&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=384&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=384&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=384&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=384&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=384&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 768,
+      "route": "/services",
+      "scrollWidth": 768,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=828&q=75",
+          "alt": "Newly built Treasure Valley great room with vaulted ceiling and natural light",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Custom Home Building by Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=384&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=384&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=384&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=384&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=384&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=384&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=384&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=384&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=384&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 768,
+      "route": "/services/build-on-your-lot",
+      "scrollWidth": 768,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=828&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=828&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Ffoundation-and-excavation.webp&w=828&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 768,
+      "route": "/services/build-on-your-lot/boise",
+      "scrollWidth": 768,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=828&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=828&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=828&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 768,
+      "route": "/guides/boise-home-building-cost-guide",
+      "scrollWidth": 768,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fline-item-budget.webp&w=828&q=75",
+          "alt": "Line-item construction budget and draw schedule on a desk beside a wooden architectural model",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 768,
+      "route": "/blog/ada-vs-canyon-county-permit-timelines",
+      "scrollWidth": 768,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuilding-permit-placard.webp&w=828&q=75",
+          "alt": "A residential building-permit placard posted on a stake at a new-home construction site with the framed house and stacked lumber behind it",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=828&q=75",
+          "alt": "New house under construction with wall framing and roof trusses in place on an Idaho building site",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 768,
+      "route": "/services/custom-home-builder/star",
+      "processImage": {
+        "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=828&q=75",
+        "width": 768,
+        "height": 380,
+        "opacity": "1"
+      },
+      "scrollWidth": 768,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcovered-outdoor-living.webp&w=828&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=828&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=828&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 768,
+      "route": "component-fixture",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "route": "/",
+      "scrollWidth": 1024,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=1080&q=75",
+          "alt": "Representative construction detail showing framing, plumbing, electrical wiring and ductwork before drywall",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fbudget-kitchen-detail.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Representative custom home building work",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=1080&q=75",
+          "alt": "Representative mechanical rough-in showing pipes and wiring coordinated inside framed walls",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative image of a Boise Construction Co worker checking interior framing",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/consult-lifestyle.webp",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "route": "/estimate/scope",
+      "scrollWidth": 1024,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "route": "/contact",
+      "scrollWidth": 1024,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1080&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1080&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "route": "/about",
+      "scrollWidth": 1024,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=1080&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=640&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=640&q=75",
+          "alt": "Representative mechanical rough-in showing pipes and wiring coordinated inside framed walls",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1080&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=640&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=640&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=640&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=640&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=640&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=640&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=640&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "route": "/testimonials",
+      "scrollWidth": 1024,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=1080&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=640&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=640&q=75",
+          "alt": "Representative mechanical rough-in showing pipes and wiring coordinated inside framed walls",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1080&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=640&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=640&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=640&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=640&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=640&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=640&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=640&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "route": "/services",
+      "scrollWidth": 1024,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1080&q=75",
+          "alt": "Newly built Treasure Valley great room with vaulted ceiling and natural light",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Custom Home Building by Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=640&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=640&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=640&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=640&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=640&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=640&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=640&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=640&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "route": "/services/build-on-your-lot",
+      "scrollWidth": 1024,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=1080&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1080&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Ffoundation-and-excavation.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "route": "/services/build-on-your-lot/boise",
+      "scrollWidth": 1024,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=1080&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=1080&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=1080&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "route": "/guides/boise-home-building-cost-guide",
+      "scrollWidth": 1024,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fline-item-budget.webp&w=1080&q=75",
+          "alt": "Line-item construction budget and draw schedule on a desk beside a wooden architectural model",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "route": "/blog/ada-vs-canyon-county-permit-timelines",
+      "scrollWidth": 1024,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuilding-permit-placard.webp&w=1080&q=75",
+          "alt": "A residential building-permit placard posted on a stake at a new-home construction site with the framed house and stacked lumber behind it",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=828&q=75",
+          "alt": "New house under construction with wall framing and roof trusses in place on an Idaho building site",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "route": "/services/custom-home-builder/star",
+      "processImage": {
+        "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1080&q=75",
+        "width": 491.515625,
+        "height": 733.890625,
+        "opacity": "1"
+      },
+      "scrollWidth": 1024,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcovered-outdoor-living.webp&w=1080&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1080&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1080&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "route": "component-fixture",
+      "ok": true
+    },
+    {
+      "width": 1366,
+      "route": "/",
+      "scrollWidth": 1366,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=640&q=75",
+          "alt": "Representative construction detail showing framing, plumbing, electrical wiring and ductwork before drywall",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fbudget-kitchen-detail.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Representative custom home building work",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=640&q=75",
+          "alt": "Representative mechanical rough-in showing pipes and wiring coordinated inside framed walls",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative image of a Boise Construction Co worker checking interior framing",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/consult-lifestyle.webp",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1366,
+      "route": "/estimate/scope",
+      "scrollWidth": 1366,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1366,
+      "route": "/contact",
+      "scrollWidth": 1366,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=828&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1366,
+      "route": "/about",
+      "scrollWidth": 1366,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=1920&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=828&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=640&q=75",
+          "alt": "Representative mechanical rough-in showing pipes and wiring coordinated inside framed walls",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=828&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=828&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=828&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=828&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=828&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=828&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=828&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=828&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=828&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1366,
+      "route": "/testimonials",
+      "scrollWidth": 1366,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=1920&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=828&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=640&q=75",
+          "alt": "Representative mechanical rough-in showing pipes and wiring coordinated inside framed walls",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=828&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=828&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=828&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=828&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=828&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=828&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=828&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=828&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=828&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1366,
+      "route": "/services",
+      "scrollWidth": 1366,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=75",
+          "alt": "Newly built Treasure Valley great room with vaulted ceiling and natural light",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Custom Home Building by Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=828&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=828&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=828&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=828&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=828&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=828&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=828&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=828&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=828&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1366,
+      "route": "/services/build-on-your-lot",
+      "scrollWidth": 1366,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Ffoundation-and-excavation.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1366,
+      "route": "/services/build-on-your-lot/boise",
+      "scrollWidth": 1366,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1366,
+      "route": "/guides/boise-home-building-cost-guide",
+      "scrollWidth": 1366,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fline-item-budget.webp&w=1920&q=75",
+          "alt": "Line-item construction budget and draw schedule on a desk beside a wooden architectural model",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1366,
+      "route": "/blog/ada-vs-canyon-county-permit-timelines",
+      "scrollWidth": 1366,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuilding-permit-placard.webp&w=1920&q=75",
+          "alt": "A residential building-permit placard posted on a stake at a new-home construction site with the framed house and stacked lumber behind it",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=828&q=75",
+          "alt": "New house under construction with wall framing and roof trusses in place on an Idaho building site",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1366,
+      "route": "/services/custom-home-builder/star",
+      "processImage": {
+        "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+        "width": 778.609375,
+        "height": 864.171875,
+        "opacity": "1"
+      },
+      "scrollWidth": 1366,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcovered-outdoor-living.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1366,
+      "route": "component-fixture",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "route": "/",
+      "scrollWidth": 1440,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=640&q=75",
+          "alt": "Representative construction detail showing framing, plumbing, electrical wiring and ductwork before drywall",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fbudget-kitchen-detail.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Representative custom home building work",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=640&q=75",
+          "alt": "Representative mechanical rough-in showing pipes and wiring coordinated inside framed walls",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=640&q=75",
+          "alt": "Representative image of a Boise Construction Co worker checking interior framing",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/consult-lifestyle.webp",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "route": "/estimate/scope",
+      "scrollWidth": 1440,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "route": "/contact",
+      "scrollWidth": 1440,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=828&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "route": "/about",
+      "scrollWidth": 1440,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=1920&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=828&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=640&q=75",
+          "alt": "Representative mechanical rough-in showing pipes and wiring coordinated inside framed walls",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=828&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=828&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=828&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=828&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=828&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=828&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=828&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=828&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=828&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "route": "/testimonials",
+      "scrollWidth": 1440,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=1920&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=828&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=640&q=75",
+          "alt": "Representative mechanical rough-in showing pipes and wiring coordinated inside framed walls",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=828&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=828&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=828&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=828&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=828&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=828&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=828&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=828&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=828&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "route": "/services",
+      "scrollWidth": 1440,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=75",
+          "alt": "Newly built Treasure Valley great room with vaulted ceiling and natural light",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Custom Home Building by Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=828&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=828&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=828&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=828&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=828&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=828&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=828&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=828&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=828&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "route": "/services/build-on-your-lot",
+      "scrollWidth": 1440,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Ffoundation-and-excavation.webp&w=640&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "route": "/services/build-on-your-lot/boise",
+      "scrollWidth": 1440,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "route": "/guides/boise-home-building-cost-guide",
+      "scrollWidth": 1440,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fline-item-budget.webp&w=1920&q=75",
+          "alt": "Line-item construction budget and draw schedule on a desk beside a wooden architectural model",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "route": "/blog/ada-vs-canyon-county-permit-timelines",
+      "scrollWidth": 1440,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuilding-permit-placard.webp&w=1920&q=75",
+          "alt": "A residential building-permit placard posted on a stake at a new-home construction site with the framed house and stacked lumber behind it",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=828&q=75",
+          "alt": "New house under construction with wall framing and roof trusses in place on an Idaho building site",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "route": "/services/custom-home-builder/star",
+      "processImage": {
+        "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+        "width": 820.796875,
+        "height": 877.6875,
+        "opacity": "1"
+      },
+      "scrollWidth": 1440,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcovered-outdoor-living.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "route": "component-fixture",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "route": "/",
+      "scrollWidth": 1920,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=828&q=75",
+          "alt": "Representative construction detail showing framing, plumbing, electrical wiring and ductwork before drywall",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fbudget-kitchen-detail.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Representative custom home building work",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=828&q=75",
+          "alt": "Representative mechanical rough-in showing pipes and wiring coordinated inside framed walls",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=828&q=75",
+          "alt": "Representative image of a Boise Construction Co worker checking interior framing",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/consult-lifestyle.webp",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "route": "/estimate/scope",
+      "scrollWidth": 1920,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "route": "/contact",
+      "scrollWidth": 1920,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "White board-and-batten home exterior with a covered front porch",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=1080&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "route": "/about",
+      "scrollWidth": 1920,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=1920&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=1080&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=828&q=75",
+          "alt": "Representative mechanical rough-in showing pipes and wiring coordinated inside framed walls",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=1080&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=1080&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=1080&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=1080&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=1080&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=1080&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=1080&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=1080&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=1080&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "route": "/testimonials",
+      "scrollWidth": 1920,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fframing-in-progress-branded.webp&w=1920&q=75",
+          "alt": "Representative framing work with a Boise Construction Co branded worker",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fplans-and-selections.webp&w=1080&q=75",
+          "alt": "Architectural drawings and finish selections for a Treasure Valley new home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fmechanical-rough-in.webp&w=828&q=75",
+          "alt": "Representative mechanical rough-in showing pipes and wiring coordinated inside framed walls",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=65",
+          "alt": "Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/icon/boise-construction-co-icon-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=1080&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=1080&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=1080&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=1080&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=1080&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=1080&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=1080&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=1080&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=1080&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "route": "/services",
+      "scrollWidth": 1920,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fgreat-room-evening.webp&w=1920&q=75",
+          "alt": "Newly built Treasure Valley great room with vaulted ceiling and natural light",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/images/construction/custom-home-exterior.webp",
+          "alt": "Custom Home Building by Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=1080&q=75",
+          "alt": "New home construction in Boise, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmeridian.webp&w=1080&q=75",
+          "alt": "New home construction in Meridian, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Feagle.webp&w=1080&q=75",
+          "alt": "New home construction in Eagle, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fnampa.webp&w=1080&q=75",
+          "alt": "New home construction in Nampa, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fkuna.webp&w=1080&q=75",
+          "alt": "New home construction in Kuna, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fstar.webp&w=1080&q=75",
+          "alt": "New home construction in Star, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fmiddleton.webp&w=1080&q=75",
+          "alt": "New home construction in Middleton, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fcaldwell.webp&w=1080&q=75",
+          "alt": "New home construction in Caldwell, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fareas%2Fboise.webp&w=1080&q=75",
+          "alt": "New home construction in Garden City, Idaho",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "route": "/services/build-on-your-lot",
+      "scrollWidth": 1920,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Ffoundation-and-excavation.webp&w=828&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "route": "/services/build-on-your-lot/boise",
+      "scrollWidth": 1920,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuildable-lot.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "route": "/guides/boise-home-building-cost-guide",
+      "scrollWidth": 1920,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fline-item-budget.webp&w=1920&q=75",
+          "alt": "Line-item construction budget and draw schedule on a desk beside a wooden architectural model",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "route": "/blog/ada-vs-canyon-county-permit-timelines",
+      "scrollWidth": 1920,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fbuilding-permit-placard.webp&w=1920&q=75",
+          "alt": "A residential building-permit placard posted on a stake at a new-home construction site with the framed house and stacked lumber behind it",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fhome-under-framing.webp&w=828&q=75",
+          "alt": "New house under construction with wall framing and roof trusses in place on an Idaho building site",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "route": "/services/custom-home-builder/star",
+      "processImage": {
+        "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+        "width": 1094.390625,
+        "height": 912.59375,
+        "opacity": "1"
+      },
+      "scrollWidth": 1920,
+      "images": [
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcovered-outdoor-living.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/_next/image?url=%2Fimages%2Fconstruction%2Fcustom-home-exterior.webp&w=1920&q=75",
+          "alt": "",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:5000/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg",
+          "alt": "Boise Construction Co",
+          "ok": true
+        }
+      ],
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "route": "component-fixture",
+      "ok": true
+    }
+  ],
+  "route_workflows": [
+    {
+      "commit": "0d5114a91df55c09b51cd13246967ff0f245cc87",
+      "run": 34520559493
+    },
+    {
+      "commit": "55c430f9eab7366eea3b117381e196c7955e93ae",
+      "run": 34522525616
+    }
+  ],
+  "earlier_failed_checks": [
+    {
+      "width": 768,
+      "route": "/guides/meridian-home-building-guide",
+      "stage": "fonts-and-first-scroll",
+      "ok": false,
+      "error": "Error: fonts-and-first-scroll timed out after 45000ms",
+      "source_commit": "0d5114a91df55c09b51cd13246967ff0f245cc87",
+      "workflow_run": 34520559493
+    },
+    {
+      "width": 1024,
+      "route": "/blog/energy-efficient-home-building-boise",
+      "stage": "fonts-and-first-scroll",
+      "ok": false,
+      "error": "Error: fonts-and-first-scroll timed out after 45000ms",
+      "source_commit": "0d5114a91df55c09b51cd13246967ff0f245cc87",
+      "workflow_run": 34520559493
+    }
+  ],
+  "browser-results": {
+    "externalServices": "simulated",
+    "results": [
+      {
+        "width": 320,
+        "passed": true,
+        "capturePosition": {
+          "scrollY": 0,
+          "headers": [
+            {
+              "top": 0,
+              "bottom": 61,
+              "position": "fixed"
+            }
+          ],
+          "contentTop": 112
+        },
+        "checks": [
+          "speech API simulation",
+          "typed scope",
+          "upload failure and IndexedDB recovery",
+          "extraction review",
+          "optional location",
+          "long mobile content",
+          "viewport resizing",
+          "back navigation",
+          "contact preservation",
+          "submission restoration",
+          "single submission",
+          "no page errors",
+          "item quantities and unit pricing",
+          "item privacy",
+          "result overflow"
+        ]
+      },
+      {
+        "width": 390,
+        "passed": true,
+        "capturePosition": {
+          "scrollY": 0,
+          "headers": [
+            {
+              "top": 0,
+              "bottom": 61,
+              "position": "fixed"
+            }
+          ],
+          "contentTop": 112
+        },
+        "checks": [
+          "speech API simulation",
+          "typed scope",
+          "upload failure and IndexedDB recovery",
+          "extraction review",
+          "optional location",
+          "long mobile content",
+          "viewport resizing",
+          "back navigation",
+          "contact preservation",
+          "submission restoration",
+          "single submission",
+          "no page errors",
+          "item quantities and unit pricing",
+          "item privacy",
+          "result overflow"
+        ]
+      },
+      {
+        "width": 430,
+        "passed": true,
+        "capturePosition": {
+          "scrollY": 0,
+          "headers": [
+            {
+              "top": 0,
+              "bottom": 61,
+              "position": "fixed"
+            }
+          ],
+          "contentTop": 112
+        },
+        "checks": [
+          "speech API simulation",
+          "typed scope",
+          "upload failure and IndexedDB recovery",
+          "extraction review",
+          "optional location",
+          "long mobile content",
+          "viewport resizing",
+          "back navigation",
+          "contact preservation",
+          "submission restoration",
+          "single submission",
+          "no page errors",
+          "item quantities and unit pricing",
+          "item privacy",
+          "result overflow"
+        ]
+      },
+      {
+        "width": 600,
+        "passed": true,
+        "capturePosition": {
+          "scrollY": 0,
+          "headers": [
+            {
+              "top": 0,
+              "bottom": 61,
+              "position": "fixed"
+            }
+          ],
+          "contentTop": 112
+        },
+        "checks": [
+          "speech API simulation",
+          "typed scope",
+          "upload failure and IndexedDB recovery",
+          "extraction review",
+          "optional location",
+          "long mobile content",
+          "viewport resizing",
+          "back navigation",
+          "contact preservation",
+          "submission restoration",
+          "single submission",
+          "no page errors",
+          "item quantities and unit pricing",
+          "item privacy",
+          "result overflow"
+        ]
+      },
+      {
+        "width": 768,
+        "passed": true,
+        "capturePosition": {
+          "scrollY": 0,
+          "headers": [
+            {
+              "top": 0,
+              "bottom": 61,
+              "position": "fixed"
+            }
+          ],
+          "contentTop": 112
+        },
+        "checks": [
+          "speech API simulation",
+          "typed scope",
+          "upload failure and IndexedDB recovery",
+          "extraction review",
+          "optional location",
+          "long mobile content",
+          "viewport resizing",
+          "back navigation",
+          "contact preservation",
+          "submission restoration",
+          "single submission",
+          "no page errors",
+          "item quantities and unit pricing",
+          "item privacy",
+          "result overflow"
+        ]
+      },
+      {
+        "width": 1024,
+        "passed": true,
+        "capturePosition": {
+          "scrollY": 0,
+          "headers": [
+            {
+              "top": 0,
+              "bottom": 61,
+              "position": "fixed"
+            }
+          ],
+          "contentTop": 112
+        },
+        "checks": [
+          "speech API simulation",
+          "typed scope",
+          "upload failure and IndexedDB recovery",
+          "extraction review",
+          "optional location",
+          "long mobile content",
+          "viewport resizing",
+          "back navigation",
+          "contact preservation",
+          "submission restoration",
+          "single submission",
+          "no page errors",
+          "item quantities and unit pricing",
+          "item privacy",
+          "result overflow"
+        ]
+      },
+      {
+        "width": 1366,
+        "passed": true,
+        "capturePosition": {
+          "scrollY": 0,
+          "headers": [
+            {
+              "top": 0,
+              "bottom": 61,
+              "position": "fixed"
+            }
+          ],
+          "contentTop": 112
+        },
+        "checks": [
+          "speech API simulation",
+          "typed scope",
+          "upload failure and IndexedDB recovery",
+          "extraction review",
+          "optional location",
+          "long mobile content",
+          "viewport resizing",
+          "back navigation",
+          "contact preservation",
+          "submission restoration",
+          "single submission",
+          "no page errors",
+          "item quantities and unit pricing",
+          "item privacy",
+          "result overflow"
+        ]
+      },
+      {
+        "width": 1440,
+        "passed": true,
+        "capturePosition": {
+          "scrollY": 0,
+          "headers": [
+            {
+              "top": 0,
+              "bottom": 61,
+              "position": "fixed"
+            }
+          ],
+          "contentTop": 112
+        },
+        "checks": [
+          "speech API simulation",
+          "typed scope",
+          "upload failure and IndexedDB recovery",
+          "extraction review",
+          "optional location",
+          "long mobile content",
+          "viewport resizing",
+          "back navigation",
+          "contact preservation",
+          "submission restoration",
+          "single submission",
+          "no page errors",
+          "item quantities and unit pricing",
+          "item privacy",
+          "result overflow"
+        ]
+      },
+      {
+        "width": 1920,
+        "passed": true,
+        "capturePosition": {
+          "scrollY": 0,
+          "headers": [
+            {
+              "top": 0,
+              "bottom": 61,
+              "position": "fixed"
+            }
+          ],
+          "contentTop": 112
+        },
+        "checks": [
+          "speech API simulation",
+          "typed scope",
+          "upload failure and IndexedDB recovery",
+          "extraction review",
+          "optional location",
+          "long mobile content",
+          "viewport resizing",
+          "back navigation",
+          "contact preservation",
+          "submission restoration",
+          "single submission",
+          "no page errors",
+          "item quantities and unit pricing",
+          "item privacy",
+          "result overflow"
+        ]
+      }
+    ]
+  },
+  "launcher-results": [
+    {
+      "width": 320,
+      "ok": true,
+      "checks": [
+        "launcher returns below form",
+        "chat opens",
+        "44px close target",
+        "launcher hidden near form"
+      ]
+    },
+    {
+      "width": 390,
+      "ok": true,
+      "checks": [
+        "launcher returns below form",
+        "chat opens",
+        "44px close target",
+        "launcher hidden near form"
+      ]
+    },
+    {
+      "width": 430,
+      "ok": true,
+      "checks": [
+        "launcher returns below form",
+        "chat opens",
+        "44px close target",
+        "launcher hidden near form"
+      ]
+    },
+    {
+      "width": 600,
+      "ok": true,
+      "checks": [
+        "launcher returns below form",
+        "chat opens",
+        "44px close target",
+        "launcher hidden near form"
+      ]
+    },
+    {
+      "width": 768,
+      "ok": true,
+      "checks": [
+        "launcher returns below form",
+        "chat opens",
+        "44px close target",
+        "launcher hidden near form"
+      ]
+    },
+    {
+      "width": 1024,
+      "ok": true,
+      "checks": [
+        "launcher returns below form",
+        "chat opens",
+        "44px close target",
+        "launcher hidden near form"
+      ]
+    },
+    {
+      "width": 1366,
+      "ok": true,
+      "checks": [
+        "launcher returns below form",
+        "chat opens",
+        "44px close target",
+        "launcher hidden near form"
+      ]
+    },
+    {
+      "width": 1440,
+      "ok": true,
+      "checks": [
+        "launcher returns below form",
+        "chat opens",
+        "44px close target",
+        "launcher hidden near form"
+      ]
+    },
+    {
+      "width": 1920,
+      "ok": true,
+      "checks": [
+        "launcher returns below form",
+        "chat opens",
+        "44px close target",
+        "launcher hidden near form"
+      ]
+    }
+  ],
+  "mobile-navigation": [
+    {
+      "width": 320,
+      "route": "/estimate",
+      "passed": true
+    },
+    {
+      "width": 320,
+      "route": "/",
+      "passed": true
+    },
+    {
+      "width": 320,
+      "route": "/re-10-repairs-boise",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "route": "/estimate",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "route": "/",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "route": "/re-10-repairs-boise",
+      "passed": true
+    },
+    {
+      "width": 768,
+      "route": "/estimate",
+      "passed": true
+    },
+    {
+      "width": 768,
+      "route": "/",
+      "passed": true
+    },
+    {
+      "width": 768,
+      "route": "/re-10-repairs-boise",
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "route": "/estimate",
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "route": "/",
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "route": "/re-10-repairs-boise",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "route": "/estimate",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "route": "/",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "route": "/re-10-repairs-boise",
+      "passed": true
+    }
+  ]
+}
