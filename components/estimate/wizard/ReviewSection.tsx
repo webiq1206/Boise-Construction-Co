@@ -43,7 +43,7 @@ export function ReviewSection({
         data-testid={testId}
         className={cn(
           "flex items-center justify-between gap-3 border-b py-1",
-          inverse ? "border-inverse-foreground/12" : "border-border",
+          inverse ? "border-inverse-foreground/[0.12]" : "border-border",
           className,
         )}
       >

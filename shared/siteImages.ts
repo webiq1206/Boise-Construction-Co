@@ -1,5 +1,5 @@
 /**
- * Marketing image paths. These point at project photography in
+ * Marketing image paths. These point at representative design imagery in
  * `public/images/`. Replace with your own photos using the same filenames
  * (or update the paths here) - .jpg or .webp also work.
  */
@@ -9,14 +9,14 @@ export const SITE_IMAGES = {
       Custom Home Building service card uses (owner picked it for the hero). */
   hero: "/images/construction/custom-home-exterior.webp",
   /** Design-build / plan review split panels. */
-  process: "/images/process-design-review.webp",
+  process: "/images/construction/plans-and-selections.webp",
   /** "Where your money goes" value band - a carpenter setting custom cabinetry,
    *  reinforcing that the budget is spent on craftsmanship, not overhead. */
-  valueCraft: "/images/value-craftsmanship-cabinetry.webp",
+  valueCraft: "/images/construction/mechanical-rough-in.webp",
   /** A house being framed - process sections. */
   processInProgress: "/images/framing-in-progress-branded.webp",
   /** Full-bleed brand statement band. */
-  statementBand: "/images/statement-great-room.webp",
+  statementBand: "/images/construction/great-room-evening.webp",
   /** About/contact split panels and about hero. */
   // Not the shared crew photo: that one shows Boise Remodeling Co shirts, which
   // is the wrong company on this site. A real Construction Co team photo goes here.

@@ -70,6 +70,15 @@ export interface ArticleInlineFigurePlacement {
  * Editorial inline figures for long articles - inserted after key H2 sections
  * to break up text-heavy content (Phase 4).
  */
+const INLINE_HUB_ALTS: Record<string, string> = {
+  "home-building-costs": "Representative line-item home building budget and plans",
+  "choosing-a-builder": "Representative Boise Construction Co builder meeting homeowners at a framed home",
+  "home-building-process": "Representative new home during wood framing",
+  "land-and-lots": "Representative open residential building lot",
+  "home-design-and-plans": "Home plans and finish samples arranged for design review",
+  "treasure-valley-locations": "Representative custom home exterior with Treasure Valley foothills"
+};
+
 export function getArticleInlineFigures(
   slug: string,
   sectionCount: number,
@@ -79,15 +88,9 @@ export function getArticleInlineFigures(
 
   const entry = BLOG_IMAGE_REGISTRY[slug];
   const primarySrc = entry?.hero ?? DEFAULT_BLOG_IMAGE;
-  const primaryAlt = entry?.alt ?? getBlogImageAlt(slug);
 
-  const figures: ArticleInlineFigurePlacement[] = [
-    {
-      afterSectionIndex: 1,
-      src: primarySrc,
-      alt: primaryAlt,
-    },
-  ];
+  // The article hero already establishes the setting. Avoid repeating it in the body.
+  const figures: ArticleInlineFigurePlacement[] = [];
 
   if (sectionCount >= 6 && hubSlug) {
     const hubHero = getHubHeroImage(hubSlug);
@@ -95,8 +98,8 @@ export function getArticleInlineFigures(
       figures.push({
         afterSectionIndex: Math.floor(sectionCount / 2),
         src: hubHero,
-        alt: `Treasure Valley ${hubSlug.replace(/-/g, ' ')}`,
-        caption: 'New home construction in the Treasure Valley.',
+        alt: INLINE_HUB_ALTS[hubSlug] ?? 'Representative design imagery',
+        caption: 'Representative imagery for this guide.',
       });
     }
   }
