@@ -67,7 +67,7 @@ export function ServicesGrid() {
               <div className="relative min-h-[clamp(280px,38vw,460px)] overflow-hidden">
                 <Image
                   src={getServiceBackground(lead.slug)}
-                  alt={`${lead.name} by ${SITE_CONFIG.name} in the Treasure Valley, Idaho`}
+                  alt={`Representative ${lead.name.toLowerCase()} work`}
                   fill
                   sizes="(max-width: 1024px) 100vw, 55vw"
                   quality={72}
