@@ -43,6 +43,7 @@ try {
      if(width<1440){
       await menu.click();const dialog=page.getByRole('dialog').filter({visible:true}).first();await dialog.waitFor();
       const close=dialog.getByRole('button',{name:/close/i}).first();const rect=await close.boundingBox();assert(rect&&rect.width>=44&&rect.height>=44,'Menu close target');
+      await page.waitForTimeout(450);
       await page.screenshot({path:`${out}/${width}-menu.jpg`});
       await page.keyboard.press('Escape');await dialog.waitFor({state:'hidden'});
       await menu.click();await dialog.waitFor();await page.setViewportSize({width:1440,height:900});await dialog.waitFor({state:'hidden'});
@@ -67,6 +68,9 @@ try {
       assert(!style.background.startsWith('rgba')&&!['transparent',''].includes(style.background),'Sticky CTA must be opaque');
       const boxes=await sticky.locator('a,button').evaluateAll(es=>es.filter(e=>e.getClientRects().length).map(e=>({w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height})));
       assert(boxes.every(b=>b.w>=44&&b.h>=44),'Sticky tap target');
+      const barBox=await sticky.boundingBox();
+      const footerBottom=await page.locator('footer a').evaluateAll(es=>Math.max(...es.filter(e=>e.getClientRects().length).map(e=>e.getBoundingClientRect().bottom)));
+      assert(footerBottom<=barBox.y-8,'Last footer links must clear the sticky CTA');
       rec.sticky=style;
      }
      await page.screenshot({path:`${out}/${width}-footer-cta.jpg`});
