@@ -35,7 +35,7 @@ import {
 import { resolveQuotedRange, resolveInternalEstimate } from "@/shared/costs/resolve";
 import { assessBudget, budgetGuidance, BUDGET_BASIS_NOTE } from "@/shared/costs/budget";
 import type { QualityLevel, ScopeSelections } from "@/shared/costs/engine";
-import { HOUSE_NUMBER_REGEX, extractZip } from "@/shared/addressValidation";
+import { extractZip } from "@/shared/addressValidation";
 import {
   type ProjectType,
   type FinishLevel,
@@ -2482,16 +2482,7 @@ export function EstimateCalculator({
     if (gatePhone.trim() && gatePhone.replace(/\D/g, "").length < 10) {
       errors.phone = "Please enter a valid 10-digit phone number, or leave it blank.";
     }
-    /* A street address is only demanded of someone who has one: landowners
-       get the house-number check; everyone else just needs to name the city
-       or area they plan to build in. Both are editable right here. */
-    if (ownsLand) {
-      if (!gateAddress.trim() || !HOUSE_NUMBER_REGEX.test(gateAddress.trim())) {
-        errors.address = "Please enter your property address, including the house number.";
-      }
-    } else if (buildArea.trim().length < 2) {
-      errors.address = "Please tell us the city or area you plan to build in.";
-    }
+    // Location is optional for a preliminary range, including for landowners.
     setGateFieldErrors(errors);
     if (Object.keys(errors).length > 0) {
       // Field NAMES only - never values.
@@ -2543,11 +2534,9 @@ export function EstimateCalculator({
          API treats budget as optional but rejects "". */
       budget: budgetValue ? `$${budgetValue.toLocaleString("en-US")}` : undefined,
       projectType: effectiveProject,
-      /* Landowners send their street address; everyone else sends the area
-         they plan to build in. Never both - the API records whichever the
-         visitor's situation makes true. */
+      /* Preserve an optional street address and any general location supplied. */
       address: ownsLand ? gateAddress.trim() : undefined,
-      buildArea: ownsLand ? undefined : buildArea.trim(),
+      buildArea: buildArea.trim() || undefined,
       landOwnership: landOwnership ?? undefined,
       /* Zip and property profile describe a specific parcel, so they only
          travel with an owner's lead: for anyone else they would be leftovers
@@ -2887,7 +2876,7 @@ export function EstimateCalculator({
 
   /* Shared input class for the plain-text inputs in the flow. */
   const flowInputClass =
-    "w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-3 py-2.5 text-base text-inverse-foreground placeholder:text-sm placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors";
+    "min-w-0 max-w-full w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-3 py-2.5 text-base text-inverse-foreground placeholder:text-sm placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors";
 
   /* The non-landowner's version of the address slot: a city or area is enough
      to confirm the service area, and asking for a street address for land they
@@ -2896,7 +2885,7 @@ export function EstimateCalculator({
     <div className="mt-6 scroll-mt-20">
       {renderStepLabel("address", "Where do you plan to build?")}
       <p className="-mt-2 mb-3 text-caption text-inverse-muted/90">
-        A city or general area is plenty - it confirms we serve where you are headed.
+        City, ZIP code, county or a general area is enough. You may also leave this blank.
       </p>
       <input
         type="text"
@@ -2924,7 +2913,7 @@ export function EstimateCalculator({
     <div className="mt-6 scroll-mt-20">
       {renderStepLabel("address", "Where is your lot?")}
       <p className="-mt-2 mb-3 text-caption text-inverse-muted/90">
-        Confirms we serve your area and auto-fills details if we find a match.
+        An address can help us review the property, but it is not required for a preliminary range.
       </p>
       <AddressAutocomplete
         variant="inverse"
@@ -2949,8 +2938,11 @@ export function EstimateCalculator({
         data-testid="early-input-address"
       />
       <p className="mt-2 text-caption text-inverse-muted/90 leading-relaxed">
-        Optional here - you can skip ahead and fill it in later.
+        Optional. Skip this field or enter a city, ZIP code, county or general location below.
       </p>
+      <label htmlFor="optional-build-location" className="mt-4 block text-sm text-inverse-foreground">General location (optional)</label>
+      <input id="optional-build-location" value={buildArea} onChange={(e) => setBuildArea(e.target.value)} maxLength={160} className={flowInputClass} placeholder="City, ZIP code, county or general area" />
+      <p className="mt-2 text-caption text-inverse-muted/90 leading-relaxed">Jurisdiction, utilities, access, soil, slope, permitting and site conditions may affect the final price. We will request the exact address when arranging a site visit, property review or firm proposal.</p>
     </div>
   );
 
@@ -3235,7 +3227,7 @@ export function EstimateCalculator({
      patio). These controls state them and let the visitor adjust; every value
      feeds the line-item engine, so changing one visibly moves the range. */
   const approxInputClass =
-    "w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-3 py-2.5 text-base text-inverse-foreground placeholder:text-sm placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors";
+    "min-w-0 max-w-full w-full bg-inverse-foreground/[0.07] border border-inverse-foreground/20 rounded-md px-3 py-2.5 text-base text-inverse-foreground placeholder:text-sm placeholder:text-inverse-muted/90 outline-none focus:border-inverse-foreground/50 transition-colors";
   const GARAGE_PRESET_SF: Record<string, number> = { two: 480, three: 720, four: 960 };
   /* Collapsed "from your plans" lines for garage, basement and patio. Each
      Edit drops that one plan override, which re-shows the chip and the manual
@@ -4903,7 +4895,7 @@ export function EstimateCalculator({
      has actually been captured. */
   const gateInputClass = (invalid: boolean) =>
     cn(
-      "w-full bg-inverse-foreground/[0.07] border rounded-md px-4 py-3 text-base text-inverse-foreground placeholder:text-sm placeholder:text-inverse-muted/90 outline-none transition-colors",
+      "min-w-0 max-w-full w-full bg-inverse-foreground/[0.07] border rounded-md px-4 py-3 text-base text-inverse-foreground placeholder:text-sm placeholder:text-inverse-muted/90 outline-none transition-colors",
       invalid
         ? "border-red-400/70 focus:border-red-400"
         : "border-inverse-foreground/20 focus:border-inverse-foreground/50",
@@ -5072,12 +5064,12 @@ export function EstimateCalculator({
                 htmlFor="gate-address"
                 className="mb-1.5 block text-caption tracking-[0.06em] uppercase text-inverse-muted"
               >
-                Property address
+                Property address (optional)
               </label>
               <input
                 id="gate-address"
                 type="text"
-                placeholder="Property address (house number + street)"
+                placeholder="Street address, if available"
                 value={gateAddress}
                 onChange={(e) => {
                   setGateAddress(e.target.value);
@@ -5091,7 +5083,7 @@ export function EstimateCalculator({
               />
               {gateFieldError("address")}
               <p id="gate-help-address" className="mt-1.5 text-xs text-inverse-muted/90">
-                So we can confirm we serve your area and check county records before your visit.
+                You may leave this blank. We will ask for the exact address when a property review or site visit is needed.
               </p>
             </div>
           ) : (
@@ -5100,7 +5092,7 @@ export function EstimateCalculator({
                 htmlFor="gate-build-area"
                 className="mb-1.5 block text-caption tracking-[0.06em] uppercase text-inverse-muted"
               >
-                City or area you plan to build in
+                General location (optional)
               </label>
               <input
                 id="gate-build-area"
@@ -5119,7 +5111,7 @@ export function EstimateCalculator({
               />
               {gateFieldError("address")}
               <p id="gate-help-area" className="mt-1.5 text-xs text-inverse-muted/90">
-                So we can confirm we serve the area you are headed to.
+                City, ZIP code, county or a general area is enough. You may leave this blank.
               </p>
             </div>
           )}
