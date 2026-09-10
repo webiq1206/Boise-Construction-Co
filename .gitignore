@@ -29,3 +29,6 @@ tsconfig.tsbuildinfo
 # Rasterised brand previews. Throwaway output of `npm run brand:preview`, used to
 # eyeball a generated mark before committing the real assets in public/brand.
 scripts/brand/preview/
+
+# Estimator test outputs
+/p5-verification/

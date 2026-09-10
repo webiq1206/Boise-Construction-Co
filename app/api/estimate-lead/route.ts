@@ -263,7 +263,7 @@ export async function POST(request: NextRequest) {
        mistakes it for a property we can look up. */
     const displayAddress =
       data.address ||
-      (data.buildArea ? `${data.buildArea} (planned area - lot not owned yet)` : "");
+      (data.buildArea ? `${data.buildArea} (general location)` : "");
     const ownershipNote =
       data.landOwnership === "own"
         ? "Owns the lot"
