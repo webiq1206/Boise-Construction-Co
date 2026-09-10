@@ -65,8 +65,8 @@ export function WhyChooseUsSection({ limit }: WhyChooseUsSectionProps) {
               <figure className="mt-10 hidden lg:block">
                 <div className="relative aspect-[4/3] overflow-hidden" style={{ border: "1px solid var(--ed-line)" }}>
                   <Image
-                    src={SITE_IMAGES.processInProgress}
-                    alt="Representative image of a Boise Construction Co worker checking interior framing"
+                    src={SITE_IMAGES.valueCraft}
+                    alt="Representative mechanical rough-in showing pipes and wiring coordinated inside framed walls"
                     fill
                     sizes="(min-width: 1024px) 40vw, 100vw"
                     className="object-cover img-brand-grade"
