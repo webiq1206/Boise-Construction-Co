@@ -52,7 +52,7 @@ function renderMessageText(text: string) {
 
 export function AssistantWidget() {
   const pathname = usePathname();
-  const formInView = useFormInView(pathname);
+  const formInView = useFormInView(pathname, true);
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
   const [input, setInput] = useState("");
