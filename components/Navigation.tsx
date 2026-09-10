@@ -286,7 +286,7 @@ export function Navigation() {
           three equal actions diluted which one visitors actually tap. */}
       <div
         data-mobile-nav-bar=""
-        className={cn("fixed left-0 right-0 bottom-0 z-[100] lg:hidden pb-safe border-t bg-background border-border", (formInView || mobileOpen) && "invisible pointer-events-none")}
+        className={cn("fixed left-0 right-0 bottom-0 z-[100] lg:hidden pb-safe border-t bg-background border-border", (formInView || mobileOpen || pathname?.startsWith("/estimate")) && "invisible pointer-events-none")}
       >
         <div className="flex items-stretch gap-2 p-2">
           <a
