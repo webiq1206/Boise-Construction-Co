@@ -113,6 +113,7 @@ export default function ServicesIndexPage() {
                     fill
                     sizes="(max-width: 1024px) 100vw, 55vw"
                     quality={72}
+                  unoptimized={getServiceBackground(lead.slug) === "/images/construction/custom-home-exterior.webp"}
                     className="object-cover img-brand-grade"
                   />
                 </div>
