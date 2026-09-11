@@ -31,7 +31,8 @@ export const runtime = "nodejs";
  * customer answers exactly one question before losing interest, it has to be
  * the one worth a factor of two.
  */
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const job = await getJob(params.id).catch(() => null);
   if (!job) {
     return NextResponse.json({ error: "failed", message: "That review has expired." }, { status: 404 });

@@ -30,7 +30,8 @@ export const runtime = "nodejs";
  *     deriving it from a counter - a counter is shared state, and shared state
  *     is the race this design exists to avoid.
  */
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const job = await getJob(params.id).catch(() => null);
   if (!job) {
     return NextResponse.json({ error: "failed", message: "That review has expired." }, { status: 404 });

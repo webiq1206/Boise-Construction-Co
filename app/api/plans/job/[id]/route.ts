@@ -19,7 +19,8 @@ export const runtime = "nodejs";
  * because a clean 200-sheet set would otherwise ship 200 redundant "processed"
  * rows to a browser that renders none of them.
  */
-export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const job = await getJob(params.id).catch(() => null);
   if (!job) {
     return NextResponse.json({ error: "failed", message: "That review has expired." }, { status: 404 });

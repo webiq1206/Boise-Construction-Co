@@ -24,7 +24,8 @@ export const runtime = "nodejs";
  * died reports "we could not review 12 of your 103 sheets" rather than quietly
  * pricing the 91 it managed and calling that the answer.
  */
-export async function POST(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(_request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const job = await getJob(params.id).catch(() => null);
   if (!job) {
     return NextResponse.json({ error: "failed", message: "That review has expired." }, { status: 404 });
