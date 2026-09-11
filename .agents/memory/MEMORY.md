@@ -1,3 +1,4 @@
+- [Publish schema parity](publish-schema-parity.md) — production-only runtime tables can become proposed drops; inspect the actual publish diff, not just builds or migrations.
 - [Email provider decision](email-provider.md) — sends via Resend not Gmail; Gmail couldn't send from the boiseremodeling.co alias; always check Resend's `{data,error}`.
 - [Em-dash build guard](em-dash-guard.md) — prebuild fails on U+2014 in code/content; use hyphens; markdown & .json deliberately out of scope.
 - [Address field validation](address-field-validation.md) — never store raw geocoder formattedAddress in the regex-validated form field; always run buildCleanAddress first.
