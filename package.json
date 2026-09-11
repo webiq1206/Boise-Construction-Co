@@ -108,6 +108,7 @@
     "embla-carousel-react": "^8.6.0",
     "exceljs": "^4.4.0",
     "framer-motion": "^11.13.1",
+    "heic-convert": "^2.1.0",
     "input-otp": "^1.4.2",
     "iron-session": "^8.0.4",
     "leaflet": "^1.9.4",
