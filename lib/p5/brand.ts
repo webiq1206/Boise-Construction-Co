@@ -4,6 +4,7 @@ export const ESTIMATOR_BRAND = {
   "domain": "boiseconstruction.co",
   "accent": "#D09A5C",
   "services": [
+    "re10",
     "new-construction",
     "addition",
     "adu",

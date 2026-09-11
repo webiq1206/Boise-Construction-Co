@@ -1,19 +1,17 @@
 import { ESTIMATOR_BRAND } from "./brand";
 import { DraftError } from "./store";
 const buckets=new Map<string,{count:number;until:number}>();
+function configuredOrigins() {
+  const values=[`https://${ESTIMATOR_BRAND.domain}`,`https://www.${ESTIMATOR_BRAND.domain}`,process.env.APP_BASE_URL,process.env.REPLIT_DEV_DOMAIN];
+  return new Set(values.flatMap(value=>{
+    if(!value)return [];
+    try{return [new URL(value.includes("://")?value:`https://${value}`).origin];}catch{return [];}
+  }));
+}
 export function protectRequest(request:Request,limit=60) {
   const origin=request.headers.get("origin");const url=new URL(request.url);
-  const allowedOrigins = new Set([url.origin, `https://${ESTIMATOR_BRAND.domain}`, `https://www.${ESTIMATOR_BRAND.domain}`]);
-  // Next's internal request URL can differ from the browser's proxied preview URL.
-  // Trust only configured domains, not client-supplied forwarded host headers.
-  if (process.env.NODE_ENV !== "production") {
-    if (process.env.REPLIT_DEV_DOMAIN) allowedOrigins.add(`https://${process.env.REPLIT_DEV_DOMAIN}`);
-    if (url.hostname === "localhost" || url.hostname === "127.0.0.1") {
-      allowedOrigins.add(`http://localhost:${url.port || "80"}`);
-      allowedOrigins.add(`http://127.0.0.1:${url.port || "80"}`);
-    }
-  }
-  if(origin && !allowedOrigins.has(origin))throw new DraftError("Request origin is not allowed.",403);
+  const localPreview=process.env.NODE_ENV==="development" && origin==="http://terminal.local:4173";
+  if(origin && !localPreview && origin!==url.origin && !configuredOrigins().has(origin))throw new DraftError("Request origin is not allowed.",403);
   const key=`${url.pathname}:${request.method}:${(request.headers.get("x-forwarded-for")||"unknown").split(",")[0]}`;const now=Date.now();
   if(buckets.size>10000)for(const [k,v]of buckets)if(v.until<now)buckets.delete(k);
   const b=buckets.get(key);if(!b||b.until<now)buckets.set(key,{count:1,until:now+600000});
@@ -31,14 +29,6 @@ export function failed(error:unknown){
   if(error instanceof DraftError)return json({error:error.message},error.status);
   console.error("[p5-estimator]",error instanceof Error?error.message:"request failed");
   const code=error instanceof Error?error.message:"";
-  const analysisMessages: Record<string, string> = {
-    "analysis-unconfigured": "Automatic document review is not configured on this site. Your files and saved work are intact. The site operator must enable the analysis service before retrying.",
-    "analysis-unauthorized": "The document-analysis service could not authorize this site. Your files and saved work are intact. The site operator must restore service access before retrying.",
-    "analysis-model-unavailable": "The configured document-analysis model is unavailable. Your files and saved work are intact. The site operator must correct the model configuration.",
-    "analysis-busy": "Scope review is busy. Your files and work are saved. Please try again shortly.",
-    "analysis-provider-unavailable": "The document-analysis provider is temporarily unavailable. Your files and work are saved. Please try again shortly.",
-    "analysis-request-rejected": "The document-analysis provider could not accept this review request. Your files and work are saved. The site operator must check the analysis configuration.",
-  };
-  const message=analysisMessages[code] || "We could not finish this step. Your existing work is intact. Please try again.";
+  const message=code==="analysis-unconfigured"?"Automatic scope review is temporarily unavailable. Your saved work is intact; continue manually or try again later.":code==="analysis-busy"?"Scope review is busy. Your work is saved. Please try again shortly.":"We could not finish this step. Your existing work is intact. Please try again.";
   return json({error:message},503);
 }
