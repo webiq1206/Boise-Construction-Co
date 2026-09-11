@@ -238,7 +238,7 @@ export async function recordProgress(report: ProgressReport, now = new Date()): 
       completedAt: completed ? sql`COALESCE(${estimatorSessions.completedAt}, ${now})` : sql`${estimatorSessions.completedAt}`,
       updatedAt: now,
     },
-  });
+  }).returning({ id: estimatorSessions.id });
   return { stored: true };
 }
 
@@ -292,7 +292,7 @@ export async function recordCallbackRequest(req: CallbackRequest, now = new Date
       callbackRequestedAt: sql`COALESCE(${estimatorSessions.callbackRequestedAt}, ${now})`,
       updatedAt: now,
     },
-  });
+  }).returning({ id: estimatorSessions.id });
 
   // Claim the notification atomically so a retried request cannot send twice.
   const claimed = await db.update(estimatorSessions)

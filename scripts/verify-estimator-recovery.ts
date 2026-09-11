@@ -16,6 +16,7 @@
  */
 import assert from "node:assert/strict";
 import { PGlite } from "@electric-sql/pglite";
+import { neon, neonConfig } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/pglite";
 import { eq } from "drizzle-orm";
 import * as schema from "../shared/schema";
@@ -30,7 +31,15 @@ import {
 
 async function main() {
   const pg = new PGlite();
-  const db = drizzle(pg, { schema });
+  const mutationQueries: string[] = [];
+  const db = drizzle(pg, {
+    schema,
+    logger: {
+      logQuery(query) {
+        if (/insert into "estimator_sessions"/i.test(query)) mutationQueries.push(query);
+      },
+    },
+  });
   const sent: Array<{ subject: string; html: string }> = [];
   let failNext = 0;
   installEstimatorSessionsTestAdapter({
@@ -43,6 +52,24 @@ async function main() {
     },
   });
 
+  // Neon HTTP cannot process a non-returning mutation when the deployment SQL
+  // proxy returns its valid rowCount=1, rows=null, fields=null response.
+  const previousFetch = neonConfig.fetchFunction;
+  neonConfig.fetchFunction = async () => new Response(JSON.stringify({ rowCount: 1, rows: null, fields: null }), {
+    status: 200,
+    headers: { "content-type": "application/json" },
+  });
+  try {
+    const neonClient = neon("postgresql://regression:regression@example.com/regression");
+    await assert.rejects(
+      neonClient`INSERT INTO "estimator_sessions" ("id") VALUES ('synthetic-regression')`,
+      /Cannot read properties of null \(reading 'map'\)/,
+      "Neon HTTP null mutation rows reproduce the 503-triggering driver error",
+    );
+  } finally {
+    neonConfig.fetchFunction = previousFetch;
+  }
+
   const t0 = new Date("2026-09-08T10:00:00Z");
   const later = (ms: number) => new Date(t0.getTime() + ms);
   const idle = INACTIVITY_MS + 5 * 60_000;
@@ -50,6 +77,8 @@ async function main() {
 
   // 1. Not engaged: first step, a few seconds in.
   await recordProgress({ sessionId: "aaaaaaaa-0000-4000-8000-000000000001", flow: "estimate", currentStep: "project", currentStepIndex: 0, totalSteps: 9, startedAt: t0.getTime() }, t0);
+  assert.ok(mutationQueries.length > 0);
+  assert.match(mutationQueries[0], /RETURNING "id"/i, "progress upsert must return rows for Neon HTTP");
   let r = await sweepAbandonedSessions({ now: later(idle) });
   assert.equal(r.sent, 0, "un-engaged session must not email");
 
@@ -100,6 +129,7 @@ async function main() {
   cb = await recordCallbackRequest({ sessionId: "aaaaaaaa-0000-4000-8000-000000000004", flow: "plans", phone: "2085550100" }, later(41_000));
   assert.equal(cb.notified, false, "a retried callback request does not send twice");
   assert.equal(sent.length, 2);
+  assert.ok(mutationQueries.slice(-1)[0]?.match(/RETURNING "id"/i), "callback upsert must return rows for Neon HTTP");
   r = await sweepAbandonedSessions({ now: later(idle + 2_000_000) });
   assert.equal(r.sent, 0, "a callback session is excluded from the abandonment sweep");
 

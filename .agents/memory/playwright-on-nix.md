@@ -13,3 +13,9 @@ For notification-free browser verification, block non-fixture API requests as we
 **Why:** Estimator interactions also trigger a separate session-analytics endpoint. Mocked estimator submissions alone did not prevent synthetic session write attempts during browser checks.
 
 **How to apply:** Register a default API interception before the committed test's more-specific fixture routes. Keep this in the test harness, not application code, and distinguish mocked browser success from real database or provider verification.
+
+Allow for cold development compilation when diagnosing proxy reload timeouts.
+
+**Why:** A cold estimator page exceeded the browser suite's 15-second navigation budget while subsequent requests were fast; a timeout alone did not establish a draft-recovery regression.
+
+**How to apply:** Warm the development route, use a separate longer navigation timeout, and capture static-asset failures. Do not rewrite draft recovery or application caching based only on a cold-load timeout.
