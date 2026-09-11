@@ -71,12 +71,12 @@ export interface ArticleInlineFigurePlacement {
  * to break up text-heavy content (Phase 4).
  */
 const INLINE_HUB_ALTS: Record<string, string> = {
-  "home-building-costs": "Representative line-item home building budget and plans",
-  "choosing-a-builder": "Representative Boise Construction Co builder meeting homeowners at a framed home",
-  "home-building-process": "Representative new home during wood framing",
-  "land-and-lots": "Representative open residential building lot",
+  "home-building-costs": "Line-item home building budget and plans",
+  "choosing-a-builder": "Builder meeting homeowners at a framed home",
+  "home-building-process": "New home during wood framing",
+  "land-and-lots": "Open residential building lot",
   "home-design-and-plans": "Home plans and finish samples arranged for design review",
-  "treasure-valley-locations": "Representative custom home exterior with Treasure Valley foothills"
+  "treasure-valley-locations": "Custom home exterior with Treasure Valley foothills"
 };
 
 export function getArticleInlineFigures(
@@ -99,8 +99,7 @@ export function getArticleInlineFigures(
         afterSectionIndex: Math.floor(sectionCount / 2),
         src: hubHero,
         alt: Object.values(BLOG_IMAGE_REGISTRY).find((image) => image.hero === hubHero)?.alt
-          ?? INLINE_HUB_ALTS[hubSlug] ?? `Representative ${hubSlug.replace(/-/g, ' ')} imagery`,
-        caption: 'Representative imagery for this guide.',
+          ?? INLINE_HUB_ALTS[hubSlug] ?? `${hubSlug.replace(/-/g, ' ')} imagery`,
       });
     }
   }

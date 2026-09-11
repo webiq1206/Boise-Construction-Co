@@ -31,7 +31,17 @@ async function analyzeBatch(text: string, files: AnalysisFile[], previous: Scope
       messages: [{ role: "user", content }], output_config: { format: { type:"json_schema", schema:EXTRACTION_JSON_SCHEMA } },
     }),
   });
-  if (!response.ok) throw new Error(response.status === 429 ? "analysis-busy" : "analysis-failed");
+  if (!response.ok) {
+    // Log only provider metadata, never uploaded content, response bodies or credentials.
+    console.error("[p5-analysis]", JSON.stringify({ provider: "Anthropic", model, status: response.status }));
+    throw new Error(
+      response.status === 401 || response.status === 403 ? "analysis-unauthorized"
+        : response.status === 404 ? "analysis-model-unavailable"
+        : response.status === 429 ? "analysis-busy"
+        : response.status >= 500 ? "analysis-provider-unavailable"
+        : "analysis-request-rejected"
+    );
+  }
   const body = await response.json();
   if (body.stop_reason !== "end_turn") throw new Error("analysis-incomplete");
   const resultText = body.content?.find((part: {type:string}) => part.type === "text")?.text;
@@ -57,14 +67,16 @@ export async function analyzeScope(text:string,files:AnalysisFile[],previous:Sco
   if(!units.length)return analyzeBatch(text,[],previous,request);
   const parts:ScopeExtraction[]=new Array(units.length);let position=0;let last:AnalysisResult|undefined;
   const failed:string[]=[];
+  const failures: unknown[] = [];
   // Bounded concurrency prevents one large plan set from flooding the provider.
   await Promise.all(Array.from({length:Math.min(3,units.length)},async()=>{
     while(position<units.length){const index=position++;const unit=units[index];
       try{const remaining=deadline-Date.now();if(remaining<1000)throw new Error("analysis-time-budget");const value=await analyzeBatch(text,unit,previous,request,Math.min(120000,remaining));parts[index]=value.extraction;last=value;}
-      catch(error){failed.push(`${unit[0].name}: automatic read failed. Review this page before publishing a price.`);}
+      catch(error){failures.push(error);failed.push(`${unit[0].name}: automatic read failed. Retry automatic review before using this page for an estimate.`);}
     }
   }));
-  if(!last)throw new Error("analysis-failed");
+  // Retain the actionable provider failure instead of hiding it behind a generic error.
+  if(!last)throw failures[0] instanceof Error ? failures[0] : new Error("analysis-failed");
   const extraction=combineScopeExtractions(parts.filter(Boolean));extraction.reviewNotes.push(...failed);
   return {...last,extraction,analyzedAt:new Date().toISOString()};
 }
