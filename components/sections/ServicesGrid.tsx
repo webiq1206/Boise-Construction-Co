@@ -6,7 +6,6 @@ import { SERVICES } from "@/shared/contentData";
 import { servicePath } from "@/lib/seo-routes";
 import { CTA_SECONDARY } from "@/shared/ctaCopy";
 import { getServiceBackground } from "@/shared/serviceBackgrounds";
-import { SITE_CONFIG } from "@/shared/siteConfig";
 
 /**
  * Services.
@@ -67,7 +66,7 @@ export function ServicesGrid() {
               <div className="relative min-h-[clamp(280px,38vw,460px)] overflow-hidden">
                 <Image
                   src={getServiceBackground(lead.slug)}
-                  alt={`Representative ${lead.name.toLowerCase()} work`}
+                  alt={`${lead.name} construction scene`}
                   fill
                   sizes="(max-width: 1024px) 100vw, 55vw"
                   quality={72}

@@ -71,15 +71,12 @@ export function ValueOverheadSection() {
                 <Image
                   src={SITE_IMAGES.valueCraft}
                   loading="lazy"
-                  alt="Representative construction detail showing framing, plumbing, electrical wiring and ductwork before drywall"
+                  alt="Construction detail showing framing, plumbing, electrical wiring and ductwork before drywall"
                   fill
                   sizes="(max-width: 1024px) 100vw, 40vw"
                   className="object-cover img-brand-grade"
                 />
               </div>
-              <figcaption className="ed-small mt-4 border-t pt-4" style={{ borderColor: "var(--ed-line)" }}>
-                Construction details · Representative imagery
-              </figcaption>
             </figure>
           </Reveal>
         </div>
