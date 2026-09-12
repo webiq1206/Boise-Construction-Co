@@ -13,6 +13,13 @@ async function put(root, name, content = 'preserve') {
   await mkdir(path.dirname(path.join(root, name)), { recursive: true });
   await writeFile(path.join(root, name), content);
 }
+function backupRecord(prefix, name, content) {
+  return {
+    name, objectKey: `${prefix}/${name}`, bytes: Buffer.byteLength(content),
+    sha256: createHash('sha256').update(content).digest('hex'),
+    generation: '1', anonymousStatus: 403, acl: [{ entity: 'test-owner', role: 'OWNER' }],
+  };
+}
 async function fixture(t) {
   const root = await mkdtemp(path.join(tmpdir(), 'packaging-test-'));
   t.after(() => rm(root, { recursive: true, force: true }));
@@ -22,9 +29,7 @@ async function fixture(t) {
   await put(root, receipt, JSON.stringify({
     bucket: 'private-test-bucket', prefix: 'private-test-prefix', originalDirectory,
     totalBytes: Buffer.byteLength(content),
-    files: [{ name: 'backup.tar', objectKey: 'private-test-prefix/backup.tar',
-      bytes: Buffer.byteLength(content), sha256: createHash('sha256').update(content).digest('hex'),
-      generation: '1', anonymousStatus: 403, acl: [{ entity: 'test-owner', role: 'OWNER' }] }],
+    files: [backupRecord('private-test-prefix', 'backup.tar', content)],
   }));
   await put(root, identity, JSON.stringify({ mountNamespace: 'mnt:[synthetic-disposable-copy]' }));
   for (const entry of exclusions.filter(e => !e.startsWith('.local/'))) await put(root, `${entry}/fixture-cache`);
@@ -32,6 +37,25 @@ async function fixture(t) {
     '.next/standalone/public/customer.pdf', '.next/static/asset.js', 'public/customer.pdf',
     'data/customer.json', '.uploads/customer.bin', 'node_modules/runtime.js', 'start.sh',
     'scripts/submit-indexnow.mjs', '.cache/customer-kept', '.local/customer-kept']) await put(root, entry);
+  return root;
+}
+async function compositeFixture(t) {
+  const root = await fixture(t);
+  const prefix = 'private-test-accuracy-prefix';
+  const originalDirectory = '.local/recovery/nested-accuracy';
+  const name = 'reports/accuracy.json';
+  const content = '{"accuracy":true}\n';
+  await put(root, `${originalDirectory}/${name}`, content);
+  const first = {
+    bucket: 'private-test-bucket', prefix: 'private-test-prefix',
+    originalDirectory: '.local/recovery/synthetic-backup', totalBytes: Buffer.byteLength('synthetic recovery bytes'),
+    files: [backupRecord('private-test-prefix', 'backup.tar', 'synthetic recovery bytes')],
+  };
+  const second = {
+    bucket: 'private-test-bucket', prefix, originalDirectory, totalBytes: Buffer.byteLength(content),
+    files: [backupRecord(prefix, name, content)],
+  };
+  await put(root, receipt, JSON.stringify({ version: 2, sets: [first, second] }));
   return root;
 }
 const apply = { apply: true, env: { PUBLISHING_BUILD_COPY: '1' }, verifyRemote: async () => {} };
@@ -105,6 +129,70 @@ test('verified disposable copy prunes only allowlisted paths', async t => {
     '.next/static/asset.js', 'public/customer.pdf', 'data/customer.json', '.uploads/customer.bin',
     'node_modules/runtime.js', 'start.sh', 'scripts/submit-indexnow.mjs', '.cache/customer-kept',
     '.local/customer-kept']) assert.equal(await readFile(path.join(root, entry), 'utf8'), 'preserve');
+});
+test('composite receipt verifies two sets with a nested file', async t => {
+  const root = await compositeFixture(t);
+  const calls = [];
+  const result = await packageDeployment(root, {
+    ...apply,
+    verifyRemote: async (set, serialized) => {
+      calls.push([set, serialized]);
+      assert.equal(serialized, `${JSON.stringify(set, null, 2)}\n`);
+    },
+  });
+  assert.equal(result.backup.files, 2);
+  assert.equal(calls.length, 2);
+  for (const entry of exclusions) await assert.rejects(access(path.join(root, entry)));
+});
+test('nested composite inventory and checksum mismatches block cleanup', async t => {
+  const cases = [
+    ['missing', async root => rm(path.join(root, '.local/recovery/nested-accuracy/reports/accuracy.json')), /inventory differs/],
+    ['extra', async root => put(root, '.local/recovery/nested-accuracy/reports/extra.json'), /inventory differs/],
+    ['changed', async root => put(root, '.local/recovery/nested-accuracy/reports/accuracy.json', 'changed'), /checksum differs/],
+  ];
+  for (const [label, change, error] of cases) {
+    await t.test(`nested composite ${label} file blocks cleanup`, async t => {
+      const root = await compositeFixture(t);
+      await change(root);
+      await assert.rejects(packageDeployment(root, apply), error);
+      await access(path.join(root, '.next/cache/fixture-cache'));
+    });
+  }
+});
+test('composite receipt rejects duplicate and unsafe paths', async t => {
+  const root = await compositeFixture(t);
+  const report = JSON.parse(await readFile(path.join(root, receipt), 'utf8'));
+  report.sets[1].files.push({ ...report.sets[1].files[0] });
+  await put(root, receipt, JSON.stringify(report));
+  await assert.rejects(packageDeployment(root, apply), /Duplicate recovery path/);
+
+  const traversal = await compositeFixture(t);
+  const traversalReport = JSON.parse(await readFile(path.join(traversal, receipt), 'utf8'));
+  traversalReport.sets[1].files[0].name = 'reports/../accuracy.json';
+  traversalReport.sets[1].files[0].objectKey = `${traversalReport.sets[1].prefix}/reports/../accuracy.json`;
+  await put(traversal, receipt, JSON.stringify(traversalReport));
+  await assert.rejects(packageDeployment(traversal, apply), /Invalid private backup/);
+
+  const invalidDirectory = await compositeFixture(t);
+  const directoryReport = JSON.parse(await readFile(path.join(invalidDirectory, receipt), 'utf8'));
+  directoryReport.sets[1].originalDirectory = '.local/recovery/../outside';
+  await put(invalidDirectory, receipt, JSON.stringify(directoryReport));
+  await assert.rejects(packageDeployment(invalidDirectory, apply), /Invalid private backup/);
+});
+test('remote failure in a later composite set prevents all cleanup', async t => {
+  const root = await compositeFixture(t);
+  let calls = 0;
+  await assert.rejects(packageDeployment(root, {
+    ...apply,
+    verifyRemote: async () => {
+      calls += 1;
+      if (calls === 2) throw Error('Second durable backup object changed');
+    },
+  }), /Second durable backup object changed/);
+  assert.equal(calls, 2);
+  await access(path.join(root, '.local/recovery/synthetic-backup/backup.tar'));
+  await access(path.join(root, '.local/recovery/nested-accuracy/reports/accuracy.json'));
+  await access(path.join(root, '.next/cache/fixture-cache'));
 });
 test('unverified extra recovery file blocks all pruning', async t => {
   const root = await fixture(t);

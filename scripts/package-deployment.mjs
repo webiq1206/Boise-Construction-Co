@@ -50,6 +50,26 @@ async function safeTarget(root, relative) {
   }
 }
 
+function invalidReceipt() {
+  throw Error('Invalid private backup receipt entry.');
+}
+
+function recoveryDirectory(relative) {
+  if (typeof relative !== 'string' || relative.includes('\\')) invalidReceipt();
+  const parts = relative.split('/');
+  if (parts.length < 3 || parts[0] !== '.local' || parts[1] !== 'recovery' ||
+      parts.some(part => !part || part === '.' || part === '..')) invalidReceipt();
+  return parts.slice(2).join('/');
+}
+
+function recoveryName(name) {
+  if (typeof name !== 'string' || !name || name.includes('\\') || path.posix.isAbsolute(name) ||
+      /^[A-Za-z]:\//.test(name)) invalidReceipt();
+  const parts = name.split('/');
+  if (parts.some(part => !part || part === '.' || part === '..')) invalidReceipt();
+  return name;
+}
+
 export async function checkContext(root, env = process.env) {
   if (env.PUBLISHING_BUILD_COPY !== '1') throw Error('Cleanup requires the publishing-build opt-in; editor workspace refused.');
   await safeTarget(root, identityPath);
@@ -71,36 +91,68 @@ export async function checkContext(root, env = process.env) {
 export async function verifyRecovery(root, verifyRemote) {
   const recovery = path.join(root, '.local/recovery');
   if (!await exists(recovery)) return { files: 0, bytes: 0 };
+  await safeTarget(root, '.local/recovery');
   await safeTarget(root, receiptPath);
   const serializedReceipt = await readFile(path.join(root, receiptPath), 'utf8');
   const receipt = JSON.parse(serializedReceipt);
-  if (!receipt.bucket || !receipt.prefix || !Array.isArray(receipt.files) || !receipt.files.length) {
+  let sets;
+  const composite = receipt?.version === 2;
+  if (composite) {
+    if (!Array.isArray(receipt.sets) || !receipt.sets.length) throw Error('Missing verified private backup receipt.');
+    sets = receipt.sets;
+  } else {
+    sets = [receipt];
+  }
+  if (!sets.every(set => set && set.bucket && set.prefix &&
+      Array.isArray(set.files) && set.files.length)) {
     throw Error('Missing verified private backup receipt.');
   }
-  const expected = receipt.files.map(record => {
-    const relative = path.posix.join(receipt.originalDirectory, record.name);
-    if (!relative.startsWith('.local/recovery/') || relative.includes('..') ||
-        record.name.includes('/') || record.name.includes('\\') ||
-        record.objectKey !== `${receipt.prefix}/${record.name}` ||
-        record.anonymousStatus !== 403 || !record.generation ||
-        !Array.isArray(record.acl) || !record.acl.length ||
-        record.acl.some(a => ['allUsers', 'allAuthenticatedUsers'].includes(a.entity))) {
-      throw Error('Invalid private backup receipt entry.');
+  const expected = [];
+  const validated = [];
+  const seen = new Set();
+  for (const set of sets) {
+    const directory = recoveryDirectory(set.originalDirectory);
+    await safeTarget(root, set.originalDirectory);
+    const records = [];
+    for (const record of set.files) {
+      if (!record || typeof record !== 'object') invalidReceipt();
+      const name = recoveryName(record.name);
+      if (record.objectKey !== `${set.prefix}/${name}` ||
+          record.anonymousStatus !== 403 || !record.generation ||
+          !Array.isArray(record.acl) || !record.acl.length ||
+          record.acl.some(a => ['allUsers', 'allAuthenticatedUsers'].includes(a.entity))) {
+        invalidReceipt();
+      }
+      const relative = `${directory}/${name}`;
+      if (seen.has(relative)) throw Error('Duplicate recovery path in verified durable backup.');
+      seen.add(relative);
+      expected.push(relative);
+      records.push({ ...record, name, relative });
     }
-    return relative.slice('.local/recovery/'.length);
-  }).sort();
+    validated.push({ set, records });
+  }
   const actual = await files(recovery);
+  expected.sort();
   if (JSON.stringify(expected) !== JSON.stringify(actual)) throw Error('Recovery inventory differs from verified durable backup.');
   let bytes = 0;
-  for (const record of receipt.files) {
-    const actualHash = await hash(path.join(root, receipt.originalDirectory, record.name));
-    if (actualHash.sha256 !== record.sha256 || actualHash.bytes !== record.bytes) {
-      throw Error(`Recovery checksum differs from verified backup: ${record.name}`);
+  for (const { set, records } of validated) {
+    let setBytes = 0;
+    for (const record of records) {
+      const actualHash = await hash(path.join(root, set.originalDirectory, record.name));
+      if (actualHash.sha256 !== record.sha256 || actualHash.bytes !== record.bytes) {
+        throw Error(`Recovery checksum differs from verified backup: ${record.name}`);
+      }
+      setBytes += actualHash.bytes;
     }
-    bytes += actualHash.bytes;
+    if (set.totalBytes !== setBytes) throw Error('Backup total byte count mismatch.');
+    bytes += setBytes;
   }
-  if (receipt.totalBytes !== bytes) throw Error('Backup total byte count mismatch.');
-  if (verifyRemote) await verifyRemote(receipt, serializedReceipt);
+  if (verifyRemote) {
+    for (const { set } of validated) {
+      const serialized = composite ? `${JSON.stringify(set, null, 2)}\n` : serializedReceipt;
+      await verifyRemote(set, serialized);
+    }
+  }
   return { files: actual.length, bytes };
 }
 
