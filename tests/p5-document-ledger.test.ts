@@ -20,6 +20,13 @@ test('Missing or duplicate page reports never claim completion',()=>{
   assert.equal(coverageFor([page],[read,read]).complete,false);
   assert.equal(coverageFor([page],[{...read,status:'partial'}]).complete,false);
 });
+test('An unreadable source still contributes every known physical page to progress',()=>{
+ const expected=[page,{...page,page:2},{...page,page:3}];
+ const progress=analysisProgress([],expected);
+ assert.equal(progress.readPages,0);assert.equal(progress.totalPages,3);
+ assert.equal(progress.readSections,0);assert.equal(progress.totalSections,0);
+ assert.match(progress.message,/Read 0 of 3 pages/);
+});
 test('Parallelism is bounded without limiting total plan pages',()=>{
   assert.equal(analysisConcurrency('6'),6);assert.equal(analysisConcurrency('999'),8);
   assert.equal(analysisConcurrency('-1'),6);assert.equal(analysisConcurrency('invalid'),6);

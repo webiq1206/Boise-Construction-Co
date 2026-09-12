@@ -1,29 +1,47 @@
 import assert from 'node:assert/strict';
 import {cp,mkdir,mkdtemp,readFile,rm,writeFile} from 'node:fs/promises';
-import {randomBytes,randomUUID} from 'node:crypto';
+import {createHash,randomBytes,randomUUID} from 'node:crypto';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
+import {priceCompleteScope,requestPricing,type PricingRequest} from '../lib/p5/scopePricing';
+import type {EstimatorConfiguration} from '../lib/p5/costBook';
+import type {ReviewedScope} from '../lib/p5/scope';
 
 // This is deliberately not a build check. It runs the durable analysis queue
 // against only an in-memory PGlite database and an explicitly authorized live
 // provider. It creates no upload, submission, delivery, lead, or CRM record.
 const offlineSafetyCheck=process.env.P5_LIVE_ANALYSIS_OFFLINE_CHECK==='true';
+const acceptanceMode=process.env.P5_LIVE_ANALYSIS_ACCEPTANCE==='true';
 if(!offlineSafetyCheck&&process.env.P5_RUN_LIVE_ANALYSIS!=='true')throw new Error('Set P5_RUN_LIVE_ANALYSIS=true only for an authorized configured-provider analysis diagnostic.');
 
-const syntheticText='Replace one existing bathroom vanity with a new owner-supplied 36-inch vanity in the same location. Reconnect the existing sink plumbing. No flooring, painting, or layout changes.';
+const syntheticText='Boise, Idaho. First-floor bathroom. Replace one existing 36-inch vanity in place with one owner-supplied assembled 36-inch vanity whose owner-supplied top is included, plus owner-supplied hardware. Do not reuse the existing countertop. Remove the existing vanity, install the supplied vanity, and reconnect the existing sink supply and drain at the same locations. No faucet replacement, countertop work beyond installing the supplied top, wall changes, plumbing reroute, electrical work, flooring, painting, demolition beyond the existing vanity, or layout changes.';
 const startedAt=Date.now();
 const overallLimitMs=180_000;
 // Leave time to persist a useful result and clean up before the hard limit.
 const providerDeadline=startedAt+175_000;
-const reportDirectory=path.join(process.cwd(),'.local/diagnostics/startup-preservation/live-analysis');
-const reportPath=path.join(reportDirectory,`analysis-${new Date().toISOString().replace(/[:.]/g,'-')}.json`);
+const reportDirectory=path.join(process.cwd(),acceptanceMode?'.local/diagnostics/acceptance':'.local/diagnostics/startup-preservation/live-analysis');
+const reportPath=path.join(reportDirectory,`${acceptanceMode?'live-runtime-acceptance':'analysis'}-${new Date().toISOString().replace(/[:.]/g,'-')}.json`);
 const originalDatabaseUrl=process.env.DATABASE_URL;
 const originalFetch=globalThis.fetch;
 const originalConsoleWarn=console.warn;
 const originalConsoleError=console.error;
-const httpEvents:Array<{provider:string;model:string|null;status:number|null;error?:string}>=[];
+const httpEvents:Array<{phase:'analysis'|'pricing';provider:string;model:string|null;status:number|null;durationMs:number;error?:string}>=[];
 const runtimeWarnings:Array<{level:'warn'|'error';message:string}>=[];
 const blockedRequests:string[]=[];
+const pricingStages:Array<{
+  run:'baseline'|'no-change-followup';
+  stage:string;
+  search:boolean;
+  durationMs:number;
+  providerCalls:Array<{provider:string;model:string|null;status:number|null;durationMs:number;error?:string}>;
+  sourceHosts:string[];
+  error?:string;
+}>=[];
+let pricingReport:any;
+let pricingDeadline=0;
+let activePhase:'analysis'|'pricing'='analysis';
+let validatedExtractionElapsedMs:number|undefined;
+let sameSourceCacheDiagnostic:any;
 let businessDatabaseImports=0;
 let deliveryModuleImports=0;
 let outboxEmpty=false;
@@ -93,7 +111,7 @@ function safeJob(job:any){
       provider:redact(analysis.provider),
       model:redact(analysis.model),
       analyzedAt:analysis.analyzedAt,
-      summary:redact(analysis.extraction?.summary),
+      summary:acceptanceMode?undefined:redact(analysis.extraction?.summary),
       factCount:Array.isArray(analysis.extraction?.facts)?analysis.extraction.facts.length:0,
       clarificationCount:Array.isArray(analysis.extraction?.clarifications)?analysis.extraction.clarifications.length:0,
       reviewNoteCount:Array.isArray(analysis.extraction?.reviewNotes)?analysis.extraction.reviewNotes.length:0,
@@ -103,7 +121,177 @@ function safeJob(job:any){
 
 async function sleep(milliseconds:number){await new Promise(resolve=>setTimeout(resolve,milliseconds));}
 
+async function runSameSourceClarificationCacheDiagnostic(){
+  const scopeEndpointSource=await readFile(path.join(process.cwd(),'lib/p5/scopeEndpoint.ts'),'utf8');
+  assert.match(scopeEndpointSource,/const reuseSavedAnalysis=Boolean\(sameSource&&draft\.extraction&&!incompleteSavedAnalysis&&form\.get\('retry'\)!=='true'\);/,'Same-source clarification must retain the saved extraction fast path.');
+  const started=performance.now();
+  const savedSourceVersion='synthetic-source-v1';
+  const submittedSourceVersion='synthetic-source-v1';
+  const savedTextHash='synthetic-text-hash';
+  const submittedTextHash='synthetic-text-hash';
+  const sameSource=savedSourceVersion===submittedSourceVersion;
+  const sourceTextChanged=!sameSource&&savedTextHash!==submittedTextHash;
+  const savedExtraction={documentCoverage:{complete:true}};
+  const incompleteSavedAnalysis=false;
+  const reuseSavedAnalysis=Boolean(sameSource&&savedExtraction&&!incompleteSavedAnalysis);
+  return {
+    synthetic:true,
+    sameSource,
+    sourceTextChanged,
+    savedExtractionReused:reuseSavedAnalysis,
+    providerRereadCalls:reuseSavedAnalysis?0:1,
+    avoidedProviderRereads:reuseSavedAnalysis?1:0,
+    cacheDecisionElapsedMs:Math.round(performance.now()-started),
+    liveProviderDelaySavingsMs:null,
+    note:'Synthetic local-path check only; no live provider delay savings are claimed.',
+  };
+}
+
+function sourceHosts(urls:unknown){
+  return [...new Set((Array.isArray(urls)?urls:[]).flatMap(url=>{
+    try{return [new URL(String(url)).hostname.slice(0,120)];}catch{return [];}
+  }))].slice(0,20);
+}
+
+function pricingStageName(search:boolean,input:unknown){
+  if(search)return 'research';
+  if(!input||typeof input!=='object')return 'provider-json';
+  const fields=input as Record<string,unknown>;
+  if(Object.hasOwn(fields,'priorTaskDescriptions'))return 'inventory';
+  if(Object.hasOwn(fields,'catalog'))return 'mapping';
+  if(Object.hasOwn(fields,'requested'))return 'normalize-research';
+  if(Object.hasOwn(fields,'additionalRules'))return 'audit';
+  return 'provider-json';
+}
+
+async function runAcceptancePricing(extraction:unknown){
+  const policyPath=path.join(process.cwd(),'.local/diagnostics/acceptance/owner-policy.json');
+  const policyBefore=await readFile(policyPath,'utf8');
+  const configuration=JSON.parse(policyBefore) as EstimatorConfiguration;
+  const rateCount=configuration.planningCatalog?.rates.length||0;
+  assert.equal(rateCount,185,'The supplied owner policy must contain exactly 185 approved production rates.');
+  const policyHash=createHash('sha256').update(policyBefore).digest('hex');
+  const configurationHash=createHash('sha256').update(JSON.stringify(configuration)).digest('hex');
+  const scope:ReviewedScope={
+    text:syntheticText,
+    answers:{
+      service:'re10',
+      location:'Boise, Idaho',
+      estimatingInstructions:'Price only replacement and reconnection of the existing bathroom vanity at the same location. Owner supplies the 36-inch vanity. Include only normal installation labor and explicitly required sink reconnection. Exclude flooring, painting, layout changes and unrelated work.',
+    },
+    extraction:extraction as ReviewedScope['extraction'],
+    uploads:[],
+    reviewedAt:new Date().toISOString(),
+    corrections:[],
+  };
+  const run=async(runName:'baseline'|'no-change-followup',runScope:ReviewedScope)=>{
+    const started=performance.now();
+    const stageOffset=pricingStages.length;
+    const requestOffset=httpEvents.length;
+    const request:PricingRequest=async(instructions,input,search,remainingMs)=>{
+      const stageStarted=performance.now();
+      const eventOffset=httpEvents.length;
+      let reply:{value:unknown;sourceUrls:string[];sourceReport?:string}|undefined;
+      let errorMessage:string|undefined;
+      try{
+        reply=await requestPricing(instructions,input,search,remainingMs);
+        return reply;
+      }catch(error){
+        errorMessage=redact(error instanceof Error?error.message:'pricing provider semantic failure');
+        throw error;
+      }finally{
+        const calls=httpEvents.slice(eventOffset).filter(event=>event.phase==='pricing').map(({phase,...event})=>event);
+        pricingStages.push({
+          run:runName,
+          stage:pricingStageName(search,input),
+          search,
+          durationMs:Math.round(performance.now()-stageStarted),
+          providerCalls:calls,
+          sourceHosts:sourceHosts(reply?.sourceUrls),
+          error:errorMessage,
+        });
+      }
+    };
+    try{
+      const result=await priceCompleteScope(runScope,configuration,request);
+      const internal=result.internal as any;
+      const lines=Array.isArray(internal?.lines)?internal.lines:[];
+      const issues=Array.isArray(internal?.scopePricing?.issues)?internal.scopePricing.issues.map(redact):['pricing-result-missing-scope-audit'];
+      const range=result.customer?.range;
+      const rangeSummary=range&&Number.isFinite(range.low)&&Number.isFinite(range.high)?{low:range.low,high:range.high}:null;
+      const positiveLines=lines.filter((line:any)=>Number.isFinite(line?.quantity)&&line.quantity>0&&Number.isFinite(line?.unitCost)&&line.unitCost>0).length;
+      const semanticFailures=issues.length?issues:[];
+      return {
+        run:runName,
+        elapsedMs:Math.round(performance.now()-started),
+        stageCount:pricingStages.length-stageOffset,
+        providerCallCount:httpEvents.slice(requestOffset).filter(event=>event.phase==='pricing').length,
+        status:redact(result.customer?.status),
+        range:rangeSummary,
+        lineCount:lines.length,
+        positiveLineCount:positiveLines,
+        semanticFailures,
+        passed:Boolean(rangeSummary&&lines.length>0&&positiveLines===lines.length&&semanticFailures.length===0),
+      };
+    }catch(error){
+      return {
+        run:runName,
+        elapsedMs:Math.round(performance.now()-started),
+        stageCount:pricingStages.length-stageOffset,
+        providerCallCount:httpEvents.slice(requestOffset).filter(event=>event.phase==='pricing').length,
+        status:'provider-error',
+        range:null,
+        lineCount:0,
+        positiveLineCount:0,
+        semanticFailures:[redact(error instanceof Error?error.message:'pricing provider semantic failure')],
+        passed:false,
+      };
+    }
+  };
+  activePhase='pricing';
+  const pricingStarted=Date.now();
+  pricingDeadline=Date.now()+175_000;
+  const baseline=await run('baseline',scope);
+  // A second request with byte-for-byte identical scope and policy is useful
+  // evidence that a clarification follow-up which changes nothing does not
+  // silently alter the priced result. Skip it only when the bounded pricing
+  // budget cannot accommodate another complete provider pass.
+  const followup=baseline.passed&&Date.now()<pricingDeadline-60_000
+    ? await run('no-change-followup',structuredClone(scope))
+    : undefined;
+  const policyAfter=await readFile(policyPath,'utf8');
+  const afterConfiguration=JSON.parse(policyAfter) as EstimatorConfiguration;
+  const report={
+    policySnapshot:{
+      path:'.local/diagnostics/acceptance/owner-policy.json',
+      rateCount,
+      version:configuration.planningCatalog?.version||null,
+      sha256:policyHash,
+      unchanged:policyBefore===policyAfter,
+      configurationUnchanged:configurationHash===createHash('sha256').update(JSON.stringify(afterConfiguration)).digest('hex'),
+    },
+    elapsedMs:Date.now()-pricingStarted,
+    baseline,
+    noChangeFollowup:followup||{skipped:'bounded pricing budget'},
+    noChangeComparison:followup?{
+      sameScope:true,
+      rangeUnchanged:Boolean(baseline.range&&followup.range&&baseline.range.low===followup.range.low&&baseline.range.high===followup.range.high),
+      baselineRange:baseline.range,
+      followupRange:followup.range,
+      providerCallDelta:followup.providerCallCount-baseline.providerCallCount,
+    }:undefined,
+    stages:pricingStages,
+  };
+  pricingReport=report;
+  assert.equal(report.policySnapshot.unchanged,true,'The supplied owner policy snapshot must not change.');
+  assert.equal(report.policySnapshot.configurationUnchanged,true,'The in-memory owner policy configuration must not change.');
+  assert.equal(baseline.passed,true,'Complete-scope pricing must produce a validated positive range with no semantic failures.');
+  if(followup)assert.equal(followup.passed,true,'No-change clarification follow-up pricing must remain fully validated.');
+  return report;
+}
+
 async function main(){
+  sameSourceCacheDiagnostic=await runSameSourceClarificationCacheDiagnostic();
   const endpoints=configuredEndpoints();
   assert.ok(endpoints.length>0,'No configured OpenAI or Anthropic analysis provider is available in this runtime.');
   const allowed=new Map(endpoints.map(endpoint=>[new URL(endpoint.url).toString(),endpoint.provider]));
@@ -121,14 +309,15 @@ async function main(){
       throw new Error('diagnostic-blocked-outgoing-request');
     }
     const model=modelFromRequest(init);
-    const remaining=Math.max(1,providerDeadline-Date.now());
+    const requestStarted=performance.now();
+    const remaining=Math.max(1,(activePhase==='pricing'?pricingDeadline:providerDeadline)-Date.now());
     const signals=[AbortSignal.timeout(remaining),init?.signal].filter(Boolean) as AbortSignal[];
     // Do not allow a permitted provider URL to redirect this diagnostic to a
     // different host or endpoint. Redirects are failures, never a second fetch.
     const guarded={...init,redirect:'error' as RequestRedirect,signal:signals.length===1?signals[0]:AbortSignal.any(signals)};
     try {
       const response=await originalFetch(input,guarded);
-      const event:{provider:string;model:string|null;status:number|null;error?:string}={provider,model,status:response.status};
+      const event:{phase:'analysis'|'pricing';provider:string;model:string|null;status:number|null;durationMs:number;error?:string}={phase:activePhase,provider,model,status:response.status,durationMs:Math.round(performance.now()-requestStarted)};
       if(!response.ok){
         let detail='';
         try{detail=await response.clone().text();}catch{}
@@ -137,7 +326,7 @@ async function main(){
       httpEvents.push(event);
       return response;
     } catch(error) {
-      httpEvents.push({provider,model,status:null,error:redact(error instanceof Error?error.message:'provider request failed')});
+      httpEvents.push({phase:activePhase,provider,model,status:null,durationMs:Math.round(performance.now()-requestStarted),error:redact(error instanceof Error?error.message:'provider request failed')});
       throw error;
     }
   }) as typeof fetch;
@@ -209,10 +398,14 @@ async function main(){
   assert.ok(httpEvents.length>0,'The durable analysis job did not reach a configured provider.');
   assert.equal(finalJob.state,'complete',`Live analysis did not complete after ${finalJob.attempts||0} durable attempt(s).`);
   assert.ok(finalJob.result?.analysis?.provider&&finalJob.result?.analysis?.model,'A completed job must contain a real provider and model result.');
+  assert.ok(finalJob.result?.analysis?.extraction&&Array.isArray(finalJob.result.analysis.extraction.facts)&&Array.isArray(finalJob.result.analysis.extraction.clarifications),'A completed job must contain schema-validated extraction.');
   assert.ok(httpEvents.some(event=>event.status!==null&&event.status>=200&&event.status<300),'A completed job requires an actual successful provider response.');
+  validatedExtractionElapsedMs=Date.now()-startedAt;
+  if(acceptanceMode)pricingReport=await runAcceptancePricing(finalJob.result.analysis.extraction);
 }
 
 if(offlineSafetyCheck){
+  sameSourceCacheDiagnostic=await runSameSourceClarificationCacheDiagnostic();
   const source=await readFile(new URL(import.meta.url),'utf8');
   assert.match(source,/redirect:'error'/,'The provider request must fail rather than follow redirects.');
   assert.match(source,/diagnostic-delivery-module-import-blocked/,'The copied delivery modules must remain fail-closed sentinels.');
@@ -221,9 +414,18 @@ if(offlineSafetyCheck){
   assert.equal(runtimeWarnings.length,before+1,'P5 analysis warnings must be captured alongside original console output.');
   assert.equal(runtimeWarnings.at(-1)?.level,'warn');
   assert.ok(runtimeWarnings.at(-1)?.message.length&&runtimeWarnings.at(-1)!.message.length<=600,'Captured runtime warnings must be bounded.');
+  if(acceptanceMode){
+    await mkdir(reportDirectory,{recursive:true});
+    await writeFile(path.join(reportDirectory,'offline-cache-acceptance.json'),JSON.stringify({
+      synthetic:true,
+      offlineSafetyCheck:true,
+      sameSourceClarificationCache:sameSourceCacheDiagnostic,
+      externalWrites:'None',
+    },null,2));
+  }
   console.warn=originalConsoleWarn;
   console.error=originalConsoleError;
-  console.log(JSON.stringify({passed:true,offlineSafetyCheck:true,runtimeWarningCapture:true,redirectPolicy:'error',deliverySentinel:'fail-closed'}));
+  console.log(JSON.stringify({passed:true,offlineSafetyCheck:true,runtimeWarningCapture:true,redirectPolicy:'error',deliverySentinel:'fail-closed',sameSourceCacheDiagnostic}));
 }else{
   try {
     await main();
@@ -249,7 +451,16 @@ if(offlineSafetyCheck){
       configuredProviders:configuredEndpoints().map(endpoint=>endpoint.provider),
       requestPolicy:'Only exact configured OpenAI /responses and Anthropic /v1/messages POST requests were permitted.',
       elapsedMs,
-      withinOverallLimit:elapsedMs<=overallLimitMs,
+      analysis:{
+        validatedExtractionElapsedMs,
+        limitMs:overallLimitMs,
+        withinLimit:typeof validatedExtractionElapsedMs==='number'&&validatedExtractionElapsedMs<=overallLimitMs,
+      },
+      pricing:acceptanceMode?pricingReport:undefined,
+      withinOverallLimit:acceptanceMode
+        ? typeof validatedExtractionElapsedMs==='number'&&validatedExtractionElapsedMs<=overallLimitMs&&(!pricingReport||pricingReport.elapsedMs<=overallLimitMs)
+        : elapsedMs<=overallLimitMs,
+      sameSourceClarificationCache:sameSourceCacheDiagnostic,
       httpEvents,
       runtimeWarnings,
       job:safeJob(finalJob),
@@ -268,7 +479,8 @@ if(offlineSafetyCheck){
     console.log(JSON.stringify({passed:!diagnosticError,elapsedMs,job:report.job,httpEvents:report.httpEvents,runtimeWarnings:report.runtimeWarnings,safety:report.safety,report:path.relative(process.cwd(),reportPath),error:diagnosticError}));
   }
   if(diagnosticError)process.exitCode=1;
-  if(Date.now()-startedAt>overallLimitMs)process.exitCode=1;
+  if(!acceptanceMode&&Date.now()-startedAt>overallLimitMs)process.exitCode=1;
+  if(acceptanceMode&&(!(typeof validatedExtractionElapsedMs==='number'&&validatedExtractionElapsedMs<=overallLimitMs&&(!pricingReport||pricingReport.elapsedMs<=overallLimitMs))))process.exitCode=1;
   await rm(dir,{recursive:true,force:true});
 }
 delete (globalThis as Record<symbol,unknown>)[deliverySentinelKey];

@@ -52,16 +52,27 @@ export function materialScopeFields(answers:ScopeAnswers,pricedFields:ScopeField
   return [...new Set([...required,...pricedFields])].filter(k=>!answers[k]?.trim());
 }
 export function scopeQuestions(input:ScopeAnswers,extraction:ScopeExtraction|null,conflicts:ScopeConflict[]=[],skipped:ScopeField[]=[],pricedFields:ScopeField[]=[]):ScopeQuestion[]{
-  const answers=deriveScopeAnswers(input);
+  // A caller may be holding an extraction and a pre-reconciliation answer
+  // snapshot (for example just after a saved draft is restored). Treat
+  // high-confidence source facts as known here so the wizard never asks for a
+  // value that the supplied scope already established.
+  const known=extraction?mergeScopeFacts(input,extraction).answers:input;
+  const answers=deriveScopeAnswers(known);
   const relevant=new Set<ScopeField>(['service',...materialScopeFields(answers,pricedFields),...pricedFields]);
   // An uncertain stated quantity is more useful as one clarification than a blank form.
   const uncertain=(extraction?.facts||[]).filter(f=>f.confidence<.85&&f.confidence>=.4&&!answers[f.field]?.trim()&&relevant.has(f.field));
   const questions:ScopeQuestion[]=conflicts.map(c=>({field:c.field,label:SCOPE_FIELDS[c.field].label,reason:c.explanation,values:c.values,conflict:true}));
   questions.unshift(...instructionPrompts(extraction,answers).map(q=>({field:'estimatingInstructions' as const,label:'One scope detail',reason:q.question,detail:q.detail,values:q.values,instructionId:q.id})));
-  for(const fact of uncertain)if(!questions.some(q=>q.field===fact.field)&&!skipped.includes(fact.field))questions.push({field:fact.field,label:SCOPE_FIELDS[fact.field].label,reason:`${SCOPE_FIELDS[fact.field].label}: we found “${fact.value}” in ${fact.source}. Is that correct?`,values:[fact.value]});
-  for(const q of extraction?.clarifications||[])if(relevant.has(q.field)&&!(q.field==='finish'&&answers.materials)&&!(['address','location','schedule','urgency'].includes(q.field)&&!pricedFields.includes(q.field))&&!answers[q.field]?.trim()&&!skipped.includes(q.field)&&!questions.some(x=>x.field===q.field))questions.push({field:q.field,label:SCOPE_FIELDS[q.field].label,reason:SCOPE_FIELDS[q.field].kind==='number'?`Please confirm ${SCOPE_FIELDS[q.field].label.toLowerCase()}. Approximate is fine.`:q.question});
+  for(const fact of uncertain)if(!questions.some(q=>q.field===fact.field)&&!skipped.includes(fact.field)){
+    const reason=`${SCOPE_FIELDS[fact.field].label}: we found “${fact.value}” in ${fact.source}. Is that correct?`;
+    questions.push({field:fact.field,label:SCOPE_FIELDS[fact.field].label,reason:reason.length<=180?reason:`Please confirm ${SCOPE_FIELDS[fact.field].label.toLowerCase()}.`,detail:reason.length<=180?undefined:reason,values:[fact.value]});
+  }
+  for(const q of extraction?.clarifications||[])if(relevant.has(q.field)&&!(q.field==='finish'&&answers.materials)&&!(['address','location','schedule','urgency'].includes(q.field)&&!pricedFields.includes(q.field))&&!answers[q.field]?.trim()&&!skipped.includes(q.field)&&!questions.some(x=>x.field===q.field)){
+    const reason=SCOPE_FIELDS[q.field].kind==='number'?`Please confirm ${SCOPE_FIELDS[q.field].label.toLowerCase()}. Approximate is fine.`:q.question.replace(/\s+/g,' ').trim();
+    questions.push({field:q.field,label:SCOPE_FIELDS[q.field].label,reason:reason.length<=180?reason:`Please confirm ${SCOPE_FIELDS[q.field].label.toLowerCase()}.`,detail:reason.length<=180?undefined:reason});
+  }
   for(const field of relevant)if(!answers[field]?.trim()&&!questions.some(q=>q.field===field)&&!skipped.includes(field))questions.push({field,label:SCOPE_FIELDS[field].label,reason:field==='service'?'What would you like help with?':field==='taskList'?'What work should be included? A short list with quantities is enough.':field==='sqft'?(builds.includes(answers.service||'')?'About how many square feet of living space are included? Keep garage and outdoor areas separate.':'About how large is the area being worked on?'):field==='finish'?'This helps us allow for the materials you have in mind.':'This detail affects the work and its cost.'});
-  return questions.map(q=>{const definition=SCOPE_FIELDS[q.field];return {...q,...(!q.values?.length&&definition.kind==='choice'?{values:definition.options.filter(v=>q.field!=='service'||(ESTIMATOR_BRAND.services as readonly string[]).includes(v))}:{}),...(q.reason.length>240?{reason:`Please confirm ${q.label.toLowerCase()}.`,detail:q.reason}:{})};});
+  return questions.map(q=>{const definition=SCOPE_FIELDS[q.field];return {...q,...(!q.values?.length&&definition.kind==='choice'?{values:definition.options.filter(v=>q.field!=='service'||(ESTIMATOR_BRAND.services as readonly string[]).includes(v))}:{}),...(q.reason.length>180?{reason:`Please confirm ${q.label.toLowerCase()}.`,detail:q.detail||q.reason}:{})};});
 }
 export function validateScopeAnswer(field:ScopeField,value:string){
   const error=validateAnswer(field,value);if(error)return error;

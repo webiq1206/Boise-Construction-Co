@@ -11,5 +11,5 @@ export function mergeProjectSource(draft:BrowserDraft,source:ProjectSource):Brow
     if(!current||current===previous[field]){if(incoming)answers[field]=incoming;else delete answers[field];}
     else if(incoming&&current!==incoming&&!conflicts.some(c=>c.field===field))conflicts.push({field,values:[current,incoming],explanation:`Your saved answer and updated design differ for ${SCOPE_FIELDS[field].label.toLowerCase()}. Which should we use?`});
   }
-  return {...draft,answers,conflicts,projectSource:source,dirty:true,updatedAt:Date.now(),analyzedAnswers:undefined,step:0};
+  return {...draft,answers,conflicts,projectSource:source,dirty:true,updatedAt:Date.now(),analyzedAnswers:undefined,pendingReply:undefined,step:0};
 }

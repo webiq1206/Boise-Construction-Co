@@ -63,3 +63,34 @@
 @media(max-width:580px){.actions .primary{flex:1 1 100%;width:100%}.root .question h2{font-size:22px}.choices{grid-template-columns:1fr}.loadingCard .processingActivity{margin-top:14px}}
 
 .inputTools[data-dragging=true] .attach{outline:3px solid var(--p5-accent);outline-offset:3px;background:#46584e}
+
+/*
+ * The final action is the only estimator control that stays reachable while a
+ * visitor reviews a tall scope. It remains in the form (one submit control,
+ * one validation path), but on phones follows the visual viewport as the
+ * document scrolls. The keyboard inset is applied by the component so a
+ * focused contact field cannot disappear behind this bar.
+ */
+.finalActions{margin:24px 0 12px}
+@media(max-width:767px){
+  :global(html):has(.root[data-final-review=true]){scroll-padding-bottom:calc(112px + env(safe-area-inset-bottom,0px))}
+  .root[data-final-review=true]{scroll-padding-bottom:calc(112px + env(safe-area-inset-bottom,0px));padding-bottom:calc(132px + env(safe-area-inset-bottom,0px))}
+  .finalActions{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    width:min(100%,820px);
+    margin:0 auto;
+    z-index:5;
+    padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));
+    border-top:1px solid #65706a;
+    background:linear-gradient(180deg,#2c302f00 0%,#2c302f 22%,#2c302f 100%);
+    box-shadow:0 -8px 18px #17251e66;
+    transition:none;
+  }
+  .finalActions .primary{width:100%;min-height:54px}
+}
+@media(prefers-reduced-motion:reduce){
+  .finalActions{transition:none}
+}

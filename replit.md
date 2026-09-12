@@ -1,5 +1,16 @@
 # Replit notes
 
+## Estimator acceptance requirements
+
+The final Get Estimate action must remain visible on mobile during long scope
+review, with safe-area and keyboard clearance. This supersedes the earlier
+no-sticky preference. Keep one project text box and one project upload control;
+the persistent action must use the same confirmation/contact validation and
+duplicate-submission protection as the normal submit path.
+
+Historic prices in uploaded documents are not current approved rates. Preserve
+owner-approved rate and financial policy unless the owner explicitly changes it.
+
 ## Publish checklist (database diff)
 
 Replit's Republish compares the development database with the production

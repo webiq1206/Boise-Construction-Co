@@ -225,7 +225,7 @@ for (const r of EXTRACTION_REVIEW_REASONS) {
 
   // And the wizard must actually send them, or none of the above ever runs.
   check(
-    endpointSource.includes("safeExtraction") && endpointSource.includes("facts:extraction?.facts"),
+    endpointSource.includes("safeExtraction") && /facts:(?:baseExtraction|extraction)\??\.facts/.test(endpointSource),
     "the wizard does not forward unmapped items to the estimate - they die at the review screen",
   );
   check(

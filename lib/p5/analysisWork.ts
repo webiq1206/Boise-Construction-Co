@@ -45,12 +45,18 @@ export async function* analysisSegments(file:AnalysisFile,startPage=0):AsyncGene
 }
 type Unit={name:string;type:string;object:string;pages?:AnalysisFile['pages'];detailViews?:boolean;detailRegions?:AnalysisFile['detailRegions'];result?:AnalysisResult;attempts?:number;rateLimitRetries?:number;error?:string;retryAt?:number;active?:boolean};
 type Job={prepared:number;units:Unit[];notes:string[];textDone?:AnalysisResult;textPrepared?:boolean;cursor?:number;expected?:{source:string;page:number}[];progress?:string;processing?:ProcessingStatus;concurrency?:number;cooldownUntil?:number};
+/** The document set, not visitor answers, identifies resumable reading work.
+ * Answers are reconciled against the saved extraction and must not cause every
+ * source page to be sent through the provider a second time. */
+export function analysisSourceVersion(text:string,uploads:{sha256:string}[]){
+  return createHash('sha256').update(JSON.stringify([text,uploads.map(file=>file.sha256)])).digest('hex');
+}
 export function analysisWorkKey(draft:Draft,text:string,answers:ScopeAnswers){
-  return `analysis:v7:${createHash('sha256').update(JSON.stringify([text,answers,draft.uploads.map(f=>[f.id,f.sha256])])).digest('hex')}`;
+  return `analysis:v8:${analysisSourceVersion(text,draft.uploads)}`;
 }
 /** Each request checkpoints work before returning. Reloading resumes the same source fingerprint. */
 export async function advanceAnalysis(draft:Draft,text:string,answers:ScopeAnswers,request=fetch,retryFailed=false){
-  const version=createHash('sha256').update(JSON.stringify([text,answers,draft.uploads.map(f=>[f.id,f.sha256])])).digest('hex');
+  const version=analysisSourceVersion(text,draft.uploads);
   const workKey=analysisWorkKey(draft,text,answers),bucketId=ESTIMATOR_BUCKETS[ESTIMATOR_BRAND.domain],client=new Client({bucketId});
   const lease=await claimWork(draft.id,workKey,{prepared:0,units:[],notes:[]},300);
   if(!lease)return {pending:true as const,progress:'Your document review is already running. Saved progress will appear shortly.'};
@@ -59,12 +65,17 @@ export async function advanceAnalysis(draft:Draft,text:string,answers:ScopeAnswe
   // Serialize writes from concurrent readers so a late database response cannot
   // overwrite a more recent completed section.
   let saving=Promise.resolve();
-  const checkpoint=()=>{saving=saving.then(()=>{
+   const checkpoint=(override?:{phase:ProcessingStatus['phase'];message:string})=>{saving=saving.then(()=>{
     const progress=analysisProgress(job.units,job.expected);
     const active=job.units.filter(u=>u.active);
-    const phase=!active.length&&job.prepared<draft.uploads.length?'preparing':active.some(u=>isInstructionFile(u.name))?'instructions':progress.readSections===progress.totalSections?'cross-referencing':'reading';
-    job.progress=phase==='preparing'?`Preparing file ${Math.min(job.prepared+1,draft.uploads.length)} of ${draft.uploads.length}. ${job.units.length} sections saved for reading.`:progress.message;
-    job.processing={...progress,phase,message:job.progress,currentItems:active.slice(0,3).map(u=>u.name),updatedAt:new Date().toISOString()};
+     // A completed set of section readers has not yet gone through the final
+     // aggregate below. Do not label that checkpoint "cross-referencing", and
+     // do not call a text-only job complete merely because it has zero units.
+     // Physical-page progress remains the source of truth until aggregation
+     // actually returns.
+     const phase=override?.phase||(!active.length&&job.prepared<draft.uploads.length?'preparing':active.some(u=>isInstructionFile(u.name))?'instructions':'reading');
+     job.progress=override?.message||(phase==='preparing'?`Preparing file ${Math.min(job.prepared+1,draft.uploads.length)} of ${draft.uploads.length}. ${job.units.length} sections saved for reading.`:progress.message);
+     job.processing={...progress,phase,message:job.progress,preparedFiles:Math.min(job.prepared,draft.uploads.length),totalFiles:draft.uploads.length,currentItems:active.slice(0,3).map(u=>u.name),updatedAt:new Date().toISOString()};
     return writeWork(draft.id,workKey,lease.token,job);
   });return saving;};
   try{
@@ -156,6 +167,7 @@ export async function advanceAnalysis(draft:Draft,text:string,answers:ScopeAnswe
     extraction.reviewNotes.push(...job.notes,...job.units.filter(u=>!u.result).map(u=>u.error||`${u.name}: unread section requires review before pricing.`));
     extraction.reviewNotes.push(...(extraction.documentCoverage?.pages.filter(p=>p.status!=='read').map(p=>`${p.source}, page ${p.page}: ${p.status}. ${p.notes.join(' ')}`)||[]));
     extraction.reviewNotes=[...new Set(extraction.reviewNotes)];
+     await checkpoint({phase:'cross-referencing',message:'Cross-referencing completed sections, quantities and document exceptions.'});
     return {pending:false as const,version,analysis:{...last,extraction,analyzedAt:new Date().toISOString()}};
   }finally{await releaseWork(draft.id,workKey,lease.token);}
 }

@@ -1,5 +1,6 @@
-import {instructionPrompts} from './clarifications';
+import {instructionPrompts,upsertInstructionAnswer,type InstructionAnswer} from './clarifications';
 import {resolveInstructionAnswer} from './clarificationAnswer';
+import {analysisSourceVersion} from './analysisWork';
 import {deriveScopeAnswers,reconcileScope,scopeQuestions} from "./adaptive";
 import {costQuestionFields} from "./questionPolicy";
 import { ESTIMATOR_BRAND } from "./brand";
@@ -16,28 +17,80 @@ export function parseAnswers(raw:unknown):ScopeAnswers {
     answers[field as keyof ScopeAnswers]=value;
   }return answers;
 }
+/** Clarification saves are retried with the browser's old answer snapshot.
+ * Rebuild generated instruction records from the acknowledged server history
+ * before resolving or writing, so a lost response cannot erase the answer. */
+export function mergeServerClarificationAnswers(raw:ScopeAnswers,saved:ScopeAnswers,history:InstructionAnswer[],clarification:boolean){
+  if(!clarification)return raw;
+  let instructions=saved.estimatingInstructions||raw.estimatingInstructions||'';
+  for(const record of history)instructions=upsertInstructionAnswer(instructions,record.question,record.answer);
+  // The clarification operation does not edit the ordinary scope fields.
+  // Start from the acknowledged server snapshot so a stale browser payload
+  // cannot clear a field saved by another request.
+  const result={...saved,...raw};
+  if(instructions)result.estimatingInstructions=instructions;
+  else delete result.estimatingInstructions;
+  return result;
+}
 export async function putDraft(request:Request){
   try{
     protectRequest(request);const {id,key}=draftCredentials(request);
     const raw=JSON.parse(new TextDecoder().decode(await limitedBody(request,24*1024*1024)));
     if(typeof raw.text!=="string"||raw.text.length>SCOPE_TEXT_LIMIT||!Number.isInteger(raw.revision)||raw.revision<0)throw new DraftError("Invalid draft.");
-    let answers=deriveScopeAnswers(parseAnswers(raw.answers));const existing=await readDraft(id,key);
-    const skipped=Array.isArray(raw.wizard?.skipped)?raw.wizard.skipped.filter((k:unknown)=>typeof k==="string"&&Object.hasOwn(SCOPE_FIELDS,k)&&k!=="service"):[];
-    const resolutions=parseAnswers(raw.wizard?.resolutions||{});
-    const wizard={skipped,resolutions,sourceVersion:existing?.wizard?.sourceVersion,instructionAnswers:existing?.wizard?.instructionAnswers||[]};
+     const rawAnswers=deriveScopeAnswers(parseAnswers(raw.answers));const existing=await readDraft(id,key);
+     const previousText=existing?.text?.trim()||'',nextText=raw.text.trim();
+     const analyzedExisting=Boolean(existing?.extraction||existing?.wizard?.sourceVersion||existing?.wizard?.sourceTextHash||existing?.wizard?.pendingSourceVersion);
+     const appendCandidate=Boolean(previousText&&nextText.length>previousText.length&&nextText.startsWith(previousText));
+     const correctiveAppend=appendCandidate&&/\b(?:actually|instead|rather|no longer|correction|correct|change|changed|replace|replaced|update|updated|remove|removed|exclude|excluded|delete|deleted|revision)\b/i.test(nextText.slice(previousText.length));
+     const appendedText=appendCandidate&&!correctiveAppend;
+     const replacedText=Boolean(analyzedExisting&&previousText&&nextText!==previousText&&!appendedText);
+     // A replacement can arrive with the browser's old answer snapshot. Keep
+     // only fields that actually changed in this request; generated
+     // clarification history never crosses into an unrelated project.
+     const replacementAnswers:ScopeAnswers={};
+     if(replacedText)for(const [field,value] of Object.entries(rawAnswers))if(field!=='estimatingInstructions'&&existing?.answers[field as keyof ScopeAnswers]!==value)replacementAnswers[field as keyof ScopeAnswers]=value;
+     let answers=replacedText?replacementAnswers:mergeServerClarificationAnswers(rawAnswers,existing?.answers||{},existing?.wizard?.instructionAnswers||[],Boolean(raw.clarification));
+     const sourceVersion=analysisSourceVersion(raw.text,existing?.uploads||[]);
+     const savedWizard=raw.clarification&&existing?.wizard?existing.wizard:raw.wizard;
+     const skipped=replacedText?[]:Array.isArray(savedWizard?.skipped)?savedWizard.skipped.filter((k:unknown)=>typeof k==="string"&&Object.hasOwn(SCOPE_FIELDS,k)&&k!=="service"):[];
+     const resolutions=replacedText?{}:parseAnswers(savedWizard?.resolutions||{});
+     const wizard={skipped,resolutions,sourceVersion:replacedText?undefined:existing?.wizard?.sourceVersion,sourceTextHash:replacedText?undefined:existing?.wizard?.sourceTextHash,sourceTextAppended:replacedText?undefined:(appendedText||existing?.wizard?.sourceTextAppended||undefined),pendingSourceVersion:replacedText?undefined:existing?.wizard?.pendingSourceVersion,pendingSourceTextHash:replacedText?undefined:existing?.wizard?.pendingSourceTextHash,instructionAnswers:replacedText?[]:existing?.wizard?.instructionAnswers||[]};
+     const clarification=raw.clarification as {id?:unknown;answer?:unknown}|undefined;
+     const repeatedClarification=Boolean(existing&&clarification&&typeof clarification.id==="string"&&typeof clarification.answer==="string"&&existing.wizard?.instructionAnswers?.some(item=>item.id===clarification.id&&item.answer===String(clarification.answer).trim())&&(existing.wizard.sourceVersion===sourceVersion||existing.wizard.pendingSourceVersion===sourceVersion));
+     // A response can be lost after the server commits but before the browser
+     // receives the new revision. Return that acknowledged answer idempotently
+     // instead of asking the stale browser snapshot to overwrite it.
+     if(clarification&&existing&&raw.revision!==existing.revision&&repeatedClarification){
+       const pricedFields=await costQuestionFields(existing.answers);
+       const conflicts=existing.extraction?reconcileScope(existing.answers,existing.extraction,existing.wizard?.resolutions||{}).conflicts:[];
+       return json({draft:existing,conflicts,questions:scopeQuestions(existing.answers,existing.extraction,conflicts,existing.wizard?.skipped||[],pricedFields),pricedFields});
+     }
     // Provider extraction is immutable to public clients. Corrections live in answers.
-    let extraction=existing?.extraction||null;
+     let extraction=replacedText?null:existing?.extraction||null;
     if(raw.clarification){
       if(!existing||raw.revision!==existing.revision)throw new DraftError('Your project changed in another tab. Refresh to continue.',409);
+       if(existing.wizard?.sourceVersion!==sourceVersion&&existing.wizard?.pendingSourceVersion!==sourceVersion)throw new DraftError('This question belongs to an earlier project scope. Refresh and review the replacement scope before answering.',409);
       const resolved=await resolveInstructionAnswer(extraction,answers,raw.clarification,wizard.instructionAnswers);
       extraction=resolved.extraction;answers=resolved.answers;wizard.instructionAnswers=resolved.history;
       wizard.resolutions.estimatingInstructions=answers.estimatingInstructions;
     }
-    if(extraction?.instructions)extraction={...extraction,instructions:{...extraction.instructions,questions:instructionPrompts(extraction,answers).map(q=>q.detail||q.question)}};
-    const contact={name:String(raw.contact?.name||"").trim(),email:String(raw.contact?.email||"").trim().toLowerCase(),phone:String(raw.contact?.phone||"").trim()};
+    if(extraction?.instructions){
+      const instructions=extraction.instructions;
+      extraction={...extraction,instructions:{...instructions,questions:instructionPrompts(extraction,answers).map(q=>q.detail||q.question)}};
+    }
+     const contact={
+       name:String(replacedText&&raw.contact?.name===undefined?existing?.contact?.name||"":raw.contact?.name||"").trim(),
+       email:String(replacedText&&raw.contact?.email===undefined?existing?.contact?.email||"":raw.contact?.email||"").trim().toLowerCase(),
+       phone:String(replacedText&&raw.contact?.phone===undefined?existing?.contact?.phone||"":raw.contact?.phone||"").trim(),
+     };
     if(contact.name.length>120||contact.email.length>200||contact.phone.length>40)throw new DraftError("Contact details are too long.");
     let reviewed:ReviewedScope|null=null;
     if(raw.reviewed===true){
+       const acknowledgedSource=Boolean(existing?.wizard?.sourceVersion===sourceVersion&&!existing?.wizard?.pendingSourceVersion);
+       const incompleteCoverage=Boolean(extraction?.documentCoverage&&!extraction.documentCoverage.complete);
+       const missingUploadedCoverage=Boolean(existing?.uploads.length&&!extraction?.documentCoverage);
+       const failedAnalysis=Boolean(extraction?.reviewNotes.some(note=>/saved for manual review|could not read|automatic read failed|automatic reading could not finish|unread section requires review|unreadable|partial/i.test(note)));
+       if(!existing||!extraction||!acknowledgedSource||incompleteCoverage||missingUploadedCoverage||failedAnalysis)throw new DraftError('Analyze the current project scope completely before reviewing it.',409);
       if(extraction?.instructions?.questions.length)throw new DraftError('Answer the remaining scope question before continuing.');
       const unresolved=extraction?reconcileScope(answers,extraction,resolutions).conflicts:[];
       if(unresolved.length)throw new DraftError(`Confirm ${SCOPE_FIELDS[unresolved[0].field].label} before submitting.`);
