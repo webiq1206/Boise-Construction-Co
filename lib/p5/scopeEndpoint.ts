@@ -2,6 +2,7 @@ import {applyCabinetIntent} from "./projectIntent";
 import {advanceAnalysis,analysisSourceVersion} from "./analysisWork";
 import {queuedJob} from './backgroundJobs';
 import {reconcileScope,scopeQuestions,manualScopeAnswers} from "./adaptive";
+import {isProjectReplacement} from './projectReplacement';
 import {costQuestionFields} from "./questionPolicy";
 import {createHash} from "node:crypto";
 import { analyzeScope } from "./extraction.ts";
@@ -44,22 +45,25 @@ export async function postScope(request:Request){
     if(incoming.length){draft=await readDraft(id,key);if(!draft)throw new DraftError("Saved project could not be restored. Please retry.",503);}
     if(form.get("analyze")==="false")return json({draft:await readDraft(id,key),analysis:null});
     const checkpointed=form.get("resumable")==="true"&&process.env.P5_OBJECT_STORAGE_ENABLED==="true";
-    const stored=checkpointed?[]:await readUploads(id,key);if(stored.reduce((n,f)=>n+f.data.length,0)>SCOPE_BATCH_LIMIT)throw new DraftError(SCOPE_UPLOAD_HELP,413);
-    const version=analysisSourceVersion(text,draft.uploads);
+    const activeUploads=draft.uploads.filter(upload=>!(draft.wizard?.retiredUploadIds||[]).includes(upload.id));
+    const stored=(checkpointed?[]:await readUploads(id,key)).filter(file=>activeUploads.some(upload=>upload.id===file.id));if(stored.reduce((n,f)=>n+f.data.length,0)>SCOPE_BATCH_LIMIT)throw new DraftError(SCOPE_UPLOAD_HELP,413);
+    const version=analysisSourceVersion(text,activeUploads);
     const sourceTextHash=createHash("sha256").update(text).digest("hex");
      const {sameSource,sourceChanged,sourceTextChanged}=sourceTransition(draft.wizard,version,sourceTextHash);
     // A resolution belongs to the source that produced its question. Applying
     // it to a replacement scope would quietly carry an old measurement or
     // exclusion into the new estimate.
-    const resolutions=sourceChanged?{}:(draft.wizard?.resolutions||{});
+     const declaredReplacement=Boolean(draft.wizard?.replacement)||isProjectReplacement({previousText:draft.text,nextText:text,previousAnswers:draft.answers,previousExtraction:draft.extraction});
+     const resetForReplacement=declaredReplacement;
+     const resolutions=sourceChanged?{}:(draft.wizard?.resolutions||{});
      const appendedText=Boolean(sourceChanged&&draft.wizard?.sourceTextAppended&&!sourceTextChanged);
-     const priorAnswers=appendedText?{...draft.answers}:manualScopeAnswers(draft.answers,draft.extraction,sourceChanged?{}:resolutions);
-    if(sourceTextChanged&&draft.wizard?.instructionAnswers?.length){
+      const priorAnswers=resetForReplacement?{...(draft.wizard?.replacementAnswers||{})}:appendedText?{...draft.answers}:manualScopeAnswers(draft.answers,draft.extraction,sourceChanged?{}:resolutions);
+     if((sourceTextChanged||resetForReplacement)&&draft.wizard?.instructionAnswers?.length){
       const estimatingInstructions=removeInstructionAnswers(priorAnswers.estimatingInstructions,draft.wizard.instructionAnswers);
       if(estimatingInstructions)priorAnswers.estimatingInstructions=estimatingInstructions;
       else delete priorAnswers.estimatingInstructions;
     }
-    const visitorAnswers=applyCabinetIntent(text,ESTIMATOR_BRAND.services,priorAnswers).answers;
+     const visitorAnswers=applyCabinetIntent(text,ESTIMATOR_BRAND.services,priorAnswers).answers;
     let analysis=null;let warning="";let reusedAnalysis=false;
     // Saving a normal answer changes reconciliation input, not the source
     // documents. Reuse the acknowledged extraction instead of entering the
@@ -72,9 +76,10 @@ export async function postScope(request:Request){
         reusedAnalysis=true;
       }else if(checkpointed){
         const background=form.get('background')==='true';
-        const job=background?await queuedJob({kind:'analysis',draft,text,answers:visitorAnswers},form.get('retry')==='true'):null;
+        const analysisDraft={...draft,uploads:activeUploads};
+        const job=background?await queuedJob({kind:'analysis',draft:analysisDraft,text,answers:visitorAnswers},form.get('retry')==='true'):null;
         if(job&&job.state!=='complete')return json({pending:job.state!=='failed',progress:job.progress,processing:job.processing,...(job.state==='failed'?{error:job.progress}:{})},job.state==='failed'?503:200);
-        const step=job?job.result:await advanceAnalysis(draft,text,visitorAnswers,fetch,form.get("retry")==="true");
+        const step=job?job.result:await advanceAnalysis(analysisDraft,text,visitorAnswers,fetch,form.get("retry")==="true");
         if(step.pending)return json(step);
         analysis=step.analysis;
       }else{
@@ -89,14 +94,18 @@ export async function postScope(request:Request){
       console.error("[p5-scope-analysis]",error instanceof Error?error.message:"analysis failed");
       warning="Your files are saved, but automatic reading could not finish. You can retry without uploading again, or add the key details below. Unread documents will need review before pricing.";
     }
-    let sourceExtraction=analysis?.extraction||(reusedAnalysis?draft.extraction:null);
+     let sourceExtraction=analysis?.extraction||(reusedAnalysis?draft.extraction:null);
     if(sourceExtraction)sourceExtraction=applyCabinetIntent(text,ESTIMATOR_BRAND.services,visitorAnswers,sourceExtraction).extraction!;
+     const replacementFromExtraction=Boolean(sourceChanged&&sourceExtraction&&isProjectReplacement({previousText:draft.text,nextText:text,previousAnswers:draft.answers,previousExtraction:draft.extraction,nextExtraction:sourceExtraction}));
+     const replacement=resetForReplacement||replacementFromExtraction;
+     const effectiveAnswers=replacement?{...(resetForReplacement?draft.wizard?.replacementAnswers||{}:{})}:visitorAnswers;
     const extraction=sourceExtraction||draft.extraction;
-    const merged=sourceExtraction?reconcileScope(visitorAnswers,sourceExtraction,resolutions):{answers:visitorAnswers,conflicts:[]};
+     const merged=sourceExtraction?reconcileScope(effectiveAnswers,sourceExtraction,replacement?{}:resolutions):{answers:effectiveAnswers,conflicts:[]};
+     const completeCurrentAnalysis=Boolean(analysis&&(!analysis.extraction.documentCoverage||analysis.extraction.documentCoverage.complete)&&!warning);
     const wizard={
-      instructionAnswers:sourceTextChanged?[]:draft.wizard?.instructionAnswers||[],
-      skipped:sourceChanged?[]:draft.wizard?.skipped||[],
-      resolutions,
+       instructionAnswers:(sourceTextChanged||replacement)?[]:draft.wizard?.instructionAnswers||[],
+       skipped:(sourceChanged||replacement)?[]:draft.wizard?.skipped||[],
+       resolutions:replacement?{}:resolutions,
       // Keep the prior successful fingerprint until this attempt completes.
       // A retry must enter the same durable work record rather than treating a
       // failed replacement as a fresh completed source.
@@ -104,6 +113,9 @@ export async function postScope(request:Request){
       sourceTextHash:analysis?sourceTextHash:draft.wizard?.sourceTextHash,
       pendingSourceVersion:analysis?undefined:(sourceChanged?version:draft.wizard?.pendingSourceVersion),
       pendingSourceTextHash:analysis?undefined:(sourceChanged?sourceTextHash:draft.wizard?.pendingSourceTextHash),
+       replacement:replacement&&!completeCurrentAnalysis||undefined,
+       replacementAnswers:replacement&&!completeCurrentAnalysis?draft.wizard?.replacementAnswers:undefined,
+       retiredUploadIds:draft.wizard?.retiredUploadIds,
     };
     // Partial analysis is visible and prevents unread documents from being priced.
     const baseExtraction=sourceChanged&&!analysis?null:extraction;

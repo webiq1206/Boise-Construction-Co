@@ -90,7 +90,7 @@ export function instructionPrompts(extraction:ScopeExtraction|null,answers:Scope
 /** Answers remain scope data for the pricing audit, with original pages intact. */
 export function clarificationContext(extraction:ScopeExtraction,question:string,answer:string){
   return JSON.stringify({
-    task:'Resolve only this answered scope question using the answer below. Return the complete updated instructions, preserving every unrelated inclusion, exclusion, responsibility, building and floor. Remove this question when answered. Never ask it again because a page was not reuploaded. This is a clarification of a document review already completed. Do not produce page records, takeoffs, or unreadable-file notes. If the answer is insufficient, return one short, specific follow-up explaining the missing decision.',
+    task:'Resolve only this answered scope question using the answer below. Return the complete updated instructions, preserving every unrelated inclusion, exclusion, responsibility, building and floor. An explicit selection controls over alternatives retained in the original document: include only the selected alternative and record every explicitly excluded alternative as an exclusion; never choose an excluded mention. Apply every stated quantity, labor breakdown and inclusion change from the answer. Remove this question when answered. Never ask it again because a page was not reuploaded. This is a clarification of a document review already completed. Do not produce page records, takeoffs, or unreadable-file notes. If the answer is insufficient, return one short, specific follow-up explaining the missing decision.',
     previousInstructions:extraction.instructions,question,answer,
   });
 }

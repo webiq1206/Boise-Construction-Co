@@ -1,5 +1,12 @@
 # Replit notes
 
+## Safe Git synchronization
+
+Keep repository-local `pull.ff=only` and `pull.rebase=false`. A divergent Pull
+must stop rather than start an automatic rebase. Preserve recovered local
+history and private recovery files; do not force-push that history to GitHub.
+Review source-only synchronization separately from the retained local history.
+
 ## Estimator acceptance requirements
 
 The final Get Estimate action must remain visible on mobile during long scope

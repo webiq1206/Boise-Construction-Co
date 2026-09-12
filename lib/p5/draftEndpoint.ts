@@ -2,10 +2,11 @@ import {instructionPrompts,upsertInstructionAnswer,type InstructionAnswer} from 
 import {resolveInstructionAnswer} from './clarificationAnswer';
 import {analysisSourceVersion} from './analysisWork';
 import {deriveScopeAnswers,reconcileScope,scopeQuestions} from "./adaptive";
+import {isProjectReplacement} from './projectReplacement';
 import {costQuestionFields} from "./questionPolicy";
 import { ESTIMATOR_BRAND } from "./brand";
 import { draftCredentials, readDraft, saveDraft, DraftError } from "./store";
-import { SCOPE_FIELDS, SCOPE_TEXT_LIMIT, validateAnswer, validateExtraction, type ScopeAnswers, type ReviewedScope } from "./scope.ts";
+import { SCOPE_FIELDS, SCOPE_TEXT_LIMIT, validateAnswer, validateExtraction, type ScopeAnswers, type ReviewedScope, type ScopeExtraction } from "./scope.ts";
 import { failed,json,limitedBody,protectRequest } from "./http";
 export async function getDraft(request:Request){try{protectRequest(request);const {id,key}=draftCredentials(request);return json({draft:await readDraft(id,key)});}catch(error){return failed(error);}}
 export function parseAnswers(raw:unknown):ScopeAnswers {
@@ -32,6 +33,14 @@ export function mergeServerClarificationAnswers(raw:ScopeAnswers,saved:ScopeAnsw
   else delete result.estimatingInstructions;
   return result;
 }
+/** A yes/no reply retires a source only when it answers a replacement question,
+ * never when it answers an unrelated generic confirmation. */
+export function confirmsProjectReplacement(extraction:ScopeExtraction|null|undefined,answers:ScopeAnswers,clarification:{id?:unknown;answer?:unknown}|undefined){
+  if(!extraction||typeof clarification?.id!=='string'||typeof clarification.answer!=='string')return false;
+  const prompt=instructionPrompts(extraction,answers).find(question=>question.id===clarification.id);
+  if(!prompt||!/\b(?:replace|replacement|supersed|instead of|rather than|new (?:project|scope))\b/i.test(`${prompt.question} ${prompt.detail||''}`))return false;
+  return /^(?:yes|yeah|yep|confirm(?:ed)?|correct|it does|replace(?:s|d)?)(?:[\s,.!]|$)/i.test(clarification.answer.trim());
+}
 export async function putDraft(request:Request){
   try{
     protectRequest(request);const {id,key}=draftCredentials(request);
@@ -43,19 +52,28 @@ export async function putDraft(request:Request){
      const appendCandidate=Boolean(previousText&&nextText.length>previousText.length&&nextText.startsWith(previousText));
      const correctiveAppend=appendCandidate&&/\b(?:actually|instead|rather|no longer|correction|correct|change|changed|replace|replaced|update|updated|remove|removed|exclude|excluded|delete|deleted|revision)\b/i.test(nextText.slice(previousText.length));
      const appendedText=appendCandidate&&!correctiveAppend;
-     const replacedText=Boolean(analyzedExisting&&previousText&&nextText!==previousText&&!appendedText);
+      const confirmation=raw.clarification as {id?:unknown;answer?:unknown}|undefined;
+      const replacementConfirmation=confirmsProjectReplacement(existing?.extraction,existing?.answers||{},confirmation);
+      const replacedText=Boolean(analyzedExisting&&previousText&&nextText!==previousText&&isProjectReplacement({previousText,nextText,previousAnswers:existing?.answers,nextAnswers:rawAnswers,previousExtraction:existing?.extraction})||replacementConfirmation);
      // A replacement can arrive with the browser's old answer snapshot. Keep
      // only fields that actually changed in this request; generated
      // clarification history never crosses into an unrelated project.
      const replacementAnswers:ScopeAnswers={};
-     if(replacedText)for(const [field,value] of Object.entries(rawAnswers))if(field!=='estimatingInstructions'&&existing?.answers[field as keyof ScopeAnswers]!==value)replacementAnswers[field as keyof ScopeAnswers]=value;
+      if(replacedText)for(const [field,value] of Object.entries(rawAnswers)){
+        const key=field as keyof ScopeAnswers;
+        const numericMention=SCOPE_FIELDS[key].kind==='number'&&new RegExp(`(?:^|\\D)${value.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}(?:$|\\D)`).test(nextText);
+        const serviceMention=key==='service'&&new RegExp(`\\b${value.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\b`,'i').test(nextText);
+        if(field!=='estimatingInstructions'&&(existing?.answers[key]!==value||(replacementConfirmation&&(numericMention||serviceMention))))replacementAnswers[key]=value;
+      }
+      const pendingReplacementAnswers=replacedText?replacementAnswers:existing?.wizard?.replacement?{...(existing.wizard.replacementAnswers||{}),...Object.fromEntries(Object.entries(rawAnswers).filter(([field,value])=>existing.answers[field as keyof ScopeAnswers]!==value))}:undefined;
      let answers=replacedText?replacementAnswers:mergeServerClarificationAnswers(rawAnswers,existing?.answers||{},existing?.wizard?.instructionAnswers||[],Boolean(raw.clarification));
      const sourceVersion=analysisSourceVersion(raw.text,existing?.uploads||[]);
      const savedWizard=raw.clarification&&existing?.wizard?existing.wizard:raw.wizard;
      const skipped=replacedText?[]:Array.isArray(savedWizard?.skipped)?savedWizard.skipped.filter((k:unknown)=>typeof k==="string"&&Object.hasOwn(SCOPE_FIELDS,k)&&k!=="service"):[];
      const resolutions=replacedText?{}:parseAnswers(savedWizard?.resolutions||{});
-     const wizard={skipped,resolutions,sourceVersion:replacedText?undefined:existing?.wizard?.sourceVersion,sourceTextHash:replacedText?undefined:existing?.wizard?.sourceTextHash,sourceTextAppended:replacedText?undefined:(appendedText||existing?.wizard?.sourceTextAppended||undefined),pendingSourceVersion:replacedText?undefined:existing?.wizard?.pendingSourceVersion,pendingSourceTextHash:replacedText?undefined:existing?.wizard?.pendingSourceTextHash,instructionAnswers:replacedText?[]:existing?.wizard?.instructionAnswers||[]};
-     const clarification=raw.clarification as {id?:unknown;answer?:unknown}|undefined;
+      const retiredUploadIds=replacedText?[...new Set([...(existing?.wizard?.retiredUploadIds||[]),...(existing?.uploads||[]).map(upload=>upload.id)])]:existing?.wizard?.retiredUploadIds;
+      const wizard={skipped,resolutions,sourceVersion:replacedText?undefined:existing?.wizard?.sourceVersion,sourceTextHash:replacedText?undefined:existing?.wizard?.sourceTextHash,sourceTextAppended:replacedText?undefined:(appendedText||existing?.wizard?.sourceTextAppended||undefined),pendingSourceVersion:replacedText?undefined:existing?.wizard?.pendingSourceVersion,pendingSourceTextHash:replacedText?undefined:existing?.wizard?.pendingSourceTextHash,replacement:replacedText||existing?.wizard?.replacement||undefined,replacementAnswers:pendingReplacementAnswers,retiredUploadIds,instructionAnswers:replacedText?[]:existing?.wizard?.instructionAnswers||[]};
+      const clarification=confirmation;
      const repeatedClarification=Boolean(existing&&clarification&&typeof clarification.id==="string"&&typeof clarification.answer==="string"&&existing.wizard?.instructionAnswers?.some(item=>item.id===clarification.id&&item.answer===String(clarification.answer).trim())&&(existing.wizard.sourceVersion===sourceVersion||existing.wizard.pendingSourceVersion===sourceVersion));
      // A response can be lost after the server commits but before the browser
      // receives the new revision. Return that acknowledged answer idempotently
@@ -67,12 +85,17 @@ export async function putDraft(request:Request){
      }
     // Provider extraction is immutable to public clients. Corrections live in answers.
      let extraction=replacedText?null:existing?.extraction||null;
-    if(raw.clarification){
+     if(raw.clarification&&!replacementConfirmation){
       if(!existing||raw.revision!==existing.revision)throw new DraftError('Your project changed in another tab. Refresh to continue.',409);
        if(existing.wizard?.sourceVersion!==sourceVersion&&existing.wizard?.pendingSourceVersion!==sourceVersion)throw new DraftError('This question belongs to an earlier project scope. Refresh and review the replacement scope before answering.',409);
       const resolved=await resolveInstructionAnswer(extraction,answers,raw.clarification,wizard.instructionAnswers);
       extraction=resolved.extraction;answers=resolved.answers;wizard.instructionAnswers=resolved.history;
       wizard.resolutions.estimatingInstructions=answers.estimatingInstructions;
+       // A clarification can authoritatively replace a retained extracted fact
+       // (for example, a selected assembly's labor subtotal). Record only the
+       // fields actually changed by its resolver, never a browser's full stale
+       // answer snapshot, so reconciliation does not re-open that decision.
+       for(const field of resolved.resolvedFields||[])if(field!=='estimatingInstructions'&&answers[field]?.trim())wizard.resolutions[field]=answers[field];
     }
     if(extraction?.instructions){
       const instructions=extraction.instructions;

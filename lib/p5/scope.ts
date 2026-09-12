@@ -1,5 +1,6 @@
 import {mergeInstructions,validateInstructions,type ScopeInstructions} from './instructions.ts';
 import {readPageRecords,readTakeoffs,reconcileTakeoffs,combineCoverage} from './documentLedger.ts';
+import {completeLaborHoursAnswer,laborEvidenceFromFact,reconcileLaborEvidence,type LaborEvidenceReconciliation} from './laborEvidence.ts';
 /** Public scope vocabulary. No internal prices or financial policy belongs here. */
 export const SCOPE_FIELDS = {
   estimatingInstructions: {label: "Custom estimating instructions", kind: "text"},
@@ -58,7 +59,7 @@ export type ScopeField = keyof typeof SCOPE_FIELDS;
 export type ScopeAnswers = Partial<Record<ScopeField, string>>;
 export interface ExtractedFact { field: ScopeField; value: string; confidence: number; source: string; evidence: string; basis?: "stated" | "calculated" | "visual" | "inferred" }
 export interface ScopeConflict { field: ScopeField; values: string[]; explanation: string }
-export interface ScopeExtraction { summary: string; facts: ExtractedFact[]; conflicts: ScopeConflict[]; missingInformation: string[]; reviewNotes: string[]; clarifications?: {field:ScopeField;question:string;reason:string}[]; instructions?:ScopeInstructions; documentCoverage?:import('./documentLedger.ts').DocumentCoverage; takeoffs?:import('./documentLedger.ts').Takeoff[] }
+export interface ScopeExtraction { summary: string; facts: ExtractedFact[]; conflicts: ScopeConflict[]; missingInformation: string[]; reviewNotes: string[]; clarifications?: {field:ScopeField;question:string;reason:string}[]; instructions?:ScopeInstructions; documentCoverage?:import('./documentLedger.ts').DocumentCoverage; takeoffs?:import('./documentLedger.ts').Takeoff[]; laborEvidence?:LaborEvidenceReconciliation }
 export interface ScopeUpload { id: string; name: string; type: string; size: number; sha256: string; status: "stored" | "failed" }
 export interface ReviewedScope {
   text: string; answers: ScopeAnswers; extraction: ScopeExtraction | null; uploads: ScopeUpload[];
@@ -86,6 +87,75 @@ export function validateAnswer(field: ScopeField, value: string): string | null 
   }
   if (definition.kind === "choice" && !(definition.options as readonly string[]).includes(value)) return "Choose one of the listed options.";
   return null;
+}
+const LABOR_SUMMARY=/\b(?:total|subtotal|summary)\b/i;
+const LABOR_ARITHMETIC=/(?:\d[\d,.]*\s*(?:hours?|hrs?)?\s*[+]\s*)+\d[\d,.]*|\d[\d,.]*\s*[=]\s*\d[\d,.]*/i;
+const UNMEASURED_LABOR=/\b(?:labor|labour)\b[\s\S]{0,120}\b(?:unmeasured|unknown|missing|tbd|pending|to\s+be\s+determined|not\s+(?:stated|specified|measured))\b|\b(?:unmeasured|unknown|missing|tbd|pending|to\s+be\s+determined|not\s+(?:stated|specified|measured))\b[\s\S]{0,120}\b(?:labor|labour)\b/i;
+const LABOR_WORK_FILLER=new Set(['a','an','and','are','as','at','be','been','being','by','for','from','in','include','included','includes','is','labor','labour','of','on','or','scope','task','the','to','was','were','with','work','allow','allowed','allowance','estimate','estimated','hour','hours','hr','hrs']);
+function laborWorkTokens(value:string){
+  return value.toLowerCase().replace(/\b\d[\d,]*(?:\.\d+)?\b/g,' ').replace(/[^a-z]+/g,' ').split(/\s+/)
+    .map(word=>word.replace(/ation$/,'').replace(/ate$/,'').replace(/ing$/,'').replace(/ed$/,'').replace(/s$/,''))
+    .filter(word=>word.length>1&&!LABOR_WORK_FILLER.has(word));
+}
+function laborWorkId(value:string){return [...new Set(laborWorkTokens(value))].join('-')||'unidentified-labor';}
+function scopedTaskSegments(value:string){
+  return value.split(/[\n.;]+/).flatMap(part=>part.split(/\b(?:and|or)\b/i))
+    .map(part=>laborWorkTokens(part)).filter(tokens=>tokens.length);
+}
+function taskMatchesWork(task:string[],workId:string){
+  const work=workId.split('-').filter(Boolean);
+  return work.length>0&&work.every(token=>task.includes(token));
+}
+/** A conservative bridge from fact evidence to the typed reconciliation API.
+ * The source facts remain untouched; this identity is only a comparison key. */
+function laborEvidenceForFacts(facts:ExtractedFact[],missingInformation:string[]=[],taskList='',instructions?:ScopeInstructions){
+  const quantities=facts.flatMap((fact,index)=>{
+    const summary=LABOR_SUMMARY.test(fact.evidence)||LABOR_ARITHMETIC.test(fact.evidence);
+    return laborEvidenceFromFact(fact,{
+      id:`labor-fact-${index}`,
+      // An evidence excerpt with no work label is one unidentified package.
+      // Treating all such values as interchangeable is safer than summing them.
+      workId:summary?`summary-${index}`:laborWorkId(fact.evidence),
+      kind:summary?'summary':'task',
+    })||[];
+  });
+  const measuredWorkIds=[...new Set(quantities.filter(record=>record.kind==='task'&&record.hours!==null).map(record=>record.workId))];
+  const scopedTasks=[
+    ...facts.filter(fact=>fact.field==='taskList').map(fact=>({source:fact.source,evidence:fact.value})),
+    ...(taskList?[{source:'reviewed scope answer',evidence:taskList}]:[]),
+    ...(instructions?.inclusions||[]).map(evidence=>({source:'scope instructions',evidence})),
+  ];
+  const scopeGaps=scopedTasks.flatMap((task,index)=>scopedTaskSegments(task.evidence).flatMap((segment,segmentIndex)=>
+    measuredWorkIds.some(workId=>taskMatchesWork(segment,workId))
+      ?[]
+      :[{id:`unmeasured-scope-task-${index}-${segmentIndex}`,workId:`unmeasured-scope-task-${laborWorkId(segment.join(' '))}`,hours:null,kind:'task' as const,source:task.source,evidence:task.evidence,basis:'stated' as const}],
+  ));
+  const unknown=facts.flatMap((fact,index)=>{
+    if(!['taskList','otherDetails','installation'].includes(fact.field))return [];
+    const evidence=UNMEASURED_LABOR.test(fact.evidence)?fact.evidence:fact.value;
+    if(!UNMEASURED_LABOR.test(evidence))return [];
+    return [{id:`unmeasured-labor-fact-${index}`,workId:`unmeasured-labor-fact-${index}`,hours:null,kind:'task' as const,source:fact.source,evidence,basis:'stated' as const}];
+  });
+  const noteRecords=[...missingInformation,...(taskList?[taskList]:[])].flatMap((note,index)=>UNMEASURED_LABOR.test(note)
+    ?[{id:`unmeasured-labor-note-${index}`,workId:`unmeasured-labor-note-${index}`,hours:null,kind:'task' as const,source:'scope clarification',evidence:note,basis:'stated' as const}]
+    :[]);
+  return [...quantities,...scopeGaps,...unknown,...noteRecords];
+}
+function reconcileExtractionLaborFacts(facts:ExtractedFact[],missingInformation:string[]=[],taskList='',instructions?:ScopeInstructions){
+  const records=laborEvidenceForFacts(facts,missingInformation,taskList,instructions);
+  return records.length?reconcileLaborEvidence({records}):undefined;
+}
+function laborScopeConflicts(reconciliation:LaborEvidenceReconciliation):ScopeConflict[]{
+  return reconciliation.conflicts.map(conflict=>({
+    field:'laborHours',
+    values:[...new Set(conflict.records.flatMap(record=>record.hours===null?[]:[String(record.hours)]))],
+    explanation:conflict.reason==='different-task-values'
+      ?'The supplied evidence gives different labor quantities for the same work package. Confirm the intended scope.'
+      :'The supplied labor aggregate overlaps or disagrees with its explicit task quantities. Confirm the intended scope.',
+  }));
+}
+function sameConflict(a:ScopeConflict,b:ScopeConflict){
+  return a.field===b.field&&a.values.length===b.values.length&&a.values.every(value=>b.values.includes(value));
 }
 export function validateExtraction(raw: unknown): ScopeExtraction {
   if (!raw || typeof raw !== "object") throw new Error("Invalid scope analysis");
@@ -124,6 +194,7 @@ export function validateExtraction(raw: unknown): ScopeExtraction {
   });
   // Independent conflict detection: never let a model overwrite two different measurements.
   for (const field of Object.keys(SCOPE_FIELDS) as ScopeField[]) {
+    if(field==='laborHours')continue;
     const values = [...new Set(facts.filter(f => f.field === field && f.confidence >= .4).map(f => f.value.trim()))];
     if (values.length > 1 && SCOPE_FIELDS[field].kind !== "text" && !conflicts.some(c => c.field === field)) conflicts.push({ field, values, explanation: "The supplied information contains different values. Please confirm the intended scope." });
   }
@@ -132,7 +203,10 @@ export function validateExtraction(raw: unknown): ScopeExtraction {
     return {field:q.field as ScopeField,question:q.question,reason:q.reason};
   }):[];
   const pages=r.pages?readPageRecords(r.pages):[];
-  return { summary: r.summary, facts, conflicts,clarifications, ...(r.instructions?{instructions:validateInstructions(r.instructions)}:{}), ...(r.pages?{documentCoverage:{pages,expectedPages:pages.length,complete:pages.every(p=>p.status==='read')}}:{}),...(r.takeoffs?{takeoffs:readTakeoffs(r.takeoffs)}:{}), missingInformation: [...strings(r.missingInformation, 50),...unreadValues], reviewNotes: strings(r.reviewNotes, 50) };
+  const instructions=r.instructions?validateInstructions(r.instructions):undefined;
+  const laborEvidence=reconcileExtractionLaborFacts(facts,[...strings(r.missingInformation, 50),...unreadValues],'',instructions);
+  if(laborEvidence)for(const conflict of laborScopeConflicts(laborEvidence))if(!conflicts.some(existing=>sameConflict(existing,conflict)))conflicts.push(conflict);
+  return { summary: r.summary, facts, conflicts,clarifications, ...(instructions?{instructions}:{}), ...(r.pages?{documentCoverage:{pages,expectedPages:pages.length,complete:pages.every(p=>p.status==='read')}}:{}),...(r.takeoffs?{takeoffs:readTakeoffs(r.takeoffs)}:{}),...(laborEvidence?{laborEvidence}:{}), missingInformation: [...strings(r.missingInformation, 50),...unreadValues], reviewNotes: strings(r.reviewNotes, 50) };
 }
 const IMAGE_SOURCE = /\.(?:jpe?g|png|webp|gif|heic|heif)(?:\b|[),])/i;
 const EXPLICIT_URGENCY = /\b(?:standard|normal timing|not urgent|priority|prioritized|emergency|urgent|rush|asap|same[- ]day|immediately)\b/i;
@@ -180,12 +254,26 @@ export function protectPricingFacts(extraction: ScopeExtraction): ScopeExtractio
   if(heldDerivedMeasurement&&!missingInformation.some(note=>/confirm.*(?:project area|measurement)/i.test(note))){
     missingInformation.push("Confirm the project area or other material measurement from the written scope before pricing.");
   }
-  return {...extraction, facts, missingInformation, reviewNotes: [...new Set(reviewNotes)]};
+  const laborEvidence=reconcileExtractionLaborFacts(facts,missingInformation,'',extraction.instructions);
+  return {...extraction, facts, laborEvidence, missingInformation, reviewNotes: [...new Set(reviewNotes)]};
 }
 export function mergeScopeFacts(current: ScopeAnswers, extraction: ScopeExtraction) {
   const answers = { ...current }; const conflicts = [...extraction.conflicts];
   const textFields=new Set<ScopeField>();
+  // Reconcile again with the saved task list.  Extraction metadata is a useful
+  // history record, but it predates a visitor's current scope answer and must
+  // never let a newly named, unmeasured package appear fully covered.
+  const laborEvidence=reconcileExtractionLaborFacts(extraction.facts,extraction.missingInformation,current.taskList,extraction.instructions);
+  const laborHours=laborEvidence?completeLaborHoursAnswer(laborEvidence):undefined;
+  if(laborHours&&!conflicts.some(conflict=>conflict.field==='laborHours')){
+    const existing=answers.laborHours?.trim();
+    if(existing&&existing!==laborHours)conflicts.push({field:'laborHours',values:[existing,laborHours],explanation:'Your previous answer differs from the complete explicit labor evidence. Choose which is correct.'});
+    else answers.laborHours=laborHours;
+  }
   for (const fact of extraction.facts) {
+    // Labor facts stay in source history.  Only a complete aggregate above can
+    // project into the global answer; a subtotal must not replace that answer.
+    if(fact.field==='laborHours')continue;
     if (fact.confidence < .85 || conflicts.some(c => c.field === fact.field)) continue;
     if(SCOPE_FIELDS[fact.field].kind==="text"){
       if(textFields.has(fact.field))continue;textFields.add(fact.field);
@@ -218,7 +306,13 @@ export function combineScopeExtractions(parts:ScopeExtraction[]):ScopeExtraction
     const key=JSON.stringify([fact.field,fact.value.trim(),fact.source,fact.evidence]);
     if(!seen.has(key)){seen.add(key);merged.facts.push(fact);}
   }
+  const laborEvidence=reconcileExtractionLaborFacts(merged.facts,merged.missingInformation,'',merged.instructions);
+  if(laborEvidence){
+    merged.laborEvidence=laborEvidence;
+    for(const conflict of laborScopeConflicts(laborEvidence))if(!merged.conflicts.some(existing=>sameConflict(existing,conflict)))merged.conflicts.push(conflict);
+  }
   for(const field of Object.keys(SCOPE_FIELDS) as ScopeField[]){
+    if(field==='laborHours')continue;
     const values=[...new Set(merged.facts.filter(f=>f.field===field&&f.confidence>=.4).map(f=>f.value.trim()))];
     if(values.length>1&&SCOPE_FIELDS[field].kind!=="text"&&!merged.conflicts.some(c=>c.field===field))merged.conflicts.push({field,values,explanation:"Different document pages state different values. Confirm the intended project information."});
   }

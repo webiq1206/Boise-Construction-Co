@@ -8,7 +8,7 @@ export class DraftError extends Error { status: number; constructor(message: str
 export interface Draft {
   id: string; revision: number; status: "draft" | "submitted"; updatedAt: string;
   text: string; answers: ScopeAnswers; extraction: ScopeExtraction | null;
-  wizard?: {skipped: (keyof ScopeAnswers)[]; resolutions: ScopeAnswers; sourceVersion?:string;sourceTextHash?:string;sourceTextAppended?:boolean;pendingSourceVersion?:string;pendingSourceTextHash?:string;instructionAnswers?:import('./clarifications').InstructionAnswer[]} ;
+  wizard?: {skipped: (keyof ScopeAnswers)[]; resolutions: ScopeAnswers; sourceVersion?:string;sourceTextHash?:string;sourceTextAppended?:boolean;pendingSourceVersion?:string;pendingSourceTextHash?:string;replacement?:boolean;replacementAnswers?:ScopeAnswers;retiredUploadIds?:string[];instructionAnswers?:import('./clarifications').InstructionAnswer[]} ;
   reviewed: ReviewedScope | null; uploads: ScopeUpload[];
   contact: { name: string; email: string; phone: string }; brand: string;
 }
@@ -50,10 +50,12 @@ async function rowFor(id: string, key: string) {
 export async function readDraft(id: string,key: string): Promise<Draft|null> {
   const row=await rowFor(id,key);if(!row)return null;
   const files=await query("SELECT id,name,mime_type,size_bytes,sha256 FROM p5_estimator_files WHERE draft_id=$1 ORDER BY created_at",[id]);
-  return {id,revision:Number(row.revision),status:row.status,updatedAt:new Date(row.updated_at).toISOString(),brand:row.brand,
+  const draft:Draft={id,revision:Number(row.revision),status:row.status,updatedAt:new Date(row.updated_at).toISOString(),brand:row.brand,
     text:"",answers:{},extraction:null,reviewed:null,contact:{name:"",email:"",phone:""},...row.payload,
     uploads:files.map(f=>({id:f.id,name:f.name,type:f.mime_type,size:f.size_bytes,sha256:f.sha256,status:"stored"})),
   };
+  const retired=new Set(draft.wizard?.retiredUploadIds||[]);
+  return {...draft,uploads:draft.uploads.filter(file=>!retired.has(file.id))};
 }
 export async function saveDraft(id: string,key: string,brand: string,payload: Omit<Draft,"id"|"brand"|"revision"|"status"|"updatedAt"|"uploads">,expectedRevision: number): Promise<Draft> {
   const existing=await rowFor(id,key);
@@ -67,7 +69,8 @@ export async function saveDraft(id: string,key: string,brand: string,payload: Om
   const row=result[0];
   if(!row || !Number.isInteger(Number(row.revision)))throw new DraftError("Your project could not be saved. Please retry; your information is still on this device.",503);
   const files=await query("SELECT id,name,mime_type,size_bytes,sha256 FROM p5_estimator_files WHERE draft_id=$1 ORDER BY created_at",[id]);
-  return {...payload,id,brand,revision:Number(row.revision),status:row.status,updatedAt:new Date(row.updated_at).toISOString(),uploads:files.map(f=>({id:f.id,name:f.name,type:f.mime_type,size:f.size_bytes,sha256:f.sha256,status:"stored" as const}))};
+  const retired=new Set(payload.wizard?.retiredUploadIds||[]);
+  return {...payload,id,brand,revision:Number(row.revision),status:row.status,updatedAt:new Date(row.updated_at).toISOString(),uploads:files.filter(file=>!retired.has(file.id)).map(f=>({id:f.id,name:f.name,type:f.mime_type,size:f.size_bytes,sha256:f.sha256,status:"stored" as const}))};
 }
 export async function saveUpload(id:string,key:string,file:{name:string;type:string;data:Buffer}):Promise<ScopeUpload> {
   const draft=await rowFor(id,key);if(!draft)throw new DraftError("Save the draft before uploading.",404);
