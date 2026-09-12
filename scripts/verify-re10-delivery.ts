@@ -292,7 +292,7 @@ check(fs.readFileSync("components/P5Estimator.module.css", "utf8").includes("scr
  * on the camera button and nowhere else, and it is a one-word regression to
  * reintroduce, so it is checked rather than remembered.
  */
-const pickerBlock = wizard.slice(wizard.indexOf('type="file"'));
+const pickerBlock = wizard.slice(wizard.indexOf('id={`${id}-files`}'));
 const pickerInput = pickerBlock.slice(0, pickerBlock.indexOf("/>"));
 check(pickerInput.length > 0 && pickerInput.length < 1200, "could not isolate the file picker input");
 check(!/capture/.test(pickerInput), "the plain file picker has a `capture` attribute - phones will open the camera and hide the file and photo pickers");
