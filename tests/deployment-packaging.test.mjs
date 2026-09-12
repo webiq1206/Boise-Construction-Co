@@ -4,6 +4,7 @@ import { mkdtemp, mkdir, writeFile, readFile, readlink, rm, symlink, access } fr
 import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { checkContext, exclusions, packageDeployment } from '../scripts/package-deployment.mjs';
 
 const receipt = '.local/diagnostics/publishing-packaging/backup-verification.json';
@@ -33,7 +34,7 @@ async function fixture(t) {
     'scripts/submit-indexnow.mjs', '.cache/customer-kept', '.local/customer-kept']) await put(root, entry);
   return root;
 }
-const apply = { apply: true, env: { REPLIT_DEPLOYMENT: '1' }, verifyRemote: async () => {} };
+const apply = { apply: true, env: { PUBLISHING_BUILD_COPY: '1' }, verifyRemote: async () => {} };
 
 test('read-only plan changes no files', async t => {
   const root = await fixture(t);
@@ -45,13 +46,55 @@ test('read-only plan changes no files', async t => {
 });
 test('editor environment refuses cleanup', async t => {
   const root = await fixture(t);
-  await assert.rejects(packageDeployment(root, { apply: true, env: {} }), /publishing environment/);
+  await assert.rejects(packageDeployment(root, { apply: true, env: {} }), /publishing-build opt-in/);
   await access(path.join(root, '.local/recovery/synthetic-backup/backup.tar'));
 });
 test('original workspace is refused even with a deployment marker', async t => {
   const root = await fixture(t);
   await put(root, identity, JSON.stringify({ mountNamespace: await readlink('/proc/self/ns/mnt') }));
   await assert.rejects(checkContext(root, apply.env), /Original workspace/);
+});
+test('build guard accepts explicit opt-in without the runtime marker', async t => {
+  const root = await fixture(t);
+  await checkContext(root, { PUBLISHING_BUILD_COPY: '1' });
+  await assert.rejects(checkContext(root, { REPLIT_DEPLOYMENT: '1' }), /publishing-build opt-in/);
+});
+test('configured publishing command propagates opt-in and stops on build failure', async t => {
+  const root = await fixture(t);
+  const configuration = await readFile(new URL('../.replit', import.meta.url), 'utf8');
+  const command = JSON.parse(configuration.match(/^build = (\[.*\])$/m)[1]);
+  for (const name of ['build-deployment.sh', 'package-deployment.mjs']) {
+    await put(root, `scripts/${name}`, await readFile(new URL(`../scripts/${name}`, import.meta.url), 'utf8'));
+  }
+  // Execute the real guard and wrapper, but never build the app or prune files.
+  await put(root, 'bin/node', `#!/bin/bash
+if [[ "$2" == "--apply" ]]; then
+  printf 'apply:%s\\n' "$PUBLISHING_BUILD_COPY" >> "$GUARD_TEST_LOG"
+else
+  exec ${JSON.stringify(process.execPath)} "$@"
+fi
+`);
+  const { chmod } = await import('node:fs/promises');
+  await chmod(path.join(root, 'bin/node'), 0o755);
+  await put(root, 'build.sh', 'printf "build:%s\\n" "$PUBLISHING_BUILD_COPY" >> "$GUARD_TEST_LOG"\nexit "${GUARD_TEST_EXIT:-0}"\n');
+  const log = path.join(root, 'command.log');
+  const env = { PATH: `${root}/bin:${process.env.PATH}`, GUARD_TEST_LOG: log };
+  const success = spawnSync(command[0], command.slice(1), { cwd: root, env, encoding: 'utf8' });
+  assert.equal(success.status, 0, success.stderr);
+  assert.equal(await readFile(log, 'utf8'), 'build:1\napply:1\n');
+  await writeFile(log, '');
+  const failure = spawnSync(command[0], command.slice(1), {
+    cwd: root, env: { ...env, GUARD_TEST_EXIT: '17' }, encoding: 'utf8',
+  });
+  assert.equal(failure.status, 17, failure.stderr);
+  assert.equal(await readFile(log, 'utf8'), 'build:1\n');
+  // With the original namespace, the configured command must stop before build.
+  await writeFile(log, '');
+  await put(root, identity, JSON.stringify({ mountNamespace: await readlink('/proc/self/ns/mnt') }));
+  const original = spawnSync(command[0], command.slice(1), { cwd: root, env, encoding: 'utf8' });
+  assert.equal(original.status, 1);
+  assert.match(original.stderr, /Original workspace/);
+  assert.equal(await readFile(log, 'utf8'), '');
 });
 test('verified disposable copy prunes only allowlisted paths', async t => {
   const root = await fixture(t);

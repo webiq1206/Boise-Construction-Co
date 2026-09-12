@@ -51,7 +51,7 @@ async function safeTarget(root, relative) {
 }
 
 export async function checkContext(root, env = process.env) {
-  if (env.REPLIT_DEPLOYMENT !== '1') throw Error('Cleanup requires the Replit publishing environment; editor workspace refused.');
+  if (env.PUBLISHING_BUILD_COPY !== '1') throw Error('Cleanup requires the publishing-build opt-in; editor workspace refused.');
   await safeTarget(root, identityPath);
   const identity = path.join(root, identityPath);
   if (await exists(path.join(root, '.local/recovery')) && !await exists(identity)) {

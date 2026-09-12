@@ -8,7 +8,7 @@ packages = ["imagemagick", "libwebp"]
 
 [deployment]
 deploymentTarget = "autoscale"
-build = ["bash", "scripts/build-deployment.sh"]
+build = ["env", "PUBLISHING_BUILD_COPY=1", "bash", "scripts/build-deployment.sh"]
 run = ["bash", "start.sh"]
 
 [env]
