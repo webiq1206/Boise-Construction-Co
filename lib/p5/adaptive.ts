@@ -51,6 +51,19 @@ export function materialScopeFields(answers:ScopeAnswers,pricedFields:ScopeField
   }
   return [...new Set([...required,...pricedFields])].filter(k=>!answers[k]?.trim());
 }
+const detailQuestions:Partial<Record<ScopeField,string>>={
+ cabinetRoom:'Which room are the cabinets for?',
+ cabinetBaseLf:'How many linear feet of base cabinets are needed?',
+ cabinetUpperLf:'How many linear feet of wall cabinets are needed?',
+ cabinetTallLf:'How many linear feet of tall cabinets are needed?',
+ garageSqft:'How many square feet is the garage?',
+ coveredOutdoorSqft:'How many square feet of covered outdoor space are included?',
+ laborHours:'How many total labor hours are included?',
+ projectMonths:'How many months do you expect the work to take?',
+ rooms:'How many rooms are included?',
+ bathrooms:'How many bathrooms are included?',
+ stories:'How many stories are included?',
+};
 export function scopeQuestions(input:ScopeAnswers,extraction:ScopeExtraction|null,conflicts:ScopeConflict[]=[],skipped:ScopeField[]=[],pricedFields:ScopeField[]=[]):ScopeQuestion[]{
   // A caller may be holding an extraction and a pre-reconciliation answer
   // snapshot (for example just after a saved draft is restored). Treat
@@ -71,7 +84,7 @@ export function scopeQuestions(input:ScopeAnswers,extraction:ScopeExtraction|nul
     const reason=SCOPE_FIELDS[q.field].kind==='number'?`Please confirm ${SCOPE_FIELDS[q.field].label.toLowerCase()}. Approximate is fine.`:q.question.replace(/\s+/g,' ').trim();
     questions.push({field:q.field,label:SCOPE_FIELDS[q.field].label,reason:reason.length<=180?reason:`Please confirm ${SCOPE_FIELDS[q.field].label.toLowerCase()}.`,detail:reason.length<=180?undefined:reason});
   }
-  for(const field of relevant)if(!answers[field]?.trim()&&!questions.some(q=>q.field===field)&&!skipped.includes(field))questions.push({field,label:SCOPE_FIELDS[field].label,reason:field==='service'?'What would you like help with?':field==='taskList'?'What work should be included? A short list with quantities is enough.':field==='sqft'?(builds.includes(answers.service||'')?'About how many square feet of living space are included? Keep garage and outdoor areas separate.':'About how large is the area being worked on?'):field==='finish'?'This helps us allow for the materials you have in mind.':'This detail affects the work and its cost.'});
+  for(const field of relevant)if(!answers[field]?.trim()&&!questions.some(q=>q.field===field)&&!skipped.includes(field))questions.push({field,label:SCOPE_FIELDS[field].label,reason:field==='service'?'What would you like help with?':field==='taskList'?'What work should be included? A short list with quantities is enough.':field==='sqft'?(builds.includes(answers.service||'')?'About how many square feet of living space are included? Keep garage and outdoor areas separate.':'About how large is the area being worked on?'):field==='finish'?'What finish level would you like?':detailQuestions[field]||`What should we use for ${SCOPE_FIELDS[field].label.toLowerCase()}?`});
   return questions.map(q=>{const definition=SCOPE_FIELDS[q.field];return {...q,...(!q.values?.length&&definition.kind==='choice'?{values:definition.options.filter(v=>q.field!=='service'||(ESTIMATOR_BRAND.services as readonly string[]).includes(v))}:{}),...(q.reason.length>180?{reason:`Please confirm ${q.label.toLowerCase()}.`,detail:q.detail||q.reason}:{})};});
 }
 export function validateScopeAnswer(field:ScopeField,value:string){
