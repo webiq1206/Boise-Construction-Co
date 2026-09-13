@@ -2,7 +2,7 @@ import {ProcessingDeadlineError,PROCESSING_PAUSED} from './processingBudget.ts';
 import {applyCabinetIntent} from "./projectIntent";
 import {advanceAnalysis,analysisSourceVersion} from "./analysisWork";
 import {queuedJob} from './backgroundJobs';
-import {reconcileScope,scopeQuestions,manualScopeAnswers} from "./adaptive";
+import {reconcileScope,scopeQuestionsForBrand as scopeQuestions,manualScopeAnswers} from "./adaptive";
 import {isProjectReplacement} from './projectReplacement';
 import {costQuestionFields} from "./questionPolicy";
 import {createHash} from "node:crypto";

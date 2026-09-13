@@ -1,7 +1,7 @@
 import {instructionPrompts,upsertInstructionAnswer,type InstructionAnswer} from './clarifications';
 import {resolveInstructionAnswer} from './clarificationAnswer';
 import {analysisSourceVersion} from './analysisWork';
-import {deriveScopeAnswers,reconcileScope,scopeQuestions} from "./adaptive";
+import {deriveScopeAnswers,reconcileScope,scopeQuestionsForBrand as scopeQuestions} from "./adaptive";
 import {isProjectReplacement} from './projectReplacement';
 import {costQuestionFields} from "./questionPolicy";
 import { ESTIMATOR_BRAND } from "./brand";
