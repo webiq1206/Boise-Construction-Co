@@ -1,3 +1,4 @@
+import {atomicInstructionQuestions,textBenchTopChoices} from './atomicQuestions.ts';
 import type {ScopeAnswers,ScopeExtraction} from './scope.ts';
 
 export interface InstructionAnswer {id:string;question:string;answer:string}
@@ -69,7 +70,7 @@ export function removeInstructionAnswers(text:string|undefined,history:Instructi
 export function instructionPrompts(extraction:ScopeExtraction|null,answers:ScopeAnswers):InstructionPrompt[]{
   const result:InstructionPrompt[]=[];
   for(const raw of extraction?.instructions?.questions||[]){
-    for(const part of splitInstructionQuestions(raw)){
+    for(const part of splitInstructionQuestions(raw).flatMap(part=>atomicInstructionQuestions(part,answers,extraction?.conflicts))){
       const full=part.replace(/\s+/g,' ').trim();if(!full)continue;
       // Filter each question separately so a legacy paragraph cannot lose a real scope decision.
       if(serviceQuestion(full))continue;
@@ -81,7 +82,7 @@ export function instructionPrompts(extraction:ScopeExtraction|null,answers:Scope
       const question=full.length<=180?full:'What should we include for this part of your project?';
       const values=/labor.only/i.test(full)&&/materials.only/i.test(full)?['Labor only','Materials only','Labor and materials']:
         /include or exclude|include.*or.*exclude/i.test(full)?['Include it','Exclude it']:undefined;
-      result.push({id,question,...(question!==full?{detail:full}:{}),values});
+      result.push({id,question,...(question!==full?{detail:full}:{}),values:values?.length?values:textBenchTopChoices(extraction,full)});
     }
   }
   return result;
