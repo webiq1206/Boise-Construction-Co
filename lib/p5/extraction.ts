@@ -1,5 +1,5 @@
-import {readSpecificationSource,specificationHint,unsupportedSpecifications,UnsupportedSpecificationError,retainUnspecifiedRatings} from './sourceSpecificationGuard.ts';
 import {groundSourceResponsibilities} from './sourceResponsibilities.ts';
+import {readSpecificationSource,specificationHint,unsupportedSpecifications,UnsupportedSpecificationError,retainUnspecifiedRatings} from './sourceSpecificationGuard.ts';
 import {SERVER_BUDGET_MS,ProcessingDeadlineError,fetchWithinDeadline,withinDeadline} from './processingBudget.ts';
 import {ESTIMATOR_BRAND} from "./brand.ts";
 import { SCOPE_FIELDS, SCOPE_BATCH_LIMIT, SCOPE_TEXT_LIMIT, validateExtraction, combineScopeExtractions, type ScopeAnswers, type ScopeExtraction } from "./scope.ts";
@@ -44,6 +44,8 @@ function extractionRecord(value:unknown){
 }
 
 const DOCUMENT_POLICY=`${INSTRUCTION_POLICY} PAGE COVERAGE: Review every supplied page, including scans, drawing details, schedules, specifications, revision clouds and notes. The supplied page manifest gives original source filenames and page numbers; return exactly one pages record per manifest entry. Do not call an unreadable or partially legible sheet read. Identify the affected content and conflicting or absent dimensions. Never infer scale from display size. Retain every distinct work component in takeoffs, with explicit building/floor, source pages, quantity unit and arithmetic. Use a stable physical identity (room/element/mark plus component) for id so plans and schedules referencing the same work are not counted twice. A repeated detail is not another physical instance. Use null quantity and uncertain basis when measurement is unsupported; preserve the item for an explicitly estimated allowance later. Record exact superseded references as source:sheet:revision only when the drawing explicitly establishes supersession. Do not infer the controlling revision from upload order. Cross-reference schedules, dimensions, material notes and assemblies. An empty page must still have a read record noting that it is blank. No sample-based analysis or silent truncation. Return empty pages/takeoffs for text without page references.`;
+
+const FACT_VALUE_POLICY='FACT OUTPUT CONTRACT: facts is a sparse list, not a form to fill. Omit an entire fact record when its value is unknown, irrelevant, empty or whitespace. Never emit an empty-string value, including for cabinetRoom or cabinetBaseLf on non-cabinet work. Do not emit placeholders such as N/A or unknown. Retain all supported nonempty facts and every page/takeoff record; this does not permit dropping evidence, pages or uncertain takeoffs.';
 
 function detailViewContext(file:AnalysisFile):string|null {
   if(!file.detailViews||file.pages?.length!==1)return null;
@@ -120,7 +122,7 @@ async function analyzeWithOpenAI(provider: Provider, text: string, files: Analys
     method: "POST", signal: AbortSignal.timeout(timeoutMs),
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${provider.key}` },
     body: JSON.stringify({
-      model: provider.model, instructions: EXTRACTION_SYSTEM+'\n'+DOCUMENT_POLICY+'\n'+sourceInstruction, max_output_tokens: 16000,
+      model: provider.model, instructions: EXTRACTION_SYSTEM+'\n'+DOCUMENT_POLICY+'\n'+sourceInstruction+'\n'+FACT_VALUE_POLICY, max_output_tokens: 16000,
       input: [{ role: "user", content: asInputContent(files, text, previous) }],
       text: { format: { type: "json_schema", name: "p5_scope_extraction", strict: true, schema: EXTRACTION_JSON_SCHEMA } },
     }),
@@ -155,7 +157,7 @@ async function analyzeWithAnthropic(provider: Provider, text: string, files: Ana
     // This formatting-only tool never executes code or an external action.
     // Local schema/evidence validation remains mandatory; avoiding compiled
     // output grammars prevents rejection of the full, nested page ledger.
-    body: JSON.stringify({ model: provider.model, max_tokens: 16000, system: EXTRACTION_SYSTEM+'\n'+DOCUMENT_POLICY+'\n'+sourceInstruction+' Return the final structured record through record_scope_analysis. It is only an output format, not an external action.', messages: [{ role: "user", content }], tools:[{name:'record_scope_analysis',description:'Return the complete extracted scope, interpreted instructions, original-page coverage and evidence-linked takeoffs. This output record performs no actions and changes no data. Do not omit unreadable pages or excluded-scope instructions.',input_schema:anthropicExtractionSchema()}],tool_choice:{type:'tool',name:'record_scope_analysis',disable_parallel_tool_use:true} }),
+    body: JSON.stringify({ model: provider.model, max_tokens: 16000, system: EXTRACTION_SYSTEM+'\n'+DOCUMENT_POLICY+'\n'+sourceInstruction+'\n'+FACT_VALUE_POLICY+' Return the final structured record through record_scope_analysis. It is only an output format, not an external action.', messages: [{ role: "user", content }], tools:[{name:'record_scope_analysis',description:'Return the complete extracted scope, interpreted instructions, original-page coverage and evidence-linked takeoffs. This output record performs no actions and changes no data. Do not omit unreadable pages or excluded-scope instructions.',input_schema:anthropicExtractionSchema()}],tool_choice:{type:'tool',name:'record_scope_analysis',disable_parallel_tool_use:true} }),
   });
   if (!response.ok) throw await responseError(provider, response);
   let body: any;
@@ -227,8 +229,7 @@ export async function analyzeBatch(text: string, files: AnalysisFile[], previous
       if(error instanceof ProcessingDeadlineError&&Date.now()>=absoluteDeadline)throw error;
       if(error instanceof UnsupportedSpecificationError&&!sourceRepair&&absoluteDeadline-Date.now()>1000){
         sourceRepair=true;sourceInstruction=specificationHint(source)+' The preceding response incorrectly supplied '+error.specifications.join(', ')+'. Those claims are absent from the source. Re-read the supplied pages, omit unsupported work, and keep missing designations unspecified. Clearing, excavation and haul-off do not establish demolition work.';
-        // Correct a semantic source error with the provider that already read
-        // the pages, within the same deadline. A slow fallback is for failures.
+        // Keep semantic correction on the same provider and original deadline.
         configured.splice(providerIndex+1,0,provider);
       }
       last = error;

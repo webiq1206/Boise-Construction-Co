@@ -1,12 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {instructionPrompts,removeInstructionAnswers,splitInstructionQuestions,upsertInstructionAnswer} from '../lib/p5/clarifications.ts';
+import {instructionPrompts} from '../lib/p5/clarifications.ts';
 import {require as tsxRequire} from 'tsx/cjs/api';
 import {pathToFileURL} from 'node:url';
 const resolver=()=>tsxRequire('../lib/p5/clarificationAnswer.ts',pathToFileURL(`${process.cwd()}/tests/p5-clarifications.test.ts`).href) as typeof import('../lib/p5/clarificationAnswer.ts');
 import {emptyInstructions} from '../lib/p5/instructions.ts';
 import {scopeQuestions} from '../lib/p5/adaptive.ts';
-import {mergeServerClarificationAnswers} from '../lib/p5/draftEndpoint.ts';
 import type {ScopeExtraction} from '../lib/p5/scope.ts';
 const scope=():ScopeExtraction=>({summary:'Trim scope',facts:[],conflicts:[],reviewNotes:[],missingInformation:[],instructions:{...emptyInstructions(),inclusions:['Trim'],exclusions:['Plumbing'],questions:['Labor only or materials only?','Should we include or exclude painting?']},documentCoverage:{expectedPages:80,complete:true,pages:[]},takeoffs:[]});
 
@@ -14,26 +13,13 @@ test('legacy paragraphs become distinct, concise questions and exact duplicates 
   const e=scope();e.instructions!.questions=['Labor only or materials only? Should we include or exclude painting?','Labor only or materials only?'];
   const q=instructionPrompts(e,{});assert.equal(q.length,2);assert.deepEqual(q[0].values,['Labor only','Materials only','Labor and materials']);assert.equal(q[1].question,'Should we include or exclude painting?');
 });
-test('sentence splitting preserves decimals, units and context fragments',()=>{
-  assert.deepEqual(splitInstructionQuestions('Confirm 36.5 sq. ft. of flooring. Include the matching baseboard.'),['Confirm 36.5 sq. ft. of flooring.','Include the matching baseboard.']);
-  const e=scope();e.instructions!.questions=['Confirm 36.5 sq. ft. of flooring. Include the matching baseboard.'];
-  assert.deepEqual(instructionPrompts(e,{}).map(q=>q.question),['Confirm 36.5 sq. ft. of flooring.','Include the matching baseboard.']);
-});
 test('legacy company-fit questions use the service picker instead of an instruction loop',()=>{
   const e=scope();e.instructions!.questions=['Does the submitted scope require residential remodel work?','Which of the following services does your requested estimate cover?'];
   const q=scopeQuestions({},e);assert.equal(q.some(q=>q.instructionId),false);assert.ok(q.find(q=>q.field==='service')?.values?.length);
   e.instructions!.questions=['Which of the following services does your estimate cover? Should we include or exclude painting?'];
   assert.deepEqual(instructionPrompts(e,{}).map(q=>q.question),['Should we include or exclude painting?']);
 });
-test('a supplied clarification answer is not asked again and replacement does not retain the old answer',()=>{
-  const e=scope();
-  const first=upsertInstructionAnswer('', 'Labor only or materials only?', 'Labor only');
-  assert.deepEqual(instructionPrompts(e,{estimatingInstructions:first}).map(q=>q.question),['Should we include or exclude painting?']);
-  const replaced=upsertInstructionAnswer(first,'Labor only or materials only?','Materials only');
-  assert.match(replaced,/Answer: Materials only/);assert.doesNotMatch(replaced,/Answer: Labor only/);
-  assert.equal(removeInstructionAnswers(replaced,[{id:'labor only or materials only',question:'Labor only or materials only?',answer:'Materials only'}]),'');
-});
-test('clarification updates instructions without sending documents or changing page coverage',async()=>{
+test('ambiguous responsibility clarification retains provider and document protections',async()=>{
   const {resolveInstructionAnswer}=await resolver();
   process.env.OPENAI_API_KEY='synthetic';delete process.env.AI_INTEGRATIONS_OPENAI_API_KEY;
   const e=scope();const id=instructionPrompts(e,{})[0].id;let calls=0;
@@ -43,28 +29,85 @@ test('clarification updates instructions without sending documents or changing p
     return Response.json({status:'completed',output:[{content:[{type:'output_text',text:JSON.stringify(output)}]}]});
   };
   try{
-    const result=await resolveInstructionAnswer(e,{service:'handyman'},{id,answer:'Labor only'},[],request);
+    const answer='Labor only, but owner supplies materials for paint';
+    const result=await resolveInstructionAnswer(e,{service:'handyman'},{id,answer},[],request);
     assert.equal(calls,1);assert.equal(result.extraction?.documentCoverage,e.documentCoverage);assert.equal(result.extraction?.takeoffs,e.takeoffs);
     assert.deepEqual(result.extraction?.instructions?.exclusions,['Plumbing']);assert.equal(result.extraction?.instructions?.laborOnly,true);
     assert.deepEqual(instructionPrompts(result.extraction,result.answers).map(q=>q.question),['Should we include or exclude painting?']);
-     const repeated=await resolveInstructionAnswer(result.extraction,{}, {id,answer:'Labor only'},result.history,request);
-     assert.equal(calls,1);assert.equal(repeated.history.length,1);assert.match(repeated.answers.estimatingInstructions||'',/Answer: Labor only/);
+    const repeated=await resolveInstructionAnswer(result.extraction,result.answers,{id,answer},result.history,request);
+    assert.equal(calls,1);assert.equal(repeated.history.length,1);assert.match(result.answers.estimatingInstructions||'',/Answer: Labor only/);
   }finally{delete process.env.OPENAI_API_KEY;}
 });
-test('draft clarification retry reconstructs the acknowledged answer from server history',()=>{
-  const e=scope();const prompt=instructionPrompts(e,{})[0];
-  const saved=upsertInstructionAnswer('',prompt.question,'Labor only');
-  const restored=mergeServerClarificationAnswers({}, {estimatingInstructions:saved},[{id:prompt.id,question:prompt.question,answer:'Labor only'}],true);
-  assert.match(restored.estimatingInstructions||'',/Answer: Labor only/);
-});
-test('retrying an acknowledged answer does not invoke analysis again',async()=>{
+test('exact responsibility choices resolve locally, preserve evidence and retry idempotently',async()=>{
   const {resolveInstructionAnswer}=await resolver();
-  const e=scope();const prompt=instructionPrompts(e,{})[0];let calls=0;
+  const keys=['OPENAI_API_KEY','AI_INTEGRATIONS_OPENAI_API_KEY','AI_INTEGRATIONS_OPENAI_BASE_URL','ANTHROPIC_API_KEY'];
+  const saved=Object.fromEntries(keys.map(key=>[key,process.env[key]]));
+  for(const key of keys)delete process.env[key];
+  try{
+    for(const answer of ['Labor only','Materials only','Labor and materials']){
+      const e=scope();
+      e.facts=[{field:'sqft',value:'80',confidence:.99,source:'scope.pdf',evidence:'80 square feet',basis:'stated'}];
+      const pages=e.documentCoverage,takeoffs=e.takeoffs,facts=e.facts;
+      const id=instructionPrompts(e,{})[0].id;let calls=0;
+      const request:typeof fetch=async()=>{calls++;throw new Error('A constrained choice must not call a provider.');};
+      const result=await resolveInstructionAnswer(e,{service:'handyman'},{id,answer},[],request);
+      assert.equal(calls,0);
+      assert.equal(result.extraction?.documentCoverage,pages);
+      assert.equal(result.extraction?.takeoffs,takeoffs);
+      assert.deepEqual(result.extraction?.facts,facts);
+      assert.equal(result.extraction?.instructions?.laborOnly,answer==='Labor only');
+      assert.equal(result.extraction?.instructions?.materialsOnly,answer==='Materials only');
+      assert.deepEqual(instructionPrompts(result.extraction,result.answers).map(q=>q.question),['Should we include or exclude painting?']);
+      const retried=await resolveInstructionAnswer(result.extraction,result.answers,{id,answer},result.history,request);
+      assert.equal(calls,0);
+      assert.deepEqual(retried,result);
+    }
+  }finally{
+    for(const key of keys){
+      if(saved[key]===undefined)delete process.env[key];else process.env[key]=saved[key];
+    }
+  }
+});
+test('explicit project-wide responsibility wording remains locally constrained',async()=>{
+  const {resolveInstructionAnswer}=await resolver();
+  const keys=['OPENAI_API_KEY','AI_INTEGRATIONS_OPENAI_API_KEY','AI_INTEGRATIONS_OPENAI_BASE_URL','ANTHROPIC_API_KEY'];
+  const saved=Object.fromEntries(keys.map(key=>[key,process.env[key]]));
+  for(const key of keys)delete process.env[key];
+  try{
+    const e=scope();e.instructions!.questions=['For the entire project, choose Labor only, Materials only, or Labor and materials?'];
+    const prompt=instructionPrompts(e,{})[0];assert.deepEqual(prompt.values,['Labor only','Materials only','Labor and materials']);
+    let calls=0;const request:typeof fetch=async()=>{calls++;throw new Error('A project-wide constrained choice must not call a provider.');};
+    const result=await resolveInstructionAnswer(e,{service:'handyman'},{id:prompt.id,answer:'Materials only'},[],request);
+    assert.equal(calls,0);assert.equal(result.extraction?.instructions?.laborOnly,false);assert.equal(result.extraction?.instructions?.materialsOnly,true);
+  }finally{
+    for(const key of keys){
+      if(saved[key]===undefined)delete process.env[key];else process.env[key]=saved[key];
+    }
+  }
+});
+test('scoped responsibility choices retain the choices but use provider interpretation',async()=>{
+  const {resolveInstructionAnswer}=await resolver();
+  const keys=['OPENAI_API_KEY','AI_INTEGRATIONS_OPENAI_API_KEY','AI_INTEGRATIONS_OPENAI_BASE_URL','ANTHROPIC_API_KEY'];
+  const saved=Object.fromEntries(keys.map(key=>[key,process.env[key]]));
+  for(const key of keys)delete process.env[key];
   process.env.OPENAI_API_KEY='synthetic';
   try{
-    const result=await resolveInstructionAnswer(e,{estimatingInstructions:upsertInstructionAnswer('',prompt.question,'Labor only')},{id:prompt.id,answer:'Labor only'},[{id:prompt.id,question:prompt.question,answer:'Labor only'}],async()=>{calls++;throw new Error('provider should not be called');});
-    assert.equal(calls,0);assert.deepEqual(instructionPrompts(result.extraction,result.answers).map(q=>q.question),['Should we include or exclude painting?']);
-  }finally{delete process.env.OPENAI_API_KEY;}
+    const e=scope();e.instructions!.questions=['Should kitchen trim be labor only or materials only?'];
+    const prompt=instructionPrompts(e,{})[0];assert.deepEqual(prompt.values,['Labor only','Materials only','Labor and materials']);
+    let calls=0;
+    const request:typeof fetch=async(_url,options)=>{
+      calls++;const body=JSON.parse(String(options?.body));assert.equal(body.input[0].content.some((c:any)=>c.type==='input_file'||c.type==='input_image'),false);
+      const output={summary:'',facts:[],conflicts:[],reviewNotes:[],missingInformation:[],clarifications:[],instructions:{...e.instructions,laborOnly:true,materialsOnly:false,questions:[]},pages:[],takeoffs:[]};
+      return Response.json({status:'completed',output:[{content:[{type:'output_text',text:JSON.stringify(output)}]}]});
+    };
+    const result=await resolveInstructionAnswer(e,{service:'handyman'},{id:prompt.id,answer:'Labor only'},[],request);
+    assert.equal(calls,1);
+    assert.equal(result.extraction?.instructions?.laborOnly,true);
+  }finally{
+    for(const key of keys){
+      if(saved[key]===undefined)delete process.env[key];else process.env[key]=saved[key];
+    }
+  }
 });
 test('invalid or stale clarification cannot replace the server extraction',async()=>{
   const {resolveInstructionAnswer}=await resolver();

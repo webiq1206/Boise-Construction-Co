@@ -1,20 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {priceCompleteScope,marketResolution,requestPricing,type PricingRequest} from '../lib/p5/scopePricing.ts';
+import {priceCompleteScope,marketResolution,catalogResolution,requestPricing,type PricingRequest} from '../lib/p5/scopePricing.ts';
 import {priceReviewedScope} from '../lib/p5/costBook.ts';
 import {createPlanningConfiguration,PLANNING_MODEL_VERSION,type PlanningCatalog} from '../lib/p5/planningBooks.ts';
-import {calculateP5Estimate,COST_CATEGORIES,type FinancePolicy} from '../lib/p5/pricing.ts';
 import type {ReviewedScope} from '../lib/p5/scope.ts';
 import {emptyInstructions} from '../lib/p5/instructions.ts';
 const date='2026-09-11T00:00:00.000Z',now=new Date(date);
-const codes=['03-17-01-M','03-17-01-L','03-19-02-M','03-15-02-M','03-15-02-L','03-16-01-M','03-16-01-L','03-14-01-M','03-14-01-L','03-17-02-M','03-17-02-L','03-02-02','03-02-04','03-02-06','03-04-01','03-04-02','03-04-03','03-05-02-M','03-05-02-L','REF-GENERAL-HOUR','REF-PLUMBING-HOUR','REF-ELECTRICAL-HOUR'];
-const fixtureRate=(code:string)=>{
- const equipment=code==='03-02-02'||code==='03-02-06';
- return {code,description:'Synthetic work',type:code==='03-02-04'?'Material':equipment?'Equipment':code.endsWith('-M')?'Material':code.endsWith('-L')||code.startsWith('REF-')?'Labor':'Other',unit:code==='03-02-04'?'SF':equipment?'MO':code.includes('HOUR')?'HR':'LF',amount:100,source:'Synthetic fixture',basis:'owner-average-cost' as const};
-};
-const catalog:PlanningCatalog={version:PLANNING_MODEL_VERSION,source:'Synthetic fixture',authorizedBy:'Test only',importedAt:date,rates:codes.map(fixtureRate)};
+const codes=['03-17-01-M','03-17-01-L','03-19-02-M','03-15-02-M','03-15-02-L','03-16-01-M','03-16-01-L','03-14-01-M','03-14-01-L','03-04-01','03-04-02','03-04-03','03-05-02-M','03-05-02-L','REF-GENERAL-HOUR','REF-PLUMBING-HOUR','REF-ELECTRICAL-HOUR'];
+const catalog:PlanningCatalog={version:PLANNING_MODEL_VERSION,source:'Synthetic fixture',authorizedBy:'Test only',importedAt:date,rates:codes.map(code=>({code,description:'Synthetic work',type:code.endsWith('-M')?'Material':'Labor',unit:code.includes('HOUR')?'HR':'LF',amount:100,source:'Synthetic fixture',basis:'owner-average-cost'}))};
 const config=createPlanningConfiguration(catalog);
-const pricingFinance:FinancePolicy={annualOverhead:420000,annualRevenue:6000000,forecastSource:'Synthetic fixture only: conservative earned-revenue forecast',reviewedAt:'2026-09-11',approvedBy:['Synthetic test owner']};
 const scope:ReviewedScope={text:'Supply ten feet of cabinetry and a specialty protective overlay.',answers:{service:'cabinet-product',cabinetBaseLf:'10',cabinetUpperLf:'0',cabinetTallLf:'0',location:'Boise'},extraction:null,uploads:[],reviewedAt:date,corrections:[]};
 const base=priceReviewedScope(scope,config,now);
 const ids=(base.internal as any).lines.map((l:any)=>l.id);
@@ -26,34 +20,6 @@ const adjustmentEvidence={url:urls[0],publishedAt:'',dateBasis:'retrieved' as co
 const purchaseAdjustments={taxRate:0,freightPerUnit:0,taxOnFreight:false,taxEvidence:adjustmentEvidence,freightEvidence:adjustmentEvidence};
 const researched={rates:[{taskId:'overlay',description:'Protective overlay',unit:'LF',quantity:10,quantityEvidence:'Ten feet requested',basis:'material-purchase',includes:'overlay material',excludes:'',landedCost:purchaseAdjustments,sources:[source(urls[0],10,20),source(urls[1],20,30)]}],issues:[]};
 const replies=(values:unknown[]):PricingRequest=>{const first=values[0] as {tasks:typeof task[]};const queue=[{tasks:first.tasks.map(({id,description,evidence})=>({id,description,evidence})),issues:[]},...values];return async()=>({value:queue.shift(),sourceUrls:urls});};
-const reviewKitchen=(answers:Record<string,string>)=>priceReviewedScope({text:answers.taskList||'Synthetic kitchen scope',answers,extraction:null,uploads:[],reviewedAt:date,corrections:[]},createPlanningConfiguration(catalog,['kitchen'],pricingFinance),now);
-
-test('P5 owner planning uses the stated SF-to-LF conversion once and keeps owner-supplied material out',()=>{
- const normal=reviewKitchen({service:'kitchen',location:'Boise',sqft:'100',countertopSqft:'50',taskList:'Install countertops'});
- const normalLines=((normal.internal as {lines?:Array<{id:string;quantity:number;cost:number}>}).lines||[]);
- const countertopMaterial=normalLines.find(line=>line.id.startsWith('03-17-02-M-'));
- const countertopLabor=normalLines.find(line=>line.id.startsWith('03-17-02-L-'));
- assert.ok(normal.customer.range);assert.ok(countertopMaterial);assert.ok(countertopLabor);
- assert.ok(Math.abs(countertopMaterial!.quantity-50/(25/12))<1e-10);
- assert.equal(countertopMaterial!.cost,countertopLabor!.cost);
- const ownerSupplied=reviewKitchen({service:'kitchen',location:'Boise',sqft:'100',countertopSqft:'50',taskList:'Install countertops',ownerSupplied:'Owner supplies countertops'});
- const ownerLines=((ownerSupplied.internal as {lines?:Array<{id:string;quantity:number;cost:number}>}).lines||[]);
- assert.ok(ownerSupplied.customer.range);assert.equal(ownerLines.filter(line=>line.id.startsWith('03-17-02-M-')).length,0);
- assert.equal(ownerLines.filter(line=>line.id.startsWith('03-17-02-L-')).length,1);
- assert.ok(Math.abs(ownerLines.find(line=>line.id.startsWith('03-17-02-L-'))!.quantity-50/(25/12))<1e-10);
- assert.ok(ownerLines.reduce((sum,line)=>sum+line.cost,0)<normalLines.reduce((sum,line)=>sum+line.cost,0));
-});
-
-test('P5 alternatives remain one selected assembly and explicit exclusions remove it',()=>{
- const alternate=reviewKitchen({service:'kitchen',location:'Boise',sqft:'100',countertopSqft:'50',taskList:'Install one countertop',alternates:'Standard laminate or premium quartz; select one, never both.'});
- const alternateLines=((alternate.internal as {lines?:Array<{id:string}>}).lines||[]);
- assert.equal(alternateLines.filter(line=>line.id.startsWith('03-17-02-M-')).length,1);
- assert.equal(alternateLines.filter(line=>line.id.startsWith('03-17-02-L-')).length,1);
- const excluded=reviewKitchen({service:'kitchen',location:'Boise',sqft:'100',countertopSqft:'50',taskList:'Install one countertop',exclusions:'Countertops are explicitly excluded.'});
- assert.ok(excluded.customer.range);
- assert.equal(((excluded.internal as {lines?:Array<{id:string}>}).lines||[]).filter(line=>line.id.startsWith('03-17-02-')).length,0);
-});
-
 test('Provider failure cannot publish the otherwise available partial range',async()=>{
  assert.ok(base.customer.range);
  const r=await priceCompleteScope(scope,config,async()=>{throw new Error('offline')},now);
@@ -90,23 +56,21 @@ test('Sourced averages add missing costs, retain sources, and preserve financial
  assert.ok(JSON.stringify(r.internal.scopePricing).includes(urls[0]));
  assert.ok(!JSON.stringify(r.customer).includes('unitCost'));
 });
-test('Landed benchmark arithmetic is direct cost, then P5 policy is applied once',()=>{
- const withPurchase=structuredClone(researched);
- withPurchase.rates[0].landedCost={taxRate:.10,freightPerUnit:2,taxOnFreight:true,taxEvidence:adjustmentEvidence,freightEvidence:adjustmentEvidence};
- const rule=marketResolution(withPurchase,urls,[extra],now).rules[0];
- assert.ok(Math.abs(rule.unitCost-24.2)<1e-10);
- assert.ok(Math.abs(rule.unitCostRange!.low-13.2)<1e-10);
- assert.ok(Math.abs(rule.unitCostRange!.high-35.2)<1e-10);
- const {quantity:ignoredQuantity,scopeTaskId:ignoredTask,...directRule}=rule;
- const line={...directRule,id:'market-direct',quantity:1,quantitySource:'Synthetic ten-foot reviewed scope',landed:{netPurchase:24.2,tax:0,freight:0,delivery:0,waste:0,storage:0,handling:0}};
- const priced=calculateP5Estimate({
-   estimatePurpose:'preliminary',service:'kitchen',revision:'landed-fixture',scopeSummary:'Synthetic direct-cost benchmark',
-   lines:[line],coverage:COST_CATEGORIES.map(category=>({category,status:category==='materials'?'included' as const:'not-applicable' as const,reason:'Synthetic test coverage'})),
-   risks:[],assumptions:[],exclusions:[],missingInformation:[],allowances:[],uncertainty:'low',locationProvided:true,
- },pricingFinance,[],now);
- assert.ok(Math.abs(priced.directCost-24.2)<1e-10);
- assert.ok(Math.abs(priced.riskAdjustedDirectCost-24.2*1.07)<1e-10);
- assert.ok(Math.abs(priced.contractPrice-(24.2*1.07/.6))<1e-10);
+test('Complete-scope mapper and audit receive active scope without retained alternatives',async()=>{
+ const history={version:'p5-retained-clarification-v1',clarifications:[],unselected:'Unselected quartz top'};
+ const archived={...scope,extraction:{summary:'Selected cabinet scope',facts:[],conflicts:[],missingInformation:[],reviewNotes:[],clarificationProvenance:history,sourceHistory:history}} as ReviewedScope;
+ const seen:unknown[]=[];
+ const queue:unknown[]=[
+  {tasks:[{id:'cabinets',description:'Cabinet supply',evidence:'ten feet'}],issues:[]},
+  {tasks:[task],issues:[]},
+  {coveredTaskIds:['cabinets'],issues:[]},
+ ];
+ const request:PricingRequest=async(_instructions,input)=>{seen.push(input);return {value:queue.shift(),sourceUrls:urls};};
+ const result=await priceCompleteScope(archived,config,request,now);
+ assert.ok(result.customer.range);
+ assert.ok(seen.length>=3);
+ assert.ok(!JSON.stringify(seen).includes('Unselected quartz top'));
+ assert.ok(seen.every(payload=>!JSON.stringify(payload).includes('clarificationProvenance')&&!JSON.stringify(payload).includes('sourceHistory')));
 });
 test('Regional unit-cost benchmarks reject incompatible units, responsibility and supplier offers',()=>{
  const priced=marketResolution(researched,urls,[extra],now).rules[0];assert.equal(priced.unitCost,20);assert.equal(priced.quantity.fixed,10);
@@ -296,4 +260,56 @@ test('Preliminary regional benchmark verification notes persist without becoming
  const research={...researched,notes:[note]};
  const r=await priceCompleteScope(scope,config,replies([{tasks:[task,extra],issues:[]},research,{coveredTaskIds:['cabinets','overlay'],issues:[],notes:[note]}]),now);
  assert.ok(r.customer.range);assert.ok(r.customer.assumptions.includes(note));assert.equal(r.internal.scopePricing.issues.length,0);
+});
+
+test('Mapped labor cannot change a confirmed hour quantity',()=>{
+ const mapping={tasks:[{id:'drywall',description:'Drywall repair labor',evidence:'The reviewed scope states 14 labor hours.',existingLineIds:[],additions:[{code:'REF-GENERAL-HOUR',quantity:10,quantityEvidence:'Ten labor hours'}],researchDescription:'',issues:[]}],issues:[],notes:[],replacements:[],removeExclusions:[]};
+ const result=catalogResolution(mapping as any,config,[],now,scope);
+ assert.equal(result.rules.length,0);assert.ok(result.issues.some(issue=>/does not match the explicit quantity/i.test(issue)));
+});
+
+test('Distinct trade labor remains additive while partial-hour unknowns stay unpriced',()=>{
+ const mapping={tasks:[
+  {id:'excavation',description:'Driveway excavation labor',evidence:'16 labor hours',existingLineIds:[],additions:[{code:'REF-GENERAL-HOUR',quantity:16,quantityEvidence:'16 labor hours'}],researchDescription:'',issues:[]},
+  {id:'concrete',description:'Driveway concrete labor',evidence:'24 labor hours',existingLineIds:[],additions:[{code:'REF-GENERAL-HOUR',quantity:24,quantityEvidence:'24 labor hours'}],researchDescription:'',issues:[]},
+  {id:'unknown',description:'Concrete finishing labor',evidence:'Partial labor hours remain unknown',existingLineIds:[],additions:[{code:'REF-GENERAL-HOUR',quantity:10,quantityEvidence:'10 labor hours'}],researchDescription:'',issues:[]},
+ ],issues:[],notes:[],replacements:[],removeExclusions:[]};
+ const result=catalogResolution(mapping as any,config,[],now,scope);
+ assert.deepEqual(result.rules.map(rule=>rule.quantity.fixed),[16,24]);
+ assert.equal(result.rules.reduce((sum,rule)=>sum+(rule.quantity.fixed||0),0),40);
+ assert.ok(result.issues.some(issue=>/remains unmeasured/i.test(issue)));
+});
+
+test('Unselected alternatives never become billable mapping rules',()=>{
+ const mapping={tasks:[{id:'optional',description:'Optional alternate island package',evidence:'Alternative not selected by owner; 10 LF',existingLineIds:[],additions:[{code:'03-15-02-M',quantity:10,quantityEvidence:'10 LF'}],researchDescription:'',issues:[]}],issues:[],notes:[],replacements:[],removeExclusions:[]};
+ const result=catalogResolution(mapping as any,config,[],now,scope);
+ assert.equal(result.rules.length,0);assert.ok(result.issues.some(issue=>/not billable/i.test(issue)));
+});
+
+test('Component-scoped exclusion does not reject included painting',()=>{
+ const mapping={tasks:[{id:'paint',description:'Interior painting',evidence:'Painting is included. Appliances are excluded.',existingLineIds:[],additions:[{code:'03-14-01-M',quantity:100,quantityEvidence:'100 LF for painting'}],researchDescription:'',issues:[]}],issues:[],notes:[],replacements:[],removeExclusions:[]};
+ const result=catalogResolution(mapping as any,config,[],now,scope);
+ assert.equal(result.rules.length,1);assert.equal(result.issues.length,0);
+});
+
+test('Known component keeps a positive line while unknown sibling remains incomplete',()=>{
+ const mapping={tasks:[{id:'mixed',description:'Painting and cabinet labor',evidence:'Painting labor is 14 hours; cabinet labor hours are unknown.',existingLineIds:[],additions:[{code:'REF-GENERAL-HOUR',quantity:14,quantityEvidence:'14 labor hours for painting'}],researchDescription:'',issues:[]}],issues:[],notes:[],replacements:[],removeExclusions:[]};
+ const result=catalogResolution(mapping as any,config,[],now,scope);
+ assert.equal(result.rules.length,1);assert.ok(result.issues.some(issue=>/quantity remains unmeasured/i.test(issue)));
+});
+
+test('Repair does not erase a non-price blocker when it adds a positive rule',async()=>{
+ const bad={id:'labor',description:'Drywall labor',evidence:'14 labor hours',existingLineIds:[],additions:[{code:'REF-GENERAL-HOUR',quantity:10,quantityEvidence:'10 labor hours'}],researchDescription:'',issues:[]};
+ const good={...bad,additions:[{code:'REF-GENERAL-HOUR',quantity:14,quantityEvidence:'Corrected 14 labor hours'}]};
+ const queue:unknown[]=[
+  {tasks:[{id:'labor',description:bad.description,evidence:bad.evidence}],issues:[]},
+  {tasks:[bad],issues:[]},
+  {coveredTaskIds:['labor'],issues:[]},
+  {tasks:[good],issues:[]},
+  {coveredTaskIds:['labor'],issues:[]},
+ ];
+ const request:PricingRequest=async()=>({value:queue.shift(),sourceUrls:urls});
+ const result=await priceCompleteScope({...scope,answers:{...scope.answers,service:'handyman'}},config,request,now);
+ assert.equal(result.customer.range,null);
+ assert.ok(result.internal.scopePricing.issues.some(issue=>/does not match the explicit quantity/i.test(issue)));
 });

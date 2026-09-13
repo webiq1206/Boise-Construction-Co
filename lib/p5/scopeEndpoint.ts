@@ -1,25 +1,33 @@
 import {ProcessingDeadlineError,PROCESSING_PAUSED} from './processingBudget.ts';
 import {applyCabinetIntent} from "./projectIntent";
-import {advanceAnalysis,analysisSourceVersion} from "./analysisWork";
+import {advanceAnalysis} from "./analysisWork";
 import {queuedJob} from './backgroundJobs';
-import {reconcileScope,scopeQuestionsForBrand as scopeQuestions,manualScopeAnswers} from "./adaptive";
-import {isProjectReplacement} from './projectReplacement';
+import {manualScopeAnswers,reconcileScope,scopeQuestionsForBrand as scopeQuestions} from "./adaptive";
 import {costQuestionFields} from "./questionPolicy";
 import {createHash} from "node:crypto";
 import { analyzeScope } from "./extraction.ts";
 import { prepareAnalysisFiles,verifyUpload } from "./documents";
-import {removeInstructionAnswers} from "./clarifications";
-import { SCOPE_BATCH_LIMIT,SCOPE_TEXT_LIMIT,SCOPE_FILE_COUNT,SCOPE_UPLOAD_HELP } from "./scope.ts";
+import { SCOPE_BATCH_LIMIT,SCOPE_TEXT_LIMIT,SCOPE_FILE_COUNT,SCOPE_UPLOAD_HELP,SCOPE_FIELDS } from "./scope.ts";
 import { draftCredentials,readDraft,readUploads,saveUpload,saveDraft,DraftError } from "./store";
+import {answersForEditedScope,normalizeScopeText,scopeFingerprint,scopeTextChanged,sourceSnapshot,sourceSnapshotsEqual} from "./scopeReplacement.ts";
 import { failed,json,limitedBody,protectRequest } from "./http";
 import { ESTIMATOR_BRAND } from "./brand";
-export function sourceTransition(wizard:{sourceVersion?:string;sourceTextHash?:string;sourceTextAppended?:boolean;pendingSourceVersion?:string;pendingSourceTextHash?:string}|undefined,version:string,textHash:string){
-  const sameSource=wizard?.sourceVersion===version||wizard?.pendingSourceVersion===version;
-  const priorTextHash=wizard?.pendingSourceVersion===version?wizard.pendingSourceTextHash:wizard?.sourceTextHash;
-  // Legacy drafts have no text hash. A source transition must conservatively
-  // discard generated clarification state rather than assume the text stayed
-  // compatible merely because the upload set changed.
-  return {sameSource,sourceChanged:!sameSource,sourceTextChanged:Boolean(!sameSource&&(!priorTextHash||(!wizard?.sourceTextAppended&&priorTextHash!==textHash)))};
+
+/** Guard multipart analysis/upload requests before they can mutate files. */
+export function guardScopeRequestRevision(storedRevision:number,requestedRevision:unknown,storedText:string,incomingText:string){
+  const supplied=requestedRevision!==undefined&&requestedRevision!==null&&String(requestedRevision).trim()!=="";
+  const changed=scopeTextChanged(storedText,incomingText);
+  if(supplied){
+    const revision=Number(requestedRevision);
+    if(!Number.isInteger(revision)||revision<0)throw new DraftError("Invalid draft revision.",409);
+    if(revision!==storedRevision)throw new DraftError("This project changed in another tab. Refresh to continue.",409);
+  }else if(changed){
+    throw new DraftError("This project changed in another tab. Refresh to continue.",409);
+  }
+  return {changed,supplied};
+}
+export function guardUploadedSourceSnapshot(expectedRevision:number,rereadRevision:number,expectedSource:ReturnType<typeof sourceSnapshot>,rereadSource:ReturnType<typeof sourceSnapshot>){
+  if(rereadRevision!==expectedRevision||!sourceSnapshotsEqual(expectedSource,rereadSource))throw new DraftError("This project changed while its files were uploading. The files are saved; refresh before continuing.",409);
 }
 export async function postScope(request:Request){
   try{
@@ -27,12 +35,21 @@ export async function postScope(request:Request){
     if(!draft)throw new DraftError("Save your draft before analyzing.",404);
     const bytes=await limitedBody(request,24*1024*1024);
     const form=await new Response(bytes as BodyInit,{headers:{"Content-Type":request.headers.get("content-type")||""}}).formData();
-    const submittedText=form.get("text");
-    const text=String(submittedText??draft.text);
-    if(submittedText!==null&&text!==draft.text)throw new DraftError("Save your project details before analyzing the scope.",409);
-    if(text.length>SCOPE_TEXT_LIMIT)throw new DraftError("Upload this scope as a document so every section can be processed.");
+    const text=normalizeScopeText(String(form.get("text")??draft.text));if(text.length>SCOPE_TEXT_LIMIT)throw new DraftError("Upload this scope as a document so every section can be processed.");
+    if(form.get("scopeFingerprint")!==null&&form.get("scopeFingerprint")!==scopeFingerprint(text))throw new DraftError("The project source fingerprint does not match its text. Refresh before continuing.",409);
+    // Validate the caller's snapshot before reading, storing or replacing
+    // anything. Legacy clients may upload only when they send the same source
+    // text; a missing revision must never authorize a source rewrite.
+    const requestIdentity=guardScopeRequestRevision(draft.revision,form.get("revision"),draft.text,text);
+    const analyzedMismatch=Boolean(draft.analyzedFingerprint&&draft.extraction&&draft.analyzedFingerprint!==scopeFingerprint(text));
+    const sourceChanged=requestIdentity.changed||analyzedMismatch;
+    // Keep the authored source snapshot from the request's validated read.
+    // Uploads may race another tab; the reread below must not be allowed to
+    // launder that newer revision into this request's old source.
+    const expectedSource=sourceSnapshot(draft);
+    let analysisDraft=draft;
     const files=form.getAll("files");if(files.length>SCOPE_FILE_COUNT)throw new DraftError(SCOPE_UPLOAD_HELP);
-    const requested:string[]=[];const incoming=[];const known=new Set(draft.uploads.map(f=>f.sha256));
+    const requested:string[]=[];const incoming=[];const known=new Set(analysisDraft.uploads.map(f=>f.sha256));
     for(const file of files){
       if(!(file instanceof File))throw new DraftError("Invalid file.");
       let verified;try{verified=verifyUpload(file.name,Buffer.from(await file.arrayBuffer()));}catch(error){throw new DraftError(error instanceof Error?error.message:"Invalid upload.");}
@@ -40,89 +57,60 @@ export async function postScope(request:Request){
       requested.push(digest);
       if(!known.has(digest)){known.add(digest);incoming.push(verified);}
     }
-    if(incoming.length+draft.uploads.length>SCOPE_FILE_COUNT)throw new DraftError(SCOPE_UPLOAD_HELP);
-    if(incoming.reduce((n,f)=>n+f.data.length,0)+draft.uploads.reduce((n,f)=>n+f.size,0)>SCOPE_BATCH_LIMIT)throw new DraftError(SCOPE_UPLOAD_HELP,413);
+    if(incoming.length+analysisDraft.uploads.length>SCOPE_FILE_COUNT)throw new DraftError(SCOPE_UPLOAD_HELP);
+    if(incoming.reduce((n,f)=>n+f.data.length,0)+analysisDraft.uploads.reduce((n,f)=>n+f.size,0)>SCOPE_BATCH_LIMIT)throw new DraftError(SCOPE_UPLOAD_HELP,413);
     for(const file of incoming)await saveUpload(id,key,file);
-    if(incoming.length){draft=await readDraft(id,key);if(!draft)throw new DraftError("Saved project could not be restored. Please retry.",503);}
+    const reread=await readDraft(id,key);if(!reread)throw new DraftError("Saved project could not be restored. Please retry.",503);
+    guardUploadedSourceSnapshot(draft.revision,reread.revision,expectedSource,sourceSnapshot(reread));
+    draft=reread;
+    // PUT normally performs this invalidation first. Repeat it at the
+    // analysis boundary so a direct/replayed analysis request cannot reuse
+    // an extraction or wizard decision from another source text.
+    if(sourceChanged){
+      const resetAnswers=answersForEditedScope(draft.answers,draft.extraction,draft.wizard?.resolutions||{},draft.analyzedAnswers);
+      const resetWizard={skipped:[],resolutions:{},sourceVersion:undefined,instructionAnswers:[]};
+      const reset=await saveDraft(id,key,ESTIMATOR_BRAND.id,{text,answers:resetAnswers,extraction:null,reviewed:null,contact:draft.contact,wizard:resetWizard,analyzedFingerprint:undefined,analyzedAnswers:undefined},draft.revision);
+      draft=reset;analysisDraft=reset;
+    }else analysisDraft=draft;
     if(form.get("analyze")==="false")return json({draft:await readDraft(id,key),analysis:null});
     const checkpointed=form.get("resumable")==="true"&&process.env.P5_OBJECT_STORAGE_ENABLED==="true";
-    const activeUploads=draft.uploads.filter(upload=>!(draft.wizard?.retiredUploadIds||[]).includes(upload.id));
-    const stored=(checkpointed?[]:await readUploads(id,key)).filter(file=>activeUploads.some(upload=>upload.id===file.id));if(stored.reduce((n,f)=>n+f.data.length,0)>SCOPE_BATCH_LIMIT)throw new DraftError(SCOPE_UPLOAD_HELP,413);
-    const version=analysisSourceVersion(text,activeUploads);
-    const sourceTextHash=createHash("sha256").update(text).digest("hex");
-     const {sameSource,sourceChanged,sourceTextChanged}=sourceTransition(draft.wizard,version,sourceTextHash);
-    // A resolution belongs to the source that produced its question. Applying
-    // it to a replacement scope would quietly carry an old measurement or
-    // exclusion into the new estimate.
-     const declaredReplacement=Boolean(draft.wizard?.replacement)||isProjectReplacement({previousText:draft.text,nextText:text,previousAnswers:draft.answers,previousExtraction:draft.extraction});
-     const resetForReplacement=declaredReplacement;
-     const resolutions=sourceChanged?{}:(draft.wizard?.resolutions||{});
-     const appendedText=Boolean(sourceChanged&&draft.wizard?.sourceTextAppended&&!sourceTextChanged);
-      const priorAnswers=resetForReplacement?{...(draft.wizard?.replacementAnswers||{})}:appendedText?{...draft.answers}:manualScopeAnswers(draft.answers,draft.extraction,sourceChanged?{}:resolutions);
-     if((sourceTextChanged||resetForReplacement)&&draft.wizard?.instructionAnswers?.length){
-      const estimatingInstructions=removeInstructionAnswers(priorAnswers.estimatingInstructions,draft.wizard.instructionAnswers);
-      if(estimatingInstructions)priorAnswers.estimatingInstructions=estimatingInstructions;
-      else delete priorAnswers.estimatingInstructions;
-    }
-     const visitorAnswers=applyCabinetIntent(text,ESTIMATOR_BRAND.services,priorAnswers).answers;
-    let analysis=null;let warning="";let reusedAnalysis=false;
-    // Saving a normal answer changes reconciliation input, not the source
-    // documents. Reuse the acknowledged extraction instead of entering the
-    // reader lifecycle again; warning/retry requests deliberately bypass this
-    // fast path so failed pages remain recoverable.
-    const incompleteSavedAnalysis=Boolean(draft.extraction?.documentCoverage&&!draft.extraction.documentCoverage.complete);
-    const reuseSavedAnalysis=Boolean(sameSource&&draft.extraction&&!incompleteSavedAnalysis&&form.get('retry')!=='true');
+    const stored=checkpointed?[]:await readUploads(id,key);if(stored.reduce((n,f)=>n+f.data.length,0)>SCOPE_BATCH_LIMIT)throw new DraftError(SCOPE_UPLOAD_HELP,413);
+    const version=createHash("sha256").update(JSON.stringify([text,analysisDraft.uploads.map(f=>f.sha256)])).digest("hex");
+    const resolutions=analysisDraft.wizard?.sourceVersion===version?analysisDraft.wizard.resolutions:{};
+    // Only visitor-authored answers shape the read. Facts the previous read
+    // derived from these same documents are re-derived, so a retry after a
+    // partial read keeps the same work key and never re-bills finished pages.
+    const visitorAnswers=applyCabinetIntent(text,ESTIMATOR_BRAND.services,manualScopeAnswers(analysisDraft.answers,analysisDraft.extraction,analysisDraft.wizard?.resolutions||{})).answers;
+    let analysis=null;let warning="";
     try{
-      if(reuseSavedAnalysis){
-        reusedAnalysis=true;
-      }else if(checkpointed){
+      if(checkpointed){
         const background=form.get('background')==='true';
-        const analysisDraft={...draft,uploads:activeUploads};
         const job=background?await queuedJob({kind:'analysis',draft:analysisDraft,text,answers:visitorAnswers},form.get('retry')==='true'):null;
-        if(job&&job.state!=='complete')return json({pending:job.state!=='failed',progress:job.progress,processing:job.processing,...(job.state==='failed'?{error:job.progress}:{})},job.state==='failed'?503:200);
+        if(job&&job.state!=='complete')return json({pending:job.state!=='failed',progress:job.progress,processing:job.processing,revision:draft.revision,draftRevision:draft.revision,...(job.state==='failed'?{error:job.progress}:{})},job.state==='failed'?503:200);
         const step=job?job.result:await advanceAnalysis(analysisDraft,text,visitorAnswers,fetch,form.get("retry")==="true");
-        if(step.pending)return json(step);
+         if(step.pending)return json({...step,revision:draft.revision,draftRevision:draft.revision});
         analysis=step.analysis;
       }else{
       const {readable,manualReview}=await prepareAnalysisFiles(stored);
-      if(!text.trim()&&!readable.length&&!Object.values(draft.answers).some(v=>v?.trim()))throw new Error(manualReview.join(" ")||"Add a project description or a document.");
+      if(!text.trim()&&!readable.length&&!Object.values(analysisDraft.answers).some(v=>v?.trim()))throw new Error(manualReview.join(" ")||"Add a project description or a document.");
       analysis=await analyzeScope(text,readable,visitorAnswers);
       analysis.extraction.reviewNotes.push(...manualReview);
       }
-      const unread=analysis?.extraction.reviewNotes.filter((note:string)=>/saved for manual review|could not read|automatic read failed|automatic reading could not finish|unread section requires review|unreadable|partial/.test(note))||[];
+      const unread=analysis.extraction.reviewNotes.filter((note:string)=>/saved for manual review|could not read|automatic read failed|automatic reading could not finish|unread section requires review|unreadable|partial/.test(note));
       if(unread.length)warning="Some files need review before pricing. "+unread.join(" ");
     }catch(error){
       if(error instanceof ProcessingDeadlineError)throw new DraftError(PROCESSING_PAUSED,503);
       console.error("[p5-scope-analysis]",error instanceof Error?error.message:"analysis failed");
       warning="Your files are saved, but automatic reading could not finish. You can retry without uploading again, or add the key details below. Unread documents will need review before pricing.";
     }
-     let sourceExtraction=analysis?.extraction||(reusedAnalysis?draft.extraction:null);
-    if(sourceExtraction)sourceExtraction=applyCabinetIntent(text,ESTIMATOR_BRAND.services,visitorAnswers,sourceExtraction).extraction!;
-     const replacementFromExtraction=Boolean(sourceChanged&&sourceExtraction&&isProjectReplacement({previousText:draft.text,nextText:text,previousAnswers:draft.answers,previousExtraction:draft.extraction,nextExtraction:sourceExtraction}));
-     const replacement=resetForReplacement||replacementFromExtraction;
-     const effectiveAnswers=replacement?{...(resetForReplacement?draft.wizard?.replacementAnswers||{}:{})}:visitorAnswers;
-    const extraction=sourceExtraction||draft.extraction;
-     const merged=sourceExtraction?reconcileScope(effectiveAnswers,sourceExtraction,replacement?{}:resolutions):{answers:effectiveAnswers,conflicts:[]};
-     const completeCurrentAnalysis=Boolean(analysis&&(!analysis.extraction.documentCoverage||analysis.extraction.documentCoverage.complete)&&!warning);
-    const wizard={
-       instructionAnswers:(sourceTextChanged||replacement)?[]:draft.wizard?.instructionAnswers||[],
-       skipped:(sourceChanged||replacement)?[]:draft.wizard?.skipped||[],
-       resolutions:replacement?{}:resolutions,
-      // Keep the prior successful fingerprint until this attempt completes.
-      // A retry must enter the same durable work record rather than treating a
-      // failed replacement as a fresh completed source.
-      sourceVersion:analysis?version:draft.wizard?.sourceVersion,
-      sourceTextHash:analysis?sourceTextHash:draft.wizard?.sourceTextHash,
-      pendingSourceVersion:analysis?undefined:(sourceChanged?version:draft.wizard?.pendingSourceVersion),
-      pendingSourceTextHash:analysis?undefined:(sourceChanged?sourceTextHash:draft.wizard?.pendingSourceTextHash),
-       replacement:replacement&&!completeCurrentAnalysis||undefined,
-       replacementAnswers:replacement&&!completeCurrentAnalysis?draft.wizard?.replacementAnswers:undefined,
-       retiredUploadIds:draft.wizard?.retiredUploadIds,
-    };
+    if(analysis)analysis.extraction=applyCabinetIntent(text,ESTIMATOR_BRAND.services,visitorAnswers,analysis.extraction).extraction!;
+    const extraction=analysis?.extraction||analysisDraft.extraction;
+    const merged=analysis?reconcileScope(visitorAnswers,analysis.extraction,resolutions):{answers:analysisDraft.answers,conflicts:[]};
+    const wizard={instructionAnswers:sourceChanged?[]:analysisDraft.wizard?.instructionAnswers||[],skipped:sourceChanged?[]:analysisDraft.wizard?.skipped||[],resolutions,sourceVersion:analysis?version:sourceChanged?undefined:analysisDraft.wizard?.sourceVersion};
     // Partial analysis is visible and prevents unread documents from being priced.
-    const baseExtraction=sourceChanged&&!analysis?null:extraction;
-    const safeExtraction=warning&&baseExtraction?{...baseExtraction,summary:baseExtraction.summary||text,facts:baseExtraction.facts||[],conflicts:baseExtraction.conflicts||[],missingInformation:baseExtraction.missingInformation||[],reviewNotes:[...new Set([...(baseExtraction.reviewNotes||[]),warning])]}:baseExtraction;
-    const saved=await saveDraft(id,key,ESTIMATOR_BRAND.id,{text,answers:merged.answers,extraction:safeExtraction,reviewed:null,contact:draft.contact,wizard},draft.revision);
+    const safeExtraction=warning?{...extraction,summary:extraction?.summary||text,facts:extraction?.facts||[],conflicts:extraction?.conflicts||[],missingInformation:extraction?.missingInformation||[],reviewNotes:[...new Set([...(extraction?.reviewNotes||[]),warning])]}:extraction;
+    const analyzedAnswers=analysis?JSON.stringify(Object.entries(merged.answers).filter(([field,value])=>SCOPE_FIELDS[field as keyof typeof SCOPE_FIELDS].kind==='text'&&value?.trim()).sort(([a],[b])=>a.localeCompare(b))):undefined;
+    const saved=await saveDraft(id,key,ESTIMATOR_BRAND.id,{text,answers:merged.answers,extraction:safeExtraction,reviewed:null,contact:analysisDraft.contact,wizard,analyzedFingerprint:analysis?scopeFingerprint(text):undefined,analyzedAnswers},draft.revision);
     if(requested.some(digest=>!saved.uploads.some(file=>file.sha256===digest)))throw new DraftError("Some files could not be confirmed. Please retry; duplicate files will not be added twice.",503);
     const pricedFields=await costQuestionFields(saved.answers);
     return json({draft:saved,analysis,warning,conflicts:merged.conflicts,pricedFields,questions:scopeQuestions(saved.answers,safeExtraction,merged.conflicts,wizard.skipped,pricedFields)});

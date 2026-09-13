@@ -5,9 +5,6 @@ export interface ProcessingStatus {
   message:string;
   updatedAt:string;
   startedAt?:string;
-  /** File preparation counters are deliberately separate from document sections. */
-  preparedFiles?:number;
-  totalFiles?:number;
   readPages?:number;
   totalPages?:number;
   readSections?:number;
