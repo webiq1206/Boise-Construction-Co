@@ -1,8 +1,8 @@
-import {atomicInstructionQuestions,textBenchTopChoices} from './atomicQuestions.ts';
-import type {ScopeAnswers,ScopeExtraction} from './scope.ts';
+import {atomicInstructionQuestions,textBenchTopChoices,cabinetQuestionField} from './atomicQuestions.ts';
+import type {ScopeAnswers,ScopeExtraction,ScopeField} from './scope.ts';
 
 export interface InstructionAnswer {id:string;question:string;answer:string}
-export interface InstructionPrompt {id:string;question:string;detail?:string;values?:string[]}
+export interface InstructionPrompt {id:string;question:string;detail?:string;values?:string[];field?:ScopeField}
 export const questionKey=(text:string)=>text.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 const serviceQuestion=(text:string)=>/which .*services|what .*remodel.*service|company.s scope|typical .*services|offered.*services|services.*offered|residential remodel|boise .*estimate|requested subset/i.test(text);
 const sentenceAbbreviation=/\b(?:approx|e\.g|i\.e|etc|no|sq|ft|in|oz|lb|lbs|yd|yds|hr|hrs|min|sec|cm|mm|kg|gal|pt|qt|dr|mr|mrs|ms|prof|st|vs)\.$/i;
@@ -74,6 +74,8 @@ export function instructionPrompts(extraction:ScopeExtraction|null,answers:Scope
       const full=part.replace(/\s+/g,' ').trim();if(!full)continue;
       // Filter each question separately so a legacy paragraph cannot lose a real scope decision.
       if(serviceQuestion(full))continue;
+      const field=cabinetQuestionField(full);
+      if(field&&answers[field]?.trim()&&!extraction?.conflicts.some(conflict=>conflict.field===field))continue;
       const id=questionKey(full);
       if(result.some(q=>q.id===id))continue;
       // Clarification responses are appended to the scope as durable records. Do
@@ -82,7 +84,7 @@ export function instructionPrompts(extraction:ScopeExtraction|null,answers:Scope
       const question=full.length<=180?full:'What should we include for this part of your project?';
       const values=/labor.only/i.test(full)&&/materials.only/i.test(full)?['Labor only','Materials only','Labor and materials']:
         /include or exclude|include.*or.*exclude/i.test(full)?['Include it','Exclude it']:undefined;
-      result.push({id,question,...(question!==full?{detail:full}:{}),values:values?.length?values:textBenchTopChoices(extraction,full)});
+      result.push({id,question,...(field?{field}:{}),...(question!==full?{detail:full}:{}),values:values?.length?values:textBenchTopChoices(extraction,full)});
     }
   }
   return result;

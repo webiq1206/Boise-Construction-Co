@@ -75,7 +75,7 @@ export function scopeQuestions(input:ScopeAnswers,extraction:ScopeExtraction|nul
   // An uncertain stated quantity is more useful as one clarification than a blank form.
   const uncertain=(extraction?.facts||[]).filter(f=>f.confidence<.85&&f.confidence>=.4&&!answers[f.field]?.trim()&&relevant.has(f.field));
   const questions:ScopeQuestion[]=conflicts.map(c=>({field:c.field,label:SCOPE_FIELDS[c.field].label,reason:c.explanation,values:c.values,conflict:true}));
-  questions.unshift(...instructionPrompts(extraction,answers).map(q=>({field:'estimatingInstructions' as const,label:'One scope detail',reason:q.question,detail:q.detail,values:q.values,instructionId:q.id})));
+  questions.unshift(...instructionPrompts(extraction,answers).map(q=>({field:q.field||'estimatingInstructions' as const,label:q.field?SCOPE_FIELDS[q.field].label:'One scope detail',reason:q.question,detail:q.detail,values:q.values,...(!q.field?{instructionId:q.id}:{})})));
   for(const fact of uncertain)if(!questions.some(q=>q.field===fact.field)&&!skipped.includes(fact.field)){
     const reason=`${SCOPE_FIELDS[fact.field].label}: we found “${fact.value}” in ${fact.source}. Is that correct?`;
     questions.push({field:fact.field,label:SCOPE_FIELDS[fact.field].label,reason:reason.length<=180?reason:`Please confirm ${SCOPE_FIELDS[fact.field].label.toLowerCase()}.`,detail:reason.length<=180?undefined:reason,values:[fact.value]});
