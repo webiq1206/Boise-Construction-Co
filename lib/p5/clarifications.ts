@@ -84,7 +84,7 @@ export function instructionPrompts(extraction:ScopeExtraction|null,answers:Scope
       const question=full.length<=180?full:'What should we include for this part of your project?';
       const values=/labor.only/i.test(full)&&/materials.only/i.test(full)?['Labor only','Materials only','Labor and materials']:
         /include or exclude|include.*or.*exclude/i.test(full)?['Include it','Exclude it']:undefined;
-      result.push({id,question,...(field?{field}:{}),...(question!==full?{detail:full}:{}),values:values?.length?values:textBenchTopChoices(extraction,full)});
+      result.push({id,question,...(field?{field}:{}),...(question!==full?{detail:full}:{}),values:/^Who should install the /i.test(full)?['Include installation in this estimate','Owner handles installation']:values?.length?values:textBenchTopChoices(extraction,full)});
     }
   }
   return result;

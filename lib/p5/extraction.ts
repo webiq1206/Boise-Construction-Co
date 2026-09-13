@@ -1,4 +1,5 @@
 import {readSpecificationSource,specificationHint,unsupportedSpecifications,UnsupportedSpecificationError,retainUnspecifiedRatings} from './sourceSpecificationGuard.ts';
+import {groundSourceResponsibilities} from './sourceResponsibilities.ts';
 import {SERVER_BUDGET_MS,ProcessingDeadlineError,fetchWithinDeadline,withinDeadline} from './processingBudget.ts';
 import {ESTIMATOR_BRAND} from "./brand.ts";
 import { SCOPE_FIELDS, SCOPE_BATCH_LIMIT, SCOPE_TEXT_LIMIT, validateExtraction, combineScopeExtractions, type ScopeAnswers, type ScopeExtraction } from "./scope.ts";
@@ -201,6 +202,7 @@ export async function analyzeBatch(text: string, files: AnalysisFile[], previous
         : await analyzeWithAnthropic(provider, text, files, previous, boundedRequest, providerTimeout,sourceInstruction);
       const confirmedSource=source?{...source,text:source.text+'\n'+text+'\n'+JSON.stringify(previous)}:null;
       result.extraction=retainUnspecifiedRatings(result.extraction,confirmedSource);
+      result.extraction=groundSourceResponsibilities(result.extraction,source?.text,text,previous);
       const unsupported=unsupportedSpecifications(result.extraction,confirmedSource);
       if(unsupported.length)throw new UnsupportedSpecificationError(unsupported);
       if(source)result.extraction.sourceText=source.text;
