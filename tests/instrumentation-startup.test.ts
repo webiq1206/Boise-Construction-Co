@@ -29,11 +29,15 @@ type RegistrationOptions = {
 };
 
 async function waitForWorkerImport() {
-  for (let attempt = 0; attempt < 20; attempt++) {
+  // The fixture is a TypeScript file transpiled on first import; on a slow
+  // build machine that takes longer than a handful of event-loop turns, so
+  // wait on wall-clock time rather than a fixed number of setImmediate ticks.
+  const deadline = Date.now() + 3000;
+  while (Date.now() < deadline) {
     if ((globalThis as Record<string, unknown>)[workerStateKey] !== undefined) {
       return;
     }
-    await new Promise<void>((resolve) => setImmediate(resolve));
+    await new Promise<void>((resolve) => setTimeout(resolve, 10));
   }
 }
 
