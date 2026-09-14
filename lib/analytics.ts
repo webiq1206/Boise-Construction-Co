@@ -5,8 +5,8 @@
  */
 type GtagParams = Record<string, string | number | boolean | undefined>;
 
-const GOOGLE_ADS_LEAD_DESTINATION =
-  'AW-18354188204/LE2vCPXstO8cEKzf-q9E';
+import { googleAdsLeadParams, type LeadContext } from '@/lib/googleAdsConversion';
+
 const conversionInFlight = new Set<string>();
 
 export function trackEvent(name: string, params: GtagParams = {}): void {
@@ -85,14 +85,12 @@ export function trackMetaEvent(
  * Sends the native Google Ads lead conversion with a stable transaction ID.
  * The ID is opaque and server-issued, so no contact information reaches Ads.
  */
-export function trackGoogleAdsLead(conversionId: string): void {
+export function trackGoogleAdsLead(conversionId: string, context: LeadContext = {}): void {
   if (typeof window === 'undefined') return;
   const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
   if (typeof gtag !== 'function') return;
-  gtag('event', 'conversion', {
-    send_to: GOOGLE_ADS_LEAD_DESTINATION,
-    transaction_id: conversionId,
-  });
+  // Per-lead value for ROAS reporting (lib/googleAdsConversion.ts); no PII.
+  gtag('event', 'conversion', googleAdsLeadParams(context, conversionId));
 }
 
 export interface ClaimedLeadConversion {
@@ -152,7 +150,9 @@ async function performClaimedLeadConversion(
 
     tracking.markInquiryConversionFired(input.conversionId);
     trackEvent('generate_lead', input.ga4Params);
-    trackGoogleAdsLead(input.conversionId);
+    trackGoogleAdsLead(input.conversionId, {
+      projectType: String(input.ga4Params.project_type ?? ''),
+    });
     trackMetaEvent('Lead', input.metaParams, undefined, input.conversionId);
 
     try {
