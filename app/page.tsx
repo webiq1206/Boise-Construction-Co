@@ -1,3 +1,4 @@
+import {withBrandPageMetadata} from '@/lib/brand-page-metadata';
 import type { Metadata } from "next";
 import Image from "next/image";
 import dynamic from "next/dynamic";
@@ -39,7 +40,7 @@ const EstimateCalculator = dynamic(
   },
 );
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withBrandPageMetadata(({
   // 55 chars. Leads with the primary term ("custom home builder Boise") rather
   // than the brand, which the suffix carries anyway.
   title: { absolute: `Custom Home Builder in Boise, ID | ${SITE_CONFIG.name}` },
@@ -64,7 +65,7 @@ export const metadata: Metadata = {
     siteName: SITE_CONFIG.name,
     images: [{ url: "/images/og-default.png", width: 1200, height: 630, alt: SITE_CONFIG.name }],
   },
-};
+}), "/");
 
 export default function HomePage() {
   return (
