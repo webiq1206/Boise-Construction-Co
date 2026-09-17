@@ -1,3 +1,4 @@
+import {withBrandPageMetadata} from '@/lib/brand-page-metadata';
 import { Metadata } from "next";
 import { ObfuscatedEmail } from "@/components/ObfuscatedEmail";
 import { BusinessPhoneLink } from "@/components/BusinessPhoneContact";
@@ -8,7 +9,7 @@ import { buildCanonical, FEED_ALTERNATES } from "@/lib/page-metadata";
 
 const PRIVACY_CANONICAL = buildCanonical("/privacy-policy");
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withBrandPageMetadata(({
   title: "Privacy Policy",
   description: "Boise Construction Co privacy policy. How we protect your data when you request home building services across Boise and the Treasure Valley.",
   alternates: {
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
     title: "Privacy Policy | Boise Construction Co",
     description: "How we protect your data when you use Boise Construction Co home building services in Idaho.",
   },
-};
+}), "/privacy-policy");
 
 export default function PrivacyPolicyPage() {
   const breadcrumbSchema = generateBreadcrumbSchema([

@@ -1,3 +1,4 @@
+import {withBrandPageMetadata} from '@/lib/brand-page-metadata';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -33,13 +34,13 @@ function GuideCardStats({ guide }: { guide: GuidePageData }) {
   );
 }
 
-export const metadata: Metadata = buildPageMetadata({
+export const metadata: Metadata = withBrandPageMetadata((buildPageMetadata({
   kind: 'blog',
   path: '/guides',
   titleOverride: 'Home Building Guides | Boise Construction Co',
   descriptionOverride:
     'In-depth Treasure Valley home building guides: what a custom home costs, how the build process runs, buying land, choosing a builder, design decisions, and construction financing.',
-});
+})), "/guides");
 
 const PILLAR_TYPES = new Set(['hub-pillar', 'master']);
 
