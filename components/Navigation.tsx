@@ -33,6 +33,18 @@ function Logo() {
 export function Navigation() {
   const pathname = usePathname();
   const formInView = useFormInView(pathname);
+  // Hide the sticky bar until the hero scrolls out of view, so it never
+  // competes with the hero's own call to action. Pages with no hero (no
+  // sentinel) keep the bar from first paint.
+  const [pastHero, setPastHero] = useState(true);
+  useEffect(() => {
+    const sentinel = document.getElementById("hero-sentinel");
+    if (!sentinel || typeof IntersectionObserver === "undefined") { setPastHero(true); return; }
+    setPastHero(false);
+    const ob = new IntersectionObserver(([entry]) => setPastHero(!entry.isIntersecting && entry.boundingClientRect.top < 0), { threshold: 0 });
+    ob.observe(sentinel);
+    return () => ob.disconnect();
+  }, [pathname]);
   // P5's header behaviour: transparent over the hero, gaining its ground, blur
   // and a hairline only once the page has scrolled.
   const [scrolled, setScrolled] = useState(false);
@@ -293,7 +305,7 @@ export function Navigation() {
           three equal actions diluted which one visitors actually tap. */}
       <div
         data-mobile-nav-bar=""
-        className={cn("fixed left-0 right-0 bottom-0 z-[100] lg:hidden pb-safe border-t bg-background border-border", (formInView || mobileOpen || pathname?.startsWith("/estimate")) && "invisible pointer-events-none")}
+        className={cn("fixed left-0 right-0 bottom-0 z-[100] lg:hidden pb-safe border-t bg-background border-border", (formInView || !pastHero || mobileOpen || pathname?.startsWith("/estimate")) && "invisible pointer-events-none")}
       >
         <div className="flex items-stretch gap-2 p-2">
           <a
