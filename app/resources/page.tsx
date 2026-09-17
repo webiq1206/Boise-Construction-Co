@@ -1,3 +1,4 @@
+import {withBrandPageMetadata} from '@/lib/brand-page-metadata';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Download, FileText, Workflow } from 'lucide-react';
@@ -11,13 +12,13 @@ import {
   generateCollectionPageSchema,
 } from '@/lib/schema';
 
-export const metadata: Metadata = buildPageMetadata({
+export const metadata: Metadata = withBrandPageMetadata((buildPageMetadata({
   kind: 'blog',
   path: '/resources',
   titleOverride: 'Home Building Planning Resources | Boise Construction Co',
   descriptionOverride:
     'Free PDF worksheets and visual guides for building in the Treasure Valley: new home budget worksheet, lot evaluation checklist, and the Ada vs Canyon County permit flow.',
-});
+})), "/resources");
 
 export default function ResourcesIndexPage() {
   const pdfs = ALL_RESOURCES_LIST.filter((r) => r.kind === 'pdf');

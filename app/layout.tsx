@@ -1,3 +1,4 @@
+import {withBrandPageMetadata} from '@/lib/brand-page-metadata';
 import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import { Navigation } from '@/components/Navigation'
@@ -38,7 +39,7 @@ const cormorant = localFont({
   display: 'swap',
 })
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withBrandPageMetadata(({
   title: {
     /*
      * Leads with the primary commercial term rather than the brand. Ahrefs
@@ -133,7 +134,7 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-}
+}), "__layout__")
 
 export const viewport: Viewport = {
   themeColor: '#2C302F',
