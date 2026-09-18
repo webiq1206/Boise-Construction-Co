@@ -34,3 +34,6 @@ scripts/brand/preview/
 /p5-verification/
 
 !/scripts/test-p5-receipt.mts
+
+# Maintained saved-pricing regression.
+!/scripts/test-p5-pricing-recovery.mts
