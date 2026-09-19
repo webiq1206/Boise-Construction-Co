@@ -1,24 +1,54 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {mkdir,writeFile} from 'node:fs/promises';
-import {query} from '../lib/p5/database';
-import {priceCompleteScope,requestPricing,type PricingRequest} from '../lib/p5/scopePricing';
+import {mkdir,writeFile,readFile} from 'node:fs/promises';
+import {resolve,dirname,relative} from 'node:path';
+import ts from 'typescript';
+import {digest,openGuard,canonicalSourcePath} from './lib/livePricingGuard.mts';
+import type {PricingRequest} from '../lib/p5/scopePricing';
 import {ESTIMATOR_BRAND as brand} from '../lib/p5/brand';
 import type {EstimatorConfiguration} from '../lib/p5/costBook';
 import type {ReviewedScope} from '../lib/p5/scope';
 
-// Opt-in paid inference with synthetic scope and read-only approved pricing.
-// No draft, rate, lead, CRM, outbox or email write is called by this script.
+// Qualification uses an explicitly authorized LOCAL configuration snapshot.
+// No customer DB or delivery module is imported. All network except the
+// allowance's exact provider generation URLs is denied. Each generation stops
+// subsequent calls until immutable operator billing reconciliation is supplied.
 if(process.env.P5_RUN_LIVE_PRICING!=='true')throw new Error('Explicit live pricing test authorization is required.');
 const fingerprint=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
 async function main(){
- const [policy]=await query("SELECT payload FROM p5_estimator_policy WHERE id='current'");
- assert.ok(policy?.payload?.planningCatalog?.rates?.length,'The approved catalog must be populated');
- const configuration=policy.payload as EstimatorConfiguration,before=fingerprint(configuration),reports:any[]=[];
+ const allowanceFile=process.env.P5_LIVE_PRICING_ALLOWANCE_FILE;
+ assert.ok(allowanceFile,'Blocked: explicit documented allowance file required; no paid requests made.');
+ const guard=await openGuard(allowanceFile,globalThis.fetch);
+ // Pin the entire local import graph before importing the production engine.
+ // Only audited global-fetch provider code is allowed to access transport.
+ const visited=new Set<string>();
+ async function audit(file:string):Promise<void>{
+  file=await canonicalSourcePath(process.cwd(),file);if(visited.has(file))return;visited.add(file);
+  const source=await readFile(file,'utf8'),key=relative(process.cwd(),file);
+  assert.equal(guard.allowance.sourceSha256?.[key],digest(source),'Blocked: unaudited pricing source');
+  assert.ok(!/\b(?:require|import)\s*\(|\b(?:XMLHttpRequest|WebSocket|process\s*\[|eval)\b/.test(source),'Blocked: indirect transport');
+  if(!['lib/p5/scopePricing.ts','lib/p5/processingBudget.ts'].includes(key)){
+   assert.ok(!/\bfetch\b|\bhttps?\b|\bundici\b|\bglobalThis\s*\[/.test(source),'Blocked: unaudited transport path');
+  }
+  for(const ref of ts.preProcessFile(source).importedFiles){
+   if(['node:crypto','zod'].includes(ref.fileName))continue;
+   assert.ok(ref.fileName.startsWith('.'),'Blocked: unaudited external dependency');
+   const next=resolve(dirname(file),ref.fileName);
+   await audit(/\.[cm]?tsx?$/.test(next)?next:`${next}.ts`);
+  }
+ }
+ await audit('lib/p5/scopePricing.ts');
+ globalThis.fetch=guard.fetch;
+ const {priceCompleteScope,requestPricing}=await import('../lib/p5/scopePricing');
+ const configurationBytes=await readFile(guard.allowance.configurationFile);
+ assert.equal(digest(configurationBytes),guard.allowance.configurationSha256,'Blocked: configuration snapshot mismatch');
+ const configuration=JSON.parse(configurationBytes.toString()) as EstimatorConfiguration,before=fingerprint(configuration),reports:any[]=[];
+ assert.ok(configuration.planningCatalog?.rates?.length,'The approved local catalog must be populated');
  const services=brand.services as readonly string[],cabinet=String(brand.id)==='cabinet';
  const baseService=services.includes('handyman')?'handyman':services.includes('kitchen')?'kitchen':services[0];
  const selected=process.env.P5_LIVE_PRICING_SCENARIO||'both';assert.ok(['both','mapping','missing'].includes(selected));
- await mkdir('p5-verification',{recursive:true});
+  const outputDirectory=`p5-verification/live-pricing-${Date.now()}-${process.pid}`;
+  await mkdir(outputDirectory,{recursive:false,mode:0o700});
  for(const scenario of ['mapping','missing'].filter(s=>selected==='both'||s===selected)){
   const missing=scenario==='missing';
   const text=missing?'Supply 100 linear feet of standard paint-grade wood crown moulding for kitchen cabinets in Boise, Idaho. Materials only; owner installs it. Price the moulding by linear foot using a preliminary average material cost for the area.':cabinet?'Install 20 linear feet of owner-supplied, assembled paint-grade Shaker base cabinets on the first floor of Building Alpha. Installation labor only, including normal leveling, fastening and adjustment.':'Fit and fasten 100 linear feet of paint-grade interior base moulding on the first floor of Building Alpha. Baseboard installation labor only. Owner supplies all materials.';
@@ -29,17 +59,16 @@ async function main(){
   // the research path. The owner's saved185-rate catalog remains untouched.
   if(missing)config.planningCatalog!.rates=config.planningCatalog!.rates.filter(rate=>rate.type!=='Material');
   const stages:any[]=[];const request:PricingRequest=async(instructions,input,search,remaining)=>{
-   const start=performance.now();try{const result=await requestPricing(instructions,input,search,remaining);stages.push({search,milliseconds:Math.round(performance.now()-start),sourceUrls:result.sourceUrls,value:result.value});return result;}catch(error){stages.push({search,milliseconds:Math.round(performance.now()-start),error:error instanceof Error?error.message:'failed'});throw error;}finally{await writeFile(`p5-verification/live-pricing-${scenario}-stages.json`,JSON.stringify(stages,null,2));}
+   const start=performance.now();try{const result=await requestPricing(instructions,input,search,remaining);stages.push({search,milliseconds:Math.round(performance.now()-start),sourceUrls:result.sourceUrls,value:result.value});return result;}catch(error){stages.push({search,milliseconds:Math.round(performance.now()-start),error:'Provider qualification blocked or failed; inspect private ledger.'});throw error;}finally{await writeFile(`${outputDirectory}/live-pricing-${scenario}-stage-${stages.length}.json`,JSON.stringify(stages,null,2),{flag:'wx',mode:0o600});}
   };
   const start=performance.now();const result=await priceCompleteScope(scope,config,request);const internal=result.internal as any;
   const issues=internal.scopePricing?.issues||[];const lines=internal.lines||[];
   reports.push({scenario,scope,elapsedMs:Math.round(performance.now()-start),stages,result,passed:Boolean(result.customer.range)&&lines.length>0&&lines.every((line:any)=>line.quantity>0&&line.cost>0)&&issues.length===0});
-  await writeFile(`p5-verification/live-pricing-${scenario}-report.json`,JSON.stringify(reports.at(-1),null,2));
+   await writeFile(`${outputDirectory}/live-pricing-${scenario}-report.json`,JSON.stringify(reports.at(-1),null,2),{flag:'wx',mode:0o600});
  }
- const [after]=await query("SELECT payload FROM p5_estimator_policy WHERE id='current'");
- const report={synthetic:true,brand:brand.id,approvedRateCount:configuration.planningCatalog!.rates.length,approvedConfigurationUnchanged:before===fingerprint(after.payload),businessWrites:0,reports};
- await mkdir('p5-verification',{recursive:true});await writeFile('p5-verification/live-pricing-report.json',JSON.stringify(report,null,2));
+ const report={synthetic:true,brand:brand.id,approvedRateCount:configuration.planningCatalog!.rates.length,approvedConfigurationUnchanged:before===fingerprint(configuration),businessWrites:0,delivery:'not invoked; no delivery transport imported',reports};
+ await writeFile(`${outputDirectory}/live-pricing-report.json`,JSON.stringify(report,null,2),{flag:'wx',mode:0o600});
  console.log(JSON.stringify({brand:brand.id,approvedRateCount:report.approvedRateCount,unchanged:report.approvedConfigurationUnchanged,scenarios:reports.map(r=>({scenario:r.scenario,passed:r.passed,range:r.result.customer.range,elapsedMs:r.elapsedMs,issues:r.result.internal.scopePricing?.issues}))}));
  assert.ok(report.approvedConfigurationUnchanged,'The approved configuration must not change');assert.ok(reports.every(r=>r.passed),'Every synthetic scope must have a complete positive range');
 }
-main().then(()=>process.exit(0)).catch(error=>{console.error(error instanceof Error?error.message:'Live pricing check failed');process.exit(1);});
+main().then(()=>process.exit(0)).catch(()=>{console.error('Live pricing qualification blocked or failed. Inspect allowance and private ledger; do not reset reservations.');process.exit(1);});

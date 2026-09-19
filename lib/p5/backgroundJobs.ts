@@ -4,10 +4,11 @@ import {isPricingPending} from './pricingProgress.ts';
 import {createHash} from 'node:crypto';
 import {query} from './database.ts';
 import {claimWork,writeWork,releaseWork,renewWork} from './workStore.ts';
-import type {Draft} from './store.ts';
+import {DraftError,type Draft} from './store.ts';
 import type {ScopeAnswers} from './scope.ts';
 import type {EstimatorConfiguration} from './costBook.ts';
 import type {ProcessingStatus} from './processingStatus.ts';
+import {assertAnalysisMigrationSafe,assertProjectSourceCoverage} from './documentServiceClient.ts';
 
 type Input={kind:'analysis';draft:Draft;text:string;answers:ScopeAnswers}|{kind:'pricing';draft:Draft;configuration:EstimatorConfiguration};
 type Job={input:Input;state:'queued'|'running'|'complete'|'failed';progress:string;attempts:number;result?:any;retryAt?:number;retryUnits?:boolean;createdAt:string;processing?:ProcessingStatus};
@@ -39,6 +40,9 @@ export async function bootEstimatorWorker(){
  * progress does not depend on CPU being available between requests.
  */
 export async function queuedJob(input:Input,retry=false,holdMs=JOB_HOLD_MS){
+  if(input.kind==='pricing')assertProjectSourceCoverage(input.draft.reviewed?.uploads||input.draft.uploads,input.draft.reviewed?.extraction);
+  if(input.kind==='analysis'&&input.draft.uploads.length)await assertAnalysisMigrationSafe(input.draft,input.text,input.answers,(await import('./analysisWork.ts')).analysisWorkKey(input.draft,input.text,input.answers));
+  // Keep the deployed v1 queue identity and its attempt/lifetime accounting.
   const key='background-v1-'+createHash('sha256').update(JSON.stringify(input.kind==='analysis'?{engineVersion:11,...(process.env.P5_DOCUMENT_SERVICE_MODE==='remote'?{documentServiceProtocol:'v1',documentServiceOrigin:process.env.P5_DOCUMENT_SERVICE_URL}:{}),kind:input.kind,id:input.draft.id,text:input.text,answers:input.answers,uploads:input.draft.uploads}:{engineVersion:8,kind:input.kind,id:input.draft.id,reviewed:input.draft.reviewed,configuration:input.configuration,date:new Date().toISOString().slice(0,10)})).digest('hex');
   const initial:Job={input,state:'queued',progress:input.kind==='analysis'?'Your complete document set is queued for analysis.':'Your scope is queued for pricing.',attempts:0,createdAt:new Date().toISOString()};
   await query('INSERT INTO p5_estimator_work(draft_id,work_key,payload) VALUES($1,$2,$3::jsonb) ON CONFLICT DO NOTHING',[input.draft.id,key,JSON.stringify(initial)]);
@@ -55,6 +59,11 @@ export async function queuedJob(input:Input,retry=false,holdMs=JOB_HOLD_MS){
   if(holdMs>0)await driveJob(input.draft.id,key,holdMs);else void ensureRunning(input.draft.id,key);
   const [row]=await query('SELECT payload FROM p5_estimator_work WHERE draft_id=$1 AND work_key=$2',[input.draft.id,key]);
   const job=row.payload as Job;
+  if(job.state==='complete'&&input.kind==='analysis'&&input.draft.uploads.length){
+    const extraction=job.result?.analysis?.extraction;
+    if(!extraction)throw new DraftError('Saved analysis result is missing; your files are preserved. Please retry.',503);
+    assertProjectSourceCoverage(input.draft.uploads,extraction);
+  }
   if(job.state!=='complete'&&job.state!=='failed'&&jobExpired(job)){job.state='failed';job.progress=PROCESSING_PAUSED;}
   if(job.state!=='complete'&&job.state!=='failed'){
     const workKey=input.kind==='analysis'?(await import('./analysisWork.ts')).analysisWorkKey(input.draft,input.text,input.answers):(await import('./pricingWork.ts')).pricingWorkKey(input.draft.reviewed!,input.configuration,new Date(job.createdAt));

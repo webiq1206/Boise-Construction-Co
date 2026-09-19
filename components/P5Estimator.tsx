@@ -11,7 +11,7 @@ import {estimatorTheme,estimatorThemeStyle} from '@/lib/p5/theme';
 import {SCOPE_FIELDS,SCOPE_FILE_LIMIT,SCOPE_BATCH_LIMIT,SCOPE_FILE_COUNT,SCOPE_UPLOAD_HELP,type ScopeField,type ScopeAnswers,type ScopeUpload} from '@/lib/p5/scope';
 import {questionContext,scopeFieldApplies} from '@/lib/p5/dynamicQuestions';
 import {deriveScopeAnswers,finishOptionsForService,questionForField,scopeQuestionsForBrand as scopeQuestions,scopeAssumptions,validateScopeAnswer,type ScopeQuestion} from '@/lib/p5/adaptive';
-import {loadBrowserDraft,persistBrowserDraft,draftHeaders,cacheFiles,loadCachedFiles,clearCachedFiles,requireDraftReceipt,archiveBrowserDraft,listBrowserDraftRecoveries,replaceBrowserDraft,restoreBrowserDraft,type BrowserDraft,type BrowserDraftRecovery,type TranscriptEntry,readJson,withTimeout} from '@/lib/p5/browserDraft';
+import {loadBrowserDraft,persistBrowserDraft,draftHeaders,cacheFiles,loadCachedFiles,clearCachedFiles,requireDraftReceipt,archiveBrowserDraft,listBrowserDraftRecoveries,replaceBrowserDraft,restoreBrowserDraft,missingPendingFiles,type BrowserDraft,type BrowserDraftRecovery,type TranscriptEntry,readJson,withTimeout} from '@/lib/p5/browserDraft';
 import {mergeProjectSource,type ProjectSource} from '@/lib/p5/projectSource';
 import {resumeWizardDraft} from '@/lib/p5/wizardResume';
 import {snapshotProjectFile} from '@/lib/p5/fileSnapshot';
@@ -59,7 +59,7 @@ export function P5Estimator({defaultService='',headingAs='h1',projectSource,layo
   const [draft,setDraft]=useState<BrowserDraft|null>(null);const current=useRef<BrowserDraft|null>(null);
   const [files,setFiles]=useState<File[]>([]);const filesRef=useRef<File[]>([]);const fileInput=useRef<HTMLInputElement|null>(null);const composerRef=useRef<HTMLTextAreaElement|null>(null);
   const [busy,setBusy]=useState('');const busyRef=useRef(false);const [error,setError]=useState('');const [warning,setWarning]=useState('');const [status,setStatus]=useState('');
-  const [uploadPercent,setUploadPercent]=useState<number|null>(null);const [preparingFiles,setPreparingFiles]=useState(false);const [dragging,setDragging]=useState(false);
+  const [uploadPercent,setUploadPercent]=useState<number|null>(null);const [preparingFiles,setPreparingFiles]=useState(true);const [dragging,setDragging]=useState(false);
   const [processing,setProcessing]=useState<ProcessingStatus|null>(null);const lastProcessing=useRef<ProcessingStatus|null>(null);
   const [paused,setPaused]=useState<Paused|null>(null);const resuming=useRef(false);
   const [missingFields,setMissingFields]=useState<MissingField[]>([]);const [verificationItems,setVerificationItems]=useState<string[]>([]);
@@ -107,7 +107,8 @@ export function P5Estimator({defaultService='',headingAs='h1',projectSource,layo
   useEffect(()=>{
     mounted.current=true;const loaded=loadBrowserDraft(defaultService,projectSource?.id);const d=projectSource&&!loaded.sourceDetached?mergeProjectSource(loaded,projectSource):loaded;resume(d);setRecoveries(listBrowserDraftRecoveries(d.namespace));setWarning(d.analysisWarning||d.extraction?.reviewNotes.find(n=>n.startsWith("Your files are saved, but"))||"");
     setSpeechAvailable(Boolean((window as any).SpeechRecognition||(window as any).webkitSpeechRecognition));
-    loadCachedFiles(d.id).then(f=>{if(mounted.current&&current.current?.id===d.id){filesRef.current=f;setFiles(f);}}).catch(()=>setStatus('File recovery is unavailable. Keep this page open while uploading.'));
+    setPreparingFiles(true);
+    withTimeout(loadCachedFiles(d.id),15000,'File recovery did not respond. Reload or select your original files again before continuing.').then(f=>{if(mounted.current&&current.current?.id===d.id){filesRef.current=f;setFiles(f);requireRecoveredFiles();}}).catch(error=>{if(mounted.current&&current.current?.id===d.id)setError(error instanceof Error?error.message:'File recovery is unavailable. Select your original files again before continuing; your saved answers are retained.');}).finally(()=>{if(mounted.current&&current.current?.id===d.id)setPreparingFiles(false);});
     if(d.revision>0)fetch('/api/p5-estimator/draft',{headers:draftHeaders(d),cache:'no-store'}).then(r=>r.ok?r.text().then(b=>{try{return JSON.parse(b);}catch{return null;}}):null).then(async data=>{
       if(!mounted.current||!data?.draft||current.current?.id!==d.id)return;
       checkOperation();const saved=requireDraftReceipt(data);
@@ -257,7 +258,7 @@ export function P5Estimator({defaultService='',headingAs='h1',projectSource,layo
   async function analyze(){
     const initiated=operationBudget.current;
     const checkAnalysis=()=>{if(initiated&&initiated!==operationBudget.current)throw new ProcessingDeadlineError();checkOperation();};
-    await ensureSourcePhoto();
+    requireRecoveredFiles();await ensureSourcePhoto();
     const message=pendingUserMessage.current;pendingUserMessage.current=null;
     if(message&&(message.text.trim()||message.files.length))log(newEntry('user',message.text,{files:message.files,kind:'scope',caption:message.caption}));
     setBusy('Saving your project...');await save();const d=current.current!;const pending=[...filesRef.current];
@@ -273,7 +274,7 @@ export function P5Estimator({defaultService='',headingAs='h1',projectSource,layo
       if(!sourceSnapshotsEqual(sourceSnapshot(d),sourceSnapshot(receipt as BrowserDraft)))throw new Error('Your project changed while files were uploading. Your files are retained. Refresh before continuing so newer details are not overwritten.');
       requireCurrentSource();
       for(const f of pending){const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await f.arrayBuffer()))).map(b=>b.toString(16).padStart(2,'0')).join('');if(!receipt.uploads.some(stored=>stored.sha256===digest))throw new Error(`${f.name}: upload was not confirmed. Please retry.`);}
-      apply({...current.current!,uploads:receipt.uploads,revision:receipt.revision});filesRef.current=[];setFiles([]);await clearCachedFiles(d.id).catch(()=>undefined);setUploadPercent(null);setStatus('Files uploaded and saved.');
+      apply({...current.current!,uploads:receipt.uploads,revision:receipt.revision,pendingFiles:[]});filesRef.current=[];setFiles([]);await clearCachedFiles(d.id).catch(()=>undefined);setUploadPercent(null);setStatus('Files uploaded and saved.');
     }
     setBusy(analysisMessage(Boolean(current.current!.uploads?.length)));const form=new FormData();form.set('text',d.text);form.set('scopeFingerprint',scopeFingerprint(d.text));form.set('revision',String(current.current!.revision));form.set('resumable','true');form.set('background','true');form.set('retry',resuming.current?'false':'true');resuming.current=false;
     let data:any;let conflicts=0;
@@ -301,7 +302,12 @@ export function P5Estimator({defaultService='',headingAs='h1',projectSource,layo
     return()=>{cancelled=true;clearTimeout(timer);};
   },[result,delivery]);
   useEffect(()=>{const el=composerRef.current;if(!el)return;el.style.height='auto';el.style.height=Math.min(el.scrollHeight,220)+'px';},[draft?.text,draft?.answers.estimatingInstructions,draft?.step,reply,editText,addingDetails]);
+  function requireRecoveredFiles(){
+    const missing=missingPendingFiles(current.current||{},filesRef.current);
+    if(missing.length)throw new Error(`Select the original files again before continuing: ${missing.map(f=>f.name).join(', ')}. Your answers and server upload progress are retained; matching uploaded segments will resume.`);
+  }
   const begin=()=>run('Reading your project...',async()=>{
+    requireRecoveredFiles();
     if(!current.current?.text.trim()&&!filesRef.current.length&&!current.current?.uploads?.length&&!Object.values(current.current?.answers||{}).some(v=>v?.trim())){pendingUserMessage.current=null;setError('Describe your project or add a file to continue.');return;}
     if(needsAnalysis()||(current.current?.uploads?.length&&!current.current.extraction))await analyze();else{pendingUserMessage.current=null;await save();showQuestions(current.current!);}
   },'analysis');
@@ -314,7 +320,8 @@ export function P5Estimator({defaultService='',headingAs='h1',projectSource,layo
     let copied:File[];setPreparingFiles(true);
     try{copied=[];for(const file of next)copied.push(filesRef.current.includes(file)||file.size>10*1024*1024?file:await snapshotProjectFile(file));}catch(error){setPreparingFiles(false);setError(error instanceof Error?error.message:'The selected file could not be read. Please select it again.');return;}
     filesRef.current=copied;setFiles(copied);setError('');setConfirmed(false);
-    try{if(copied.reduce((n,f)=>n+f.size,0)>22*1024*1024)throw new Error('Large files stay in this tab until upload.');await withTimeout(cacheFiles(current.current.id,copied),6000,'Device storage did not respond.');setStatus('Files ready. Send your message to read them with your project details.');}catch{setStatus('Files are ready in this tab. Device storage is unavailable; keep this tab open until upload completes.');}finally{setPreparingFiles(false);}
+    apply({...current.current,pendingFiles:[...missingPendingFiles(current.current,copied),...copied.map(({name,size})=>({name,size}))]});
+    try{await withTimeout(cacheFiles(current.current.id,copied),60000,'Device storage did not respond.');requireRecoveredFiles();setStatus('Files saved on this device. Send your message to upload and read them with your project details.');}catch(error){const message=error instanceof Error?error.message:'';if(missingPendingFiles(current.current,copied).length)setError(message);setStatus(`Files remain in this tab. Device storage may be full or unavailable. Keep this tab open until upload completes; after a reload, reselect the original files to resume saved server segments. ${message}`);}finally{setPreparingFiles(false);}
   }
   function speak(){
     if(listening){recognition.current?.stop();return;}
@@ -340,6 +347,7 @@ export function P5Estimator({defaultService='',headingAs='h1',projectSource,layo
   const focusCorrection=(element:HTMLElement|null)=>requestAnimationFrame(()=>{if(!element)return;element.focus({preventScroll:true});scrollThread(element,'center');});
   async function submit(event:React.FormEvent){
     event.preventDefault();if(busyRef.current)return;if(draft?.step!==2){await begin();return;}
+    try{requireRecoveredFiles();}catch(error){setError(error instanceof Error?error.message:'Reselect your original files before continuing.');return;}
     if(current.current?.analysisWarning&&!filesRef.current.length&&(current.current.text||'')===(current.current.analyzedText||'')){setError('Some of your files could not be read, so they cannot be priced yet. Use Retry document reading, or remove the file to price the rest of your project.');return;}
     if(needsAnalysis()){await begin();return;}
     const d=current.current!;
@@ -427,7 +435,7 @@ export function P5Estimator({defaultService='',headingAs='h1',projectSource,layo
   const field=(key:ScopeField)=>{const definition=SCOPE_FIELDS[key];const value=draft?.answers[key]||'';const fieldId=`${id}-${key}`;const options=definition.kind==='choice'?(key==='finish'?finishOptionsForService(draft?.answers.service):definition.options.filter(v=>key!=='service'||(brand.services as readonly string[]).includes(v))):[];return <div key={key} className={styles.field}><label htmlFor={fieldId}>{definition.label}</label>{definition.kind==='choice'?<select id={fieldId} value={value} onChange={e=>answer(key,e.target.value)}><option value="">Choose an answer</option>{options.map(v=><option key={v} value={v}>{readable(key,v)}</option>)}</select>:definition.kind==='number'?<input id={fieldId} inputMode="decimal" value={value} onChange={e=>answer(key,e.target.value)} placeholder="Approximate is fine"/>:<textarea id={fieldId} rows={3} value={value} onChange={e=>answer(key,e.target.value)} />}</div>;};
   const composer=<div className={styles.composer} data-dragging={dragging} onDragEnter={e=>{e.preventDefault();setDragging(true);}} onDragOver={e=>e.preventDefault()} onDragLeave={e=>{if(!e.currentTarget.contains(e.relatedTarget as Node|null))setDragging(false);}} onDrop={e=>{e.preventDefault();setDragging(false);void addFiles(e.dataTransfer.files);}}>
     <label htmlFor={`${id}-scope`} className={styles.srOnly}>{composerMode==='answer'?'Your answer':'Tell us about your project'}</label>
-    {Boolean(files.length||(composerMode!=='answer'&&uploadedCount))&&<ul className={styles.chips} aria-label="Project files">{composerMode!=='answer'&&draft.uploads?.map(f=><li key={f.id} className={styles.chip}><FileGlyph/><span className={styles.chipText}><span>{f.name}</span><small>Saved</small></span></li>)}{files.map((f,i)=><li key={`${f.name}-${i}`} className={styles.chip}><FileGlyph/><span className={styles.chipText}><span>{f.name}</span><small>Ready</small></span><button type="button" className={styles.chipRemove} aria-label={`Remove ${f.name}`} onClick={async()=>{const next=filesRef.current.filter((_,index)=>i!==index);filesRef.current=next;setFiles(next);try{await cacheFiles(draft.id,next);}catch{setStatus('File removed from this session. Local storage could not be updated.');}}}><span aria-hidden="true">×</span></button></li>)}</ul>}
+    {Boolean(files.length||(composerMode!=='answer'&&uploadedCount))&&<ul className={styles.chips} aria-label="Project files">{composerMode!=='answer'&&draft.uploads?.map(f=><li key={f.id} className={styles.chip}><FileGlyph/><span className={styles.chipText}><span>{f.name}</span><small>Saved</small></span></li>)}{files.map((f,i)=><li key={`${f.name}-${i}`} className={styles.chip}><FileGlyph/><span className={styles.chipText}><span>{f.name}</span><small>Ready</small></span><button type="button" disabled={locked} className={styles.chipRemove} aria-label={`Remove ${f.name}`} onClick={async()=>{const next=filesRef.current.filter((_,index)=>i!==index);filesRef.current=next;setFiles(next);if(current.current)apply({...current.current,pendingFiles:(current.current.pendingFiles||[]).filter(file=>file.name!==f.name||file.size!==f.size)});try{await cacheFiles(draft.id,next);}catch{setStatus('File removed from this session. Local storage could not be updated.');}}}><span aria-hidden="true">×</span></button></li>)}</ul>}
     <textarea ref={composerRef} id={`${id}-scope`} className={styles.composerText} rows={composerMode==='answer'?1:2} value={composerValue} onChange={e=>setComposerValue(e.target.value)} onKeyDown={composerKey} disabled={locked} placeholder={composerMode==='answer'?'Type your answer':composerMode==='edit'?'Edit your project description or add details':composerPlaceholder}/>
     <div className={styles.composerBar}><div className={styles.composerTools}><button type="button" className={styles.iconBtn} aria-label="Attach files" title="Attach plans, photos, estimates or documents" disabled={locked} onClick={()=>fileInput.current?.click()}><AttachGlyph/></button><input ref={fileInput} id={`${id}-files`} className={styles.srOnly} type="file" accept={accept} multiple tabIndex={-1} aria-label="Upload project files" onChange={e=>{const input=e.currentTarget;const selected=Array.from(input.files||[]);void addFiles(selected).then(()=>{input.value='';});}}/>{speechAvailable&&<button type="button" className={styles.iconBtn} data-listening={listening} aria-pressed={listening} aria-label={listening?'Stop listening':'Talk instead'} title={listening?'Stop listening':'Talk instead'} disabled={locked} onClick={speak}><MicGlyph/></button>}<span className={styles.composerHint}>{dragging?'Drop files to add them':locked?'Working on your project':'Type, talk, or attach files'}</span></div><button type="button" className={styles.send} aria-label={composerMode==='answer'?'Send answer':'Continue'} title={composerMode==='answer'?'Send answer':'Continue'} onClick={()=>{sentMessageRef.current=true;send();}} disabled={!canSend}><span aria-hidden="true">↑</span></button></div>
   </div>;

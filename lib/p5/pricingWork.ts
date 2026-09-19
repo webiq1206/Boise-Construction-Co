@@ -7,6 +7,7 @@ import type {ReviewedScope} from './scope.ts';
 import type {EstimatorConfiguration} from './costBook.ts';
 import {readRegionalRates,saveRegionalRates} from './regionalRates.ts';
 import {pricingActivity,type ProcessingStatus} from './processingStatus.ts';
+import {assertProjectSourceCoverage} from './documentServiceClient.ts';
 
 export function pricingWorkKey(scope:ReviewedScope,configuration:EstimatorConfiguration,pricingAt:Date){
  const signature={pricingDate:pricingAt.toISOString().slice(0,10),text:scope.text,answers:scope.answers,extraction:scope.extraction,uploads:scope.uploads,uncertainFields:scope.uncertainFields,configuration};
@@ -19,6 +20,7 @@ export function pricingReplyKey(instructions:string,input:unknown,search:boolean
 }
 type Payload={replies:Record<string,PricingReply>;failures?:number;completed?:number;regionalRates?:EstimatorConfiguration['regionalRates'];processing?:ProcessingStatus;pricingAt?:string};
 export async function priceSavedScope(id:string,scope:ReviewedScope,configuration:EstimatorConfiguration,pricingAt=new Date(),deadline=Date.now()+SERVER_BUDGET_MS){
+ assertProjectSourceCoverage(scope.uploads,scope.extraction);
  remainingBudget(deadline);
  const workKey=pricingWorkKey(scope,configuration,pricingAt);
  const claimed=await claimWork(id,workKey,{replies:{},regionalRates:await readRegionalRates(scope.answers.location||'',pricingAt)},290);

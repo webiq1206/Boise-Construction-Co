@@ -1,5 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
+test.use({serviceWorkers:'block'});
+
 /**
  * This fixture intentionally owns every estimator response. Any API request
  * outside the fixture endpoints is aborted, so this suite cannot create a
@@ -40,6 +42,14 @@ function extraction(questions: string[] = [], longReview = false) {
 }
 
 async function installFixture(page: Page, mode: FixtureMode = "review") {
+  // Fail closed for analytics, providers, email/CRM and every non-fixture API.
+  // The specific fixture route below overrides this route only for local APIs.
+  await page.route("**/*", async route => {
+    const url=new URL(route.request().url());
+    const origin=new URL(test.info().project.use.baseURL as string).origin;
+    if(url.origin!==origin||url.pathname.startsWith("/api/"))await route.abort("blockedbyclient");
+    else await route.continue();
+  });
   await page.addInitScript(() => {
     const events = new EventTarget();
     let height = window.innerHeight;
@@ -88,6 +98,7 @@ async function installFixture(page: Page, mode: FixtureMode = "review") {
   await page.route("**/api/**", async (route) => {
     const request = route.request();
     const path = new URL(request.url()).pathname;
+    if(new URL(request.url()).origin!==new URL(test.info().project.use.baseURL as string).origin){await route.abort("blockedbyclient");return;}
     const send = (body: unknown, status = 200) =>
       route.fulfill({
         status,
@@ -334,6 +345,105 @@ test.describe("P5 estimator mobile final action", () => {
     expect(state.draft?.text).not.toContain("Question:");
   });
 });
+
+for(const width of [390,1280]){
+  test.describe(`P5 isolated mixed-file recovery at ${width}px`,()=>{
+    test.use({viewport:{width,height:900},serviceWorkers:'block'});
+    test('reload keeps all pending PDF/photo/XLSX bytes and partial manual answers',async({page})=>{
+      const {estimator,state}=await openEstimator(page);
+      const text='Retain Bosch fixtures. Exclude painting. Resolve plans versus spreadsheet quantities.';
+      await estimator.getByLabel('Tell us about your project',{exact:true}).fill(text);
+      const fixtures=[
+        {name:'250-page-plan.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF fixture with all 250 page references '+Array.from({length:250},(_,i)=>`page-${i+1}`).join('\n'))},
+        {name:'site.jpg',mimeType:'image/jpeg',buffer:Buffer.from('synthetic photo bytes')},
+        {name:'scope.xlsx',mimeType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',buffer:Buffer.from('synthetic spreadsheet bytes with exclusion and quantities')},
+      ];
+      await estimator.getByLabel('Upload project files',{exact:true}).setInputFiles(fixtures);
+      await expect(estimator.getByRole('button',{name:'Continue',exact:true})).toBeEnabled();
+      await expect(estimator.getByLabel('Project files')).toContainText('scope.xlsx');
+      const before=await page.evaluate(()=>{
+        const draft=JSON.parse(localStorage.getItem('p5-project-draft-v2')!);
+        draft.answers={...draft.answers,sqft:'1,'};
+        draft.pendingReply={id:'manual-fixture-question',answer:'Owner supplies all Bosch fixtures; retain exclusions.'};
+        draft.dirty=true;
+        localStorage.setItem('p5-project-draft-v2',JSON.stringify(draft));return draft;
+      });
+      await page.reload();
+      await expect(estimator.getByRole('button',{name:'Continue',exact:true})).toBeEnabled();
+      await expect(estimator.getByLabel('Tell us about your project',{exact:true})).toHaveValue(text);
+      for(const file of fixtures)await expect(estimator.getByLabel('Project files')).toContainText(file.name);
+      const recovered=await page.evaluate(async()=>{
+        const draft=JSON.parse(localStorage.getItem('p5-project-draft-v2')!);
+        const files=await new Promise<Array<{name:string;bytes:number[]}>>((resolve,reject)=>{
+          const open=indexedDB.open('p5-project-files-v1',1);
+          open.onerror=()=>reject(open.error);
+          open.onsuccess=()=>{
+            const db=open.result;const tx=db.transaction('files','readonly');const read=tx.objectStore('files').getAll();
+            read.onsuccess=()=>resolve(read.result.filter(f=>f.draftId===draft.id).map(f=>({name:f.name,bytes:Array.from(new Uint8Array(f.bytes))})));
+            read.onerror=()=>reject(read.error);tx.oncomplete=()=>db.close();
+          };
+        });return {draft,files};
+      });
+      expect(recovered.draft.id).toBe(before.id);
+      expect(recovered.draft.answers).toEqual(before.answers);
+      expect(recovered.draft.pendingReply).toEqual(before.pendingReply);
+      expect(recovered.files).toHaveLength(3);
+      for(const file of fixtures)expect(recovered.files.find(f=>f.name===file.name)?.bytes).toEqual(Array.from(file.buffer));
+      expect(state.scopeCalls).toBe(0);expect(state.submitCalls).toBe(0);
+    });
+    test('quota failure survives reload as a reselection requirement before analysis',async({page})=>{
+      await page.addInitScript(()=>{
+        const put=IDBObjectStore.prototype.put;
+        IDBObjectStore.prototype.put=function(value:any,key?:IDBValidKey){
+          if(sessionStorage.getItem('fixture-quota-failure')==='true'&&String(value?.id).startsWith('staging:'))throw new DOMException('Fixture quota exhausted','QuotaExceededError');
+          return key===undefined?put.call(this,value):put.call(this,value,key);
+        };
+      });
+      const {estimator,state}=await openEstimator(page);
+      await page.evaluate(()=>sessionStorage.setItem('fixture-quota-failure','true'));
+      await estimator.getByLabel('Tell us about your project',{exact:true}).fill('Retain every plan, photo and spreadsheet exclusion.');
+      const file={name:'plan.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF fixture retained original')};
+      await estimator.getByLabel('Upload project files',{exact:true}).setInputFiles([file]);
+      await expect(estimator.getByRole('button',{name:'Continue',exact:true})).toBeEnabled();
+      await expect(estimator).toContainText('Device storage may be full or unavailable');
+      await page.reload();
+      await expect(estimator).toContainText('Select the original files again before continuing: plan.pdf');
+      await estimator.getByRole('button',{name:'Continue',exact:true}).click();
+      await expect(estimator).toContainText('matching uploaded segments will resume');
+      expect(state.scopeCalls).toBe(0);expect(state.draft).toBeNull();expect(state.submitCalls).toBe(0);
+      await page.evaluate(()=>sessionStorage.setItem('fixture-quota-failure','false'));
+      await estimator.getByLabel('Upload project files',{exact:true}).setInputFiles([file]);
+      await expect(estimator).toContainText('Files saved on this device');
+      await page.reload();
+      await expect(estimator.getByRole('button',{name:'Continue',exact:true})).toBeEnabled();
+      await expect(estimator.getByLabel('Project files')).toContainText('plan.pdf');
+      await expect(estimator).not.toContainText('Select the original files again before continuing');
+      expect(state.scopeCalls).toBe(0);
+    });
+    test('typed clarification and saved mixed upload receipts survive reload together',async({page})=>{
+      const {estimator,state}=await openEstimator(page,'clarifications');
+      await estimator.getByLabel('Tell us about your project',{exact:true}).fill('Repair doors; labor only, owner supplies Bosch materials.');
+      await estimator.getByRole('button',{name:'Continue',exact:true}).click();
+      const question=estimator.getByRole('region',{name:'Project question'});
+      await expect(question).toContainText('Labor only or materials only?');
+      const reply='Labor only. Exclude painting and retain the Bosch specifications.';
+      await question.getByLabel('Your answer',{exact:true}).fill(reply);
+      const uploads=['plan.pdf','photo.jpg','scope.xlsx'].map((name,index)=>({id:`fixture-${index}`,name,type:'fixture',size:index+10,sha256:String(index).repeat(64),status:'stored'}));
+      state.draft!.uploads=uploads;
+      await page.evaluate(uploads=>{
+        const draft=JSON.parse(localStorage.getItem('p5-project-draft-v2')!);draft.uploads=uploads;
+        localStorage.setItem('p5-project-draft-v2',JSON.stringify(draft));
+      },uploads);
+      await page.reload();
+      await expect(question).toContainText('Labor only or materials only?');
+      await expect(question.getByLabel('Your answer',{exact:true})).toHaveValue(reply);
+      const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('p5-project-draft-v2')!));
+      expect(saved.uploads).toEqual(uploads);
+      expect(saved.text).toBe('Repair doors; labor only, owner supplies Bosch materials.');
+      expect(state.scopeCalls).toBe(1);expect(state.submitCalls).toBe(0);
+    });
+  });
+}
 
 test.describe("P5 estimator desktop final action", () => {
   test.use({ viewport: { width: 1280, height: 900 }, hasTouch: false });

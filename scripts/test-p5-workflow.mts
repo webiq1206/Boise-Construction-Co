@@ -4,6 +4,7 @@ import {randomUUID,randomBytes,createHash} from 'node:crypto';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {PDFDocument} from 'pdf-lib';
+import {getDocument} from 'pdfjs-dist/legacy/build/pdf.mjs';
 import {customerPdf,administrativePdf} from '../lib/p5/pdf.ts';
 import {COST_CATEGORIES,calculateP5Estimate,customerEstimate} from '../lib/p5/pricing.ts';
 import {mergeScopeFacts,requiredScopeQuestions,validateExtraction,validateAnswer} from '../lib/p5/scope.ts';
@@ -18,7 +19,35 @@ import {ESTIMATOR_BRAND as brand} from '../lib/p5/brand.ts';
 // change which code path this fixture exercises.
 for (const key of ['AI_INTEGRATIONS_OPENAI_API_KEY','AI_INTEGRATIONS_OPENAI_BASE_URL','OPENAI_API_KEY','ANTHROPIC_API_KEY']) delete process.env[key];
 const root=process.cwd();
-await mkdir('p5-verification',{recursive:true});
+const outputFlag=process.argv.indexOf('--output-dir');
+assert.ok(outputFlag===-1||process.argv[outputFlag+1],"--output-dir requires a path.");
+assert.ok(outputFlag===-1||outputFlag===2,"Only --output-dir <new-directory> is supported.");
+assert.ok(outputFlag===-1||process.argv.length===4,"Only --output-dir <new-directory> is supported.");
+const diagnosticsRoot=path.join(root,'.local','diagnostics');
+await mkdir(diagnosticsRoot,{recursive:true});
+let outputDir:string;
+if(outputFlag===-1)outputDir=await mkdtemp(path.join(diagnosticsRoot,'p5-workflow-'));
+else{
+ outputDir=path.resolve(process.argv[outputFlag+1]);
+ assert.notEqual(outputDir,path.join(root,'p5-verification'),"Refusing to overwrite saved p5-verification artifacts.");
+ assert.notEqual(outputDir,root,"Refusing to use the project root as a qualification output directory.");
+ await mkdir(path.dirname(outputDir),{recursive:true});
+ await mkdir(outputDir); // Deliberately fail if a caller points at a stale run.
+}
+const artifact=(name:string)=>path.join(outputDir,name);
+async function pdfText(bytes:Uint8Array){
+ const loadingTask=getDocument({data:Uint8Array.from(bytes),disableFontFace:true});
+ const document=await loadingTask.promise;
+ const pages:string[]=[];
+ try{
+  for(let pageNumber=1;pageNumber<=document.numPages;pageNumber++){
+   const content=await (await document.getPage(pageNumber)).getTextContent();
+   pages.push(content.items.map(item=>'str' in item?item.str:'').join(' '));
+  }
+ }finally{await loadingTask.destroy();}
+ return pages.join(' ').replace(/\s+/g,' ').trim();
+}
+const money=(value:number,digits=0)=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',minimumFractionDigits:digits,maximumFractionDigits:digits}).format(value);
 const now=new Date();
 const today=now.toISOString().slice(0,10);
 const future=new Date(now.getTime()+86400000*20).toISOString().slice(0,10);
@@ -29,11 +58,21 @@ const pricing:any={service:'kitchen',revision:'synthetic-fixture',scopeSummary:'
 const internal=calculateP5Estimate(pricing,finance,[],now);
 const customer=customerEstimate(internal,pricing.scopeSummary);
 const fixtureId=randomUUID();
+assert.ok(customer.range,"The synthetic fixture must produce a customer planning range.");
+const expectedCustomerRange=`${money(customer.range.low)} to ${money(customer.range.high)}`;
+const pdfReport:{fixtureId:string;files:{kind:string;file:string;pages:number;bytes:number;sha256:string;verifiedPricing:string}[]}={fixtureId,files:[]};
 for(const [kind,bytes] of [['customer',await customerPdf(fixtureId,customer)],['administrative',await administrativePdf(fixtureId,{...internal,scope:{text:'TEST ONLY. '+('Long scope with room, dimensions, allowances and source evidence. '.repeat(120)),uploads:[{name:'A'.repeat(250)+'.pdf'}]}})]] as const){
  const doc=await PDFDocument.load(bytes);assert.ok(doc.getPageCount()>=1);if(kind==="customer")assert.equal(doc.getPageCount(),1,"A short planning summary and its complete disclaimer should fit on one page.");
  for(const page of doc.getPages()){assert.equal(page.getWidth(),612);assert.equal(page.getHeight(),792);}
- await writeFile(`p5-verification/${kind}.pdf`,bytes);
+ const text=await pdfText(bytes);
+ const verifiedPricing=kind==="customer"?expectedCustomerRange:money(internal.contractPrice,2);
+ assert.ok(text.includes(verifiedPricing),`${kind} PDF must display the price calculated from the unchanged synthetic fixture.`);
+ assert.ok(text.includes(kind==="customer"?'Planning disclaimer':'Recommended contract price'),`${kind} PDF must retain its pricing context.`);
+ const file=artifact(`${kind}.pdf`);
+ await writeFile(file,bytes);
+ pdfReport.files.push({kind,file,pages:doc.getPageCount(),bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),verifiedPricing});
 }
+await writeFile(artifact('pdf-consistency.json'),JSON.stringify({passed:true,source:'Synthetic fixture only; no live or inferred rates.',expectedCustomerRange,expectedAdministrativeContractPrice:money(internal.contractPrice,2),...pdfReport},null,2));
 const extraction=validateExtraction({summary:"Synthetic kitchen scope",facts:[{field:'service',value:'kitchen',confidence:.98,source:'typed scope',evidence:'kitchen remodel'},{field:'sqft',value:'200',confidence:.95,source:'plan.pdf',evidence:'200 square feet'}],conflicts:[],missingInformation:[],reviewNotes:[]});
 assert.equal(mergeScopeFacts({},extraction).answers.sqft,'200');
 assert.ok(mergeScopeFacts({sqft:'300'},extraction).conflicts.length);
@@ -81,6 +120,9 @@ try{
  const customerMail=[...transport.delivered.values()].find((v:any)=>v.to==='customer@example.invalid') as any;
  assert.ok(customerMail);assert.match(customerMail.attachments[0].filename,/-customer.pdf$/);
  assert.ok(!customerMail.text.includes('operatingProfit'));
+ const deliveredCustomerPdfText=await pdfText(customerMail.attachments[0].content);
+ assert.ok(deliveredCustomerPdfText.includes(expectedCustomerRange),"The intercepted customer attachment must contain the range calculated for its delivery record.");
+ assert.ok(deliveredCustomerPdfText.includes('Planning disclaimer'),"The intercepted customer attachment must contain its disclaimer.");
  const alertMail=[...transport.delivered.values()].find((v:any)=>v.subject?.includes('needs attention')) as any;
  assert.ok(alertMail);assert.equal(alertMail.attachments.length,0);
  const publicRecord=await store.readDraft(id,key);assert.equal(publicRecord.internal_estimate,undefined);
@@ -180,7 +222,17 @@ try{
  await assert.rejects(manual.publishManualReview({reviewId:review.reviewId,confirmed:true},actor));
  await outbox.processOutbox({draftId:id});
  assert.ok((await outbox.deliveryStatus(id)).every((d:any)=>d.status==='sent'));
+ assert.ok(transport.attempts.length>0,"The fake transport must capture delivery attempts.");
+ assert.ok(transport.attempts.every((attempt:any)=>attempt.crm||String(attempt.to).split(':').every((address:string)=>address.endsWith('@example.invalid'))),"Captured email must remain confined to reserved invalid fixture addresses.");
+ const captured=[...transport.delivered.entries()].map(([key,value]:[string,any])=>value.to?{
+  key,type:'email',to:value.to,subject:value.subject,attachmentCount:value.attachments.length,
+  attachments:value.attachments.map((attachment:any)=>({filename:attachment.filename,bytes:attachment.content.length,sha256:createHash('sha256').update(attachment.content).digest('hex')})),
+ }:{key,type:'crm',draftId:value.draftId,contactEmail:value.contact?.email});
+ const deliveryReport={passed:true,boundary:'In-memory fake email/CRM adapter; no provider call.',attemptCount:transport.attempts.length,capturedCount:captured.length,emailCount:captured.filter((item:any)=>item.type==='email').length,crmAttemptCount:transport.attempts.filter((attempt:any)=>attempt.crm).length,captured};
+ assert.ok(deliveryReport.emailCount>0&&deliveryReport.crmAttemptCount>0,"Both email delivery and CRM attempts must be intercepted.");
+ await writeFile(artifact('intercepted-deliveries.json'),JSON.stringify(deliveryReport,null,2));
  await db.database.close();
- await writeFile('p5-verification/workflow-results.json',JSON.stringify({passed:true,scope:'Isolated database, synthetic pricing fixtures, simulated delivery and CRM. No live email or CRM request was made.',checks:['PDF generation','high-confidence extraction','conflict preservation','low-confidence review','optional address','invalid upload','XLSX extraction','draft authorization','optimistic concurrency','upload deduplication','atomic submission','outbox deduplication','customer delivery retry','CRM ambiguity review','administrator alert','confidential result separation','manual cost review','authenticated distinct owner approvals','stale forecast approval rejection','changed scope approval rejection','atomic reviewed publication','revision history','CRM update duplicate guard','delivery reconciliation audit','unresolved document review blocks pricing','submitted urgency cannot silently lower margin','missing conditional cost answers block pricing','interrupted delivery alert and retry ceiling','private reference authorization','versioned reference import','stale reference import rejected','comparison tied to reviewed quantity and units','saved reference comparison audit','approved initial overhead without forecast','legacy policy approval invalidation','stale pricing comparison rejection','reference direct-cost ceilings','complex scope retains higher target in automatic and manual review']},null,2));
- console.log('P5 workflow checks passed (isolated database; simulated external services).');
+ const summary={passed:true,outputDir,artifacts:[artifact('customer.pdf'),artifact('administrative.pdf'),artifact('pdf-consistency.json'),artifact('intercepted-deliveries.json'),artifact('workflow-results.json')],counts:{pdfs:pdfReport.files.length,pdfPages:pdfReport.files.reduce((sum,file)=>sum+file.pages,0),deliveryAttempts:deliveryReport.attemptCount,capturedDeliveries:deliveryReport.capturedCount,capturedEmails:deliveryReport.emailCount,capturedCrmAttempts:deliveryReport.crmAttemptCount},scope:'Isolated PGlite database, synthetic pricing fixtures, and in-memory fake delivery/CRM. No live email, CRM, customer database, pricing provider or network request was made.',checks:['PDF generation','content-based PDF/pricing consistency','intercepted PDF delivery consistency','captured fake email and CRM delivery','high-confidence extraction','conflict preservation','low-confidence review','optional address','invalid upload','XLSX extraction','draft authorization','optimistic concurrency','upload deduplication','atomic submission','outbox deduplication','customer delivery retry','CRM ambiguity review','administrator alert','confidential result separation','manual cost review','authenticated distinct owner approvals','stale forecast approval rejection','changed scope approval rejection','atomic reviewed publication','revision history','CRM update duplicate guard','delivery reconciliation audit','unresolved document review blocks pricing','submitted urgency cannot silently lower margin','missing conditional cost answers block pricing','interrupted delivery alert and retry ceiling','private reference authorization','versioned reference import','stale reference import rejected','comparison tied to reviewed quantity and units','saved reference comparison audit','approved initial overhead without forecast','legacy policy approval invalidation','stale pricing comparison rejection','reference direct-cost ceilings','complex scope retains higher target in automatic and manual review']};
+ await writeFile(artifact('workflow-results.json'),JSON.stringify(summary,null,2));
+ console.log(JSON.stringify(summary,null,2));
 }finally{await rm(runtime,{recursive:true,force:true});}

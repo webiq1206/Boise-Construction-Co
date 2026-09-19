@@ -1,4 +1,4 @@
-import {documentServiceEligible,advanceDocumentService} from './documentServiceClient.ts';
+import {advanceMixedDocumentAnalysis,assertAnalysisMigrationSafe,assertCompleteSourceCoverage,readSavedSource,type DocumentAnalysisStep} from './documentServiceClient.ts';
 import {ANALYSIS_PASS_MS,READ_ALLOWANCE_MS,READ_START_MARGIN_MS,remainingBudget,ProcessingDeadlineError,isProcessingDeadline} from './processingBudget.ts';
 import {createHash} from 'node:crypto';
 import {PDFDocument} from 'pdf-lib';
@@ -7,7 +7,7 @@ import {analyzeBatch,AnalysisBusyError,type AnalysisFile,type AnalysisResult} fr
 import {prepareAnalysisFiles} from './documents.ts';
 import {combineScopeExtractions,type ScopeAnswers,type ScopeExtraction} from './scope.ts';
 import {query} from './database.ts';
-import {readStoredBytes,ESTIMATOR_BUCKETS} from './objectStorage.ts';
+import {ESTIMATOR_BUCKETS} from './objectStorage.ts';
 import {ESTIMATOR_BRAND} from './brand.ts';
 import {claimWork,writeWork,releaseWork} from './workStore.ts';
 import {type Draft,DraftError} from './store.ts';
@@ -28,7 +28,7 @@ type Job={prepared:number;units:Unit[];notes:string[];textDone?:AnalysisResult;t
 export const MAX_READ_ATTEMPTS=Math.max(1,Number(process.env.P5_READ_ATTEMPTS||4));
 const pending=(u:Unit)=>!u.result&&(u.attempts||0)<MAX_READ_ATTEMPTS;
 export function analysisWorkKey(draft:Draft,text:string,answers:ScopeAnswers){
-  return `analysis:${process.env.P5_DOCUMENT_SERVICE_MODE==='remote'?'document-service-v1':'v8'}:${createHash('sha256').update(JSON.stringify([text,answers,draft.uploads.map(f=>[f.id,f.sha256])])).digest('hex')}`;
+  return `analysis:${process.env.P5_DOCUMENT_SERVICE_MODE==='remote'?'document-service-v2':'v8'}:${createHash('sha256').update(JSON.stringify([text,answers,draft.uploads.map(f=>[f.id,f.sha256])])).digest('hex')}`;
 }
 /** Page numbers as compact ranges: 1-4, 7, 9-10. */
 export function pageRanges(pages:number[]):string{
@@ -52,12 +52,20 @@ export function unreadNotes(units:Unit[]):string[]{
   });
 }
 /** Each request checkpoints work before returning. Reloading resumes the same source fingerprint. */
-type DocumentAnalysisStep={pending:true;progress:string;retryAfterMs?:number}|{pending:false;version:string;analysis:AnalysisResult};
 export async function advanceAnalysis(draft:Draft,text:string,answers:ScopeAnswers,request=fetch,retryFailed=false,absoluteDeadline=Date.now()+ANALYSIS_PASS_MS):Promise<DocumentAnalysisStep>{
   remainingBudget(absoluteDeadline);
-  if(documentServiceEligible(draft.uploads))return advanceDocumentService(draft,text,answers,analysisWorkKey(draft,text,answers),request,retryFailed,absoluteDeadline);
+  const key=analysisWorkKey(draft,text,answers);
+  if(draft.uploads.length)await assertAnalysisMigrationSafe(draft,text,answers,key);
+  if(process.env.P5_DOCUMENT_SERVICE_MODE==='remote'&&draft.uploads.length)return advanceMixedDocumentAnalysis(draft,text,answers,key,request,retryFailed,absoluteDeadline,async(subset,scope,context,branchKey,fetcher,retry,deadline)=>{
+    const step=await advanceLocalAnalysis(subset,scope,context,fetcher,retry,deadline,branchKey,true);
+    if(step.pending){const [row]=await query("SELECT payload->'processing' AS processing FROM p5_estimator_work WHERE draft_id=$1 AND work_key=$2",[draft.id,branchKey]);if(row?.processing)step.processing=row.processing;}
+    return step;
+  });
+  return advanceLocalAnalysis(draft,text,answers,request,retryFailed,absoluteDeadline,undefined,draft.uploads.length>0);
+}
+async function advanceLocalAnalysis(draft:Draft,text:string,answers:ScopeAnswers,request:typeof fetch,retryFailed:boolean,absoluteDeadline:number,keyOverride?:string,requireComplete=false):Promise<DocumentAnalysisStep>{
   const version=createHash('sha256').update(JSON.stringify([text,answers,draft.uploads.map(f=>[f.id,f.sha256])])).digest('hex');
-  const workKey=analysisWorkKey(draft,text,answers),bucketId=ESTIMATOR_BUCKETS[ESTIMATOR_BRAND.domain],client=new Client({bucketId});
+  const workKey=keyOverride||analysisWorkKey(draft,text,answers),bucketId=ESTIMATOR_BUCKETS[ESTIMATOR_BRAND.domain],client=new Client({bucketId});
   const lease=await claimWork(draft.id,workKey,{prepared:0,units:[],notes:[]},300);
   if(!lease)return {pending:true as const,progress:analysisMessage(draft.uploads.length>0,'busy')};
   const job=lease.payload as Job;
@@ -93,10 +101,9 @@ export async function advanceAnalysis(draft:Draft,text:string,answers:ScopeAnswe
     // upload instead of after every file is prepared.
     if(job.prepared<draft.uploads.length){
       const upload=draft.uploads[job.prepared];
-      const [row]=await query('SELECT name,mime_type,data_base64,storage_bucket,storage_key,sha256,size_bytes FROM p5_estimator_files WHERE draft_id=$1 AND id=$2',[draft.id,upload.id]);
-      if(!row)throw new DraftError('A saved project file could not be located. Please retry.',503);
-      const name=draft.uploads.filter(u=>u.name===row.name).length>1?`${row.name} [${upload.id.slice(0,8)}]`:String(row.name);
-      const file={name,type:String(row.mime_type),data:await readStoredBytes(row)};
+      const {file:row,bytes}=await readSavedSource(upload,draft.id);
+      const name=keyOverride?upload.name:draft.uploads.filter(u=>u.name===row.name).length>1?`${row.name} [${upload.id.slice(0,8)}]`:String(row.name);
+      const file={name,type:String(row.mime_type),data:bytes};
       const preparing=Date.now();
       if(file.type==='application/pdf'){
         try{const pdf=await PDFDocument.load(file.data);job.expected=[...(job.expected||[]).filter(p=>p.source!==file.name),...Array.from({length:pdf.getPageCount()},(_,i)=>({source:file.name,page:i+1}))];}
@@ -186,6 +193,7 @@ export async function advanceAnalysis(draft:Draft,text:string,answers:ScopeAnswe
       job.textDone=await analyzeBatch(text,[],answers,request,Math.min(READ_ALLOWANCE_MS,absoluteDeadline-Date.now()),absoluteDeadline,{race:true,event:{draftId:draft.id,estimator:answers.service||null,file:null}});await checkpoint();
     }
     const results=job.units.flatMap(u=>u.result?[u.result]:[]);if(job.textDone)results.push(job.textDone);
+    if(requireComplete)for(const unit of job.units)if(unit.result)assertCompleteSourceCoverage(unit.result.extraction,unit.pages?.map(p=>p.source)||[unit.name],unit.pages,Boolean(unit.pages?.length));
     const last=results[results.length-1];
     const extraction:ScopeExtraction=combineScopeExtractions(results.map(r=>r.extraction));
     const unprocessed=job.units.filter(u=>!u.result).flatMap(u=>(u.pages||[]).map(p=>({...p,sheet:'',revision:'',status:'unreadable' as const,notes:[u.error||'Page analysis did not finish.']})));
@@ -199,6 +207,8 @@ export async function advanceAnalysis(draft:Draft,text:string,answers:ScopeAnswe
     extraction.reviewNotes=[...new Set(extraction.reviewNotes)];
     const unread=job.units.filter(u=>!u.result).length;
     event('complete',unread?'failed':'ok',{meta:{sections:job.units.length,unread,pages:job.expected?.length||0,files:draft.uploads.length}});
-    return {pending:false as const,version,analysis:{...last,extraction,analyzedAt:new Date().toISOString()}};
+    if(requireComplete&&(unread||job.notes.length||extraction.documentCoverage?.complete===false))throw new DraftError('Some local files could not be completely read. Your files and completed sections are saved. Use Retry or replace the unreadable file before continuing.',422);
+    if(requireComplete)assertCompleteSourceCoverage(extraction,draft.uploads.map(u=>keyOverride?u.name:draft.uploads.filter(v=>v.name===u.name).length>1?`${u.name} [${u.id.slice(0,8)}]`:u.name),job.expected,Boolean(job.expected?.length));
+    return {pending:false as const,version,analysis:{...last,extraction,analyzedAt:new Date().toISOString()},expectedPages:job.expected,processing:job.processing};
   }finally{await releaseWork(draft.id,workKey,lease.token);}
 }
