@@ -7,6 +7,8 @@ import {join,resolve} from 'node:path';
 import {promisify} from 'node:util';
 import {test} from 'node:test';
 import {COST_CATEGORIES,calculateP5Estimate,customerEstimate} from '../lib/p5/pricing.ts';
+import {projectCustomerEstimate} from '../lib/p5/customerProjection.ts';
+import {getDocument} from 'pdfjs-dist/legacy/build/pdf.mjs';
 
 const exec=promisify(execFile);
 const sha=(value:string|Uint8Array)=>createHash('sha256').update(value).digest('hex');
@@ -55,6 +57,31 @@ test('fixture mode rejects a null range instead of substituting a price',async()
   value.result.customer.range=null;
   await writeFile(file,JSON.stringify(value));
   await assert.rejects(run(file,join(root,'capture'),'--fixture'),/positive customer range/);
+});
+
+test('sealed historical customer allowance prose cannot exempt $200 direct cost from projection',async()=>{
+  const root=await mkdtemp(join(tmpdir(),'p5-capture-private-')),value=artifact();
+  value.result.customer.assumptions.push('Preliminary labor allowance $200 direct cost.');
+  value.result.internal.assumptions.push('Preliminary labor allowance $200 direct cost.');
+  const {file,ledger}=await sealed(root,value),output=join(root,'capture');
+  const original=await readFile(file);
+  const ledgerNames=['final-output.seal.json',...['mapping','audit'].flatMap(stage=>[`${stage}.reservation.json`,`${stage}.completed.json`,`${stage}.response.json`])];
+  const originals=await Promise.all(ledgerNames.map(name=>readFile(join(ledger,name))));
+  await run(file,output,'--fixture');
+  for(const name of ['customer-email.txt','customer-email.html'])assert.doesNotMatch(await readFile(join(output,name),'utf8'),/\$200\b/);
+  const pdfTask=getDocument({data:new Uint8Array(await readFile(join(output,'customer.pdf'))),useSystemFonts:true});
+  const pdf=await pdfTask.promise;
+  try{
+    let text='';
+    for(let page=1;page<=pdf.numPages;page++)text+=(await (await pdf.getPage(page)).getTextContent()).items.map(item=>'str' in item?item.str:'').join(' ');
+    assert.doesNotMatch(text,/\$200\b/);
+  }finally{await pdfTask.destroy();}
+  assert.match(await readFile(join(output,'administrative-email.txt'),'utf8'),/Direct project cost: \$60,000/);
+  const crm=JSON.parse(await readFile(join(output,'crm-payload.json'),'utf8'));
+  assert.deepEqual(crm.estimate.customer,projectCustomerEstimate(value.result.customer));
+  assert.equal(crm.estimate.internal.financialSummary.directCost,value.result.internal.directCost);
+  assert.deepEqual(await readFile(file),original,'sealed input is immutable');
+  for(let i=0;i<ledgerNames.length;i++)assert.deepEqual(await readFile(join(ledger,ledgerNames[i])),originals[i],'ledger and raw provider fixtures are immutable');
 });
 
 test('default mode rejects unverified provenance',async()=>{

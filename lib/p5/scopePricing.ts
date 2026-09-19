@@ -6,6 +6,7 @@ import {createHash} from 'node:crypto';
 import {z} from 'zod';
 import {PricingPending,PricingStageTimeout,isPricingPending,isPricingStageTimeout} from './pricingProgress.ts';
 import {suggestedTrade} from './trades.ts';
+import {projectCustomerEstimate} from './customerProjection.ts';
 import {priceReviewedScope,type CostRule,type EstimatorConfiguration,type ScopePriceResolution} from './costBook.ts';
 import type {ReviewedScope} from './scope.ts';
 import {hasRestrictedScope,INSTRUCTION_POLICY} from './instructions.ts';
@@ -774,5 +775,5 @@ export async function priceCompleteScope(scope:ReviewedScope,configuration:Estim
   resolution.issues=kept;
   resolution.completeScopeVerified=Boolean(auditTrail.verification)&&kept.length===0;
   const priced=priceReviewedScope(scope,configuration,now,resolution);
-  return {...priced,customer:{...priced.customer,instructions:pricingExtraction?.instructions,documentCoverage:pricingExtraction?.documentCoverage,verificationItems:[...resolution.assumptions.filter(a=>/allowance|preliminary|confirm/i.test(a)),...resolution.issues],scopeTasks:(auditTrail.tasks as {description:string}[]).map(t=>({description:t.description,category:suggestedTrade(t.description)}))},internal:{...priced.internal,scopePricing:auditTrail}};
+  return {...priced,customer:projectCustomerEstimate({...priced.customer,instructions:pricingExtraction?.instructions,documentCoverage:pricingExtraction?.documentCoverage,verificationItems:[...resolution.assumptions.filter(a=>/allowance|preliminary|confirm/i.test(a)),...resolution.issues],scopeTasks:(auditTrail.tasks as {description:string}[]).map(t=>({description:t.description,category:suggestedTrade(t.description)}))}),internal:{...priced.internal,scopePricing:auditTrail}};
 }

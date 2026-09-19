@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import {projectCustomerEstimate} from './customerProjection.ts';
 import path from "node:path";
 import { PDFDocument,rgb,type PDFPage,type PDFFont } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
@@ -76,6 +77,7 @@ async function render(kind:"customer"|"administrative",id:string,blocks:Block[])
   return Buffer.from(await doc.save());
 }
 export function customerPdf(id:string,result:PublicResult){
+  result=projectCustomerEstimate(result);
   const blocks:Block[]=[
     {title:result.range?`${money(result.range.low)} to ${money(result.range.high)}`:"Scope received for pricing review",text:result.message},
     // Reading order: project, included work, categories, excluded work,

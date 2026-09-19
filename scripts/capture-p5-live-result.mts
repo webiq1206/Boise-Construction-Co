@@ -5,6 +5,7 @@ import {cp,lstat,mkdir,mkdtemp,readFile,realpath,readdir,rm,writeFile} from 'nod
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {getDocument} from 'pdfjs-dist/legacy/build/pdf.mjs';
+import {projectCustomerEstimate} from '../lib/p5/customerProjection.ts';
 
 /*
  * Offline delivery capture for a completed qualification result.
@@ -21,8 +22,9 @@ import {getDocument} from 'pdfjs-dist/legacy/build/pdf.mjs';
  *   "contact": { "name": "...", "email": "...@....invalid", "phone": "" }
  * }
  *
- * This script never prices. It feeds the supplied result unchanged through the
- * production outbox, email and PDF code copied to an isolated PGlite runtime.
+ * This script never prices. It retains supplied evidence unchanged and feeds
+ * it through production customer projection, CRM, outbox, email and PDF code
+ * copied to an isolated PGlite runtime.
  * Only the database and delivery adapter boundaries are replaced.
  */
 
@@ -111,7 +113,8 @@ assert.ok(input.scope&&typeof input.scope==='object','Result artifact must conta
 assert.ok(input.scope.answers&&typeof input.scope.answers==='object','Result artifact scope must contain answers.');
 assert.ok(input.configuration&&typeof input.configuration==='object','Result artifact must contain configuration.');
 if(!fixture)await verifyLiveProvenance();
-const range=input.result.customer.range;
+const projectedCustomer=projectCustomerEstimate(input.result.customer as any);
+const range=projectedCustomer.range;
 assert.ok(range&&Number.isFinite(range.low)&&Number.isFinite(range.high)&&range.low>0&&range.high>=range.low,'Completed live result must contain a positive customer range.');
 assert.ok(Number.isFinite(input.result.internal.contractPrice)&&input.result.internal.contractPrice>0,'Completed live result must contain its actual internal contractPrice.');
 const contact={name:input.contact?.name||'Offline Qualification',email:input.contact?.email||'qualification-customer@example.invalid',phone:input.contact?.phone||''};
@@ -144,20 +147,13 @@ try{
   await cp(path.join(root,'lib','p5'),runtime,{recursive:true});
   await writeFile(path.join(runtime,'database.ts'),`import {PGlite} from '@electric-sql/pglite';export const database=new PGlite();export async function query(statement:string,values:unknown[]=[]){return (await database.query(statement,values)).rows as any[];}`);
   await writeFile(path.join(runtime,'deliveryAdapter.ts'),`
-import {ESTIMATOR_BRAND as brand} from './brand.ts';
+import {buildCrmPayload} from './crmPayload.ts';
 export const EMAIL_SUPPORTS_IDEMPOTENCY=true;
 export const emails:any[]=[];export const crm:any[]=[];
 export async function adminRecipients(){return ['qualification-admin@example.invalid'];}
 export async function sendEmail(input:any){emails.push(input);return 'captured-email-'+input.key;}
 export async function syncCrm(record:any,key:string){
- const range=record.customer.range;
- const payload={fullName:record.contact.name,email:record.contact.email,phone:record.contact.phone,
-  source:brand.domain,externalLeadId:key,inquiryId:record.draftId,
-  propertyAddress:record.scope.answers.address||undefined,city:record.scope.answers.location||undefined,
-  projectTypes:[record.scope.answers.service],projectScope:record.customer.summary.slice(0,1900),
-  estimate:{brand:brand.name,estimator:'p5-policy',id:record.draftId,scope:record.scope,internal:record.internal,customer:record.customer},
-  estimateSummary:JSON.stringify(record.internal).slice(0,19000),
-  estimateLow:range?.low,estimateHigh:range?.high,estimateRange:range?'$'+range.low+' to $'+range.high:undefined};
+ const {payload}=buildCrmPayload(record,key);
  crm.push({key,payload});return 'captured-crm-'+key;
 }`);
   // The unique temporary directory already gives this run a fresh module graph.
@@ -191,25 +187,22 @@ export async function syncCrm(record:any,key:string){
     else if(Array.isArray(value))value.forEach(collectNumbers);
     else if(value&&typeof value==='object')Object.values(value).forEach(collectNumbers);
   };
-  collectNumbers(input.result.customer);
-  // A verified customer result may deliberately disclose a cost-basis note
-  // (for example, a preliminary labor allowance). The renderer must not add
-  // any internal amount that was absent from that sealed public result, but it
-  // must reproduce customer-approved text unchanged.
-  const sealedCustomerText=JSON.stringify(input.result.customer);
+  collectNumbers(projectedCustomer);
   const internalNumbers=[
     input.result.internal.directCost,input.result.internal.contingency,input.result.internal.riskAdjustedDirectCost,
     input.result.internal.operatingProfit,input.result.internal.contractPrice,
   ].filter((n):n is number=>Number.isFinite(n)&&!customerNumbers.has(n));
   const publicText=[customerPdfText,customerEmail.text,customerEmail.html].join('\n');
   for(const number of internalNumbers){
-    for(const token of new Set([money(number),money(number,2)]))if(!sealedCustomerText.includes(token))assert.ok(!publicText.includes(token),`Customer artifacts leaked internal amount ${token}.`);
+    for(const token of new Set([money(number),money(number,2)]))assert.ok(!publicText.includes(token),`Customer artifacts leaked internal amount ${token}.`);
   }
   assert.ok(adminPdfText.includes(money(input.result.internal.contractPrice,2)),'Administrative PDF must contain the supplied contract price.');
   const crm=transport.crm[0].payload;
   assert.equal(crm.estimateLow,range.low);assert.equal(crm.estimateHigh,range.high);
-  assert.deepEqual(crm.estimate.internal,input.result.internal,'CRM payload must retain the supplied internal result unchanged.');
-  assert.deepEqual(crm.estimate.customer,input.result.customer,'CRM payload must retain the supplied customer result unchanged.');
+  assert.equal(crm.estimate.internal.financialSummary.directCost,input.result.internal.directCost,'CRM administrative projection retains direct cost.');
+  assert.deepEqual(crm.estimate.customer,projectedCustomer,'CRM uses the production customer projection, not sealed unsafe customer prose.');
+  const [saved]=await db.query('SELECT internal_estimate FROM p5_estimator_drafts WHERE id=$1',[id]);
+  assert.deepEqual(saved.internal_estimate,input.result.internal,'Full administrative record remains unchanged.');
 
   await put('customer.pdf',customerPdf);
   await put('administrative.pdf',adminPdf);

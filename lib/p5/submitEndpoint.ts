@@ -1,4 +1,5 @@
 import {HANDOFF_ISSUE} from './scopePricing.ts';
+import {projectCustomerEstimate} from './customerProjection.ts';
 import { query } from "./database.ts";
 import { draftCredentials,readDraft,DraftError,requireEstimateContact } from "./store.ts";
 import { EMPTY_CONFIGURATION,type EstimatorConfiguration } from "./costBook.ts";
@@ -20,7 +21,7 @@ export async function postSubmission(request:Request,schedule?:(task:()=>Promise
       const [row]=await query("SELECT customer_estimate FROM p5_estimator_drafts WHERE id=$1",[id]);
       // A status check after submission drives any delivery still queued; an autoscale host has no CPU between requests.
       await processOutbox({draftId:id,limit:12}).catch(()=>undefined);
-      return json({accepted:false,duplicate:true,id,result:row.customer_estimate,delivery:await deliveryStatus(id)});
+      return json({accepted:false,duplicate:true,id,result:projectCustomerEstimate(row.customer_estimate),delivery:await deliveryStatus(id)});
     }
     const body=JSON.parse(new TextDecoder().decode(await limitedBody(request,4000)));
     if(body.revision!==draft.revision)throw new DraftError("Save the latest scope before submitting.",409);
@@ -67,6 +68,6 @@ export async function postSubmission(request:Request,schedule?:(task:()=>Promise
     const started=deliver();
     await Promise.race([started,new Promise<void>(resolve=>setTimeout(resolve,DELIVERY_WAIT_MS))]);
     if(schedule)schedule(()=>started);
-    return json({accepted,duplicate:!accepted,id,result:priced.customer,delivery:await deliveryStatus(id)});
+    return json({accepted,duplicate:!accepted,id,result:projectCustomerEstimate(priced.customer),delivery:await deliveryStatus(id)});
   }catch(error){if(isPricingPending(error))return error.retryAfterMs===0?json({error:error.message},503):json({pending:true,message:error.message,retryAfterMs:error.retryAfterMs},202);return failed(error);}
 }

@@ -1,4 +1,5 @@
 "use client";
+import {projectCustomerEstimate} from '@/lib/p5/customerProjection';
 import {CLIENT_BUDGET_MS,CLIENT_BACKGROUND_BUDGET_MS,ProcessingDeadlineError,remainingBudget,withinDeadline,fetchWithinDeadline,isProcessingDeadline} from '@/lib/p5/processingBudget';
 import {completeSubmission} from '@/lib/p5/submitProgress';
 import P5EstimateDetails from './P5EstimateDetails';
@@ -67,7 +68,7 @@ export function P5Estimator({defaultService='',headingAs='h1',projectSource,layo
   const [reply,setReply]=useState('');
   const [editText,setEditText]=useState('');const [addingDetails,setAddingDetails]=useState(false);
   const [recoveries,setRecoveries]=useState<BrowserDraftRecovery[]>([]);
-  const [result,setResult]=useState<any>(null);const [delivery,setDelivery]=useState<any[]>([]);const deliveryChecks=useRef(0);const [confirmed,setConfirmed]=useState(false);
+  const [rawResult,setResult]=useState<any>(null);const result=projectCustomerEstimate(rawResult);const [delivery,setDelivery]=useState<any[]>([]);const deliveryChecks=useRef(0);const [confirmed,setConfirmed]=useState(false);
   const [active,setActive]=useState<ScopeQuestion|null>(null);const [editField,setEditField]=useState<ScopeField|''>('');
   const [listening,setListening]=useState(false);const [speechAvailable,setSpeechAvailable]=useState(false);const recognition=useRef<Recognition|null>(null);
   const [expanded,setExpanded]=useState(false);const [topInset,setTopInset]=useState(0);const [bottomInset,setBottomInset]=useState(0);

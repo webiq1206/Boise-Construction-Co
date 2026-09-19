@@ -1,4 +1,5 @@
 import {tradeForLine,apportionAmount,type TradeCategory} from "./trades.ts";
+import {projectCustomerEstimate} from "./customerProjection.ts";
 /** Internal policy. Import only from server entry points, never client components. */
 export const POLICY_VERSION = "p5-2026-09-10-unified-overhead";
 export const STANDARD_OVERHEAD_RATE = .20;
@@ -291,7 +292,7 @@ export function customerEstimate(estimate: P5Estimate, summary: string) {
   const increases=apportionAmount(estimate.planningRange.high-estimate.planningRange.low,highWeights.some(n=>n>0)?highWeights:weights);
   const highs=lows.map((low,i)=>low+increases[i]);
   const lineItems=estimate.publishable?estimate.lines.map((line,i)=>({id:line.id,category:tradeForLine(line),description:line.description,quantity:line.quantity,unit:line.unit,low:lows[i],high:highs[i],unitLow:lows[i]/line.quantity,unitHigh:highs[i]/line.quantity,...(line.building?{building:line.building}:{}),...(line.floor?{floor:line.floor}:{}),...(line.quantityRange?{quantityRange:line.quantityRange}:{}),pricingStatus:line.allowance||line.estimatingBasis==='sourced-market-average'||line.estimatingBasis==='regional-planning-average'?'estimated-allowance':line.evidence.basis==='owner-estimating-schedule'?'owner-planning-rate':'verified-cost',...(line.estimatingBasis==='regional-planning-average'?{verification:'Regional planning average, not verified local pricing. Confirm current local rates, quantities and selections before a firm proposal.'}:line.allowance||line.estimatingBasis==='sourced-market-average'||line.evidence.basis==='owner-estimating-schedule'?{verification:'Confirm quantities, selections and current supplier/trade pricing before a firm proposal.'}:{}),...(line.evidence.provenance?{rateLocation:line.evidence.provenance.location,rateDate:line.evidence.provenance.retrievedAt,rateSources:line.evidence.provenance.sources.map(s=>s.url)}:{})})):[];
-  return {
+  return projectCustomerEstimate({
     status: estimate.publishable ? "planning-range" as const : "review-required" as const,
     range: estimate.publishable ? estimate.planningRange : null,
     summary,
@@ -311,5 +312,5 @@ export function customerEstimate(estimate: P5Estimate, summary: string) {
     nextStep: estimate.contractMethod,
     message: estimate.publishable ? "Schedule a consultation to confirm the scope and refine this range." : "Your scope needs a pricing review before we can provide a reliable range. Schedule a consultation or plan review.",
     disclaimer: PLANNING_DISCLAIMER,
-  };
+  });
 }

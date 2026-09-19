@@ -11,6 +11,7 @@ import { uploadFile } from "@/lib/storage/blob";
 import { summarizeCoverage } from "@/server/services/documents/coverage";
 import { gatePlanEstimate } from "@/shared/plans/gating";
 import { randomUUID } from "crypto";
+import { filesForPlanAnalysis } from "@/server/services/documents/analysisInputs";
 
 /**
  * Upload a plan set and get back what the drawings say.
@@ -37,13 +38,6 @@ import { randomUUID } from "crypto";
 export const runtime = "nodejs";
 // A full permit set is dozens of large sheets and genuinely takes a while.
 export const maxDuration = 300;
-
-/** Keep attachment-only sources in the extractor inventory whenever at least
- * one readable source can start analysis. Coverage, not this route, records
- * those sources as skipped and prevents a false complete result. */
-export function filesForPlanAnalysis(files: PlanExtractionInput[]) {
-  return files.some((file) => classifyUpload(file.filename, file.mimeType) === "readable") ? files : [];
-}
 
 export async function POST(request: NextRequest) {
   if (!isPlanExtractionConfigured()) {

@@ -10,6 +10,7 @@ import {
 import { uploadFile } from "@/lib/storage/blob";
 import { summarizeCoverage } from "@/server/services/documents/coverage";
 import { randomUUID } from "crypto";
+import { filesForRe10Analysis } from "@/server/services/documents/analysisInputs";
 
 /**
  * Upload an RE-10 and get back the repairs it contains.
@@ -36,12 +37,6 @@ import { randomUUID } from "crypto";
 export const runtime = "nodejs";
 // Analysis of a long inspection report with photos genuinely takes a while.
 export const maxDuration = 300;
-
-/** Preserve attachment-only evidence in coverage whenever a PDF/photo makes
- * automatic analysis possible. The readable-empty check remains route-local. */
-export function filesForRe10Analysis(files: ExtractionInput[]) {
-  return files.some((file) => classifyUpload(file.filename, file.mimeType) === "readable") ? files : [];
-}
 
 export async function POST(request: NextRequest) {
   if (!isExtractionConfigured()) {

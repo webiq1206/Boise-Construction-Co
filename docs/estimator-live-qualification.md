@@ -23,8 +23,11 @@ and produced two PDFs, two email payloads with attachments, and one CRM payload.
 No actual sends, customer business writes or production queue mutations occurred
 during qualification. The verified standalone source was subsequently published
 successfully on 2026-09-19; its public estimator loaded and retained saved project text. Captured transport is not proof of inbox/CRM deliverability.
-The customer projection retains its existing disclosed $200 labor-allowance
-basis; it is not evidence that every internal amount is redacted.
+At qualification time the customer projection retained a disclosed $200 direct
+labor-cost basis. That historical capture is not a confidentiality acceptance
+baseline. The subsequent customer-boundary repair removes internal cost prose
+from current rendering without changing the sealed source evidence or quoted
+selling totals. See `construction-acceptance-preparation.md`.
 
 ## Spending evidence
 

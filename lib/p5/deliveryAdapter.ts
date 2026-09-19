@@ -1,6 +1,7 @@
 import { getUncachableEmailClient } from "../../server/services/emailTransport";
 import { getAdminRecipientEmails,formatFromAddress } from "../../server/services/emailLayout";
 import { ESTIMATOR_BRAND as brand } from "./brand";
+import { buildCrmPayload } from "./crmPayload";
 export async function adminRecipients(){return [...new Set(await getAdminRecipientEmails(brand.email))];}
 export const EMAIL_SUPPORTS_IDEMPOTENCY=true;
 export async function sendEmail(input:{to:string;subject:string;text:string;html?:string;attachments:{filename:string;content:Buffer}[];key:string}){
@@ -12,23 +13,43 @@ export async function sendEmail(input:{to:string;subject:string;text:string;html
   if(!id||id==="noop"||result?.skipped)throw new Error("Email delivery is not configured");
   return String(id);
 }
-export async function syncCrm(record:any,key:string){
-  const token=process.env.LEAD_DASHBOARD_KEY;if(!token)throw new Error("CRM synchronization is not configured");
-  const range=record.customer.range;
-  const response=await fetch(process.env.LEAD_DASHBOARD_API_URL||brand.crmUrl,{
-    method:"POST",signal:AbortSignal.timeout(20000),headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`,"Idempotency-Key":key},
-    body:JSON.stringify({fullName:record.contact.name,email:record.contact.email,phone:record.contact.phone,
-      source:brand.domain,externalLeadId:key,inquiryId:record.draftId,
-      propertyAddress:record.scope.answers.address||undefined,city:record.scope.answers.location||undefined,
-      projectTypes:[record.scope.answers.service],projectScope:record.customer.summary.slice(0,1900),
-      estimate:{brand:brand.name,estimator:"p5-policy",id:record.draftId,scope:record.scope,internal:record.internal,customer:record.customer},
-      estimateSummary:JSON.stringify(record.internal).slice(0,19000),
-      estimateLow:range?.low,estimateHigh:range?.high,estimateRange:range?`$${range.low} to $${range.high}`:undefined,
-    }),
-  });
-  if(!response.ok)throw new Error(`CRM returned HTTP ${response.status}`);
-  const body=await response.json();if(body.success===false||body.accepted===false&&!body.duplicate)throw new Error("CRM did not accept the estimate");
-  const id=body.leadId||body.id||body.lead?.id||body.dealId;
-  if(!id)throw new Error("CRM acknowledged without a record identifier; verify before retrying");
+/** Allowlisted codes only: provider messages, URLs and credentials never enter delivery errors. */
+export function crmTransportCode(error:unknown):string{
+  const allowed=new Set(["ENOTFOUND","EAI_AGAIN","ECONNREFUSED","ECONNRESET","ETIMEDOUT","EHOSTUNREACH","ENETUNREACH","UND_ERR_CONNECT_TIMEOUT","UND_ERR_HEADERS_TIMEOUT","UND_ERR_SOCKET","CERT_HAS_EXPIRED","DEPTH_ZERO_SELF_SIGNED_CERT","ERR_TLS_CERT_ALTNAME_INVALID"]);
+  const seen=new Set<unknown>();let current:any=error;
+  for(let depth=0;current&&depth<8&&!seen.has(current);depth++){
+    seen.add(current);
+    if(allowed.has(current.code))return current.code;
+    if(current.name==="TimeoutError"||current.name==="AbortError")return current.name;
+    current=current.cause;
+  }
+  return "UNKNOWN_TRANSPORT";
+}
+export async function syncCrm(record:any,key:string,options?:{token:string;url:string;fetch:typeof fetch}){
+  const token=options?options.token:process.env.LEAD_DASHBOARD_KEY;
+  if(!token)throw new Error("CRM synchronization is not configured");
+  let destination:URL;
+  try{destination=new URL(options?options.url:process.env.LEAD_DASHBOARD_API_URL||brand.crmUrl);}
+  catch{throw new Error("CRM destination must be a valid credential-free HTTPS URL; nothing sent");}
+  if(destination.protocol!=="https:"||destination.username||destination.password)
+    throw new Error("CRM destination must be a valid credential-free HTTPS URL; nothing sent");
+  const projection=buildCrmPayload(record,key);
+  let response:Response;
+  try{
+    response=await (options?.fetch||fetch)(destination.href,{
+      method:"POST",redirect:"error",signal:AbortSignal.timeout(20000),
+      headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`,"Idempotency-Key":key},
+      body:projection.body,
+    });
+  }catch(error){throw new Error(`CRM transport failed (${crmTransportCode(error)}); delivery unconfirmed; verify before any manual retry`);}
+  if(!response.ok)throw new Error(`CRM returned HTTP ${response.status}; delivery unconfirmed; verify before any manual retry`);
+  let body:any;
+  try{body=await response.json();}catch{throw new Error("CRM response was not valid JSON; delivery unconfirmed; verify before any manual retry");}
+  if(!body||body.success===false||body.accepted===false||body.error||body.status==="error")
+    throw new Error("CRM did not confirm acceptance; delivery unconfirmed; verify before any manual retry");
+  const id=body.leadId??body.id??body.lead?.id??body.dealId;
+  const positiveId=typeof id==="number"?Number.isSafeInteger(id)&&id>0:
+    typeof id==="string"&&(/^[1-9]\d*$/.test(id)||/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id));
+  if(!positiveId)throw new Error("CRM acknowledged without a positive record identifier; delivery unconfirmed; verify before any manual retry");
   return String(id);
 }

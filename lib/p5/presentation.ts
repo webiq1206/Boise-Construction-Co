@@ -1,4 +1,5 @@
 import {SCOPE_FIELDS} from './scope.ts';
+import {projectCustomerEstimate} from './customerProjection.ts';
 import {suggestedTrade} from './trades.ts';
 /**
  * What a section means to the reader. Every consumer (estimator, email, PDF,
@@ -68,6 +69,7 @@ function uniqueCustomerSections(sections:EstimateSection[]):EstimateSection[]{
  }).filter(s=>s.text||s.bullets?.length||s.rows?.length);
 }
 export function estimateSections(result:any):EstimateSection[]{
+ result=projectCustomerEstimate(result);
  const sections=summarySections(result.summary||'');
  const lines:any[]=result.lineItems||[], tasks:any[]=result.scopeTasks||[];
  const suppliedInstructions=result.instructions;
@@ -159,6 +161,7 @@ export interface CategoryLine {id:string;label:string;quantity:number;unit:strin
 export interface CategoryBreakdown {category:string;low?:number;high?:number;tasks:string[];items:CategoryLine[]}
 /** Structured category accordions for the customer result. Same data as estimateSections, without prose. */
 export function categoryBreakdown(result:any):CategoryBreakdown[]{
+ result=projectCustomerEstimate(result);
  const lines:any[]=result?.lineItems||[],tasks:any[]=result?.scopeTasks||[];
  const categories=[...new Set<string>([...(result?.includedCategories||[]),...lines.map(x=>x.category),...tasks.map(x=>x.category||suggestedTrade(x.description))])];
  return categories.map(category=>{
