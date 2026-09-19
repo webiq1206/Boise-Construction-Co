@@ -199,8 +199,8 @@ export async function syncCrm(record:any,key:string){
   assert.ok(adminPdfText.includes(money(input.result.internal.contractPrice,2)),'Administrative PDF must contain the supplied contract price.');
   const crm=transport.crm[0].payload;
   assert.equal(crm.estimateLow,range.low);assert.equal(crm.estimateHigh,range.high);
-  assert.equal(crm.estimate.internal.financialSummary.directCost,input.result.internal.directCost,'CRM administrative projection retains direct cost.');
-  assert.deepEqual(crm.estimate.customer,projectedCustomer,'CRM uses the production customer projection, not sealed unsafe customer prose.');
+  assert.equal(crm.estimate.internal.directCost,input.result.internal.directCost,'CRM administrative projection retains direct cost.');
+  assert.deepEqual(projectCustomerEstimate(crm.estimate.customer),projectedCustomer,'The saved staff record produces the same protected customer presentation.');
   const [saved]=await db.query('SELECT internal_estimate FROM p5_estimator_drafts WHERE id=$1',[id]);
   assert.deepEqual(saved.internal_estimate,input.result.internal,'Full administrative record remains unchanged.');
 

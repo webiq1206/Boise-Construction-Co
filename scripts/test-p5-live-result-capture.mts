@@ -79,7 +79,7 @@ test('sealed historical customer allowance prose cannot exempt $200 direct cost 
   assert.match(await readFile(join(output,'administrative-email.txt'),'utf8'),/Direct project cost: \$60,000/);
   const crm=JSON.parse(await readFile(join(output,'crm-payload.json'),'utf8'));
   assert.deepEqual(crm.estimate.customer,projectCustomerEstimate(value.result.customer));
-  assert.equal(crm.estimate.internal.financialSummary.directCost,value.result.internal.directCost);
+  assert.equal(crm.estimate.internal.directCost,value.result.internal.directCost);
   assert.deepEqual(await readFile(file),original,'sealed input is immutable');
   for(let i=0;i<ledgerNames.length;i++)assert.deepEqual(await readFile(join(ledger,ledgerNames[i])),originals[i],'ledger and raw provider fixtures are immutable');
 });
