@@ -39,3 +39,5 @@ scripts/brand/preview/
 !/scripts/test-p5-pricing-recovery.mts
 
 !/scripts/test-p5-pricing-identity.mts
+!/scripts/test-p5-upload-adversarial.mts
+!/scripts/test-p5-document-adversarial.mts
