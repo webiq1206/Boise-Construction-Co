@@ -114,6 +114,11 @@ test('managed endpoint eligible only when selected by runtime integration pair',
  assert.ok(!eligibleGenerationEndpoints({AI_INTEGRATIONS_OPENAI_BASE_URL:base}).includes(base+'/responses'));
  assert.ok(eligibleGenerationEndpoints({AI_INTEGRATIONS_OPENAI_BASE_URL:base,AI_INTEGRATIONS_OPENAI_API_KEY:'simulated'}).includes(base+'/responses'));
 });
+test('local Replit model proxy is eligible only with the runtime integration pair',()=>{
+ const base='http://localhost:1106/modelfarm/openai';
+ assert.ok(!eligibleGenerationEndpoints({AI_INTEGRATIONS_OPENAI_BASE_URL:base}).includes(base+'/responses'));
+ assert.ok(eligibleGenerationEndpoints({AI_INTEGRATIONS_OPENAI_BASE_URL:base,AI_INTEGRATIONS_OPENAI_API_KEY:'simulated'}).includes(base+'/responses'));
+});
 test('endpoint-specific token fields reject alternates, missing and duplicate keys',async()=>{
  for(const body of [
   '{"model":"simulated","max_output_tokens":10}',

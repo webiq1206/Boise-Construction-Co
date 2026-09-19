@@ -52,10 +52,12 @@ compatibility, body limits, 250-page throughput, resumability, capacity, and
 provider budgets. Configuration validation and fixture coverage are not live
 connection evidence.
 
-Real-provider accuracy and actual email/CRM delivery remain unqualified. Any paid
-test requires a separately approved allowance and billing reconciliation under
-`docs/p5-live-pricing-guard-operations.md`. A captured email/PDF fixture is not
-proof of inbox delivery.
+This initial offline qualification was followed by the owner-authorized bounded
+live scenario documented in `estimator-live-qualification.md`. That report
+supersedes the initial separate-approval gate for this grant and records actual
+mapping/audit usage with conservative accounting, not an exact invoice.
+Broader real-provider accuracy and actual email/CRM delivery remain unqualified.
+A captured email/PDF fixture is not proof of inbox delivery.
 
 ## Browser-suite accounting
 

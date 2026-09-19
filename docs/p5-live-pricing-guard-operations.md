@@ -1,8 +1,12 @@
-# Live pricing qualification: blocked until authorization and reconciliation
+# Legacy live pricing guard operations
 
-This runner is not a completed real-provider qualification. No allowance has
-been supplied or paid requests authorized by these changes. Do not run paid
-qualification merely to generate an allowance or discover its cost bounds.
+This document describes the legacy `check-p5-live-pricing.mts` runner and its
+invoice-reconciliation policy, not a standing restriction on later owner grants.
+The owner subsequently authorized a bounded scenario with conservative usage
+accounting. Its dedicated staged runner, preserved ledger, live results, and
+remaining limitations are documented in `estimator-live-qualification.md`.
+That scenario did not reset or bypass any legacy ledger. Do not run additional
+paid qualification merely to generate an allowance or discover its cost bounds.
 
 `scripts/check-p5-live-pricing.mts` requires both explicit live-run opt-in and
 `P5_LIVE_PRICING_ALLOWANCE_FILE`. It reads a local approved configuration snapshot,

@@ -51,7 +51,8 @@ export function eligibleGenerationEndpoints(env: NodeJS.ProcessEnv=process.env) 
   if(env.AI_INTEGRATIONS_OPENAI_API_KEY && env.AI_INTEGRATIONS_OPENAI_BASE_URL){
     try {
       const url=new URL(env.AI_INTEGRATIONS_OPENAI_BASE_URL.replace(/\/+$/,'')+'/responses');
-      if(url.protocol==='https:' && !url.username && !url.password && !url.search && !url.hash)endpoints.push(url.href);
+      const loopback=url.protocol==='http:'&&(url.hostname==='localhost'||url.hostname==='127.0.0.1'||url.hostname==='[::1]');
+      if((url.protocol==='https:'||loopback) && !url.username && !url.password && !url.search && !url.hash)endpoints.push(url.href);
     } catch { /* Invalid/insecure managed configuration is never eligible. */ }
   }
   return endpoints;
@@ -85,7 +86,8 @@ async function openGuardInternal(allowanceFile: string, transport: typeof fetch)
       !allowance.ledgerDirectory || !(Date.parse(allowance.expiresAt) > Date.now())) throw stop();
   for (const endpoint of allowance.endpoints) {
     const url = new URL(endpoint);
-    if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash ||
+    const loopback=url.protocol==='http:'&&(url.hostname==='localhost'||url.hostname==='127.0.0.1'||url.hostname==='[::1]');
+    if (!(url.protocol==='https:'||loopback) || url.username || url.password || url.search || url.hash ||
         !eligibleGenerationEndpoints().includes(endpoint)) throw stop();
   }
   const root = resolve(allowance.ledgerDirectory);
