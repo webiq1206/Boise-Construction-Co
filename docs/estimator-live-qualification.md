@@ -20,8 +20,9 @@ The calculated customer range was $305-$415; internal contract price was $336.51
 The saved result has one 100 LF field-labor line and a successful coverage audit.
 An isolated PGlite/captured-adapter run consumed this sealed live result unchanged
 and produced two PDFs, two email payloads with attachments, and one CRM payload.
-No actual sends, customer business writes, production queue mutations, or
-publication occurred. Captured transport is not proof of inbox/CRM deliverability.
+No actual sends, customer business writes or production queue mutations occurred
+during qualification. The verified standalone source was subsequently published
+successfully on 2026-09-19; its public estimator loaded and retained saved project text. Captured transport is not proof of inbox/CRM deliverability.
 The customer projection retains its existing disclosed $200 labor-allowance
 basis; it is not evidence that every internal amount is redacted.
 
@@ -74,18 +75,18 @@ duplicate-ledger blocking. They are source preparation, not an installed
 production lifecycle hook. No speculative signal handler overrides Next.js.
 See `p5-queue-readiness.md` for the required operator cutover sequence.
 
-## Remaining blockers and limits
+## Release status and remaining qualification limits
 
-1. **Safe cutover is not established.** Existing deployed processes do not have
-   these new drain APIs. Replit autoscale may overlap old and new revisions.
-   Before publishing, establish supported admission closure, per-instance
-   quiescence/drain, and confirmed old-instance termination without discarding
-   customer work. A newer source export or an empty replica snapshot cannot
-   establish this. Replit documents a Publishing options-menu shutdown/unpublish
-   control for maintenance, but it was not invoked: it takes the public app
-   offline and is not itself proof that an old in-flight provider call drained.
-   Use an explicitly scheduled maintenance cutover, not an ordinary overlapping
-   autoscale rollout, for the first transition.
+1. **Standalone publication completed.** A subsequent read-only comparison found
+   identical local-mode queue-key formulas and serialization order, compatible
+   checkpoints, and byte-identical lease/accounting implementations between the
+   compared publication checkpoint and tested source. Remote mode remained off.
+   Active old-server tree identity could not be established conclusively from
+   deployment metadata, but no concrete local-mode incompatibility was found.
+   The earlier blanket zero-overlap gate was too broad. Supported normal
+   publication completed successfully, with deployment
+   `04ce82c1-c1d2-4091-a8c9-5e14bb01193c`. Later reader-mode or configuration
+   changes still require a migration-specific compatibility review.
 2. **Shared remote document host is not live-qualified.** Tenant/signature
    compatibility, body limits, 250-page throughput, resumability, and capacity
    need actual configured host access; credentials must not be fabricated.
@@ -98,8 +99,8 @@ See `p5-queue-readiness.md` for the required operator cutover sequence.
 4. **Real delivery was intentionally not exercised.** Estimate/PDF/email/CRM
    payload capture passed; actual inbox and CRM acceptance remain untested.
 
-No publication should be represented as safe until the cutover blocker is
-resolved. No further paid call is necessary to reproduce the captured outputs.
+No further paid call is necessary to reproduce the captured outputs. The live
+standalone release does not activate or qualify the shared remote reader.
 
 ## Verification and source delivery
 

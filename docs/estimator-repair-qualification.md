@@ -1,5 +1,12 @@
 # Estimator repair qualification
 
+Current release status: the later live qualification passed and the verified
+standalone estimator was published on 2026-09-19. The final offline run passed
+458 checks, TypeScript and the production build. The earlier blanket maintenance
+gate was corrected after a local-mode compatibility review. See
+`estimator-live-qualification.md` for the current evidence and remaining
+shared-reader setup. The sections below preserve the original offline pass.
+
 ## Scope and safety
 
 This qualification covers recovered estimator source, mixed PDF/photo/spreadsheet

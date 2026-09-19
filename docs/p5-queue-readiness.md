@@ -12,7 +12,21 @@ A provider pass that was already running is allowed to finish its bounded pass, 
 
 No SIGTERM listener is installed here. Adding a Node signal listener changes the default termination behavior and can conflict with Next.js or the hosting supervisor. A platform lifecycle hook may call the exported drain API only if the platform guarantees enough pre-stop time and coordinates traffic removal.
 
-## Cutover limits
+## Standalone release review, 2026-09-19
+
+The reviewed local-mode queue-key formulas and serialization order match between
+the publication checkpoint and tested source. Checkpoint formats are compatible,
+and the lease/accounting implementation is byte-identical. Remote mode remains
+off. No concrete incompatibility requiring an exceptional zero-overlap rollout
+was found for this release, and supported normal publication completed
+successfully. Deployment metadata did not conclusively identify the prior active
+server tree; that provenance limit is retained rather than overstating the review.
+
+The stricter analysis below applies when a later reader-mode/configuration
+migration actually changes execution identity or compatibility. It is not a
+blanket prerequisite for every compatible standalone release.
+
+## Cutover limits for reader-configuration migrations
 
 Source changes cannot quiesce old code that is already running before this source is published. An empty snapshot from one replica is not proof that other replicas, requests, timer sweeps, leases, or provider calls are idle. A publish-ready, zero-overlap cutover must not be claimed without a platform guarantee that old replicas stop admission and finish their in-flight passes before replacement processing starts.
 
@@ -35,9 +49,12 @@ This is a point-in-time observation from a replica, not an idle-cutover certific
 
 The outbox is outside the estimator worker drain. The pending item and the needs-review items must remain retained exactly as they are during this operation. Do not send, retry, reconcile, lock, delete, or otherwise process the outbox as part of queue cutover.
 
-## Operator cutover sequence
+## Operator sequence when a migration requires zero overlap
 
-Do not begin this sequence until Replit supplies a supported mechanism that can establish all of the required boundaries below. If it cannot, stop and report the platform lifecycle guarantee as unresolved rather than describing the release as zero-overlap.
+First establish through the specific old/new compatibility review whether zero
+overlap is necessary. When it is required, do not begin this sequence until the
+platform can establish the boundaries below. Do not claim those guarantees from
+a queue snapshot alone.
 
 1. Establish an external admission boundary that prevents estimator requests from reaching every old and new replica. Application source in the new revision cannot establish this boundary for old code.
 2. Through a verified platform pre-stop hook, invoke `drainEstimatorWorker(timeoutMs)` on every serving old process. The hook must provide a documented grace period longer than the selected timeout and must not start replacement worker admission concurrently.
