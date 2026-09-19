@@ -14,8 +14,19 @@ import {draftEvents,recentFailures} from './events.ts';
 function validId(id:string){if(!/^[a-f0-9-]{36}$/.test(id))throw new DraftError("Invalid record id.");return id;}
 export async function getAdminEstimates(request:Request){try{
   await requireEstimatorAdmin();await ensureReviewSchema();const url=new URL(request.url);const id=url.searchParams.get("id");
-  if(id){const [row]=await query("SELECT id,brand,revision,status,payload,internal_estimate,customer_estimate,updated_at FROM p5_estimator_drafts WHERE id=$1",[validId(id)]);
+  if(id){let [row]=await query("SELECT id,brand,revision,status,payload,internal_estimate,customer_estimate,updated_at FROM p5_estimator_drafts WHERE id=$1",[validId(id)]);
     if(!row)throw new DraftError("Estimate not found.",404);
+    const revisionText=url.searchParams.get("revision");
+    if(revisionText!==null){
+      if(!/^[1-9]\d*$/.test(revisionText)||!Number.isSafeInteger(Number(revisionText)))throw new DraftError("Invalid estimate revision.");
+      const requestedRevision=Number(revisionText);
+      if(Number(row.revision)!==requestedRevision){
+        await ensureReviewSchema();
+        const [saved]=await query("SELECT revision,record,created_at FROM p5_estimator_history WHERE draft_id=$1 AND revision=$2",[id,requestedRevision]);
+        if(!saved)throw new DraftError("Saved estimate revision not found.",404);
+        row={id:row.id,brand:row.brand,revision:Number(saved.revision),status:"historical",payload:saved.record.payload,internal_estimate:saved.record.internal,customer_estimate:saved.record.customer,updated_at:saved.created_at};
+      }
+    }
     if(url.searchParams.get("pdf")){const customer=url.searchParams.get("pdf")==="customer";
       if(customer&&!row.customer_estimate)throw new DraftError("This draft has no submitted customer summary yet.",409);
       const data=customer?await customerPdf(id,row.customer_estimate):await administrativePdf(id,{...row.internal_estimate,contact:row.payload.contact,scope:row.internal_estimate?.scope||row.payload});
