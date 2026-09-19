@@ -89,6 +89,9 @@ export interface ReviewedScope {
 // use the resumable document upload and are processed in full sections.
 export const SCOPE_TEXT_LIMIT = 8 * 1024 * 1024;
 export const SCOPE_FILE_LIMIT = 250 * 1024 * 1024;
+/** Maximum logical source pages across one estimate. Photos and spreadsheets
+ * each contribute one page, so completeness and admission use the same unit. */
+export const SCOPE_PAGE_LIMIT = 250;
 export const SCOPE_BATCH_LIMIT = 1024 * 1024 * 1024;
 export const SCOPE_FILE_COUNT = 50;
 export const SCOPE_CHUNK_SIZE = 4 * 1024 * 1024;
@@ -271,7 +274,7 @@ export function validateExtraction(raw: unknown): ScopeExtraction {
   const hasPages=r.pages!==undefined||savedCoverage!==undefined;
   const pages=hasPages?readPageRecords(r.pages??savedCoverage?.pages):[];
   const expectedPages=savedCoverage?.expectedPages??pages.length;
-  if(!Number.isSafeInteger(expectedPages)||expectedPages<pages.length||expectedPages>10000)throw new Error('Invalid document page coverage');
+  if(!Number.isSafeInteger(expectedPages)||expectedPages<pages.length||expectedPages>SCOPE_PAGE_LIMIT)throw new Error('Invalid document page coverage');
   if(laborCoverage&&laborCoverage.components.some(component=>{
     const row=takeoffs?.find(item=>item.id===component.id);
     return !row||!/^(?:h|hr|hrs|hour|hours)$/i.test(row.unit)||row.quantity!==component.hours;

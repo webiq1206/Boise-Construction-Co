@@ -28,6 +28,14 @@ export interface Allowance {
   // Binds every input, tool budget, service tier and future provider field.
   requestBodySha256: string[];
 }
+const SHA256=/^[a-f0-9]{64}$/;
+const RESERVATION_ID=/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+const ALLOWANCE_FIELDS=[
+  'authorization','boundEvidence','budgetMicrousd','configurationFile',
+  'configurationSha256','coversAllTokensAndTools','currency','endpoints',
+  'expiresAt','ledgerDirectory','maxOutputTokens','maxRequestBytes','models',
+  'perCallMicrousd','requestBodySha256','sourceSha256','version',
+] as const;
 export async function canonicalSourcePath(root: string, file: string) {
   try {
     root=resolve(root);file=resolve(file);
@@ -57,14 +65,23 @@ async function openGuardInternal(allowanceFile: string, transport: typeof fetch)
   const raw = await readFile(allowanceFile);
   const allowance: Allowance = JSON.parse(raw.toString());
   const positive = (n: number) => Number.isSafeInteger(n) && n > 0;
-  if (allowance.version !== 1 || allowance.currency !== 'USD' ||
+  if (!allowance || typeof allowance !== 'object' || Array.isArray(allowance) ||
+      Object.keys(allowance).sort().join(',') !== [...ALLOWANCE_FIELDS].sort().join(',') ||
+      allowance.version !== 1 || allowance.currency !== 'USD' ||
       !allowance.authorization?.trim() || !allowance.boundEvidence?.trim() ||
       allowance.coversAllTokensAndTools !== true ||
       !positive(allowance.budgetMicrousd) || !positive(allowance.perCallMicrousd) ||
+      allowance.perCallMicrousd > allowance.budgetMicrousd ||
       !positive(allowance.maxRequestBytes) || !positive(allowance.maxOutputTokens) ||
-      !allowance.models?.length || !allowance.endpoints?.length ||
+      !allowance.models?.length || !allowance.models.every(model=>typeof model==='string'&&model.trim()) ||
+      !allowance.endpoints?.length || !allowance.configurationFile ||
+      !SHA256.test(allowance.configurationSha256) ||
+      !allowance.sourceSha256 || typeof allowance.sourceSha256 !== 'object' ||
+      Array.isArray(allowance.sourceSha256) ||
+      !Object.entries(allowance.sourceSha256).length ||
+      !Object.entries(allowance.sourceSha256).every(([file,hash])=>file.trim()&&SHA256.test(hash)) ||
       !Array.isArray(allowance.requestBodySha256) || !allowance.requestBodySha256.length ||
-      !allowance.requestBodySha256.every(hash=>/^[a-f0-9]{64}$/.test(hash)) ||
+      !allowance.requestBodySha256.every(hash=>SHA256.test(hash)) ||
       !allowance.ledgerDirectory || !(Date.parse(allowance.expiresAt) > Date.now())) throw stop();
   for (const endpoint of allowance.endpoints) {
     const url = new URL(endpoint);
@@ -122,6 +139,19 @@ async function openGuardInternal(allowanceFile: string, transport: typeof fetch)
     const output = body[field];
     if (!allowance.models.includes(body.model) || !positive(output) ||
         output > allowance.maxOutputTokens || body.stream) throw stop();
+    // Only the production pricing client's ordinary authentication and JSON
+    // headers are accepted. Provider beta/service-tier headers can change tool
+    // availability or billing and therefore require a new reviewed body/guard
+    // contract rather than slipping through an otherwise pinned request.
+    const headers=new Headers(init.headers);
+    const names=[...headers.keys()].sort();
+    const anthropic=input==='https://api.anthropic.com/v1/messages';
+    const expected=anthropic?['anthropic-version','content-type','x-api-key']:['authorization','content-type'];
+    if(names.join(',')!==expected.join(',') ||
+       headers.get('content-type')!=='application/json' ||
+       (anthropic
+         ? headers.get('anthropic-version')!=='2023-06-01'||!headers.get('x-api-key')?.trim()
+         : !/^Bearer \S+$/.test(headers.get('authorization')||'')))throw stop();
     const id = randomUUID();
     await locked(async () => {
       const names = await readdir(root);
@@ -131,7 +161,9 @@ async function openGuardInternal(allowanceFile: string, transport: typeof fetch)
           if(JSON.parse(await readLedger(name)).sha256!==digest(raw))throw stop();
           continue;
         }
-        if(!/^[a-f0-9-]{36}\.(?:reservation\.json|response\.json|reconciled\.json|billing-evidence)$/.test(name))throw stop();
+        const entryId=name.slice(0,36);
+        if(!RESERVATION_ID.test(entryId) ||
+            !/^\.(?:reservation\.json|response\.json|reconciled\.json|billing-evidence)$/.test(name.slice(36)))throw stop();
         const content=await readLedger(name);
         if(name.endsWith('.json'))JSON.parse(content);
         if(!name.endsWith('.reservation.json') &&
@@ -142,7 +174,7 @@ async function openGuardInternal(allowanceFile: string, transport: typeof fetch)
         const entry = JSON.parse(await readLedger(name));
         if (!positive(entry.amount) || entry.amount!==allowance.perCallMicrousd ||
             entry.allowanceSha256!==digest(raw) || name!==`${entry.id}.reservation.json` ||
-            !/^[a-f0-9-]{36}$/.test(entry.id)) throw stop();
+             !RESERVATION_ID.test(entry.id)) throw stop();
         reserved += entry.amount;
         // Even successful HTTP is not billing evidence. Every call remains
         // unresolved until an operator supplies immutable reconciliation.
@@ -151,7 +183,7 @@ async function openGuardInternal(allowanceFile: string, transport: typeof fetch)
         const evidence = JSON.parse(await readLedger(evidenceName));
         if (evidence.reservationId !== entry.id || evidence.allowanceSha256 !== digest(raw) ||
             evidence.chargedAtMostMicrousd !== entry.amount || !evidence.reviewedBy ||
-            !evidence.providerEvidenceSha256 || !/^[a-f0-9]{64}$/.test(evidence.providerEvidenceSha256)) throw stop();
+            !evidence.providerEvidenceSha256 || !SHA256.test(evidence.providerEvidenceSha256)) throw stop();
         const proof = await readLedger(`${entry.id}.billing-evidence`);
         if (digest(proof) !== evidence.providerEvidenceSha256) throw stop();
       }

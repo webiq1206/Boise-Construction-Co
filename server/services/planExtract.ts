@@ -367,7 +367,10 @@ export async function extractPlan(
     return { ok: false, reason: "failed", message: "No readable PDF or image files were supplied." };
   }
 
-  const manifest = await buildPageManifest(usable);
+  // Inventory every stored source. Unsupported spreadsheets/word-processing
+  // files become explicit skipped evidence and therefore prevent a false
+  // "complete" ledger instead of disappearing before coverage accounting.
+  const manifest = await buildPageManifest(files);
 
   /* Every page failed to parse. There is nothing to send, and returning a
      cheerful empty extraction here would be the worst possible answer. */

@@ -37,6 +37,12 @@ export const runtime = "nodejs";
 // Analysis of a long inspection report with photos genuinely takes a while.
 export const maxDuration = 300;
 
+/** Preserve attachment-only evidence in coverage whenever a PDF/photo makes
+ * automatic analysis possible. The readable-empty check remains route-local. */
+export function filesForRe10Analysis(files: ExtractionInput[]) {
+  return files.some((file) => classifyUpload(file.filename, file.mimeType) === "readable") ? files : [];
+}
+
 export async function POST(request: NextRequest) {
   if (!isExtractionConfigured()) {
     // 503, not 500: the code is fine, the environment is not configured. The
@@ -142,7 +148,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const outcome = await extractRepairs(readable);
+  const outcome = await extractRepairs(filesForRe10Analysis(files));
 
   if (!outcome.ok) {
     const status = outcome.reason === "busy" ? 503 : outcome.reason === "not-configured" ? 503 : 422;
@@ -171,6 +177,7 @@ export async function POST(request: NextRequest) {
       attention: outcome.coverage.pages
         .filter((p) => p.status !== "processed")
         .map((p) => ({ page: `${p.filename} p.${p.pageNumber}`, status: p.status, reason: p.reason })),
+      skippedFiles: outcome.coverage.skippedFiles,
     },
     /* Surfaced, not hidden. A repair kept because it MIGHT restate another, and
        a count that differed between pages, are both things an estimator must

@@ -7,6 +7,7 @@ export async function transferLargeFiles(files:File[],headers:Record<string,stri
   const total=files.reduce((n,f)=>n+f.size,0);let completed=0;let receipt:unknown;
   const expected:Array<{hash:string;size:number;name:string}>=[];
   const send=async(url:string,body:BodyInit,contentType:string)=>{
+    let lastConnectionError:unknown;
     for(let attempt=0;attempt<3;attempt++){
       try{
         const response=await request(url,{method:'POST',headers:{...headers,'Content-Type':contentType},body,signal:AbortSignal.timeout(240000)});
@@ -15,16 +16,20 @@ export async function transferLargeFiles(files:File[],headers:Record<string,stri
         const data=await readJson(response);
         if(!response.ok)throw new Error(data.error||'Your upload could not be confirmed. Retry to resume the saved segments.');
         return data;
-      }catch(error){if(attempt===2||error instanceof Error&& !['TypeError','TimeoutError','AbortError'].includes(error.name))throw error;}
+      }catch(error){
+        if(error instanceof Error&&!['TypeError','TimeoutError','AbortError'].includes(error.name))throw error;
+        lastConnectionError=error;
+        if(attempt<2)await new Promise(r=>setTimeout(r,1000*(attempt+1)));
+      }
     }
-    throw new Error('Your upload connection was interrupted. Retry to resume.');
+    throw new Error('Your upload connection was interrupted. Retry to resume the saved segments.',{cause:lastConnectionError});
   };
   for(const file of files){
     const bytes=await file.arrayBuffer();if(bytes.byteLength!==file.size)throw new Error(`${file.name}: not fully read. Select the original file again.`);
     const hash=await digest(bytes),base=`/api/p5-estimator/upload?sha256=${hash}`;
     expected.push({hash,size:file.size,name:file.name});
     const status=await send(`${base}&action=start`,JSON.stringify({name:file.name,size:file.size}),'application/json');
-    if(status.chunkSize!==SCOPE_CHUNK_SIZE)throw new Error('The upload settings changed. Reload to continue.');
+    if(status.chunkSize!==SCOPE_CHUNK_SIZE||!status.chunks||typeof status.chunks!=='object')throw new Error('The upload settings changed. Reload to continue.');
     if(!status.complete)for(let offset=0,index=0;offset<file.size;offset+=SCOPE_CHUNK_SIZE,index++){
        const data=await file.slice(offset,offset+SCOPE_CHUNK_SIZE).arrayBuffer();
        if(data.byteLength!==Math.min(SCOPE_CHUNK_SIZE,file.size-offset))throw new Error(`${file.name}: upload segment was not fully read. Select the original file again.`);

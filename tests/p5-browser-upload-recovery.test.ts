@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {transferLargeFiles} from '../lib/p5/resumableTransfer.ts';
-import {loadBrowserDraft,newBrowserDraft,persistBrowserDraft,cacheFiles,loadCachedFiles,validateCacheSelection,missingPendingFiles} from '../lib/p5/browserDraft.ts';
+import {BROWSER_DRAFT_RECOVERY_KEY,loadBrowserDraft,newBrowserDraft,persistBrowserDraft,cacheFiles,loadCachedFiles,validateCacheSelection,missingPendingFiles,listBrowserDraftRecoveries,restoreBrowserDraft} from '../lib/p5/browserDraft.ts';
 import {SCOPE_FILE_LIMIT,SCOPE_BATCH_LIMIT,SCOPE_CHUNK_SIZE,validateAnswer} from '../lib/p5/scope.ts';
 
 // Pure tests: any unintended provider, session, CRM or database HTTP call fails.
@@ -27,6 +27,36 @@ test('reload retains incomplete manual numbers, typed reply, conflicts and compl
     assert.deepEqual(restored.uploads,draft.uploads);
     assert.deepEqual(restored.conflicts,draft.conflicts);
     assert.ok(validateAnswer('sqft',restored.answers.sqft!),'recovery must not weaken submission validation');
+  }finally{if(previous)Object.defineProperty(globalThis,'localStorage',previous);else Reflect.deleteProperty(globalThis,'localStorage');}
+});
+
+test('legacy source drafts migrate only to the matching identity and recoveries stay source-isolated',()=>{
+  const previous=Object.getOwnPropertyDescriptor(globalThis,'localStorage');
+  const values=new Map<string,string>();
+  const storage={getItem:(key:string)=>values.get(key)??null,setItem:(key:string,value:string)=>values.set(key,value),removeItem:(key:string)=>values.delete(key)};
+  Object.defineProperty(globalThis,'localStorage',{configurable:true,value:storage});
+  try{
+    const legacy={...newBrowserDraft(''),text:'Kitchen design A',projectSource:{id:'design-a',answers:{service:'kitchen' as const}},answers:{service:'kitchen' as const}};
+    values.set('p5-project-draft-v2',JSON.stringify(legacy));
+    const unrelated=loadBrowserDraft('bathroom','design-b');
+    assert.notEqual(unrelated.id,legacy.id);
+    assert.equal(values.get('p5-project-draft-v2'),JSON.stringify(legacy),'an unrelated route must not consume the legacy draft');
+    const migrated=loadBrowserDraft('','design-a');
+    assert.equal(migrated.id,legacy.id);
+    assert.equal(migrated.namespace,'design-a');
+    assert.equal(values.has('p5-project-draft-v2'),false);
+    assert.ok(values.has('p5-project-draft-v2:design-a'));
+
+    const generic={...newBrowserDraft(''),text:'Generic project'};
+    const sourceA={...legacy,namespace:'design-a'};
+    const sourceB={...newBrowserDraft(''),namespace:'design-b',text:'Design B'};
+    const mixed={...legacy,namespace:'design-b',text:'Conflicting source identities'};
+    const records=[generic,sourceA,sourceB,mixed].map((draft,index)=>({key:`recovery-${index}`,archivedAt:index,draft}));
+    values.set(BROWSER_DRAFT_RECOVERY_KEY,JSON.stringify(records));
+    assert.deepEqual(listBrowserDraftRecoveries().map(r=>r.key),['recovery-0']);
+    assert.deepEqual(listBrowserDraftRecoveries('design-a').map(r=>r.key),['recovery-1']);
+    assert.equal(listBrowserDraftRecoveries('design-b').some(r=>r.key==='recovery-3'),false);
+    assert.equal(restoreBrowserDraft('recovery-2')?.text,'Design B','key restoration remains available independent of listing filters');
   }finally{if(previous)Object.defineProperty(globalThis,'localStorage',previous);else Reflect.deleteProperty(globalThis,'localStorage');}
 });
 

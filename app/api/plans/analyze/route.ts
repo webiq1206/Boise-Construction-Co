@@ -38,6 +38,13 @@ export const runtime = "nodejs";
 // A full permit set is dozens of large sheets and genuinely takes a while.
 export const maxDuration = 300;
 
+/** Keep attachment-only sources in the extractor inventory whenever at least
+ * one readable source can start analysis. Coverage, not this route, records
+ * those sources as skipped and prevents a false complete result. */
+export function filesForPlanAnalysis(files: PlanExtractionInput[]) {
+  return files.some((file) => classifyUpload(file.filename, file.mimeType) === "readable") ? files : [];
+}
+
 export async function POST(request: NextRequest) {
   if (!isPlanExtractionConfigured()) {
     // 503, not 500: the code is fine, the environment is not configured. The UI
@@ -150,7 +157,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const outcome = await extractPlan(readable);
+  const outcome = await extractPlan(filesForPlanAnalysis(files));
 
   if (!outcome.ok) {
     const status = outcome.reason === "busy" || outcome.reason === "not-configured" ? 503 : 422;

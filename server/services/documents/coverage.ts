@@ -84,7 +84,12 @@ export function buildCoverageLedger(input: CoverageInput): CoverageLedger {
     /* Deliberately strict. "Complete" means every page was READ - an unreadable
        page still leaves scope unknown, so a set containing one is not complete
        and must not be quoted as though it were. */
-    complete: missing === 0 && unreadable === 0 && input.failedChunks.length === 0,
+    complete:
+      pages.length > 0 &&
+      missing === 0 &&
+      unreadable === 0 &&
+      input.failedChunks.length === 0 &&
+      input.skippedFiles.length === 0,
     pages,
     skippedFiles: input.skippedFiles,
     failedChunks: input.failedChunks,

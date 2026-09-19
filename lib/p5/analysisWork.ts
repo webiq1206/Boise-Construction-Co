@@ -5,7 +5,7 @@ import {PDFDocument} from 'pdf-lib';
 import {Client} from '@replit/object-storage';
 import {analyzeBatch,AnalysisBusyError,type AnalysisFile,type AnalysisResult} from './extraction.ts';
 import {prepareAnalysisFiles} from './documents.ts';
-import {combineScopeExtractions,type ScopeAnswers,type ScopeExtraction} from './scope.ts';
+import {SCOPE_PAGE_LIMIT,combineScopeExtractions,type ScopeAnswers,type ScopeExtraction} from './scope.ts';
 import {query} from './database.ts';
 import {ESTIMATOR_BUCKETS} from './objectStorage.ts';
 import {ESTIMATOR_BRAND} from './brand.ts';
@@ -69,6 +69,24 @@ async function advanceLocalAnalysis(draft:Draft,text:string,answers:ScopeAnswers
   const lease=await claimWork(draft.id,workKey,{prepared:0,units:[],notes:[]},300);
   if(!lease)return {pending:true as const,progress:analysisMessage(draft.uploads.length>0,'busy')};
   const job=lease.payload as Job;
+  let identityMigrated=false;
+  // Checkpoints created before non-PDF source ledgers existed may contain a
+  // completed photo/spreadsheet result with no proof that the source was read.
+  // Give those units their logical identity, but mark the old result unread so
+  // only an explicit Retry can spend another read attempt.
+  for(const upload of draft.uploads.filter(source=>source.type!=='application/pdf')){
+    const source=keyOverride?upload.name:draft.uploads.filter(other=>other.name===upload.name).length>1?`${upload.name} [${upload.id.slice(0,8)}]`:upload.name;
+    const page={source,page:1};
+    if(!(job.expected||[]).some(expected=>expected.source===page.source&&expected.page===1)){
+      job.expected=[...(job.expected||[]),page];identityMigrated=true;
+    }
+    for(const unit of job.units.filter(candidate=>!candidate.pages?.length&&(candidate.name===source||candidate.name.startsWith(`${source} (`)))){
+      unit.pages=[page];identityMigrated=true;
+      if(unit.result&&!unit.result.extraction.documentCoverage){
+        unit.result.extraction.documentCoverage={expectedPages:1,complete:false,pages:[{...page,sheet:'',revision:'',status:'unreadable',notes:['This saved result predates source coverage verification. Use Retry to verify it.']}]};
+      }
+    }
+  }
   const event=(stage:string,outcome:'ok'|'failed'|'retry',extra:Partial<Parameters<typeof recordEvent>[0]>={})=>void recordEvent({draftId:draft.id,estimator:answers.service||null,kind:'analysis',stage,outcome,...extra});
   if(retryFailed)delete job.cooldownUntil;
   if(retryFailed)for(const unit of job.units)if(unit.object&&(!unit.result||unit.result.extraction.documentCoverage?.complete===false)){unit.attempts=0;unit.rateLimitRetries=0;delete unit.error;delete unit.lastCode;delete unit.result;delete unit.retryAt;}
@@ -84,6 +102,7 @@ async function advanceLocalAnalysis(draft:Draft,text:string,answers:ScopeAnswers
     return writeWork(draft.id,workKey,lease.token,job);
   });return saving;};
   try{
+    if(identityMigrated)await checkpoint();
     if(!job.textPrepared){
       // Long typed instructions are read in full before plan sections. No silent
       // clipping to fit one provider request, and no instruction-count cap.
@@ -106,15 +125,28 @@ async function advanceLocalAnalysis(draft:Draft,text:string,answers:ScopeAnswers
       const file={name,type:String(row.mime_type),data:bytes};
       const preparing=Date.now();
       if(file.type==='application/pdf'){
-        try{const pdf=await PDFDocument.load(file.data);job.expected=[...(job.expected||[]).filter(p=>p.source!==file.name),...Array.from({length:pdf.getPageCount()},(_,i)=>({source:file.name,page:i+1}))];}
-        catch(error){job.notes.push(`${file.name}: unreadable or encrypted PDF. No pages can be claimed as analyzed.`);event('prepare','failed',{file:file.name,code:'unreadable-pdf',message:error instanceof Error?error.message:String(error),durationMs:Date.now()-preparing});job.prepared++;await checkpoint();return {pending:true as const,progress:`Saved an unreadable-file exception for ${file.name}. Continuing remaining files.`};}
+        try{
+          const pdf=await PDFDocument.load(file.data),count=pdf.getPageCount();
+          const prior=(job.expected||[]).filter(p=>p.source!==file.name);
+          if(!count||count>SCOPE_PAGE_LIMIT||prior.length+count>SCOPE_PAGE_LIMIT)throw new DraftError(`Source review is limited to ${SCOPE_PAGE_LIMIT} pages total. Split this project into separate estimates.`,422);
+          job.expected=[...prior,...Array.from({length:count},(_,i)=>({source:file.name,page:i+1}))];
+        }
+        catch(error){if(error instanceof DraftError)throw error;job.notes.push(`${file.name}: unreadable or encrypted PDF. No pages can be claimed as analyzed.`);event('prepare','failed',{file:file.name,code:'unreadable-pdf',message:error instanceof Error?error.message:String(error),durationMs:Date.now()-preparing});job.prepared++;await checkpoint();return {pending:true as const,progress:`Saved an unreadable-file exception for ${file.name}. Continuing remaining files.`};}
       }
       const {readable,manualReview}=await prepareAnalysisFiles([file]);job.notes.push(...manualReview);
       for(const note of manualReview)event('prepare','failed',{file:file.name,code:'manual-review',message:note,durationMs:Date.now()-preparing});
       const preparedAt=Date.now();let finished=true;
       for(const converted of readable){
         try{
-          for await(const segment of analysisSegments(converted,job.cursor||0)){
+          // Non-PDF sources are one logical page. If preparation emits several
+          // views/sections they all retain this identity and all must be read.
+          const logical=converted.type==='application/pdf'?converted:{...converted,pages:[{source:file.name,page:1}]};
+          if(converted.type!=='application/pdf'){
+            const prior=(job.expected||[]).filter(p=>p.source!==file.name);
+            if(prior.length+1>SCOPE_PAGE_LIMIT)throw new DraftError(`Source review is limited to ${SCOPE_PAGE_LIMIT} pages total. Split this project into separate estimates.`,422);
+            job.expected=[...prior,{source:file.name,page:1}];
+          }
+          for await(const segment of analysisSegments(logical,job.cursor||0)){
             remainingBudget(absoluteDeadline);
             const object=`analysis/${ESTIMATOR_BRAND.domain}/${draft.id}/${version}/${job.units.length}`;
             if(segment.preparationError){job.units.push({name:segment.name,type:segment.type,object:'',pages:segment.pages,error:segment.preparationError,lastCode:'preparation',attempts:MAX_READ_ATTEMPTS});event('prepare','failed',{file:segment.name,code:'preparation',message:segment.preparationError});job.cursor=segment.nextPage;await checkpoint();continue;}

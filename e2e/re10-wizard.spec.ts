@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { installSafeBrowserHarness } from "./safe-browser-harness";
 
 /**
  * RE-10 wizard: auto-advance behaviour.
@@ -26,14 +27,6 @@ const CANNED_ANALYZE = {
 };
 
 async function reachReview(page: Page) {
-  await page.route("**/api/re10/analyze", (route) =>
-    route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify(CANNED_ANALYZE),
-    }),
-  );
-
   await page.goto("/re-10-repairs-boise");
   await page.locator("#re10-estimator").scrollIntoViewIfNeeded();
 
@@ -51,7 +44,32 @@ async function reachReview(page: Page) {
 
 test.use({ viewport: { width: 390, height: 844 } });
 
-test.describe("RE-10 wizard auto-advance", () => {
+test.beforeEach(async ({ page }, testInfo) => {
+  await installSafeBrowserHarness(
+    page,
+    String(testInfo.project.use.baseURL),
+    { re10Analyze: CANNED_ANALYZE },
+  );
+});
+
+test("public RE-10 route exposes the current P5 repair estimator entry", async ({ page }) => {
+  await page.goto("/re-10-repairs-boise");
+
+  const estimator = page.locator("#re10-wizard [data-p5-estimator]");
+  await expect(estimator).toBeVisible();
+  await expect(estimator).toHaveAttribute("aria-label", "Project estimator");
+  await expect(estimator.getByRole("heading", { name: "Let’s estimate your project" })).toBeVisible();
+  await expect(
+    estimator.getByRole("button", { name: "Estimate the repairs from my RE-10 report" }),
+  ).toBeVisible();
+});
+
+test.describe("Retired RE-10 wizard auto-advance coverage", () => {
+  test.skip(
+    true,
+    "Retired legacy RE-10 wizard: the public route now mounts P5Estimator with defaultService=re10.",
+  );
+
   test("selecting a role auto-advances to the contact step once a name is present", async ({ page }) => {
     await reachReview(page);
 

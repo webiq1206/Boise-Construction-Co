@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {documentServiceEligible,documentServiceHeaders,remoteDocumentId,partitionDocumentServiceUploads,documentServiceReadiness,advanceMixedDocumentAnalysis,advanceDocumentService,assertCompleteSourceCoverage,assertProjectSourceCoverage,assertAnalysisMigrationSafe,readSavedSource,type DocumentAnalysisStep} from '../lib/p5/documentServiceClient.ts';
+import {documentServiceEligible,documentServiceHeaders,remoteDocumentId,partitionDocumentServiceUploads,documentServiceReadiness,advanceMixedDocumentAnalysis,advanceDocumentService,assertCompleteSourceCoverage,assertProjectSourceCoverage,assertAnalysisMigrationSafe,readSavedSource,sourceIdentity,type DocumentAnalysisStep} from '../lib/p5/documentServiceClient.ts';
 import {priceSavedScope} from '../lib/p5/pricingWork.ts';
 import {analysisWorkKey} from '../lib/p5/analysisWork.ts';
 import {ESTIMATOR_BRAND} from '../lib/p5/brand.ts';
@@ -8,13 +8,13 @@ const pdf:any={id:'file',name:'scope.pdf',type:'application/pdf',size:1000,sha25
 test('shared service is off by default and selects eligible PDFs within mixed inputs',()=>{
  assert.equal(documentServiceEligible([pdf],{}),false);
  assert.equal(documentServiceEligible([pdf],{P5_DOCUMENT_SERVICE_MODE:'remote'}),true);
- assert.equal(documentServiceEligible([pdf,{...pdf,type:'image/png'}],{P5_DOCUMENT_SERVICE_MODE:'remote'}),true);
+ assert.equal(documentServiceEligible([pdf,{...pdf,id:'photo',sha256:'b'.repeat(64),type:'image/png'}],{P5_DOCUMENT_SERVICE_MODE:'remote'}),true);
  assert.equal(documentServiceEligible([{...pdf,size:60*1024*1024}],{P5_DOCUMENT_SERVICE_MODE:'remote'}),false);
  assert.equal(documentServiceEligible([{...pdf,size:0}],{P5_DOCUMENT_SERVICE_MODE:'remote'}),false);
  assert.throws(()=>documentServiceEligible([pdf],{P5_DOCUMENT_SERVICE_MODE:'remote',P5_DOCUMENT_SERVICE_MAX_BYTES:'invalid'}),/configuration/);
 });
-test('routing conserves every file and never guesses an upgraded host byte limit',()=>{
- const inputs=[pdf,{...pdf,id:'photo',type:'image/png'},{...pdf,id:'sheet',type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'},{...pdf,id:'large',size:250*1024*1024}];
+test('routing conserves every physical source and never guesses an upgraded host byte limit',()=>{
+ const inputs=[pdf,{...pdf,id:'photo',sha256:'b'.repeat(64),type:'image/png'},{...pdf,id:'sheet',sha256:'c'.repeat(64),type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'},{...pdf,id:'large',sha256:'d'.repeat(64),size:250*1024*1024}];
  const routes=partitionDocumentServiceUploads(inputs,{P5_DOCUMENT_SERVICE_MODE:'remote'});
  assert.deepEqual(routes.remote.map(u=>u.id),['file']);
  assert.deepEqual(routes.local.map(u=>u.id),['photo','sheet','large']);
@@ -34,6 +34,8 @@ test('readiness is redacted, strict about URL shape, and cannot assert host read
  assert.equal(documentServiceReadiness({P5_DOCUMENT_SERVICE_MODE:'remote'}).state,'invalid');
 });
 const result=(summary:string,complete=true,source=summary):DocumentAnalysisStep=>({pending:false,version:summary,analysis:{provider:'fixture',model:'fixture',analyzedAt:'2026-01-01',extraction:{summary,facts:[],conflicts:[],missingInformation:[],reviewNotes:[],documentCoverage:{pages:[{source,page:1,sheet:'',revision:'',status:complete?'read':'unreadable',notes:[]}],expectedPages:1,complete}}}});
+const results=(summary:string,sources:string[]):DocumentAnalysisStep=>({pending:false,version:summary,analysis:{provider:'fixture',model:'fixture',analyzedAt:'2026-01-01',extraction:{summary,facts:[],conflicts:[],missingInformation:[],reviewNotes:[],documentCoverage:{pages:sources.map(source=>({source,page:1,sheet:'',revision:'',status:'read' as const,notes:[]})),expectedPages:sources.length,complete:true}}}});
+const onePage=async()=>1;
 function memoryWork(){
  const saved=new Map<string,any>();
  return {
@@ -47,26 +49,26 @@ test('mixed checkpoints resume across reload and never complete while either rea
  const previous=process.env.P5_DOCUMENT_SERVICE_MODE;process.env.P5_DOCUMENT_SERVICE_MODE='remote';
  try{
   const memory=memoryWork(),calls:{branch:string;ids:string[];names:string[];retry:boolean}[]=[];
-  const draft:any={id:'fixture',uploads:[pdf,{...pdf,id:'photo123456',type:'image/png'},{...pdf,id:'sheet123456',name:'sheet.xlsx',type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}]};
+   const draft:any={id:'fixture',uploads:[pdf,{...pdf,id:'photo123456',sha256:'b'.repeat(64),type:'image/png'},{...pdf,id:'sheet123456',sha256:'c'.repeat(64),name:'sheet.xlsx',type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}]};
   const answers:any={estimatingInstructions:'Owner supplies fixtures; exclude historic prices.'};
   const neverFetch:typeof fetch=async()=>{throw new Error('Network forbidden');};
   let localPass=0;
   const local=async(d:any,text:string,a:any,key:string,_fetch:typeof fetch,retry:boolean)=>{
    assert.equal(text,'one project');assert.deepEqual(a,answers);assert.match(key,/:local$/);
    calls.push({branch:'local',ids:d.uploads.map((u:any)=>u.id),names:d.uploads.map((u:any)=>u.name),retry});
-   return ++localPass===1?{pending:true as const,progress:'still reading',retryAfterMs:1000,processing:{phase:'reading' as const,message:'still reading',updatedAt:'fixture',readSections:1,totalSections:3,currentItems:['sheet.xlsx']}}:result('photo and spreadsheet',true,'scope.pdf [photo123]');
+    return ++localPass===1?{pending:true as const,progress:'still reading',retryAfterMs:1000,processing:{phase:'reading' as const,message:'still reading',updatedAt:'fixture',readSections:1,totalSections:3,currentItems:['sheet.xlsx']}}:results('photo and spreadsheet',['scope.pdf [photo123]','sheet.xlsx']);
   };
   const remote=async(d:any,_text:string,_a:any,_key:string,_fetch:typeof fetch,retry:boolean)=>{
    calls.push({branch:'remote',ids:d.uploads.map((u:any)=>u.id),names:d.uploads.map((u:any)=>u.name),retry});return result('pdf',true,'scope.pdf [file]');
   };
-  const first=await advanceMixedDocumentAnalysis(draft,'one project',answers,'mixed',neverFetch,false,Date.now()+10000,local,{...memory,remoteReader:remote});
+  const first=await advanceMixedDocumentAnalysis(draft,'one project',answers,'mixed',neverFetch,false,Date.now()+10000,local,{...memory,remoteReader:remote,inventorySource:onePage});
   assert.equal(first.pending,true);assert.ok(memory.saved.get('mixed').remote);
   assert.equal(memory.saved.get('mixed').processing.readSections,1);assert.equal(memory.saved.get('mixed').processing.totalSections,3);
   assert.equal(memory.saved.get('mixed').branchProcessing.local.currentItems[0],'sheet.xlsx');
   assert.equal(memory.saved.get('mixed').processing.branches.local.totalSections,3);
-  const second=await advanceMixedDocumentAnalysis(structuredClone(draft),'one project',answers,'mixed',neverFetch,true,Date.now()+10000,local,{...memory,remoteReader:remote});
+  const second=await advanceMixedDocumentAnalysis(structuredClone(draft),'one project',answers,'mixed',neverFetch,true,Date.now()+10000,local,{...memory,remoteReader:remote,inventorySource:onePage});
   assert.equal(second.pending,false);
-  if(!second.pending){assert.match(second.analysis.extraction.summary,/pdf/);assert.match(second.analysis.extraction.summary,/spreadsheet/);assert.equal(second.analysis.extraction.documentCoverage?.expectedPages,2);}
+  if(!second.pending){assert.match(second.analysis.extraction.summary,/pdf/);assert.match(second.analysis.extraction.summary,/spreadsheet/);assert.equal(second.analysis.extraction.documentCoverage?.expectedPages,3);}
   assert.deepEqual(calls.map(c=>c.branch),['local','remote','local']);
   assert.deepEqual(calls[0].ids,['photo123456','sheet123456']);assert.deepEqual(calls[1].ids,['file']);
   assert.equal(calls[2].retry,true);
@@ -77,7 +79,7 @@ test('an incomplete branch is never cached as a completed mixed project',async()
  const previous=process.env.P5_DOCUMENT_SERVICE_MODE;process.env.P5_DOCUMENT_SERVICE_MODE='remote';
  try{
   const memory=memoryWork();
-  await assert.rejects(()=>advanceMixedDocumentAnalysis({id:'fixture',uploads:[pdf,{...pdf,id:'photo',type:'image/png'}]} as any,'',{},'mixed',async()=>{throw new Error('Network forbidden');},false,Date.now()+10000,async()=>result('photo',false),{...memory,remoteReader:async()=>result('pdf')}),/still unread/);
+  await assert.rejects(()=>advanceMixedDocumentAnalysis({id:'fixture',uploads:[pdf,{...pdf,id:'photo',sha256:'b'.repeat(64),type:'image/png'}]} as any,'',{},'mixed',async()=>{throw new Error('Network forbidden');},false,Date.now()+10000,async()=>result('photo',false),{...memory,remoteReader:async()=>result('pdf'),inventorySource:onePage}),/still unread/);
   assert.equal(memory.saved.get('mixed')?.local,undefined);
  }finally{if(previous===undefined)delete process.env.P5_DOCUMENT_SERVICE_MODE;else process.env.P5_DOCUMENT_SERVICE_MODE=previous;}
 });
@@ -99,7 +101,7 @@ test('remote protocol mocks accept all 250 verified pages and reject missing, pa
    };
    const run=()=>advanceDocumentService(draft,'',{},'remote',request,false,Date.now()+10000,{...memory,query:async()=>{throw new Error('DB forbidden');},readStoredBytes:async()=>{throw new Error('Storage forbidden');}});
    if(mode==='complete'){const step=await run();assert.equal(step.pending,false);if(!step.pending)assert.equal(step.analysis.extraction.documentCoverage?.pages.length,250);}
-   else await assert.rejects(run,/coverage|verification/);
+    else await assert.rejects(run,/coverage|verification|progress/);
   }
  }finally{keys.forEach((key,i)=>{if(previous[i]===undefined)delete process.env[key];else process.env[key]=previous[i];});}
 });
@@ -112,10 +114,10 @@ test('route snapshot and checkpoint identity survive a changed byte limit',async
   const local=async(d:any)=>{calls.push(d.uploads.map((u:any)=>u.id));return {pending:true as const,progress:'reading'};};
   const remote=async()=>result('pdf',true,pdf.name);
   const noFetch:typeof fetch=async()=>{throw new Error('Network forbidden');};
-  await advanceMixedDocumentAnalysis(draft,'',{},key,noFetch,false,Date.now()+10000,local,{...memory,remoteReader:remote});
+  await advanceMixedDocumentAnalysis(draft,'',{},key,noFetch,false,Date.now()+10000,local,{...memory,remoteReader:remote,inventorySource:onePage});
   process.env.P5_DOCUMENT_SERVICE_MAX_BYTES=String(250*1024*1024);
   assert.equal(analysisWorkKey(draft,'',{}),key);
-  await advanceMixedDocumentAnalysis(draft,'',{},key,noFetch,false,Date.now()+10000,local,{...memory,remoteReader:remote});
+  await advanceMixedDocumentAnalysis(draft,'',{},key,noFetch,false,Date.now()+10000,local,{...memory,remoteReader:remote,inventorySource:onePage});
   assert.deepEqual(calls,[['large'],['large']]);
   assert.deepEqual(memory.saved.get(key).routes.remote.map((u:any)=>u.id),['file']);
   assert.ok(memory.saved.get(key).remote);
@@ -156,6 +158,7 @@ test('strict coverage rejects false-complete records without blocking unpaged ty
  assert.doesNotThrow(()=>assertCompleteSourceCoverage({...base,documentCoverage:{complete:true,expectedPages:1,pages:[page]}},['local.pdf'],[{source:'local.pdf',page:1}],true));
  assert.doesNotThrow(()=>assertProjectSourceCoverage([],null));
  assert.throws(()=>assertProjectSourceCoverage([pdf],null),/verification is missing/);
+  assert.throws(()=>assertProjectSourceCoverage([pdf,{...pdf,id:'photo',sha256:'b'.repeat(64),name:'site.jpg',type:'image/jpeg'}],{...base,documentCoverage:{complete:true,expectedPages:1,pages:[page]}}),/coverage/);
 });
 test('local-only partial coverage is blocked before direct pricing touches storage or providers',async()=>{
  const partial=result('fixture',false,pdf.name);
@@ -186,6 +189,28 @@ test('duplicate PDF bytes make one host request and one progress/coverage contri
   assert.equal(finished.pending,false);assert.equal(gets,2);
   if(!finished.pending)assert.equal(finished.analysis.extraction.documentCoverage?.expectedPages,5);
  }finally{keys.forEach((key,i)=>{if(previous[i]===undefined)delete process.env[key];else process.env[key]=previous[i];});}
+});
+test('physical source identity deduplicates equal bytes and disambiguates only distinct same-name evidence',()=>{
+ const photo={...pdf,id:'photo123456',sha256:'b'.repeat(64),type:'image/png'};
+ const copy={...photo,id:'copy123456'};
+ const sheet={...pdf,id:'sheet123456',sha256:'c'.repeat(64),type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'};
+ const routes=partitionDocumentServiceUploads([pdf,photo,copy,sheet],{P5_DOCUMENT_SERVICE_MODE:'remote'});
+ assert.deepEqual(routes.remote.map(u=>u.id),['file']);
+ assert.deepEqual(routes.local.map(u=>u.id),['photo123456','sheet123456']);
+ assert.equal(routes.local[0].name,'scope.pdf [photo123]');
+ assert.equal(sourceIdentity(copy,[photo,copy]),'scope.pdf','an identical copy is the same physical source');
+});
+test('full-project inventory rejects 200 PDF pages plus 51 photos before either reader spends a call',async()=>{
+ const previous=process.env.P5_DOCUMENT_SERVICE_MODE;process.env.P5_DOCUMENT_SERVICE_MODE='remote';
+ try{
+  const memory=memoryWork(),photos=Array.from({length:51},(_,index)=>({...pdf,id:`photo-${index}`,name:`photo-${index}.jpg`,type:'image/jpeg',sha256:(index+1).toString(16).padStart(64,'0')}));
+  const draft:any={id:'fixture',uploads:[pdf,...photos]};
+  let localCalls=0,remoteCalls=0;
+  await assert.rejects(()=>advanceMixedDocumentAnalysis(draft,'',{},'mixed-limit',async()=>{throw new Error('Network forbidden');},false,Date.now()+10000,async()=>{localCalls++;return result('local');},{...memory,remoteReader:async()=>{remoteCalls++;return result('remote');},inventorySource:async upload=>upload.type==='application/pdf'?200:1}),/250 pages/);
+  assert.equal(localCalls,0);assert.equal(remoteCalls,0);
+  assert.ok(memory.saved.get('mixed-limit').routes,'route snapshot is durable before inventory rejection');
+  assert.equal(memory.saved.get('mixed-limit').expected,undefined,'an invalid partial inventory is never checkpointed as complete');
+ }finally{if(previous===undefined)delete process.env.P5_DOCUMENT_SERVICE_MODE;else process.env.P5_DOCUMENT_SERVICE_MODE=previous;}
 });
 test('cross-site and cross-project source identities cannot collide',()=>{
  assert.notEqual(remoteDocumentId('p5homeco.com','one',pdf.sha256),remoteDocumentId('boiseconstruction.co','one',pdf.sha256));

@@ -6,6 +6,7 @@ export interface BrowserDraft {pendingFiles?:Array<{name:string;size:number}>}
 export interface BrowserDraft {transcript?:TranscriptEntry[];/** Revision confirmed with reviewed=true; cleared by any later change. */reviewedRevision?:number;pendingReply?:{id:string;answer:string};namespace?:string;sourceImageUrl?:string;/** Set when an explicit replacement must not reattach route-provided design data. */sourceDetached?:boolean;projectSource?:{id:string;answers:ScopeAnswers;imageUrl?:string};id:string;key:string;revision:number;text:string;answers:ScopeAnswers;extraction:ScopeExtraction|null;contact:{name:string;email:string;phone:string};step:number;updatedAt:number;conflicts?:ScopeConflict[];uploads?:ScopeUpload[];wizard?:{skipped:ScopeField[];resolutions:ScopeAnswers;sourceVersion?:string;instructionAnswers?:import('./clarifications.ts').InstructionAnswer[]} ;analysisWarning?:string;analyzedText?:string;analyzedAnswers?:string;analyzedFingerprint?:string;scopeFingerprint?:string;dirty?:boolean;pricedFields?:ScopeField[]}
 const storageKey='p5-project-draft-v2';
 export const BROWSER_DRAFT_RECOVERY_KEY=`${storageKey}:recovery-v1`;
+const draftStorageKey=(namespace?:string)=>namespace?`${storageKey}:${namespace}`:storageKey;
 
 export interface BrowserDraftRecovery {
   key: string;
@@ -23,11 +24,36 @@ export function loadBrowserDraft(defaultService:string,namespace?:string):Browse
   // A local draft is unfinished input, not an approved submission. A partial
   // numeric edit (e.g. "1,") must not erase its text, files and other answers.
   // Semantic validation still happens when answering/saving/submitting.
-  try{const d=JSON.parse(localStorage.getItem(namespace?`${storageKey}:${namespace}`:storageKey)||'null');if(d&&typeof d.id==='string'&&/^[a-f0-9-]{36}$/i.test(d.id)&&/^[a-f0-9]{64}$/.test(d.key)&&Number.isInteger(d.revision)&&d.revision>=0&&typeof d.text==='string'&&d.answers&&!Array.isArray(d.answers)&&d.contact&&['name','email','phone'].every(k=>typeof d.contact[k]==='string')&&Object.entries(d.answers).every(([k,v])=>Object.hasOwn(SCOPE_FIELDS,k)&&typeof v==='string'))return {...d,step:Math.min(2,Math.max(0,Number(d.step)||0)),wizard:d.wizard||{skipped:[],resolutions:{}}};}catch{}
+  try{
+    const storage=browserStorage();if(!storage)return {...newBrowserDraft(defaultService),namespace};
+    let raw=storage.getItem(draftStorageKey(namespace));
+    // Before source-specific storage existed, design drafts were written to the
+    // global key. Move only a draft carrying the same explicit source identity;
+    // a generic draft must never be silently combined with a design route.
+    if(!raw&&namespace){
+      const legacyRaw=storage.getItem(storageKey);
+      if(legacyRaw){
+        const legacy=JSON.parse(legacyRaw);
+        if(legacy?.projectSource?.id===namespace&&(!legacy.namespace||legacy.namespace===namespace)){
+          const migrated=JSON.stringify({...legacy,namespace});
+          storage.setItem(draftStorageKey(namespace),migrated);
+          if(storage.getItem(draftStorageKey(namespace))===migrated)storage.removeItem(storageKey);
+          raw=migrated;
+        }
+      }
+    }
+    const d=JSON.parse(raw||'null');
+    const identityMatches=namespace
+      ?(!d?.namespace||d.namespace===namespace)&&(!d?.projectSource?.id||d.projectSource.id===namespace)
+      :!d?.namespace&&!d?.projectSource?.id;
+    if(identityMatches&&d&&typeof d.id==='string'&&/^[a-f0-9-]{36}$/i.test(d.id)&&/^[a-f0-9]{64}$/.test(d.key)&&Number.isInteger(d.revision)&&d.revision>=0&&typeof d.text==='string'&&d.answers&&!Array.isArray(d.answers)&&d.contact&&['name','email','phone'].every(k=>typeof d.contact[k]==='string')&&Object.entries(d.answers).every(([k,v])=>Object.hasOwn(SCOPE_FIELDS,k)&&typeof v==='string')){
+      return {...d,namespace,step:Math.min(2,Math.max(0,Number(d.step)||0)),wizard:d.wizard||{skipped:[],resolutions:{}}};
+    }
+  }catch{}
   return {...newBrowserDraft(defaultService),namespace};
 }
 function browserStorage():Storage|null{try{return typeof localStorage==='undefined'?null:localStorage;}catch{return null;}}
-export function persistBrowserDraft(draft:BrowserDraft){try{const storage=browserStorage();if(!storage)return false;storage.setItem(draft.namespace?`${storageKey}:${draft.namespace}`:storageKey,JSON.stringify({...draft,updatedAt:Date.now()}));return true;}catch{return false;}}
+export function persistBrowserDraft(draft:BrowserDraft){try{const storage=browserStorage();if(!storage)return false;storage.setItem(draftStorageKey(draft.namespace),JSON.stringify({...draft,updatedAt:Date.now()}));return true;}catch{return false;}}
 export function draftHeaders(draft:BrowserDraft){return {'x-p5-draft-id':draft.id,'x-p5-draft-key':draft.key};}
 /** Validate the server receipt before reading its revision or clearing local files. */
 export function requireDraftReceipt(data:unknown):{revision:number;answers:ScopeAnswers;extraction:ScopeExtraction|null;uploads:ScopeUpload[];[key:string]:any}{
@@ -126,13 +152,23 @@ export function listBrowserDraftRecoveries(namespace?:string):BrowserDraftRecove
     const storage=browserStorage();if(!storage)return [];
     const records=JSON.parse(storage.getItem(BROWSER_DRAFT_RECOVERY_KEY)||'[]');
     if(!Array.isArray(records))return [];
-    return records.filter((item):item is BrowserDraftRecovery=>Boolean(item&&typeof item.key==='string'&&item.draft&&(!namespace||item.draft.namespace===namespace)));
+    return records.filter((item):item is BrowserDraftRecovery=>{
+      if(!item||typeof item.key!=='string'||!item.draft)return false;
+      const draft=item.draft;
+      return namespace
+        ?(!draft.namespace||draft.namespace===namespace)&&(!draft.projectSource?.id||draft.projectSource.id===namespace)&&Boolean(draft.namespace||draft.projectSource?.id)
+        :!draft.namespace&&!draft.projectSource?.id;
+    });
   }catch{return [];}
 }
 
 /** Read a recovery without changing the active draft or touching cached files. */
 export function restoreBrowserDraft(recovery:string|BrowserDraftRecovery):BrowserDraft|null{
-  const record=typeof recovery==='string'?listBrowserDraftRecoveries().find(item=>item.key===recovery):recovery;
+  let record=typeof recovery==='string'?undefined:recovery;
+  if(typeof recovery==='string')try{
+    const records=JSON.parse(browserStorage()?.getItem(BROWSER_DRAFT_RECOVERY_KEY)||'[]');
+    if(Array.isArray(records))record=records.find(item=>item?.key===recovery);
+  }catch{}
   return record?.draft?JSON.parse(JSON.stringify(record.draft)) as BrowserDraft:null;
 }
 

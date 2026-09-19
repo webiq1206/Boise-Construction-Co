@@ -8,6 +8,8 @@ test.use({serviceWorkers:'block'});
  * session, send a lead, or contact a real customer.
  */
 type FixtureMode = "review" | "long-review" | "clarifications";
+const CONSTRUCTION_SCOPE = "Build a new 2,000 square foot home in Boise with three bedrooms, two bathrooms, standard finishes, and no garage.";
+const SMALLER_CONSTRUCTION_SCOPE = "Replace the plan with a smaller 1,600 square foot new home in Boise with three bedrooms, two bathrooms, standard finishes, and no garage.";
 
 function extraction(questions: string[] = [], longReview = false) {
   const instructions =
@@ -31,8 +33,11 @@ function extraction(questions: string[] = [], longReview = false) {
         }
       : undefined;
   return {
-    summary: "Synthetic project scope",
-    facts: [],
+    summary: "New 2,000 square foot home in Boise with standard finishes and no garage.",
+    facts: [
+      {field:"service",value:"new-construction",confidence:1,source:"Typed project scope",evidence:"Build a new home",basis:"stated"},
+      {field:"sqft",value:"2000",confidence:1,source:"Typed project scope",evidence:"2,000 square foot",basis:"stated"},
+    ],
     conflicts: [],
     missingInformation: [],
     reviewNotes: [],
@@ -152,8 +157,12 @@ async function installFixture(page: Page, mode: FixtureMode = "review") {
         ...(state.draft ?? {}),
         answers: {
           ...(state.draft?.answers ?? {}),
-          service: "handyman",
-          taskList: "Repair two interior doors.",
+          service: "new-construction",
+          taskList: "Build a complete new home with three bedrooms and two bathrooms.",
+          location: "Boise, Idaho",
+          sqft: "2000",
+          garageIncluded: "no",
+          finish: "mid-range",
         },
         extraction: extraction(questions, mode === "long-review"),
         uploads: state.draft?.uploads ?? [],
@@ -197,97 +206,104 @@ async function openEstimator(page: Page, mode: FixtureMode = "review") {
 test.describe("P5 estimator mobile final action", () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
-  test("is visible on entry and mid-scope, reserves the window scroller, and preserves both gates", async ({ page }) => {
+  test("is visible on entry and mid-scope, reserves the frame scroller, and preserves both gates", async ({ page }) => {
     const { estimator, state } = await openEstimator(page, "long-review");
-    await estimator.getByLabel("Tell us about your project", { exact: true }).fill("Repair two interior doors.");
+    await estimator.getByLabel("Tell us about your project", { exact: true }).fill(CONSTRUCTION_SCOPE);
     await estimator.getByRole("button", { name: "Continue", exact: true }).click();
-    await expect(estimator.getByRole("heading", { name: "Your project is ready to review", exact: true })).toBeVisible();
+    await expect(estimator.getByRole("heading", { name: "Review your project", exact: true })).toBeVisible();
 
     const action = estimator.getByRole("button", { name: "Get my estimate", exact: true });
+    const name = estimator.getByLabel("Your name", { exact: true });
+    const email = estimator.getByLabel("Email", { exact: true });
     await expect(action).toHaveCount(1);
+    await action.click();
+    await expect(estimator.getByRole("alert")).toContainText("Enter your name and a valid email address");
+    expect(state.submitCalls).toBe(0);
+    await name.fill("Synthetic Test");
+    await email.fill("synthetic@example.invalid");
     const metrics = await action.evaluate((button) => {
-      const bar = button.parentElement!;
+      const bar = button.closest("[data-final-action]")!;
+      const dock = bar.parentElement!.parentElement!;
+      const root = button.closest("[data-p5-estimator]")!;
+      const thread = root.querySelector<HTMLElement>("[data-p5-thread]")!;
       const checkbox = button.closest("form")?.querySelector('input[type="checkbox"]');
       const barRect = bar.getBoundingClientRect();
+      const dockRect = dock.getBoundingClientRect();
       const checkboxRect = checkbox?.getBoundingClientRect();
-      const scrollingElement = document.scrollingElement!;
       return {
-        position: getComputedStyle(bar).position,
-        safeAreaPadding: Number.parseFloat(getComputedStyle(bar).paddingBottom),
-        barTop: barRect.top,
-        barBottom: barRect.bottom,
+        rootPosition: getComputedStyle(root).position,
+        safeAreaPadding: Number.parseFloat(getComputedStyle(dock).paddingBottom),
+        barTop: dockRect.top,
+        barBottom: dockRect.bottom,
         checkboxBottom: checkboxRect?.bottom ?? 0,
         checkboxVisible: Boolean(checkboxRect && checkboxRect.top >= 0 && checkboxRect.bottom <= window.innerHeight),
         viewportBottom: window.innerHeight,
-        documentScrollPadding: Number.parseFloat(getComputedStyle(scrollingElement).scrollPaddingBottom),
-        rootScrollPadding: Number.parseFloat(getComputedStyle(button.closest("[data-p5-estimator]")!).scrollPaddingBottom),
-        rootBottomPadding: Number.parseFloat(getComputedStyle(button.closest("[data-p5-estimator]")!).paddingBottom),
-        scrollContainer: scrollingElement.tagName,
-        documentHeight: scrollingElement.scrollHeight,
-        initialScrollY: window.scrollY,
+        scrollOverflow: getComputedStyle(thread).overflowY,
+        frameHeight: thread.scrollHeight,
+        frameViewport: thread.clientHeight,
+        initialScrollTop: thread.scrollTop,
+        windowScrollY: window.scrollY,
       };
     });
-    expect(metrics.position).toBe("fixed");
+    expect(metrics.rootPosition).toBe("fixed");
     expect(metrics.safeAreaPadding).toBeGreaterThan(0);
     expect(metrics.barTop).toBeGreaterThanOrEqual(-1);
     expect(metrics.barBottom).toBeLessThanOrEqual(metrics.viewportBottom + 1);
     if (metrics.checkboxVisible) expect(metrics.checkboxBottom).toBeLessThanOrEqual(metrics.barTop + 1);
-    expect(metrics.documentScrollPadding).toBeGreaterThan(0);
-    expect(metrics.rootScrollPadding).toBeGreaterThan(0);
-    expect(metrics.rootBottomPadding).toBeGreaterThan(metrics.safeAreaPadding);
-    expect(metrics.scrollContainer).toBe("HTML");
-    expect(metrics.documentHeight).toBeGreaterThan(metrics.viewportBottom + 200);
-    expect(metrics.initialScrollY).toBeLessThanOrEqual(1);
+    expect(metrics.scrollOverflow).toBe("auto");
+    expect(metrics.frameHeight).toBeGreaterThan(metrics.frameViewport + 200);
+    expect(metrics.initialScrollTop).toBeGreaterThan(0);
+    expect(metrics.windowScrollY).toBeLessThanOrEqual(1);
 
-    await page.evaluate(() => window.scrollTo({ top: 480, behavior: "auto" }));
+    await estimator.locator("[data-p5-thread]").evaluate((thread: HTMLElement) => thread.scrollTo({ top: 480, behavior: "auto" }));
     const midScope = await action.evaluate((button) => {
-      const rect = button.parentElement!.getBoundingClientRect();
-      return { top: rect.top, bottom: rect.bottom, viewportBottom: window.innerHeight, scrollY: window.scrollY };
+      const dock = button.closest("[data-final-action]")!.parentElement!.parentElement!;
+      const thread = button.closest("[data-p5-estimator]")!.querySelector<HTMLElement>("[data-p5-thread]")!;
+      const rect = dock.getBoundingClientRect();
+      return { top: rect.top, bottom: rect.bottom, viewportBottom: window.innerHeight, scrollTop: thread.scrollTop };
     });
     expect(midScope.top).toBeGreaterThanOrEqual(-1);
     expect(midScope.bottom).toBeLessThanOrEqual(midScope.viewportBottom + 1);
-    expect(midScope.scrollY).toBeGreaterThan(0);
+    expect(midScope.scrollTop).toBeGreaterThan(0);
 
     await action.click();
     await expect(estimator.getByRole("alert")).toContainText("Please confirm your project details");
     expect(state.submitCalls).toBe(0);
 
     await estimator.getByRole("checkbox").check();
-    await action.click();
-    await expect(estimator.getByRole("alert")).toContainText("Enter your name and a valid email address");
-    expect(state.submitCalls).toBe(0);
-
-    await estimator.getByLabel("Your name", { exact: true }).fill("Synthetic Test");
-    await estimator.getByLabel("Email", { exact: true }).fill("synthetic@example.invalid");
     await action.evaluate((button) => {
       (button as HTMLButtonElement).click();
       (button as HTMLButtonElement).click();
     });
-    await expect(estimator.getByText("Schedule a scope review.", { exact: true })).toBeVisible();
+    await expect(estimator.getByRole("heading", { name: "$1,000 to $1,800", exact: true })).toBeVisible();
     expect(state.submitCalls).toBe(1);
   });
 
   test("moves a focused contact field above a visualViewport keyboard and the action bar", async ({ page }) => {
     const { estimator } = await openEstimator(page, "long-review");
-    await estimator.getByLabel("Tell us about your project", { exact: true }).fill("Repair two interior doors.");
+    await estimator.getByLabel("Tell us about your project", { exact: true }).fill(CONSTRUCTION_SCOPE);
     await estimator.getByRole("button", { name: "Continue", exact: true }).click();
 
+    await estimator.getByLabel("Your name", { exact: true }).fill("Synthetic Test");
     const email = estimator.getByLabel("Email", { exact: true });
+    await email.fill("synthetic@example.invalid");
     await email.focus();
+    const action = estimator.getByRole("button", { name: "Get my estimate", exact: true });
+    await expect(action).toHaveCount(1);
     await page.evaluate(() => {
       const resize = (window as unknown as { __p5ResizeVisualViewport?: (height: number) => void }).__p5ResizeVisualViewport;
       resize?.(460);
     });
     await expect.poll(async () =>
-      page.evaluate(() => {
+      action.evaluate((button) => {
         const focused = document.activeElement as HTMLElement | null;
-        const action = document.querySelector('[data-testid="p5-final-action"]')!;
         const input = document.querySelector('input[type="email"]')!;
-        const actionRect = action.getBoundingClientRect();
+        const actionBar = button.closest("[data-final-action]")!;
+        const actionRect = actionBar.getBoundingClientRect();
         const inputRect = input.getBoundingClientRect();
         return {
           focused: focused === input,
-          keyboardInsetApplied: action.style.transform.includes("translateY(-"),
+          keyboardInsetApplied: Number.parseFloat(getComputedStyle(button.closest("[data-p5-estimator]")!).bottom) > 0,
           inputTop: inputRect.top,
           inputBottom: inputRect.bottom,
           actionTop: actionRect.top,
@@ -297,8 +313,9 @@ test.describe("P5 estimator mobile final action", () => {
       }),
     ).toMatchObject({ focused: true, keyboardInsetApplied: true, inputClearsAction: true });
 
-    const geometry = await page.evaluate(() => {
-      const actionRect = document.querySelector('[data-testid="p5-final-action"]')!.getBoundingClientRect();
+    const geometry = await action.evaluate((button) => {
+      const actionBar = button.closest("[data-final-action]")!;
+      const actionRect = actionBar.getBoundingClientRect();
       const inputRect = document.querySelector('input[type="email"]')!.getBoundingClientRect();
       return {
         inputTop: inputRect.top,
@@ -306,41 +323,39 @@ test.describe("P5 estimator mobile final action", () => {
         actionTop: actionRect.top,
           actionBottom: actionRect.bottom,
         visualBottom: window.visualViewport?.height ?? window.innerHeight,
-        scrollY: window.scrollY,
-        safeAreaPadding: Number.parseFloat(
-          getComputedStyle(document.querySelector('[data-testid="p5-final-action"]')!).paddingBottom,
-        ),
+        scrollTop: button.closest("[data-p5-estimator]")!.querySelector<HTMLElement>("[data-p5-thread]")!.scrollTop,
+        safeAreaPadding: Number.parseFloat(getComputedStyle(actionBar.parentElement!.parentElement!).paddingBottom),
       };
     });
     expect(geometry.inputTop).toBeGreaterThanOrEqual(0);
     expect(geometry.inputBottom).toBeLessThanOrEqual(geometry.actionTop + 1);
     expect(geometry.inputBottom).toBeLessThanOrEqual(geometry.visualBottom + 1);
     expect(geometry.actionBottom).toBeLessThanOrEqual(geometry.visualBottom + 1);
-    expect(geometry.scrollY).toBeGreaterThan(0);
+    expect(geometry.scrollTop).toBeGreaterThan(0);
     expect(geometry.safeAreaPadding).toBeGreaterThan(0);
   });
 
   test("renders one clarification at a time and clears a reply after scope replacement", async ({ page }) => {
     const { estimator, state } = await openEstimator(page, "clarifications");
-    await estimator.getByLabel("Tell us about your project", { exact: true }).fill("Price the door repairs.");
+    await estimator.getByLabel("Tell us about your project", { exact: true }).fill(CONSTRUCTION_SCOPE);
     await estimator.getByRole("button", { name: "Continue", exact: true }).click();
 
     const question = estimator.getByRole("region", { name: "Project question" });
     await expect(question).toContainText("Labor only or materials only?");
     await expect(question).not.toContainText("Should we confirm permits?");
-    await question.getByRole("button", { name: "Labor only", exact: true }).click();
-    await question.getByRole("button", { name: "Continue", exact: true }).click();
+    await question.getByRole("button", { name: "Please include labor only", exact: true }).click();
+    await estimator.getByRole("button", { name: "Send answer", exact: true }).click();
     await expect(question).toContainText("Should we include painting?");
-    await expect(question.getByLabel("Your answer", { exact: true })).toHaveValue("");
+    await expect(estimator.getByLabel("Your answer", { exact: true })).toHaveValue("");
 
-    await estimator.getByText("Add or edit project information", { exact: true }).click();
+    await estimator.getByRole("button", { name: "Back to the previous step", exact: true }).click();
     const projectText = estimator.getByLabel("Tell us about your project", { exact: true });
     await expect(projectText).toHaveCount(1);
-    await expect(projectText).toHaveValue("Price the door repairs.");
-    await projectText.fill("Replace the door repairs with a new, smaller scope.");
-    await estimator.getByRole("button", { name: "Update project", exact: true }).click();
+    await expect(projectText).toHaveValue(new RegExp(CONSTRUCTION_SCOPE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    await projectText.fill(SMALLER_CONSTRUCTION_SCOPE);
+    await estimator.getByRole("button", { name: "Continue", exact: true }).click();
     await expect(question).toContainText("Should we confirm permits?");
-    await expect(question.getByLabel("Your answer", { exact: true })).toHaveValue("");
+    await expect(estimator.getByLabel("Your answer", { exact: true })).toHaveValue("");
     expect(state.scopeCalls).toBe(2);
     expect(state.draft?.text).not.toContain("Question:");
   });
@@ -351,7 +366,7 @@ for(const width of [390,1280]){
     test.use({viewport:{width,height:900},serviceWorkers:'block'});
     test('reload keeps all pending PDF/photo/XLSX bytes and partial manual answers',async({page})=>{
       const {estimator,state}=await openEstimator(page);
-      const text='Retain Bosch fixtures. Exclude painting. Resolve plans versus spreadsheet quantities.';
+      const text='Build a new 2,000 square foot home in Boise. Retain specified fixtures, exclude landscaping, and resolve plan versus spreadsheet quantities.';
       await estimator.getByLabel('Tell us about your project',{exact:true}).fill(text);
       const fixtures=[
         {name:'250-page-plan.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF fixture with all 250 page references '+Array.from({length:250},(_,i)=>`page-${i+1}`).join('\n'))},
@@ -360,7 +375,7 @@ for(const width of [390,1280]){
       ];
       await estimator.getByLabel('Upload project files',{exact:true}).setInputFiles(fixtures);
       await expect(estimator.getByRole('button',{name:'Continue',exact:true})).toBeEnabled();
-      await expect(estimator.getByLabel('Project files')).toContainText('scope.xlsx');
+      await expect(estimator.getByRole('list',{name:'Project files',exact:true})).toContainText('scope.xlsx');
       const before=await page.evaluate(()=>{
         const draft=JSON.parse(localStorage.getItem('p5-project-draft-v2')!);
         draft.answers={...draft.answers,sqft:'1,'};
@@ -371,7 +386,7 @@ for(const width of [390,1280]){
       await page.reload();
       await expect(estimator.getByRole('button',{name:'Continue',exact:true})).toBeEnabled();
       await expect(estimator.getByLabel('Tell us about your project',{exact:true})).toHaveValue(text);
-      for(const file of fixtures)await expect(estimator.getByLabel('Project files')).toContainText(file.name);
+      for(const file of fixtures)await expect(estimator.getByRole('list',{name:'Project files',exact:true})).toContainText(file.name);
       const recovered=await page.evaluate(async()=>{
         const draft=JSON.parse(localStorage.getItem('p5-project-draft-v2')!);
         const files=await new Promise<Array<{name:string;bytes:number[]}>>((resolve,reject)=>{
@@ -416,18 +431,18 @@ for(const width of [390,1280]){
       await expect(estimator).toContainText('Files saved on this device');
       await page.reload();
       await expect(estimator.getByRole('button',{name:'Continue',exact:true})).toBeEnabled();
-      await expect(estimator.getByLabel('Project files')).toContainText('plan.pdf');
+      await expect(estimator.getByRole('list',{name:'Project files',exact:true})).toContainText('plan.pdf');
       await expect(estimator).not.toContainText('Select the original files again before continuing');
       expect(state.scopeCalls).toBe(0);
     });
     test('typed clarification and saved mixed upload receipts survive reload together',async({page})=>{
       const {estimator,state}=await openEstimator(page,'clarifications');
-      await estimator.getByLabel('Tell us about your project',{exact:true}).fill('Repair doors; labor only, owner supplies Bosch materials.');
+      await estimator.getByLabel('Tell us about your project',{exact:true}).fill('Build a new 2,000 square foot home in Boise; labor only, owner supplies specified materials.');
       await estimator.getByRole('button',{name:'Continue',exact:true}).click();
       const question=estimator.getByRole('region',{name:'Project question'});
       await expect(question).toContainText('Labor only or materials only?');
       const reply='Labor only. Exclude painting and retain the Bosch specifications.';
-      await question.getByLabel('Your answer',{exact:true}).fill(reply);
+      await estimator.getByLabel('Your answer',{exact:true}).fill(reply);
       const uploads=['plan.pdf','photo.jpg','scope.xlsx'].map((name,index)=>({id:`fixture-${index}`,name,type:'fixture',size:index+10,sha256:String(index).repeat(64),status:'stored'}));
       state.draft!.uploads=uploads;
       await page.evaluate(uploads=>{
@@ -436,10 +451,10 @@ for(const width of [390,1280]){
       },uploads);
       await page.reload();
       await expect(question).toContainText('Labor only or materials only?');
-      await expect(question.getByLabel('Your answer',{exact:true})).toHaveValue(reply);
+      await expect(estimator.getByLabel('Your answer',{exact:true})).toHaveValue(reply);
       const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('p5-project-draft-v2')!));
       expect(saved.uploads).toEqual(uploads);
-      expect(saved.text).toBe('Repair doors; labor only, owner supplies Bosch materials.');
+      expect(saved.text).toBe('Build a new 2,000 square foot home in Boise; labor only, owner supplies specified materials.');
       expect(state.scopeCalls).toBe(1);expect(state.submitCalls).toBe(0);
     });
   });
@@ -450,8 +465,10 @@ test.describe("P5 estimator desktop final action", () => {
 
   test("does not pin the final action on desktop", async ({ page }) => {
     const { estimator } = await openEstimator(page, "long-review");
-    await estimator.getByLabel("Tell us about your project", { exact: true }).fill("Repair two interior doors.");
+    await estimator.getByLabel("Tell us about your project", { exact: true }).fill(CONSTRUCTION_SCOPE);
     await estimator.getByRole("button", { name: "Continue", exact: true }).click();
+    await estimator.getByLabel("Your name", { exact: true }).fill("Synthetic Test");
+    await estimator.getByLabel("Email", { exact: true }).fill("synthetic@example.invalid");
     const action = estimator.getByRole("button", { name: "Get my estimate", exact: true });
     await expect(action).toHaveCount(1);
     const position = await action.evaluate((button) => getComputedStyle(button.parentElement!).position);

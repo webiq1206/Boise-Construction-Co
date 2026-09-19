@@ -115,7 +115,7 @@ export default function Re10RepairsPage() {
         </p>
         <div className="flex flex-col sm:flex-row gap-3">
           <Button variant="brand" asChild>
-            <Link href="#re10-estimator">
+            <Link href="#re10-wizard">
               {/* Shortened from "Upload your RE-10 and get an instant estimate".
                   The Button primitive is whitespace-nowrap, and at 375px that
                   label needed 361px in a 341px box - it clipped at BOTH ends,

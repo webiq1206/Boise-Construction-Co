@@ -224,7 +224,9 @@ export async function extractRepairs(files: ExtractionInput[]): Promise<Extracti
     return { ok: false, reason: "failed", message: "No readable PDF or image files were supplied." };
   }
 
-  const manifest = await buildPageManifest(usable);
+  // Keep unsupported stored files in the manifest as skipped evidence. Filtering
+  // them out here would let the remaining PDF/photo pages claim completeness.
+  const manifest = await buildPageManifest(files);
 
   if (manifest.chunks.length === 0) {
     return {

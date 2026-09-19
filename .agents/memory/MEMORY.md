@@ -8,3 +8,4 @@
 - [Neon HTTP mutation quirks](neon-http-mutations.md) — mutation returning rows may be empty after success; use rowCount, and omit absent numeric or JSON values instead of passing null.
 - [Private catalog retention](private-catalog-retention.md) — private source staging and per-environment pricing activation are distinct; inspect both before reporting counts.
 - [Recovery backup verification](recovery-backup-verification.md) — separate immutable publishing inventory from Git backups; account explicitly for changing platform caches.
+- [Background ledger migration](background-ledger-migration.md) — preserve one runnable accounting ledger; request-side ambiguity checks must also cover autonomous workers.

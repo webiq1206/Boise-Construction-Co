@@ -27,6 +27,30 @@ export const JOB_HOLD_MS=Number(process.env.P5_JOB_HOLD_MS||25_000);
 const jobExpired=(job:Job)=>Date.now()-Date.parse(job.createdAt)>=BACKGROUND_JOB_LIMIT_MS;
 const sleep=(ms:number)=>new Promise<void>(resolve=>{setTimeout(resolve,Math.max(0,ms));});
 const runs=()=>runtime.p5JobRuns||(runtime.p5JobRuns=new Map());
+const analysisQueueIdentity=(input:Extract<Input,{kind:'analysis'}>)=>({engineVersion:11,kind:input.kind,id:input.draft.id,text:input.text,answers:input.answers,uploads:input.draft.uploads});
+const backgroundKey=(identity:unknown)=>'background-v1-'+createHash('sha256').update(JSON.stringify(identity)).digest('hex');
+const matchingAnalysisRows=(rows:Record<string,any>[],canonicalKey:string)=>rows.filter(row=>{
+  const prior=row.payload as Job;
+  return prior?.input?.kind==='analysis'&&backgroundKey(analysisQueueIdentity(prior.input))===canonicalKey;
+});
+async function analysisQueueKey(input:Extract<Input,{kind:'analysis'}>,canonicalKey:string){
+  // A short-lived recovery release included document-service mode/origin in the
+  // background key. Those deployment settings are not job inputs: changing
+  // them must not create a fresh attempt/lifetime ledger. Reuse the persisted
+  // row itself: copying it would leave two runnable jobs. More than one match
+  // is ambiguous and must not silently select or combine accounting ledgers.
+  const rows=await query("SELECT work_key,payload FROM p5_estimator_work WHERE draft_id=$1 AND work_key LIKE 'background-v1-%'",[input.draft.id]);
+  const matches=matchingAnalysisRows(rows,canonicalKey);
+  if(matches.length>1)throw new DraftError('Multiple saved processing ledgers match this analysis. Processing is paused for safe reconciliation; no saved work was changed.',409);
+  return (matches[0]?.work_key as string|undefined)||canonicalKey;
+}
+async function assertQueueUnambiguous(draftId:string,workKey:string){
+  const rows=await query("SELECT work_key,payload FROM p5_estimator_work WHERE draft_id=$1 AND work_key LIKE 'background-v1-%'",[draftId]);
+  const target=rows.find(row=>row.work_key===workKey)?.payload as Job|undefined;
+  if(target?.input?.kind!=='analysis')return;
+  const canonicalKey=backgroundKey(analysisQueueIdentity(target.input));
+  if(matchingAnalysisRows(rows,canonicalKey).length>1)throw new DraftError('Multiple saved processing ledgers match this analysis. Processing is paused for safe reconciliation; no saved work was changed.',409);
+}
 export async function bootEstimatorWorker(){
   if(!process.env.DATABASE_URL||process.env.NEXT_PHASE==='phase-production-build')return;
   try{await (await import('./store.ts')).ensureSchema();startEstimatorWorker();}
@@ -43,7 +67,8 @@ export async function queuedJob(input:Input,retry=false,holdMs=JOB_HOLD_MS){
   if(input.kind==='pricing')assertProjectSourceCoverage(input.draft.reviewed?.uploads||input.draft.uploads,input.draft.reviewed?.extraction);
   if(input.kind==='analysis'&&input.draft.uploads.length)await assertAnalysisMigrationSafe(input.draft,input.text,input.answers,(await import('./analysisWork.ts')).analysisWorkKey(input.draft,input.text,input.answers));
   // Keep the deployed v1 queue identity and its attempt/lifetime accounting.
-  const key='background-v1-'+createHash('sha256').update(JSON.stringify(input.kind==='analysis'?{engineVersion:11,...(process.env.P5_DOCUMENT_SERVICE_MODE==='remote'?{documentServiceProtocol:'v1',documentServiceOrigin:process.env.P5_DOCUMENT_SERVICE_URL}:{}),kind:input.kind,id:input.draft.id,text:input.text,answers:input.answers,uploads:input.draft.uploads}:{engineVersion:8,kind:input.kind,id:input.draft.id,reviewed:input.draft.reviewed,configuration:input.configuration,date:new Date().toISOString().slice(0,10)})).digest('hex');
+  const canonicalKey=backgroundKey(input.kind==='analysis'?analysisQueueIdentity(input):{engineVersion:8,kind:input.kind,id:input.draft.id,reviewed:input.draft.reviewed,configuration:input.configuration,date:new Date().toISOString().slice(0,10)});
+  const key=input.kind==='analysis'?await analysisQueueKey(input,canonicalKey):canonicalKey;
   const initial:Job={input,state:'queued',progress:input.kind==='analysis'?'Your complete document set is queued for analysis.':'Your scope is queued for pricing.',attempts:0,createdAt:new Date().toISOString()};
   await query('INSERT INTO p5_estimator_work(draft_id,work_key,payload) VALUES($1,$2,$3::jsonb) ON CONFLICT DO NOTHING',[input.draft.id,key,JSON.stringify(initial)]);
   if(retry){
@@ -71,6 +96,9 @@ export async function queuedJob(input:Input,retry=false,holdMs=JOB_HOLD_MS){
     if(detail?.processing){job.processing={...detail.processing,startedAt:job.createdAt};job.progress=job.processing!.message;}
   }
   if(job.state==='failed'||job.retryAt&&job.retryAt>Date.now()+2000)job.processing={...job.processing,phase:'retrying',message:job.progress,startedAt:job.createdAt,updatedAt:new Date().toISOString()};
+  // Close the request-side insertion race as well: an older deployment could
+  // have written a second configuration-bound key while this request ran.
+  if(input.kind==='analysis')await assertQueueUnambiguous(input.draft.id,key);
   return job;
 }
 export function startEstimatorWorker(){
@@ -106,6 +134,7 @@ async function driveJob(draftId:string,workKey:string,holdMs:number){
 }
 /** Run passes until the job completes, fails, expires, or another instance holds it. */
 async function runJob(draftId:string,workKey:string){
+  await assertQueueUnambiguous(draftId,workKey);
   for(let pass=0;pass<400;pass++){
     const next=await runPass(draftId,workKey);
     if(next===null)return;
@@ -115,7 +144,10 @@ async function runJob(draftId:string,workKey:string){
 /** One bounded pass over a job. Returns the delay before the next pass, or
  * null when nothing further should run here. */
 async function runPass(draftId:string,workKey:string):Promise<number|null>{
+  await assertQueueUnambiguous(draftId,workKey);
   const lease=await claimWork(draftId,workKey,{},JOB_LEASE_S);if(!lease)return null;
+  try{await assertQueueUnambiguous(draftId,workKey);}
+  catch(error){await releaseWork(draftId,workKey,lease.token);throw error;}
   const job=lease.payload as Job;
   if(!job.input||job.state==='complete'||job.state==='failed'){await releaseWork(draftId,workKey,lease.token);return null;}
   if(job.retryAt&&job.retryAt>Date.now()){const wait=job.retryAt-Date.now();await releaseWork(draftId,workKey,lease.token);return Math.min(wait,60_000);}

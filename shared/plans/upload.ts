@@ -22,12 +22,12 @@
 /**
  * Sheets in one upload.
  *
- * 200 is the number the estimator promises. The ceiling is not really the
+ * 250 is the number the estimator promises. The ceiling is not really the
  * pages - it is the reading time, and that is handled by stepping rather than
  * by refusing sheets. Sets beyond this are a conversation with the team, not a
  * silent truncation.
  */
-export const MAX_PLAN_PAGES = 200;
+export const MAX_PLAN_PAGES = 250;
 
 /**
  * Bytes for ONE page.
@@ -43,11 +43,11 @@ export const MAX_PAGE_BYTES = 12 * 1024 * 1024;
 /**
  * Total bytes across the whole set.
  *
- * 400MB comfortably covers a 200-sheet scanned set at ~1.5MB/sheet with room
- * for the heavy ones. This is a sanity bound against a runaway upload, not the
- * mechanism that keeps requests small - that is the per-page split.
+ * 250 MiB is the estimator-wide source ceiling. This is a sanity bound against
+ * a runaway upload, not the mechanism that keeps requests small - that is the
+ * per-page split.
  */
-export const MAX_PLAN_TOTAL_BYTES = 400 * 1024 * 1024;
+export const MAX_PLAN_TOTAL_BYTES = 250 * 1024 * 1024;
 
 /** Source files in one upload (a set is sometimes delivered as several PDFs). */
 export const MAX_PLAN_FILES = 30;

@@ -6,13 +6,13 @@ import {test} from 'node:test';
 import {digest,openGuard,canonicalSourcePath,eligibleGenerationEndpoints,type Allowance} from './lib/livePricingGuard.mts';
 
 const endpoint='https://api.anthropic.com/v1/messages';
-const request={method:'POST',body:JSON.stringify({model:'simulated',max_tokens:10})};
+const request={method:'POST',headers:{'Content-Type':'application/json','x-api-key':'simulated','anthropic-version':'2023-06-01'},body:JSON.stringify({model:'simulated',max_tokens:10})};
 async function fixture(transport:typeof fetch,budget=20,changes:Partial<Allowance>={}){
  const directory=await mkdtemp(join(tmpdir(),'pricing-guard-'));
  const allowance:Allowance={version:1,authorization:'Simulated test only',currency:'USD',
   budgetMicrousd:budget,perCallMicrousd:10,boundEvidence:'Simulated explicit bound, not a real rate',
   coversAllTokensAndTools:true,expiresAt:'2099-01-01',ledgerDirectory:join(directory,'ledger'),
-  configurationFile:'unused',configurationSha256:'unused',sourceSha256:{},endpoints:[endpoint],
+   configurationFile:'unused',configurationSha256:digest('configuration'),sourceSha256:{'source.ts':digest('source')},endpoints:[endpoint],
   models:['simulated'],maxRequestBytes:1000,maxOutputTokens:10,requestBodySha256:[digest(request.body)],...changes};
  const file=join(directory,'allowance.json');await writeFile(file,JSON.stringify(allowance));
  return {file,guard:await openGuard(file,transport),directory};
@@ -52,6 +52,23 @@ test('immutable billing proof allows remaining budget only, full reserve never r
   reservationId:entry.id,allowanceSha256:digest(await readFile(file)),chargedAtMostMicrousd:10,
   reviewedBy:'test operator',providerEvidenceSha256:digest(proof)}),{flag:'wx',mode:0o600});
  await assert.rejects(guard.fetch(endpoint,request));assert.equal(calls,1);
+});
+test('a changed allowance cannot replace or clear a prior ledger',async()=>{
+ let calls=0;const transport:typeof fetch=async()=>{calls++;return new Response('{}');};
+ const {file,guard,directory}=await fixture(transport);
+ await guard.fetch(endpoint,request);
+ const before=new Map(await Promise.all((await readdir(guard.ledgerDirectory)).map(async name=>[
+  name,await readFile(join(guard.ledgerDirectory,name),'utf8'),
+ ] as const)));
+ const changed={...JSON.parse(await readFile(file,'utf8')),authorization:'Different simulated authorization'};
+ const changedFile=join(directory,'changed-allowance.json');
+ await writeFile(changedFile,JSON.stringify(changed));
+ await assert.rejects(openGuard(changedFile,transport));
+ const after=new Map(await Promise.all((await readdir(guard.ledgerDirectory)).map(async name=>[
+  name,await readFile(join(guard.ledgerDirectory,name),'utf8'),
+ ] as const)));
+ assert.deepEqual(after,before);
+ assert.equal(calls,1);
 });
 test('unapproved network and metadata never spend',async()=>{
  let calls=0;const {guard}=await fixture(async()=>{calls++;return new Response();});
@@ -119,6 +136,30 @@ test('unreviewed tool budgets, service tiers, unknown fields and inputs cannot s
  for(const extra of [{tools:[{type:'web_search',max_uses:100}]},{service_tier:'priority'},{future_paid_option:true},{messages:[{role:'user',content:'changed'}]}]){
   await assert.rejects(guard.fetch(endpoint,{method:'POST',body:JSON.stringify({...JSON.parse(request.body),...extra})}));
  }
+ assert.equal(calls,0);
+});
+test('unreviewed provider headers cannot alter billing or tool behavior',async()=>{
+ let calls=0;const {guard}=await fixture(async()=>{calls++;return new Response();});
+ for(const headers of [
+  {...request.headers,'anthropic-beta':'computer-use-2025-01-24'},
+  {...request.headers,'x-service-tier':'priority'},
+  {'Content-Type':'application/json','x-api-key':'simulated'},
+ ]){
+  await assert.rejects(guard.fetch(endpoint,{...request,headers}));
+ }
+ assert.equal(calls,0);
+ assert.equal((await readdir(guard.ledgerDirectory)).filter(n=>n.endsWith('.reservation.json')).length,0);
+});
+test('malformed or ambiguous allowance budgets fail closed',async()=>{
+ let calls=0;const transport:typeof fetch=async()=>{calls++;return new Response();};
+ await assert.rejects(fixture(transport,5));
+ await assert.rejects(fixture(transport,20,{configurationSha256:'unused'}));
+ const extra=await fixture(transport);
+ const parsed=JSON.parse(await readFile(extra.file,'utf8'));
+ parsed.normalCustomerPriceCap=1;
+ const changed=join(extra.directory,'allowance-with-unknown-field.json');
+ await writeFile(changed,JSON.stringify(parsed));
+ await assert.rejects(openGuard(changed,transport));
  assert.equal(calls,0);
 });
 test('source audit rejects traversal and file/directory symlinks',async()=>{

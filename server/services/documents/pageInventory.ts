@@ -22,6 +22,7 @@
  * dropped - an unreadable page is a finding, not an absence.
  */
 import { PDFDocument } from "pdf-lib";
+import { createHash } from "node:crypto";
 
 /** Types we can hand to the model directly. */
 const PDF_TYPE = "application/pdf";
@@ -83,6 +84,9 @@ export interface PageManifest {
  * will either take or reject cleanly.
  */
 export const PAGES_PER_CHUNK = 8;
+export const MAX_DOCUMENT_BYTES = 250 * 1024 * 1024;
+export const MAX_DOCUMENT_TOTAL_BYTES = 250 * 1024 * 1024;
+export const MAX_DOCUMENT_PAGES = 250;
 const CHUNK_BYTE_BUDGET = 16 * 1024 * 1024; // raw; ~21MB base64
 
 function encodedSize(raw: number): number {
@@ -170,24 +174,46 @@ async function splitPdf(file: SourceFile, fileIndex: number): Promise<ManifestPa
 export async function buildPageManifest(files: SourceFile[]): Promise<PageManifest> {
   const pages: ManifestPage[] = [];
   const skippedFiles: { filename: string; reason: string }[] = [];
+  const seen = new Set<string>();
+  let sourceIndex = 0;
+  let physicalBytes = 0;
 
   for (let fileIndex = 0; fileIndex < files.length; fileIndex++) {
     const file = files[fileIndex];
+    if (file.data.byteLength > MAX_DOCUMENT_BYTES) {
+      throw new Error(`Files must be no larger than 250 MiB each.`);
+    }
+    const identity = createHash("sha256").update(file.data).digest("hex");
+    if (seen.has(identity)) continue;
+    seen.add(identity);
+    physicalBytes += file.data.byteLength;
+    if (physicalBytes > MAX_DOCUMENT_TOTAL_BYTES) {
+      throw new Error(`Document review is limited to 250 MiB total.`);
+    }
+    // Number physical sources, not upload slots. Inserting a renamed duplicate
+    // must not renumber every distinct source that follows it.
+    const physicalIndex = sourceIndex++;
 
     if (file.mimeType === PDF_TYPE) {
-      pages.push(...(await splitPdf(file, fileIndex)));
+      pages.push(...(await splitPdf(file, physicalIndex)));
+      if (pages.length > MAX_DOCUMENT_PAGES) {
+        throw new Error(`Document review is limited to ${MAX_DOCUMENT_PAGES} pages total.`);
+      }
       continue;
     }
 
     if (IMAGE_TYPES.has(file.mimeType)) {
       pages.push({
-        id: `${fileIndex}:1`,
+        id: `${physicalIndex}:1`,
         filename: file.filename,
         pageNumber: 1,
         mimeType: file.mimeType,
         data: file.data,
         byteLength: file.data.byteLength,
       });
+      if (pages.length > MAX_DOCUMENT_PAGES) {
+        throw new Error(`Document review is limited to ${MAX_DOCUMENT_PAGES} pages total.`);
+      }
       continue;
     }
 

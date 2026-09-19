@@ -3,11 +3,12 @@ import {query} from './database.ts';
 import {readStoredBytes} from './objectStorage.ts';
 import {claimWork,writeWork,releaseWork} from './workStore.ts';
 import {ESTIMATOR_BRAND} from './brand.ts';
-import {SCOPE_FILE_LIMIT,combineScopeExtractions,validateExtraction,type ScopeAnswers,type ScopeUpload} from './scope.ts';
+import {SCOPE_FILE_LIMIT,SCOPE_PAGE_LIMIT,combineScopeExtractions,validateExtraction,type ScopeAnswers,type ScopeUpload} from './scope.ts';
 import type {AnalysisResult} from './extraction.ts';
 import {type Draft,DraftError} from './store.ts';
 import {fetchWithinDeadline,remainingBudget} from './processingBudget.ts';
 import type {ProcessingStatus} from './processingStatus.ts';
+import {PDFDocument} from 'pdf-lib';
 const VERSION='p5-documents-2026-09-17-v1';
 const digest=(value:string|Buffer)=>createHash('sha256').update(value).digest('hex');
 /** This is the existing host contract, not evidence of a 250 MiB host upgrade. */
@@ -33,22 +34,41 @@ export function documentServiceReadiness(env:Readonly<Record<string,string|undef
 export function partitionDocumentServiceUploads(uploads:ScopeUpload[],env:Readonly<Record<string,string|undefined>>=process.env){
  const remote:ScopeUpload[]=[],local:ScopeUpload[]=[];
  const limit=env.P5_DOCUMENT_SERVICE_MODE==='remote'?documentServiceMaxBytes(env):0;
- for(const upload of uploads)(upload.status==='stored'&&upload.type==='application/pdf'&&upload.size>0&&upload.size<=limit?remote:local).push(upload);
+ const seen=new Set<string>();
+ for(const raw of uploads){
+  // A checksum identifies physical evidence. Reading identical bytes twice can
+  // double quantities, and the storage schema already applies the same rule.
+  if(seen.has(raw.sha256))continue;
+  seen.add(raw.sha256);
+  const upload={...raw,name:sourceIdentity(raw,uploads)};
+  (upload.status==='stored'&&upload.type==='application/pdf'&&upload.size>0&&upload.size<=limit?remote:local).push(upload);
+ }
  return {remote,local};
+}
+/** Human-facing evidence identity. Names remain readable; duplicate names are
+ * disambiguated with the immutable upload id rather than branch-local order. */
+export function sourceIdentity(upload:ScopeUpload,uploads:ScopeUpload[]){
+ return uploads.filter(other=>other.sha256!==upload.sha256&&other.name===upload.name).length
+  ?`${upload.name} [${upload.id.slice(0,8)}]`
+  :upload.name;
+}
+export function uniqueSourceUploads(uploads:ScopeUpload[]){
+ const seen=new Set<string>();
+ return uploads.filter(upload=>!seen.has(upload.sha256)&&Boolean(seen.add(upload.sha256)));
 }
 export function documentServiceEligible(uploads:ScopeUpload[],env:Readonly<Record<string,string|undefined>>=process.env){
  return partitionDocumentServiceUploads(uploads,env).remote.length>0;
 }
 export type DocumentAnalysisStep=({pending:true;progress:string;retryAfterMs?:number}|{pending:false;version:string;analysis:AnalysisResult;expectedPages?:{source:string;page:number}[]})&{processing?:ProcessingStatus};
 type BranchReader=(draft:Draft,text:string,answers:ScopeAnswers,workKey:string,request:typeof fetch,retryFailed:boolean,deadline:number)=>Promise<DocumentAnalysisStep>;
-type MixedState={routes?:ReturnType<typeof partitionDocumentServiceUploads>;local?:AnalysisResult;remote?:AnalysisResult;localRetry?:boolean;remoteRetry?:boolean;branchProcessing?:Partial<Record<'local'|'remote',ProcessingStatus>>;processing?:ProcessingStatus&{branches?:Partial<Record<'local'|'remote',ProcessingStatus>>}};
+type MixedState={routes?:ReturnType<typeof partitionDocumentServiceUploads>;expected?:{source:string;page:number}[];local?:AnalysisResult;remote?:AnalysisResult;localRetry?:boolean;remoteRetry?:boolean;branchProcessing?:Partial<Record<'local'|'remote',ProcessingStatus>>;processing?:ProcessingStatus&{branches?:Partial<Record<'local'|'remote',ProcessingStatus>>}};
 /** Validate before merging: the merger intentionally coalesces detail tiles. */
 export function assertCompleteSourceCoverage(extraction:AnalysisResult['extraction'],sources:string[],expected?:{source:string;page:number}[],requiresPages=false){
  const fail=()=>{throw new DraftError('Some source evidence is still unread or its coverage could not be verified. Your files and completed work are saved. Use Retry to resume.',422);};
  if(!extraction||typeof extraction!=='object')fail();
  const coverage=extraction?.documentCoverage;
  if(!coverage){if(requiresPages||expected?.length)fail();return;}
- if(coverage.complete!==true||!Number.isSafeInteger(coverage.expectedPages)||coverage.expectedPages<0||!Array.isArray(coverage.pages)||coverage.pages.length!==coverage.expectedPages)fail();
+ if(coverage.complete!==true||!Number.isSafeInteger(coverage.expectedPages)||coverage.expectedPages<0||coverage.expectedPages>SCOPE_PAGE_LIMIT||!Array.isArray(coverage.pages)||coverage.pages.length!==coverage.expectedPages)fail();
  const seen=new Set<string>(),wanted=expected&&new Set(expected.map(p=>JSON.stringify([p.source,p.page])));
  for(const page of coverage.pages){
   const key=JSON.stringify([page.source,page.page]);
@@ -60,7 +80,11 @@ export function assertCompleteSourceCoverage(extraction:AnalysisResult['extracti
 export function assertProjectSourceCoverage(uploads:ScopeUpload[],extraction:AnalysisResult['extraction']|null|undefined){
  if(!uploads.length)return; // Typed-only projects have no page ledger.
  if(!extraction)throw new DraftError('Source verification is missing. Your files are preserved; complete document reading before pricing.',422);
- assertCompleteSourceCoverage(extraction,uploads.map(u=>uploads.filter(v=>v.name===u.name).length>1?`${u.name} [${u.id.slice(0,8)}]`:u.name),undefined,uploads.some(u=>u.type==='application/pdf'));
+ const unique=uniqueSourceUploads(uploads);
+ const sources=unique.map(u=>sourceIdentity(u,unique));
+ assertCompleteSourceCoverage(extraction,sources,undefined,true);
+ const covered=new Set(extraction.documentCoverage?.pages.map(page=>page.source));
+ if(sources.some(source=>!covered.has(source)))throw new DraftError('Some source evidence is still unread or its coverage could not be verified. Your files and completed work are saved. Use Retry to resume.',422);
 }
 /** No implicit migration may replay already-spent legacy read attempts. */
 export async function assertAnalysisMigrationSafe(draft:Draft,text:string,answers:ScopeAnswers,currentKey:string,read=query){
@@ -80,10 +104,19 @@ export async function readSavedSource(upload:ScopeUpload,draftId:string,dependen
  if(digest(bytes)!==upload.sha256)throw new DraftError('A saved document failed its integrity check. Your files are preserved; please reattach it.',422);
  return {file,bytes};
 }
+export async function inventorySourcePages(upload:ScopeUpload,draftId:string){
+ if(upload.type!=='application/pdf')return 1;
+ const {bytes}=await readSavedSource(upload,draftId);
+ let count:number;
+ try{count=(await PDFDocument.load(bytes,{ignoreEncryption:true})).getPageCount();}
+ catch{throw new DraftError(`The page count for ${upload.name} could not be verified. Your file is saved; replace an unreadable or password-protected PDF before continuing.`,422);}
+ if(!Number.isSafeInteger(count)||count<=0)throw new DraftError(`The page count for ${upload.name} could not be verified. Your file is saved.`,422);
+ return count;
+}
 /** Independently checkpoint both readers, then use the existing evidence merger.
  * No non-PDF payload or invented protocol field is sent to the remote host. */
 export async function advanceMixedDocumentAnalysis(draft:Draft,text:string,answers:ScopeAnswers,workKey:string,request:typeof fetch,retryFailed:boolean,deadline:number,localReader:BranchReader,
- dependencies={claimWork,writeWork,releaseWork,remoteReader:advanceDocumentService as BranchReader}):Promise<DocumentAnalysisStep>{
+ dependencies:{claimWork:typeof claimWork;writeWork:typeof writeWork;releaseWork:typeof releaseWork;remoteReader:BranchReader;inventorySource?:typeof inventorySourcePages}={claimWork,writeWork,releaseWork,remoteReader:advanceDocumentService as BranchReader}):Promise<DocumentAnalysisStep>{
  const lease=await dependencies.claimWork(draft.id,workKey,{},Math.max(30,Math.ceil((deadline-Date.now())/1000)+30));
  if(!lease)return {pending:true,progress:'Your source review is already running.',retryAfterMs:1000};
  const state=lease.payload as MixedState;
@@ -92,7 +125,20 @@ export async function advanceMixedDocumentAnalysis(draft:Draft,text:string,answe
   if(!state.routes){
    // Capture configuration exactly once. Saved choices survive limit changes.
    const env={...process.env};
-   state.routes=partitionDocumentServiceUploads(draft.uploads.map(upload=>({...upload,name:draft.uploads.filter(u=>u.name===upload.name).length>1?`${upload.name} [${upload.id.slice(0,8)}]`:upload.name})),env);
+   state.routes=partitionDocumentServiceUploads(draft.uploads,env);
+   await save();
+  }
+  if(!state.expected){
+   // Inventory all branches durably before either reader. Enforcing each branch
+   // separately would allow 200 PDF pages plus 51 photos to spend calls first.
+   const inventory=dependencies.inventorySource||inventorySourcePages;
+   const expected:{source:string;page:number}[]=[];
+   for(const upload of [...state.routes.remote,...state.routes.local]){
+    const count=await inventory(upload,draft.id);
+    if(!Number.isSafeInteger(count)||count<=0||expected.length+count>SCOPE_PAGE_LIMIT)throw new DraftError(`Source review is limited to ${SCOPE_PAGE_LIMIT} pages total. Split this project into separate estimates.`,422);
+    expected.push(...Array.from({length:count},(_,index)=>({source:upload.name,page:index+1})));
+   }
+   state.expected=expected;
    await save();
   }
   const routes=state.routes;
@@ -111,7 +157,8 @@ export async function advanceMixedDocumentAnalysis(draft:Draft,text:string,answe
    if(step.processing)state.branchProcessing[branch]=step.processing;
    if(step.pending){messages.push(`${branch==='local'?'Photos, spreadsheets and local files':'PDF reader'}: ${step.progress}`);waits.push(step.retryAfterMs||750);}
    else{
-    assertCompleteSourceCoverage(step.analysis.extraction,uploads.map(u=>u.name),step.expectedPages,uploads.some(u=>u.type==='application/pdf'));
+     const branchExpected=state.expected.filter(page=>uploads.some(upload=>upload.name===page.source));
+     assertCompleteSourceCoverage(step.analysis.extraction,uploads.map(u=>u.name),branchExpected,true);
     state[branch]=step.analysis;
     const coverage=step.analysis.extraction.documentCoverage;
     if(coverage)state.branchProcessing[branch]={...state.branchProcessing[branch],phase:'cross-referencing',message:'Source evidence verified.',readPages:coverage.pages.length,totalPages:coverage.expectedPages,updatedAt:new Date().toISOString()};
@@ -123,6 +170,7 @@ export async function advanceMixedDocumentAnalysis(draft:Draft,text:string,answe
   if((routes.local.length&&!state.local)||(routes.remote.length&&!state.remote))return {pending:true,progress:messages.join(' '),retryAfterMs:Math.min(...waits),processing:state.processing};
   const results=[state.remote,state.local].filter((r):r is AnalysisResult=>Boolean(r));
   const extraction=combineScopeExtractions(results.map(r=>r.extraction));
+   assertCompleteSourceCoverage(extraction,[...routes.remote,...routes.local].map(upload=>upload.name),state.expected,true);
   return {pending:false,version:digest(JSON.stringify([text,answers,draft.uploads.map(f=>[f.id,f.sha256])])),analysis:{extraction,provider:results.map(r=>r.provider).join(' + '),model:results.map(r=>r.model).join(' + '),analyzedAt:new Date().toISOString()}};
  }finally{await dependencies.releaseWork(draft.id,workKey,lease.token);}
 }
@@ -170,8 +218,13 @@ export async function advanceDocumentService(draft:Draft,text:string,answers:Sco
     if(retryFailed){const retried=await send('POST',path+'/retry');if(!retried.ok)throw new DraftError('The document retry could not start. Your files are saved.',503);return pending('Retrying only the interrupted document stages.',{phase:'retrying'});}
     throw new DraftError(`Document processing needs attention (${response.value.error||'reader failure'}). Completed work is saved. Use Retry to resume.`,422);
    }
-   complete&&=response.value.state==='complete';readPages+=Number(response.value.progress?.checkedPages||0);totalPages+=Number(response.value.progress?.totalPages||0);
-   const source=draft.uploads.filter(u=>u.name===upload.name).length>1?`${upload.name} [${upload.id.slice(0,8)}]`:upload.name;
+    const checked=response.value.progress?.checkedPages,total=response.value.progress?.totalPages;
+    if(checked!==undefined&&(!Number.isSafeInteger(checked)||checked<0))throw new DraftError('The document service returned invalid page progress.',503);
+    if(total!==undefined&&(!Number.isSafeInteger(total)||total<0||total>SCOPE_PAGE_LIMIT))throw new DraftError(`Documents are limited to ${SCOPE_PAGE_LIMIT} pages.`,422);
+    if(checked!==undefined&&total!==undefined&&checked>total)throw new DraftError('The document service returned invalid page progress.',503);
+    complete&&=response.value.state==='complete';readPages+=checked||0;totalPages+=total||0;
+    if(totalPages>SCOPE_PAGE_LIMIT)throw new DraftError(`Documents are limited to ${SCOPE_PAGE_LIMIT} pages total.`,422);
+    const source=upload.name;
    // Duplicate bytes in the same project are one physical source, even when
    // uploaded twice under different names. They must not multiply quantities.
    documents.push({id,source});
