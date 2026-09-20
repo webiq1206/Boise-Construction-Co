@@ -1,6 +1,5 @@
-import {estimateSections,groupSections,money,orderedSections,scopeBullets,type EstimateSection} from './presentation.ts';
+import {customerPresentation,estimateSections,groupSections,money,orderedSections,scopeBullets,type EstimateSection} from './presentation.ts';
 import {ESTIMATOR_BRAND as brand} from './brand.ts';
-import {projectCustomerEstimate} from './customerProjection.ts';
 
 /**
  * Customer and internal estimate emails.
@@ -118,7 +117,11 @@ function plainText(id:string,record:any,admin:boolean){
  return lines.join('\n');
 }
 export function estimateEmail(id:string,record:any,admin:boolean){
- if(!admin)record={...record,customer:projectCustomerEstimate(record.customer)};
+ // The customer email is never handed anything outside the customer boundary:
+ // its message, next step and disclaimer are projected with the sections. The
+ // administrative email keeps the saved record and projects only the
+ // "as delivered" sections (estimateSections applies the same projection).
+ if(!admin)record={...record,customer:customerPresentation(record.customer)};
  const result=record.customer;
  const title=admin?'Internal estimate record':'Your project estimate';
  const subtitle=admin?`Confidential · Reference ${id.slice(0,8)}`:`${brand.name} · Reference ${id.slice(0,8)}`;

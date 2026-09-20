@@ -3,31 +3,44 @@ import {query} from './database.ts';
 import {readStoredBytes} from './objectStorage.ts';
 import {claimWork,writeWork,releaseWork} from './workStore.ts';
 import {ESTIMATOR_BRAND} from './brand.ts';
-import {SCOPE_FILE_LIMIT,SCOPE_PAGE_LIMIT,combineScopeExtractions,validateExtraction,type ScopeAnswers,type ScopeUpload} from './scope.ts';
-import type {AnalysisResult} from './extraction.ts';
+import {SCOPE_FILE_LIMIT,SCOPE_MAX_PAGES,combineScopeExtractions,validateExtraction,type ScopeAnswers,type ScopeUpload} from './scope.ts';
+import {retainScopeContext,type AnalysisResult} from './extraction.ts';
 import {type Draft,DraftError} from './store.ts';
 import {fetchWithinDeadline,remainingBudget} from './processingBudget.ts';
 import type {ProcessingStatus} from './processingStatus.ts';
 import {PDFDocument} from 'pdf-lib';
 const VERSION='p5-documents-2026-09-17-v1';
 const digest=(value:string|Buffer)=>createHash('sha256').update(value).digest('hex');
-/** This is the existing host contract, not evidence of a 250 MiB host upgrade. */
-export const DOCUMENT_SERVICE_DEFAULT_MAX_BYTES=50*1024*1024;
-export function documentServiceMaxBytes(env:Readonly<Record<string,string|undefined>>=process.env){
- const limit=Number(env.P5_DOCUMENT_SERVICE_MAX_BYTES||DOCUMENT_SERVICE_DEFAULT_MAX_BYTES);
- if(!Number.isSafeInteger(limit)||limit<=0||limit>SCOPE_FILE_LIMIT)throw new DraftError('The document size limit needs configuration. Your files are saved.',503);
- return limit;
+/** Brand policy. Construction refuses to complete a local read, or queue pricing,
+ * while any uploaded source lacks verified page coverage. The other brands
+ * return the partial read with blocking review notes and incomplete coverage,
+ * so the visitor can still submit for manual review. Shared-reader (remote and
+ * mixed) results always require complete verified coverage on every brand. */
+export const SOURCE_COVERAGE_REQUIRED=(ESTIMATOR_BRAND.id as string)==='construction';
+type Environment=Readonly<Record<string,string|undefined>>;
+/** The client default equals the upload limit. It is a request, not a claim
+ * about the host: /readyz must attest at least these limits before any
+ * document is sent (see validateDocumentServiceReadiness). Operators lower it
+ * with P5_DOCUMENT_SERVICE_MAX_BYTES when the host is smaller. */
+export const DOCUMENT_SERVICE_DEFAULT_MAX_BYTES=SCOPE_FILE_LIMIT;
+/** Byte and page limits are clamped to the customer-facing upload contract. */
+export function documentServiceLimits(env:Environment=process.env){
+ const maxFileBytes=Number(env.P5_DOCUMENT_SERVICE_MAX_BYTES||DOCUMENT_SERVICE_DEFAULT_MAX_BYTES),maxPages=Number(env.P5_DOCUMENT_SERVICE_MAX_PAGES||SCOPE_MAX_PAGES);
+ if(!Number.isSafeInteger(maxFileBytes)||maxFileBytes<=0||maxFileBytes>SCOPE_FILE_LIMIT||!Number.isSafeInteger(maxPages)||maxPages<=0||maxPages>SCOPE_MAX_PAGES)throw new DraftError('The document size/page limit needs configuration. Your files are saved.',503);
+ return {maxFileBytes,maxPages};
 }
+export function documentServiceMaxBytes(env:Environment=process.env){return documentServiceLimits(env).maxFileBytes;}
 /** Pure, redacted configuration check. It never probes a host or proves capability. */
 export function documentServiceReadiness(env:Readonly<Record<string,string|undefined>>=process.env){
  if(!env.P5_DOCUMENT_SERVICE_MODE||env.P5_DOCUMENT_SERVICE_MODE==='local')return {enabled:false,state:'off' as const,configurationReady:false,maxBytes:null,uploadMaxBytes:SCOPE_FILE_LIMIT,hostVerified:false as const,issues:[] as string[]};
  const issues:string[]=[];let maxBytes:number|null=null;
- try{maxBytes=documentServiceMaxBytes(env);}catch{issues.push('Invalid remote byte limit (must be within the upload limit).');}
+ try{maxBytes=documentServiceMaxBytes(env);}catch{issues.push('Invalid remote byte or page limit (must be within the upload limits).');}
  try{
   const url=new URL(env.P5_DOCUMENT_SERVICE_URL||'');
   if(url.protocol!=='https:'||url.username||url.password||!['/','/api/p5-documents','/api/p5-documents/'].includes(url.pathname)||url.search||url.hash)issues.push('Use an HTTPS service origin or /api/p5-documents base without credentials, query or fragment.');
  }catch{issues.push('A valid document service URL is required.');}
  if((env.P5_DOCUMENT_SERVICE_KEY||'').length<32)issues.push('A signing key of at least 32 characters is required.');
+ if(env.P5_DOCUMENT_SERVICE_TENANT!==ESTIMATOR_BRAND.domain)issues.push('P5_DOCUMENT_SERVICE_TENANT must explicitly name this site.');
  if(env.P5_DOCUMENT_SERVICE_MODE&& !['local','remote'].includes(env.P5_DOCUMENT_SERVICE_MODE))issues.push('Document service mode must be local or remote.');
  return {enabled:env.P5_DOCUMENT_SERVICE_MODE==='remote',state:issues.length?'invalid' as const:'configured-unverified' as const,configurationReady:issues.length===0,maxBytes,uploadMaxBytes:SCOPE_FILE_LIMIT,hostVerified:false as const,issues};
 }
@@ -52,6 +65,10 @@ export function sourceIdentity(upload:ScopeUpload,uploads:ScopeUpload[]){
   ?`${upload.name} [${upload.id.slice(0,8)}]`
   :upload.name;
 }
+/** Handyman call sites: only the uploads the shared reader will receive. */
+export function documentServiceUploads(uploads:ScopeUpload[],env:Environment=process.env){return partitionDocumentServiceUploads(uploads,env).remote;}
+/** Cabinet call sites use the shorter name for the same partition. */
+export const partitionDocumentUploads=partitionDocumentServiceUploads;
 export function uniqueSourceUploads(uploads:ScopeUpload[]){
  const seen=new Set<string>();
  return uploads.filter(upload=>!seen.has(upload.sha256)&&Boolean(seen.add(upload.sha256)));
@@ -68,7 +85,7 @@ export function assertCompleteSourceCoverage(extraction:AnalysisResult['extracti
  if(!extraction||typeof extraction!=='object')fail();
  const coverage=extraction?.documentCoverage;
  if(!coverage){if(requiresPages||expected?.length)fail();return;}
- if(coverage.complete!==true||!Number.isSafeInteger(coverage.expectedPages)||coverage.expectedPages<0||coverage.expectedPages>SCOPE_PAGE_LIMIT||!Array.isArray(coverage.pages)||coverage.pages.length!==coverage.expectedPages)fail();
+ if(coverage.complete!==true||!Number.isSafeInteger(coverage.expectedPages)||coverage.expectedPages<0||coverage.expectedPages>SCOPE_MAX_PAGES||!Array.isArray(coverage.pages)||coverage.pages.length!==coverage.expectedPages)fail();
  const seen=new Set<string>(),wanted=expected&&new Set(expected.map(p=>JSON.stringify([p.source,p.page])));
  for(const page of coverage.pages){
   const key=JSON.stringify([page.source,page.page]);
@@ -135,7 +152,7 @@ export async function advanceMixedDocumentAnalysis(draft:Draft,text:string,answe
    const expected:{source:string;page:number}[]=[];
    for(const upload of [...state.routes.remote,...state.routes.local]){
     const count=await inventory(upload,draft.id);
-    if(!Number.isSafeInteger(count)||count<=0||expected.length+count>SCOPE_PAGE_LIMIT)throw new DraftError(`Source review is limited to ${SCOPE_PAGE_LIMIT} pages total. Split this project into separate estimates.`,422);
+    if(!Number.isSafeInteger(count)||count<=0||expected.length+count>SCOPE_MAX_PAGES)throw new DraftError(`Source review is limited to ${SCOPE_MAX_PAGES} pages total. Split this project into separate estimates.`,422);
     expected.push(...Array.from({length:count},(_,index)=>({source:upload.name,page:index+1})));
    }
    state.expected=expected;
@@ -179,13 +196,51 @@ export function documentServiceHeaders(method:string,path:string,tenant:string,s
  return {'x-p5-tenant':tenant,'x-p5-time':timestamp,'x-p5-nonce':nonce,'x-p5-body-sha256':bodyHash,'x-p5-signature':createHmac('sha256',secret).update([method,path,tenant,timestamp,nonce,bodyHash].join('\n')).digest('hex')};
 }
 export function remoteDocumentId(tenant:string,project:string,sha256:string){return digest(JSON.stringify([VERSION,tenant,project,sha256]));}
+/** Explicit brand binding is required; never borrow a sibling site's credential. */
+export function documentServiceConfiguration(env:Environment=process.env){
+ const tenant=ESTIMATOR_BRAND.domain,secret=env.P5_DOCUMENT_SERVICE_KEY||'';
+ let origin:URL;try{origin=new URL(env.P5_DOCUMENT_SERVICE_URL||'');}catch{throw new DraftError('The document service is not configured. Your files are saved.',503);}
+ if(origin.protocol!=='https:'||origin.username||origin.password||!['/','/api/p5-documents','/api/p5-documents/'].includes(origin.pathname)||origin.search||origin.hash||secret.length<32)throw new DraftError('The document service configuration needs attention. Your files are saved.',503);
+ if(env.P5_DOCUMENT_SERVICE_TENANT!==tenant)throw new DraftError(`The document service requires a credential explicitly provisioned for ${ESTIMATOR_BRAND.domain}. Your files are saved.`,503);
+ return {tenant,secret,origin,limits:documentServiceLimits(env)};
+}
+/** /readyz must attest the authenticated tenant and actual worker limits, not just HTTP health.
+ * The host answers both adapter shapes (limits/capabilities and the flat
+ * maxBytes/maxPages/pdf/provider/service form); either is accepted, and any
+ * provider or service health block that is present must be healthy. */
+export function validateDocumentServiceReadiness(value:unknown,limits=documentServiceLimits()){
+ const ready=value as {ready?:boolean;ok?:boolean;providerConfigured?:boolean;tenant?:string;protocol?:string;limits?:{maxFileBytes?:number;maxPages?:number};capabilities?:{pdf?:boolean};pdf?:boolean;maxBytes?:number;maxPages?:number;provider?:{configured?:boolean;ready?:boolean;health?:string};service?:{healthy?:boolean;database?:string}}|null;
+ const fail=()=>{throw new DraftError('Reader readiness is unverified: /readyz must confirm this tenant, a configured provider, v1 PDF support, and the configured byte/page limits. No documents were sent; your files are saved.',503);};
+ if(!ready||typeof ready!=='object')return fail();
+ const maxFileBytes=ready.limits?.maxFileBytes??ready.maxBytes,maxPages=ready.limits?.maxPages??ready.maxPages;
+ const providerReady=ready.provider===undefined?ready.providerConfigured===true:ready.providerConfigured!==false&&ready.provider?.configured===true&&ready.provider.ready===true&&ready.provider.health==='configured';
+ const serviceReady=ready.service===undefined||(ready.service?.healthy===true&&ready.service.database==='ok');
+ if(!(ready.ready===true||ready.ok===true)||ready.ready===false||ready.ok===false||!providerReady||!serviceReady||ready.tenant!==ESTIMATOR_BRAND.domain||ready.protocol!=='v1'||!(ready.capabilities?.pdf===true||ready.pdf===true)||!Number.isSafeInteger(maxFileBytes)||!Number.isSafeInteger(maxPages)||maxFileBytes!<limits.maxFileBytes||maxPages!<limits.maxPages)return fail();
+ return true;
+}
+/** No-charge readiness check: GET only, no document upload or review creation. */
+export async function checkDocumentServiceReadiness(request:typeof fetch=fetch,env:Environment=process.env,deadline=Date.now()+10000){
+ const config=documentServiceConfiguration(env),path='/readyz',body=Buffer.alloc(0);
+ const response=await fetchWithinDeadline(request,config.origin.origin+config.origin.pathname.replace(/\/$/,'')+path,{method:'GET',headers:documentServiceHeaders('GET',path,config.tenant,config.secret,body),redirect:'error'},deadline);
+ if(!response.ok)throw new DraftError('The authenticated document reader readiness check failed. Your files are saved.',503);
+ let value:unknown;try{value=await response.json();}catch{throw new DraftError('The document reader readiness response is invalid. Your files are saved.',503);}
+ validateDocumentServiceReadiness(value,config.limits);
+ return config;
+}
+/** Reject oversized metadata immediately, including queued/reading receipts. */
+export function validateRemotePageCount(value:unknown,maxPages=SCOPE_MAX_PAGES){
+ if(value!==undefined&&(!Number.isSafeInteger(value)||Number(value)<0||Number(value)>maxPages))throw new DraftError(`The document reader reported an invalid page count or more than ${maxPages} pages. Your file is saved but cannot be automatically analyzed.`,422);
+}
 export async function advanceDocumentService(draft:Draft,text:string,answers:ScopeAnswers,workKey:string,request:typeof fetch,retryFailed:boolean,deadline:number,
  dependencies={claimWork,writeWork,releaseWork,query,readStoredBytes}):Promise<DocumentAnalysisStep>{
- const tenant=ESTIMATOR_BRAND.domain;
+ if(draft.brand!==ESTIMATOR_BRAND.id)throw new DraftError('This project does not belong to this document-service tenant.',403);
+ if(draft.uploads.some(u=>u.type!=='application/pdf'))throw new DraftError('Non-PDF sources must be reconciled through mixed-source routing.',422);
+ if(process.env.P5_DOCUMENT_SERVICE_MODE!=='remote')throw new DraftError('Remote document reading is not enabled for this source. Your files are saved.',503);
+ if(draft.uploads.some(u=>u.status!=='stored'||u.size<=0))throw new DraftError('A PDF is not fully stored. Your files are saved; it cannot be sent to the document reader.',422);
  if(!documentServiceReadiness().configurationReady)throw new DraftError('The document service configuration needs attention. Your files are saved.',503);
- const secret=process.env.P5_DOCUMENT_SERVICE_KEY||'',configured=process.env.P5_DOCUMENT_SERVICE_URL||'';
- let origin:URL;try{origin=new URL(configured);}catch{throw new DraftError('The document service is not configured. Your files are saved.',503);}
- if(origin.protocol!=='https:'||origin.username||origin.password||!['/','/api/p5-documents','/api/p5-documents/'].includes(origin.pathname)||origin.search||origin.hash||secret.length<32)throw new DraftError('The document service configuration needs attention. Your files are saved.',503);
+ // Authenticated, no-charge preflight: the host must attest this tenant and
+ // at least the configured limits before any document bytes leave the site.
+ const {tenant,secret,origin,limits}=await checkDocumentServiceReadiness(request,process.env,Math.min(deadline,Date.now()+10000));
  const base=`/v1/projects/${encodeURIComponent(draft.id)}`;
  const send=async(method:string,path:string,body:Buffer=Buffer.alloc(0),contentType='application/json')=>{
   const response=await fetchWithinDeadline(request,origin.origin+origin.pathname.replace(/\/$/,'')+path,{method,headers:{...documentServiceHeaders(method,path,tenant,secret,body),'content-type':contentType},...(method==='POST'?{body:body as unknown as BodyInit}:{}),redirect:'error'},Math.min(deadline,Date.now()+60000));
@@ -212,25 +267,27 @@ export async function advanceDocumentService(draft:Draft,text:string,answers:Sco
     response=await send('POST',base+'/documents?name='+encodeURIComponent(upload.name),bytes,'application/pdf');
    }
    if(response.status===429||response.status===503)return pending('Your documents are saved. Waiting for reader capacity.',{phase:'queued'},Math.min(10000,response.value.retryAfterMs||2000));
-   if(!response.ok)throw new DraftError(`Document reading is unavailable (${response.value.error||response.status}). Your uploaded files are saved.`,503);
+   if(!response.ok)throw new DraftError(`Document reading is unavailable (HTTP ${response.status}). Your uploaded files are saved.`,503);
    if(response.value.id!==id)throw new DraftError('The document service receipt did not match this project.',503);
    if(response.value.state==='failed'){
     if(retryFailed){const retried=await send('POST',path+'/retry');if(!retried.ok)throw new DraftError('The document retry could not start. Your files are saved.',503);return pending('Retrying only the interrupted document stages.',{phase:'retrying'});}
-    throw new DraftError(`Document processing needs attention (${response.value.error||'reader failure'}). Completed work is saved. Use Retry to resume.`,422);
+    throw new DraftError('Document processing needs attention. Completed work is saved. Use Retry to resume.',422);
    }
+    // Reject oversized metadata immediately, including queued/reading receipts.
+    validateRemotePageCount(response.value.progress?.totalPages,limits.maxPages);
     const checked=response.value.progress?.checkedPages,total=response.value.progress?.totalPages;
     if(checked!==undefined&&(!Number.isSafeInteger(checked)||checked<0))throw new DraftError('The document service returned invalid page progress.',503);
-    if(total!==undefined&&(!Number.isSafeInteger(total)||total<0||total>SCOPE_PAGE_LIMIT))throw new DraftError(`Documents are limited to ${SCOPE_PAGE_LIMIT} pages.`,422);
+    if(total!==undefined&&(!Number.isSafeInteger(total)||total<0||total>limits.maxPages))throw new DraftError(`Documents are limited to ${limits.maxPages} pages. Split larger plans before automatic reading. Your uploaded file is saved.`,422);
     if(checked!==undefined&&total!==undefined&&checked>total)throw new DraftError('The document service returned invalid page progress.',503);
     complete&&=response.value.state==='complete';readPages+=checked||0;totalPages+=total||0;
-    if(totalPages>SCOPE_PAGE_LIMIT)throw new DraftError(`Documents are limited to ${SCOPE_PAGE_LIMIT} pages total.`,422);
+    if(totalPages>limits.maxPages)throw new DraftError(`Documents are limited to ${limits.maxPages} pages total. Split this project into separate scopes before pricing. Your uploaded files are saved.`,422);
     const source=upload.name;
    // Duplicate bytes in the same project are one physical source, even when
    // uploaded twice under different names. They must not multiply quantities.
    documents.push({id,source});
    if(response.value.state==='complete'){
     const coverage=response.value.coverage;
-     if(!coverage?.complete||!Number.isSafeInteger(response.value.progress?.totalPages)||response.value.progress.totalPages<=0||!Array.isArray(coverage.pages)||coverage.pages.length!==response.value.progress?.totalPages||coverage.pages.some((p:any,i:number)=>p.page!==i+1||p.status!=='read'||(p.source!==undefined&&p.source!==source)))throw new DraftError('Some document pages still need verification. Your files are saved; an unchecked estimate cannot be submitted.',422);
+     if(!coverage?.complete||!Number.isSafeInteger(response.value.progress?.totalPages)||response.value.progress.totalPages<=0||response.value.progress.totalPages>limits.maxPages||!Array.isArray(coverage.pages)||coverage.pages.length!==response.value.progress?.totalPages||coverage.pages.some((p:any,i:number)=>p.page!==i+1||p.status!=='read'||(p.source!==undefined&&p.source!==source)))throw new DraftError('Some document pages still need verification or exceed the configured page limit. Your files are saved; an unchecked estimate cannot be submitted.',422);
     for(const page of coverage.pages)expectedPages.add(JSON.stringify([source,page.page]));
    }
   }
@@ -242,14 +299,16 @@ export async function advanceDocumentService(draft:Draft,text:string,answers:Sco
   const review=submitted.value;
   if(review.state==='failed'){
    if(retryFailed){const retried=await send('POST',base+'/reviews/'+review.id+'/retry');if(!retried.ok)throw new DraftError('The scope retry could not start. Your source evidence is saved.',503);return pending('Retrying scope reconciliation without rereading the documents.',{phase:'cross-referencing'});}
-   throw new DraftError(`Scope reconciliation needs attention (${review.error||'processing error'}). Your source documents are saved.`,422);
+   throw new DraftError('Scope reconciliation needs attention. Your source documents are saved.',422);
   }
   if(!complete)return pending(totalPages?`Checked ${readPages} of ${totalPages} pages. Reading source evidence.`:'Preparing your document source records.',{readPages,totalPages});
   if(review.state!=='complete')return pending('Matching the source evidence to your project and checking only missing details.',{phase:'cross-referencing',readPages,totalPages});
-  assertCompleteSourceCoverage(review.result,documents.map(d=>d.source),[...expectedPages].map(key=>{const [source,page]=JSON.parse(key);return {source,page};}),true);
-  const extraction=validateExtraction(review.result);
+  const extraction=retainScopeContext(validateExtraction(review.result),text,answers);
   const coverage=extraction.documentCoverage,seen=new Set<string>();
   if(!coverage?.complete||coverage.expectedPages!==totalPages||coverage.pages.length!==totalPages||coverage.pages.some(p=>{const key=JSON.stringify([p.source,p.page]);if(p.status!=='read'||!expectedPages.has(key)||seen.has(key))return true;seen.add(key);return false;}))throw new DraftError('The returned document coverage did not match the verified uploaded pages.',503);
+  // The host returns its page manifest as result.pages; validation normalizes it
+  // (or a documentCoverage block) into one coverage record before the strict check.
+  assertCompleteSourceCoverage(extraction,documents.map(d=>d.source),[...expectedPages].map(key=>{const [source,page]=JSON.parse(key);return {source,page};}),true);
   return {pending:false as const,version:digest(JSON.stringify([text,answers,draft.uploads.map(f=>[f.id,f.sha256])])),analysis:{extraction,provider:'P5 Document Service',model:VERSION,analyzedAt:new Date().toISOString()}};
  }finally{await dependencies.releaseWork(draft.id,workKey,lease.token);}
 }

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {transferLargeFiles} from '../lib/p5/resumableTransfer.ts';
-import {BROWSER_DRAFT_RECOVERY_KEY,loadBrowserDraft,newBrowserDraft,persistBrowserDraft,cacheFiles,loadCachedFiles,validateCacheSelection,missingPendingFiles,listBrowserDraftRecoveries,restoreBrowserDraft} from '../lib/p5/browserDraft.ts';
+import {BROWSER_DRAFT_RECOVERY_KEY,DEVICE_CACHE_LIMIT,loadBrowserDraft,newBrowserDraft,persistBrowserDraft,cacheFiles,loadCachedFiles,validateCacheSelection,missingPendingFiles,listBrowserDraftRecoveries,restoreBrowserDraft} from '../lib/p5/browserDraft.ts';
 import {SCOPE_FILE_LIMIT,SCOPE_BATCH_LIMIT,SCOPE_CHUNK_SIZE,validateAnswer} from '../lib/p5/scope.ts';
 
 // Pure tests: any unintended provider, session, CRM or database HTTP call fails.
@@ -94,13 +94,21 @@ test('file recovery reads only the active draft and never returns a partial read
   }
 });
 
-test('cache metadata admits 250 MiB files and the exact 1 GiB batch, without the obsolete 22 MiB cutoff',()=>{
+test('selection metadata admits 250 MiB files and the exact 1 GiB batch',()=>{
   assert.doesNotThrow(()=>validateCacheSelection([{size:250*1024*1024}]));
   assert.doesNotThrow(()=>validateCacheSelection([...Array.from({length:4},()=>({size:SCOPE_FILE_LIMIT})),{size:SCOPE_BATCH_LIMIT-4*SCOPE_FILE_LIMIT}]));
-  assert.throws(()=>validateCacheSelection([{size:SCOPE_FILE_LIMIT+1}]),/250 MB/);
-  assert.throws(()=>validateCacheSelection(Array.from({length:5},()=>({size:SCOPE_FILE_LIMIT}))),/1 GB/);
+  assert.throws(()=>validateCacheSelection([{size:SCOPE_FILE_LIMIT+1}]),/250 MiB/);
+  assert.throws(()=>validateCacheSelection(Array.from({length:5},()=>({size:SCOPE_FILE_LIMIT}))),/1 GiB/);
   assert.throws(()=>validateCacheSelection(Array.from({length:51},()=>({size:1}))),/50 files/);
   assert.doesNotThrow(()=>validateCacheSelection([]),'clearing the cache remains valid');
+});
+
+test('the device recovery copy keeps its own memory budget and refuses before reading any bytes',async()=>{
+  assert.equal(DEVICE_CACHE_LIMIT,22*1024*1024);
+  const large={name:'250-page-plan.pdf',size:DEVICE_CACHE_LIMIT+1,lastModified:1,type:'application/pdf',arrayBuffer(){throw new Error('Must not read');},slice(){throw new Error('Must not read');}} as unknown as File;
+  await assert.rejects(cacheFiles('fixture-budget',[large]),/Large files stay in this tab/);
+  // The refused selection is still named, so a reload asks for the original instead of losing it.
+  assert.deepEqual(missingPendingFiles({pendingFiles:[{name:large.name,size:large.size}]},[]),[{name:large.name,size:large.size}]);
 });
 
 test('missing original files remain identifiable after quota failure and partial reselection',()=>{
@@ -116,7 +124,7 @@ test('a truncated upload segment cannot receive a finish receipt',async()=>{
   const file=new File(['complete source'],'plan.pdf');
   Object.defineProperty(file,'slice',{value:()=>new Blob(['cut'])});
   let requests=0;
-  const fixture:typeof fetch=async(input)=>{requests++;assert.match(String(input),/action=start/);return json({chunkSize:SCOPE_CHUNK_SIZE,chunks:{}});};
+  const fixture:typeof fetch=async(input)=>{requests++;assert.match(String(input),/action=start/);return json({chunkSize:SCOPE_CHUNK_SIZE,chunks:{},complete:false});};
   await assert.rejects(transferLargeFiles([file],{},()=>{},fixture),/segment was not fully read/);
   assert.equal(requests,1);
 });
@@ -125,7 +133,18 @@ test('partial file reads are rejected before caching or sending any bytes',async
   const file=new File(['whole source'],'scope.xlsx');
   Object.defineProperty(file,'arrayBuffer',{value:async()=>new ArrayBuffer(2)});
   await assert.rejects(cacheFiles('fixture',[file]),/not fully read/);
-  await assert.rejects(transferLargeFiles([file],{},()=>{}),/not fully read/);
+});
+
+test('selection limits and cancellation are enforced before any file data is read or sent',async()=>{
+  const unread=(size:number)=>({name:'plan.pdf',size,slice(){throw new Error('Must not read');},arrayBuffer(){throw new Error('Must not read');}}) as unknown as File;
+  await assert.rejects(transferLargeFiles([],{},()=>{}),/50 files/);
+  await assert.rejects(transferLargeFiles([unread(0)],{},()=>{}),/250 MiB/);
+  await assert.rejects(transferLargeFiles(Array.from({length:51},()=>unread(1)),{},()=>{}),/50 files/);
+  await assert.rejects(transferLargeFiles(Array.from({length:5},()=>unread(SCOPE_FILE_LIMIT)),{},()=>{}),/1 GiB/);
+  const controller=new AbortController();let requests=0;
+  const cancelled:typeof fetch=async()=>{requests++;controller.abort();throw new DOMException('Aborted','AbortError');};
+  await assert.rejects(transferLargeFiles([new File(['scope'],'scope.txt')],{},()=>{},cancelled,controller.signal),{name:'AbortError'});
+  assert.equal(requests,1,'a customer cancellation is never retried');
 });
 
 test('250 MiB boundary transfers every byte including the last partial segment',async()=>{
@@ -139,7 +158,7 @@ test('250 MiB boundary transfers every byte including the last partial segment',
     const url=new URL(String(input),'http://fixture.invalid');
     assert.equal(url.searchParams.get('sha256'),expectedHash);
     switch(url.searchParams.get('action')){
-      case 'start': assert.deepEqual(JSON.parse(String(init?.body)),{name:file.name,size:SCOPE_FILE_LIMIT});return json({chunkSize:SCOPE_CHUNK_SIZE,chunks:{}});
+      case 'start': assert.deepEqual(JSON.parse(String(init?.body)),{name:file.name,size:SCOPE_FILE_LIMIT});return json({chunkSize:SCOPE_CHUNK_SIZE,chunks:{},complete:false});
       case 'part': {
         const data=init?.body as Uint8Array;
         assert.equal(Number(url.searchParams.get('part')),parts);
@@ -157,7 +176,7 @@ test('250 MiB boundary transfers every byte including the last partial segment',
   assert.equal(progress.at(-1),99);
   assert.ok(progress.every((value,index)=>value<=99&&(!index||value>=progress[index-1])));
   const oversized=new File(['x'],'too-large.pdf');Object.defineProperty(oversized,'size',{value:SCOPE_FILE_LIMIT+1});
-  await assert.rejects(transferLargeFiles([oversized],{},()=>{}),/250 MB/);
+  await assert.rejects(transferLargeFiles([oversized],{},()=>{}),/250 MiB/);
 });
 
 test('mixed files resume matching segments, retry HTML gateway failure, and require cumulative receipt',async()=>{
@@ -169,7 +188,7 @@ test('mixed files resume matching segments, retry HTML gateway failure, and requ
     const action=url.searchParams.get('action');
     if(action==='start'){
       if(starts++===0)return new Response('<html>Bad gateway</html>',{status:502});
-      return json({chunkSize:SCOPE_CHUNK_SIZE,chunks:{0:hashes[index]}});
+      return json({chunkSize:SCOPE_CHUNK_SIZE,chunks:{0:hashes[index]},complete:false});
     }
     if(action==='part'){parts++;throw new Error('Acknowledged segments must not be resent');}
     assert.equal(action,'finish');finishes++;

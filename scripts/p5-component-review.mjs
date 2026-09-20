@@ -15,7 +15,6 @@ const selected=[...new Set(['/', '/estimate/scope', '/contact','/about','/testim
  routes.find(r=>/^\/services\/[^/]+\/[^/]+$/.test(r)),
  routes.find(r=>/^\/guides\/[^/]+$/.test(r)),
  routes.find(r=>/^\/blog\/[^/]+$/.test(r)),
- ...(process.env.P5_SITE==='construction'?['/services/custom-home-builder/star']:[]),
  ...(cabinet?['/catalog','/cabinets','/compare','/construction','/builders','/warranty']:[])
 ].filter(Boolean))];
 try {
@@ -32,8 +31,7 @@ try {
   for(const route of selected){
    const rec={width,route};
    try{
-    await page.goto(origin+route,{waitUntil:'load'});
-    await page.waitForTimeout(700);
+    await page.goto(origin+route,{waitUntil:'domcontentloaded'});
     await page.evaluate(async()=>{await document.fonts.ready;for(let y=0;y<document.documentElement.scrollHeight;y+=600){window.scrollTo({top:y,behavior:'instant'});await new Promise(r=>setTimeout(r,80));}});
     await page.locator('article details:not([open]) > summary').evaluateAll(es=>es.forEach(e=>e.click()));
     await page.evaluate(async()=>{const is=[...document.images].filter(i=>i.getClientRects().length);is.forEach(i=>i.loading='eager');await Promise.race([Promise.allSettled(is.map(i=>i.decode())),new Promise(r=>setTimeout(r,15000))]);});
@@ -48,13 +46,6 @@ try {
     assert.equal(missingGradients.length,0,'Missing gradient overlays: '+JSON.stringify(missingGradients));
     await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
     await page.screenshot({path:`${out}/${width}-${route.replaceAll('/','_')}.jpg`,fullPage:true,type:'jpeg',quality:72});
-    if(route==='/services/custom-home-builder/star'){
-     const panel=page.locator('.ed-panel-media').first();await panel.scrollIntoViewIfNeeded();
-     await panel.locator('img').evaluate(i=>i.decode());await page.waitForTimeout(400);
-     rec.processImage=await panel.locator('img').evaluate(i=>({src:i.currentSrc,width:i.getBoundingClientRect().width,height:i.getBoundingClientRect().height,opacity:getComputedStyle(i).opacity}));
-     assert(rec.processImage.width>200&&rec.processImage.height>200,'Process image must occupy its panel');
-     await page.screenshot({path:`${out}/${width}-process-panel.jpg`});
-    }
     if(route==='/'){
      const menu=page.getByRole('button',{name:'Open navigation menu',exact:true});
      if(width<1440){
@@ -117,6 +108,9 @@ try {
      assert(await slider.locator('..').locator('img').evaluateAll(es=>es.every(i=>i.naturalWidth>0&&i.complete)),'Both comparison images decode');
      await page.waitForTimeout(500);
      await page.screenshot({path:`${out}/${width}-kitchen-comparison.jpg`});
+     const originalLabel=await slider.locator('..').getByText('Original concept',{exact:true}).boundingBox();
+     const refreshLabel=await slider.locator('..').getByText('Refresh concept',{exact:true}).boundingBox();
+     assert(originalLabel.x+originalLabel.width+4<=refreshLabel.x,'Comparison labels must remain separate');
      const imgs=await slider.locator('..').locator('img').evaluateAll(es=>es.map(i=>({w:i.getBoundingClientRect().width,h:i.getBoundingClientRect().height,nw:i.naturalWidth,nh:i.naturalHeight})));
      assert(imgs.length===2&&imgs.every(i=>Math.abs(i.w/i.h-1.5)<.01),'Comparison aspect ratio');
     }

@@ -19,6 +19,7 @@ let unblock:()=>void=()=>{};
 let gate=new Promise<void>(resolve=>{unblock=resolve;});
 export function releasePass(){unblock();}
 export function analysisWorkKey(draft:any,text:string){return 'analysis-drain-'+text;}
+export function analysisProgressWorkKeys(draft:any,text:string){return [analysisWorkKey(draft,text)];}
 export async function advanceAnalysis(draft:any,text:string){
   const key=analysisWorkKey(draft,text);
   const [row]=await query('SELECT payload FROM p5_estimator_work WHERE draft_id=$1 AND work_key=$2',[draft.id,key]);

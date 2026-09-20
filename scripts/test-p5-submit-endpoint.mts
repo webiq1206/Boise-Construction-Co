@@ -34,7 +34,11 @@ try{
   const text='Change order: supply and install ten feet of base cabinetry. No other work.';
   const answers={service:'change-order',cabinetBaseLf:'10',cabinetUpperLf:'0',cabinetTallLf:'0',location:'Boise',address:'123 Test Street'};
   const contact={name:'Offline Test',email:'customer@example.invalid',phone:'2085550100'};
-  const makeRequest=(route:string,id:string,key:string,body?:any)=>new Request(`https://boiseconstruction.co/api/p5-estimator/${route}`,{method:body===undefined?'GET':route==='draft'?'PUT':'POST',headers:{origin:'https://boiseconstruction.co','content-type':'application/json','x-p5-draft-id':id,'x-p5-draft-key':key},...(body===undefined?{}:{body:JSON.stringify(body)})});
+  // Brand-neutral: the same script runs on every site against its own domain and services.
+  const {ESTIMATOR_BRAND:brand}=await load('brand');
+  const site=`https://${brand.domain}`;
+  assert.ok((brand.services as readonly string[]).includes(answers.service),`${brand.name} must offer the fixture service ${answers.service}`);
+  const makeRequest=(route:string,id:string,key:string,body?:any)=>new Request(`${site}/api/p5-estimator/${route}`,{method:body===undefined?'GET':route==='draft'?'PUT':'POST',headers:{origin:site,'content-type':'application/json','x-p5-draft-id':id,'x-p5-draft-key':key},...(body===undefined?{}:{body:JSON.stringify(body)})});
   const id=randomUUID(),key=randomBytes(32).toString('hex');
   let response=await draft.putDraft(makeRequest('draft',id,key,{text,answers,contact,revision:0}));
   assert.equal(response.status,200,await response.clone().text());
@@ -61,6 +65,15 @@ try{
   const result=await response.json();assert.equal(result.accepted,true);assert.ok(result.result.range);
   assert.ok(provider.calls>=2,'genuine pricing orchestration invokes fake provider');
   assert.equal(transport.emails.length,2);assert.equal(transport.crm.length,1);
+  // The response, the saved-draft reload, the CRM customer copy and both emails
+  // pass through the one customer boundary; the CRM copy is for this exact revision.
+  for(const key of ['directCost','lines','costBookSnapshot','scopePricing','financeSnapshot'])assert.equal(key in result.result,false,`public result must not expose ${key}`);
+  assert.equal(transport.crm[0].payload.estimate.revision,reviewed.revision);
+  assert.equal(transport.crm[0].payload.estimate.id,id);
+  assert.equal(transport.crm[0].bytes,Buffer.byteLength(transport.crm[0].body,'utf8'));
+  assert.deepEqual(transport.crm[0].payload.estimate.customer.range,result.result.range);
+  const reload=await (await draft.getDraft(makeRequest('draft',id,key))).json();
+  assert.deepEqual(reload.result,result.result,'a reloaded submitted draft returns the same projected customer result');
   const pdfResponse=await pdf.getCustomerPdf(makeRequest('pdf',id,key));
   assert.equal(pdfResponse.status,200);assert.equal(Buffer.from(await pdfResponse.arrayBuffer()).subarray(0,5).toString(),'%PDF-');
   assert.equal((await pdf.getCustomerPdf(makeRequest('pdf',id,wrongKey))).status,404);
@@ -83,5 +96,6 @@ try{
   console.log('PASS: genuine authenticated review, pricing, PDF/outbox, wrong-key/stale guards, duplicate fencing and incomplete-price hold; isolated PGlite and fake provider/transports only.');
 }finally{
   if(db)await db.database.close();
-  await rm(dir,{recursive:true,force:true});
+  // Windows and file-sync clients can hold the directory briefly after the database closes.
+  await rm(dir,{recursive:true,force:true,maxRetries:10,retryDelay:300});
 }

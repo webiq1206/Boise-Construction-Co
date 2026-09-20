@@ -67,6 +67,12 @@ async function fileDb(){return new Promise<IDBDatabase>((resolve,reject)=>{const
 export function withTimeout<T>(promise:Promise<T>,ms:number,message:string):Promise<T>{
   return new Promise<T>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error(message)),ms);promise.then(value=>{clearTimeout(timer);resolve(value);},error=>{clearTimeout(timer);reject(error);});});
 }
+/** Portable-byte budget for the on-device recovery copy. Upload limits are far
+ * larger, but recovery and remove-file callers must not materialize an entire
+ * 1 GiB selection in memory. Larger originals stay in the open tab; the draft's
+ * pendingFiles list names them so a reload asks for reselection, and server
+ * chunk receipts let the reselected originals resume. */
+export const DEVICE_CACHE_LIMIT=22*1024*1024;
 export function validateCacheSelection(files:ReadonlyArray<{size:number}>){
   if(files.length>SCOPE_FILE_COUNT||files.some(f=>!Number.isInteger(f.size)||f.size<=0||f.size>SCOPE_FILE_LIMIT)||files.reduce((n,f)=>n+f.size,0)>SCOPE_BATCH_LIMIT)throw new Error(SCOPE_UPLOAD_HELP);
 }
@@ -83,6 +89,12 @@ export function cacheFiles(draftId:string,files:File[]):Promise<void>{
 }
 async function writeCachedFiles(draftId:string,files:File[]){
   validateCacheSelection(files);
+  if(files.reduce((bytes,file)=>bytes+file.size,0)>DEVICE_CACHE_LIMIT){
+    // Drop any earlier, smaller copy first: a stale subset must never be
+    // recovered later as if it were the complete current selection.
+    await writeCachedFiles(draftId,[]).catch(()=>undefined);
+    throw new Error('Large files stay in this tab. Finish uploading or reselect the original files to resume saved segments.');
+  }
   const read=async(file:File)=>{const bytes=await file.arrayBuffer();if(bytes.byteLength!==file.size)throw new Error(`${file.name}: not fully read. Select the original file again.`);return bytes;};
   let first=files.length?await read(files[0]):undefined;
   const db=await fileDb(),prefix=`staging:${draftId}:${crypto.randomUUID()}:`;
@@ -118,10 +130,12 @@ export async function loadCachedFiles(draftId:string):Promise<File[]>{
     const tx=db.transaction('files','readonly');
     // Do not deserialize every archived project's potentially gigabyte-sized files.
     const r=tx.objectStore('files').openCursor(IDBKeyRange.bound(`${draftId}:`,`${draftId}:\uffff`));
-    let files:File[]=[];
+    let files:File[]=[];let bytes=0;
     r.onsuccess=()=>{try{const item=r.result;if(!item)return;const x=item.value;
       const file=x.bytes instanceof ArrayBuffer?new File([x.bytes],x.name,{type:x.type,lastModified:x.lastModified}):x.file;
       if(x.draftId!==draftId||!(file instanceof File)||!file.size||(x.size!==undefined&&file.size!==x.size))throw new Error('A saved project file could not be fully recovered. Select the original file again before continuing.');
+      bytes+=file.size;
+      if(bytes>DEVICE_CACHE_LIMIT)throw new Error('This recovery contains large files. Reselect the originals to resume saved upload segments; the recovery has not been removed.');
       files.push(file);item.continue();
     }catch(error){tx.abort();reject(error);}};
     tx.oncomplete=()=>resolve(files);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);

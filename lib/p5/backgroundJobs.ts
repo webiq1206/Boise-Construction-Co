@@ -8,7 +8,7 @@ import {DraftError,type Draft} from './store.ts';
 import type {ScopeAnswers} from './scope.ts';
 import type {EstimatorConfiguration} from './costBook.ts';
 import type {ProcessingStatus} from './processingStatus.ts';
-import {assertAnalysisMigrationSafe,assertProjectSourceCoverage} from './documentServiceClient.ts';
+import {assertAnalysisMigrationSafe,assertProjectSourceCoverage,SOURCE_COVERAGE_REQUIRED} from './documentServiceClient.ts';
 
 type Input={kind:'analysis';draft:Draft;text:string;answers:ScopeAnswers}|{kind:'pricing';draft:Draft;configuration:EstimatorConfiguration};
 type Job={input:Input;state:'queued'|'running'|'complete'|'failed';progress:string;attempts:number;result?:any;retryAt?:number;retryUnits?:boolean;createdAt:string;processing?:ProcessingStatus};
@@ -34,6 +34,19 @@ export const JOB_HOLD_MS=Number(process.env.P5_JOB_HOLD_MS||25_000);
 const jobExpired=(job:Job)=>Date.now()-Date.parse(job.createdAt)>=BACKGROUND_JOB_LIMIT_MS;
 const sleep=(ms:number)=>new Promise<void>(resolve=>{setTimeout(resolve,Math.max(0,ms));});
 const runs=()=>runtime.p5JobRuns||(runtime.p5JobRuns=new Map());
+/** Work keys are bound as scalar text values. Passing a JavaScript array through
+ * the Drizzle SQL bridge can reach Postgres as one scalar and fail its text[]
+ * parser before the completed analysis is returned to the browser. The first
+ * key is the project's own checkpoint (it carries the combined status of a
+ * mixed read); branch checkpoints are used only when it has no status yet. */
+export function processingLookup(workKeys:string[]){
+  if(!workKeys.length)throw new Error('processing-work-key-missing');
+  const values=workKeys.length===1?[workKeys[0],workKeys[0]]:[...workKeys];
+  return {
+    statement:`SELECT payload->'processing' AS processing FROM p5_estimator_work WHERE draft_id=$1 AND work_key IN (${values.map((_,index)=>`$${index+2}`).join(',')}) AND payload->'processing' IS NOT NULL ORDER BY (work_key=$2) DESC,updated_at DESC LIMIT 1`,
+    values,
+  };
+}
 const isQuiescing=()=>runtime.p5JobQuiescing===true;
 const waitForNextPass=(ms:number)=>new Promise<void>(resolve=>{
   if(isQuiescing()){resolve();return;}
@@ -86,7 +99,7 @@ export async function queuedJob(input:Input,retry=false,holdMs=JOB_HOLD_MS){
   // A quiescing process admits neither new rows nor explicit retries. This is
   // deliberately checked before validation that can call a provider.
   rejectQuiescedAdmission();
-  if(input.kind==='pricing')assertProjectSourceCoverage(input.draft.reviewed?.uploads||input.draft.uploads,input.draft.reviewed?.extraction);
+  if(SOURCE_COVERAGE_REQUIRED&&input.kind==='pricing')assertProjectSourceCoverage(input.draft.reviewed?.uploads||input.draft.uploads,input.draft.reviewed?.extraction);
   if(input.kind==='analysis'&&input.draft.uploads.length)await assertAnalysisMigrationSafe(input.draft,input.text,input.answers,(await import('./analysisWork.ts')).analysisWorkKey(input.draft,input.text,input.answers));
   rejectQuiescedAdmission();
   // Keep the deployed v1 queue identity and its attempt/lifetime accounting.
@@ -110,15 +123,16 @@ export async function queuedJob(input:Input,retry=false,holdMs=JOB_HOLD_MS){
   if(holdMs>0)await driveJob(input.draft.id,key,holdMs);else void ensureRunning(input.draft.id,key);
   const [row]=await query('SELECT payload FROM p5_estimator_work WHERE draft_id=$1 AND work_key=$2',[input.draft.id,key]);
   const job=row.payload as Job;
-  if(job.state==='complete'&&input.kind==='analysis'&&input.draft.uploads.length){
+  if(SOURCE_COVERAGE_REQUIRED&&job.state==='complete'&&input.kind==='analysis'&&input.draft.uploads.length){
     const extraction=job.result?.analysis?.extraction;
     if(!extraction)throw new DraftError('Saved analysis result is missing; your files are preserved. Please retry.',503);
     assertProjectSourceCoverage(input.draft.uploads,extraction);
   }
   if(job.state!=='complete'&&job.state!=='failed'&&jobExpired(job)){job.state='failed';job.progress=PROCESSING_PAUSED;}
   if(job.state!=='complete'&&job.state!=='failed'){
-    const workKey=input.kind==='analysis'?(await import('./analysisWork.ts')).analysisWorkKey(input.draft,input.text,input.answers):(await import('./pricingWork.ts')).pricingWorkKey(input.draft.reviewed!,input.configuration,new Date(job.createdAt));
-    const [detail]=await query("SELECT payload->'processing' AS processing FROM p5_estimator_work WHERE draft_id=$1 AND work_key=$2",[input.draft.id,workKey]);
+    const workKeys=input.kind==='analysis'?(await import('./analysisWork.ts')).analysisProgressWorkKeys(input.draft,input.text,input.answers):[(await import('./pricingWork.ts')).pricingWorkKey(input.draft.reviewed!,input.configuration,new Date(job.createdAt))];
+    const lookup=processingLookup(workKeys);
+    const [detail]=await query(lookup.statement,[input.draft.id,...lookup.values]);
     if(detail?.processing){job.processing={...detail.processing,startedAt:job.createdAt};job.progress=job.processing!.message;}
   }
   if(job.state==='failed'||job.retryAt&&job.retryAt>Date.now()+2000)job.processing={...job.processing,phase:'retrying',message:job.progress,startedAt:job.createdAt,updatedAt:new Date().toISOString()};
@@ -223,7 +237,7 @@ async function runPass(draftId:string,workKey:string):Promise<number|null>{
       else{job.result=step;job.state='complete';job.progress='Document processing finished. Review the page coverage and any unreadable content.';}
     }else{
       const {priceSavedScope}=await import('./pricingWork.ts');
-      try{job.result=await priceSavedScope(job.input.draft.id,job.input.draft.reviewed!,job.input.configuration,new Date(job.createdAt),deadline);job.state='complete';job.progress='Pricing calculation saved.';}
+      try{const contact=job.input.draft.contact;const pricingIdentity={draftId:job.input.draft.id,customerKey:`${contact.email.trim().toLowerCase()}|${contact.name.trim().toLowerCase()}`,revision:job.input.draft.revision};job.result=await priceSavedScope(job.input.draft.id,job.input.draft.reviewed!,job.input.configuration,new Date(job.createdAt),deadline,pricingIdentity);job.state='complete';job.progress='Pricing calculation saved.';}
       catch(error){
         if(!isPricingPending(error))throw error;
         if(error.fatal){job.state='failed';job.progress=error.message;job.attempts=3;again=null;console.error(`[p5-worker] pricing stopped: ${error.message}`);void recordEvent({draftId,estimator:job.input.draft.answers?.service||null,kind:'pricing',stage:'job',code:'fatal',message:error.message,outcome:'failed'});}

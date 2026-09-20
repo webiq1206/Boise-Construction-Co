@@ -12,8 +12,11 @@ const REDUNDANT_INTERNAL_FIELDS: Record<string, string> = {
 };
 
 export class CrmPayloadTooLargeError extends Error {
-  constructor(readonly payloadBytes: number) {
+  // A declared field, not a parameter property: the engine runs under type stripping.
+  readonly payloadBytes: number;
+  constructor(payloadBytes: number) {
     super(`CRM payload exceeds safe limit (payloadBytes=${payloadBytes}, payloadLimit=${CRM_PAYLOAD_LIMIT_BYTES})`);
+    this.payloadBytes = payloadBytes;
     this.name = "CrmPayloadTooLargeError";
   }
 }
@@ -79,20 +82,41 @@ function trustedDomain(value: unknown) {
   return domain;
 }
 
-function adminDraftUrl(domain: string, draftId: string) {
-  const url = new URL(`https://${domain}/api/admin/p5-estimators`);
+/**
+ * Where an authenticated administrator opens the saved record. The page
+ * accepts ?id=&revision= deep links; the API route returns the same record as
+ * JSON and is the default, because it resolves on every site whether or not
+ * its admin page handles the deep link. crmPayload.ts selects the page for a
+ * brand whose page does. Both require normal administrator authentication.
+ */
+export const CRM_ADMIN_PAGE_PATH = "/admin/p5-estimators";
+export const CRM_ADMIN_API_PATH = "/api/admin/p5-estimators";
+export type CrmAdminPath = typeof CRM_ADMIN_PAGE_PATH | typeof CRM_ADMIN_API_PATH;
+export interface CrmPayloadOptions { adminPath?: CrmAdminPath }
+
+function trustedAdminPath(value: unknown): CrmAdminPath {
+  if (value === undefined) return CRM_ADMIN_API_PATH;
+  if (value !== CRM_ADMIN_PAGE_PATH && value !== CRM_ADMIN_API_PATH) {
+    throw new Error("CRM payload cannot be built: adminPath is not an estimator administrator route");
+  }
+  return value;
+}
+
+function adminDraftUrl(domain: string, draftId: string, adminPath: CrmAdminPath) {
+  const url = new URL(`https://${domain}${adminPath}`);
   url.searchParams.set("id", draftId);
   return url;
 }
 
-function revisionAdminDraftUrl(domain: string, draftId: string, revision: unknown) {
-  const url = adminDraftUrl(domain, draftId);
+function revisionAdminDraftUrl(domain: string, draftId: string, revision: unknown, adminPath: CrmAdminPath) {
+  const url = adminDraftUrl(domain, draftId, adminPath);
   url.searchParams.set("revision", String(revision));
   return url.toString();
 }
 
 function referencePayload(source: JsonRecord, fields: {
   domain: string;
+  adminPath: CrmAdminPath;
   draftId: string;
   fullName: string;
   email: string;
@@ -104,7 +128,7 @@ function referencePayload(source: JsonRecord, fields: {
   compactBytes: number;
 }) {
   const summaryExcerpt = fields.summary.slice(0, 1_900);
-  const url = revisionAdminDraftUrl(fields.domain, fields.draftId, source.revision);
+  const url = revisionAdminDraftUrl(fields.domain, fields.draftId, source.revision, fields.adminPath);
   const omittedPaths = ["estimate.scope", "estimate.internal", "estimate.customer"];
   return {
     fullName: fields.fullName,
@@ -212,7 +236,8 @@ export function safeCrmContentClass(contentType: string|null) {
  * sent instead; it contains identity, source, revision, summary and selling
  * range, and points administrators to the complete authenticated record.
  */
-export function buildCrmPayload(record: unknown, key: string, configuredDomain: string) {
+export function buildCrmPayload(record: unknown, key: string, configuredDomain: string, options: CrmPayloadOptions = {}) {
+  const adminPath = trustedAdminPath(options.adminPath);
   const source = requireRecord(record, "record");
   const contact = requireRecord(source.contact, "contact");
   const scope = requireRecord(source.scope, "scope");
@@ -243,7 +268,7 @@ export function buildCrmPayload(record: unknown, key: string, configuredDomain: 
 
   const domain = trustedDomain(configuredDomain);
   const {compact, omittedRedundantMetadata} = compactInternal(internal,scope);
-  const adminUrl = revisionAdminDraftUrl(domain, draftId, source.revision);
+  const adminUrl = revisionAdminDraftUrl(domain, draftId, source.revision, adminPath);
   const range = requireRecord(customer.range, "customer.range");
   const estimate = {
     schemaVersion: 1,
@@ -285,7 +310,7 @@ export function buildCrmPayload(record: unknown, key: string, configuredDomain: 
   const bytes = crmPayloadBytes(payload);
   if (bytes > CRM_PAYLOAD_LIMIT_BYTES) {
     const reference = referencePayload(source, {
-      domain, draftId, fullName, email, service, summary, answers, range, key,
+      domain, adminPath, draftId, fullName, email, service, summary, answers, range, key,
       compactBytes: bytes,
     });
     const referenceBytes = crmPayloadBytes(reference);
