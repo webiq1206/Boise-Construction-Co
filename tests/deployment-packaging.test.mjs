@@ -90,7 +90,7 @@ test('configured publishing command propagates opt-in and stops on build failure
   for (const name of ['build-deployment.sh', 'package-deployment.mjs']) {
     await put(root, `scripts/${name}`, await readFile(new URL(`../scripts/${name}`, import.meta.url), 'utf8'));
   }
-  // Execute the real guard and wrapper, but never build the app or prune files.
+  // Execute the configured wrapper and detect any unintended cleanup call.
   await put(root, 'bin/node', `#!/bin/bash
 if [[ "$2" == "--apply" ]]; then
   printf 'apply:%s\\n' "$PUBLISHING_BUILD_COPY" >> "$GUARD_TEST_LOG"
@@ -105,20 +105,19 @@ fi
   const env = { PATH: `${root}/bin:${process.env.PATH}`, GUARD_TEST_LOG: log };
   const success = spawnSync(command[0], command.slice(1), { cwd: root, env, encoding: 'utf8' });
   assert.equal(success.status, 0, success.stderr);
-  assert.equal(await readFile(log, 'utf8'), 'build:1\napply:1\n');
+  assert.equal(await readFile(log, 'utf8'), 'build:1\n');
   await writeFile(log, '');
   const failure = spawnSync(command[0], command.slice(1), {
     cwd: root, env: { ...env, GUARD_TEST_EXIT: '17' }, encoding: 'utf8',
   });
   assert.equal(failure.status, 17, failure.stderr);
   assert.equal(await readFile(log, 'utf8'), 'build:1\n');
-  // With the original namespace, the configured command must stop before build.
+  // Building is safe in the original namespace because cleanup is never called.
   await writeFile(log, '');
   await put(root, identity, JSON.stringify({ mountNamespace: await readlink('/proc/self/ns/mnt') }));
   const original = spawnSync(command[0], command.slice(1), { cwd: root, env, encoding: 'utf8' });
-  assert.equal(original.status, 1);
-  assert.match(original.stderr, /Original workspace/);
-  assert.equal(await readFile(log, 'utf8'), '');
+  assert.equal(original.status, 0, original.stderr);
+  assert.equal(await readFile(log, 'utf8'), 'build:1\n');
 });
 test('verified disposable copy prunes only allowlisted paths', async t => {
   const root = await fixture(t);
@@ -250,4 +249,20 @@ test('runtime symlinks and wrong types are rejected', async t => {
   await rm(server);
   await mkdir(server);
   await assert.rejects(packageDeployment(root, apply), /Invalid runtime artifact type/);
+});
+
+test('publishing wrapper builds in the original namespace without deleting workspace evidence', async t => {
+  const root = await fixture(t);
+  await put(root, identity, JSON.stringify({mountNamespace: await readlink('/proc/self/ns/mnt')}));
+  const wrapper = await readFile(new URL('../scripts/build-deployment.sh', import.meta.url), 'utf8');
+  await put(root, 'scripts/build-deployment.sh', wrapper);
+  await put(root, 'build.sh', '#!/bin/bash\nset -eu\nprintf built > build-finished\n');
+  // The legacy destructive packager is intentionally unavailable in this fixture.
+  const result = spawnSync('bash', ['scripts/build-deployment.sh'], {cwd: root, encoding: 'utf8', env: {...process.env, PUBLISHING_BUILD_COPY: '1'}});
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(await readFile(path.join(root, 'build-finished'), 'utf8'), 'built');
+  assert.equal(await readFile(path.join(root, '.local/recovery/synthetic-backup/backup.tar'), 'utf8'), 'synthetic recovery bytes');
+  for (const entry of exclusions.filter(e => !e.startsWith('.local/'))) {
+    assert.equal(await readFile(path.join(root, entry, 'fixture-cache'), 'utf8'), 'preserve');
+  }
 });
