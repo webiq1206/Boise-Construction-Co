@@ -90,7 +90,7 @@ export async function queuedJob(input:Input,retry=false,holdMs=JOB_HOLD_MS){
   if(input.kind==='analysis'&&input.draft.uploads.length)await assertAnalysisMigrationSafe(input.draft,input.text,input.answers,(await import('./analysisWork.ts')).analysisWorkKey(input.draft,input.text,input.answers));
   rejectQuiescedAdmission();
   // Keep the deployed v1 queue identity and its attempt/lifetime accounting.
-  const canonicalKey=backgroundKey(input.kind==='analysis'?analysisQueueIdentity(input):{engineVersion:8,kind:input.kind,id:input.draft.id,reviewed:input.draft.reviewed,configuration:input.configuration,date:new Date().toISOString().slice(0,10)});
+  const canonicalKey=backgroundKey(input.kind==='analysis'?analysisQueueIdentity(input):{engineVersion:9,kind:input.kind,id:input.draft.id,reviewed:input.draft.reviewed,configuration:input.configuration,date:new Date().toISOString().slice(0,10)});
   const key=input.kind==='analysis'?await analysisQueueKey(input,canonicalKey):canonicalKey;
   rejectQuiescedAdmission();
   const initial:Job={input,state:'queued',progress:input.kind==='analysis'?'Your complete document set is queued for analysis.':'Your scope is queued for pricing.',attempts:0,createdAt:new Date().toISOString()};
