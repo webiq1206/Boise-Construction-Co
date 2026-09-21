@@ -153,13 +153,15 @@ test('mutually exclusive framing alternatives cannot become a combined base pric
   else assert.ok(both.customer.verificationItems.length>0);
 });
 
-test('missing trim rate cannot release a partial framing estimate despite optimistic audit',async()=>{
+test('a task with no catalog rate is carried out of the total and named, never silently priced or dropped',async()=>{
   const result=await price(scope('Supply and install 100 SF framing and install 100 LF of owner-supplied trim.'),[
     framing(100),{id:'trim',description:'Trim installation labor',evidence:'Install 100 LF trim.',additions:[addition('03-18-02-L',100,'100 LF trim')]},
   ],catalog.rates.filter(rate=>rate.code!=='03-18-02-L'));
-  assert.equal(result.customer.range,null,'partially priced scope is not a releasable estimate');
-  assert.match(JSON.stringify(result.internal.scopePricing),/unavailable|unsupported|no supported price/i);
-  assert.ok(result.customer.verificationItems.length>0);
+  // The framing prices; the trim cannot, so it is excluded by name with a site-visit note and costs nothing in the range.
+  assert.ok(result.customer.range,'the priced framing is released');
+  assert.ok(result.customer.exclusions.some((e:string)=>/Trim installation labor/.test(e)&&/not included in this range/.test(e)),'the unpriced trim is named as excluded');
+  assert.ok(!JSON.stringify(result.customer.lineItems||[]).includes('03-18-02-L'),'no line is priced from the missing rate');
+  assert.match(JSON.stringify(result.internal.scopePricing),/unavailable|unsupported|no supported price/i,'the cause stays in the internal record');
 });
 
 test('ambiguous feet cannot silently turn into a plausible square-foot framing total',async()=>{
