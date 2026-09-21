@@ -2,6 +2,8 @@ export const ESTIMATOR_BRAND = {
   "id": "construction",
   "name": "Boise Construction Co",
   "domain": "boiseconstruction.co",
+  "legalName": null,
+  "parentLegalName": "P5 Home Co, LLC",
   "accent": "#D09A5C",
   "services": [
     "re10",
