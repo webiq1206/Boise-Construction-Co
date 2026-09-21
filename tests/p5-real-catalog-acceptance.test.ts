@@ -159,7 +159,7 @@ test('a task with no catalog rate is carried out of the total and named, never s
   ],catalog.rates.filter(rate=>rate.code!=='03-18-02-L'));
   // The framing prices; the trim cannot, so it is excluded by name with a site-visit note and costs nothing in the range.
   assert.ok(result.customer.range,'the priced framing is released');
-  assert.ok(result.customer.exclusions.some((e:string)=>/Trim installation labor/.test(e)&&/not included in this range/.test(e)),'the unpriced trim is named as excluded');
+  assert.ok(result.customer.exclusions.some((e:string)=>/Trim installation labor/.test(e)&&/not included in this price/.test(e)),'the unpriced trim is named as excluded');
   assert.ok(!JSON.stringify(result.customer.lineItems||[]).includes('03-18-02-L'),'no line is priced from the missing rate');
   assert.match(JSON.stringify(result.internal.scopePricing),/unavailable|unsupported|no supported price/i,'the cause stays in the internal record');
 });
