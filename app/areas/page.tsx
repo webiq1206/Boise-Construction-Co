@@ -1,25 +1,26 @@
-import {withBrandPageMetadata} from '@/lib/brand-page-metadata';
-import { ArrowRight } from "lucide-react";
-import { JsonLd } from "@/components/seo/JsonLd";
-import { Section } from "@/components/marketing/Section";
-import { SectionHeader } from "@/components/marketing/SectionHeader";
+import { InteriorPage } from '@/components/approved/InteriorLayout';
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { AreaCard } from "@/components/marketing/AreaCard";
 import { BlogEndCta } from "@/components/marketing/BlogEndCta";
 import { EstimatePromptBand } from "@/components/marketing/EstimatePromptBand";
-import { PageHeroBand } from "@/components/sections/PageHeroBand";
-import { CITY_HERO_IMAGES } from "@/shared/cityServiceImages";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { Section } from "@/components/marketing/Section";
+import { SectionHeader } from "@/components/marketing/SectionHeader";
+import { ConsultCTA } from "@/components/modals/ConsultCTA";
 import { Reveal } from "@/components/Reveal";
+import { PageHeroBand } from "@/components/sections/PageHeroBand";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { Button } from "@/components/ui/button";
+import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
-  generateBreadcrumbSchema,
-  generateWebPageSchema,
+generateBreadcrumbSchema,
+generateWebPageSchema,
 } from "@/lib/schema";
-import { CITIES, TREASURE_VALLEY_CITIES } from "@/shared/contentData";
-import { CTA_PRIMARY, CTA_SECONDARY } from "@/shared/ctaCopy";
-import { Button } from "@/components/ui/button";
-import { ConsultCTA } from "@/components/modals/ConsultCTA";
+import { CITY_HERO_IMAGES } from "@/shared/cityServiceImages";
+import { CITIES,TREASURE_VALLEY_CITIES } from "@/shared/contentData";
+import { CTA_PRIMARY,CTA_SECONDARY } from "@/shared/ctaCopy";
 import { SITE_IMAGES } from "@/shared/siteImages";
+import { ArrowRight } from "lucide-react";
 
 export const metadata = withBrandPageMetadata((buildPageMetadata({
   kind: "about",
@@ -43,7 +44,7 @@ export default function AreasHubPage() {
   ];
 
   return (
-    <>
+    <InteriorPage kind="areas"><>
       <JsonLd data={schemas} />
       <div className="flex flex-col pb-20 md:pb-0">
         <PageHeroBand
@@ -104,6 +105,6 @@ export default function AreasHubPage() {
 
         <BlogEndCta />
       </div>
-    </>
+    </></InteriorPage>
   );
 }

@@ -1,42 +1,43 @@
-import {withBrandPageMetadata} from '@/lib/brand-page-metadata';
-import { ArrowRight, Check, ChevronRight, Mail, MapPin, MessageSquare, Phone } from 'lucide-react';
-import Link from 'next/link';
-import { JsonLd } from '@/components/seo/JsonLd';
-import Image from 'next/image';
-import { Section } from '@/components/marketing';
-import { SectionHeader } from '@/components/marketing/SectionHeader';
-import { Hairline } from '@/components/marketing/Hairline';
-import { SITE_IMAGES } from '@/shared/siteImages';
-import { MarketingCard } from '@/components/marketing/MarketingCard';
-import { Reveal } from '@/components/Reveal';
-import { StatementBandSection } from '@/components/sections/StatementBandSection';
+import { InteriorEstimateLink,InteriorHero,InteriorPage } from '@/components/approved/InteriorLayout';
+import { BusinessPhoneContact } from '@/components/BusinessPhoneContact';
 import { ConsultationForm } from '@/components/ConsultationForm';
+import { EmailLink } from '@/components/EmailLink';
+import { Section } from '@/components/marketing';
+import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
+import { Hairline } from '@/components/marketing/Hairline';
+import { MarketingCard } from '@/components/marketing/MarketingCard';
+import { SectionHeader } from '@/components/marketing/SectionHeader';
+import { ConsultCTA } from '@/components/modals/ConsultCTA';
+import { Reveal } from '@/components/Reveal';
+import { SaveContactLink } from '@/components/SaveContactLink';
+import { StatementBandSection } from '@/components/sections/StatementBandSection';
+import { JsonLd } from '@/components/seo/JsonLd';
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
+Accordion,
+AccordionContent,
+AccordionItem,
+AccordionTrigger,
 } from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
+import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
+import { GRAIN_URL } from '@/lib/grain';
 import { buildPageMetadata } from '@/lib/page-metadata';
 import {
-  generateBreadcrumbSchema,
-  generateFAQSchema,
-  generateLocalBusinessSchema,
-  generateWebPageSchema,
+generateBreadcrumbSchema,
+generateFAQSchema,
+generateLocalBusinessSchema,
+generateWebPageSchema,
 } from '@/lib/schema';
-import { EmailLink } from '@/components/EmailLink';
-import { BusinessPhoneContact } from '@/components/BusinessPhoneContact';
-import { SaveContactLink } from '@/components/SaveContactLink';
 import { BUSINESS_INFO } from '@/lib/seo';
-import { SITE_CONFIG } from '@/shared/siteConfig';
-import { CITIES, TREASURE_VALLEY_CITIES } from '@/shared/contentData';
-import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
-import { CONSULT_BULLETS, HERO_STATS } from '@/shared/siteContent';
-import { ConsultCTA } from '@/components/modals/ConsultCTA';
-import { Button } from '@/components/ui/button';
 import { areaPath } from '@/lib/seo-routes';
-import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
-import { GRAIN_URL } from '@/lib/grain';
+import { CITIES,TREASURE_VALLEY_CITIES } from '@/shared/contentData';
+import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
+import { SITE_CONFIG } from '@/shared/siteConfig';
+import { CONSULT_BULLETS,HERO_STATS } from '@/shared/siteContent';
+import { SITE_IMAGES } from '@/shared/siteImages';
+import { ArrowRight,Check,ChevronRight,Mail,MapPin,MessageSquare,Phone } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const CONTACT_FAQS = [
   {
@@ -198,29 +199,11 @@ export default function ContactPage() {
   ];
 
   return (
-    <>
+    <InteriorPage kind="contact"><>
       <JsonLd data={schemas} />
       <div className="flex flex-col pb-20 md:pb-0">
-        {/* ─── Cinematic hero ─── */}
-        <section className="relative min-h-[520px] md:min-h-[72vh] flex items-end overflow-hidden bg-inverse">
-          <Image
-            src={SITE_IMAGES.hero}
-            alt="White board-and-batten home exterior with a covered front porch"
-            fill
-            className="object-cover opacity-[0.82] img-brand-grade"
-            sizes="100vw"
-            priority
-          />
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-inverse/90 via-inverse/60 to-transparent" />
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-inverse/60 via-inverse/15 to-transparent" />
-          <div className="absolute inset-x-0 top-0 h-44 pointer-events-none bg-gradient-to-b from-inverse/70 via-inverse/30 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-24 pointer-events-none bg-gradient-to-t from-background via-background/40 to-transparent" />
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{ backgroundImage: GRAIN_URL, backgroundRepeat: 'repeat', opacity: 0.03 }}
-          />
-
-          <div className="relative z-10 w-full container px-4 pb-14 md:pb-20 pt-10 fade-up">
+        {/* Approved editorial hero */}
+        <InteriorHero layout="contact" imageSrc={SITE_IMAGES.hero} imageAlt="White board-and-batten home exterior with a covered front porch">
             <HeroBreadcrumbs />
             <p data-speakable="summary" className="sr-only">
               {SPEAKABLE_SUMMARY}
@@ -248,18 +231,7 @@ export default function ContactPage() {
             >
               Prefer to text? Message us instead
             </a>
-            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap [&>*]:w-full sm:[&>*]:w-auto mb-8">
-              {/* Primary action on the contact page is the inline form below -
-                  one tap from the hero. The estimator lives on the homepage. */}
-              <Button variant="brand" asChild>
-                <a href="#consult">
-                  Request your free visit <ArrowRight className="h-4 w-4" />
-                </a>
-              </Button>
-              <Button variant="heroOutline" asChild>
-                <a href="/estimate">Get an instant estimate</a>
-              </Button>
-            </div>
+            <div className="interior-contact-actions"><InteriorEstimateLink/><a href="#consult" className="interior-text-link">Request a consultation</a></div>
             <dl className="ed-hero-facts">
               {HERO_STATS.map((stat) => (
                 <div key={stat.label}>
@@ -268,14 +240,13 @@ export default function ContactPage() {
                 </div>
               ))}
             </dl>
-          </div>
-        </section>
+          </InteriorHero>
 
         {/* ─── Inline consultation form ─── */}
         <Section id="consult" divider className="scroll-mt-24">
           <div className="container px-4">
-            <div className="max-w-5xl mx-auto grid md:grid-cols-5 gap-12 items-start">
-              <div className="min-w-0 md:col-span-2">
+            <div className="interior-contact-grid">
+              <div className="interior-contact-intro">
                 <Reveal>
                   <p className="ed-eyebrow">Request your consultation</p>
                   <h2 className="ed-h2 ed-statement-wide">
@@ -538,12 +509,12 @@ export default function ContactPage() {
                     <a href="#consult">{CTA_SECONDARY}</a>
                   </Button>
                 </div>
-              
+
               </div></div>
             </Reveal>
           </div>
         </Section>
       </div>
-    </>
+    </></InteriorPage>
   );
 }

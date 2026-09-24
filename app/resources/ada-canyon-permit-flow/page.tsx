@@ -1,18 +1,19 @@
-import {withBrandPageMetadata} from '@/lib/brand-page-metadata';
+import { InteriorDocument,InteriorPage } from '@/components/approved/InteriorLayout';
+import { Section } from '@/components/marketing/Section';
+import { ConsultCTA } from '@/components/modals/ConsultCTA';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
+import { buildPageMetadata,fitDescription } from '@/lib/page-metadata';
+import {
+generateArticleSchema,
+generateBreadcrumbSchema,
+generateHowToSchema,
+} from '@/lib/schema';
+import { CTA_PRIMARY } from '@/shared/ctaCopy';
+import { ArrowLeft,ArrowRight,Download } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Download } from 'lucide-react';
-import { buildPageMetadata, fitDescription } from '@/lib/page-metadata';
-import { Section } from '@/components/marketing/Section';
 import { PermitFlowGraphic } from './PermitFlowGraphic';
-import { ConsultCTA } from '@/components/modals/ConsultCTA';
-import { CTA_PRIMARY } from '@/shared/ctaCopy';
-import { JsonLd } from '@/components/seo/JsonLd';
-import {
-  generateArticleSchema,
-  generateBreadcrumbSchema,
-  generateHowToSchema,
-} from '@/lib/schema';
 
 const PERMIT_FLOW_DESCRIPTION =
   fitDescription('Visual guide to new home construction permits in Ada and Canyon County - jurisdiction, plan review, and the inspection sequence for Treasure Valley builds.');
@@ -53,10 +54,12 @@ export default function AdaCanyonPermitFlowPage() {
   ];
 
   return (
-    <div className="flex flex-col pb-20">
+    <InteriorPage kind="resources"><div className="flex flex-col pb-20">
       <JsonLd data={schemas} />
       <Section spacing="lg" className="pt-28 md:pt-32">
-        <div className="container px-4 max-w-4xl mx-auto">
+        <InteriorDocument heading={<h1 className="text-3xl md:text-4xl font-serif tracking-tight text-foreground mb-4">
+            Ada vs Canyon County permit flow
+          </h1>} contents={[]}>
           <Link
             href="/resources"
             className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8"
@@ -68,9 +71,7 @@ export default function AdaCanyonPermitFlowPage() {
           <p className="text-xs font-normal uppercase tracking-wider text-accent-legible mb-3">
             Visual guide
           </p>
-          <h1 className="text-3xl md:text-4xl font-serif tracking-tight text-foreground mb-4">
-            Ada vs Canyon County permit flow
-          </h1>
+
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl">
             A step-by-step view of how a new home permit moves through plan review and
             inspections in the Treasure Valley. Timelines vary by jurisdiction and by how
@@ -121,8 +122,8 @@ export default function AdaCanyonPermitFlowPage() {
               Home building process guide
             </Link>
           </div>
-        </div>
+        </InteriorDocument>
       </Section>
-    </div>
+    </div></InteriorPage>
   );
 }
