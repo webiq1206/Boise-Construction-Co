@@ -1,3 +1,4 @@
+import {estimatorContinuation} from "@/lib/p5/legacyContinuation";
 /**
  * Tool layer for the conversational estimating assistant.
  *
@@ -140,8 +141,7 @@ const REFINEMENTS_JSON_SCHEMA = {
 export const ASSISTANT_TOOLS: Anthropic.Messages.Tool[] = [
   {
     name: "calculate_estimate",
-    description:
-      "Calculate the planning price range for a construction project using Boise Construction Co's line-item cost engine - the same engine behind the on-page estimator. Call this EVERY time you need a price, and call it again whenever the visitor changes any detail. Never state, estimate or adjust a dollar figure yourself. Works for new construction (custom-home, semi-custom-home, build-on-your-lot, shop-home) and remodels (kitchen, bathroom, whole-home, addition, adu, basement).",
+    description: "Continue the customer project in /estimate. This action returns no price and sends no lead. Do not collect extra measurements before continuing.",
     input_schema: {
       type: "object",
       properties: {
@@ -174,8 +174,7 @@ export const ASSISTANT_TOOLS: Anthropic.Messages.Tool[] = [
   },
   {
     name: "price_re10_repairs",
-    description:
-      "Price an RE-10 repair list (Idaho real-estate transaction repairs) using the company's per-item repair engine. Items whose kind is not in the priced catalog are returned as 'needs review' - tell the visitor those items need a human look rather than guessing a price.",
+    description: "Continue the customer project in /estimate. This action returns no price and sends no lead. Do not collect extra measurements before continuing.",
     input_schema: {
       type: "object",
       properties: {
@@ -226,8 +225,7 @@ export const ASSISTANT_TOOLS: Anthropic.Messages.Tool[] = [
   },
   {
     name: "submit_lead",
-    description:
-      "Submit the visitor's contact details (and their estimate, if one was calculated in this conversation) to the Boise Construction Co team. Only call this after the visitor has explicitly agreed to be contacted AND has given you their name and email. Never invent or assume contact details.",
+    description: "Continue the customer project in /estimate. This action returns no price and sends no lead. Do not collect extra measurements before continuing.",
     input_schema: {
       type: "object",
       properties: {
@@ -373,11 +371,10 @@ function executeGetBusinessInfo(input: unknown): string {
       return JSON.stringify({
         services: SERVICES.map((s) => ({
           name: s.name,
-          planningFrom: s.planningFrom,
           description: s.shortDescription,
           page: `/services/${s.slug}`,
         })),
-        note: "planningFrom figures are budget floors for a modest build of that type, not bids.",
+        note: "Project pricing is available in the project estimator.",
       });
     case "service_areas":
       return JSON.stringify({
@@ -395,7 +392,7 @@ function executeGetBusinessInfo(input: unknown): string {
         location: SITE_CONFIG.address.cityState,
         serviceArea: SITE_CONFIG.address.serviceArea,
         consultationPage: "/consultation",
-        estimatorPage: "/#calculator",
+        estimatorPage: "/estimate",
       });
     case "company":
       return JSON.stringify({
@@ -505,13 +502,13 @@ export async function executeAssistantTool(
 ): Promise<string> {
   switch (name) {
     case "calculate_estimate":
-      return executeCalculateEstimate(input);
+      return JSON.stringify(estimatorContinuation());
     case "price_re10_repairs":
-      return executePriceRe10(input);
+      return JSON.stringify(estimatorContinuation());
     case "get_business_info":
       return executeGetBusinessInfo(input);
     case "submit_lead":
-      return executeSubmitLead(input, origin);
+      return JSON.stringify(estimatorContinuation());
     default:
       return JSON.stringify({ error: `Unknown tool: ${name}` });
   }

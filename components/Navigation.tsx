@@ -33,11 +33,15 @@ function Logo() {
 }
 
 export function Navigation() {
+  const pathname=usePathname();
+  return isEstimatorPath(pathname)?null:<MarketingNavigation />;
+}
+
+function MarketingNavigation() {
   const pathname = usePathname();
   // The estimator is a one-page app with its own brand bar, step progress and exit control.
   // Stacking the marketing header on top of it cost about a third of a phone screen before any
   // content, and gave the customer a hamburger out of the flow they were in (owner 2026-09-23).
-  if (isEstimatorPath(pathname)) return null;
 
   const formInView = useFormInView(pathname);
   const pastHero=useMobileActionVisibility(pathname);
