@@ -1,9 +1,12 @@
 import {chromium} from '@playwright/test';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
+const base=process.env.P5_TEST_BASE_URL||'http://127.0.0.1:5000';
 const browser=await chromium.launch();const results=[];await mkdir('p5-verification',{recursive:true});
 for(const width of [320,390,430,768,1024,1440,1920])for(const landOwnership of ['own','not-yet']){
  const context=await browser.newContext({viewport:{width,height:900}});const page=await context.newPage();page.setDefaultTimeout(12000);let saved=null,submitted=null;
+ await context.route('**/*',route=>{const url=new URL(route.request().url());return url.origin!==new URL(base).origin||url.pathname.startsWith('/api/')?route.abort('blockedbyclient'):route.continue();});
+ await context.route('**/api/estimator-session',route=>route.fulfill({json:{ok:true}}));
  await context.route('**/api/p5-estimator/**',async route=>{
   const request=route.request();const endpoint=new URL(request.url()).pathname.split('/').at(-1);const send=data=>route.fulfill({json:data});
   if(endpoint==='draft'){
@@ -16,12 +19,12 @@ for(const width of [320,390,430,768,1024,1440,1920])for(const landOwnership of [
   return route.fulfill({status:404});
  });
  try{
-  await page.goto(`${process.env.P5_TEST_BASE_URL||'http://127.0.0.1:5000'}/estimate`);const est=page.locator('[data-p5-estimator]');
+  await page.goto(`${base}/estimate`);const est=page.locator('[data-p5-estimator]');
   await est.getByLabel('Tell us about your project',{exact:true}).fill('Synthetic new home: 2400 square feet, standard finishes. Land ownership: '+landOwnership);
   await est.getByRole('button',{name:'Continue',exact:true}).click();
   // Construction asks its build questions before review; a suggested answer or Not sure yet answers each. The contact form follows.
-  for(let i=0;i<8;i++){const name=est.getByLabel('Your name',{exact:true});const q=est.locator('section[aria-label="Project question"]');await name.or(q).first().waitFor({timeout:60000});if(await name.count())break;const chips=q.locator('[aria-label="Suggested answers"] button');const unsure=q.getByRole('button',{name:'Not sure yet',exact:true});if(await chips.count())await chips.first().click();else if(await unsure.count())await unsure.click();else throw new Error('Unexpected question: '+(await q.innerText()).slice(0,120));await page.waitForFunction(()=>!document.querySelector('[data-p5-estimator][aria-busy=true]'));}
-  await est.getByLabel('Your name',{exact:true}).fill('Synthetic Address Test');await est.getByLabel('Email',{exact:true}).fill('address-test@example.invalid');
+  for(let i=0;i<8;i++){const name=est.getByLabel('Your name',{exact:true});const q=est.locator('section[aria-label="Project question"]');await name.or(q).first().waitFor({timeout:60000});if(await name.count())break;const chips=q.locator('[aria-label="Suggested answers"] button');const unsure=q.getByRole('button',{name:'Not sure yet',exact:true});if(await chips.count()){await chips.first().click();await est.getByRole('button',{name:'Send answer',exact:true}).click();}else if(await unsure.count())await unsure.click();else throw new Error('Unexpected question: '+(await q.innerText()).slice(0,120));await page.waitForFunction(()=>!document.querySelector('[data-p5-estimator][aria-busy=true]'));}
+  await est.getByLabel('Your name',{exact:true}).fill('Synthetic Address Test');await est.getByLabel(/^Email/).fill('address-test@example.invalid');
   assert.equal(await est.getByRole('region',{name:'Project question'}).count(),0,'Known project requires no location question');
   await est.getByRole('checkbox').check();await est.getByRole('button',{name:'Get my estimate',exact:true}).click();await est.getByText('Simulated planning result; no delivery.',{exact:true}).waitFor();
   assert.ok(submitted);assert.ok(!submitted.answers.address&&!submitted.answers.location);assert.ok(submitted.text.includes(landOwnership));assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
