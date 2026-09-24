@@ -1,29 +1,19 @@
-import {withBrandPageMetadata} from '@/lib/brand-page-metadata';
-import type { Metadata } from "next";
-import Image from "next/image";
-import dynamic from "next/dynamic";
-import { FAQSection } from "@/components/FAQSection";
+import { ApprovedHome } from "@/components/approved/ApprovedHome";
 import { ConsultationForm } from "@/components/ConsultationForm";
-import { Reveal } from "@/components/Reveal";
-import { HeroSection } from "@/components/sections/HeroSection";
-import { ValueOverheadSection } from "@/components/sections/ValueOverheadSection";
-import { WhyChooseUsSection } from "@/components/sections/WhyChooseUsSection";
-import { ServicesGrid } from "@/components/sections/ServicesGrid";
-import { ProcessSection } from "@/components/sections/ProcessSection";
-import { BudgetInclusionsSection } from "@/components/sections/BudgetInclusionsSection";
-import { ProjectGallerySection } from "@/components/sections/ProjectGallerySection";
-import { BrandStatementBand } from "@/components/sections/BrandStatementBand";
-import { EstimatePromptBand } from "@/components/marketing/EstimatePromptBand";
-import { Section } from "@/components/marketing/Section";
 import { MarketingCard } from "@/components/marketing/MarketingCard";
-import { Check } from "lucide-react";
-import { CONSULT_BULLETS, SITE_TAGLINE } from "@/shared/siteContent";
-import { CTA_PRIMARY } from "@/shared/ctaCopy";
+import { Section } from "@/components/marketing/Section";
+import { Reveal } from "@/components/Reveal";
+import { BudgetInclusionsSection } from "@/components/sections/BudgetInclusionsSection";
 import { HomePageSchema } from "@/components/seo/HomePageSchema";
-import { buildCanonical } from "@/lib/page-metadata";
-import { SITE_IMAGES } from "@/shared/siteImages";
+import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
+import { buildCanonical,fitDescription } from "@/lib/page-metadata";
 import { SITE_CONFIG } from "@/shared/siteConfig";
-import { fitDescription } from '@/lib/page-metadata';
+import { CONSULT_BULLETS,SITE_TAGLINE } from "@/shared/siteContent";
+import { SITE_IMAGES } from "@/shared/siteImages";
+import { Check } from "lucide-react";
+import type { Metadata } from "next";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 
 const EstimateCalculator = dynamic(
   () =>
@@ -91,37 +81,8 @@ export default function HomePage() {
           thing they came for. Everything above it now exists only to make the
           number land well; everything below it answers what the number raised. */}
       <HomePageSchema />
-      <HeroSection />
-      <ValueOverheadSection />
-      <EstimateCalculator />
+      <ApprovedHome />
       <BudgetInclusionsSection />
-      <ServicesGrid />
-      {/* No longer excludes whole-home: the featured before/after slider that
-          used to carry that project was removed, so the gallery is now the only
-          place it appears. */}
-      <ProjectGallerySection limit={6} showViewAll={true} />
-
-      <EstimatePromptBand
-        eyebrow="Still comparing builders"
-        title={
-          <>
-            Find out what your home will{' '}
-            <em className="brc-accent">cost</em>
-          </>
-        }
-        description="Missed the estimator higher up the page? It stays open whenever you are ready - or book a free planning consultation and we will work through your lot, your plan, and a realistic budget band in person."
-        variant="tint"
-        bullets={[
-          "A ballpark range built from current Treasure Valley build costs",
-          "A free planning consultation when you want the detail",
-          "No strings - a copy of whatever the estimator returns lands in your inbox",
-        ]}
-      />
-
-      <WhyChooseUsSection limit={5} />
-      <ProcessSection />
-      <BrandStatementBand />
-      <FAQSection />
       <Section id="consult" divider className="relative overflow-hidden scroll-mt-16 pb-28 md:pb-28">
         {/* Warm, dimmed lifestyle photo grounds the closing section. Directional
             scrims keep the left-column copy legible and fade the edges into the

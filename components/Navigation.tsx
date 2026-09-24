@@ -1,33 +1,27 @@
 "use client";
+import { ApprovedBrand } from "@/components/approved/ApprovedBrand";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { isEstimatorPath } from "@/lib/p5/estimatorRoutes";
-import {useMobileActionVisibility} from "@/hooks/use-mobile-action-visibility";
-import { useFormInView } from "@/hooks/use-form-in-view";
-import * as Dialog from "@radix-ui/react-dialog";
-import { Button } from "@/components/ui/button";
-import { Contact, Menu, MessageSquare, Phone, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { CTA_QUOTE } from "@/shared/ctaCopy";
-import { SITE_CONFIG } from "@/shared/siteConfig";
+
 import { NavEstimateButton } from "@/components/modals/NavEstimateButton";
 import { SaveContactLink } from "@/components/SaveContactLink";
+import { Button } from "@/components/ui/button";
+import { isEstimatorPath } from "@/lib/p5/estimatorRoutes";
+import { cn } from "@/lib/utils";
+import { CTA_QUOTE } from "@/shared/ctaCopy";
 import { NAV_LINKS } from "@/shared/navConfig";
+import { SITE_CONFIG } from "@/shared/siteConfig";
+import * as Dialog from "@radix-ui/react-dialog";
+import { Contact,Menu,MessageSquare,Phone,X } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect,useState } from "react";
 
 function Logo() {
   return (
     <Link href="/" className="flex items-center" aria-label={`${SITE_CONFIG.name} - home`}>
       {/* Bone wordmark with the ochre "Co." for the dark ground. Intrinsic
           size is 1765.71x159.96, so 26px tall renders ~287px wide. */}
-      <img
-        src="/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg"
-        alt={SITE_CONFIG.name}
-        width={287}
-        height={26}
-        className="h-[26px] w-auto max-w-[calc(100vw-92px)] object-contain object-left"
-      />
+      <ApprovedBrand />
     </Link>
   );
 }
@@ -43,8 +37,6 @@ function MarketingNavigation() {
   // Stacking the marketing header on top of it cost about a third of a phone screen before any
   // content, and gave the customer a hamburger out of the flow they were in (owner 2026-09-23).
 
-  const formInView = useFormInView(pathname);
-  const pastHero=useMobileActionVisibility(pathname);
   // P5's header behaviour: transparent over the hero, gaining its ground, blur
   // and a hairline only once the page has scrolled.
   const [scrolled, setScrolled] = useState(false);
@@ -56,7 +48,7 @@ function MarketingNavigation() {
   }, []);
   const [mobileOpen, setMobileOpen] = useState(false);
   useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 1440px)");
+    const desktop = window.matchMedia("(min-width: 1180px)");
     const closeOnDesktop = () => { if (desktop.matches) setMobileOpen(false); };
     closeOnDesktop();
     desktop.addEventListener("change", closeOnDesktop);
@@ -86,7 +78,7 @@ function MarketingNavigation() {
 
   return (
     <>
-      <header
+      <header data-approved-navigation
         className={cn(
           "fixed top-0 z-[100] w-full transition-[background-color,border-color] duration-300",
           scrolled
@@ -97,7 +89,7 @@ function MarketingNavigation() {
         <nav className="container flex h-[60px] items-center justify-between gap-4 px-4 md:px-6">
           <Logo />
 
-          <div className="hidden min-[1440px]:flex items-center gap-0">
+          <div className="hidden min-[1180px]:flex items-center gap-0">
             {NAV_LINKS.map((link) => {
               const active = isActivePath(link.href);
               return (
@@ -119,7 +111,7 @@ function MarketingNavigation() {
             })}
           </div>
 
-          <div className="hidden min-[1440px]:flex shrink-0 items-center gap-3">
+          <div className="hidden min-[1180px]:flex shrink-0 items-center gap-3">
               <a
                 href={SITE_CONFIG.phoneHref}
                 className="flex items-center gap-2 text-sm font-normal transition-colors text-muted-foreground hover:text-foreground"
@@ -159,7 +151,7 @@ function MarketingNavigation() {
 
           {/* Mobile menu - Radix Dialog gives focus trap, Escape, scroll-lock,
               inert background, and auto aria-expanded/aria-controls on the trigger. */}
-          <div className="flex min-[1440px]:hidden items-center gap-2">
+          <div className="flex min-[1180px]:hidden items-center gap-2">
             <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
               <Dialog.Trigger asChild>
                 {/* The shared icon size is 36px, which suits dense admin
@@ -177,9 +169,9 @@ function MarketingNavigation() {
               </Dialog.Trigger>
 
               <Dialog.Portal>
-                <Dialog.Overlay className="fixed inset-0 z-[190] bg-background/80 backdrop-blur-sm min-[1440px]:hidden" />
+                <Dialog.Overlay className="fixed inset-0 z-[190] bg-background/80 backdrop-blur-sm min-[1180px]:hidden" />
                 <Dialog.Content
-                  className="fixed inset-0 z-[200] bg-background flex flex-col min-[1440px]:hidden focus:outline-none"
+                  className="fixed inset-0 z-[200] bg-background flex flex-col min-[1180px]:hidden focus:outline-none"
                   data-testid="mobile-nav-drawer"
                 >
                   <Dialog.Title className="sr-only">Navigation menu</Dialog.Title>
@@ -305,7 +297,7 @@ function MarketingNavigation() {
           three equal actions diluted which one visitors actually tap. */}
       <div
         data-mobile-nav-bar=""
-        className={cn("fixed left-0 right-0 bottom-0 z-[100] lg:hidden pb-safe border-t bg-background border-border", (formInView || !pastHero || mobileOpen || pathname?.startsWith("/estimate")) && "invisible pointer-events-none")}
+        className={cn("fixed left-0 right-0 bottom-0 z-[100] min-[1180px]:hidden pb-safe border-t bg-background border-border", (mobileOpen || pathname?.startsWith("/estimate")) && "invisible pointer-events-none")}
       >
         <div className="flex items-stretch gap-2 p-2">
           <a

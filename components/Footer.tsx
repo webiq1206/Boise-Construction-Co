@@ -1,17 +1,19 @@
-import Link from "next/link";
-import { ChevronDown, Facebook } from "lucide-react";
-import { CITIES, SERVICES } from "@/shared/contentData";
-import { SITE_TAGLINE } from "@/shared/siteContent";
-import { areaPath, servicePath } from "@/lib/seo-routes";
-import { SITE_CONFIG } from "@/shared/siteConfig";
-import { GBP_SOCIAL } from "@/shared/gbpProfile";
-import { Button } from "@/components/ui/button";
-import { EmailLink } from "@/components/EmailLink";
+
 import { BusinessPhoneLink } from "@/components/BusinessPhoneContact";
+import { EmailLink } from "@/components/EmailLink";
 import { SaveContactLink } from "@/components/SaveContactLink";
+import { ApprovedBrand } from "@/components/approved/ApprovedBrand";
 import { FooterCTAs } from "@/components/modals/FooterCTAs";
-import { CONTENT_HUBS, guidePath } from "@/shared/contentHubs";
+import { Button } from "@/components/ui/button";
+import { areaPath,servicePath } from "@/lib/seo-routes";
+import { CITIES,SERVICES } from "@/shared/contentData";
+import { CONTENT_HUBS,guidePath } from "@/shared/contentHubs";
+import { GBP_SOCIAL } from "@/shared/gbpProfile";
 import { GUIDE_PAGES } from "@/shared/guideContent";
+import { SITE_CONFIG } from "@/shared/siteConfig";
+import { SITE_TAGLINE } from "@/shared/siteContent";
+import { ChevronDown,Facebook } from "lucide-react";
+import Link from "next/link";
 
 const PUBLISHED_GUIDE_SLUGS = new Set(GUIDE_PAGES.map((g) => g.slug));
 
@@ -109,13 +111,7 @@ export function Footer() {
           <div className="pb-2 lg:pb-0">
             <div className="mb-5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/brand/svg/wordmark/dark/boise-construction-co-wordmark-bone-accent.svg"
-                alt={SITE_CONFIG.name}
-                width={287}
-                height={26}
-                className="h-[26px] w-auto"
-              />
+              <ApprovedBrand />
             </div>
             <p className="mb-6 font-sans text-sm text-inverse-muted">{SITE_TAGLINE}.</p>
             <div className="space-y-1">

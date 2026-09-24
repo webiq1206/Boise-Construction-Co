@@ -1,3 +1,4 @@
+import { ApprovedShell } from "@/components/approved/ApprovedShell";
 import {withBrandPageMetadata} from '@/lib/brand-page-metadata';
 import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
@@ -17,6 +18,8 @@ import './globals.css'
 // The shared P5 family editorial layer. Imported after globals so it can build
 // on the site's tokens; identical file in all four brand repositories.
 import './family.css'
+import './approved-family.css'
+import './approved-system.css'
 
 // P5 family typefaces, self-hosted. These are the same two files P5 Home Co
 // serves (Manrope and Cormorant Garamond, both variable-weight, both SIL Open
@@ -172,13 +175,13 @@ export default function RootLayout({
           >
             Skip to content
           </a>
-          <div className="flex flex-col min-h-screen">
+          <ApprovedShell><div className="flex flex-col min-h-screen">
             <Navigation />
             <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
               {children}
             </main>
             <ConditionalFooter />
-          </div>
+          </div></ApprovedShell>
           <Toaster />
           <AssistantWidget />
         </Providers>
