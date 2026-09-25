@@ -1,23 +1,13 @@
 import {withBrandPageMetadata} from '@/lib/brand-page-metadata';
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
+import { EstimateCalculator } from "@/components/EstimateCalculator";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildCanonical } from "@/lib/page-metadata";
 import { generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/schema";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { fitDescription } from '@/lib/page-metadata';
 
-const EstimateCalculator = dynamic(
-  () =>
-    import("@/components/EstimateCalculator").then((mod) => mod.EstimateCalculator),
-  {
-    loading: () => (
-      <div className="container px-4 py-16 text-center text-sm text-muted-foreground">
-        Loading project estimator...
-      </div>
-    ),
-  },
-);
+
 
 // 34 chars, so the branded title below lands at 58 with the 24-char suffix.
 const TITLE = "Home Build Cost Estimator, Idaho";
