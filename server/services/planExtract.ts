@@ -1,3 +1,4 @@
+import {createEstimatorModelClient,estimatorConnection} from "@/lib/p5/estimatorModelClient";
 import Anthropic from "@anthropic-ai/sdk";
 import {
   PLAN_EXTRACTION_SCHEMA,
@@ -81,7 +82,7 @@ const PDF_TYPE = "application/pdf";
 export { MAX_TOTAL_UPLOAD_BYTES };
 
 export function isPlanExtractionConfigured(): boolean {
-  return Boolean(process.env.ANTHROPIC_API_KEY);
+  return Boolean(estimatorConnection().key);
 }
 
 /** "permit-set.pdf p.14" - what a human can actually go look at. */
@@ -385,7 +386,7 @@ export async function extractPlan(
     };
   }
 
-  const client = new Anthropic();
+  const client = (createEstimatorModelClient() as unknown as Anthropic);
   const chunkSchema = buildChunkSchema();
   let inputTokens = 0;
   let outputTokens = 0;
@@ -398,7 +399,7 @@ export async function extractPlan(
     async (chunk): Promise<ChunkOutcome<ChunkPayload>> => {
       try {
         const stream = client.beta.messages.stream({
-          model: "claude-opus-5",
+          model: "gpt-4.1",
           max_tokens: 8000,
           betas: ["server-side-fallback-2026-07-01"],
           fallbacks: "default",
@@ -552,7 +553,7 @@ export async function readPlanChunk(
     return { ok: false, reason: "failed", message: "No sheets in this batch." };
   }
 
-  const client = new Anthropic();
+  const client = (createEstimatorModelClient() as unknown as Anthropic);
   const chunk: PageChunk = {
     index: 0,
     pages: pages.map((p) => ({
@@ -568,7 +569,7 @@ export async function readPlanChunk(
 
   try {
     const stream = client.beta.messages.stream({
-      model: "claude-opus-5",
+      model: "gpt-4.1",
       max_tokens: 8000,
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",

@@ -1,3 +1,4 @@
+import {createEstimatorModelClient,estimatorConnection} from "@/lib/p5/estimatorModelClient";
 import {assistantReplyWithoutPrice} from "@/lib/p5/legacyContinuation";
 /**
  * Conversational estimating assistant.
@@ -27,7 +28,7 @@ import { SITE_CONFIG } from "@/shared/siteConfig";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const MODEL = "claude-sonnet-5";
+const MODEL = "gpt-4.1";
 const MAX_OUTPUT_TOKENS = 600;
 const MAX_TOOL_ROUNDS = 5;
 /** Assistant replies per conversation before we hand off to a human channel. */
@@ -96,7 +97,7 @@ Use get_business_info for other company information. A free consultation is avai
 /* ────────────────────────────────────────────────────────────── handler */
 
 export async function POST(request: NextRequest) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = estimatorConnection().key;
   if (!apiKey) {
     return NextResponse.json({ reply: FALLBACK_REPLY }, { status: 503 });
   }
@@ -132,7 +133,7 @@ export async function POST(request: NextRequest) {
   }
 
   const origin = new URL(request.url).origin;
-  const client = new Anthropic({ apiKey });
+  const client = (createEstimatorModelClient() as unknown as Anthropic);
 
   /* Per-request context the static prompt can't carry. Kept in its own
      system block so the big block above still prompt-caches. */

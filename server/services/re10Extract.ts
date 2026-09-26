@@ -1,3 +1,4 @@
+import {createEstimatorModelClient,estimatorConnection} from "@/lib/p5/estimatorModelClient";
 import Anthropic from "@anthropic-ai/sdk";
 import {
   EXTRACTION_SCHEMA,
@@ -78,7 +79,7 @@ const PDF_TYPE = "application/pdf";
 export { MAX_TOTAL_UPLOAD_BYTES };
 
 export function isExtractionConfigured(): boolean {
-  return Boolean(process.env.ANTHROPIC_API_KEY);
+  return Boolean(estimatorConnection().key);
 }
 
 /** "inspection-report.pdf p.14" - what a human can actually go look at. */
@@ -239,7 +240,7 @@ export async function extractRepairs(files: ExtractionInput[]): Promise<Extracti
     };
   }
 
-  const client = new Anthropic();
+  const client = (createEstimatorModelClient() as unknown as Anthropic);
   const chunkSchema = buildChunkSchema();
   let inputTokens = 0;
   let outputTokens = 0;
@@ -252,7 +253,7 @@ export async function extractRepairs(files: ExtractionInput[]): Promise<Extracti
         // Streaming, because a long inspection report with several photos can
         // take well past a plain HTTP timeout.
         const stream = client.beta.messages.stream({
-          model: "claude-opus-5",
+          model: "gpt-4.1",
           max_tokens: 16000,
           // Anthropic's recommended fallback, routed by refusal category, so a
           // classifier decline on a benign inspection report still returns an

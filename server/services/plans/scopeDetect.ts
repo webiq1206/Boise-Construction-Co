@@ -1,3 +1,4 @@
+import {createEstimatorModelClient,estimatorConnection} from "@/lib/p5/estimatorModelClient";
 import Anthropic from "@anthropic-ai/sdk";
 import { SCOPE_CLASSIFIER_PROMPT, obviousScope, type PlanScope } from "@/shared/plans/scope";
 
@@ -13,12 +14,12 @@ import { SCOPE_CLASSIFIER_PROMPT, obviousScope, type PlanScope } from "@/shared/
 export async function detectPlanScope(instructions: string | null): Promise<PlanScope> {
   const obvious = obviousScope(instructions);
   if (obvious) return obvious;
-  if (!process.env.ANTHROPIC_API_KEY) return "residential";
+  if (!estimatorConnection().key) return "residential";
 
   try {
-    const client = new Anthropic({ maxRetries: 1, timeout: 20_000 });
+    const client = (createEstimatorModelClient({timeoutMs:20000}) as unknown as Anthropic);
     const message = await client.messages.create({
-      model: "claude-opus-5",
+      model: "gpt-4.1",
       max_tokens: 200,
       system: SCOPE_CLASSIFIER_PROMPT,
       tools: [

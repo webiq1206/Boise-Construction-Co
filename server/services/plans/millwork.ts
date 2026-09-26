@@ -1,3 +1,4 @@
+import {createEstimatorModelClient,estimatorConnection} from "@/lib/p5/estimatorModelClient";
 import Anthropic from "@anthropic-ai/sdk";
 import {
   MILLWORK_EXTRACTION_SCHEMA,
@@ -20,11 +21,11 @@ import type { ReadableChunkPage } from "@/server/services/planExtract";
  * upstream and are indifferent to what a pass is looking for.
  */
 
-const MODEL = "claude-opus-5";
+const MODEL = "gpt-4.1";
 const TOOL_NAME = "report_millwork";
 
 function client(): Anthropic {
-  return new Anthropic();
+  return (createEstimatorModelClient() as unknown as Anthropic);
 }
 
 export type MillworkFailure = "not-configured" | "refused" | "busy" | "failed";
@@ -166,7 +167,7 @@ export async function readMillworkChunk(
   instructions: string | null,
   answers: QuestionAnswer[] = [],
 ): Promise<MillworkOutcome> {
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!estimatorConnection().key) {
     return { ok: false, reason: "not-configured", message: "Plan review is not configured." };
   }
   if (pages.length === 0) return { ok: false, reason: "failed", message: "No sheets in this batch." };
@@ -288,7 +289,7 @@ export async function refineMillworkTakeoff(
   answers: QuestionAnswer[],
   instructions: string | null,
 ): Promise<MillworkOutcome> {
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!estimatorConnection().key) {
     return { ok: false, reason: "not-configured", message: "Plan review is not configured." };
   }
   if (answers.length === 0) {
