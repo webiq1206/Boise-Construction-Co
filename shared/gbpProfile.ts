@@ -321,7 +321,7 @@ export interface GbpQaEntry {
 export const GBP_QA_SEED: GbpQaEntry[] = [
   {
     question: 'Do you provide free estimates?',
-    answer: `Yes. We offer a free planning consultation where we talk through your lot, your program, and a realistic budget band - no pressure, no obligation. You can also get an instant planning range online at ${SITE}/#calculator`,
+    answer: `Yes. We offer a free planning consultation where we talk through your lot, your program, and a realistic budget band - no pressure, no obligation. You can also get a preliminary planning range online at ${SITE}/#calculator`,
   },
   {
     question: 'What areas do you serve?',
