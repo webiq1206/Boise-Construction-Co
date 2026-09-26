@@ -1,3 +1,4 @@
+import {permitGuidanceHtml} from '../../lib/permitGuidance';
 /**
  * City and neighborhood guides for building a new home, under the
  * treasure-valley-locations hub.
@@ -40,7 +41,6 @@ interface PlaceGuide {
   faqs: Array<{ question: string; answer: string }>;
 }
 
-const countyLabel = (c: 'ada' | 'canyon') => (c === 'ada' ? 'Ada County' : 'Canyon County');
 
 const PLACES: PlaceGuide[] = [
   {
@@ -52,7 +52,7 @@ const PLACES: PlaceGuide[] = [
     title: 'Building a Home in Boise',
     seoTitle: 'Building a New Home in Boise, Idaho',
     metaDescription:
-      'What it takes to build a new home in Boise: infill lots, foothills sites, Ada County permitting, and what each of those does to a construction budget.',
+      'What it takes to build a new home in Boise: infill lots, foothills sites, address-specific permit requirements, and what each of those does to a construction budget.',
     excerpt:
       'Boise has two very different building problems: tight infill lots inside the established grid, and foothills parcels where the site costs more than people expect.',
     quickAnswer:
@@ -107,7 +107,7 @@ const PLACES: PlaceGuide[] = [
     title: 'Building a Home in Meridian',
     seoTitle: 'Building a New Home in Meridian, Idaho',
     metaDescription:
-      'Building a new home in Meridian: subdivision lots, HOA design review, Ada County permitting, and what a serviced lot actually costs to build on.',
+      'Building a new home in Meridian: subdivision lots, HOA design review, address-specific permit requirements, and what a serviced lot actually costs to build on.',
     excerpt:
       'Meridian is the most straightforward place in the valley to build, which is exactly why the constraints that do exist are the ones people miss.',
     quickAnswer:
@@ -129,7 +129,7 @@ const PLACES: PlaceGuide[] = [
       {
         question: 'Is Meridian in Ada County?',
         answer:
-          'Yes. Meridian is in Ada County, and residential building permits route through either the City of Meridian or Ada County depending on whether the parcel is inside the city limits. Both use Ada County processes rather than the Canyon County portals that Nampa, Caldwell, and Middleton use, which matters because the two counties run on different review cadences.',
+          'Yes. Meridian is in Ada County. For a property within city limits, start with the City of Meridian building department; unincorporated property follows the county process. Confirm the address, application requirements and current review times before scheduling work.',
       },
       {
         question: 'Do I need HOA approval to build in Meridian?',
@@ -227,7 +227,7 @@ const PLACES: PlaceGuide[] = [
       'Rural site work with well, septic, and access commonly runs $80,000 to $150,000, excluding land.',
       'Septic feasibility depends on soil and goes through Central District Health.',
       'Irrigation ditches and laterals cross many Kuna parcels and carry delivery obligations.',
-      'Kuna is in Ada County, so permits follow Ada processes rather than Canyon County ones.',
+      'Confirm whether your Kuna-area parcel follows city or unincorporated county permit requirements.',
     ],
     landscape: `<p><strong>Kuna is where people go when they want ground, and ground changes the arithmetic of a build.</strong> A serviced subdivision lot hands you utilities at the property line and a street; an acreage parcel hands you a field. Between those two situations sits $80,000 to $150,000 of site work: drilling a well, designing and installing a septic system, building a driveway long enough and solid enough to satisfy the fire district, extending power, and grading for drainage. None of that appears in a per-square-foot figure for the house, and it is the single most common reason a Kuna budget comes apart.</p>
 <p>The upside is real. Acreage in Kuna is the most attainable way in this valley to build the house you want with room around it, and the building itself is straightforward once the site is prepared. The ground is generally flat, which keeps excavation and foundation costs sensible compared with the foothills.</p>`,
@@ -244,7 +244,7 @@ const PLACES: PlaceGuide[] = [
       {
         question: 'Is Kuna in Ada County or Canyon County?',
         answer:
-          'Kuna is in Ada County. That matters more than it sounds, because Ada and Canyon County use different permit portals and run on different review cadences, so a builder who works mostly in Nampa or Caldwell is working in a different system. Septic permits are separate again and go through Central District Health.',
+          'Kuna is in Ada County, but the property jurisdiction determines the building-permit path. Start with the city for property within city limits and the county for unincorporated property. A private septic system requires separate review by the health district serving the parcel.',
       },
       {
         question: 'What is an irrigation lateral and why does it matter?',
@@ -272,14 +272,14 @@ const PLACES: PlaceGuide[] = [
     title: 'Building a Home in Star',
     seoTitle: 'Building a New Home in Star, Idaho',
     metaDescription:
-      'Building in Star, Idaho: new subdivisions alongside working acreage, Ada County permitting, and what each type of parcel does to a build budget.',
+      'Building in Star, Idaho: new subdivisions alongside working acreage, address-specific permit requirements, and what each type of parcel does to a build budget.',
     excerpt:
       'Star has both new platted subdivisions and working agricultural acreage, sometimes on the same road, and the two are different builds entirely.',
     quickAnswer:
       'Star mixes new platted subdivisions with agricultural acreage, so two parcels a mile apart can have completely different site costs. A serviced subdivision lot carries $25,000 to $50,000 of site work; acreage needing well, septic, and access carries $80,000 to $150,000. Star is in Ada County.',
     takeaways: [
       'Star has both finished subdivision lots and working acreage, with very different site costs.',
-      'Star is in Ada County, so permits follow Ada processes.',
+      'Confirm the parcel jurisdiction and begin with the City of Star for property within city limits.',
       'Agricultural parcels here commonly carry irrigation easements and water delivery obligations.',
       'Newer subdivisions usually have CCRs with architectural review.',
       'Confirm whether municipal water and sewer reach a parcel before assuming a serviced-lot budget.',
@@ -294,7 +294,7 @@ const PLACES: PlaceGuide[] = [
       {
         question: 'Is Star in Ada County?',
         answer:
-          'Yes, Star is in Ada County, so residential permits route through Ada County or the City of Star rather than through the Canyon County system used by Nampa, Caldwell, and Middleton. If a parcel is on a private septic system, that permit is separate again and goes through Central District Health, which reviews the soil evaluation and system design.',
+          'For property within Star city limits, start with the City of Star building department. Verify the county and jurisdiction of the actual parcel rather than relying on its mailing address. Private septic systems require separate health-district review.',
       },
       {
         question: 'Are there still acreage parcels available in Star?',
@@ -327,29 +327,29 @@ const PLACES: PlaceGuide[] = [
     title: 'Building a Home in Middleton',
     seoTitle: 'Building a New Home in Middleton, Idaho',
     metaDescription:
-      'Building in Middleton: Canyon County permitting, acreage and subdivision lots, irrigation easements, and realistic site work costs for a new home.',
+      'Building in Middleton: city and county permit requirements, acreage and subdivision lots, irrigation easements, and realistic site work costs for a new home.',
     excerpt:
-      'Middleton offers acreage at prices Ada County no longer does, and it runs on Canyon County permitting, which is a different system with a different rhythm.',
+      'Compare Middleton subdivision lots and acreage by utility access, buildable area and the permit jurisdiction for the address.',
     quickAnswer:
       'Middleton sits in Canyon County, which uses different permit portals and a different review cadence from Ada County. It offers both subdivision lots and acreage, with rural site work at $80,000 to $150,000 and serviced lots at $25,000 to $50,000. House costs follow the standard valley bands.',
     takeaways: [
       'Middleton is in Canyon County, not Ada, so the permit path differs from Boise and Meridian.',
       'Both subdivision lots and acreage are available, with very different site costs.',
       'Irrigation district ditches and laterals cross many parcels here.',
-      'Septic permitting on rural parcels goes through Central District Health.',
+      'Septic permitting on rural parcels goes through Southwest District Health.',
       'Acreage is more attainable here than in comparable Ada County locations.',
     ],
     landscape: `<p><strong>Middleton is the practical answer for people who want acreage in the Treasure Valley and have found Ada County prices unworkable.</strong> The ground is flat, the soils are generally agricultural and well drained, and the building itself is as straightforward as anywhere on the valley floor. What changes is the administrative side: Middleton is in Canyon County, and Canyon County runs its own portals and its own review cadence. A build here is not harder, but it is a different process from a build in Meridian, and a builder who has only worked in Ada County is learning it on your project.</p>
 <p>There is a mix of parcel types. Newer platted subdivisions offer serviced lots with CCRs, and outside them there is genuine acreage, much of it still farmed or recently so.</p>`,
-    lots: `<p><strong>On Middleton acreage the checklist is the standard rural one, and every item on it is worth money.</strong> Septic feasibility depends on the soil and is reviewed by Central District Health, so it belongs in the purchase contingencies. Confirm whether municipal water and sewer reach the parcel or whether a well is required. Verify that access is legally recorded rather than customary. Check what the irrigation district has recorded against the title, because ditches and laterals here are common and they constrain siting.</p>
+    lots: `<p><strong>On Middleton acreage the checklist is the standard rural one, and every item on it is worth money.</strong> Septic feasibility depends on the soil and is reviewed by Southwest District Health, so it belongs in the purchase contingencies. Confirm whether municipal water and sewer reach the parcel or whether a well is required. Verify that access is legally recorded rather than customary. Check what the irrigation district has recorded against the title, because ditches and laterals here are common and they constrain siting.</p>
 <p>Where those questions come back well, Middleton acreage is one of the better value propositions in this valley for someone building a house with room around it.</p>`,
-    watchOut: `<p><strong>Do not assume Ada County timelines and processes apply.</strong> Canyon County is a separate jurisdiction with its own submission requirements and its own review rhythm, and the gap between the two catches out both homeowners and out-of-area builders. Plan the permit stage against Canyon County's process specifically, and make sure whoever is submitting has actually done it there before.</p>`,
+    watchOut: `<p><strong>Confirm the permit authority before preparing plans.</strong> Middleton has a city building-permit process, while unincorporated property follows the county process. Verify the parcel boundaries, application requirements and current review times with the responsible office. A neighboring project may have followed a different approval path.</p>`,
     budget: `<p>The house follows the valley bands: $225 to $300 per finished square foot for semi-custom, $250 to $400 for custom, excluding land. Site work is the variable. Serviced subdivision lots carry $25,000 to $50,000; acreage with a well, a septic system, a driveway, and a power extension carries $80,000 to $150,000. Middleton's advantage is usually in the land price rather than the build cost, which is the same here as anywhere on the valley floor.</p>`,
     faqs: [
       {
         question: 'Is Middleton in Ada County or Canyon County?',
         answer:
-          'Middleton is in Canyon County. That is a practical difference rather than a trivial one, because Canyon County uses different permit portals and runs on a different review cadence from Ada County. A builder whose experience is mostly in Boise and Meridian is working in an unfamiliar system, and it is worth asking directly how many Canyon County permits they have pulled.',
+          'Middleton is in Canyon County. The city has its own building-permit process for property within city limits; unincorporated property follows the county process. Confirm the actual parcel jurisdiction before preparing an application.',
       },
       {
         question: 'Is it cheaper to build in Middleton than in Meridian?',
@@ -359,7 +359,7 @@ const PLACES: PlaceGuide[] = [
       {
         question: 'Do Middleton parcels need well and septic?',
         answer:
-          'Many acreage parcels do, though it depends on whether municipal services reach the property. Confirm it in writing with the provider before purchase. Septic feasibility is decided by the soil and reviewed by Central District Health, and a parcel needing an engineered rather than a conventional gravity system costs materially more and takes longer to permit.',
+          'Many acreage parcels do, though it depends on whether municipal services reach the property. Confirm it in writing with the provider before purchase. Septic feasibility is decided by the soil and reviewed by Southwest District Health, and a parcel needing an engineered rather than a conventional gravity system costs materially more and takes longer to permit.',
       },
       {
         question: 'How long does a Canyon County permit take?',
@@ -382,7 +382,7 @@ const PLACES: PlaceGuide[] = [
     title: 'Building a Home in Nampa',
     seoTitle: 'Building a New Home in Nampa, Idaho',
     metaDescription:
-      'Building a new home in Nampa: Canyon County permitting, serviced subdivision lots, nearby acreage, and what each does to a construction budget.',
+      'Building a new home in Nampa: city and county permit requirements, serviced subdivision lots, nearby acreage, and what each does to a construction budget.',
     excerpt:
       'Nampa is the largest city in Canyon County and has the widest range of buildable parcels, from serviced infill to acreage on the edge of town.',
     quickAnswer:
@@ -397,7 +397,7 @@ const PLACES: PlaceGuide[] = [
     landscape: `<p><strong>Nampa is the largest city in Canyon County and it offers more variety of buildable parcel than anywhere else on that side of the valley.</strong> There are serviced subdivision lots in newer developments, infill parcels inside the established city where utilities are already at the line, and acreage at the edges where a well and septic system may be required. Because those three situations produce very different site costs, the useful question in Nampa is never what it costs to build here but what it costs to build on this parcel.</p>
 <p>Permitting runs through the City of Nampa or Canyon County depending on the address. Canyon County uses different portals from Ada County and works to a different cadence, and that is worth confirming your builder has actually navigated rather than assuming.</p>`,
     lots: `<p><strong>A serviced Nampa lot is one of the more economical places to build in the Treasure Valley, because the land is more attainable than Ada County and the site work is the same low band.</strong> Utilities at the property line put site work in the $25,000 to $50,000 range covering excavation, grading, drainage, the driveway approach, and connections. Connection and impact fees apply and should be confirmed with the jurisdiction rather than estimated from another city's schedule.</p>
-<p>At the edges of town, ordinary rural diligence applies: septic feasibility through Central District Health, water source, recorded access, soils, and irrigation easements.</p>`,
+<p>At the edges of town, ordinary rural diligence applies: septic feasibility through Southwest District Health, water source, recorded access, soils, and irrigation easements.</p>`,
     watchOut: `<p><strong>The thing to verify in Nampa is which jurisdiction actually reviews your parcel, because city and county boundaries here are not intuitive.</strong> A parcel that looks like it is in town may be in unincorporated Canyon County, and that changes the submission path, the fee schedule, and sometimes whether municipal services are available at all. Establish it at the start of design rather than discovering it at submission.</p>`,
     budget: `<p>House costs are the same as the rest of the valley, because labour and materials are: $225 to $300 per finished square foot for semi-custom, $250 to $400 for custom, excluding land. There is no Canyon County discount on construction. Where Nampa is more attainable is the land, and on a serviced lot the site work stays in the $25,000 to $50,000 band, so the total lands lower without the house being built any differently.</p>`,
     faqs: [
@@ -409,12 +409,12 @@ const PLACES: PlaceGuide[] = [
       {
         question: 'Which county handles Nampa building permits?',
         answer:
-          'Canyon County, through either the City of Nampa or Canyon County depending on whether the parcel is inside the city limits. Canyon uses different portals and a different review cadence from Ada County, so it is worth asking a prospective builder how many permits they have actually pulled on that side of the valley rather than assuming the experience transfers.',
+          'The City of Nampa is the starting point for building permits within city limits. Canyon County handles the county process for unincorporated property. Confirm the parcel jurisdiction and current application requirements before submitting plans.',
       },
       {
         question: 'Are there acreage parcels near Nampa?',
         answer:
-          'Yes, mostly at the edges of the city and in unincorporated Canyon County beyond them. Those parcels commonly need a well and a septic system, which puts site work in the $80,000 to $150,000 range rather than $25,000 to $50,000. Septic feasibility is decided by the soil and reviewed by Central District Health, so it belongs in the purchase contingencies.',
+          'Yes, mostly at the edges of the city and in unincorporated Canyon County beyond them. Those parcels commonly need a well and a septic system, which puts site work in the $80,000 to $150,000 range rather than $25,000 to $50,000. Septic feasibility is decided by the soil and reviewed by Southwest District Health, so it belongs in the purchase contingencies.',
       },
       {
         question: 'Can I build on an infill lot in Nampa?',
@@ -424,7 +424,7 @@ const PLACES: PlaceGuide[] = [
       {
         question: 'How long does it take to build a house in Nampa?',
         answer:
-          'Design and engineering commonly take 8 to 16 weeks, Canyon County plan review another 4 to 10 weeks, and construction follows from there. The two most common causes of delay are the same everywhere: finish selections made late, and plan revisions submitted after the permit application, which push the project back into the review queue.',
+          'Build a schedule around design, engineering, the applicable city or county review, and construction. Confirm current permit review times for your Nampa-area parcel. Incomplete submissions, plan revisions and late selections can extend the schedule; an early planning estimate is not an approval deadline.',
       },
     ],
   },
@@ -437,7 +437,7 @@ const PLACES: PlaceGuide[] = [
     title: 'Building a Home in Caldwell',
     seoTitle: 'Building a New Home in Caldwell, Idaho',
     metaDescription:
-      'Building in Caldwell, Idaho: Canyon County permitting, serviced lots and agricultural acreage, irrigation easements, and realistic site work budgets.',
+      'Building in Caldwell, Idaho: city and county permit requirements, serviced lots and agricultural acreage, irrigation easements, and realistic site work budgets.',
     excerpt:
       'Caldwell puts serviced city lots and working agricultural ground within a few miles of each other, and the site work difference between them is six figures.',
     quickAnswer:
@@ -446,25 +446,25 @@ const PLACES: PlaceGuide[] = [
       'Caldwell is in Canyon County, with its own permit portals and review cadence.',
       'Serviced city lots and agricultural acreage are both available and cost very differently to build on.',
       'Irrigation ditches and water delivery obligations are common on former farmland here.',
-      'Septic permitting on rural parcels goes through Central District Health.',
+      'Septic permitting on rural parcels goes through Southwest District Health.',
       'Construction costs match the rest of the valley; the land is where Caldwell differs.',
     ],
     landscape: `<p><strong>Caldwell offers the clearest example in the valley of how much the parcel matters and how little the town name does.</strong> Inside the city you can buy a serviced lot with utilities at the line and build for the same site work budget as a Meridian subdivision. A few miles out you can buy agricultural acreage that needs a well, a septic system, a driveway, and a power extension, and the site work alone is six figures. Same city, same builder, same house, wildly different total.</p>
 <p>The building itself is straightforward in both cases. The ground is flat, the soils are agricultural and generally well understood, and there is no foothills factor here. The variation is entirely in what the site requires before the foundation.</p>`,
     lots: `<p><strong>On agricultural ground around Caldwell, irrigation is the first thing to investigate and often the most consequential.</strong> This is long-established farmland, and ditches, laterals, easements, and water delivery obligations are recorded against a great many parcels. They constrain where a house and a driveway can go, they cannot generally be piped or moved without district approval, and they do not lapse because the field is no longer farmed.</p>
-<p>After that, the standard rural checks: septic feasibility through Central District Health, water source, legally recorded access, soils, and floodplain status. A written lot evaluation at $950 to $3,500 covers all of it inside a normal inspection period.</p>`,
+<p>After that, the standard rural checks: septic feasibility through Southwest District Health, water source, legally recorded access, soils, and floodplain status. A written lot evaluation at $950 to $3,500 covers all of it inside a normal inspection period.</p>`,
     watchOut: `<p><strong>Verify whether a parcel is inside the city limits or in unincorporated Canyon County before design starts.</strong> It determines the submission path, the fee schedule, and frequently whether municipal water and sewer are available at all, which is the difference between a $25,000 to $50,000 site budget and an $80,000 to $150,000 one. It is a five minute question at the beginning and an expensive surprise later.</p>`,
     budget: `<p>Construction costs match the valley: $225 to $300 per finished square foot semi-custom, $250 to $400 custom, excluding land. There is no discount for being in Canyon County, because the trades and the materials are the same. The Caldwell advantage is land price, and whether it survives depends entirely on whether the parcel is serviced or needs a well, a septic system, and access.</p>`,
     faqs: [
       {
         question: 'Which county issues building permits in Caldwell?',
         answer:
-          'Canyon County, through either the City of Caldwell or Canyon County depending on whether the parcel is inside the city limits. Canyon runs different portals and a different review cadence from Ada County, so establishing which jurisdiction has your parcel is one of the first questions at the start of design rather than something to sort out at submission.',
+          'Start with the City of Caldwell for property within city limits and Canyon County for unincorporated property. The mailing address alone does not settle jurisdiction. Confirm the parcel and required building, trade and utility approvals before submitting plans.',
       },
       {
         question: 'What should I check before buying farmland in Caldwell to build on?',
         answer:
-          'Irrigation first, because this is long-established farmland and ditches, laterals, easements, and water delivery obligations are recorded against many parcels and constrain where you can build. Then septic feasibility through Central District Health, water source, legally recorded access, soils, and floodplain status. A written lot evaluation at $950 to $3,500 covers all of it.',
+          'Irrigation first, because this is long-established farmland and ditches, laterals, easements, and water delivery obligations are recorded against many parcels and constrain where you can build. Then septic feasibility through Southwest District Health, water source, legally recorded access, soils, and floodplain status. A written lot evaluation at $950 to $3,500 covers all of it.',
       },
       {
         question: 'Is building in Caldwell cheaper than Boise?',
@@ -474,7 +474,7 @@ const PLACES: PlaceGuide[] = [
       {
         question: 'Do Caldwell acreage parcels need a well and septic?',
         answer:
-          'Many do, though it depends on whether municipal services reach the parcel, which should be confirmed in writing with the provider. Where they are required, expect rural site work of $80,000 to $150,000 covering the well, the septic system and its permitting through Central District Health, the driveway, power extension, and grading, all before a foundation is poured.',
+          'Many do, though it depends on whether municipal services reach the parcel, which should be confirmed in writing with the provider. Where they are required, expect rural site work of $80,000 to $150,000 covering the well, the septic system and its permitting through Southwest District Health, the driveway, power extension, and grading, all before a foundation is poured.',
       },
       {
         question: 'Is there a floodplain concern building near the river in Caldwell?',
@@ -649,14 +649,11 @@ const PLACES: PlaceGuide[] = [
 ];
 
 function buildLocationGuide(p: PlaceGuide): GuidePageData {
-  const county = countyLabel(p.county);
-  const otherCounty = p.county === 'ada' ? 'Canyon County' : 'Ada County';
+  const healthDistrict = p.county === 'canyon' ? 'Southwest District Health' : 'the health district serving the parcel';
 
   const permitCallout =
     `<div class="callout note"><p class="callout-label">${p.name}: permit snapshot</p>` +
-    `<p>New home permits for ${p.name} route through <strong>${county}</strong>, which uses different portals and a different review cadence from ${otherCounty}. ` +
-    `The package includes a site plan, an architectural set, stamped structural engineering, energy compliance documentation, and either utility will-serve letters or well and septic approvals. ` +
-    `Septic permits for parcels on private systems go through Central District Health. See <a href="/blog/ada-vs-canyon-county-permit-timelines">Ada vs Canyon County permit timelines</a>.</p></div>`;
+    `<p>${permitGuidanceHtml(p.name)} For a private septic system, confirm requirements with ${healthDistrict}. Utility and septic approvals are separate from the building permit.</p></div>`;
 
   const content = [
     permitCallout,
@@ -671,7 +668,7 @@ function buildLocationGuide(p: PlaceGuide): GuidePageData {
     p.budget,
     `<p>For the full picture of what moves a construction budget, see the <a href="/guides/boise-home-building-cost-guide">Boise home building cost guide</a>, or run your size and finish level through the <a href="/#calculator">estimator</a> for a starting range.</p>`,
     `<h2 id="how-we-build">How we work in ${p.name}</h2>`,
-    `<p><strong>We handle design, engineering, permitting, and construction under one contract, which means one accountable team from the first drawing to handover.</strong> That includes the ${county} submissions and inspections, the utility applications, and where relevant the septic approval through Central District Health. You get a line-item budget before we break ground, a published draw schedule, a written progress update every week, and a one-year workmanship warranty after possession. Our <a href="/guides/boise-home-building-process-guide">process guide</a> walks through every stage in order.</p>`,
+    `<p><strong>We handle design, engineering, permitting, and construction under one contract, which means one accountable team from the first drawing to handover.</strong> That includes submissions and inspections with the authority for your address, utility applications, and any separate septic approval with ${healthDistrict}. You get a line-item budget before we break ground, a published draw schedule, a written progress update every week, and a one-year workmanship warranty after possession. Our <a href="/guides/boise-home-building-process-guide">process guide</a> walks through every stage in order.</p>`,
     `<p>Services relevant here: <a href="/services/custom-home-builder">custom home building</a>, <a href="/services/semi-custom-homes">semi-custom homes</a>, <a href="/services/build-on-your-lot">build on your lot</a>, and <a href="/services/home-plans-design">home plans and design</a>. See also <a href="/areas/${p.citySlug}">our ${p.citySlug === p.name.toLowerCase() ? p.name : p.citySlug} service area page</a> and the <a href="/guides/treasure-valley-home-building-guide">Treasure Valley home building guide</a>.</p>`,
     `<h2 id="next-steps">Start with the parcel</h2>`,
     `<p>The fastest way to get a real answer about building in ${p.name} is to tell us about the specific parcel, because that is what determines the site budget and frequently the plan. <a href="/contact">Send us the address or parcel number</a> and we will tell you what we see, or start with the <a href="/#calculator">build cost estimator</a> for a planning range.</p>`,

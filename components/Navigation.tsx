@@ -1,4 +1,5 @@
 "use client";
+import { useP5MobileActions } from "@/components/P5MobileActions";
 import { ApprovedBrand } from "@/components/approved/ApprovedBrand";
 
 
@@ -33,6 +34,7 @@ export function Navigation() {
 
 function MarketingNavigation() {
   const pathname = usePathname();
+  const mobileActionsVisible = useP5MobileActions(pathname);
   // The estimator is a one-page app with its own brand bar, step progress and exit control.
   // Stacking the marketing header on top of it cost about a third of a phone screen before any
   // content, and gave the customer a hamburger out of the flow they were in (owner 2026-09-23).
@@ -297,6 +299,7 @@ function MarketingNavigation() {
           three equal actions diluted which one visitors actually tap. */}
       <div
         data-mobile-nav-bar=""
+        data-p5-actions-ready={mobileActionsVisible}
         className={cn("fixed left-0 right-0 bottom-0 z-[100] min-[1180px]:hidden pb-safe border-t bg-background border-border", (mobileOpen || pathname?.startsWith("/estimate")) && "invisible pointer-events-none")}
       >
         <div className="flex items-stretch gap-2 p-2">

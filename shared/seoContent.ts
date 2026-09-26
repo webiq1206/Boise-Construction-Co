@@ -1,5 +1,6 @@
 import type { ServiceData, CityData } from './contentData';
 import { getCountyLabel } from './contentData';
+import {permitGuidance,permitSource} from '../lib/permitGuidance';
 import type { LandingSection } from '@/components/seo/LandingPageTemplate';
 
 export interface FAQItem {
@@ -112,7 +113,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'Do you build on rural acreage outside city limits?',
         answer:
-          'Yes. Rural parcels in Ada and Canyon County usually need a well, a septic system permitted through Central District Health, and sometimes private road or power extension. That work commonly adds $80,000 to $150,000 before a foundation is poured, so we price it during feasibility.',
+          'Rural parcels without municipal service may need a well, a septic system, and private road or power extensions. Confirm utility availability for the parcel first. Septic review goes through Central District Health in Ada County or Southwest District Health in Canyon County. Site work commonly adds $80,000 to $150,000 before a foundation is poured, so we price it during feasibility.',
       },
       {
         question: 'Can I supply my own plans?',
@@ -264,7 +265,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'Do I need a well and septic on rural Ada or Canyon County land?',
         answer:
-          'If municipal water and sewer are not at the property line, yes. Septic systems are permitted through Central District Health and wells through the Idaho Department of Water Resources. Together they commonly add $35,000 to $70,000, more if the well has to go deep.',
+          'Confirm municipal connection options before assuming a well or septic system is needed. For septic review, contact Central District Health in Ada County or Southwest District Health in Canyon County. Well requirements are handled through the Idaho Department of Water Resources. Well and septic work commonly adds $35,000 to $70,000, with actual costs depending on site conditions and well depth.',
       },
       {
         question: 'Can you build in a subdivision with an HOA?',
@@ -550,7 +551,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       'Written site work and permitting cost summary',
     ],
     timeline:
-      'A standard lot evaluation takes 2 to 4 weeks. Parcels needing a formal geotechnical report or a septic feasibility test through Central District Health can take 4 to 8 weeks.',
+      'A standard lot evaluation typically takes 2 to 4 weeks. Parcels needing a formal geotechnical report or septic feasibility review by the health district serving the parcel may take longer. Confirm current review availability before relying on a schedule.',
     processSteps: [
       {
         title: 'Parcel research',
@@ -604,7 +605,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Lot evaluation cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, a written lot evaluation in the Treasure Valley runs $950 to $3,500. A standard review of a serviced subdivision lot sits near the lower end, while rural acreage requiring a geotechnical report, septic feasibility testing through Central District Health, or a well yield assessment sits at the upper end.',
+        'As of 2026, a written lot evaluation in the Treasure Valley runs $950 to $3,500. A standard review of a serviced subdivision lot sits near the lower end, while rural acreage requiring a geotechnical report, septic feasibility testing through the health district serving the parcel, or a well yield assessment sits at the upper end.',
         'These are planning ranges, not bids. The fee is credited toward design if you build with us, and it routinely surfaces site costs that dwarf it.',
       ],
     },
@@ -867,15 +868,16 @@ export function getCityServiceSections(
       ],
     },
     {
-      heading: `New construction permits and plan review in ${county}`,
+      heading: `New construction permits and plan review in ${city.name}`,
       paragraphs: [
-        `New home construction in ${city.name} requires a building permit, plan review, and impact fees through ${county}. Residential plan review commonly runs 3 to 6 weeks, and parcels outside municipal service need septic approval through Central District Health and a well permit through the Idaho Department of Water Resources. We build those timelines into your schedule from day one and handle submissions, fees, and inspections as part of the contract.`,
+        permitGuidance(city.name),
         seo?.climate
           ? `Our ${city.name} designs also account for the local ${seo.climate}, from insulation and ventilation choices to frost depth, snow load, and materials that hold up to Treasure Valley freeze-thaw cycles.`
           : `Our ${city.name} designs account for the local Treasure Valley climate, including frost depth, snow load, insulation levels, and durable exterior materials.`,
       ],
       links: [
         { label: `${city.name} home builder overview`, href: `/areas/${city.slug}` },
+        ...(permitSource(city.name)?[{label:`Official ${city.name} permit guidance`,href:permitSource(city.name)!}]:[]),
         { label: 'Ada vs Canyon County permit timelines', href: '/resources/ada-canyon-permit-flow' },
       ],
     },

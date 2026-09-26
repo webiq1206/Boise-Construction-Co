@@ -67,7 +67,7 @@ const CONTACT_FAQS = [
   {
     question: 'How do I get a cost estimate for my home?',
     answer:
-      'Use our online build cost estimator for an instant range, then book a free consultation for a written, line-item budget tailored to your plan and your lot.',
+      'Use our online build cost estimator for a preliminary range, then book a free consultation for a written, line-item budget tailored to your plan and your lot.',
   },
 ];
 
@@ -443,7 +443,7 @@ export default function ContactPage() {
               <em className="brc-accent">call</em>?
             </>
           }
-          description="Use our online build cost estimator for an instant Treasure Valley range - then schedule your free consultation when you're ready for a written, line-item budget."
+          description="Use our online build cost estimator for a preliminary Treasure Valley range - then schedule your free consultation when you're ready for a written, line-item budget."
           variant="canvas"
         />
 

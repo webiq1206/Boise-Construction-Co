@@ -190,7 +190,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
               )}
 
               <div className="lg:hidden mt-10">
-                <ArticleSidebarCta description="See what your project might cost with an instant Treasure Valley planning range." />
+                <ArticleSidebarCta description="See what your project might cost with a preliminary Treasure Valley planning range." />
               </div>
             </div>
 

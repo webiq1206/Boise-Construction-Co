@@ -775,7 +775,7 @@
           "anchor": "Building a Home in Middleton",
           "title": "Building a Home in Middleton",
           "type": "guide",
-          "score": 0.323
+          "score": 0.318
         }
       ]
     },
@@ -1810,7 +1810,7 @@
           "anchor": "Building a Home in Middleton",
           "title": "Building a Home in Middleton",
           "type": "guide",
-          "score": 0.301
+          "score": 0.294
         }
       ]
     },
@@ -5149,13 +5149,6 @@
       "url": "/services/home-plans-design/nampa",
       "links": [
         {
-          "url": "/services/home-plans-design/middleton",
-          "anchor": "Home Design & Plans in Middleton",
-          "title": "Home Design & Plans in Middleton, Idaho",
-          "type": "city-service",
-          "score": 1.733
-        },
-        {
           "url": "/services/home-plans-design/caldwell",
           "anchor": "Home Design & Plans in Caldwell",
           "title": "Home Design & Plans in Caldwell, Idaho",
@@ -5203,6 +5196,13 @@
           "title": "The Stages of Building a House, in Order",
           "type": "blog",
           "score": -0.169
+        },
+        {
+          "url": "/blog/choosing-finishes-for-a-new-home",
+          "anchor": "Choosing Finishes for a New Home Without Blowing the Budget",
+          "title": "Choosing Finishes for a New Home Without Blowing the Budget",
+          "type": "blog",
+          "score": -0.171
         }
       ]
     },
@@ -8310,14 +8310,14 @@
           "anchor": "Building a Home in Middleton",
           "title": "Building a Home in Middleton",
           "type": "guide",
-          "score": 1.201
+          "score": 1.184
         },
         {
-          "url": "/guides/eagle-home-building-guide",
-          "anchor": "Building a Home in Eagle",
-          "title": "Building a Home in Eagle",
+          "url": "/guides/caldwell-home-building-guide",
+          "anchor": "Building a Home in Caldwell",
+          "title": "Building a Home in Caldwell",
           "type": "guide",
-          "score": 1.177
+          "score": 1.182
         },
         {
           "url": "/guides/star-home-building-guide",
@@ -8381,7 +8381,7 @@
           "anchor": "Building a Home in Middleton",
           "title": "Building a Home in Middleton",
           "type": "guide",
-          "score": 1.09
+          "score": 1.075
         },
         {
           "url": "/services/design-build/meridian",
@@ -8434,39 +8434,39 @@
           "score": 999
         },
         {
-          "url": "/guides/star-home-building-guide",
-          "anchor": "Building a Home in Star",
-          "title": "Building a Home in Star",
+          "url": "/guides/eagle-home-building-guide",
+          "anchor": "Building a Home in Eagle",
+          "title": "Building a Home in Eagle",
           "type": "guide",
-          "score": 1.239
+          "score": 1.177
         },
         {
           "url": "/guides/meridian-home-building-guide",
           "anchor": "Building a Home in Meridian",
           "title": "Building a Home in Meridian",
           "type": "guide",
-          "score": 1.17
-        },
-        {
-          "url": "/guides/nampa-home-building-guide",
-          "anchor": "Building a Home in Nampa",
-          "title": "Building a Home in Nampa",
-          "type": "guide",
-          "score": 1.121
+          "score": 1.155
         },
         {
           "url": "/guides/harris-ranch-home-building-guide",
           "anchor": "Building in Harris Ranch",
           "title": "Building in Harris Ranch",
           "type": "guide",
-          "score": 1.118
+          "score": 1.149
         },
         {
-          "url": "/services/custom-home-builder/middleton",
-          "anchor": "Custom Home Building in Middleton",
-          "title": "Custom Home Building in Middleton, Idaho",
+          "url": "/guides/nampa-home-building-guide",
+          "anchor": "Building a Home in Nampa",
+          "title": "Building a Home in Nampa",
+          "type": "guide",
+          "score": 1.149
+        },
+        {
+          "url": "/services/home-plans-design/middleton",
+          "anchor": "Home Design & Plans in Middleton",
+          "title": "Home Design & Plans in Middleton, Idaho",
           "type": "city-service",
-          "score": 0.065
+          "score": 0.06
         }
       ]
     },
@@ -8505,6 +8505,13 @@
           "score": 1.182
         },
         {
+          "url": "/guides/star-home-building-guide",
+          "anchor": "Building a Home in Star",
+          "title": "Building a Home in Star",
+          "type": "guide",
+          "score": 1.177
+        },
+        {
           "url": "/guides/meridian-home-building-guide",
           "anchor": "Building a Home in Meridian",
           "title": "Building a Home in Meridian",
@@ -8512,18 +8519,11 @@
           "score": 1.155
         },
         {
-          "url": "/guides/hidden-springs-home-building-guide",
-          "anchor": "Building in Hidden Springs",
-          "title": "Building in Hidden Springs",
-          "type": "guide",
-          "score": 1.099
-        },
-        {
           "url": "/guides/middleton-home-building-guide",
           "anchor": "Building a Home in Middleton",
           "title": "Building a Home in Middleton",
           "type": "guide",
-          "score": 1.081
+          "score": 1.109
         },
         {
           "url": "/services/design-build/nampa",
@@ -8569,13 +8569,6 @@
           "score": 1.177
         },
         {
-          "url": "/guides/caldwell-home-building-guide",
-          "anchor": "Building a Home in Caldwell",
-          "title": "Building a Home in Caldwell",
-          "type": "guide",
-          "score": 1.176
-        },
-        {
           "url": "/guides/meridian-home-building-guide",
           "anchor": "Building a Home in Meridian",
           "title": "Building a Home in Meridian",
@@ -8588,6 +8581,13 @@
           "title": "Building a Home in Kuna",
           "type": "guide",
           "score": 1.1
+        },
+        {
+          "url": "/guides/hidden-springs-home-building-guide",
+          "anchor": "Building in Hidden Springs",
+          "title": "Building in Hidden Springs",
+          "type": "guide",
+          "score": 1.095
         },
         {
           "url": "/services/custom-home-builder/star",
@@ -8654,11 +8654,11 @@
           "score": -0.069
         },
         {
-          "url": "/blog/single-story-vs-two-story-home",
-          "anchor": "Single Story vs Two Story: Cost, Lot, and Livability",
-          "title": "Single Story vs Two Story: Cost, Lot, and Livability",
+          "url": "/blog/how-long-does-it-take-to-build-a-house-boise",
+          "anchor": "How Long Does It Take to Build a House in Boise?",
+          "title": "How Long Does It Take to Build a House in Boise?",
           "type": "blog",
-          "score": -0.075
+          "score": -0.069
         }
       ]
     },
@@ -8733,6 +8733,13 @@
       "url": "/services/custom-home-builder",
       "links": [
         {
+          "url": "/services/custom-home-builder/star",
+          "anchor": "Custom Home Building in Star",
+          "title": "Custom Home Building in Star, Idaho",
+          "type": "city-service",
+          "score": 1.817
+        },
+        {
           "url": "/services/custom-home-builder/garden-city",
           "anchor": "Custom Home Building in Garden City",
           "title": "Custom Home Building in Garden City, Idaho",
@@ -8768,25 +8775,18 @@
           "score": 1.657
         },
         {
+          "url": "/services/custom-home-builder/middleton",
+          "anchor": "Custom Home Building in Middleton",
+          "title": "Custom Home Building in Middleton, Idaho",
+          "type": "city-service",
+          "score": 1.657
+        },
+        {
           "url": "/services/custom-home-builder/nampa",
           "anchor": "Custom Home Building in Nampa",
           "title": "Custom Home Building in Nampa, Idaho",
           "type": "city-service",
           "score": 1.657
-        },
-        {
-          "url": "/services/custom-home-builder/star",
-          "anchor": "Custom Home Building in Star",
-          "title": "Custom Home Building in Star, Idaho",
-          "type": "city-service",
-          "score": 1.657
-        },
-        {
-          "url": "/blog/build-vs-buy-boise",
-          "anchor": "Building vs Buying a Home in the Treasure Valley",
-          "title": "Building vs Buying a Home in the Treasure Valley",
-          "type": "blog",
-          "score": -0.249
         }
       ]
     },
@@ -9245,9 +9245,9 @@
     "/blog/aging-in-place-home-design": 9,
     "/blog/allowances-explained-new-home": 9,
     "/blog/boise-building-permit-guide": 8,
-    "/blog/build-vs-buy-boise": 7,
+    "/blog/build-vs-buy-boise": 6,
     "/blog/building-in-the-boise-foothills": 8,
-    "/blog/choosing-finishes-for-a-new-home": 8,
+    "/blog/choosing-finishes-for-a-new-home": 9,
     "/blog/construction-loan-basics-idaho": 7,
     "/blog/cost-to-build-a-house-boise": 10,
     "/blog/covered-outdoor-living-new-home": 9,
@@ -9258,7 +9258,7 @@
     "/blog/first-meeting-with-a-home-builder": 6,
     "/blog/fixed-price-vs-cost-plus": 8,
     "/blog/home-builder-red-flags": 10,
-    "/blog/how-long-does-it-take-to-build-a-house-boise": 10,
+    "/blog/how-long-does-it-take-to-build-a-house-boise": 11,
     "/blog/how-to-budget-a-new-home-boise": 9,
     "/blog/how-to-buy-a-buildable-lot-boise": 7,
     "/blog/how-to-compare-builder-bids": 8,
@@ -9270,7 +9270,7 @@
     "/blog/production-vs-custom-home-builder": 8,
     "/blog/questions-to-ask-a-home-builder": 9,
     "/blog/shop-homes-and-barndominiums-idaho": 15,
-    "/blog/single-story-vs-two-story-home": 9,
+    "/blog/single-story-vs-two-story-home": 8,
     "/blog/stages-of-building-a-house": 9,
     "/blog/well-and-septic-cost-idaho": 8,
     "/blog/what-drives-home-building-costs-boise": 9,
