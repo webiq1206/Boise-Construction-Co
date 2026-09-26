@@ -1,5 +1,6 @@
 import type { ServiceData, CityData } from './contentData';
 import { getCountyLabel } from './contentData';
+import {permitGuidance,permitSource} from '../lib/permitGuidance';
 import type { LandingSection } from '@/components/seo/LandingPageTemplate';
 
 export interface FAQItem {
@@ -867,15 +868,16 @@ export function getCityServiceSections(
       ],
     },
     {
-      heading: `New construction permits and plan review in ${county}`,
+      heading: `New construction permits and plan review in ${city.name}`,
       paragraphs: [
-        `New home construction in ${city.name} requires a building permit, plan review, and impact fees through ${county}. Residential plan review commonly runs 3 to 6 weeks, and parcels outside municipal service need septic approval through Central District Health and a well permit through the Idaho Department of Water Resources. We build those timelines into your schedule from day one and handle submissions, fees, and inspections as part of the contract.`,
+        permitGuidance(city.name),
         seo?.climate
           ? `Our ${city.name} designs also account for the local ${seo.climate}, from insulation and ventilation choices to frost depth, snow load, and materials that hold up to Treasure Valley freeze-thaw cycles.`
           : `Our ${city.name} designs account for the local Treasure Valley climate, including frost depth, snow load, insulation levels, and durable exterior materials.`,
       ],
       links: [
         { label: `${city.name} home builder overview`, href: `/areas/${city.slug}` },
+        ...(permitSource(city.name)?[{label:`Official ${city.name} permit guidance`,href:permitSource(city.name)!}]:[]),
         { label: 'Ada vs Canyon County permit timelines', href: '/resources/ada-canyon-permit-flow' },
       ],
     },
