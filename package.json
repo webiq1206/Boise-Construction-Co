@@ -10,7 +10,7 @@
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install chromium",
     "test:instrumentation-startup": "node --import tsx --test tests/instrumentation-startup.test.ts",
-    "db:push": "drizzle-kit push",
+    "db:push": "npm run db:prepare",
     "links:generate": "node --import tsx scripts/internal-links/generate.ts",
     "audit:links": "node --import tsx scripts/internal-links/audit.ts",
     "verify:pricing": "node --import tsx scripts/verify-pricing-fingerprint.ts",
@@ -42,7 +42,7 @@
     "brand:preview": "node scripts/brand/generate-brand-assets.mjs --preview",
     "images:optimize": "node scripts/optimize-marketing-images-sharp.mjs",
     "verify:p5-shared": "node --import tsx --test tests/p5-shared-engine.test.ts tests/p5-review-schema.test.mjs",
-    "prebuild": "npm run verify:p5-shared && npm run verify:no-em-dash && npm run verify:estimate && npm run verify:cost-pricing && npm run verify:engine-independent && npm run verify:golden && npm run verify:page-inventory && npm run verify:doc-coverage && npm run verify:plan-merge && npm run verify:plan-gating && npm run verify:re10-merge && npm run verify:estimate-audit && npm run verify:new-construction && npm run verify:lead-payload && npm run verify:budget && npm run verify:no-appliance-costs && npm run verify:re10 && npm run verify:re10-delivery && npm run verify:assessors && npm run links:generate && npm run audit:links && npm run verify:section-links && npm run verify:redirect-collisions && npm run resources:generate && npm run verify:content && npm run verify:images && npm run verify:image-paths && npm run verify:llms && npm run verify:estimator-recovery && npm run test:instrumentation-startup",
+    "prebuild": "npm run verify:db-safety && npm run verify:p5-shared && npm run verify:no-em-dash && npm run verify:estimate && npm run verify:cost-pricing && npm run verify:engine-independent && npm run verify:golden && npm run verify:page-inventory && npm run verify:doc-coverage && npm run verify:plan-merge && npm run verify:plan-gating && npm run verify:re10-merge && npm run verify:estimate-audit && npm run verify:new-construction && npm run verify:lead-payload && npm run verify:budget && npm run verify:no-appliance-costs && npm run verify:re10 && npm run verify:re10-delivery && npm run verify:assessors && npm run links:generate && npm run audit:links && npm run verify:section-links && npm run verify:redirect-collisions && npm run resources:generate && npm run verify:content && npm run verify:images && npm run verify:image-paths && npm run verify:llms && npm run verify:estimator-recovery && npm run test:instrumentation-startup",
     "backlink:score": "node backlink-engine/src/score.mjs",
     "backlink:run": "node backlink-engine/src/run.mjs",
     "backlink:preflight": "node backlink-engine/src/preflight.mjs",
@@ -60,7 +60,10 @@
     "verify:plan-gating": "node --import tsx scripts/verify-plan-gating.ts",
     "verify:re10-merge": "node --import tsx scripts/verify-re10-merge.ts",
     "verify:estimate-audit": "node --import tsx scripts/verify-estimate-audit.ts",
-    "verify:contrast": "node scripts/verify-contrast.mjs"
+    "verify:contrast": "node scripts/verify-contrast.mjs",
+    "db:prepare": "node --env-file-if-exists=.env.local scripts/p5-prepare-database.mjs",
+    "verify:db-safety": "node scripts/p5-schema-safety.mjs && node --test tests/p5-database-safety.test.mjs",
+    "predev": "npm run db:prepare -- --optional"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
@@ -146,7 +149,8 @@
     "zod": "^3.24.2",
     "zod-validation-error": "^3.4.0",
     "jszip": "^3.10.1",
-    "saxes": "^5.0.1"
+    "saxes": "^5.0.1",
+    "pg": "^8.23.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
