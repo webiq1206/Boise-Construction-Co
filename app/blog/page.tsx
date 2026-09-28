@@ -76,7 +76,7 @@ export default function BlogPage() {
             <em className="brc-accent">range</em>
           </>
         }
-        description="Read enough to know roughly what you want? Run it through the estimator for a Treasure Valley build range in about 60 seconds. No obligation, no phone number required."
+        description="Have a project in mind? Describe it or upload your plans for a preliminary Treasure Valley build estimate in a few minutes. No call or appointment needed. Larger plan sets may take longer."
         variant="greige"
       />
     </></InteriorPage>
