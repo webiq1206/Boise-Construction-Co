@@ -9,6 +9,7 @@ landingBreadcrumbs,
 landingFAQSchema,
 } from '@/lib/landing-schema';
 import { buildPageMetadata } from '@/lib/page-metadata';
+import { permitGuidance, permitSource } from '@/lib/permitGuidance';
 import { generateSpeakableSchema } from '@/lib/schema';
 import { CITY_SEO_DATA } from '@/lib/seo';
 import { areaPath,CITY_SLUGS,getCityBySlug } from '@/lib/seo-routes';
@@ -50,7 +51,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
   const overview = getAreaIntro(city);
   const images = getAreaImageSet(city.slug);
   const localNote = seo
-    ? `We serve ${city.name} homeowners across ${seo.neighborhoods.slice(0, 3).join(', ')}, and all of ${county}. Permits are coordinated through ${county} for projects requiring approval.`
+    ? `We serve ${city.name} homeowners across ${seo.neighborhoods.slice(0, 3).join(', ')}, and all of ${county}. Confirm the permitting authority for the project address before applying.`
     : `We serve ${city.name} and all of ${county} with design-build home construction.`;
 
   const neighborhoods = seo?.neighborhoods ?? [];
@@ -80,9 +81,13 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       ],
     },
     {
-      heading: `Permits and planning in ${county}`,
+      heading: `Permits and planning in ${city.name}`,
+      links: permitSource(city.name)
+        ? [{ label: `Official ${city.name} permit guidance`, href: permitSource(city.name)! }]
+        : undefined,
       paragraphs: [
-        `Every new home in ${city.name} requires a building permit through ${county}, along with plan review, and often site-specific approvals for driveways, septic, or well. We build plan review and inspection windows into the master schedule so timelines stay realistic, and we coordinate submissions, fees, and inspections as part of your design-build contract.`,
+        permitGuidance(city.name),
+        'We confirm the required submissions and inspection steps for your scope, then account for them in the project schedule.',
         seo?.climate
           ? `Our ${city.name} designs also account for the local ${seo.climate} - from insulation levels and window specification to a building envelope and exterior materials that hold up to freeze-thaw cycles.`
           : `Our designs also account for the Treasure Valley climate, from insulation levels and window specification to a building envelope built for freeze-thaw cycles.`,
