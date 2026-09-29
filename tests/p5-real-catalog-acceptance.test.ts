@@ -51,7 +51,7 @@ function scope(text:string,laborOnly=false):ReviewedScope{
   };
 }
 
-async function price(reviewed:ReviewedScope,tasks:Task[],rates=catalog.rates){
+async function price(reviewed:ReviewedScope,tasks:Task[],rates=catalog.rates,allowResearch=false){
   const configuration=createPlanningConfiguration({...catalog,rates},['change-order'],snapshot.finance);
   const before=JSON.stringify(configuration);
   const stages:string[]=[];
@@ -59,8 +59,13 @@ async function price(reviewed:ReviewedScope,tasks:Task[],rates=catalog.rates){
   // mapping, quantity/unit checks, book materialization, audit reconciliation,
   // financial arithmetic and customer presentation remain production functions.
   const request:PricingRequest=async(instructions,input,search)=>{
-    assert.equal(search,false,'acceptance fixtures must never request web research');
+    assert.ok(!search||allowResearch,'only the missing-rate fixture may request simulated research');
     const data=input as any;
+    if(search){
+      stages.push('research');
+      const sourceUrls=['https://synthetic-trade-a.example/trim','https://synthetic-trade-b.example/trim'];
+      return {sourceUrls,value:{rates:data.tasks.map((task:any)=>({taskId:task.id,description:'Trim installation labor',unit:'LF',quantity:100,quantityEvidence:'100 LF of owner-supplied trim requested',basis:'trade-labor',includes:'Trim installation labor only',excludes:'Owner-supplied trim materials',sources:sourceUrls.map(url=>({url,low:2,high:4,unit:'LF',costBasis:'trade-labor',sourceType:'contractor-rate',dateBasis:'published',publishedAt:'2026-09-11',region:'Boise, Idaho',excerpt:'Synthetic fixture: trim installation labor costs 2 to 4 dollars per linear foot.'}))})),issues:[]}};
+    }
     const reply=(value:unknown)=>({value,sourceUrls:[]});
     if(instructions.startsWith('Inventory ')){
       stages.push('inventory');
@@ -85,7 +90,7 @@ async function price(reviewed:ReviewedScope,tasks:Task[],rates=catalog.rates){
   };
   const result=await priceCompleteScope(reviewed,configuration,request,now);
   assert.deepEqual(JSON.stringify(configuration),before,'the approved policy is immutable');
-  for(const stage of ['inventory','mapping','audit'])assert.ok(stages.includes(stage),`${stage} genuinely ran`);
+  for(const stage of ['inventory','mapping',...(allowResearch?['research']:[]),'audit'])assert.ok(stages.includes(stage),`${stage} genuinely ran`);
   return result;
 }
 function lines(result:Awaited<ReturnType<typeof price>>){
@@ -153,15 +158,16 @@ test('mutually exclusive framing alternatives cannot become a combined base pric
   else assert.ok(both.customer.verificationItems.length>0);
 });
 
-test('a task with no catalog rate is carried out of the total and named, never silently priced or dropped',async()=>{
+test('a missing catalog rate is researched, audited, and included exactly once',async()=>{
   const result=await price(scope('Supply and install 100 SF framing and install 100 LF of owner-supplied trim.'),[
     framing(100),{id:'trim',description:'Trim installation labor',evidence:'Install 100 LF trim.',additions:[addition('03-18-02-L',100,'100 LF trim')]},
-  ],catalog.rates.filter(rate=>rate.code!=='03-18-02-L'));
-  // The framing prices; the trim cannot, so it is excluded by name with a site-visit note and costs nothing in the range.
-  assert.ok(result.customer.range,'the priced framing is released');
-  assert.ok(result.customer.exclusions.some((e:string)=>/Trim installation labor/.test(e)&&/not included in this price/.test(e)),'the unpriced trim is named as excluded');
-  assert.ok(!JSON.stringify(result.customer.lineItems||[]).includes('03-18-02-L'),'no line is priced from the missing rate');
-  assert.match(JSON.stringify(result.internal.scopePricing),/unavailable|unsupported|no supported price/i,'the cause stays in the internal record');
+  ],catalog.rates.filter(rate=>rate.code!=='03-18-02-L'),true);
+  assert.ok(result.customer.range,JSON.stringify(result.customer.verificationItems));
+  assert.ok(!result.customer.exclusions.some((e:string)=>/Trim installation labor/.test(e)),'requested trim must not be omitted');
+  const trim=lines(result).filter(line=>line.description==='Trim installation labor');
+  assert.deepEqual(trim.map(line=>[line.quantity,line.unit,line.unitCost,line.cost]),[[100,'LF',3,300]]);
+  assert.equal((result.internal as any).directCost,1900,'framing 1600 plus researched trim 300, each charged once');
+  assert.match(JSON.stringify(result.internal.scopePricing),/synthetic-trade-a\.example/,'research evidence survives the audit');
 });
 
 test('ambiguous feet cannot silently turn into a plausible square-foot framing total',async()=>{
