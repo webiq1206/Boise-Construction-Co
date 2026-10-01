@@ -110,7 +110,7 @@ export const LOT_CHECKLIST_BLOCKS: PdfBlock[] = [
       'Power: at the property line, or how far away and who pays to extend',
       'Water: municipal at the line, or a well is required',
       'Sewer: municipal at the line, or a septic system is required',
-      'Septic feasibility confirmed with Central District Health',
+      'Septic feasibility: CDH in Ada County; SWDH in Canyon County',
       'Natural gas available, or plan for propane or all-electric',
       'Internet and phone service available at the address',
     ],
@@ -145,7 +145,7 @@ export const LOT_CHECKLIST_BLOCKS: PdfBlock[] = [
     rows: [
       ['Land purchase', '___________', ''],
       ['Well', '___________', 'Driller quote'],
-      ['Septic system', '___________', 'Designer / CDH'],
+      ['Septic system', '___________', 'Designer / health district'],
       ['Driveway and access', '___________', ''],
       ['Power extension', '___________', 'Utility'],
       ['Excavation and grading', '___________', 'Builder'],
@@ -166,78 +166,46 @@ export const LOT_CHECKLIST_BLOCKS: PdfBlock[] = [
 ];
 
 export const ADA_CANYON_PERMIT_BLOCKS: PdfBlock[] = [
-  {
-    type: 'title',
-    text: 'Ada vs Canyon County New Home Permits',
-  },
-  {
-    type: 'subtitle',
-    text: 'Quick reference for Treasure Valley owners building a new home. Timelines are estimates.',
-  },
-  { type: 'heading', text: 'Which county reviews my build?' },
-  {
-    type: 'table',
-    headers: ['Area', 'County', 'Review'],
-    rows: [
-      ['Boise, Meridian, Eagle', 'Ada', 'City or Ada County'],
-      ['Kuna, Star', 'Ada', 'City or Ada County'],
-      ['Nampa, Middleton', 'Canyon', 'City or Canyon County'],
-      ['Caldwell', 'Canyon', 'City or Canyon County'],
-    ],
-  },
-  { type: 'heading', text: 'What a new home permit package contains' },
-  {
-    type: 'bullets',
-    items: [
-      'Site plan showing setbacks, access, grading, and drainage',
-      'Architectural set: floor plans, elevations, sections, details',
-      'Structural engineering stamped for our seismic and snow loads',
-      'Energy code compliance documentation',
-      'Utility will-serve letters, or well and septic approvals',
-      'Septic permit through Central District Health on rural parcels',
-    ],
-  },
-  { type: 'heading', text: 'Inspection sequence during construction' },
-  {
-    type: 'bullets',
-    items: [
-      'Footing and foundation, before concrete',
-      'Underground plumbing, before backfill',
-      'Framing, plus rough electrical, plumbing, and mechanical',
-      'Insulation and air sealing, before drywall',
-      'Final, then the certificate of occupancy',
-    ],
-  },
-  { type: 'heading', text: 'Typical timeline bands' },
-  {
-    type: 'table',
-    headers: ['Phase', 'Ada County', 'Canyon County'],
-    rows: [
-      ['Design and engineering', '8-16 weeks', '8-16 weeks'],
-      ['Plan review', '4-10 weeks', '4-10 weeks'],
-      ['Inspections', 'During construction', 'During construction'],
-    ],
-  },
-  { type: 'heading', text: 'Owner checklist' },
-  {
-    type: 'checkboxes',
-    items: [
-      'Confirm the jurisdiction before design starts, not after',
-      'Ask whether permits and impact fees are inside the contract price',
-      'Respond to plan-check comments the week they arrive',
-      'Do not let work be covered before its rough inspection',
-      'HOA design review runs separately and in parallel',
-    ],
-  },
-  { type: 'heading', text: 'Learn more' },
-  {
-    type: 'bullets',
-    items: [
-      `Visual flowchart: ${SITE_CONFIG.siteUrl}/resources/ada-canyon-permit-flow`,
-      `Article: ${SITE_CONFIG.siteUrl}/blog/ada-vs-canyon-county-permit-timelines`,
-      `Process guide: ${SITE_CONFIG.siteUrl}/guides/boise-home-building-process-guide`,
-    ],
-  },
+  { type: 'title', text: 'Treasure Valley Permit Planning' },
+  { type: 'subtitle', text: 'Ada and Canyon County reference. Guidance checked October 1, 2026; confirm current requirements for the actual parcel.' },
+  { type: 'heading', text: 'Find the right authority' },
+  { type: 'bullets', items: [
+    'Inside city limits: start with the city building department.',
+    'Unincorporated property: start with the county building department.',
+    'A mailing address does not establish jurisdiction. Confirm the parcel.',
+    'Building, trade, septic, road, utility and HOA reviews can be separate.',
+  ] },
+  { type: 'heading', text: 'Plan the application and inspections' },
+  { type: 'bullets', items: [
+    'Ask for the application checklist, required plans and current review queue.',
+    'Coordinate site, architectural, structural and energy documents as required.',
+    'Confirm fees, outside approvals and who submits each application.',
+    'Receive required permits before starting the work they cover.',
+    'Schedule rough inspections before covering the work.',
+    'Complete final approvals and required occupancy clearance.',
+    'Review time depends on scope, completeness, corrections and the current queue.',
+  ] },
+  { type: 'heading', text: 'Septic systems: use the correct health district' },
+  { type: 'bullets', items: [
+    'Ada County: Central District Health (CDH).',
+    'Canyon County: Southwest District Health (SWDH).',
+    'Confirm septic feasibility and approvals before finalizing the site layout.',
+  ] },
+  { type: 'heading', text: 'Official starting points' },
+  { type: 'bullets', items: [
+    'City of Boise Building: cityofboise.org (Planning and Development Services)',
+    'Ada County: adacounty.id.gov/developmentservices/',
+    'Canyon County: canyoncounty.id.gov/building-department/',
+    'Central District Health: cdh.idaho.gov (Septic, Subdivisions & Water)',
+    'Southwest District Health: swdh.id.gov (Septic & Land Development)',
+  ] },
+  { type: 'heading', text: 'Keep the project scope together' },
+  { type: 'checkboxes', items: [
+    'Parcel, proposed work and existing conditions identified',
+    'Permit responsibilities, fees and inspections included in the written scope',
+    'HOA approval checked separately where applicable',
+  ] },
+  { type: 'paragraph', text: `Guide and source links: ${SITE_CONFIG.siteUrl}/resources/ada-canyon-permit-flow` },
 ];
 
 export const PDF_FOOTERS = {
@@ -245,3 +213,4 @@ export const PDF_FOOTERS = {
   checklist: FOOTER,
   permits: FOOTER,
 } as const;
+

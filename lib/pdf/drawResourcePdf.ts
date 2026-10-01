@@ -223,7 +223,14 @@ export async function buildResourcePdf(
     y: PAGE_HEIGHT - MARGIN,
   };
 
-  for (const block of blocks) {
+  for (const [index, block] of blocks.entries()) {
+    if (block.type === 'heading') {
+      const next = blocks[index + 1];
+      const nextHeight = next?.type === 'table'
+        ? 16 * (next.rows.length + 2)
+        : LINE_HEIGHT * 3;
+      ensureSpace(ctx, 28 + nextHeight);
+    }
     drawBlock(ctx, block);
   }
 

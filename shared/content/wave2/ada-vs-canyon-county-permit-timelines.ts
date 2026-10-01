@@ -26,13 +26,13 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
   ],
   wordCountTarget: 'cluster',
   quickAnswer:
-    'Ada County jurisdictions cover Boise, Meridian, Eagle, Kuna, and Star; Canyon County covers Nampa, Caldwell, and Middleton. The building code applied is essentially the same, but the two counties use separate permit portals, review on different cadences, and set impact fees through different structures. Rural septic in both goes through Central District Health.',
+    'Ada County jurisdictions cover Boise, Meridian, Eagle, Kuna, and Star; Canyon County covers Nampa, Caldwell, and Middleton. The building code applied is essentially the same, but the two counties use separate permit portals, review on different cadences, and set impact fees through different structures. Septic permitting goes through Central District Health in Ada County and Southwest District Health in Canyon County.',
   keyTakeaways: [
     'The house you can build is essentially the same; the path to permit it is not.',
     'Each county uses its own portal, and city jurisdictions inside them add another layer.',
     'Review cadence differs between the two, so a schedule copied from one will not fit the other.',
     'Impact fees are structured differently and are set by jurisdiction, not by county line.',
-    'Rural septic in both counties is permitted through Central District Health.',
+    'Ada County septic permits go through CDH; Canyon County septic permits go through SWDH.',
     'Canyon County parcels are more often rural, which changes site cost more than permitting does.',
   ],
   relatedLinks: [
@@ -63,7 +63,7 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
     {
       question: 'Who permits a septic system in Ada and Canyon County?',
       answer:
-        'Central District Health permits septic systems for rural parcels in both counties. That application runs on its own track alongside the building permit, and it depends on a soil evaluation and an approved design. Starting it early matters, because a septic approval that arrives late holds up a site plan that the building permit depends on.',
+        'Central District Health handles septic permitting in Ada County; Southwest District Health handles it in Canyon County. That application runs on its own track alongside the building permit, and it depends on a site evaluation and the required system design. Starting it early matters, because a septic approval that arrives late holds up a site plan that the building permit depends on.',
     },
     {
       question: 'Is it cheaper to build in Canyon County?',
@@ -78,7 +78,7 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
   ],
   content: `
 <h2 id="short-answer">What changes when you cross the county line</h2>
-<p><strong>The house is the same. The paperwork path, the fee structure, and the list of agencies you deal with are not.</strong> Ada County covers Boise, Meridian, Eagle, Kuna, and Star. Canyon County covers Nampa, Caldwell, and Middleton. Both apply essentially the same building code to the same kind of house, so a plan that works in Meridian works in Nampa. What differs is the submittal portal, the review cadence, how impact fees are assembled, and which outside agencies have a say.</p>
+<p><strong>The house is the same. The paperwork path, the fee structure, and the list of agencies you deal with are not.</strong> Ada County covers Boise, Meridian, Eagle, Kuna, and Star. Canyon County covers Nampa, Caldwell, and Middleton. A plan approved in one location still needs review for the next property and its applicable requirements. What differs is the submittal portal, the review cadence, how impact fees are assembled, and which outside agencies have a say.</p>
 <p>We build on both sides of the line and handle permitting in-house for both, so this is a practical comparison rather than a preference. It pairs with our <a href="/blog/boise-building-permit-guide">guide to what a new-home permit contains</a> and sits inside the wider <a href="/guides/boise-home-building-process-guide">Boise home building process guide</a>.</p>
 
 <h2 id="jurisdiction">The county line is not the real dividing line</h2>
@@ -101,8 +101,8 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
 <p><strong>Outside the building department, the agency map differs enough that a Canyon County build can involve a different cast entirely.</strong> Public roads and driveway approaches in Ada County are handled by a single county-wide highway district, which makes that piece consistent across Boise, Meridian, Eagle, Kuna, and Star. In Canyon County, road authority is divided among separate highway districts and city engineering departments, so which office approves your approach depends on where the parcel sits.</p>
 <p>Irrigation is the other one people do not see coming. Much of the valley floor in both counties carries irrigation easements, laterals, and delivery obligations from agricultural land that was subdivided. An irrigation district may need to review a site plan, and an easement running through the middle of a parcel can move a house or a driveway. This is a due diligence item, not a permitting surprise, provided somebody looks before you buy.</p>
 
-<h2 id="septic">Rural septic goes to Central District Health in both</h2>
-<p><strong>If your parcel is not on city sewer, the septic system is permitted through Central District Health regardless of which county you are in.</strong> That application depends on a soil evaluation and an engineered design, and it runs on its own timeline in parallel with the building permit.</p>
+<h2 id="septic">Septic permitting uses different health districts</h2>
+<p><strong>For a parcel that needs septic, contact <a href="https://cdh.idaho.gov/licenses-permits-inspections/water-septic-subdivisions/">Central District Health in Ada County</a> or <a href="https://swdh.id.gov/environmental-health-services/septic-land-development/">Southwest District Health in Canyon County</a>.</strong> That application depends on a site evaluation and the required system design, and it runs on its own timeline in parallel with the building permit.</p>
 <p>The practical consequence is sequencing. A site plan cannot be finalized without a septic layout, because the drainfield, the replacement area, and their required separations from the well, the house, and property lines all constrain where the house can sit. Start the septic track late and you have a building permit application waiting on a health department approval, which is a genuinely avoidable delay. Our post on <a href="/blog/well-and-septic-cost-idaho">what a well and septic system costs in Idaho</a> covers the numbers.</p>
 
 <h2 id="site-cost">Where the real cost difference shows up</h2>
@@ -113,13 +113,23 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
 <p><strong>Who provides your water, sewer, power, and gas depends on the specific address, and the pattern is different enough between the two counties that assumptions travel badly.</strong> Inside city limits you are usually on a municipal water and sewer system. Outside them you may be on a water or sewer district, on a shared community system, or on a private well and septic with nothing municipal at all.</p>
 <p>Each of those has different application steps, different connection requirements, and a different lead time for getting service to the house. A power extension to a rural parcel is coordinated with the utility on their construction schedule, not yours, and that schedule can be the longest single item on a rural project. This is the piece of due diligence most often skipped by buyers, because a listing that says power is at the road does not tell you how far the road is from where the house will sit.</p>
 
-<h2 id="what-does-not-differ">What does not differ at all</h2>
-<p><strong>Structural engineering, energy compliance, the inspection sequence, and the certificate of occupancy work the same way on both sides.</strong> So does the underlying logic of plan review: zoning, structure, life safety, and energy. So does the requirement that nothing gets covered before it is inspected.</p>
+<h2 id="what-does-not-differ">Shared steps still need local confirmation</h2>
+<p><strong>Both areas require coordinated plans and inspections, but the responsible offices and project requirements can differ. Confirm the inspection sequence and occupancy requirements for the parcel.</strong> So does the underlying logic of plan review: zoning, structure, life safety, and energy. So does the requirement that nothing gets covered before it is inspected.</p>
 <p>This is worth saying because the differences above can make it sound as though building in Canyon County is a different exercise. It is not. It is the same build with a different address book. What actually determines whether your permit goes smoothly is whether the set was complete when it was submitted, and that has nothing to do with the county.</p>
-<p>The trades are also largely shared across the valley. The framers, plumbers, electricians, and concrete crews we work with in Meridian are frequently the same ones working in Nampa the following month, which means quality and availability do not change at the county line either. What does change with distance is drive time, and on a parcel far from the population center that can quietly affect scheduling and what a subcontractor is willing to bid.</p>
+<p>Contractor availability and travel requirements should be confirmed for the actual site. What does change with distance is drive time, and on a parcel far from the population center that can quietly affect scheduling and what a subcontractor is willing to bid.</p>
 
 <h2 id="next-steps">If you are choosing between lots in different counties</h2>
 <p><strong>Choose the lot, not the county, and price the site work before you commit to either.</strong> The permitting differences are real but manageable, and they are not a good reason to prefer one address over another. The site conditions, the utilities, the easements, and the fee stack are the things that will actually change your budget, and all four can be read before you buy.</p>
 <p>We build in Boise, Meridian, Eagle, Kuna, Star, Nampa, Caldwell, and Middleton, and handle permits in-house across both counties. See <a href="/areas">the areas we build in</a>, or bring us a parcel you are considering and we will tell you what it will take to permit and service it. <a href="/contact">Get in touch</a> and we will look at it with you before you write an offer.</p>
+<h2 id="official-sources">Official sources</h2>
+<p>Guidance checked October 1, 2026. Confirm current requirements for the actual property.</p>
+<ul>
+<li><a href="https://www.cityofboise.org/departments/planning-and-development-services/building/">City of Boise Building</a></li>
+<li><a href="https://adacounty.id.gov/developmentservices/">Ada County Development Services</a></li>
+<li><a href="https://www.canyoncounty.id.gov/building-department/">Canyon County Building</a></li>
+<li><a href="https://cdh.idaho.gov/licenses-permits-inspections/water-septic-subdivisions/">Central District Health septic guidance</a></li>
+<li><a href="https://swdh.id.gov/environmental-health-services/septic-land-development/">Southwest District Health septic guidance</a> and <a href="https://swdh.id.gov/about-us/">service counties</a></li>
+</ul>
 `.trim(),
 };
+

@@ -98,11 +98,22 @@ export default function AdaCanyonPermitFlowPage() {
 
           <PermitFlowGraphic />
 
+          <section className="mt-10 space-y-3 text-sm text-muted-foreground" aria-labelledby="official-permit-sources">
+            <h2 id="official-permit-sources" className="text-lg text-foreground">Confirm the office for your address</h2>
+            <p>A mailing city does not establish the permitting authority. Confirm the parcel before applying. Building, trade, septic and HOA approvals can follow separate processes.</p>
+            <ul className="list-disc pl-5 space-y-2">
+              <li><a className="underline" href="https://www.cityofboise.org/departments/planning-and-development-services/building/">City of Boise Building</a>: properties within Boise city limits.</li>
+              <li><a className="underline" href="https://adacounty.id.gov/developmentservices/">Ada County Development Services</a> and <a className="underline" href="https://www.canyoncounty.id.gov/building-department/">Canyon County Building</a>: confirm county jurisdiction and required applications.</li>
+              <li>Septic: <a className="underline" href="https://cdh.idaho.gov/licenses-permits-inspections/water-septic-subdivisions/">Central District Health for Ada County</a>; <a className="underline" href="https://swdh.id.gov/environmental-health-services/septic-land-development/">Southwest District Health for Canyon County</a>.</li>
+            </ul>
+            <p>Source guidance checked October 1, 2026. Ask the responsible office for current requirements and review times.</p>
+          </section>
+
           <div className="mt-12 prose-measure text-sm text-muted-foreground space-y-4">
             <p>
               <strong className="text-foreground">Note:</strong> HOAs in Eagle, Harris Ranch,
               Hidden Springs, and similar communities may require architectural review in addition
-              to county permits.
+              to required city or county permits.
             </p>
             <p>
               Design-build contracts should state who submits plans, pays fees, and schedules
