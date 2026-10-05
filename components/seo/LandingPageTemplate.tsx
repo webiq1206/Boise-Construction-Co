@@ -508,7 +508,7 @@ export function LandingPageTemplate({
         <EstimatePromptBand
           title={<>What might your <em className="not-italic" style={accent}>project</em> cost?</>}
           description="Get a preliminary planning range based on real Treasure Valley build costs, with no obligation."
-          href={estimateHref}
+          href={estimateHref ?? (manifestPath === '/services/build-on-your-lot' ? '/estimate' : undefined)}
         />
       )}
 
