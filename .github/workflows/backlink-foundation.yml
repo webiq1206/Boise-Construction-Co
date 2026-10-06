@@ -1,0 +1,29 @@
+name: Free-growth foundation
+on:
+  pull_request:
+    paths:
+      - 'backlink-engine/**'
+      - 'tests/backlink-*.test.mjs'
+      - '.github/workflows/backlink-foundation.yml'
+      - 'package.json'
+  push:
+    branches: [main]
+    paths:
+      - 'backlink-engine/**'
+      - 'tests/backlink-*.test.mjs'
+      - '.github/workflows/backlink-foundation.yml'
+      - 'package.json'
+permissions:
+  contents: read
+jobs:
+  offline-foundation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm run backlink:test
+      - run: npm run backlink:preflight
+      - run: npm run backlink:run -- --dry-run
