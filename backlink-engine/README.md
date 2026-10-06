@@ -1,72 +1,38 @@
-# Backlink Engine - boiseremodeling.co
+# Boise Construction Co free-growth foundation
 
-An autonomous backlink **intelligence** system with **human-approved outreach**. It discovers,
-qualifies, scores, prioritizes, monitors, and drafts on a schedule with no human involvement - and
-keeps a human on the irreversible send/submit/pay step. See `ARCHITECTURE.md` for the design and the
-rationale for that boundary.
+This engine prepares evidence-backed opportunities for boiseconstruction.co at zero provider spend. It does not acquire links, send outreach, submit listings, create schedules, or prove customer outcomes. The existing P5 growth workflow remains the sole live-execution owner.
 
-## Layout
-```
-backlink-engine/
-├── ARCHITECTURE.md            # design: pipeline, scoring, autonomy model, DR-50 roadmap
-├── REPLIT-CRON.md             # deploy as a weekly Replit Scheduled Deployment
-├── config/
-│   ├── scoring.json           # value weights, feasibility multipliers, tiers, canonical NAP
-│   ├── quality-gates.json     # hard anti-spam gates, anchor + velocity policy
-│   └── profile.json           # business inputs that fill outreach (sender, descriptions, photos)
-├── src/
-│   ├── score.mjs              # deterministic gate + score + rank (no deps)
-│   ├── ahrefs.mjs             # Ahrefs API v3 client (env key, headless)
-│   ├── classify.mjs           # refdomain -> opportunity classifier + white-hat filter
-│   ├── contacts.mjs           # email discovery (site-crawl + de-obfuscation + MX + optional Hunter.io)
-│   ├── store.mjs              # persistence: Neon Postgres, or JSON files locally
-│   ├── outreach.mjs           # generates real drafts + citation packets from NAP/profile
-│   ├── run.mjs                # orchestrator (discover->score->monitor->draft)
-│   ├── preflight.mjs          # self-test: config, env, live Ahrefs check
-│   └── send.mjs               # guarded send hook (off by default, approval-gated)
-├── data/                      # opportunities, scored output, audit, disavow, history/, run-log
-└── outreach/
-    ├── templates.md           # per-channel copy (human reference)
-    ├── queue.json             # drafted messages awaiting approval
-    └── citations/             # generated self-serve submission packets
-```
+## Supported commands
 
-## Commands
-```bash
-npm run backlink:preflight   # validate config + env + live Ahrefs (run before first cron)
-npm run backlink:run         # full loop (needs AHREFS_API_KEY; DATABASE_URL for durability)
-npm run backlink:run -- --dry-run   # offline: scoring + drafting + JSON persistence
-npm run backlink:score       # re-score the current opportunity list
-npm run backlink:contacts    # resolve + report outreach email addresses for P1/P2 targets
-npm run backlink:send        # dry-run report of what WOULD send (never sends unless enabled)
-```
+- `npm run backlink:preflight`: offline identity validation and explicit unresolved gates.
+- `npm run backlink:test`: dependency-free regression tests; no network or database.
+- `npm run backlink:run -- --dry-run`: validate and score local state without writes.
+- `npm run backlink:run -- --import /private/path/candidates.json --dry-run`: validate a bounded import without writes.
+- `npm run backlink:run -- --import /private/path/candidates.json`: save local preparation state only.
+- `npm run backlink:score`: re-score local state without adding drafts.
+- `npm run backlink:send`: always paused; setting `BACKLINK_SEND_ENABLED=true` fails closed.
+- `npm run backlink:contacts`: explains the paused contact-discovery gate and performs no network access.
 
-## Environment
-| Var | Purpose | Without it |
-|-----|---------|-----------|
-| `AHREFS_API_KEY` | live discovery + monitoring | those stages skip |
-| `DATABASE_URL` | Neon Postgres persistence (durable across the ephemeral cron) | falls back to JSON files |
-| `RESEND_API_KEY` | sending approved outreach | sends unavailable (drafts still generate) |
-| `BACKLINK_SEND_ENABLED` | global send kill-switch (`true` to arm) | off by default - nothing sends |
-| `OUTREACH_FROM` | From address for sends | `hello@boiseremodeling.co` |
-| `HUNTER_API_KEY` | enhanced email discovery (optional) | site-crawl only (still finds most) |
+Existing `AHREFS_API_KEY`, `HUNTER_API_KEY`, `RESEND_API_KEY`, and `DATABASE_URL` values do not activate any of these commands. No new dependency, account, scheduler, migration, or provider allowance is required.
 
-## The autonomous loop
-`npm run backlink:run` -> DISCOVER (competitor refdomains) -> QUALIFY/CLASSIFY (anti-spam gate) ->
-SCORE -> MONITOR (our DR + live refdomains, new/lost detection, disavow refresh) -> DRAFT (emails +
-citation packets into the queue) -> DIGEST (`data/run-log.md`). State persists in Postgres (or JSON).
-Deploy it weekly via `REPLIT-CRON.md`.
+## Offline source contract
 
-### What stays human (by design)
-Sending emails, submitting forms, joining paid programs, uploading the disavow file. The engine
-prepares all of them to one-click readiness; a person approves. `send.mjs` only emails an item a
-human set to `status:"approved"` with a valid recipient, and only when `BACKLINK_SEND_ENABLED=true`.
+Imports use JSON with `brandId: "boise-construction-co"`, `kind: "known_urls"`, `observedOn: "YYYY-MM-DD"`, and up to 100 `records`, each containing a public HTTPS `sourceUrl` and optional Construction `targetUrl`. URLs containing credentials, a port, a query or fragment are rejected; keep private information out of source URLs.
 
-## To finish going live
-1. `npm run backlink:preflight` on Replit (secrets set) - fix any FAIL.
-2. Set `DATABASE_URL` so state is durable, and fill `config/profile.json` (sender name, long
-   description, portfolio photo URLs) so drafts become send-ready.
-3. Create the weekly Scheduled Deployment (see `REPLIT-CRON.md`).
-4. Review `data/disavow.txt` -> upload to Search Console. Approve the P1 batch in
-   `data/pipeline-report.md`. Approve/send outreach from the queue when ready.
-```
+A manually exported Search Console Links report may be transformed into the same records with `kind: "search_console_links_export"` and `property: "sc-domain:boiseconstruction.co"`. This is an explicit local import, not a Search Console backlink API. Record the actual export date. Neither import proves the link exists or is current. Repeated imports preserve prior review, suppression, pending state and receipts rather than resetting them.
+
+Only editorial fit reviewed within 90 days and a free route verified within 30 days qualify for a local draft. Self-serve listings also require separate platform/DBA eligibility evidence. Authority, traffic and follow attributes remain null unless supplied as observed metrics with source URL and an observation date within 90 days; legacy numeric fields and estimates are ignored. Ranking uses reviewed topical fit, link context and geography, never invented DR or traffic.
+
+## Brand, history and privacy
+
+Identity is bound to Construction's canonical domain, public email, phone and home-building services. Public attribution is company-only and service-area based. No project photograph, license number, named person or street address is invented. Verified sources and date are recorded in `config/profile.json`.
+
+Copied Remodeling data, old drafts/citation packets, old audit/disavow and paid/DB modules are preserved under `legacy/` as quarantined historical evidence. Active commands never read them. Reconcile prior contact/suppression receipts privately before any future dispatch repair; do not discard history just because a new adapter exists.
+
+Operational outputs live in ignored `.backlink-state/` at the repository root. Do not commit private candidate contacts, receipts, analytics exports or credentials. Dry-run writes nothing. Local state is not durable scheduling, database health, production deployment, or measured growth. Concurrent writers are unsupported; the current workflow must retain one owner until a shared durable ledger is designed and tested.
+
+## Acceptance and next gates
+
+Focused tests prove identity isolation, free-only operation, unknown metrics, strict input validation, import deduplication and the permanent legacy send pause. No estimator, frontend, production schema, live listing, mail setting or workflow schedule is changed by this foundation repair.
+
+Before authorized distribution: reconcile historical suppression and duplicates, verify separate listing eligibility and route freshness, prove the exact supported sender/consent/unsubscribe/capacity path, and verify receiving-system receipts. A submitted receipt, public listing, actual link, indexing, referral, accepted lead and qualified customer are different outcomes. Targets are goals, never guaranteed editorial acceptance or daily lead volume.

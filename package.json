@@ -63,7 +63,8 @@
     "verify:contrast": "node scripts/verify-contrast.mjs",
     "db:prepare": "node --env-file-if-exists=.env.local scripts/p5-prepare-database.mjs",
     "verify:db-safety": "node scripts/p5-schema-safety.mjs && node --test tests/p5-database-safety.test.mjs",
-    "predev": "npm run db:prepare -- --optional"
+    "predev": "npm run db:prepare -- --optional",
+    "backlink:test": "node --test tests/backlink-*.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
