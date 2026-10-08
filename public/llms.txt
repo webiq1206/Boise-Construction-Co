@@ -2,7 +2,9 @@
 
 > New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build, founded 2020. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, Garden City. Phone (208) 477-1169.
 
-Design-build means one accountable team handles architectural design, engineering, estimating, Ada and Canyon County permitting, and construction under a single contract, backed by a written line-item scope before the foundation is poured. Budget ranges are produced by an on-site estimator from house geometry and specification level rather than a flat price per square foot, because the same 2,400 square feet costs very different money on a flat infill lot than on a sloped foothills parcel with a shared well. Ranges are planning estimates, not quotes; a firm proposal follows a site visit and a lot review.
+Design-build means one accountable team handles architectural design, engineering, estimating, Ada and Canyon County permitting, and construction under a single contract, backed by a written line-item scope before the foundation is poured. The project intake collects house geometry, specification details, plans, and site conditions for team review before an estimate is prepared. Ranges are planning estimates, not quotes; a firm proposal follows a site visit and a lot review.
+
+The online project intake accepts a description, plans or photos, and known details. Review the scope before sending; unknown details can be resolved with the team. It does not promise an instant price.
 
 ## Services
 
@@ -46,7 +48,7 @@ Design-build means one accountable team handles architectural design, engineerin
 
 - [About Boise Construction Co](https://boiseconstruction.co/about): design-build home building across the Treasure Valley since 2020.
 - [Contact](https://boiseconstruction.co/contact)
-- [Free build estimator](https://boiseconstruction.co/estimate)
+- [Home build project intake](https://boiseconstruction.co/estimate)
 - [Planning resources and worksheets](https://boiseconstruction.co/resources)
 
 ## Optional

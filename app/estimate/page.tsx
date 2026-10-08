@@ -10,9 +10,9 @@ import { fitDescription } from '@/lib/page-metadata';
 
 
 // 34 chars, so the branded title below lands at 58 with the 24-char suffix.
-const TITLE = "Home Build Cost Estimator, Idaho";
+const TITLE = "Start Your Home Build Project";
 const DESCRIPTION =
-  fitDescription("Get an instant cost range for building a new home in Boise, Meridian, Eagle, Nampa, and the Treasure Valley. Covers size, finish level, and site costs. Free, no obligation.");
+  fitDescription("Describe your home build or addition in Boise and the Treasure Valley. Add plans, review your scope, and send your project for team review.");
 
 export const metadata: Metadata = withBrandPageMetadata(({
   title: { absolute: `${TITLE} | ${SITE_CONFIG.name}` },
@@ -36,7 +36,7 @@ export const metadata: Metadata = withBrandPageMetadata(({
 export default function EstimatePage() {
   const schemas = [
     generateWebPageSchema({
-      title: "Home Build Cost Estimator",
+      title: "Home Build Project Intake",
       description: DESCRIPTION,
       url: "/estimate",
     }),

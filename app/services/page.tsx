@@ -135,7 +135,7 @@ export default function ServicesIndexPage() {
             </h2>
             <div>
               <p className="ed-body">
-                Book a free planning consultation or get an instant build cost range.
+                Describe your build and share any plans, then review your scope before sending it to the project team.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 [&>*]:w-full sm:[&>*]:w-auto">
                 <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>

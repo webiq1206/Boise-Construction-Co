@@ -6,7 +6,7 @@ export function InteriorPage({children,kind='detail'}:{children:ReactNode;kind?:
   return <div className={`approved-interior interior-${kind}`}>{children}</div>;
 }
 
-export function InteriorEstimateLink({label='Get my online estimate'}:{label?:string}) {
+export function InteriorEstimateLink({label='Start my project'}:{label?:string}) {
   return <a className="interior-estimate-link" href="/estimate">{label}<ArrowUpRight size={18} aria-hidden="true"/></a>;
 }
 
@@ -20,7 +20,7 @@ export function InteriorHero({children,imageSrc,imageAlt='',layout='split',estim
 
 /** Reusable secondary column, with the estimator as its single dominant action. */
 export function InteriorProjectAside({children}:{children?:ReactNode}) {
-  return <aside className="interior-project-aside"><p className="interior-eyebrow">YOUR PROJECT. ESTIMATED ONLINE.</p><h2>Start with<br/><em>what you know.</em></h2><p>Describe your project, share plans or photos, and get a preliminary estimate online.</p><InteriorEstimateLink/>{children}<a className="interior-text-link" href="/contact">Talk through the details<ArrowUpRight size={16} aria-hidden="true"/></a></aside>;
+  return <aside className="interior-project-aside"><p className="interior-eyebrow">YOUR PROJECT. READY FOR REVIEW.</p><h2>Start with<br/><em>what you know.</em></h2><p>Describe your project, share plans or photos, and prepare the details for project review.</p><InteriorEstimateLink/>{children}<a className="interior-text-link" href="/contact">Talk through the details<ArrowUpRight size={16} aria-hidden="true"/></a></aside>;
 }
 
 export function InteriorDocument({heading,children,contents=[]}:{heading:ReactNode;children:ReactNode;contents?:{id:string;label:string}[]}) {
