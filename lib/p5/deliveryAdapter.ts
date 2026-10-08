@@ -32,3 +32,5 @@ export async function syncCrm(record:any,key:string,options?:{token:string;url:s
  const payload={...built.payload,...identity};
  return deliverKeyedCrm(payload,key,options?options.token:process.env.LEAD_DASHBOARD_KEY||'',options?options.url:process.env.LEAD_DASHBOARD_API_URL||brand.crmUrl,options?.fetch||fetch);
 }
+/** Synchronous readiness only: the Resend key or the Replit connector identity must be present before an intake notification is attempted. */
+export function emailTransportReady(){return Boolean(process.env.RESEND_API_KEY||(process.env.REPLIT_CONNECTORS_HOSTNAME&&(process.env.REPL_IDENTITY||process.env.WEB_REPL_RENEWAL)));}
