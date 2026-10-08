@@ -76,7 +76,7 @@ export default function BlogPage() {
             <em className="brc-accent">range</em>
           </>
         }
-        description="Have a project in mind? Describe it or upload your plans for a preliminary Treasure Valley build estimate in a few minutes. No call or appointment needed. Larger plan sets may take longer."
+        description="Have a project in mind? Describe it, add any plans or photos, and review the details before sending your request to the appropriate project team."
         variant="greige"
       />
     </></InteriorPage>

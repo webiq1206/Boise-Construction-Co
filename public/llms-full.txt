@@ -10,7 +10,7 @@ Boise Construction Co is a residential design-build home builder serving the Tre
 - Founded: 2020
 - Service model: One accountable team for design, permits, and construction
 - Contact: https://boiseconstruction.co/contact
-- Build estimator: https://boiseconstruction.co/estimate
+- Home build project intake: https://boiseconstruction.co/estimate
 
 ## Service area
 
@@ -84,7 +84,7 @@ Neighborhood guides:
 ## Common questions
 
 - How long does it take to build a house in the Treasure Valley? Design and engineering typically run two to four months, plan review and permitting another one to three depending on jurisdiction, and construction ten to fourteen months for a custom home. Semi-custom plans compress the design phase because the drawings already exist.
-- What does a new home cost per square foot here? A blended rate is the wrong unit, because site work, foundation type, and specification level move the number more than area does. The estimator prices geometry and scope instead, then reports a range.
+- What does a new home cost per square foot here? A blended rate is the wrong unit, because site work, foundation type, and specification level move the number more than area does. The project intake gathers geometry, plans, and scope so the team can review the work before preparing an estimate.
 - Can I build on land I already own? Yes, that is the build-on-your-lot path. Before design starts we review soils, utilities, access, setbacks, easements, and slope, because those determine what the parcel can actually carry and what the site work will cost.
 - Do I need a construction loan? Most owners use a construction-to-permanent loan that draws against completed milestones and converts to a mortgage at occupancy. The draw schedule has to match the build schedule, which is something we set up with the lender.
 - How do I compare two builder bids? Only when the allowances, site work assumptions, and permit responsibilities match. Most of the spread between two bids on the same house is scope that one of them left out, not margin.
@@ -95,7 +95,7 @@ Neighborhood guides:
 - About: https://boiseconstruction.co/about
 - Services: https://boiseconstruction.co/services
 - Service areas: https://boiseconstruction.co/areas
-- Build estimator: https://boiseconstruction.co/estimate
+- Home build project intake: https://boiseconstruction.co/estimate
 - Blog: https://boiseconstruction.co/blog
 - Guides: https://boiseconstruction.co/guides
 - Resources: https://boiseconstruction.co/resources
