@@ -2,7 +2,7 @@ import {chromium} from '@playwright/test';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
 const base=process.env.P5_TEST_BASE_URL||'http://127.0.0.1:5000';
-// The review intake separates the whole-project confirmation from the customer confirmation.
+// Explicit Send confirms the current review without redundant checkboxes.
 const SCOPE_REVIEW_LABEL='I checked the whole project type, supporting work and exclusions against this description.';
 const INTAKE_CONFIRM_LABEL='These details reflect my project. I understand the team will review them before preparing an estimate.';
 const browser=await chromium.launch();const results=[];await mkdir('p5-verification',{recursive:true});
@@ -40,9 +40,9 @@ for(const width of [320,390,430,768,1024,1440,1920])for(const landOwnership of [
   for(let i=0;i<10;i++){const name=est.getByLabel('Your name',{exact:true});const q=est.locator('section[aria-label="Project question"]');await name.or(q).first().waitFor({timeout:60000});if(await name.count())break;const chips=q.locator('[aria-label="Suggested answers"] button');const unsure=q.getByRole('button',{name:'Not sure yet',exact:true});if(await chips.count()){await chips.first().click();await est.getByRole('button',{name:'Send answer',exact:true}).click();}else if(await unsure.count())await unsure.click();else throw new Error('Unexpected question: '+(await q.innerText()).slice(0,120));await page.waitForFunction(()=>!document.querySelector('[data-p5-estimator][aria-busy=true]'));}
   await est.getByLabel('Your name',{exact:true}).fill('Synthetic Address Test');await est.getByLabel(/^Email/).fill('address-test@example.invalid');
   assert.equal(await est.getByRole('region',{name:'Project question'}).count(),0,'The review screen asks no further question');
-  await est.getByLabel(SCOPE_REVIEW_LABEL,{exact:true}).check();await est.getByLabel(INTAKE_CONFIRM_LABEL,{exact:true}).check();
+  assert.equal(await est.getByLabel(SCOPE_REVIEW_LABEL,{exact:true}).count(),0);assert.equal(await est.getByLabel(INTAKE_CONFIRM_LABEL,{exact:true}).count(),0);
   await est.getByRole('button',{name:'Send project request',exact:true}).click();await est.getByRole('heading',{name:'Your project request is saved',exact:true}).waitFor();
-  assert.ok(submitted);assert.ok(!submitted.answers.address&&!submitted.answers.location);assert.ok(submitted.text.includes(landOwnership));assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+  assert.ok(submitted);assert.ok(submitted.intake.reviewedScopeFingerprint,'Explicit Send records review of the current scope');assert.ok(!submitted.answers.address&&!submitted.answers.location);assert.ok(submitted.text.includes(landOwnership));assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   const text=await est.innerText();assert.ok(!/\$\s?\d/.test(text),'The review intake shows no price');
   results.push({width,landOwnership,passed:true,scope:'Unified typed project reaches the saved request without location or address. Analysis and delivery simulated.'});
  }catch(error){results.push({width,landOwnership,passed:false,error:String(error)});await page.screenshot({path:`p5-verification/address-${width}-${landOwnership}.png`,fullPage:true}).catch(()=>{});}await context.close();
