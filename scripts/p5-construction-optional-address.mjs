@@ -21,7 +21,7 @@ for(const width of [320,390,430,768,1024,1440,1920])for(const landOwnership of [
  try{
   await page.goto(`${base}/estimate`);const est=page.locator('[data-p5-estimator]');
   await est.getByLabel('Tell us about your project',{exact:true}).fill('Synthetic new home: 2400 square feet, standard finishes. Land ownership: '+landOwnership);
-  await est.getByRole('button',{name:'Continue',exact:true}).click();
+  await est.getByRole('button',{name:'Send message',exact:true}).click();
   // Construction asks its build questions before review; a suggested answer or Not sure yet answers each. The contact form follows.
   for(let i=0;i<8;i++){const name=est.getByLabel('Your name',{exact:true});const q=est.locator('section[aria-label="Project question"]');await name.or(q).first().waitFor({timeout:60000});if(await name.count())break;const chips=q.locator('[aria-label="Suggested answers"] button');const unsure=q.getByRole('button',{name:'Not sure yet',exact:true});if(await chips.count()){await chips.first().click();await est.getByRole('button',{name:'Send answer',exact:true}).click();}else if(await unsure.count())await unsure.click();else throw new Error('Unexpected question: '+(await q.innerText()).slice(0,120));await page.waitForFunction(()=>!document.querySelector('[data-p5-estimator][aria-busy=true]'));}
   await est.getByLabel('Your name',{exact:true}).fill('Synthetic Address Test');await est.getByLabel(/^Email/).fill('address-test@example.invalid');
