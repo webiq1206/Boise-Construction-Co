@@ -8,6 +8,10 @@ export const BRAND_SEARCH_ICON=`https://${brand.domain}/brand/search-icon-96.png
 type Copy={title:string;description:string};
 const COPY:Record<string,Record<string,Copy>>={
  construction:{
+  "/guides/boise-home-building-cost-guide":{title:"Boise Home Building Costs (2026)",description:"Compare Boise custom home building costs, land and site-work budgets, allowances and finish options. Plan your Treasure Valley home with a clear scope."},
+  "/guides/boise-home-building-process-guide":{title:"Boise Home Building Process",description:"See the steps to build a home in Boise, from lot review and design to permits, construction and handover. Plan your budget, selections and timeline."},
+  "/blog/cost-to-build-a-house-boise":{title:"Cost to Build a House in Boise",description:"Explore Boise house-building costs by square foot, finish level and site conditions. Compare construction costs with land, utilities and site-work budgets."},
+  "/blog/custom-home-cost-per-square-foot-boise":{title:"Boise Custom Home Cost per Sq Ft",description:"Compare custom home costs per square foot in Boise. See how home size, finishes, design complexity and site conditions affect your construction budget."},
   '/':{title:'Custom Home Builder in Boise, ID',description:'Build a custom or semi-custom home in Boise and the Treasure Valley. Explore design-build services, build-on-your-lot options and clear project budgets.'},
   '/services':{title:'Home Building & Design-Build Services',description:'Explore custom homes, semi-custom homes, additions and build-on-your-lot services across Boise and the Treasure Valley. Plan your project with our team.'},
   '/about':{title:'About Our Boise Home Building Team',description:'Learn how Boise Construction Co plans and manages Treasure Valley home builds, from lot evaluation and design through permits, construction and handover.'},
