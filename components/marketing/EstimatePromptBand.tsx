@@ -18,7 +18,7 @@ interface EstimatePromptBandProps {
 
 /**
  * Contextual estimator prompt for service, area and content pages.
- * Opens the modal off-home; scrolls to #calculator on the homepage.
+ * Opens the estimator; callers can provide a service-specific destination.
  *
  * WAS a card inside a card: a bordered panel with an icon box, a left accent
  * rule and a 36px heading, centred in a 1024px container on a band the same
@@ -34,7 +34,7 @@ export function EstimatePromptBand({
   eyebrow = "Planning your budget",
   title,
   description,
-  href = "#calculator",
+  href = "/estimate",
   bullets = [
     "Based on real Treasure Valley project costs",
     "Project details reviewed by our team",

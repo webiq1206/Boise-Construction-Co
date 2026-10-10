@@ -72,7 +72,7 @@ const CONTACT_FAQS = [
 ];
 
 const SPEAKABLE_SUMMARY =
-  `Contact ${SITE_CONFIG.name} for a free consultation. Schedule a free 60 to 90 minute planning consultation, call our team, or use the build cost estimator to explore a range for your new home.`;
+  `Contact ${SITE_CONFIG.name} for a free consultation. Schedule a free 60 to 90 minute planning consultation, call our team, or send your project details to our team for an estimate review.`;
 
 function HeroBreadcrumbs() {
   const items = [
@@ -214,8 +214,8 @@ export default function ContactPage() {
               <em className="brc-accent">Co</em>
             </h1>
             <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-6">
-              Schedule a free 60 to 90 minute planning consultation, call our team, or use the build
-              cost estimator to explore a range for your new home.
+              Schedule a free 60 to 90 minute planning consultation, call our team, or send your project
+              details to our team for an estimate review.
             </p>
             <BusinessPhoneContact
               layout="stack"
@@ -439,11 +439,11 @@ export default function ContactPage() {
         <EstimatePromptBand
           title={
             <>
-              Prefer a number before you{' '}
-              <em className="brc-accent">call</em>?
+              Ready to discuss your{' '}
+              <em className="brc-accent">project</em>?
             </>
           }
-          description="Use our online build cost estimator for a preliminary Treasure Valley range - then schedule your free consultation when you're ready for a written, line-item budget."
+          description="Share your project details and plans for our team to review. We may need more information or a site visit before confirming an estimate."
           variant="canvas"
         />
 
