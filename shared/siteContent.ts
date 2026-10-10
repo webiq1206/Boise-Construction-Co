@@ -21,7 +21,7 @@ export const HERO_SUBHEAD =
   "A custom home builder for Boise and the Treasure Valley, with a line-item budget before we break ground and weekly cost updates through the build.";
 
 export const HERO_STATS = [
-  { num: "60 sec", label: "Instant build cost range" },
+  { num: "Team review", label: "Project estimate request" },
   { num: "Free", label: "Planning consultation" },
   { num: "Line-item", label: "Budget before we break ground" },
 ] as const;
