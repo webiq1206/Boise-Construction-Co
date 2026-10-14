@@ -10,6 +10,9 @@ import { ScrollToTop } from '@/components/ScrollToTop'
 import { SITE_TAGLINE } from '@/shared/siteContent'
 import { SITE_CONFIG } from '@/shared/siteConfig'
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
+import { LeadAttribution } from '@/components/LeadAttribution'
+import { consentBootstrap } from '@/lib/consentBootstrap'
+import { Suspense } from 'react'
 import { MetaPixel } from '@/components/MetaPixel'
 import { MicrosoftClarity } from '@/components/MicrosoftClarity'
 import { ConversionTracking } from '@/components/ConversionTracking'
@@ -159,6 +162,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`dark ${manrope.variable} ${cormorant.variable}`} style={{ colorScheme: 'dark' }} suppressHydrationWarning>
       <head suppressHydrationWarning>
+        <script id="p5-consent" dangerouslySetInnerHTML={{__html:consentBootstrap()}} />
         <script
           dangerouslySetInnerHTML={{
             __html: `document.documentElement.classList.add('js')`,
@@ -170,6 +174,7 @@ export default function RootLayout({
           <style>{`.reveal-init{opacity:1!important;transform:none!important}`}</style>
         </noscript>
         <Providers>
+          <Suspense fallback={null}><LeadAttribution /></Suspense>
           <ScrollToTop />
           <a
             href="#main-content"

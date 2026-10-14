@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import {sanitizeAttribution,appendAttributionEvidence} from '@/lib/leadAttribution';
 import { createHash } from "crypto";
 import { z } from "zod";
 import { getUncachableEmailClient } from "@/server/services/emailTransport";
@@ -84,6 +85,7 @@ const bodySchema = z
     projectType: z.string().min(1).max(100),
     message: z.string().max(5_000).optional(),
     propertyProfile: propertyProfileSchema,
+    attribution: z.unknown().optional().transform(sanitizeAttribution),
     estimate: optionalEstimateSchema,
     inquiryKey: z.string().max(124).regex(/^inq_[A-Za-z0-9_-]{16,120}$/).optional(),
     submissionKind: z.enum(["initial", "followup"]).optional().default("initial"),
@@ -263,8 +265,8 @@ export async function POST(request: NextRequest) {
           zip: data.zip || "",
           address: data.address,
           city: (profile?.city as string) || null,
-          ...(data.propertyProfile
-            ? { propertyProfile: data.propertyProfile as unknown as PropertyProfile }
+          ...(data.propertyProfile || data.attribution
+            ? { propertyProfile: {...data.propertyProfile,_leadAttribution:data.attribution} as unknown as PropertyProfile }
             : {}),
           projectType: data.projectType,
           message: data.message || null,
@@ -349,7 +351,7 @@ export async function POST(request: NextRequest) {
       // Structured intake fields the estimator can answer. See
       // buildCrmIntakeFields for why the rest stay deliberately empty.
       ...buildCrmIntakeFields(estimate),
-      estimateSummary: buildLeadNotes(crmLead, estimate, crmProfile, costs),
+      estimateSummary: appendAttributionEvidence(buildLeadNotes(crmLead, estimate, crmProfile, costs),data.attribution),
       estimateLow: estimate?.priceLow,
       estimateHigh: estimate?.priceHigh,
       estimateRange: estimate

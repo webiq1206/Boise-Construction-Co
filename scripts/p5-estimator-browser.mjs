@@ -102,6 +102,8 @@ async function mock(context,{interruptions=false,scenario='full'}={}){
   if(endpoint==='intake'){
    if(request.method()==='GET')return send({receipt:state.receipt});
    state.intakeRequests++;const body=request.postDataJSON();
+   assert.equal(body.attribution?.version,1,'Existing P5 submit carries hidden acquisition metadata');
+   assert.equal(body.attribution?.trust,'browser_reported','Acquisition evidence never claims verified ad/call origin');
    if(!state.saved)return send({error:'Save your project before sending it.'},404);
    if(body.revision!==state.saved.revision||body.confirmed!==true)return send({error:'Review and confirm the latest project details before sending.'},409);
    if(!intakeScopeReviewed(state.saved))return send({error:'Confirm the whole project type, supporting work and exclusions against the current description before sending.'},409);

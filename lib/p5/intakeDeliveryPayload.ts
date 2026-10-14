@@ -4,6 +4,7 @@ import {INTAKE_SITES,INTAKE_RECIPIENTS} from './intakePolicy.ts';
 import type {IntakeChannel} from './intakeDeliveryPolicy.ts';
 import {safeEmailReplyTo} from './emailReplyTo.ts';
 import {renderIntakeEmail} from './intakeEmail.ts';
+import {sanitizeAttribution} from '../leadAttribution.ts';
 
 export interface IntakeEmail {to:string;replyTo?:string;subject:string;text:string;html?:string;attachments:{filename:string;base64:string;contentType?:string}[]}
 export interface IntakeDeliveryEnvelope {schema:1;channel:IntakeChannel;key:string;leadKey:string;snapshotDigest:string;email?:IntakeEmail;request?:IntakeSnapshot}
@@ -14,7 +15,7 @@ export const intakeOperationKey=(s:IntakeSnapshot,c:IntakeChannel)=>'p5-intake-'
 /** Source-compatible P5 local ingestLead projection: no price or promised deadline. */
 export function intakeLocalCrmRecord(s:IntakeSnapshot){
  const site=INTAKE_SITES[s.currentSite];
- const summary=JSON.stringify({request:'Unpriced project request',...(s.reference?{reference:s.reference}:{}),revision:s.revision,originSite:s.originSite,receivingSite:s.currentSite,primaryTeam:s.routing.primaryTeam,supportingServices:s.routing.supportingServices,preferredContact:s.contact.preferredContact,scope:s.scope.text,answers:s.scope.answers,details:s.details,unresolved:s.unresolved,files:s.scope.uploads,
+ const summary=JSON.stringify({request:'Unpriced project request',attribution:sanitizeAttribution(s.attribution),...(s.reference?{reference:s.reference}:{}),revision:s.revision,originSite:s.originSite,receivingSite:s.currentSite,primaryTeam:s.routing.primaryTeam,supportingServices:s.routing.supportingServices,preferredContact:s.contact.preferredContact,scope:s.scope.text,answers:s.scope.answers,details:s.details,unresolved:s.unresolved,files:s.scope.uploads,
   staffRecord:`https://${site.domain}/api/admin/p5-intake?draftId=${s.draftId}&revision=${s.revision}`});
  if(Buffer.byteLength(summary)>90000)throw new Error('payload-review');
  return {draftId:s.draftId,contact:s.contact,scope:s.scope,brand:site.name,customer:{summary}};

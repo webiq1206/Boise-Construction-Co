@@ -1,4 +1,5 @@
 "use client";
+import {readLeadAttribution} from '@/lib/leadAttributionBrowser';
 
 import { EstimatorRecovery } from "@/components/estimate/recovery/EstimatorRecovery";
 import { markEstimatorCompleted } from "@/lib/estimatorSession";
@@ -346,7 +347,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
       const res = await fetch("/api/consultation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({...payload,attribution:readLeadAttribution()}),
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));

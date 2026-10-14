@@ -5,7 +5,7 @@
  */
 type GtagParams = Record<string, string | number | boolean | undefined>;
 
-import { googleAdsLeadParams, type LeadContext } from '@/lib/googleAdsConversion';
+import { trackGoogleAdsLeadConversion, type LeadContext } from '@/lib/googleAdsConversion';
 
 const conversionInFlight = new Set<string>();
 
@@ -86,11 +86,7 @@ export function trackMetaEvent(
  * The ID is opaque and server-issued, so no contact information reaches Ads.
  */
 export function trackGoogleAdsLead(conversionId: string, context: LeadContext = {}): void {
-  if (typeof window === 'undefined') return;
-  const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
-  if (typeof gtag !== 'function') return;
-  // Per-lead value for ROAS reporting (lib/googleAdsConversion.ts); no PII.
-  gtag('event', 'conversion', googleAdsLeadParams(context, conversionId));
+  trackGoogleAdsLeadConversion(context,conversionId);
 }
 
 export interface ClaimedLeadConversion {

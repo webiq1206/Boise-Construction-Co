@@ -7,7 +7,7 @@ const options = { hostname: 'example.com', measurementId: 'G-EXAMPLE', adsId: 'A
 function browser(hostname: string, webdriver = false, disabled = false) {
   const nodes: Record<string, unknown>[] = [];
   const storage = new Map(disabled ? [['p5_analytics_disabled', '1']] : []);
-  const window = { location: { hostname, pathname: '/quote' }, dataLayer: [['event', 'queued_before_load']] };
+  const window = { location: { hostname, pathname: '/quote' }, dataLayer: [['event', 'queued_before_load']], p5Consent:{ad_storage:'granted',ad_user_data:'granted',analytics_storage:'granted'},addEventListener:()=>{} };
   const context = vm.createContext({ window, navigator: { webdriver }, sessionStorage: {
     getItem: (key: string) => storage.get(key), setItem: (key: string, value: string) => storage.set(key, value),
   }, document: { getElementById: (id: string) => nodes.find(n => n.id === id), createElement: () => ({}), head: { appendChild: (n: Record<string, unknown>) => nodes.push(n) } } });
