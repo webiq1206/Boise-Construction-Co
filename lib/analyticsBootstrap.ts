@@ -1,4 +1,4 @@
-import {googlePhoneReplacementBootstrap} from './googlePhoneReplacement';
+import {googlePhoneReplacementBootstrap} from './googlePhoneReplacement.ts';
 /** Gate vendor loading by the actual browser host, including production builds used in QA. */
 export function googleTagBootstrap(options: {
   hostname: string;
