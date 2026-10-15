@@ -53,29 +53,35 @@ test('unavailable session storage does not break real visitor analytics', () => 
 });
 
 
-test('campaign attribution uses the same tag bootstrap with one business phone', () => {
-  const b = browser('example.com');
-  (b.context as Record<string, unknown>).URLSearchParams = URLSearchParams;
-  (b.context as Record<string, unknown>).URL = URL;
-  vm.runInContext("window.location.pathname='/services'; window.location.search='?gclid=click123&utm_source=google&utm_medium=cpc&email=ignore%40example.com'", b.context);
-  vm.runInContext(googleTagBootstrap(options), b.context);
-  const first = JSON.parse(b.storage.get('p5_attribution_first_v1') ?? '{}');
-  const initialLatest = JSON.parse(b.storage.get('p5_attribution_latest_v1') ?? '{}');
-  assert.equal(first.gclid, 'click123');
-  assert.equal(initialLatest.landing_page, '/services');
-  assert.equal(first.email, undefined);
-  assert.equal(first.phone, undefined);
-  // A subsequent on-site navigation must not clear attribution to direct.
-  b.nodes.length = 0;
-  vm.runInContext("window.location.pathname='/quote'; window.location.search=''", b.context);
-  vm.runInContext(googleTagBootstrap(options), b.context);
-  assert.equal(JSON.parse(b.storage.get('p5_attribution_first_v1') ?? '{}').gclid, 'click123');
-  assert.equal(JSON.parse(b.storage.get('p5_attribution_latest_v1') ?? '{}').gclid, 'click123');
-  b.nodes.length = 0;
-  vm.runInContext("window.location.search='?utm_source=newsletter&utm_medium=email'; window.location.pathname='/contact'", b.context);
-  vm.runInContext(googleTagBootstrap(options), b.context);
-  assert.equal(JSON.parse(b.storage.get('p5_attribution_first_v1') ?? '{}').gclid, 'click123');
-  const latest = JSON.parse(b.storage.get('p5_attribution_latest_v1') ?? '{}');
-  assert.equal(latest.utm_source, 'newsletter');
-  assert.equal(latest.gclid, undefined);
+test('campaign capture uses consent-gated attribution storage across navigation', async () => {
+  const {captureAttribution,handleAttributionConsent}=await import('../lib/leadAttributionBrowser.ts');
+  const {ATTRIBUTION_KEY}=await import('../lib/leadAttribution.ts');
+  const g=globalThis as unknown as Record<string,unknown>;
+  const names=['window','document','localStorage'];
+  const previous=names.map(name=>Object.getOwnPropertyDescriptor(globalThis,name));
+  const saved=new Map<string,string>();
+  const w={location:new URL('https://example.com/services?gclid=click123&utm_source=google&utm_medium=cpc&email=ignore%40example.com'),p5Consent:{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'},p5ConsentResolved:false};
+  try {
+    g.window=w;g.document={referrer:''};
+    g.localStorage={getItem:(key:string)=>saved.get(key)||null,setItem:(key:string,value:string)=>saved.set(key,value),removeItem:(key:string)=>saved.delete(key)};
+    captureAttribution();
+    assert.equal(saved.size,0,'pending consent must not persist campaign evidence');
+    w.p5Consent={analytics_storage:'granted',ad_storage:'granted',ad_user_data:'granted',ad_personalization:'denied'};
+    w.p5ConsentResolved=true;handleAttributionConsent();
+    const read=()=>JSON.parse(saved.get(ATTRIBUTION_KEY)||'{}');
+    assert.equal(read().first.clickIds.gclid,'click123');
+    assert.equal(read().first.campaign.utm_source,'google');
+    assert.equal(JSON.stringify(read()).includes('ignore'),false);
+    w.location=new URL('https://example.com/quote');captureAttribution();
+    assert.equal(read().first.clickIds.gclid,'click123');
+    assert.equal(read().latest.clickIds.gclid,'click123');
+    w.location=new URL('https://example.com/contact?utm_source=newsletter&utm_medium=email');captureAttribution();
+    assert.equal(read().first.clickIds.gclid,'click123');
+    assert.equal(read().latest.campaign.utm_source,'newsletter');
+    assert.equal(read().latest.clickIds.gclid,undefined);
+    w.p5Consent={analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'};
+    handleAttributionConsent();assert.equal(saved.has(ATTRIBUTION_KEY),false);
+  } finally {
+    names.forEach((name,i)=>{if(previous[i])Object.defineProperty(globalThis,name,previous[i]!);else delete g[name];});
+  }
 });
