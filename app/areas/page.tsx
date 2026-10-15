@@ -99,7 +99,7 @@ export default function AreasHubPage() {
               <em className="brc-accent">city</em>?
             </>
           }
-          description="Lot costs, impact fees, and permit timelines differ across Ada and Canyon County. Get an instant build cost range for your city, then book a free consultation for local guidance."
+          description="Lot costs, impact fees, and permit timelines differ across Ada and Canyon County. Share your lot and project details for team review and local guidance before we prepare your estimate."
           variant="tint"
         />
 

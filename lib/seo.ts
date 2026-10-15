@@ -434,7 +434,7 @@ export const CITY_SEO_DATA: Record<string, {
     population: '108,188',
     founded: '1886',
     zipCodes: ['83651', '83653', '83686', '83687'],
-    neighborhoods: ['Downtown Nampa', 'Karcher', 'Greenhurst', 'Columbia Village'],
+    neighborhoods: ['Downtown Nampa', 'Karcher', 'Greenhurst'],
     landmarks: ['Ford Idaho Center', 'Lake Lowell', 'Nampa Train Depot'],
     climate: 'semi-arid with hot summers and cold winters',
     coordinates: { lat: 43.5407, lng: -116.5635 },
