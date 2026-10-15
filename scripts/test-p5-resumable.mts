@@ -4,9 +4,12 @@ import {randomUUID,randomBytes,createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import path from 'node:path';
 import {PDFDocument} from 'pdf-lib';
-const root=process.cwd();await mkdir('node_modules/.cache',{recursive:true});const dir=await mkdtemp(path.join(root,'node_modules/.cache/p5-resume-'));
+const root=process.cwd();await mkdir('node_modules/.cache',{recursive:true});const isolatedRoot=await mkdtemp(path.join(root,'node_modules/.cache/p5-resume-'));
+const dir=path.join(isolatedRoot,'p5');
 try{
  await cp('lib/p5',dir,{recursive:true});
+  // Preserve the production sibling import without sharing files between test runs.
+  await cp('lib/leadAttribution.ts',path.join(isolatedRoot,'leadAttribution.ts'));
  await writeFile(path.join(dir,'database.ts'),`import {PGlite} from '@electric-sql/pglite';export const database=new PGlite();export async function query(statement:string,values:unknown[]=[]){return (await database.query(statement,values)).rows as any[];}`);
  await writeFile(path.join(dir,'storageFixture.ts'),`export const objects=new Map<string,Buffer>();export let writes=0;export class Client{async uploadFromBytes(k:string,b:Buffer){objects.set(k,Buffer.from(b));writes++;return {ok:true,value:null};}async downloadAsBytes(k:string){return objects.has(k)?{ok:true,value:[objects.get(k)]}:{ok:false};}async uploadFromStream(k:string,s:any){const parts=[];for await(const part of s)parts.push(part);objects.set(k,Buffer.concat(parts));}async delete(k:string){objects.delete(k);return {ok:true};}}`);
  for(const name of ['objectStorage','resumableUpload','analysisWork']){const p=path.join(dir,name+'.ts');await writeFile(p,(await readFile(p,'utf8')).replace(/from ['"]@replit\/object-storage['"]/g,"from './storageFixture'"));}
@@ -79,4 +82,4 @@ try{
  for(const [name,count] of completedBefore)assert.equal(sectionCalls.get(name),count,'completed sections must not be billed again');
  globalThis.fetch=nativeFetch;
  await db.database.close();console.log('Passed: 25 MB resumable upload, corrupted-segment rejection, retry deduplication, authorization, full byte comparison, cleanup, all 250 pages and final revision in per-page requests, bounded concurrent readers, failed-page retry, Cabinet intent. Real isolated SQL/PDF; storage and AI simulated, not an OCR accuracy benchmark.');
-}finally{delete process.env.P5_OBJECT_STORAGE_ENABLED;delete process.env.OPENAI_API_KEY;await rm(dir,{recursive:true,force:true});}
+}finally{delete process.env.P5_OBJECT_STORAGE_ENABLED;delete process.env.OPENAI_API_KEY;await rm(isolatedRoot,{recursive:true,force:true});}

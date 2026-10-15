@@ -4,9 +4,12 @@ import {randomUUID,randomBytes} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import path from 'node:path';
 await mkdir('node_modules/.cache',{recursive:true});
-const dir=await mkdtemp(path.join(process.cwd(),'node_modules/.cache/p5-pricing-work-'));
+const isolatedRoot=await mkdtemp(path.join(process.cwd(),'node_modules/.cache/p5-pricing-work-'));
+const dir=path.join(isolatedRoot,'p5');
 try{
  await cp('lib/p5',dir,{recursive:true});
+  // Preserve the production sibling import without sharing files between test runs.
+  await cp('lib/leadAttribution.ts',path.join(isolatedRoot,'leadAttribution.ts'));
  await writeFile(path.join(dir,'database.ts'),`import {PGlite} from '@electric-sql/pglite';export const database=new PGlite();export async function query(s:string,v:unknown[]=[]){return (await database.query(s,v)).rows;}`);
  // Public sites hold every new project for team review (lib/p5/intakePolicy.ts). The
  // preserved pricing route is exercised behind an explicit harness-only switch once the
@@ -74,4 +77,4 @@ try{
  assert.equal(held.status,422,"incomplete pricing is held for review once every stage has run");const message=await held.json();assert.equal(message.pricingReviewRequired,true);assert.ok(!JSON.stringify(message).includes('INTERNAL_ONLY'));assert.ok(!message.error.includes('tileSqft'));
  const [retained]=await db.query('SELECT status,internal_estimate,customer_estimate FROM p5_estimator_drafts WHERE id=$1',[blockedId]);assert.equal(retained.status,'draft');assert.equal(retained.customer_estimate,null);assert.equal(retained.internal_estimate.privateCostDetail,'INTERNAL_ONLY');assert.equal((await db.query('SELECT * FROM p5_estimator_outbox')).length,0);
  await db.database.close();console.log('PASS: persisted pricing stages, resumed requests, unchanged-scope reuse, changed-scope invalidation and concurrent lease safety; isolated SQL and simulated AI only.');
-}finally{await rm(dir,{recursive:true,force:true});}
+}finally{await rm(isolatedRoot,{recursive:true,force:true});}
