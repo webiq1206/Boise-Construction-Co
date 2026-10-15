@@ -83,7 +83,7 @@ function serviceDisplayTitle(s: ServiceData): string {
 }
 
 function cityAnchor(c: CityData): string {
-  return `Remodeling in ${c.name}`;
+  return `Home Building in ${c.name}`;
 }
 
 function cityServiceAnchor(s: ServiceData, c: CityData): string {
@@ -169,7 +169,7 @@ export function buildPages(): PageNode[] {
       id: `city:${city.slug}`,
       type: "city",
       url: `/areas/${city.slug}`,
-      title: `Remodeling Services in ${city.name}, Idaho`,
+      title: `Home Building in ${city.name}, Idaho`,
       anchor: cityAnchor(city),
       category: "city",
       tags: [city.slug, city.county],

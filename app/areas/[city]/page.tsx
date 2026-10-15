@@ -37,6 +37,10 @@ export async function generateMetadata(
     cityName: cityData.name,
     citySlug: cityData.slug,
     path: areaPath(cityData.slug),
+    ...(cityData.slug === 'middleton' ? {
+      titleOverride: 'Custom Home Builder in Middleton, ID',
+      descriptionOverride: 'Plan a custom home in Middleton, Idaho. Share your lot, plans and project details with Boise Construction Co for team review before we prepare your estimate.',
+    } : {}),
   })), "/areas/[city]");
 }
 

@@ -507,7 +507,7 @@ export function LandingPageTemplate({
       {showEstimatePrompt && (
         <EstimatePromptBand
           title={<>What might your <em className="not-italic" style={accent}>project</em> cost?</>}
-          description="Get a preliminary planning range based on real Treasure Valley build costs, with no obligation."
+          description="Share your lot, plans and project details. Our team will review your scope before preparing your estimate."
           href={estimateHref ?? (manifestPath === '/services/build-on-your-lot' ? '/estimate' : undefined)}
         />
       )}
