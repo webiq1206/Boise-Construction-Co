@@ -17,6 +17,7 @@ import { getAreaImageSet } from '@/shared/cityServiceImages';
 import { getCountyLabel,SERVICES } from '@/shared/contentData';
 import { getGalleryProjectsForCity } from '@/shared/galleryData';
 import { getAreaCityCopy } from '@/shared/content/areaCopy';
+import { cityBuildingSection,cityFaqSchema,cityOnlyFaqs } from '@/shared/cityLocal';
 import { AREA_PAGE_FAQS,getAreaIntro } from '@/shared/seoContent';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { notFound } from 'next/navigation';
@@ -125,8 +126,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
 
   const h1 = `Home Builder in ${city.name}, Idaho`;
   const cityCopy = getAreaCityCopy(city.slug);
-  const faqs = cityCopy?.faqs ?? [
-    ...AREA_PAGE_FAQS,
+  const fallbackCityFaqs = [
     {
       question: `Do you build in ${city.name}, Idaho?`,
       answer: `Yes. ${city.name} is part of our Treasure Valley service area. We build custom homes, semi-custom homes, and homes on land you already own, and we can evaluate a ${city.name} lot before you buy it.`,
@@ -136,6 +136,8 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       answer: `${city.name} is in ${county}. The permit steps for Ada County and Canyon County are compared on the Ada and Canyon County permit-flow page.`,
     },
   ];
+  const cityFaqs = [...(cityCopy?.faqs ?? fallbackCityFaqs), ...cityOnlyFaqs(city)];
+  const faqs = cityCopy ? cityFaqs : [...AREA_PAGE_FAQS, ...cityFaqs];
 
   const schemas = [
     landingBreadcrumbs([
@@ -144,7 +146,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       { name: city.name, url: path },
     ]),
     landingAreaBusinessSchema(city.name),
-    landingFAQSchema(faqs),
+    landingFAQSchema(cityCopy ? faqs : cityFaqSchema(cityFaqs, city.name)),
     generateSpeakableSchema({ path, name: h1 }),
   ];
 
@@ -171,7 +173,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
           'Written workmanship warranty',
         ]}
         localNote={localNote}
-        sections={sections}
+        sections={[...sections, cityBuildingSection(city)]}
         proof={proof}
         proofHeading={`Recent ${city.name} projects`}
         showEstimatePrompt

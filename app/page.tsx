@@ -32,11 +32,10 @@ const EstimateCalculator = dynamic(
 );
 
 export const metadata: Metadata = withBrandPageMetadata(({
-  // 55 chars. Leads with the primary term ("custom home builder Boise") rather
-  // than the brand, which the suffix carries anyway.
-  title: { absolute: `Custom Home Builder in Boise, ID | ${SITE_CONFIG.name}` },
+  // Leads with the query "Boise construction" and keeps Custom Home Builder, Boise, and ID.
+  title: { absolute: `Boise Construction Co | Custom Home Builder in Boise, ID` },
   description:
-    fitDescription("Design-build home builder for Boise, Meridian, Eagle, Nampa & the Treasure Valley. Custom and semi-custom homes, or build on your own lot, with a line-item budget before we break ground."),
+    fitDescription("Boise construction custom home builder. Custom and semi-custom homes in Boise and the Treasure Valley. Design-build, build-on-your-lot, clear project budgets."),
   alternates: {
     canonical: buildCanonical("/"),
     // Setting `alternates` replaces the root declaration, so the feed link has
