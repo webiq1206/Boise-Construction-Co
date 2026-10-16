@@ -3,7 +3,7 @@ import type { BlogPostData } from '../../blogContent';
 export const luxuryHomeBuildingCostBoise: BlogPostData = {
   slug: 'luxury-home-building-cost-boise',
   title: 'What a Luxury Home Costs to Build in Boise',
-  seoTitle: 'What a Luxury Home Costs to Build in Boise',
+  seoTitle: 'Luxury Home Building Cost in Boise',
   metaDescription:
     'Luxury builds in the Boise area regularly exceed $450 per square foot. Here is what separates them from a $300 home, and which of that spend you notice.',
   excerpt:

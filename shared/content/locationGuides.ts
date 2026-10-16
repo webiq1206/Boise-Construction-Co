@@ -52,7 +52,7 @@ const PLACES: PlaceGuide[] = [
     title: 'Building a Home in Boise',
     seoTitle: 'Building a New Home in Boise, Idaho',
     metaDescription:
-      'What it takes to build a new home in Boise: infill lots, foothills sites, address-specific permit requirements, and what each of those does to a construction budget.',
+      'To build a new home in Boise: infill lots, foothills sites, address-specific permit requirements, and what each does to a construction budget.',
     excerpt:
       'Boise has two very different building problems: tight infill lots inside the established grid, and foothills parcels where the site costs more than people expect.',
     quickAnswer:
@@ -105,9 +105,9 @@ const PLACES: PlaceGuide[] = [
     county: 'ada',
     guideType: 'location',
     title: 'Building a Home in Meridian',
-    seoTitle: 'Building a New Home in Meridian, Idaho',
+    seoTitle: 'Building a New Home in Meridian',
     metaDescription:
-      'Building a new home in Meridian: subdivision lots, HOA design review, address-specific permit requirements, and what a serviced lot actually costs to build on.',
+      'Building a new home in Meridian: subdivision lots, HOA design review, address-specific permit requirements, and what a serviced lot costs to build on.',
     excerpt:
       'Meridian is the most straightforward place in the valley to build, which is exactly why the constraints that do exist are the ones people miss.',
     quickAnswer:
@@ -162,7 +162,7 @@ const PLACES: PlaceGuide[] = [
     title: 'Building a Home in Eagle',
     seoTitle: 'Building a New Home in Eagle, Idaho',
     metaDescription:
-      'Building in Eagle: valley-floor acreage, foothills sites, strict design review, and why Eagle budgets run higher per square foot than the rest of Ada County.',
+      'Building in Eagle: valley-floor acreage, foothills sites, strict design review, and why Eagle budgets run higher per square foot than Ada County.',
     excerpt:
       'Eagle covers flat valley acreage and steep foothills within the same city, and the two produce completely different construction budgets.',
     quickAnswer:
@@ -272,7 +272,7 @@ const PLACES: PlaceGuide[] = [
     title: 'Building a Home in Star',
     seoTitle: 'Building a New Home in Star, Idaho',
     metaDescription:
-      'Building in Star, Idaho: new subdivisions alongside working acreage, address-specific permit requirements, and what each type of parcel does to a build budget.',
+      'Building in Star: new subdivisions alongside working acreage, address-specific permit requirements, and what each type of parcel does to a build budget.',
     excerpt:
       'Star has both new platted subdivisions and working agricultural acreage, sometimes on the same road, and the two are different builds entirely.',
     quickAnswer:
@@ -325,9 +325,9 @@ const PLACES: PlaceGuide[] = [
     county: 'canyon',
     guideType: 'location',
     title: 'Building a Home in Middleton',
-    seoTitle: 'Building a New Home in Middleton, Idaho',
+    seoTitle: 'Building a New Home in Middleton',
     metaDescription:
-      'Building in Middleton: city and county permit requirements, acreage and subdivision lots, irrigation easements, and realistic site work costs for a new home.',
+      'Building in Middleton: city and county permit requirements, acreage and subdivision lots, irrigation easements, and site work costs for a new home.',
     excerpt:
       'Compare Middleton subdivision lots and acreage by utility access, buildable area and the permit jurisdiction for the address.',
     quickAnswer:
@@ -435,9 +435,9 @@ const PLACES: PlaceGuide[] = [
     county: 'canyon',
     guideType: 'location',
     title: 'Building a Home in Caldwell',
-    seoTitle: 'Building a New Home in Caldwell, Idaho',
+    seoTitle: 'Building a New Home in Caldwell',
     metaDescription:
-      'Building in Caldwell, Idaho: city and county permit requirements, serviced lots and agricultural acreage, irrigation easements, and realistic site work budgets.',
+      'Building in Caldwell, Idaho: city and county permit requirements, serviced lots and agricultural acreage, irrigation easements, and site work budgets.',
     excerpt:
       'Caldwell puts serviced city lots and working agricultural ground within a few miles of each other, and the site work difference between them is six figures.',
     quickAnswer:
@@ -490,7 +490,7 @@ const PLACES: PlaceGuide[] = [
     county: 'ada',
     guideType: 'neighborhood',
     title: 'Building in the Eagle Foothills',
-    seoTitle: 'Building a Home in the Eagle Foothills',
+    seoTitle: 'Building a Home in Eagle Foothills',
     metaDescription:
       'Building in the Eagle Foothills: slope, access, geotechnical work, wildland-urban interface, and why these sites regularly exceed $450 per square foot.',
     excerpt:
@@ -545,7 +545,7 @@ const PLACES: PlaceGuide[] = [
     county: 'ada',
     guideType: 'neighborhood',
     title: 'Building in Hidden Springs',
-    seoTitle: 'Building a Home in Hidden Springs, Idaho',
+    seoTitle: 'Building a Home in Hidden Springs',
     metaDescription:
       'Building in Hidden Springs: design guidelines, architectural review, foothills access, and what a master-planned community expects from a new home.',
     excerpt:
@@ -599,7 +599,7 @@ const PLACES: PlaceGuide[] = [
     county: 'ada',
     guideType: 'neighborhood',
     title: 'Building in Harris Ranch',
-    seoTitle: 'Building a Home in Harris Ranch, Boise',
+    seoTitle: 'Building a Home in Harris Ranch',
     metaDescription:
       'Building in Harris Ranch: planned community design standards, serviced lots at the edge of the Boise foothills, and what a new home there involves.',
     excerpt:

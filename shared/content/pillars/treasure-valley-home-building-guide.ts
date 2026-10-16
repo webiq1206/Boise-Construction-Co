@@ -5,7 +5,7 @@ export const treasureValleyHomeBuildingGuide: GuidePageData = {
   title: 'Treasure Valley Home Building Guide',
   seoTitle: 'Treasure Valley Home Building Guide by City',
   metaDescription:
-    'What changes as you build a new home across the Treasure Valley: Ada and Canyon County permits, valley floor versus foothills cost, serviced lots and acreage.',
+    'What changes as you build a new home across the Treasure Valley: Ada and Canyon permits, valley floor versus foothills cost, serviced lots and acreage.',
   excerpt:
     'The parcel sets your budget more than the city name does. Here is what actually changes as you move across the Treasure Valley, from Ada and Canyon County permitting to the foothills, irrigation ditches, and rural site work, with a guide for each of the eight cities we build in.',
   hubSlug: 'treasure-valley-locations',

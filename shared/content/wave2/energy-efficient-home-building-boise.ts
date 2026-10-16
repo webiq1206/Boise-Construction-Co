@@ -3,7 +3,7 @@ import type { BlogPostData } from '../../blogContent';
 export const energyEfficientHomeBuildingBoise: BlogPostData = {
   slug: 'energy-efficient-home-building-boise',
   title: 'Building an Energy-Efficient Home in Boise',
-  seoTitle: 'Building an Energy-Efficient Home in Boise',
+  seoTitle: 'Energy-Efficient Homes in Boise',
   metaDescription:
     'How to build an energy-efficient home in Boise: air sealing, insulation, window specs, right-sized HVAC, ducts inside, and blower-door verification.',
   excerpt:

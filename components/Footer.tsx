@@ -130,6 +130,9 @@ export function Footer() {
               <p className="py-2 text-sm text-inverse-muted">
                 {SITE_CONFIG.address.cityState} · {SITE_CONFIG.address.serviceArea}
               </p>
+              <p className="py-2 text-sm text-inverse-muted">
+                Public representative: {SITE_CONFIG.publicRepresentative}. {SITE_CONFIG.address.street}, {SITE_CONFIG.address.city}, {SITE_CONFIG.address.state} {SITE_CONFIG.address.postalCode}. Service-area business, not a staffed storefront.
+              </p>
             </div>
             <div className="mt-4 flex flex-wrap items-center gap-4">
               <Button variant="brandInverseOutline" size="sm" asChild>

@@ -3,9 +3,9 @@ import type { BlogPostData } from '../../blogContent';
 export const singleStoryVsTwoStoryHome: BlogPostData = {
   slug: 'single-story-vs-two-story-home',
   title: 'Single Story vs Two Story: Cost, Lot, and Livability',
-  seoTitle: 'Single Story vs Two Story: Cost and Lot',
+  seoTitle: 'Single vs Two Story Cost and Lot',
   metaDescription:
-    'Single story vs two story homes compared for Treasure Valley builds: cost per square foot, lot coverage and setbacks, HVAC, resale, aging in place, and noise.',
+    'Single story vs two story for Treasure Valley builds: cost per square foot, lot coverage and setbacks, HVAC, resale, aging in place, and noise.',
   excerpt:
     'A two storey shares one foundation and one roof across twice the finished area, so it costs less per square foot. A single storey needs twice the lot. Here is how the trade really works on a Treasure Valley parcel.',
   category: 'Design & Floor Plans',

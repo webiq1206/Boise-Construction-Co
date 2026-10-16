@@ -3,7 +3,7 @@ import type { BlogPostData } from '../../blogContent';
 export const fixedPriceVsCostPlus: BlogPostData = {
   slug: 'fixed-price-vs-cost-plus',
   title: 'Fixed Price vs Cost Plus for a New Home Build',
-  seoTitle: 'Fixed Price vs Cost Plus for a New Home',
+  seoTitle: 'Fixed Price vs Cost Plus, New Home',
   metaDescription:
     'Fixed price vs cost plus for a new home build: who carries the risk over nine to fourteen months, why allowances matter, GMP contracts, and how draws work.',
   excerpt:

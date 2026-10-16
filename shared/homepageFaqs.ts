@@ -10,7 +10,7 @@ export interface HomepageFaq {
  * clicked. Lives here (not in the client component) so a server component can
  * import it without crossing the client/server boundary.
  */
-export const INITIAL_FAQ_COUNT = 8;
+export const INITIAL_FAQ_COUNT = 10;
 
 /**
  * Homepage FAQ set. These feed FAQPage schema, so answers lead with the direct
@@ -21,6 +21,14 @@ export const INITIAL_FAQ_COUNT = 8;
  * Treasure Valley construction, excluding land) and with the estimator engine.
  */
 export const HOMEPAGE_FAQS: HomepageFaq[] = [
+  {
+    q: "What is Boise Construction Co?",
+    a: "Boise Construction Co is a design-build home builder in Boise, Idaho, founded in 2020. The work covers custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. The service area is Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and Garden City. Phone (208) 477-1169.",
+  },
+  {
+    q: "Are the budget ranges quotes?",
+    a: "A written quote comes first: a firm proposal follows a site visit and a lot review, and ranges are planning estimates, not quotes. See \"How much does it cost to build a house in Boise and the Treasure Valley?\" for the planning ranges already published on this page. Design-build means one accountable team handles architectural design, engineering, estimating, Ada and Canyon County permitting, and construction under a single contract, backed by a written line-item scope before the foundation is poured.",
+  },
   {
     q: "How much does it cost to build a house in Boise and the Treasure Valley?",
     a: "As of 2026, most Treasure Valley custom homes plan between $250 and $400 per finished square foot excluding land, which puts a 2,400 square foot home roughly between $600,000 and $960,000. Simpler single-level designs on flat valley lots can approach $225 per square foot, while foothills sites, steep grades, and highly detailed interiors regularly exceed $450. Land, site work, and utility connections are separate and vary more between lots than the house itself does, which is why we price them as their own lines rather than folding them into a square-foot number.",

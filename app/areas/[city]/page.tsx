@@ -39,7 +39,7 @@ export async function generateMetadata(
     path: areaPath(cityData.slug),
     ...(cityData.slug === 'middleton' ? {
       titleOverride: 'Custom Home Builder in Middleton, ID',
-      descriptionOverride: 'Plan a custom home in Middleton, Idaho. Share your lot, plans and project details with Boise Construction Co for team review before we prepare your estimate.',
+      descriptionOverride: 'Plan a custom home in Middleton, ID. Share your lot, plans and project details with Boise Construction Co for team review before we prepare your estimate.',
     } : {}),
   })), "/areas/[city]");
 }
@@ -53,6 +53,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
   const county = getCountyLabel(city.county);
   const path = areaPath(city.slug);
   const overview = getAreaIntro(city);
+  const answerFirst = `${city.name}, Idaho is in ${county}. ${SITE_CONFIG.name} builds there as a design-build home builder. Ada County and Canyon County permit steps are on the permit-flow page.`;
   const images = getAreaImageSet(city.slug);
   const localNote = seo
     ? `We serve ${city.name} homeowners across ${seo.neighborhoods.slice(0, 3).join(', ')}, and all of ${county}. Confirm the permitting authority for the project address before applying.`
@@ -86,9 +87,13 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
     },
     {
       heading: `Permits and planning in ${city.name}`,
-      links: permitSource(city.name)
-        ? [{ label: `Official ${city.name} permit guidance`, href: permitSource(city.name)! }]
-        : undefined,
+      links: [
+        ...(permitSource(city.name)
+          ? [{ label: `Official ${city.name} permit guidance`, href: permitSource(city.name)! }]
+          : []),
+        { label: 'Ada and Canyon County permit flow', href: '/resources/ada-canyon-permit-flow' },
+        { label: 'Custom home builder', href: '/services/custom-home-builder' },
+      ],
       paragraphs: [
         permitGuidance(city.name),
         'We confirm the required submissions and inspection steps for your scope, then account for them in the project schedule.',
@@ -121,6 +126,10 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       question: `Do you build in ${city.name}, Idaho?`,
       answer: `Yes. ${city.name} is part of our Treasure Valley service area. We build custom homes, semi-custom homes, and homes on land you already own, and we can evaluate a ${city.name} lot before you buy it.`,
     },
+    {
+      question: `Which county is ${city.name} in?`,
+      answer: `${city.name} is in ${county}. The permit steps for Ada County and Canyon County are compared on the Ada and Canyon County permit-flow page.`,
+    },
   ];
 
   const schemas = [
@@ -140,7 +149,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       <LandingPageTemplate
         h1={h1}
         speakableSummary={overview}
-        overview={overview}
+        overview={`${answerFirst} ${overview}`}
         heroImageUrl={images.hero}
         breatherImageUrl={images.breather}
         processImageUrl={images.process}

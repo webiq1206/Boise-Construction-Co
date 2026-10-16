@@ -5,7 +5,7 @@ export const coveredOutdoorLivingNewHome: BlogPostData = {
   title: 'Designing Covered Outdoor Living Into a New Home',
   seoTitle: 'Covered Outdoor Living in a New Home',
   metaDescription:
-    'Covered outdoor space is far cheaper built with the house than added later. Orientation for valley sun, what to rough in at framing, and screened versus open.',
+    'Covered outdoor space is cheaper built with the house than added later. Orientation for valley sun, what to rough in at framing, and screened versus open.',
   excerpt:
     'A covered patio built with the house shares the roof structure, the footings, and one mobilisation of every trade. Added three years later it shares none of them. Here is how to design it properly the first time.',
   category: 'Design & Floor Plans',
