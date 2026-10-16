@@ -213,6 +213,7 @@ export function generateServiceSchema(serviceName: string, serviceDescription: s
       address: PUBLIC_POSTAL_ADDRESS,
       contactPoint: PUBLIC_CONTACT_POINT,
     },
+    // The page city is the area served, not a second PostalAddress.
     areaServed: city ? {
       '@type': 'City',
       name: city,
