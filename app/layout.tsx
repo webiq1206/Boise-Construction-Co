@@ -12,6 +12,7 @@ import { ScrollToTop } from '@/components/ScrollToTop'
 import { SITE_TAGLINE } from '@/shared/siteContent'
 import { SITE_CONFIG } from '@/shared/siteConfig'
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
+import { HubSpotAnalytics } from '@/components/HubSpotAnalytics'
 import { LeadAttribution } from '@/components/LeadAttribution'
 import { consentBootstrap } from '@/lib/consentBootstrap'
 import { Suspense } from 'react'
@@ -198,6 +199,7 @@ export default function RootLayout({
         <GoogleAnalytics />
         <MetaPixel />
         <MicrosoftClarity />
+        <HubSpotAnalytics />
         <ConversionTracking />
       </body>
     </html>

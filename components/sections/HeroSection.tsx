@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Reveal } from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { HERO_EYEBROW, HERO_SUBHEAD, HERO_STATS, TRUST_ITEMS } from "@/shared/siteContent";
 import { SITE_IMAGES } from "@/shared/siteImages";
@@ -19,7 +18,7 @@ export function HeroSection() {
           fill
           priority
           sizes="(max-width: 768px) 100vw, 1400px"
-          className="object-cover opacity-[0.86] img-brand-grade animate-hero-reveal"
+          className="object-cover opacity-[0.86] img-brand-grade"
         />
         {/* Ends at /25 rather than /15. The stat cards live in the last third
             of this gradient, and at /15 the photo was effectively unscrimmed
@@ -43,7 +42,6 @@ export function HeroSection() {
 
         <div className="relative z-10 container px-4 md:px-8 py-20 md:py-32 pb-16 md:pb-28">
           <div className="ed-hero-copy">
-            <Reveal>
               {/* Not text-inverse-muted: at 11px over the photo it measured
                   3.15:1, under the 4.5:1 AA needs, and lightening the scrim
                   behind it would only widen that gap. */}
@@ -94,7 +92,6 @@ export function HeroSection() {
                   </div>
                 ))}
               </dl>
-            </Reveal>
           </div>
         </div>
       </section>
