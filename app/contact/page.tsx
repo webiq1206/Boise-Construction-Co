@@ -329,6 +329,12 @@ export default function ContactPage() {
                     Based in {SITE_CONFIG.address.cityState}
                     <br />
                     Serving the Treasure Valley
+                    <br />
+                    Public representative: {SITE_CONFIG.publicRepresentative}
+                    <br />
+                    {SITE_CONFIG.address.street}, {SITE_CONFIG.address.city}, {SITE_CONFIG.address.state} {SITE_CONFIG.address.postalCode}
+                    <br />
+                    Service-area business, not a staffed storefront.
                   </address>
                 </ContactChannel>
               </Reveal>

@@ -6,6 +6,7 @@ import {schemaTime} from './schemaTime';
 
 import { BUSINESS_INFO, CITY_SEO_DATA, getBaseUrl } from './seo';
 import { SERVICES } from '@/shared/contentData';
+import { SITE_CONFIG } from '@/shared/siteConfig';
 
 interface SchemaContext {
   '@context': string;
@@ -54,15 +55,27 @@ export const P5_PARENT_ORGANIZATION = {
 export const BUSINESS_TYPES = ['HomeAndConstructionBusiness', 'GeneralContractor'] as const;
 
 /**
- * Locality-only NAP for public JSON-LD. Meridian, Idaho. No street and no
- * postal code: this is a service-area business and the street stays off
- * view-source schema.
+ * Public PostalAddress for JSON-LD. Values come from SITE_CONFIG, which matches
+ * the authorized P5 street address. areaServed still carries the service area.
+ * Publishing the street does not make this a staffed storefront.
  */
 export const PUBLIC_POSTAL_ADDRESS = {
   '@type': 'PostalAddress',
-  addressLocality: 'Meridian',
-  addressRegion: 'ID',
+  streetAddress: SITE_CONFIG.address.street,
+  addressLocality: SITE_CONFIG.address.city,
+  addressRegion: SITE_CONFIG.address.state,
+  postalCode: SITE_CONFIG.address.postalCode,
   addressCountry: 'US',
+} as const;
+
+/** Named public contact. Role wording is the brief's "public representative". */
+export const PUBLIC_CONTACT_POINT = {
+  '@type': 'ContactPoint',
+  name: SITE_CONFIG.publicRepresentative,
+  telephone: BUSINESS_INFO.phone,
+  contactType: 'public representative',
+  areaServed: 'US-ID',
+  availableLanguage: 'English',
 } as const;
 // Organization logo for knowledge-panel / rich-result use. The approved seal on
 // a charcoal disc (bone lettering, ochre ring) is square and stays legible on
@@ -111,6 +124,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     telephone: BUSINESS_INFO.phone,
     email: BUSINESS_INFO.email,
     address: PUBLIC_POSTAL_ADDRESS,
+    contactPoint: PUBLIC_CONTACT_POINT,
     geo: {
       '@type': 'GeoCoordinates',
       latitude: coordinates.lat,
@@ -197,6 +211,7 @@ export function generateServiceSchema(serviceName: string, serviceDescription: s
       email: BUSINESS_INFO.email,
       priceRange: '$$',
       address: PUBLIC_POSTAL_ADDRESS,
+      contactPoint: PUBLIC_CONTACT_POINT,
     },
     areaServed: city ? {
       '@type': 'City',
@@ -283,13 +298,16 @@ export function generateOrganizationSchema(): SchemaContext {
       'Canyon County building permits',
     ],
     sameAs: BUSINESS_INFO.sameAs,
-    contactPoint: {
-      '@type': 'ContactPoint',
-      telephone: BUSINESS_INFO.phone,
-      contactType: 'Customer Service',
-      areaServed: 'US-ID',
-      availableLanguage: 'English',
-    },
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        telephone: BUSINESS_INFO.phone,
+        contactType: 'Customer Service',
+        areaServed: 'US-ID',
+        availableLanguage: 'English',
+      },
+      PUBLIC_CONTACT_POINT,
+    ],
   };
 }
 
