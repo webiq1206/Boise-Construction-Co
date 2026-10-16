@@ -5,7 +5,7 @@ export const multigenerationalHomeDesign: BlogPostData = {
   title: 'Designing a Home for Multiple Generations',
   seoTitle: 'Designing a Multigenerational Home',
   metaDescription:
-    'How to design a new home for parents, adult children, or both: separate entrances, real sound separation, a main-floor suite, shared kitchens, and ADU rules.',
+    'Design a new home for parents, adult children, or both: separate entrances, real sound separation, a main-floor suite, shared kitchens, and ADU rules.',
   excerpt:
     'Housing three generations under one roof works when the plan gives each household a door, a quiet zone, and a way to be alone. Here is how we design that into a new Treasure Valley home.',
   category: 'Design & Floor Plans',

@@ -3,7 +3,7 @@ import type { BlogPostData } from '../../blogContent';
 export const boiseBuildingPermitGuide: BlogPostData = {
   slug: 'boise-building-permit-guide',
   title: 'Building Permits in Boise: What a New Home Needs',
-  seoTitle: 'Building Permits in Boise: New Home Guide',
+  seoTitle: 'Boise New Home Building Permits',
   metaDescription:
     'What a new-home building permit in Boise actually contains: site plan, architectural set, structural engineering, energy compliance, and utility approvals.',
   excerpt:

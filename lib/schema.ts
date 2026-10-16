@@ -45,6 +45,25 @@ export const P5_PARENT_ORGANIZATION = {
   name: 'P5 Home Co',
   url: P5_ORIGIN,
 } as const;
+
+/**
+ * Public business type. HomeAndConstructionBusiness is the primary type;
+ * GeneralContractor stays as an additional type so existing classification
+ * is not dropped.
+ */
+export const BUSINESS_TYPES = ['HomeAndConstructionBusiness', 'GeneralContractor'] as const;
+
+/**
+ * Locality-only NAP for public JSON-LD. Meridian, Idaho. No street and no
+ * postal code: this is a service-area business and the street stays off
+ * view-source schema.
+ */
+export const PUBLIC_POSTAL_ADDRESS = {
+  '@type': 'PostalAddress',
+  addressLocality: 'Meridian',
+  addressRegion: 'ID',
+  addressCountry: 'US',
+} as const;
 // Organization logo for knowledge-panel / rich-result use. The approved seal on
 // a charcoal disc (bone lettering, ochre ring) is square and stays legible on
 // any background, unlike the reverse wordmark which vanished on Google's white
@@ -80,7 +99,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
 
   return {
     '@context': 'https://schema.org',
-    '@type': 'GeneralContractor',
+    '@type': [...BUSINESS_TYPES],
     name: BUSINESS_INFO.name,
     legalName: BUSINESS_INFO.legalName,
     description: `Design-build home builder serving ${city || 'Boise'} and the Treasure Valley, Idaho. Custom homes, semi-custom homes, build-on-your-lot, and shop homes.`,
@@ -91,12 +110,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     parentOrganization: { '@id': ORG_ID },
     telephone: BUSINESS_INFO.phone,
     email: BUSINESS_INFO.email,
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: BUSINESS_INFO.address.city,
-      addressRegion: BUSINESS_INFO.address.state,
-      addressCountry: BUSINESS_INFO.address.country,
-    },
+    address: PUBLIC_POSTAL_ADDRESS,
     geo: {
       '@type': 'GeoCoordinates',
       latitude: coordinates.lat,
@@ -176,17 +190,13 @@ export function generateServiceSchema(serviceName: string, serviceDescription: s
     name: serviceName,
     description: serviceDescription,
     provider: {
-      '@type': 'GeneralContractor',
+      '@type': [...BUSINESS_TYPES],
+      '@id': LOCALBUSINESS_ID,
       name: BUSINESS_INFO.name,
       telephone: BUSINESS_INFO.phone,
       email: BUSINESS_INFO.email,
       priceRange: '$$',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: city || BUSINESS_INFO.address.city,
-        addressRegion: BUSINESS_INFO.address.state,
-        addressCountry: BUSINESS_INFO.address.country,
-      },
+      address: PUBLIC_POSTAL_ADDRESS,
     },
     areaServed: city ? {
       '@type': 'City',
@@ -258,12 +268,7 @@ export function generateOrganizationSchema(): SchemaContext {
       : {}),
     telephone: BUSINESS_INFO.phone,
     email: BUSINESS_INFO.email,
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: BUSINESS_INFO.address.city,
-      addressRegion: BUSINESS_INFO.address.state,
-      addressCountry: BUSINESS_INFO.address.country,
-    },
+    address: PUBLIC_POSTAL_ADDRESS,
     knowsAbout: [
       'custom home building',
       'semi-custom home building',
@@ -300,7 +305,7 @@ export function generateReviewSchema(reviews: Array<{
 }>): SchemaContext {
   return {
     '@context': 'https://schema.org',
-    '@type': 'GeneralContractor',
+    '@type': [...BUSINESS_TYPES],
     '@id': LOCALBUSINESS_ID,
     name: BUSINESS_INFO.name,
     // AggregateRating is gated on a real, populated review count. Emitting a

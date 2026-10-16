@@ -1,5 +1,7 @@
 import { ApprovedShell } from "@/components/approved/ApprovedShell";
+import { JsonLd } from "@/components/seo/JsonLd";
 import {withBrandPageMetadata} from '@/lib/brand-page-metadata';
+import { generateLocalBusinessSchema } from "@/lib/schema";
 import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import { Navigation } from '@/components/Navigation'
@@ -170,6 +172,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-background font-sans antialiased">
+        <JsonLd data={generateLocalBusinessSchema()} />
         <noscript>
           <style>{`.reveal-init{opacity:1!important;transform:none!important}`}</style>
         </noscript>

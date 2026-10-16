@@ -172,6 +172,15 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                 </section>
               )}
 
+              {!post.content.includes('/services/custom-home-builder') && (
+                <p className="mt-8 text-sm leading-relaxed">
+                  <Link href="/services/custom-home-builder" className="underline underline-offset-2">
+                    Custom home builder
+                  </Link>{' '}
+                  for a home drawn around your lot, your budget, and how you live.
+                </p>
+              )}
+
               {post.tags && post.tags.length > 0 && (
                 <div className="mt-10 pt-8 border-t border-border lg:hidden">
                   <div className="flex items-center gap-2 flex-wrap">

@@ -98,7 +98,7 @@ export default function Re10RepairsPage() {
       {/* ------------------------------------------------------------ hero */}
       <PageHeroBand
         imageSrc={SITE_IMAGES.processInProgress}
-        imageAlt="Worker checking interior framing on a new home"
+        imageAlt="A worker beside exterior wall framing, with stacked lumber and a concrete slab on a new-home site"
         scrim={0.86}
       >
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "RE-10 Repairs" }]} />
@@ -113,6 +113,13 @@ export default function Re10RepairsPage() {
           We complete inspection-related repairs for Boise-area real estate transactions, with one
           point of contact, clear scheduling against your closing date, and documentation you can
           put straight in the file.
+        </p>
+        <p className="mt-4 max-w-[44ch] text-sm text-inverse-foreground/80">
+          RE-10 repair lists are also published by{' '}
+          <a href="https://boisehandyman.co/re-10-repairs-boise" className="underline underline-offset-2">
+            Boise Handyman Co
+          </a>
+          .
         </p>
         <div className="flex flex-col sm:flex-row gap-3">
           <Button variant="brand" asChild>

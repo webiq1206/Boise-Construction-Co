@@ -3,9 +3,9 @@ import type { BlogPostData } from '../../blogContent';
 export const lotEvaluationChecklist: BlogPostData = {
   slug: 'lot-evaluation-checklist',
   title: 'Lot Evaluation Checklist: What to Check Before You Buy',
-  seoTitle: 'Lot Evaluation Checklist Before You Buy',
+  seoTitle: 'Lot Evaluation Checklist, Before Buy',
   metaDescription:
-    'A working checklist for Treasure Valley land buyers: access, utilities, ground, zoning, and cost. What to check, who checks it, and what a bad answer costs.',
+    'A checklist for Treasure Valley land buyers: access, utilities, ground, zoning, and cost. What to check, who checks it, and what a bad answer costs.',
   excerpt:
     'A usable checklist for buying land in Ada and Canyon County, organised by category, with who does each check and what it costs you to get the answer wrong.',
   category: 'Land & Lots',

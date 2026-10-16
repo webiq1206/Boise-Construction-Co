@@ -5,7 +5,7 @@ export const whyHomeBuildingBidsVary: BlogPostData = {
   title: 'Why Home Building Bids Vary So Much',
   seoTitle: 'Why Home Building Bids Vary So Much',
   metaDescription:
-    'Two bids on the same house plan can differ by six figures. Here are the legitimate reasons, the illegitimate ones, and how to tell which you are looking at.',
+    'Two bids on the same house plan can differ by six figures. The legitimate reasons, the illegitimate ones, and how to tell which you are looking at.',
   excerpt:
     'A six-figure gap between two bids on identical drawings is normal and usually explainable. The explanation is almost never that one builder is cheaper.',
   category: 'Choosing a Builder',

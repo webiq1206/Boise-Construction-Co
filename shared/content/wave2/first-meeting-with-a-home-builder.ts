@@ -3,7 +3,7 @@ import type { BlogPostData } from '../../blogContent';
 export const firstMeetingWithAHomeBuilder: BlogPostData = {
   slug: 'first-meeting-with-a-home-builder',
   title: 'What Happens at Your First Meeting With a Builder',
-  seoTitle: 'Your First Meeting With a Home Builder',
+  seoTitle: 'First Meeting With a Home Builder',
   metaDescription:
     'What a free consultation with a Boise home builder covers: what to bring, the questions we ask, and the budget band and schedule you leave with.',
   excerpt:

@@ -3,7 +3,7 @@ import type { BlogPostData } from '../../blogContent';
 export const buildingInTheBoiseFoothills: BlogPostData = {
   slug: 'building-in-the-boise-foothills',
   title: 'What It Costs to Build in the Boise Foothills',
-  seoTitle: 'What It Costs to Build in the Boise Foothills',
+  seoTitle: 'Build Costs in the Boise Foothills',
   metaDescription:
     'Foothills homes regularly run above $450 per square foot. Here is what slope, excavation, retaining, access, geotech, and wind exposure add to the build.',
   excerpt:

@@ -5,7 +5,7 @@ export const impactFeesAndUtilityConnections: BlogPostData = {
   title: 'Impact Fees and Utility Connections in Ada and Canyon County',
   seoTitle: 'Impact Fees and Utility Connections',
   metaDescription:
-    'Impact fees, connection fees, and meter fees are separate charges from separate agencies. What each pays for in Ada and Canyon County, and why amounts vary.',
+    'Impact fees, connection fees and meter fees are separate charges from separate agencies. What each pays for in Ada and Canyon County, and why amounts vary.',
   excerpt:
     'Impact fees and connection fees are separate charges levied by separate bodies. Here is what each one is, who charges it, and why nobody should quote you a number early.',
   category: 'Land & Lots',

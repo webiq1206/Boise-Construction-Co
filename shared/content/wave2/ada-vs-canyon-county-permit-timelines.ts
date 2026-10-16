@@ -3,7 +3,7 @@ import type { BlogPostData } from '../../blogContent';
 export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
   slug: 'ada-vs-canyon-county-permit-timelines',
   title: 'Ada vs Canyon County: What Differs When You Build',
-  seoTitle: 'Ada vs Canyon County: Building Differences',
+  seoTitle: 'Ada vs Canyon: Building Differences',
   metaDescription:
     'Building in Ada County versus Canyon County: separate permit portals, different review cadence, impact fee structures, and how rural septic is handled.',
   excerpt:
