@@ -31,7 +31,7 @@ import { BUSINESS_INFO } from '@/lib/seo';
 import { areaPath } from '@/lib/seo-routes';
 import { CITIES,TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
-import { SITE_CONFIG } from '@/shared/siteConfig';
+import { PUBLIC_NAP_LINE, SITE_CONFIG } from '@/shared/siteConfig';
 import { CONSULT_BULLETS,HERO_STATS } from '@/shared/siteContent';
 import { SITE_IMAGES } from '@/shared/siteImages';
 import { ArrowRight,Check,ChevronRight,Mail,MapPin,MessageSquare,Phone } from 'lucide-react';
@@ -330,11 +330,7 @@ export default function ContactPage() {
                     <br />
                     Serving the Treasure Valley
                     <br />
-                    Public representative: {SITE_CONFIG.publicRepresentative}
-                    <br />
-                    {SITE_CONFIG.address.street}, {SITE_CONFIG.address.city}, {SITE_CONFIG.address.state} {SITE_CONFIG.address.postalCode}
-                    <br />
-                    Service-area business, not a staffed storefront.
+                    {PUBLIC_NAP_LINE}
                   </address>
                 </ContactChannel>
               </Reveal>

@@ -44,7 +44,11 @@ export const SITE_CONFIG = {
     cityState: "Meridian, ID",
     serviceArea: "Treasure Valley · Ada and Canyon County",
   },
-} as const;
+  } as const;
+
+/** Shared footer and contact line. Same wording on every P5 brand. */
+export const PUBLIC_NAP_LINE =
+  `Public representative: ${SITE_CONFIG.publicRepresentative} · ${SITE_CONFIG.address.street}, ${SITE_CONFIG.address.city}, ${SITE_CONFIG.address.state} ${SITE_CONFIG.address.postalCode} · Service-area business, not a staffed storefront.`;
 
 export function formatPhoneDisplay(tel: string = SITE_CONFIG.phoneTel): string {
   const digits = tel.replace(/\D/g, "");

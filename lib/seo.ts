@@ -176,9 +176,26 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
   if (!serviceName) {
     return `New home builder in Boise & the Treasure Valley. Bonded, insured, design-build. Call ${phone} for a free planning consultation and a realistic budget band!`;
   }
-  
+
+  // Exact trims for the two service metas that ran past 160 characters.
+  // Claims stay: bonded, insured, line-item budget, free consultation, phone.
+  const exactServiceMeta: Record<string, string> = {
+    'lot-evaluation':
+      'Lot evaluation & feasibility in Boise & the Treasure Valley. Bonded, insured, line-item budget before we build. Free consultation: (208) 477-1169.',
+    'shop-homes-barndominiums':
+      'Shop homes & barndominiums in Boise & the Treasure Valley. Bonded, insured, line-item budget before we build. Free consultation: (208) 477-1169.',
+    // Capitalized template is 157 characters. Drop "with a" so it fits 155
+    // without dropping bonded, insured, the line-item budget, or the phone.
+    'energy-efficient-homes':
+      'Energy-efficient homes in Boise & the Treasure Valley. Bonded, insured, line-item budget before we build. Call (208) 477-1169 for a free consultation!',
+  };
+  if (params.serviceSlug && exactServiceMeta[params.serviceSlug]) {
+    return exactServiceMeta[params.serviceSlug];
+  }
+
   const serviceLC = serviceName.toLowerCase();
-  return `${serviceLC} in Boise & the Treasure Valley. Bonded, insured, with a line-item budget before we build. Call ${phone} for a free consultation!`;
+  const serviceLabel = serviceLC.charAt(0).toUpperCase() + serviceLC.slice(1);
+  return `${serviceLabel} in Boise & the Treasure Valley. Bonded, insured, with a line-item budget before we build. Call ${phone} for a free consultation!`;
 }
 
 /**
