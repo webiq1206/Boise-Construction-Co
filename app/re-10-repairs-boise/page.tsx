@@ -10,7 +10,7 @@ import { PageHeroBand } from "@/components/sections/PageHeroBand";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Button } from "@/components/ui/button";
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
-import { buildCanonical,fitDescription } from '@/lib/page-metadata';
+import { fitDescription } from '@/lib/page-metadata';
 import {
 generateBreadcrumbSchema,
 generateFAQSchema,
@@ -35,6 +35,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 const PATH = "/re-10-repairs-boise";
+// Boise Handyman Co owns the RE-10 page. Domain is the handyman brand origin
+// in components/approved/family-content.ts; the path is that site's live URL.
+// Canonical tag only, pending confirmation. Do not 301 this route.
+const RE10_CANONICAL = "https://boisehandyman.co/re-10-repairs-boise";
 
 /**
  * Title and description are length-budgeted deliberately.
@@ -54,11 +58,11 @@ const DESCRIPTION =
 export const metadata: Metadata = withBrandPageMetadata(({
   title: { absolute: TITLE_WITH_BRAND },
   description: DESCRIPTION,
-  alternates: { canonical: buildCanonical(PATH) },
+  alternates: { canonical: RE10_CANONICAL },
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    url: buildCanonical(PATH),
+    url: RE10_CANONICAL,
     type: "website",
     images: [{ url: "/images/og-default.png", width: 1200, height: 630, alt: SITE_CONFIG.name }],
   },
