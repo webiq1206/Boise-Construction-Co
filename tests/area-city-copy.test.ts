@@ -4,6 +4,7 @@ import { getAreaCityCopy } from '../shared/content/areaCopy.ts';
 import { AREA_PAGE_FAQS, getAreaIntro } from '../shared/seoContent.ts';
 import { getCityBySlug } from '../shared/contentData.ts';
 import { landingFAQSchema } from '../lib/landing-schema.ts';
+import { CITY_SEO_DATA } from '../lib/seo.ts';
 
 const BATCH = ['boise', 'meridian', 'nampa', 'eagle', 'kuna', 'caldwell', 'star'] as const;
 
@@ -31,6 +32,15 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
       assert.equal(schema.mainEntity[i].acceptedAnswer.text, faq.answer);
     });
   }
+});
+
+test('misplaced landmarks are corrected only on the city that listed them', () => {
+  assert.deepEqual(CITY_SEO_DATA.Kuna.landmarks, ['Kuna Caves', 'Swan Falls Dam', 'Bernie Fisher Park']);
+  assert.deepEqual(CITY_SEO_DATA.Meridian.landmarks, ['The Village at Meridian', 'Julius M. Kleiner Memorial Park', 'Settlers Park']);
+  assert.deepEqual(CITY_SEO_DATA.Star.landmarks, ['Boise River', 'Star Riverfront Park', 'Freedom Park']);
+  assert.ok(CITY_SEO_DATA.Eagle.landmarks.includes('Eagle Island State Park'));
+  assert.ok(CITY_SEO_DATA.Caldwell.landmarks.includes('Indian Creek Plaza'));
+  assert.equal(CITY_SEO_DATA.Kuna.neighborhoods.includes('Indian Creek'), true);
 });
 
 test('cities outside the batch keep the shared intro and shared FAQ questions', () => {
