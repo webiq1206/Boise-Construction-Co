@@ -16,6 +16,7 @@ import { areaPath,CITY_SLUGS,getCityBySlug } from '@/lib/seo-routes';
 import { getAreaImageSet } from '@/shared/cityServiceImages';
 import { getCountyLabel,SERVICES } from '@/shared/contentData';
 import { getGalleryProjectsForCity } from '@/shared/galleryData';
+import { getAreaCityCopy } from '@/shared/content/areaCopy';
 import { AREA_PAGE_FAQS,getAreaIntro } from '@/shared/seoContent';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { notFound } from 'next/navigation';
@@ -120,7 +121,8 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       : undefined;
 
   const h1 = `Home Builder in ${city.name}, Idaho`;
-  const faqs = [
+  const cityCopy = getAreaCityCopy(city.slug);
+  const faqs = cityCopy?.faqs ?? [
     ...AREA_PAGE_FAQS,
     {
       question: `Do you build in ${city.name}, Idaho?`,

@@ -1,5 +1,6 @@
 import type { ServiceData, CityData } from './contentData';
 import { getCountyLabel } from './contentData';
+import { getAreaCityCopy } from './content/areaCopy';
 import {permitGuidance,permitSource} from '../lib/permitGuidance';
 import type { LandingSection } from '@/components/seo/LandingPageTemplate';
 
@@ -775,6 +776,8 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
 };
 
 export function getAreaIntro(city: CityData): string {
+  const custom = getAreaCityCopy(city.slug);
+  if (custom) return custom.intro;
   const county = getCountyLabel(city.county);
   return `Boise Construction Co builds new homes for clients in ${city.name}, Idaho and throughout ${county}. From fully custom homes and semi-custom plans to building on land you already own, you work with one accountable team from feasibility through final walkthrough.`;
 }
