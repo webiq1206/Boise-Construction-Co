@@ -43,12 +43,16 @@ test('misplaced landmarks are corrected only on the city that listed them', () =
   assert.ok(CITY_SEO_DATA.Eagle.landmarks.includes('Eagle Island State Park'));
   assert.ok(CITY_SEO_DATA.Caldwell.landmarks.includes('Indian Creek Plaza'));
   assert.equal(CITY_SEO_DATA.Kuna.neighborhoods.includes('Indian Creek'), false);
+  assert.equal(CITY_SEO_DATA.Nampa.neighborhoods.includes('Indian Creek'), false);
   assert.equal(CITY_SEO_DATA.Caldwell.neighborhoods.includes('Indian Creek'), false);
   const creek = indianCreekDescription('Kuna');
+  assert.equal(indianCreekDescription('Nampa'), creek);
   assert.equal(indianCreekDescription('Caldwell'), creek);
-  assert.match(creek, /creek that runs/);
-  assert.match(creek, /Indian Creek Plaza/);
+  assert.match(creek, /creek that flows through Kuna, Nampa, and Caldwell/);
+  assert.match(creek, /Indian Creek Plaza is on that creek in downtown Caldwell/);
   assert.equal(indianCreekDescription('Boise'), '');
+  assert.equal(indianCreekDescription('Meridian'), '');
+  assert.equal(indianCreekDescription('Star'), '');
 });
 
 test('cities outside the batch keep the shared intro and shared FAQ questions', () => {
