@@ -28,7 +28,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'How do I start a project?',
         answer:
-          'Three ways: call (208) 477-1169, get a planning range from our construction estimator, or book the free planning consultation on our website. Have the Boise address handy, because the parcel gets reviewed for setbacks, utilities, soil, and slope before we price the home.',
+          'Three ways: call (208) 477-1169, get a planning range from our construction estimator, or book the free planning consultation on our website. Have the Boise address handy, because we review the parcel\'s setbacks, utilities, soil, and slope before putting a price on the house.',
       },
       {
         question: 'Do you build in Boise, Idaho?',
@@ -295,6 +295,88 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
         question: 'When does the fire department review a Star home?',
         answer:
           'Star\'s checklist sends any structure or group of structures totaling 4,000 sq ft or more to Fire, which checks whether hydrant flow to the property is adequate and may require alternatives if it isn\'t. Larger custom homes and shop-home combinations should plan for that review.',
+      },
+    ],
+  },
+  middleton: {
+    intro:
+      'Middleton is a homeowner\'s town: about 90% of occupied homes are owner-occupied, and nearly half of all housing (47%) has been built since 2010, per Census ACS 2020–2024 estimates. We build new homes for clients here and throughout Canyon County, whether fully custom, semi-custom, or on land you already own, and one accountable team stays with the project from feasibility through the final walkthrough.',
+    faqs: [
+      {
+        question: 'What kinds of homes do you build?',
+        answer:
+          'For Middleton clients the options are a custom home designed from nothing, a semi-custom home built from an adapted plan, a build on property you already own, or a shop home. We also take on design work or lot evaluation as standalone services, which helps when a Canyon County parcel still has open questions.',
+      },
+      {
+        question: 'Are you licensed and insured?',
+        answer:
+          'Yes, licensed, bonded, and insured. You can ask for our Idaho contractor registration details at any point. Middleton\'s online permit portal links the state\'s contractor registration search and cites Idaho Code 54-5209, which ties a registration number to each building permit.',
+      },
+      {
+        question: 'How do I start a project?',
+        answer:
+          'Call (208) 477-1169, see what the construction estimator gives as a planning range, or get a free planning consultation on the calendar through our website. Middleton permits are applied for, paid, and tracked through the city\'s Citizenserve online portal, and permitting is part of what our team handles.',
+      },
+      {
+        question: 'Do you build in Middleton, Idaho?',
+        answer:
+          'Yes. Middleton is part of the Treasure Valley area we serve, Middleton Heights and Windermere among its neighborhoods. Custom, semi-custom, or a home on your own land: we build all three here, and we\'ll evaluate a Middleton lot before you buy it. Our Middleton home building guide has more local detail.',
+      },
+      {
+        question: 'Which county is Middleton in?',
+        answer:
+          'Canyon County, entirely. Property inside Middleton city limits goes through the City of Middleton Building Department, and the city suggests checking the Canyon County Assessor\'s web map to confirm a parcel is inside city limits. Our permit-flow page compares the Ada and Canyon County steps.',
+      },
+      {
+        question: 'What does a Middleton lot need before a house can go up?',
+        answer:
+          'Middleton city code (section 4-1-1) bars building a residence on a lot unless it has been legally subdivided, has 30 feet of frontage on a public right-of-way, and meets the city\'s zoning and subdivision title. A home with a garage also needs a concrete or asphalt driveway and approach at least as wide as the garage. Our lot evaluation looks at these before you buy.',
+      },
+      {
+        question: 'How much heating does a Middleton home need?',
+        answer:
+          'Plenty. The closest long-term NOAA station sits at the Nampa Sugar Factory, about 7 miles from Middleton to the south-southeast, and it logs roughly 5,550 heating degree days a year in its 1991–2020 normals, plus about 13 days whose high stays below freezing. That\'s why insulation, air sealing, and window choices get early attention in our designs, and our energy-efficient homes are verified with blower-door testing.',
+      },
+    ],
+  },
+  'garden-city': {
+    intro:
+      'Garden City\'s housing is a mix: Census ACS 2020–2024 estimates put detached single-family homes at about 51% of units, with attached houses, apartments, and manufactured homes making up the rest, and a median build year of 1995. Boise Construction Co builds new homes here and across Ada County: fully custom homes, semi-custom plans, and houses on land you already own, each run by one accountable team from feasibility to the final walkthrough.',
+    faqs: [
+      {
+        question: 'What kinds of homes do you build?',
+        answer:
+          'Four options in Garden City: a fully custom design, a semi-custom plan we adapt, a home built on the parcel you hold today, or a shop home. Design and lot evaluation are also sold separately, a sensible first step where a parcel may sit in a mapped floodplain.',
+      },
+      {
+        question: 'Are you licensed and insured?',
+        answer:
+          'Yes. Boise Construction Co carries a license, a bond, and insurance, and Idaho contractor registration details are yours if you ask for them.',
+      },
+      {
+        question: 'How do I start a project?',
+        answer:
+          'You can call, pull a planning range from the online construction estimator, or book a free planning consultation through the website. Garden City wants the full application package with fees paid before an application is routed for review, so we assemble the complete set before filing.',
+      },
+      {
+        question: 'Do you build in Garden City, Idaho?',
+        answer:
+          'We do. Garden City falls inside the Treasure Valley area we build in, and we take on custom, semi-custom, and own-lot homes here. Before you purchase a Garden City lot, we can evaluate it for you.',
+      },
+      {
+        question: 'Which county is Garden City in?',
+        answer:
+          'Garden City is an Ada County city. Building permits inside city limits come from Garden City\'s own building department, and our permit-flow resource lays out how the Ada County and Canyon County processes differ.',
+      },
+      {
+        question: 'What does Garden City review on a new home application?',
+        answer:
+          'Garden City\'s residential building permit page lists the typical fees: administrative setup, a building permit covering standard inspections, structural review, design compliance review and inspection, and floodplain review when the lot is in a floodplain. A general erosion and sediment control permit is required for any land-disturbing activity, with Public Works fees attached.',
+      },
+      {
+        question: 'What kind of housing is in Garden City?',
+        answer:
+          'A real mix. Census ACS 2020–2024 estimates show about 14% of Garden City\'s homes are mobile or manufactured homes, 13.5% are attached single-family houses, and roughly 22% are in buildings with two or more units. The city also requires engineering drawings for structural changes to a manufactured or mobile home. That variety shapes what a lot can hold, which is why we evaluate each parcel first.',
       },
     ],
   },

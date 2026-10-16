@@ -4,9 +4,9 @@ import { getAreaCityCopy } from '../shared/content/areaCopy.ts';
 import { AREA_PAGE_FAQS, getAreaIntro } from '../shared/seoContent.ts';
 import { getCityBySlug } from '../shared/contentData.ts';
 import { landingFAQSchema } from '../lib/landing-schema.ts';
-import { CITY_SEO_DATA } from '../lib/seo.ts';
+import { CITY_SEO_DATA, indianCreekDescription } from '../lib/seo.ts';
 
-const BATCH = ['boise', 'meridian', 'nampa', 'eagle', 'kuna', 'caldwell', 'star'] as const;
+const BATCH = ['boise', 'meridian', 'nampa', 'eagle', 'kuna', 'caldwell', 'star', 'middleton', 'garden-city'] as const;
 
 test('batch city pages use per-city intro and seven FAQs whose schema matches the visible text', () => {
   for (const slug of BATCH) {
@@ -21,7 +21,9 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
     assert.equal(copy.faqs[2].question, 'How do I start a project?');
     assert.equal(copy.faqs[3].question, `Do you build in ${city.name}, Idaho?`);
     assert.equal(copy.faqs[4].question, `Which county is ${city.name} in?`);
-    assert.match(copy.faqs[1].answer, /licensed, bonded,? and insured|licensed, bonded, insured/i);
+    assert.match(copy.faqs[1].answer, /licen[sc]ed|license/i);
+    assert.match(copy.faqs[1].answer, /bond/i);
+    assert.match(copy.faqs[1].answer, /insur/i);
     assert.doesNotMatch(copy.intro + copy.faqs.map((f) => f.question + f.answer).join(' '), /Jared/);
     const schema = landingFAQSchema(copy.faqs) as {
       mainEntity: Array<{ name: string; acceptedAnswer: { text: string } }>;
@@ -40,15 +42,20 @@ test('misplaced landmarks are corrected only on the city that listed them', () =
   assert.deepEqual(CITY_SEO_DATA.Star.landmarks, ['Boise River', 'Star Riverfront Park', 'Freedom Park']);
   assert.ok(CITY_SEO_DATA.Eagle.landmarks.includes('Eagle Island State Park'));
   assert.ok(CITY_SEO_DATA.Caldwell.landmarks.includes('Indian Creek Plaza'));
-  assert.equal(CITY_SEO_DATA.Kuna.neighborhoods.includes('Indian Creek'), true);
+  assert.equal(CITY_SEO_DATA.Kuna.neighborhoods.includes('Indian Creek'), false);
+  assert.equal(CITY_SEO_DATA.Caldwell.neighborhoods.includes('Indian Creek'), false);
+  const creek = indianCreekDescription('Kuna');
+  assert.equal(indianCreekDescription('Caldwell'), creek);
+  assert.match(creek, /creek that runs/);
+  assert.match(creek, /Indian Creek Plaza/);
+  assert.equal(indianCreekDescription('Boise'), '');
 });
 
 test('cities outside the batch keep the shared intro and shared FAQ questions', () => {
-  const middleton = getCityBySlug('middleton');
-  assert.ok(middleton);
-  assert.equal(getAreaCityCopy('middleton'), undefined);
-  assert.match(getAreaIntro(middleton), /throughout Canyon County/);
-  assert.match(getAreaIntro(middleton), /one accountable team from feasibility through final walkthrough/);
+  const other = { slug: 'unlisted', name: 'Unlisted', county: 'ada' as const, isPrimary: false };
+  assert.equal(getAreaCityCopy('unlisted'), undefined);
+  assert.match(getAreaIntro(other), /throughout Ada County/);
+  assert.match(getAreaIntro(other), /one accountable team from feasibility through final walkthrough/);
   assert.equal(AREA_PAGE_FAQS.length, 3);
   assert.match(AREA_PAGE_FAQS[1].answer, /licensed, bonded, and insured/);
 });

@@ -380,7 +380,7 @@ export const CITY_SEO_DATA: Record<string, {
     population: '24,011',
     founded: '1992',
     zipCodes: ['83634'],
-    neighborhoods: ['Indian Creek', 'Black Cat', 'Crimson Point', 'Ten Mile Creek'],
+    neighborhoods: ['Black Cat', 'Crimson Point', 'Ten Mile Creek'],
     landmarks: ['Kuna Caves', 'Swan Falls Dam', 'Bernie Fisher Park'],
     climate: 'semi-arid high desert climate with hot summers and cold winters',
     coordinates: { lat: 43.4913, lng: -116.4201 },
@@ -443,12 +443,22 @@ export const CITY_SEO_DATA: Record<string, {
     population: '65,359',
     founded: '1883',
     zipCodes: ['83605', '83607'],
-    neighborhoods: ['Indian Creek', 'Cleveland Blvd', 'Ustick', 'Wilson'],
+    neighborhoods: ['Cleveland Blvd', 'Ustick', 'Wilson'],
     landmarks: ['Indian Creek Plaza', 'Caldwell Night Rodeo', 'College of Idaho'],
     climate: 'semi-arid high desert with four distinct seasons',
     coordinates: { lat: 43.6629, lng: -116.6874 },
   },
 };
+
+/**
+ * Indian Creek is a stream through Kuna and Caldwell, not a neighborhood.
+ * Caldwell's stormwater plan: it runs from the New York Canal in Kuna to the
+ * Boise River in Caldwell. Indian Creek Plaza is on that creek in Caldwell.
+ */
+export function indianCreekDescription(cityName: string): string {
+  if (cityName !== 'Kuna' && cityName !== 'Caldwell') return '';
+  return 'Indian Creek is the creek that runs from the New York Canal in Kuna northwest to the Boise River in Caldwell. Indian Creek Plaza is on that creek in downtown Caldwell.';
+}
 
 /**
  * Business information for NAP consistency
