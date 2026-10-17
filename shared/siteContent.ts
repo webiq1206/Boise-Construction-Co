@@ -7,6 +7,7 @@ import {
   HeartHandshake,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { SHOW_FOUNDING_YEAR } from "@/shared/publicFlags";
 
 export const SITE_TAGLINE = "Treasure Valley home building, built on clarity and craftsmanship";
 
@@ -114,7 +115,7 @@ export const PROOF_STATS = {
  * the strip fills the six-column desktop grid in HeroSection.
  */
 export const TRUST_ITEMS = [
-  `Est. ${PROOF_STATS.established}`,
+  ...(SHOW_FOUNDING_YEAR ? [`Est. ${PROOF_STATS.established}`] : []),
   "Design-Build",
   "Bonded · Insured",
   "Permits In-House",
