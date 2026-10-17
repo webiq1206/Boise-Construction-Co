@@ -43,6 +43,11 @@ export interface LeadContext {
   projectType?: string;
   /** Enhanced-conversion fields. Omitted from the conversion event parameters. */
   user?: GoogleAdsUserInput;
+  /**
+   * False when the submit response says this email or phone is suppressed.
+   * Only user_data is skipped. The conversion event still fires.
+   */
+  allowEnhancedConversions?: boolean;
 }
 
 export type GoogleAdsLeadParams = {
@@ -152,7 +157,7 @@ export function trackGoogleAdsLeadConversion(ctx: LeadContext = {}, dedupeKey?: 
       // Ignore; in-memory guard is enough for this page load.
     }
   }
-  if (googleAdsUserDataAllowed()) {
+  if (ctx.allowEnhancedConversions !== false && googleAdsUserDataAllowed()) {
     const userData = googleAdsUserData(ctx.user);
     if (userData) gtag('set', 'user_data', userData);
   }

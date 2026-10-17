@@ -96,6 +96,7 @@ export interface ClaimedLeadConversion {
   ga4Params: GtagParams;
   metaParams: GtagParams;
   user?: GoogleAdsUserInput;
+  allowEnhancedConversions?: boolean;
 }
 
 /**
@@ -150,6 +151,7 @@ async function performClaimedLeadConversion(
     trackGoogleAdsLead(input.conversionId, {
       projectType: String(input.ga4Params.project_type ?? ''),
       user: input.user,
+      allowEnhancedConversions: input.allowEnhancedConversions,
     });
     trackMetaEvent('Lead', input.metaParams, undefined, input.conversionId);
 

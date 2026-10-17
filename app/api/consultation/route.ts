@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import {sanitizeAttribution,appendAttributionEvidence} from '@/lib/leadAttribution';
+import { allowEnhancedConversionsFlag } from "@/lib/enhancedConversionSuppression";
 import { createHash } from "crypto";
 import { z } from "zod";
 import { getUncachableEmailClient } from "@/server/services/emailTransport";
@@ -287,6 +288,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Inquiry service is temporarily unavailable" }, { status: 503 });
     }
 
+    const allowEnhancedConversions = await allowEnhancedConversionsFlag({ email: data.email, phone: data.phone });
+
     // Followups update the existing inquiry without changing its delivery state.
     if (data.submissionKind === "followup" && !intakeResult.inserted) {
       return NextResponse.json({
@@ -296,6 +299,7 @@ export async function POST(request: NextRequest) {
         conversionId: intakeResult.conversionId,
         newInquiry: intakeResult.inserted,
         conversionEligible: intakeResult.conversionEligible,
+        allowEnhancedConversions,
         delivery: [],
       });
     }
@@ -418,6 +422,7 @@ export async function POST(request: NextRequest) {
       conversionId: intakeResult.conversionId,
       newInquiry: intakeResult.inserted,
       conversionEligible: intakeResult.conversionEligible,
+      allowEnhancedConversions,
       delivery: delivery.map(({ channel, attempted, delivered }) => ({ channel, attempted, delivered })),
     });
   } catch (err) {

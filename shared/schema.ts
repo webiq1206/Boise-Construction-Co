@@ -396,6 +396,16 @@ export const siteSettings = pgTable("site_settings", {
 
 export type SiteSetting = typeof siteSettings.$inferSelect;
 
+/** SHA-256 hashes only. Raw emails and phone numbers are never stored. */
+export const enhancedConversionSuppressions = pgTable("enhanced_conversion_suppressions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  kind: text("kind").notNull(),
+  valueHash: text("value_hash").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  uniqueIndex("enhanced_conversion_suppressions_value_hash_unique").on(table.valueHash),
+]);
+
 // Consultation Requests Schema (new contacts from the homepage form)
 export const consultationRequests = pgTable("consultation_requests", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

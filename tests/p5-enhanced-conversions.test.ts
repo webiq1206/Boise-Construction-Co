@@ -118,8 +118,8 @@ test('each lead form passes only its collected fields, after the server accepts 
   assert.doesNotMatch(consultation, /user:\s*\{[^}]*address:\s*variables\.address/s);
 
   const intakeGuard = estimator.indexOf('if(!response.ok)throw new Error');
-  const intakeCall = estimator.indexOf('trackGoogleAdsLeadConversion({service:latest.answers.service,user:{name:latest.contact.name,email:latest.contact.email,phone:latest.contact.phone}}');
-  const estimateCall = estimator.indexOf('trackGoogleAdsLeadConversion({service:d.answers.service,user:{name:d.contact.name,email:d.contact.email,phone:d.contact.phone}}');
+  const intakeCall = estimator.indexOf('trackGoogleAdsLeadConversion({service:latest.answers.service,user:{name:latest.contact.name,email:latest.contact.email,phone:latest.contact.phone},allowEnhancedConversions:value.allowEnhancedConversions}');
+  const estimateCall = estimator.indexOf('trackGoogleAdsLeadConversion({service:d.answers.service,user:{name:d.contact.name,email:d.contact.email,phone:d.contact.phone},allowEnhancedConversions:data.allowEnhancedConversions}');
   assert.ok(intakeGuard >= 0 && intakeCall > intakeGuard);
   assert.ok(estimateCall > intakeCall);
   assert.doesNotMatch(estimator, /user:\{[^}]*text:/);
