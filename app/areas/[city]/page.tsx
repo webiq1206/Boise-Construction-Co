@@ -11,11 +11,12 @@ landingFAQSchema,
 import { buildPageMetadata } from '@/lib/page-metadata';
 import { permitGuidance, permitSource } from '@/lib/permitGuidance';
 import { generateSpeakableSchema } from '@/lib/schema';
-import { CITY_SEO_DATA } from '@/lib/seo';
+import { CITY_SEO_DATA, indianCreekDescription } from '@/lib/seo';
 import { areaPath,CITY_SLUGS,getCityBySlug } from '@/lib/seo-routes';
 import { getAreaImageSet } from '@/shared/cityServiceImages';
 import { getCountyLabel,SERVICES } from '@/shared/contentData';
 import { getGalleryProjectsForCity } from '@/shared/galleryData';
+import { getAreaCityCopy } from '@/shared/content/areaCopy';
 import { AREA_PAGE_FAQS,getAreaIntro } from '@/shared/seoContent';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { notFound } from 'next/navigation';
@@ -61,6 +62,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
 
   const neighborhoods = seo?.neighborhoods ?? [];
   const landmarks = seo?.landmarks ?? [];
+  const creek = indianCreekDescription(city.name);
 
   const sections: LandingSection[] = [
     {
@@ -78,8 +80,8 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       heading: `Neighborhoods and lots we build on in ${city.name}`,
       paragraphs: [
         neighborhoods.length
-          ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}. Lots vary block by block in setbacks, utilities, soil, and slope, so we evaluate the specific parcel before we price the home rather than applying a flat square-foot number.`
-          : `We build throughout ${city.name}, evaluating each parcel for setbacks, utilities, soil, and slope before we price the home rather than applying a flat square-foot number.`,
+          ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}.${creek ? ` ${creek}` : ''} Lots vary block by block in setbacks, utilities, soil, and slope, so we evaluate the specific parcel before we price the home rather than applying a flat square-foot number.`
+          : `We build throughout ${city.name}.${creek ? ` ${creek}` : ''} We evaluate each parcel for setbacks, utilities, soil, and slope before we price the home rather than applying a flat square-foot number.`,
         landmarks.length
           ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand the area's character and how to design a home that fits its street and holds its value.`
           : `As a local team, we understand the area's character and how to design a home that fits its street and holds its value.`,
@@ -120,7 +122,8 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       : undefined;
 
   const h1 = `Home Builder in ${city.name}, Idaho`;
-  const faqs = [
+  const cityCopy = getAreaCityCopy(city.slug);
+  const faqs = cityCopy?.faqs ?? [
     ...AREA_PAGE_FAQS,
     {
       question: `Do you build in ${city.name}, Idaho?`,
