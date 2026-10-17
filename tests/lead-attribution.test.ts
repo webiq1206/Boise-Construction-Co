@@ -48,11 +48,13 @@ test('consent defaults precede vendor config and standard updates are observed',
  const events:string[]=[];const window:any={dispatchEvent:(e:any)=>events.push(e.type)};
  vm.runInNewContext(consentBootstrap(),{window,CustomEvent:class{constructor(public type:string){}}});
  assert.equal(window.dataLayer[0][0],'consent');
- assert.equal(window.p5Consent.ad_storage,'denied');
- window.gtag('consent','update',granted);
+ assert.equal(window.dataLayer[0][1],'default');
  assert.equal(window.p5Consent.ad_storage,'granted');
- window.p5UpdateConsent({ad_storage:'denied'});
+ assert.equal(window.p5Consent.analytics_storage,'granted');
+ window.gtag('consent','update',{...granted,ad_storage:'denied'});
  assert.equal(window.p5Consent.ad_storage,'denied');
+ window.p5UpdateConsent({ad_storage:'granted'});
+ assert.equal(window.p5Consent.ad_storage,'granted');
  assert.equal(events.length,3);
 });
 test('CRM evidence stays in existing strict keyed review contract, not a second lead',()=>{

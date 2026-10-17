@@ -214,6 +214,7 @@ export function AssistantWidget() {
             ref={logRef}
             role="log"
             aria-live="polite"
+            data-clarity-mask="True"
             className="flex-1 space-y-3 overflow-y-auto px-4 py-4"
           >
             {messages.map((m, i) => (

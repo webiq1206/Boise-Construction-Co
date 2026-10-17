@@ -11,6 +11,10 @@ export const GOOGLE_ADS_ID = 'AW-18354188204';
 export const GOOGLE_ADS_LEAD_LABEL = 'AW-18354188204/LE2vCPXstO8cEKzf-q9E';
 /** 'P5 Website Call (60s+)': swaps the visible number for a Google forwarding number. */
 export const GOOGLE_ADS_WEBSITE_CALL_LABEL = 'AW-18354188204/YHR0CIaPz_ccEKzf-q9E';
+/** Click on a tel: link. Separate from the forwarding-number website-call action. */
+export const GOOGLE_ADS_CALL_CLICK_LABEL = 'AW-18354188204/ng9fCPiOhaAdEKzf-q9E';
+/** Click on an sms: link. One conversion per click. */
+export const GOOGLE_ADS_TEXT_CLICK_LABEL = 'AW-18354188204/lTxsCOqahaAdEKzf-q9E';
 export const GOOGLE_ADS_PHONE_DISPLAY = '(208) 477-1169';
 /** sessionStorage key written by GoogleAnalytics.tsx on the first page view. */
 export const ENTRY_PATH_KEY = 'p5_entry_path';
@@ -87,5 +91,63 @@ export function trackGoogleAdsLeadConversion(ctx: LeadContext = {}, dedupeKey?: 
     }
   }
   gtag('event', 'conversion', googleAdsLeadParams(ctx, dedupeKey));
+  return true;
+}
+
+type AdsConsent = { ad_storage?: string; ad_user_data?: string };
+
+/** Same gate as the website-call number swap: both Ads consent signals granted. */
+export function googleAdsContactClickAllowed(consent?: AdsConsent): boolean {
+  const current =
+    consent ??
+    (typeof window === 'undefined'
+      ? undefined
+      : (window as unknown as { p5Consent?: AdsConsent }).p5Consent);
+  return current?.ad_storage === 'granted' && current?.ad_user_data === 'granted';
+}
+
+/**
+ * The click conversion uses the same visitor gate as the Google tag bootstrap:
+ * the live host, a real browser, and analytics not switched off. It also
+ * requires ad_storage and ad_user_data to be granted. The consent bootstrap
+ * starts those four signals granted, so a tap on the business number or a
+ * Google forwarding number can be counted.
+ */
+export function googleAdsClickAnalyticsOn(): boolean {
+  if (typeof window === 'undefined') return false;
+  const host = window.location?.hostname?.toLowerCase() ?? '';
+  if (host !== 'boiseconstruction.co' && host !== 'www.boiseconstruction.co') return false;
+  if ((window.navigator as { webdriver?: boolean } | undefined)?.webdriver === true) return false;
+  try {
+    if (window.sessionStorage?.getItem('p5_analytics_disabled') === '1') return false;
+  } catch {
+    // Unavailable storage does not turn analytics off.
+  }
+  return true;
+}
+
+/** One Ads click conversion for a tel: or sms: href. The number itself is not checked. */
+export function googleAdsContactClickSendTo(href: string): string | undefined {
+  if (href.startsWith('sms:')) return GOOGLE_ADS_TEXT_CLICK_LABEL;
+  if (href.startsWith('tel:')) return GOOGLE_ADS_CALL_CLICK_LABEL;
+  return undefined;
+}
+
+/**
+ * Fires one call or text click conversion. A second call is a second click.
+ * The conversion object is only the send_to label. No phone number, email,
+ * or user_data is attached.
+ */
+export function trackGoogleAdsContactClick(href: string): boolean {
+  const sendTo = googleAdsContactClickSendTo(href);
+  if (!sendTo || !googleAdsClickAnalyticsOn() || !googleAdsContactClickAllowed()) return false;
+  if (typeof window === 'undefined') return false;
+  const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+  if (typeof gtag !== 'function') return false;
+  try {
+    gtag('event', 'conversion', { send_to: sendTo });
+  } catch {
+    return false;
+  }
   return true;
 }
