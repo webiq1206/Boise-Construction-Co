@@ -40,7 +40,6 @@ import {displayScopeText,refreshAnalyzedScope,replaceAnalyzedScope,replacesEntir
 import {ESTIMATOR_VERSION,estimatorRelease} from '@/lib/p5/version';
 import type {SavedEstimatePreview} from '@/lib/p5/qaSavedEstimateView';
 import {parseNumericAnswer} from '@/lib/p5/answerParsing';
-import {CONTRACTOR_REGISTRATION_LABEL} from '@/shared/contractorRegistration';
 
 const textAnswers=(a:ScopeAnswers)=>JSON.stringify(Object.entries(a).filter(([k,v])=>SCOPE_FIELDS[k as ScopeField].kind==='text'&&v?.trim()).sort(([a],[b])=>a.localeCompare(b)));
 const labels:Record<string,string>={handyman:'Home repairs',re10:'Inspection and RE-10 repairs','cabinet-product':'Cabinets, supply only','cabinet-install':'Cabinet installation',kitchen:'Kitchen remodel',bathroom:'Bathroom remodel',remodel:'Other interior remodel','whole-home':'Whole-home remodel',addition:'Home addition',adu:'ADU','new-construction':'New home','change-order':'Change order',rush:'Rush work',refresh:'Builder grade','mid-range':'Mid-range','high-end':'High-end',luxury:'Luxury',standard:'Standard',priority:'Priority',emergency:'Emergency',complex:'Complex',yes:'Yes',no:'No'};
@@ -771,8 +770,7 @@ export function P5Estimator({defaultService='',entryLabel,headingAs='h1',project
   useEffect(()=>{if(!busy||!sentMessageRef.current)return;sentMessageRef.current=false;requestAnimationFrame(()=>{const last=threadRef.current?.querySelector<HTMLElement>('[data-last-user]');if(last)scrollThread(last,'start');});},[busy]);
   useEffect(()=>{if(error&&!missingFields.length){if(validationTarget==='contact'&&contactErrorFields.length&&[contactNameRef,contactEmailRef,contactPhoneRef,contactPreferenceRef].some(ref=>ref.current===document.activeElement))return;const el=threadRef.current?.querySelector<HTMLElement>('[role=alert]');if(el)requestAnimationFrame(()=>scrollThread(el,'center'));}},[error]);
   useEffect(()=>{if(addingDetails){setEditText(composerText);requestAnimationFrame(()=>composerRef.current?.focus());}},[addingDetails]);
-  const registration=layout==='page'?<p className={styles.registration} data-testid="contractor-registration">{CONTRACTOR_REGISTRATION_LABEL}</p>:null;
-  if(!draft)return <div ref={rootRef} className={styles.root} data-p5-estimator data-theme={theme.mode} data-layout={layout} style={estimatorThemeStyle(theme) as React.CSSProperties}><P5EstimatorNavigation brandName={brand.name} stepLabel="Loading your project" showBack={false} frameActive={layout==='page'} embedded={layout==='embedded'} onBack={()=>{}} onExit={onExit}/><div className={styles.loading} role="status">Loading your project...</div>{registration}</div>;
+  if(!draft)return <div ref={rootRef} className={styles.root} data-p5-estimator data-theme={theme.mode} data-layout={layout} style={estimatorThemeStyle(theme) as React.CSSProperties}><P5EstimatorNavigation brandName={brand.name} stepLabel="Loading your project" showBack={false} frameActive={layout==='page'} embedded={layout==='embedded'} onBack={()=>{}} onExit={onExit}/><div className={styles.loading} role="status">Loading your project...</div></div>;
   if(transferView){
     const destination=transferView.binding?.destinationSite,target=destination?INTAKE_SITES[destination].name:'the receiving team';
     const sourceCanCancel=transferView.role==='source'&&['recovering','freezing','prepared','cancelled'].includes(transferView.state);
@@ -781,7 +779,7 @@ export function P5Estimator({defaultService='',entryLabel,headingAs='h1',project
       <div ref={threadRef} className={styles.thread}><div className={styles.threadInner}><section className={styles.card} aria-label="Saved project transfer"><h2>{transferView.role==='destination'?'Continue your saved project':`Continue with ${target}`}</h2><p>{transferView.role==='destination'?'Your conversation, contact details and original files are being carried here. Any other project saved on this device will be kept in project recovery.':'Your original project and files are retained. Continue with the receiving team using the same saved project. The original stays protected while copying is in progress.'}</p>
       {status&&<p role="status">{status}</p>}{busy&&<p role="status">{busy}</p>}{error&&<p role="alert">{error}</p>}
       <div className={styles.actions}><button type="button" className={styles.primary} disabled={Boolean(busy)||transferView.role==='source'&&!draft.intakeTransfer&&!transferView.proof} onClick={()=>void resumeIntakeTransfer()}>{transferView.role==='destination'?'Continue copying and review':`Continue with ${target}`}</button>{sourceCanCancel&&<button type="button" className={styles.secondary} disabled={Boolean(busy)} onClick={()=>void cancelIntakeTransfer()}>Keep the project here</button>}</div></section></div></div>
-    </div>{registration}</div>;
+    </div></div>;
   }
   const attachedProjectSource=projectSource&&!draft.sourceDetached?projectSource:undefined;
   const known=Object.keys(draft.answers).filter(k=>k!=='estimatingInstructions'&&draft.answers[k as ScopeField]?.trim()) as ScopeField[];
@@ -887,6 +885,5 @@ export function P5Estimator({defaultService='',entryLabel,headingAs='h1',project
       {!collapsedWithProgress&&<div className={styles.dock}><div className={styles.dockInner}>{dock}</div></div>}
     </form>
     {!readOnly&&!intakeReceipt&&!result&&<P5ExitOffer ref={exitOffer} enabled={frameActive&&!busy} engaged={hasProgress||Boolean(draft.text.trim())||files.length>0} onLeave={exit} draft={draft}/>}
-    {registration}
   </div>;
 }

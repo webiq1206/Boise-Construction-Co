@@ -9,7 +9,7 @@ import { CITIES,SERVICES } from "@/shared/contentData";
 import { CONTENT_HUBS,guidePath } from "@/shared/contentHubs";
 import { GBP_SOCIAL } from "@/shared/gbpProfile";
 import { GUIDE_PAGES } from "@/shared/guideContent";
-import { CONTRACTOR_LICENSE_SEARCH_URL, CONTRACTOR_REGISTRATION_LABEL } from "@/shared/contractorRegistration";
+import { ContractorRegistrationLink } from "@/components/ContractorRegistration";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { SITE_TAGLINE } from "@/shared/siteContent";
 import { ChevronDown,Facebook } from "lucide-react";
@@ -178,13 +178,7 @@ export function Footer() {
         <div className="flex flex-col gap-4 pt-5 text-xs text-inverse-muted sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             <span>&copy; {currentYear} {SITE_CONFIG.name}. All rights reserved.</span>
-            <a
-              href={CONTRACTOR_LICENSE_SEARCH_URL}
-              className="min-w-0 max-w-full whitespace-normal underline underline-offset-2 transition-colors hover:text-inverse-foreground"
-              data-testid="contractor-registration"
-            >
-              {CONTRACTOR_REGISTRATION_LABEL}
-            </a>
+            <ContractorRegistrationLink />
             {/* Required parent-company disclosure. This brand is a DBA of
                 P5 Home Co LLC, not a separate company. */}
             <span>

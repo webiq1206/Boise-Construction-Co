@@ -75,15 +75,17 @@ test('contractor registration is on the footer, plain on the estimator, and in s
   assert.equal(CONTRACTOR_REGISTRATION_LABEL.includes('('), false);
   assert.equal(CONTRACTOR_LICENSE_SEARCH_URL, 'https://dopl.idaho.gov/license-search/');
   const footer = read('components/Footer.tsx');
-  assert.equal(footer.includes('CONTRACTOR_REGISTRATION_LABEL'), true);
-  assert.equal(footer.includes('CONTRACTOR_LICENSE_SEARCH_URL'), true);
-  assert.match(footer, /whitespace-normal/);
-  const estimator = read('components/P5Estimator.tsx');
-  assert.match(estimator, /<p className=\{styles\.registration\}/);
-  assert.equal(estimator.includes('dopl.idaho.gov'), false);
-  const css = read('components/P5Estimator.module.css');
-  assert.match(css, /\.registration\{[^}]*overflow:visible/);
-  assert.match(css, /\.registration\{[^}]*white-space:normal/);
+  assert.equal(footer.includes('ContractorRegistrationLink'), true);
+  const link = read('components/ContractorRegistration.tsx');
+  assert.equal(link.includes('CONTRACTOR_LICENSE_SEARCH_URL'), true);
+  assert.match(link, /function ContractorRegistrationPlain[\s\S]*<p /);
+  assert.equal(link.slice(link.indexOf('function ContractorRegistrationPlain')).includes('dopl.idaho.gov'), false);
+  const chrome = read('components/ConditionalFooter.tsx');
+  assert.match(chrome, /isEstimatorPath\(pathname\)\) return <ContractorRegistrationPlain/);
+  const css = read('components/ContractorRegistration.module.css');
+  assert.match(css, /white-space:\s*normal/);
+  assert.match(css, /overflow:\s*visible/);
+  assert.equal(read('components/P5Estimator.tsx').includes('8381215'), false);
   assert.equal(credentialId(generateLocalBusinessSchema() as Record<string, unknown>), CONTRACTOR_REGISTRATION_NUMBER);
   assert.equal(credentialId(generateOrganizationSchema() as Record<string, unknown>), CONTRACTOR_REGISTRATION_NUMBER);
   const service = generateServiceSchema('Custom Home Building', 'Custom homes') as { provider?: Record<string, unknown> };
@@ -102,10 +104,8 @@ function filesUnder(dir: string, acc: string[] = []): string[] {
 
 test('built home and city pages include the registration number', () => {
   const appDir = path.join(root, '.next/server/app');
-  if (!fs.existsSync(appDir)) {
-    if (process.env.REQUIRE_STATIC_GREP === '1') assert.fail('missing .next/server/app; run next build first');
-    return;
-  }
+  if (process.env.REQUIRE_STATIC_GREP !== '1') return;
+  if (!fs.existsSync(appDir)) assert.fail('missing .next/server/app; run next build first');
   const files = filesUnder(appDir);
   const hit = (predicate: (rel: string) => boolean) =>
     files.filter((file) => predicate(path.relative(appDir, file)) && fs.readFileSync(file, 'utf8').includes('8381215'));
