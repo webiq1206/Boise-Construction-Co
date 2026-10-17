@@ -357,6 +357,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
         accepted?: boolean;
         inquiryKey?: string;
         conversionId?: string;
+        allowEnhancedConversions?: boolean;
       };
       if (
         response.accepted !== true ||
@@ -388,6 +389,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
           content_name: variables.projectType,
           content_category: "consultation_request",
         },
+        allowEnhancedConversions: response.allowEnhancedConversions,
         user: {
           email: variables.email,
           phone: variables.phone,
