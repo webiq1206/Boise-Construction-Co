@@ -81,7 +81,9 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       paragraphs: [
         neighborhoods.length
           ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}.${creek ? ` ${creek}` : ''} Lots vary block by block in setbacks, utilities, soil, and slope, so we evaluate the specific parcel before we price the home rather than applying a flat square-foot number.`
-          : `We build throughout ${city.name}.${creek ? ` ${creek}` : ''} We evaluate each parcel for setbacks, utilities, soil, and slope before we price the home rather than applying a flat square-foot number.`,
+          : creek
+            ? `We build throughout ${city.name}. ${creek} We evaluate each parcel for setbacks, utilities, soil, and slope before we price the home rather than applying a flat square-foot number.`
+            : `We build throughout ${city.name}, evaluating each parcel for setbacks, utilities, soil, and slope before we price the home rather than applying a flat square-foot number.`,
         landmarks.length
           ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand the area's character and how to design a home that fits its street and holds its value.`
           : `As a local team, we understand the area's character and how to design a home that fits its street and holds its value.`,
