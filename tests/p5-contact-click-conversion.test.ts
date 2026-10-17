@@ -233,7 +233,7 @@ test('the privacy page states what a call or text tap tells Google Ads', () => {
 test('the privacy page states the rev 3 tap, analytics, and forwarding lines in order', () => {
   const privacy = fs.readFileSync(new URL('../app/privacy-policy/page.tsx', import.meta.url), 'utf8');
   const tap =
-    "When you tap Call or Text on our site, Google Ads is told that the tap happened, on which page, and the ad click identifier Google's tag saved if you arrived from one of our ads, so we can count calls and texts that come from our ads. The tap itself doesn't send Google your name, phone number or what you say or write.";
+    "When you tap Call or Text on our site, Google Ads is told that the tap happened, on which page, and the ad click identifier Google's tag saved if you arrived from one of our ads, so we can count calls and texts that come from our ads. The tap itself doesn't send Google your name, your own phone number or what you say or write.";
   const analytics =
     'Google Analytics also records the tap, including the number tapped, which is our business number.';
   const forwarding =
@@ -243,4 +243,13 @@ test('the privacy page states the rev 3 tap, analytics, and forwarding lines in 
   const analyticsAt = privacy.indexOf(analytics);
   const forwardingAt = privacy.indexOf(forwarding);
   assert.equal(tapAt >= 0 && analyticsAt > tapAt && forwardingAt > analyticsAt, true);
+  const collectAt = privacy.indexOf('Information We Collect');
+  const useAt = privacy.indexOf('How We Use Your Information');
+  const cookiesAt = privacy.indexOf('Cookies, analytics and advertising');
+  assert.equal(collectAt >= 0 && useAt > collectAt && tapAt > cookiesAt && cookiesAt > useAt, true);
+  assert.match(privacy, /We use Google Analytics 4 \(GA4\)/);
+  assert.match(privacy, /We use Google Ads conversion tracking/);
+  assert.doesNotMatch(privacy, /remarketing/);
+  assert.match(privacy, /We also use Microsoft Clarity to see how visitors use our pages through heatmaps and session recordings; form fields are masked so what you type is not recorded\. Microsoft processes this under its own privacy statement \(https:\/\/privacy\.microsoft\.com\/privacystatement\)\./);
+  assert.match(privacy, /Meta's pixel may also record which buttons you click and basic information about the page, such as its title\./);
 });

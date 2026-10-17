@@ -108,8 +108,10 @@ export function googleAdsContactClickAllowed(consent?: AdsConsent): boolean {
 
 /**
  * The click conversion uses the same visitor gate as the Google tag bootstrap:
- * the live host, a real browser, and analytics not switched off. Consent stays
- * the separate Ads check. K3 grants that consent by default.
+ * the live host, a real browser, and analytics not switched off. It also
+ * requires ad_storage and ad_user_data to be granted. That default is the
+ * separate K3 change in lib/consentBootstrap.ts. This pull request does not
+ * set it, so the gate does not pass on main until K3 merges.
  */
 export function googleAdsClickAnalyticsOn(): boolean {
   if (typeof window === 'undefined') return false;

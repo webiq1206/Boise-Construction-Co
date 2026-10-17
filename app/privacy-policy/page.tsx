@@ -54,7 +54,7 @@ export default function PrivacyPolicyPage() {
       />
       <section className="py-16 md:py-24">
         <div className="container px-4">
-          <InteriorDocument heading={<h1>Privacy Policy for Boise Construction Co Services</h1>} contents={[{"id":"document-section-1","label":"Introduction"},{"id":"document-section-2","label":"Information We Collect"},{"id":"document-section-3","label":"How We Use Your Information"},{"id":"document-section-4","label":"Information Sharing"},{"id":"document-section-5","label":"Data Security"},{"id":"document-section-6","label":"Your Rights"},{"id":"document-section-7","label":"Contact Us"}]}>
+          <InteriorDocument heading={<h1>Privacy Policy for Boise Construction Co Services</h1>} contents={[{"id":"document-section-1","label":"Introduction"},{"id":"document-section-2","label":"Information We Collect"},{"id":"document-section-3","label":"How We Use Your Information"},{"id":"document-section-4","label":"Information Sharing"},{"id":"document-section-5","label":"Data Security"},{"id":"document-section-6","label":"Your Rights"},{"id":"document-section-8","label":"Cookies, analytics and advertising"},{"id":"document-section-7","label":"Contact Us"}]}>
 
             <p className="lead text-muted-foreground">
               Last updated: January 2024
@@ -73,9 +73,6 @@ export default function PrivacyPolicyPage() {
               <li><strong>Payment Information:</strong> Payment details processed securely through our payment providers.</li>
               <li><strong>Usage Data:</strong> Information about how you use our website, including pages visited and features used.</li>
             </ul>
-            <p>
-              When you tap Call or Text on our site, Google Ads is told that the tap happened, on which page, and the ad click identifier Google's tag saved if you arrived from one of our ads, so we can count calls and texts that come from our ads. The tap itself doesn't send Google your name, phone number or what you say or write. Google Analytics also records the tap, including the number tapped, which is our business number. If your call goes through a Google forwarding number, Google connects the call and can see the calling number and call length, but not what's said.
-            </p>
 
             <h2 id="document-section-3">How We Use Your Information</h2>
             <p>We use the information we collect to:</p>
@@ -111,6 +108,20 @@ export default function PrivacyPolicyPage() {
               <li>Request deletion of your information</li>
               <li>Opt-out of marketing communications</li>
             </ul>
+
+            <h2 id="document-section-8">Cookies, analytics and advertising</h2>
+            <p>
+              We use Google Analytics 4 (GA4) to understand how visitors use this site, such as pages viewed, referring site, approximate location, browser and device type. We use Google Ads conversion tracking to measure which of our ads lead to calls, form submissions and completed estimates. These tools set cookies and receive information about your visit, including your IP address, which Google processes under its own privacy policy (https://policies.google.com/privacy).
+            </p>
+            <p>
+              We also use Microsoft Clarity to see how visitors use our pages through heatmaps and session recordings; form fields are masked so what you type is not recorded. Microsoft processes this under its own privacy statement (https://privacy.microsoft.com/privacystatement).
+            </p>
+            <p>
+              We also use the Meta Pixel and Meta's Conversions API to measure visits and inquiries from our Facebook and Instagram ads. Meta's pixel may also record which buttons you click and basic information about the page, such as its title. When a consultation inquiry is accepted, our server sends Meta a Lead event with the project type, the category consultation_request, the page address, an event id for that inquiry, your IP address, your browser user agent, and the Meta cookies _fbp and _fbc when those cookies are present. That inquiry does not include your name, email, or phone. The server route will hash an email or a phone and include those hashes if a caller sends them.
+            </p>
+            <p>
+              When you tap Call or Text on our site, Google Ads is told that the tap happened, on which page, and the ad click identifier Google's tag saved if you arrived from one of our ads, so we can count calls and texts that come from our ads. The tap itself doesn't send Google your name, your own phone number or what you say or write. Google Analytics also records the tap, including the number tapped, which is our business number. If your call goes through a Google forwarding number, Google connects the call and can see the calling number and call length, but not what's said.
+            </p>
 
             <h2 id="document-section-7">Contact Us</h2>
             <p>
