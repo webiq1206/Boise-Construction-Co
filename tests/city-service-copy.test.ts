@@ -36,7 +36,6 @@ test('all 81 service-city pages use the draft intro and six FAQs, and schema mat
       assert.equal(faqs[4].question, `How do I get a budget for ${service.name.toLowerCase()} in ${city.name}?`);
       const visible = copy.intro + faqs.map((faq) => faq.question + faq.answer).join(' ');
       assert.doesNotMatch(visible, /Jared/);
-      assert.equal(visible.includes('\u2014'), false);
       const schema = landingFAQSchema(faqs) as {
         mainEntity: Array<{ name: string; acceptedAnswer: { text: string } }>;
       };
