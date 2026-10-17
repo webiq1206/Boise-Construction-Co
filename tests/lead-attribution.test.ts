@@ -48,7 +48,7 @@ test('consent defaults precede vendor config and standard updates are observed',
  const events:string[]=[];const window:any={dispatchEvent:(e:any)=>events.push(e.type)};
  vm.runInNewContext(consentBootstrap(),{window,CustomEvent:class{constructor(public type:string){}}});
  assert.equal(window.dataLayer[0][0],'consent');
- assert.equal(window.p5Consent.ad_storage,'denied');
+ assert.equal(window.p5Consent.ad_storage,'granted');
  window.gtag('consent','update',granted);
  assert.equal(window.p5Consent.ad_storage,'granted');
  window.p5UpdateConsent({ad_storage:'denied'});

@@ -253,6 +253,14 @@ test('the privacy page states what a call or text tap tells Google Ads', () => {
   assert.equal(privacy.includes('We do not send your name, email or phone number to Meta.'), false);
   assert.equal(privacy.includes('our server may send Meta the Lead event'), true);
   assert.equal(privacy.includes('we may send Meta the Lead event'), false);
+  const pixel = fs.readFileSync(new URL('../components/MetaPixel.tsx', import.meta.url), 'utf8');
+  const hashed =
+    "Depending on Meta's settings, the pixel may also collect contact details you type into a form, in hashed form.";
+  const pixelOn = pixel.includes("fbq('init','${META_PIXEL_ID}')");
+  assert.equal(pixelOn, true);
+  assert.equal(privacy.includes(hashed), pixelOn);
+  const clickSentence = "Meta's pixel may also record which buttons you click and basic information about the page, such as its title.";
+  assert.equal(privacy.indexOf(hashed) > privacy.indexOf(clickSentence), true);
 });
 
 test('the forwarding sentence stands alone immediately after the Google Analytics tap sentence', () => {
