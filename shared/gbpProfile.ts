@@ -346,9 +346,9 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
     answer: `No, and it is often better if you have not bought yet. We evaluate candidate lots for soils, utilities, access, and setbacks before you commit, because the parcel drives a large share of the budget: ${SITE}/services/lot-evaluation`,
   },
   {
-    question: 'Are you licensed and insured?',
+    question: 'Are you a registered contractor and insured?',
     answer:
-      'Yes. Boise Construction Co is bonded and insured for residential construction across the Treasure Valley. Idaho contractor registration details are available upon request.',
+      'Yes. Boise Construction Co is an Idaho Registered Contractor #8381215, bonded, and insured for residential construction across the Treasure Valley. Idaho contractor registration details are available upon request.',
   },
   {
     question: 'Can you build on land I already own?',

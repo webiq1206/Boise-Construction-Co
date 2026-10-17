@@ -10,6 +10,10 @@ export function ContractorRegistrationLink() {
     <a
       href={CONTRACTOR_LICENSE_SEARCH_URL}
       className={`${styles.link} underline underline-offset-2 transition-colors hover:text-inverse-foreground`}
+      target="_blank"
+      rel="noopener noreferrer"
+      title="Look up registration 8381215 on Idaho DOPL"
+      aria-label="Verify with Idaho DOPL: look up registration 8381215, opens in a new tab"
       data-testid="contractor-registration"
     >
       {CONTRACTOR_REGISTRATION_LABEL}

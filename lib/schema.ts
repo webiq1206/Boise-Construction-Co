@@ -10,6 +10,19 @@ import { SITE_CONFIG } from '@/shared/siteConfig';
 import { FOUNDING, PUBLIC_MARK_PATH, SHOW_FOUNDING_YEAR } from '@/shared/publicFlags';
 import { CONTRACTOR_REGISTRATION_NUMBER } from '@/shared/contractorRegistration';
 
+/** Idaho registers contractors. The same credential is on LocalBusiness, Organization, and Service. */
+const CONTRACTOR_CREDENTIAL = {
+  '@type': 'EducationalOccupationalCredential',
+  credentialCategory: 'registration',
+  name: 'Idaho Registered Contractor',
+  identifier: CONTRACTOR_REGISTRATION_NUMBER,
+  recognizedBy: {
+    '@type': 'GovernmentOrganization',
+    name: 'Idaho Division of Occupational and Professional Licenses',
+    url: 'https://dopl.idaho.gov/con/',
+  },
+};
+
 interface SchemaContext {
   '@context': string;
   '@type'?: string | string[];
@@ -127,12 +140,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     parentOrganization: { '@id': ORG_ID },
     telephone: BUSINESS_INFO.phone,
     email: BUSINESS_INFO.email,
-    hasCredential: {
-      '@type': 'EducationalOccupationalCredential',
-      credentialCategory: 'license',
-      name: 'Idaho Registered Contractor',
-      identifier: CONTRACTOR_REGISTRATION_NUMBER,
-    },
+    hasCredential: CONTRACTOR_CREDENTIAL,
     address: PUBLIC_POSTAL_ADDRESS,
     contactPoint: PUBLIC_CONTACT_POINT,
     geo: {
@@ -219,12 +227,7 @@ export function generateServiceSchema(serviceName: string, serviceDescription: s
       name: BUSINESS_INFO.name,
       telephone: BUSINESS_INFO.phone,
       email: BUSINESS_INFO.email,
-      hasCredential: {
-        '@type': 'EducationalOccupationalCredential',
-        credentialCategory: 'license',
-        name: 'Idaho Registered Contractor',
-        identifier: CONTRACTOR_REGISTRATION_NUMBER,
-      },
+      hasCredential: CONTRACTOR_CREDENTIAL,
       priceRange: '$$',
       address: PUBLIC_POSTAL_ADDRESS,
       contactPoint: PUBLIC_CONTACT_POINT,
@@ -286,12 +289,7 @@ export function generateOrganizationSchema(): SchemaContext {
       height: LOGO_SIZE,
     },
     description: FOUNDING.schemaDescription,
-    hasCredential: {
-      '@type': 'EducationalOccupationalCredential',
-      credentialCategory: 'license',
-      name: 'Idaho Registered Contractor',
-      identifier: CONTRACTOR_REGISTRATION_NUMBER,
-    },
+    hasCredential: CONTRACTOR_CREDENTIAL,
     ...(SHOW_FOUNDING_YEAR ? { foundingDate: BUSINESS_INFO.founded } : {}),
     // founder is gated: only emitted once a real named founder is supplied in
     // BUSINESS_INFO.founderName (see seo-audit/trust-signal-map.md).

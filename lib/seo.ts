@@ -173,7 +173,9 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
   if (city && serviceName) {
     const serviceLC = serviceName.toLowerCase();
     const cityVariant = cityDescriptionVariant(city);
-    const ctaVariant = CITY_CTA_VARIANTS[city] || "Satisfaction guaranteed";
+    const ctaVariant = SHOW_TRUST
+      ? (CITY_CTA_VARIANTS[city] || "Satisfaction guaranteed")
+      : "Free planning consultation";
     return `${cityVariant} ${serviceLC} team. Bonded & insured. ${ctaVariant}. Call ${phone} for a free consultation!`;
   }
   
