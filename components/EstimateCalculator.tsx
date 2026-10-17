@@ -11,6 +11,6 @@ export interface EstimateCalculatorProps {sectionId?:string|null;inModal?:boolea
  */
 export function EstimateCalculator({sectionId="calculator",inModal=false,fitViewport=false,viewportFit=false,headingAs,onExit}:EstimateCalculatorProps={}){
   const standalone=fitViewport||viewportFit||inModal;
-  if(standalone)return <section id={sectionId||undefined} style={{minWidth:0}}><P5Estimator layout="page" headingAs={headingAs||'h1'} onExit={onExit}/></section>;
-  return <section id={sectionId||undefined} style={{padding:'36px 0',minWidth:0,scrollMarginTop:112}}><div style={{padding:'0 16px'}}><P5LazyEstimator layout="embedded" headingAs={headingAs||'h2'}/></div></section>;
+  if(standalone)return <section id={sectionId||undefined} style={{minWidth:0}} data-clarity-mask="true"><P5Estimator layout="page" headingAs={headingAs||'h1'} onExit={onExit}/></section>;
+  return <section id={sectionId||undefined} style={{padding:'36px 0',minWidth:0,scrollMarginTop:112}} data-clarity-mask="true"><div style={{padding:'0 16px'}}><P5LazyEstimator layout="embedded" headingAs={headingAs||'h2'}/></div></section>;
 }

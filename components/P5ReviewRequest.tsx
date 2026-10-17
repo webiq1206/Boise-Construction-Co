@@ -27,7 +27,7 @@ export default function P5ReviewRequest({draft,manual=false}:{draft:BrowserDraft
   return <section className={styles.card} aria-label="Request a project review" onKeyDown={event=>{if(event.key==='Enter'&&event.target instanceof HTMLInputElement){event.preventDefault();event.stopPropagation();void send();}}}>
     {receipt?<p role="status">Request {receipt.reference} is saved. {receipt.notified?'Our team has been notified and will use your preferred contact details.':'The team notification could not be confirmed. Please call us with this reference so we can help.'}</p>:<>
       <button type="button" className={styles.primary} aria-expanded={open} aria-controls={`${id}-fields`} onClick={()=>setOpen(v=>!v)}>{manual?'Request a manual estimate':'Request a project review'}</button>
-      {open&&<div id={`${id}-fields`} className={styles.panel} data-clarity-mask="true">
+      {open&&<div id={`${id}-fields`} className={styles.panel}>
         <p className={styles.hint}>Your saved project and reference are included. Add your name and at least one way to reach you. Submitting requests human follow-up, not another automatic estimate.</p>
         {(['name','email','phone'] as const).map(key=><label key={key} className={styles.field} htmlFor={`${id}-${key}`}><span>{key==='name'?'Your name':key==='email'?'Email':'Phone'}</span><input id={`${id}-${key}`} autoComplete={key==='phone'?'tel':key} type={key==='email'?'email':key==='phone'?'tel':'text'} value={contact[key]} maxLength={key==='name'?120:key==='email'?200:40} onChange={e=>setContact({...contact,[key]:e.target.value})}/></label>)}
         <button type="button" className={styles.primary} disabled={busy} onClick={()=>void send()}>{busy?'Sending request…':'Send review request'}</button>

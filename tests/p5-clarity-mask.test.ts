@@ -10,13 +10,7 @@ function read(file: string): string {
 
 const masked = [
   'components/ConsultationForm.tsx',
-  'components/P5Estimator.tsx',
-  'components/P5AddressInput.tsx',
   'components/AddressAutocomplete.tsx',
-  'components/P5ExitOffer.tsx',
-  'components/P5ProjectReview.tsx',
-  'components/P5ReviewRequest.tsx',
-  'components/P5IntakeReview.tsx',
   'components/estimate/recovery/AbandonmentPrompt.tsx',
   'components/assistant/AssistantWidget.tsx',
   'components/modals/ModalProvider.tsx',
@@ -24,6 +18,19 @@ const masked = [
   'components/StripePaymentForm.tsx',
   'components/marketing/BlogIndexClient.tsx',
   'components/MillworkPanel.tsx',
+  'components/EstimateCalculator.tsx',
+  'components/re10/Re10Wizard.tsx',
+  'app/estimate/p5-preview/page.tsx',
+  'app/estimate/scope/page.tsx',
+];
+
+const sharedEstimator = [
+  'components/P5Estimator.tsx',
+  'components/P5AddressInput.tsx',
+  'components/P5ExitOffer.tsx',
+  'components/P5ProjectReview.tsx',
+  'components/P5ReviewRequest.tsx',
+  'components/P5IntakeReview.tsx',
 ];
 
 test('form containers that collect visitor text set the Clarity mask', () => {
@@ -33,8 +40,13 @@ test('form containers that collect visitor text set the Clarity mask', () => {
   const consult = read('components/ConsultationForm.tsx');
   assert.match(consult, /data-testid="consultation-success"[^>]*data-clarity-mask="true"/);
   assert.match(consult, /<form\n\s+data-clarity-mask="true"/);
-  assert.match(read('components/P5Estimator.tsx'), /<form id=\{formId\}[^>]*data-clarity-mask="true"/);
-  assert.match(read('components/P5Estimator.tsx'), /className=\{styles\.composer\} data-clarity-mask="true"/);
+  // The estimator engine is synced. Mask the brand-owned mounts so every field
+  // inside the estimator, including the wizard, upload, address, and review
+  // forms, is covered without editing those shared files.
+  for (const file of sharedEstimator) {
+    assert.equal(read(file).includes('data-clarity-mask'), false, file);
+  }
+  assert.equal(read('components/EstimateCalculator.tsx').match(/data-clarity-mask="true"/g)?.length, 2);
 });
 
 test('Meta pixel turns off automatic advanced matching before init and passes no user data', () => {
