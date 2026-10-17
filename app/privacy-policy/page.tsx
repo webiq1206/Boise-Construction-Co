@@ -73,6 +73,9 @@ export default function PrivacyPolicyPage() {
               <li><strong>Payment Information:</strong> Payment details processed securely through our payment providers.</li>
               <li><strong>Usage Data:</strong> Information about how you use our website, including pages visited and features used.</li>
             </ul>
+            <p>
+              We use Google Analytics 4 and Google Ads conversion tracking. These tools use cookies and similar identifiers to measure how the site is used and whether an ad led to a conversion, such as a submitted form or a phone call. We do not currently send your name, email, phone number or project details to Google. Google's tag also adds visitors to remarketing lists, and Google may use this data to show you relevant ads on other websites (remarketing). You can opt out in <a href="https://adssettings.google.com" className="text-primary hover:underline">Google's ad settings</a> or with the <a href="https://tools.google.com/dlpage/gaoptout" className="text-primary hover:underline">Google Analytics opt-out browser add-on</a>. We also use the Meta Pixel and Meta's Conversions API to measure visits and inquiries from our Facebook and Instagram ads. When you submit an inquiry, we may send Meta the Lead event, the page address, the project type, the inquiry category, your IP address, your browser user agent, and the Meta cookies _fbp and _fbc so it can match the inquiry to an ad. Meta processes this under its own privacy policy (<a href="https://www.facebook.com/privacy/policy" className="text-primary hover:underline">https://www.facebook.com/privacy/policy</a>).
+            </p>
 
             <h2 id="document-section-3">How We Use Your Information</h2>
             <p>We use the information we collect to:</p>
