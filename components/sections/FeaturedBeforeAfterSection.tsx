@@ -27,7 +27,7 @@ export function FeaturedBeforeAfterSection({
         <SectionHeader
           eyebrow="Project proof"
           title={title}
-          description="Drag the slider to compare the same space before and after."
+          description="Drag the slider to compare the same space."
           className="mb-8 max-w-3xl"
         />
         <Reveal>

@@ -99,7 +99,7 @@ try {
      await page.screenshot({path:`${out}/${width}-footer-cta.jpg`});
     }
     if(remodeling&&route==='/'){
-     const slider=page.getByRole('slider',{name:'Compare before and after'}).first();await slider.scrollIntoViewIfNeeded();
+     const slider=page.getByRole('slider',{name:'Compare the two views'}).first();await slider.scrollIntoViewIfNeeded();
      await slider.focus();await page.keyboard.press('Home');assert.equal(await slider.getAttribute('aria-valuenow'),'0');
      await page.keyboard.press('End');assert.equal(await slider.getAttribute('aria-valuenow'),'100');
      await page.keyboard.press('ArrowLeft');assert.equal(await slider.getAttribute('aria-valuenow'),'96');
