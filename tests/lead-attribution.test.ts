@@ -84,7 +84,10 @@ test('accepted lead conversion ID deduplicates repeated callbacks and sessions',
  try{
   assert.equal(trackGoogleAdsLeadConversion({},'intake:fixture-attribution'),true);
   assert.equal(trackGoogleAdsLeadConversion({},'intake:fixture-attribution'),false);
-  assert.equal(events.length,1);
+  assert.equal(events.length,2);
+  assert.equal((events[0][2] as any).send_to,'AW-18354188204/cEzmCPOagKAdEKzf-q9E');
+  assert.equal((events[1][2] as any).send_to,'AW-18354188204/LE2vCPXstO8cEKzf-q9E');
   assert.equal((events[0][2] as any).transaction_id,'intake:fixture-attribution');
+  assert.equal((events[1][2] as any).transaction_id,'intake:fixture-attribution');
  }finally{(globalThis as any).window=prior;}
 });
