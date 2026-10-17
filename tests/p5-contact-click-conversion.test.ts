@@ -223,6 +223,12 @@ test('the site listener is bound once and does not add the forwarding snippet', 
   assert.match(helper, /addEventListener\('click', onClick, \{ capture: true \}\)/);
   assert.match(helper, /removeEventListener\('click', onClick, \{ capture: true \}\)/);
   assert.doesNotMatch(component + helper, /phone_conversion_number/);
+});
+
+test('the privacy page states what a call or text tap tells Google Ads', () => {
   const privacy = fs.readFileSync(new URL('../app/privacy-policy/page.tsx', import.meta.url), 'utf8');
-  assert.doesNotMatch(privacy, /Google Ads/);
+  const sentence =
+    "When you tap Call or Text on our site, Google Ads is told that the tap happened and on which page, so we can count calls and texts that come from our ads. We don't send Google your name, phone number or the content of your call or message.";
+  assert.equal(privacy.includes(sentence), true);
+  assert.equal(privacy.includes('Google Ads receives a random reference number'), false);
 });

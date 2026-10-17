@@ -73,6 +73,9 @@ export default function PrivacyPolicyPage() {
               <li><strong>Payment Information:</strong> Payment details processed securely through our payment providers.</li>
               <li><strong>Usage Data:</strong> Information about how you use our website, including pages visited and features used.</li>
             </ul>
+            <p>
+              When you tap Call or Text on our site, Google Ads is told that the tap happened and on which page, so we can count calls and texts that come from our ads. We don't send Google your name, phone number or the content of your call or message.
+            </p>
 
             <h2 id="document-section-3">How We Use Your Information</h2>
             <p>We use the information we collect to:</p>
