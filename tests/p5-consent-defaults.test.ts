@@ -28,7 +28,7 @@ test('privacy page discloses Google Analytics, Google Ads, remarketing, and Meta
   assert.match(source, /Google's tag also adds visitors to remarketing lists, and Google may use this data to show you relevant ads on other websites \(remarketing\)\./);
   assert.doesNotMatch(source, /show our ads to people who have visited this site/);
   assert.match(source, /https:\/\/policies\.google\.com\/privacy/);
-  assert.match(source, /We do not currently send your name, email, phone number, address or project description to Google; Google Analytics receives only the type of project you choose \(for example, an addition or an ADU\) when you use the estimator or send an inquiry, and the words you type into our blog search\./);
+  assert.match(source, /We do not currently send your name, email, phone number, address or project description to Google; Google Analytics receives only the type of project you choose \(for example, an addition or an ADU\) when you use the estimator or send an inquiry, and the words you type into our blog search\. Google Ads receives a random reference number for your inquiry so each lead is counted only once\./);
   assert.match(source, /Calls from our site or ads may be routed through a Google forwarding number so we can measure which ads lead to calls\./);
   assert.doesNotMatch(source, /or project details to Google/);
   assert.doesNotMatch(source, /personalise ads/);
