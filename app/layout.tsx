@@ -17,6 +17,8 @@ import { consentBootstrap } from '@/lib/consentBootstrap'
 import { Suspense } from 'react'
 import { MetaPixel } from '@/components/MetaPixel'
 import { MicrosoftClarity } from '@/components/MicrosoftClarity'
+import { clarityFormMaskScript } from '@/lib/clarityFormMask'
+import Script from 'next/script'
 import { ConversionTracking } from '@/components/ConversionTracking'
 import { AssistantWidget } from '@/components/assistant/AssistantWidget'
 import './globals.css'
@@ -198,6 +200,11 @@ export default function RootLayout({
         </Providers>
         <GoogleAnalytics />
         <MetaPixel />
+        <Script
+          id="clarity-form-mask"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: clarityFormMaskScript }}
+        />
         <MicrosoftClarity />
         <ConversionTracking />
       </body>
