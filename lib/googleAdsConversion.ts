@@ -149,21 +149,48 @@ export function isEstimatorCompletionKey(dedupeKey?: string): boolean {
 }
 
 /**
- * Fires Google Ads conversions once per dedupe key (per page load and, where
- * storage allows, per browser session). An estimator finish key fires
- * 'P5 Estimator Completed' and the form label, both with transaction_id set
- * to that key. Any other key fires the form label only. If gtag is not
- * loaded yet, the retry waits five seconds and still fires at most once.
- * Returns true when at least one conversion was sent immediately.
+ * Shared project identity for an estimator finish. Intake keys look like
+ * `intake:construction:<draftId>` and estimate keys like `estimator:<draftId>`.
+ * The form label dedupes on this id, not on the raw completion key.
  */
-export function trackGoogleAdsLeadConversion(ctx: LeadContext = {}, dedupeKey?: string): boolean {
+export function estimatorLeadIdentity(dedupeKey: string): string {
+  const body = dedupeKey.startsWith('intake:')
+    ? dedupeKey.slice('intake:'.length)
+    : dedupeKey.startsWith('estimator:')
+      ? dedupeKey.slice('estimator:'.length)
+      : dedupeKey;
+  const id = body.split(':').pop();
+  return id || body;
+}
+
+export type LeadConversionOptions = {
+  /** False when this finish did not create an accepted lead. Omitted means the caller did not say. */
+  accepted?: boolean;
+};
+
+/**
+ * Fires Google Ads conversions once per lead. An estimator finish fires
+ * 'P5 Estimator Completed' once for that completion key. The form label fires
+ * once for the shared project id across intake confirm and estimate submit.
+ * `accepted: false` sends only the estimator label. Any other key fires the
+ * form label only. If gtag is not loaded yet, the retry waits five seconds
+ * and still fires at most once. Returns true when at least one conversion
+ * was sent immediately.
+ */
+export function trackGoogleAdsLeadConversion(
+  ctx: LeadContext = {},
+  dedupeKey?: string,
+  options?: LeadConversionOptions,
+): boolean {
   if (typeof window === 'undefined') return false;
   if (isEstimatorCompletionKey(dedupeKey) && dedupeKey) {
     const estimatorSent = queueConversion(`google_ads_estimator:${dedupeKey}`, () => ({
       send_to: GOOGLE_ADS_ESTIMATOR_LABEL,
       transaction_id: dedupeKey,
     }));
-    const formSent = queueConversion(`google_ads_lead:${dedupeKey}`, () => googleAdsLeadParams(ctx, dedupeKey));
+    if (options?.accepted === false) return estimatorSent;
+    const leadId = estimatorLeadIdentity(dedupeKey);
+    const formSent = queueConversion(`google_ads_lead:project:${leadId}`, () => googleAdsLeadParams(ctx, leadId));
     return estimatorSent || formSent;
   }
   const storageKey = dedupeKey ? `google_ads_lead:${dedupeKey}` : undefined;

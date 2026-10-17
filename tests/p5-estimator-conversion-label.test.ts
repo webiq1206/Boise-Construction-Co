@@ -33,7 +33,7 @@ test('an estimator finish fires the estimator label and the form label once', ()
     assert.equal(trackGoogleAdsLeadConversion({service: 'new-build'}, 'estimator:draft-1'), false);
     assert.deepEqual(sendTo(seen.events), [GOOGLE_ADS_ESTIMATOR_LABEL, GOOGLE_ADS_LEAD_LABEL]);
     assert.equal((seen.events[0][2] as {transaction_id: string}).transaction_id, 'estimator:draft-1');
-    assert.equal((seen.events[1][2] as {transaction_id: string}).transaction_id, 'estimator:draft-1');
+    assert.equal((seen.events[1][2] as {transaction_id: string}).transaction_id, 'draft-1');
     assert.equal((seen.events[1][2] as {value: number}).value, 300);
   } finally {
     seen.restore();
@@ -46,6 +46,36 @@ test('an intake finish fires both labels once per key', () => {
     assert.equal(trackGoogleAdsLeadConversion({}, 'intake:construction:project-1'), true);
     assert.equal(trackGoogleAdsLeadConversion({}, 'intake:construction:project-1'), false);
     assert.deepEqual(sendTo(seen.events), [GOOGLE_ADS_ESTIMATOR_LABEL, GOOGLE_ADS_LEAD_LABEL]);
+  } finally {
+    seen.restore();
+  }
+});
+
+test('intake confirm and estimate submit share one form label for the same project', () => {
+  const seen = calls();
+  const project = '11111111-1111-4111-8111-111111111111';
+  try {
+    assert.equal(trackGoogleAdsLeadConversion({}, `intake:construction:${project}`), true);
+    assert.equal(trackGoogleAdsLeadConversion({service: 'new-build'}, `estimator:${project}`), true);
+    assert.deepEqual(sendTo(seen.events), [
+      GOOGLE_ADS_ESTIMATOR_LABEL,
+      GOOGLE_ADS_LEAD_LABEL,
+      GOOGLE_ADS_ESTIMATOR_LABEL,
+    ]);
+    assert.equal((seen.events[0][2] as {transaction_id: string}).transaction_id, `intake:construction:${project}`);
+    assert.equal((seen.events[1][2] as {transaction_id: string}).transaction_id, project);
+    assert.equal((seen.events[2][2] as {transaction_id: string}).transaction_id, `estimator:${project}`);
+  } finally {
+    seen.restore();
+  }
+});
+
+test('a finish that did not create an accepted lead fires only the estimator label', () => {
+  const seen = calls();
+  try {
+    assert.equal(trackGoogleAdsLeadConversion({service: 'new-build'}, 'estimator:draft-no-lead', {accepted: false}), true);
+    assert.equal(trackGoogleAdsLeadConversion({service: 'new-build'}, 'estimator:draft-no-lead', {accepted: false}), false);
+    assert.deepEqual(sendTo(seen.events), [GOOGLE_ADS_ESTIMATOR_LABEL]);
   } finally {
     seen.restore();
   }
