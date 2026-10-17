@@ -287,7 +287,7 @@ export default function ContactPage() {
                   icon={<Phone className="h-5 w-5" strokeWidth={1.5} />}
                   label="Call us"
                   href={SITE_CONFIG.phoneHref}
-                  subtext="Mon – Fri 7 am – 6 pm · Sat 8 am – 4 pm"
+                  subtext="Mon – Fri 9 am – 6 pm · Sat 9 am – 4 pm"
                   featured
                   companion={
                     <SaveContactLink className="text-sm text-muted-foreground hover:text-foreground transition-colors" />
