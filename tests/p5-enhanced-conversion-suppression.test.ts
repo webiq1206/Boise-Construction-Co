@@ -94,16 +94,13 @@ test('a suppressed contact skips user_data and still fires the conversion', () =
 test('submit responses carry the flag and the client checks it before user_data', () => {
   const consultationRoute = fs.readFileSync(new URL('../app/api/consultation/route.ts', import.meta.url), 'utf8');
   const consultation = fs.readFileSync(new URL('../components/ConsultationForm.tsx', import.meta.url), 'utf8');
-  const intake = fs.readFileSync(new URL('../lib/p5/intakeEndpoint.ts', import.meta.url), 'utf8');
-  const submit = fs.readFileSync(new URL('../lib/p5/submitEndpoint.ts', import.meta.url), 'utf8');
   const estimator = fs.readFileSync(new URL('../components/P5Estimator.tsx', import.meta.url), 'utf8');
   assert.match(consultationRoute, /allowEnhancedConversionsFlag\(\{ email: data\.email, phone: data\.phone \}\)/);
   assert.match(consultationRoute, /inquiryKey: intakeResult\.inquiryKey/);
   assert.match(consultation, /allowEnhancedConversions: response\.allowEnhancedConversions/);
-  assert.match(intake, /withAllowEnhancedConversions\(receipt,\{email:contact\.email,phone:contact\.phone\}\)/);
-  assert.match(submit, /withAllowEnhancedConversions\(\{accepted,duplicate:!accepted/);
-  assert.match(estimator, /allowEnhancedConversions:value\.allowEnhancedConversions/);
-  assert.match(estimator, /allowEnhancedConversions:data\.allowEnhancedConversions/);
+  assert.doesNotMatch(estimator, /allowEnhancedConversions/);
+  assert.match(estimator, /trackGoogleAdsLeadConversion\(\{service:latest\.answers\.service\},`intake:\$\{receipt\.projectId\}`\)/);
+  assert.match(estimator, /trackGoogleAdsLeadConversion\(\{service:d\.answers\.service\},`estimator:\$\{d\.id\}`\)/);
   const privacy = fs.readFileSync(new URL('../app/privacy-policy/page.tsx', import.meta.url), 'utf8');
   assert.doesNotMatch(privacy, /opt out of enhanced conversions/i);
 });

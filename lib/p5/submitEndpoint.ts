@@ -8,7 +8,6 @@ import {ESTIMATOR_VERSION} from './version.ts';
 import {withRateCard} from './rateCard.ts';
 import {finishTier,priceBookRates,PRICE_BOOK_VERSION} from './priceBook.ts';
 import { query } from "./database.ts";
-import {withAllowEnhancedConversions} from '../enhancedConversionSuppression.ts';
 import { draftCredentials,readDraft,DraftError,requireEstimateContact } from "./store.ts";
 import { EMPTY_CONFIGURATION,type EstimatorConfiguration } from "./costBook.ts";
 import {priceSavedScope} from "./pricingWork.ts";
@@ -53,7 +52,7 @@ export async function postSubmission(request:Request,schedule?:(task:()=>Promise
       // is reported as "still sending", which is what the next poll will resolve.
       const saved=row?.customer_estimate?publicResult(row.customer_estimate):null;
       const delivered=await deliveryStatus(id).catch(error=>{console.error(`[p5-delivery] status lookup failed for draft ${id}:`,error instanceof Error?error.message:error);return [];});
-            return json(await withAllowEnhancedConversions({accepted:false,duplicate:true,id,...(saved?{result:saved}:{}),...(row?.customer_estimate?{document:estimateDocument(id,row.customer_estimate,row.submitted_at?new Date(row.submitted_at).toISOString():null)}:{}),delivery:delivered},{email:draft.contact.email,phone:draft.contact.phone}));
+            return json({accepted:false,duplicate:true,id,...(saved?{result:saved}:{}),...(row?.customer_estimate?{document:estimateDocument(id,row.customer_estimate,row.submitted_at?new Date(row.submitted_at).toISOString():null)}:{}),delivery:delivered});
     }
     if(publicProjectMode(brand.id,draft.answers.service)==='review'){
       const operation=qaOperationContext();
@@ -170,7 +169,7 @@ export async function completeSubmission(id:string,draft:Awaited<ReturnType<type
       const [persisted]=await query("SELECT status,revision,customer_estimate,internal_estimate,submitted_at FROM p5_estimator_drafts WHERE id=$1",[id]);
       if(persisted?.status!=='submitted'||Number(persisted.revision)!==draft.revision||!persisted.customer_estimate)throw new DraftError('The project changed before this estimate was saved. Your work is retained; reload its saved status before retrying.',409);
       const saved=restoreSavedCustomerCopy(persisted.customer_estimate,persisted.internal_estimate);
-      return json(await withAllowEnhancedConversions({accepted:false,duplicate:true,id,result:publicResult(saved),document:estimateDocument(id,saved,persisted.submitted_at?new Date(persisted.submitted_at).toISOString():null),delivery:await deliveryStatus(id)},{email:contact.email,phone:contact.phone}));
+      return json({accepted:false,duplicate:true,id,result:publicResult(saved),document:estimateDocument(id,saved,persisted.submitted_at?new Date(persisted.submitted_at).toISOString():null),delivery:await deliveryStatus(id)});
     }
     // Persistence is acknowledged separately from delivery. A transport failure
     // never erases the submission or tells a visitor to create a duplicate.
@@ -183,6 +182,6 @@ export async function completeSubmission(id:string,draft:Awaited<ReturnType<type
       await Promise.race([started,new Promise<void>(resolve=>setTimeout(resolve,DELIVERY_WAIT_MS))]);
       if(schedule)schedule(()=>started);
     }
-    return json(await withAllowEnhancedConversions({accepted,duplicate:!accepted,id,result:publicCustomer,document:estimateDocument(id,record.customer),delivery:await deliveryStatus(id)},{email:contact.email,phone:contact.phone}));
+    return json({accepted,duplicate:!accepted,id,result:publicCustomer,document:estimateDocument(id,record.customer),delivery:await deliveryStatus(id)});
   }catch(error){if(isPricingPending(error))return error.retryAfterMs===0?json({error:error.message},503):json({pending:true,message:error.message,retryAfterMs:error.retryAfterMs},202);return failed(error);}
 }
