@@ -5,7 +5,7 @@ import { getCityServiceCopy } from '../shared/content/cityServiceCopy.ts';
 import { AREA_PAGE_FAQS, getAreaIntro, getCityServiceSections, SERVICE_SEO_CONTENT } from '../shared/seoContent.ts';
 import { getCityBySlug, getCountyLabel, SERVICES } from '../shared/contentData.ts';
 import { landingFAQSchema } from '../lib/landing-schema.ts';
-import { CITY_SEO_DATA, indianCreekDescription } from '../lib/seo.ts';
+import { CITY_SEO_DATA, indianCreekDescription, joinNames, placesAcrossCounty } from '../lib/seo.ts';
 import { LOCATION_GUIDES } from '../shared/content/locationGuides.ts';
 
 const BATCH = ['boise', 'meridian', 'nampa', 'eagle', 'kuna', 'caldwell', 'star', 'middleton', 'garden-city'] as const;
@@ -96,14 +96,15 @@ test('The Estates is absent from Eagle pages', () => {
   assert.ok(areaCopy);
   const areaPage = [
     getAreaIntro(eagle),
-    `We serve ${eagle.name} homeowners across ${seo.neighborhoods.slice(0, 3).join(', ')}, and all of ${county}.`,
-    `We build throughout ${eagle.name}, including ${seo.neighborhoods.join(', ')}.`,
-    `landmarks like ${seo.landmarks.slice(0, 3).join(', ')}`,
+    `We serve ${eagle.name} homeowners across ${placesAcrossCounty(seo.neighborhoods, county)}.`,
+    `We build throughout ${eagle.name}, including ${joinNames(seo.neighborhoods)}.`,
+    `landmarks like ${joinNames(seo.landmarks.slice(0, 3))}`,
     ...areaCopy.faqs.map((faq) => `${faq.question} ${faq.answer}`),
   ].join(' ');
   assert.doesNotMatch(areaPage, /The Estates/);
-  assert.match(areaPage, /across Banbury, Floating Feather, and all of Ada County/);
-  assert.match(areaPage, /including Banbury, Floating Feather\./);
+  assert.match(areaPage, /across Banbury and Floating Feather, and all of Ada County/);
+  assert.match(areaPage, /including Banbury and Floating Feather\./);
+  assert.match(areaPage, /Eagle Island State Park, Heritage Park, and Eagle Hills Golf Course/);
 
   for (const service of SERVICES) {
     const content = SERVICE_SEO_CONTENT[service.slug];
@@ -112,8 +113,30 @@ test('The Estates is absent from Eagle pages', () => {
     const sections = getCityServiceSections(content, eagle, seo);
     const visible = [intro, ...sections.flatMap((section) => section.paragraphs ?? [])].join(' ');
     assert.doesNotMatch(visible, /The Estates/);
-    assert.match(visible, /including Banbury, Floating Feather\./);
+    assert.match(visible, /including Banbury and Floating Feather\./);
   }
+});
+
+test('neighborhood lists name Star, Kuna, and Middleton without a stray comma', () => {
+  const custom = SERVICE_SEO_CONTENT['custom-home-builder'];
+  assert.ok(custom);
+
+  const star = getCityBySlug('star');
+  const kuna = getCityBySlug('kuna');
+  const middleton = getCityBySlug('middleton');
+  const boise = getCityBySlug('boise');
+  assert.ok(star && kuna && middleton && boise);
+
+  const textFor = (city: NonNullable<typeof star>, seo: (typeof CITY_SEO_DATA)[string]) =>
+    getCityServiceSections(custom, city, seo).flatMap((section) => section.paragraphs ?? []).join(' ');
+
+  assert.match(textFor(star, CITY_SEO_DATA.Star), /including Star River Ranch and Star Crossing\./);
+  assert.match(textFor(kuna, CITY_SEO_DATA.Kuna), /including Crimson Point and Black Cat\./);
+  assert.match(textFor(boise, CITY_SEO_DATA.Boise), /including North End, Bench, Downtown, East End, and Southwest Boise\./);
+
+  const middletonAcross = placesAcrossCounty(CITY_SEO_DATA.Middleton.neighborhoods, getCountyLabel(middleton.county));
+  assert.equal(middletonAcross, 'Middleton Heights and all of Canyon County');
+  assert.doesNotMatch(middletonAcross, /Heights,/);
 });
 
 test('cities outside the batch keep the shared intro and shared FAQ questions', () => {
