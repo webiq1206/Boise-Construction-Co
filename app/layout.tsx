@@ -18,6 +18,7 @@ import { Suspense } from 'react'
 import { MetaPixel } from '@/components/MetaPixel'
 import { MicrosoftClarity } from '@/components/MicrosoftClarity'
 import { ConversionTracking } from '@/components/ConversionTracking'
+import { EstimatorFoldContact } from '@/components/EstimatorFoldContact'
 import { AssistantWidget } from '@/components/assistant/AssistantWidget'
 import './globals.css'
 // The shared P5 family editorial layer. Imported after globals so it can build
@@ -194,6 +195,7 @@ export default function RootLayout({
           </div></ApprovedShell>
           <Toaster />
           <AssistantWidget />
+          <EstimatorFoldContact />
         </Providers>
         <GoogleAnalytics />
         <MetaPixel />
