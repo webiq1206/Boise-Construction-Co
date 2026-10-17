@@ -19,6 +19,7 @@ generateWebPageSchema,
 import { CITY_HERO_IMAGES } from "@/shared/cityServiceImages";
 import { CITIES,TREASURE_VALLEY_CITIES } from "@/shared/contentData";
 import { CTA_PRIMARY,CTA_SECONDARY } from "@/shared/ctaCopy";
+import { contentImageAlt } from "@/shared/imageAlts";
 import { SITE_IMAGES } from "@/shared/siteImages";
 import { ArrowRight } from "lucide-react";
 
@@ -49,7 +50,7 @@ export default function AreasHubPage() {
       <div className="flex flex-col pb-20 md:pb-0">
         <PageHeroBand
           imageSrc={SITE_IMAGES.hero}
-          imageAlt="White board-and-batten home exterior with a covered front porch"
+          imageAlt={contentImageAlt(SITE_IMAGES.hero)}
         >
           <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Service Areas" }]} />
           <p className="ed-eyebrow mt-8" style={{ color: "rgb(255 255 255 / 0.72)" }}>Treasure Valley</p>

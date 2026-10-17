@@ -77,5 +77,7 @@ const ALTS: Record<string, string> = {
 export function contentImageAlt(src: string | undefined | null): string {
   if (!src) return "";
   const path = src.split("?")[0].split("#")[0];
-  return ALTS[path] ?? "";
+  const description = ALTS[path] ?? "";
+  if (!description) return "";
+  return `Representative image: ${description}`;
 }

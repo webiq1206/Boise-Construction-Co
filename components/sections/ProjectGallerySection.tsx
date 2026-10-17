@@ -76,8 +76,8 @@ export function ProjectGallerySection({
               <BeforeAfterSlider
                 beforeSrc={lead.beforeImageUrl}
                 afterSrc={lead.afterImageUrl}
-                beforeAlt="Earlier view of the space"
-                afterAlt="Later view of the space"
+                beforeAlt="Representative image: Earlier view of the space"
+                afterAlt="Representative image: Later view of the space"
                 aspectClass="aspect-[4/3]"
               />
             </div>
@@ -109,8 +109,8 @@ export function ProjectGallerySection({
                   <BeforeAfterSlider
                     beforeSrc={project.beforeImageUrl}
                     afterSrc={project.afterImageUrl}
-                    beforeAlt="Earlier view of the space"
-                    afterAlt="Later view of the space"
+                    beforeAlt="Representative image: Earlier view of the space"
+                    afterAlt="Representative image: Later view of the space"
                     aspectClass="aspect-[4/3]"
                   />
                   <div className="p-6">

@@ -66,12 +66,13 @@ export function WhyChooseUsSection({ limit }: WhyChooseUsSectionProps) {
                 <div className="relative aspect-[4/3] overflow-hidden" style={{ border: "1px solid var(--ed-line)" }}>
                   <Image
                     src={SITE_IMAGES.valueCraft}
-                    alt="Mechanical rough-in showing pipes and wiring coordinated inside framed walls"
+                    alt="Representative image: Mechanical rough-in with pipes and wiring inside framed walls"
                     fill
                     sizes="(min-width: 1024px) 40vw, 100vw"
                     className="object-cover img-brand-grade"
                   />
                 </div>
+                <figcaption className="ed-body mt-3 text-[0.875rem]">Representative imagery</figcaption>
               </figure>
             </Reveal>
           </div>

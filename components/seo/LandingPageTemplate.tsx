@@ -451,7 +451,7 @@ export function LandingPageTemplate({
         <Section surface="deep" spacing="xl" edge>
           <div className="ed-shell">
             <Reveal>
-              <p className="ed-eyebrow">Proof of work</p>
+              <p className="ed-eyebrow">Representative imagery</p>
               {proofHeading ? <h2 className="ed-h2 ed-statement-wide">{proofHeading}</h2> : null}
             </Reveal>
 
@@ -462,10 +462,10 @@ export function LandingPageTemplate({
                     <article className="flex h-full flex-col" style={{ border: '1px solid var(--ed-line)' }}>
                       <div className="grid grid-cols-2">
                         <div className="relative aspect-[4/3]">
-                          <Image src={project.beforeImageUrl} alt="Earlier view of the space" fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
+                          <Image src={project.beforeImageUrl} alt="Representative image: Earlier view of the space" fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                         </div>
                         <div className="relative aspect-[4/3]">
-                          <Image src={project.afterImageUrl} alt="Later view of the space" fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
+                          <Image src={project.afterImageUrl} alt="Representative image: Later view of the space" fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                         </div>
                       </div>
                       <div className="p-6">
