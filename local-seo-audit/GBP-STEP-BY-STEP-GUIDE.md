@@ -18,7 +18,8 @@ Use these exact details everywhere — on Google, Yelp, Facebook, Instagram, Bin
 | Email | hello@boiseremodeling.co |
 | Website | https://boiseremodeling.co |
 | Public location | Meridian, ID (do not show a street address publicly) |
-| Year founded | 2017 |
+| Year founded | withheld while SHOW_FOUNDING_YEAR is false |
+<!-- Recorded year founded: 2017 -->
 
 **Hours**
 
@@ -185,7 +186,9 @@ Add categories in this exact order:
 
 Go to **Edit profile → Business description**. Paste this exactly (748 characters):
 
-> Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles design, Ada and Canyon County permits, and construction for kitchen remodels, bathroom remodels, whole-home renovations, room additions, ADUs, garage conversions, and basement finishing. Every project includes a written scope before construction, a dedicated project manager, weekly written progress updates, and a written workmanship guarantee. Founded in 2017. Bonded and insured. Schedule a free 60 to 90 minute in-home visit and leave with a planning range and design direction - no pressure, no obligation.
+> Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles design, Ada and Canyon County permits, and construction for kitchen remodels, bathroom remodels, whole-home renovations, room additions, ADUs, garage conversions, and basement finishing. Every project includes a written scope before construction, a dedicated project manager, weekly written progress updates, and a written workmanship guarantee. Bonded and insured. Schedule a free 60 to 90 minute in-home visit and leave with a planning range and design direction - no pressure, no obligation.
+
+<!-- Recorded description sentence, withheld while SHOW_FOUNDING_YEAR is false: Founded in 2017. -->
 
 ### Step 3.5 — Add all services
 

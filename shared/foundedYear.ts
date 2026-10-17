@@ -4,11 +4,13 @@
  * omitted from pages, schema, and generated copy while this flag is false.
  */
 export const FOUNDED_YEAR = '2020';
-export const SHOW_FOUNDED_YEAR = false;
+/** Unpublished until the year is proven. Handyman uses this same flag name. */
+export const SHOW_FOUNDING_YEAR = false;
+export const SHOW_FOUNDED_YEAR = SHOW_FOUNDING_YEAR;
 
 /** ", founded in 2020" when the claim may be published, otherwise nothing. */
 export function foundedInClause(): string {
-  return SHOW_FOUNDED_YEAR ? `, founded in ${FOUNDED_YEAR}` : '';
+  return SHOW_FOUNDING_YEAR ? `, founded in ${FOUNDED_YEAR}` : '';
 }
 
 /**
@@ -16,22 +18,22 @@ export function foundedInClause(): string {
  * when the claim may be published, otherwise nothing.
  */
 export function sinceFoundedLead(name = 'Boise Construction Co'): string {
-  return SHOW_FOUNDED_YEAR
+  return SHOW_FOUNDING_YEAR
     ? `${name} has worked in Treasure Valley residential construction since ${FOUNDED_YEAR}. `
     : '';
 }
 
 /** "Est. 2020" when the claim may be published. */
 export function establishedLabel(): string | null {
-  return SHOW_FOUNDED_YEAR ? `Est. ${FOUNDED_YEAR}` : null;
+  return SHOW_FOUNDING_YEAR ? `Est. ${FOUNDED_YEAR}` : null;
 }
 
 /** "Founded in 2020. " when the claim may be published. */
 export function foundedSentence(): string {
-  return SHOW_FOUNDED_YEAR ? `Founded in ${FOUNDED_YEAR}. ` : '';
+  return SHOW_FOUNDING_YEAR ? `Founded in ${FOUNDED_YEAR}. ` : '';
 }
 
 /** " since 2020" when the claim may be published. */
 export function sinceFoundedYear(): string {
-  return SHOW_FOUNDED_YEAR ? ` since ${FOUNDED_YEAR}` : '';
+  return SHOW_FOUNDING_YEAR ? ` since ${FOUNDED_YEAR}` : '';
 }

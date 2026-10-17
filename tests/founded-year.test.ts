@@ -9,7 +9,7 @@ import { FoundingSeal } from '../components/brand/FoundingSeal.tsx';
 import { BRAND_PAGE_IMAGE } from '../lib/brand-page-metadata.ts';
 import { generateArticleSchema, generateLocalBusinessSchema, generateOrganizationSchema } from '../lib/schema.ts';
 import { BUSINESS_INFO } from '../lib/seo.ts';
-import { FOUNDED_YEAR, SHOW_FOUNDED_YEAR } from '../shared/foundedYear.ts';
+import { FOUNDED_YEAR, SHOW_FOUNDED_YEAR, SHOW_FOUNDING_YEAR } from '../shared/foundedYear.ts';
 import { GBP_DESCRIPTION, GBP_NAP } from '../shared/gbpProfile.ts';
 import { HOMEPAGE_FAQS } from '../shared/homepageFaqs.ts';
 import { PROOF_STATS, TRUST_ITEMS } from '../shared/siteContent.ts';
@@ -20,7 +20,8 @@ const read = (file: string) => fs.readFileSync(path.join(root, file), 'utf8');
 const PUBLISHED = /Est\. 2020|founded in 2020|since 2020|founded 2020|Founded: 2020|Founded in 2020|EST 2020/i;
 
 test('the 2020 founding year stays on record and does not render', () => {
-  assert.equal(SHOW_FOUNDED_YEAR, false);
+  assert.equal(SHOW_FOUNDING_YEAR, false);
+  assert.equal(SHOW_FOUNDED_YEAR, SHOW_FOUNDING_YEAR);
   assert.equal(FOUNDED_YEAR, '2020');
   assert.equal(BUSINESS_INFO.founded, '2020');
   assert.equal(PROOF_STATS.established, '2020');
@@ -54,7 +55,7 @@ test('the 2020 founding year stays on record and does not render', () => {
 });
 
 test('the seal component is not rendered while the founding year is hidden', () => {
-  assert.equal(SHOW_FOUNDED_YEAR, false);
+  assert.equal(SHOW_FOUNDING_YEAR, false);
   assert.equal(renderToStaticMarkup(createElement(FoundingSeal)), '');
   assert.match(read('components/brand/FoundingSeal.tsx'), /boise-construction-co-seal-charcoal-accent\.svg/);
   assert.equal(fs.existsSync(path.join(root, 'public/brand/svg/seal/light/boise-construction-co-seal-charcoal-accent.svg')), true);

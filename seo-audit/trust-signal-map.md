@@ -10,7 +10,8 @@ Existing / weak / missing trust signals and recommendations.
 | Bonded & insured | `certifications`, footer | medium |
 | Workmanship guarantee | about, FAQs, benefits | medium |
 | Permits handled in-house (Ada/Canyon) | FAQs, copy | medium |
-| Founded 2017 | `foundingDate` in schema | medium |
+| Founding year withheld while SHOW_FOUNDING_YEAR is false | `foundingDate` in schema | hidden |
+<!-- Recorded trust row: Founded 2017 -->
 | Service hours | `openingHoursSpecification` | OK |
 | Offer catalog | `hasOfferCatalog` | OK |
 | Contact point | `Organization.contactPoint` | OK |
