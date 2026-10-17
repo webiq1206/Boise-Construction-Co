@@ -451,9 +451,10 @@ export const CITY_SEO_DATA: Record<string, {
 };
 
 /**
- * Indian Creek is a stream through Kuna, Nampa, and Caldwell, not a neighborhood.
- * Idaho DEQ's Indian Creek Subbasin Assessment (December 2001) says it flows
- * through those three cities. Indian Creek Plaza is on that creek in Caldwell.
+ * Indian Creek is a stream, not a neighborhood. Idaho DEQ's Indian Creek
+ * Subbasin Assessment (December 2001) says it "flows through Elmore, Ada and
+ * Canyon counties and the cities of Kuna, Nampa and Caldwell, Idaho."
+ * Indian Creek Plaza is on that creek in downtown Caldwell.
  * https://www2.deq.idaho.gov/admin/LEIA/api/document/download/11724
  */
 export function indianCreekDescription(cityName: string): string {

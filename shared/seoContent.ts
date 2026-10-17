@@ -1,5 +1,6 @@
 import type { ServiceData, CityData } from './contentData';
 import { getCountyLabel } from './contentData';
+import { getAreaCityCopy } from './content/areaCopy';
 import { getCityServiceCopy } from './content/cityServiceCopy';
 import { indianCreekDescription } from '../lib/seo';
 import {permitGuidance,permitSource} from '../lib/permitGuidance';
@@ -777,6 +778,8 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
 };
 
 export function getAreaIntro(city: CityData): string {
+  const custom = getAreaCityCopy(city.slug);
+  if (custom) return custom.intro;
   const county = getCountyLabel(city.county);
   return `Boise Construction Co builds new homes for clients in ${city.name}, Idaho and throughout ${county}. From fully custom homes and semi-custom plans to building on land you already own, you work with one accountable team from feasibility through final walkthrough.`;
 }
@@ -868,7 +871,9 @@ export function getCityServiceSections(
       paragraphs: [
         neighborhoods.length
           ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}.${creek ? ` ${creek}` : ''} Lot conditions, utility access, and subdivision design standards vary between these areas, so we tailor the site plan, foundation, and elevations to the specific parcel rather than dropping a plan onto it.`
-          : `We build throughout ${city.name}, tailoring the site plan, foundation design, and elevations to the specific parcel rather than dropping a plan onto it.`,
+          : creek
+            ? `We build throughout ${city.name}. ${creek} We tailor the site plan, foundation design, and elevations to the specific parcel rather than dropping a plan onto it.`
+            : `We build throughout ${city.name}, tailoring the site plan, foundation design, and elevations to the specific parcel rather than dropping a plan onto it.`,
         landmarks.length
           ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand how the area is developing and plan ${serviceLC} that fits the neighborhood and holds its value.`
           : `As a local team, we plan ${serviceLC} that fits the neighborhood and holds its value.`,
