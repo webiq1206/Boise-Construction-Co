@@ -6,6 +6,7 @@ import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildCanonical,FEED_ALTERNATES } from "@/lib/page-metadata";
 import { generateBreadcrumbSchema,generateWebPageSchema } from "@/lib/schema";
 import { SITE_CONFIG } from "@/shared/siteConfig";
+import { SHOW_UNPROVEN_TRUST } from "@/shared/trustClaims";
 import { Metadata } from "next";
 
 export const metadata: Metadata = withBrandPageMetadata(({
@@ -28,6 +29,20 @@ export const metadata: Metadata = withBrandPageMetadata(({
     description: "Your rights when using Boise Construction Co home building services in Idaho's Treasure Valley.",
   },
 }), "/terms-of-service");
+
+const TERMS_CONTENTS = [
+  { id: "document-section-1", label: "Agreement to Terms" },
+  { id: "document-section-2", label: "Services" },
+  { id: "document-section-3", label: "Service Estimates and Pricing" },
+  { id: "document-section-4", label: "Payment Terms" },
+  { id: "document-section-5", label: "Scheduling and Cancellation" },
+  { id: "document-section-6", label: "Property Access" },
+  { id: "document-section-7", label: "Subcontracting" },
+  { id: "document-section-8", label: "Limitation of Liability" },
+  { id: "document-section-9", label: "Satisfaction Guarantee" },
+  { id: "document-section-10", label: "Changes to Terms" },
+  { id: "document-section-11", label: "Contact Information" },
+];
 
 export default function TermsOfServicePage() {
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -52,7 +67,7 @@ export default function TermsOfServicePage() {
       />
       <section className="py-16 md:py-24">
         <div className="container px-4">
-          <InteriorDocument heading={<h1>Terms of Service for Boise Construction Co</h1>} contents={[{"id":"document-section-1","label":"Agreement to Terms"},{"id":"document-section-2","label":"Services"},{"id":"document-section-3","label":"Service Estimates and Pricing"},{"id":"document-section-4","label":"Payment Terms"},{"id":"document-section-5","label":"Scheduling and Cancellation"},{"id":"document-section-6","label":"Property Access"},{"id":"document-section-7","label":"Subcontracting"},{"id":"document-section-8","label":"Limitation of Liability"},{"id":"document-section-9","label":"Satisfaction Guarantee"},{"id":"document-section-10","label":"Changes to Terms"},{"id":"document-section-11","label":"Contact Information"}]}>
+          <InteriorDocument heading={<h1>Terms of Service for Boise Construction Co</h1>} contents={TERMS_CONTENTS.filter((item) => SHOW_UNPROVEN_TRUST || item.id !== "document-section-9")}>
 
             <p className="lead text-muted-foreground">
               Last updated: January 2024
@@ -107,10 +122,14 @@ export default function TermsOfServicePage() {
               While we take great care in providing our services, Boise Construction Co's liability for any claims arising from our services is limited to the amount paid for the specific service in question. We are not liable for pre-existing conditions, normal wear, or conditions outside our control.
             </p>
 
-            <h2 id="document-section-9">Satisfaction Guarantee</h2>
-            <p>
-              We stand behind our work. If you're not satisfied with a service, please contact us within 48 hours and we will work to address your concerns.
-            </p>
+            {SHOW_UNPROVEN_TRUST ? (
+              <>
+                <h2 id="document-section-9">Satisfaction Guarantee</h2>
+                <p>
+                  We stand behind our work. If you're not satisfied with a service, please contact us within 48 hours and we will work to address your concerns.
+                </p>
+              </>
+            ) : null}
 
             <h2 id="document-section-10">Changes to Terms</h2>
             <p>

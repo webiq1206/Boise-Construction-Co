@@ -18,11 +18,11 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
     assert.equal(getAreaIntro(city), copy.intro);
     assert.equal(copy.faqs.length, 7);
     assert.equal(copy.faqs[0].question, 'What kinds of homes do you build?');
-    assert.equal(copy.faqs[1].question, 'Are you licensed and insured?');
+    assert.equal(copy.faqs[1].question, 'Are you a registered contractor and insured?');
     assert.equal(copy.faqs[2].question, 'How do I start a project?');
     assert.equal(copy.faqs[3].question, `Do you build in ${city.name}, Idaho?`);
     assert.equal(copy.faqs[4].question, `Which county is ${city.name} in?`);
-    assert.match(copy.faqs[1].answer, /licen[sc]ed|license/i);
+    assert.match(copy.faqs[1].answer, /Idaho Registered Contractor \(#8381215\)/);
     assert.match(copy.faqs[1].answer, /bond/i);
     assert.match(copy.faqs[1].answer, /insur/i);
     assert.doesNotMatch(copy.intro + copy.faqs.map((f) => f.question + f.answer).join(' '), /Jared/);
@@ -88,5 +88,6 @@ test('cities outside the batch keep the shared intro and shared FAQ questions', 
   assert.match(getAreaIntro(other), /throughout Ada County/);
   assert.match(getAreaIntro(other), /one accountable team from feasibility through final walkthrough/);
   assert.equal(AREA_PAGE_FAQS.length, 3);
-  assert.match(AREA_PAGE_FAQS[1].answer, /licensed, bonded, and insured/);
+  assert.equal(AREA_PAGE_FAQS[1].question, 'Are you a registered contractor and insured?');
+  assert.match(AREA_PAGE_FAQS[1].answer, /Idaho Registered Contractor \(#8381215\), bonded, and insured/);
 });

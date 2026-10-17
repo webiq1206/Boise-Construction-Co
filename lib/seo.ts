@@ -4,6 +4,8 @@
  * for service and location pages
  */
 
+import { IDAHO_REGISTERED_CONTRACTOR } from '@/shared/contractorRegistration';
+import { satisfactionGuaranteedCta } from '@/shared/trustClaims';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { GBP_SOCIAL, getExternalProfileUrls } from '@/shared/gbpProfile';
 
@@ -165,7 +167,7 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
   if (city && serviceName) {
     const serviceLC = serviceName.toLowerCase();
     const cityVariant = CITY_DESCRIPTION_VARIANTS[city] || `${city}'s trusted`;
-    const ctaVariant = CITY_CTA_VARIANTS[city] || "Satisfaction guaranteed";
+    const ctaVariant = CITY_CTA_VARIANTS[city] || satisfactionGuaranteedCta();
     return `${cityVariant} ${serviceLC} team. Bonded & insured. ${ctaVariant}. Call ${phone} for a free consultation!`;
   }
   
@@ -508,11 +510,11 @@ export const BUSINESS_INFO = {
   founded: '2020',
   serviceArea: ['Boise', 'Meridian', 'Eagle', 'Nampa', 'Kuna', 'Star', 'Middleton', 'Caldwell', 'Garden City'],
   serviceRadius: '35 miles',
-  licenses: ['License details available upon request'],
+  licenses: [IDAHO_REGISTERED_CONTRACTOR],
   certifications: ['Design-Build Home Building', 'Bonded & Insured'],
-  // Kept consistent with GBP and the `licenses` field above: the business
-  // publishes bonded/insured status and provides registration details on
-  // request, so nothing here should assert a specific license.
+  // Previous public line, kept as the record: "License details available upon request".
+  // Sam verified #8381215 on Idaho DOPL (Active General Contractor Registration,
+  // issued 27-May-2026), so the registration number is the published value.
   insurance: 'Bonded & Insured',
   rating: 0,
   reviewCount: 0,
