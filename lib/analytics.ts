@@ -5,7 +5,7 @@
  */
 type GtagParams = Record<string, string | number | boolean | undefined>;
 
-import { trackGoogleAdsLeadConversion, type LeadContext } from '@/lib/googleAdsConversion';
+import { trackGoogleAdsLeadConversion, type GoogleAdsUserInput, type LeadContext } from '@/lib/googleAdsConversion';
 
 const conversionInFlight = new Set<string>();
 
@@ -95,6 +95,7 @@ export interface ClaimedLeadConversion {
   conversionId: string;
   ga4Params: GtagParams;
   metaParams: GtagParams;
+  user?: GoogleAdsUserInput;
 }
 
 /**
@@ -148,6 +149,7 @@ async function performClaimedLeadConversion(
     trackEvent('generate_lead', input.ga4Params);
     trackGoogleAdsLead(input.conversionId, {
       projectType: String(input.ga4Params.project_type ?? ''),
+      user: input.user,
     });
     trackMetaEvent('Lead', input.metaParams, undefined, input.conversionId);
 
