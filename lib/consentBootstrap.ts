@@ -1,14 +1,19 @@
-/** Bridge a CMP's standard gtag consent commands; no invented consent or new banner. */
+/**
+ * US visitors get measurement without a banner. Cabinet, Handyman, Remodeling,
+ * and p5homeco set no consent default, so Google treats those tags as granted.
+ * This site checks p5Consent before a call tap or a forwarding-number swap, so
+ * the same four signals start granted here.
+ */
 export function consentBootstrap():string {
   return `(function(){
     if(window.p5UpdateConsent)return;
-    var denied={analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'};
-    window.p5Consent=Object.assign({},denied);
+    var granted={analytics_storage:'granted',ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted'};
+    window.p5Consent=Object.assign({},granted);
     window.p5ConsentResolved=false;
     window.dataLayer=window.dataLayer||[];
     var original=window.gtag||function(){window.dataLayer.push(arguments);};
     function update(value){
-      Object.keys(denied).forEach(function(k){if(value[k]==='granted'||value[k]==='denied')window.p5Consent[k]=value[k];});
+      Object.keys(granted).forEach(function(k){if(value[k]==='granted'||value[k]==='denied')window.p5Consent[k]=value[k];});
       window.dispatchEvent(new CustomEvent('p5:consent'));
     }
     window.gtag=function(){
@@ -19,7 +24,7 @@ export function consentBootstrap():string {
       }
       return result;
     };
-    window.gtag('consent','default',Object.assign({},denied,{wait_for_update:500}));
+    window.gtag('consent','default',Object.assign({},granted,{wait_for_update:500}));
     window.p5UpdateConsent=function(value){window.gtag('consent','update',value);};
   })();`;
 }
