@@ -21,13 +21,16 @@ test('Google consent defaults grant analytics and ad storage', () => {
 
 test('privacy page discloses Google Analytics, Google Ads, remarketing, and Meta', () => {
   const source = fs.readFileSync(new URL('../app/privacy-policy/page.tsx', import.meta.url), 'utf8');
-  assert.match(source, /Google Analytics 4/);
-  assert.match(source, /Google Ads conversion tracking/);
-  assert.match(source, /We do not currently send your name, email, phone number or project details to Google\./);
-  assert.match(source, /Google's tag also adds visitors to remarketing lists, and Google may use this data to show you relevant ads on other websites \(remarketing\)\./);
+  assert.match(source, /Last updated: October 17, 2026/);
+  assert.match(source, /Cookies, analytics and advertising\./);
+  assert.match(source, /We use Google Analytics 4 \(GA4\) to understand how visitors use this site, such as pages viewed, referring site, approximate location, browser and device type\./);
+  assert.match(source, /We use Google Ads conversion tracking to measure which of our ads lead to calls, form submissions and completed estimates, and Google may use cookies to show our ads to people who have visited this site \(remarketing\)\./);
+  assert.match(source, /https:\/\/policies\.google\.com\/privacy/);
+  assert.match(source, /We do not send your name, email, phone number or project details to Google\./);
   assert.doesNotMatch(source, /personalise ads/);
   assert.match(source, /https:\/\/adssettings\.google\.com/);
   assert.match(source, /https:\/\/tools\.google\.com\/dlpage\/gaoptout/);
-  assert.match(source, /Meta Pixel and Meta's Conversions API/);
-  assert.match(source, /https:\/\/www\.facebook\.com\/privacy\/policy/);
+  assert.match(source, /We also use the Meta Pixel to measure visits and inquiries that come from our Facebook and Instagram ads\./);
+  assert.match(source, /id="document-section-1"/);
+  assert.match(source, /id="document-section-7"/);
 });
