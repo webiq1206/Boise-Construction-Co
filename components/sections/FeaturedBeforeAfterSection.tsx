@@ -25,9 +25,9 @@ export function FeaturedBeforeAfterSection({
     <Section divider>
       <div className="container px-4 max-w-5xl">
         <SectionHeader
-          eyebrow="Project proof"
+          eyebrow="Representative imagery"
           title={title}
-          description="Drag the slider to compare the same space before and after our design-build work."
+          description="Drag the slider to compare the same space."
           className="mb-8 max-w-3xl"
         />
         <Reveal>
@@ -35,8 +35,8 @@ export function FeaturedBeforeAfterSection({
             <BeforeAfterSlider
               beforeSrc={project.beforeImageUrl}
               afterSrc={project.afterImageUrl}
-              beforeAlt={`Before: ${project.title}`}
-              afterAlt={`After: ${project.title}`}
+              beforeAlt="Representative image: Earlier view of the space"
+              afterAlt="Representative image: Later view of the space"
               aspectClass="aspect-[16/10] md:aspect-[21/9]"
             />
             <div className="p-6 md:p-8">

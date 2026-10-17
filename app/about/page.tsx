@@ -11,6 +11,7 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { Button } from '@/components/ui/button';
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { GRAIN_URL } from '@/lib/grain';
+import { contentImageAlt } from '@/shared/imageAlts';
 import { buildPageMetadata } from '@/lib/page-metadata';
 import {
 generateBreadcrumbSchema,
@@ -112,7 +113,7 @@ export default function AboutPage() {
       <JsonLd data={schemas} />
       <div className="flex flex-col pb-20 md:pb-0">
         {/* Approved editorial hero */}
-        <InteriorHero layout="editorial" imageSrc={SITE_IMAGES.leadership} imageAlt="Worker checking interior framing on a new home">
+        <InteriorHero layout="editorial" imageSrc={SITE_IMAGES.leadership} imageAlt={contentImageAlt(SITE_IMAGES.leadership)}>
             <HeroBreadcrumbs />
             <p data-speakable="summary" className="sr-only">
               {SPEAKABLE_SUMMARY}
@@ -157,7 +158,7 @@ export default function AboutPage() {
             <div className="relative min-h-[260px] md:min-h-[520px] overflow-hidden bg-inverse">
               <Image
                 src={SITE_IMAGES.process}
-                alt="Architectural drawings and finish selections for a Treasure Valley new home"
+                alt={contentImageAlt(SITE_IMAGES.process)}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover img-brand-grade"
@@ -174,6 +175,7 @@ export default function AboutPage() {
                   <br />
                   concept to completion
                 </p>
+                <p className="mt-3 text-xs text-inverse-foreground/80">Representative imagery</p>
               </div>
             </div>
 
