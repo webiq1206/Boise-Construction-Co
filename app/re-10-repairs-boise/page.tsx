@@ -104,6 +104,7 @@ export default function Re10RepairsPage() {
       <PageHeroBand
         imageSrc={SITE_IMAGES.processInProgress}
         imageAlt={contentImageAlt(SITE_IMAGES.processInProgress)}
+        imageCaption="Representative imagery"
         scrim={0.86}
       >
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "RE-10 Repairs" }]} />

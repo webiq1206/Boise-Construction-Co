@@ -3,9 +3,8 @@
  * Decorative backgrounds and brand marks are intentionally absent: those stay
  * empty and aria-hidden at the call site.
  *
- * /images/construction/mechanical-rough-in.webp (same file as
- * /family/construction-mechanical-rough-in.webp) is also absent. Two looks at
- * the file disagreed, so it keeps an empty alt where it had none.
+ * /images/construction/mechanical-rough-in.webp and
+ * /family/construction-mechanical-rough-in.webp share one rough-in description.
  *
  * Paths that are byte-identical share one description.
  */
@@ -15,11 +14,11 @@ const ALTS: Record<string, string> = {
   "/family/construction-custom-home-exterior.webp":
     "White board-and-batten house with a dark gable roof and a covered front porch",
   "/images/construction/semi-custom-home.webp":
-    "Single-story house with light horizontal siding, dark shutters, and a covered entry on a subdivision lot",
+    "Single-story gray house with stone-wrapped porch columns, a covered entry and a garage",
   "/images/construction/home-under-framing.webp":
-    "Wood-framed house with roof trusses in place and a worker on the roof deck",
+    "Wood-framed house with roof trusses in place and stacked lumber on a gravel lot",
   "/images/construction/foundation-and-excavation.webp":
-    "Concrete foundation walls in an excavated building pad with gravel and a worker nearby",
+    "Concrete foundation walls in an excavated building pad, with rebar nearby",
   "/images/construction/new-home-kitchen.webp":
     "Kitchen with white cabinets, a wood island, and a light tile backsplash",
   "/images/construction/new-home-interior.webp":
@@ -27,51 +26,55 @@ const ALTS: Record<string, string> = {
   "/images/construction/covered-outdoor-living.webp":
     "Covered outdoor patio with a wood ceiling, dining table, and kitchen counter beside a house",
   "/images/construction/site-meeting.webp":
-    "Three people at a table outdoors reviewing drawings, with a framed house behind them",
+    "Three people in hard hats standing outdoors reviewing a drawing, with a framed house behind them",
   "/images/construction/foothills-building-site.webp":
     "Graded hillside building pad with a rock retaining wall and an unpaved access road",
   "/images/construction/plans-and-selections.webp":
-    "Architectural floor plans, finish samples, and a laptop on a work table",
+    "Floor plan and front elevation drawings with a scale ruler, pencil, and wood, stone and paint samples",
   "/images/construction/line-item-budget.webp":
     "Printed budget pages and a small wood house model on a desk",
   "/images/construction/buildable-lot.webp":
     "Open grassy lot with a survey stake, fence posts, and overhead power lines",
   "/images/construction/rural-site-work.webp":
-    "Rural dirt work site with a trench, excavated soil, and a yellow excavator",
+    "Rural dirt work site with a trench, excavated soil, a yellow excavator, and a well-drilling rig",
   "/images/construction/shop-home-barndominium.webp":
     "Metal building with a large shop bay and an attached living wing on a rural lot",
   "/images/construction/insulation-and-air-sealing.webp":
     "Wall studs filled with insulation and sealed at the edges before drywall",
+  "/images/construction/mechanical-rough-in.webp":
+    "Mechanical rough-in with pipes and wiring inside framed walls",
+  "/family/construction-mechanical-rough-in.webp":
+    "Mechanical rough-in with pipes and wiring inside framed walls",
   "/images/construction/great-room-evening.webp":
     "Living room with a stone fireplace, wood ceiling beams, and large windows at dusk",
   "/family/construction-great-room-evening.webp":
     "Living room with a stone fireplace, wood ceiling beams, and large windows at dusk",
   "/images/framing-in-progress-branded.webp":
-    "A worker beside exterior wall framing, with stacked lumber and a concrete slab on a new-home site",
+    "A worker kneeling beside interior wall framing on a plywood subfloor, with a drill and tape measure nearby",
   "/family/p5-p5-construction-branded.webp":
-    "Framed house on a building site with a worker in a hard hat checking the structure",
+    "A worker kneeling beside interior wall framing on a plywood subfloor, with a drill and tape measure nearby",
   "/family/construction-budget-kitchen-detail.webp":
-    "Kitchen counter with material samples, a notebook, and a tablet showing a floor plan",
+    "Close-up of a white marble waterfall countertop over a light oak Shaker cabinet door",
   "/images/budget-kitchen-detail.webp":
-    "Kitchen counter with material samples, a notebook, and a tablet showing a floor plan",
+    "Close-up of a white marble waterfall countertop over a light oak Shaker cabinet door",
   "/family/p5-p5-hero.webp":
-    "Kitchen with white cabinets, a wood island, and large windows",
+    "Stone and stucco house with a metal roof at dusk, with foothills behind",
   "/images/areas/boise.webp":
-    "Light-colored two-story houses with dark roofs along a wide suburban street",
+    "Craftsman bungalow with a covered porch on a tree-lined street, with foothills behind",
   "/images/areas/meridian.webp":
     "Houses with light siding and dark roofs along a curving street lined with young trees",
   "/images/areas/eagle.webp":
-    "Large homes with varied rooflines along a wide paved suburban street",
+    "Large stone house with a long curving driveway at sunset",
   "/images/areas/nampa.webp":
-    "Houses with light siding and dark roofs along a straight suburban street",
+    "Single-story red brick ranch house with a wide lawn and young trees",
   "/images/areas/kuna.webp":
-    "Houses with light siding and dark roofs along a suburban street with a sidewalk",
+    "Single-story stone and board-and-batten house with a metal roof among sagebrush",
   "/images/areas/star.webp":
-    "A single-story house with light siding and a dark roof on a wide suburban lot",
+    "House with wood and stone siding on a lawn beside a tree-lined river",
   "/images/areas/middleton.webp":
     "A two-story house with light siding and a dark roof beside a lawn and sidewalk",
   "/images/areas/caldwell.webp":
-    "Houses with light siding and dark roofs along a suburban street with sidewalks",
+    "Stucco house with a tile roof beside a vineyard",
 };
 
 export function contentImageAlt(src: string | undefined | null): string {
