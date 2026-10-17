@@ -453,7 +453,7 @@ export function LandingPageTemplate({
             <Reveal>
               <p className="ed-eyebrow">Proof of work</p>
               <h2 className="ed-h2 ed-statement-wide">
-                {proofHeading ?? (<>Recent <em className="not-italic" style={accent}>local work</em></>)}
+                {proofHeading ?? (<>Before <em className="not-italic" style={accent}>and after</em></>)}
               </h2>
             </Reveal>
 
@@ -464,11 +464,11 @@ export function LandingPageTemplate({
                     <article className="flex h-full flex-col" style={{ border: '1px solid var(--ed-line)' }}>
                       <div className="grid grid-cols-2">
                         <div className="relative aspect-[4/3]">
-                          <Image src={project.beforeImageUrl} alt={`${project.title} - before`} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
+                          <Image src={project.beforeImageUrl} alt="Earlier view of the space" fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                           <span className="absolute bottom-2 left-2 bg-inverse/70 px-2 py-1 text-[0.6875rem] font-bold uppercase tracking-[0.18em] text-inverse-foreground">Before</span>
                         </div>
                         <div className="relative aspect-[4/3]">
-                          <Image src={project.afterImageUrl} alt={`${project.title} - after`} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
+                          <Image src={project.afterImageUrl} alt="Later view of the space" fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                           <span className="absolute bottom-2 left-2 bg-accent px-2 py-1 text-[0.6875rem] font-bold uppercase tracking-[0.18em]" style={{ color: "hsl(var(--accent-foreground))" }}>After</span>
                         </div>
                       </div>

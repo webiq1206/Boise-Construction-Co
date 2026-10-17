@@ -63,14 +63,9 @@ export function ProjectGallerySection({
         {/* LEAD: the slider at the size it deserves, heading alongside. */}
         <div className="grid gap-[var(--ed-gutter)] lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <Reveal>
-            <p className="ed-eyebrow">Our work</p>
             <h2 className="ed-h2 ed-statement">
               Homes across the Treasure Valley
             </h2>
-            <p className="ed-body mt-7">
-              Recent homes we have designed and built across Boise, Meridian,
-              Eagle, Nampa and the surrounding valley.
-            </p>
             <div className="mt-10 hidden lg:block">
               <ProjectMeta project={lead} lead />
             </div>
@@ -81,8 +76,8 @@ export function ProjectGallerySection({
               <BeforeAfterSlider
                 beforeSrc={lead.beforeImageUrl}
                 afterSrc={lead.afterImageUrl}
-                beforeAlt={`Before: ${lead.title} in ${cityDisplayName(lead.city)}, Idaho`}
-                afterAlt={`After: ${lead.title} in ${cityDisplayName(lead.city)}, Idaho`}
+                beforeAlt="Earlier view of the space"
+                afterAlt="Later view of the space"
                 aspectClass="aspect-[4/3]"
               />
             </div>
@@ -114,8 +109,8 @@ export function ProjectGallerySection({
                   <BeforeAfterSlider
                     beforeSrc={project.beforeImageUrl}
                     afterSrc={project.afterImageUrl}
-                    beforeAlt={`Before: ${project.title} in ${cityDisplayName(project.city)}, Idaho`}
-                    afterAlt={`After: ${project.title} in ${cityDisplayName(project.city)}, Idaho`}
+                    beforeAlt="Earlier view of the space"
+                    afterAlt="Later view of the space"
                     aspectClass="aspect-[4/3]"
                   />
                   <div className="p-6">
@@ -130,7 +125,7 @@ export function ProjectGallerySection({
         {showViewAll && (
           <div className="mt-12">
             <Button variant="brandOutline" asChild>
-              <Link href="/services">See more of our work</Link>
+              <Link href="/services">See services</Link>
             </Button>
           </div>
         )}
