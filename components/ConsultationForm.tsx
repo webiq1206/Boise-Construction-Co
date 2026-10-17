@@ -388,6 +388,12 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
           content_name: variables.projectType,
           content_category: "consultation_request",
         },
+        user: {
+          email: variables.email,
+          phone: variables.phone,
+          name: variables.name,
+          postalCode: deriveZip(variables.address),
+        },
       });
     },
     onError: () => {
