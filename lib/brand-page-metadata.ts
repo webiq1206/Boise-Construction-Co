@@ -1,9 +1,14 @@
 import type {Metadata} from 'next';
 import {ESTIMATOR_BRAND as brand} from './p5/brand.ts';
+import {SHOW_FOUNDED_YEAR} from '../shared/foundedYear.ts';
 
 /** Branded sharing previews are the owner's preference. Product/article schema
- * retains its real subject image. Neither favicon nor preview display is guaranteed. */
-export const BRAND_PAGE_IMAGE=`https://${brand.domain}/brand/page-preview.png`;
+ * retains its real subject image. Neither favicon nor preview display is guaranteed.
+ * page-preview.png draws the maker's seal, so it is withheld while
+ * SHOW_FOUNDED_YEAR is false. The existing wordmark card has no year. */
+const SEAL_PAGE_IMAGE=`https://${brand.domain}/brand/page-preview.png`;
+const YEAR_FREE_PAGE_IMAGE=`https://${brand.domain}/images/og-default.png`;
+export const BRAND_PAGE_IMAGE=SHOW_FOUNDED_YEAR?SEAL_PAGE_IMAGE:YEAR_FREE_PAGE_IMAGE;
 export const BRAND_SEARCH_ICON=`https://${brand.domain}/brand/search-icon-96.png`;
 type Copy={title:string;description:string};
 const COPY:Record<string,Record<string,Copy>>={
@@ -53,7 +58,7 @@ export function withBrandPageMetadata(meta:Metadata,routeHint?:string):Metadata{
  const original=titleText(meta);
  const title=override?`${override.title} | ${brand.name}`:original.includes(brand.name)?original:`${original} | ${brand.name}`;
  const description=override?.description||meta.description||undefined;
- const image={url:BRAND_PAGE_IMAGE,width:1200,height:630,alt:`${brand.name} brand seal`};
+ const image={url:BRAND_PAGE_IMAGE,width:1200,height:630,alt:SHOW_FOUNDED_YEAR?`${brand.name} brand seal`:brand.name};
  const icons=routeHint==='__layout__'?{
   ...(typeof meta.icons==='object'&&!Array.isArray(meta.icons)&&!(meta.icons instanceof URL)?meta.icons:{}),
   icon:[{url:BRAND_SEARCH_ICON,sizes:'96x96',type:'image/png'}],

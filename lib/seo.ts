@@ -270,7 +270,8 @@ export function generateSafePageTitle(primary: string, suffix?: string): string 
  * Default Open Graph / Twitter image path used as a site-wide fallback so every
  * page emits an og:image. Pages with their own hero (blog posts, guides) override
  * this with a more specific image.
- * Purpose-built 1200x630 dark social card: reverse wordmark + Maker's Seal on #1C1F1E.
+ * Purpose-built 1200x630 dark social card: reverse wordmark only. It does not
+ * draw the maker's seal.
  */
 export const DEFAULT_OG_IMAGE_PATH = '/images/og-default.png';
 

@@ -34,8 +34,9 @@ try{
   const meta=await page.evaluate(html=>{const doc=new DOMParser().parseFromString(html,'text/html');return {title:doc.querySelector('title')?.textContent||'',description:doc.querySelector('meta[name=description]')?.getAttribute('content')||'',canonical:doc.querySelector('link[rel=canonical]')?.getAttribute('href'),images:[...doc.querySelectorAll('meta[property="og:image"]')].map(e=>e.getAttribute('content')),twitter:doc.querySelector('meta[name="twitter:image"]')?.getAttribute('content'),robots:doc.querySelector('meta[name=robots]')?.getAttribute('content')||'',icon:doc.querySelector('link[rel=icon]')?.getAttribute('href')};},html);
   results.pages.push({route,...meta});
   assert.ok(meta.title,`Title missing on ${route}`);assert.ok(meta.description,`Description missing on ${route}`);
-  assert.ok(meta.images.some(u=>u?.endsWith('/brand/page-preview.png')),`Approved brand preview missing on ${route}`);
-  assert.ok(meta.twitter?.endsWith('/brand/page-preview.png'),`Twitter preview missing on ${route}`);
+  assert.ok(meta.images.some(u=>u?.endsWith('/images/og-default.png')),`Year-free share image missing on ${route}`);
+  assert.ok(meta.twitter?.endsWith('/images/og-default.png'),`Twitter preview missing on ${route}`);
+  assert.ok(![...meta.images,meta.twitter].some(u=>u?.includes('page-preview')),`Seal preview still published on ${route}`);
  }
  for(const field of ['title','description']){const used=new Map();for(const p of results.pages.filter(p=>!p.robots.includes('noindex'))){assert.ok(!used.has(p[field]),`Duplicate ${field}: ${p.route} and ${used.get(p[field])}`);used.set(p[field],p.route);}}
  for(const asset of ['/brand/page-preview.png','/brand/search-icon-96.png','/brand/search-icon-180.png'])assert.equal((await page.request.get(base+asset)).status(),200,`Missing image: ${asset}`);
