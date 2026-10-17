@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -25,13 +26,12 @@ test('gbp description interpolates and does not keep a literal template', () => 
   assert.match(read('shared/gbpProfile.ts'), /`[\s\S]*\$\{FOUNDING\.gbpFoundedSentence\}/);
 });
 
-test('share image uses the year-free card while the original file stays', () => {
-  assert.equal(BRAND_PAGE_IMAGE.endsWith('/brand/page-preview-year-free.png'), true);
-  assert.equal(fs.existsSync(path.join(root, 'public/brand/page-preview.png')), true);
-  assert.equal(fs.existsSync(path.join(root, 'public/brand/page-preview-year-free.png')), true);
-  const original = fs.readFileSync(path.join(root, 'public/brand/page-preview.png'));
-  const yearFree = fs.readFileSync(path.join(root, 'public/brand/page-preview-year-free.png'));
-  assert.equal(original.equals(yearFree), false);
+test('share image is the supplied year-free card at the public preview path', () => {
+  assert.equal(BRAND_PAGE_IMAGE.endsWith('/brand/page-preview.png'), true);
+  const file = path.join(root, 'public/brand/page-preview.png');
+  const hash = crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+  assert.equal(hash, '62170364be2f94a0c72658764181cdc60d73dde9de46b6bfa5c366edee3a324b');
+  assert.equal(fs.existsSync(path.join(root, 'public/brand/page-preview-year-free.png')), false);
   assert.equal(read('public/brand/BRAND.md').includes('Est. 2020'), false);
   assert.match(read('scripts/brand/generate-brand-assets.mjs'), /Est\. 2020/);
 });
