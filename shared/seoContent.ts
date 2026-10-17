@@ -1,5 +1,7 @@
 import type { ServiceData, CityData } from './contentData';
 import { getCountyLabel } from './contentData';
+import { getCityServiceCopy } from './content/cityServiceCopy';
+import { indianCreekDescription } from '../lib/seo';
 import {permitGuidance,permitSource} from '../lib/permitGuidance';
 import type { LandingSection } from '@/components/seo/LandingPageTemplate';
 
@@ -784,6 +786,8 @@ export function getCityServiceIntro(
   city: CityData,
   localFact?: string,
 ): string {
+  const custom = getCityServiceCopy(service.slug, city.slug);
+  if (custom) return custom.intro;
   const county = getCountyLabel(city.county);
   const fact = localFact
     ? ` ${localFact}`
@@ -792,6 +796,8 @@ export function getCityServiceIntro(
 }
 
 export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): FAQItem[] {
+  const custom = getCityServiceCopy(service.slug, city.slug);
+  if (custom) return custom.faqs;
   const county = getCountyLabel(city.county);
   // First sentence of the cost band, reused as a direct city-level answer for
   // "{service} cost in {city}" queries (voice/AI extractable).
@@ -834,6 +840,7 @@ export function getCityServiceSections(
   const county = getCountyLabel(city.county);
   const neighborhoods = seo?.neighborhoods ?? [];
   const landmarks = seo?.landmarks ?? [];
+  const creek = indianCreekDescription(city.name);
   const serviceLC = service.name.toLowerCase();
 
   const sections: LandingSection[] = [
@@ -860,7 +867,7 @@ export function getCityServiceSections(
       heading: `${service.name} across ${city.name}`,
       paragraphs: [
         neighborhoods.length
-          ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}. Lot conditions, utility access, and subdivision design standards vary between these areas, so we tailor the site plan, foundation, and elevations to the specific parcel rather than dropping a plan onto it.`
+          ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}.${creek ? ` ${creek}` : ''} Lot conditions, utility access, and subdivision design standards vary between these areas, so we tailor the site plan, foundation, and elevations to the specific parcel rather than dropping a plan onto it.`
           : `We build throughout ${city.name}, tailoring the site plan, foundation design, and elevations to the specific parcel rather than dropping a plan onto it.`,
         landmarks.length
           ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand how the area is developing and plan ${serviceLC} that fits the neighborhood and holds its value.`
