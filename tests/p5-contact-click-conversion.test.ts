@@ -58,6 +58,36 @@ test('call and text clicks send one Ads conversion each when consent is granted'
   }
 });
 
+test('call and text conversions set no user_data and send no personal data', () => {
+  const window = installWindow(granted);
+  try {
+    assert.equal(trackGoogleAdsContactClick('tel:+12084771169'), true);
+    assert.equal(trackGoogleAdsContactClick('sms:+12084771169'), true);
+    trackDelegatedContactClick('tel:2084771169', '/contact');
+    trackDelegatedContactClick('sms:2084771169', '/contact');
+    const sets = window.events.filter((event) => event[0] === 'set');
+    assert.deepEqual(sets, []);
+    assert.equal(window.events.some((event) => event.includes('user_data')), false);
+    const conversions = window.events.filter((event) => event[0] === 'event' && event[1] === 'conversion');
+    assert.equal(conversions.length, 4);
+    for (const event of conversions) {
+      const payload = event[2] as Record<string, unknown>;
+      assert.deepEqual(Object.keys(payload).sort(), ['send_to']);
+      assert.equal(
+        /email|phone_number|first_name|last_name|address|user_data|2084771169|\+1/i.test(JSON.stringify(payload)),
+        false,
+      );
+    }
+    const source = fs.readFileSync(new URL('../lib/googleAdsConversion.ts', import.meta.url), 'utf8');
+    const body = source.slice(source.indexOf('export function trackGoogleAdsContactClick'));
+    assert.match(body, /gtag\('event', 'conversion', \{ send_to: sendTo \}\)/);
+    assert.equal(body.includes("gtag('set'"), false);
+    assert.equal(body.includes('user_data'), false);
+  } finally {
+    window.restore();
+  }
+});
+
 test('a second click sends a second conversion and one click sends only one', () => {
   const window = installWindow(granted);
   try {

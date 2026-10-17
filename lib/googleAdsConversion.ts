@@ -133,8 +133,9 @@ export function googleAdsContactClickSendTo(href: string): string | undefined {
 
 /**
  * Fires one call or text click conversion. A second call is a second click.
- * Analytics switched off, denied Ads consent, a missing gtag, and any non
- * tel:/sms: href send nothing.
+ * The conversion object is only the send_to label. No enhanced-conversion
+ * fields are attached. Analytics switched off, denied Ads consent, a missing
+ * gtag, and any non tel:/sms: href send nothing.
  */
 export function trackGoogleAdsContactClick(href: string): boolean {
   const sendTo = googleAdsContactClickSendTo(href);
