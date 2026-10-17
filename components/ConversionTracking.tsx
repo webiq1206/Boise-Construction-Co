@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { trackDelegatedContactClick } from '@/lib/contactClickTracking';
+import { bindDelegatedContactClicks } from '@/lib/contactClickTracking';
 
 /**
  * Site-wide conversion tracking for call/text/email intent. Uses a single
@@ -12,16 +12,7 @@ import { trackDelegatedContactClick } from '@/lib/contactClickTracking';
  * at the form (generate_lead).
  */
 export function ConversionTracking() {
-  useEffect(() => {
-    const onClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement | null;
-      const link = target?.closest('a[href]') as HTMLAnchorElement | null;
-      if (!link) return;
-      trackDelegatedContactClick(link.getAttribute('href') || '', window.location.pathname);
-    };
-    document.addEventListener('click', onClick, { capture: true });
-    return () => document.removeEventListener('click', onClick, { capture: true });
-  }, []);
+  useEffect(() => bindDelegatedContactClicks(), []);
 
   return null;
 }
