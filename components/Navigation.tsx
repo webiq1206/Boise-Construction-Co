@@ -153,7 +153,23 @@ function MarketingNavigation() {
 
           {/* Mobile menu - Radix Dialog gives focus trap, Escape, scroll-lock,
               inert background, and auto aria-expanded/aria-controls on the trigger. */}
-          <div className="flex min-[1180px]:hidden items-center gap-2">
+          <div className="flex min-[1180px]:hidden items-center gap-1">
+            <a
+              href={SITE_CONFIG.phoneHref}
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-sm text-foreground"
+              aria-label={`Call ${SITE_CONFIG.phone}`}
+              data-testid="link-call-header"
+            >
+              <Phone className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+            </a>
+            <a
+              href={SITE_CONFIG.phoneSmsHref}
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-sm text-foreground"
+              aria-label={`Text ${SITE_CONFIG.phone}`}
+              data-testid="link-text-header"
+            >
+              <MessageSquare className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+            </a>
             <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
               <Dialog.Trigger asChild>
                 {/* The shared icon size is 36px, which suits dense admin

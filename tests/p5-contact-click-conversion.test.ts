@@ -107,6 +107,25 @@ test('a missing gtag does not throw and does not report the click conversion', (
   }
 });
 
+test('landing chrome links call and text to the configured number', () => {
+  const nav = fs.readFileSync(new URL('../components/Navigation.tsx', import.meta.url), 'utf8');
+  const estimator = fs.readFileSync(new URL('../components/EstimatorFoldContact.tsx', import.meta.url), 'utf8');
+  const layout = fs.readFileSync(new URL('../app/layout.tsx', import.meta.url), 'utf8');
+  const home = fs.readFileSync(new URL('../components/approved/ApprovedHome.tsx', import.meta.url), 'utf8');
+  const css = fs.readFileSync(new URL('../app/audit-accessibility.css', import.meta.url), 'utf8');
+  assert.match(nav, /data-testid="link-call-header"[\s\S]*href=\{SITE_CONFIG\.phoneHref\}|href=\{SITE_CONFIG\.phoneHref\}[\s\S]*data-testid="link-call-header"/);
+  assert.match(nav, /href=\{SITE_CONFIG\.phoneSmsHref\}[\s\S]*data-testid="link-text-header"/);
+  assert.match(estimator, /href=\{SITE_CONFIG\.phoneHref\}/);
+  assert.match(estimator, /href=\{SITE_CONFIG\.phoneSmsHref\}/);
+  assert.match(estimator, /isEstimatorPath/);
+  assert.match(layout, /<EstimatorFoldContact \/>/);
+  assert.match(home, /href=\{SITE_CONFIG\.phoneHref\}/);
+  assert.match(home, /href=\{SITE_CONFIG\.phoneSmsHref\}/);
+  assert.doesNotMatch(home, /tel:\+12084771169|sms:\+12084771169/);
+  assert.match(css, /\[data-mobile-nav-bar\]\[data-p5-actions-ready="false"\]/);
+  assert.match(css, /data-estimator-fold-contact/);
+});
+
 test('the site listener is one capture-phase tel and sms delegation', () => {
   const source = fs.readFileSync(new URL('../components/ConversionTracking.tsx', import.meta.url), 'utf8');
   assert.match(source, /trackDelegatedContactClick\(link\.getAttribute\('href'\)/);
