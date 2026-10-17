@@ -1,7 +1,6 @@
 import { InteriorEstimateLink,InteriorHero,InteriorPage } from '@/components/approved/InteriorLayout';
 import { BusinessPhoneContact } from '@/components/BusinessPhoneContact';
 import { ConsultationForm } from '@/components/ConsultationForm';
-import { EmailLink } from '@/components/EmailLink';
 import { Section } from '@/components/marketing';
 import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
 import { Hairline } from '@/components/marketing/Hairline';
@@ -314,9 +313,10 @@ export default function ContactPage() {
                 <ContactChannel
                   icon={<Mail className="h-5 w-5" strokeWidth={1.5} />}
                   label="Email us"
+                  href={`mailto:${SITE_CONFIG.email}`}
                   subtext="Response within one business day"
                 >
-                  <EmailLink className="text-base hover:text-foreground/70 transition-colors" />
+                  {SITE_CONFIG.email}
                 </ContactChannel>
               </Reveal>
               <Reveal delay={120}>

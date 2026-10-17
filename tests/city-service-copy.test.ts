@@ -49,10 +49,15 @@ test('all 81 service-city pages use the draft intro and six FAQs, and schema mat
 });
 
 test('landmark lists and Indian Creek follow the approved corrections', () => {
-  assert.deepEqual(CITY_SEO_DATA.Kuna.landmarks, ['Kuna Caves', 'Swan Falls Dam', 'Bernie Fisher Park']);
+  assert.deepEqual(CITY_SEO_DATA.Kuna.landmarks, ['Bernie Fisher Park']);
   assert.deepEqual(CITY_SEO_DATA.Meridian.landmarks, ['The Village at Meridian', 'Julius M. Kleiner Memorial Park', 'Settlers Park']);
-  assert.deepEqual(CITY_SEO_DATA.Star.landmarks, ['Boise River', 'Star Riverfront Park', 'Freedom Park']);
+  assert.deepEqual(CITY_SEO_DATA.Star.landmarks, ['Boise River', 'Star Riverwalk Park', 'Freedom Park']);
+  assert.equal(CITY_SEO_DATA.Star.neighborhoods.includes('Hillsdale'), false);
+  assert.equal(CITY_SEO_DATA.Star.neighborhoods.includes('Paramount'), false);
   assert.ok(CITY_SEO_DATA.Eagle.landmarks.includes('Eagle Island State Park'));
+  assert.equal(CITY_SEO_DATA.Meridian.landmarks.includes('Eagle Island State Park'), false);
+  assert.deepEqual(CITY_SEO_DATA.Nampa.landmarks, ['Ford Idaho Center', 'Nampa Train Depot']);
+  assert.equal(CITY_SEO_DATA.Nampa.neighborhoods.includes('Columbia Village'), false);
   assert.ok(CITY_SEO_DATA.Caldwell.landmarks.includes('Indian Creek Plaza'));
   for (const city of ['Kuna', 'Nampa', 'Caldwell']) {
     assert.equal(CITY_SEO_DATA[city].neighborhoods.includes('Indian Creek'), false);

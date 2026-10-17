@@ -37,12 +37,24 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
 });
 
 test('misplaced landmarks are corrected only on the city that listed them', () => {
-  assert.deepEqual(CITY_SEO_DATA.Kuna.landmarks, ['Kuna Caves', 'Swan Falls Dam', 'Bernie Fisher Park']);
+  assert.deepEqual(CITY_SEO_DATA.Kuna.landmarks, ['Bernie Fisher Park']);
+  assert.deepEqual(CITY_SEO_DATA.Kuna.neighborhoods, ['Crimson Point', 'Black Cat']);
   assert.deepEqual(CITY_SEO_DATA.Meridian.landmarks, ['The Village at Meridian', 'Julius M. Kleiner Memorial Park', 'Settlers Park']);
-  assert.deepEqual(CITY_SEO_DATA.Star.landmarks, ['Boise River', 'Star Riverfront Park', 'Freedom Park']);
+  assert.deepEqual(CITY_SEO_DATA.Meridian.neighborhoods, ['Lochsa Falls', 'Tuscany', 'Paramount', 'Meridian Ranch']);
   assert.ok(CITY_SEO_DATA.Eagle.landmarks.includes('Eagle Island State Park'));
+  assert.equal(CITY_SEO_DATA.Meridian.landmarks.includes('Eagle Island State Park'), false);
+  assert.deepEqual(CITY_SEO_DATA.Star.neighborhoods, ['Star River Ranch', 'Star Crossing']);
+  assert.deepEqual(CITY_SEO_DATA.Star.landmarks, ['Boise River', 'Star Riverwalk Park', 'Freedom Park']);
+  assert.equal(CITY_SEO_DATA.Star.neighborhoods.includes('Hillsdale'), false);
+  assert.equal(CITY_SEO_DATA.Star.neighborhoods.includes('Paramount'), false);
+  assert.equal(CITY_SEO_DATA.Star.landmarks.includes('Celebration Park'), false);
+  assert.deepEqual(CITY_SEO_DATA.Middleton.neighborhoods, ['Middleton Heights']);
+  assert.deepEqual(CITY_SEO_DATA.Middleton.landmarks, ['Boise River']);
+  assert.equal(CITY_SEO_DATA.Nampa.neighborhoods.includes('Columbia Village'), false);
+  assert.deepEqual(CITY_SEO_DATA.Nampa.landmarks, ['Ford Idaho Center', 'Nampa Train Depot']);
   assert.ok(CITY_SEO_DATA.Caldwell.landmarks.includes('Indian Creek Plaza'));
   assert.equal(CITY_SEO_DATA.Kuna.neighborhoods.includes('Indian Creek'), false);
+  assert.equal(CITY_SEO_DATA.Kuna.neighborhoods.includes('Ten Mile Creek'), false);
   assert.equal(CITY_SEO_DATA.Nampa.neighborhoods.includes('Indian Creek'), false);
   assert.equal(CITY_SEO_DATA.Caldwell.neighborhoods.includes('Indian Creek'), false);
   const creek = indianCreekDescription('Kuna');
