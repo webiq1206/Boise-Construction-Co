@@ -115,6 +115,35 @@ test('the mask script is in the document head, ahead of Clarity', () => {
   assert.match(script, /type==='checkbox'\|\|type==='radio'\|\|type==='range'\|\|type==='button'/);
 });
 
+test('a checkbox parent is never body or html', () => {
+  const body = element('body');
+  append(body, element('input', {type: 'checkbox'}));
+  install(body);
+  assert.equal(body.attrs['data-clarity-mask'], undefined);
+
+  const html = element('html');
+  const radio = append(html, element('input', {type: 'radio'}));
+  const document = {
+    readyState: 'complete',
+    body: html,
+    nodeType: 9,
+    querySelectorAll: (selector: string) => html.querySelectorAll(selector),
+    addEventListener() {},
+  };
+  class MutationObserver {
+    constructor(_fn: (records: Array<{addedNodes: Node[]}>) => void) {}
+    observe() {}
+  }
+  vm.runInNewContext(clarityFieldMaskBootstrap(), {document, MutationObserver});
+  assert.equal(html.attrs['data-clarity-mask'], undefined);
+  assert.equal(radio.attrs['data-clarity-mask'], 'True');
+});
+
+test('the consultation success state masks the name and address', () => {
+  const source = fs.readFileSync(new URL('../components/ConsultationForm.tsx', import.meta.url), 'utf8');
+  assert.match(source, /data-testid="consultation-success"[^>]*data-clarity-mask="True"/);
+});
+
 test('the assistant transcript is masked', () => {
   const source = fs.readFileSync(new URL('../components/assistant/AssistantWidget.tsx', import.meta.url), 'utf8');
   assert.match(source, /role="log"[\s\S]{0,120}data-clarity-mask="True"/);

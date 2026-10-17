@@ -26,8 +26,10 @@ export function clarityFieldMaskBootstrap(): string {
       if(name==='FORM'||name==='INPUT'||name==='TEXTAREA'||name==='SELECT') node.setAttribute(attr,'True');
       if(name!=='INPUT') return;
       var type=String((node.getAttribute&&node.getAttribute('type'))||node.type||'').toLowerCase();
-      if((type==='checkbox'||type==='radio'||type==='range'||type==='button')&&!closestMasked(node)&&node.parentNode&&node.parentNode.setAttribute){
-        node.parentNode.setAttribute(attr,'True');
+      var parent=node.parentNode;
+      var parentName=parent&&parent.nodeName;
+      if((type==='checkbox'||type==='radio'||type==='range'||type==='button')&&!closestMasked(node)&&parent&&parent.setAttribute&&parentName!=='BODY'&&parentName!=='HTML'){
+        parent.setAttribute(attr,'True');
       }
     }
     function maskForms(root){
