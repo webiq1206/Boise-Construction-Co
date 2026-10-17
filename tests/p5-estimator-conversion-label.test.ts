@@ -26,34 +26,33 @@ function sendTo(events: unknown[][]): string[] {
   return events.map((event) => (event[2] as {send_to: string}).send_to);
 }
 
-test('an estimator finish fires the estimator label and the form label once', () => {
+test('an estimator finish fires only the estimator label once, with the raw key as transaction_id', () => {
   const seen = calls();
   try {
     assert.equal(trackGoogleAdsLeadConversion({service: 'new-build'}, 'estimator:draft-1'), true);
     assert.equal(trackGoogleAdsLeadConversion({service: 'new-build'}, 'estimator:draft-1'), false);
-    assert.deepEqual(sendTo(seen.events), [GOOGLE_ADS_ESTIMATOR_LABEL, GOOGLE_ADS_LEAD_LABEL]);
+    assert.deepEqual(sendTo(seen.events), [GOOGLE_ADS_ESTIMATOR_LABEL]);
+    assert.equal(GOOGLE_ADS_ESTIMATOR_LABEL, 'AW-18354188204/cEzmCPOagKAdEKzf-q9E');
     assert.equal((seen.events[0][2] as {transaction_id: string}).transaction_id, 'estimator:draft-1');
-    assert.equal((seen.events[1][2] as {transaction_id: string}).transaction_id, 'estimator:draft-1');
-    assert.equal((seen.events[1][2] as {value: number}).value, 300);
+    assert.equal(sendTo(seen.events).includes(GOOGLE_ADS_LEAD_LABEL), false);
   } finally {
     seen.restore();
   }
 });
 
-test('an intake finish fires both labels once per key', () => {
+test('an intake finish fires only the estimator label once per key', () => {
   const seen = calls();
   try {
     assert.equal(trackGoogleAdsLeadConversion({}, 'intake:construction:project-1', {accepted: true}), true);
     assert.equal(trackGoogleAdsLeadConversion({}, 'intake:construction:project-1', {accepted: true}), false);
-    assert.deepEqual(sendTo(seen.events), [GOOGLE_ADS_ESTIMATOR_LABEL, GOOGLE_ADS_LEAD_LABEL]);
+    assert.deepEqual(sendTo(seen.events), [GOOGLE_ADS_ESTIMATOR_LABEL]);
     assert.equal((seen.events[0][2] as {transaction_id: string}).transaction_id, 'intake:construction:project-1');
-    assert.equal((seen.events[1][2] as {transaction_id: string}).transaction_id, 'intake:construction:project-1');
   } finally {
     seen.restore();
   }
 });
 
-test('intake and estimate keys each fire both labels once, with the raw key as transaction_id', () => {
+test('intake and estimate keys each fire the estimator label once, with the raw key as transaction_id', () => {
   const seen = calls();
   const project = '11111111-1111-4111-8111-111111111111';
   const intakeKey = `intake:construction:${project}`;
@@ -63,16 +62,10 @@ test('intake and estimate keys each fire both labels once, with the raw key as t
     assert.equal(trackGoogleAdsLeadConversion({service: 'new-build'}, estimatorKey, {accepted: true}), true);
     assert.equal(trackGoogleAdsLeadConversion({}, intakeKey, {accepted: true}), false);
     assert.equal(trackGoogleAdsLeadConversion({service: 'new-build'}, estimatorKey, {accepted: true}), false);
-    assert.deepEqual(sendTo(seen.events), [
-      GOOGLE_ADS_ESTIMATOR_LABEL,
-      GOOGLE_ADS_LEAD_LABEL,
-      GOOGLE_ADS_ESTIMATOR_LABEL,
-      GOOGLE_ADS_LEAD_LABEL,
-    ]);
+    assert.deepEqual(sendTo(seen.events), [GOOGLE_ADS_ESTIMATOR_LABEL, GOOGLE_ADS_ESTIMATOR_LABEL]);
     assert.equal((seen.events[0][2] as {transaction_id: string}).transaction_id, intakeKey);
-    assert.equal((seen.events[1][2] as {transaction_id: string}).transaction_id, intakeKey);
-    assert.equal((seen.events[2][2] as {transaction_id: string}).transaction_id, estimatorKey);
-    assert.equal((seen.events[3][2] as {transaction_id: string}).transaction_id, estimatorKey);
+    assert.equal((seen.events[1][2] as {transaction_id: string}).transaction_id, estimatorKey);
+    assert.equal(sendTo(seen.events).includes(GOOGLE_ADS_LEAD_LABEL), false);
   } finally {
     seen.restore();
   }
@@ -89,13 +82,15 @@ test('a submit replay marked accepted false fires only the estimator label', () 
   }
 });
 
-test('a form lead fires only the form label', () => {
+test('a consultation form submit fires only the form label', () => {
   const seen = calls();
   try {
-    assert.equal(trackGoogleAdsLeadConversion({projectType: 'Custom home'}, 'form-lead-1'), true);
-    assert.equal(trackGoogleAdsLeadConversion({projectType: 'Custom home'}, 'form-lead-1'), false);
+    assert.equal(trackGoogleAdsLeadConversion({projectType: 'Custom home'}, 'conv_fixture1234567890123456'), true);
+    assert.equal(trackGoogleAdsLeadConversion({projectType: 'Custom home'}, 'conv_fixture1234567890123456'), false);
+    assert.equal(GOOGLE_ADS_LEAD_LABEL, 'AW-18354188204/LE2vCPXstO8cEKzf-q9E');
     assert.deepEqual(sendTo(seen.events), [GOOGLE_ADS_LEAD_LABEL]);
-    assert.equal((seen.events[0][2] as {transaction_id: string}).transaction_id, 'form-lead-1');
+    assert.equal((seen.events[0][2] as {transaction_id: string}).transaction_id, 'conv_fixture1234567890123456');
+    assert.equal(sendTo(seen.events).includes(GOOGLE_ADS_ESTIMATOR_LABEL), false);
   } finally {
     seen.restore();
   }

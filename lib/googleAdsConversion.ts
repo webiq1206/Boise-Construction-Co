@@ -1,16 +1,15 @@
 /**
  * Google Ads conversion helpers shared by every lead path on this site.
  *
- * 'P5 Raw Form Submitted' receives every accepted lead, with a per-lead value
- * so Google Ads can report ROAS by campaign. Values are the per-lead estimates
- * agreed with P5 on 14 Sept 2026 (form fallback in Google Ads is $50).
- * Estimator finishes also report 'P5 Estimator Completed'. Never pass PII here:
- * no names, phones, emails or free text - only a service/project category and
- * an opaque id.
+ * 'P5 Raw Form Submitted' is the consultation form submit. Estimator finishes
+ * report 'P5 Estimator Completed' instead, and do not also send the form label.
+ * Values are the per-lead estimates agreed with P5 on 14 Sept 2026 (form
+ * fallback in Google Ads is $50). Never pass PII here: no names, phones,
+ * emails or free text - only a service/project category and an opaque id.
  */
 export const GOOGLE_ADS_ID = 'AW-18354188204';
 export const GOOGLE_ADS_LEAD_LABEL = 'AW-18354188204/LE2vCPXstO8cEKzf-q9E';
-/** 'P5 Estimator Completed'. Secondary action for an estimator finish, not a substitute for the form lead. */
+/** 'P5 Estimator Completed'. Estimator finish only. Not the consultation form. */
 export const GOOGLE_ADS_ESTIMATOR_LABEL = 'AW-18354188204/cEzmCPOagKAdEKzf-q9E';
 /** 'P5 Website Call (60s+)': swaps the visible number for a Google forwarding number. */
 export const GOOGLE_ADS_WEBSITE_CALL_LABEL = 'AW-18354188204/YHR0CIaPz_ccEKzf-q9E';
@@ -150,35 +149,32 @@ export function isEstimatorCompletionKey(dedupeKey?: string): boolean {
 
 export type LeadConversionOptions = {
   /**
-   * True when the endpoint returned accepted===true. False for a submit
-   * replay `{accepted:false, duplicate:true}`, which sends only the estimator
-   * label. The shared engine omits this argument.
+   * Kept so existing callers still type-check. Estimator keys never send the
+   * form label, so this flag does not add or remove a conversion.
    */
   accepted?: boolean;
 };
 
 /**
- * Fires Google Ads conversions. An estimator finish fires
- * 'P5 Estimator Completed' once for that raw key. The form label fires for
- * the same key (`intake:${projectId}` or `estimator:${draftId}`), once per
- * key, unless `accepted` is false. Any other key fires the form label only.
- * If gtag is not loaded yet, the retry waits ten seconds and still fires at
- * most once. Returns true when at least one conversion was sent immediately.
+ * Fires one Google Ads conversion. An estimator finish (`intake:` or
+ * `estimator:`) fires 'P5 Estimator Completed' once, with that raw key as
+ * `transaction_id`. A consultation form id, and any other key, fires the form
+ * label only. If gtag is not loaded yet, the retry waits ten seconds and
+ * still fires at most once. Returns true when the conversion was sent
+ * immediately.
  */
 export function trackGoogleAdsLeadConversion(
   ctx: LeadContext = {},
   dedupeKey?: string,
-  options?: LeadConversionOptions,
+  _options?: LeadConversionOptions,
 ): boolean {
+  void _options;
   if (typeof window === 'undefined') return false;
   if (isEstimatorCompletionKey(dedupeKey) && dedupeKey) {
-    const estimatorSent = queueConversion(`google_ads_estimator:${dedupeKey}`, () => ({
+    return queueConversion(`google_ads_estimator:${dedupeKey}`, () => ({
       send_to: GOOGLE_ADS_ESTIMATOR_LABEL,
       transaction_id: dedupeKey,
     }));
-    if (options?.accepted === false) return estimatorSent;
-    const formSent = queueConversion(`google_ads_lead:${dedupeKey}`, () => googleAdsLeadParams(ctx, dedupeKey));
-    return estimatorSent || formSent;
   }
   const storageKey = dedupeKey ? `google_ads_lead:${dedupeKey}` : undefined;
   return queueConversion(storageKey, () => googleAdsLeadParams(ctx, dedupeKey));
