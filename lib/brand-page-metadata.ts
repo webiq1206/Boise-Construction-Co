@@ -1,9 +1,13 @@
 import type {Metadata} from 'next';
 import {ESTIMATOR_BRAND as brand} from './p5/brand.ts';
+import {SHOW_FOUNDING_YEAR} from '../shared/publicFlags.ts';
 
 /** Branded sharing previews are the owner's preference. Product/article schema
- * retains its real subject image. Neither favicon nor preview display is guaranteed. */
-export const BRAND_PAGE_IMAGE=`https://${brand.domain}/brand/page-preview.png`;
+ * retains its real subject image. Neither favicon nor preview display is guaranteed.
+ * page-preview.png keeps the EST 2020 seal. The year-free card is that photo
+ * with those glyphs removed. */
+const BRAND_PAGE_IMAGE_PATH=SHOW_FOUNDING_YEAR?'/brand/page-preview.png':'/brand/page-preview-year-free.png';
+export const BRAND_PAGE_IMAGE=`https://${brand.domain}${BRAND_PAGE_IMAGE_PATH}`;
 export const BRAND_SEARCH_ICON=`https://${brand.domain}/brand/search-icon-96.png`;
 type Copy={title:string;description:string};
 const COPY:Record<string,Record<string,Copy>>={

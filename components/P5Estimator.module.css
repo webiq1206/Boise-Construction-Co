@@ -56,8 +56,9 @@
 .root[data-layout=embedded] .app{min-height:0}
 .root[data-layout=embedded] .thread{overflow:visible}
 /* Page, or an expanded embedded card: a fixed frame below the site header. */
-.root[data-layout=page],.root[data-expanded=true]{position:fixed;top:max(var(--p5-top,0px),env(safe-area-inset-top,0px));left:0;right:0;bottom:var(--p5-bottom);z-index:95;max-width:none;border:0;border-radius:0;box-shadow:none;overflow:hidden}
-.root[data-layout=page] .app,.root[data-expanded=true] .app{height:100%}
+.root[data-layout=page],.root[data-expanded=true]{position:fixed;top:max(var(--p5-top,0px),env(safe-area-inset-top,0px));left:0;right:0;bottom:var(--p5-bottom);z-index:95;display:flex;flex-direction:column;max-width:none;border:0;border-radius:0;box-shadow:none;overflow:hidden}
+.root[data-layout=page] .app,.root[data-expanded=true] .app{flex:1 1 auto;min-height:0;height:auto}
+.registration{flex:0 0 auto;margin:0;margin-top:auto;padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--p5-line);background:var(--p5-surface);color:var(--p5-ink-muted);font-size:12px;line-height:1.45;text-align:center;white-space:normal;overflow:visible;overflow-wrap:anywhere}
 .root[data-layout=page] .thread,.root[data-expanded=true] .thread{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .app{display:flex;flex-direction:column;min-width:0;background:var(--p5-surface)}
 .loading{padding:32px 20px;text-align:center;color:var(--p5-ink-muted)}

@@ -5,6 +5,9 @@
  */
 export const SHOW_FOUNDING_YEAR = false;
 
+/** Trust wording ("trusted", "preferred", and the like) stays in source and off the page. */
+export const SHOW_TRUST = false;
+
 export const FOUNDING_YEAR_COPY = {
   shown: {
     idahoBuilder:

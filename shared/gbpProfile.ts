@@ -64,7 +64,7 @@ export const GBP_CATEGORIES = {
 } as const;
 
 export const GBP_DESCRIPTION =
-  'Boise Construction Co is a design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles feasibility, design, Ada and Canyon County permits, and construction for custom homes, semi-custom homes, builds on land you already own, and shop homes. Every project includes a line-item budget before construction, a dedicated project manager, weekly written cost and schedule updates, and a written workmanship warranty. We also offer lot evaluation and permit-ready home design as standalone services. ${FOUNDING.gbpFoundedSentence}Bonded and insured. Book a free planning consultation and leave with a realistic budget band and clear next steps.';
+  `Boise Construction Co is a design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles feasibility, design, Ada and Canyon County permits, and construction for custom homes, semi-custom homes, builds on land you already own, and shop homes. Every project includes a line-item budget before construction, a dedicated project manager, weekly written cost and schedule updates, and a written workmanship warranty. We also offer lot evaluation and permit-ready home design as standalone services. ${FOUNDING.gbpFoundedSentence}Bonded and insured. Book a free planning consultation and leave with a realistic budget band and clear next steps.`;
 
 export const GBP_LINKS = {
   website: SITE,
