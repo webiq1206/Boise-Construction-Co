@@ -14,6 +14,7 @@ import { SITE_CONFIG } from '@/shared/siteConfig'
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
 import { LeadAttribution } from '@/components/LeadAttribution'
 import { consentBootstrap } from '@/lib/consentBootstrap'
+import { clarityFieldMaskBootstrap } from '@/lib/clarityFieldMask'
 import { Suspense } from 'react'
 import { MetaPixel } from '@/components/MetaPixel'
 import { MicrosoftClarity } from '@/components/MicrosoftClarity'
@@ -165,6 +166,7 @@ export default function RootLayout({
     <html lang="en" className={`dark ${manrope.variable} ${cormorant.variable}`} style={{ colorScheme: 'dark' }} suppressHydrationWarning>
       <head suppressHydrationWarning>
         <script id="p5-consent" dangerouslySetInnerHTML={{__html:consentBootstrap()}} />
+        <script id="p5-clarity-mask" dangerouslySetInnerHTML={{__html:clarityFieldMaskBootstrap()}} />
         <script
           dangerouslySetInnerHTML={{
             __html: `document.documentElement.classList.add('js')`,
