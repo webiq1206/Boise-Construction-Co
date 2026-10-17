@@ -507,7 +507,7 @@ export const BUSINESS_INFO = {
   founded: '2020',
   serviceArea: ['Boise', 'Meridian', 'Eagle', 'Nampa', 'Kuna', 'Star', 'Middleton', 'Caldwell', 'Garden City'],
   serviceRadius: '35 miles',
-  licenses: ['Registered Idaho contractor (#8381215)'],
+  licenses: ['Idaho Registered Contractor #8381215'],
   certifications: ['Design-Build Home Building', 'Bonded & Insured'],
   // The registration number is published in `licenses` and the footer.
   // Insurance stays a separate bonded-and-insured statement.
