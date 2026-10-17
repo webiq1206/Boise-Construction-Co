@@ -1,8 +1,7 @@
 name: P5 interface and metadata verification
 on:
-  push:
-    branches: [fix/p5-interface-completion-20260917]
   pull_request:
+    branches: [main]
     paths: ['app/**', 'components/**', 'hooks/**', 'lib/brand-page-metadata.ts', 'shared/ctaCopy.ts', 'lib/p5/adaptive.ts', 'tests/p5-brand*.test.ts', 'scripts/verify-p5-mobile-seo.mjs', '.github/workflows/p5-mobile-seo.yml', 'public/brand/**']
   workflow_dispatch:
 permissions:

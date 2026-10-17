@@ -1,9 +1,7 @@
 name: P5 document adapter verification
 on:
-  push:
-    branches: [main, fix/shared-document-service-hardening-20260917]
-    paths: ['lib/p5/**', 'scripts/*document*', 'tests/p5-*.test.ts', '.github/workflows/p5-document-adapter.yml']
   pull_request:
+    branches: [main]
     paths: ['lib/p5/**', 'scripts/*document*', 'tests/p5-*.test.ts', '.github/workflows/p5-document-adapter.yml']
   workflow_dispatch:
 permissions:
