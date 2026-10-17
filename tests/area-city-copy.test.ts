@@ -5,6 +5,7 @@ import { AREA_PAGE_FAQS, getAreaIntro } from '../shared/seoContent.ts';
 import { getCityBySlug } from '../shared/contentData.ts';
 import { landingFAQSchema } from '../lib/landing-schema.ts';
 import { CITY_SEO_DATA, indianCreekDescription } from '../lib/seo.ts';
+import { LOCATION_GUIDES } from '../shared/content/locationGuides.ts';
 
 const BATCH = ['boise', 'meridian', 'nampa', 'eagle', 'kuna', 'caldwell', 'star', 'middleton', 'garden-city'] as const;
 
@@ -37,12 +38,27 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
 });
 
 test('misplaced landmarks are corrected only on the city that listed them', () => {
-  assert.deepEqual(CITY_SEO_DATA.Kuna.landmarks, ['Kuna Caves', 'Swan Falls Dam', 'Bernie Fisher Park']);
+  assert.deepEqual(CITY_SEO_DATA.Kuna.landmarks, ['Bernie Fisher Park']);
+  assert.deepEqual(CITY_SEO_DATA.Kuna.neighborhoods, ['Crimson Point', 'Black Cat']);
   assert.deepEqual(CITY_SEO_DATA.Meridian.landmarks, ['The Village at Meridian', 'Julius M. Kleiner Memorial Park', 'Settlers Park']);
-  assert.deepEqual(CITY_SEO_DATA.Star.landmarks, ['Boise River', 'Star Riverfront Park', 'Freedom Park']);
+  assert.deepEqual(CITY_SEO_DATA.Meridian.neighborhoods, ['Lochsa Falls', 'Tuscany', 'Paramount', 'Meridian Ranch']);
   assert.ok(CITY_SEO_DATA.Eagle.landmarks.includes('Eagle Island State Park'));
+  assert.equal(CITY_SEO_DATA.Meridian.landmarks.includes('Eagle Island State Park'), false);
+  assert.deepEqual(CITY_SEO_DATA.Eagle.neighborhoods, ['Banbury', 'The Estates', 'Floating Feather']);
+  assert.equal(CITY_SEO_DATA.Eagle.neighborhoods.includes('Shadow Valley'), false);
+  assert.equal(CITY_SEO_DATA.Eagle.neighborhoods.includes('Hidden Springs'), false);
+  assert.deepEqual(CITY_SEO_DATA.Star.neighborhoods, ['Star River Ranch', 'Star Crossing']);
+  assert.deepEqual(CITY_SEO_DATA.Star.landmarks, ['Boise River', 'Star Riverwalk Park', 'Freedom Park']);
+  assert.equal(CITY_SEO_DATA.Star.neighborhoods.includes('Hillsdale'), false);
+  assert.equal(CITY_SEO_DATA.Star.neighborhoods.includes('Paramount'), false);
+  assert.equal(CITY_SEO_DATA.Star.landmarks.includes('Celebration Park'), false);
+  assert.deepEqual(CITY_SEO_DATA.Middleton.neighborhoods, ['Middleton Heights']);
+  assert.deepEqual(CITY_SEO_DATA.Middleton.landmarks, ['Boise River']);
+  assert.equal(CITY_SEO_DATA.Nampa.neighborhoods.includes('Columbia Village'), false);
+  assert.deepEqual(CITY_SEO_DATA.Nampa.landmarks, ['Ford Idaho Center', 'Nampa Train Depot']);
   assert.ok(CITY_SEO_DATA.Caldwell.landmarks.includes('Indian Creek Plaza'));
   assert.equal(CITY_SEO_DATA.Kuna.neighborhoods.includes('Indian Creek'), false);
+  assert.equal(CITY_SEO_DATA.Kuna.neighborhoods.includes('Ten Mile Creek'), false);
   assert.equal(CITY_SEO_DATA.Nampa.neighborhoods.includes('Indian Creek'), false);
   assert.equal(CITY_SEO_DATA.Caldwell.neighborhoods.includes('Indian Creek'), false);
   const creek = indianCreekDescription('Kuna');
@@ -53,6 +69,17 @@ test('misplaced landmarks are corrected only on the city that listed them', () =
   assert.equal(indianCreekDescription('Boise'), '');
   assert.equal(indianCreekDescription('Meridian'), '');
   assert.equal(indianCreekDescription('Star'), '');
+});
+
+test('Hidden Springs is its own community on the Boise side, not an Eagle neighborhood', () => {
+  const guide = LOCATION_GUIDES.find((g) => g.slug === 'hidden-springs-home-building-guide');
+  assert.ok(guide);
+  assert.deepEqual(guide.linkedCities, ['boise']);
+  assert.equal(guide.tags?.includes('eagle'), false);
+  assert.equal(guide.tags?.includes('boise'), true);
+  assert.equal(guide.relatedLinks?.some((link) => link.url === '/areas/eagle'), false);
+  assert.equal(guide.relatedLinks?.some((link) => link.url === '/areas/boise'), true);
+  assert.doesNotMatch(guide.content, /areas\/eagle/);
 });
 
 test('cities outside the batch keep the shared intro and shared FAQ questions', () => {

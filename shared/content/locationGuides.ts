@@ -541,7 +541,8 @@ const PLACES: PlaceGuide[] = [
   {
     slug: 'hidden-springs-home-building-guide',
     name: 'Hidden Springs',
-    citySlug: 'eagle',
+    // Its own community on the Boise side of Ada County, not an Eagle neighborhood.
+    citySlug: 'boise',
     county: 'ada',
     guideType: 'neighborhood',
     title: 'Building in Hidden Springs',
@@ -648,6 +649,11 @@ const PLACES: PlaceGuide[] = [
   },
 ];
 
+/** "Eagle" takes "an". The other place names here start with a consonant sound. */
+function indefiniteArticle(name: string): 'a' | 'an' {
+  return /^[aeiou]/i.test(name) ? 'an' : 'a';
+}
+
 function buildLocationGuide(p: PlaceGuide): GuidePageData {
   const healthDistrict = p.county === 'canyon' ? 'Southwest District Health' : 'the health district serving the parcel';
 
@@ -664,7 +670,7 @@ function buildLocationGuide(p: PlaceGuide): GuidePageData {
     `<p>Our <a href="/guides/buying-land-to-build-boise">guide to buying land to build on</a> covers the full diligence list, and a written <a href="/services/lot-evaluation">lot evaluation</a> at $950 to $3,500 documents it for a specific parcel before your inspection period closes.</p>`,
     `<h2 id="watch-out">The thing that catches people out here</h2>`,
     p.watchOut,
-    `<h2 id="budget">What a ${p.name} build costs</h2>`,
+    `<h2 id="budget">What ${indefiniteArticle(p.name)} ${p.name} build costs</h2>`,
     p.budget,
     `<p>For the full picture of what moves a construction budget, see the <a href="/guides/boise-home-building-cost-guide">Boise home building cost guide</a>, or run your size and finish level through the <a href="/#calculator">estimator</a> for a starting range.</p>`,
     `<h2 id="how-we-build">How we work in ${p.name}</h2>`,

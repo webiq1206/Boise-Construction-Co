@@ -381,7 +381,10 @@ export const CITY_SEO_DATA: Record<string, {
     founded: '1992',
     zipCodes: ['83634'],
     neighborhoods: ['Crimson Point', 'Black Cat'],
-    landmarks: ['Kuna Caves', 'Swan Falls Dam', 'Bernie Fisher Park'],
+    // Kuna Caves and Swan Falls Dam sit south of the city. The City of Kuna
+    // map marks both "down the road," and the city tells visitors to drive out
+    // to Swan Falls. Bernie Fisher Park is a city park at Main and Linder.
+    landmarks: ['Bernie Fisher Park'],
     climate: 'semi-arid high desert climate with hot summers and cold winters',
     coordinates: { lat: 43.4913, lng: -116.4201 },
   },
@@ -407,7 +410,8 @@ export const CITY_SEO_DATA: Record<string, {
     population: '30,346',
     founded: '1864',
     zipCodes: ['83616'],
-    neighborhoods: ['Shadow Valley', 'Banbury', 'The Estates', 'Floating Feather'],
+    // Shadow Valley is Boise 83714 / unincorporated Ada County, not Eagle.
+    neighborhoods: ['Banbury', 'The Estates', 'Floating Feather'],
     landmarks: ['Eagle Island State Park', 'Heritage Park', 'Eagle Hills Golf Course'],
     climate: 'semi-arid with distinct four seasons',
     coordinates: { lat: 43.6954, lng: -116.3540 },
@@ -416,8 +420,10 @@ export const CITY_SEO_DATA: Record<string, {
     population: '12,701',
     founded: '1907',
     zipCodes: ['83669'],
-    neighborhoods: ['Star River Ranch', 'Hillsdale', 'Paramount', 'Star Crossing'],
-    landmarks: ['Boise River', 'Star Riverfront Park', 'Freedom Park'],
+    // Hillsdale and Paramount are Meridian subdivisions. The riverside city
+    // park is Star Riverwalk Park (1000 S. Main Street), not "Star Riverfront Park."
+    neighborhoods: ['Star River Ranch', 'Star Crossing'],
+    landmarks: ['Boise River', 'Star Riverwalk Park', 'Freedom Park'],
     climate: 'semi-arid climate with hot summers and cool winters',
     coordinates: { lat: 43.6921, lng: -116.4939 },
   },
@@ -425,8 +431,10 @@ export const CITY_SEO_DATA: Record<string, {
     population: '10,141',
     founded: '1909',
     zipCodes: ['83644'],
-    neighborhoods: ['Middleton Heights', 'Purple Sage', 'Puckett Estates', 'Windermere'],
-    landmarks: ['Boise River', 'Middleton City Park', 'Purple Sage Golf Course'],
+    // Purple Sage Golf Course is in Caldwell. Middleton's city parks are
+    // Middleton Place, Piccadilly, and Roadside, not "Middleton City Park."
+    neighborhoods: ['Middleton Heights'],
+    landmarks: ['Boise River'],
     climate: 'semi-arid high desert climate with warm summers and cool winters',
     coordinates: { lat: 43.7068, lng: -116.6209 },
   },
@@ -435,7 +443,8 @@ export const CITY_SEO_DATA: Record<string, {
     founded: '1886',
     zipCodes: ['83651', '83653', '83686', '83687'],
     neighborhoods: ['Downtown Nampa', 'Karcher', 'Greenhurst'],
-    landmarks: ['Ford Idaho Center', 'Lake Lowell', 'Nampa Train Depot'],
+    // Lake Lowell is Deer Flat National Wildlife Refuge, outside Nampa city limits.
+    landmarks: ['Ford Idaho Center', 'Nampa Train Depot'],
     climate: 'semi-arid with hot summers and cold winters',
     coordinates: { lat: 43.5407, lng: -116.5635 },
   },

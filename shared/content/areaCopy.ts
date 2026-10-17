@@ -320,7 +320,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Do you build in Middleton, Idaho?',
         answer:
-          'Yes. Middleton is part of the Treasure Valley area we serve, Middleton Heights and Windermere among its neighborhoods. Custom, semi-custom, or a home on your own land: we build all three here, and we\'ll evaluate a Middleton lot before you buy it. Our Middleton home building guide has more local detail.',
+          'Yes. Middleton is part of the Treasure Valley area we serve, Middleton Heights among its neighborhoods. Custom, semi-custom, or a home on your own land: we build all three here, and we\'ll evaluate a Middleton lot before you buy it. Our Middleton home building guide has more local detail.',
       },
       {
         question: 'Which county is Middleton in?',

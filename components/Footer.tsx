@@ -1,6 +1,5 @@
 
 import { BusinessPhoneLink } from "@/components/BusinessPhoneContact";
-import { EmailLink } from "@/components/EmailLink";
 import { SaveContactLink } from "@/components/SaveContactLink";
 import { ApprovedBrand } from "@/components/approved/ApprovedBrand";
 import { FooterCTAs } from "@/components/modals/FooterCTAs";
@@ -126,7 +125,13 @@ export function Footer() {
               >
                 Text us
               </a>
-              <EmailLink className="flex min-h-[44px] items-center text-left text-sm text-inverse-muted transition-colors hover:text-inverse-foreground" />
+              <a
+                href={`mailto:${SITE_CONFIG.email}`}
+                className="flex min-h-[44px] items-center text-sm text-inverse-muted transition-colors hover:text-inverse-foreground"
+                data-testid="link-footer-email"
+              >
+                {SITE_CONFIG.email}
+              </a>
               <p className="py-2 text-sm text-inverse-muted">
                 {SITE_CONFIG.address.cityState} · {SITE_CONFIG.address.serviceArea}
               </p>
