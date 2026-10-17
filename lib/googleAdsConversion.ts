@@ -67,9 +67,9 @@ const waitingLeadKeys = new Set<string>();
 
 type GtagFn = (...args: unknown[]) => void;
 
-/** Ten half-second checks: five seconds for lazy gtag, then give up. */
+/** Twenty half-second checks: ten seconds for lazy gtag, then give up. */
 export const GTAG_READY_WAIT_MS = 500;
-export const GTAG_READY_ATTEMPTS = 10;
+export const GTAG_READY_ATTEMPTS = 20;
 
 function readGtag(): GtagFn | undefined {
   if (typeof window === 'undefined') return undefined;
@@ -78,7 +78,7 @@ function readGtag(): GtagFn | undefined {
 }
 
 /**
- * Calls fire once gtag exists. A missing library retries for five seconds
+ * Calls fire once gtag exists. A missing library retries for ten seconds
  * and then drops the call. The marker is not written by this waiter.
  */
 export function whenGtagReady(fire: (gtag: GtagFn) => void, attempt = 0): void {
@@ -124,7 +124,7 @@ function sendConversion(storageKey: string | undefined, payload: () => Record<st
 }
 
 /**
- * Fires one conversion once per storage key. A missing gtag retries for five
+ * Fires one conversion once per storage key. A missing gtag retries for ten
  * seconds and still fires at most once. The sent marker is written only
  * when gtag is ready. gtag itself is called inside try/catch.
  */
@@ -148,34 +148,22 @@ export function isEstimatorCompletionKey(dedupeKey?: string): boolean {
   return !!dedupeKey && (dedupeKey.startsWith('intake:') || dedupeKey.startsWith('estimator:'));
 }
 
-/**
- * Shared project identity for an estimator finish. Intake keys look like
- * `intake:construction:<draftId>` and estimate keys like `estimator:<draftId>`.
- * The form label dedupes on this id, not on the raw completion key.
- */
-export function estimatorLeadIdentity(dedupeKey: string): string {
-  const body = dedupeKey.startsWith('intake:')
-    ? dedupeKey.slice('intake:'.length)
-    : dedupeKey.startsWith('estimator:')
-      ? dedupeKey.slice('estimator:'.length)
-      : dedupeKey;
-  const id = body.split(':').pop();
-  return id || body;
-}
-
 export type LeadConversionOptions = {
-  /** False when this finish did not create an accepted lead. Omitted means the caller did not say. */
+  /**
+   * True when the endpoint returned accepted===true. False for a submit
+   * replay `{accepted:false, duplicate:true}`, which sends only the estimator
+   * label. The shared engine omits this argument.
+   */
   accepted?: boolean;
 };
 
 /**
- * Fires Google Ads conversions once per lead. An estimator finish fires
- * 'P5 Estimator Completed' once for that completion key. The form label fires
- * once for the shared project id across intake confirm and estimate submit.
- * `accepted: false` sends only the estimator label. Any other key fires the
- * form label only. If gtag is not loaded yet, the retry waits five seconds
- * and still fires at most once. Returns true when at least one conversion
- * was sent immediately.
+ * Fires Google Ads conversions. An estimator finish fires
+ * 'P5 Estimator Completed' once for that raw key. The form label fires for
+ * the same key (`intake:${projectId}` or `estimator:${draftId}`), once per
+ * key, unless `accepted` is false. Any other key fires the form label only.
+ * If gtag is not loaded yet, the retry waits ten seconds and still fires at
+ * most once. Returns true when at least one conversion was sent immediately.
  */
 export function trackGoogleAdsLeadConversion(
   ctx: LeadContext = {},
@@ -189,8 +177,7 @@ export function trackGoogleAdsLeadConversion(
       transaction_id: dedupeKey,
     }));
     if (options?.accepted === false) return estimatorSent;
-    const leadId = estimatorLeadIdentity(dedupeKey);
-    const formSent = queueConversion(`google_ads_lead:project:${leadId}`, () => googleAdsLeadParams(ctx, leadId));
+    const formSent = queueConversion(`google_ads_lead:${dedupeKey}`, () => googleAdsLeadParams(ctx, dedupeKey));
     return estimatorSent || formSent;
   }
   const storageKey = dedupeKey ? `google_ads_lead:${dedupeKey}` : undefined;

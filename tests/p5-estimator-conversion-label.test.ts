@@ -33,7 +33,7 @@ test('an estimator finish fires the estimator label and the form label once', ()
     assert.equal(trackGoogleAdsLeadConversion({service: 'new-build'}, 'estimator:draft-1'), false);
     assert.deepEqual(sendTo(seen.events), [GOOGLE_ADS_ESTIMATOR_LABEL, GOOGLE_ADS_LEAD_LABEL]);
     assert.equal((seen.events[0][2] as {transaction_id: string}).transaction_id, 'estimator:draft-1');
-    assert.equal((seen.events[1][2] as {transaction_id: string}).transaction_id, 'draft-1');
+    assert.equal((seen.events[1][2] as {transaction_id: string}).transaction_id, 'estimator:draft-1');
     assert.equal((seen.events[1][2] as {value: number}).value, 300);
   } finally {
     seen.restore();
@@ -43,34 +43,42 @@ test('an estimator finish fires the estimator label and the form label once', ()
 test('an intake finish fires both labels once per key', () => {
   const seen = calls();
   try {
-    assert.equal(trackGoogleAdsLeadConversion({}, 'intake:construction:project-1'), true);
-    assert.equal(trackGoogleAdsLeadConversion({}, 'intake:construction:project-1'), false);
+    assert.equal(trackGoogleAdsLeadConversion({}, 'intake:construction:project-1', {accepted: true}), true);
+    assert.equal(trackGoogleAdsLeadConversion({}, 'intake:construction:project-1', {accepted: true}), false);
     assert.deepEqual(sendTo(seen.events), [GOOGLE_ADS_ESTIMATOR_LABEL, GOOGLE_ADS_LEAD_LABEL]);
+    assert.equal((seen.events[0][2] as {transaction_id: string}).transaction_id, 'intake:construction:project-1');
+    assert.equal((seen.events[1][2] as {transaction_id: string}).transaction_id, 'intake:construction:project-1');
   } finally {
     seen.restore();
   }
 });
 
-test('intake confirm and estimate submit share one form label for the same project', () => {
+test('intake and estimate keys each fire both labels once, with the raw key as transaction_id', () => {
   const seen = calls();
   const project = '11111111-1111-4111-8111-111111111111';
+  const intakeKey = `intake:construction:${project}`;
+  const estimatorKey = `estimator:${project}`;
   try {
-    assert.equal(trackGoogleAdsLeadConversion({}, `intake:construction:${project}`), true);
-    assert.equal(trackGoogleAdsLeadConversion({service: 'new-build'}, `estimator:${project}`), true);
+    assert.equal(trackGoogleAdsLeadConversion({}, intakeKey, {accepted: true}), true);
+    assert.equal(trackGoogleAdsLeadConversion({service: 'new-build'}, estimatorKey, {accepted: true}), true);
+    assert.equal(trackGoogleAdsLeadConversion({}, intakeKey, {accepted: true}), false);
+    assert.equal(trackGoogleAdsLeadConversion({service: 'new-build'}, estimatorKey, {accepted: true}), false);
     assert.deepEqual(sendTo(seen.events), [
       GOOGLE_ADS_ESTIMATOR_LABEL,
       GOOGLE_ADS_LEAD_LABEL,
       GOOGLE_ADS_ESTIMATOR_LABEL,
+      GOOGLE_ADS_LEAD_LABEL,
     ]);
-    assert.equal((seen.events[0][2] as {transaction_id: string}).transaction_id, `intake:construction:${project}`);
-    assert.equal((seen.events[1][2] as {transaction_id: string}).transaction_id, project);
-    assert.equal((seen.events[2][2] as {transaction_id: string}).transaction_id, `estimator:${project}`);
+    assert.equal((seen.events[0][2] as {transaction_id: string}).transaction_id, intakeKey);
+    assert.equal((seen.events[1][2] as {transaction_id: string}).transaction_id, intakeKey);
+    assert.equal((seen.events[2][2] as {transaction_id: string}).transaction_id, estimatorKey);
+    assert.equal((seen.events[3][2] as {transaction_id: string}).transaction_id, estimatorKey);
   } finally {
     seen.restore();
   }
 });
 
-test('a finish that did not create an accepted lead fires only the estimator label', () => {
+test('a submit replay marked accepted false fires only the estimator label', () => {
   const seen = calls();
   try {
     assert.equal(trackGoogleAdsLeadConversion({service: 'new-build'}, 'estimator:draft-no-lead', {accepted: false}), true);
@@ -93,8 +101,9 @@ test('a form lead fires only the form label', () => {
   }
 });
 
-test('a missing gtag retries for 5 seconds, then fires once inside try/catch', () => {
-  assert.equal(GTAG_READY_ATTEMPTS * GTAG_READY_WAIT_MS, 5000);
+test('a missing gtag retries for 10 seconds, then fires once inside try/catch', () => {
+  assert.equal(GTAG_READY_ATTEMPTS, 20);
+  assert.equal(GTAG_READY_ATTEMPTS * GTAG_READY_WAIT_MS, 10000);
   const events: unknown[][] = [];
   const storage = new Map<string, string>();
   const timers: Array<() => void> = [];
@@ -146,8 +155,11 @@ test('a missing gtag retries for 5 seconds, then fires once inside try/catch', (
 
 test('the shared estimator engine still calls the helper and does not name the new label', () => {
   const source = fs.readFileSync(new URL('../components/P5Estimator.tsx', import.meta.url), 'utf8');
-  assert.match(source, /trackGoogleAdsLeadConversion\(\{service:latest\.answers\.service\},`intake:\$\{receipt\.projectId\}`\)/);
-  assert.match(source, /trackGoogleAdsLeadConversion\(\{service:d\.answers\.service\},`estimator:\$\{d\.id\}`\)/);
+  const notConfirmed = source.indexOf('if(!response.ok)throw new Error');
+  const intakeCall = source.indexOf('trackGoogleAdsLeadConversion({service:latest.answers.service},`intake:${receipt.projectId}`)');
+  assert.ok(notConfirmed >= 0 && intakeCall > notConfirmed);
+  assert.match(source, /trackGoogleAdsLeadConversion\(\{service:latest\.answers\.service\},`intake:\$\{receipt\.projectId\}`\);/);
+  assert.match(source, /trackGoogleAdsLeadConversion\(\{service:d\.answers\.service\},`estimator:\$\{d\.id\}`\);/);
   assert.equal(source.includes('cEzmCPOagKAdEKzf-q9E'), false);
   assert.equal(source.includes('GOOGLE_ADS_ESTIMATOR_LABEL'), false);
 });
