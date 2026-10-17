@@ -78,17 +78,23 @@ export const PUBLIC_CONTACT_POINT = {
   areaServed: 'US-ID',
   availableLanguage: 'English',
 } as const;
-// Organization logo for knowledge-panel / rich-result use. The approved seal on
-// a charcoal disc (bone lettering, ochre ring) is square and stays legible on
-// any background, unlike the reverse wordmark which vanished on Google's white
-// panels. Served at its native 512px with explicit dimensions. The artwork
-// states the founding year, so it is omitted from schema while
-// SHOW_FOUNDED_YEAR is false. The file stays in the brand kit.
-const LOGO_URL = `${baseUrl}/brand/png/seal/any/boise-construction-co-seal-on-charcoal-accent-512px.png`;
+// Organization logo for knowledge-panel / rich-result use. The seal states the
+// founding year, so schema uses the charcoal icon while SHOW_FOUNDED_YEAR is
+// false. That icon is the ochre ring, charcoal disc, and bone C, with no year.
+// The seal files stay in the brand kit.
+const SEAL_LOGO_PATH =
+  '/brand/png/seal/any/boise-construction-co-seal-on-charcoal-accent-512px.png';
+const ICON_LOGO_PATH =
+  '/brand/png/icon/boise-construction-co-icon-charcoal-512px.png';
+const LOGO_PATH = SHOW_FOUNDED_YEAR ? SEAL_LOGO_PATH : ICON_LOGO_PATH;
+const LOGO_URL = `${baseUrl}${LOGO_PATH}`;
 const LOGO_SIZE = 512;
-const sealLogo = SHOW_FOUNDED_YEAR
-  ? { '@type': 'ImageObject' as const, url: LOGO_URL, width: LOGO_SIZE, height: LOGO_SIZE }
-  : undefined;
+const organizationLogo = {
+  '@type': 'ImageObject' as const,
+  url: LOGO_URL,
+  width: LOGO_SIZE,
+  height: LOGO_SIZE,
+};
 
 /**
  * Generate LocalBusiness schema for homepage and location pages
@@ -123,7 +129,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     legalName: BUSINESS_INFO.legalName,
     description: `Design-build home builder serving ${city || 'Boise'} and the Treasure Valley, Idaho. Custom homes, semi-custom homes, build-on-your-lot, and shop homes.`,
     image: `${baseUrl}/images/hero-great-room.webp`,
-    ...(SHOW_FOUNDED_YEAR ? { logo: LOGO_URL } : {}),
+    logo: LOGO_URL,
     '@id': LOCALBUSINESS_ID,
     url: baseUrl,
     parentOrganization: { '@id': ORG_ID },
@@ -269,7 +275,7 @@ export function generateOrganizationSchema(): SchemaContext {
       ? { alternateName: BUSINESS_INFO.alternateName }
       : {}),
     url: baseUrl,
-    ...(sealLogo ? { logo: sealLogo } : {}),
+    logo: organizationLogo,
     description: `Design-build home builder serving the Treasure Valley${sinceFoundedYear()}. Custom homes, semi-custom homes, builds on client-owned land, and shop homes. Bonded, insured, and committed to line-item budgets before construction.`,
     ...(SHOW_FOUNDED_YEAR ? { foundingDate: BUSINESS_INFO.founded } : {}),
     // founder is gated: only emitted once a real named founder is supplied in
@@ -423,7 +429,7 @@ export function generateArticleSchema(article: {
       '@type': 'Organization',
       '@id': ORG_ID,
       name: BUSINESS_INFO.name,
-      ...(sealLogo ? { logo: sealLogo } : {}),
+      logo: organizationLogo,
     },
     mainEntityOfPage: {
       '@type': 'WebPage',

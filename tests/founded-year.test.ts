@@ -82,3 +82,44 @@ test('the seal component is not rendered while the founding year is hidden', () 
   assert.equal(published.includes('page-preview.png'), false);
   assert.equal(published.includes('svg/seal/'), false);
 });
+
+test('the organization logo is the charcoal icon and built HTML has no seal URL', () => {
+  assert.equal(SHOW_FOUNDING_YEAR, false);
+  const icon = '/brand/png/icon/boise-construction-co-icon-charcoal-512px.png';
+  const org = generateOrganizationSchema();
+  const logo = org.logo as { url?: string };
+  assert.equal(typeof logo.url, 'string');
+  assert.equal(logo.url?.endsWith(icon), true);
+  const schemaJson = [
+    JSON.stringify(org),
+    JSON.stringify(generateLocalBusinessSchema()),
+    JSON.stringify(generateArticleSchema({
+      title: 'Example',
+      description: 'Example',
+      publishedAt: '2026-01-01',
+      slug: 'example',
+    })),
+  ].join('\n');
+  assert.equal(schemaJson.includes('/brand/png/seal/'), false);
+  assert.equal(schemaJson.includes('boise-construction-co-seal'), false);
+
+  const pageDirs = ['app', 'pages'].map((name) => path.join(root, '.next', 'server', name));
+  assert.equal(pageDirs.every((dir) => fs.existsSync(dir)), true, 'npm run build must run before this assertion');
+  const hits: string[] = [];
+  const walk = (dir: string) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(full);
+        continue;
+      }
+      if (!entry.name.endsWith('.html')) continue;
+      const text = fs.readFileSync(full, 'utf8');
+      if (text.includes('/brand/png/seal/') || text.includes('boise-construction-co-seal')) {
+        hits.push(path.relative(root, full));
+      }
+    }
+  };
+  pageDirs.forEach(walk);
+  assert.deepEqual(hits, []);
+});
