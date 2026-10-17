@@ -411,7 +411,8 @@ export const CITY_SEO_DATA: Record<string, {
     founded: '1864',
     zipCodes: ['83616'],
     // Shadow Valley is Boise 83714 / unincorporated Ada County, not Eagle.
-    neighborhoods: ['Banbury', 'The Estates', 'Floating Feather'],
+    // "The Estates" is unverified. Eagle lists Banbury and Floating Feather only.
+    neighborhoods: ['Banbury', 'Floating Feather'],
     landmarks: ['Eagle Island State Park', 'Heritage Park', 'Eagle Hills Golf Course'],
     climate: 'semi-arid with distinct four seasons',
     coordinates: { lat: 43.6954, lng: -116.3540 },
