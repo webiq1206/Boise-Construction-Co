@@ -1,30 +1,50 @@
 /**
- * Sets data-clarity-mask="True" on every form field, including fields the
- * shared estimator engine renders. That engine is synced and is not edited
- * here. The script runs before Microsoft Clarity (lazyOnload) and watches
- * for fields added later.
+ * Masks form content for Microsoft Clarity before the tag loads.
+ *
+ * The shared estimator is not edited. Masking each form covers the text it
+ * echoes, including the project description and "sent to ${email}"
+ * (P5Estimator.tsx:860), address suggestions (ConsultationForm.tsx:802),
+ * and contact-method radios (ConsultationForm.tsx:716). A checkbox, radio,
+ * range, or button input outside a masked form marks its parent, which
+ * covers the labels at P5Estimator.tsx:853 and P5IntakeReview.tsx:31.
+ * Mutations scan only the nodes that were added.
  */
 export function clarityFieldMaskBootstrap(): string {
   return `(function(){
     var attr='data-clarity-mask';
-    function isField(node){
-      return !!(node&&node.nodeType===1&&(node.nodeName==='INPUT'||node.nodeName==='TEXTAREA'||node.nodeName==='SELECT'));
+    function closestMasked(node){
+      var current=node&&node.parentNode;
+      while(current){
+        if(current.getAttribute&&current.getAttribute(attr)==='True') return true;
+        current=current.parentNode;
+      }
+      return false;
     }
-    function mask(root){
-      if(!root||typeof root.querySelectorAll!=='function')return;
-      var fields=root.querySelectorAll('input,textarea,select');
-      for(var i=0;i<fields.length;i++) fields[i].setAttribute(attr,'True');
+    function maskOne(node){
+      if(!node||node.nodeType!==1) return;
+      var name=node.nodeName;
+      if(name==='FORM'||name==='INPUT'||name==='TEXTAREA'||name==='SELECT') node.setAttribute(attr,'True');
+      if(name!=='INPUT') return;
+      var type=String((node.getAttribute&&node.getAttribute('type'))||node.type||'').toLowerCase();
+      if((type==='checkbox'||type==='radio'||type==='range'||type==='button')&&!closestMasked(node)&&node.parentNode&&node.parentNode.setAttribute){
+        node.parentNode.setAttribute(attr,'True');
+      }
+    }
+    function maskForms(root){
+      if(!root) return;
+      if(root.nodeType===1) maskOne(root);
+      if(typeof root.querySelectorAll!=='function') return;
+      var nodes=root.querySelectorAll('form,input,textarea,select');
+      for(var i=0;i<nodes.length;i++) maskOne(nodes[i]);
     }
     function watch(){
-      mask(document);
-      if(!document.body||typeof MutationObserver!=='function')return;
+      maskForms(document);
+      if(!document.body||typeof MutationObserver!=='function') return;
       new MutationObserver(function(records){
         for(var i=0;i<records.length;i++){
           var added=records[i].addedNodes||[];
           for(var j=0;j<added.length;j++){
-            var node=added[j];
-            if(isField(node)) node.setAttribute(attr,'True');
-            if(node&&node.nodeType===1) mask(node);
+            if(added[j]&&added[j].nodeType===1) maskForms(added[j]);
           }
         }
       }).observe(document.body,{childList:true,subtree:true});
