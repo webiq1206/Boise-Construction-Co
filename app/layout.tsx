@@ -27,6 +27,7 @@ import './approved-family.css'
 import './approved-system.css'
 import './approved-interiors.css'
 import './audit-accessibility.css'
+import './contractor-registration.css'
 
 // P5 family typefaces, self-hosted. These are the same two files P5 Home Co
 // serves (Manrope and Cormorant Garamond, both variable-weight, both SIL Open

@@ -82,9 +82,10 @@ test('contractor registration is on the footer, plain on the estimator, and in s
   assert.equal(link.slice(link.indexOf('function ContractorRegistrationPlain')).includes('dopl.idaho.gov'), false);
   const chrome = read('components/ConditionalFooter.tsx');
   assert.match(chrome, /isEstimatorPath\(pathname\)\) return <ContractorRegistrationPlain/);
-  const css = read('components/ContractorRegistration.module.css');
+  const css = read('components/ContractorRegistration.module.css') + read('app/contractor-registration.css');
   assert.match(css, /white-space:\s*normal/);
   assert.match(css, /overflow:\s*visible/);
+  assert.match(css, /data-layout="page"/);
   assert.equal(read('components/P5Estimator.tsx').includes('8381215'), false);
   assert.equal(credentialId(generateLocalBusinessSchema() as Record<string, unknown>), CONTRACTOR_REGISTRATION_NUMBER);
   assert.equal(credentialId(generateOrganizationSchema() as Record<string, unknown>), CONTRACTOR_REGISTRATION_NUMBER);
