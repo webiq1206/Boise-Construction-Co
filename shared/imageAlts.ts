@@ -75,12 +75,38 @@ const ALTS: Record<string, string> = {
     "A two-story house with light siding and a dark roof beside a lawn and sidewalk",
   "/images/areas/caldwell.webp":
     "Stucco house with a tile roof beside a vineyard",
+  "/images/framing-foothills.webp":
+    "New home framing with roof trusses and a lumber stack near the foothills",
+  "/images/construction/bid-review-desk.webp":
+    "Folders, a highlighter, a tape measure and a hard hat on a desk for reviewing bids",
+  "/images/construction/single-story-farmhouse-exterior.webp":
+    "White board-and-batten farmhouse with cedar porch posts, a metal porch roof and an attached garage, foothills behind",
+  "/images/construction/mountain-modern-home-exterior.webp":
+    "Mountain-modern house with log porch posts and beams, aligned upper and lower windows, and a lit living room",
+  "/images/construction/great-room-timber-daylight.webp":
+    "Great room with timber trusses, a dining table and chairs, and daylight through a gable window",
+  "/images/construction/kitchen-alder-stone.webp":
+    "Kitchen with alder cabinets, a stone range wall, a dark granite island and a window facing the hills",
+  "/images/construction/material-choices.webp":
+    "Oak flooring, tile, lumber, yellow tubing and stone samples on a jobsite table",
 };
+
+/** These descriptions are the rendered alt, with no added disclaimer. */
+const PLAIN_ALT_PATHS = new Set<string>([
+  "/images/framing-foothills.webp",
+  "/images/construction/bid-review-desk.webp",
+  "/images/construction/single-story-farmhouse-exterior.webp",
+  "/images/construction/mountain-modern-home-exterior.webp",
+  "/images/construction/great-room-timber-daylight.webp",
+  "/images/construction/kitchen-alder-stone.webp",
+  "/images/construction/material-choices.webp",
+]);
 
 export function contentImageAlt(src: string | undefined | null): string {
   if (!src) return "";
   const path = src.split("?")[0].split("#")[0];
   const description = ALTS[path] ?? "";
   if (!description) return "";
+  if (PLAIN_ALT_PATHS.has(path)) return description;
   return `Representative image: ${description}`;
 }

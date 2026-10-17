@@ -37,7 +37,7 @@ const CITY_SLUGS = [
  */
 const SERVICE_ROTATION: Record<string, readonly string[]> = {
   "custom-home-builder": [
-    CONSTRUCTION_IMAGES.customHome,
+    CONSTRUCTION_IMAGES.mountainModern,
     CONSTRUCTION_IMAGES.interior,
     CONSTRUCTION_IMAGES.framing,
     CONSTRUCTION_IMAGES.kitchen,
