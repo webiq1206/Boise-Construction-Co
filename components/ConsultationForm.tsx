@@ -411,7 +411,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
       : null;
 
     return (
-      <div className="flex flex-col items-start py-2 space-y-4" data-testid="consultation-success">
+      <div className="flex flex-col items-start py-2 space-y-4" data-testid="consultation-success" data-clarity-mask="true">
         {/* Brand icon (ochre field) confirms the brand on the request-received state */}
         <img
           src="/brand/svg/icon/boise-construction-co-icon-accent.svg"
@@ -498,6 +498,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
         submitted={success}
       />
       <form
+        data-clarity-mask="true"
         onSubmit={form.handleSubmit(
           (data) => {
             setSubmitted(data);

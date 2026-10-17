@@ -1,14 +1,16 @@
 /**
  * Google Ads conversion helpers shared by every lead path on this site.
  *
- * One Google Ads conversion action ('P5 Raw Form Submitted') receives every
- * accepted lead, with a per-lead value so Google Ads can report ROAS by
- * campaign. Values are the per-lead estimates agreed with P5 on 14 Sept 2026
- * (form fallback in Google Ads is $50). Never pass PII here: no names, phones,
+ * 'P5 Raw Form Submitted' is the consultation form submit. Estimator finishes
+ * report 'P5 Estimator Completed' instead, and do not also send the form label.
+ * Values are the per-lead estimates agreed with P5 on 14 Sept 2026 (form
+ * fallback in Google Ads is $50). Never pass PII here: no names, phones,
  * emails or free text - only a service/project category and an opaque id.
  */
 export const GOOGLE_ADS_ID = 'AW-18354188204';
 export const GOOGLE_ADS_LEAD_LABEL = 'AW-18354188204/LE2vCPXstO8cEKzf-q9E';
+/** 'P5 Estimator Completed'. Estimator finish only. Not the consultation form. */
+export const GOOGLE_ADS_ESTIMATOR_LABEL = 'AW-18354188204/cEzmCPOagKAdEKzf-q9E';
 /** 'P5 Website Call (60s+)': swaps the visible number for a Google forwarding number. */
 export const GOOGLE_ADS_WEBSITE_CALL_LABEL = 'AW-18354188204/YHR0CIaPz_ccEKzf-q9E';
 /** Click on a tel: link. Separate from the forwarding-number website-call action. */
@@ -64,24 +66,50 @@ export function googleAdsLeadParams(
 }
 
 const sentLeadKeys = new Set<string>();
+const waitingLeadKeys = new Set<string>();
+
+type GtagFn = (...args: unknown[]) => void;
+
+/** Twenty half-second checks: ten seconds for lazy gtag, then give up. */
+export const GTAG_READY_WAIT_MS = 500;
+export const GTAG_READY_ATTEMPTS = 20;
+
+function readGtag(): GtagFn | undefined {
+  if (typeof window === 'undefined') return undefined;
+  const gtag = (window as unknown as { gtag?: GtagFn }).gtag;
+  return typeof gtag === 'function' ? gtag : undefined;
+}
 
 /**
- * Fires the Google Ads lead conversion once per dedupe key (per page load and,
- * where storage allows, per browser session). Returns true when it was sent.
+ * Calls fire once gtag exists. A missing library retries for ten seconds
+ * and then drops the call. The marker is not written by this waiter.
  */
-export function trackGoogleAdsLeadConversion(ctx: LeadContext = {}, dedupeKey?: string): boolean {
-  if (typeof window === 'undefined') return false;
-  const storageKey = dedupeKey ? `google_ads_lead:${dedupeKey}` : undefined;
-  if (storageKey) {
-    if (sentLeadKeys.has(storageKey)) return false;
-    try {
-      if (window.sessionStorage.getItem(storageKey) === 'sent') return false;
-    } catch {
-      // Storage can be unavailable under strict privacy settings; the in-memory guard still applies.
-    }
+export function whenGtagReady(fire: (gtag: GtagFn) => void, attempt = 0): void {
+  if (typeof window === 'undefined') return;
+  const gtag = readGtag();
+  if (gtag) {
+    fire(gtag);
+    return;
   }
-  const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
-  if (typeof gtag !== 'function') return false;
+  if (attempt >= GTAG_READY_ATTEMPTS) return;
+  const schedule = (window as unknown as { setTimeout?: typeof setTimeout }).setTimeout ?? setTimeout;
+  schedule(() => whenGtagReady(fire, attempt + 1), GTAG_READY_WAIT_MS);
+}
+
+function leadAlreadySent(storageKey?: string): boolean {
+  if (!storageKey) return false;
+  if (sentLeadKeys.has(storageKey)) return true;
+  try {
+    return window.sessionStorage.getItem(storageKey) === 'sent';
+  } catch {
+    return false;
+  }
+}
+
+function sendConversion(storageKey: string | undefined, payload: () => Record<string, unknown>): boolean {
+  if (leadAlreadySent(storageKey)) return false;
+  const gtag = readGtag();
+  if (!gtag) return false;
   if (storageKey) {
     sentLeadKeys.add(storageKey);
     try {
@@ -90,8 +118,70 @@ export function trackGoogleAdsLeadConversion(ctx: LeadContext = {}, dedupeKey?: 
       // Ignore; in-memory guard is enough for this page load.
     }
   }
-  gtag('event', 'conversion', googleAdsLeadParams(ctx, dedupeKey));
+  try {
+    gtag('event', 'conversion', payload());
+  } catch {
+    // A tracking failure must not break the form or the estimator.
+  }
   return true;
+}
+
+/**
+ * Fires one conversion once per storage key. A missing gtag retries for ten
+ * seconds and still fires at most once. The sent marker is written only
+ * when gtag is ready. gtag itself is called inside try/catch.
+ */
+function queueConversion(storageKey: string | undefined, payload: () => Record<string, unknown>): boolean {
+  if (typeof window === 'undefined') return false;
+  if (leadAlreadySent(storageKey) || (storageKey && waitingLeadKeys.has(storageKey))) return false;
+  if (readGtag()) return sendConversion(storageKey, payload);
+  if (storageKey) waitingLeadKeys.add(storageKey);
+  let fired = false;
+  whenGtagReady(() => {
+    if (storageKey) waitingLeadKeys.delete(storageKey);
+    if (fired) return;
+    fired = true;
+    sendConversion(storageKey, payload);
+  });
+  return false;
+}
+
+/** Estimator finish keys come from P5Estimator intake confirm and estimate submit. */
+export function isEstimatorCompletionKey(dedupeKey?: string): boolean {
+  return !!dedupeKey && (dedupeKey.startsWith('intake:') || dedupeKey.startsWith('estimator:'));
+}
+
+export type LeadConversionOptions = {
+  /**
+   * Kept so existing callers still type-check. Estimator keys never send the
+   * form label, so this flag does not add or remove a conversion.
+   */
+  accepted?: boolean;
+};
+
+/**
+ * Fires one Google Ads conversion. An estimator finish (`intake:` or
+ * `estimator:`) fires 'P5 Estimator Completed' once, with that raw key as
+ * `transaction_id`. A consultation form id, and any other key, fires the form
+ * label only. If gtag is not loaded yet, the retry waits ten seconds and
+ * still fires at most once. Returns true when the conversion was sent
+ * immediately.
+ */
+export function trackGoogleAdsLeadConversion(
+  ctx: LeadContext = {},
+  dedupeKey?: string,
+  _options?: LeadConversionOptions,
+): boolean {
+  void _options;
+  if (typeof window === 'undefined') return false;
+  if (isEstimatorCompletionKey(dedupeKey) && dedupeKey) {
+    return queueConversion(`google_ads_estimator:${dedupeKey}`, () => ({
+      send_to: GOOGLE_ADS_ESTIMATOR_LABEL,
+      transaction_id: dedupeKey,
+    }));
+  }
+  const storageKey = dedupeKey ? `google_ads_lead:${dedupeKey}` : undefined;
+  return queueConversion(storageKey, () => googleAdsLeadParams(ctx, dedupeKey));
 }
 
 type AdsConsent = { ad_storage?: string; ad_user_data?: string };
@@ -126,7 +216,7 @@ export function googleAdsClickAnalyticsOn(): boolean {
   return true;
 }
 
-/** One Ads click conversion for a tel: or sms: href. Other hrefs are ignored. */
+/** One Ads click conversion for a tel: or sms: href. Other hrefs are ignored. The number itself is not checked. */
 export function googleAdsContactClickSendTo(href: string): string | undefined {
   if (href.startsWith('sms:')) return GOOGLE_ADS_TEXT_CLICK_LABEL;
   if (href.startsWith('tel:')) return GOOGLE_ADS_CALL_CLICK_LABEL;

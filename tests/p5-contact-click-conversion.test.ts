@@ -183,6 +183,25 @@ test('strict-mode rebinding leaves one listener, so one click fires once', () =>
   }
 });
 
+test('any tel or sms outside admin and portal fires without matching the business number', () => {
+  const window = installWindow(granted);
+  try {
+    trackDelegatedContactClick('tel:+15555550123', '/contact');
+    trackDelegatedContactClick('sms:5555550199', '/services/custom-homes');
+    trackDelegatedContactClick('tel:+15555550123', '/admin');
+    trackDelegatedContactClick('sms:5555550199', '/admin/p5-estimators');
+    trackDelegatedContactClick('tel:+15555550123', '/portal');
+    trackDelegatedContactClick('sms:5555550199', '/portal/jobs');
+    const conversions = window.events.filter((event) => event[1] === 'conversion');
+    assert.equal(conversions.length, 2);
+    assert.equal((conversions[0][2] as { send_to: string }).send_to, GOOGLE_ADS_CALL_CLICK_LABEL);
+    assert.equal((conversions[1][2] as { send_to: string }).send_to, GOOGLE_ADS_TEXT_CLICK_LABEL);
+    assert.equal(JSON.stringify(conversions).includes('555'), false);
+  } finally {
+    window.restore();
+  }
+});
+
 test('a missing gtag does not throw and does not report the click conversion', () => {
   const prior = (globalThis as { window?: unknown }).window;
   (globalThis as { window?: unknown }).window = { p5Consent: granted };
@@ -231,12 +250,16 @@ test('the privacy page states what a call or text tap tells Google Ads', () => {
     'We use Google Analytics 4 (GA4) to understand how visitors use this site and Google Ads to measure which of our ads lead to quote requests, calls and texts. These tools set cookies and receive information about your visit, including your IP address, which Google processes under its own privacy policy (<a href="https://policies.google.com/privacy">https://policies.google.com/privacy</a>). When you tap Call or Text on our site, Google Ads is told that the tap happened, on which page, and the ad click identifier Google\'s tag saved if you arrived from one of our ads, so we can count calls and texts that come from our ads. The tap itself doesn\'t send Google your name, your own phone number or what you say or write. Google Analytics also records the tap, including the number tapped, which is our business number.';
   assert.equal(privacy.includes(sentence), true);
   assert.equal(privacy.includes('Google Ads receives a random reference number'), false);
-  assert.equal(
-    privacy.includes(
-      "If your call goes through a Google forwarding number, Google connects the call and can see the calling number and call length, but not what's said.",
-    ),
-    false,
-  );
+  assert.equal(privacy.includes('We do not send your name, email or phone number to Meta.'), false);
+  assert.equal(privacy.includes('our server may send Meta the Lead event'), true);
+  assert.equal(privacy.includes('we may send Meta the Lead event'), false);
+});
+
+test('the forwarding sentence stands alone immediately after the Google Analytics tap sentence', () => {
+  const privacy = fs.readFileSync(new URL('../app/privacy-policy/page.tsx', import.meta.url), 'utf8');
+  const paired =
+    "Google Analytics also records the tap, including the number tapped, which is our business number.\n            </p>\n            <p>\n              If your call goes through a Google forwarding number, Google connects the call and can see the calling number and call length, but not what's said.\n            </p>";
+  assert.equal(privacy.includes(paired), true);
 });
 
 test('the privacy page places the cookies section before data security', () => {

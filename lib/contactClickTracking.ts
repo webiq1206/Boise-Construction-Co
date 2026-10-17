@@ -1,12 +1,19 @@
 import { trackEvent } from '@/lib/analytics';
 import { trackGoogleAdsContactClick } from '@/lib/googleAdsConversion';
 
+/** Staff tools are outside the public call and text tap. */
+export function contactClickExcludedPath(pathname: string): boolean {
+  return pathname === '/admin' || pathname.startsWith('/admin/') || pathname === '/portal' || pathname.startsWith('/portal/');
+}
+
 /**
  * One delegated contact click. GA4 contact_click stays on the existing path.
- * A tel: or sms: click also sends one Google Ads conversion when Ads consent
- * is already granted. The caller runs this once per click.
+ * Any tel: or sms: link outside /admin and /portal also sends one Google Ads
+ * conversion when Ads consent is already granted. The number in the href is
+ * not compared with the business number. The caller runs this once per click.
  */
 export function trackDelegatedContactClick(href: string, pathname = ''): void {
+  if ((href.startsWith('tel:') || href.startsWith('sms:')) && contactClickExcludedPath(pathname)) return;
   if (href.startsWith('tel:')) {
     trackEvent('contact_click', { method: 'phone', link_url: href });
     trackGoogleAdsContactClick(href);

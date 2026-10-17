@@ -163,7 +163,7 @@ export function MillworkPanel({
               ))}
             </div>
           ) : (
-            <div className="mt-2.5 flex gap-2">
+            <div className="mt-2.5 flex gap-2" data-clarity-mask="true">
               <input
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
