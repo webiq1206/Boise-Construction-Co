@@ -1,4 +1,5 @@
 import {schemaTime} from './schemaTime';
+import { SHOW_FOUNDED_YEAR, sinceFoundedYear } from '@/shared/foundedYear';
 /**
  * JSON-LD Schema Markup Generators
  * Creates structured data for Google rich snippets and search features
@@ -153,7 +154,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
           },
         }
       : {}),
-    foundingDate: BUSINESS_INFO.founded,
+    ...(SHOW_FOUNDED_YEAR ? { foundingDate: BUSINESS_INFO.founded } : {}),
     slogan: 'Boise\'s Design-Build Home Builder',
     paymentAccepted: 'Cash, Credit Card, Check, Financing',
     currenciesAccepted: 'USD',
@@ -269,8 +270,8 @@ export function generateOrganizationSchema(): SchemaContext {
       width: LOGO_SIZE,
       height: LOGO_SIZE,
     },
-    description: 'Design-build home builder serving the Treasure Valley since 2020. Custom homes, semi-custom homes, builds on client-owned land, and shop homes. Bonded, insured, and committed to line-item budgets before construction.',
-    foundingDate: BUSINESS_INFO.founded,
+    description: `Design-build home builder serving the Treasure Valley${sinceFoundedYear()}. Custom homes, semi-custom homes, builds on client-owned land, and shop homes. Bonded, insured, and committed to line-item budgets before construction.`,
+    ...(SHOW_FOUNDED_YEAR ? { foundingDate: BUSINESS_INFO.founded } : {}),
     // founder is gated: only emitted once a real named founder is supplied in
     // BUSINESS_INFO.founderName (see seo-audit/trust-signal-map.md).
     ...(BUSINESS_INFO.founderName

@@ -7,6 +7,7 @@ import {
   HeartHandshake,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { establishedLabel } from "@/shared/foundedYear";
 
 export const SITE_TAGLINE = "Treasure Valley home building, built on clarity and craftsmanship";
 
@@ -108,13 +109,12 @@ export const PROOF_STATS = {
 } as const;
 
 /**
- * Post-hero proof bar. Leads with the founding year, then the genuine trust
- * signals the business carries. No review counts, ratings, or project counts
- * until real ones exist. Keep labels concise and keep this at six entries so
- * the strip fills the six-column desktop grid in HeroSection.
+ * Post-hero proof bar. The founding-year label is included only while
+ * SHOW_FOUNDED_YEAR is true. No review counts, ratings, or project counts
+ * until real ones exist. Keep labels concise.
  */
 export const TRUST_ITEMS = [
-  `Est. ${PROOF_STATS.established}`,
+  ...(establishedLabel() ? [establishedLabel() as string] : []),
   "Design-Build",
   "Bonded · Insured",
   "Permits In-House",

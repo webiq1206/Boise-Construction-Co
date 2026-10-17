@@ -23,6 +23,7 @@ import { CITY_HERO_IMAGES } from '@/shared/cityServiceImages';
 import { CITIES,TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { foundedInClause, sinceFoundedLead } from '@/shared/foundedYear';
 import { HERO_STATS,PRINCIPLES,TRUST_ITEMS } from '@/shared/siteContent';
 import { SITE_IMAGES } from '@/shared/siteImages';
 import { ArrowRight,Check,ChevronRight } from 'lucide-react';
@@ -33,7 +34,7 @@ const ABOUT_FAQS = [
   {
     question: 'What is Boise Construction Co?',
     answer:
-      'Boise Construction Co is a design-build home builder in Boise, Idaho, founded in 2020. The work covers custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. The service area is Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and Garden City. Phone (208) 477-1169.',
+      `Boise Construction Co is a design-build home builder in Boise, Idaho${foundedInClause()}. The work covers custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. The service area is Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and Garden City. Phone (208) 477-1169.`,
   },
   {
     question: 'Are the budget ranges quotes?',
@@ -43,7 +44,7 @@ const ABOUT_FAQS = [
   {
     question: 'How long has Boise Construction Co built in the Treasure Valley?',
     answer:
-      'Boise Construction Co has worked in Treasure Valley residential construction since 2020. One team leads every build from the first look at your lot through Ada and Canyon County permitting to the final walkthrough.',
+      `${sinceFoundedLead()}One team leads every build from the first look at your lot through Ada and Canyon County permitting to the final walkthrough.`,
   },
 ];
 
@@ -210,8 +211,7 @@ export default function AboutPage() {
                     One accountable team
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    {SITE_CONFIG.name} has worked in Treasure Valley residential construction since
-                    2020. One team leads every build from the first look at your lot through Ada and
+                    {sinceFoundedLead(SITE_CONFIG.name)}One team leads every build from the first look at your lot through Ada and
                     Canyon County permitting to the final walkthrough, and stands behind a line-item budget
                     before we break ground and a one-year workmanship warranty after you move in.
                   </p>
