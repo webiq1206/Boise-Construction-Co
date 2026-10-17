@@ -227,8 +227,20 @@ test('the site listener is bound once and does not add the forwarding snippet', 
 
 test('the privacy page states what a call or text tap tells Google Ads', () => {
   const privacy = fs.readFileSync(new URL('../app/privacy-policy/page.tsx', import.meta.url), 'utf8');
-  const sentence =
-    "When you tap Call or Text on our site, Google Ads is told that the tap happened and on which page, so we can count calls and texts that come from our ads. We don't send Google your name, phone number or the content of your call or message.";
-  assert.equal(privacy.includes(sentence), true);
   assert.equal(privacy.includes('Google Ads receives a random reference number'), false);
+});
+
+test('the privacy page states the rev 3 tap, analytics, and forwarding lines in order', () => {
+  const privacy = fs.readFileSync(new URL('../app/privacy-policy/page.tsx', import.meta.url), 'utf8');
+  const tap =
+    "When you tap Call or Text on our site, Google Ads is told that the tap happened, on which page, and the ad click identifier Google's tag saved if you arrived from one of our ads, so we can count calls and texts that come from our ads. The tap itself doesn't send Google your name, phone number or what you say or write.";
+  const analytics =
+    'Google Analytics also records the tap, including the number tapped, which is our business number.';
+  const forwarding =
+    "If your call goes through a Google forwarding number, Google connects the call and can see the calling number and call length, but not what's said.";
+  assert.equal(privacy.includes(`${tap} ${analytics} ${forwarding}`), true);
+  const tapAt = privacy.indexOf(tap);
+  const analyticsAt = privacy.indexOf(analytics);
+  const forwardingAt = privacy.indexOf(forwarding);
+  assert.equal(tapAt >= 0 && analyticsAt > tapAt && forwardingAt > analyticsAt, true);
 });
