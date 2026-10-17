@@ -7,7 +7,7 @@ export function StatementBandSection() {
     <section className="relative h-48 md:h-64 overflow-hidden">
       <Image
         src={SITE_IMAGES.statementBand}
-        alt="Warm open-concept great room and kitchen in a newly built Treasure Valley, Idaho custom home"
+        alt="Living room with a stone fireplace, wood ceiling beams, and large windows at dusk"
         fill
         loading="lazy"
         quality={65}
