@@ -4,6 +4,7 @@ import {
   EMAIL_BRAND,
 } from "@/server/services/emailLayout";
 import { SITE_CONFIG } from "@/shared/siteConfig";
+import { insertPreferToTextHtmlAfterBusinessDay } from "@/shared/textReply";
 import {
   takeoffForRange,
   takeoffForClient,
@@ -839,6 +840,22 @@ export function buildAdminEmailHtml(
  * customer has it in writing without ever logging in. Falls back to a warm
  * acknowledgement when no planning range was attached.
  */
+const TEXT_REPLY_LINK_STYLE = `color:${EMAIL_BRAND.accent}`;
+
+export function customerEstimateFollowUpHtml(): string {
+  return insertPreferToTextHtmlAfterBusinessDay(
+    `<p style="color:${EMAIL_BRAND.text};line-height:1.6;">We will reach out within one business day to book your free planning consultation, where we confirm the scope and give you a firm number. Until then, reply here or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> with any questions.</p>`,
+    TEXT_REPLY_LINK_STYLE,
+  );
+}
+
+export function customerConsultationGreetingHtml(): string {
+  return insertPreferToTextHtmlAfterBusinessDay(
+    `<p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">We received your consultation request and will reach out within one business day to schedule your free planning consultation.</p>`,
+    TEXT_REPLY_LINK_STYLE,
+  );
+}
+
 export function buildCustomerEmailHtml(
   lead: LeadContact,
   estimate: VerifiedEstimate | null,
@@ -858,16 +875,19 @@ export function buildCustomerEmailHtml(
     ? `<p style="margin:16px 0;color:${EMAIL_BRAND.text};line-height:1.6;">Your stated project budget is <strong>${escapeHtml(lead.budget)}</strong>. We will do everything we can to recommend solutions that fit within that budget while helping you achieve the goals you have shared. If your ideal scope runs beyond it, we will focus on the rooms and features that matter most to you, look at where a simpler footprint or a different plan buys back real money, and show you what is worth spending on now versus finishing later. Our job is to find the best path forward for your home, never to tell you your budget is not enough.</p>`
     : "";
 
+  const estimateFollowUp = customerEstimateFollowUpHtml();
+  const consultationGreeting = customerConsultationGreetingHtml();
+
   const content = estimate
     ? `
       <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">Thanks, ${escapeHtml(firstName)}. Here is the planning range you built.</p>
       ${buildEstimateSectionsHtml(estimate, overrides)}
       ${budgetNote}
-      <p style="color:${EMAIL_BRAND.text};line-height:1.6;">We will reach out within one business day to book your free planning consultation, where we confirm the scope and give you a firm number. Until then, reply here or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> with any questions.</p>
+      ${estimateFollowUp}
       <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The ${escapeHtml(SITE_CONFIG.name)} team</p>
     `
     : `
-      <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">We received your consultation request and will reach out within one business day to schedule your free planning consultation.</p>
+      ${consultationGreeting}
       <p style="color:${EMAIL_BRAND.text};line-height:1.6;">In the meantime, feel free to call us at <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a>, <a href="${SITE_CONFIG.phoneSmsHref}" style="color:${EMAIL_BRAND.accent};">send us a text</a>, or reply to this email with any questions.</p>
       <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The ${escapeHtml(SITE_CONFIG.name)} team</p>
     `;

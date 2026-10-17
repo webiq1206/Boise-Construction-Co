@@ -15,6 +15,8 @@
  * unverifiable or a promise a contractor cannot keep on someone else's closing.
  */
 
+import { insertPreferToTextAfterBusinessDay } from "@/shared/textReply";
+
 /** An RE-10 is an Idaho form. Say what it is before selling against it. */
 export const RE10_DEFINITION =
   "An RE-10 is the Idaho inspection response form. After a home inspection, the buyer uses it to ask the seller to repair specific items before closing, and the seller responds by agreeing, declining, or negotiating. The repairs on that form are what has to be scheduled, completed and documented before the transaction can close.";
@@ -200,7 +202,9 @@ export const RE10_FAQS: Re10Faq[] = [
   {
     question: "How quickly can you review a repair request?",
     answer:
-      "Most repair lists are reviewed within one business day of receiving the documents. Send them as early as you can. The earlier we see the list, the more honestly we can tell you what fits inside your deadline.",
+      insertPreferToTextAfterBusinessDay(
+        "Most repair lists are reviewed within one business day of receiving the documents. Send them as early as you can. The earlier we see the list, the more honestly we can tell you what fits inside your deadline.",
+      ),
   },
   {
     question: "Can you complete repairs before closing?",

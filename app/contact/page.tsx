@@ -1,6 +1,7 @@
 import { InteriorEstimateLink,InteriorHero,InteriorPage } from '@/components/approved/InteriorLayout';
 import { BusinessPhoneContact } from '@/components/BusinessPhoneContact';
 import { ConsultationForm } from '@/components/ConsultationForm';
+import { CopyWithTextReply, PreferToTextLine } from '@/components/PreferToTextLine';
 import { Section } from '@/components/marketing';
 import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
 import { Hairline } from '@/components/marketing/Hairline';
@@ -32,17 +33,19 @@ import { areaPath } from '@/lib/seo-routes';
 import { CITIES,TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { insertPreferToTextAfterBusinessDay } from '@/shared/textReply';
 import { CONSULT_BULLETS,HERO_STATS } from '@/shared/siteContent';
 import { SITE_IMAGES } from '@/shared/siteImages';
 import { ArrowRight,Check,ChevronRight,Mail,MapPin,MessageSquare,Phone } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const CONTACT_FAQS = [
+export const CONTACT_FAQS = [
   {
     question: 'How quickly will you respond to my inquiry?',
-    answer:
+    answer: insertPreferToTextAfterBusinessDay(
       'We respond within one business day. Call us during business hours for an immediate conversation, or submit the form and we will reach out to schedule your free planning consultation.',
+    ),
   },
   {
     question: 'Is the planning consultation really free?',
@@ -255,7 +258,8 @@ export default function ContactPage() {
                   <p className="text-base leading-relaxed mb-8 text-muted-foreground">
                     Send a few details and we will reach out within one business day to schedule
                     your free 60 to 90 minute planning consultation - budget band, schedule, and
-                    site requirements, with no obligation.
+                    site requirements, with no obligation.{" "}
+                    <PreferToTextLine />
                   </p>
                 </Reveal>
               </div>
@@ -278,7 +282,12 @@ export default function ContactPage() {
                   <em className="brc-accent">connect</em>
                 </>
               }
-              description="Call, email, or visit - we respond within one business day and never use high-pressure sales tactics."
+              description={
+                <>
+                  Call, email, or visit - we respond within one business day and never use high-pressure sales tactics.{" "}
+                  <PreferToTextLine />
+                </>
+              }
               className="max-w-3xl"
             />
             <div className="ed-grid-balance grid sm:grid-cols-2 gap-4">
@@ -315,6 +324,7 @@ export default function ContactPage() {
                   label="Email us"
                   href={`mailto:${SITE_CONFIG.email}`}
                   subtext="Response within one business day"
+                  companion={<>{" "}<PreferToTextLine className="text-sm text-muted-foreground" /></>}
                 >
                   {SITE_CONFIG.email}
                 </ContactChannel>
@@ -395,7 +405,7 @@ export default function ContactPage() {
                     <li key={bullet}>
                       <div className="flex items-start gap-3 py-4">
                         <Check className="h-4 w-4 text-accent-legible flex-shrink-0 mt-0.5" />
-                        <span className="text-base text-foreground">{bullet}</span>
+                        <span className="text-base text-foreground"><CopyWithTextReply text={bullet} /></span>
                       </div>
                       {i < CONSULT_BULLETS.length - 1 && (
                         <Hairline spaced={false} className="my-0" />
@@ -431,7 +441,7 @@ export default function ContactPage() {
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent className="text-sm leading-relaxed pb-6 text-muted-foreground">
-                      {faq.answer}
+                      <CopyWithTextReply text={faq.answer} />
                     </AccordionContent>
                   </AccordionItem>
                 ))}
