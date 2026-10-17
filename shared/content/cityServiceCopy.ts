@@ -2141,7 +2141,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "Who has to be licensed on a Boise build?",
-          answer: "According to Boise's homeowner guide, when someone other than the owner performs trade work that needs a permit, that person needs a State of Idaho registration and license. Under a design-build contract that responsibility sits with us and the licensed trades we schedule, not with you.",
+          answer: "According to Boise's homeowner guide, when someone other than the owner performs trade work that needs a permit, that person needs a State of Idaho registration and license. Under a design-build contract that responsibility sits with us, an Idaho Registered Contractor #8381215, and the licensed trades we schedule, not with you.",
         },
       ],
     },
@@ -2315,7 +2315,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "Who can apply for a building permit in Star?",
-          answer: "Star's FAQ lets architects, homeowners, and contractors apply for permits, and a contractor who applies must hold a current, valid Idaho license. In design-build, we prepare and file the permit as your licensed contractor.",
+          answer: "Star's FAQ lets architects, homeowners, and contractors apply for permits, and a contractor who applies must hold a current, valid Idaho license. In design-build, we prepare and file the permit as your Idaho Registered Contractor.",
         },
       ],
     },
