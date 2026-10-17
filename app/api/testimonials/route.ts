@@ -4,9 +4,13 @@ import { testimonials } from "@/shared/schema";
 import { storage } from "@/server/storage";
 import { SHOW_TESTIMONIALS, TESTIMONIALS } from "@/shared/testimonialsData";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   if (!SHOW_TESTIMONIALS) {
-    return NextResponse.json([]);
+    return NextResponse.json([], {
+      headers: { "Cache-Control": "no-store" },
+    });
   }
 
   if (isDbAvailable() && db) {

@@ -34,4 +34,60 @@ test('the testimonials endpoint returns an empty list while the flag is off', as
   assert.equal(published.includes('Lawn Care'), false);
   assert.equal(published.includes('Sarah M.'), false);
   assert.equal(published.includes('testimonials'), false);
+  assert.equal(response.headers.get('cache-control'), 'no-store');
+});
+
+const REVIEW_NEEDLES = [
+  'Lawn Care',
+  'Lawn Care Kuna',
+  'taking care of our yard',
+  'never looked better',
+  'Best Christmas light installation',
+  'recommended them to all our neighbors',
+  'beautiful patio in our backyard',
+];
+
+function filesUnder(dir: string, acc: string[] = []): string[] {
+  if (!fs.existsSync(dir)) return acc;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) filesUnder(full, acc);
+    else acc.push(full);
+  }
+  return acc;
+}
+
+test('client source does not contain the other-business review text', () => {
+  const roots = ['app', 'components', 'shared', 'lib', 'public'].map((dir) => path.join(root, dir));
+  const hits: string[] = [];
+  for (const dir of roots) {
+    for (const file of filesUnder(dir)) {
+      if (!/\.(ts|tsx|js|jsx|mjs|txt|html|json)$/.test(file)) continue;
+      const text = fs.readFileSync(file, 'utf8');
+      for (const needle of REVIEW_NEEDLES) {
+        if (text.includes(needle)) hits.push(`${path.relative(root, file)}: ${needle}`);
+      }
+    }
+  }
+  assert.deepEqual(hits, []);
+});
+
+test('post-build client bundles omit Lawn Care and Kuna review strings', () => {
+  const staticDir = path.join(root, '.next/static');
+  if (!fs.existsSync(staticDir)) {
+    if (process.env.REQUIRE_STATIC_GREP === '1') {
+      assert.fail('missing .next/static; run next build before the bundle grep');
+    }
+    return;
+  }
+  const hits: string[] = [];
+  for (const file of filesUnder(staticDir)) {
+    if (!/\.(js|css|json|txt|html|map)$/.test(file)) continue;
+    const text = fs.readFileSync(file);
+    const decoded = text.toString('utf8');
+    for (const needle of REVIEW_NEEDLES) {
+      if (decoded.includes(needle)) hits.push(`${path.relative(root, file)}: ${needle}`);
+    }
+  }
+  assert.deepEqual(hits, []);
 });
