@@ -56,6 +56,14 @@ test('landmark lists and Indian Creek follow the approved corrections', () => {
   assert.equal(CITY_SEO_DATA.Star.neighborhoods.includes('Paramount'), false);
   assert.ok(CITY_SEO_DATA.Eagle.landmarks.includes('Eagle Island State Park'));
   assert.equal(CITY_SEO_DATA.Meridian.landmarks.includes('Eagle Island State Park'), false);
+  assert.deepEqual(CITY_SEO_DATA.Eagle.neighborhoods, ['Banbury', 'The Estates', 'Floating Feather']);
+  assert.equal(CITY_SEO_DATA.Eagle.neighborhoods.includes('Shadow Valley'), false);
+  assert.equal(CITY_SEO_DATA.Eagle.neighborhoods.includes('Hidden Springs'), false);
+  for (const service of SERVICES) {
+    const intro = getCityServiceCopy(service.slug, 'eagle')!.intro;
+    assert.doesNotMatch(intro, /Shadow Valley|Hidden Springs/);
+    assert.match(intro, /Banbury|Floating Feather/);
+  }
   assert.deepEqual(CITY_SEO_DATA.Nampa.landmarks, ['Ford Idaho Center', 'Nampa Train Depot']);
   assert.equal(CITY_SEO_DATA.Nampa.neighborhoods.includes('Columbia Village'), false);
   assert.ok(CITY_SEO_DATA.Caldwell.landmarks.includes('Indian Creek Plaza'));

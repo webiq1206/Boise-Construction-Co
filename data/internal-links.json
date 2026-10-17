@@ -771,9 +771,9 @@
           "score": 999
         },
         {
-          "url": "/guides/middleton-home-building-guide",
-          "anchor": "Building a Home in Middleton",
-          "title": "Building a Home in Middleton",
+          "url": "/guides/hidden-springs-home-building-guide",
+          "anchor": "Building in Hidden Springs",
+          "title": "Building in Hidden Springs",
           "type": "guide",
           "score": 0.318
         }
@@ -928,11 +928,11 @@
           "score": 999
         },
         {
-          "url": "/guides/caldwell-home-building-guide",
-          "anchor": "Building a Home in Caldwell",
-          "title": "Building a Home in Caldwell",
+          "url": "/guides/hidden-springs-home-building-guide",
+          "anchor": "Building in Hidden Springs",
+          "title": "Building in Hidden Springs",
           "type": "guide",
-          "score": 0.342
+          "score": 0.361
         }
       ]
     },
@@ -1085,11 +1085,11 @@
           "score": 999
         },
         {
-          "url": "/guides/boise-home-building-guide",
-          "anchor": "Building a Home in Boise",
-          "title": "Building a Home in Boise",
+          "url": "/guides/caldwell-home-building-guide",
+          "anchor": "Building a Home in Caldwell",
+          "title": "Building a Home in Caldwell",
           "type": "guide",
-          "score": 0.176
+          "score": 0.197
         }
       ]
     },
@@ -1135,11 +1135,11 @@
           "score": 999
         },
         {
-          "url": "/guides/star-home-building-guide",
-          "anchor": "Building a Home in Star",
-          "title": "Building a Home in Star",
+          "url": "/guides/middleton-home-building-guide",
+          "anchor": "Building a Home in Middleton",
+          "title": "Building a Home in Middleton",
           "type": "guide",
-          "score": 0.334
+          "score": 0.338
         }
       ]
     },
@@ -1303,7 +1303,7 @@
           "anchor": "Building a Home in Boise",
           "title": "Building a Home in Boise",
           "type": "guide",
-          "score": 0.188
+          "score": 0.228
         }
       ]
     },
@@ -1349,11 +1349,11 @@
           "score": 999
         },
         {
-          "url": "/guides/hidden-springs-home-building-guide",
-          "anchor": "Building in Hidden Springs",
-          "title": "Building in Hidden Springs",
+          "url": "/guides/nampa-home-building-guide",
+          "anchor": "Building a Home in Nampa",
+          "title": "Building a Home in Nampa",
           "type": "guide",
-          "score": 0.325
+          "score": 0.299
         }
       ]
     },
@@ -1399,11 +1399,11 @@
           "score": 999
         },
         {
-          "url": "/guides/eagle-foothills-home-building-guide",
-          "anchor": "Building in the Eagle Foothills",
-          "title": "Building in the Eagle Foothills",
+          "url": "/guides/star-home-building-guide",
+          "anchor": "Building a Home in Star",
+          "title": "Building a Home in Star",
           "type": "guide",
-          "score": 0.341
+          "score": 0.372
         }
       ]
     },
@@ -1499,11 +1499,11 @@
           "score": 999
         },
         {
-          "url": "/guides/nampa-home-building-guide",
-          "anchor": "Building a Home in Nampa",
-          "title": "Building a Home in Nampa",
+          "url": "/guides/meridian-home-building-guide",
+          "anchor": "Building a Home in Meridian",
+          "title": "Building a Home in Meridian",
           "type": "guide",
-          "score": 0.306
+          "score": 0.305
         }
       ]
     },
@@ -1549,11 +1549,11 @@
           "score": 999
         },
         {
-          "url": "/guides/star-home-building-guide",
-          "anchor": "Building a Home in Star",
-          "title": "Building a Home in Star",
+          "url": "/guides/eagle-foothills-home-building-guide",
+          "anchor": "Building in the Eagle Foothills",
+          "title": "Building in the Eagle Foothills",
           "type": "guide",
-          "score": 0.389
+          "score": 0.394
         }
       ]
     },
@@ -1656,11 +1656,11 @@
           "score": 999
         },
         {
-          "url": "/guides/meridian-home-building-guide",
-          "anchor": "Building a Home in Meridian",
-          "title": "Building a Home in Meridian",
+          "url": "/guides/hidden-springs-home-building-guide",
+          "anchor": "Building in Hidden Springs",
+          "title": "Building in Hidden Springs",
           "type": "guide",
-          "score": 0.313
+          "score": 0.331
         }
       ]
     },
@@ -7865,11 +7865,11 @@
           "score": 999
         },
         {
-          "url": "/guides/kuna-home-building-guide",
-          "anchor": "Building a Home in Kuna",
-          "title": "Building a Home in Kuna",
+          "url": "/guides/star-home-building-guide",
+          "anchor": "Building a Home in Star",
+          "title": "Building a Home in Star",
           "type": "guide",
-          "score": 1.102
+          "score": 1.136
         },
         {
           "url": "/blog/construction-loan-basics-idaho",
@@ -8057,13 +8057,6 @@
           "score": 1.304
         },
         {
-          "url": "/guides/hidden-springs-home-building-guide",
-          "anchor": "Building in Hidden Springs",
-          "title": "Building in Hidden Springs",
-          "type": "guide",
-          "score": 1.242
-        },
-        {
           "url": "/services/custom-home-builder/eagle",
           "anchor": "Custom Home Building in Eagle",
           "title": "Custom Home Building in Eagle, Idaho",
@@ -8083,6 +8076,13 @@
           "title": "The Stages of Building a House, in Order",
           "type": "blog",
           "score": -0.091
+        },
+        {
+          "url": "/blog/construction-loan-basics-idaho",
+          "anchor": "How Construction Loans Work in Idaho",
+          "title": "How Construction Loans Work in Idaho",
+          "type": "blog",
+          "score": -0.094
         }
       ]
     },
@@ -8121,13 +8121,6 @@
           "score": 1.256
         },
         {
-          "url": "/guides/hidden-springs-home-building-guide",
-          "anchor": "Building in Hidden Springs",
-          "title": "Building in Hidden Springs",
-          "type": "guide",
-          "score": 1.231
-        },
-        {
           "url": "/guides/nampa-home-building-guide",
           "anchor": "Building a Home in Nampa",
           "title": "Building a Home in Nampa",
@@ -8140,6 +8133,13 @@
           "title": "Building in the Eagle Foothills",
           "type": "guide",
           "score": 1.204
+        },
+        {
+          "url": "/guides/caldwell-home-building-guide",
+          "anchor": "Building a Home in Caldwell",
+          "title": "Building a Home in Caldwell",
+          "type": "guide",
+          "score": 1.176
         },
         {
           "url": "/services/home-additions/eagle",
@@ -8182,7 +8182,7 @@
           "anchor": "Building in Hidden Springs",
           "title": "Building in Hidden Springs",
           "type": "guide",
-          "score": 1.29
+          "score": 1.325
         },
         {
           "url": "/services/design-build/garden-city",
@@ -8221,9 +8221,9 @@
       "url": "/guides/hidden-springs-home-building-guide",
       "links": [
         {
-          "url": "/areas/eagle",
+          "url": "/areas/boise",
           "anchor": "Building in Hidden Springs",
-          "title": "Home Building in Eagle, Idaho",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 999
         },
@@ -8246,35 +8246,35 @@
           "anchor": "Building in Harris Ranch",
           "title": "Building in Harris Ranch",
           "type": "guide",
-          "score": 1.33
+          "score": 1.325
         },
         {
-          "url": "/guides/eagle-foothills-home-building-guide",
-          "anchor": "Building in the Eagle Foothills",
-          "title": "Building in the Eagle Foothills",
-          "type": "guide",
-          "score": 1.242
-        },
-        {
-          "url": "/guides/eagle-home-building-guide",
-          "anchor": "Building a Home in Eagle",
-          "title": "Building a Home in Eagle",
-          "type": "guide",
-          "score": 1.211
-        },
-        {
-          "url": "/services/home-additions/eagle",
-          "anchor": "Home Additions in Eagle",
-          "title": "Home Additions in Eagle, Idaho",
+          "url": "/services/home-additions/boise",
+          "anchor": "Home Additions in Boise",
+          "title": "Home Additions in Boise, Idaho",
           "type": "city-service",
-          "score": 0.078
+          "score": 0.007
         },
         {
-          "url": "/blog/aging-in-place-home-design",
-          "anchor": "Building a Home You Can Age In",
-          "title": "Building a Home You Can Age In",
+          "url": "/blog/boise-building-permit-guide",
+          "anchor": "Building Permits in Boise: What a New Home Needs",
+          "title": "Building Permits in Boise: What a New Home Needs",
           "type": "blog",
-          "score": -0.122
+          "score": -0.035
+        },
+        {
+          "url": "/blog/questions-to-ask-a-home-builder",
+          "anchor": "Questions to Ask a Home Builder Before You Sign",
+          "title": "Questions to Ask a Home Builder Before You Sign",
+          "type": "blog",
+          "score": -0.064
+        },
+        {
+          "url": "/blog/stages-of-building-a-house",
+          "anchor": "The Stages of Building a House, in Order",
+          "title": "The Stages of Building a House, in Order",
+          "type": "blog",
+          "score": -0.069
         }
       ]
     },
@@ -8313,11 +8313,11 @@
           "score": 1.184
         },
         {
-          "url": "/guides/caldwell-home-building-guide",
-          "anchor": "Building a Home in Caldwell",
-          "title": "Building a Home in Caldwell",
+          "url": "/guides/nampa-home-building-guide",
+          "anchor": "Building a Home in Nampa",
+          "title": "Building a Home in Nampa",
           "type": "guide",
-          "score": 1.182
+          "score": 1.184
         },
         {
           "url": "/guides/star-home-building-guide",
@@ -8334,11 +8334,11 @@
           "score": 0.074
         },
         {
-          "url": "/blog/construction-loan-basics-idaho",
-          "anchor": "How Construction Loans Work in Idaho",
-          "title": "How Construction Loans Work in Idaho",
+          "url": "/blog/aging-in-place-home-design",
+          "anchor": "Building a Home You Can Age In",
+          "title": "Building a Home You Can Age In",
           "type": "blog",
-          "score": -0.106
+          "score": -0.092
         }
       ]
     },
@@ -8370,16 +8370,30 @@
           "score": 999
         },
         {
+          "url": "/guides/eagle-foothills-home-building-guide",
+          "anchor": "Building in the Eagle Foothills",
+          "title": "Building in the Eagle Foothills",
+          "type": "guide",
+          "score": 1.118
+        },
+        {
+          "url": "/guides/harris-ranch-home-building-guide",
+          "anchor": "Building in Harris Ranch",
+          "title": "Building in Harris Ranch",
+          "type": "guide",
+          "score": 1.118
+        },
+        {
+          "url": "/guides/hidden-springs-home-building-guide",
+          "anchor": "Building in Hidden Springs",
+          "title": "Building in Hidden Springs",
+          "type": "guide",
+          "score": 1.113
+        },
+        {
           "url": "/guides/kuna-home-building-guide",
           "anchor": "Building a Home in Kuna",
           "title": "Building a Home in Kuna",
-          "type": "guide",
-          "score": 1.155
-        },
-        {
-          "url": "/guides/middleton-home-building-guide",
-          "anchor": "Building a Home in Middleton",
-          "title": "Building a Home in Middleton",
           "type": "guide",
           "score": 1.075
         },
@@ -8389,20 +8403,6 @@
           "title": "Design-Build in Meridian, Idaho",
           "type": "city-service",
           "score": 0.076
-        },
-        {
-          "url": "/blog/questions-to-ask-a-home-builder",
-          "anchor": "Questions to Ask a Home Builder Before You Sign",
-          "title": "Questions to Ask a Home Builder Before You Sign",
-          "type": "blog",
-          "score": -0.095
-        },
-        {
-          "url": "/blog/home-builder-red-flags",
-          "anchor": "Home Builder Red Flags",
-          "title": "Home Builder Red Flags",
-          "type": "blog",
-          "score": -0.108
         }
       ]
     },
@@ -8448,18 +8448,18 @@
           "score": 1.155
         },
         {
-          "url": "/guides/harris-ranch-home-building-guide",
-          "anchor": "Building in Harris Ranch",
-          "title": "Building in Harris Ranch",
-          "type": "guide",
-          "score": 1.149
-        },
-        {
           "url": "/guides/nampa-home-building-guide",
           "anchor": "Building a Home in Nampa",
           "title": "Building a Home in Nampa",
           "type": "guide",
           "score": 1.149
+        },
+        {
+          "url": "/guides/caldwell-home-building-guide",
+          "anchor": "Building a Home in Caldwell",
+          "title": "Building a Home in Caldwell",
+          "type": "guide",
+          "score": 1.146
         },
         {
           "url": "/services/home-plans-design/middleton",
@@ -8498,11 +8498,11 @@
           "score": 999
         },
         {
-          "url": "/guides/caldwell-home-building-guide",
-          "anchor": "Building a Home in Caldwell",
-          "title": "Building a Home in Caldwell",
+          "url": "/guides/kuna-home-building-guide",
+          "anchor": "Building a Home in Kuna",
+          "title": "Building a Home in Kuna",
           "type": "guide",
-          "score": 1.182
+          "score": 1.184
         },
         {
           "url": "/guides/star-home-building-guide",
@@ -8523,7 +8523,7 @@
           "anchor": "Building a Home in Middleton",
           "title": "Building a Home in Middleton",
           "type": "guide",
-          "score": 1.109
+          "score": 1.149
         },
         {
           "url": "/services/design-build/nampa",
@@ -8562,9 +8562,16 @@
           "score": 999
         },
         {
-          "url": "/guides/nampa-home-building-guide",
-          "anchor": "Building a Home in Nampa",
-          "title": "Building a Home in Nampa",
+          "url": "/guides/kuna-home-building-guide",
+          "anchor": "Building a Home in Kuna",
+          "title": "Building a Home in Kuna",
+          "type": "guide",
+          "score": 1.22
+        },
+        {
+          "url": "/guides/middleton-home-building-guide",
+          "anchor": "Building a Home in Middleton",
+          "title": "Building a Home in Middleton",
           "type": "guide",
           "score": 1.177
         },
@@ -8576,18 +8583,11 @@
           "score": 1.149
         },
         {
-          "url": "/guides/kuna-home-building-guide",
-          "anchor": "Building a Home in Kuna",
-          "title": "Building a Home in Kuna",
+          "url": "/guides/eagle-home-building-guide",
+          "anchor": "Building a Home in Eagle",
+          "title": "Building a Home in Eagle",
           "type": "guide",
-          "score": 1.1
-        },
-        {
-          "url": "/guides/hidden-springs-home-building-guide",
-          "anchor": "Building in Hidden Springs",
-          "title": "Building in Hidden Springs",
-          "type": "guide",
-          "score": 1.095
+          "score": 1.136
         },
         {
           "url": "/services/custom-home-builder/star",
@@ -8953,18 +8953,18 @@
           "score": 1.713
         },
         {
-          "url": "/services/home-additions/boise",
-          "anchor": "Home Additions in Boise",
-          "title": "Home Additions in Boise, Idaho",
-          "type": "city-service",
-          "score": 1.7
-        },
-        {
           "url": "/services/home-additions/kuna",
           "anchor": "Home Additions in Kuna",
           "title": "Home Additions in Kuna, Idaho",
           "type": "city-service",
           "score": 1.7
+        },
+        {
+          "url": "/services/home-additions/eagle",
+          "anchor": "Home Additions in Eagle",
+          "title": "Home Additions in Eagle, Idaho",
+          "type": "city-service",
+          "score": 1.673
         },
         {
           "url": "/services/home-additions/meridian",
@@ -9244,7 +9244,7 @@
     "/blog/adu-cost-boise": 7,
     "/blog/aging-in-place-home-design": 9,
     "/blog/allowances-explained-new-home": 9,
-    "/blog/boise-building-permit-guide": 8,
+    "/blog/boise-building-permit-guide": 9,
     "/blog/build-vs-buy-boise": 6,
     "/blog/building-in-the-boise-foothills": 8,
     "/blog/choosing-finishes-for-a-new-home": 9,
@@ -9257,7 +9257,7 @@
     "/blog/energy-efficient-home-building-boise": 9,
     "/blog/first-meeting-with-a-home-builder": 6,
     "/blog/fixed-price-vs-cost-plus": 8,
-    "/blog/home-builder-red-flags": 10,
+    "/blog/home-builder-red-flags": 9,
     "/blog/how-long-does-it-take-to-build-a-house-boise": 11,
     "/blog/how-to-budget-a-new-home-boise": 9,
     "/blog/how-to-buy-a-buildable-lot-boise": 7,
@@ -9271,7 +9271,7 @@
     "/blog/questions-to-ask-a-home-builder": 9,
     "/blog/shop-homes-and-barndominiums-idaho": 15,
     "/blog/single-story-vs-two-story-home": 8,
-    "/blog/stages-of-building-a-house": 9,
+    "/blog/stages-of-building-a-house": 10,
     "/blog/well-and-septic-cost-idaho": 8,
     "/blog/what-drives-home-building-costs-boise": 9,
     "/blog/why-home-building-bids-vary": 8,
@@ -9281,7 +9281,7 @@
     "/guides/choose-home-builder-boise": 12,
     "/guides/custom-home-design-guide": 10,
     "/guides/treasure-valley-home-building-guide": 16,
-    "/guides/boise-home-building-guide": 7,
+    "/guides/boise-home-building-guide": 6,
     "/guides/meridian-home-building-guide": 5,
     "/guides/eagle-home-building-guide": 5,
     "/guides/kuna-home-building-guide": 5,
@@ -9301,9 +9301,9 @@
     "/services/lot-evaluation": 18,
     "/services/shop-homes-barndominiums": 18,
     "/services/energy-efficient-homes": 18,
-    "/areas/boise": 16,
+    "/areas/boise": 17,
     "/areas/meridian": 12,
-    "/areas/eagle": 14,
+    "/areas/eagle": 13,
     "/areas/nampa": 11,
     "/areas/kuna": 15,
     "/areas/star": 12,

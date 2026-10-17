@@ -100,7 +100,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "eagle": {
-      intro: "Shop homes and barndominiums suit Eagle's larger lots and acreage. Near Shadow Valley and across Eagle, the combined home and shop still has to be laid out for local building requirements and inspected on the city's schedule. Shop homes run design-build with us, so the shop and the living space are priced together on a line-item budget. Weekly updates come in writing, and the workmanship is covered by a written warranty. Book a free planning consultation about a shop home in Eagle, or try the estimator for a combined shop-and-house planning range.",
+      intro: "Shop homes and barndominiums suit Eagle's larger lots and acreage. Near Banbury and across Eagle, the combined home and shop still has to be laid out for local building requirements and inspected on the city's schedule. Shop homes run design-build with us, so the shop and the living space are priced together on a line-item budget. Weekly updates come in writing, and the workmanship is covered by a written warranty. Book a free planning consultation about a shop home in Eagle, or try the estimator for a combined shop-and-house planning range.",
       faqs: [
         {
           question: "How much does shop homes & barndominiums cost in Eagle?",
@@ -363,7 +363,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "eagle": {
-      intro: "In Eagle, an energy-efficient home suits owners who plan to stay put. Near Shadow Valley and throughout Eagle, a high-performance house must still meet local building requirements and pass inspection in sequence. An efficient home goes best when one design-build team owns both drawings and construction. In Eagle that means a budget broken out by line, written updates each week, and a written warranty behind our workmanship. A free planning consultation about an efficient Eagle home is a good first step, or let the estimator produce a planning range from your square footage.",
+      intro: "In Eagle, an energy-efficient home suits owners who plan to stay put. Near Floating Feather and throughout Eagle, a high-performance house must still meet local building requirements and pass inspection in sequence. An efficient home goes best when one design-build team owns both drawings and construction. In Eagle that means a budget broken out by line, written updates each week, and a written warranty behind our workmanship. A free planning consultation about an efficient Eagle home is a good first step, or let the estimator produce a planning range from your square footage.",
       faqs: [
         {
           question: "How much does energy-efficient homes cost in Eagle?",
@@ -626,7 +626,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "eagle": {
-      intro: "Custom home building in Eagle, Idaho often starts with a site that has views, slope, or acreage to work around. Near Shadow Valley and in every other part of Eagle, the house has to be planned to the city's building requirements and its inspection calendar. One design-build team carries an Eagle custom home from sketch to keys. You see every cost as its own line, get a progress report in writing weekly, and receive a written workmanship warranty at move-in. Enter your custom home wish list in the estimator to get a planning range, or sit down with us over it at a free planning consultation.",
+      intro: "Custom home building in Eagle, Idaho often starts with a site that has views, slope, or acreage to work around. Near Banbury and in every other part of Eagle, the house has to be planned to the city's building requirements and its inspection calendar. One design-build team carries an Eagle custom home from sketch to keys. You see every cost as its own line, get a progress report in writing weekly, and receive a written workmanship warranty at move-in. Enter your custom home wish list in the estimator to get a planning range, or sit down with us over it at a free planning consultation.",
       faqs: [
         {
           question: "How much does custom home building cost in Eagle?",
@@ -889,7 +889,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "eagle": {
-      intro: "Semi-custom homes work well in Eagle, where much of the housing is recent and detached. A plan for a lot by Shadow Valley, or elsewhere in town, is adjusted so it meets the city's requirements and passes each inspection in turn. Semi-custom homes are design-build with us, so changes to the plan are priced on an itemized budget, written updates come weekly, and our workmanship carries a written warranty. Try the estimator for a first planning range on an Eagle semi-custom home, or book a free planning consultation to go through plan changes.",
+      intro: "Semi-custom homes work well in Eagle, where much of the housing is recent and detached. A plan for a lot by Banbury, or elsewhere in town, is adjusted so it meets the city's requirements and passes each inspection in turn. Semi-custom homes are design-build with us, so changes to the plan are priced on an itemized budget, written updates come weekly, and our workmanship carries a written warranty. Try the estimator for a first planning range on an Eagle semi-custom home, or book a free planning consultation to go through plan changes.",
       faqs: [
         {
           question: "How much does semi-custom homes cost in Eagle?",
@@ -1152,7 +1152,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "eagle": {
-      intro: "Home design and plans in Eagle have to suit the lot and the code at the same time. Drawings for a home near Shadow Valley, or anywhere else in Eagle, are prepared around the city's building requirements and the inspections that come with them. Drawing and building under one design-build roof means the plans and the budget move together. In Eagle you'll get an itemized cost list, a written progress report weekly once we're building, and our workmanship warranted in writing. Book a free planning consultation to start your Eagle plans, or open the estimator and see a planning range for the home the drawings describe.",
+      intro: "Home design and plans in Eagle have to suit the lot and the code at the same time. Drawings for a home near Floating Feather, or anywhere else in Eagle, are prepared around the city's building requirements and the inspections that come with them. Drawing and building under one design-build roof means the plans and the budget move together. In Eagle you'll get an itemized cost list, a written progress report weekly once we're building, and our workmanship warranted in writing. Book a free planning consultation to start your Eagle plans, or open the estimator and see a planning range for the home the drawings describe.",
       faqs: [
         {
           question: "How much does home design & plans cost in Eagle?",
@@ -1415,7 +1415,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "eagle": {
-      intro: "Have land in Eagle and want a house on it? From Shadow Valley to the foothills, a home on your own lot still has to be laid out for Eagle's building requirements and the inspection steps that follow. It's one design-build contract covering the house on your lot: an itemized budget, a written update each week, and our workmanship warranty in writing. Bring your Eagle lot's details to a free planning consultation, or run the estimator first and get a planning range for the home you're picturing.",
+      intro: "Have land in Eagle and want a house on it? From Banbury to Floating Feather, a home on your own lot still has to be laid out for Eagle's building requirements and the inspection steps that follow. It's one design-build contract covering the house on your lot: an itemized budget, a written update each week, and our workmanship warranty in writing. Bring your Eagle lot's details to a free planning consultation, or run the estimator first and get a planning range for the home you're picturing.",
       faqs: [
         {
           question: "How much does build on your lot cost in Eagle?",
@@ -1678,7 +1678,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "eagle": {
-      intro: "Home additions in Eagle let you stay in a neighborhood you already like. Whether the house is near Shadow Valley or elsewhere in Eagle, the new rooms must satisfy Eagle's building rules, clear its inspections, and join the existing home without looking tacked on. We handle additions design-build, with written updates every week, an itemized budget, and workmanship backed by a written warranty. Ask for a free planning consultation at your home in Eagle, or get a planning range for the addition from the estimator first.",
+      intro: "Home additions in Eagle let you stay in a neighborhood you already like. Whether the house is near Banbury or elsewhere in Eagle, the new rooms must satisfy Eagle's building rules, clear its inspections, and join the existing home without looking tacked on. We handle additions design-build, with written updates every week, an itemized budget, and workmanship backed by a written warranty. Ask for a free planning consultation at your home in Eagle, or get a planning range for the addition from the estimator first.",
       faqs: [
         {
           question: "How much does home additions cost in Eagle?",
@@ -1941,7 +1941,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "eagle": {
-      intro: "Lot evaluation and feasibility in Eagle can save you from a parcel that costs far more to build on than it looks. Near Shadow Valley and throughout Eagle, city building rules and the inspection process limit what a lot can hold, and the evaluation considers them alongside the soil and slope. A lot that passes our review can go straight into design-build with the same team. That brings an itemized budget, weekly written updates, and a workmanship warranty you keep in writing. See a planning range for an Eagle build in the estimator, or bring the listing to a free planning consultation.",
+      intro: "Lot evaluation and feasibility in Eagle can save you from a parcel that costs far more to build on than it looks. Near Floating Feather and throughout Eagle, city building rules and the inspection process limit what a lot can hold, and the evaluation considers them alongside the soil and slope. A lot that passes our review can go straight into design-build with the same team. That brings an itemized budget, weekly written updates, and a workmanship warranty you keep in writing. See a planning range for an Eagle build in the estimator, or bring the listing to a free planning consultation.",
       faqs: [
         {
           question: "How much does lot evaluation & feasibility cost in Eagle?",
@@ -2204,7 +2204,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "eagle": {
-      intro: "Design-build in Eagle means the people who draw your house are the people who build it. Near Shadow Valley and across Eagle, a home's plan has to answer to local requirements and the city's inspection sequence, and one team keeps both in view. Under one design-build agreement you get an itemized cost breakdown, written updates weekly while we build, and a written workmanship warranty when we hand over the keys. Request a free planning consultation for your Eagle project, or get the estimator's planning range before we talk.",
+      intro: "Design-build in Eagle means the people who draw your house are the people who build it. Near Banbury and across Eagle, a home's plan has to answer to local requirements and the city's inspection sequence, and one team keeps both in view. Under one design-build agreement you get an itemized cost breakdown, written updates weekly while we build, and a written workmanship warranty when we hand over the keys. Request a free planning consultation for your Eagle project, or get the estimator's planning range before we talk.",
       faqs: [
         {
           question: "How much does design-build cost in Eagle?",

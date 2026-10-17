@@ -320,7 +320,7 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
   'hidden-springs-home-building-guide': {
     hero: '/images/construction/custom-home-exterior.webp',
     alt: 'Newly completed custom home with board-and-batten siding and a covered porch on a Treasure Valley lot',
-    topicTags: ["eagle","hidden springs","idaho","new construction","treasure"],
+    topicTags: ["boise","hidden springs","idaho","new construction","treasure"],
     source: 'construction',
   },
   'harris-ranch-home-building-guide': {
