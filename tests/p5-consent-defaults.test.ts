@@ -37,6 +37,7 @@ test('privacy page discloses Google Analytics, Google Ads, remarketing, and Meta
   assert.match(source, /We also use the Meta Pixel and Meta's Conversions API to measure visits and inquiries from our Facebook and Instagram ads\./);
   assert.match(source, /When you submit an inquiry, we may send Meta the Lead event, the page address, the project type, the inquiry category, your IP address, your browser user agent, and the Meta cookies _fbp and _fbc so it can match the inquiry to an ad\./);
   assert.match(source, /https:\/\/www\.facebook\.com\/privacy\/policy/);
+  assert.match(source, /TODO \(pending Larry's approval\): Microsoft Clarity disclosure goes here\. Final wording is not approved yet\./);
   assert.match(source, /id="document-section-1"/);
   assert.match(source, /id="document-section-7"/);
 });
