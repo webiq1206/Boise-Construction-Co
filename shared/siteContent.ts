@@ -7,6 +7,7 @@ import {
   HeartHandshake,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { insertPreferToTextAfterBusinessDay } from "@/shared/textReply";
 
 export const SITE_TAGLINE = "Treasure Valley home building, built on clarity and craftsmanship";
 
@@ -296,7 +297,7 @@ export const CONSULT_BULLETS = [
   "Nobody in the room works on commission",
   "No pressure to sign anything on the spot",
   "A written budget band that is yours to keep",
-  "We reply within one business day",
+  insertPreferToTextAfterBusinessDay("We reply within one business day"),
 ];
 
 /**

@@ -4,7 +4,9 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { MessageSquare, Phone, PhoneCall } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { CopyWithTextReply } from "@/components/PreferToTextLine";
 import { SITE_CONFIG } from "@/shared/siteConfig";
+import { insertPreferToTextAfterBusinessDay } from "@/shared/textReply";
 import { trackEvent } from "@/lib/analytics";
 import { deviceCategory, getEstimatorSessionId, recordRecoveryAction, type EstimatorFlow } from "@/lib/estimatorSession";
 import type { ExitMethod } from "./useAbandonmentRecovery";
@@ -20,6 +22,17 @@ export interface AbandonmentPromptProps {
 }
 
 type CallbackState = "idle" | "sending" | "sent" | "error";
+
+const ABANDONMENT_SENT = insertPreferToTextAfterBusinessDay(
+  "Thanks. Someone from the team will call within one business day. You can keep going here or close this window.",
+);
+const ABANDONMENT_IDLE = insertPreferToTextAfterBusinessDay(
+  "A quick call or text answers most questions in a minute. Or leave a number and we will call you back within one business day.",
+);
+
+export function AbandonmentPromptMessage({ sent }: { sent: boolean }) {
+  return <CopyWithTextReply text={sent ? ABANDONMENT_SENT : ABANDONMENT_IDLE} />;
+}
 
 /**
  * "Prefer to talk instead?" - shown once when a visitor is about to leave an
@@ -92,9 +105,7 @@ export function AbandonmentPrompt({ open, flow, method, leaving, onStay, onConti
           {state === "sent" ? "We will call you back." : "Prefer to talk it through instead?"}
         </DialogTitle>
         <DialogDescription id="abandonment-prompt-desc" className="ed-body mt-2 text-[0.9375rem] text-inverse-muted">
-          {state === "sent"
-            ? "Thanks. Someone from the team will call within one business day. You can keep going here or close this window."
-            : `A quick call or text answers most questions in a minute. Or leave a number and we will call you back within one business day.`}
+          <AbandonmentPromptMessage sent={state === "sent"} />
         </DialogDescription>
 
         {state !== "sent" && (

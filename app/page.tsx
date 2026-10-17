@@ -1,5 +1,6 @@
 import { ApprovedHome } from "@/components/approved/ApprovedHome";
 import { ConsultationForm } from "@/components/ConsultationForm";
+import { CopyWithTextReply, PreferToTextLine } from "@/components/PreferToTextLine";
 import { MarketingCard } from "@/components/marketing/MarketingCard";
 import { Section } from "@/components/marketing/Section";
 import { Reveal } from "@/components/Reveal";
@@ -119,7 +120,8 @@ export default function HomePage() {
                 </h2>
                 <p className="ed-lede mt-8 max-w-[40ch]">
                   Send a few details and we will set up a free 60 to 90 minute
-                  planning session, usually within one business day.
+                  planning session, usually within one business day.{" "}
+                  <PreferToTextLine />
                 </p>
                 <p className="ed-body mt-4">
                   By the end you will have a realistic budget band, a clear-eyed read
@@ -136,7 +138,7 @@ export default function HomePage() {
                         style={{ color: "var(--ed-accent)" }}
                         aria-hidden="true"
                       />
-                      {item}
+                      <CopyWithTextReply text={item} />
                     </li>
                   ))}
                 </ul>
