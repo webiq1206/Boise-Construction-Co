@@ -11,7 +11,7 @@ landingFAQSchema,
 import { buildPageMetadata } from '@/lib/page-metadata';
 import { permitGuidance, permitSource } from '@/lib/permitGuidance';
 import { generateSpeakableSchema } from '@/lib/schema';
-import { CITY_SEO_DATA, indianCreekDescription } from '@/lib/seo';
+import { CITY_SEO_DATA, indianCreekDescription, joinNames, placesAcrossCounty } from '@/lib/seo';
 import { areaPath,CITY_SLUGS,getCityBySlug } from '@/lib/seo-routes';
 import { getAreaImageSet } from '@/shared/cityServiceImages';
 import { getCountyLabel,SERVICES } from '@/shared/contentData';
@@ -57,7 +57,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
   const answerFirst = `${city.name}, Idaho is in ${county}. ${SITE_CONFIG.name} builds there as a design-build home builder. Ada County and Canyon County permit steps are on the permit-flow page.`;
   const images = getAreaImageSet(city.slug);
   const localNote = seo
-    ? `We serve ${city.name} homeowners across ${seo.neighborhoods.slice(0, 3).join(', ')}, and all of ${county}. Confirm the permitting authority for the project address before applying.`
+    ? `We serve ${city.name} homeowners across ${placesAcrossCounty(seo.neighborhoods, county)}. Confirm the permitting authority for the project address before applying.`
     : `We serve ${city.name} and all of ${county} with design-build home construction.`;
 
   const neighborhoods = seo?.neighborhoods ?? [];
@@ -80,12 +80,12 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       heading: `Neighborhoods and lots we build on in ${city.name}`,
       paragraphs: [
         neighborhoods.length
-          ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}.${creek ? ` ${creek}` : ''} Lots vary block by block in setbacks, utilities, soil, and slope, so we evaluate the specific parcel before we price the home rather than applying a flat square-foot number.`
+          ? `We build throughout ${city.name}, including ${joinNames(neighborhoods)}.${creek ? ` ${creek}` : ''} Lots vary block by block in setbacks, utilities, soil, and slope, so we evaluate the specific parcel before we price the home rather than applying a flat square-foot number.`
           : creek
             ? `We build throughout ${city.name}. ${creek} We evaluate each parcel for setbacks, utilities, soil, and slope before we price the home rather than applying a flat square-foot number.`
             : `We build throughout ${city.name}, evaluating each parcel for setbacks, utilities, soil, and slope before we price the home rather than applying a flat square-foot number.`,
         landmarks.length
-          ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand the area's character and how to design a home that fits its street and holds its value.`
+          ? `As a local team familiar with ${city.name} landmarks like ${joinNames(landmarks.slice(0, 3))}, we understand the area's character and how to design a home that fits its street and holds its value.`
           : `As a local team, we understand the area's character and how to design a home that fits its street and holds its value.`,
       ],
     },

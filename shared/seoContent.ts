@@ -2,7 +2,7 @@ import type { ServiceData, CityData } from './contentData';
 import { getCountyLabel } from './contentData';
 import { getAreaCityCopy } from './content/areaCopy';
 import { getCityServiceCopy } from './content/cityServiceCopy';
-import { indianCreekDescription } from '../lib/seo';
+import { indianCreekDescription, joinNames } from '../lib/seo';
 import {permitGuidance,permitSource} from '../lib/permitGuidance';
 import type { LandingSection } from '@/components/seo/LandingPageTemplate';
 
@@ -870,12 +870,12 @@ export function getCityServiceSections(
       heading: `${service.name} across ${city.name}`,
       paragraphs: [
         neighborhoods.length
-          ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}.${creek ? ` ${creek}` : ''} Lot conditions, utility access, and subdivision design standards vary between these areas, so we tailor the site plan, foundation, and elevations to the specific parcel rather than dropping a plan onto it.`
+          ? `We build throughout ${city.name}, including ${joinNames(neighborhoods)}.${creek ? ` ${creek}` : ''} Lot conditions, utility access, and subdivision design standards vary between these areas, so we tailor the site plan, foundation, and elevations to the specific parcel rather than dropping a plan onto it.`
           : creek
             ? `We build throughout ${city.name}. ${creek} We tailor the site plan, foundation design, and elevations to the specific parcel rather than dropping a plan onto it.`
             : `We build throughout ${city.name}, tailoring the site plan, foundation design, and elevations to the specific parcel rather than dropping a plan onto it.`,
         landmarks.length
-          ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand how the area is developing and plan ${serviceLC} that fits the neighborhood and holds its value.`
+          ? `As a local team familiar with ${city.name} landmarks like ${joinNames(landmarks.slice(0, 3))}, we understand how the area is developing and plan ${serviceLC} that fits the neighborhood and holds its value.`
           : `As a local team, we plan ${serviceLC} that fits the neighborhood and holds its value.`,
       ],
     },
