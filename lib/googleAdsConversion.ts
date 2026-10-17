@@ -106,6 +106,24 @@ export function googleAdsContactClickAllowed(consent?: AdsConsent): boolean {
   return current?.ad_storage === 'granted' && current?.ad_user_data === 'granted';
 }
 
+/**
+ * The click conversion uses the same visitor gate as the Google tag bootstrap:
+ * the live host, a real browser, and analytics not switched off. Consent stays
+ * the separate Ads check. K3 grants that consent by default.
+ */
+export function googleAdsClickAnalyticsOn(): boolean {
+  if (typeof window === 'undefined') return false;
+  const host = window.location?.hostname?.toLowerCase() ?? '';
+  if (host !== 'boiseconstruction.co' && host !== 'www.boiseconstruction.co') return false;
+  if ((window.navigator as { webdriver?: boolean } | undefined)?.webdriver === true) return false;
+  try {
+    if (window.sessionStorage?.getItem('p5_analytics_disabled') === '1') return false;
+  } catch {
+    // Unavailable storage does not turn analytics off.
+  }
+  return true;
+}
+
 /** One Ads click conversion for a tel: or sms: href. Other hrefs are ignored. */
 export function googleAdsContactClickSendTo(href: string): string | undefined {
   if (href.startsWith('sms:')) return GOOGLE_ADS_TEXT_CLICK_LABEL;
@@ -115,11 +133,12 @@ export function googleAdsContactClickSendTo(href: string): string | undefined {
 
 /**
  * Fires one call or text click conversion. A second call is a second click.
- * Denied Ads consent, a missing gtag, and any non tel:/sms: href send nothing.
+ * Analytics switched off, denied Ads consent, a missing gtag, and any non
+ * tel:/sms: href send nothing.
  */
 export function trackGoogleAdsContactClick(href: string): boolean {
   const sendTo = googleAdsContactClickSendTo(href);
-  if (!sendTo || !googleAdsContactClickAllowed()) return false;
+  if (!sendTo || !googleAdsClickAnalyticsOn() || !googleAdsContactClickAllowed()) return false;
   if (typeof window === 'undefined') return false;
   const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
   if (typeof gtag !== 'function') return false;
