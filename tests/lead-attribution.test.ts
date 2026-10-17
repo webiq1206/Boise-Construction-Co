@@ -8,7 +8,8 @@ import {intakeProjectReview} from '../lib/p5/intakeProjectReview.ts';
 import {intakeDeliveryEnvelope} from '../lib/p5/intakeDeliveryPayload.ts';
 import {emptyIntakeDetails,type IntakeSnapshot} from '../lib/p5/intakeContract.ts';
 import {routeIntake} from '../lib/p5/intakePolicy.ts';
-import {trackGoogleAdsLeadConversion} from '../lib/googleAdsConversion.ts';
+import {GOOGLE_ADS_LEAD_LABEL,trackGoogleAdsLeadConversion} from '../lib/googleAdsConversion.ts';
+import fs from 'node:fs';
 import {resolvePropertyProfile} from '../shared/propertyProfile.ts';
 const granted={analytics_storage:'granted',ad_storage:'granted',ad_user_data:'granted',ad_personalization:'denied'} as const;
 const touch=captureTouch('https://boiseconstruction.co/estimate/scope?gclid=fixture-click&utm_campaign=homes&campaignid=123&email=private@example.invalid#secret','https://google.com/search?q=private');
@@ -84,9 +85,32 @@ test('accepted lead conversion ID deduplicates repeated callbacks and sessions',
  const prior=(globalThis as any).window;
  (globalThis as any).window={gtag:(...args:unknown[])=>events.push(args),sessionStorage:{getItem:(k:string)=>storage.get(k),setItem:(k:string,v:string)=>storage.set(k,v)}};
  try{
-  assert.equal(trackGoogleAdsLeadConversion({},'intake:fixture-attribution'),true);
-  assert.equal(trackGoogleAdsLeadConversion({},'intake:fixture-attribution'),false);
+  assert.equal(trackGoogleAdsLeadConversion({},'inquiry:fixture-attribution'),true);
+  assert.equal(trackGoogleAdsLeadConversion({},'inquiry:fixture-attribution'),false);
   assert.equal(events.length,1);
-  assert.equal((events[0][2] as any).transaction_id,'intake:fixture-attribution');
+  assert.equal((events[0][2] as any).send_to,GOOGLE_ADS_LEAD_LABEL);
+  assert.equal((events[0][2] as any).transaction_id,'inquiry:fixture-attribution');
  }finally{(globalThis as any).window=prior;}
+});
+test('estimator finishes do not fire the form lead label without an accepted lead',()=>{
+ const events:unknown[][]=[];const storage=new Map();
+ const prior=(globalThis as any).window;
+ (globalThis as any).window={gtag:(...args:unknown[])=>events.push(args),sessionStorage:{getItem:(k:string)=>storage.get(k)??null,setItem:(k:string,v:string)=>storage.set(k,v)}};
+ try{
+  assert.equal(trackGoogleAdsLeadConversion({service:'new-construction'},'estimator:fixture'),false);
+  assert.equal(trackGoogleAdsLeadConversion({},'intake:fixture-attribution'),false);
+  assert.equal(events.length,0);
+  assert.equal(storage.size,0);
+  assert.equal(trackGoogleAdsLeadConversion({acceptedLead:true},'intake:fixture-lead'),true);
+  assert.equal(trackGoogleAdsLeadConversion({acceptedLead:true},'intake:fixture-lead'),false);
+  assert.equal(events.length,1);
+  assert.equal((events[0][2] as any).send_to,GOOGLE_ADS_LEAD_LABEL);
+  assert.equal((events[0][2] as any).transaction_id,'intake:fixture-lead');
+ }finally{(globalThis as any).window=prior;}
+});
+test('estimator completed stays unfired until a configured label exists',()=>{
+ const source=fs.readFileSync(new URL('../lib/googleAdsConversion.ts',import.meta.url),'utf8');
+ assert.match(source,/TODO:[\s\S]*Estimator Completed/);
+ assert.equal(source.includes('GOOGLE_ADS_ESTIMATOR_LABEL'),false);
+ assert.equal(source.includes('cEzmCPOagKAdEKzf-q9E'),false);
 });

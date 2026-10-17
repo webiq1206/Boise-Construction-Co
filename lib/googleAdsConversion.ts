@@ -24,6 +24,12 @@ export interface LeadContext {
   service?: string;
   /** Consultation form project type. */
   projectType?: string;
+  /**
+   * Estimator finishes only. True also sends the form/lead label for that
+   * finish. False or omitted is not an accepted lead. The shared estimator
+   * calls this helper with two arguments and does not pass this flag.
+   */
+  acceptedLead?: boolean;
 }
 
 export type GoogleAdsLeadParams = {
@@ -65,12 +71,27 @@ export function googleAdsLeadParams(
 
 const sentLeadKeys = new Set<string>();
 
+function isEstimatorFinishKey(dedupeKey?: string): dedupeKey is string {
+  return !!dedupeKey && (dedupeKey.startsWith('estimator:') || dedupeKey.startsWith('intake:'));
+}
+
 /**
  * Fires the Google Ads lead conversion once per dedupe key (per page load and,
  * where storage allows, per browser session). Returns true when it was sent.
+ *
+ * Estimator finish keys (`estimator:` or `intake:`) are not form leads. They
+ * send the form/lead label only when `acceptedLead` is true. A two-argument
+ * call from the shared estimator omits that flag and must not send the form
+ * label.
+ *
+ * TODO: Send a separate "Estimator Completed" conversion once per estimator
+ * or intake key when this account has that label id in config. No label id
+ * is configured, so the estimator-completed event stays unfired. Do not
+ * invent a send_to id.
  */
 export function trackGoogleAdsLeadConversion(ctx: LeadContext = {}, dedupeKey?: string): boolean {
   if (typeof window === 'undefined') return false;
+  if (isEstimatorFinishKey(dedupeKey) && ctx.acceptedLead !== true) return false;
   const storageKey = dedupeKey ? `google_ads_lead:${dedupeKey}` : undefined;
   if (storageKey) {
     if (sentLeadKeys.has(storageKey)) return false;
