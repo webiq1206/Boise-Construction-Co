@@ -65,7 +65,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          `Yes on all three counts: ${IDAHO_REGISTERED_CONTRACTOR_PHRASE}, bonded, and insured. Permitting sits inside our design-build scope, which matters in Meridian: the city fee schedule sets double permit fees as the minimum charge when work starts without a permit.`,
+          `Yes on all counts: ${IDAHO_REGISTERED_CONTRACTOR_PHRASE}, bonded, and insured. Permitting sits inside our design-build scope, which matters in Meridian: the city fee schedule sets double permit fees as the minimum charge when work starts without a permit.`,
       },
       {
         question: 'How do I start a project?',
@@ -229,7 +229,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          `Yes. We are ${IDAHO_REGISTERED_CONTRACTOR_PHRASE}, bonded, and insured. Caldwell's permit packet includes a contractor registration declaration under Idaho Code 54-5209, so that number appears on the permit.`,
+          `Yes: ${IDAHO_REGISTERED_CONTRACTOR_PHRASE}, bonded, and insured, and Caldwell's permit packet includes a contractor registration declaration under Idaho Code 54-5209, so that number appears on the permit.`,
       },
       {
         question: 'How do I start a project?',

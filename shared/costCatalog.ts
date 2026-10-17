@@ -141,7 +141,7 @@ const SOFT_COSTS: ComponentDef[] = [
     share: 0.13,
     quantity: { kind: "lot" },
     group: "soft",
-    note: "Insurance, warranty, contractor registration, and the cost of running a registered contractor.",
+    note: "Insurance, warranty, licensing, and the cost of running a licensed contractor.",
   },
 ];
 

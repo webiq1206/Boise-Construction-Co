@@ -22,7 +22,9 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
     assert.equal(copy.faqs[2].question, 'How do I start a project?');
     assert.equal(copy.faqs[3].question, `Do you build in ${city.name}, Idaho?`);
     assert.equal(copy.faqs[4].question, `Which county is ${city.name} in?`);
-    assert.match(copy.faqs[1].answer, /Idaho Registered Contractor \(#8381215\)/);
+    assert.match(copy.faqs[1].answer, /Idaho Registered Contractor #8381215/);
+    assert.equal(copy.faqs[1].answer.includes('(#8381215)'), false);
+    assert.equal(copy.faqs[1].answer.includes('edopl.idaho.gov'), false);
     assert.match(copy.faqs[1].answer, /bond/i);
     assert.match(copy.faqs[1].answer, /insur/i);
     assert.doesNotMatch(copy.intro + copy.faqs.map((f) => f.question + f.answer).join(' '), /Jared/);
@@ -89,5 +91,6 @@ test('cities outside the batch keep the shared intro and shared FAQ questions', 
   assert.match(getAreaIntro(other), /one accountable team from feasibility through final walkthrough/);
   assert.equal(AREA_PAGE_FAQS.length, 3);
   assert.equal(AREA_PAGE_FAQS[1].question, 'Are you a registered contractor and insured?');
-  assert.match(AREA_PAGE_FAQS[1].answer, /Idaho Registered Contractor \(#8381215\), bonded, and insured/);
+  assert.match(AREA_PAGE_FAQS[1].answer, /Idaho Registered Contractor #8381215, bonded, and insured/);
+  assert.equal(AREA_PAGE_FAQS[1].answer.includes('(#8381215)'), false);
 });

@@ -6,6 +6,7 @@ import { SHOW_FOUNDED_YEAR, sinceFoundedYear } from '@/shared/foundedYear';
  */
 
 import { BUSINESS_INFO, CITY_SEO_DATA, getBaseUrl } from './seo';
+import { IDAHO_CONTRACTOR_REGISTRATION_NUMBER } from '@/shared/contractorRegistration';
 import { SERVICES } from '@/shared/contentData';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 
@@ -133,6 +134,17 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     '@id': LOCALBUSINESS_ID,
     url: baseUrl,
     parentOrganization: { '@id': ORG_ID },
+    hasCredential: {
+      '@type': 'EducationalOccupationalCredential',
+      credentialCategory: 'registration',
+      name: 'Idaho Registered Contractor',
+      identifier: IDAHO_CONTRACTOR_REGISTRATION_NUMBER,
+      recognizedBy: {
+        '@type': 'GovernmentOrganization',
+        name: 'Idaho Division of Occupational and Professional Licenses',
+        url: 'https://dopl.idaho.gov/con/',
+      },
+    },
     telephone: BUSINESS_INFO.phone,
     email: BUSINESS_INFO.email,
     address: PUBLIC_POSTAL_ADDRESS,

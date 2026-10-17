@@ -6,7 +6,7 @@
 
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { CITIES } from '@/shared/contentData';
-import { IDAHO_REGISTERED_CONTRACTOR_PHRASE } from '@/shared/contractorRegistration';
+import { IDAHO_REGISTERED_CONTRACTOR } from '@/shared/contractorRegistration';
 import { foundedSentence } from '@/shared/foundedYear';
 
 const SITE = SITE_CONFIG.siteUrl.replace(/\/$/, '');
@@ -351,7 +351,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   {
     question: 'Are you a registered contractor and insured?',
     answer:
-      `Yes. Boise Construction Co is ${IDAHO_REGISTERED_CONTRACTOR_PHRASE}, bonded, and insured for residential construction across the Treasure Valley.`,
+      `Yes. Boise Construction Co is bonded and insured for residential construction across the Treasure Valley. ${IDAHO_REGISTERED_CONTRACTOR}.`,
   },
   {
     question: 'Can you build on land I already own?',

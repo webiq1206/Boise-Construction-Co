@@ -122,6 +122,17 @@ export const TRUST_ITEMS = [
   "Free Consultation",
 ];
 
+export const HOW_P5_WORKS_TITLE = "How P5 works";
+export const HOW_P5_WORKS = [
+  "Own install crew",
+  "Bonded & insured",
+  "Manufacturer warranties passed through",
+  "Install dates confirmed in writing",
+  "Written update every week",
+  "Free in-home consultation, no pressure",
+  "Public representative: Nick Perkins",
+] as const;
+
 export const PROMISE_ITEMS = [
   {
     num: "01",

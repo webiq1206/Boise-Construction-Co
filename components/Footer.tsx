@@ -9,7 +9,7 @@ import { CITIES,SERVICES } from "@/shared/contentData";
 import { CONTENT_HUBS,guidePath } from "@/shared/contentHubs";
 import { GBP_SOCIAL } from "@/shared/gbpProfile";
 import { GUIDE_PAGES } from "@/shared/guideContent";
-import { IDAHO_REGISTERED_CONTRACTOR } from "@/shared/contractorRegistration";
+import { IdahoRegistrationLine } from "@/components/IdahoRegistrationLine";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { SITE_TAGLINE } from "@/shared/siteContent";
 import { ChevronDown,Facebook } from "lucide-react";
@@ -178,7 +178,7 @@ export function Footer() {
         <div className="flex flex-col gap-4 pt-5 text-xs text-inverse-muted sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             <span>&copy; {currentYear} {SITE_CONFIG.name}. All rights reserved.</span>
-            <span>{IDAHO_REGISTERED_CONTRACTOR}</span>
+            <IdahoRegistrationLine />
             {/* Required parent-company disclosure. This brand is a DBA of
                 P5 Home Co LLC, not a separate company. */}
             <span>

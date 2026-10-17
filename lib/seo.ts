@@ -130,14 +130,14 @@ export function generatePageTitle(params: ServiceSEOParams): string {
 }
 
 const CITY_DESCRIPTION_VARIANTS: Record<string, string> = {
-  Kuna: "Kuna's trusted design-build",
+  Kuna: "Kuna design-build",
   Boise: "Boise's design-build",
-  Meridian: "Meridian's trusted",
+  Meridian: "Meridian",
   Eagle: "Eagle's preferred",
   Star: "Star's reliable",
   Middleton: "Middleton's expert",
-  Nampa: "Nampa's trusted",
-  Caldwell: "Caldwell's trusted",
+  Nampa: "Nampa",
+  Caldwell: "Caldwell",
 };
 
 const CITY_CTA_VARIANTS: Record<string, string> = {
@@ -166,7 +166,7 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
   
   if (city && serviceName) {
     const serviceLC = serviceName.toLowerCase();
-    const cityVariant = CITY_DESCRIPTION_VARIANTS[city] || `${city}'s trusted`;
+    const cityVariant = CITY_DESCRIPTION_VARIANTS[city] || city;
     const ctaVariant = CITY_CTA_VARIANTS[city] || satisfactionGuaranteedCta();
     return `${cityVariant} ${serviceLC} team. Bonded & insured. ${ctaVariant}. Call ${phone} for a free consultation!`;
   }
@@ -235,7 +235,7 @@ export function generateCityServiceDescription(
 ): string {
   const phone = SITE_CONFIG.phone;
   const serviceLC = serviceName.toLowerCase();
-  const cityVariant = CITY_DESCRIPTION_VARIANTS[cityName] || `${cityName}'s trusted`;
+  const cityVariant = CITY_DESCRIPTION_VARIANTS[cityName] || "Local";
   const cityData = CITY_SEO_DATA[cityName as keyof typeof CITY_SEO_DATA];
   const neighborhood = cityData?.neighborhoods?.[0];
 
@@ -512,9 +512,8 @@ export const BUSINESS_INFO = {
   serviceRadius: '35 miles',
   licenses: [IDAHO_REGISTERED_CONTRACTOR],
   certifications: ['Design-Build Home Building', 'Bonded & Insured'],
-  // Previous public line, kept as the record: "License details available upon request".
-  // Sam verified #8381215 on Idaho DOPL (Active General Contractor Registration,
-  // issued 27-May-2026), so the registration number is the published value.
+  // `licenses` is the published registration string. It is not a JSON-LD
+  // license claim; LocalBusiness.hasCredential carries the credential.
   insurance: 'Bonded & Insured',
   rating: 0,
   reviewCount: 0,

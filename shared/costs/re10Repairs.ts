@@ -649,7 +649,7 @@ export const CREW_LABELS: Record<RepairCrew, string> = {
  * the margin, not before it.
  *
  * These sit deliberately above the handyman market, which runs $75-200 for a
- * minimum call. Boise Construction Co. is a licensed, insured contractor turning
+ * minimum call. Boise Construction Co. is a registered, insured contractor turning
  * up on a transaction deadline with photo documentation and a warranty, and that
  * is not the same product as an hourly handyman. But it is a premium, not a
  * multiple.
@@ -769,7 +769,7 @@ export const CREW_HOURLY_COST = 56;
  * stops returning calls.
  *
  * Boise Construction Co. should sit in the UPPER half of each band. It is a
- * licensed, insured contractor arriving on a closing deadline with photo
+ * registered, insured contractor arriving on a closing deadline with photo
  * documentation and a warranty, and that is worth more than the cheapest number
  * on a lead-gen site. It is not worth a multiple of the band, which is where
  * this engine started.

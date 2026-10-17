@@ -46,9 +46,11 @@ test('the 2020 founding year stays on record and does not render', () => {
     read('components/approved/ApprovedHome.tsx'),
     read('public/llms.txt'),
     read('public/llms-full.txt'),
-    read('public/brand/BRAND.md'),
-    read('public/brand/brand-kit.html'),
   ].join('\n');
+  assert.equal(fs.existsSync(path.join(root, 'public/brand/BRAND.md')), false);
+  assert.equal(fs.existsSync(path.join(root, 'public/brand/brand-kit.html')), false);
+  assert.equal(fs.existsSync(path.join(root, 'brand-kit/BRAND.md')), true);
+  assert.equal(fs.existsSync(path.join(root, 'brand-kit/brand-kit.html')), true);
 
   assert.equal(PUBLISHED.test(rendered), false);
   assert.equal(rendered.includes('foundingDate'), false);
@@ -61,7 +63,7 @@ test('the seal component is not rendered while the founding year is hidden', () 
   assert.equal(fs.existsSync(path.join(root, 'public/brand/svg/seal/light/boise-construction-co-seal-charcoal-accent.svg')), true);
   assert.equal(fs.existsSync(path.join(root, 'public/brand/page-preview.png')), true);
 
-  const brandKit = read('public/brand/brand-kit.html');
+  const brandKit = read('brand-kit/brand-kit.html');
   assert.equal(/<img\b[^>]*seal/i.test(brandKit), false);
   assert.match(brandKit, /svg\/icon\/boise-construction-co-icon-accent\.svg/);
 

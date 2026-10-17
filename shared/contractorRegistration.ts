@@ -4,4 +4,5 @@
  */
 export const IDAHO_CONTRACTOR_REGISTRATION_NUMBER = '8381215';
 export const IDAHO_REGISTERED_CONTRACTOR = `Idaho Registered Contractor #${IDAHO_CONTRACTOR_REGISTRATION_NUMBER}`;
-export const IDAHO_REGISTERED_CONTRACTOR_PHRASE = `an Idaho Registered Contractor (#${IDAHO_CONTRACTOR_REGISTRATION_NUMBER})`;
+export const IDAHO_REGISTERED_CONTRACTOR_PHRASE = `an Idaho Registered Contractor #${IDAHO_CONTRACTOR_REGISTRATION_NUMBER}`;
+export const DOPL_SEARCH_URL = 'https://edopl.idaho.gov/OnlineServices/?link=PubSearch';
