@@ -262,6 +262,24 @@ test('the forwarding sentence stands alone immediately after the Google Analytic
   assert.equal(privacy.includes(paired), true);
 });
 
+test('the forwarding sentence is present only when the website-call label is configured', () => {
+  const privacy = fs.readFileSync(new URL('../app/privacy-policy/page.tsx', import.meta.url), 'utf8');
+  const analytics = fs.readFileSync(new URL('../components/GoogleAnalytics.tsx', import.meta.url), 'utf8');
+  const replacement = fs.readFileSync(new URL('../lib/googlePhoneReplacement.ts', import.meta.url), 'utf8');
+  const conversion = fs.readFileSync(new URL('../lib/googleAdsConversion.ts', import.meta.url), 'utf8');
+  const forwarding =
+    "If your call goes through a Google forwarding number, Google connects the call and can see the calling number and call length, but not what's said.";
+  const label = 'AW-18354188204/YHR0CIaPz_ccEKzf-q9E';
+  const labelPresent =
+    analytics.includes("adsId: 'AW-18354188204'") &&
+    analytics.includes("phoneConversionLabel: 'YHR0CIaPz_ccEKzf-q9E'") &&
+    analytics.includes("phoneNumber: '(208) 477-1169'") &&
+    replacement.includes("config.adsId+'/'+config.phoneConversionLabel") &&
+    replacement.includes('phone_conversion_number:config.phoneNumber') &&
+    conversion.includes(`export const GOOGLE_ADS_WEBSITE_CALL_LABEL = '${label}'`);
+  assert.equal(privacy.includes(forwarding), labelPresent);
+});
+
 test('the privacy page places the cookies section before data security', () => {
   const privacy = fs.readFileSync(new URL('../app/privacy-policy/page.tsx', import.meta.url), 'utf8');
   const toc =
