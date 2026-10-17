@@ -37,6 +37,13 @@ const SUMMARY =
   `precede them. Design-build, founded 2020. Serving ${CITIES.map((c) => c.name).join(', ')}. ` +
   `Phone ${SITE_CONFIG.phone}.`;
 
+const CONTACT =
+  `Public representative: ${SITE_CONFIG.publicRepresentative}. Service-area business based at ` +
+  `${SITE_CONFIG.address.street}, ${SITE_CONFIG.address.city}, ${SITE_CONFIG.address.state} ${SITE_CONFIG.address.postalCode} ` +
+  `(not a staffed storefront). Phone ${SITE_CONFIG.phone}. Email ${SITE_CONFIG.email}.`;
+
+const HANDYMAN_RE10 = 'https://boisehandyman.co/re-10-repairs-boise';
+
 const POSITIONING =
   `Design-build means one accountable team handles architectural design, engineering, ` +
   `estimating, Ada and Canyon County permitting, and construction under a single contract, ` +
@@ -51,13 +58,15 @@ function buildShort(): string {
   lines.push(`# ${SITE_CONFIG.name}`, '');
   lines.push(`> ${SUMMARY}`, '');
   lines.push(POSITIONING, '');
+  lines.push('## Contact', '');
+  lines.push(CONTACT, '');
 
   lines.push('## Services', '');
   for (const s of SERVICES) {
     lines.push(`- [${s.name}](${url(`/services/${s.slug}`)}): ${s.shortDescription}`);
   }
   lines.push(
-    `- [RE-10 / Inspection Repairs](${url('/re-10-repairs-boise')}): repairs from an Idaho RE-10 inspection response, completed and documented before closing, for real estate agents, buyers and sellers.`,
+    `- [RE-10 repairs (Boise Handyman Co)](${HANDYMAN_RE10}): repairs from an Idaho RE-10 inspection response, completed and documented before closing, for real estate agents, buyers and sellers.`,
   );
   lines.push(
     `- [All Services](${url('/services')}): plus city pages at /services/{service}/{city} and [Service Areas](${url('/areas')}).`,
@@ -83,7 +92,10 @@ function buildShort(): string {
   lines.push('');
 
   lines.push('## Blog category hubs', '');
-  for (const h of CONTENT_HUBS) lines.push(`- [${h.title}](${url(`/blog/category/${h.hubSlug}`)})`);
+  for (const h of CONTENT_HUBS) {
+    const hubUrl = h.hubSlug === 'treasure-valley-locations' ? url('/areas') : url(`/blog/category/${h.hubSlug}`);
+    lines.push(`- [${h.title}](${hubUrl})`);
+  }
   lines.push('');
 
   lines.push('## About and contact', '');
@@ -111,6 +123,8 @@ function buildFull(): string {
   const lines: string[] = [];
   lines.push(`# ${SITE_CONFIG.name} - Full Reference`, '');
   lines.push(`> ${SUMMARY}`, '');
+  lines.push('## Contact', '');
+  lines.push(CONTACT, '');
 
   lines.push('## About', '');
   lines.push(
@@ -167,7 +181,10 @@ function buildFull(): string {
   lines.push('');
 
   lines.push('## Blog category hubs (long-tail questions support the pillars)', '');
-  for (const h of CONTENT_HUBS) lines.push(`- ${h.title}: /blog/category/${h.hubSlug}`);
+  for (const h of CONTENT_HUBS) {
+    const hubPath = h.hubSlug === 'treasure-valley-locations' ? '/areas' : `/blog/category/${h.hubSlug}`;
+    lines.push(`- ${h.title}: ${hubPath}`);
+  }
   lines.push('', `${BLOG_POSTS.length} articles across these hubs. Index: /blog`, '');
 
   lines.push('## Planning resources', '');
@@ -228,7 +245,7 @@ function buildFull(): string {
       `roof replacement are coordinated to licensed specialists rather than performed in house. ` +
       `We take this work because an inspection repair is a deadline problem rather than a ` +
       `construction problem, and sequencing trades against a date that will not move is the same ` +
-      `thing we do on every build. Details: ${url('/re-10-repairs-boise')}`,
+      `thing we do on every build. Details: ${HANDYMAN_RE10}`,
     '',
   );
 

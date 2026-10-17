@@ -31,7 +31,7 @@
 | Check | Result |
 |---|---|
 | Allow: * | PASS |
-| Disallow: /api/, /admin/, /subcontractor/ | PASS |
+| Disallow: /api/, /admin/, /subcontractor | PASS |
 | Sitemap URL emitted | PASS |
 | Host emitted | PASS |
 

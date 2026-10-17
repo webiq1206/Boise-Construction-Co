@@ -26,6 +26,7 @@ getCityServiceIntro,
 getCityServiceSections,
 SERVICE_SEO_CONTENT,
 } from '@/shared/seoContent';
+import { cityBuildingSection,cityFaqSchema,cityOnlyFaqs } from '@/shared/cityLocal';
 import { notFound } from 'next/navigation';
 
 export function generateStaticParams() {
@@ -73,7 +74,7 @@ export default async function CityServicePage(
 
   const overview = getCityServiceIntro(content, city, localFact);
   const h1 = `${service.name} in ${city.name}, Idaho`;
-  const faqs = getCityServiceFaqs(content, city);
+  const faqs = [...getCityServiceFaqs(content, city), ...cityOnlyFaqs(city, service.name)];
   const localNote = `For ${content.name.toLowerCase()} in ${city.name}, confirm the property jurisdiction and scope before applying. City addresses and unincorporated county parcels may use different building departments. Confirm required building and trade permits, inspections and review times for the actual address.`;
   const images = getCityServiceImageSet(service.slug, city.slug);
   const sections = getCityServiceSections(content, city, seo);
@@ -101,7 +102,7 @@ export default async function CityServicePage(
       { name: `${city.name}, ID`, url: path },
     ]),
     landingServiceSchema(service.name, overview, city.name),
-    landingFAQSchema(faqs),
+    landingFAQSchema(cityFaqSchema(faqs, city.name)),
     generateSpeakableSchema({ path, name: h1 }),
   ];
 
@@ -127,7 +128,7 @@ export default async function CityServicePage(
         timeline={content.timeline}
         processSteps={content.processSteps}
         localNote={localNote}
-        sections={sections}
+        sections={[...sections, cityBuildingSection(city, service.name)]}
         proof={proof}
         proofHeading={`Recent ${city.name} ${service.name.toLowerCase()} work`}
         showEstimatePrompt

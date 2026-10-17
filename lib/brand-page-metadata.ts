@@ -12,8 +12,8 @@ const COPY:Record<string,Record<string,Copy>>={
   "/guides/boise-home-building-process-guide":{title:"Boise Home Building Process",description:"See the steps to build a home in Boise, from lot review and design to permits, construction and handover. Plan your budget, selections and timeline."},
   "/blog/cost-to-build-a-house-boise":{title:"Cost to Build a House in Boise",description:"Explore Boise house-building costs by square foot, finish level and site conditions. Compare construction costs with land, utilities and site-work budgets."},
   "/blog/custom-home-cost-per-square-foot-boise":{title:"Boise Custom Home Cost per Sq Ft",description:"Compare custom home costs per square foot in Boise. See how home size, finishes, design complexity and site conditions affect your construction budget."},
-  '/':{title:'Custom Home Builder in Boise, ID',description:'Build a custom or semi-custom home in Boise and the Treasure Valley. Explore design-build services, build-on-your-lot options and clear project budgets.'},
-  '/services':{title:'Home Building & Design-Build Services',description:'Explore custom homes, semi-custom homes, additions and build-on-your-lot services across Boise and the Treasure Valley. Plan your project with our team.'},
+  '/':{title:'Boise Construction Co | Custom Home Builder in Boise, ID',description:'Boise construction custom home builder. Custom and semi-custom homes in Boise and the Treasure Valley. Design-build, build-on-your-lot, clear project budgets.'},
+  '/services':{title:'Home Building & Design-Build',description:'Explore custom homes, semi-custom homes, additions and build-on-your-lot services across Boise and the Treasure Valley. Plan your project with our team.'},
   '/about':{title:'About Our Boise Home Building Team',description:'Learn how Boise Construction Co plans and manages Treasure Valley home builds, from lot evaluation and design through permits, construction and handover.'},
   '/contact':{title:'Contact a Boise Home Builder',description:'Discuss your new home, building lot or addition with Boise Construction Co. Call our team or request project guidance for Boise and the Treasure Valley.'},
   '/resources':{title:'Home Building Worksheets & Guides',description:'Download home-building budget worksheets and lot evaluation checklists. Compare Ada and Canyon County permit steps before planning your Idaho build.'},
@@ -51,7 +51,7 @@ function pagePath(meta:Metadata,hint?:string):string{
 export function withBrandPageMetadata(meta:Metadata,routeHint?:string):Metadata{
  const override=routeHint==='__layout__'?undefined:COPY[brand.id]?.[pagePath(meta,routeHint)];
  const original=titleText(meta);
- const title=override?`${override.title} | ${brand.name}`:original.includes(brand.name)?original:`${original} | ${brand.name}`;
+ const title=override?(override.title.includes(brand.name)?override.title:`${override.title} | ${brand.name}`):original.includes(brand.name)?original:`${original} | ${brand.name}`;
  const description=override?.description||meta.description||undefined;
  const image={url:BRAND_PAGE_IMAGE,width:1200,height:630,alt:`${brand.name} brand seal`};
  const icons=routeHint==='__layout__'?{

@@ -19,7 +19,7 @@ isCategoryHubIndexable,
 import { ArrowRight } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound,redirect } from 'next/navigation';
+import { notFound,permanentRedirect,redirect } from 'next/navigation';
 
 function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString('en-US', {
@@ -96,7 +96,8 @@ export default async function BlogCategoryHubPage(
   );
 
   if (posts.length === 0) {
-    redirect(hub.hubSlug === 'treasure-valley-locations' ? '/areas' : '/blog');
+    if (hub.hubSlug === 'treasure-valley-locations') permanentRedirect('/areas');
+    redirect('/blog');
   }
 
   const hubHero = getHubHeroImage(params.hubSlug);
