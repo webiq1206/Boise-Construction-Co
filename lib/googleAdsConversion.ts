@@ -1,14 +1,17 @@
 /**
  * Google Ads conversion helpers shared by every lead path on this site.
  *
- * One Google Ads conversion action ('P5 Raw Form Submitted') receives every
- * accepted lead, with a per-lead value so Google Ads can report ROAS by
- * campaign. Values are the per-lead estimates agreed with P5 on 14 Sept 2026
+ * 'P5 Raw Form Submitted' receives an accepted lead, including an estimator
+ * finish, with a per-lead value so Google Ads can report ROAS by campaign.
+ * An intake or estimator finish also sends 'P5 Estimator Completed' once for
+ * that key. Values are the per-lead estimates agreed with P5 on 14 Sept 2026
  * (form fallback in Google Ads is $50). Never pass PII here: no names, phones,
  * emails or free text - only a service/project category and an opaque id.
  */
 export const GOOGLE_ADS_ID = 'AW-18354188204';
 export const GOOGLE_ADS_LEAD_LABEL = 'AW-18354188204/LE2vCPXstO8cEKzf-q9E';
+/** 'P5 Estimator Completed'. Estimator finish only. Not the consultation form. */
+export const GOOGLE_ADS_ESTIMATOR_LABEL = 'AW-18354188204/cEzmCPOagKAdEKzf-q9E';
 /** 'P5 Website Call (60s+)': swaps the visible number for a Google forwarding number. */
 export const GOOGLE_ADS_WEBSITE_CALL_LABEL = 'AW-18354188204/YHR0CIaPz_ccEKzf-q9E';
 /** Click on a tel: link. Separate from the forwarding-number website-call action. */
@@ -24,6 +27,12 @@ export interface LeadContext {
   service?: string;
   /** Consultation form project type. */
   projectType?: string;
+  /**
+   * Estimator finishes only. False skips the form/lead label for that key.
+   * Omitted still sends it. The shared estimator calls this with two arguments
+   * and does not pass this flag.
+   */
+  acceptedLead?: boolean;
 }
 
 export type GoogleAdsLeadParams = {
@@ -65,32 +74,69 @@ export function googleAdsLeadParams(
 
 const sentLeadKeys = new Set<string>();
 
+function isEstimatorFinishKey(dedupeKey?: string): dedupeKey is string {
+  return !!dedupeKey && (dedupeKey.startsWith('estimator:') || dedupeKey.startsWith('intake:'));
+}
+
+function alreadySent(storageKey: string): boolean {
+  if (sentLeadKeys.has(storageKey)) return true;
+  try {
+    return window.sessionStorage.getItem(storageKey) === 'sent';
+  } catch {
+    return false;
+  }
+}
+
+function markSent(storageKey: string) {
+  sentLeadKeys.add(storageKey);
+  try {
+    window.sessionStorage.setItem(storageKey, 'sent');
+  } catch {
+    // Ignore; in-memory guard is enough for this page load.
+  }
+}
+
+type PendingConversion = { storageKey?: string; params: Record<string, unknown> };
+
+function pendingConversions(ctx: LeadContext, dedupeKey?: string): PendingConversion[] {
+  if (isEstimatorFinishKey(dedupeKey)) {
+    const pending: PendingConversion[] = [];
+    const estimatorKey = `google_ads_estimator:${dedupeKey}`;
+    if (!alreadySent(estimatorKey)) {
+      pending.push({
+        storageKey: estimatorKey,
+        params: { send_to: GOOGLE_ADS_ESTIMATOR_LABEL, transaction_id: dedupeKey },
+      });
+    }
+    if (ctx.acceptedLead !== false) {
+      const leadKey = `google_ads_lead:${dedupeKey}`;
+      if (!alreadySent(leadKey)) pending.push({ storageKey: leadKey, params: googleAdsLeadParams(ctx, dedupeKey) });
+    }
+    return pending;
+  }
+  const storageKey = dedupeKey ? `google_ads_lead:${dedupeKey}` : undefined;
+  if (storageKey && alreadySent(storageKey)) return [];
+  return [{ storageKey, params: googleAdsLeadParams(ctx, dedupeKey) }];
+}
+
 /**
- * Fires the Google Ads lead conversion once per dedupe key (per page load and,
- * where storage allows, per browser session). Returns true when it was sent.
+ * Fires Google Ads conversions once per key (per page load and, where storage
+ * allows, per browser session). An `intake:` or `estimator:` key sends
+ * Estimator Completed once, with that key as transaction_id, and also sends
+ * the form label once for the same key unless `acceptedLead` is false.
+ * A `conv_` inquiry id, and any other key, sends the form label only.
+ * Returns true when at least one conversion was sent.
  */
 export function trackGoogleAdsLeadConversion(ctx: LeadContext = {}, dedupeKey?: string): boolean {
   if (typeof window === 'undefined') return false;
-  const storageKey = dedupeKey ? `google_ads_lead:${dedupeKey}` : undefined;
-  if (storageKey) {
-    if (sentLeadKeys.has(storageKey)) return false;
-    try {
-      if (window.sessionStorage.getItem(storageKey) === 'sent') return false;
-    } catch {
-      // Storage can be unavailable under strict privacy settings; the in-memory guard still applies.
-    }
-  }
+  const pending = pendingConversions(ctx, dedupeKey);
+  if (!pending.length) return false;
   const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
   if (typeof gtag !== 'function') return false;
-  if (storageKey) {
-    sentLeadKeys.add(storageKey);
-    try {
-      window.sessionStorage.setItem(storageKey, 'sent');
-    } catch {
-      // Ignore; in-memory guard is enough for this page load.
-    }
+  for (const item of pending) {
+    if (item.storageKey) markSent(item.storageKey);
+    gtag('event', 'conversion', item.params);
   }
-  gtag('event', 'conversion', googleAdsLeadParams(ctx, dedupeKey));
   return true;
 }
 

@@ -42,6 +42,17 @@ test('the forwarding sentence is present only when the website-call label is con
   assert.equal(privacy.includes(forwarding), labelPresent);
 });
 
+test('the privacy page keeps ad click ids and campaign tags for 90 days with the inquiry', () => {
+  const privacy = fs.readFileSync(new URL('../app/privacy-policy/page.tsx', import.meta.url), 'utf8');
+  const paragraph =
+    'If you arrive from one of our ads or a link with campaign tags, our site saves the ad click identifier from that link (such as gclid, gbraid, wbraid or dclid) and the campaign tags in your browser for up to 90 days. If you then send an inquiry, we keep them with your inquiry in our customer records so we can tell which ad or campaign led to it.';
+  const at = privacy.indexOf(paragraph);
+  const afterVendors = privacy.indexOf('https://www.facebook.com/privacy/policy');
+  const securityAt = privacy.indexOf('<h2 id="document-section-5">');
+  assert.equal(at > afterVendors && at < securityAt, true);
+  assert.equal(privacy.includes('Last updated: October 17, 2026'), true);
+});
+
 test('the privacy page places the cookies section before data security', () => {
   const privacy = fs.readFileSync(new URL('../app/privacy-policy/page.tsx', import.meta.url), 'utf8');
   const toc =
