@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/accordion";
 import { Section } from "@/components/marketing/Section";
 import { Button } from "@/components/ui/button";
-import { CTA_PRIMARY, CTA_SECONDARY } from "@/shared/ctaCopy";
 import { HOMEPAGE_FAQS, INITIAL_FAQ_COUNT } from "@/shared/homepageFaqs";
 
 export { HOMEPAGE_FAQS };
@@ -43,14 +42,6 @@ export function FAQSection() {
                 matter
               </em>
             </h2>
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-              <Button variant="brand" className="w-full sm:w-auto" asChild>
-                <a href="#calculator">{CTA_PRIMARY}</a>
-              </Button>
-              <Button variant="brandOutline" className="w-full sm:w-auto" asChild>
-                <a href="#consult">{CTA_SECONDARY}</a>
-              </Button>
-            </div>
           </div>
 
           <div>

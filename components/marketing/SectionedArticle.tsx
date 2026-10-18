@@ -63,7 +63,7 @@ function renderSectionBody(
 
 export function SectionedArticle({
   html,
-  defaultOpenCount = 3,
+  defaultOpenCount = 99,
   testId = 'article-content',
   forceExpanded = false,
   inlineFigures = [],
@@ -127,9 +127,6 @@ export function SectionedArticle({
                 className="blog-content [&_h2]:mt-0 [&_h2]:mb-0 [&_h2]:text-xl md:[&_h2]:text-2xl flex items-start justify-between gap-4"
                 dangerouslySetInnerHTML={{ __html: section.headingHtml }}
               />
-              <span className="text-xs text-muted-foreground mt-1 block group-open:hidden">
-                Expand section
-              </span>
             </summary>
             <div className="blog-content pb-8 pt-0">
               {renderSectionBody(index, section.bodyHtml, inlineFigures, '')}

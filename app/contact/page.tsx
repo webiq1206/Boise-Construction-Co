@@ -2,7 +2,6 @@ import { InteriorEstimateLink,InteriorHero,InteriorPage } from '@/components/app
 import { BusinessPhoneContact } from '@/components/BusinessPhoneContact';
 import { ConsultationForm } from '@/components/ConsultationForm';
 import { Section } from '@/components/marketing';
-import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
 import { Hairline } from '@/components/marketing/Hairline';
 import { MarketingCard } from '@/components/marketing/MarketingCard';
 import { SectionHeader } from '@/components/marketing/SectionHeader';
@@ -444,16 +443,6 @@ export default function ContactPage() {
 
         <StatementBandSection />
 
-        <EstimatePromptBand
-          title={
-            <>
-              Ready to discuss your{' '}
-              <em className="brc-accent">project</em>?
-            </>
-          }
-          description="Share your project details and plans for our team to review. We may need more information or a site visit before confirming an estimate."
-          variant="canvas"
-        />
 
         {/* ─── Service areas ─── */}
         <Section divider>
