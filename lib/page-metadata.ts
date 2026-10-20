@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { CITIES, SERVICES } from '@/shared/contentData';
 import {
   generateCityServiceDescription,
   generateCityServiceTitle,
@@ -41,23 +42,32 @@ export interface PageMetaInput {
 }
 
 /**
- * City x service combos flagged as doorway risk. These are secondary services
- * in the smallest markets, where the copy is most generic and there is no local
- * proof or pillar support, plus shop homes in Boise proper where lot sizes and
- * zoning make the service largely implausible. Toggle entries off here once a
- * combo earns unique local content. Keyed as `${serviceSlug}/${citySlug}`.
+ * City x service combos that are allowed into the index. A young domain with no
+ * backlinks or reviews is better served by a smaller set of pages that each
+ * carry real local substance than by a full services-by-cities grid, which
+ * reads as doorway content. Everything outside this list is `noindex, follow`:
+ * it stays crawlable, keeps its internal-link value, and drops out of the
+ * sitemap. Widen a list here once a combo earns unique proof (reviews, local
+ * job photos, neighborhood detail).
  */
-export const NOINDEX_CITY_SERVICE = new Set<string>([
-  'lot-evaluation/kuna',
-  'lot-evaluation/star',
-  'lot-evaluation/middleton',
-  'lot-evaluation/caldwell',
-  'energy-efficient-homes/kuna',
-  'energy-efficient-homes/star',
-  'energy-efficient-homes/middleton',
-  'energy-efficient-homes/caldwell',
-  'shop-homes-barndominiums/boise',
-]);
+const CORE_SERVICES = ['custom-home-builder','semi-custom-homes','build-on-your-lot','design-build'];
+const CORE_CITIES = ['boise','meridian','eagle','nampa'];
+const SECONDARY_SERVICES = ['home-plans-design','home-additions','lot-evaluation','energy-efficient-homes'];
+const SECONDARY_CITIES = ['boise','meridian'];
+const EXTRA_INDEXABLE = ['shop-homes-barndominiums/meridian','shop-homes-barndominiums/eagle','shop-homes-barndominiums/nampa','shop-homes-barndominiums/kuna'];
+
+function isIndexable(serviceSlug: string, citySlug: string): boolean {
+  if (CORE_SERVICES.includes(serviceSlug) && CORE_CITIES.includes(citySlug)) return true;
+  if (SECONDARY_SERVICES.includes(serviceSlug) && SECONDARY_CITIES.includes(citySlug)) return true;
+  return EXTRA_INDEXABLE.includes(`${serviceSlug}/${citySlug}`);
+}
+
+/** Keyed as `${serviceSlug}/${citySlug}`. Derived from the allowlist above. */
+export const NOINDEX_CITY_SERVICE = new Set<string>(
+  SERVICES.flatMap((s) =>
+    CITIES.filter((c) => !isIndexable(s.slug, c.slug)).map((c) => `${s.slug}/${c.slug}`),
+  ),
+);
 
 export function isCityServiceNoindex(serviceSlug: string, citySlug: string): boolean {
   return NOINDEX_CITY_SERVICE.has(`${serviceSlug}/${citySlug}`);

@@ -28,7 +28,9 @@ export { HOMEPAGE_FAQS };
  */
 export function FAQSection() {
   const [showAll, setShowAll] = useState(false);
-  const visibleFaqs = showAll ? HOMEPAGE_FAQS : HOMEPAGE_FAQS.slice(0, INITIAL_FAQ_COUNT);
+  // Every question is rendered so the full answers ship in the HTML; the ones past
+  // the initial count are only hidden until "Show all" is pressed.
+  const visibleFaqs = HOMEPAGE_FAQS;
 
   return (
     <Section id="faq" surface="bone" spacing="xl" edge>
@@ -55,7 +57,7 @@ export function FAQSection() {
                 <AccordionItem
                   key={i}
                   value={`faq-${i}`}
-                  className="border-0 border-b"
+                  className={i >= INITIAL_FAQ_COUNT && !showAll ? "hidden" : "border-0 border-b"}
                   style={{ borderColor: "var(--ed-line)" }}
                 >
                   <AccordionTrigger className="ed-h4 py-6 text-left hover:no-underline [&[data-state=open]]:[color:var(--ed-accent)]">
