@@ -11,11 +11,12 @@ landingFAQSchema,
 import { buildPageMetadata } from '@/lib/page-metadata';
 import { permitGuidance, permitSource } from '@/lib/permitGuidance';
 import { generateSpeakableSchema } from '@/lib/schema';
-import { CITY_SEO_DATA } from '@/lib/seo';
+import { CITY_SEO_DATA, indianCreekDescription } from '@/lib/seo';
 import { areaPath,CITY_SLUGS,getCityBySlug } from '@/lib/seo-routes';
 import { getAreaImageSet } from '@/shared/cityServiceImages';
 import { getCountyLabel,SERVICES } from '@/shared/contentData';
 import { getGalleryProjectsForCity } from '@/shared/galleryData';
+import { getAreaCityCopy } from '@/shared/content/areaCopy';
 import { AREA_PAGE_FAQS,getAreaIntro } from '@/shared/seoContent';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { notFound } from 'next/navigation';
@@ -37,6 +38,10 @@ export async function generateMetadata(
     cityName: cityData.name,
     citySlug: cityData.slug,
     path: areaPath(cityData.slug),
+    ...(cityData.slug === 'middleton' ? {
+      titleOverride: 'Custom Home Builder in Middleton, ID',
+      descriptionOverride: 'Plan a custom home in Middleton, ID. Share your lot, plans and project details with Boise Construction Co for team review before we prepare your estimate.',
+    } : {}),
   })), "/areas/[city]");
 }
 
@@ -49,6 +54,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
   const county = getCountyLabel(city.county);
   const path = areaPath(city.slug);
   const overview = getAreaIntro(city);
+  const answerFirst = `${city.name}, Idaho is in ${county}. ${SITE_CONFIG.name} builds there as a design-build home builder. Ada County and Canyon County permit steps are on the permit-flow page.`;
   const images = getAreaImageSet(city.slug);
   const localNote = seo
     ? `We serve ${city.name} homeowners across ${seo.neighborhoods.slice(0, 3).join(', ')}, and all of ${county}. Confirm the permitting authority for the project address before applying.`
@@ -56,6 +62,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
 
   const neighborhoods = seo?.neighborhoods ?? [];
   const landmarks = seo?.landmarks ?? [];
+  const creek = indianCreekDescription(city.name);
 
   const sections: LandingSection[] = [
     {
@@ -73,8 +80,10 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       heading: `Neighborhoods and lots we build on in ${city.name}`,
       paragraphs: [
         neighborhoods.length
-          ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}. Lots vary block by block in setbacks, utilities, soil, and slope, so we evaluate the specific parcel before we price the home rather than applying a flat square-foot number.`
-          : `We build throughout ${city.name}, evaluating each parcel for setbacks, utilities, soil, and slope before we price the home rather than applying a flat square-foot number.`,
+          ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}.${creek ? ` ${creek}` : ''} Lots vary block by block in setbacks, utilities, soil, and slope, so we evaluate the specific parcel before we price the home rather than applying a flat square-foot number.`
+          : creek
+            ? `We build throughout ${city.name}. ${creek} We evaluate each parcel for setbacks, utilities, soil, and slope before we price the home rather than applying a flat square-foot number.`
+            : `We build throughout ${city.name}, evaluating each parcel for setbacks, utilities, soil, and slope before we price the home rather than applying a flat square-foot number.`,
         landmarks.length
           ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand the area's character and how to design a home that fits its street and holds its value.`
           : `As a local team, we understand the area's character and how to design a home that fits its street and holds its value.`,
@@ -82,9 +91,13 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
     },
     {
       heading: `Permits and planning in ${city.name}`,
-      links: permitSource(city.name)
-        ? [{ label: `Official ${city.name} permit guidance`, href: permitSource(city.name)! }]
-        : undefined,
+      links: [
+        ...(permitSource(city.name)
+          ? [{ label: `Official ${city.name} permit guidance`, href: permitSource(city.name)! }]
+          : []),
+        { label: 'Ada and Canyon County permit flow', href: '/resources/ada-canyon-permit-flow' },
+        { label: 'Custom home builder', href: '/services/custom-home-builder' },
+      ],
       paragraphs: [
         permitGuidance(city.name),
         'We confirm the required submissions and inspection steps for your scope, then account for them in the project schedule.',
@@ -111,11 +124,16 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       : undefined;
 
   const h1 = `Home Builder in ${city.name}, Idaho`;
-  const faqs = [
+  const cityCopy = getAreaCityCopy(city.slug);
+  const faqs = cityCopy?.faqs ?? [
     ...AREA_PAGE_FAQS,
     {
       question: `Do you build in ${city.name}, Idaho?`,
       answer: `Yes. ${city.name} is part of our Treasure Valley service area. We build custom homes, semi-custom homes, and homes on land you already own, and we can evaluate a ${city.name} lot before you buy it.`,
+    },
+    {
+      question: `Which county is ${city.name} in?`,
+      answer: `${city.name} is in ${county}. The permit steps for Ada County and Canyon County are compared on the Ada and Canyon County permit-flow page.`,
     },
   ];
 
@@ -136,7 +154,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       <LandingPageTemplate
         h1={h1}
         speakableSummary={overview}
-        overview={overview}
+        overview={`${answerFirst} ${overview}`}
         heroImageUrl={images.hero}
         breatherImageUrl={images.breather}
         processImageUrl={images.process}
@@ -155,7 +173,6 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
         localNote={localNote}
         sections={sections}
         proof={proof}
-        proofHeading={`Recent ${city.name} projects`}
         showEstimatePrompt
         faqs={faqs}
         related={{ variant: 'area', citySlug: city.slug }}

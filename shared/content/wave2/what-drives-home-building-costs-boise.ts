@@ -3,9 +3,9 @@ import type { BlogPostData } from '../../blogContent';
 export const whatDrivesHomeBuildingCostsBoise: BlogPostData = {
   slug: 'what-drives-home-building-costs-boise',
   title: 'What Actually Drives Home Building Costs in Boise',
-  seoTitle: 'What Drives Home Building Costs in Boise',
+  seoTitle: 'Cost Drivers for Boise Home Building',
   metaDescription:
-    'The real cost drivers on a Boise new build, ranked: site conditions, size, storeys, footprint complexity, finish level, glazing, and when you decide things.',
+    'The cost drivers on a Boise new build, ranked: site conditions, size, storeys, footprint complexity, finish level, glazing, and when you decide things.',
   excerpt:
     'Seven things move a new home budget more than anything else. They are ranked here by how far they move it, with the decisions that look cheap on paper flagged.',
   category: 'Home Building Costs',

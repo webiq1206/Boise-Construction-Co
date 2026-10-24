@@ -3,9 +3,9 @@ import type { GuidePageData } from '../../guideContent';
 export const customHomeDesignGuide: GuidePageData = {
   slug: 'custom-home-design-guide',
   title: 'Designing a Custom Home in the Treasure Valley',
-  seoTitle: 'Designing a Custom Home in the Treasure Valley',
+  seoTitle: 'Custom Home Design, Treasure Valley',
   metaDescription:
-    'How to design a custom home in the Treasure Valley: start with the lot, program the plan, and settle geometry, performance, and finishes in the right order.',
+    'Design a custom home in the Treasure Valley: start with the lot, program the plan, and settle geometry, performance, and finishes in the right order.',
   excerpt:
     'Design decisions are cheap on paper, expensive after framing, and effectively impossible after drywall. This guide walks the whole design sequence for a Treasure Valley custom home, from reading the lot through to the selections calendar, in the order the money actually moves.',
   hubSlug: 'home-design-and-plans',

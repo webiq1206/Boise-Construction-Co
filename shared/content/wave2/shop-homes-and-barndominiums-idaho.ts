@@ -3,7 +3,7 @@ import type { BlogPostData } from '../../blogContent';
 export const shopHomesAndBarndominiumsIdaho: BlogPostData = {
   slug: 'shop-homes-and-barndominiums-idaho',
   title: 'Shop Homes and Barndominiums in Idaho',
-  seoTitle: 'Shop Homes and Barndominiums in Idaho',
+  seoTitle: 'Shop Homes and Barndominiums, Idaho',
   metaDescription:
     'Shop homes and barndominiums in Idaho: why they cost $150 to $250 per square foot blended, the real trade-offs, zoning, financing, and insulating a shop.',
   excerpt:

@@ -7,10 +7,11 @@ import {
   HeartHandshake,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { SHOW_FOUNDING_YEAR } from "@/shared/publicFlags";
 
 export const SITE_TAGLINE = "Treasure Valley home building, built on clarity and craftsmanship";
 
-export const HERO_EYEBROW = "Boise Home Builder · Treasure Valley";
+export const HERO_EYEBROW = "Boise Residential Construction · Treasure Valley";
 
 // Avoids the old remodeling subhead's shape ("One accountable design-build team
 // from first visit to final walkthrough") and does not repeat the H1's "to the
@@ -18,10 +19,10 @@ export const HERO_EYEBROW = "Boise Home Builder · Treasure Valley";
 // dirt moves - which is what separates this builder from both a remodeler and a
 // production builder.
 export const HERO_SUBHEAD =
-  "A custom home builder for Boise and the Treasure Valley, with a line-item budget before we break ground and weekly cost updates through the build.";
+  "Boise Construction Co is a residential construction company and custom home builder for Boise and the Treasure Valley, with a line-item budget before we break ground and weekly cost updates through the build.";
 
 export const HERO_STATS = [
-  { num: "Your scope", label: "Reviewed before you send" },
+  { num: "Team review", label: "Project estimate request" },
   { num: "Free", label: "Planning consultation" },
   { num: "Line-item", label: "Budget before we break ground" },
 ] as const;
@@ -114,7 +115,7 @@ export const PROOF_STATS = {
  * the strip fills the six-column desktop grid in HeroSection.
  */
 export const TRUST_ITEMS = [
-  `Est. ${PROOF_STATS.established}`,
+  ...(SHOW_FOUNDING_YEAR ? [`Est. ${PROOF_STATS.established}`] : ["Idaho Registered Contractor"]),
   "Design-Build",
   "Bonded · Insured",
   "Permits In-House",

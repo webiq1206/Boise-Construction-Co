@@ -1,3 +1,4 @@
+import {interpretIntakeIntent} from './intakeIntent.ts';
 /**
  * Project types that need evidence before a reader may assert them.
  *
@@ -24,6 +25,9 @@ const REVISION_NOTE=/\brequested change for revision \d+\s*:?/gi;
 const withoutRevisionNotes=(text:string|null|undefined)=>String(text||'').replace(REVISION_NOTE,' ');
 /** True unless the service is one that needs a signal and the text carries none. */
 export function serviceEvidenceSupports(service:string|null|undefined,text:string|null|undefined):boolean{
+  // Constructing a driveway or fence is not constructing a new home. This
+  // guard affects acceptance only, not signalledService's repair-policy routing.
+  if(service==='new-construction')return interpretIntakeIntent(String(text||'')).service==='new-construction';
   const signal=SERVICE_SIGNALS[String(service||'')];
   return !signal||signal.test(withoutRevisionNotes(text));
 }

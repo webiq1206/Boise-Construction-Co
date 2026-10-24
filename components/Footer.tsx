@@ -1,6 +1,5 @@
 
 import { BusinessPhoneLink } from "@/components/BusinessPhoneContact";
-import { EmailLink } from "@/components/EmailLink";
 import { SaveContactLink } from "@/components/SaveContactLink";
 import { ApprovedBrand } from "@/components/approved/ApprovedBrand";
 import { FooterCTAs } from "@/components/modals/FooterCTAs";
@@ -10,6 +9,7 @@ import { CITIES,SERVICES } from "@/shared/contentData";
 import { CONTENT_HUBS,guidePath } from "@/shared/contentHubs";
 import { GBP_SOCIAL } from "@/shared/gbpProfile";
 import { GUIDE_PAGES } from "@/shared/guideContent";
+import { ContractorRegistrationLink } from "@/components/ContractorRegistration";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { SITE_TAGLINE } from "@/shared/siteContent";
 import { ChevronDown,Facebook } from "lucide-react";
@@ -105,7 +105,7 @@ export function Footer() {
   const groups = buildFooterGroups();
 
   return (
-    <footer className="bg-inverse text-inverse-foreground pb-[calc(96px+env(safe-area-inset-bottom))] lg:pb-0">
+    <footer className="site-footer bg-inverse text-inverse-foreground">
       <div className="container px-4 py-16 md:py-20">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.35fr_repeat(3,1fr)] lg:gap-0 lg:divide-x lg:divide-inverse-foreground/10 [&>*]:lg:px-8 [&>*:first-child]:lg:pl-0 [&>*:last-child]:lg:pr-0">
           <div className="pb-2 lg:pb-0">
@@ -126,9 +126,18 @@ export function Footer() {
               >
                 Text us
               </a>
-              <EmailLink className="flex min-h-[44px] items-center text-left text-sm text-inverse-muted transition-colors hover:text-inverse-foreground" />
+              <a
+                href={`mailto:${SITE_CONFIG.email}`}
+                className="flex min-h-[44px] items-center text-sm text-inverse-muted transition-colors hover:text-inverse-foreground"
+                data-testid="link-footer-email"
+              >
+                {SITE_CONFIG.email}
+              </a>
               <p className="py-2 text-sm text-inverse-muted">
                 {SITE_CONFIG.address.cityState} · {SITE_CONFIG.address.serviceArea}
+              </p>
+              <p className="py-2 text-sm text-inverse-muted">
+                Public representative: {SITE_CONFIG.publicRepresentative}. {SITE_CONFIG.address.street}, {SITE_CONFIG.address.city}, {SITE_CONFIG.address.state} {SITE_CONFIG.address.postalCode}. Service-area business, not a staffed storefront.
               </p>
             </div>
             <div className="mt-4 flex flex-wrap items-center gap-4">
@@ -169,7 +178,7 @@ export function Footer() {
         <div className="flex flex-col gap-4 pt-5 text-xs text-inverse-muted sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             <span>&copy; {currentYear} {SITE_CONFIG.name}. All rights reserved.</span>
-            <span>License details available upon request</span>
+            <ContractorRegistrationLink />
             {/* Required parent-company disclosure. This brand is a DBA of
                 P5 Home Co LLC, not a separate company. */}
             <span>

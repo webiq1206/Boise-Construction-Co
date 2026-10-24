@@ -3,9 +3,9 @@ import type { BlogPostData } from '../../blogContent';
 export const customHomeFloorPlanIdeasBoise: BlogPostData = {
   slug: 'custom-home-floor-plan-ideas-boise',
   title: 'Floor Plan Ideas That Work in Treasure Valley Homes',
-  seoTitle: 'Floor Plan Ideas for Treasure Valley Homes',
+  seoTitle: 'Treasure Valley Floor Plan Ideas',
   metaDescription:
-    'Floor plan ideas that suit how Treasure Valley families actually live: single-level living, the garage to mudroom sequence, suite placement, and circulation.',
+    'Floor plan ideas that suit how Treasure Valley families live: single-level living, the garage to mudroom sequence, suite placement, and circulation.',
   excerpt:
     'The plan decisions that change daily life in a Boise-area house: what stays on one level, the garage to mudroom sequence, kitchen and great room relationships, and why hallways are the most expensive square feet you will ever buy.',
   category: 'Design & Floor Plans',

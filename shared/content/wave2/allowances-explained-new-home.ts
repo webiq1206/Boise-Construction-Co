@@ -3,7 +3,7 @@ import type { BlogPostData } from '../../blogContent';
 export const allowancesExplainedNewHome: BlogPostData = {
   slug: 'allowances-explained-new-home',
   title: 'How Allowances Work in a New Home Contract',
-  seoTitle: 'How Allowances Work in a New Home Contract',
+  seoTitle: 'Allowances in a New Home Contract',
   metaDescription:
     'What an allowance is, which categories carry one, how a low allowance hides a low bid, how to test if a number is realistic, and how overages are handled.',
   excerpt:

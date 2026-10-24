@@ -34,7 +34,7 @@ test('both contact methods and each preference survive validation, CRM and confi
   assert.deepEqual(intakeContact(s.contact),s.contact);assert.deepEqual(intakeProjectReview(env(s)).request.contact,s.contact);
   for(const channel of ['customer','team'] as const){
    const email=intakeDeliveryEnvelope(s,channel,digest).email!;
-   assert.deepEqual(JSON.parse(Buffer.from(email.attachments[0].base64,'base64').toString()).contact,s.contact);
+   assert.equal(email.attachments.length,0); // PDFs and verified originals are assembled before sending.
    assert.match(email.text,/2085550100/);assert.match(email.text,/fictional@example.invalid/);
   }
  }
@@ -63,7 +63,7 @@ test('target mapping accepts only verified legacy/new BRC endpoint forms',()=>{
  for(const url of ['https://other.invalid/api/external/leads',config.url+'?x=1',config.url+'#fragment','http://leads.boiseremodeling.co/api/external/leads','https://user:password@leads.boiseremodeling.co/api/external/leads'])assert.equal(projectReviewEndpoint(url),null);
 });
 test('absent source proof, settings, credentials or verified destination cannot dispatch',async()=>{
- assert.deepEqual(INTAKE_RUNTIME_PROOF,{email:null,crm:null});let calls=0;const fetcher=async()=>{calls++;throw Error('Must not send');};
+ assert.deepEqual(INTAKE_RUNTIME_PROOF,{email:'fleet-release-2026-10-08',crm:null});let calls=0;const fetcher=async()=>{calls++;throw Error('Must not send');};
  for(const [change,reason] of [[{proof:null},'runtime-proof-pending'],[{enabled:false},'crm-disabled'],[{token:''},'configuration-missing'],[{url:'https://unknown.invalid'},'crm-contract-pending']] as const){
   const t=projectReviewTransport({...config,...change},fetcher);assert.equal(await t.readiness(source()),reason);await assert.rejects(t.send(env()),new RegExp(reason));assert.equal(t.retryWindowMs,0);
  }

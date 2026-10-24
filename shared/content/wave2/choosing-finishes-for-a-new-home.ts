@@ -3,9 +3,9 @@ import type { BlogPostData } from '../../blogContent';
 export const choosingFinishesForANewHome: BlogPostData = {
   slug: 'choosing-finishes-for-a-new-home',
   title: 'Choosing Finishes for a New Home Without Blowing the Budget',
-  seoTitle: 'Choosing Finishes Without Blowing the Budget',
+  seoTitle: 'Finishes Without Blowing the Budget',
   metaDescription:
-    'How selections work in a new build: selection schedule, what to decide before framing, long-lead items, allowances, and where finish money is worth spending.',
+    'Selections in a new build: selection schedule, what to decide before framing, long-lead items, allowances, and where finish money is worth spending.',
   excerpt:
     'Selections are a schedule problem before they are a taste problem. Here is when each decision is due, how allowances behave, and where finish money actually earns its keep.',
   category: 'The Building Process',

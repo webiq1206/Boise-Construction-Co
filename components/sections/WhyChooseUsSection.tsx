@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
+import { contentImageAlt } from "@/shared/imageAlts";
 import { SITE_IMAGES } from "@/shared/siteImages";
 import { Section } from "@/components/marketing/Section";
 import {
@@ -66,12 +67,13 @@ export function WhyChooseUsSection({ limit }: WhyChooseUsSectionProps) {
                 <div className="relative aspect-[4/3] overflow-hidden" style={{ border: "1px solid var(--ed-line)" }}>
                   <Image
                     src={SITE_IMAGES.valueCraft}
-                    alt="Mechanical rough-in showing pipes and wiring coordinated inside framed walls"
+                    alt={contentImageAlt(SITE_IMAGES.valueCraft)}
                     fill
                     sizes="(min-width: 1024px) 40vw, 100vw"
                     className="object-cover img-brand-grade"
                   />
                 </div>
+                <figcaption className="ed-body mt-3 text-[0.875rem]">Representative imagery</figcaption>
               </figure>
             </Reveal>
           </div>

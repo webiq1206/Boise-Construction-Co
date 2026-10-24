@@ -3,7 +3,7 @@ import type { GuidePageData } from '../../guideContent';
 export const chooseHomeBuilderBoise: GuidePageData = {
   slug: 'choose-home-builder-boise',
   title: 'How to Choose a Home Builder in Boise',
-  seoTitle: 'How to Choose a Home Builder in Boise',
+  seoTitle: 'Choose a Home Builder in Boise',
   metaDescription:
     'How to choose a home builder in Boise: delivery models, design-build trade-offs, verifying bonding and insurance, reading bids, contracts, and red flags.',
   excerpt:

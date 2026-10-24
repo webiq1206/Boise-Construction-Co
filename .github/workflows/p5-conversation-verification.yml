@@ -7,6 +7,7 @@ on:
       - 'components/P5ProcessingStatus.tsx'
       - 'lib/p5/**'
       - 'tests/p5-*.test.ts'
+      - 'server/services/emailLayout.ts'
       - '.github/workflows/p5-conversation-verification.yml'
   push:
     branches: [main]
@@ -15,6 +16,7 @@ on:
       - 'components/P5ProcessingStatus.tsx'
       - 'lib/p5/**'
       - 'tests/p5-*.test.ts'
+      - 'server/services/emailLayout.ts'
       - '.github/workflows/p5-conversation-verification.yml'
 permissions:
   contents: read

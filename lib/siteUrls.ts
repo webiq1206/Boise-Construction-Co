@@ -48,7 +48,6 @@ export function getSiteUrlGroups(): SiteUrlGroup[] {
     { path: '/about', label: 'About', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/areas', label: 'Service areas', changeFrequency: 'monthly', priority: 0.75 },
     { path: '/estimate', label: 'Get an estimate', changeFrequency: 'monthly', priority: 0.9 },
-    { path: '/re-10-repairs-boise', label: 'RE-10 and inspection repairs', changeFrequency: 'monthly', priority: 0.9 },
     { path: '/contact', label: 'Contact', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/resources', label: 'Resources', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/resources/ada-canyon-permit-flow', label: 'Ada vs Canyon County permit flow', changeFrequency: 'monthly', priority: 0.65 },

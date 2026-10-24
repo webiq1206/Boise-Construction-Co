@@ -5,6 +5,7 @@ import {INTAKE_SITES} from './intakePolicy.ts';
 import type {IntakeDeliveryReason} from './intakeDeliveryPolicy.ts';
 import type {IntakeTransport} from './intakeDelivery.ts';
 import {deliverKeyedCrm} from './keyedCrm.ts';
+import {attributionEvidence} from '../leadAttribution.ts';
 
 const endpoint='https://leads.boiseremodeling.co/api/external/project-reviews';
 /** Resolve only the verified existing BRC target. Unknown overrides require review. */
@@ -17,18 +18,23 @@ class ReviewValidationError extends Error{
 }
 /** Explicit source-owned projection. Retain full submitted material; omit storage credentials,
  * engine extraction and binary files. The receiver derives authenticated staff references. */
-export function intakeProjectReview(envelope:IntakeDeliveryEnvelope,qaAllowlist=''):ProjectReview{
+export function intakeProjectReview(envelope:IntakeDeliveryEnvelope,qaAllowlist='',allowP5=false):ProjectReview{
  const s=envelope.request;
- if(!s||s.currentSite==='p5')throw new ReviewValidationError('payload-review');
+ if(!s||(!allowP5&&s.currentSite==='p5'))throw new ReviewValidationError('payload-review');
  if(envelope.channel!=='crm'||envelope.leadKey!==intakeLeadKey(s.projectId)||envelope.key!==intakeOperationKey(s,'crm'))throw new ReviewValidationError('snapshot-conflict');
  const qa=[s.contact.name,(s.scope.answers as Record<string,unknown>).projectName].some(value=>typeof value==='string'&&/^(?:\[QA\](?:\s|$)|SYNTHETIC\s+QA\b)/i.test(value.trim()));
  const email=s.contact.email.toLowerCase();
  if(qa&&email&&!email.endsWith('@example.invalid')&&!qaAllowlist.split(',').map(v=>v.trim().toLowerCase()).filter(Boolean).includes(email))throw new ReviewValidationError('contact-review');
  const payload={schema:1,requestType:'project_review_v1',source:INTAKE_SITES[s.currentSite].domain,
   externalLeadId:(qa?'qa-':'')+envelope.leadKey,snapshotDigest:envelope.snapshotDigest,deliveryMode:qa?'synthetic_qa':'live',
-  request:{projectId:s.projectId,draftId:s.draftId,revision:s.revision,savedAt:s.savedAt,originSite:s.originSite,currentSite:s.currentSite,
+  request:{projectId:s.projectId,...(s.reference?{reference:s.reference}:{}),draftId:s.draftId,revision:s.revision,savedAt:s.savedAt,originSite:s.originSite,currentSite:s.currentSite,
    contact:s.contact,scope:{text:s.scope.text,answers:s.scope.answers,uploads:s.scope.uploads.map(f=>({id:f.id,name:f.name,type:f.type,size:f.size,sha256:f.sha256}))},
-   details:{desiredOutcome:s.details.desiredOutcome,workContext:s.details.workContext,budget:s.details.budget,transcript:s.details.transcript},
+   details:{desiredOutcome:s.details.desiredOutcome,workContext:s.details.workContext,budget:s.details.budget,
+    // The existing strict receiver accepts transcript evidence, not arbitrary new CRM
+    // properties. Keep evidence on the same keyed lead; never open a second sync.
+    transcript:s.details.transcript.length<500&&attributionEvidence(s.attribution)
+      ? [...s.details.transcript,{id:'p5-acquisition-v1',role:'assistant',kind:'acquisition',label:'Browser-reported acquisition evidence',at:Date.parse(s.savedAt),text:attributionEvidence(s.attribution)}]
+      : s.details.transcript},
    routing:{primaryTeam:s.routing.primaryTeam,supportingServices:s.routing.supportingServices},unresolved:s.unresolved}};
  const parsed=projectReviewSchema.safeParse(payload);
  if(!parsed.success)throw new ReviewValidationError(parsed.error.issues.some(i=>i.path[0]==='request'&&i.path[1]==='contact')?'contact-review':'payload-review');

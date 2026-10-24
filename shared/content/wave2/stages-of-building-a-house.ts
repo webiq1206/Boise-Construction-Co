@@ -3,7 +3,7 @@ import type { BlogPostData } from '../../blogContent';
 export const stagesOfBuildingAHouse: BlogPostData = {
   slug: 'stages-of-building-a-house',
   title: 'The Stages of Building a House, in Order',
-  seoTitle: 'The Stages of Building a House, in Order',
+  seoTitle: 'Building a House, Stages in Order',
   metaDescription:
     'Every stage of building a house in order, from feasibility to final walkthrough: what each looks like, how long it takes, and what you decide beforehand.',
   excerpt:

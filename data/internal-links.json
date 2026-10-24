@@ -771,9 +771,9 @@
           "score": 999
         },
         {
-          "url": "/guides/middleton-home-building-guide",
-          "anchor": "Building a Home in Middleton",
-          "title": "Building a Home in Middleton",
+          "url": "/guides/hidden-springs-home-building-guide",
+          "anchor": "Building in Hidden Springs",
+          "title": "Building in Hidden Springs",
           "type": "guide",
           "score": 0.318
         }
@@ -928,11 +928,11 @@
           "score": 999
         },
         {
-          "url": "/guides/caldwell-home-building-guide",
-          "anchor": "Building a Home in Caldwell",
-          "title": "Building a Home in Caldwell",
+          "url": "/guides/hidden-springs-home-building-guide",
+          "anchor": "Building in Hidden Springs",
+          "title": "Building in Hidden Springs",
           "type": "guide",
-          "score": 0.342
+          "score": 0.361
         }
       ]
     },
@@ -1085,11 +1085,11 @@
           "score": 999
         },
         {
-          "url": "/guides/boise-home-building-guide",
-          "anchor": "Building a Home in Boise",
-          "title": "Building a Home in Boise",
+          "url": "/guides/caldwell-home-building-guide",
+          "anchor": "Building a Home in Caldwell",
+          "title": "Building a Home in Caldwell",
           "type": "guide",
-          "score": 0.176
+          "score": 0.197
         }
       ]
     },
@@ -1135,11 +1135,11 @@
           "score": 999
         },
         {
-          "url": "/guides/star-home-building-guide",
-          "anchor": "Building a Home in Star",
-          "title": "Building a Home in Star",
+          "url": "/guides/middleton-home-building-guide",
+          "anchor": "Building a Home in Middleton",
+          "title": "Building a Home in Middleton",
           "type": "guide",
-          "score": 0.334
+          "score": 0.338
         }
       ]
     },
@@ -1303,7 +1303,7 @@
           "anchor": "Building a Home in Boise",
           "title": "Building a Home in Boise",
           "type": "guide",
-          "score": 0.188
+          "score": 0.228
         }
       ]
     },
@@ -1349,11 +1349,11 @@
           "score": 999
         },
         {
-          "url": "/guides/hidden-springs-home-building-guide",
-          "anchor": "Building in Hidden Springs",
-          "title": "Building in Hidden Springs",
+          "url": "/guides/nampa-home-building-guide",
+          "anchor": "Building a Home in Nampa",
+          "title": "Building a Home in Nampa",
           "type": "guide",
-          "score": 0.325
+          "score": 0.299
         }
       ]
     },
@@ -1399,11 +1399,11 @@
           "score": 999
         },
         {
-          "url": "/guides/eagle-foothills-home-building-guide",
-          "anchor": "Building in the Eagle Foothills",
-          "title": "Building in the Eagle Foothills",
+          "url": "/guides/star-home-building-guide",
+          "anchor": "Building a Home in Star",
+          "title": "Building a Home in Star",
           "type": "guide",
-          "score": 0.341
+          "score": 0.372
         }
       ]
     },
@@ -1499,11 +1499,11 @@
           "score": 999
         },
         {
-          "url": "/guides/nampa-home-building-guide",
-          "anchor": "Building a Home in Nampa",
-          "title": "Building a Home in Nampa",
+          "url": "/guides/meridian-home-building-guide",
+          "anchor": "Building a Home in Meridian",
+          "title": "Building a Home in Meridian",
           "type": "guide",
-          "score": 0.306
+          "score": 0.305
         }
       ]
     },
@@ -1549,11 +1549,11 @@
           "score": 999
         },
         {
-          "url": "/guides/star-home-building-guide",
-          "anchor": "Building a Home in Star",
-          "title": "Building a Home in Star",
+          "url": "/guides/eagle-foothills-home-building-guide",
+          "anchor": "Building in the Eagle Foothills",
+          "title": "Building in the Eagle Foothills",
           "type": "guide",
-          "score": 0.389
+          "score": 0.394
         }
       ]
     },
@@ -1656,11 +1656,11 @@
           "score": 999
         },
         {
-          "url": "/guides/meridian-home-building-guide",
-          "anchor": "Building a Home in Meridian",
-          "title": "Building a Home in Meridian",
+          "url": "/guides/hidden-springs-home-building-guide",
+          "anchor": "Building in Hidden Springs",
+          "title": "Building in Hidden Springs",
           "type": "guide",
-          "score": 0.313
+          "score": 0.331
         }
       ]
     },
@@ -1857,8 +1857,8 @@
         },
         {
           "url": "/areas/boise",
-          "anchor": "Remodeling in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 0.4
         },
@@ -1921,8 +1921,8 @@
         },
         {
           "url": "/areas/caldwell",
-          "anchor": "Remodeling in Caldwell",
-          "title": "Remodeling Services in Caldwell, Idaho",
+          "anchor": "Home Building in Caldwell",
+          "title": "Home Building in Caldwell, Idaho",
           "type": "city",
           "score": 0.483
         },
@@ -1985,8 +1985,8 @@
         },
         {
           "url": "/areas/eagle",
-          "anchor": "Remodeling in Eagle",
-          "title": "Remodeling Services in Eagle, Idaho",
+          "anchor": "Home Building in Eagle",
+          "title": "Home Building in Eagle, Idaho",
           "type": "city",
           "score": 0.483
         },
@@ -2042,8 +2042,8 @@
         },
         {
           "url": "/areas/garden-city",
-          "anchor": "Remodeling in Garden City",
-          "title": "Remodeling Services in Garden City, Idaho",
+          "anchor": "Home Building in Garden City",
+          "title": "Home Building in Garden City, Idaho",
           "type": "city",
           "score": 0.554
         },
@@ -2127,8 +2127,8 @@
         },
         {
           "url": "/areas/kuna",
-          "anchor": "Remodeling in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 0.4
         }
@@ -2170,8 +2170,8 @@
         },
         {
           "url": "/areas/meridian",
-          "anchor": "Remodeling in Meridian",
-          "title": "Remodeling Services in Meridian, Idaho",
+          "anchor": "Home Building in Meridian",
+          "title": "Home Building in Meridian, Idaho",
           "type": "city",
           "score": 0.483
         },
@@ -2234,8 +2234,8 @@
         },
         {
           "url": "/areas/middleton",
-          "anchor": "Remodeling in Middleton",
-          "title": "Remodeling Services in Middleton, Idaho",
+          "anchor": "Home Building in Middleton",
+          "title": "Home Building in Middleton, Idaho",
           "type": "city",
           "score": 0.483
         },
@@ -2305,8 +2305,8 @@
         },
         {
           "url": "/areas/nampa",
-          "anchor": "Remodeling in Nampa",
-          "title": "Remodeling Services in Nampa, Idaho",
+          "anchor": "Home Building in Nampa",
+          "title": "Home Building in Nampa, Idaho",
           "type": "city",
           "score": 0.483
         },
@@ -2369,8 +2369,8 @@
         },
         {
           "url": "/areas/star",
-          "anchor": "Remodeling in Star",
-          "title": "Remodeling Services in Star, Idaho",
+          "anchor": "Home Building in Star",
+          "title": "Home Building in Star, Idaho",
           "type": "city",
           "score": 0.483
         },
@@ -2433,8 +2433,8 @@
         },
         {
           "url": "/areas/boise",
-          "anchor": "Remodeling in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 0.36
         },
@@ -2497,8 +2497,8 @@
         },
         {
           "url": "/areas/caldwell",
-          "anchor": "Remodeling in Caldwell",
-          "title": "Remodeling Services in Caldwell, Idaho",
+          "anchor": "Home Building in Caldwell",
+          "title": "Home Building in Caldwell, Idaho",
           "type": "city",
           "score": 0.437
         },
@@ -2554,8 +2554,8 @@
         },
         {
           "url": "/areas/eagle",
-          "anchor": "Remodeling in Eagle",
-          "title": "Remodeling Services in Eagle, Idaho",
+          "anchor": "Home Building in Eagle",
+          "title": "Home Building in Eagle, Idaho",
           "type": "city",
           "score": 0.437
         },
@@ -2618,8 +2618,8 @@
         },
         {
           "url": "/areas/garden-city",
-          "anchor": "Remodeling in Garden City",
-          "title": "Remodeling Services in Garden City, Idaho",
+          "anchor": "Home Building in Garden City",
+          "title": "Home Building in Garden City, Idaho",
           "type": "city",
           "score": 0.503
         },
@@ -2689,8 +2689,8 @@
         },
         {
           "url": "/areas/kuna",
-          "anchor": "Remodeling in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 0.36
         },
@@ -2746,8 +2746,8 @@
         },
         {
           "url": "/areas/meridian",
-          "anchor": "Remodeling in Meridian",
-          "title": "Remodeling Services in Meridian, Idaho",
+          "anchor": "Home Building in Meridian",
+          "title": "Home Building in Meridian, Idaho",
           "type": "city",
           "score": 0.437
         },
@@ -2810,8 +2810,8 @@
         },
         {
           "url": "/areas/middleton",
-          "anchor": "Remodeling in Middleton",
-          "title": "Remodeling Services in Middleton, Idaho",
+          "anchor": "Home Building in Middleton",
+          "title": "Home Building in Middleton, Idaho",
           "type": "city",
           "score": 0.437
         },
@@ -2874,8 +2874,8 @@
         },
         {
           "url": "/areas/nampa",
-          "anchor": "Remodeling in Nampa",
-          "title": "Remodeling Services in Nampa, Idaho",
+          "anchor": "Home Building in Nampa",
+          "title": "Home Building in Nampa, Idaho",
           "type": "city",
           "score": 0.437
         },
@@ -2938,8 +2938,8 @@
         },
         {
           "url": "/areas/star",
-          "anchor": "Remodeling in Star",
-          "title": "Remodeling Services in Star, Idaho",
+          "anchor": "Home Building in Star",
+          "title": "Home Building in Star, Idaho",
           "type": "city",
           "score": 0.437
         },
@@ -3009,8 +3009,8 @@
         },
         {
           "url": "/areas/boise",
-          "anchor": "Remodeling in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 0.32
         },
@@ -3066,8 +3066,8 @@
         },
         {
           "url": "/areas/caldwell",
-          "anchor": "Remodeling in Caldwell",
-          "title": "Remodeling Services in Caldwell, Idaho",
+          "anchor": "Home Building in Caldwell",
+          "title": "Home Building in Caldwell, Idaho",
           "type": "city",
           "score": 0.411
         },
@@ -3130,8 +3130,8 @@
         },
         {
           "url": "/areas/eagle",
-          "anchor": "Remodeling in Eagle",
-          "title": "Remodeling Services in Eagle, Idaho",
+          "anchor": "Home Building in Eagle",
+          "title": "Home Building in Eagle, Idaho",
           "type": "city",
           "score": 0.411
         },
@@ -3194,8 +3194,8 @@
         },
         {
           "url": "/areas/garden-city",
-          "anchor": "Remodeling in Garden City",
-          "title": "Remodeling Services in Garden City, Idaho",
+          "anchor": "Home Building in Garden City",
+          "title": "Home Building in Garden City, Idaho",
           "type": "city",
           "score": 0.487
         },
@@ -3279,8 +3279,8 @@
         },
         {
           "url": "/areas/kuna",
-          "anchor": "Remodeling in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 0.32
         }
@@ -3322,8 +3322,8 @@
         },
         {
           "url": "/areas/meridian",
-          "anchor": "Remodeling in Meridian",
-          "title": "Remodeling Services in Meridian, Idaho",
+          "anchor": "Home Building in Meridian",
+          "title": "Home Building in Meridian, Idaho",
           "type": "city",
           "score": 0.411
         },
@@ -3386,8 +3386,8 @@
         },
         {
           "url": "/areas/middleton",
-          "anchor": "Remodeling in Middleton",
-          "title": "Remodeling Services in Middleton, Idaho",
+          "anchor": "Home Building in Middleton",
+          "title": "Home Building in Middleton, Idaho",
           "type": "city",
           "score": 0.411
         },
@@ -3450,8 +3450,8 @@
         },
         {
           "url": "/areas/nampa",
-          "anchor": "Remodeling in Nampa",
-          "title": "Remodeling Services in Nampa, Idaho",
+          "anchor": "Home Building in Nampa",
+          "title": "Home Building in Nampa, Idaho",
           "type": "city",
           "score": 0.411
         },
@@ -3514,8 +3514,8 @@
         },
         {
           "url": "/areas/star",
-          "anchor": "Remodeling in Star",
-          "title": "Remodeling Services in Star, Idaho",
+          "anchor": "Home Building in Star",
+          "title": "Home Building in Star, Idaho",
           "type": "city",
           "score": 0.411
         },
@@ -3585,8 +3585,8 @@
         },
         {
           "url": "/areas/boise",
-          "anchor": "Remodeling in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 0.28
         },
@@ -3642,8 +3642,8 @@
         },
         {
           "url": "/areas/caldwell",
-          "anchor": "Remodeling in Caldwell",
-          "title": "Remodeling Services in Caldwell, Idaho",
+          "anchor": "Home Building in Caldwell",
+          "title": "Home Building in Caldwell, Idaho",
           "type": "city",
           "score": 0.339
         },
@@ -3706,8 +3706,8 @@
         },
         {
           "url": "/areas/eagle",
-          "anchor": "Remodeling in Eagle",
-          "title": "Remodeling Services in Eagle, Idaho",
+          "anchor": "Home Building in Eagle",
+          "title": "Home Building in Eagle, Idaho",
           "type": "city",
           "score": 0.339
         },
@@ -3770,8 +3770,8 @@
         },
         {
           "url": "/areas/garden-city",
-          "anchor": "Remodeling in Garden City",
-          "title": "Remodeling Services in Garden City, Idaho",
+          "anchor": "Home Building in Garden City",
+          "title": "Home Building in Garden City, Idaho",
           "type": "city",
           "score": 0.391
         },
@@ -3848,8 +3848,8 @@
         },
         {
           "url": "/areas/kuna",
-          "anchor": "Remodeling in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 0.28
         },
@@ -3898,8 +3898,8 @@
         },
         {
           "url": "/areas/meridian",
-          "anchor": "Remodeling in Meridian",
-          "title": "Remodeling Services in Meridian, Idaho",
+          "anchor": "Home Building in Meridian",
+          "title": "Home Building in Meridian, Idaho",
           "type": "city",
           "score": 0.339
         },
@@ -3969,8 +3969,8 @@
         },
         {
           "url": "/areas/middleton",
-          "anchor": "Remodeling in Middleton",
-          "title": "Remodeling Services in Middleton, Idaho",
+          "anchor": "Home Building in Middleton",
+          "title": "Home Building in Middleton, Idaho",
           "type": "city",
           "score": 0.339
         },
@@ -4040,8 +4040,8 @@
         },
         {
           "url": "/areas/nampa",
-          "anchor": "Remodeling in Nampa",
-          "title": "Remodeling Services in Nampa, Idaho",
+          "anchor": "Home Building in Nampa",
+          "title": "Home Building in Nampa, Idaho",
           "type": "city",
           "score": 0.339
         },
@@ -4104,8 +4104,8 @@
         },
         {
           "url": "/areas/star",
-          "anchor": "Remodeling in Star",
-          "title": "Remodeling Services in Star, Idaho",
+          "anchor": "Home Building in Star",
+          "title": "Home Building in Star, Idaho",
           "type": "city",
           "score": 0.339
         },
@@ -4154,8 +4154,8 @@
         },
         {
           "url": "/areas/boise",
-          "anchor": "Remodeling in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 0.24
         },
@@ -4218,8 +4218,8 @@
         },
         {
           "url": "/areas/caldwell",
-          "anchor": "Remodeling in Caldwell",
-          "title": "Remodeling Services in Caldwell, Idaho",
+          "anchor": "Home Building in Caldwell",
+          "title": "Home Building in Caldwell, Idaho",
           "type": "city",
           "score": 0.303
         },
@@ -4282,8 +4282,8 @@
         },
         {
           "url": "/areas/eagle",
-          "anchor": "Remodeling in Eagle",
-          "title": "Remodeling Services in Eagle, Idaho",
+          "anchor": "Home Building in Eagle",
+          "title": "Home Building in Eagle, Idaho",
           "type": "city",
           "score": 0.303
         },
@@ -4346,8 +4346,8 @@
         },
         {
           "url": "/areas/garden-city",
-          "anchor": "Remodeling in Garden City",
-          "title": "Remodeling Services in Garden City, Idaho",
+          "anchor": "Home Building in Garden City",
+          "title": "Home Building in Garden City, Idaho",
           "type": "city",
           "score": 0.358
         },
@@ -4424,8 +4424,8 @@
         },
         {
           "url": "/areas/kuna",
-          "anchor": "Remodeling in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 0.24
         },
@@ -4474,8 +4474,8 @@
         },
         {
           "url": "/areas/meridian",
-          "anchor": "Remodeling in Meridian",
-          "title": "Remodeling Services in Meridian, Idaho",
+          "anchor": "Home Building in Meridian",
+          "title": "Home Building in Meridian, Idaho",
           "type": "city",
           "score": 0.303
         },
@@ -4538,8 +4538,8 @@
         },
         {
           "url": "/areas/middleton",
-          "anchor": "Remodeling in Middleton",
-          "title": "Remodeling Services in Middleton, Idaho",
+          "anchor": "Home Building in Middleton",
+          "title": "Home Building in Middleton, Idaho",
           "type": "city",
           "score": 0.303
         },
@@ -4602,8 +4602,8 @@
         },
         {
           "url": "/areas/nampa",
-          "anchor": "Remodeling in Nampa",
-          "title": "Remodeling Services in Nampa, Idaho",
+          "anchor": "Home Building in Nampa",
+          "title": "Home Building in Nampa, Idaho",
           "type": "city",
           "score": 0.303
         },
@@ -4673,8 +4673,8 @@
         },
         {
           "url": "/areas/star",
-          "anchor": "Remodeling in Star",
-          "title": "Remodeling Services in Star, Idaho",
+          "anchor": "Home Building in Star",
+          "title": "Home Building in Star, Idaho",
           "type": "city",
           "score": 0.303
         },
@@ -4730,8 +4730,8 @@
         },
         {
           "url": "/areas/boise",
-          "anchor": "Remodeling in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 0.2
         },
@@ -4794,8 +4794,8 @@
         },
         {
           "url": "/areas/caldwell",
-          "anchor": "Remodeling in Caldwell",
-          "title": "Remodeling Services in Caldwell, Idaho",
+          "anchor": "Home Building in Caldwell",
+          "title": "Home Building in Caldwell, Idaho",
           "type": "city",
           "score": 0.283
         },
@@ -4858,8 +4858,8 @@
         },
         {
           "url": "/areas/eagle",
-          "anchor": "Remodeling in Eagle",
-          "title": "Remodeling Services in Eagle, Idaho",
+          "anchor": "Home Building in Eagle",
+          "title": "Home Building in Eagle, Idaho",
           "type": "city",
           "score": 0.283
         },
@@ -4922,8 +4922,8 @@
         },
         {
           "url": "/areas/garden-city",
-          "anchor": "Remodeling in Garden City",
-          "title": "Remodeling Services in Garden City, Idaho",
+          "anchor": "Home Building in Garden City",
+          "title": "Home Building in Garden City, Idaho",
           "type": "city",
           "score": 0.354
         },
@@ -5000,8 +5000,8 @@
         },
         {
           "url": "/areas/kuna",
-          "anchor": "Remodeling in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 0.2
         },
@@ -5050,8 +5050,8 @@
         },
         {
           "url": "/areas/meridian",
-          "anchor": "Remodeling in Meridian",
-          "title": "Remodeling Services in Meridian, Idaho",
+          "anchor": "Home Building in Meridian",
+          "title": "Home Building in Meridian, Idaho",
           "type": "city",
           "score": 0.283
         },
@@ -5114,8 +5114,8 @@
         },
         {
           "url": "/areas/middleton",
-          "anchor": "Remodeling in Middleton",
-          "title": "Remodeling Services in Middleton, Idaho",
+          "anchor": "Home Building in Middleton",
+          "title": "Home Building in Middleton, Idaho",
           "type": "city",
           "score": 0.283
         },
@@ -5178,8 +5178,8 @@
         },
         {
           "url": "/areas/nampa",
-          "anchor": "Remodeling in Nampa",
-          "title": "Remodeling Services in Nampa, Idaho",
+          "anchor": "Home Building in Nampa",
+          "title": "Home Building in Nampa, Idaho",
           "type": "city",
           "score": 0.283
         },
@@ -5242,8 +5242,8 @@
         },
         {
           "url": "/areas/star",
-          "anchor": "Remodeling in Star",
-          "title": "Remodeling Services in Star, Idaho",
+          "anchor": "Home Building in Star",
+          "title": "Home Building in Star, Idaho",
           "type": "city",
           "score": 0.283
         },
@@ -5306,8 +5306,8 @@
         },
         {
           "url": "/areas/boise",
-          "anchor": "Remodeling in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 0.16
         },
@@ -5370,8 +5370,8 @@
         },
         {
           "url": "/areas/caldwell",
-          "anchor": "Remodeling in Caldwell",
-          "title": "Remodeling Services in Caldwell, Idaho",
+          "anchor": "Home Building in Caldwell",
+          "title": "Home Building in Caldwell, Idaho",
           "type": "city",
           "score": 0.237
         },
@@ -5434,8 +5434,8 @@
         },
         {
           "url": "/areas/eagle",
-          "anchor": "Remodeling in Eagle",
-          "title": "Remodeling Services in Eagle, Idaho",
+          "anchor": "Home Building in Eagle",
+          "title": "Home Building in Eagle, Idaho",
           "type": "city",
           "score": 0.237
         },
@@ -5498,8 +5498,8 @@
         },
         {
           "url": "/areas/garden-city",
-          "anchor": "Remodeling in Garden City",
-          "title": "Remodeling Services in Garden City, Idaho",
+          "anchor": "Home Building in Garden City",
+          "title": "Home Building in Garden City, Idaho",
           "type": "city",
           "score": 0.303
         },
@@ -5576,8 +5576,8 @@
         },
         {
           "url": "/areas/kuna",
-          "anchor": "Remodeling in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 0.16
         },
@@ -5619,8 +5619,8 @@
         },
         {
           "url": "/areas/meridian",
-          "anchor": "Remodeling in Meridian",
-          "title": "Remodeling Services in Meridian, Idaho",
+          "anchor": "Home Building in Meridian",
+          "title": "Home Building in Meridian, Idaho",
           "type": "city",
           "score": 0.237
         },
@@ -5683,8 +5683,8 @@
         },
         {
           "url": "/areas/middleton",
-          "anchor": "Remodeling in Middleton",
-          "title": "Remodeling Services in Middleton, Idaho",
+          "anchor": "Home Building in Middleton",
+          "title": "Home Building in Middleton, Idaho",
           "type": "city",
           "score": 0.237
         },
@@ -5754,8 +5754,8 @@
         },
         {
           "url": "/areas/nampa",
-          "anchor": "Remodeling in Nampa",
-          "title": "Remodeling Services in Nampa, Idaho",
+          "anchor": "Home Building in Nampa",
+          "title": "Home Building in Nampa, Idaho",
           "type": "city",
           "score": 0.237
         },
@@ -5825,8 +5825,8 @@
         },
         {
           "url": "/areas/star",
-          "anchor": "Remodeling in Star",
-          "title": "Remodeling Services in Star, Idaho",
+          "anchor": "Home Building in Star",
+          "title": "Home Building in Star, Idaho",
           "type": "city",
           "score": 0.237
         },
@@ -5882,8 +5882,8 @@
         },
         {
           "url": "/areas/boise",
-          "anchor": "Remodeling in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 0.12
         },
@@ -5946,8 +5946,8 @@
         },
         {
           "url": "/areas/caldwell",
-          "anchor": "Remodeling in Caldwell",
-          "title": "Remodeling Services in Caldwell, Idaho",
+          "anchor": "Home Building in Caldwell",
+          "title": "Home Building in Caldwell, Idaho",
           "type": "city",
           "score": 0.187
         },
@@ -6003,8 +6003,8 @@
         },
         {
           "url": "/areas/eagle",
-          "anchor": "Remodeling in Eagle",
-          "title": "Remodeling Services in Eagle, Idaho",
+          "anchor": "Home Building in Eagle",
+          "title": "Home Building in Eagle, Idaho",
           "type": "city",
           "score": 0.187
         },
@@ -6067,8 +6067,8 @@
         },
         {
           "url": "/areas/garden-city",
-          "anchor": "Remodeling in Garden City",
-          "title": "Remodeling Services in Garden City, Idaho",
+          "anchor": "Home Building in Garden City",
+          "title": "Home Building in Garden City, Idaho",
           "type": "city",
           "score": 0.245
         },
@@ -6152,8 +6152,8 @@
         },
         {
           "url": "/areas/kuna",
-          "anchor": "Remodeling in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 0.12
         },
@@ -6209,8 +6209,8 @@
         },
         {
           "url": "/areas/meridian",
-          "anchor": "Remodeling in Meridian",
-          "title": "Remodeling Services in Meridian, Idaho",
+          "anchor": "Home Building in Meridian",
+          "title": "Home Building in Meridian, Idaho",
           "type": "city",
           "score": 0.187
         },
@@ -6273,8 +6273,8 @@
         },
         {
           "url": "/areas/middleton",
-          "anchor": "Remodeling in Middleton",
-          "title": "Remodeling Services in Middleton, Idaho",
+          "anchor": "Home Building in Middleton",
+          "title": "Home Building in Middleton, Idaho",
           "type": "city",
           "score": 0.187
         },
@@ -6337,8 +6337,8 @@
         },
         {
           "url": "/areas/nampa",
-          "anchor": "Remodeling in Nampa",
-          "title": "Remodeling Services in Nampa, Idaho",
+          "anchor": "Home Building in Nampa",
+          "title": "Home Building in Nampa, Idaho",
           "type": "city",
           "score": 0.187
         },
@@ -6401,8 +6401,8 @@
         },
         {
           "url": "/areas/star",
-          "anchor": "Remodeling in Star",
-          "title": "Remodeling Services in Star, Idaho",
+          "anchor": "Home Building in Star",
+          "title": "Home Building in Star, Idaho",
           "type": "city",
           "score": 0.187
         },
@@ -6465,8 +6465,8 @@
         },
         {
           "url": "/areas/boise",
-          "anchor": "Remodeling in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 0.08
         },
@@ -6529,8 +6529,8 @@
         },
         {
           "url": "/areas/caldwell",
-          "anchor": "Remodeling in Caldwell",
-          "title": "Remodeling Services in Caldwell, Idaho",
+          "anchor": "Home Building in Caldwell",
+          "title": "Home Building in Caldwell, Idaho",
           "type": "city",
           "score": 0.139
         },
@@ -6593,8 +6593,8 @@
         },
         {
           "url": "/areas/eagle",
-          "anchor": "Remodeling in Eagle",
-          "title": "Remodeling Services in Eagle, Idaho",
+          "anchor": "Home Building in Eagle",
+          "title": "Home Building in Eagle, Idaho",
           "type": "city",
           "score": 0.139
         },
@@ -6657,8 +6657,8 @@
         },
         {
           "url": "/areas/garden-city",
-          "anchor": "Remodeling in Garden City",
-          "title": "Remodeling Services in Garden City, Idaho",
+          "anchor": "Home Building in Garden City",
+          "title": "Home Building in Garden City, Idaho",
           "type": "city",
           "score": 0.191
         },
@@ -6721,8 +6721,8 @@
         },
         {
           "url": "/areas/kuna",
-          "anchor": "Remodeling in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 0.08
         },
@@ -6785,8 +6785,8 @@
         },
         {
           "url": "/areas/meridian",
-          "anchor": "Remodeling in Meridian",
-          "title": "Remodeling Services in Meridian, Idaho",
+          "anchor": "Home Building in Meridian",
+          "title": "Home Building in Meridian, Idaho",
           "type": "city",
           "score": 0.139
         },
@@ -6849,8 +6849,8 @@
         },
         {
           "url": "/areas/middleton",
-          "anchor": "Remodeling in Middleton",
-          "title": "Remodeling Services in Middleton, Idaho",
+          "anchor": "Home Building in Middleton",
+          "title": "Home Building in Middleton, Idaho",
           "type": "city",
           "score": 0.139
         },
@@ -6913,8 +6913,8 @@
         },
         {
           "url": "/areas/nampa",
-          "anchor": "Remodeling in Nampa",
-          "title": "Remodeling Services in Nampa, Idaho",
+          "anchor": "Home Building in Nampa",
+          "title": "Home Building in Nampa, Idaho",
           "type": "city",
           "score": 0.139
         },
@@ -6977,8 +6977,8 @@
         },
         {
           "url": "/areas/star",
-          "anchor": "Remodeling in Star",
-          "title": "Remodeling Services in Star, Idaho",
+          "anchor": "Home Building in Star",
+          "title": "Home Building in Star, Idaho",
           "type": "city",
           "score": 0.139
         },
@@ -7000,28 +7000,28 @@
     },
     "/areas/boise": {
       "type": "city",
-      "title": "Remodeling Services in Boise, Idaho",
-      "anchor": "Remodeling in Boise",
+      "title": "Home Building in Boise, Idaho",
+      "anchor": "Home Building in Boise",
       "url": "/areas/boise",
       "links": [
         {
           "url": "/areas/kuna",
-          "anchor": "Remodeling in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 1.04
         },
         {
           "url": "/areas/eagle",
-          "anchor": "Remodeling in Eagle",
-          "title": "Remodeling Services in Eagle, Idaho",
+          "anchor": "Home Building in Eagle",
+          "title": "Home Building in Eagle, Idaho",
           "type": "city",
           "score": 0.54
         },
         {
           "url": "/areas/meridian",
-          "anchor": "Remodeling in Meridian",
-          "title": "Remodeling Services in Meridian, Idaho",
+          "anchor": "Home Building in Meridian",
+          "title": "Home Building in Meridian, Idaho",
           "type": "city",
           "score": 0.54
         },
@@ -7064,35 +7064,35 @@
     },
     "/areas/caldwell": {
       "type": "city",
-      "title": "Remodeling Services in Caldwell, Idaho",
-      "anchor": "Remodeling in Caldwell",
+      "title": "Home Building in Caldwell, Idaho",
+      "anchor": "Home Building in Caldwell",
       "url": "/areas/caldwell",
       "links": [
         {
           "url": "/areas/boise",
-          "anchor": "Remodeling in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 0.44
         },
         {
           "url": "/areas/kuna",
-          "anchor": "Remodeling in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 0.4
         },
         {
           "url": "/areas/middleton",
-          "anchor": "Remodeling in Middleton",
-          "title": "Remodeling Services in Middleton, Idaho",
+          "anchor": "Home Building in Middleton",
+          "title": "Home Building in Middleton, Idaho",
           "type": "city",
           "score": 0.373
         },
         {
           "url": "/areas/nampa",
-          "anchor": "Remodeling in Nampa",
-          "title": "Remodeling Services in Nampa, Idaho",
+          "anchor": "Home Building in Nampa",
+          "title": "Home Building in Nampa, Idaho",
           "type": "city",
           "score": 0.373
         },
@@ -7128,28 +7128,28 @@
     },
     "/areas/eagle": {
       "type": "city",
-      "title": "Remodeling Services in Eagle, Idaho",
-      "anchor": "Remodeling in Eagle",
+      "title": "Home Building in Eagle, Idaho",
+      "anchor": "Home Building in Eagle",
       "url": "/areas/eagle",
       "links": [
         {
           "url": "/areas/boise",
-          "anchor": "Remodeling in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 0.5
         },
         {
           "url": "/areas/kuna",
-          "anchor": "Remodeling in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 0.46
         },
         {
           "url": "/areas/star",
-          "anchor": "Remodeling in Star",
-          "title": "Remodeling Services in Star, Idaho",
+          "anchor": "Home Building in Star",
+          "title": "Home Building in Star, Idaho",
           "type": "city",
           "score": 0.373
         },
@@ -7192,8 +7192,8 @@
     },
     "/areas/garden-city": {
       "type": "city",
-      "title": "Remodeling Services in Garden City, Idaho",
-      "anchor": "Remodeling in Garden City",
+      "title": "Home Building in Garden City, Idaho",
+      "anchor": "Home Building in Garden City",
       "url": "/areas/garden-city",
       "links": [
         {
@@ -7256,35 +7256,35 @@
     },
     "/areas/kuna": {
       "type": "city",
-      "title": "Remodeling Services in Kuna, Idaho",
-      "anchor": "Remodeling in Kuna",
+      "title": "Home Building in Kuna, Idaho",
+      "anchor": "Home Building in Kuna",
       "url": "/areas/kuna",
       "links": [
         {
           "url": "/areas/boise",
-          "anchor": "Remodeling in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 0.96
         },
         {
           "url": "/areas/eagle",
-          "anchor": "Remodeling in Eagle",
-          "title": "Remodeling Services in Eagle, Idaho",
+          "anchor": "Home Building in Eagle",
+          "title": "Home Building in Eagle, Idaho",
           "type": "city",
           "score": 0.5
         },
         {
           "url": "/areas/meridian",
-          "anchor": "Remodeling in Meridian",
-          "title": "Remodeling Services in Meridian, Idaho",
+          "anchor": "Home Building in Meridian",
+          "title": "Home Building in Meridian, Idaho",
           "type": "city",
           "score": 0.5
         },
         {
           "url": "/areas/star",
-          "anchor": "Remodeling in Star",
-          "title": "Remodeling Services in Star, Idaho",
+          "anchor": "Home Building in Star",
+          "title": "Home Building in Star, Idaho",
           "type": "city",
           "score": 0.5
         },
@@ -7320,21 +7320,21 @@
     },
     "/areas/meridian": {
       "type": "city",
-      "title": "Remodeling Services in Meridian, Idaho",
-      "anchor": "Remodeling in Meridian",
+      "title": "Home Building in Meridian, Idaho",
+      "anchor": "Home Building in Meridian",
       "url": "/areas/meridian",
       "links": [
         {
           "url": "/areas/boise",
-          "anchor": "Remodeling in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 0.42
         },
         {
           "url": "/areas/kuna",
-          "anchor": "Remodeling in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 0.42
         },
@@ -7384,14 +7384,14 @@
     },
     "/areas/middleton": {
       "type": "city",
-      "title": "Remodeling Services in Middleton, Idaho",
-      "anchor": "Remodeling in Middleton",
+      "title": "Home Building in Middleton, Idaho",
+      "anchor": "Home Building in Middleton",
       "url": "/areas/middleton",
       "links": [
         {
           "url": "/areas/caldwell",
-          "anchor": "Remodeling in Caldwell",
-          "title": "Remodeling Services in Caldwell, Idaho",
+          "anchor": "Home Building in Caldwell",
+          "title": "Home Building in Caldwell, Idaho",
           "type": "city",
           "score": 0.373
         },
@@ -7448,8 +7448,8 @@
     },
     "/areas/nampa": {
       "type": "city",
-      "title": "Remodeling Services in Nampa, Idaho",
-      "anchor": "Remodeling in Nampa",
+      "title": "Home Building in Nampa, Idaho",
+      "anchor": "Home Building in Nampa",
       "url": "/areas/nampa",
       "links": [
         {
@@ -7512,8 +7512,8 @@
     },
     "/areas/star": {
       "type": "city",
-      "title": "Remodeling Services in Star, Idaho",
-      "anchor": "Remodeling in Star",
+      "title": "Home Building in Star, Idaho",
+      "anchor": "Home Building in Star",
       "url": "/areas/star",
       "links": [
         {
@@ -7560,15 +7560,15 @@
         },
         {
           "url": "/areas/boise",
-          "anchor": "Remodeling in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 0.38
         },
         {
           "url": "/areas/kuna",
-          "anchor": "Remodeling in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 0.38
         }
@@ -7647,7 +7647,7 @@
         {
           "url": "/areas/boise",
           "anchor": "Building in Boise",
-          "title": "Remodeling Services in Boise, Idaho",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 999
         },
@@ -7839,7 +7839,7 @@
         {
           "url": "/areas/caldwell",
           "anchor": "Building in Caldwell",
-          "title": "Remodeling Services in Caldwell, Idaho",
+          "title": "Home Building in Caldwell, Idaho",
           "type": "city",
           "score": 999
         },
@@ -7865,11 +7865,11 @@
           "score": 999
         },
         {
-          "url": "/guides/kuna-home-building-guide",
-          "anchor": "Building a Home in Kuna",
-          "title": "Building a Home in Kuna",
+          "url": "/guides/star-home-building-guide",
+          "anchor": "Building a Home in Star",
+          "title": "Building a Home in Star",
           "type": "guide",
-          "score": 1.102
+          "score": 1.136
         },
         {
           "url": "/blog/construction-loan-basics-idaho",
@@ -8031,7 +8031,7 @@
         {
           "url": "/areas/eagle",
           "anchor": "Building in the Eagle Foothills",
-          "title": "Remodeling Services in Eagle, Idaho",
+          "title": "Home Building in Eagle, Idaho",
           "type": "city",
           "score": 999
         },
@@ -8057,13 +8057,6 @@
           "score": 1.304
         },
         {
-          "url": "/guides/hidden-springs-home-building-guide",
-          "anchor": "Building in Hidden Springs",
-          "title": "Building in Hidden Springs",
-          "type": "guide",
-          "score": 1.242
-        },
-        {
           "url": "/services/custom-home-builder/eagle",
           "anchor": "Custom Home Building in Eagle",
           "title": "Custom Home Building in Eagle, Idaho",
@@ -8083,6 +8076,13 @@
           "title": "The Stages of Building a House, in Order",
           "type": "blog",
           "score": -0.091
+        },
+        {
+          "url": "/blog/construction-loan-basics-idaho",
+          "anchor": "How Construction Loans Work in Idaho",
+          "title": "How Construction Loans Work in Idaho",
+          "type": "blog",
+          "score": -0.094
         }
       ]
     },
@@ -8095,7 +8095,7 @@
         {
           "url": "/areas/eagle",
           "anchor": "Building in Eagle",
-          "title": "Remodeling Services in Eagle, Idaho",
+          "title": "Home Building in Eagle, Idaho",
           "type": "city",
           "score": 999
         },
@@ -8121,13 +8121,6 @@
           "score": 1.256
         },
         {
-          "url": "/guides/hidden-springs-home-building-guide",
-          "anchor": "Building in Hidden Springs",
-          "title": "Building in Hidden Springs",
-          "type": "guide",
-          "score": 1.231
-        },
-        {
           "url": "/guides/nampa-home-building-guide",
           "anchor": "Building a Home in Nampa",
           "title": "Building a Home in Nampa",
@@ -8140,6 +8133,13 @@
           "title": "Building in the Eagle Foothills",
           "type": "guide",
           "score": 1.204
+        },
+        {
+          "url": "/guides/caldwell-home-building-guide",
+          "anchor": "Building a Home in Caldwell",
+          "title": "Building a Home in Caldwell",
+          "type": "guide",
+          "score": 1.176
         },
         {
           "url": "/services/home-additions/eagle",
@@ -8159,7 +8159,7 @@
         {
           "url": "/areas/boise",
           "anchor": "Building in Harris Ranch",
-          "title": "Remodeling Services in Boise, Idaho",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 999
         },
@@ -8182,7 +8182,7 @@
           "anchor": "Building in Hidden Springs",
           "title": "Building in Hidden Springs",
           "type": "guide",
-          "score": 1.29
+          "score": 1.325
         },
         {
           "url": "/services/design-build/garden-city",
@@ -8221,9 +8221,9 @@
       "url": "/guides/hidden-springs-home-building-guide",
       "links": [
         {
-          "url": "/areas/eagle",
+          "url": "/areas/boise",
           "anchor": "Building in Hidden Springs",
-          "title": "Remodeling Services in Eagle, Idaho",
+          "title": "Home Building in Boise, Idaho",
           "type": "city",
           "score": 999
         },
@@ -8246,35 +8246,35 @@
           "anchor": "Building in Harris Ranch",
           "title": "Building in Harris Ranch",
           "type": "guide",
-          "score": 1.33
+          "score": 1.325
         },
         {
-          "url": "/guides/eagle-foothills-home-building-guide",
-          "anchor": "Building in the Eagle Foothills",
-          "title": "Building in the Eagle Foothills",
-          "type": "guide",
-          "score": 1.242
-        },
-        {
-          "url": "/guides/eagle-home-building-guide",
-          "anchor": "Building a Home in Eagle",
-          "title": "Building a Home in Eagle",
-          "type": "guide",
-          "score": 1.211
-        },
-        {
-          "url": "/services/home-additions/eagle",
-          "anchor": "Home Additions in Eagle",
-          "title": "Home Additions in Eagle, Idaho",
+          "url": "/services/home-additions/boise",
+          "anchor": "Home Additions in Boise",
+          "title": "Home Additions in Boise, Idaho",
           "type": "city-service",
-          "score": 0.078
+          "score": 0.007
         },
         {
-          "url": "/blog/aging-in-place-home-design",
-          "anchor": "Building a Home You Can Age In",
-          "title": "Building a Home You Can Age In",
+          "url": "/blog/boise-building-permit-guide",
+          "anchor": "Building Permits in Boise: What a New Home Needs",
+          "title": "Building Permits in Boise: What a New Home Needs",
           "type": "blog",
-          "score": -0.122
+          "score": -0.035
+        },
+        {
+          "url": "/blog/questions-to-ask-a-home-builder",
+          "anchor": "Questions to Ask a Home Builder Before You Sign",
+          "title": "Questions to Ask a Home Builder Before You Sign",
+          "type": "blog",
+          "score": -0.064
+        },
+        {
+          "url": "/blog/stages-of-building-a-house",
+          "anchor": "The Stages of Building a House, in Order",
+          "title": "The Stages of Building a House, in Order",
+          "type": "blog",
+          "score": -0.069
         }
       ]
     },
@@ -8287,7 +8287,7 @@
         {
           "url": "/areas/kuna",
           "anchor": "Building in Kuna",
-          "title": "Remodeling Services in Kuna, Idaho",
+          "title": "Home Building in Kuna, Idaho",
           "type": "city",
           "score": 999
         },
@@ -8313,11 +8313,11 @@
           "score": 1.184
         },
         {
-          "url": "/guides/caldwell-home-building-guide",
-          "anchor": "Building a Home in Caldwell",
-          "title": "Building a Home in Caldwell",
+          "url": "/guides/nampa-home-building-guide",
+          "anchor": "Building a Home in Nampa",
+          "title": "Building a Home in Nampa",
           "type": "guide",
-          "score": 1.182
+          "score": 1.184
         },
         {
           "url": "/guides/star-home-building-guide",
@@ -8334,11 +8334,11 @@
           "score": 0.074
         },
         {
-          "url": "/blog/construction-loan-basics-idaho",
-          "anchor": "How Construction Loans Work in Idaho",
-          "title": "How Construction Loans Work in Idaho",
+          "url": "/blog/aging-in-place-home-design",
+          "anchor": "Building a Home You Can Age In",
+          "title": "Building a Home You Can Age In",
           "type": "blog",
-          "score": -0.106
+          "score": -0.092
         }
       ]
     },
@@ -8351,7 +8351,7 @@
         {
           "url": "/areas/meridian",
           "anchor": "Building in Meridian",
-          "title": "Remodeling Services in Meridian, Idaho",
+          "title": "Home Building in Meridian, Idaho",
           "type": "city",
           "score": 999
         },
@@ -8370,16 +8370,30 @@
           "score": 999
         },
         {
+          "url": "/guides/eagle-foothills-home-building-guide",
+          "anchor": "Building in the Eagle Foothills",
+          "title": "Building in the Eagle Foothills",
+          "type": "guide",
+          "score": 1.118
+        },
+        {
+          "url": "/guides/harris-ranch-home-building-guide",
+          "anchor": "Building in Harris Ranch",
+          "title": "Building in Harris Ranch",
+          "type": "guide",
+          "score": 1.118
+        },
+        {
+          "url": "/guides/hidden-springs-home-building-guide",
+          "anchor": "Building in Hidden Springs",
+          "title": "Building in Hidden Springs",
+          "type": "guide",
+          "score": 1.113
+        },
+        {
           "url": "/guides/kuna-home-building-guide",
           "anchor": "Building a Home in Kuna",
           "title": "Building a Home in Kuna",
-          "type": "guide",
-          "score": 1.155
-        },
-        {
-          "url": "/guides/middleton-home-building-guide",
-          "anchor": "Building a Home in Middleton",
-          "title": "Building a Home in Middleton",
           "type": "guide",
           "score": 1.075
         },
@@ -8389,20 +8403,6 @@
           "title": "Design-Build in Meridian, Idaho",
           "type": "city-service",
           "score": 0.076
-        },
-        {
-          "url": "/blog/questions-to-ask-a-home-builder",
-          "anchor": "Questions to Ask a Home Builder Before You Sign",
-          "title": "Questions to Ask a Home Builder Before You Sign",
-          "type": "blog",
-          "score": -0.095
-        },
-        {
-          "url": "/blog/home-builder-red-flags",
-          "anchor": "Home Builder Red Flags",
-          "title": "Home Builder Red Flags",
-          "type": "blog",
-          "score": -0.108
         }
       ]
     },
@@ -8415,7 +8415,7 @@
         {
           "url": "/areas/middleton",
           "anchor": "Building in Middleton",
-          "title": "Remodeling Services in Middleton, Idaho",
+          "title": "Home Building in Middleton, Idaho",
           "type": "city",
           "score": 999
         },
@@ -8448,18 +8448,18 @@
           "score": 1.155
         },
         {
-          "url": "/guides/harris-ranch-home-building-guide",
-          "anchor": "Building in Harris Ranch",
-          "title": "Building in Harris Ranch",
-          "type": "guide",
-          "score": 1.149
-        },
-        {
           "url": "/guides/nampa-home-building-guide",
           "anchor": "Building a Home in Nampa",
           "title": "Building a Home in Nampa",
           "type": "guide",
           "score": 1.149
+        },
+        {
+          "url": "/guides/caldwell-home-building-guide",
+          "anchor": "Building a Home in Caldwell",
+          "title": "Building a Home in Caldwell",
+          "type": "guide",
+          "score": 1.146
         },
         {
           "url": "/services/home-plans-design/middleton",
@@ -8479,7 +8479,7 @@
         {
           "url": "/areas/nampa",
           "anchor": "Building in Nampa",
-          "title": "Remodeling Services in Nampa, Idaho",
+          "title": "Home Building in Nampa, Idaho",
           "type": "city",
           "score": 999
         },
@@ -8498,11 +8498,11 @@
           "score": 999
         },
         {
-          "url": "/guides/caldwell-home-building-guide",
-          "anchor": "Building a Home in Caldwell",
-          "title": "Building a Home in Caldwell",
+          "url": "/guides/kuna-home-building-guide",
+          "anchor": "Building a Home in Kuna",
+          "title": "Building a Home in Kuna",
           "type": "guide",
-          "score": 1.182
+          "score": 1.184
         },
         {
           "url": "/guides/star-home-building-guide",
@@ -8523,7 +8523,7 @@
           "anchor": "Building a Home in Middleton",
           "title": "Building a Home in Middleton",
           "type": "guide",
-          "score": 1.109
+          "score": 1.149
         },
         {
           "url": "/services/design-build/nampa",
@@ -8543,7 +8543,7 @@
         {
           "url": "/areas/star",
           "anchor": "Building in Star",
-          "title": "Remodeling Services in Star, Idaho",
+          "title": "Home Building in Star, Idaho",
           "type": "city",
           "score": 999
         },
@@ -8562,9 +8562,16 @@
           "score": 999
         },
         {
-          "url": "/guides/nampa-home-building-guide",
-          "anchor": "Building a Home in Nampa",
-          "title": "Building a Home in Nampa",
+          "url": "/guides/kuna-home-building-guide",
+          "anchor": "Building a Home in Kuna",
+          "title": "Building a Home in Kuna",
+          "type": "guide",
+          "score": 1.22
+        },
+        {
+          "url": "/guides/middleton-home-building-guide",
+          "anchor": "Building a Home in Middleton",
+          "title": "Building a Home in Middleton",
           "type": "guide",
           "score": 1.177
         },
@@ -8576,18 +8583,11 @@
           "score": 1.149
         },
         {
-          "url": "/guides/kuna-home-building-guide",
-          "anchor": "Building a Home in Kuna",
-          "title": "Building a Home in Kuna",
+          "url": "/guides/eagle-home-building-guide",
+          "anchor": "Building a Home in Eagle",
+          "title": "Building a Home in Eagle",
           "type": "guide",
-          "score": 1.1
-        },
-        {
-          "url": "/guides/hidden-springs-home-building-guide",
-          "anchor": "Building in Hidden Springs",
-          "title": "Building in Hidden Springs",
-          "type": "guide",
-          "score": 1.095
+          "score": 1.136
         },
         {
           "url": "/services/custom-home-builder/star",
@@ -8953,18 +8953,18 @@
           "score": 1.713
         },
         {
-          "url": "/services/home-additions/boise",
-          "anchor": "Home Additions in Boise",
-          "title": "Home Additions in Boise, Idaho",
-          "type": "city-service",
-          "score": 1.7
-        },
-        {
           "url": "/services/home-additions/kuna",
           "anchor": "Home Additions in Kuna",
           "title": "Home Additions in Kuna, Idaho",
           "type": "city-service",
           "score": 1.7
+        },
+        {
+          "url": "/services/home-additions/eagle",
+          "anchor": "Home Additions in Eagle",
+          "title": "Home Additions in Eagle, Idaho",
+          "type": "city-service",
+          "score": 1.673
         },
         {
           "url": "/services/home-additions/meridian",
@@ -9244,7 +9244,7 @@
     "/blog/adu-cost-boise": 7,
     "/blog/aging-in-place-home-design": 9,
     "/blog/allowances-explained-new-home": 9,
-    "/blog/boise-building-permit-guide": 8,
+    "/blog/boise-building-permit-guide": 9,
     "/blog/build-vs-buy-boise": 6,
     "/blog/building-in-the-boise-foothills": 8,
     "/blog/choosing-finishes-for-a-new-home": 9,
@@ -9257,7 +9257,7 @@
     "/blog/energy-efficient-home-building-boise": 9,
     "/blog/first-meeting-with-a-home-builder": 6,
     "/blog/fixed-price-vs-cost-plus": 8,
-    "/blog/home-builder-red-flags": 10,
+    "/blog/home-builder-red-flags": 9,
     "/blog/how-long-does-it-take-to-build-a-house-boise": 11,
     "/blog/how-to-budget-a-new-home-boise": 9,
     "/blog/how-to-buy-a-buildable-lot-boise": 7,
@@ -9271,7 +9271,7 @@
     "/blog/questions-to-ask-a-home-builder": 9,
     "/blog/shop-homes-and-barndominiums-idaho": 15,
     "/blog/single-story-vs-two-story-home": 8,
-    "/blog/stages-of-building-a-house": 9,
+    "/blog/stages-of-building-a-house": 10,
     "/blog/well-and-septic-cost-idaho": 8,
     "/blog/what-drives-home-building-costs-boise": 9,
     "/blog/why-home-building-bids-vary": 8,
@@ -9281,7 +9281,7 @@
     "/guides/choose-home-builder-boise": 12,
     "/guides/custom-home-design-guide": 10,
     "/guides/treasure-valley-home-building-guide": 16,
-    "/guides/boise-home-building-guide": 7,
+    "/guides/boise-home-building-guide": 6,
     "/guides/meridian-home-building-guide": 5,
     "/guides/eagle-home-building-guide": 5,
     "/guides/kuna-home-building-guide": 5,
@@ -9301,9 +9301,9 @@
     "/services/lot-evaluation": 18,
     "/services/shop-homes-barndominiums": 18,
     "/services/energy-efficient-homes": 18,
-    "/areas/boise": 16,
+    "/areas/boise": 17,
     "/areas/meridian": 12,
-    "/areas/eagle": 14,
+    "/areas/eagle": 13,
     "/areas/nampa": 11,
     "/areas/kuna": 15,
     "/areas/star": 12,

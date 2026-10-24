@@ -3,9 +3,9 @@ import type { BlogPostData } from '../../blogContent';
 export const buildVsBuyBoise: BlogPostData = {
   slug: 'build-vs-buy-boise',
   title: 'Building vs Buying a Home in the Treasure Valley',
-  seoTitle: 'Building vs Buying a Home in Treasure Valley',
+  seoTitle: 'Build vs Buy a Home, Treasure Valley',
   metaDescription:
-    'An honest comparison of building and buying in the Treasure Valley: total cost, timeline, financing, compromise, and the cases where buying is clearly better.',
+    'An honest comparison of building and buying in the Treasure Valley: total cost, timeline, financing, compromise, and when buying is clearly better.',
   excerpt:
     'We build houses, so treat this with appropriate suspicion. Then read it anyway, because there are several situations where buying an existing home is the better answer.',
   category: 'Home Building Costs',

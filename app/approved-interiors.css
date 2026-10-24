@@ -251,6 +251,13 @@
   min-height:0;
   height:clamp(280px,38vw,520px)
 }
+.approved-interior .interior-hero-caption {
+  width:min(88%,1260px);
+  margin:12px auto 28px;
+  font-size:12px;
+  line-height:1.4;
+  color:#62645f
+}
 .approved-interior .interior-hero-contact {
   background:#2c302f;
   color:#fbfaf6

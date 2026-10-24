@@ -1,5 +1,8 @@
 import type { ServiceData, CityData } from './contentData';
 import { getCountyLabel } from './contentData';
+import { getAreaCityCopy } from './content/areaCopy';
+import { getCityServiceCopy } from './content/cityServiceCopy';
+import { indianCreekDescription } from '../lib/seo';
 import {permitGuidance,permitSource} from '../lib/permitGuidance';
 import type { LandingSection } from '@/components/seo/LandingPageTemplate';
 
@@ -775,6 +778,8 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
 };
 
 export function getAreaIntro(city: CityData): string {
+  const custom = getAreaCityCopy(city.slug);
+  if (custom) return custom.intro;
   const county = getCountyLabel(city.county);
   return `Boise Construction Co builds new homes for clients in ${city.name}, Idaho and throughout ${county}. From fully custom homes and semi-custom plans to building on land you already own, you work with one accountable team from feasibility through final walkthrough.`;
 }
@@ -784,6 +789,8 @@ export function getCityServiceIntro(
   city: CityData,
   localFact?: string,
 ): string {
+  const custom = getCityServiceCopy(service.slug, city.slug);
+  if (custom) return custom.intro;
   const county = getCountyLabel(city.county);
   const fact = localFact
     ? ` ${localFact}`
@@ -792,6 +799,8 @@ export function getCityServiceIntro(
 }
 
 export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): FAQItem[] {
+  const custom = getCityServiceCopy(service.slug, city.slug);
+  if (custom) return custom.faqs;
   const county = getCountyLabel(city.county);
   // First sentence of the cost band, reused as a direct city-level answer for
   // "{service} cost in {city}" queries (voice/AI extractable).
@@ -834,6 +843,7 @@ export function getCityServiceSections(
   const county = getCountyLabel(city.county);
   const neighborhoods = seo?.neighborhoods ?? [];
   const landmarks = seo?.landmarks ?? [];
+  const creek = indianCreekDescription(city.name);
   const serviceLC = service.name.toLowerCase();
 
   const sections: LandingSection[] = [
@@ -860,8 +870,10 @@ export function getCityServiceSections(
       heading: `${service.name} across ${city.name}`,
       paragraphs: [
         neighborhoods.length
-          ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}. Lot conditions, utility access, and subdivision design standards vary between these areas, so we tailor the site plan, foundation, and elevations to the specific parcel rather than dropping a plan onto it.`
-          : `We build throughout ${city.name}, tailoring the site plan, foundation design, and elevations to the specific parcel rather than dropping a plan onto it.`,
+          ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}.${creek ? ` ${creek}` : ''} Lot conditions, utility access, and subdivision design standards vary between these areas, so we tailor the site plan, foundation, and elevations to the specific parcel rather than dropping a plan onto it.`
+          : creek
+            ? `We build throughout ${city.name}. ${creek} We tailor the site plan, foundation design, and elevations to the specific parcel rather than dropping a plan onto it.`
+            : `We build throughout ${city.name}, tailoring the site plan, foundation design, and elevations to the specific parcel rather than dropping a plan onto it.`,
         landmarks.length
           ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand how the area is developing and plan ${serviceLC} that fits the neighborhood and holds its value.`
           : `As a local team, we plan ${serviceLC} that fits the neighborhood and holds its value.`,
@@ -893,9 +905,9 @@ export const AREA_PAGE_FAQS: FAQItem[] = [
       'Fully custom homes, semi-custom homes from adapted plans, builds on land you already own, and shop homes. We also provide design and lot evaluation as standalone services.',
   },
   {
-    question: 'Are you licensed and insured?',
+    question: 'Are you a registered contractor and insured?',
     answer:
-      'Yes. Boise Construction Co is licensed, bonded, and insured. Idaho contractor registration details are available on request.',
+      'Yes. Boise Construction Co is an Idaho Registered Contractor #8381215, bonded, and insured. Idaho contractor registration details are available on request.',
   },
   {
     question: 'How do I start a project?',

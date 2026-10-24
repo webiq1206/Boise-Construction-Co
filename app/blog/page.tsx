@@ -76,7 +76,7 @@ export default function BlogPage() {
             <em className="brc-accent">range</em>
           </>
         }
-        description="Have a project in mind? Describe it, add any plans or photos, and review the details before sending your request to the appropriate project team."
+        description="Have a project in mind? Describe it or upload your plans for our Treasure Valley building team to review. More information or a site visit may be needed before we prepare your estimate."
         variant="greige"
       />
     </></InteriorPage>

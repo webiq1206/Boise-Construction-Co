@@ -3,7 +3,7 @@ import type { BlogPostData } from '../../blogContent';
 export const aduCostBoise: BlogPostData = {
   slug: 'adu-cost-boise',
   title: 'ADU Cost in Boise',
-  seoTitle: 'ADU Cost in Boise: What It Costs to Build',
+  seoTitle: 'ADU Cost to Build in Boise',
   metaDescription:
     'What an ADU costs to build in Boise: detached vs attached, size and zoning limits, utility connections, septic capacity, and real per square foot costs.',
   excerpt:

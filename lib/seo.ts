@@ -5,6 +5,7 @@
  */
 
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { SHOW_TRUST } from '@/shared/publicFlags';
 import { GBP_SOCIAL, getExternalProfileUrls } from '@/shared/gbpProfile';
 
 interface SEOMetaData {
@@ -138,6 +139,13 @@ const CITY_DESCRIPTION_VARIANTS: Record<string, string> = {
   Caldwell: "Caldwell's trusted",
 };
 
+/** Original city phrases stay above. While SHOW_TRUST is off, a trusted phrase becomes the city name. */
+function cityDescriptionVariant(city: string): string {
+  const trusted = CITY_DESCRIPTION_VARIANTS[city] || `${city}'s trusted`;
+  if (SHOW_TRUST || !/trusted/i.test(trusted)) return trusted;
+  return city;
+}
+
 const CITY_CTA_VARIANTS: Record<string, string> = {
   Kuna: "Free planning consultation",
   Boise: "Treasure Valley design-build",
@@ -164,8 +172,10 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
   
   if (city && serviceName) {
     const serviceLC = serviceName.toLowerCase();
-    const cityVariant = CITY_DESCRIPTION_VARIANTS[city] || `${city}'s trusted`;
-    const ctaVariant = CITY_CTA_VARIANTS[city] || "Satisfaction guaranteed";
+    const cityVariant = cityDescriptionVariant(city);
+    const ctaVariant = SHOW_TRUST
+      ? (CITY_CTA_VARIANTS[city] || "Satisfaction guaranteed")
+      : "Free planning consultation";
     return `${cityVariant} ${serviceLC} team. Bonded & insured. ${ctaVariant}. Call ${phone} for a free consultation!`;
   }
   
@@ -233,7 +243,7 @@ export function generateCityServiceDescription(
 ): string {
   const phone = SITE_CONFIG.phone;
   const serviceLC = serviceName.toLowerCase();
-  const cityVariant = CITY_DESCRIPTION_VARIANTS[cityName] || `${cityName}'s trusted`;
+  const cityVariant = cityDescriptionVariant(cityName);
   const cityData = CITY_SEO_DATA[cityName as keyof typeof CITY_SEO_DATA];
   const neighborhood = cityData?.neighborhoods?.[0];
 
@@ -253,44 +263,17 @@ export function generateCityServiceDescription(
   return `${serviceLC} in ${cityName}, ID. Bonded & insured builder. Call ${phone} for a free consultation!`;
 }
 
-/**
- * Generate a page title for any service or area page
- * Ensures final rendered title (with layout template " | Boise Construction Co")
- * stays under 60 characters
- */
+/** Keep complete authored titles; an optional secondary label may be omitted. */
 export function generateSafePageTitle(primary: string, suffix?: string): string {
-  const templateSuffix = ` | ${BRAND}`;
-  const maxLen = 60 - templateSuffix.length;
-
-  if (suffix) {
-    const full = `${primary} | ${suffix}`;
-    if (full.length <= maxLen) return full;
+  const title = primary.replace(/\s+/g, ' ').trim();
+  const detail = suffix?.replace(/\s+/g, ' ').trim();
+  if (detail) {
+    const candidate = title + ' | ' + detail;
+    if (candidate.length + (' | ' + SITE_CONFIG.name).length <= 60) return candidate;
   }
-
-  if (primary.length <= maxLen) return primary;
-
-  // Truncate on a word boundary without a baked-in ellipsis (the ellipsis would
-  // become a literal part of the <title>, not SERP truncation).
-  const words = primary.split(' ');
-  let truncated = '';
-  for (const word of words) {
-    const candidate = truncated ? `${truncated} ${word}` : word;
-    if (candidate.length > maxLen) break;
-    truncated = candidate;
-  }
-
-  // A word-boundary cut can still land on a dangling connector, producing
-  // titles like "Energy-Efficient Homes in the". Drop trailing connectors so
-  // an overflowing title degrades to a clean phrase instead of a broken one.
-  const DANGLING = new Set(['in', 'the', 'a', 'an', 'of', 'for', 'and', '&', 'to', 'at', 'on', 'with']);
-  let cleaned = truncated.trim();
-  let parts = cleaned.split(' ');
-  while (parts.length > 1 && DANGLING.has(parts[parts.length - 1].toLowerCase())) {
-    parts.pop();
-    cleaned = parts.join(' ');
-  }
-
-  return cleaned || truncated || primary.substring(0, maxLen).trim();
+  // Preserve the authored topic, including dates and qualifiers. A display
+  // length preference must not become a broken title in the document itself.
+  return title;
 }
 
 /**
@@ -407,8 +390,11 @@ export const CITY_SEO_DATA: Record<string, {
     population: '24,011',
     founded: '1992',
     zipCodes: ['83634'],
-    neighborhoods: ['Indian Creek', 'Black Cat', 'Crimson Point', 'Ten Mile Creek'],
-    landmarks: ['Kuna Caves', 'Swan Falls Dam', 'Indian Creek Plaza'],
+    neighborhoods: ['Crimson Point', 'Black Cat'],
+    // Kuna Caves and Swan Falls Dam sit south of the city. The City of Kuna
+    // map marks both "down the road," and the city tells visitors to drive out
+    // to Swan Falls. Bernie Fisher Park is a city park at Main and Linder.
+    landmarks: ['Bernie Fisher Park'],
     climate: 'semi-arid high desert climate with hot summers and cold winters',
     coordinates: { lat: 43.4913, lng: -116.4201 },
   },
@@ -426,7 +412,7 @@ export const CITY_SEO_DATA: Record<string, {
     founded: '1893',
     zipCodes: ['83642', '83646'],
     neighborhoods: ['Lochsa Falls', 'Tuscany', 'Paramount', 'Meridian Ranch'],
-    landmarks: ['The Village at Meridian', 'Julius M. Kleiner Memorial Park', 'Eagle Island State Park'],
+    landmarks: ['The Village at Meridian', 'Julius M. Kleiner Memorial Park', 'Settlers Park'],
     climate: 'semi-arid with hot, dry summers and cold winters',
     coordinates: { lat: 43.6121, lng: -116.3915 },
   },
@@ -434,7 +420,8 @@ export const CITY_SEO_DATA: Record<string, {
     population: '30,346',
     founded: '1864',
     zipCodes: ['83616'],
-    neighborhoods: ['Shadow Valley', 'Banbury', 'The Estates', 'Floating Feather'],
+    // Shadow Valley is Boise 83714 / unincorporated Ada County, not Eagle.
+    neighborhoods: ['Banbury', 'The Estates', 'Floating Feather'],
     landmarks: ['Eagle Island State Park', 'Heritage Park', 'Eagle Hills Golf Course'],
     climate: 'semi-arid with distinct four seasons',
     coordinates: { lat: 43.6954, lng: -116.3540 },
@@ -443,8 +430,10 @@ export const CITY_SEO_DATA: Record<string, {
     population: '12,701',
     founded: '1907',
     zipCodes: ['83669'],
-    neighborhoods: ['Star River Ranch', 'Hillsdale', 'Paramount', 'Star Crossing'],
-    landmarks: ['Boise River', 'Star Riverfront Park', 'Celebration Park'],
+    // Hillsdale and Paramount are Meridian subdivisions. The riverside city
+    // park is Star Riverwalk Park (1000 S. Main Street), not "Star Riverfront Park."
+    neighborhoods: ['Star River Ranch', 'Star Crossing'],
+    landmarks: ['Boise River', 'Star Riverwalk Park', 'Freedom Park'],
     climate: 'semi-arid climate with hot summers and cool winters',
     coordinates: { lat: 43.6921, lng: -116.4939 },
   },
@@ -452,8 +441,10 @@ export const CITY_SEO_DATA: Record<string, {
     population: '10,141',
     founded: '1909',
     zipCodes: ['83644'],
-    neighborhoods: ['Middleton Heights', 'Purple Sage', 'Puckett Estates', 'Windermere'],
-    landmarks: ['Boise River', 'Middleton City Park', 'Purple Sage Golf Course'],
+    // Purple Sage Golf Course is in Caldwell. Middleton's city parks are
+    // Middleton Place, Piccadilly, and Roadside, not "Middleton City Park."
+    neighborhoods: ['Middleton Heights'],
+    landmarks: ['Boise River'],
     climate: 'semi-arid high desert climate with warm summers and cool winters',
     coordinates: { lat: 43.7068, lng: -116.6209 },
   },
@@ -461,8 +452,9 @@ export const CITY_SEO_DATA: Record<string, {
     population: '108,188',
     founded: '1886',
     zipCodes: ['83651', '83653', '83686', '83687'],
-    neighborhoods: ['Downtown Nampa', 'Karcher', 'Greenhurst', 'Columbia Village'],
-    landmarks: ['Ford Idaho Center', 'Lake Lowell', 'Nampa Train Depot'],
+    neighborhoods: ['Downtown Nampa', 'Karcher', 'Greenhurst'],
+    // Lake Lowell is Deer Flat National Wildlife Refuge, outside Nampa city limits.
+    landmarks: ['Ford Idaho Center', 'Nampa Train Depot'],
     climate: 'semi-arid with hot summers and cold winters',
     coordinates: { lat: 43.5407, lng: -116.5635 },
   },
@@ -470,12 +462,24 @@ export const CITY_SEO_DATA: Record<string, {
     population: '65,359',
     founded: '1883',
     zipCodes: ['83605', '83607'],
-    neighborhoods: ['Indian Creek', 'Cleveland Blvd', 'Ustick', 'Wilson'],
+    neighborhoods: ['Wilson', 'Ustick', 'Cleveland Blvd'],
     landmarks: ['Indian Creek Plaza', 'Caldwell Night Rodeo', 'College of Idaho'],
     climate: 'semi-arid high desert with four distinct seasons',
     coordinates: { lat: 43.6629, lng: -116.6874 },
   },
 };
+
+/**
+ * Indian Creek is a stream, not a neighborhood. Idaho DEQ's Indian Creek
+ * Subbasin Assessment (December 2001) says it "flows through Elmore, Ada and
+ * Canyon counties and the cities of Kuna, Nampa and Caldwell, Idaho."
+ * Indian Creek Plaza is on that creek in downtown Caldwell.
+ * https://www2.deq.idaho.gov/admin/LEIA/api/document/download/11724
+ */
+export function indianCreekDescription(cityName: string): string {
+  if (cityName !== 'Kuna' && cityName !== 'Nampa' && cityName !== 'Caldwell') return '';
+  return 'Indian Creek is the creek that flows through Kuna, Nampa, and Caldwell. Indian Creek Plaza is on that creek in downtown Caldwell.';
+}
 
 /**
  * Business information for NAP consistency
@@ -502,22 +506,20 @@ export const BUSINESS_INFO = {
     country: 'United States',
   },
   hours: {
-    monday: '7:00 AM - 6:00 PM',
-    tuesday: '7:00 AM - 6:00 PM',
-    wednesday: '7:00 AM - 6:00 PM',
-    thursday: '7:00 AM - 6:00 PM',
-    friday: '7:00 AM - 6:00 PM',
-    saturday: '8:00 AM - 4:00 PM',
+    monday: '9:00 AM - 6:00 PM',
+    tuesday: '9:00 AM - 6:00 PM',
+    wednesday: '9:00 AM - 6:00 PM',
+    thursday: '9:00 AM - 6:00 PM',
+    friday: '9:00 AM - 6:00 PM',
+    saturday: '9:00 AM - 4:00 PM',
     sunday: 'Closed',
   },
   founded: '2020',
   serviceArea: ['Boise', 'Meridian', 'Eagle', 'Nampa', 'Kuna', 'Star', 'Middleton', 'Caldwell', 'Garden City'],
   serviceRadius: '35 miles',
-  licenses: ['License details available upon request'],
+  licenses: ['Idaho Registered Contractor #8381215'],
   certifications: ['Design-Build Home Building', 'Bonded & Insured'],
-  // Kept consistent with GBP and the `licenses` field above: the business
-  // publishes bonded/insured status and provides registration details on
-  // request, so nothing here should assert a specific license.
+  // The registration number is published in the footer and in hasCredential.
   insurance: 'Bonded & Insured',
   rating: 0,
   reviewCount: 0,

@@ -3,7 +3,7 @@ import type { BlogPostData } from '../../blogContent';
 export const howToBuyABuildableLotBoise: BlogPostData = {
   slug: 'how-to-buy-a-buildable-lot-boise',
   title: 'How to Tell If a Lot Is Actually Buildable',
-  seoTitle: 'How to Tell If a Lot Is Actually Buildable',
+  seoTitle: 'Is a Lot Actually Buildable',
   metaDescription:
     'A lot being for sale does not make it buildable. Here is how to check access, zoning, setbacks, utilities, septic, floodplain, soils, and slope first.',
   excerpt:

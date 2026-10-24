@@ -29,12 +29,13 @@ export const SITE_CONFIG = {
   phoneSmsHref: `sms:${process.env.NEXT_PUBLIC_PHONE_TEL ?? DEFAULT_PHONE_TEL}`,
   email: process.env.NEXT_PUBLIC_EMAIL ?? DEFAULT_EMAIL,
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL,
-  // Canonical NAP. This is the owner's HOME address, so the street is NEVER
-  // rendered on-page and is NOT emitted in public JSON-LD (which is view-source
-  // visible). It exists here only to supply the full NAP to Google Business
-  // Profile and off-site citation submissions. Public surfaces (schema, footer,
-  // contact) show city/state only: Meridian, ID. Google gets the full street
-  // via GBP, where a service-area business hides the address publicly.
+  /**
+   * Public representative named by the P5 brand brief (section 4.2) and
+   * docs/growth/OPERATIONS.md. Not a storefront staff listing.
+   */
+  publicRepresentative: "Nick Perkins",
+  // Canonical NAP. Street, city, region, and postal code match the authorized
+  // public address. This is a service-area business, not a staffed storefront.
   address: {
     street: "4031 W Wapoot St",
     city: "Meridian",

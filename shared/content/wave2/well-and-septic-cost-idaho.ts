@@ -5,7 +5,7 @@ export const wellAndSepticCostIdaho: BlogPostData = {
   title: 'What a Well and Septic System Costs in Idaho',
   seoTitle: 'What a Well and Septic Cost in Idaho',
   metaDescription:
-    'Well and septic are the biggest unknowns on a rural Idaho parcel. What drives the cost, why depth is unknown until drilling, and what sits in $80k to $150k.',
+    'Well and septic are the biggest unknowns on a rural Idaho parcel. What drives cost, why depth is unknown until drilling, and what sits in $80k to $150k.',
   excerpt:
     'On a rural Treasure Valley parcel, the well and the septic system are the two costs nobody can quote you precisely. Here is what actually drives each of them.',
   category: 'Land & Lots',

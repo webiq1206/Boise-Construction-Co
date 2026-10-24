@@ -1,7 +1,7 @@
 import type {IntakeContext} from './intakeContract.ts';
 import {SCOPE_FIELDS,SCOPE_FILE_LIMIT,SCOPE_BATCH_LIMIT,SCOPE_FILE_COUNT,SCOPE_UPLOAD_HELP,type ScopeAnswers,type ScopeExtraction,type ScopeConflict,type ScopeField,type ScopeUpload} from './scope.ts';
 /** One turn of the conversation, kept with the draft on this device so a
- * reload shows the same exchange. Never sent to the server. */
+ * reload shows the same exchange. Review intake also persists this untrusted display history with the authenticated server draft. */
 export interface TranscriptEntry {id:string;role:'user'|'assistant';text:string;at:number;kind?:'scope'|'ack'|'question'|'answer'|'note';label?:string;caption?:string;files?:string[]}
 export interface BrowserDraft {intake?:IntakeContext;intakeTransfer?:import('./intakeTransferBrowser.ts').BrowserSourceTransfer;pendingFiles?:Array<{name:string;size:number}>;analyzedUploads?:Array<{sha256:string;size:number}>}
 export interface BrowserDraft {transcript?:TranscriptEntry[];/** Revision confirmed with reviewed=true; cleared by any later change. */reviewedRevision?:number;pendingReply?:{id:string;answer:string};namespace?:string;sourceImageUrl?:string;/** Set when an explicit replacement must not reattach route-provided design data. */sourceDetached?:boolean;projectSource?:{id:string;answers:ScopeAnswers;imageUrl?:string};id:string;key:string;revision:number;text:string;answers:ScopeAnswers;extraction:ScopeExtraction|null;contact:{name:string;email:string;phone:string};step:number;updatedAt:number;conflicts?:ScopeConflict[];uploads?:ScopeUpload[];wizard?:{skipped:ScopeField[];resolutions:ScopeAnswers;sourceVersion?:string;instructionAnswers?:import('./clarifications.ts').InstructionAnswer[]} ;analysisWarning?:string;analyzedText?:string;analyzedAnswers?:string;analyzedFingerprint?:string;scopeFingerprint?:string;dirty?:boolean;pricedFields?:ScopeField[]}
@@ -13,6 +13,17 @@ export interface BrowserDraftRecovery {
   key: string;
   archivedAt: number;
   draft: BrowserDraft;
+}
+/** True once the visitor has entered something: text, files, contact details, an
+ * answer other than the page's preset project type, or a message. A draft that
+ * holds only the seeded service is not a project; it must not be autosaved,
+ * announced as saved, or offered back as "your saved project". */
+export function draftHasUserContent(d:BrowserDraft|null|undefined):boolean{
+  if(!d)return false;
+  if(d.text.trim()||(d.uploads||[]).length||(d.pendingFiles||[]).length)return true;
+  if(['name','email','phone'].some(k=>String((d.contact as Record<string,string>)[k]||'').trim()))return true;
+  if(Object.entries(d.answers||{}).some(([k,v])=>k!=='service'&&String(v||'').trim()))return true;
+  return (d.transcript||[]).some(e=>e.role==='user');
 }
 export function newBrowserDraft(defaultService:string):BrowserDraft {
   const bytes=new Uint8Array(32);crypto.getRandomValues(bytes);
@@ -48,7 +59,10 @@ export function loadBrowserDraft(defaultService:string,namespace?:string):Browse
       ?(!d?.namespace||d.namespace===namespace)&&(!d?.projectSource?.id||d.projectSource.id===namespace)
       :!d?.namespace&&!d?.projectSource?.id;
     if(identityMatches&&d&&typeof d.id==='string'&&/^[a-f0-9-]{36}$/i.test(d.id)&&/^[a-f0-9]{64}$/.test(d.key)&&Number.isInteger(d.revision)&&d.revision>=0&&typeof d.text==='string'&&d.answers&&!Array.isArray(d.answers)&&d.contact&&['name','email','phone'].every(k=>typeof d.contact[k]==='string')&&Object.entries(d.answers).every(([k,v])=>Object.hasOwn(SCOPE_FIELDS,k)&&typeof v==='string')){
-      return {...d,namespace,step:Math.min(2,Math.max(0,Number(d.step)||0)),wizard:d.wizard||{skipped:[],resolutions:{}}};
+      const restored={...d,namespace,step:Math.min(2,Math.max(0,Number(d.step)||0)),wizard:d.wizard||{skipped:[],resolutions:{}}};
+      // An empty draft left by viewing another service page takes this page's service.
+      if(defaultService&&!draftHasUserContent(restored))return {...restored,answers:{...restored.answers,service:defaultService}};
+      return restored;
     }
   }catch{}
   return {...newBrowserDraft(defaultService),namespace};

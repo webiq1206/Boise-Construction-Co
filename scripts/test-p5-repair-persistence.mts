@@ -6,10 +6,13 @@ import path from 'node:path';
 // Isolated PostgreSQL semantics, no application credentials, network or delivery.
 process.env.P5_ESTIMATE_DRIVER='off';delete process.env.DATABASE_URL;
 await mkdir('node_modules/.cache',{recursive:true});
-const dir=await mkdtemp(path.join(process.cwd(),'node_modules/.cache/p5-repair-'));
+const isolatedRoot=await mkdtemp(path.join(process.cwd(),'node_modules/.cache/p5-repair-'));
+const dir=path.join(isolatedRoot,'p5');
 let db:any;
 try {
   await cp('lib/p5',dir,{recursive:true});
+  // Preserve the production sibling import without sharing files between test runs.
+  await cp('lib/leadAttribution.ts',path.join(isolatedRoot,'leadAttribution.ts'));
   await writeFile(path.join(dir,'database.ts'),`import {PGlite} from '@electric-sql/pglite';export const database=new PGlite();export async function query(s:string,v:unknown[]=[]){return (await database.query(s,v)).rows;}export async function transaction(run:any){return database.transaction(tx=>run(async(s:string,v:unknown[]=[])=> (await tx.query(s,v)).rows));}`);
   await writeFile(path.join(dir,'submitEndpoint.ts'),`import {query} from './database.ts';export let status=500;export let supersede=false;export function setResponse(s:number,next=false){status=s;supersede=next;}export async function completeSubmission(id:string,draft:any){if(supersede)await query("UPDATE p5_estimator_work SET payload=jsonb_set(payload,'{revision}',to_jsonb($2::int)) WHERE draft_id=$1 AND work_key='submit-request-v1'",[id,draft.revision+1]);return new Response('{}',{status});}`);
   await writeFile(path.join(dir,'events.ts'),`export async function recordEvent(){}`);
@@ -60,12 +63,14 @@ try {
   delete process.env.P5_PRICING_BUDGET_USD;delete process.env.P5_PRICING_REQUEST_RESERVATION_USD;
   await ledger.reservePricingCharge('isolated-retry','openai');
   await ledger.markPricingChargeUnknown('isolated-retry','synthetic timeout');
+  const held=await db.query("SELECT state,amount,provider_id,last_error FROM p5_pricing_ledger WHERE fingerprint='isolated-retry'");
   const retried=await Promise.allSettled(Array.from({length:5},()=>ledger.reservePricingCharge('isolated-retry','openai')));
-  assert.equal(retried.filter(r=>r.status==='fulfilled').length,1,'one owner for an uncapped provider retry');
+  assert.equal(retried.filter(r=>r.status==='fulfilled').length,0,'no concurrent caller may replay an uncapped unknown charge');
   for(const r of retried)if(r.status==='rejected')assert.ok(r.reason instanceof ledger.PricingChargeUnknownError);
-  await ledger.markPricingChargeUnknown('isolated-retry','synthetic timeout');
+  assert.deepEqual(await db.query("SELECT state,amount,provider_id,last_error FROM p5_pricing_ledger WHERE fingerprint='isolated-retry'"),held,'uncapped replay cannot change the hold');
   process.env.P5_PRICING_BUDGET_USD='1';process.env.P5_PRICING_REQUEST_RESERVATION_USD='0.25';
   await assert.rejects(()=>ledger.reservePricingCharge('isolated-retry','openai'),ledger.PricingChargeUnknownError);
+  assert.deepEqual(await db.query("SELECT state,amount,provider_id,last_error FROM p5_pricing_ledger WHERE fingerprint='isolated-retry'"),held,'adding a cap cannot clear the same hold');
   delete process.env.P5_PRICING_BUDGET_USD;delete process.env.P5_PRICING_REQUEST_RESERVATION_USD;
-  console.log('PASS: revision race/archive parity, single-use full-scope handoff, retryable completion, superseded revision fencing and serialized pricing admission.');
-} finally {await db?.database.close();await rm(dir,{recursive:true,force:true});}
+  console.log('PASS: revision race/archive parity, single-use full-scope handoff, retryable completion, superseded revision fencing and concurrent unknown-charge holds.');
+} finally {await db?.database.close();await rm(isolatedRoot,{recursive:true,force:true});}

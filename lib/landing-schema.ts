@@ -27,6 +27,8 @@ export function landingServiceSchema(
 }
 
 export function landingAreaBusinessSchema(cityName: string) {
+  // Area pages keep the single Meridian service-area PostalAddress.
+  // The city on the page is already listed in areaServed; it is not a storefront.
   return generateLocalBusinessSchema(cityName);
 }
 

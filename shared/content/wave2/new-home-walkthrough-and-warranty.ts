@@ -3,7 +3,7 @@ import type { BlogPostData } from '../../blogContent';
 export const newHomeWalkthroughAndWarranty: BlogPostData = {
   slug: 'new-home-walkthrough-and-warranty',
   title: 'The Final Walkthrough and What the Warranty Covers',
-  seoTitle: 'Final Walkthrough and New Home Warranty',
+  seoTitle: 'New Home Walkthrough and Warranty',
   metaDescription:
     'How the pre-drywall and final walkthrough work, how a punch list is handled, what a one-year warranty covers, and how to tell a defect from settling.',
   excerpt:

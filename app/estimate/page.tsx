@@ -9,10 +9,9 @@ import { fitDescription } from '@/lib/page-metadata';
 
 
 
-// 34 chars, so the branded title below lands at 58 with the 24-char suffix.
-const TITLE = "Start Your Home Build Project";
+const TITLE = "Request a Home Build Estimate";
 const DESCRIPTION =
-  fitDescription("Describe your home build or addition in Boise and the Treasure Valley. Add plans, review your scope, and send your project for team review.");
+  fitDescription("Planning a home build in Boise or the Treasure Valley? Share your project details and plans for team review before we prepare your estimate.");
 
 export const metadata: Metadata = withBrandPageMetadata(({
   title: { absolute: `${TITLE} | ${SITE_CONFIG.name}` },
@@ -36,7 +35,7 @@ export const metadata: Metadata = withBrandPageMetadata(({
 export default function EstimatePage() {
   const schemas = [
     generateWebPageSchema({
-      title: "Home Build Project Intake",
+      title: "Request a Home Build Estimate",
       description: DESCRIPTION,
       url: "/estimate",
     }),

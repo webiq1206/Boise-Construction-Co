@@ -3,7 +3,7 @@ import type { BlogPostData } from '../../blogContent';
 export const howToBudgetANewHomeBoise: BlogPostData = {
   slug: 'how-to-budget-a-new-home-boise',
   title: 'How to Budget for a New Home in Boise',
-  seoTitle: 'How to Budget for a New Home in Boise',
+  seoTitle: 'Budget for a New Home in Boise',
   metaDescription:
     'How to budget a Treasure Valley new build: land, site work, vertical construction, soft costs, allowances, contingency, and the costs most people forget.',
   excerpt:

@@ -19,6 +19,7 @@ generateWebPageSchema,
 import { CITY_HERO_IMAGES } from "@/shared/cityServiceImages";
 import { CITIES,TREASURE_VALLEY_CITIES } from "@/shared/contentData";
 import { CTA_PRIMARY,CTA_SECONDARY } from "@/shared/ctaCopy";
+import { contentImageAlt } from "@/shared/imageAlts";
 import { SITE_IMAGES } from "@/shared/siteImages";
 import { ArrowRight } from "lucide-react";
 
@@ -46,10 +47,10 @@ export default function AreasHubPage() {
   return (
     <InteriorPage kind="areas"><>
       <JsonLd data={schemas} />
-      <div className="flex flex-col pb-20 md:pb-0">
+      <div className="flex flex-col ">
         <PageHeroBand
           imageSrc={SITE_IMAGES.hero}
-          imageAlt="White board-and-batten home exterior with a covered front porch"
+          imageAlt={contentImageAlt(SITE_IMAGES.hero)}
         >
           <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Service Areas" }]} />
           <p className="ed-eyebrow mt-8" style={{ color: "rgb(255 255 255 / 0.72)" }}>Treasure Valley</p>
@@ -82,7 +83,7 @@ export default function AreasHubPage() {
               description="Custom homes, semi-custom homes, and builds on your own lot across Ada and Canyon County."
               align="left"
             />
-            <div className="grid gap-5 sm:grid-cols-3">
+            <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
               {CITIES.map((city, i) => (
                 <Reveal key={city.slug} delay={i * 40}>
                   <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />
@@ -99,7 +100,7 @@ export default function AreasHubPage() {
               <em className="brc-accent">city</em>?
             </>
           }
-          description="Lot costs, impact fees, and permit timelines differ across Ada and Canyon County. Share your project location and plans so the team can review the scope and advise on next steps."
+          description="Lot costs, impact fees, and permit timelines differ across Ada and Canyon County. Share your lot and project details for team review and local guidance before we prepare your estimate."
           variant="tint"
         />
 

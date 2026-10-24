@@ -4,5 +4,5 @@ export const approvedBrand = {
   "accent": "#D09A5C",
   "wordmarkLight": "/brand/p5-wordmark-light.svg",
   "wordmarkDark": "/brand/p5-wordmark-dark.svg",
-  "estimateIntro": "Describe your project in your own words. Add what you know, review the details, and send your request to the appropriate project team."
+  "estimateIntro": "Describe your project and share photos or plans. Our team will review your scope and selections before preparing an estimate."
 } as const;

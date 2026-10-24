@@ -6,11 +6,15 @@ import { storeObject, readStoredBytes } from "./objectStorage.ts";
 import { ESTIMATOR_BRAND } from "./brand.ts";
 import { EVENTS_TABLE_SQL, EVENTS_INDEX_SQL } from "./events.ts";
 import type { ReviewedScope, ScopeAnswers, ScopeExtraction, ScopeUpload } from "./scope.ts";
+import {qaOperationContext} from './qaOperationContext.ts';
+import {assertQaOperationAccess,withQaWriteFence} from './qaOperationFence.ts';
+import {isOperatorQaCase} from './qaCases.ts';
 // Optional tables exist only where they are used. A table created on a site that
 // never writes to it is a production schema change (and a publish review) for nothing.
 const LEDGER_TABLES=(ESTIMATOR_BRAND.id as string)==='p5'||process.env.P5_PRICING_LEDGER==='on'||Boolean(process.env.P5_PRICING_BUDGET_USD||process.env.P5_PRICING_REQUEST_RESERVATION_USD);
 const QUALIFICATION_TABLES=(ESTIMATOR_BRAND.id as string)==='handyman'||process.env.P5_PROVIDER_BUDGET==='on';
 const hash = (value: string | Buffer) => createHash("sha256").update(value).digest("hex");
+export const QA_NO_PROVIDER_KEY="qa-no-provider-v1";
 export class DraftError extends Error { status: number; constructor(message: string, status = 400) { super(message); this.status=status; } }
 export interface Draft {
   intake?:IntakeContext;
@@ -34,6 +38,7 @@ export function requireEstimateContact(contact:Draft['contact']) {
 }
 let schemaReady: Promise<void> | null = null;
 export function ensureSchema(): Promise<void> {
+  if(qaOperationContext())return Promise.resolve();
   if (!schemaReady) schemaReady = (async () => {
     for (const statement of [
       `CREATE TABLE IF NOT EXISTS p5_estimator_drafts (id uuid PRIMARY KEY, key_hash text NOT NULL, brand text NOT NULL, revision integer NOT NULL DEFAULT 0, status text NOT NULL DEFAULT 'draft', payload jsonb NOT NULL DEFAULT '{}', internal_estimate jsonb, customer_estimate jsonb, submitted_at timestamptz, updated_at timestamptz NOT NULL DEFAULT now(), created_at timestamptz NOT NULL DEFAULT now())`,
@@ -43,6 +48,9 @@ export function ensureSchema(): Promise<void> {
       `CREATE TABLE IF NOT EXISTS p5_estimator_outbox (id uuid PRIMARY KEY, draft_id uuid NOT NULL REFERENCES p5_estimator_drafts(id), revision integer NOT NULL, destination text NOT NULL, payload jsonb NOT NULL, status text NOT NULL DEFAULT 'pending', attempts integer NOT NULL DEFAULT 0, provider_id text, last_error text, locked_until timestamptz, next_attempt_at timestamptz NOT NULL DEFAULT now(), created_at timestamptz NOT NULL DEFAULT now(), sent_at timestamptz, UNIQUE(draft_id, revision, destination))`,
       `CREATE INDEX IF NOT EXISTS p5_estimator_outbox_due ON p5_estimator_outbox(status,next_attempt_at)`,
       `CREATE TABLE IF NOT EXISTS p5_estimator_work (draft_id uuid NOT NULL REFERENCES p5_estimator_drafts(id), work_key text NOT NULL, payload jsonb NOT NULL DEFAULT '{}', lease_token text, lease_until timestamptz, updated_at timestamptz NOT NULL DEFAULT now(), PRIMARY KEY(draft_id,work_key))`,
+      // Durable customer-facing request references (intakeReferenceStore). Every site reserves one on
+      // submission, and a production database that never ran db:prepare otherwise answers 503 at intake.
+      `CREATE TABLE IF NOT EXISTS p5_project_references (project_id text PRIMARY KEY, reference text NOT NULL UNIQUE, created_at timestamptz NOT NULL DEFAULT now())`,
       // Paid pricing-request ledger: one reservation per fingerprint so a retry never pays twice.
       ...(LEDGER_TABLES?[`CREATE TABLE IF NOT EXISTS p5_pricing_ledger (fingerprint text PRIMARY KEY, provider text NOT NULL, amount numeric(12,6) NOT NULL, state text NOT NULL, provider_id text, last_error text, active_until timestamptz, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now())`]:[]),
       ...(LEDGER_TABLES?[`ALTER TABLE p5_pricing_ledger ADD COLUMN IF NOT EXISTS active_until timestamptz`]:[]),
@@ -60,11 +68,18 @@ export function ensureSchema(): Promise<void> {
 }
 export function draftCredentials(request: Request) {
   const id = request.headers.get("x-p5-draft-id") || "";
+  const operator=qaOperationContext();
+  if(operator){if(!operator.active||id!==operator.draftId)throw new DraftError('QA operation identity changed.',409);return {id,key:''};}
   const key = request.headers.get("x-p5-draft-key") || "";
   if (!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(id) || !/^[a-f0-9]{64}$/i.test(key)) throw new DraftError("Invalid draft credentials",401);
   return {id,key};
 }
 async function rowFor(id: string, key: string) {
+  if(qaOperationContext()){
+    await assertQaOperationAccess(id);
+    const [row]=await query('SELECT id,brand,revision,status,payload,updated_at,submitted_at FROM p5_estimator_drafts WHERE id=$1',[id]);
+    return row;
+  }
   await ensureSchema();
   const [row]=await query("SELECT * FROM p5_estimator_drafts WHERE id=$1",[id]);
   if (!row) return null;
@@ -74,6 +89,7 @@ async function rowFor(id: string, key: string) {
     const [linked]=await query("SELECT 1 FROM p5_estimator_work WHERE draft_id=$1 AND work_key=$2",[id,`access-key-v1:${hash(key)}`]);
     if(!linked)throw new DraftError("Draft not found",404);
   }
+  await assertQaOperationAccess(id);
   return row;
 }
 /** A fresh key for a draft, issued only after a signed estimate link was verified. The original key keeps working. */
@@ -86,6 +102,7 @@ export async function issueLinkKey(id:string):Promise<string>{
 /** A draft read by the server itself (the background driver finishing a submission). Never exposed to a request. */
 export async function readDraftById(id:string):Promise<Draft|null>{
   await ensureSchema();
+  await assertQaOperationAccess(id);
   const [row]=await query("SELECT * FROM p5_estimator_drafts WHERE id=$1",[id]);if(!row)return null;
   const files=await query("SELECT id,name,mime_type,size_bytes,sha256 FROM p5_estimator_files WHERE draft_id=$1 ORDER BY created_at",[id]);
   return {id,revision:Number(row.revision),status:row.status,updatedAt:new Date(row.updated_at).toISOString(),brand:row.brand,
@@ -101,7 +118,11 @@ export async function readDraft(id: string,key: string): Promise<Draft|null> {
     uploads:files.map(f=>({id:f.id,name:f.name,type:f.mime_type,size:f.size_bytes,sha256:f.sha256,status:"stored"})),
   };
 }
-export async function saveDraft(id: string,key: string,brand: string,payload: Omit<Draft,"id"|"brand"|"revision"|"status"|"updatedAt"|"uploads">,expectedRevision: number): Promise<Draft> {
+export async function saveDraft(...args:Parameters<typeof saveDraftImpl>):Promise<Draft>{
+  if(isOperatorQaCase(args[0])&&!qaOperationContext())await rowFor(args[0],args[1]);
+  return withQaWriteFence(args[0],()=>saveDraftImpl(...args));
+}
+async function saveDraftImpl(id: string,key: string,brand: string,payload: Omit<Draft,"id"|"brand"|"revision"|"status"|"updatedAt"|"uploads">,expectedRevision: number,qaDeterministicOnly:boolean|'bounded-paid'=false): Promise<Draft> {
   const existing=await rowFor(id,key);
   // Preserve conversational context when extraction or a clarification saves its own scope fields.
   if(existing?.payload?.intake&&!payload.intake)payload={...payload,intake:existing.payload.intake};
@@ -110,7 +131,20 @@ export async function saveDraft(id: string,key: string,brand: string,payload: Om
   if(existing&&existing.status!=='draft')throw new DraftError(TRANSFER_HOLD_MESSAGE,409);
   if(existing && existing.revision!==expectedRevision)throw new DraftError("This project was updated elsewhere. Reload the saved version before overwriting it.",409);
   let result;
-  if(!existing)result=await query("INSERT INTO p5_estimator_drafts(id,key_hash,brand,payload,revision) VALUES($1,$2,$3,$4::jsonb,1) ON CONFLICT DO NOTHING RETURNING *",[id,hash(key),brand,JSON.stringify(payload)]);
+  if(qaDeterministicOnly){
+    if(existing||!/^\[QA\](?:\s|$)/i.test(payload.contact.name)||payload.contact.email||payload.contact.phone)throw new DraftError('Deterministic QA mode requires a new labelled draft without delivery details.',422);
+    // One statement commits both rows, or neither. A concurrent request cannot
+    // observe a new QA draft before its permanent provider restriction.
+    result=await query(`WITH saved AS (
+      INSERT INTO p5_estimator_drafts(id,key_hash,brand,payload,revision)
+      VALUES($1,$2,$3,$4::jsonb,1) ON CONFLICT DO NOTHING RETURNING *
+    ), restricted AS (
+      INSERT INTO p5_estimator_work(draft_id,work_key,payload)
+      SELECT id,$5,$6::jsonb FROM saved
+      RETURNING draft_id
+    ) SELECT saved.* FROM saved JOIN restricted ON restricted.draft_id=saved.id`,[id,hash(key),brand,JSON.stringify(payload),qaDeterministicOnly==='bounded-paid'?'qa-bounded-provider-v1':QA_NO_PROVIDER_KEY,JSON.stringify(qaDeterministicOnly==='bounded-paid'?{brokerRequired:true,createdRevision:1}:{providerCallsAllowed:0,createdRevision:1})]);
+  }
+  else if(!existing)result=await query("INSERT INTO p5_estimator_drafts(id,key_hash,brand,payload,revision) VALUES($1,$2,$3,$4::jsonb,1) ON CONFLICT DO NOTHING RETURNING *",[id,hash(key),brand,JSON.stringify(payload)]);
   else result=await query("UPDATE p5_estimator_drafts SET payload=$1::jsonb,revision=revision+1,updated_at=now() WHERE id=$2 AND revision=$3 AND status='draft' RETURNING *",[JSON.stringify(payload),id,expectedRevision]);
   if(!result.length)throw new DraftError("The draft changed while saving. Reload before retrying.",409);
   // Return the acknowledged write itself. A second read is not a write receipt.
@@ -127,7 +161,7 @@ export async function saveUpload(id:string,key:string,file:{name:string;type:str
   const fileId=duplicate[0]?.id||randomUUID();
   if(!duplicate.length){
     const location=await storeObject(ESTIMATOR_BRAND.domain,id,file.data);
-    await query(REGISTER_DRAFT_UPLOAD_SQL,[fileId,id,file.name,file.type,file.data.length,digest,location?"":file.data.toString("base64"),location?.bucketId||null,location?.objectKey||null]);
+    await withQaWriteFence(id,()=>query(REGISTER_DRAFT_UPLOAD_SQL,[fileId,id,file.name,file.type,file.data.length,digest,location?"":file.data.toString("base64"),location?.bucketId||null,location?.objectKey||null]));
   }
   const [stored]=await query("SELECT id,name,mime_type,size_bytes,sha256 FROM p5_estimator_files WHERE draft_id=$1 AND sha256=$2",[id,digest]);
   if(!stored)throw new DraftError(TRANSFER_HOLD_MESSAGE,409);

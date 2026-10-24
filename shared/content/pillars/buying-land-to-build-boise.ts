@@ -3,7 +3,7 @@ import type { GuidePageData } from '../../guideContent';
 export const buyingLandToBuildBoise: GuidePageData = {
   slug: 'buying-land-to-build-boise',
   title: 'Buying Land to Build On in the Treasure Valley',
-  seoTitle: 'Buying Land to Build On in the Treasure Valley',
+  seoTitle: 'Buying Treasure Valley Land to Build',
   metaDescription:
     'A parcel being for sale does not make it buildable. Check access, zoning, utilities, septic, soils, slope, and irrigation before you buy land near Boise.',
   excerpt:

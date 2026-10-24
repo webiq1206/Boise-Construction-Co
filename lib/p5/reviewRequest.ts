@@ -1,3 +1,4 @@
+import {qaContactRestricted} from './qaProviderPolicy.ts';
 import {isIntakeTransferStatus,TRANSFER_HOLD_MESSAGE} from './intakeTransferGuards.ts';
 import {createHash} from 'node:crypto';
 import {draftCredentials,readDraft,DraftError} from './store.ts';
@@ -33,6 +34,7 @@ export function projectReviewHandler(dependencies={readDraft,query,adminRecipien
     const draft=await readDraft(id,key);
     if(!draft||draft.brand!==brand.id)throw new DraftError('Save your project before requesting a review.',404);
     if(isIntakeTransferStatus(draft.status))throw new DraftError(TRANSFER_HOLD_MESSAGE,409);
+    if(await qaContactRestricted(id,query))return json({qaReviewHold:true,error:'This restricted QA draft cannot request external review or send notifications.'},422);
     const body=JSON.parse(new TextDecoder().decode(await limitedBody(request,2048)));
     const contact=reviewContact(body);
     const reference=estimateReference(id);
