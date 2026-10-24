@@ -1,3 +1,5 @@
+> **NOTICE (2026-10-20):** most files in this folder were copied from the Boise Remodeling Co audit and still describe a remodeling business. Treat them as historical templates. `keyword-map.md` has been rewritten for the home-building business. The other documents need a rewrite before they are used for decisions.
+
 # Boise Remodeling Co — SEO / GEO / AEO + Knowledge Graph Audit
 
 This directory is the consolidated deliverable set for two audits:

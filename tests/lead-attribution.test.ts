@@ -8,7 +8,7 @@ import {intakeProjectReview} from '../lib/p5/intakeProjectReview.ts';
 import {intakeDeliveryEnvelope} from '../lib/p5/intakeDeliveryPayload.ts';
 import {emptyIntakeDetails,type IntakeSnapshot} from '../lib/p5/intakeContract.ts';
 import {routeIntake} from '../lib/p5/intakePolicy.ts';
-import {trackGoogleAdsLeadConversion} from '../lib/googleAdsConversion.ts';
+import {GOOGLE_ADS_ESTIMATOR_LABEL,GOOGLE_ADS_LEAD_LABEL,trackGoogleAdsLeadConversion} from '../lib/googleAdsConversion.ts';
 import {resolvePropertyProfile} from '../shared/propertyProfile.ts';
 const granted={analytics_storage:'granted',ad_storage:'granted',ad_user_data:'granted',ad_personalization:'denied'} as const;
 const touch=captureTouch('https://boiseconstruction.co/estimate/scope?gclid=fixture-click&utm_campaign=homes&campaignid=123&email=private@example.invalid#secret','https://google.com/search?q=private');
@@ -48,11 +48,13 @@ test('consent defaults precede vendor config and standard updates are observed',
  const events:string[]=[];const window:any={dispatchEvent:(e:any)=>events.push(e.type)};
  vm.runInNewContext(consentBootstrap(),{window,CustomEvent:class{constructor(public type:string){}}});
  assert.equal(window.dataLayer[0][0],'consent');
- assert.equal(window.p5Consent.ad_storage,'denied');
- window.gtag('consent','update',granted);
+ assert.equal(window.dataLayer[0][1],'default');
  assert.equal(window.p5Consent.ad_storage,'granted');
- window.p5UpdateConsent({ad_storage:'denied'});
+ assert.equal(window.p5Consent.analytics_storage,'granted');
+ window.gtag('consent','update',{...granted,ad_storage:'denied'});
  assert.equal(window.p5Consent.ad_storage,'denied');
+ window.p5UpdateConsent({ad_storage:'granted'});
+ assert.equal(window.p5Consent.ad_storage,'granted');
  assert.equal(events.length,3);
 });
 test('CRM evidence stays in existing strict keyed review contract, not a second lead',()=>{
@@ -82,10 +84,60 @@ test('accepted lead conversion ID deduplicates repeated callbacks and sessions',
  const prior=(globalThis as any).window;
  (globalThis as any).window={gtag:(...args:unknown[])=>events.push(args),sessionStorage:{getItem:(k:string)=>storage.get(k),setItem:(k:string,v:string)=>storage.set(k,v)}};
  try{
-  assert.equal(trackGoogleAdsLeadConversion({},'intake:fixture-attribution'),true);
-  assert.equal(trackGoogleAdsLeadConversion({},'intake:fixture-attribution'),false);
+  assert.equal(trackGoogleAdsLeadConversion({},'inquiry:fixture-attribution'),true);
+  assert.equal(trackGoogleAdsLeadConversion({},'inquiry:fixture-attribution'),false);
   assert.equal(events.length,1);
-  assert.equal((events[0][2] as any).send_to,'AW-18354188204/cEzmCPOagKAdEKzf-q9E');
-  assert.equal((events[0][2] as any).transaction_id,'intake:fixture-attribution');
+  assert.equal((events[0][2] as any).send_to,GOOGLE_ADS_LEAD_LABEL);
+  assert.equal((events[0][2] as any).transaction_id,'inquiry:fixture-attribution');
+ }finally{(globalThis as any).window=prior;}
+});
+function adsWindow(events:unknown[][],storage:Map<string,string>){
+ return {gtag:(...args:unknown[])=>events.push(args),sessionStorage:{getItem:(k:string)=>storage.get(k)??null,setItem:(k:string,v:string)=>storage.set(k,v)}};
+}
+function sendTo(events:unknown[][]){return events.map(event=>(event[2] as {send_to:string}).send_to);}
+test('estimator finishes fire the estimator label and the form label once',()=>{
+ const events:unknown[][]=[];const storage=new Map();
+ const prior=(globalThis as any).window;
+ (globalThis as any).window=adsWindow(events,storage);
+ try{
+  assert.equal(trackGoogleAdsLeadConversion({service:'new-construction'},'estimator:fixture'),true);
+  assert.equal(trackGoogleAdsLeadConversion({},'intake:fixture-attribution'),true);
+  assert.deepEqual(sendTo(events),[GOOGLE_ADS_ESTIMATOR_LABEL,GOOGLE_ADS_LEAD_LABEL,GOOGLE_ADS_ESTIMATOR_LABEL,GOOGLE_ADS_LEAD_LABEL]);
+  assert.equal((events[0][2] as any).transaction_id,'estimator:fixture');
+  assert.equal((events[1][2] as any).transaction_id,'estimator:fixture');
+  assert.equal((events[2][2] as any).transaction_id,'intake:fixture-attribution');
+  assert.equal((events[3][2] as any).transaction_id,'intake:fixture-attribution');
+ }finally{(globalThis as any).window=prior;}
+});
+test('a repeated estimator finish fires nothing',()=>{
+ const events:unknown[][]=[];const storage=new Map();
+ const prior=(globalThis as any).window;
+ (globalThis as any).window=adsWindow(events,storage);
+ try{
+  assert.equal(trackGoogleAdsLeadConversion({},'intake:fixture-repeat'),true);
+  assert.equal(events.length,2);
+  assert.equal(trackGoogleAdsLeadConversion({},'intake:fixture-repeat'),false);
+  assert.equal(events.length,2);
+ }finally{(globalThis as any).window=prior;}
+});
+test('acceptedLead false fires the estimator label only',()=>{
+ const events:unknown[][]=[];const storage=new Map();
+ const prior=(globalThis as any).window;
+ (globalThis as any).window=adsWindow(events,storage);
+ try{
+  assert.equal(trackGoogleAdsLeadConversion({acceptedLead:false},'estimator:fixture-declined'),true);
+  assert.deepEqual(sendTo(events),[GOOGLE_ADS_ESTIMATOR_LABEL]);
+  assert.equal((events[0][2] as any).transaction_id,'estimator:fixture-declined');
+ }finally{(globalThis as any).window=prior;}
+});
+test('conv_ keys fire the form label only',()=>{
+ const events:unknown[][]=[];const storage=new Map();
+ const prior=(globalThis as any).window;
+ (globalThis as any).window=adsWindow(events,storage);
+ try{
+  assert.equal(trackGoogleAdsLeadConversion({},'conv_fixture'),true);
+  assert.equal(trackGoogleAdsLeadConversion({},'conv_fixture'),false);
+  assert.deepEqual(sendTo(events),[GOOGLE_ADS_LEAD_LABEL]);
+  assert.equal((events[0][2] as any).transaction_id,'conv_fixture');
  }finally{(globalThis as any).window=prior;}
 });
