@@ -53,7 +53,9 @@ export default function EstimatePage() {
           mounts beneath the site header and owns everything below it, with its
           own scroll area and a bottom-anchored input, so nothing here scrolls
           into unrelated content. */}
-      <EstimateCalculator fitViewport />
+      <div data-clarity-mask="true">
+        <EstimateCalculator fitViewport />
+      </div>
     </>
   );
 }

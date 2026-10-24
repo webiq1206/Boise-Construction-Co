@@ -14,6 +14,52 @@
 }
 [data-mobile-nav-bar][data-p5-actions-ready="false"] { visibility:hidden !important; pointer-events:none !important; }
 
+/* Header call and text stay in the first screen. Shrink the wordmark so the
+   two controls and the menu fit at 390px without horizontal scroll. */
+@media (max-width: 1179px) {
+  .approved-shell [data-approved-navigation] .approved-original-wordmark {
+    width: min(160px, calc(100vw - 246px));
+    max-height: 22px;
+  }
+  .approved-shell [data-approved-navigation] .approved-endorsement {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* Estimator routes omit the marketing header. This row is the above-the-fold
+   call and text, and the fixed estimator starts beneath it. */
+[data-estimator-fold-contact] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  height: calc(52px + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) 12px 0;
+  background: #1c1f1e;
+  color: #fbfaf6;
+}
+[data-estimator-fold-contact] a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 12px;
+  color: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+body:has([data-estimator-fold-contact]) .root[data-layout="page"] {
+  top: calc(52px + env(safe-area-inset-top)) !important;
+}
+
 /* Surface-aware text tokens: decorative brand accents stay unchanged. */
 .approved-shell { --accent-legible:var(--accent-on-light); --ed-accent:var(--audit-accent-ink); }
 .approved-shell :is(.family-site,.approved-interior) :is(h1,h2,h3,h4) em,

@@ -20,6 +20,7 @@ import { MicrosoftClarity } from '@/components/MicrosoftClarity'
 import { clarityFormMaskScript } from '@/lib/clarityFormMask'
 import Script from 'next/script'
 import { ConversionTracking } from '@/components/ConversionTracking'
+import { EstimatorFoldContact } from '@/components/EstimatorFoldContact'
 import { AssistantWidget } from '@/components/assistant/AssistantWidget'
 import './globals.css'
 // The shared P5 family editorial layer. Imported after globals so it can build
@@ -198,6 +199,7 @@ export default function RootLayout({
           </div></ApprovedShell>
           <Toaster />
           <AssistantWidget />
+          <EstimatorFoldContact />
         </Providers>
         <GoogleAnalytics />
         <MetaPixel />

@@ -249,6 +249,7 @@ export function AssistantWidget() {
           <button type="button" onClick={continueProject} disabled={sending} data-testid="button-assistant-continue" className="mx-3 mb-2 min-h-11 rounded-sm border border-card-border px-3 py-2 text-sm text-foreground disabled:opacity-40">Continue project</button>
           {/* Composer */}
           <form
+            data-clarity-mask="true"
             onSubmit={(e) => {
               e.preventDefault();
               void send();
