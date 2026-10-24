@@ -73,6 +73,27 @@ export function googleAdsLeadParams(
 }
 
 const sentLeadKeys = new Set<string>();
+const waitingLeadKeys = new Set<string>();
+export const GTAG_READY_WAIT_MS = 500;
+export const GTAG_READY_ATTEMPTS = 20;
+
+function waitForLeadTag(ctx: LeadContext, dedupeKey?: string): void {
+  if (dedupeKey && waitingLeadKeys.has(dedupeKey)) return;
+  if (dedupeKey) waitingLeadKeys.add(dedupeKey);
+  let attempt = 0;
+  const poll = () => {
+    attempt += 1;
+    const gtag = (window as unknown as {gtag?: unknown}).gtag;
+    if (typeof gtag === 'function') {
+      if (dedupeKey) waitingLeadKeys.delete(dedupeKey);
+      trackGoogleAdsLeadConversion(ctx, dedupeKey);
+    } else if (attempt < GTAG_READY_ATTEMPTS) {
+      schedule(poll, GTAG_READY_WAIT_MS);
+    } else if (dedupeKey) waitingLeadKeys.delete(dedupeKey);
+  };
+  const schedule = (window as unknown as {setTimeout?: typeof setTimeout}).setTimeout ?? setTimeout;
+  schedule(poll, GTAG_READY_WAIT_MS);
+}
 
 function isEstimatorFinishKey(dedupeKey?: string): dedupeKey is string {
   return !!dedupeKey && (dedupeKey.startsWith('estimator:') || dedupeKey.startsWith('intake:'));
@@ -127,17 +148,27 @@ function pendingConversions(ctx: LeadContext, dedupeKey?: string): PendingConver
  * A `conv_` inquiry id, and any other key, sends the form label only.
  * Returns true when at least one conversion was sent.
  */
-export function trackGoogleAdsLeadConversion(ctx: LeadContext = {}, dedupeKey?: string): boolean {
+export function trackGoogleAdsLeadConversion(ctx: LeadContext = {}, dedupeKey?: string, acceptance?: {accepted?: boolean}): boolean {
+  if (acceptance) ctx = {...ctx, acceptedLead: acceptance.accepted === true};
   if (typeof window === 'undefined') return false;
   const pending = pendingConversions(ctx, dedupeKey);
   if (!pending.length) return false;
   const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
-  if (typeof gtag !== 'function') return false;
+  if (typeof gtag !== 'function') {
+    waitForLeadTag(ctx, dedupeKey);
+    return false;
+  }
+  let sent = false;
   for (const item of pending) {
     if (item.storageKey) markSent(item.storageKey);
-    gtag('event', 'conversion', item.params);
+    try {
+      gtag('event', 'conversion', item.params);
+      sent = true;
+    } catch {
+      // A blocked analytics tag must not interrupt the accepted request UI.
+    }
   }
-  return true;
+  return sent;
 }
 
 type AdsConsent = { ad_storage?: string; ad_user_data?: string };
