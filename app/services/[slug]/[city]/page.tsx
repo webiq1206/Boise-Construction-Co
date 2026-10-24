@@ -130,7 +130,6 @@ export default async function CityServicePage(
         localNote={localNote}
         sections={[...sections, cityBuildingSection(city, service.name)]}
         proof={proof}
-        proofHeading={`Recent ${city.name} ${service.name.toLowerCase()} work`}
         showEstimatePrompt
         faqs={faqs}
         related={{

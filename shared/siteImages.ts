@@ -10,8 +10,7 @@ export const SITE_IMAGES = {
   hero: "/images/construction/custom-home-exterior.webp",
   /** Design-build / plan review split panels. */
   process: "/images/construction/plans-and-selections.webp",
-  /** "Where your money goes" value band - a carpenter setting custom cabinetry,
-   *  reinforcing that the budget is spent on craftsmanship, not overhead. */
+  /** "Where your money goes" value band - mechanical rough-in with pipes and wiring. */
   valueCraft: "/images/construction/mechanical-rough-in.webp",
   /** A house being framed - process sections. */
   processInProgress: "/images/framing-in-progress-branded.webp",

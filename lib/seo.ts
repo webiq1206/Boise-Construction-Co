@@ -5,6 +5,7 @@
  */
 
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { SHOW_TRUST } from '@/shared/publicFlags';
 import { GBP_SOCIAL, getExternalProfileUrls } from '@/shared/gbpProfile';
 
 interface SEOMetaData {
@@ -138,6 +139,13 @@ const CITY_DESCRIPTION_VARIANTS: Record<string, string> = {
   Caldwell: "Caldwell's trusted",
 };
 
+/** Original city phrases stay above. While SHOW_TRUST is off, a trusted phrase becomes the city name. */
+function cityDescriptionVariant(city: string): string {
+  const trusted = CITY_DESCRIPTION_VARIANTS[city] || `${city}'s trusted`;
+  if (SHOW_TRUST || !/trusted/i.test(trusted)) return trusted;
+  return city;
+}
+
 const CITY_CTA_VARIANTS: Record<string, string> = {
   Kuna: "Free planning consultation",
   Boise: "Treasure Valley design-build",
@@ -164,8 +172,10 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
   
   if (city && serviceName) {
     const serviceLC = serviceName.toLowerCase();
-    const cityVariant = CITY_DESCRIPTION_VARIANTS[city] || `${city}'s trusted`;
-    const ctaVariant = CITY_CTA_VARIANTS[city] || "Satisfaction guaranteed";
+    const cityVariant = cityDescriptionVariant(city);
+    const ctaVariant = SHOW_TRUST
+      ? (CITY_CTA_VARIANTS[city] || "Satisfaction guaranteed")
+      : "Free planning consultation";
     return `${cityVariant} ${serviceLC} team. Bonded & insured. ${ctaVariant}. Call ${phone} for a free consultation!`;
   }
   
@@ -250,7 +260,7 @@ export function generateCityServiceDescription(
 ): string {
   const phone = SITE_CONFIG.phone;
   const serviceLC = serviceName.toLowerCase();
-  const cityVariant = CITY_DESCRIPTION_VARIANTS[cityName] || `${cityName}'s trusted`;
+  const cityVariant = cityDescriptionVariant(cityName);
   const cityData = CITY_SEO_DATA[cityName as keyof typeof CITY_SEO_DATA];
   const neighborhood = cityData?.neighborhoods?.[0];
 
@@ -513,22 +523,20 @@ export const BUSINESS_INFO = {
     country: 'United States',
   },
   hours: {
-    monday: '7:00 AM - 6:00 PM',
-    tuesday: '7:00 AM - 6:00 PM',
-    wednesday: '7:00 AM - 6:00 PM',
-    thursday: '7:00 AM - 6:00 PM',
-    friday: '7:00 AM - 6:00 PM',
-    saturday: '8:00 AM - 4:00 PM',
+    monday: '9:00 AM - 6:00 PM',
+    tuesday: '9:00 AM - 6:00 PM',
+    wednesday: '9:00 AM - 6:00 PM',
+    thursday: '9:00 AM - 6:00 PM',
+    friday: '9:00 AM - 6:00 PM',
+    saturday: '9:00 AM - 4:00 PM',
     sunday: 'Closed',
   },
   founded: '2020',
   serviceArea: ['Boise', 'Meridian', 'Eagle', 'Nampa', 'Kuna', 'Star', 'Middleton', 'Caldwell', 'Garden City'],
   serviceRadius: '35 miles',
-  licenses: ['License details available upon request'],
+  licenses: ['Idaho Registered Contractor #8381215'],
   certifications: ['Design-Build Home Building', 'Bonded & Insured'],
-  // Kept consistent with GBP and the `licenses` field above: the business
-  // publishes bonded/insured status and provides registration details on
-  // request, so nothing here should assert a specific license.
+  // The registration number is published in the footer and in hasCredential.
   insurance: 'Bonded & Insured',
   rating: 0,
   reviewCount: 0,

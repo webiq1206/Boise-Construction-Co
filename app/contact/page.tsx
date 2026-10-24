@@ -2,7 +2,6 @@ import { InteriorEstimateLink,InteriorHero,InteriorPage } from '@/components/app
 import { BusinessPhoneContact } from '@/components/BusinessPhoneContact';
 import { ConsultationForm } from '@/components/ConsultationForm';
 import { Section } from '@/components/marketing';
-import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
 import { Hairline } from '@/components/marketing/Hairline';
 import { MarketingCard } from '@/components/marketing/MarketingCard';
 import { SectionHeader } from '@/components/marketing/SectionHeader';
@@ -33,6 +32,7 @@ import { CITIES,TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
 import { PUBLIC_NAP_LINE, SITE_CONFIG } from '@/shared/siteConfig';
 import { CONSULT_BULLETS,HERO_STATS } from '@/shared/siteContent';
+import { contentImageAlt } from '@/shared/imageAlts';
 import { SITE_IMAGES } from '@/shared/siteImages';
 import { ArrowRight,Check,ChevronRight,Mail,MapPin,MessageSquare,Phone } from 'lucide-react';
 import Image from 'next/image';
@@ -200,9 +200,9 @@ export default function ContactPage() {
   return (
     <InteriorPage kind="contact"><>
       <JsonLd data={schemas} />
-      <div className="flex flex-col pb-20 md:pb-0">
+      <div className="flex flex-col ">
         {/* Approved editorial hero */}
-        <InteriorHero layout="contact" imageSrc={SITE_IMAGES.hero} imageAlt="White board-and-batten home exterior with a covered front porch">
+        <InteriorHero layout="contact" imageSrc={SITE_IMAGES.hero} imageAlt={contentImageAlt(SITE_IMAGES.hero)}>
             <HeroBreadcrumbs />
             <p data-speakable="summary" className="sr-only">
               {SPEAKABLE_SUMMARY}
@@ -259,7 +259,7 @@ export default function ContactPage() {
                   </p>
                 </Reveal>
               </div>
-              <MarketingCard className="md:col-span-3 p-4 sm:p-7 md:p-10" padding="lg">
+              <MarketingCard className="interior-contact-form p-4 sm:p-7 md:p-10" padding="lg">
                 <ConsultationForm />
               </MarketingCard>
             </div>
@@ -287,7 +287,7 @@ export default function ContactPage() {
                   icon={<Phone className="h-5 w-5" strokeWidth={1.5} />}
                   label="Call us"
                   href={SITE_CONFIG.phoneHref}
-                  subtext="Mon – Fri 7 am – 6 pm · Sat 8 am – 4 pm"
+                  subtext="Mon – Fri 9 am – 6 pm · Sat 9 am – 4 pm"
                   featured
                   companion={
                     <SaveContactLink className="text-sm text-muted-foreground hover:text-foreground transition-colors" />
@@ -353,7 +353,7 @@ export default function ContactPage() {
             <div className="relative min-h-[260px] md:min-h-[520px] overflow-hidden bg-inverse order-2 md:order-1">
               <Image
                 src={SITE_IMAGES.leadership}
-                alt="Worker checking interior framing on a new home"
+                alt={contentImageAlt(SITE_IMAGES.leadership)}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover img-brand-grade"
@@ -370,6 +370,7 @@ export default function ContactPage() {
                   <br />
                   No pitch. Just answers.
                 </p>
+                <p className="mt-3 text-xs text-inverse-foreground/80">Representative imagery</p>
               </div>
             </div>
 
@@ -438,16 +439,6 @@ export default function ContactPage() {
 
         <StatementBandSection />
 
-        <EstimatePromptBand
-          title={
-            <>
-              Ready to discuss your{' '}
-              <em className="brc-accent">project</em>?
-            </>
-          }
-          description="Share your project details and plans for our team to review. We may need more information or a site visit before confirming an estimate."
-          variant="canvas"
-        />
 
         {/* ─── Service areas ─── */}
         <Section divider>

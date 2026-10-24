@@ -1,6 +1,6 @@
 # Boise Construction Co - Full Reference
 
-> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build, founded 2020. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, Garden City. Phone (208) 477-1169.
+> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, Garden City. Phone (208) 477-1169.
 
 ## Contact
 
@@ -8,10 +8,9 @@ Public representative: Nick Perkins. Service-area business based at 4031 W Wapoo
 
 ## About
 
-Boise Construction Co is a residential design-build home builder serving the Treasure Valley since 2020. We build new homes: custom homes drawn from a blank page, semi-custom homes personalized from a proven plan, and build-on-your-lot projects for families who already own land. Design-build means design, engineering, permitting, and construction are delivered by one team under one contract, which removes the handoff between an architect and a general contractor and keeps the drawings and the budget on the same schedule. Every project includes a written line-item scope before construction, named allowances for selections, and a workmanship warranty at completion.
+Boise Construction Co is a residential design-build home builder serving the Treasure Valley. We build new homes: custom homes drawn from a blank page, semi-custom homes personalized from a proven plan, and build-on-your-lot projects for families who already own land. Design-build means design, engineering, permitting, and construction are delivered by one team under one contract, which removes the handoff between an architect and a general contractor and keeps the drawings and the budget on the same schedule. Every project includes a written line-item scope before construction, named allowances for selections, and a workmanship warranty at completion.
 
 - Business type: Residential design-build home builder (new construction)
-- Founded: 2020
 - Service model: One accountable team for design, permits, and construction
 - Contact: https://boiseconstruction.co/contact
 - Build estimator: https://boiseconstruction.co/estimate
@@ -109,4 +108,4 @@ Neighborhood guides:
 
 Boise Construction Co also completes RE-10 and home inspection repairs for real estate agents, buyers and sellers across Boise and the Treasure Valley. An RE-10 is the Idaho inspection response form: after a home inspection the buyer requests specific repairs before closing. We review the RE-10 and inspection report, provide a written scope and pricing, coordinate access, complete the approved work across multiple trades, and supply photo documentation, invoices and receipts for the transaction file. Structural, foundation, mold and asbestos abatement, main electrical service, sewer and septic, HVAC replacement, gas lines and full roof replacement are coordinated to licensed specialists rather than performed in house. We take this work because an inspection repair is a deadline problem rather than a construction problem, and sequencing trades against a date that will not move is the same thing we do on every build. Details: https://boisehandyman.co/re-10-repairs-boise
 
-Last updated: 2026-10-16. Full sitemap: https://boiseconstruction.co/sitemap.xml
+Last updated: 2026-10-17. Full sitemap: https://boiseconstruction.co/sitemap.xml

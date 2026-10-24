@@ -175,7 +175,6 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
         localNote={localNote}
         sections={[...sections, cityBuildingSection(city)]}
         proof={proof}
-        proofHeading={`Recent ${city.name} projects`}
         showEstimatePrompt
         faqs={faqs}
         related={{ variant: 'area', citySlug: city.slug }}
