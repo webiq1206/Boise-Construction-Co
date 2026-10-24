@@ -12,16 +12,16 @@ export const SITE_IMAGES = {
   process: "/images/construction/plans-and-selections.webp",
   /** "Where your money goes" value band - mechanical rough-in with pipes and wiring. */
   valueCraft: "/images/construction/mechanical-rough-in.webp",
-  /** A house being framed - process sections. */
-  processInProgress: "/images/framing-in-progress-branded.webp",
+  /** A house being framed - process sections. Single WebP, no srcset variants. */
+  processInProgress: "/images/framing-foothills.webp",
   /** Full-bleed brand statement band. */
   statementBand: "/images/construction/great-room-evening.webp",
   /** About/contact split panels and about hero. */
   // Not the shared crew photo: that one shows Boise Remodeling Co shirts, which
   // is the wrong company on this site. A real Construction Co team photo goes here.
-  leadership: "/images/framing-in-progress-branded.webp",
-  /** Consultation section background (homepage). */
-  consultBg: "/images/consult-lifestyle.webp",
+  leadership: "/images/framing-foothills.webp",
+  /** Consultation section background (homepage). Decorative: alt="". */
+  consultBg: "/images/farmhouse-kitchen-dining.webp",
   /** Budget section subtle texture - island detail crop. */
   budgetDetail: "/images/budget-kitchen-detail.webp",
 } as const;
@@ -40,13 +40,15 @@ const c = (name: string) => `/images/construction/${name}.webp`;
 
 export const CONSTRUCTION_IMAGES = {
   customHome: c("custom-home-exterior"),
-  semiCustom: c("semi-custom-home"),
+  /** Custom-home-builder hero and the build-on-your-lot breather. Single WebP. */
+  mountainModern: c("mountain-modern-home-exterior"),
+  semiCustom: c("single-story-farmhouse-exterior"),
   framing: c("home-under-framing"),
   foundation: c("foundation-and-excavation"),
   roughIn: c("mechanical-rough-in"),
   insulation: c("insulation-and-air-sealing"),
-  interior: c("new-home-interior"),
-  kitchen: c("new-home-kitchen"),
+  interior: c("great-room-timber-daylight"),
+  kitchen: c("kitchen-alder-stone"),
   lot: c("buildable-lot"),
   foothills: c("foothills-building-site"),
   ruralSite: c("rural-site-work"),

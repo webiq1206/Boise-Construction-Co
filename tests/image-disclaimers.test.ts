@@ -5,6 +5,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getBlogImageAlt } from '../shared/blogImages.ts';
 import { contentImageAlt } from '../shared/imageAlts.ts';
+import { CONSTRUCTION_IMAGES, SITE_IMAGES } from '../shared/siteImages.ts';
+import { getServiceImageSet } from '../shared/serviceBackgrounds.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (file: string) => fs.readFileSync(path.join(root, file), 'utf8');
@@ -73,4 +75,46 @@ test('stock photos keep a representative disclaimer and describe the framing pho
   assert.equal(gallery.includes('Recent homes we have designed'), false);
   assert.equal(read('app/areas/[city]/page.tsx').includes('Recent ${city.name} projects'), false);
   assert.equal(read('components/seo/LandingPageTemplate.tsx').includes('Proof of work'), false);
+});
+
+test('Sam replacement photos use the exact alt and a single WebP', () => {
+  const exact: Record<string, string> = {
+    [SITE_IMAGES.processInProgress]: 'New home framing with roof trusses and a lumber stack near the foothills',
+    [CONSTRUCTION_IMAGES.semiCustom]: 'White board-and-batten farmhouse with cedar porch posts, a metal porch roof and an attached garage, foothills behind',
+    [CONSTRUCTION_IMAGES.mountainModern]: 'Mountain-modern house with log porch posts and beams, aligned upper and lower windows, and a lit living room',
+    [CONSTRUCTION_IMAGES.interior]: 'Great room with timber trusses, a dining table and chairs, and daylight through a gable window',
+    [CONSTRUCTION_IMAGES.kitchen]: 'Kitchen with alder cabinets, a stone range wall, a dark granite island and a window facing the hills',
+    '/images/construction/bid-review-desk.webp': 'Folders, a highlighter, a tape measure and a hard hat on a desk for reviewing bids',
+    '/images/construction/material-choices.webp': 'Oak flooring, tile, lumber, yellow tubing and stone samples on a jobsite table',
+  };
+  for (const [src, alt] of Object.entries(exact)) {
+    assert.equal(contentImageAlt(src), alt, src);
+    assert.equal(fs.existsSync(path.join(root, 'public', src.replace(/^\//, ''))), true, src);
+    assert.equal(fs.existsSync(path.join(root, 'public', src.replace(/\.webp$/, '-768.webp'))), false, src);
+    assert.equal(fs.existsSync(path.join(root, 'public', src.replace(/\.webp$/, '-1280.webp'))), false, src);
+  }
+  assert.equal(contentImageAlt(SITE_IMAGES.consultBg), '');
+  assert.equal(SITE_IMAGES.leadership, SITE_IMAGES.processInProgress);
+  assert.equal(getServiceImageSet('custom-home-builder').hero, CONSTRUCTION_IMAGES.mountainModern);
+  assert.equal(getServiceImageSet('build-on-your-lot').breather, CONSTRUCTION_IMAGES.mountainModern);
+  const served = [
+    read('shared/siteImages.ts'),
+    read('shared/serviceBackgrounds.ts'),
+    read('shared/cityServiceImages.ts'),
+    read('shared/blogImageRegistry.ts'),
+    read('components/approved/family-content.ts'),
+  ].join('\n');
+  for (const oldPath of [
+    'framing-in-progress-branded.webp',
+    'p5-p5-construction-branded.webp',
+    'builder-bid-comparison.webp',
+    'cost-breakdown-variance.webp',
+    'consult-lifestyle.webp',
+    'semi-custom-home.webp',
+    'new-home-interior.webp',
+    'new-home-kitchen.webp',
+  ]) {
+    assert.equal(served.includes(oldPath), false, oldPath);
+  }
+  assert.equal(served.includes('handyman-hero-door-hinge-branded.webp'), true);
 });

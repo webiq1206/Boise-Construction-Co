@@ -12,7 +12,7 @@ const DEFAULT_BACKGROUND = CONSTRUCTION_IMAGES.customHome;
  * drawings, the build services show a house.
  */
 export const SERVICE_BACKGROUNDS: ServiceBackgroundConfig = {
-  "custom-home-builder": CONSTRUCTION_IMAGES.customHome,
+  "custom-home-builder": CONSTRUCTION_IMAGES.mountainModern,
   "semi-custom-homes": CONSTRUCTION_IMAGES.semiCustom,
   "build-on-your-lot": CONSTRUCTION_IMAGES.lot,
   "design-build": CONSTRUCTION_IMAGES.meeting,
@@ -47,7 +47,7 @@ export interface LandingImageSet {
  */
 const SERVICE_IMAGE_SETS: Record<string, LandingImageSet> = {
   "custom-home-builder": {
-    hero: CONSTRUCTION_IMAGES.customHome,
+    hero: CONSTRUCTION_IMAGES.mountainModern,
     breather: CONSTRUCTION_IMAGES.interior,
     process: CONSTRUCTION_IMAGES.framing,
   },
@@ -58,7 +58,7 @@ const SERVICE_IMAGE_SETS: Record<string, LandingImageSet> = {
   },
   "build-on-your-lot": {
     hero: CONSTRUCTION_IMAGES.lot,
-    breather: CONSTRUCTION_IMAGES.customHome,
+    breather: CONSTRUCTION_IMAGES.mountainModern,
     process: CONSTRUCTION_IMAGES.foundation,
   },
   "design-build": {

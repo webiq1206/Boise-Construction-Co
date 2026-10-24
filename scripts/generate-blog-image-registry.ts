@@ -33,8 +33,8 @@ const LIBRARY = {
     alt: 'Newly completed custom home with board-and-batten siding and a covered porch on a Treasure Valley lot',
   },
   semiCustom: {
-    src: img('semi-custom-home'),
-    alt: 'Newly built single-story semi-custom home on a serviced subdivision lot in Meridian, Idaho',
+    src: img('single-story-farmhouse-exterior'),
+    alt: 'White board-and-batten farmhouse with cedar porch posts, a metal porch roof and an attached garage, foothills behind',
   },
   framing: {
     src: img('home-under-framing'),
@@ -53,12 +53,12 @@ const LIBRARY = {
     alt: 'Wall cavities insulated and air sealed in a new Idaho home before drywall goes up',
   },
   interior: {
-    src: img('new-home-interior'),
-    alt: 'Finished great room in a new custom home with vaulted ceiling, stone fireplace, and foothills views',
+    src: img('great-room-timber-daylight'),
+    alt: 'Great room with timber trusses, a dining table and chairs, and daylight through a gable window',
   },
   kitchen: {
-    src: img('new-home-kitchen'),
-    alt: 'Newly completed kitchen in a custom home with a quartz island and full-height tile backsplash',
+    src: img('kitchen-alder-stone'),
+    alt: 'Kitchen with alder cabinets, a stone range wall, a dark granite island and a window facing the hills',
   },
   lot: {
     src: img('buildable-lot'),
@@ -133,8 +133,8 @@ const LIBRARY = {
     alt: 'New-home planning consultation at a kitchen table with printed floor plans and a tablet showing a 3D house model',
   },
   bidCompare: {
-    src: img('builder-bid-comparison'),
-    alt: 'Three residential construction bids fanned out on a desk with a highlighter marking line items for comparison',
+    src: img('bid-review-desk'),
+    alt: 'Folders, a highlighter, a tape measure and a hard hat on a desk for reviewing bids',
   },
   acreage: {
     src: img('rural-acreage-parcel'),
@@ -157,8 +157,8 @@ const LIBRARY = {
     alt: 'A laptop showing a builder-bid comparison chart beside two printed proposal folders and a notepad on a desk',
   },
   bidsVary: {
-    src: img('cost-breakdown-variance'),
-    alt: 'A detailed construction cost breakdown with a magnifying glass and highlighters showing how widely line-item prices vary',
+    src: img('material-choices'),
+    alt: 'Oak flooring, tile, lumber, yellow tubing and stone samples on a jobsite table',
   },
   utilityTrench: {
     src: img('utility-connections-trench'),
