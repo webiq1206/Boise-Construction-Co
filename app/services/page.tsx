@@ -15,6 +15,7 @@ import { servicePath } from '@/lib/seo-routes';
 import { CITY_HERO_IMAGES } from '@/shared/cityServiceImages';
 import { CITIES,SERVICES } from '@/shared/contentData';
 import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
+import { contentImageAlt } from '@/shared/imageAlts';
 import { getServiceBackground } from '@/shared/serviceBackgrounds';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { ArrowRight } from 'lucide-react';
@@ -87,7 +88,7 @@ export default function ServicesIndexPage() {
       </InteriorHero>
 
       {/* Approved photo-led service directory. */}
-      <section className="interior-service-grid" aria-label="All services">{SERVICES.map(service=><Link className="interior-service-card" href={servicePath(service.slug)} key={service.slug}><img src={getServiceBackground(service.slug)} alt={service.name} width={900} height={675} loading="lazy"/><div><h2>{service.name}</h2><ArrowRight size={18} aria-hidden="true"/></div><p>{service.shortDescription}</p><p className="interior-price">Planning from {service.planningFrom}</p></Link>)}</section>
+      <section className="interior-service-grid" aria-label="All services">{SERVICES.map(service=><Link className="interior-service-card" href={servicePath(service.slug)} key={service.slug}><img src={getServiceBackground(service.slug)} alt={contentImageAlt(getServiceBackground(service.slug)) || service.name} width={900} height={675} loading="lazy"/><div><h2>{service.name}</h2><ArrowRight size={18} aria-hidden="true"/></div><p>{service.shortDescription}</p><p className="interior-price">Planning from {service.planningFrom}</p></Link>)}</section>
 
       <EstimatePromptBand
         title={
@@ -116,7 +117,7 @@ export default function ServicesIndexPage() {
               </p>
             </Reveal>
           </div>
-          <div className="mt-[clamp(40px,5vw,72px)] grid gap-4 sm:grid-cols-3">
+          <div className="mt-[clamp(40px,5vw,72px)] grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {CITIES.map((city, i) => (
               <Reveal key={city.slug} delay={Math.min(i, 7) * 40}>
                 <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />

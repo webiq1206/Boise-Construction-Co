@@ -7,6 +7,13 @@ export interface TestimonialItem {
 }
 
 /**
+ * Public reviews stay off the site until they belong to this company.
+ * Database rows and this list stay in the repo. The API, pages, sitemap,
+ * and feeds omit them while this flag is false.
+ */
+export const SHOW_TESTIMONIALS = false;
+
+/**
  * Empty until real, attributable client reviews exist for Boise Construction Co.
  *
  * The previous entries were placeholder remodeling testimonials with invented
@@ -27,6 +34,7 @@ export function getTestimonialsFor(
   serviceSlug: string,
   citySlug: string,
 ): TestimonialItem[] {
+  if (!SHOW_TESTIMONIALS) return [];
   return TESTIMONIALS.filter(
     (t) => t.serviceType === serviceSlug && t.city === citySlug,
   );
@@ -34,5 +42,6 @@ export function getTestimonialsFor(
 
 /** Return all testimonials for a city (any service). Used on area pages. */
 export function getTestimonialsForCity(citySlug: string): TestimonialItem[] {
+  if (!SHOW_TESTIMONIALS) return [];
   return TESTIMONIALS.filter((t) => t.city === citySlug);
 }

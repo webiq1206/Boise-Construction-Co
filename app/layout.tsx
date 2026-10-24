@@ -17,6 +17,8 @@ import { consentBootstrap } from '@/lib/consentBootstrap'
 import { Suspense } from 'react'
 import { MetaPixel } from '@/components/MetaPixel'
 import { MicrosoftClarity } from '@/components/MicrosoftClarity'
+import { clarityFormMaskScript } from '@/lib/clarityFormMask'
+import Script from 'next/script'
 import { ConversionTracking } from '@/components/ConversionTracking'
 import { AssistantWidget } from '@/components/assistant/AssistantWidget'
 import './globals.css'
@@ -27,6 +29,8 @@ import './approved-family.css'
 import './approved-system.css'
 import './approved-interiors.css'
 import './audit-accessibility.css'
+import './design-refresh.css'
+import './contractor-registration.css'
 
 // P5 family typefaces, self-hosted. These are the same two files P5 Home Co
 // serves (Manrope and Cormorant Garamond, both variable-weight, both SIL Open
@@ -197,6 +201,11 @@ export default function RootLayout({
         </Providers>
         <GoogleAnalytics />
         <MetaPixel />
+        <Script
+          id="clarity-form-mask"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: clarityFormMaskScript }}
+        />
         <MicrosoftClarity />
         <ConversionTracking />
       </body>

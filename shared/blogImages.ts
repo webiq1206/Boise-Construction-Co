@@ -3,6 +3,7 @@ import {
   HUB_HERO_IMAGES,
   type BlogImageEntry,
 } from './blogImageRegistry';
+import { contentImageAlt } from './imageAlts';
 import { SITE_IMAGES } from './siteImages';
 
 const DEFAULT_BLOG_IMAGE = SITE_IMAGES.hero;
@@ -24,7 +25,9 @@ export function getBlogImageForSlug(
 }
 
 export function getBlogImageAlt(slug: string): string {
-  return BLOG_IMAGE_REGISTRY[slug]?.alt ?? 'Boise Construction Co new home construction';
+  const entry = BLOG_IMAGE_REGISTRY[slug];
+  if (!entry) return 'Boise Construction Co new home construction';
+  return contentImageAlt(entry.hero) || entry.alt;
 }
 
 export function getBlogHeroImage(
@@ -98,8 +101,10 @@ export function getArticleInlineFigures(
       figures.push({
         afterSectionIndex: Math.floor(sectionCount / 2),
         src: hubHero,
-        alt: Object.values(BLOG_IMAGE_REGISTRY).find((image) => image.hero === hubHero)?.alt
-          ?? INLINE_HUB_ALTS[hubSlug] ?? `${hubSlug.replace(/-/g, ' ')} imagery`,
+        alt: contentImageAlt(hubHero)
+          || Object.values(BLOG_IMAGE_REGISTRY).find((image) => image.hero === hubHero)?.alt
+          || INLINE_HUB_ALTS[hubSlug]
+          || `${hubSlug.replace(/-/g, ' ')} imagery`,
       });
     }
   }

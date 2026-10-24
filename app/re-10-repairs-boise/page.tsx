@@ -29,6 +29,7 @@ RE10_SERVICE_AREAS,
 RE10_SERVICES,
 } from "@/shared/content/re10Content";
 import { SITE_CONFIG } from "@/shared/siteConfig";
+import { contentImageAlt } from "@/shared/imageAlts";
 import { SITE_IMAGES } from "@/shared/siteImages";
 import { AlertTriangle,ArrowRight,Check,MessageSquare,Phone } from "lucide-react";
 import type { Metadata } from "next";
@@ -102,7 +103,8 @@ export default function Re10RepairsPage() {
       {/* ------------------------------------------------------------ hero */}
       <PageHeroBand
         imageSrc={SITE_IMAGES.processInProgress}
-        imageAlt="A worker beside exterior wall framing, with stacked lumber and a concrete slab on a new-home site"
+        imageAlt={contentImageAlt(SITE_IMAGES.processInProgress)}
+        imageCaption="Representative imagery"
         scrim={0.86}
       >
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "RE-10 Repairs" }]} />
