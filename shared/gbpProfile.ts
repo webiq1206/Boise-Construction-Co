@@ -7,6 +7,7 @@
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { FOUNDING } from '@/shared/publicFlags';
 import { CITIES } from '@/shared/contentData';
+import { insertPreferToTextAfterBusinessDay } from '@/shared/textReply';
 
 const SITE = SITE_CONFIG.siteUrl.replace(/\/$/, '');
 
@@ -105,8 +106,9 @@ export const GBP_ATTRIBUTES = {
 } as const;
 
 export const GBP_MESSAGING = {
-  welcomeMessage:
+  welcomeMessage: insertPreferToTextAfterBusinessDay(
     'Thanks for reaching out to Boise Construction Co. We respond within one business day. For faster help, call (208) 477-1169 or book a planning consultation at boiseconstruction.co/contact',
+  ),
 } as const;
 
 export interface GbpService {
@@ -368,7 +370,9 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   },
   {
     question: 'How do I get started?',
-    answer: `Call (208) 477-1169, text us at the same number, or book online: ${SITE}/contact. We respond within one business day.`,
+    answer: insertPreferToTextAfterBusinessDay(
+      `Call (208) 477-1169, text us at the same number, or book online: ${SITE}/contact. We respond within one business day.`,
+    ),
   },
 ];
 

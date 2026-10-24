@@ -10,6 +10,7 @@ import {
 import { Section } from "@/components/marketing/Section";
 import { SectionHeader } from "@/components/marketing/SectionHeader";
 import { Button } from "@/components/ui/button";
+import { CopyWithTextReply } from "@/components/PreferToTextLine";
 import { RE10_FAQS } from "@/shared/content/re10Content";
 
 /**
@@ -57,7 +58,7 @@ export function Re10Faqs() {
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-5">
-                  {faq.answer}
+                  <CopyWithTextReply text={faq.answer} />
                 </AccordionContent>
               </AccordionItem>
             ))}

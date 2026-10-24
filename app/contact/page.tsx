@@ -1,6 +1,7 @@
 import { InteriorEstimateLink,InteriorHero,InteriorPage } from '@/components/approved/InteriorLayout';
 import { BusinessPhoneContact } from '@/components/BusinessPhoneContact';
 import { ConsultationForm } from '@/components/ConsultationForm';
+import { CopyWithTextReply, PreferToTextLine } from '@/components/PreferToTextLine';
 import { Section } from '@/components/marketing';
 import { Hairline } from '@/components/marketing/Hairline';
 import { MarketingCard } from '@/components/marketing/MarketingCard';
@@ -31,6 +32,7 @@ import { areaPath } from '@/lib/seo-routes';
 import { CITIES,TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { CONTACT_FAQS } from '@/shared/contactFaqs';
 import { CONSULT_BULLETS,HERO_STATS } from '@/shared/siteContent';
 import { contentImageAlt } from '@/shared/imageAlts';
 import { SITE_IMAGES } from '@/shared/siteImages';
@@ -38,37 +40,7 @@ import { ArrowRight,Check,ChevronRight,Mail,MapPin,MessageSquare,Phone } from 'l
 import Image from 'next/image';
 import Link from 'next/link';
 
-const CONTACT_FAQS = [
-  {
-    question: 'How quickly will you respond to my inquiry?',
-    answer:
-      'We respond within one business day. Call us during business hours for an immediate conversation, or submit the form and we will reach out to schedule your free planning consultation.',
-  },
-  {
-    question: 'Is the planning consultation really free?',
-    answer:
-      'Yes. The 60 to 90 minute consultation is free with no obligation. We meet at our office, or on your lot if you already own one, and you leave with a budget band, a realistic schedule, and a read on what your site will require - never a high-pressure sales pitch.',
-  },
-  {
-    question: 'Do I need to own land before I contact you?',
-    answer:
-      'No. Roughly half the people who call us are still looking. We will walk a lot with you before you buy and tell you what it will cost to build on, which is the single most useful thing you can know before making an offer.',
-  },
-  {
-    question: 'What areas do you serve?',
-    answer: `We build in ${TREASURE_VALLEY_CITIES}, and surrounding Treasure Valley communities across Ada and Canyon County.`,
-  },
-  {
-    question: 'Do you handle permits?',
-    answer:
-      'Yes. Building permits, plan review, engineering, and utility applications are part of our design-build scope and handled in-house for both Ada and Canyon County jurisdictions.',
-  },
-  {
-    question: 'How do I get a cost estimate for my home?',
-    answer:
-      'Use our online build cost estimator for a preliminary range, then book a free consultation for a written, line-item budget tailored to your plan and your lot.',
-  },
-];
+
 
 const SPEAKABLE_SUMMARY =
   `Contact ${SITE_CONFIG.name} for a free consultation. Schedule a free 60 to 90 minute planning consultation, call our team, or send your project details to our team for an estimate review.`;
@@ -255,7 +227,8 @@ export default function ContactPage() {
                   <p className="text-base leading-relaxed mb-8 text-muted-foreground">
                     Send a few details and we will reach out within one business day to schedule
                     your free 60 to 90 minute planning consultation - budget band, schedule, and
-                    site requirements, with no obligation.
+                    site requirements, with no obligation.{" "}
+                    <PreferToTextLine />
                   </p>
                 </Reveal>
               </div>
@@ -278,7 +251,12 @@ export default function ContactPage() {
                   <em className="brc-accent">connect</em>
                 </>
               }
-              description="Call, email, or visit - we respond within one business day and never use high-pressure sales tactics."
+              description={
+                <>
+                  Call, email, or visit - we respond within one business day and never use high-pressure sales tactics.{" "}
+                  <PreferToTextLine />
+                </>
+              }
               className="max-w-3xl"
             />
             <div className="ed-grid-balance grid sm:grid-cols-2 gap-4">
@@ -315,6 +293,7 @@ export default function ContactPage() {
                   label="Email us"
                   href={`mailto:${SITE_CONFIG.email}`}
                   subtext="Response within one business day"
+                  companion={<>{" "}<PreferToTextLine className="text-sm text-muted-foreground" /></>}
                 >
                   {SITE_CONFIG.email}
                 </ContactChannel>
@@ -396,7 +375,7 @@ export default function ContactPage() {
                     <li key={bullet}>
                       <div className="flex items-start gap-3 py-4">
                         <Check className="h-4 w-4 text-accent-legible flex-shrink-0 mt-0.5" />
-                        <span className="text-base text-foreground">{bullet}</span>
+                        <span className="text-base text-foreground"><CopyWithTextReply text={bullet} /></span>
                       </div>
                       {i < CONSULT_BULLETS.length - 1 && (
                         <Hairline spaced={false} className="my-0" />
@@ -432,7 +411,7 @@ export default function ContactPage() {
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent className="text-sm leading-relaxed pb-6 text-muted-foreground">
-                      {faq.answer}
+                      <CopyWithTextReply text={faq.answer} />
                     </AccordionContent>
                   </AccordionItem>
                 ))}
