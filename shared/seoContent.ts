@@ -9,6 +9,8 @@ import type { LandingSection } from '@/components/seo/LandingPageTemplate';
 export interface FAQItem {
   question: string;
   answer: string;
+  /** Visible inline anchors. Schema and the answer string stay plain text. */
+  links?: { phrase: string; href: string }[];
 }
 
 /** Minimal shape of a CITY_SEO_DATA entry needed to build local sections. */

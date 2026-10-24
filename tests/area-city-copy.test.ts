@@ -16,7 +16,22 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
     const copy = getAreaCityCopy(slug);
     assert.ok(copy, slug);
     assert.equal(getAreaIntro(city), copy.intro);
-    assert.equal(copy.faqs.length, 7);
+    assert.equal(copy.faqs.length, slug === 'middleton' ? 9 : 7);
+    if (slug === 'middleton') {
+      assert.equal(copy.lead?.join(' '), copy.intro);
+      assert.match(copy.intro, /Looking for a custom home builder in Middleton\?/);
+      assert.match(copy.intro, /about 90% of occupied homes are owner-occupied/);
+      assert.match(copy.intro, /\(47%\) has been built since 2010, per Census ACS 2020/);
+      assert.doesNotMatch(copy.intro, /\$|warranty|10 to 14 months|525,000/i);
+      assert.equal(copy.faqs[7].question, 'Do you build custom homes in Middleton?');
+      assert.equal(copy.faqs[7].links?.[0]?.href, '/guides/middleton-home-building-guide');
+      assert.match(copy.faqs[7].answer, /Middleton home building guide/);
+      assert.equal(copy.faqs[8].question, 'Who is a custom home builder in Middleton for?');
+      assert.match(copy.faqs[5].answer, /section 4-1-1/);
+      assert.match(copy.faqs[6].answer, /5,550 heating degree days/);
+    } else {
+      assert.equal(copy.lead, undefined);
+    }
     assert.equal(copy.faqs[0].question, 'What kinds of homes do you build?');
     assert.equal(copy.faqs[1].question, 'Are you a registered contractor and insured?');
     assert.equal(copy.faqs[2].question, 'How do I start a project?');
@@ -70,6 +85,26 @@ test('misplaced landmarks are corrected only on the city that listed them', () =
   assert.equal(indianCreekDescription('Boise'), '');
   assert.equal(indianCreekDescription('Meridian'), '');
   assert.equal(indianCreekDescription('Star'), '');
+});
+
+test('Middleton guide title, meta, and intro keep live cost and warranty lines', () => {
+  const guide = LOCATION_GUIDES.find((g) => g.slug === 'middleton-home-building-guide');
+  assert.ok(guide);
+  assert.equal(guide.title, 'Custom Home Building in Middleton');
+  assert.equal(guide.seoTitle, 'Custom Home Building Guide for Middleton, ID');
+  assert.equal(
+    guide.metaDescription,
+    'Guide for custom home builders and homeowners in Middleton: Canyon County vs city permits, subdivision vs acreage, site work ranges, and how a design-build team runs the project.',
+  );
+  assert.match(guide.content, /<strong>custom home builder in Middleton<\/strong>/);
+  assert.match(guide.content, /href="\/areas\/middleton">Middleton area page<\/a>/);
+  assert.match(guide.content, /href="\/services\/custom-home-builder">Treasure Valley custom home builder<\/a>/);
+  assert.match(guide.content, /a one-year workmanship warranty after possession/);
+  assert.match(guide.content, /\$225 to \$300 per finished square foot/);
+  assert.match(guide.content, /\$250 to \$400 for custom/);
+  assert.match(guide.content, /\$25,000 to \$50,000/);
+  assert.match(guide.content, /\$80,000 to \$150,000/);
+  assert.match(guide.content, /\$950 to \$3,500/);
 });
 
 test('Hidden Springs is its own community on the Boise side, not an Eagle neighborhood', () => {

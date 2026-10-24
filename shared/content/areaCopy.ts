@@ -8,7 +8,18 @@ import type { FAQItem } from '../seoContent';
 export interface AreaCityCopy {
   intro: string;
   faqs: FAQItem[];
+  /**
+   * Hero paragraphs under the H1. When set, the area page renders these
+   * instead of the shared answer-first overview. `intro` is the same text
+   * joined for speakable summary and schema.
+   */
+  lead?: readonly string[];
 }
+
+const MIDDLETON_LEAD = [
+  'Looking for a custom home builder in Middleton? Boise Construction Co is a design-build home builder serving Middleton and Canyon County. We build fully custom homes, semi-custom plans, and homes on land you already own - with one accountable team from feasibility through the final walkthrough.',
+  'Middleton is a homeowner\'s town: about 90% of occupied homes are owner-occupied, and nearly half of all housing (47%) has been built since 2010, per Census ACS 2020–2024 estimates. We build for clients here and throughout Canyon County. Confirm the permitting authority for the project address before applying.',
+] as const;
 
 const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
   boise: {
@@ -299,8 +310,8 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
     ],
   },
   middleton: {
-    intro:
-      'Middleton is a homeowner\'s town: about 90% of occupied homes are owner-occupied, and nearly half of all housing (47%) has been built since 2010, per Census ACS 2020–2024 estimates. We build new homes for clients here and throughout Canyon County, whether fully custom, semi-custom, or on land you already own, and one accountable team stays with the project from feasibility through the final walkthrough.',
+    intro: MIDDLETON_LEAD.join(' '),
+    lead: MIDDLETON_LEAD,
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -336,6 +347,22 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
         question: 'How much heating does a Middleton home need?',
         answer:
           'Plenty. The closest long-term NOAA station sits at the Nampa Sugar Factory, about 7 miles from Middleton to the south-southeast, and it logs roughly 5,550 heating degree days a year in its 1991–2020 normals, plus about 13 days whose high stays below freezing. That\'s why insulation, air sealing, and window choices get early attention in our designs, and our energy-efficient homes are verified with blower-door testing.',
+      },
+      {
+        question: 'Do you build custom homes in Middleton?',
+        answer:
+          'Yes. We build custom, semi-custom, and build-on-your-lot homes in Middleton and across Canyon County, including neighborhoods such as Middleton Heights. We evaluate a Middleton lot before you buy when that helps the decision. More local detail is in our Middleton home building guide.',
+        links: [
+          {
+            phrase: 'Middleton home building guide',
+            href: '/guides/middleton-home-building-guide',
+          },
+        ],
+      },
+      {
+        question: 'Who is a custom home builder in Middleton for?',
+        answer:
+          'Homeowners who want a home designed from a blank page, an adapted plan, or a build on land they already own - not a catalog-only production home. Start with a free planning consultation or our construction estimator for a planning range.',
       },
     ],
   },

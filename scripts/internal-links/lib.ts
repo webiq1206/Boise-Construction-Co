@@ -135,6 +135,12 @@ export function buildPages(): PageNode[] {
   }
 
   for (const guide of GUIDE_PAGES) {
+    // "custom" in the new Middleton H1 retunes unrelated related cards.
+    // Similarity keeps the previous title tokens; visible anchors use guide.title.
+    const tokenTitle =
+      guide.slug === 'middleton-home-building-guide'
+        ? 'Building a Home in Middleton'
+        : guide.title;
     pages.push({
       id: `guide:${guide.slug}`,
       type: "guide",
@@ -144,7 +150,7 @@ export function buildPages(): PageNode[] {
       category: guide.hubSlug,
       hubSlug: guide.hubSlug,
       tags: guide.tags ?? [],
-      tokens: tokenSet(guide.title, guide.excerpt, (guide.tags ?? []).join(" "), guide.hubSlug),
+      tokens: tokenSet(tokenTitle, guide.excerpt, (guide.tags ?? []).join(" "), guide.hubSlug),
       overrides: guide.relatedLinks ?? [],
     });
   }

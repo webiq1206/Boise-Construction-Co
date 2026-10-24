@@ -237,7 +237,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   guide('eagle-home-building-guide', 'Building a Home in Eagle', 'treasure-valley-locations', 'location'),
   guide('kuna-home-building-guide', 'Building a Home in Kuna', 'treasure-valley-locations', 'location'),
   guide('star-home-building-guide', 'Building a Home in Star', 'treasure-valley-locations', 'location'),
-  guide('middleton-home-building-guide', 'Building a Home in Middleton', 'treasure-valley-locations', 'location'),
+  guide('middleton-home-building-guide', 'Custom Home Building in Middleton', 'treasure-valley-locations', 'location'),
   guide('nampa-home-building-guide', 'Building a Home in Nampa', 'treasure-valley-locations', 'location'),
   guide('caldwell-home-building-guide', 'Building a Home in Caldwell', 'treasure-valley-locations', 'location'),
   guide('eagle-foothills-home-building-guide', 'Building in the Eagle Foothills', 'treasure-valley-locations', 'neighborhood'),

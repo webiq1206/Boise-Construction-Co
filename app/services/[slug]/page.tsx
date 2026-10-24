@@ -96,7 +96,20 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
       paragraphs: [
         `We provide ${serviceLC} services throughout the Treasure Valley, with dedicated local pages for each city we serve. Lot availability, permit paths, impact fees, and HOA design review differ between Ada and Canyon County communities, so each city page covers the details that matter where you plan to build.`,
         `Choose your city below to see local ${serviceLC} guidance, or schedule a free planning consultation to discuss your build directly.`,
+        ...(service.slug === 'custom-home-builder'
+          ? [
+              'Middleton (Canyon County) has its own city vs county permit path - see the area page.',
+            ]
+          : []),
       ],
+      paragraphLinks:
+        service.slug === 'custom-home-builder'
+          ? [
+              undefined,
+              undefined,
+              [{ phrase: 'area page', href: '/areas/middleton' }],
+            ]
+          : undefined,
       links: CITIES.map((c) => ({
         label: `${service.name} in ${c.name}`,
         href: `/services/${service.slug}/${c.slug}`,
