@@ -97,10 +97,13 @@ export default function PrivacyPolicyPage() {
 
             <h2 id="cookies-analytics-advertising">Cookies, analytics and advertising</h2>
             <p>
-              We use Google Analytics 4 (GA4) to understand how visitors use this site and Google Ads to measure which of our ads lead to quote requests, calls and texts. These tools set cookies and receive information about your visit, including your IP address, which Google processes under its own privacy policy (<a href="https://policies.google.com/privacy">https://policies.google.com/privacy</a>). When you tap Call or Text on our site, Google Ads is told that the tap happened, on which page, and the ad click identifier Google's tag saved if you arrived from one of our ads, so we can count calls and texts that come from our ads. The tap itself doesn't send Google your name, your own phone number or what you say or write. Google Analytics also records the tap, including the number tapped, which is our business number. Google Ads receives a random reference number for your inquiry so each lead is counted only once.
+              We use Google Analytics 4 (GA4) to understand how visitors use this site and Google Ads to measure which of our ads lead to quote requests, calls and texts. These tools set cookies and receive information about your visit, including your IP address, which Google processes under its own privacy policy (<a href="https://policies.google.com/privacy">https://policies.google.com/privacy</a>). When you tap Call or Text on our site, Google Ads is told that the tap happened, on which page, and the ad click identifier Google's tag saved if you arrived from one of our ads, so we can count calls and texts that come from our ads. The tap itself doesn't send Google your name, your own phone number or what you say or write. Google Analytics also records the tap, including the number tapped, which is our business number.
             </p>
             <p>
               If your call goes through a Google forwarding number, Google connects the call and can see the calling number and call length, but not what's said.
+            </p>
+            <p>
+              Google Ads receives a random reference number for your inquiry so each lead is counted only once.
             </p>
             <p>
               We also use Microsoft Clarity to see how visitors use our pages through heatmaps and session recordings; form fields are masked so what you type is not recorded. Microsoft processes this under its own privacy statement (<a href="https://privacy.microsoft.com/privacystatement">https://privacy.microsoft.com/privacystatement</a>).
