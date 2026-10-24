@@ -7,6 +7,21 @@ import {schemaTime} from './schemaTime';
 import { BUSINESS_INFO, CITY_SEO_DATA, getBaseUrl } from './seo';
 import { SERVICES } from '@/shared/contentData';
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { FOUNDING, PUBLIC_MARK_PATH, SHOW_FOUNDING_YEAR } from '@/shared/publicFlags';
+import { CONTRACTOR_REGISTRATION_NUMBER } from '@/shared/contractorRegistration';
+
+/** Idaho registers contractors. The same credential is on LocalBusiness, Organization, and Service. */
+const CONTRACTOR_CREDENTIAL = {
+  '@type': 'EducationalOccupationalCredential',
+  credentialCategory: 'registration',
+  name: 'Idaho Registered Contractor',
+  identifier: CONTRACTOR_REGISTRATION_NUMBER,
+  recognizedBy: {
+    '@type': 'GovernmentOrganization',
+    name: 'Idaho Division of Occupational and Professional Licenses',
+    url: 'https://dopl.idaho.gov/con/',
+  },
+};
 
 interface SchemaContext {
   '@context': string;
@@ -80,8 +95,10 @@ export const PUBLIC_CONTACT_POINT = {
 // Organization logo for knowledge-panel / rich-result use. The approved seal on
 // a charcoal disc (bone lettering, ochre ring) is square and stays legible on
 // any background, unlike the reverse wordmark which vanished on Google's white
-// panels. Served at its native 512px with explicit dimensions.
-const LOGO_URL = `${baseUrl}/brand/png/seal/any/boise-construction-co-seal-on-charcoal-accent-512px.png`;
+// panels. Served at its native 512px with explicit dimensions. While
+// SHOW_FOUNDING_YEAR is off, the public mark is the year-free icon; the seal
+// path stays in shared/publicFlags.ts.
+const LOGO_URL = `${baseUrl}${PUBLIC_MARK_PATH}`;
 const LOGO_SIZE = 512;
 
 /**
@@ -123,6 +140,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     parentOrganization: { '@id': ORG_ID },
     telephone: BUSINESS_INFO.phone,
     email: BUSINESS_INFO.email,
+    hasCredential: CONTRACTOR_CREDENTIAL,
     address: PUBLIC_POSTAL_ADDRESS,
     contactPoint: PUBLIC_CONTACT_POINT,
     geo: {
@@ -153,7 +171,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
           },
         }
       : {}),
-    foundingDate: BUSINESS_INFO.founded,
+    ...(SHOW_FOUNDING_YEAR ? { foundingDate: BUSINESS_INFO.founded } : {}),
     slogan: 'Boise\'s Design-Build Home Builder',
     paymentAccepted: 'Cash, Credit Card, Check, Financing',
     currenciesAccepted: 'USD',
@@ -209,6 +227,7 @@ export function generateServiceSchema(serviceName: string, serviceDescription: s
       name: BUSINESS_INFO.name,
       telephone: BUSINESS_INFO.phone,
       email: BUSINESS_INFO.email,
+      hasCredential: CONTRACTOR_CREDENTIAL,
       priceRange: '$$',
       address: PUBLIC_POSTAL_ADDRESS,
       contactPoint: PUBLIC_CONTACT_POINT,
@@ -269,8 +288,9 @@ export function generateOrganizationSchema(): SchemaContext {
       width: LOGO_SIZE,
       height: LOGO_SIZE,
     },
-    description: 'Design-build home builder serving the Treasure Valley since 2020. Custom homes, semi-custom homes, builds on client-owned land, and shop homes. Bonded, insured, and committed to line-item budgets before construction.',
-    foundingDate: BUSINESS_INFO.founded,
+    description: FOUNDING.schemaDescription,
+    hasCredential: CONTRACTOR_CREDENTIAL,
+    ...(SHOW_FOUNDING_YEAR ? { foundingDate: BUSINESS_INFO.founded } : {}),
     // founder is gated: only emitted once a real named founder is supplied in
     // BUSINESS_INFO.founderName (see seo-audit/trust-signal-map.md).
     ...(BUSINESS_INFO.founderName

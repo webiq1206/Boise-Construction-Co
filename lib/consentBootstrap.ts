@@ -1,4 +1,9 @@
-/** Bridge a CMP's standard gtag consent commands. Defaults are granted, matching the other P5 sites, which set no consent default. */
+/**
+ * US visitors are measured without a banner. The other P5 sites set no consent
+ * default, so Google treats those tags as granted. This site checks p5Consent
+ * before a call tap or a forwarding-number swap, so the same four signals
+ * start granted, and that default is queued before any tag config.
+ */
 export function consentBootstrap():string {
   return `(function(){
     if(window.p5UpdateConsent)return;

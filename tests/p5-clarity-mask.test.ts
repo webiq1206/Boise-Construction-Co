@@ -1,150 +1,179 @@
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
-import vm from 'node:vm';
-import {clarityFieldMaskBootstrap} from '../lib/clarityFieldMask.ts';
+import { clarityFormMaskScript } from '../lib/clarityFormMask.ts';
 
-type Node = {
+type FakeEl = {
   nodeType: number;
-  nodeName: string;
-  parentNode: Node | null;
-  children: Node[];
+  tag: string;
+  tagName: string;
+  type: string;
   attrs: Record<string, string>;
+  children: FakeEl[];
+  parentElement: FakeEl | null;
+  append: (child: FakeEl) => void;
+  getAttribute: (name: string) => string | null;
   setAttribute: (name: string, value: string) => void;
-  getAttribute: (name: string) => string | undefined;
-  querySelectorAll: (selector: string) => Node[];
+  querySelectorAll: (selector: string) => FakeEl[];
 };
 
-function element(name: string, attrs: Record<string, string> = {}): Node {
-  const node: Node = {
+function el(tag: string, children: FakeEl[] = [], type = ''): FakeEl {
+  const node = {
     nodeType: 1,
-    nodeName: name.toUpperCase(),
-    parentNode: null,
-    children: [],
-    attrs: {...attrs},
-    setAttribute(attr, value) {
-      node.attrs[attr] = value;
+    tag,
+    tagName: tag.toUpperCase(),
+    type: type || (tag === 'input' ? 'text' : ''),
+    attrs: {} as Record<string, string>,
+    children: [] as FakeEl[],
+    parentElement: null as FakeEl | null,
+    append(child: FakeEl) {
+      child.parentElement = this;
+      this.children.push(child);
     },
-    getAttribute(attr) {
-      return node.attrs[attr];
+    getAttribute(name: string) {
+      return Object.prototype.hasOwnProperty.call(this.attrs, name) ? this.attrs[name] : null;
     },
-    querySelectorAll(selector) {
-      const names = selector.split(',').map((part) => part.trim().toUpperCase());
-      const found: Node[] = [];
-      const walk = (current: Node) => {
-        if (names.includes(current.nodeName)) found.push(current);
+    setAttribute(name: string, value: string) {
+      this.attrs[name] = value;
+    },
+    querySelectorAll(selector: string) {
+      const tags = selector.split(',').map((part) => part.trim().toLowerCase());
+      const out: FakeEl[] = [];
+      const walk = (current: FakeEl) => {
+        if (tags.includes(current.tag)) out.push(current);
         current.children.forEach(walk);
       };
-      node.children.forEach(walk);
-      return found;
+      this.children.forEach(walk);
+      return out;
     },
   };
+  if (type) node.attrs.type = type;
+  children.forEach((child) => node.append(child));
   return node;
 }
 
-function append(parent: Node, child: Node) {
-  child.parentNode = parent;
-  parent.children.push(child);
-  return child;
+function masked(node: FakeEl): boolean {
+  return node.attrs['data-clarity-mask'] === 'True';
 }
 
-function install(body: Node) {
-  const document = {
-    readyState: 'complete',
-    body,
-    nodeType: 9,
-    querySelectorAll: (selector: string) => body.querySelectorAll(selector),
-    addEventListener() {},
-  };
-  let callback: ((records: Array<{addedNodes: Node[]}>) => void) | undefined;
+type Observer = { callback: (mutations: Array<{ addedNodes?: FakeEl[] }>) => void };
+
+function run(root: FakeEl) {
+  const observers: Observer[] = [];
+  const documentQueries: unknown[] = [];
   class MutationObserver {
-    constructor(fn: (records: Array<{addedNodes: Node[]}>) => void) {
-      callback = fn;
+    callback: Observer['callback'];
+    constructor(callback: Observer['callback']) {
+      this.callback = callback;
+      observers.push(this);
     }
     observe() {}
   }
-  vm.runInNewContext(clarityFieldMaskBootstrap(), {document, MutationObserver});
-  return callback;
+  const document = {
+    nodeType: 9,
+    readyState: 'complete',
+    documentElement: root,
+    addEventListener() {},
+    querySelectorAll(selector: string) {
+      documentQueries.push(document);
+      return root.querySelectorAll(selector);
+    },
+  };
+  new Function('document', 'MutationObserver', clarityFormMaskScript)(document, MutationObserver);
+  return { observers, documentQueries };
 }
 
-test('a form masks its echoed text, and a checkbox outside a form masks its parent', () => {
-  const body = element('body');
-  const form = append(body, element('form'));
-  const echo = append(form, element('p'));
-  const sent = append(form, element('p'));
-  const suggestions = append(form, element('ul'));
-  const radio = append(form, element('button'));
-  const label = append(form, element('label'));
-  append(label, element('input', {type: 'checkbox'}));
-  const loose = append(body, element('label'));
-  const box = append(loose, element('input', {type: 'checkbox'}));
-
-  install(body);
-
-  assert.equal(form.attrs['data-clarity-mask'], 'True');
-  assert.equal(echo.parentNode, form);
-  assert.equal(sent.parentNode, form);
-  assert.equal(suggestions.parentNode, form);
-  assert.equal(radio.parentNode, form);
-  assert.equal(label.attrs['data-clarity-mask'], undefined);
-  assert.equal(loose.attrs['data-clarity-mask'], 'True');
-  assert.equal(box.attrs['data-clarity-mask'], 'True');
+test('a masked form covers nested project text and leaves a checkbox parent unmarked', () => {
+  const projectCopy = el('div');
+  const checkbox = el('input', [], 'checkbox');
+  const label = el('label', [checkbox]);
+  const address = el('input');
+  const preferred = el('button');
+  const form = el('form', [projectCopy, label, address, preferred]);
+  const root = el('html', [el('body', [form])]);
+  run(root);
+  assert.equal(masked(form), true);
+  assert.equal(masked(projectCopy), false);
+  assert.equal(masked(label), false);
+  assert.equal(masked(checkbox), false);
+  assert.equal(masked(address), true);
+  assert.equal(masked(preferred), false);
 });
 
-test('mutations mask only the added node', () => {
-  const body = element('body');
-  const callback = install(body);
-  const added = element('form');
-  append(added, element('p'));
-  const boxParent = element('label');
-  append(boxParent, element('input', {type: 'checkbox'}));
-  assert.equal(typeof callback, 'function');
-  callback?.([{addedNodes: [added, boxParent]}]);
-  assert.equal(added.attrs['data-clarity-mask'], 'True');
-  assert.equal(boxParent.attrs['data-clarity-mask'], 'True');
-  assert.equal(body.attrs['data-clarity-mask'], undefined);
-});
-
-test('the mask script is in the document head, ahead of Clarity', () => {
-  const layout = fs.readFileSync(new URL('../app/layout.tsx', import.meta.url), 'utf8');
-  const mask = layout.indexOf('id="p5-clarity-mask"');
-  const clarity = layout.indexOf('<MicrosoftClarity />');
-  assert.ok(mask > 0 && clarity > mask);
-  const script = clarityFieldMaskBootstrap();
-  assert.match(script, /querySelectorAll\('form,input,textarea,select'\)/);
-  assert.match(script, /type==='checkbox'\|\|type==='radio'\|\|type==='range'\|\|type==='button'/);
-});
-
-test('a checkbox parent is never body or html', () => {
-  const body = element('body');
-  append(body, element('input', {type: 'checkbox'}));
-  install(body);
-  assert.equal(body.attrs['data-clarity-mask'], undefined);
-
-  const html = element('html');
-  const radio = append(html, element('input', {type: 'radio'}));
-  const document = {
-    readyState: 'complete',
-    body: html,
-    nodeType: 9,
-    querySelectorAll: (selector: string) => html.querySelectorAll(selector),
-    addEventListener() {},
-  };
-  class MutationObserver {
-    constructor(_fn: (records: Array<{addedNodes: Node[]}>) => void) {}
-    observe() {}
+test('a checkbox, radio, range, or button input with no masked ancestor marks its parent', () => {
+  const checkbox = el('input', [], 'checkbox');
+  const checkboxParent = el('div', [checkbox]);
+  const radio = el('input', [], 'radio');
+  const radioParent = el('label', [radio]);
+  const range = el('input', [], 'range');
+  const rangeParent = el('div', [range]);
+  const buttonInput = el('input', [], 'button');
+  const buttonParent = el('div', [buttonInput]);
+  const typed = el('input');
+  const typedParent = el('div', [typed]);
+  const root = el('html', [el('body', [checkboxParent, radioParent, rangeParent, buttonParent, typedParent])]);
+  run(root);
+  for (const parent of [checkboxParent, radioParent, rangeParent, buttonParent]) {
+    assert.equal(masked(parent), true);
   }
-  vm.runInNewContext(clarityFieldMaskBootstrap(), {document, MutationObserver});
-  assert.equal(html.attrs['data-clarity-mask'], undefined);
-  assert.equal(radio.attrs['data-clarity-mask'], 'True');
+  assert.equal(masked(checkbox), false);
+  assert.equal(masked(typed), true);
+  assert.equal(masked(typedParent), false);
 });
 
-test('the consultation success state masks the name and address', () => {
-  const source = fs.readFileSync(new URL('../components/ConsultationForm.tsx', import.meta.url), 'utf8');
-  assert.match(source, /data-testid="consultation-success"[^>]*data-clarity-mask="True"/);
+test('a mutation masks only the added node', () => {
+  const existing = el('input');
+  const untouched = el('div');
+  const body = el('body', [existing, untouched]);
+  const root = el('html', [body]);
+  const { observers, documentQueries } = run(root);
+  assert.equal(masked(existing), true);
+  assert.equal(documentQueries.length, 1);
+  const addedChoice = el('input', [], 'checkbox');
+  const addedParent = el('div', [addedChoice]);
+  const addedForm = el('form', [el('p'), addedParent]);
+  observers[0].callback([{ addedNodes: [addedForm] }]);
+  assert.equal(documentQueries.length, 1);
+  assert.equal(masked(addedForm), true);
+  assert.equal(masked(addedParent), false);
+  assert.equal(masked(untouched), false);
 });
 
-test('the assistant transcript is masked', () => {
-  const source = fs.readFileSync(new URL('../components/assistant/AssistantWidget.tsx', import.meta.url), 'utf8');
-  assert.match(source, /role="log"[\s\S]{0,120}data-clarity-mask="True"/);
+test('the root layout installs the Clarity mask before the Clarity tag', () => {
+  const layout = readFileSync(new URL('../app/layout.tsx', import.meta.url), 'utf8');
+  const maskAt = layout.indexOf('id="clarity-form-mask"');
+  const clarityAt = layout.indexOf('<MicrosoftClarity />');
+  assert.ok(maskAt > 0);
+  assert.ok(clarityAt > maskAt);
+  assert.match(layout, /strategy="beforeInteractive"/);
+  assert.equal(readFileSync(new URL('../components/P5Estimator.tsx', import.meta.url), 'utf8').includes('data-clarity-mask'), false);
+});
+
+test('the consultation success screen and assistant transcript are masked', () => {
+  const consult = readFileSync(new URL('../components/ConsultationForm.tsx', import.meta.url), 'utf8');
+  const successAt = consult.indexOf('data-testid="consultation-success"');
+  assert.match(consult.slice(successAt, successAt + 120), /data-clarity-mask="True"/);
+  const assistant = readFileSync(new URL('../components/assistant/AssistantWidget.tsx', import.meta.url), 'utf8');
+  const logAt = assistant.indexOf('role="log"');
+  assert.match(assistant.slice(logAt, logAt + 220), /data-clarity-mask="True"/);
+});
+
+
+test('choice inputs never mask the whole body or html element', () => {
+  for (const tag of ['body', 'html']) {
+    const choice = el('input', [], 'checkbox');
+    const root = el(tag, [choice]);
+    run(root);
+    assert.equal(masked(root), false, tag);
+    assert.equal(masked(choice), true, tag);
+  }
+});
+
+test('privacy reconciliation preserves newer disclosures and inquiry deduplication', () => {
+  const policy = readFileSync(new URL('../app/privacy-policy/page.tsx', import.meta.url), 'utf8');
+  assert.match(policy, /Google Ads receives a random reference number for your inquiry so each lead is counted only once/);
+  assert.match(policy, /When you tap Call or Text on our site/);
+  assert.match(policy, /Depending on Meta's settings, the pixel may also collect contact details you type into a form, in hashed form/);
+  assert.match(policy, /up to 90 days/);
+  assert.equal((policy.match(/Cookies, analytics and advertising<\/h2>/g) || []).length, 1);
 });
