@@ -29,7 +29,7 @@ test('the 2020 founding year stays on record and does not render', () => {
   assert.match(read('scripts/brand/generate-brand-assets.mjs'), /EST 2020/);
   assert.match(read('shared/foundedYear.ts'), /founded in 2020/);
   assert.match(read('shared/foundedYear.ts'), /since 2020/);
-  assert.match(read('scripts/generate-llms-txt.ts'), /founded \$\{FOUNDED_YEAR\}/);
+  assert.match(read('scripts/generate-llms-txt.ts'), /FOUNDING\.llmsFoundedClause/);
 
   const local = generateLocalBusinessSchema();
   const org = generateOrganizationSchema();
@@ -42,16 +42,16 @@ test('the 2020 founding year stays on record and does not render', () => {
     TRUST_ITEMS.join('\n'),
     HOMEPAGE_FAQS.map((faq) => `${faq.q}\n${faq.a}`).join('\n'),
     GBP_DESCRIPTION,
-    read('app/about/page.tsx'),
-    read('components/approved/ApprovedHome.tsx'),
     read('public/llms.txt'),
     read('public/llms-full.txt'),
   ].join('\n');
-  assert.equal(fs.existsSync(path.join(root, 'public/brand/BRAND.md')), false);
-  assert.equal(fs.existsSync(path.join(root, 'public/brand/brand-kit.html')), false);
+  assert.equal(read('public/brand/BRAND.md').includes('Est. 2020'), false);
+  assert.match(read('public/brand/brand-kit.html'), /<meta name="robots" content="noindex">/);
   assert.equal(fs.existsSync(path.join(root, 'brand-kit/BRAND.md')), true);
   assert.equal(fs.existsSync(path.join(root, 'brand-kit/brand-kit.html')), true);
 
+  assert.match(read('app/about/page.tsx'), /SHOW_FOUNDING_YEAR/);
+  assert.match(read('components/approved/ApprovedHome.tsx'), /FOUNDING.idahoBuilder/);
   assert.equal(PUBLISHED.test(rendered), false);
   assert.equal(rendered.includes('foundingDate'), false);
 });
@@ -81,7 +81,7 @@ test('the seal component is not rendered while the founding year is hidden', () 
     read('public/site.webmanifest'),
   ].join('\n');
   assert.equal(published.includes('/brand/png/seal/'), false);
-  assert.equal(published.includes('page-preview.png'), false);
+  assert.equal(BRAND_PAGE_IMAGE.endsWith('/brand/page-preview.png'), true); // Approved year-free image; hash is checked by p5-follow-up-public-copy.
   assert.equal(published.includes('svg/seal/'), false);
 });
 

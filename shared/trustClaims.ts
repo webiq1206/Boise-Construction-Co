@@ -2,7 +2,8 @@
  * Unproven marketing claims. The phrases stay here. They are omitted from
  * copy, meta, JSON-LD, llms files, and alts while this flag is false.
  */
-export const SHOW_UNPROVEN_TRUST = false;
+import { SHOW_TRUST } from './publicFlags';
+export const SHOW_UNPROVEN_TRUST = SHOW_TRUST;
 
 /** "Satisfaction guaranteed" when that claim may be published. */
 export function satisfactionGuaranteedCta(): string {

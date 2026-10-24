@@ -22,8 +22,8 @@ generateWebPageSchema,
 import { CITY_HERO_IMAGES } from '@/shared/cityServiceImages';
 import { CITIES,TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
+import { FOUNDING, SHOW_FOUNDING_YEAR } from '@/shared/publicFlags';
 import { SITE_CONFIG } from '@/shared/siteConfig';
-import { foundedInClause, sinceFoundedLead } from '@/shared/foundedYear';
 import { HowP5Works } from '@/components/HowP5Works';
 import { IdahoRegistrationLine } from '@/components/IdahoRegistrationLine';
 import { HERO_STATS,PRINCIPLES,TRUST_ITEMS } from '@/shared/siteContent';
@@ -36,7 +36,7 @@ const ABOUT_FAQS = [
   {
     question: 'What is Boise Construction Co?',
     answer:
-      `Boise Construction Co is a design-build home builder in Boise, Idaho${foundedInClause()}. The work covers custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. The service area is Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and Garden City. Phone (208) 477-1169.`,
+      `${FOUNDING.idahoBuilder} The work covers custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. The service area is Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and Garden City. Phone (208) 477-1169.`,
   },
   {
     question: 'Are the budget ranges quotes?',
@@ -44,9 +44,10 @@ const ABOUT_FAQS = [
       'A written quote comes first: a firm proposal follows a site visit and a lot review, and ranges are planning estimates, not quotes. See "How much does it cost to build a house in Boise and the Treasure Valley?" on the homepage for the planning ranges already published there. Design-build means one accountable team handles architectural design, engineering, estimating, Ada and Canyon County permitting, and construction under a single contract, backed by a written line-item scope before the foundation is poured.',
   },
   {
-    question: 'How long has Boise Construction Co built in the Treasure Valley?',
-    answer:
-      `${sinceFoundedLead()}One team leads every build from the first look at your lot through Ada and Canyon County permitting to the final walkthrough.`,
+    question: FOUNDING.aboutDurationQuestion,
+    answer: SHOW_FOUNDING_YEAR
+      ? 'Boise Construction Co has worked in Treasure Valley residential construction since 2020. One team leads every build from the first look at your lot through Ada and Canyon County permitting to the final walkthrough.'
+      : `${FOUNDING.valleyWork} One team leads every build from the first look at your lot through Ada and Canyon County permitting to the final walkthrough.`,
   },
 ];
 
@@ -114,7 +115,7 @@ export default function AboutPage() {
   return (
     <InteriorPage kind="about"><>
       <JsonLd data={schemas} />
-      <div className="flex flex-col pb-20 md:pb-0">
+      <div className="flex flex-col ">
         {/* Approved editorial hero */}
         <InteriorHero layout="editorial" imageSrc={SITE_IMAGES.leadership} imageAlt={contentImageAlt(SITE_IMAGES.leadership)}>
             <HeroBreadcrumbs />
@@ -216,7 +217,10 @@ export default function AboutPage() {
                     One accountable team
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    {sinceFoundedLead(SITE_CONFIG.name)}One team leads every build from the first look at your lot through Ada and
+                    {SHOW_FOUNDING_YEAR
+                      ? `${SITE_CONFIG.name} has worked in Treasure Valley residential construction since 2020. `
+                      : `${FOUNDING.valleyWork} `}
+                    One team leads every build from the first look at your lot through Ada and
                     Canyon County permitting to the final walkthrough, and stands behind a line-item budget
                     before we break ground and a one-year workmanship warranty after you move in.
                   </p>
@@ -338,7 +342,7 @@ export default function AboutPage() {
               description={`We serve homeowners in ${TREASURE_VALLEY_CITIES}, and surrounding communities.`}
               className="max-w-3xl"
             />
-            <div className="grid sm:grid-cols-3 gap-4">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
               {CITIES.map((city, i) => (
                 <Reveal key={city.slug} delay={Math.min(i, 7) * 50}>
                   <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />

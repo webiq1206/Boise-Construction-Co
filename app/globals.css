@@ -348,12 +348,13 @@ html, body {
   }
 
   /* P5's section rhythm: 130px on desktop, stepping down on smaller screens. */
+  /* 88px from 768 up (was 130px, which stacked to 260px between two bands). */
   .section-y {
-    @apply py-20 md:py-[130px];
+    @apply py-20 md:py-[88px];
   }
 
   .section-y-lg {
-    @apply py-24 md:py-[160px];
+    @apply py-24 md:py-[104px];
   }
 
   .section-y-sm {
@@ -626,8 +627,12 @@ html, body {
   color: hsl(var(--foreground));
 }
 .blog-content tr:last-child td { border-bottom: none; }
-.blog-content img {
+/* Next `fill` images are absolutely positioned inside a clipped frame; a margin
+   would push them down and expose the frame. (BRC-28, BCONC-27) */
+.blog-content img:not([data-nimg="fill"]) {
   margin: 1.5rem 0;
+}
+.blog-content img {
   max-width: 100%;
 }
 .blog-content hr {

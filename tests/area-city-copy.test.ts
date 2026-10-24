@@ -25,6 +25,8 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
     assert.match(copy.faqs[1].answer, /Idaho Registered Contractor #8381215/);
     assert.equal(copy.faqs[1].answer.includes('(#8381215)'), false);
     assert.equal(copy.faqs[1].answer.includes('edopl.idaho.gov'), false);
+    assert.match(copy.faqs[1].answer, /Idaho Registered Contractor #8381215, bonded, and insured/);
+    assert.doesNotMatch(copy.faqs[1].answer, /(?:we(?:'|’)re|we are|the company is|fully) licensed|licensed, bonded|carries a license/i);
     assert.match(copy.faqs[1].answer, /bond/i);
     assert.match(copy.faqs[1].answer, /insur/i);
     assert.doesNotMatch(copy.intro + copy.faqs.map((f) => f.question + f.answer).join(' '), /Jared/);
@@ -93,4 +95,5 @@ test('cities outside the batch keep the shared intro and shared FAQ questions', 
   assert.equal(AREA_PAGE_FAQS[1].question, 'Are you a registered contractor and insured?');
   assert.match(AREA_PAGE_FAQS[1].answer, /Idaho Registered Contractor #8381215, bonded, and insured/);
   assert.equal(AREA_PAGE_FAQS[1].answer.includes('(#8381215)'), false);
+  assert.match(AREA_PAGE_FAQS[1].answer, /an Idaho Registered Contractor #8381215, bonded, and insured/);
 });

@@ -1,4 +1,3 @@
-import { IDAHO_REGISTERED_CONTRACTOR_PHRASE } from './contractorRegistration';
 import type { ServiceData, CityData } from './contentData';
 import { getCountyLabel } from './contentData';
 import { getAreaCityCopy } from './content/areaCopy';
@@ -908,7 +907,7 @@ export const AREA_PAGE_FAQS: FAQItem[] = [
   {
     question: 'Are you a registered contractor and insured?',
     answer:
-      `Yes. Boise Construction Co is ${IDAHO_REGISTERED_CONTRACTOR_PHRASE}, bonded, and insured.`,
+      'Yes. Boise Construction Co is an Idaho Registered Contractor #8381215, bonded, and insured. Idaho contractor registration details are available on request.',
   },
   {
     question: 'How do I start a project?',

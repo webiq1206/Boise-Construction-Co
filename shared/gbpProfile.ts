@@ -5,9 +5,8 @@
  */
 
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { FOUNDING } from '@/shared/publicFlags';
 import { CITIES } from '@/shared/contentData';
-import { IDAHO_REGISTERED_CONTRACTOR } from '@/shared/contractorRegistration';
-import { foundedSentence } from '@/shared/foundedYear';
 
 const SITE = SITE_CONFIG.siteUrl.replace(/\/$/, '');
 
@@ -65,9 +64,7 @@ export const GBP_CATEGORIES = {
 } as const;
 
 export const GBP_DESCRIPTION =
-  'Boise Construction Co is a design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles feasibility, design, Ada and Canyon County permits, and construction for custom homes, semi-custom homes, builds on land you already own, and shop homes. Every project includes a line-item budget before construction, a dedicated project manager, weekly written cost and schedule updates, and a written workmanship warranty. We also offer lot evaluation and permit-ready home design as standalone services. ' +
-  foundedSentence() +
-  'Bonded and insured. Book a free planning consultation and leave with a realistic budget band and clear next steps.';
+  `Boise Construction Co is a design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles feasibility, design, Ada and Canyon County permits, and construction for custom homes, semi-custom homes, builds on land you already own, and shop homes. Every project includes a line-item budget before construction, a dedicated project manager, weekly written cost and schedule updates, and a written workmanship warranty. We also offer lot evaluation and permit-ready home design as standalone services. ${FOUNDING.gbpFoundedSentence}Bonded and insured. Book a free planning consultation and leave with a realistic budget band and clear next steps.`;
 
 export const GBP_LINKS = {
   website: SITE,
@@ -351,7 +348,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   {
     question: 'Are you a registered contractor and insured?',
     answer:
-      `Yes. Boise Construction Co is bonded and insured for residential construction across the Treasure Valley. ${IDAHO_REGISTERED_CONTRACTOR}.`,
+      'Yes. Boise Construction Co is an Idaho Registered Contractor #8381215, bonded, and insured for residential construction across the Treasure Valley. Idaho contractor registration details are available upon request.',
   },
   {
     question: 'Can you build on land I already own?',

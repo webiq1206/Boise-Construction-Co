@@ -5,7 +5,8 @@
  */
 export const FOUNDED_YEAR = '2020';
 /** Unpublished until the year is proven. Handyman uses this same flag name. */
-export const SHOW_FOUNDING_YEAR = false;
+import { SHOW_FOUNDING_YEAR } from './publicFlags';
+export { SHOW_FOUNDING_YEAR };
 export const SHOW_FOUNDED_YEAR = SHOW_FOUNDING_YEAR;
 
 /** ", founded in 2020" when the claim may be published, otherwise nothing. */

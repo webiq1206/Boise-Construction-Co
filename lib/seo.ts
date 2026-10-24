@@ -4,9 +4,8 @@
  * for service and location pages
  */
 
-import { IDAHO_REGISTERED_CONTRACTOR } from '@/shared/contractorRegistration';
-import { satisfactionGuaranteedCta } from '@/shared/trustClaims';
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { SHOW_TRUST } from '@/shared/publicFlags';
 import { GBP_SOCIAL, getExternalProfileUrls } from '@/shared/gbpProfile';
 
 interface SEOMetaData {
@@ -130,15 +129,22 @@ export function generatePageTitle(params: ServiceSEOParams): string {
 }
 
 const CITY_DESCRIPTION_VARIANTS: Record<string, string> = {
-  Kuna: "Kuna design-build",
+  Kuna: "Kuna's trusted design-build",
   Boise: "Boise's design-build",
-  Meridian: "Meridian",
+  Meridian: "Meridian's trusted",
   Eagle: "Eagle's preferred",
   Star: "Star's reliable",
   Middleton: "Middleton's expert",
-  Nampa: "Nampa",
-  Caldwell: "Caldwell",
+  Nampa: "Nampa's trusted",
+  Caldwell: "Caldwell's trusted",
 };
+
+/** Original city phrases stay above. While SHOW_TRUST is off, a trusted phrase becomes the city name. */
+function cityDescriptionVariant(city: string): string {
+  const trusted = CITY_DESCRIPTION_VARIANTS[city] || `${city}'s trusted`;
+  if (SHOW_TRUST || !/trusted/i.test(trusted)) return trusted;
+  return city;
+}
 
 const CITY_CTA_VARIANTS: Record<string, string> = {
   Kuna: "Free planning consultation",
@@ -166,8 +172,10 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
   
   if (city && serviceName) {
     const serviceLC = serviceName.toLowerCase();
-    const cityVariant = CITY_DESCRIPTION_VARIANTS[city] || city;
-    const ctaVariant = CITY_CTA_VARIANTS[city] || satisfactionGuaranteedCta();
+    const cityVariant = cityDescriptionVariant(city);
+    const ctaVariant = SHOW_TRUST
+      ? (CITY_CTA_VARIANTS[city] || "Satisfaction guaranteed")
+      : "Free planning consultation";
     return `${cityVariant} ${serviceLC} team. Bonded & insured. ${ctaVariant}. Call ${phone} for a free consultation!`;
   }
   
@@ -235,7 +243,7 @@ export function generateCityServiceDescription(
 ): string {
   const phone = SITE_CONFIG.phone;
   const serviceLC = serviceName.toLowerCase();
-  const cityVariant = CITY_DESCRIPTION_VARIANTS[cityName] || "Local";
+  const cityVariant = cityDescriptionVariant(cityName);
   const cityData = CITY_SEO_DATA[cityName as keyof typeof CITY_SEO_DATA];
   const neighborhood = cityData?.neighborhoods?.[0];
 
@@ -272,8 +280,7 @@ export function generateSafePageTitle(primary: string, suffix?: string): string 
  * Default Open Graph / Twitter image path used as a site-wide fallback so every
  * page emits an og:image. Pages with their own hero (blog posts, guides) override
  * this with a more specific image.
- * Purpose-built 1200x630 dark social card: reverse wordmark only. It does not
- * draw the maker's seal.
+ * Purpose-built 1200x630 dark social card: reverse wordmark + Maker's Seal on #1C1F1E.
  */
 export const DEFAULT_OG_IMAGE_PATH = '/images/og-default.png';
 
@@ -510,10 +517,9 @@ export const BUSINESS_INFO = {
   founded: '2020',
   serviceArea: ['Boise', 'Meridian', 'Eagle', 'Nampa', 'Kuna', 'Star', 'Middleton', 'Caldwell', 'Garden City'],
   serviceRadius: '35 miles',
-  licenses: [IDAHO_REGISTERED_CONTRACTOR],
+  licenses: ['Idaho Registered Contractor #8381215'],
   certifications: ['Design-Build Home Building', 'Bonded & Insured'],
-  // `licenses` is the published registration string. It is not a JSON-LD
-  // license claim; LocalBusiness.hasCredential carries the credential.
+  // The registration number is published in the footer and in hasCredential.
   insurance: 'Bonded & Insured',
   rating: 0,
   reviewCount: 0,

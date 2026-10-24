@@ -1,4 +1,4 @@
-import { foundedInClause } from '@/shared/foundedYear';
+import { FOUNDING } from "@/shared/publicFlags";
 
 export interface HomepageFaq {
   q: string;
@@ -25,7 +25,7 @@ export const INITIAL_FAQ_COUNT = 10;
 export const HOMEPAGE_FAQS: HomepageFaq[] = [
   {
     q: "What is Boise Construction Co?",
-    a: `Boise Construction Co is a design-build home builder in Boise, Idaho${foundedInClause()}. The work covers custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. The service area is Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and Garden City. Phone (208) 477-1169.`,
+    a: `${FOUNDING.idahoBuilder} The work covers custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. The service area is Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and Garden City. Phone (208) 477-1169.`,
   },
   {
     q: "Are the budget ranges quotes?",

@@ -1,14 +1,9 @@
 import type {Metadata} from 'next';
 import {ESTIMATOR_BRAND as brand} from './p5/brand.ts';
-import {SHOW_FOUNDED_YEAR} from '../shared/foundedYear.ts';
 
 /** Branded sharing previews are the owner's preference. Product/article schema
- * retains its real subject image. Neither favicon nor preview display is guaranteed.
- * page-preview.png draws the maker's seal, so it is withheld while
- * SHOW_FOUNDED_YEAR is false. The existing wordmark card has no year. */
-const SEAL_PAGE_IMAGE=`https://${brand.domain}/brand/page-preview.png`;
-const YEAR_FREE_PAGE_IMAGE=`https://${brand.domain}/images/og-default.png`;
-export const BRAND_PAGE_IMAGE=SHOW_FOUNDED_YEAR?SEAL_PAGE_IMAGE:YEAR_FREE_PAGE_IMAGE;
+ * retains its real subject image. Neither favicon nor preview display is guaranteed. */
+export const BRAND_PAGE_IMAGE=`https://${brand.domain}/brand/page-preview.png`;
 export const BRAND_SEARCH_ICON=`https://${brand.domain}/brand/search-icon-96.png`;
 type Copy={title:string;description:string};
 const COPY:Record<string,Record<string,Copy>>={
@@ -17,7 +12,7 @@ const COPY:Record<string,Record<string,Copy>>={
   "/guides/boise-home-building-process-guide":{title:"Boise Home Building Process",description:"See the steps to build a home in Boise, from lot review and design to permits, construction and handover. Plan your budget, selections and timeline."},
   "/blog/cost-to-build-a-house-boise":{title:"Cost to Build a House in Boise",description:"Explore Boise house-building costs by square foot, finish level and site conditions. Compare construction costs with land, utilities and site-work budgets."},
   "/blog/custom-home-cost-per-square-foot-boise":{title:"Boise Custom Home Cost per Sq Ft",description:"Compare custom home costs per square foot in Boise. See how home size, finishes, design complexity and site conditions affect your construction budget."},
-  '/':{title:'Custom Home Builder in Boise, ID',description:'Build a custom or semi-custom home in Boise and the Treasure Valley. Explore design-build services, build-on-your-lot options and clear project budgets.'},
+  '/':{title:'Custom Home Builder in Boise, ID',description:'Boise Construction Co builds custom and semi-custom homes in Boise and the Treasure Valley. Residential design-build, build-on-your-lot and clear budgets.'},
   '/services':{title:'Home Building & Design-Build Services',description:'Explore custom homes, semi-custom homes, additions and build-on-your-lot services across Boise and the Treasure Valley. Plan your project with our team.'},
   '/about':{title:'About Our Boise Home Building Team',description:'Learn how Boise Construction Co plans and manages Treasure Valley home builds, from lot evaluation and design through permits, construction and handover.'},
   '/contact':{title:'Contact a Boise Home Builder',description:'Discuss your new home, building lot or addition with Boise Construction Co. Call our team or request project guidance for Boise and the Treasure Valley.'},
@@ -58,7 +53,7 @@ export function withBrandPageMetadata(meta:Metadata,routeHint?:string):Metadata{
  const original=titleText(meta);
  const title=override?`${override.title} | ${brand.name}`:original.includes(brand.name)?original:`${original} | ${brand.name}`;
  const description=override?.description||meta.description||undefined;
- const image={url:BRAND_PAGE_IMAGE,width:1200,height:630,alt:SHOW_FOUNDED_YEAR?`${brand.name} brand seal`:brand.name};
+ const image={url:BRAND_PAGE_IMAGE,width:1200,height:630,alt:`${brand.name} brand seal`};
  const icons=routeHint==='__layout__'?{
   ...(typeof meta.icons==='object'&&!Array.isArray(meta.icons)&&!(meta.icons instanceof URL)?meta.icons:{}),
   icon:[{url:BRAND_SEARCH_ICON,sizes:'96x96',type:'image/png'}],

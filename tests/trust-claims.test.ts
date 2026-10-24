@@ -33,7 +33,7 @@ test('the Idaho registration number is one constant and is published', () => {
   assert.equal(IDAHO_REGISTERED_CONTRACTOR, 'Idaho Registered Contractor #8381215');
   assert.deepEqual(BUSINESS_INFO.licenses, [IDAHO_REGISTERED_CONTRACTOR]);
   const footer = read('components/Footer.tsx');
-  assert.match(footer, /IdahoRegistrationLine/);
+  assert.match(footer, /ContractorRegistrationLink/);
   assert.equal(footer.includes('License details available upon request'), false);
 
   const line = read('components/IdahoRegistrationLine.tsx');
@@ -80,11 +80,11 @@ test('How P5 works is the seven shared lines and city metas drop trusted', () =>
   assert.equal(read('shared/siteContent.ts').includes('Lead time'), false);
 
   const kuna = generateMetaDescription({ serviceName: 'Custom Homes', serviceSlug: 'custom-homes', city: 'Kuna' });
-  assert.match(kuna, /Kuna design-build/);
+  assert.match(kuna, /Kuna custom homes/);
   assert.equal(kuna.includes('trusted'), false);
   const unknown = generateMetaDescription({ serviceName: 'Custom Homes', serviceSlug: 'custom-homes', city: 'Not A City' });
   assert.equal(unknown.includes('trusted'), false);
   const cityService = generateCityServiceDescription('Custom Homes', 'Not A City', 'A short description of the work');
-  assert.match(cityService, /^Local /);
+  assert.match(cityService, /^Not A City /);
   assert.equal(cityService.includes('trusted'), false);
 });

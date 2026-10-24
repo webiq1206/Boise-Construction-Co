@@ -14,12 +14,12 @@
  */
 import fs from 'fs';
 import path from 'path';
-import { SHOW_FOUNDED_YEAR, FOUNDED_YEAR, sinceFoundedYear } from '../shared/foundedYear';
 import { SITE_CONFIG } from '../shared/siteConfig';
 import { SERVICES, CITIES } from '../shared/contentData';
 import { GUIDE_PAGES } from '../shared/guideContent';
 import { CONTENT_HUBS } from '../shared/contentHubs';
 import { BLOG_POSTS } from '../shared/blogContent';
+import { FOUNDING } from '../shared/publicFlags';
 
 const BASE = SITE_CONFIG.siteUrl.replace(/\/$/, '');
 const url = (p: string) => `${BASE}${p}`;
@@ -35,7 +35,7 @@ const neighborhoodGuides = GUIDE_PAGES.filter((g) => g.guideType === 'neighborho
 const SUMMARY =
   `New residential construction in Boise, Idaho and the Treasure Valley: custom homes, ` +
   `semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that ` +
-  `precede them.${SHOW_FOUNDED_YEAR ? ` Design-build, founded ${FOUNDED_YEAR}.` : ' Design-build.'} Serving ${CITIES.map((c) => c.name).join(', ')}. ` +
+  `precede them. Design-build${FOUNDING.llmsFoundedClause}. Serving ${CITIES.map((c) => c.name).join(', ')}. ` +
   `Phone ${SITE_CONFIG.phone}.`;
 
 const POSITIONING =
@@ -89,7 +89,7 @@ function buildShort(): string {
 
   lines.push('## About and contact', '');
   lines.push(
-    `- [About ${SITE_CONFIG.name}](${url('/about')}): design-build home building across the Treasure Valley${sinceFoundedYear()}.`,
+    `- [About ${SITE_CONFIG.name}](${url('/about')}): design-build home building across the Treasure Valley${FOUNDING.llmsSinceClause}.`,
   );
   lines.push(`- [Contact](${url('/contact')})`);
   lines.push(`- [Free build estimator](${url('/estimate')})`);
@@ -115,7 +115,7 @@ function buildFull(): string {
 
   lines.push('## About', '');
   lines.push(
-    `${SITE_CONFIG.name} is a residential design-build home builder serving the Treasure Valley${sinceFoundedYear()}. We build new homes: custom homes drawn from a blank page, semi-custom homes ` +
+    `${SITE_CONFIG.name} is a residential design-build home builder serving the Treasure Valley${FOUNDING.llmsSinceClause}. We build new homes: custom homes drawn from a blank page, semi-custom homes ` +
       `personalized from a proven plan, and build-on-your-lot projects for families who already ` +
       `own land. Design-build means design, engineering, permitting, and construction are ` +
       `delivered by one team under one contract, which removes the handoff between an architect ` +
@@ -125,7 +125,7 @@ function buildFull(): string {
     '',
   );
   lines.push('- Business type: Residential design-build home builder (new construction)');
-  if (SHOW_FOUNDED_YEAR) lines.push(`- Founded: ${FOUNDED_YEAR}`);
+  if (FOUNDING.foundedLine) lines.push(`- ${FOUNDING.foundedLine}`);
   lines.push('- Service model: One accountable team for design, permits, and construction');
   lines.push(`- Contact: ${url('/contact')}`);
   lines.push(`- Build estimator: ${url('/estimate')}`, '');
