@@ -6,7 +6,7 @@ export function InteriorPage({children,kind='detail'}:{children:ReactNode;kind?:
   return <div className={`approved-interior interior-${kind}`}>{children}</div>;
 }
 
-export function InteriorEstimateLink({label='Get my online estimate'}:{label?:string}) {
+export function InteriorEstimateLink({label='Request an estimate'}:{label?:string}) {
   return <a className="interior-estimate-link" href="/estimate">{label}<ArrowUpRight size={18} aria-hidden="true"/></a>;
 }
 

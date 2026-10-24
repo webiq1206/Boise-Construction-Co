@@ -41,11 +41,11 @@ const SUMMARY =
 const POSITIONING =
   `Design-build means one accountable team handles architectural design, engineering, ` +
   `estimating, Ada and Canyon County permitting, and construction under a single contract, ` +
-  `backed by a written line-item scope before the foundation is poured. Budget ranges are ` +
-  `produced by an on-site estimator from house geometry and specification level rather than ` +
-  `a flat price per square foot, because the same 2,400 square feet costs very different ` +
-  `money on a flat infill lot than on a sloped foothills parcel with a shared well. Ranges ` +
-  `are planning estimates, not quotes; a firm proposal follows a site visit and a lot review.`;
+  `backed by a written line-item scope before the foundation is poured. The project intake ` +
+  `collects house geometry, specification details, plans, and site conditions for team review ` +
+  `before an estimate is prepared. Ranges are planning estimates, not quotes; a firm proposal ` +
+  `follows a site visit and a lot review.`;
+
 
 function buildShort(): string {
   const lines: string[] = [];
@@ -92,7 +92,7 @@ function buildShort(): string {
     `- [About ${SITE_CONFIG.name}](${url('/about')}): design-build home building across the Treasure Valley${FOUNDING.llmsSinceClause}.`,
   );
   lines.push(`- [Contact](${url('/contact')})`);
-  lines.push(`- [Free build estimator](${url('/estimate')})`);
+  lines.push(`- [Home build estimate request](${url('/estimate')})`);
   lines.push(`- [Planning resources and worksheets](${url('/resources')})`, '');
 
   lines.push('## Optional', '');
