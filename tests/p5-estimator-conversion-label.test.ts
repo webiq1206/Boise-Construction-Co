@@ -154,7 +154,7 @@ test('the shared estimator engine still calls the helper and does not name the n
   const intakeCall = source.indexOf('trackGoogleAdsLeadConversion({service:latest.answers.service},`intake:${receipt.projectId}`)');
   assert.ok(notConfirmed >= 0 && intakeCall > notConfirmed);
   assert.match(source, /trackGoogleAdsLeadConversion\(\{service:latest\.answers\.service\},`intake:\$\{receipt\.projectId\}`\);/);
-  assert.match(source, /trackGoogleAdsLeadConversion\(\{service:d\.answers\.service\},`estimator:\$\{d\.id\}`\);/);
+  assert.match(source, /trackGoogleAdsLeadConversion\(\{service:d\.answers\.service\},`estimator:\$\{d\.id\}`,\{accepted:data.accepted===true\}\);/);
   assert.equal(source.includes('cEzmCPOagKAdEKzf-q9E'), false);
   assert.equal(source.includes('GOOGLE_ADS_ESTIMATOR_LABEL'), false);
 });

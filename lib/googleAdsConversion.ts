@@ -148,7 +148,8 @@ function pendingConversions(ctx: LeadContext, dedupeKey?: string): PendingConver
  * A `conv_` inquiry id, and any other key, sends the form label only.
  * Returns true when at least one conversion was sent.
  */
-export function trackGoogleAdsLeadConversion(ctx: LeadContext = {}, dedupeKey?: string): boolean {
+export function trackGoogleAdsLeadConversion(ctx: LeadContext = {}, dedupeKey?: string, acceptance?: {accepted?: boolean}): boolean {
+  if (acceptance) ctx = {...ctx, acceptedLead: acceptance.accepted === true};
   if (typeof window === 'undefined') return false;
   const pending = pendingConversions(ctx, dedupeKey);
   if (!pending.length) return false;
