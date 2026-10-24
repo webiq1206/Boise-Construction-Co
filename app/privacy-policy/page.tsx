@@ -103,6 +103,9 @@ export default function PrivacyPolicyPage() {
               If your call goes through a Google forwarding number, Google connects the call and can see the calling number and call length, but not what's said.
             </p>
             <p>
+              Google Ads receives a random reference number for your inquiry so each lead is counted only once.
+            </p>
+            <p>
               We also use Microsoft Clarity to see how visitors use our pages through heatmaps and session recordings; form fields are masked so what you type is not recorded. Microsoft processes this under its own privacy statement (<a href="https://privacy.microsoft.com/privacystatement">https://privacy.microsoft.com/privacystatement</a>).
             </p>
             <p>

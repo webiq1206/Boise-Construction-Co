@@ -157,3 +157,23 @@ test('the consultation success screen and assistant transcript are masked', () =
   const logAt = assistant.indexOf('role="log"');
   assert.match(assistant.slice(logAt, logAt + 220), /data-clarity-mask="True"/);
 });
+
+
+test('choice inputs never mask the whole body or html element', () => {
+  for (const tag of ['body', 'html']) {
+    const choice = el('input', [], 'checkbox');
+    const root = el(tag, [choice]);
+    run(root);
+    assert.equal(masked(root), false, tag);
+    assert.equal(masked(choice), true, tag);
+  }
+});
+
+test('privacy reconciliation preserves newer disclosures and inquiry deduplication', () => {
+  const policy = readFileSync(new URL('../app/privacy-policy/page.tsx', import.meta.url), 'utf8');
+  assert.match(policy, /Google Ads receives a random reference number for your inquiry so each lead is counted only once/);
+  assert.match(policy, /When you tap Call or Text on our site/);
+  assert.match(policy, /Depending on Meta's settings, the pixel may also collect contact details you type into a form, in hashed form/);
+  assert.match(policy, /up to 90 days/);
+  assert.equal((policy.match(/Cookies, analytics and advertising<\/h2>/g) || []).length, 1);
+});
