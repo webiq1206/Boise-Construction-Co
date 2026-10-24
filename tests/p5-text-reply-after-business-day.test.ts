@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ContactPage, { CONTACT_FAQS } from "../app/contact/page.tsx";
+import ContactPage from "../app/contact/page.tsx";
+import { CONTACT_FAQS } from "../shared/contactFaqs.ts";
 import HomePage from "../app/page.tsx";
 import { ConsultationForm, ConsultationSuccessReachOut } from "../components/ConsultationForm.tsx";
 import { AbandonmentPromptMessage } from "../components/estimate/recovery/AbandonmentPrompt.tsx";
@@ -85,7 +86,8 @@ test("contact page keeps each one-business-day line and adds the text line besid
   const html = render(React.createElement(ContactPage));
   const text = visible(html);
   assert.match(text, /Prefer to text\? Message us instead/);
-  assert.match(text, /Mon – Fri 7 am – 6 pm · Sat 8 am – 4 pm/);
+  assert.match(text, /Mon – Fri 9 am – 6 pm · Sat 9 am – 4 pm/);
+  assert.doesNotMatch(text, /Mon – Fri 7 am|Sat 8 am/);
   const faq = "We respond within one business day. Call us during business hours for an immediate conversation, or submit the form and we will reach out to schedule your free planning consultation.";
   for (const original of [
     faq,
@@ -97,13 +99,13 @@ test("contact page keeps each one-business-day line and adds the text line besid
   ]) {
     assertLineFollows(html, original);
   }
-  // Closed accordion content is not in the static markup. The answer still
-  // renders through the same component the accordion uses, with the sms link.
+  // Current main force-mounts closed FAQ answers in server markup. Verify the
+  // answer both on the page and through the shared text renderer.
   const faqHtml = renderToStaticMarkup(React.createElement(CopyWithTextReply, { text: CONTACT_FAQS[0].answer }));
   assertLineFollows(faqHtml, faq);
   assertSmsLink(faqHtml);
   assert.equal(CONTACT_FAQS[0].answer, insertPreferToTextAfterBusinessDay(faq));
-  assert.equal((html.match(/href="sms:\+12084771169"/g) || []).length, 5);
+  assert.equal((html.match(/href="sms:\+12084771169"/g) || []).length, 6);
   assertSmsLink(html);
 });
 

@@ -3,6 +3,7 @@ import { InteriorHero } from '@/components/approved/InteriorLayout';
 interface PageHeroBandProps {
   imageSrc: string;
   imageAlt: string;
+  imageCaption?: string;
   /** Retained for caller compatibility; editorial heroes have no image scrim. */
   scrim?: number;
   children: React.ReactNode;
@@ -12,10 +13,11 @@ interface PageHeroBandProps {
 export function PageHeroBand({
   imageSrc,
   imageAlt,
+  imageCaption,
   children,
 }: PageHeroBandProps) {
   return (
-    <InteriorHero imageSrc={imageSrc} imageAlt={imageAlt} layout="editorial">
+    <InteriorHero imageSrc={imageSrc} imageAlt={imageAlt} imageCaption={imageCaption} layout="editorial">
         {children}
       </InteriorHero>
   );

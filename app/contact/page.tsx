@@ -3,7 +3,6 @@ import { BusinessPhoneContact } from '@/components/BusinessPhoneContact';
 import { ConsultationForm } from '@/components/ConsultationForm';
 import { CopyWithTextReply, PreferToTextLine } from '@/components/PreferToTextLine';
 import { Section } from '@/components/marketing';
-import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
 import { Hairline } from '@/components/marketing/Hairline';
 import { MarketingCard } from '@/components/marketing/MarketingCard';
 import { SectionHeader } from '@/components/marketing/SectionHeader';
@@ -33,45 +32,15 @@ import { areaPath } from '@/lib/seo-routes';
 import { CITIES,TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
 import { SITE_CONFIG } from '@/shared/siteConfig';
-import { insertPreferToTextAfterBusinessDay } from '@/shared/textReply';
+import { CONTACT_FAQS } from '@/shared/contactFaqs';
 import { CONSULT_BULLETS,HERO_STATS } from '@/shared/siteContent';
+import { contentImageAlt } from '@/shared/imageAlts';
 import { SITE_IMAGES } from '@/shared/siteImages';
 import { ArrowRight,Check,ChevronRight,Mail,MapPin,MessageSquare,Phone } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const CONTACT_FAQS = [
-  {
-    question: 'How quickly will you respond to my inquiry?',
-    answer: insertPreferToTextAfterBusinessDay(
-      'We respond within one business day. Call us during business hours for an immediate conversation, or submit the form and we will reach out to schedule your free planning consultation.',
-    ),
-  },
-  {
-    question: 'Is the planning consultation really free?',
-    answer:
-      'Yes. The 60 to 90 minute consultation is free with no obligation. We meet at our office, or on your lot if you already own one, and you leave with a budget band, a realistic schedule, and a read on what your site will require - never a high-pressure sales pitch.',
-  },
-  {
-    question: 'Do I need to own land before I contact you?',
-    answer:
-      'No. Roughly half the people who call us are still looking. We will walk a lot with you before you buy and tell you what it will cost to build on, which is the single most useful thing you can know before making an offer.',
-  },
-  {
-    question: 'What areas do you serve?',
-    answer: `We build in ${TREASURE_VALLEY_CITIES}, and surrounding Treasure Valley communities across Ada and Canyon County.`,
-  },
-  {
-    question: 'Do you handle permits?',
-    answer:
-      'Yes. Building permits, plan review, engineering, and utility applications are part of our design-build scope and handled in-house for both Ada and Canyon County jurisdictions.',
-  },
-  {
-    question: 'How do I get a cost estimate for my home?',
-    answer:
-      'Use our online build cost estimator for a preliminary range, then book a free consultation for a written, line-item budget tailored to your plan and your lot.',
-  },
-];
+
 
 const SPEAKABLE_SUMMARY =
   `Contact ${SITE_CONFIG.name} for a free consultation. Schedule a free 60 to 90 minute planning consultation, call our team, or send your project details to our team for an estimate review.`;
@@ -203,9 +172,9 @@ export default function ContactPage() {
   return (
     <InteriorPage kind="contact"><>
       <JsonLd data={schemas} />
-      <div className="flex flex-col pb-20 md:pb-0">
+      <div className="flex flex-col ">
         {/* Approved editorial hero */}
-        <InteriorHero layout="contact" imageSrc={SITE_IMAGES.hero} imageAlt="White board-and-batten home exterior with a covered front porch">
+        <InteriorHero layout="contact" imageSrc={SITE_IMAGES.hero} imageAlt={contentImageAlt(SITE_IMAGES.hero)}>
             <HeroBreadcrumbs />
             <p data-speakable="summary" className="sr-only">
               {SPEAKABLE_SUMMARY}
@@ -263,7 +232,7 @@ export default function ContactPage() {
                   </p>
                 </Reveal>
               </div>
-              <MarketingCard className="md:col-span-3 p-4 sm:p-7 md:p-10" padding="lg">
+              <MarketingCard className="interior-contact-form p-4 sm:p-7 md:p-10" padding="lg">
                 <ConsultationForm />
               </MarketingCard>
             </div>
@@ -296,7 +265,7 @@ export default function ContactPage() {
                   icon={<Phone className="h-5 w-5" strokeWidth={1.5} />}
                   label="Call us"
                   href={SITE_CONFIG.phoneHref}
-                  subtext="Mon – Fri 7 am – 6 pm · Sat 8 am – 4 pm"
+                  subtext="Mon – Fri 9 am – 6 pm · Sat 9 am – 4 pm"
                   featured
                   companion={
                     <SaveContactLink className="text-sm text-muted-foreground hover:text-foreground transition-colors" />
@@ -367,7 +336,7 @@ export default function ContactPage() {
             <div className="relative min-h-[260px] md:min-h-[520px] overflow-hidden bg-inverse order-2 md:order-1">
               <Image
                 src={SITE_IMAGES.leadership}
-                alt="Worker checking interior framing on a new home"
+                alt={contentImageAlt(SITE_IMAGES.leadership)}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover img-brand-grade"
@@ -384,6 +353,7 @@ export default function ContactPage() {
                   <br />
                   No pitch. Just answers.
                 </p>
+                <p className="mt-3 text-xs text-inverse-foreground/80">Representative imagery</p>
               </div>
             </div>
 
@@ -452,16 +422,6 @@ export default function ContactPage() {
 
         <StatementBandSection />
 
-        <EstimatePromptBand
-          title={
-            <>
-              Ready to discuss your{' '}
-              <em className="brc-accent">project</em>?
-            </>
-          }
-          description="Share your project details and plans for our team to review. We may need more information or a site visit before confirming an estimate."
-          variant="canvas"
-        />
 
         {/* ─── Service areas ─── */}
         <Section divider>

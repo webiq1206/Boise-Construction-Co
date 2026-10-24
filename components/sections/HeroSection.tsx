@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { HERO_EYEBROW, HERO_SUBHEAD, HERO_STATS, TRUST_ITEMS } from "@/shared/siteContent";
+import { contentImageAlt } from "@/shared/imageAlts";
 import { SITE_IMAGES } from "@/shared/siteImages";
 import { CTA_PRIMARY, CTA_SECONDARY } from "@/shared/ctaCopy";
 
@@ -15,7 +16,7 @@ export function HeroSection() {
       <div id="hero-sentinel" className="absolute bottom-0 left-0 h-px w-full" aria-hidden="true" />
         <Image
           src={SITE_IMAGES.hero}
-          alt="White board-and-batten home exterior with a covered front porch"
+          alt={contentImageAlt(SITE_IMAGES.hero)}
           fill
           priority
           sizes="(max-width: 768px) 100vw, 1400px"
@@ -40,6 +41,7 @@ export function HeroSection() {
           className="absolute inset-0 pointer-events-none"
           style={{ backgroundImage: GRAIN_URL, backgroundRepeat: "repeat", opacity: 0.025 }}
         />
+        <p className="absolute bottom-4 left-4 z-10 text-xs text-white">Representative imagery</p>
 
         <div className="relative z-10 container px-4 md:px-8 py-20 md:py-32 pb-16 md:pb-28">
           <div className="ed-hero-copy">

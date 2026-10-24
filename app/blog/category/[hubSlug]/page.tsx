@@ -9,6 +9,7 @@ import { generateBreadcrumbSchema,generateCollectionPageSchema } from '@/lib/sch
 import { getBaseUrl } from '@/lib/seo';
 import { BLOG_POSTS } from '@/shared/blogContent';
 import { getAbsoluteImageUrl,getBlogImageAlt,getHubHeroImage } from '@/shared/blogImages';
+import { contentImageAlt } from '@/shared/imageAlts';
 import {
 categoryHubPath,
 CONTENT_HUBS,
@@ -101,7 +102,7 @@ export default async function BlogCategoryHubPage(
 
   const hubHero = getHubHeroImage(params.hubSlug);
   const pillarSlug = hub.pillarSlug;
-  const hubAlt = pillarSlug ? getBlogImageAlt(pillarSlug) : `${hub.title} articles`;
+  const hubAlt = contentImageAlt(hubHero) || (pillarSlug ? getBlogImageAlt(pillarSlug) : `${hub.title} articles`);
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
