@@ -20,6 +20,19 @@ import { getAreaCityCopy } from '@/shared/content/areaCopy';
 import { AREA_PAGE_FAQS,getAreaIntro } from '@/shared/seoContent';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { notFound } from 'next/navigation';
+import type { ReactNode } from 'react';
+
+function emphasizePhrase(text: string, phrase: string): ReactNode {
+  const index = text.indexOf(phrase);
+  if (index === -1) return text;
+  return (
+    <>
+      {text.slice(0, index)}
+      <strong>{phrase}</strong>
+      {text.slice(index + phrase.length)}
+    </>
+  );
+}
 
 export function generateStaticParams() {
   return CITY_SLUGS.map((city) => ({ city }));
@@ -53,8 +66,10 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
   const seo = CITY_SEO_DATA[city.name];
   const county = getCountyLabel(city.county);
   const path = areaPath(city.slug);
+  const cityCopy = getAreaCityCopy(city.slug);
   const overview = getAreaIntro(city);
   const answerFirst = `${city.name}, Idaho is in ${county}. ${SITE_CONFIG.name} builds there as a design-build home builder. Ada County and Canyon County permit steps are on the permit-flow page.`;
+  const middletonLead = city.slug === 'middleton' ? cityCopy?.lead : undefined;
   const images = getAreaImageSet(city.slug);
   const localNote = seo
     ? `We serve ${city.name} homeowners across ${seo.neighborhoods.slice(0, 3).join(', ')}, and all of ${county}. Confirm the permitting authority for the project address before applying.`
@@ -65,6 +80,33 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
   const creek = indianCreekDescription(city.name);
 
   const sections: LandingSection[] = [
+    ...(city.slug === 'middleton'
+      ? [
+          {
+            heading: 'Custom home builder serving Middleton',
+            paragraphs: [
+              'Home builders in Middleton work with both city lots and Canyon County acreage. As your custom home builder in Middleton, we handle lot evaluation, design, engineering, permitting, and construction under one contract so drawings, budget, and schedule stay tied together.',
+              'For local permit and land detail, read our Middleton home building guide. For Treasure Valley process and planning ranges, see custom home builder.',
+            ],
+            paragraphLinks: [
+              undefined,
+              [
+                {
+                  phrase: 'Middleton home building guide',
+                  href: '/guides/middleton-home-building-guide',
+                },
+                { phrase: 'custom home builder', href: '/services/custom-home-builder' },
+              ],
+            ],
+            bullets: [
+              'Fully custom homes designed around your lot and how you live',
+              'Semi-custom plans adapted for timeline and budget range',
+              'Build on your lot when you already own the land',
+            ],
+            bulletsAfterParagraph: 0,
+          } satisfies LandingSection,
+        ]
+      : []),
     {
       heading: `Home building services in ${city.name}`,
       paragraphs: [
@@ -123,8 +165,10 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
         }
       : undefined;
 
-  const h1 = `Home Builder in ${city.name}, Idaho`;
-  const cityCopy = getAreaCityCopy(city.slug);
+  const h1 =
+    city.slug === 'middleton'
+      ? 'Custom Home Builder in Middleton, Idaho'
+      : `Home Builder in ${city.name}, Idaho`;
   const faqs = cityCopy?.faqs ?? [
     ...AREA_PAGE_FAQS,
     {
@@ -154,7 +198,14 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       <LandingPageTemplate
         h1={h1}
         speakableSummary={overview}
-        overview={`${answerFirst} ${overview}`}
+        overview={middletonLead ? overview : `${answerFirst} ${overview}`}
+        overviewParagraphs={
+          middletonLead
+            ? middletonLead.map((paragraph, index) =>
+                index === 0 ? emphasizePhrase(paragraph, 'custom home builder in Middleton') : paragraph,
+              )
+            : undefined
+        }
         heroImageUrl={images.hero}
         breatherImageUrl={images.breather}
         processImageUrl={images.process}

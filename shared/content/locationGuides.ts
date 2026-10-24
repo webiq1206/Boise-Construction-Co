@@ -38,6 +38,8 @@ interface PlaceGuide {
   watchOut: string;
   /** Budget context specific to this place. */
   budget: string;
+  /** Optional opening paragraph, rendered before the shared permit callout. */
+  intro?: string;
   faqs: Array<{ question: string; answer: string }>;
 }
 
@@ -324,10 +326,12 @@ const PLACES: PlaceGuide[] = [
     citySlug: 'middleton',
     county: 'canyon',
     guideType: 'location',
-    title: 'Building a Home in Middleton',
-    seoTitle: 'Building a New Home in Middleton',
+    title: 'Custom Home Building in Middleton',
+    seoTitle: 'Custom Home Building Guide for Middleton, ID',
     metaDescription:
-      'Building in Middleton: city and county permit requirements, acreage and subdivision lots, irrigation easements, and site work costs for a new home.',
+      'Guide for custom home builders and homeowners in Middleton: Canyon County vs city permits, subdivision vs acreage, site work ranges, and how a design-build team runs the project.',
+    intro:
+      '<p>This guide is for homeowners and anyone comparing a <strong>custom home builder in Middleton</strong> - covering Canyon County vs city permit paths, subdivision lots vs acreage, irrigation easements, and typical site-work ranges. Pair it with our <a href="/areas/middleton">Middleton area page</a> and <a href="/services/custom-home-builder">Treasure Valley custom home builder</a> service hub.</p>',
     excerpt:
       'Compare Middleton subdivision lots and acreage by utility access, buildable area and the permit jurisdiction for the address.',
     quickAnswer:
@@ -661,7 +665,13 @@ function buildLocationGuide(p: PlaceGuide): GuidePageData {
     `<div class="callout note"><p class="callout-label">${p.name}: permit snapshot</p>` +
     `<p>${permitGuidanceHtml(p.name)} For a private septic system, confirm requirements with ${healthDistrict}. Utility and septic approvals are separate from the building permit.</p></div>`;
 
+  const customHomeAnchor =
+    p.slug === 'middleton-home-building-guide'
+      ? 'Treasure Valley custom home builder'
+      : 'custom home building';
+
   const content = [
+    ...(p.intro ? [p.intro] : []),
     permitCallout,
     `<h2 id="building-here">What building in ${p.name} actually involves</h2>`,
     p.landscape,
@@ -675,7 +685,7 @@ function buildLocationGuide(p: PlaceGuide): GuidePageData {
     `<p>For the full picture of what moves a construction budget, see the <a href="/guides/boise-home-building-cost-guide">Boise home building cost guide</a>, or run your size and finish level through the <a href="/#calculator">estimator</a> for a starting range.</p>`,
     `<h2 id="how-we-build">How we work in ${p.name}</h2>`,
     `<p><strong>We handle design, engineering, permitting, and construction under one contract, which means one accountable team from the first drawing to handover.</strong> That includes submissions and inspections with the authority for your address, utility applications, and any separate septic approval with ${healthDistrict}. You get a line-item budget before we break ground, a published draw schedule, a written progress update every week, and a one-year workmanship warranty after possession. Our <a href="/guides/boise-home-building-process-guide">process guide</a> walks through every stage in order.</p>`,
-    `<p>Services relevant here: <a href="/services/custom-home-builder">custom home building</a>, <a href="/services/semi-custom-homes">semi-custom homes</a>, <a href="/services/build-on-your-lot">build on your lot</a>, and <a href="/services/home-plans-design">home plans and design</a>. See also <a href="/areas/${p.citySlug}">our ${p.citySlug === p.name.toLowerCase() ? p.name : p.citySlug} service area page</a> and the <a href="/guides/treasure-valley-home-building-guide">Treasure Valley home building guide</a>.</p>`,
+    `<p>Services relevant here: <a href="/services/custom-home-builder">${customHomeAnchor}</a>, <a href="/services/semi-custom-homes">semi-custom homes</a>, <a href="/services/build-on-your-lot">build on your lot</a>, and <a href="/services/home-plans-design">home plans and design</a>. See also <a href="/areas/${p.citySlug}">our ${p.citySlug === p.name.toLowerCase() ? p.name : p.citySlug} service area page</a> and the <a href="/guides/treasure-valley-home-building-guide">Treasure Valley home building guide</a>.</p>`,
     `<h2 id="next-steps">Start with the parcel</h2>`,
     `<p>The fastest way to get a real answer about building in ${p.name} is to tell us about the specific parcel, because that is what determines the site budget and frequently the plan. <a href="/contact">Send us the address or parcel number</a> and we will tell you what we see, or start with the <a href="/#calculator">build cost estimator</a> for a planning range.</p>`,
   ].join('\n');

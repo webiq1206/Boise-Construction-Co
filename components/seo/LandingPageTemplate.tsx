@@ -19,6 +19,7 @@ import type { FAQItem } from '@/shared/seoContent';
 import { ArrowRight,ChevronRight,Star } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Fragment, type ReactNode } from 'react';
 import { RelatedLinks } from './RelatedLinks';
 
 interface BreadcrumbItem {
@@ -30,6 +31,8 @@ interface LandingPageTemplateProps {
   h1: string;
   speakableSummary: string;
   overview: string;
+  /** When set, these render under the H1 instead of the single overview paragraph. */
+  overviewParagraphs?: ReactNode[];
   breadcrumbs: BreadcrumbItem[];
   heroImageUrl?: string;
   breatherImageUrl?: string;
@@ -85,8 +88,50 @@ interface LandingPageTemplateProps {
 export interface LandingSection {
   heading: string;
   paragraphs?: string[];
+  /** Inline anchors for the paragraph at the same index. Schema and other cities stay plain. */
+  paragraphLinks?: Array<{ phrase: string; href: string }[] | undefined>;
+  bullets?: string[];
+  /** Paragraph index after which `bullets` render. Defaults to after the last paragraph. */
+  bulletsAfterParagraph?: number;
   links?: { label: string; href: string }[];
   subsections?: { heading: string; paragraphs: string[] }[];
+}
+
+function InlineLinks({
+  text,
+  links,
+}: {
+  text: string;
+  links?: { phrase: string; href: string }[];
+}) {
+  if (!links?.length) return <>{text}</>;
+  const sorted = [...links].sort((a, b) => b.phrase.length - a.phrase.length);
+  const nodes: ReactNode[] = [];
+  let rest = text;
+  let key = 0;
+  while (rest.length) {
+    let earliest = -1;
+    let match: { phrase: string; href: string } | null = null;
+    for (const link of sorted) {
+      const idx = rest.indexOf(link.phrase);
+      if (idx !== -1 && (earliest === -1 || idx < earliest)) {
+        earliest = idx;
+        match = link;
+      }
+    }
+    if (!match || earliest === -1) {
+      nodes.push(rest);
+      break;
+    }
+    if (earliest > 0) nodes.push(rest.slice(0, earliest));
+    nodes.push(
+      <Link key={key++} href={match.href} className="ed-link ed-link-accent">
+        {match.phrase}
+      </Link>,
+    );
+    rest = rest.slice(earliest + match.phrase.length);
+  }
+  return <>{nodes}</>;
 }
 
 export interface LandingProof {
@@ -148,6 +193,7 @@ export function LandingPageTemplate({
   h1,
   speakableSummary,
   overview,
+  overviewParagraphs,
   breadcrumbs,
   heroImageUrl,
   breatherImageUrl,
@@ -188,7 +234,22 @@ export function LandingPageTemplate({
             <p className="ed-eyebrow mt-8" style={{ color: 'rgb(255 255 255 / 0.72)' }}>{eyebrow}</p>
           )}
           <h1 className="ed-display ed-statement-display text-inverse-foreground">{h1}</h1>
-          <p className="mt-8 max-w-[60ch] text-base md:text-lg leading-relaxed text-inverse-foreground/95">{overview}</p>
+          {overviewParagraphs && overviewParagraphs.length > 0 ? (
+            overviewParagraphs.map((paragraph, i) => (
+              <p
+                key={i}
+                className={
+                  i === 0
+                    ? 'mt-8 max-w-[60ch] text-base md:text-lg leading-relaxed text-inverse-foreground/95'
+                    : 'mt-4 max-w-[60ch] text-base md:text-lg leading-relaxed text-inverse-foreground/95'
+                }
+              >
+                {paragraph}
+              </p>
+            ))
+          ) : (
+            <p className="mt-8 max-w-[60ch] text-base md:text-lg leading-relaxed text-inverse-foreground/95">{overview}</p>
+          )}
           <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 [&>*]:w-full sm:[&>*]:w-auto">
             <ConsultCTA variant="brand" href={estimateHref}>
               {CTA_PRIMARY} <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -396,9 +457,23 @@ export function LandingPageTemplate({
                 {sections.map((section, i) => (
                   <Reveal key={section.heading} delay={Math.min(i, 4) * 60}>
                     <h2 id={sectionId(section.heading)} className="ed-h2-sm ed-statement-wide scroll-mt-28">{section.heading}</h2>
-                    {section.paragraphs?.map((p, j) => (
-                      <p key={j} className={i === 0 && j === 0 && !costGuidance ? 'ed-lede mt-6 max-w-[52ch]' : j === 0 ? 'ed-body mt-6 max-w-[62ch]' : 'ed-body mt-4 max-w-[62ch]'}>{p}</p>
-                    ))}
+                    {section.paragraphs?.map((p, j) => {
+                      const bulletAt = section.bulletsAfterParagraph ?? (section.paragraphs!.length - 1);
+                      return (
+                        <Fragment key={j}>
+                          <p className={i === 0 && j === 0 && !costGuidance ? 'ed-lede mt-6 max-w-[52ch]' : j === 0 ? 'ed-body mt-6 max-w-[62ch]' : 'ed-body mt-4 max-w-[62ch]'}>
+                            <InlineLinks text={p} links={section.paragraphLinks?.[j]} />
+                          </p>
+                          {section.bullets && bulletAt === j && (
+                            <ul className="ed-body mt-4 max-w-[62ch] list-disc space-y-2 pl-5">
+                              {section.bullets.map((item) => (
+                                <li key={item}>{item}</li>
+                              ))}
+                            </ul>
+                          )}
+                        </Fragment>
+                      );
+                    })}
                     {section.subsections?.map((sub) => (
                       <div key={sub.heading} className="mt-8 border-t pt-6" style={line}>
                         <h3 className="ed-h4">{sub.heading}</h3>
@@ -498,7 +573,9 @@ export function LandingPageTemplate({
                   <AccordionTrigger className="ed-h4 py-6 text-left hover:no-underline [&[data-state=open]]:[color:var(--ed-accent)]">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="ed-body pb-7 text-[0.9375rem]">{faq.answer}</AccordionContent>
+                  <AccordionContent className="ed-body pb-7 text-[0.9375rem]">
+                    <InlineLinks text={faq.answer} links={faq.links} />
+                  </AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
