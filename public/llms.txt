@@ -1,6 +1,6 @@
 # Boise Construction Co
 
-> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build, founded 2020. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, Garden City. Phone (208) 477-1169.
+> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, Garden City. Phone (208) 477-1169.
 
 Design-build means one accountable team handles architectural design, engineering, estimating, Ada and Canyon County permitting, and construction under a single contract, backed by a written line-item scope before the foundation is poured. Budget ranges are produced by an on-site estimator from house geometry and specification level rather than a flat price per square foot, because the same 2,400 square feet costs very different money on a flat infill lot than on a sloped foothills parcel with a shared well. Ranges are planning estimates, not quotes; a firm proposal follows a site visit and a lot review.
 
@@ -44,7 +44,7 @@ Design-build means one accountable team handles architectural design, engineerin
 
 ## About and contact
 
-- [About Boise Construction Co](https://boiseconstruction.co/about): design-build home building across the Treasure Valley since 2020.
+- [About Boise Construction Co](https://boiseconstruction.co/about): design-build home building across the Treasure Valley.
 - [Contact](https://boiseconstruction.co/contact)
 - [Free build estimator](https://boiseconstruction.co/estimate)
 - [Planning resources and worksheets](https://boiseconstruction.co/resources)
@@ -60,4 +60,4 @@ Design-build means one accountable team handles architectural design, engineerin
 - [RSS feed](https://boiseconstruction.co/feed.xml): guides and articles, newest first, with publication and revision dates.
 - [Full text for LLMs](https://boiseconstruction.co/llms-full.txt): expanded reference copy of the core facts.
 
-Last updated: 2026-09-07.
+Last updated: 2026-10-17.

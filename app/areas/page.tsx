@@ -47,7 +47,7 @@ export default function AreasHubPage() {
   return (
     <InteriorPage kind="areas"><>
       <JsonLd data={schemas} />
-      <div className="flex flex-col pb-20 md:pb-0">
+      <div className="flex flex-col ">
         <PageHeroBand
           imageSrc={SITE_IMAGES.hero}
           imageAlt={contentImageAlt(SITE_IMAGES.hero)}
@@ -83,7 +83,7 @@ export default function AreasHubPage() {
               description="Custom homes, semi-custom homes, and builds on your own lot across Ada and Canyon County."
               align="left"
             />
-            <div className="grid gap-5 sm:grid-cols-3">
+            <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
               {CITIES.map((city, i) => (
                 <Reveal key={city.slug} delay={i * 40}>
                   <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />

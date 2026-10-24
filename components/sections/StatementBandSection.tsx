@@ -16,7 +16,7 @@ export function StatementBandSection() {
         className="object-cover img-brand-grade"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-inverse/10 to-background/70" />
-      <p className="absolute bottom-3 left-4 text-xs text-white">Representative imagery</p>
+      <p className="absolute bottom-3 left-4 rounded-sm bg-black/60 px-2 py-1 text-xs text-white">Representative imagery</p>
     </section>
   );
 }

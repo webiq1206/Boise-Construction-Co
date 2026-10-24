@@ -1,0 +1,5 @@
+/* The estimator frame is fixed to the viewport bottom. Leave a strip so the
+   plain registration line stays visible instead of sitting under the dock. */
+[data-p5-estimator][data-layout="page"] {
+  bottom: calc(var(--p5-bottom, 0px) + 52px + env(safe-area-inset-bottom, 0px)) !important;
+}

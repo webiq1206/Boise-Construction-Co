@@ -905,9 +905,9 @@ export const AREA_PAGE_FAQS: FAQItem[] = [
       'Fully custom homes, semi-custom homes from adapted plans, builds on land you already own, and shop homes. We also provide design and lot evaluation as standalone services.',
   },
   {
-    question: 'Are you licensed and insured?',
+    question: 'Are you a registered contractor and insured?',
     answer:
-      'Yes. Boise Construction Co is licensed, bonded, and insured. Idaho contractor registration details are available on request.',
+      'Yes. Boise Construction Co is an Idaho Registered Contractor #8381215, bonded, and insured. Idaho contractor registration details are available on request.',
   },
   {
     question: 'How do I start a project?',

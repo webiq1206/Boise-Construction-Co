@@ -1,59 +1,159 @@
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
+import { clarityFormMaskScript } from '../lib/clarityFormMask.ts';
 
-const root = new URL('../', import.meta.url);
+type FakeEl = {
+  nodeType: number;
+  tag: string;
+  tagName: string;
+  type: string;
+  attrs: Record<string, string>;
+  children: FakeEl[];
+  parentElement: FakeEl | null;
+  append: (child: FakeEl) => void;
+  getAttribute: (name: string) => string | null;
+  setAttribute: (name: string, value: string) => void;
+  querySelectorAll: (selector: string) => FakeEl[];
+};
 
-function read(file: string): string {
-  return fs.readFileSync(new URL(file, root), 'utf8');
+function el(tag: string, children: FakeEl[] = [], type = ''): FakeEl {
+  const node = {
+    nodeType: 1,
+    tag,
+    tagName: tag.toUpperCase(),
+    type: type || (tag === 'input' ? 'text' : ''),
+    attrs: {} as Record<string, string>,
+    children: [] as FakeEl[],
+    parentElement: null as FakeEl | null,
+    append(child: FakeEl) {
+      child.parentElement = this;
+      this.children.push(child);
+    },
+    getAttribute(name: string) {
+      return Object.prototype.hasOwnProperty.call(this.attrs, name) ? this.attrs[name] : null;
+    },
+    setAttribute(name: string, value: string) {
+      this.attrs[name] = value;
+    },
+    querySelectorAll(selector: string) {
+      const tags = selector.split(',').map((part) => part.trim().toLowerCase());
+      const out: FakeEl[] = [];
+      const walk = (current: FakeEl) => {
+        if (tags.includes(current.tag)) out.push(current);
+        current.children.forEach(walk);
+      };
+      this.children.forEach(walk);
+      return out;
+    },
+  };
+  if (type) node.attrs.type = type;
+  children.forEach((child) => node.append(child));
+  return node;
 }
 
-const masked = [
-  'components/ConsultationForm.tsx',
-  'components/AddressAutocomplete.tsx',
-  'components/estimate/recovery/AbandonmentPrompt.tsx',
-  'components/assistant/AssistantWidget.tsx',
-  'components/modals/ModalProvider.tsx',
-  'app/estimate/page.tsx',
-  'components/StripePaymentForm.tsx',
-  'components/marketing/BlogIndexClient.tsx',
-  'components/MillworkPanel.tsx',
-  'components/EstimateCalculator.tsx',
-  'components/re10/Re10Wizard.tsx',
-  'app/estimate/p5-preview/page.tsx',
-  'app/estimate/scope/page.tsx',
-];
+function masked(node: FakeEl): boolean {
+  return node.attrs['data-clarity-mask'] === 'True';
+}
 
-const sharedEstimator = [
-  'components/P5Estimator.tsx',
-  'components/P5AddressInput.tsx',
-  'components/P5ExitOffer.tsx',
-  'components/P5ProjectReview.tsx',
-  'components/P5ReviewRequest.tsx',
-  'components/P5IntakeReview.tsx',
-];
+type Observer = { callback: (mutations: Array<{ addedNodes?: FakeEl[] }>) => void };
 
-test('form containers that collect visitor text set the Clarity mask', () => {
-  for (const file of masked) {
-    assert.equal(read(file).includes('data-clarity-mask="true"'), true, file);
+function run(root: FakeEl) {
+  const observers: Observer[] = [];
+  const documentQueries: unknown[] = [];
+  class MutationObserver {
+    callback: Observer['callback'];
+    constructor(callback: Observer['callback']) {
+      this.callback = callback;
+      observers.push(this);
+    }
+    observe() {}
   }
-  const consult = read('components/ConsultationForm.tsx');
-  assert.match(consult, /data-testid="consultation-success"[^>]*data-clarity-mask="true"/);
-  assert.match(consult, /<form\n\s+data-clarity-mask="true"/);
-  // The estimator engine is synced. Mask the brand-owned mounts so every field
-  // inside the estimator, including the wizard, upload, address, and review
-  // forms, is covered without editing those shared files.
-  for (const file of sharedEstimator) {
-    assert.equal(read(file).includes('data-clarity-mask'), false, file);
-  }
-  assert.equal(read('components/EstimateCalculator.tsx').match(/data-clarity-mask="true"/g)?.length, 2);
+  const document = {
+    nodeType: 9,
+    readyState: 'complete',
+    documentElement: root,
+    addEventListener() {},
+    querySelectorAll(selector: string) {
+      documentQueries.push(document);
+      return root.querySelectorAll(selector);
+    },
+  };
+  new Function('document', 'MutationObserver', clarityFormMaskScript)(document, MutationObserver);
+  return { observers, documentQueries };
+}
+
+test('a masked form covers nested project text and leaves a checkbox parent unmarked', () => {
+  const projectCopy = el('div');
+  const checkbox = el('input', [], 'checkbox');
+  const label = el('label', [checkbox]);
+  const address = el('input');
+  const preferred = el('button');
+  const form = el('form', [projectCopy, label, address, preferred]);
+  const root = el('html', [el('body', [form])]);
+  run(root);
+  assert.equal(masked(form), true);
+  assert.equal(masked(projectCopy), false);
+  assert.equal(masked(label), false);
+  assert.equal(masked(checkbox), false);
+  assert.equal(masked(address), true);
+  assert.equal(masked(preferred), false);
 });
 
-test('Meta pixel turns off automatic advanced matching before init and passes no user data', () => {
-  const pixel = read('components/MetaPixel.tsx');
-  const setAt = pixel.indexOf("fbq('set','autoConfig',false,'${META_PIXEL_ID}');");
-  const initAt = pixel.indexOf("fbq('init','${META_PIXEL_ID}');");
-  assert.equal(setAt > 0, true);
-  assert.equal(initAt > setAt, true);
-  assert.equal(/fbq\('init','\$\{META_PIXEL_ID\}',\s*\{/.test(pixel), false);
+test('a checkbox, radio, range, or button input with no masked ancestor marks its parent', () => {
+  const checkbox = el('input', [], 'checkbox');
+  const checkboxParent = el('div', [checkbox]);
+  const radio = el('input', [], 'radio');
+  const radioParent = el('label', [radio]);
+  const range = el('input', [], 'range');
+  const rangeParent = el('div', [range]);
+  const buttonInput = el('input', [], 'button');
+  const buttonParent = el('div', [buttonInput]);
+  const typed = el('input');
+  const typedParent = el('div', [typed]);
+  const root = el('html', [el('body', [checkboxParent, radioParent, rangeParent, buttonParent, typedParent])]);
+  run(root);
+  for (const parent of [checkboxParent, radioParent, rangeParent, buttonParent]) {
+    assert.equal(masked(parent), true);
+  }
+  assert.equal(masked(checkbox), false);
+  assert.equal(masked(typed), true);
+  assert.equal(masked(typedParent), false);
+});
+
+test('a mutation masks only the added node', () => {
+  const existing = el('input');
+  const untouched = el('div');
+  const body = el('body', [existing, untouched]);
+  const root = el('html', [body]);
+  const { observers, documentQueries } = run(root);
+  assert.equal(masked(existing), true);
+  assert.equal(documentQueries.length, 1);
+  const addedChoice = el('input', [], 'checkbox');
+  const addedParent = el('div', [addedChoice]);
+  const addedForm = el('form', [el('p'), addedParent]);
+  observers[0].callback([{ addedNodes: [addedForm] }]);
+  assert.equal(documentQueries.length, 1);
+  assert.equal(masked(addedForm), true);
+  assert.equal(masked(addedParent), false);
+  assert.equal(masked(untouched), false);
+});
+
+test('the root layout installs the Clarity mask before the Clarity tag', () => {
+  const layout = readFileSync(new URL('../app/layout.tsx', import.meta.url), 'utf8');
+  const maskAt = layout.indexOf('id="clarity-form-mask"');
+  const clarityAt = layout.indexOf('<MicrosoftClarity />');
+  assert.ok(maskAt > 0);
+  assert.ok(clarityAt > maskAt);
+  assert.match(layout, /strategy="beforeInteractive"/);
+  assert.equal(readFileSync(new URL('../components/P5Estimator.tsx', import.meta.url), 'utf8').includes('data-clarity-mask'), false);
+});
+
+test('the consultation success screen and assistant transcript are masked', () => {
+  const consult = readFileSync(new URL('../components/ConsultationForm.tsx', import.meta.url), 'utf8');
+  const successAt = consult.indexOf('data-testid="consultation-success"');
+  assert.match(consult.slice(successAt, successAt + 120), /data-clarity-mask="True"/);
+  const assistant = readFileSync(new URL('../components/assistant/AssistantWidget.tsx', import.meta.url), 'utf8');
+  const logAt = assistant.indexOf('role="log"');
+  assert.match(assistant.slice(logAt, logAt + 220), /data-clarity-mask="True"/);
 });

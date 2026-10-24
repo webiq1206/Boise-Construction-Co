@@ -411,7 +411,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
       : null;
 
     return (
-      <div className="flex flex-col items-start py-2 space-y-4" data-testid="consultation-success" data-clarity-mask="true">
+      <div className="flex flex-col items-start py-2 space-y-4" data-testid="consultation-success" data-clarity-mask="True">
         {/* Brand icon (ochre field) confirms the brand on the request-received state */}
         <img
           src="/brand/svg/icon/boise-construction-co-icon-accent.svg"
@@ -424,12 +424,13 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
           <h3
             ref={successHeadingRef}
             tabIndex={-1}
+            data-clarity-mask="True"
             className="font-serif text-2xl text-foreground outline-none"
           >
             Request received{submitted ? `, ${submitted.name.split(" ")[0]}` : ""}.
           </h3>
           {submittedProject && (
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-sm text-muted-foreground mt-1" data-clarity-mask="True">
               {submittedProject}
               {submitted?.address ? ` · ${submitted.address}` : ""}
             </p>
@@ -498,7 +499,7 @@ export function ConsultationForm({ onRevise, showTrust = false }: ConsultationFo
         submitted={success}
       />
       <form
-        data-clarity-mask="true"
+        data-clarity-mask="True"
         onSubmit={form.handleSubmit(
           (data) => {
             setSubmitted(data);

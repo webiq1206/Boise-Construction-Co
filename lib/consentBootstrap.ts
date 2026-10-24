@@ -1,8 +1,8 @@
 /**
- * US visitors get measurement without a banner. Cabinet, Handyman, Remodeling,
- * and p5homeco set no consent default, so Google treats those tags as granted.
- * This site checks p5Consent before a call tap or a forwarding-number swap, so
- * the same four signals start granted here.
+ * US visitors are measured without a banner. The other P5 sites set no consent
+ * default, so Google treats those tags as granted. This site checks p5Consent
+ * before a call tap or a forwarding-number swap, so the same four signals
+ * start granted, and that default is queued before any tag config.
  */
 export function consentBootstrap():string {
   return `(function(){

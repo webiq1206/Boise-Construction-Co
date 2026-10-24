@@ -55,6 +55,11 @@ export function AssistantWidget() {
   const pathname = usePathname();
   const formInView = useFormInView(pathname, true);
   const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const openFromBar = () => setOpen(true);
+    window.addEventListener("p5:assistant-open", openFromBar);
+    return () => window.removeEventListener("p5:assistant-open", openFromBar);
+  }, []);
   const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
@@ -177,7 +182,7 @@ export function AssistantWidget() {
           }}
           aria-label="Chat with our estimating assistant"
           data-testid="button-assistant-open"
-          className="brc-assistant-launcher fixed bottom-[calc(96px+env(safe-area-inset-bottom))] right-4 z-40 flex h-13 w-13 min-h-11 min-w-11 items-center justify-center rounded-full bg-accent-legible text-background shadow-lg transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-legible lg:bottom-6 lg:right-6"
+          className="brc-assistant-launcher fixed bottom-[calc(96px+env(safe-area-inset-bottom))] right-4 z-40 hidden min-[1180px]:flex h-13 w-13 min-h-11 min-w-11 items-center justify-center rounded-full bg-accent-legible text-background shadow-lg transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-legible lg:bottom-6 lg:right-6"
           style={{ height: 52, width: 52 }}
         >
           <MessageCircle className="h-6 w-6" strokeWidth={1.75} />
@@ -214,7 +219,7 @@ export function AssistantWidget() {
             ref={logRef}
             role="log"
             aria-live="polite"
-            data-clarity-mask="true"
+            data-clarity-mask="True"
             className="flex-1 space-y-3 overflow-y-auto px-4 py-4"
           >
             {messages.map((m, i) => (

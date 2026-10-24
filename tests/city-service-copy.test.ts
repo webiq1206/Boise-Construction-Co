@@ -9,14 +9,20 @@ import { NOINDEX_CITY_SERVICE } from '../lib/page-metadata.ts';
 
 const NOINDEX = [
   'lot-evaluation/kuna',
-  'lot-evaluation/star',
-  'lot-evaluation/middleton',
   'lot-evaluation/caldwell',
-  'energy-efficient-homes/kuna',
   'energy-efficient-homes/star',
-  'energy-efficient-homes/middleton',
-  'energy-efficient-homes/caldwell',
+  'home-additions/nampa',
+  'custom-home-builder/kuna',
   'shop-homes-barndominiums/boise',
+  'shop-homes-barndominiums/caldwell',
+];
+const INDEXED = [
+  'custom-home-builder/boise',
+  'semi-custom-homes/meridian',
+  'build-on-your-lot/nampa',
+  'design-build/eagle',
+  'home-additions/boise',
+  'shop-homes-barndominiums/eagle',
 ];
 
 test('all 81 service-city pages use the draft intro and six FAQs, and schema matches the visible text', () => {
@@ -81,8 +87,10 @@ test('landmark lists and Indian Creek follow the approved corrections', () => {
   assert.doesNotMatch(kunaIntro, /in Indian Creek/i);
 });
 
-test('the nine noindex city-service pages stay noindex', () => {
-  assert.deepEqual([...NOINDEX_CITY_SERVICE].sort(), [...NOINDEX].sort());
+test('only the 28 allowlisted city-service pages are indexable', () => {
+  assert.equal(NOINDEX_CITY_SERVICE.size, SERVICES.length * CITIES.length - 28);
+  for (const key of NOINDEX) assert.equal(NOINDEX_CITY_SERVICE.has(key), true, key);
+  for (const key of INDEXED) assert.equal(NOINDEX_CITY_SERVICE.has(key), false, key);
 });
 
 test('an unlisted service keeps the shared intro and FAQ generator', () => {

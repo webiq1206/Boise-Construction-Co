@@ -17,6 +17,20 @@ export function googleTagBootstrap(options: {
   if (document.getElementById('p5-google-tag')) return;
   window.dataLayer = window.dataLayer || [];
   window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+  var consentSet = false;
+  for (var i = 0; i < window.dataLayer.length; i++) {
+    var row = window.dataLayer[i];
+    if (row && row[0] === 'consent' && row[1] === 'default') consentSet = true;
+  }
+  if (!consentSet) {
+    window.gtag('consent', 'default', {
+      analytics_storage: 'granted',
+      ad_storage: 'granted',
+      ad_user_data: 'granted',
+      ad_personalization: 'granted',
+      wait_for_update: 500
+    });
+  }
   window.gtag('js', new Date());
   window.gtag('config', config.measurementId);
   window.gtag('config', config.adsId);

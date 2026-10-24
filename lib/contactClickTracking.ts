@@ -10,7 +10,7 @@ export function contactClickExcludedPath(pathname: string): boolean {
  * One delegated contact click. GA4 contact_click stays on the existing path.
  * Any tel: or sms: link outside /admin and /portal also sends one Google Ads
  * conversion when Ads consent is already granted. The number in the href is
- * not compared with the business number. The caller runs this once per click.
+ * not compared with the business number, so a Google forwarding number counts.
  */
 export function trackDelegatedContactClick(href: string, pathname = ''): void {
   if ((href.startsWith('tel:') || href.startsWith('sms:')) && contactClickExcludedPath(pathname)) return;
