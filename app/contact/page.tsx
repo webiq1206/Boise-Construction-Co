@@ -30,7 +30,7 @@ import { BUSINESS_INFO } from '@/lib/seo';
 import { areaPath } from '@/lib/seo-routes';
 import { CITIES,TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
-import { SITE_CONFIG } from '@/shared/siteConfig';
+import { preferToTextLine, SITE_CONFIG } from '@/shared/siteConfig';
 import { CONSULT_BULLETS,HERO_STATS } from '@/shared/siteContent';
 import { contentImageAlt } from '@/shared/imageAlts';
 import { SITE_IMAGES } from '@/shared/siteImages';
@@ -228,7 +228,7 @@ export default function ContactPage() {
               className="block text-sm text-inverse-foreground/80 hover:text-inverse-foreground transition-colors mb-8"
               data-testid="link-hero-text"
             >
-              Prefer to text? Message us instead
+              {preferToTextLine()}
             </a>
             <div className="interior-contact-actions"><InteriorEstimateLink/><a href="#consult" className="interior-text-link">Request a consultation</a></div>
             <dl className="ed-hero-facts">

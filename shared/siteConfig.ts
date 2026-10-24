@@ -4,6 +4,8 @@
  */
 
 const DEFAULT_PHONE = "(208) 477-1169";
+/** Public text-reply hours. The Prefer to text line is the only place this is shown. */
+export const TEXT_REPLY_HOURS = "Mon–Fri 9–6, Sat 9–4 MT";
 const DEFAULT_PHONE_TEL = "2084771169";
 const DEFAULT_EMAIL = "hello@boiseconstruction.co";
 // This site now lives on its own domain. boiseremodeling.co was duplicated and
@@ -45,6 +47,10 @@ export const SITE_CONFIG = {
     serviceArea: "Treasure Valley · Ada and Canyon County",
   },
 } as const;
+
+export function preferToTextLine(phone: string = SITE_CONFIG.phone): string {
+  return `Prefer to text? Text ${phone}. We reply in minutes during business hours (${TEXT_REPLY_HOURS}).`;
+}
 
 export function formatPhoneDisplay(tel: string = SITE_CONFIG.phoneTel): string {
   const digits = tel.replace(/\D/g, "");
