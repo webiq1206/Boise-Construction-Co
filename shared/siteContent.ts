@@ -109,10 +109,9 @@ export const PROOF_STATS = {
 } as const;
 
 /**
- * Post-hero proof bar. Leads with the founding year, then the genuine trust
- * signals the business carries. No review counts, ratings, or project counts
- * until real ones exist. Keep labels concise and keep this at six entries so
- * the strip fills the six-column desktop grid in HeroSection.
+ * Post-hero proof bar. The founding-year label is included only while
+ * SHOW_FOUNDING_YEAR is true. No review counts, ratings, or project counts
+ * until real ones exist. Keep labels concise.
  */
 export const TRUST_ITEMS = [
   ...(SHOW_FOUNDING_YEAR ? [`Est. ${PROOF_STATS.established}`] : ["Idaho Registered Contractor"]),
@@ -122,6 +121,17 @@ export const TRUST_ITEMS = [
   "Workmanship Warranty",
   "Free Consultation",
 ];
+
+export const HOW_P5_WORKS_TITLE = "How P5 works";
+export const HOW_P5_WORKS = [
+  "Own install crew",
+  "Bonded & insured",
+  "Manufacturer warranties passed through",
+  "Install dates confirmed in writing",
+  "Written update every week",
+  "Free in-home consultation, no pressure",
+  "Public representative: Nick Perkins",
+] as const;
 
 export const PROMISE_ITEMS = [
   {

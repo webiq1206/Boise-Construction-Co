@@ -59,7 +59,7 @@ export async function generateOgCard(slug, title, sourceImage) {
 
   const bg = await bgDataUri(src);
 
-  // Centered, crop-safe composition. The seal and title live in the middle of
+  // Centered, crop-safe composition. The title lives in the middle of
   // the frame so nothing is cut when a platform crops the 1.91:1 card to 4:3
   // (Google Business Profile) or square (iMessage/link thumbnails). Content
   // stays inside a centered safe zone rather than the left/bottom edges.

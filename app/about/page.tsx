@@ -24,6 +24,8 @@ import { CITIES,TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
 import { FOUNDING, SHOW_FOUNDING_YEAR } from '@/shared/publicFlags';
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { HowP5Works } from '@/components/HowP5Works';
+import { IdahoRegistrationLine } from '@/components/IdahoRegistrationLine';
 import { HERO_STATS,PRINCIPLES,TRUST_ITEMS } from '@/shared/siteContent';
 import { SITE_IMAGES } from '@/shared/siteImages';
 import { ArrowRight,Check,ChevronRight } from 'lucide-react';
@@ -195,8 +197,8 @@ export default function AboutPage() {
                   className="mb-8 max-w-none"
                 />
                 <p className="text-sm text-muted-foreground leading-relaxed mb-8">
-                  Idaho contractor registration information is available upon request. We are bonded
-                  and insured for residential construction across the Treasure Valley.
+                  <IdahoRegistrationLine />. We are bonded and insured for residential construction
+                  across the Treasure Valley.
                 </p>
                 <ul className="grid sm:grid-cols-2 gap-3">
                   {TRUST_ITEMS.map((item) => (
@@ -206,6 +208,9 @@ export default function AboutPage() {
                     </li>
                   ))}
                 </ul>
+                <div className="mt-8">
+                  <HowP5Works heading="h3" />
+                </div>
                 <div className="mt-8 pt-8 border-t border-border">
                   <p className="ed-eyebrow">Our commitment</p>
                   <h3 className="ed-h4">

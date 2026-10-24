@@ -11,7 +11,8 @@
 - Email: `hello@boiseremodeling.co`
 - Hours: Mon-Fri 9:00 AM-6:00 PM, Sat 9:00 AM-4:00 PM, Sun closed
 - Categories: Remodeler; Kitchen remodeler; Bathroom remodeler; General contractor
-- Description (short, for directories): "Design-build remodeling contractor serving Boise and the Treasure Valley. Kitchen remodels, bathroom remodels, whole-home renovations, room additions, and ADUs. Founded 2017. Bonded and insured."
+- Description (short, for directories): "Design-build remodeling contractor serving Boise and the Treasure Valley. Kitchen remodels, bathroom remodels, whole-home renovations, room additions, and ADUs. Bonded and insured."
+<!-- Recorded directory founding text, withheld while SHOW_FOUNDING_YEAR is false: Founded 2017. -->
 
 ## On-site NAP audit - CONSISTENT (verified in code)
 

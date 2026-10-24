@@ -3,6 +3,7 @@ import { ConsultationForm } from "@/components/ConsultationForm";
 import { MarketingCard } from "@/components/marketing/MarketingCard";
 import { Section } from "@/components/marketing/Section";
 import { Reveal } from "@/components/Reveal";
+import { HowP5Works } from "@/components/HowP5Works";
 import { BudgetInclusionsSection } from "@/components/sections/BudgetInclusionsSection";
 import { HomePageSchema } from "@/components/seo/HomePageSchema";
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
@@ -83,6 +84,11 @@ export default function HomePage() {
       <HomePageSchema />
       <ApprovedHome />
       <BudgetInclusionsSection />
+      <Section id="how-p5-works" divider>
+        <div className="ed-shell">
+          <HowP5Works />
+        </div>
+      </Section>
       <div id="contact" className="scroll-mt-24" aria-hidden="true" />
       <Section id="consult" divider className="relative overflow-hidden scroll-mt-16 pb-28 md:pb-28">
         {/* Warm, dimmed lifestyle photo grounds the closing section. Directional

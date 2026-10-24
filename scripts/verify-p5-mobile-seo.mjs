@@ -1,10 +1,12 @@
 import {chromium} from '@playwright/test';
 import {writeFile,mkdir} from 'node:fs/promises';
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 const base=process.env.P5_TEST_ORIGIN||'http://127.0.0.1:5000';const out='p5-mobile-seo-verification';await mkdir(out,{recursive:true});
 const browser=await chromium.launch();const results={pages:[],mobile:[],errors:[],scope:'Built production app in Chromium emulation; not physical devices or a claim of live deployment.'};
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 const ctx=await browser.newContext({viewport:{width:390,height:844},hasTouch:true});const page=await ctx.newPage();page.setDefaultTimeout(15000);
+await ctx.route('**/*',route=>{const u=new URL(route.request().url());return u.origin!==new URL(base).origin||u.pathname.startsWith('/api/')?route.abort():route.continue();});
 const visible=locator=>locator.evaluateAll(els=>els.some(e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return r.width>0&&r.height>0&&s.display!=='none'&&s.visibility!=='hidden'&&s.opacity!=='0';}));
 try{
  for(const width of [320,390,768,1440]){
@@ -34,11 +36,15 @@ try{
   const meta=await page.evaluate(html=>{const doc=new DOMParser().parseFromString(html,'text/html');return {title:doc.querySelector('title')?.textContent||'',description:doc.querySelector('meta[name=description]')?.getAttribute('content')||'',canonical:doc.querySelector('link[rel=canonical]')?.getAttribute('href'),images:[...doc.querySelectorAll('meta[property="og:image"]')].map(e=>e.getAttribute('content')),twitter:doc.querySelector('meta[name="twitter:image"]')?.getAttribute('content'),robots:doc.querySelector('meta[name=robots]')?.getAttribute('content')||'',icon:doc.querySelector('link[rel=icon]')?.getAttribute('href')};},html);
   results.pages.push({route,...meta});
   assert.ok(meta.title,`Title missing on ${route}`);assert.ok(meta.description,`Description missing on ${route}`);
-  assert.ok(meta.images.some(u=>u?.endsWith('/brand/page-preview.png')),`Approved brand preview missing on ${route}`);
+  assert.ok(meta.images.some(u=>u?.endsWith('/brand/page-preview.png')),`Year-free share image missing on ${route}`);
   assert.ok(meta.twitter?.endsWith('/brand/page-preview.png'),`Twitter preview missing on ${route}`);
+  assert.ok(![...meta.images,meta.twitter].some(u=>u?.endsWith('/images/og-default.png')),`Obsolete draft preview still published on ${route}`);
  }
  for(const field of ['title','description']){const used=new Map();for(const p of results.pages.filter(p=>!p.robots.includes('noindex'))){assert.ok(!used.has(p[field]),`Duplicate ${field}: ${p.route} and ${used.get(p[field])}`);used.set(p[field],p.route);}}
  for(const asset of ['/brand/page-preview.png','/brand/search-icon-96.png','/brand/search-icon-180.png'])assert.equal((await page.request.get(base+asset)).status(),200,`Missing image: ${asset}`);
+ // Exact approved year-free asset, visually reviewed during reconciliation.
+ const preview=await page.request.get(base+'/brand/page-preview.png');
+ assert.equal(createHash('sha256').update(await preview.body()).digest('hex'),'62170364be2f94a0c72658764181cdc60d73dde9de46b6bfa5c366edee3a324b','Approved year-free preview changed');
  results.completed=true;
  console.log(JSON.stringify({pages:results.pages.length,mobile:results.mobile,errors:results.errors}));
 }finally{await writeFile(`${out}/verification.json`,JSON.stringify(results,null,2));await browser.close();}

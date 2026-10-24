@@ -5,6 +5,7 @@
  * Sections: nap | services | products | qa | posts | all (default)
  */
 
+import { SHOW_FOUNDING_YEAR } from '../shared/foundedYear';
 import {
   GBP_ATTRIBUTES,
   GBP_CATEGORIES,
@@ -22,9 +23,16 @@ import {
 
 const section = process.argv[2] ?? 'all';
 
+function publishedNap() {
+  if (SHOW_FOUNDING_YEAR) return GBP_NAP;
+  const { founded, ...rest } = GBP_NAP;
+  void founded;
+  return rest;
+}
+
 function printNap() {
   console.log('\n=== NAP ===');
-  console.log(JSON.stringify(GBP_NAP, null, 2));
+  console.log(JSON.stringify(publishedNap(), null, 2));
   console.log('\nService areas:');
   GBP_SERVICE_AREAS.forEach((a) => console.log(`  - ${a}`));
   console.log('\nCategories:');

@@ -29,6 +29,20 @@ export const metadata: Metadata = withBrandPageMetadata(({
   },
 }), "/terms-of-service");
 
+const TERMS_CONTENTS = [
+  { id: "document-section-1", label: "Agreement to Terms" },
+  { id: "document-section-2", label: "Services" },
+  { id: "document-section-3", label: "Service Estimates and Pricing" },
+  { id: "document-section-4", label: "Payment Terms" },
+  { id: "document-section-5", label: "Scheduling and Cancellation" },
+  { id: "document-section-6", label: "Property Access" },
+  { id: "document-section-7", label: "Subcontracting" },
+  { id: "document-section-8", label: "Limitation of Liability" },
+  { id: "document-section-9", label: "Satisfaction Guarantee" },
+  { id: "document-section-10", label: "Changes to Terms" },
+  { id: "document-section-11", label: "Contact Information" },
+];
+
 export default function TermsOfServicePage() {
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: "/" },
@@ -52,7 +66,7 @@ export default function TermsOfServicePage() {
       />
       <section className="py-16 md:py-24">
         <div className="container px-4">
-          <InteriorDocument heading={<h1>Terms of Service for Boise Construction Co</h1>} contents={[{"id":"document-section-1","label":"Agreement to Terms"},{"id":"document-section-2","label":"Services"},{"id":"document-section-3","label":"Service Estimates and Pricing"},{"id":"document-section-4","label":"Payment Terms"},{"id":"document-section-5","label":"Scheduling and Cancellation"},{"id":"document-section-6","label":"Property Access"},{"id":"document-section-7","label":"Subcontracting"},{"id":"document-section-8","label":"Limitation of Liability"},{"id":"document-section-9","label":"Satisfaction Guarantee"},{"id":"document-section-10","label":"Changes to Terms"},{"id":"document-section-11","label":"Contact Information"}]}>
+          <InteriorDocument heading={<h1>Terms of Service for Boise Construction Co</h1>} contents={TERMS_CONTENTS}>
 
             <p className="lead text-muted-foreground">
               Last updated: January 2024

@@ -48,8 +48,9 @@ export async function generateMetadata(
   const imageUrl = getAbsoluteImageUrl(heroPath, getBaseUrl());
   const imageAlt = getBlogImageAlt(post.slug);
 
-  // Prefer the branded Open Graph share card (photo + dark overlay + title +
-  // seal, 1200x630) when one exists; fall back to the featured hero image.
+  // Prefer the branded Open Graph share card (photo, dark overlay, and title,
+  // 1200x630) when one exists; fall back to the featured hero image. The card
+  // generator does not draw the maker's seal.
   const ogCard = getBlogOgImage(post.slug);
   const shareImageUrl = ogCard ? getAbsoluteImageUrl(ogCard, getBaseUrl()) : imageUrl;
 

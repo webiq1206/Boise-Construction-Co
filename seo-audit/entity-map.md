@@ -14,8 +14,10 @@ Complete entity inventory: organization, services, locations, team, projects.
 | Name | Boise Construction Co | `shared/siteConfig.ts` | OK |
 | Legal name | Boise Construction Co LLC | siteConfig | OK |
 | Alternate names | — | — | **GAP** (add "Boise Remodeling", "BRC") |
-| Description | Design-build remodeler, est. 2017 | `lib/schema.ts` | OK |
-| Founded | 2017 | `BUSINESS_INFO.founded` | OK |
+| Description | Design-build remodeler | `lib/schema.ts` | founding year withheld |
+<!-- Recorded description, withheld while SHOW_FOUNDING_YEAR is false: Design-build remodeler, est. 2017 -->
+| Founded | withheld while SHOW_FOUNDING_YEAR is false | `BUSINESS_INFO.founded` | hidden |
+<!-- Recorded founded year: 2017 -->
 | Phone | (208) 477-1169 | siteConfig | OK |
 | Email | hello@boiseconstruction.co | siteConfig | OK |
 | Address (NAP) | 4031 W Wapoot St, Meridian, ID 83646 | siteConfig | OK in schema; **footer shows "Boise, Idaho" only — inconsistency** |
