@@ -40,7 +40,7 @@ export const metadata: Metadata = withBrandPageMetadata((buildPageMetadata({
   path: '/guides',
   titleOverride: 'Home Building Guides | Boise Construction Co',
   descriptionOverride:
-    'In-depth Treasure Valley home building guides: what a custom home costs, how the build process runs, buying land, choosing a builder, design decisions, and construction financing.',
+    'Treasure Valley home building guides: custom home costs, the build process, buying land, choosing a builder, design, and construction financing.',
 })), "/guides");
 
 const PILLAR_TYPES = new Set(['hub-pillar', 'master']);
@@ -55,7 +55,7 @@ export default function GuidesIndexPage() {
   const webPageSchema = generateWebPageSchema({
     title: 'Home Building Guides',
     description:
-      'In-depth Treasure Valley home building guides: what a custom home costs, how the build process runs, buying land, choosing a builder, design decisions, and construction financing.',
+      'Treasure Valley home building guides: custom home costs, the build process, buying land, choosing a builder, design, and construction financing.',
     url: '/guides',
   });
 
@@ -185,10 +185,10 @@ export default function GuidesIndexPage() {
                     <ArrowRight className="ml-1 h-3 w-3" />
                   </Link>
                   <Link
-                    href={`/blog/category/${hub.hubSlug}`}
+                    href={hub.hubSlug === 'treasure-valley-locations' ? '/areas' : `/blog/category/${hub.hubSlug}`}
                     className="text-muted-foreground hover:text-accent-legible hover:underline"
                   >
-                    Related articles
+                    {hub.hubSlug === 'treasure-valley-locations' ? 'Service areas' : 'Related articles'}
                   </Link>
                 </div>
               </MarketingCard>

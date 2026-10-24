@@ -14,8 +14,10 @@ import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
 generateBreadcrumbSchema,
+generateFAQSchema,
 generateWebPageSchema,
 } from "@/lib/schema";
+import { AREA_PAGE_FAQS } from "@/shared/seoContent";
 import { CITY_HERO_IMAGES } from "@/shared/cityServiceImages";
 import { CITIES,TREASURE_VALLEY_CITIES } from "@/shared/contentData";
 import { CTA_PRIMARY,CTA_SECONDARY } from "@/shared/ctaCopy";
@@ -42,6 +44,7 @@ export default function AreasHubPage() {
       { name: "Home", url: "/" },
       { name: "Service Areas", url: "/areas" },
     ]),
+    generateFAQSchema(AREA_PAGE_FAQS),
   ];
 
   return (
@@ -88,6 +91,20 @@ export default function AreasHubPage() {
                 <Reveal key={city.slug} delay={i * 40}>
                   <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />
                 </Reveal>
+              ))}
+            </div>
+          </div>
+        </Section>
+
+        <Section surface="dark" spacing="lg">
+          <div className="ed-shell">
+            <h2 className="ed-h2">Questions about building in the Treasure Valley</h2>
+            <div className="mt-8 grid gap-6">
+              {AREA_PAGE_FAQS.map((faq) => (
+                <div key={faq.question}>
+                  <h3 className="ed-h4">{faq.question}</h3>
+                  <p className="ed-body mt-2">{faq.answer}</p>
+                </div>
               ))}
             </div>
           </div>

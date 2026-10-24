@@ -4,7 +4,7 @@ import {schemaTime} from './schemaTime';
  * Creates structured data for Google rich snippets and search features
  */
 
-import { BUSINESS_INFO, CITY_SEO_DATA, getBaseUrl } from './seo';
+import { BUSINESS_INFO, getBaseUrl } from './seo';
 import { SERVICES } from '@/shared/contentData';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { FOUNDING, PUBLIC_MARK_PATH, SHOW_FOUNDING_YEAR } from '@/shared/publicFlags';
@@ -63,6 +63,22 @@ export const P5_PARENT_ORGANIZATION = {
 } as const;
 
 /**
+ * One Nick Perkins node for every brand. The @id lives on p5homeco.com so
+ * Construction, Handyman, and P5 merge to the same Person.
+ */
+export const NICK_PERKINS_ID = `${P5_ORIGIN}/#nick-perkins`;
+export const PUBLIC_EMPLOYEE = {
+  '@type': 'Person',
+  '@id': NICK_PERKINS_ID,
+  name: SITE_CONFIG.publicRepresentative,
+  jobTitle: 'Public representative',
+  worksFor: { '@id': P5_ORG_ID },
+} as const;
+
+/** Schema telephone only. Visible copy keeps the local format in SITE_CONFIG.phone. */
+export const SCHEMA_TELEPHONE = '+1-208-477-1169';
+
+/**
  * Public business type. HomeAndConstructionBusiness is the primary type;
  * GeneralContractor stays as an additional type so existing classification
  * is not dropped.
@@ -83,12 +99,12 @@ export const PUBLIC_POSTAL_ADDRESS = {
   addressCountry: 'US',
 } as const;
 
-/** Named public contact. Role wording is the brief's "public representative". */
+/** Named public contact. Same contactType on every P5 brand. */
 export const PUBLIC_CONTACT_POINT = {
   '@type': 'ContactPoint',
   name: SITE_CONFIG.publicRepresentative,
-  telephone: BUSINESS_INFO.phone,
-  contactType: 'public representative',
+  contactType: 'customer service',
+  telephone: SCHEMA_TELEPHONE,
   areaServed: 'US-ID',
   availableLanguage: 'English',
 } as const;
@@ -117,6 +133,7 @@ const CITY_WIKIPEDIA: Record<string, string> = {
   Star: 'https://en.wikipedia.org/wiki/Star,_Idaho',
   Middleton: 'https://en.wikipedia.org/wiki/Middleton,_Idaho',
   Caldwell: 'https://en.wikipedia.org/wiki/Caldwell,_Idaho',
+  'Garden City': 'https://en.wikipedia.org/wiki/Garden_City,_Idaho',
 };
 
 export function generateLocalBusinessSchema(city?: string): SchemaContext {
@@ -124,8 +141,9 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
   // per-city coordinates under one @id confuses entity disambiguation, so geo
   // is always the HQ; the service area is expressed via `areaServed`. The
   // optional `city` only customizes the human-readable description.
-  // HQ geo matches the NAP locality (Meridian) - previously pointed at Kuna.
-  const coordinates = CITY_SEO_DATA.Meridian.coordinates;
+  // Street geocode for 4031 W Wapoot St, Meridian, ID 83646. The Meridian
+  // city centroid in CITY_SEO_DATA is a different point and is not used here.
+  const coordinates = { lat: 43.6515, lng: -116.4444 };
 
   return {
     '@context': 'https://schema.org',
@@ -137,8 +155,9 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     logo: LOGO_URL,
     '@id': LOCALBUSINESS_ID,
     url: baseUrl,
-    parentOrganization: { '@id': ORG_ID },
-    telephone: BUSINESS_INFO.phone,
+    parentOrganization: P5_PARENT_ORGANIZATION,
+    employee: PUBLIC_EMPLOYEE,
+    telephone: SCHEMA_TELEPHONE,
     email: BUSINESS_INFO.email,
     hasCredential: CONTRACTOR_CREDENTIAL,
     address: PUBLIC_POSTAL_ADDRESS,
@@ -225,7 +244,7 @@ export function generateServiceSchema(serviceName: string, serviceDescription: s
       '@type': [...BUSINESS_TYPES],
       '@id': LOCALBUSINESS_ID,
       name: BUSINESS_INFO.name,
-      telephone: BUSINESS_INFO.phone,
+      telephone: SCHEMA_TELEPHONE,
       email: BUSINESS_INFO.email,
       hasCredential: CONTRACTOR_CREDENTIAL,
       priceRange: '$$',
@@ -302,7 +321,7 @@ export function generateOrganizationSchema(): SchemaContext {
           },
         }
       : {}),
-    telephone: BUSINESS_INFO.phone,
+    telephone: SCHEMA_TELEPHONE,
     email: BUSINESS_INFO.email,
     address: PUBLIC_POSTAL_ADDRESS,
     knowsAbout: [
@@ -319,16 +338,7 @@ export function generateOrganizationSchema(): SchemaContext {
       'Canyon County building permits',
     ],
     sameAs: BUSINESS_INFO.sameAs,
-    contactPoint: [
-      {
-        '@type': 'ContactPoint',
-        telephone: BUSINESS_INFO.phone,
-        contactType: 'Customer Service',
-        areaServed: 'US-ID',
-        availableLanguage: 'English',
-      },
-      PUBLIC_CONTACT_POINT,
-    ],
+    contactPoint: [PUBLIC_CONTACT_POINT],
   };
 }
 

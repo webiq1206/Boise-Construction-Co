@@ -41,6 +41,27 @@ html, body {
   }
 }
 
+/* Above-the-fold heroes are in the server HTML and must paint at full
+   opacity. Entrance motion stays below the fold, so LCP does not wait
+   on the reveal script or a transform animation. */
+.f-hero > img,
+.f-hero h1,
+.f-proof,
+.interior-hero,
+.interior-hero-image,
+.interior-hero-image img,
+.interior-hero h1 {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+.js :is(.f-hero, .f-proof, .interior-hero) .reveal-init {
+  opacity: 1;
+  transform: none;
+  animation: none;
+  transition: none;
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    BOISE CONSTRUCTION CO - DARK-ONLY BRAND IDENTITY
    Committed charcoal ground. :root and .dark carry IDENTICAL values so

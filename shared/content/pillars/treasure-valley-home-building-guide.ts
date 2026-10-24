@@ -3,7 +3,7 @@ import type { GuidePageData } from '../../guideContent';
 export const treasureValleyHomeBuildingGuide: GuidePageData = {
   slug: 'treasure-valley-home-building-guide',
   title: 'Treasure Valley Home Building Guide',
-  seoTitle: 'Treasure Valley Home Building Guide by City',
+  seoTitle: 'Treasure Valley Home Building Guide',
   metaDescription:
     'What changes as you build a new home across the Treasure Valley: Ada and Canyon permits, valley floor versus foothills cost, serviced lots and acreage.',
   excerpt:

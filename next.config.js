@@ -86,6 +86,21 @@ const nextConfig = {
       permanent: true,
     });
 
+    // Empty locations hub. App Router redirect() is a 307; this is a 301.
+    // Internal links point at /areas directly so visitors do not need the hop.
+    redirects.push(
+      {
+        source: '/blog/category/treasure-valley-locations',
+        destination: '/areas',
+        statusCode: 301,
+      },
+      {
+        source: '/blog/category/treasure-valley-locations/',
+        destination: '/areas',
+        statusCode: 301,
+      },
+    );
+
     // Legacy page aliases → canonical BRC routes
     const pageAliases = {
       '/about-us': '/about',

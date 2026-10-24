@@ -4,6 +4,10 @@
 
 Design-build means one accountable team handles architectural design, engineering, estimating, Ada and Canyon County permitting, and construction under a single contract, backed by a written line-item scope before the foundation is poured. Budget ranges are produced by an on-site estimator from house geometry and specification level rather than a flat price per square foot, because the same 2,400 square feet costs very different money on a flat infill lot than on a sloped foothills parcel with a shared well. Ranges are planning estimates, not quotes; a firm proposal follows a site visit and a lot review.
 
+## Contact
+
+Public representative: Nick Perkins. Service-area business based at 4031 W Wapoot St, Meridian, ID 83646 (not a staffed storefront). Phone (208) 477-1169. Email hello@boiseconstruction.co.
+
 ## Services
 
 - [Custom Home Building](https://boiseconstruction.co/services/custom-home-builder): A home drawn from a blank page around your lot, your budget, and how you actually live.
@@ -15,7 +19,7 @@ Design-build means one accountable team handles architectural design, engineerin
 - [Lot Evaluation & Feasibility](https://boiseconstruction.co/services/lot-evaluation): Soils, utilities, access, setbacks, and slope reviewed before you commit to a parcel.
 - [Shop Homes & Barndominiums](https://boiseconstruction.co/services/shop-homes-barndominiums): Post-frame and steel-framed homes that pair finished living space with real working shop square footage.
 - [Energy-Efficient Homes](https://boiseconstruction.co/services/energy-efficient-homes): High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.
-- [RE-10 / Inspection Repairs](https://boiseconstruction.co/re-10-repairs-boise): repairs from an Idaho RE-10 inspection response, completed and documented before closing, for real estate agents, buyers and sellers.
+- [RE-10 repairs (Boise Handyman Co)](https://boisehandyman.co/re-10-repairs-boise): repairs from an Idaho RE-10 inspection response, completed and documented before closing, for real estate agents, buyers and sellers.
 - [All Services](https://boiseconstruction.co/services): plus city pages at /services/{service}/{city} and [Service Areas](https://boiseconstruction.co/areas).
 
 ## Authoritative guides
@@ -40,7 +44,7 @@ Design-build means one accountable team handles architectural design, engineerin
 - [The Building Process](https://boiseconstruction.co/blog/category/home-building-process)
 - [Land & Lots](https://boiseconstruction.co/blog/category/land-and-lots)
 - [Design & Floor Plans](https://boiseconstruction.co/blog/category/home-design-and-plans)
-- [Treasure Valley Locations](https://boiseconstruction.co/blog/category/treasure-valley-locations)
+- [Treasure Valley Locations](https://boiseconstruction.co/areas)
 
 ## About and contact
 
