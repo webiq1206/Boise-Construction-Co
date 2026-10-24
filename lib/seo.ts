@@ -374,6 +374,21 @@ export function generateSEOMetadata(params: ServiceSEOParams): SEOMetaData {
   };
 }
 
+/** "A", "A and B", or "A, B, and C". */
+export function joinNames(names: readonly string[]): string {
+  if (names.length <= 1) return names[0] ?? '';
+  if (names.length === 2) return `${names[0]} and ${names[1]}`;
+  return `${names.slice(0, -1).join(', ')}, and ${names[names.length - 1]}`;
+}
+
+/** One place drops the comma: "Middleton Heights and all of Canyon County". */
+export function placesAcrossCounty(places: readonly string[], county: string): string {
+  const shown = places.slice(0, 3);
+  const joined = joinNames(shown);
+  if (shown.length <= 1) return `${joined} and all of ${county}`;
+  return `${joined}, and all of ${county}`;
+}
+
 /**
  * City-specific data for local SEO
  */
@@ -421,7 +436,8 @@ export const CITY_SEO_DATA: Record<string, {
     founded: '1864',
     zipCodes: ['83616'],
     // Shadow Valley is Boise 83714 / unincorporated Ada County, not Eagle.
-    neighborhoods: ['Banbury', 'The Estates', 'Floating Feather'],
+    // "The Estates" is unverified. Eagle lists Banbury and Floating Feather only.
+    neighborhoods: ['Banbury', 'Floating Feather'],
     landmarks: ['Eagle Island State Park', 'Heritage Park', 'Eagle Hills Golf Course'],
     climate: 'semi-arid with distinct four seasons',
     coordinates: { lat: 43.6954, lng: -116.3540 },
