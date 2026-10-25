@@ -8,13 +8,14 @@
  * labelled "Virtual assistant" so a visitor always knows what they are
  * talking to - the conversation itself does the human part.
  */
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useFormInView } from "@/hooks/use-form-in-view";
 import Link from "next/link";
 import { MessageCircle, Send, X } from "lucide-react";
 import { continueAssistantProject } from "@/lib/p5/assistantContinuation";
 import { trackEvent } from "@/lib/analytics";
+import { requestHideMobileNavBar } from "@/lib/mobileNavBar";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -66,6 +67,7 @@ export function AssistantWidget() {
   const logRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const openedOnce = useRef(false);
+  const [frame, setFrame] = useState<{ top: number; height: number } | null>(null);
 
   /* Restore the session transcript once on mount. */
   useEffect(() => {
@@ -92,13 +94,49 @@ export function AssistantWidget() {
     }
   }, [messages]);
 
-  /* Keep the newest message in view. */
+  /* A greeting-only open starts at the top. Later replies stay in view. */
   useEffect(() => {
-    if (open) logRef.current?.scrollTo({ top: logRef.current.scrollHeight });
+    if (!open || !logRef.current) return;
+    if (messages.length <= 1 && !sending) {
+      logRef.current.scrollTop = 0;
+      return;
+    }
+    logRef.current.scrollTo({ top: logRef.current.scrollHeight });
   }, [messages, sending, open]);
 
   useEffect(() => {
-    if (open) inputRef.current?.focus();
+    if (open) inputRef.current?.focus({ preventScroll: true });
+  }, [open]);
+
+  useLayoutEffect(() => {
+    if (!open) return;
+    const release = requestHideMobileNavBar();
+    const previousBody = document.body.style.overflow;
+    const previousRoot = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    const place = () => {
+      const mobile = window.matchMedia("(max-width: 639px)").matches;
+      const viewport = window.visualViewport;
+      if (!mobile || !viewport) {
+        setFrame(null);
+        return;
+      }
+      setFrame({ top: viewport.offsetTop, height: viewport.height });
+    };
+    place();
+    window.visualViewport?.addEventListener("resize", place);
+    window.visualViewport?.addEventListener("scroll", place);
+    window.addEventListener("resize", place);
+    return () => {
+      release();
+      document.body.style.overflow = previousBody;
+      document.documentElement.style.overflow = previousRoot;
+      setFrame(null);
+      window.visualViewport?.removeEventListener("resize", place);
+      window.visualViewport?.removeEventListener("scroll", place);
+      window.removeEventListener("resize", place);
+    };
   }, [open]);
 
   const close = useCallback(() => setOpen(false), []);
@@ -195,10 +233,15 @@ export function AssistantWidget() {
           role="dialog"
           aria-label="Estimating assistant chat"
           data-testid="panel-assistant"
-          className="fixed inset-x-0 bottom-0 z-[150] flex h-[85dvh] flex-col overflow-hidden rounded-t-md border border-card-border bg-background shadow-2xl sm:inset-x-auto sm:bottom-5 sm:right-5 sm:h-[560px] sm:max-h-[calc(100dvh-6rem)] sm:w-[380px] sm:rounded-md"
+          className={
+            frame
+              ? "brc-assistant-panel fixed inset-x-0 z-[150] flex flex-col overflow-hidden border-0 shadow-2xl"
+              : "brc-assistant-panel fixed inset-x-0 bottom-0 z-[150] flex h-[85dvh] flex-col overflow-hidden border border-[#2c302f1f] shadow-2xl sm:inset-x-auto sm:bottom-5 sm:right-5 sm:h-[560px] sm:max-h-[calc(100dvh-6rem)] sm:w-[380px] sm:rounded-md"
+          }
+          style={frame ? { top: frame.top, height: frame.height } : undefined}
         >
           {/* Header */}
-          <div className="flex items-center justify-between gap-3 border-b border-card-border bg-card px-4 py-3">
+          <div className="brc-assistant-bar flex items-center justify-between gap-3 border-b border-[#2c302f14] px-4 py-3">
             <div className="min-w-0">
               <p className="truncate text-sm font-normal text-foreground">Boise Construction Co</p>
               <p className="text-xs text-muted-foreground">Virtual assistant · project help</p>
@@ -253,7 +296,7 @@ export function AssistantWidget() {
               e.preventDefault();
               void send();
             }}
-            className="flex items-end gap-2 border-t border-card-border bg-card px-3 py-3"
+            className="brc-assistant-bar flex items-end gap-2 border-t border-[#2c302f14] px-3 py-3"
           >
             <textarea
               ref={inputRef}

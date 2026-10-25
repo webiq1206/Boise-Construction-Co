@@ -39,6 +39,8 @@ import { createDrizzleInquiryIntake } from "@/server/services/inquiryIntake";
 import { deliverInquiryChannel, type InquiryDeliveryResult } from "@/server/services/inquiryDelivery";
 import { inspectLeadTrap, LeadRequestError, readBoundedJson } from "@/server/services/leadRequestGuard";
 import { clientKeyFrom, rateLimit } from "@/lib/rateLimit";
+import { isProjectFileUrl, joinProjectNote, projectFileNote, projectNoteFieldError } from "@/lib/projectNoteFiles";
+import { extractLocalKey, isLocalUrl, readLocalFile } from "@/lib/storage/blob";
 import {
   buildCrmIntakeFields,
   buildLeadPropertyRecord,
@@ -91,6 +93,18 @@ const bodySchema = z
     submissionKind: z.enum(["initial", "followup"]).optional().default("initial"),
     formStartedAt: z.number().finite().int(),
     website: z.string().max(200).optional().default(""),
+    /* Short homepage note. Requires name, phone, email, and a project note. */
+    formId: z.literal("project-note").optional(),
+    /* Optional plans or photos from the short project note. URLs must be ones this site stored. */
+    projectFiles: z
+      .array(
+        z.object({
+          filename: z.string().min(1).max(180),
+          url: z.string().min(1).max(500),
+        }),
+      )
+      .max(4)
+      .optional(),
     /* Set by the client when the visitor already submitted the estimate gate,
        which already sent admin + customer emails via /api/estimate-lead.
        Prevents duplicate email sends when the same person submits both forms. */
@@ -103,6 +117,23 @@ const bodySchema = z
       }
     } else if (data.phone.replace(/\D/g, "").length < 10) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["phone"], message: "Valid phone required" });
+    }
+    for (const [index, file] of (data.projectFiles ?? []).entries()) {
+      if (!isProjectFileUrl(file.url)) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["projectFiles", index, "url"], message: "Unrecognized file" });
+      }
+    }
+    if (data.formId === "project-note") {
+      const note = (data.message ?? "").replace(/^Homepage project note\.\s*/, "");
+      const fieldError = projectNoteFieldError({
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        note,
+      });
+      if (fieldError) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["message"], message: fieldError });
+      }
     }
   });
 
@@ -232,7 +263,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const data = parsed.data;
+    const parsedData = parsed.data;
+    const data = {
+      ...parsedData,
+      message: joinProjectNote(parsedData.message, projectFileNote(parsedData.projectFiles, SITE_CONFIG.siteUrl)),
+    };
     const trap = inspectLeadTrap(data);
     if (trap === "honeypot") {
       // Pretend success so bots do not get feedback, while avoiding all work.
@@ -374,6 +409,18 @@ export async function POST(request: NextRequest) {
         const adminHtml = buildAdminEmailHtml(lead, estimate, enrichment, costs);
         const adminEmails = await getAdminRecipientEmails(SITE_CONFIG.email);
         for (const adminEmail of adminEmails) {
+          const attachments: { filename: string; content: Buffer }[] = [];
+          let attachedBytes = 0;
+          for (const file of data.projectFiles ?? []) {
+            if (!isLocalUrl(file.url)) continue;
+            const content = await readLocalFile(extractLocalKey(file.url));
+            if (!content || attachedBytes + content.byteLength > 15 * 1024 * 1024) continue;
+            attachedBytes += content.byteLength;
+            attachments.push({
+              filename: file.filename.replace(/[^\w. -]+/g, "_").slice(0, 120),
+              content,
+            });
+          }
           const adminResult = await client.emails.send({
             from,
             // No reply-to-the-lead shortcut when they didn't leave an email -
@@ -383,6 +430,7 @@ export async function POST(request: NextRequest) {
             subject: buildAdminSubject(lead, estimate),
             html: adminHtml,
             text: htmlToPlainText(adminHtml),
+            ...(attachments.length ? { attachments } : {}),
           }, { idempotencyKey: resendIdempotencyKey(intakeResult.inquiryKey, revisionKey, "admin", adminEmail) });
           if (adminResult?.error) {
             throw new Error(`Admin email failed: ${adminResult.error.message}`);
