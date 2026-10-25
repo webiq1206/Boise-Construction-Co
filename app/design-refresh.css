@@ -193,3 +193,10 @@
 @media (max-width: 700px) {
   .site-cabinet .cabinet-approved .section { padding-block: 56px; }
 }
+
+/* Header Call and Chat stay on the phone bar. The wordmark shrinks so those
+   44px controls fit beside it at 320px. The homepage hero is unchanged. */
+@media (max-width: 700px) {
+  .approved-shell [data-approved-navigation] > nav { padding-inline: 16px; gap: 6px; }
+  .approved-shell .approved-original-wordmark { width: 132px; }
+}

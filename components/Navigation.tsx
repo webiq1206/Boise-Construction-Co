@@ -146,6 +146,24 @@ function MarketingNavigation() {
                 <Contact className="h-[18px] w-[18px]" strokeWidth={1.5} aria-hidden />
               </SaveContactLink>
             </div>
+            <a
+              href={SITE_CONFIG.phoneHref}
+              className="inline-flex h-11 items-center gap-2 rounded-sm px-2 text-sm text-foreground"
+              data-testid="link-call-header"
+            >
+              <Phone className="h-4 w-4" strokeWidth={1.5} aria-hidden />
+              Call
+            </a>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event("p5:assistant-open"))}
+              className="inline-flex h-11 items-center gap-2 rounded-sm px-2 text-sm text-foreground"
+              aria-label="Chat with our estimating assistant"
+              data-testid="button-chat-header"
+            >
+              <MessageSquare className="h-4 w-4" strokeWidth={1.5} aria-hidden />
+              Chat
+            </button>
             <NavEstimateButton variant="brand" size="sm" className="min-h-11" trackingLocation="nav_desktop">
               {CTA_QUOTE}
             </NavEstimateButton>
@@ -153,7 +171,24 @@ function MarketingNavigation() {
 
           {/* Mobile menu - Radix Dialog gives focus trap, Escape, scroll-lock,
               inert background, and auto aria-expanded/aria-controls on the trigger. */}
-          <div className="flex min-[1180px]:hidden items-center gap-2">
+          <div className="flex min-[1180px]:hidden items-center gap-1">
+            <a
+              href={SITE_CONFIG.phoneHref}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-sm text-foreground"
+              aria-label={`Call ${SITE_CONFIG.phone}`}
+              data-testid="link-call-header-mobile"
+            >
+              <Phone className="h-5 w-5" strokeWidth={1.5} aria-hidden />
+            </a>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event("p5:assistant-open"))}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-sm text-foreground"
+              aria-label="Chat with our estimating assistant"
+              data-testid="button-chat-header-mobile"
+            >
+              <MessageSquare className="h-5 w-5" strokeWidth={1.5} aria-hidden />
+            </button>
             <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
               <Dialog.Trigger asChild>
                 {/* The shared icon size is 36px, which suits dense admin
