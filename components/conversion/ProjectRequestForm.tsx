@@ -4,20 +4,17 @@ import { useRef, useState } from "react";
 import { readLeadAttribution } from "@/lib/leadAttributionBrowser";
 import { getOrCreateInquiryTracking, readInquiryTracking, recordInquiryAcceptance } from "@/lib/inquiryTracking";
 import { trackClaimedLeadConversion } from "@/lib/analytics";
-import { PROJECT_FILE_LIMITS } from "@/lib/projectNoteFiles";
+import { PROJECT_FILE_LIMITS, projectNoteBody, projectNoteFieldError } from "@/lib/projectNoteFiles";
 
 type StoredFile = { filename: string; url: string };
 
 const ACCEPT = ".pdf,.png,.jpg,.jpeg,.webp,.heic,.heif,application/pdf,image/jpeg,image/png,image/webp,image/heic";
 
-function digits(value: string): string {
-  return value.replace(/\D/g, "");
-}
-
 export function ProjectRequestForm() {
   const startedAt = useRef(Date.now());
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [note, setNote] = useState("");
   const [website, setWebsite] = useState("");
   const [files, setFiles] = useState<File[]>([]);
@@ -48,18 +45,13 @@ export function ProjectRequestForm() {
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
+    const fieldError = projectNoteFieldError({ name, phone, email, note });
+    if (fieldError) {
+      setStatus("error");
+      setError(fieldError);
+      return;
+    }
     const trimmedName = name.trim();
-    const phoneDigits = digits(phone);
-    if (trimmedName.length < 2) {
-      setStatus("error");
-      setError("Add your name.");
-      return;
-    }
-    if (phoneDigits.length < 10) {
-      setStatus("error");
-      setError("Add a phone number we can call.");
-      return;
-    }
     if (Date.now() - startedAt.current < 2500) {
       setStatus("error");
       setError("Please wait a moment, then send again.");
@@ -83,16 +75,17 @@ export function ProjectRequestForm() {
 
       const existing = readInquiryTracking();
       const tracking = getOrCreateInquiryTracking();
-      const message = ["Homepage project note.", note.trim()].filter(Boolean).join(" ");
+      const message = projectNoteBody(note);
       const res = await fetch("/api/consultation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: trimmedName,
           phone,
-          email: "",
+          email: email.trim(),
           preferredContact: "phone",
           projectType: "other",
+          formId: "project-note",
           message,
           projectFiles: stored,
           formStartedAt: startedAt.current,
@@ -135,7 +128,7 @@ export function ProjectRequestForm() {
       <div className="f-request" id="project-request" role="status" data-clarity-mask="True">
         <p className="f-request-kicker">Request received</p>
         <p className="f-request-title">We have your note.</p>
-        <p>We will call {phone.trim()} to talk through the project.</p>
+        <p>We will call {phone.trim()} and email {email.trim()} to talk through the project.</p>
       </div>
     );
   }
@@ -147,7 +140,6 @@ export function ProjectRequestForm() {
         <input id="project-website" name="website" type="text" tabIndex={-1} autoComplete="off" value={website} onChange={(event) => setWebsite(event.target.value)} />
       </div>
       <p className="f-request-kicker">Send a project note</p>
-      <p className="f-request-title">Name and phone. We will call you.</p>
       <label className="f-request-field">
         <span>Name</span>
         <input name="name" autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} required minLength={2} maxLength={120} />
@@ -157,8 +149,12 @@ export function ProjectRequestForm() {
         <input name="phone" type="tel" autoComplete="tel" inputMode="tel" value={phone} onChange={(event) => setPhone(event.target.value)} required />
       </label>
       <label className="f-request-field">
-        <span>Note, optional</span>
-        <input name="note" value={note} maxLength={2000} placeholder="Lot, plan, or what you want to build" onChange={(event) => setNote(event.target.value)} />
+        <span>Email</span>
+        <input name="email" type="email" autoComplete="email" inputMode="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
+      </label>
+      <label className="f-request-field">
+        <span>Project note</span>
+        <input name="note" value={note} maxLength={2000} required minLength={2} placeholder="Lot, plan, or what you want to build" onChange={(event) => setNote(event.target.value)} />
       </label>
       <div className="f-request-field">
         <span id="project-files-label">Plans or photos, optional</span>
@@ -175,7 +171,7 @@ export function ProjectRequestForm() {
           />
           <span>Add a plan set or photos</span>
         </label>
-        <p className="f-request-hint">A plan set helps us review a custom home. You can skip this.</p>
+        <p className="f-request-hint">A plan set helps. You can skip it.</p>
         {files.length > 0 && (
           <ul className="f-request-files">
             {files.map((file, index) => (

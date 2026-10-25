@@ -4,6 +4,26 @@
  * uploader would mint, so a note cannot point at some other stored document.
  */
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** The short homepage note is a finished lead: name, phone, email, and a project note. Files stay optional. */
+export function projectNoteFieldError(input: {
+  name: string;
+  phone: string;
+  email: string;
+  note: string;
+}): string | null {
+  if (input.name.trim().length < 2) return "Add your name.";
+  if (input.phone.replace(/\D/g, "").length < 10) return "Add a phone number we can call.";
+  if (!EMAIL_RE.test(input.email.trim())) return "Add an email address.";
+  if (input.note.trim().length < 2) return "Add a short project note.";
+  return null;
+}
+
+export function projectNoteBody(note: string): string {
+  return `Homepage project note. ${note.trim()}`;
+}
+
 export const PROJECT_FILE_LIMITS = {
   maxFiles: 4,
   maxBytes: 10 * 1024 * 1024,

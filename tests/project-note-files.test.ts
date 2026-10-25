@@ -4,6 +4,7 @@ import {
   isProjectFileUrl,
   joinProjectNote,
   projectFileNote,
+  projectNoteFieldError,
   safeProjectLeaf,
   sniffProjectFile,
 } from "../lib/projectNoteFiles";
@@ -37,4 +38,13 @@ test("file links survive a long visitor note", () => {
 
 test("file leaf drops paths and odd characters", () => {
   assert.equal(safeProjectLeaf("../../My Plan Set.PDF"), "my-plan-set");
+});
+
+test("the short project note requires name, phone, email, and a note", () => {
+  const complete = { name: "Ada Home", phone: "2085550142", email: "ada@example.com", note: "Eagle lot" };
+  assert.equal(projectNoteFieldError(complete), null);
+  assert.match(projectNoteFieldError({ ...complete, email: "" }) ?? "", /email/i);
+  assert.match(projectNoteFieldError({ ...complete, note: " " }) ?? "", /note/i);
+  assert.match(projectNoteFieldError({ ...complete, phone: "555" }) ?? "", /phone/i);
+  assert.match(projectNoteFieldError({ ...complete, name: "A" }) ?? "", /name/i);
 });

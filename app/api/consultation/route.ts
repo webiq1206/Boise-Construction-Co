@@ -39,7 +39,7 @@ import { createDrizzleInquiryIntake } from "@/server/services/inquiryIntake";
 import { deliverInquiryChannel, type InquiryDeliveryResult } from "@/server/services/inquiryDelivery";
 import { inspectLeadTrap, LeadRequestError, readBoundedJson } from "@/server/services/leadRequestGuard";
 import { clientKeyFrom, rateLimit } from "@/lib/rateLimit";
-import { isProjectFileUrl, joinProjectNote, projectFileNote } from "@/lib/projectNoteFiles";
+import { isProjectFileUrl, joinProjectNote, projectFileNote, projectNoteFieldError } from "@/lib/projectNoteFiles";
 import { extractLocalKey, isLocalUrl, readLocalFile } from "@/lib/storage/blob";
 import {
   buildCrmIntakeFields,
@@ -93,6 +93,8 @@ const bodySchema = z
     submissionKind: z.enum(["initial", "followup"]).optional().default("initial"),
     formStartedAt: z.number().finite().int(),
     website: z.string().max(200).optional().default(""),
+    /* Short homepage note. Requires name, phone, email, and a project note. */
+    formId: z.literal("project-note").optional(),
     /* Optional plans or photos from the short project note. URLs must be ones this site stored. */
     projectFiles: z
       .array(
@@ -119,6 +121,18 @@ const bodySchema = z
     for (const [index, file] of (data.projectFiles ?? []).entries()) {
       if (!isProjectFileUrl(file.url)) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["projectFiles", index, "url"], message: "Unrecognized file" });
+      }
+    }
+    if (data.formId === "project-note") {
+      const note = (data.message ?? "").replace(/^Homepage project note\.\s*/, "");
+      const fieldError = projectNoteFieldError({
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        note,
+      });
+      if (fieldError) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["message"], message: fieldError });
       }
     }
   });
