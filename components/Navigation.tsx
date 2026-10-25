@@ -8,6 +8,7 @@ import { SaveContactLink } from "@/components/SaveContactLink";
 import { Button } from "@/components/ui/button";
 import { isEstimatorPath } from "@/lib/p5/estimatorRoutes";
 import { cn } from "@/lib/utils";
+import { CTA_QUOTE } from "@/shared/ctaCopy";
 import { NAV_LINKS } from "@/shared/navConfig";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -145,52 +146,14 @@ function MarketingNavigation() {
                 <Contact className="h-[18px] w-[18px]" strokeWidth={1.5} aria-hidden />
               </SaveContactLink>
             </div>
-            <a
-              href={SITE_CONFIG.phoneHref}
-              className="inline-flex h-11 items-center gap-2 rounded-sm px-2 text-sm text-foreground"
-              data-testid="link-call-header"
-            >
-              <Phone className="h-4 w-4" strokeWidth={1.5} aria-hidden />
-              Call
-            </a>
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new Event("p5:assistant-open"))}
-              className="inline-flex h-11 items-center gap-2 rounded-sm px-2 text-sm text-foreground"
-              aria-label="Chat with our estimating assistant"
-              data-testid="button-chat-header"
-            >
-              <MessageSquare className="h-4 w-4" strokeWidth={1.5} aria-hidden />
-              Chat
-            </button>
             <NavEstimateButton variant="brand" size="sm" className="min-h-11" trackingLocation="nav_desktop">
-              Send a note
+              {CTA_QUOTE}
             </NavEstimateButton>
-            <a href="/estimate" className="text-sm text-muted-foreground underline-offset-4 hover:underline" data-testid="link-scoped-estimate-desktop">
-              Scoped estimate
-            </a>
           </div>
 
           {/* Mobile menu - Radix Dialog gives focus trap, Escape, scroll-lock,
               inert background, and auto aria-expanded/aria-controls on the trigger. */}
-          <div className="flex min-[1180px]:hidden items-center gap-1">
-            <a
-              href={SITE_CONFIG.phoneHref}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-sm text-foreground"
-              aria-label={`Call ${SITE_CONFIG.phone}`}
-              data-testid="link-call-header-mobile"
-            >
-              <Phone className="h-5 w-5" strokeWidth={1.5} aria-hidden />
-            </a>
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new Event("p5:assistant-open"))}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-sm text-foreground"
-              aria-label="Chat with our estimating assistant"
-              data-testid="button-chat-header-mobile"
-            >
-              <MessageSquare className="h-5 w-5" strokeWidth={1.5} aria-hidden />
-            </button>
+          <div className="flex min-[1180px]:hidden items-center gap-2">
             <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
               <Dialog.Trigger asChild>
                 {/* The shared icon size is 36px, which suits dense admin
@@ -320,11 +283,8 @@ function MarketingNavigation() {
                       onExtraClick={() => setMobileOpen(false)}
                       trackingLocation="nav_mobile_menu"
                     >
-                      Send a note
+                      {CTA_QUOTE}
                     </NavEstimateButton>
-                    <a href="/estimate" onClick={() => setMobileOpen(false)} className="mt-3 block text-center text-sm text-muted-foreground underline-offset-4 hover:underline">
-                      Scoped estimate
-                    </a>
                   </div>
                 </Dialog.Content>
               </Dialog.Portal>
@@ -366,7 +326,7 @@ function MarketingNavigation() {
             data-testid="button-begin-conversation-mobile"
             trackingLocation="mobile_sticky_bar"
           >
-            Send a note
+            {CTA_QUOTE}
           </NavEstimateButton>
         </div>
       </div>
