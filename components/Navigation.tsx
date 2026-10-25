@@ -8,6 +8,7 @@ import { SaveContactLink } from "@/components/SaveContactLink";
 import { Button } from "@/components/ui/button";
 import { isEstimatorPath } from "@/lib/p5/estimatorRoutes";
 import { cn } from "@/lib/utils";
+import { CTA_QUOTE } from "@/shared/ctaCopy";
 import { NAV_LINKS } from "@/shared/navConfig";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -164,11 +165,8 @@ function MarketingNavigation() {
               Chat
             </button>
             <NavEstimateButton variant="brand" size="sm" className="min-h-11" trackingLocation="nav_desktop">
-              Send a note
+              {CTA_QUOTE}
             </NavEstimateButton>
-            <a href="/estimate" className="text-sm text-muted-foreground underline-offset-4 hover:underline" data-testid="link-scoped-estimate-desktop">
-              Scoped estimate
-            </a>
           </div>
 
           {/* Mobile menu - Radix Dialog gives focus trap, Escape, scroll-lock,
@@ -320,11 +318,8 @@ function MarketingNavigation() {
                       onExtraClick={() => setMobileOpen(false)}
                       trackingLocation="nav_mobile_menu"
                     >
-                      Send a note
+                      {CTA_QUOTE}
                     </NavEstimateButton>
-                    <a href="/estimate" onClick={() => setMobileOpen(false)} className="mt-3 block text-center text-sm text-muted-foreground underline-offset-4 hover:underline">
-                      Scoped estimate
-                    </a>
                   </div>
                 </Dialog.Content>
               </Dialog.Portal>
@@ -366,7 +361,7 @@ function MarketingNavigation() {
             data-testid="button-begin-conversation-mobile"
             trackingLocation="mobile_sticky_bar"
           >
-            Send a note
+            {CTA_QUOTE}
           </NavEstimateButton>
         </div>
       </div>
