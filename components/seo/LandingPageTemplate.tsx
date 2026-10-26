@@ -35,6 +35,7 @@ interface LandingPageTemplateProps {
   overviewParagraphs?: ReactNode[];
   breadcrumbs: BreadcrumbItem[];
   heroImageUrl?: string;
+  heroImageAlt?: string;
   breatherImageUrl?: string;
   processImageUrl?: string;
   manifestPath?: string;
@@ -196,6 +197,7 @@ export function LandingPageTemplate({
   overviewParagraphs,
   breadcrumbs,
   heroImageUrl,
+  heroImageAlt,
   breatherImageUrl,
   processImageUrl,
   manifestPath,
@@ -227,7 +229,7 @@ export function LandingPageTemplate({
   return (
     <div className="flex flex-col ">
       {/* Approved editorial hero */}
-      <InteriorHero imageSrc={heroImageUrl} imageAlt={contentImageAlt(heroImageUrl)} layout="split">
+      <InteriorHero imageSrc={heroImageUrl} imageAlt={heroImageAlt ?? contentImageAlt(heroImageUrl)} layout="split">
           <HeroBreadcrumbs items={breadcrumbs} />
           <p data-speakable="summary" className="sr-only">{speakableSummary}</p>
           {eyebrow && (
