@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import {sanitizeAttribution,appendAttributionEvidence} from '@/lib/leadAttribution';
 import { createHash } from "crypto";
 import { z } from "zod";
@@ -37,6 +37,7 @@ import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import { readUnitCostOverrides } from "@/server/services/unitCostOverrides";
 import { createDrizzleInquiryIntake } from "@/server/services/inquiryIntake";
 import { deliverInquiryChannel, type InquiryDeliveryResult } from "@/server/services/inquiryDelivery";
+import { forwardConsultationToP5Intake } from "@/server/services/p5IntakeBridge";
 import { inspectLeadTrap, LeadRequestError, readBoundedJson } from "@/server/services/leadRequestGuard";
 import { clientKeyFrom, rateLimit } from "@/lib/rateLimit";
 import {
@@ -298,6 +299,33 @@ export async function POST(request: NextRequest) {
         conversionEligible: intakeResult.conversionEligible,
         delivery: [],
       });
+    }
+
+    // HubSpot contact, mapped deal, and lead_created mail live on p5 intake.
+    // Only a newly inserted consultation reaches this block. Honeypot,
+    // too-fast, intake failure, and the followup-only return above do not.
+    if (intakeResult.inserted) {
+      // Started before Resend and the lead-dashboard forward so it overlaps
+      // them, and kept alive with after() so the visitor response does not
+      // wait on it. Failures stay inside the bridge and cannot change this
+      // status or gate those deliveries.
+      const location = (data.propertyProfile as { city?: string; zip?: string } | null) ?? null;
+      try {
+        const bridge = forwardConsultationToP5Intake({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          address: data.address,
+          city: location?.city,
+          zip: data.zip || location?.zip,
+          projectType: data.projectType,
+          message: data.message,
+          inquiryKey: intakeResult.inquiryKey,
+        });
+        after(() => bridge);
+      } catch (bridgeErr) {
+        console.error("[p5-intake] Could not schedule HubSpot bridge:", bridgeErr);
+      }
     }
 
     // Same complete record as the estimate-gate path, so a lead looks identical
