@@ -20,6 +20,7 @@
     "verify:section-links": "node --import tsx scripts/verify-section-links.ts",
     "verify:lead-payload": "node --import tsx scripts/verify-lead-payload.ts",
     "verify:inquiry-intake": "node --import tsx scripts/verify-inquiry-intake.ts",
+    "verify:p5-intake": "node --import tsx --test tests/p5-intake-bridge.test.ts",
     "verify:lead-analytics": "node --import tsx scripts/verify-lead-analytics.ts",
     "verify:redirect-collisions": "node --import tsx scripts/verify-redirect-collisions.ts",
     "generate:llms": "node --import tsx scripts/generate-llms-txt.ts",
