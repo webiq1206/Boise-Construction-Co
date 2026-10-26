@@ -50,7 +50,7 @@ const ABOUT_FAQS = [
 ];
 
 const SPEAKABLE_SUMMARY =
-  'We are a locally owned design-build home builder serving the Treasure Valley. Our focus is clarity: a line-item budget before we break ground, a published draw schedule, weekly written updates, permits handled in-house for Ada and Canyon County, and a one-year workmanship warranty after you take possession.';
+  'Boise Construction Co is the new-home specialist in the P5 family, serving the Treasure Valley. Share your lot, plans and priorities. Review the scope and design, then agree on the proposal, contract and schedule before construction.';
 
 function HeroBreadcrumbs() {
   const items = [
@@ -126,15 +126,10 @@ export default function AboutPage() {
               <em className="brc-accent">Co</em>
             </h1>
             <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-4">
-              We are a locally owned design-build home builder serving the Treasure Valley. You work
-              with one accountable team from the first conversation about your lot through the day
-              you get the keys.
+              Boise Construction Co is the new-home specialist in the P5 family, serving the Treasure Valley. Start with your lot, plans and priorities so we can discuss the right path for your home.
             </p>
             <p className="text-base md:text-lg text-inverse-foreground/75 max-w-2xl leading-relaxed mb-8">
-              Our focus is clarity: a line-item budget before we break ground, a published draw
-              schedule, a written update every week, permits handled in-house for Ada and Canyon
-              County, and a one-year workmanship warranty. The point of all of it is simple - you
-              always know what your home costs and where the build stands.
+              Share your plans, review the scope and design, then agree on the proposal, contract and schedule before construction. You should know who to contact and what decision comes next.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap [&>*]:w-full sm:[&>*]:w-auto mb-8">
               <ConsultCTA variant="brand">
@@ -191,7 +186,7 @@ export default function AboutPage() {
                       <em className="brc-accent">explained</em>
                     </>
                   }
-                  description="Design-build means your designer, estimator, and construction lead work together under one roof. The plan, the budget, the engineering, and the permit set stay aligned, so the house you are shown in design is the house that gets priced and built."
+                  description="Start with your lot and the home you have in mind. We review the scope and design with you, clarify the proposal and responsibilities, and agree on the contract and schedule before construction. Changes and decisions should be documented, with a walkthrough to review the completed work."
                   className="mb-8 max-w-none"
                 />
                 <p className="text-sm text-muted-foreground leading-relaxed mb-8">
