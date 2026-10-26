@@ -4,6 +4,7 @@ import { MarketingCard } from "@/components/marketing/MarketingCard";
 import { Section } from "@/components/marketing/Section";
 import { Reveal } from "@/components/Reveal";
 import { BudgetInclusionsSection } from "@/components/sections/BudgetInclusionsSection";
+import { ProjectGallerySection } from "@/components/sections/ProjectGallerySection";
 import { HomePageSchema } from "@/components/seo/HomePageSchema";
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildCanonical,fitDescription } from "@/lib/page-metadata";
@@ -82,6 +83,7 @@ export default function HomePage() {
           number land well; everything below it answers what the number raised. */}
       <HomePageSchema />
       <ApprovedHome />
+      <ProjectGallerySection limit={3} />
       <BudgetInclusionsSection />
       <div id="contact" className="scroll-mt-24" aria-hidden="true" />
       <Section id="consult" divider className="relative overflow-hidden scroll-mt-16 pb-28 md:pb-28">

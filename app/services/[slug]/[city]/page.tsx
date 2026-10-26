@@ -78,8 +78,8 @@ export default async function CityServicePage(
   const images = getCityServiceImageSet(service.slug, city.slug);
   const sections = getCityServiceSections(content, city, seo);
 
-  // Real before/after projects only. Written testimonials stay hidden until we
-  // have genuine, verified reviews (no seeded quotes or star ratings).
+  // Concept-home imagery only. Written testimonials stay hidden until we have
+  // genuine, verified reviews (no seeded quotes or star ratings).
   const matchedProjects = getGalleryProjectsFor(service.slug, city.slug);
   const proof: LandingProof | undefined =
     matchedProjects.length > 0
@@ -87,8 +87,8 @@ export default async function CityServicePage(
           projects: matchedProjects.map((p) => ({
             title: p.title,
             description: p.description,
-            beforeImageUrl: p.beforeImageUrl,
-            afterImageUrl: p.afterImageUrl,
+            exteriorImageUrl: p.images[0]?.src ?? "",
+            interiorImageUrl: p.images[1]?.src ?? p.images[0]?.src ?? "",
           })),
         }
       : undefined;

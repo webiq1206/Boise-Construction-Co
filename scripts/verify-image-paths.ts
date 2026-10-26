@@ -27,6 +27,7 @@ import { CITIES, SERVICES } from '../shared/contentData';
 import { BLOG_POSTS } from '../shared/blogContent';
 import { GUIDE_PAGES } from '../shared/guideContent';
 import { getBlogHeroImage } from '../shared/blogImages';
+import { GALLERY_PROJECTS } from '../shared/galleryData';
 
 const root = path.join(__dirname, '..');
 const missing: string[] = [];
@@ -98,6 +99,16 @@ for (const post of BLOG_POSTS) {
 for (const guide of GUIDE_PAGES) {
   check(`GUIDE_PAGES["${guide.slug}"].heroImage`, guide.heroImage);
   check(`resolved hero for guide "${guide.slug}"`, getBlogHeroImage(guide.slug, guide.heroImage));
+}
+
+for (const project of GALLERY_PROJECTS) {
+  if (!project.images.length) {
+    missing.push(`GALLERY_PROJECTS["${project.title}"]: no images`);
+    continue;
+  }
+  for (const image of project.images) {
+    check(`GALLERY_PROJECTS["${project.title}"].${image.label}`, image.src);
+  }
 }
 
 if (missing.length > 0) {

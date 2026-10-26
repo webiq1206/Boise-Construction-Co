@@ -848,6 +848,27 @@ export function getCityServiceSections(
   const creek = indianCreekDescription(city.name);
   const serviceLC = service.name.toLowerCase();
 
+  const conceptFigure =
+    city.slug === 'eagle'
+      ? {
+          src: '/images/projects/eagle-farmhouse-kitchen.webp',
+          caption: `Representative imagery: concept kitchen finishes for ${city.name} home building.`,
+        }
+      : city.slug === 'meridian'
+        ? {
+            src: '/images/projects/meridian-ranch-kitchen.webp',
+            caption: `Representative imagery: concept kitchen finishes for ${city.name} home building.`,
+          }
+        : city.slug === 'boise'
+          ? {
+              src: '/images/projects/boise-craftsman-kitchen.webp',
+              caption: `Representative imagery: concept kitchen finishes for ${city.name} home building.`,
+            }
+          : {
+              src: '/images/construction/new-home-kitchen.webp',
+              caption: `Representative imagery: kitchen finishes for Treasure Valley ${serviceLC}.`,
+            };
+
   const sections: LandingSection[] = [
     // Server-rendered cost bands (extractable by crawlers and AI engines,
     // unlike the client-side estimator). See local-seo-audit/10-aeo-geo-plan.md.
@@ -865,6 +886,7 @@ export function getCityServiceSections(
                 href: '/guides/boise-home-building-cost-guide',
               },
             ],
+            figure: conceptFigure,
           },
         ]
       : []),
@@ -880,6 +902,17 @@ export function getCityServiceSections(
           ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand how the area is developing and plan ${serviceLC} that fits the neighborhood and holds its value.`
           : `As a local team, we plan ${serviceLC} that fits the neighborhood and holds its value.`,
       ],
+      figure: {
+        src:
+          city.slug === 'eagle'
+            ? '/images/projects/eagle-farmhouse-exterior.webp'
+            : city.slug === 'meridian'
+              ? '/images/projects/meridian-ranch-exterior.webp'
+              : city.slug === 'boise'
+                ? '/images/projects/boise-craftsman-exterior.webp'
+                : '/images/construction/custom-home-exterior.webp',
+        caption: `Representative imagery for ${serviceLC} in ${city.name}.`,
+      },
     },
     {
       heading: `New construction permits and plan review in ${city.name}`,
@@ -894,6 +927,10 @@ export function getCityServiceSections(
         ...(permitSource(city.name)?[{label:`Official ${city.name} permit guidance`,href:permitSource(city.name)!}]:[]),
         { label: 'Ada vs Canyon County permit timelines', href: '/resources/ada-canyon-permit-flow' },
       ],
+      figure: {
+        src: '/images/construction/plans-and-selections.webp',
+        caption: 'Representative imagery: plans and selections reviewed before permitting.',
+      },
     },
   ];
 

@@ -75,6 +75,32 @@ const ALTS: Record<string, string> = {
     "A two-story house with light siding and a dark roof beside a lawn and sidewalk",
   "/images/areas/caldwell.webp":
     "Stucco house with a tile roof beside a vineyard",
+  "/images/projects/eagle-farmhouse-exterior.webp":
+    "White board-and-batten modern farmhouse with a dark metal roof against dry Boise foothills",
+  "/images/projects/eagle-farmhouse-great-room.webp":
+    "Great room with wood beams, a stone fireplace, and black-framed glass looking to foothills",
+  "/images/projects/eagle-farmhouse-kitchen.webp":
+    "Kitchen with white cabinets, a wood island, and a foothills view through a black-framed window",
+  "/images/projects/eagle-farmhouse-bath.webp":
+    "Primary bath with a freestanding tub beside a black-framed window overlooking foothills",
+  "/images/projects/eagle-farmhouse-outdoor.webp":
+    "Covered outdoor patio with wood ceiling and black-framed doors facing the foothills",
+  "/images/projects/meridian-ranch-exterior.webp":
+    "Single-story gray ranch with stone-wrapped porch columns and a concrete driveway",
+  "/images/projects/meridian-ranch-living.webp":
+    "Bright living room with light floors, soft gray walls, and a stone fireplace",
+  "/images/projects/meridian-ranch-kitchen.webp":
+    "Open kitchen with white cabinets, pale counters, and a window to a suburban yard",
+  "/images/projects/meridian-ranch-bath.webp":
+    "Hall bath with a light vanity, white tile shower, and frosted window",
+  "/images/projects/boise-craftsman-exterior.webp":
+    "Two-story sage craftsman with cedar-shake gables and stacked stone",
+  "/images/projects/boise-craftsman-foyer.webp":
+    "Two-story foyer with a wood staircase, cream walls, and natural light from sidelights",
+  "/images/projects/boise-craftsman-kitchen.webp":
+    "Craftsman kitchen with cream cabinets, a warm wood island, and pendant lights",
+  "/images/projects/boise-craftsman-living.webp":
+    "Family room with a stacked-stone fireplace and hardwood floors",
 };
 
 export function contentImageAlt(src: string | undefined | null): string {
