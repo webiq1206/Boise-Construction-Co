@@ -272,6 +272,22 @@ export default function AboutPage() {
           </div>
         </Section>
 
+        {/* Mid-page photograph so mobile scroll is not FAQ then more copy. */}
+        <section className="relative h-[clamp(220px,32vw,400px)] overflow-hidden" aria-label="Representative home imagery">
+          <Image
+            src="/images/projects/eagle-farmhouse-great-room.webp"
+            alt={contentImageAlt('/images/projects/eagle-farmhouse-great-room.webp')}
+            fill
+            sizes="100vw"
+            className="object-cover img-brand-grade"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+          <p className="absolute bottom-6 left-6 ed-small text-inverse-foreground/90">
+            Representative imagery
+          </p>
+        </section>
+
         <WhyChooseUsSection />
 
         <StatementBandSection />

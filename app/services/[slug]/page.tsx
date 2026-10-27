@@ -18,6 +18,7 @@ import { CITIES } from '@/shared/contentData';
 import { getFeaturedGalleryProject } from '@/shared/galleryData';
 import { SERVICE_SEO_CONTENT } from '@/shared/seoContent';
 import { getServiceImageSet } from '@/shared/serviceBackgrounds';
+import { CONSTRUCTION_IMAGES } from '@/shared/siteImages';
 import { notFound } from 'next/navigation';
 
 export function generateStaticParams() {
@@ -72,6 +73,46 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
       }
     : undefined;
 
+  const sectionFigureByService: Record<string, { src: string; caption: string }> = {
+    'custom-home-builder': {
+      src: '/images/projects/eagle-farmhouse-kitchen.webp',
+      caption: 'Representative imagery: kitchen finishes continuous with the foothills farmhouse concept exterior.',
+    },
+    'semi-custom-homes': {
+      src: '/images/projects/meridian-ranch-living.webp',
+      caption: 'Representative imagery: living room finishes continuous with the Meridian ranch concept exterior.',
+    },
+    'build-on-your-lot': {
+      src: '/images/projects/eagle-farmhouse-outdoor.webp',
+      caption: 'Representative imagery: covered outdoor living tied to the same foothills farmhouse concept.',
+    },
+    'design-build': {
+      src: CONSTRUCTION_IMAGES.plans,
+      caption: 'Representative imagery: plans and selections coordinated before construction.',
+    },
+    'home-plans-design': {
+      src: CONSTRUCTION_IMAGES.plans,
+      caption: 'Representative imagery: drawings and finish samples reviewed together.',
+    },
+    'home-additions': {
+      src: CONSTRUCTION_IMAGES.framing,
+      caption: 'Representative imagery: framing that ties new space into an existing home.',
+    },
+    'lot-evaluation': {
+      src: CONSTRUCTION_IMAGES.foothills,
+      caption: 'Representative imagery: foothills building pad review before design.',
+    },
+    'shop-homes-barndominiums': {
+      src: CONSTRUCTION_IMAGES.shopHome,
+      caption: 'Representative imagery: shop home with living wing on a rural Treasure Valley lot.',
+    },
+    'energy-efficient-homes': {
+      src: CONSTRUCTION_IMAGES.insulation,
+      caption: 'Representative imagery: insulation and air sealing before drywall.',
+    },
+  };
+  const longFormFigure = sectionFigureByService[service.slug];
+
   const sections: LandingSection[] = isAddition ? [
     {
       heading: 'Room additions across the Treasure Valley',
@@ -83,6 +124,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
         label: `Home Additions in ${c.name}`,
         href: `/services/${service.slug}/${c.slug}`,
       })),
+      figure: longFormFigure,
     },
     {
       heading: 'A practical place to start',
@@ -90,6 +132,10 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
         'Useful additions start with a plain question: what would make this home work better? A bedroom, more living space, or a room that gives the household breathing room can all begin with that answer.',
         'We then look at how the new space can meet the home already there, including structure, access, utilities, exterior continuity, and the permit path.',
       ],
+      figure: {
+        src: CONSTRUCTION_IMAGES.interior,
+        caption: 'Representative imagery: finished living space planned as a connected addition.',
+      },
     },
   ] : [
     {
@@ -115,6 +161,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
         label: `${service.name} in ${c.name}`,
         href: `/services/${service.slug}/${c.slug}`,
       })),
+      figure: longFormFigure,
     },
     {
       heading: `Why design-build for your ${serviceLC}`,
@@ -127,6 +174,15 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
         // the draw schedule.
         `You get a written, fixed price before we break ground and a published draw schedule through the build.`,
       ],
+      figure: featuredProject?.images[1]
+        ? {
+            src: featuredProject.images[1].src,
+            caption: `Representative imagery: ${featuredProject.images[1].label.toLowerCase()} from the ${featuredProject.title} concept set.`,
+          }
+        : {
+            src: images.breather,
+            caption: 'Representative imagery: interior finishes for Treasure Valley home building.',
+          },
     },
   ];
 

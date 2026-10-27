@@ -19,6 +19,7 @@ import { getGalleryProjectsForCity } from '@/shared/galleryData';
 import { getAreaCityCopy } from '@/shared/content/areaCopy';
 import { AREA_PAGE_FAQS,getAreaIntro } from '@/shared/seoContent';
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { CONSTRUCTION_IMAGES } from '@/shared/siteImages';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
@@ -117,6 +118,17 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
         label: `${s.name} in ${city.name}`,
         href: `/services/${s.slug}/${city.slug}`,
       })),
+      figure: {
+        src:
+          city.slug === 'eagle'
+            ? '/images/projects/eagle-farmhouse-exterior.webp'
+            : city.slug === 'meridian'
+              ? '/images/projects/meridian-ranch-exterior.webp'
+              : city.slug === 'boise'
+                ? '/images/projects/boise-craftsman-exterior.webp'
+                : images.breather,
+        caption: `Representative imagery for home building in ${city.name}.`,
+      },
     },
     {
       heading: `Neighborhoods and lots we build on in ${city.name}`,
@@ -130,6 +142,17 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
           ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand the area's character and how to design a home that fits its street and holds its value.`
           : `As a local team, we understand the area's character and how to design a home that fits its street and holds its value.`,
       ],
+      figure: {
+        src:
+          city.slug === 'eagle'
+            ? '/images/projects/eagle-farmhouse-great-room.webp'
+            : city.slug === 'meridian'
+              ? '/images/projects/meridian-ranch-living.webp'
+              : city.slug === 'boise'
+                ? '/images/projects/boise-craftsman-living.webp'
+                : CONSTRUCTION_IMAGES.lot,
+        caption: `Representative imagery: living spaces and lots planned for ${city.name}.`,
+      },
     },
     {
       heading: `Permits and planning in ${city.name}`,
@@ -147,11 +170,15 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
           ? `Our ${city.name} designs also account for the local ${seo.climate} - from insulation levels and window specification to a building envelope and exterior materials that hold up to freeze-thaw cycles.`
           : `Our designs also account for the Treasure Valley climate, from insulation levels and window specification to a building envelope built for freeze-thaw cycles.`,
       ],
+      figure: {
+        src: CONSTRUCTION_IMAGES.plans,
+        caption: 'Representative imagery: plans reviewed before Ada or Canyon County permitting.',
+      },
     },
   ];
 
-  // Real before/after projects only - no seeded testimonials or star ratings
-  // until genuine, verified reviews exist.
+  // Concept-home imagery only - no seeded testimonials or star ratings until
+  // genuine, verified reviews exist.
   const cityProjects = getGalleryProjectsForCity(city.slug);
   const proof: LandingProof | undefined =
     cityProjects.length > 0
@@ -159,8 +186,8 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
           projects: cityProjects.map((p) => ({
             title: p.title,
             description: p.description,
-            beforeImageUrl: p.beforeImageUrl,
-            afterImageUrl: p.afterImageUrl,
+            exteriorImageUrl: p.images[0]?.src ?? "",
+            interiorImageUrl: p.images[1]?.src ?? p.images[0]?.src ?? "",
           })),
         }
       : undefined;

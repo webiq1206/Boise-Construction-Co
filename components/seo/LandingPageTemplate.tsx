@@ -96,6 +96,11 @@ export interface LandingSection {
   bulletsAfterParagraph?: number;
   links?: { label: string; href: string }[];
   subsections?: { heading: string; paragraphs: string[] }[];
+  /**
+   * Optional photograph placed after the section copy so mobile scroll keeps a
+   * photography/text rhythm through long-form landing content.
+   */
+  figure?: { src: string; caption?: string };
 }
 
 function InlineLinks({
@@ -140,8 +145,10 @@ export interface LandingProof {
   projects?: {
     title: string;
     description: string;
-    beforeImageUrl: string;
-    afterImageUrl: string;
+    /** Exterior / lead view of the concept home. */
+    exteriorImageUrl: string;
+    /** Matching interior view of the same concept home. */
+    interiorImageUrl: string;
   }[];
 }
 
@@ -496,6 +503,29 @@ export function LandingPageTemplate({
                         ))}
                       </ul>
                     )}
+                    {section.figure && (
+                      <figure className="mt-8">
+                        <div className="relative aspect-[16/10] overflow-hidden" style={{ border: '1px solid var(--ed-line)' }}>
+                          <Image
+                            src={section.figure.src}
+                            alt={contentImageAlt(section.figure.src)}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 720px"
+                            className="object-cover img-brand-grade"
+                            loading="lazy"
+                          />
+                        </div>
+                        {section.figure.caption ? (
+                          <figcaption className="ed-small mt-3 text-muted-foreground">
+                            {section.figure.caption}
+                          </figcaption>
+                        ) : (
+                          <figcaption className="ed-small mt-3 text-muted-foreground">
+                            Representative imagery
+                          </figcaption>
+                        )}
+                      </figure>
+                    )}
                   </Reveal>
                 ))}
               </div>
@@ -520,10 +550,10 @@ export function LandingPageTemplate({
                     <article className="flex h-full flex-col" style={{ border: '1px solid var(--ed-line)' }}>
                       <div className="grid grid-cols-2">
                         <div className="relative aspect-[4/3]">
-                          <Image src={project.beforeImageUrl} alt="Representative image: Earlier view of the space" fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
+                          <Image src={project.exteriorImageUrl} alt={contentImageAlt(project.exteriorImageUrl) || 'Representative image: Exterior view'} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                         </div>
                         <div className="relative aspect-[4/3]">
-                          <Image src={project.afterImageUrl} alt="Representative image: Later view of the space" fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
+                          <Image src={project.interiorImageUrl} alt={contentImageAlt(project.interiorImageUrl) || 'Representative image: Interior view'} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                         </div>
                       </div>
                       <div className="p-6">
