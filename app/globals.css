@@ -998,21 +998,64 @@ body:has([data-wizard-action-bar]) .brc-assistant-launcher {
 .article-table-scroll > table { display: table; }
 .article-table-scroll:focus-visible { outline: 2px solid hsl(var(--accent)); outline-offset: 3px; }
 
-/* Estimator navigation scrolls with the questions on phones and tablets. */
+/* AppFrame / guided-flow on phones: the whole frame scrolls, so in-frame
+   footers stay in document flow. Do NOT force static on standalone D2 bars
+   (embedded QuoteRequestWizard /contact): C10 requires a viewport-fixed
+   Back/Next that rides the keyboard inset.
+
+   Keyboard-aware AppFrames (data-keyboard-aware) keep the one-screen flex
+   layout and shrink with visualViewport instead of becoming a tall scroll
+   page that leaves Back/Next behind the keyboard. */
 @media (max-width: 1023px) {
-  [data-testid="wizard-action-bar"],
-  [data-wizard-action-bar],
-  [data-testid="wizard-sticky-nav"],
-  [data-testid="result-sticky-actions"],
-  [data-testid="wizard-mobile-bar"] {
+  [data-testid="estimate-app-frame"] [data-testid="wizard-action-bar"],
+  [data-testid="estimate-app-frame"] [data-wizard-action-bar],
+  [data-testid="estimate-app-frame"] [data-testid="wizard-sticky-nav"],
+  [data-testid="estimate-app-frame"] [data-testid="result-sticky-actions"],
+  [data-testid="estimate-app-frame"] [data-testid="wizard-mobile-bar"],
+  [data-testid="guided-flow-fit"] [data-testid="wizard-action-bar"],
+  [data-testid="guided-flow-fit"] [data-wizard-action-bar],
+  [data-testid="guided-flow-fit"] [data-testid="wizard-sticky-nav"],
+  [data-testid="guided-flow-fit"] [data-testid="result-sticky-actions"],
+  [data-testid="guided-flow-fit"] [data-testid="wizard-mobile-bar"] {
     position: static !important;
     transform: none !important;
     margin-top: 20px;
   }
-  [data-testid="estimate-app-frame"] { overflow-y: auto; overscroll-behavior: contain; }
-  [data-testid="app-frame-body"] { flex: none; overflow: visible; min-height: auto; }
-  [data-testid="app-frame-body"] > div { min-height: 0; }
-  [data-testid="app-frame-footer"] { position: static; margin-top: 20px; }
+  [data-testid="estimate-app-frame"]:not([data-keyboard-aware="true"]) {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  [data-testid="estimate-app-frame"]:not([data-keyboard-aware="true"]) [data-testid="app-frame-body"] {
+    flex: none;
+    overflow: visible;
+    min-height: auto;
+  }
+  [data-testid="estimate-app-frame"]:not([data-keyboard-aware="true"]) [data-testid="app-frame-body"] > div {
+    min-height: 0;
+  }
+  [data-testid="estimate-app-frame"]:not([data-keyboard-aware="true"]) [data-testid="app-frame-footer"] {
+    position: static;
+    margin-top: 20px;
+  }
+  [data-testid="estimate-app-frame"][data-keyboard-aware="true"] {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  [data-testid="estimate-app-frame"][data-keyboard-aware="true"] [data-testid="app-frame-body"] {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  /* C10: no inner scroll while the keyboard inset is open. */
+  [data-testid="estimate-app-frame"][data-keyboard-aware="true"][data-keyboard-inset] [data-testid="app-frame-body"] {
+    overflow: hidden;
+  }
+  [data-testid="estimate-app-frame"][data-keyboard-aware="true"] [data-testid="app-frame-footer"] {
+    position: relative;
+    margin-top: 0;
+    flex-shrink: 0;
+  }
   [data-testid="guided-flow-fit"] { overflow-y: auto; overscroll-behavior: contain; }
   [data-testid="guided-flow-fit"] > * { flex-shrink: 0; }
   [data-guided-step-layout], [data-guided-step-body] { flex: none; overflow: visible; min-height: auto; }

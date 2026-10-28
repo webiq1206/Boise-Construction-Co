@@ -137,7 +137,25 @@ const PROJECT_LABEL_LOOKUP: Record<string, string> = {
   ...Object.fromEntries(DETAIL_CHOICES.map((o) => [o.value, o.label])),
 };
 
-type StepId = "project" | "detail" | "contact" | "site" | "review";
+type StepId = "project" | "detail" | "name" | "prefer" | "reach" | "site" | "review";
+
+/** Older drafts stored the combined contact step as `contact`. */
+function normalizeDraftStep(step: string | undefined): StepId | undefined {
+  if (!step) return undefined;
+  if (step === "contact") return "name";
+  if (
+    step === "project" ||
+    step === "detail" ||
+    step === "name" ||
+    step === "prefer" ||
+    step === "reach" ||
+    step === "site" ||
+    step === "review"
+  ) {
+    return step;
+  }
+  return undefined;
+}
 
 const labelClass = "text-xs tracking-wide font-normal uppercase text-muted-foreground";
 
@@ -229,7 +247,10 @@ export function QuoteRequestWizard({
     if (detailPending || projectType === SOMETHING_ELSE) {
       list.push({ id: "detail", label: "Details" });
     }
-    list.push({ id: "contact", label: "Contact" });
+    // C10 fit sequence #1: one keyboard field per text step.
+    list.push({ id: "name", label: "Name" });
+    list.push({ id: "prefer", label: "Prefer" });
+    list.push({ id: "reach", label: "Reach" });
     if (!searchingForLand) {
       list.push({ id: "site", label: "Site" });
     }
@@ -268,10 +289,11 @@ export function QuoteRequestWizard({
       form.setValue("message", draft.message, { shouldValidate: false });
       setShowNote(true);
     }
-    if (draft.step) {
+    const restoredStep = normalizeDraftStep(draft.step);
+    if (restoredStep) {
       // Resolve after steps recompute on next paint
       requestAnimationFrame(() => {
-        const idx = steps.findIndex((s) => s.id === draft.step);
+        const idx = steps.findIndex((s) => s.id === restoredStep);
         if (idx >= 0) setStepIndex(idx);
       });
     }
@@ -292,6 +314,28 @@ export function QuoteRequestWizard({
       detailPending,
     });
   }, [watched, stepIndex, success, steps, detailPending]);
+
+  // Embedded mode: keep the focused field above the fixed Back/Next dock when
+  // the software keyboard (or design-review VV mock) is open (C10).
+  useEffect(() => {
+    if (mode !== "embedded") return;
+    const onFocusIn = (event: FocusEvent) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      if (!target.matches("input, textarea, [contenteditable='true']")) return;
+      window.setTimeout(() => {
+        const bar = document.querySelector<HTMLElement>("[data-wizard-action-bar-docked='true']");
+        const barTop = bar?.getBoundingClientRect().top ?? window.innerHeight;
+        const rect = target.getBoundingClientRect();
+        if (rect.bottom > barTop - 12) {
+          const delta = rect.bottom - barTop + 24;
+          window.scrollBy({ top: delta, behavior: "smooth" });
+        }
+      }, 50);
+    };
+    document.addEventListener("focusin", onFocusIn);
+    return () => document.removeEventListener("focusin", onFocusIn);
+  }, [mode]);
 
   // Browser Back restores the previous wizard step (D2).
   useEffect(() => {
@@ -531,15 +575,34 @@ export function QuoteRequestWizard({
       }
       return true;
     }
-    if (id === "contact") {
-      const ok = await form.trigger(["name", "preferredContact"]);
+    if (id === "name") {
+      const ok = await form.trigger("name");
+      if (!ok) {
+        setStepError("Please enter your name.");
+        return false;
+      }
+      return true;
+    }
+    if (id === "prefer") {
+      const ok = await form.trigger("preferredContact");
+      if (!ok) {
+        setStepError("Please choose how we should reach you.");
+        return false;
+      }
+      return true;
+    }
+    if (id === "reach") {
       const method = form.getValues("preferredContact");
       const contactOk =
         method === "email"
           ? await form.trigger("email")
           : await form.trigger("phone");
-      if (!ok || !contactOk) {
-        setStepError("Please enter your name and how we should reach you.");
+      if (!contactOk) {
+        setStepError(
+          method === "email"
+            ? "Please enter a valid email address."
+            : "Please enter a valid phone number.",
+        );
         return false;
       }
       return true;
@@ -852,31 +915,125 @@ export function QuoteRequestWizard({
         </WizardStep>
       )}
 
-      {stepId === "contact" && (
+      {stepId === "name" && (
+        <WizardStep
+          as="h3"
+          compact
+          heading="What's your name?"
+          instructions="So we know who to reply to."
+          data-testid="consult-step-name"
+          tone={mode === "app" ? "inverse" : "default"}
+        >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className={labelClass}>
+                  Full name
+                  <RequiredMark />
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Jane Smith"
+                    autoComplete="name"
+                    aria-required="true"
+                    data-testid="input-name"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </WizardStep>
+      )}
+
+      {stepId === "prefer" && (
         <WizardStep
           as="h3"
           compact
           heading="How should we reach you?"
-          instructions="Name and the method you prefer."
-          data-testid="consult-step-contact"
+          instructions="Email, phone call, or text."
+          data-testid="consult-step-prefer"
           tone={mode === "app" ? "inverse" : "default"}
         >
-          <div className="space-y-4">
+          <FormField
+            control={form.control}
+            name="preferredContact"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className={labelClass}>
+                  Preferred contact
+                  <RequiredMark />
+                </FormLabel>
+                <FormControl>
+                  <div
+                    role="radiogroup"
+                    aria-label="Preferred contact method"
+                    className="grid grid-cols-3 gap-2"
+                  >
+                    {CONTACT_METHODS.map((method) => {
+                      const selected = field.value === method.value;
+                      return (
+                        <button
+                          key={method.value}
+                          type="button"
+                          role="radio"
+                          aria-checked={selected}
+                          onClick={() => field.onChange(method.value)}
+                          className={cn(
+                            "min-h-12 rounded-sm border px-3 py-2.5 text-sm font-normal transition-colors",
+                            selected
+                              ? "border-foreground bg-foreground text-background"
+                              : "border-border bg-transparent text-foreground",
+                          )}
+                          data-testid={`button-preferred-contact-${method.value}`}
+                        >
+                          {method.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </WizardStep>
+      )}
+
+      {stepId === "reach" && (
+        <WizardStep
+          as="h3"
+          compact
+          heading={preferredContact === "email" ? "What's your email?" : "What's your number?"}
+          instructions={
+            preferredContact === "email"
+              ? "We'll reply within one business day."
+              : preferredContact === "text"
+                ? "A mobile number we can text."
+                : "A number we can call."
+          }
+          data-testid="consult-step-reach"
+          tone={mode === "app" ? "inverse" : "default"}
+        >
+          {preferredContact === "email" ? (
             <FormField
               control={form.control}
-              name="name"
+              name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className={labelClass}>
-                    Full name
+                    Email
                     <RequiredMark />
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Jane Smith"
-                      autoComplete="name"
+                      type="email"
+                      placeholder="jane@example.com"
+                      autoComplete="email"
                       aria-required="true"
-                      data-testid="input-name"
+                      data-testid="input-email"
                       {...field}
                     />
                   </FormControl>
@@ -884,97 +1041,31 @@ export function QuoteRequestWizard({
                 </FormItem>
               )}
             />
+          ) : (
             <FormField
               control={form.control}
-              name="preferredContact"
+              name="phone"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className={labelClass}>
-                    Preferred contact
+                    Phone
                     <RequiredMark />
                   </FormLabel>
                   <FormControl>
-                    <div
-                      role="radiogroup"
-                      aria-label="Preferred contact method"
-                      className="grid grid-cols-3 gap-2"
-                    >
-                      {CONTACT_METHODS.map((method) => {
-                        const selected = field.value === method.value;
-                        return (
-                          <button
-                            key={method.value}
-                            type="button"
-                            role="radio"
-                            aria-checked={selected}
-                            onClick={() => field.onChange(method.value)}
-                            className={cn(
-                              "min-h-12 rounded-sm border px-3 py-2.5 text-sm font-normal transition-colors",
-                              selected
-                                ? "border-foreground bg-foreground text-background"
-                                : "border-border bg-transparent text-foreground",
-                            )}
-                            data-testid={`button-preferred-contact-${method.value}`}
-                          >
-                            {method.label}
-                          </button>
-                        );
-                      })}
-                    </div>
+                    <Input
+                      type="tel"
+                      placeholder="(208) 555-0000"
+                      autoComplete="tel"
+                      aria-required="true"
+                      data-testid="input-phone"
+                      {...field}
+                    />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
-            {preferredContact === "email" ? (
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className={labelClass}>
-                      Email
-                      <RequiredMark />
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="jane@example.com"
-                        autoComplete="email"
-                        aria-required="true"
-                        data-testid="input-email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ) : (
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className={labelClass}>
-                      Phone
-                      <RequiredMark />
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type="tel"
-                        placeholder="(208) 555-0000"
-                        autoComplete="tel"
-                        aria-required="true"
-                        data-testid="input-phone"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-          </div>
+          )}
         </WizardStep>
       )}
 
@@ -983,7 +1074,7 @@ export function QuoteRequestWizard({
           as="h3"
           compact
           heading="Where is the build site?"
-          instructions="A street address, parcel number, or lot and subdivision works."
+          instructions="Street address, parcel number, or lot and subdivision."
           data-testid="consult-step-site"
           tone={mode === "app" ? "inverse" : "default"}
         >
@@ -1007,24 +1098,24 @@ export function QuoteRequestWizard({
                     data-testid="input-address"
                   />
                 </FormControl>
-                <FormDescription className="mt-1 text-xs text-muted-foreground">
-                  No street number yet? A parcel number or lot and subdivision works.
-                </FormDescription>
                 <button
                   type="button"
                   onClick={() => setShowAddrInfo((v) => !v)}
                   aria-expanded={showAddrInfo}
                   aria-controls="address-info"
-                  className="mt-1 inline-flex min-h-11 items-center gap-1 py-2 text-xs text-muted-foreground hover:text-foreground"
+                  className="mt-1 inline-flex min-h-11 items-center gap-1 py-2 text-xs text-muted-foreground hover:text-foreground [[data-keyboard-inset]_&]:hidden"
                   data-testid="button-address-info"
                 >
-                  Why we ask for your address
+                  Why we ask
                   <ChevronDown
                     className={cn("h-3 w-3 transition-transform", showAddrInfo && "rotate-180")}
                   />
                 </button>
                 {showAddrInfo && (
-                  <FormDescription id="address-info" className="mt-1 text-xs text-muted-foreground">
+                  <FormDescription
+                    id="address-info"
+                    className="mt-1 text-xs text-muted-foreground [[data-keyboard-inset]_&]:hidden"
+                  >
                     We pull county parcel records before we meet, so we can tell you what your site
                     will require. Your information is never shared or sold -{" "}
                     <Link
@@ -1079,7 +1170,7 @@ export function QuoteRequestWizard({
                 <div className="flex justify-between gap-3">
                   <dt className="text-muted-foreground">Site</dt>
                   <dd className="text-right text-foreground" data-clarity-mask="True">
-                    {form.watch("address") || "—"}
+                    {form.watch("address") || "-"}
                   </dd>
                 </div>
               )}
