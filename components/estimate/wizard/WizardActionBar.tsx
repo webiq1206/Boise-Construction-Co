@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -62,18 +62,41 @@ export function WizardActionBar({
   "data-testid": testId = "wizard-action-bar",
 }: WizardActionBarProps) {
   const keyboardInset = useKeyboardInset();
+  const barRef = useRef<HTMLDivElement | null>(null);
 
-  // While the bar owns the bottom edge, hide the global Call/Text bar rather
-  // than stacking two competing bars at the bottom of a phone.
+  // Hide the global Call/Text bar only while this action bar is on screen.
+  // Scoped to visibility (not mount) so a homepage mid-page consult wizard
+  // restores the promotional bottom bar when the visitor scrolls away (C7).
   useEffect(() => {
     if (!ownsBottomEdge) return;
-    return requestHideMobileNavBar();
+    const node = barRef.current;
+    if (!node || typeof IntersectionObserver === "undefined") {
+      return requestHideMobileNavBar();
+    }
+    let release: (() => void) | null = null;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (!release) release = requestHideMobileNavBar();
+        } else {
+          release?.();
+          release = null;
+        }
+      },
+      { threshold: 0 },
+    );
+    observer.observe(node);
+    return () => {
+      observer.disconnect();
+      release?.();
+    };
   }, [ownsBottomEdge]);
 
   const inverse = tone === "inverse";
 
   return (
     <div
+      ref={barRef}
       data-testid={testId}
       data-wizard-action-bar=""
       style={pinned && keyboardInset > 0 ? { transform: `translateY(-${keyboardInset}px)` } : undefined}

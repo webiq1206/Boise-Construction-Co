@@ -5,13 +5,11 @@ import {Tabs,TabsList,TabsTrigger,TabsContent} from '@/components/ui/tabs';
 import {Accordion,AccordionItem,AccordionTrigger,AccordionContent} from '@/components/ui/accordion';
 import {FAQSection} from '@/components/FAQSection';
 import {contentImageAlt} from '@/shared/imageAlts';
-import {SERVICES} from '@/shared/contentData';
+import {PlanningRangeExplorer} from '@/components/PlanningRangeExplorer';
 import {brands,cities} from './family-content';
 const Arrow=()=> <ArrowUpRight size={18} aria-hidden="true"/>;
 function Title({lines}:{lines:string[]}){return <>{lines[0]}<br/><em>{lines[1]}</em></>}
 function Rows({items,numbered=false}:{items:[string,string][];numbered?:boolean}){return <Accordion type="single" collapsible defaultValue="0" className="f-accordion">{items.map(([title,copy],i)=><AccordionItem value={String(i)} key={title}><AccordionTrigger>{numbered&&<span className="f-number">0{i+1}</span>}<span>{title}</span></AccordionTrigger><AccordionContent>{copy}</AccordionContent></AccordionItem>)}</Accordion>}
-
-const PLANNING_SERVICES = SERVICES.filter((s) => !s.secondary).slice(0, 6);
 
 export function ApprovedHome(){const b=brands['construction'];const home='';const primary='/estimate';
  const processBlock=<section className="f-section f-container f-two" id="how-we-build"><div className="f-sticky"><p className="f-eyebrow">KNOW WHAT HAPPENS NEXT</p><h2>A clear plan.<br/><em>At every step.</em></h2><p>Good work starts with a shared understanding of the scope, the decisions, and the next step.</p></div><Rows items={b.process} numbered/></section>;
@@ -38,26 +36,7 @@ return <div className={`family-site family-${b.id}`} style={{'--f-accent':b.acce
   <a className="f-button" href="/services/lot-evaluation" style={{marginTop:'1.5rem',display:'inline-flex'}}>Lot evaluation <Arrow/></a>
  </section>
 
- <section className="approved-estimate" aria-labelledby="planning-ranges-title" id="calculator">
-  <div className="approved-estimate-intro">
-   <div>
-    <p className="f-eyebrow">PLANNING RANGES</p>
-    <h2 id="planning-ranges-title">Start with a planning number.<br/>Then request a quote.</h2>
-   </div>
-   <div>
-    <p>These floors are planning starting points for a modest build of each type in the Treasure Valley. They are not bids. Request a quote and we reply within one business day with next steps.</p>
-   </div>
-  </div>
-  <ul style={{listStyle:'none',margin:0,padding:'0 0 1.5rem',display:'grid',gap:'0.75rem',maxWidth:'40rem'}}>
-   {PLANNING_SERVICES.map((s)=>(
-    <li key={s.slug} style={{display:'flex',justifyContent:'space-between',gap:'1rem',borderBottom:'1px solid color-mix(in srgb, currentColor 12%, transparent)',paddingBottom:'0.75rem'}}>
-     <a href={`/services/${s.slug}`} className="f-link" style={{textDecoration:'none'}}>{s.name}</a>
-     <span>Planning from {s.planningFrom}</span>
-    </li>
-   ))}
-  </ul>
-  <a className="f-button" href={primary}>{b.action}<Arrow/></a>
- </section>
+ <PlanningRangeExplorer />
 
  <section className="f-value"><img src={b.valueImage} alt={contentImageAlt(b.valueImage)||''} loading="lazy" width="1200" height="900"/><div><p className="f-eyebrow">{b.id==='adu'?'A SOUND STARTING POINT':'WHERE YOUR MONEY GOES'}</p><h2><Title lines={b.valueTitle}/></h2><p>{b.value}</p><a className="f-link" href={primary}>{b.action}<Arrow/></a></div></section>
  {approachBlock}{processBlock}
