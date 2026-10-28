@@ -62,12 +62,19 @@ return <div className={`family-site family-${b.id}`} style={{'--f-accent':b.acce
  <section className="f-value"><img src={b.valueImage} alt={contentImageAlt(b.valueImage)||''} loading="lazy" width="1200" height="900"/><div><p className="f-eyebrow">{b.id==='adu'?'A SOUND STARTING POINT':'WHERE YOUR MONEY GOES'}</p><h2><Title lines={b.valueTitle}/></h2><p>{b.value}</p><a className="f-link" href={primary}>{b.action}<Arrow/></a></div></section>
  {approachBlock}{processBlock}
  <section className="f-section f-container" id="who-you-are-hiring" aria-labelledby="who-hiring-title">
-  <div className="f-section-top" style={{display:'grid',gap:'1.5rem',gridTemplateColumns:'minmax(0, 180px) minmax(0, 1fr)',alignItems:'start'}}>
-   <img src="/images/about/nick-perkins-portrait-crop.webp" alt="Nick Perkins, founder of Boise Construction Co" width="360" height="360" loading="lazy" style={{width:'100%',height:'auto',aspectRatio:'1',objectFit:'cover'}}/>
+  <div className="f-section-top" style={{display:'grid',gap:'1.5rem',gridTemplateColumns:'minmax(0, min(100%,420px)) minmax(0, 1fr)',alignItems:'center'}}>
+   <img
+    src="/images/about/perkins-family-meridian-idaho.webp"
+    alt="Nick Perkins with his wife and five children at a pumpkin patch"
+    width="2048"
+    height="2048"
+    loading="lazy"
+    style={{width:'100%',height:'auto',objectFit:'contain',objectPosition:'center top',background:'#f1ede4'}}
+   />
    <div>
     <p className="f-eyebrow">WHO YOU ARE HIRING</p>
     <h2 id="who-hiring-title">Nick Perkins, founder</h2>
-    <p>Construction project manager, bachelor&apos;s in Construction, more than a decade of custom homes, remodels and developments. Husband, father of five, Meridian.</p>
+    <p>Construction project manager with a bachelor&apos;s degree in Construction with an emphasis in Project Management, and more than a decade of custom homes, remodels and developments. He founded P5 in Colorado in 2020, moved the family and the company to the Treasure Valley in 2025, and named the company for his five children. Husband, father of five, Meridian.</p>
     <p>&ldquo;Work hard. Keep your word. Treat people right.&rdquo;</p>
     <a className="f-link" href="/about">Read Nick&apos;s story <Arrow/></a>
    </div>

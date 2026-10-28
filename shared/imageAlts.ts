@@ -109,10 +109,16 @@ const ALTS: Record<string, string> = {
     "Empty foothills lot with sage slope and survey stakes before construction",
   "/images/about/perkins-family-meridian-idaho.webp":
     "Nick Perkins with his wife and five children at a pumpkin patch",
+  "/images/about/perkins-family-meridian-idaho-1x1.webp":
+    "Nick Perkins with his wife and five children at a pumpkin patch",
+  "/images/about/perkins-family-meridian-idaho-4x3.webp":
+    "Nick Perkins with his wife and five children at a pumpkin patch",
   "/images/about/perkins-family-portrait.webp":
     "The Perkins family, Nick, his wife and their five children, on a beach",
-  "/images/about/nick-perkins-portrait-crop.webp":
-    "Nick Perkins, founder of Boise Construction Co",
+  "/images/projects/treasure-valley-adu-finished.webp":
+    "Finished modern ADU with standing-seam metal roof beside a Treasure Valley home",
+  "/family/p5-p5-adu.webp":
+    "Finished modern ADU with standing-seam metal roof beside a Treasure Valley home",
   "/images/projects/boise-craftsman-exterior.webp":
     "Two-story sage craftsman with cedar-shake gables and stacked stone",
   "/images/projects/boise-craftsman-foyer.webp":

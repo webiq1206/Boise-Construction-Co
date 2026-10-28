@@ -32,7 +32,7 @@ const ABOUT_FAQS = [
   {
     question: 'Who runs Boise Construction Co?',
     answer:
-      'Nick Perkins, a construction project manager with a bachelor\'s degree in Construction and more than a decade of work from small renovations to multimillion-dollar custom homes. He founded P5 in Colorado in 2020 and named the company for his five children.',
+      'Nick Perkins, a construction project manager with a bachelor\'s degree in Construction with an emphasis in Project Management, and more than a decade of work from small renovations to multimillion-dollar custom homes. He founded P5 in Colorado in 2020, moved the family and the company to the Treasure Valley in 2025, and named the company for his five children.',
   },
   {
     question: 'Are you a registered contractor?',
@@ -110,7 +110,7 @@ export default function AboutPage() {
       <>
         <JsonLd data={schemas} />
         <div className="flex flex-col">
-          <InteriorHero layout="editorial" imageSrc="/images/about/perkins-family-meridian-idaho.webp" imageAlt="Nick Perkins with his wife and five children at a pumpkin patch">
+          <InteriorHero layout="editorial" peopleSafe imageSrc="/images/about/perkins-family-meridian-idaho.webp" imageAlt="Nick Perkins with his wife and five children at a pumpkin patch">
             <HeroBreadcrumbs />
             <p data-speakable="summary" className="sr-only">
               {SPEAKABLE_SUMMARY}
@@ -123,9 +123,10 @@ export default function AboutPage() {
             </h1>
             <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-4">
               Boise Construction Co is a design-build home builder in Meridian, Idaho, and one of the companies of P5 Home Co.
-              It is run by Nick Perkins, a construction project manager with a bachelor&apos;s degree in Construction and more
-              than a decade of work from small renovations to multimillion-dollar custom homes. He founded P5 in Colorado in
-              2020 and named the company for his five children. Read the full story on{' '}
+              It is run by Nick Perkins, a construction project manager with a bachelor&apos;s degree in Construction with an
+              emphasis in Project Management, and more than a decade of work from small renovations to multimillion-dollar
+              custom homes. He founded P5 in Colorado in 2020, moved the family and the company to the Treasure Valley in 2025,
+              and named the company for his five children. Read the full story on{' '}
               <a href="https://p5homeco.com/about" className="underline underline-offset-2">
                 p5homeco.com/about
               </a>
@@ -198,17 +199,17 @@ export default function AboutPage() {
             </div>
           </Section>
 
-          <section className="relative h-[clamp(220px,32vw,400px)] overflow-hidden" aria-label="The Perkins family">
+          <section className="relative bg-[#f1ede4]" aria-label="The Perkins family">
             <Image
               src="/images/about/perkins-family-meridian-idaho.webp"
               alt="Nick Perkins with his wife and five children at a pumpkin patch"
-              fill
+              width={2048}
+              height={2048}
               sizes="100vw"
-              className="object-cover"
+              className="w-full h-auto object-contain"
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-            <p className="absolute bottom-6 left-6 ed-small text-inverse-foreground/90">The Perkins family</p>
+            <p className="px-6 py-4 ed-small text-muted-foreground">The Perkins family</p>
           </section>
 
           <Section divider>

@@ -48,6 +48,8 @@ export const CONSTRUCTION_IMAGES = {
   interior: c("new-home-interior"),
   kitchen: c("new-home-kitchen"),
   lot: c("buildable-lot"),
+  /** Finished Treasure Valley ADU — never use empty-lot photos for ADU pages. */
+  adu: "/images/projects/treasure-valley-adu-finished.webp",
   foothills: c("foothills-building-site"),
   ruralSite: c("rural-site-work"),
   plans: c("plans-and-selections"),

@@ -11,10 +11,10 @@ export function InteriorEstimateLink({label='Request a quote'}:{label?:string}) 
 }
 
 /** The approved split-detail and editorial-introduction compositions. */
-export function InteriorHero({children,imageSrc,imageAlt='',imageCaption,layout='split',estimateAction=false}:{children:ReactNode;imageSrc?:string;imageAlt?:string;imageCaption?:string;layout?:'split'|'editorial'|'contact';estimateAction?:boolean}) {
+export function InteriorHero({children,imageSrc,imageAlt='',imageCaption,layout='split',estimateAction=false,peopleSafe=false}:{children:ReactNode;imageSrc?:string;imageAlt?:string;imageCaption?:string;layout?:'split'|'editorial'|'contact';estimateAction?:boolean;peopleSafe?:boolean}) {
   return <section className={`interior-hero interior-hero-${layout}${imageSrc?'':' interior-hero-text'}`}>
     <div className="interior-hero-copy">{children}{estimateAction&&<div className="interior-hero-action"><InteriorEstimateLink/></div>}</div>
-    {imageSrc&&<div className="interior-hero-image"><img src={imageSrc} alt={imageAlt} width={1400} height={1100} fetchPriority="high"/></div>}
+    {imageSrc&&<div className={`interior-hero-image${peopleSafe?' interior-hero-image--people':''}`}><img src={imageSrc} alt={imageAlt} width={1400} height={1100} fetchPriority="high"/></div>}
     {imageCaption&&<p className="interior-hero-caption">{imageCaption}</p>}
   </section>;
 }
