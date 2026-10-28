@@ -99,8 +99,8 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
       caption: 'Framing that ties new space into an existing home.',
     },
     adu: {
-      src: '/images/projects/eagle-mountain-modern/eagle-custom-home-lot-before.webp',
-      caption: 'Empty foothills lot before construction, the starting point for accessory dwellings and guest houses.',
+      src: '/images/projects/treasure-valley-adu-finished.webp',
+      caption: 'Finished modern ADU with standing-seam metal roof beside a Treasure Valley home.',
     },
     'lot-evaluation': {
       src: CONSTRUCTION_IMAGES.foothills,

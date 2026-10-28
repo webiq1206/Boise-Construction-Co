@@ -347,18 +347,17 @@ html, body {
     animation: wizard-step-enter 0.24s ease-out both;
   }
 
-  /* P5's section rhythm: 130px on desktop, stepping down on smaller screens. */
-  /* 88px from 768 up (was 130px, which stacked to 260px between two bands). */
+  /* Part B --section-y: 64 phone / 80 tablet / 96 desktop. */
   .section-y {
-    @apply py-20 md:py-[88px];
+    @apply py-16 md:py-20 lg:py-24;
   }
 
   .section-y-lg {
-    @apply py-24 md:py-[104px];
+    @apply py-20 md:py-24 lg:py-32;
   }
 
   .section-y-sm {
-    @apply py-14 md:py-20;
+    @apply py-8 md:py-12;
   }
 
   .section-divider {
