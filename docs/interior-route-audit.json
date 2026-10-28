@@ -2,12 +2,12 @@
   {
     "route": "/about",
     "file": "app/about/page.tsx",
-    "seoSignature": "2e4f236e4400ccd4ed0e79df3843ddd274aea6d1198d976e6b36c6dc2a3a8168"
+    "seoSignature": "17f7195d95709c5d32439b3e4ec6580caf82b4a7b90e001105f6ed71b3e3d3fc"
   },
   {
     "route": "/areas/[city]",
     "file": "app/areas/[city]/page.tsx",
-    "seoSignature": "5172a19ae232e3b7aab05dbe75f403e3ff70325043de5a3cb9bb8c91e5393d45"
+    "seoSignature": "2c83d8a7f6bee358680ad5736dc28dc91d89103e724b4b75107428119a5bccb1"
   },
   {
     "route": "/areas",
@@ -17,7 +17,7 @@
   {
     "route": "/blog/[slug]",
     "file": "app/blog/[slug]/page.tsx",
-    "seoSignature": "42c8d8dac802c5766af23b518406f3461f427595890768912a8206ec011dc21b"
+    "seoSignature": "993ec359a78d9f1da5535a72ec8d1119dedf1007f5db3dd19bf11cc09c6250e5"
   },
   {
     "route": "/blog/category/[hubSlug]",
@@ -37,7 +37,7 @@
   {
     "route": "/guides/[slug]",
     "file": "app/guides/[slug]/page.tsx",
-    "seoSignature": "91d425cde77318b2d7556f838bb6612f47c242cf6969201aba0bcea4c17d2253"
+    "seoSignature": "1c354162b36e560683195f9b95559d95ff3ceae6b7bd8f21d8af5c36f9534e7e"
   },
   {
     "route": "/guides",
@@ -52,7 +52,7 @@
   {
     "route": "/re-10-repairs-boise",
     "file": "app/re-10-repairs-boise/page.tsx",
-    "seoSignature": "c709abb5a60cd84ee2fd39851c2d0e68a1069dcc162b3b15b70ce181b787e111"
+    "seoSignature": "2f4ae9e078eedaa425ace473208c167b50e5d8e53603c73ebec3f91ea2a97e4a"
   },
   {
     "route": "/resources/ada-canyon-permit-flow",
@@ -88,5 +88,15 @@
     "route": "/terms-of-service",
     "file": "app/terms-of-service/page.tsx",
     "seoSignature": "ef415eec96e993300966d6e691fda5c9988d133e3320ae4dd823ab0071ede3e3"
+  },
+  {
+    "route": "/warranty",
+    "file": "app/warranty/page.tsx",
+    "seoSignature": "88b7f583deb23e292fa23792e28da789700b6af7384751c960e5f5a58ea335d5"
+  },
+  {
+    "route": "/estimate",
+    "file": "app/estimate/page.tsx",
+    "seoSignature": "9717e449122e9b0f7e0891aef58d758dd60f3eca47f73d9388a3d669502ce49e"
   }
 ]

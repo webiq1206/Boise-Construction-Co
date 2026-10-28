@@ -52,7 +52,7 @@ export interface PageMetaInput {
  */
 const CORE_SERVICES = ['custom-home-builder','semi-custom-homes','build-on-your-lot','design-build'];
 const CORE_CITIES = ['boise','meridian','eagle','nampa'];
-const SECONDARY_SERVICES = ['home-plans-design','home-additions','lot-evaluation','energy-efficient-homes'];
+const SECONDARY_SERVICES = ['home-plans-design','home-additions','adu','lot-evaluation','energy-efficient-homes'];
 const SECONDARY_CITIES = ['boise','meridian'];
 const EXTRA_INDEXABLE = ['shop-homes-barndominiums/meridian','shop-homes-barndominiums/eagle','shop-homes-barndominiums/nampa','shop-homes-barndominiums/kuna'];
 
