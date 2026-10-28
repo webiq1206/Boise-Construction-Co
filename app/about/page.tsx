@@ -32,7 +32,7 @@ const ABOUT_FAQS = [
   {
     question: 'Who runs Boise Construction Co?',
     answer:
-      'Nick Perkins, a construction project manager with a bachelor\'s degree in Construction with an emphasis in Project Management, and more than a decade of work from small renovations to multimillion-dollar custom homes. He founded P5 in Colorado in 2020, moved the family and the company to the Treasure Valley in 2025, and named the company for his five children.',
+      'Nick Perkins, a construction project manager with a bachelor\'s degree in Construction with an emphasis in Project Management, and more than a decade of work from small renovations to multimillion-dollar custom homes. He founded P5 in Colorado in 2020 and moved the family and the company to the Treasure Valley in 2025.',
   },
   {
     question: 'Are you a registered contractor?',
@@ -125,8 +125,8 @@ export default function AboutPage() {
               Boise Construction Co is a design-build home builder in Meridian, Idaho, and one of the companies of P5 Home Co.
               It is run by Nick Perkins, a construction project manager with a bachelor&apos;s degree in Construction with an
               emphasis in Project Management, and more than a decade of work from small renovations to multimillion-dollar
-              custom homes. He founded P5 in Colorado in 2020, moved the family and the company to the Treasure Valley in 2025,
-              and named the company for his five children. Read the full story on{' '}
+              custom homes. He founded P5 in Colorado in 2020 and moved the family and the company to the Treasure Valley in
+              2025. Read the full story on{' '}
               <a href="https://p5homeco.com/about" className="underline underline-offset-2">
                 p5homeco.com/about
               </a>

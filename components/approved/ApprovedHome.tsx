@@ -74,7 +74,7 @@ return <div className={`family-site family-${b.id}`} style={{'--f-accent':b.acce
    <div>
     <p className="f-eyebrow">WHO YOU ARE HIRING</p>
     <h2 id="who-hiring-title">Nick Perkins, founder</h2>
-    <p>Construction project manager with a bachelor&apos;s degree in Construction with an emphasis in Project Management, and more than a decade of custom homes, remodels and developments. He founded P5 in Colorado in 2020, moved the family and the company to the Treasure Valley in 2025, and named the company for his five children. Husband, father of five, Meridian.</p>
+    <p>Construction project manager with a bachelor&apos;s degree in Construction with an emphasis in Project Management, and more than a decade of custom homes, remodels and developments. He founded P5 in Colorado in 2020 and moved the family and the company to the Treasure Valley in 2025. Husband, father of five, Meridian.</p>
     <p>&ldquo;Work hard. Keep your word. Treat people right.&rdquo;</p>
     <a className="f-link" href="/about">Read Nick&apos;s story <Arrow/></a>
    </div>
