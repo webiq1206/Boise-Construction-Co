@@ -41,9 +41,17 @@ jobs:
             sleep 1
           done
           node scripts/verify-p5-mobile-seo.mjs
-      - uses: actions/upload-artifact@v4
+      - name: Bound complete evidence without truncation
+        id: branding_evidence
         if: always()
+        run: |
+          node --test tests/branding-ci-evidence-bound.test.mjs
+          node scripts/branding-ci-evidence-bound.mjs p5-mobile-seo-verification
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.branding_evidence.outputs.ready == 'true'
         with:
           name: p5-interface-verification
-          path: p5-mobile-seo-verification
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
+          compression-level: 0
+          if-no-files-found: error

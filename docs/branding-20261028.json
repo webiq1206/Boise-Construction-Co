@@ -1,0 +1,81 @@
+{
+  "sourceLibraryId": "libfile_4efa3eb963fc81919a6cd4c2c179b0e3",
+  "archiveSha256": "52ba70b766cd32a607675d11a4f1a36eb43697fe49f379b8ce4585c371316b6a",
+  "assets": [
+    {
+      "destination": "public/brand/approved-lockup-dark.svg",
+      "source": "construction/logos/Boise-Construction-Co_Logo_On-Light.svg",
+      "sha256": "192a33b5568624e6201ca1adf97fea5b54f1ed8a73d0747e5045ed6288c8bd01"
+    },
+    {
+      "destination": "public/brand/p5-family-dark.svg",
+      "source": "construction/icons/Boise-Construction-Co_P5-Icon_On-Light.svg",
+      "sha256": "164adc820210ce4bb9d994ad86993e8888ba0ea3b844b8ab0d55a05221ba553a"
+    },
+    {
+      "destination": "public/brand/approved-lockup-light.svg",
+      "source": "construction/logos/Boise-Construction-Co_Logo_On-Dark.svg",
+      "sha256": "6833233a529731ff1fab94935049a96a9135291918eb52fe656835ce8837df3e"
+    },
+    {
+      "destination": "public/brand/p5-family-light.svg",
+      "source": "construction/icons/Boise-Construction-Co_P5-Icon_On-Dark.svg",
+      "sha256": "e944863281ddd2d29df366da0c09bd319552d2b5929b621fa0f9153fce6b2c00"
+    },
+    {
+      "destination": "public/favicon.svg",
+      "source": "construction/icons/Boise-Construction-Co_P5-Icon_On-Light.svg",
+      "sha256": "164adc820210ce4bb9d994ad86993e8888ba0ea3b844b8ab0d55a05221ba553a"
+    },
+    {
+      "destination": "public/favicon.ico",
+      "source": "construction/icons/favicon.ico",
+      "sha256": "7be7b45b7f28ac8290a60d73db7ebe5a458bde3f9f22985b9f0aff5ec2e4d670"
+    },
+    {
+      "destination": "public/favicon-16.png",
+      "source": "construction/icons/Boise-Construction-Co_P5-Icon_On-Light_16px.png",
+      "sha256": "141ab7b23489a0be3bc548f65bdd80869dceada19e67abfca50affc2b97e995a"
+    },
+    {
+      "destination": "public/favicon-32.png",
+      "source": "construction/icons/Boise-Construction-Co_P5-Icon_On-Light_32px.png",
+      "sha256": "928cabe38f34366abe2408e3855d1c5af952031d6b20fa839b5c3ee3fd80fc1e"
+    },
+    {
+      "destination": "public/icons/apple-touch-icon.png",
+      "source": "construction/icons/Boise-Construction-Co_P5-Icon_On-Light_180px.png",
+      "sha256": "e2ecc08bdf042b377576800b2812c9525f333d72c4eb131cae05a5ce84e7db36"
+    },
+    {
+      "destination": "public/apple-touch-icon.png",
+      "source": "construction/icons/Boise-Construction-Co_P5-Icon_On-Light_180px.png",
+      "sha256": "e2ecc08bdf042b377576800b2812c9525f333d72c4eb131cae05a5ce84e7db36"
+    },
+    {
+      "destination": "public/icons/icon-192.png",
+      "source": "construction/icons/Boise-Construction-Co_P5-Icon_On-Light_192px.png",
+      "sha256": "265e6d80c5b12675ffbbf0c94a6f2c3552cee3d96aa5803d6b5ddfcc7015dfb9"
+    },
+    {
+      "destination": "public/icons/icon-512.png",
+      "source": "construction/icons/Boise-Construction-Co_P5-Icon_On-Light_512px.png",
+      "sha256": "3959cfd18075d27ffc8568d7e039faff4945bf20f175eac086ed6819d3f42201"
+    },
+    {
+      "destination": "public/brand/png/wordmark/light/boise-construction-co-wordmark-charcoal-accent-1200w.png",
+      "source": "construction/logos/Boise-Construction-Co_Logo_On-Light_1280px.png",
+      "sha256": "bc6ad465b39a8ba16e9a432d0a09661a0ffa7f0955481f84e7ec2a1e692ea595"
+    },
+    {
+      "destination": "public/brand/png/wordmark/dark/boise-construction-co-wordmark-bone-accent-1200w.png",
+      "source": "construction/logos/Boise-Construction-Co_Logo_On-Dark_1280px.png",
+      "sha256": "35805167b4e57e759dba2032aa720fb234b052f2e5ed2160df6b2e3b9771c165"
+    },
+    {
+      "destination": "public/family/construction-boise-construction-co-wordmark-bone-accent.svg",
+      "source": "construction/logos/Boise-Construction-Co_Logo_On-Dark.svg",
+      "sha256": "6833233a529731ff1fab94935049a96a9135291918eb52fe656835ce8837df3e"
+    }
+  ]
+}

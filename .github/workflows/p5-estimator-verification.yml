@@ -56,11 +56,18 @@ jobs:
           P5_TEST_BASE_URL=http://127.0.0.1:5000 P5_TEST_BROWSER=webkit node scripts/p5-exit-browser.mjs
           node scripts/p5-admin-pricing-browser.mjs
           node scripts/p5-construction-optional-address.mjs
-      - uses: actions/upload-artifact@v4
+      - name: Bound complete evidence without truncation
+        id: branding_evidence
         if: always()
+        run: |
+          node --test tests/branding-ci-evidence-bound.test.mjs
+          if [ -f /tmp/p5-estimator-server.log ]; then cp /tmp/p5-estimator-server.log p5-estimator-server.log; fi
+          node scripts/branding-ci-evidence-bound.mjs p5-verification p5-estimator-server.log
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.branding_evidence.outputs.ready == 'true'
         with:
           name: p5-estimator-verification
-          path: |
-            p5-verification
-            /tmp/p5-estimator-server.log
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
+          compression-level: 0
+          if-no-files-found: error
