@@ -62,7 +62,7 @@ test('trusted city descriptions stay in source and render as the city name', () 
       }
     }
   }
-  assert.equal(count, 45);
+  assert.equal(count, 50);
   assert.match(generateMetaDescription({ serviceName: 'Custom Home Building', city: 'Boise' }), /^Boise's design-build /);
   const subcontractor = read('app/subcontractor/page.tsx');
   assert.match(subcontractor, /trusted subcontractors/);
@@ -105,17 +105,23 @@ function assertNoSelfLicensedClaim(text: string, where: string) {
 }
 
 test('contractor registration is on the footer, plain on the estimator, and in schema', () => {
-  assert.equal(CONTRACTOR_REGISTRATION_LABEL, 'Idaho Registered Contractor #8381215');
+  assert.equal(CONTRACTOR_REGISTRATION_LABEL, 'P5 Home Co LLC, Idaho Registered Contractor #8381215');
   assert.equal(CONTRACTOR_REGISTRATION_LABEL.includes('('), false);
   assert.equal(CONTRACTOR_LICENSE_SEARCH_URL, 'https://edopl.idaho.gov/OnlineServices/?link=PubSearch');
   const footer = read('components/Footer.tsx');
   assert.equal(footer.includes('ContractorRegistrationLink'), true);
+  assert.equal(footer.includes('Built by'), false);
+  assert.equal(footer.includes('webIQ'), false);
+  assert.equal(footer.includes('/re-10-repairs-boise'), false);
+  assert.match(footer, /Save our contact/);
+  assert.match(footer, /Mon to Fri 9 to 6/);
+  assert.match(footer, /\/services\/adu/);
   const link = read('components/ContractorRegistration.tsx');
   assert.equal(link.includes('CONTRACTOR_LICENSE_SEARCH_URL'), true);
   assert.match(link, /target="_blank"/);
   assert.match(link, /rel="noopener noreferrer"/);
-  assert.match(link, /title="Look up registration 8381215 on Idaho DOPL"/);
-  assert.match(link, /aria-label="Verify with Idaho DOPL: look up registration 8381215, opens in a new tab"/);
+  assert.match(link, /title="Look up P5 Home Co LLC, Idaho Registered Contractor #8381215 on Idaho DOPL"/);
+  assert.match(link, /aria-label="Verify with Idaho DOPL: look up P5 Home Co LLC, Idaho Registered Contractor #8381215, opens in a new tab"/);
   assert.match(link, /function ContractorRegistrationPlain[\s\S]*<p /);
   const plain = link.slice(link.indexOf('function ContractorRegistrationPlain'));
   assert.equal(plain.includes('edopl.idaho.gov'), false);
@@ -134,13 +140,13 @@ test('contractor registration is on the footer, plain on the estimator, and in s
   const gbp = GBP_QA_SEED.find((entry) => /registered contractor/i.test(entry.question));
   assert.ok(gbp);
   assert.equal(gbp.question, 'Are you a registered contractor and insured?');
-  assert.match(gbp.answer, /an Idaho Registered Contractor #8381215, bonded, and insured/);
+  assert.match(gbp.answer, /P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured/);
   assert.equal(AREA_PAGE_FAQS[1].question, 'Are you a registered contractor and insured?');
-  assert.match(AREA_PAGE_FAQS[1].answer, /an Idaho Registered Contractor #8381215, bonded, and insured/);
+  assert.match(AREA_PAGE_FAQS[1].answer, /P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured/);
   for (const slug of ['boise', 'meridian', 'nampa', 'eagle', 'kuna', 'caldwell', 'star', 'middleton', 'garden-city']) {
     const faq = getAreaCityCopy(slug)?.faqs[1];
     assert.equal(faq?.question, 'Are you a registered contractor and insured?', slug);
-    assert.match(faq?.answer || '', /Idaho Registered Contractor #8381215, bonded, and insured/);
+    assert.match(faq?.answer || '', /P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured/);
   }
   const designBuildBoise = getCityServiceCopy('design-build', 'boise');
   const designBuildStar = getCityServiceCopy('design-build', 'star');

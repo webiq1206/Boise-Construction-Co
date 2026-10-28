@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import path from 'node:path';
+import path from 'path';
 import { fileURLToPath } from 'node:url';
 import { getBlogImageAlt } from '../shared/blogImages.ts';
 import { contentImageAlt } from '../shared/imageAlts.ts';
@@ -41,7 +41,13 @@ test('stock photos keep a representative disclaimer and describe the framing pho
     assert.match(source, /contentImageAlt\(SITE_IMAGES\.valueCraft\)/, file);
     assert.equal(source.includes('alt="Representative image:'), false, file);
   }
-  assert.match(read('app/re-10-repairs-boise/page.tsx'), /Representative imagery/);
+
+  // D9 / B-7: RE-10 is a referral page; homepage hero and gallery no longer require
+  // a Representative imagery stamp. Legacy marketing sections may still use it.
+  assert.equal(read('app/re-10-repairs-boise/page.tsx').includes('Representative imagery'), false);
+  assert.equal(read('components/approved/ApprovedHome.tsx').includes('Representative imagery'), false);
+  assert.equal(read('components/sections/ProjectGallerySection.tsx').includes('Representative imagery'), false);
+  assert.equal(read('app/about/page.tsx').includes('Representative imagery'), false);
   assert.equal(read('components/approved/ApprovedHome.tsx').includes('Coordinated framing and mechanical rough-in'), false);
 
   for (const file of [
@@ -52,16 +58,15 @@ test('stock photos keep a representative disclaimer and describe the framing pho
     'components/sections/HeroSection.tsx',
     'components/sections/FeaturedBeforeAfterSection.tsx',
     'components/seo/LandingPageTemplate.tsx',
-    'app/about/page.tsx',
     'app/contact/page.tsx',
-    'components/approved/ApprovedHome.tsx',
   ]) {
     assert.match(read(file), /Representative imagery|Representative image:/, file);
   }
 
   const about = read('app/about/page.tsx');
-  assert.match(about, /concept to completion/);
-  assert.match(about, /Representative imagery/);
+  assert.match(about, /About Boise Construction Co/);
+  assert.match(about, /P5 Home Co LLC, Idaho Registered Contractor #8381215|CONTRACTOR_REGISTRATION_LABEL/);
+  assert.match(about, /1-year workmanship warranty|\/warranty/);
 
   const slider = read('components/BeforeAfterSlider.tsx');
   assert.equal(slider.includes('>Before<'), false);
@@ -71,6 +76,12 @@ test('stock photos keep a representative disclaimer and describe the framing pho
   const gallery = read('components/sections/ProjectGallerySection.tsx');
   assert.equal(gallery.includes('Our work</p>'), false);
   assert.equal(gallery.includes('Recent homes we have designed'), false);
+  assert.match(gallery, /Concept design/);
   assert.equal(read('app/areas/[city]/page.tsx').includes('Recent ${city.name} projects'), false);
   assert.equal(read('components/seo/LandingPageTemplate.tsx').includes('Proof of work'), false);
+
+  const galleryData = read('shared/galleryData.ts');
+  assert.match(galleryData, /Eagle Foothills Mountain-Modern Concept/);
+  assert.equal(galleryData.includes('craftsman'), false);
+  assert.equal(galleryData.includes('farmhouse'), false);
 });

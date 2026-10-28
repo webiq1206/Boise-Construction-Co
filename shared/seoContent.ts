@@ -70,7 +70,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       'Blower-door test, final inspections, and a written workmanship warranty',
     ],
     timeline:
-      'Plan on 10 to 14 months end to end: roughly 3 to 5 months for design, engineering, and permitting, then 7 to 10 months of construction depending on size and site complexity.',
+      'Plan on 10 to 16 months end to end: roughly 2 to 4 months for design and selections, 1 to 3 months for permitting, then 7 to 11 months of construction depending on size and site complexity.',
     processSteps: [
       {
         title: 'Planning consultation',
@@ -81,8 +81,8 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
         description: 'Soils, utilities, access, setbacks, and slope get checked so the design suits the ground it sits on.',
       },
       {
-        title: 'Design and fixed scope',
-        description: 'Drawings, selections, and a line-item budget are locked together before we submit for permit.',
+        title: 'Design and line-item budget',
+        description: 'Drawings, selections, and a line-item budget with written allowances are locked together before we submit for permit.',
       },
       {
         title: 'Build and handover',
@@ -98,7 +98,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How long does it take to build a custom home in the Treasure Valley?',
         answer:
-          'Budget 10 to 14 months from the start of design to move-in. Design, engineering, and permitting take 3 to 5 months, and construction runs 7 to 10 months. Plan review timelines in Ada and Canyon County are the most common source of delay.',
+          'Budget 10 to 16 months from the start of design to move-in. Design and selections take 2 to 4 months, permitting takes 1 to 3 months, and construction runs 7 to 11 months. Plan review timelines in Ada and Canyon County are the most common source of delay.',
       },
       {
         question: 'Do I need to own land before I contact a builder?',
@@ -455,6 +455,84 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       paragraphs: [
         'As of 2026, a permit-ready custom home drawing set with structural engineering and energy compliance runs roughly $9,000 to $35,000 in the Treasure Valley, or about 5 to 12 percent of construction cost. Simple single-level homes sit near the bottom of that range and large or complex designs above it.',
         'These are planning ranges, not bids. Home size, structural complexity, and the number of design revision rounds drive the final figure, which we fix in writing after a programming session.',
+      ],
+    },
+  },
+
+  adu: {
+    slug: 'adu',
+    name: 'ADUs & Guest Houses',
+    headline: 'ADU Builder in Boise, Idaho',
+    primaryKeyword: 'adu builder boise idaho',
+    overview:
+      'ADU builders in Boise plan accessory dwellings and guest houses on the lot you already own. Boise Construction Co handles feasibility, design, permits, and construction for detached or attached units, and Boise ADU Co projects currently run through Boise Construction Co while that brand site is coming.',
+    benefits: [
+      'Feasibility before design, so setbacks and utilities shape the plan',
+      'One accountable team from drawings through the final walkthrough',
+      'Line-item budget with written allowances before construction',
+      'Boise ADU Co projects currently run through Boise Construction Co',
+    ],
+    inclusions: [
+      'Property and setback review for an accessory dwelling',
+      'Layout planning for family, guests, or independent living',
+      'Permit-ready drawings and local permit coordination',
+      'Utility connection planning called out as separate lines',
+      'Construction, inspections, and a written workmanship warranty',
+    ],
+    timeline:
+      'Timeline depends on the unit size, whether it is attached or detached, utility extensions, and plan review. Many ADUs land inside a shorter window than a full custom home; we set a project-specific schedule after the site review.',
+    processSteps: [
+      {
+        title: 'Talk about the property',
+        description: 'Share the address, intended use, and what you know about access, utilities, and the existing home.',
+      },
+      {
+        title: 'Review feasibility',
+        description: 'Confirm setbacks, utilities, parking, and jurisdiction rules before anyone draws a floor plan.',
+      },
+      {
+        title: 'Design and budget',
+        description: 'Develop the layout, selections, and a line-item budget with written allowances.',
+      },
+      {
+        title: 'Permits and build',
+        description: 'Coordinate approvals and construction, with written progress updates through handover.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Who builds ADUs in Boise?',
+        answer:
+          'Boise Construction Co builds ADUs and guest houses across the Treasure Valley. Boise ADU Co projects currently run through Boise Construction Co while the ADU brand site is coming.',
+      },
+      {
+        question: 'Can every lot have an ADU?',
+        answer:
+          'No. Feasibility depends on setbacks, lot coverage, utilities, access, and local rules. A site review answers those questions before design starts.',
+      },
+      {
+        question: 'How much does an ADU cost in the Treasure Valley?',
+        answer:
+          'Cost depends on size, attached or detached configuration, utility extensions, and finishes. We price after a site review rather than quoting a square-foot number without seeing the lot. Request a quote and we reply within one business day.',
+        links: [{ phrase: 'Request a quote', href: '/estimate' }],
+      },
+      {
+        question: 'Do ADUs need permits in Boise and Ada County?',
+        answer:
+          'Yes. Most accessory dwellings need plans and a building permit, and some parcels need separate utility or driveway approvals. We coordinate the local path as part of the project.',
+      },
+      {
+        question: 'How do I start an ADU project?',
+        answer:
+          'Request a quote with your address and intended use. We review what the property allows, then outline design, permits, and a planning budget before construction.',
+        links: [{ phrase: 'Request a quote', href: '/estimate' }],
+      },
+    ],
+    costGuidance: {
+      heading: 'Planning an ADU in the Treasure Valley',
+      paragraphs: [
+        'An ADU is priced from the property up: setbacks, utilities, access, and whether the unit is attached or detached shape the scope more than a generic square-foot figure.',
+        'Request a quote and we reply within one business day. A site review comes before a detailed proposal, so the first number you see is grounded in your lot.',
       ],
     },
   },
@@ -825,7 +903,7 @@ export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): 
     },
     {
       question: `How do I get a budget for ${service.name.toLowerCase()} in ${city.name}?`,
-      answer: `Use our online estimator for a planning range, then book a free planning consultation. If you have a lot under consideration, we will walk it with you and identify what will drive the site costs.`,
+      answer: `Request a quote for a planning conversation, then book a free planning consultation. If you have a lot under consideration, we will walk it with you and identify what will drive the site costs.`,
     },
   ];
 }
@@ -851,23 +929,13 @@ export function getCityServiceSections(
   const conceptFigure =
     city.slug === 'eagle'
       ? {
-          src: '/images/projects/eagle-farmhouse-kitchen.webp',
-          caption: `Representative imagery: concept kitchen finishes for ${city.name} home building.`,
+          src: '/images/projects/eagle-mountain-modern/eagle-custom-home-kitchen.webp',
+          caption: `Rift-cut white oak kitchen with black quartzite island for ${city.name} concept design.`,
         }
-      : city.slug === 'meridian'
-        ? {
-            src: '/images/projects/meridian-ranch-kitchen.webp',
-            caption: `Representative imagery: concept kitchen finishes for ${city.name} home building.`,
-          }
-        : city.slug === 'boise'
-          ? {
-              src: '/images/projects/boise-craftsman-kitchen.webp',
-              caption: `Representative imagery: concept kitchen finishes for ${city.name} home building.`,
-            }
-          : {
-              src: '/images/construction/new-home-kitchen.webp',
-              caption: `Representative imagery: kitchen finishes for Treasure Valley ${serviceLC}.`,
-            };
+      : {
+          src: '/images/construction/new-home-kitchen.webp',
+          caption: `Kitchen finishes for Treasure Valley ${serviceLC}.`,
+        };
 
   const sections: LandingSection[] = [
     // Server-rendered cost bands (extractable by crawlers and AI engines,
@@ -905,19 +973,19 @@ export function getCityServiceSections(
       figure: {
         src:
           city.slug === 'eagle'
-            ? '/images/projects/eagle-farmhouse-exterior.webp'
-            : city.slug === 'meridian'
-              ? '/images/projects/meridian-ranch-exterior.webp'
-              : city.slug === 'boise'
-                ? '/images/projects/boise-craftsman-exterior.webp'
-                : '/images/construction/custom-home-exterior.webp',
-        caption: `Representative imagery for ${serviceLC} in ${city.name}.`,
+            ? '/images/projects/eagle-mountain-modern/eagle-custom-home-front-exterior.webp'
+            : '/images/construction/custom-home-exterior.webp',
+        caption:
+          city.slug === 'eagle'
+            ? `Mountain-modern charcoal stucco and ledgestone exterior for ${serviceLC} in ${city.name}.`
+            : `Concept exterior for ${serviceLC} in ${city.name}.`,
       },
     },
     {
       heading: `New construction permits and plan review in ${city.name}`,
       paragraphs: [
         permitGuidance(city.name),
+        'Addresses outside city limits go through the county instead; we check this for you at the first visit.',
         seo?.climate
           ? `Our ${city.name} designs also account for the local ${seo.climate}, from insulation and ventilation choices to frost depth, snow load, and materials that hold up to Treasure Valley freeze-thaw cycles.`
           : `Our ${city.name} designs account for the local Treasure Valley climate, including frost depth, snow load, insulation levels, and durable exterior materials.`,
@@ -927,10 +995,6 @@ export function getCityServiceSections(
         ...(permitSource(city.name)?[{label:`Official ${city.name} permit guidance`,href:permitSource(city.name)!}]:[]),
         { label: 'Ada vs Canyon County permit timelines', href: '/resources/ada-canyon-permit-flow' },
       ],
-      figure: {
-        src: '/images/construction/plans-and-selections.webp',
-        caption: 'Representative imagery: plans and selections reviewed before permitting.',
-      },
     },
   ];
 
@@ -941,17 +1005,17 @@ export const AREA_PAGE_FAQS: FAQItem[] = [
   {
     question: 'What kinds of homes do you build?',
     answer:
-      'Fully custom homes, semi-custom homes from adapted plans, builds on land you already own, and shop homes. We also provide design and lot evaluation as standalone services.',
+      'Fully custom homes, semi-custom homes from adapted plans, builds on land you already own, shop homes, and ADUs. We also provide design and lot evaluation as standalone services.',
   },
   {
     question: 'Are you a registered contractor and insured?',
     answer:
-      'Yes. Boise Construction Co is an Idaho Registered Contractor #8381215, bonded, and insured. Idaho contractor registration details are available on request.',
+      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Certificate on request.',
   },
   {
     question: 'How do I start a project?',
     answer:
-      'Call us, use our construction estimator for a planning range, or book a free planning consultation through our website.',
+      'Call us, request a quote, or book a free planning consultation through our website.',
   },
 ];
 

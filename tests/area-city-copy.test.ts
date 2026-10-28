@@ -37,7 +37,7 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
     assert.equal(copy.faqs[2].question, 'How do I start a project?');
     assert.equal(copy.faqs[3].question, `Do you build in ${city.name}, Idaho?`);
     assert.equal(copy.faqs[4].question, `Which county is ${city.name} in?`);
-    assert.match(copy.faqs[1].answer, /Idaho Registered Contractor #8381215, bonded, and insured/);
+    assert.match(copy.faqs[1].answer, /P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured/);
     assert.doesNotMatch(copy.faqs[1].answer, /(?:we(?:'|’)re|we are|the company is|fully) licensed|licensed, bonded|carries a license/i);
     assert.match(copy.faqs[1].answer, /bond/i);
     assert.match(copy.faqs[1].answer, /insur/i);
@@ -55,12 +55,12 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
 
 test('misplaced landmarks are corrected only on the city that listed them', () => {
   assert.deepEqual(CITY_SEO_DATA.Kuna.landmarks, ['Bernie Fisher Park']);
-  assert.deepEqual(CITY_SEO_DATA.Kuna.neighborhoods, ['Crimson Point', 'Black Cat']);
+  assert.deepEqual(CITY_SEO_DATA.Kuna.neighborhoods, ['Crimson Point']);
   assert.deepEqual(CITY_SEO_DATA.Meridian.landmarks, ['The Village at Meridian', 'Julius M. Kleiner Memorial Park', 'Settlers Park']);
   assert.deepEqual(CITY_SEO_DATA.Meridian.neighborhoods, ['Lochsa Falls', 'Tuscany', 'Paramount', 'Meridian Ranch']);
   assert.ok(CITY_SEO_DATA.Eagle.landmarks.includes('Eagle Island State Park'));
   assert.equal(CITY_SEO_DATA.Meridian.landmarks.includes('Eagle Island State Park'), false);
-  assert.deepEqual(CITY_SEO_DATA.Eagle.neighborhoods, ['Banbury', 'The Estates', 'Floating Feather']);
+  assert.deepEqual(CITY_SEO_DATA.Eagle.neighborhoods, ['Banbury']);
   assert.equal(CITY_SEO_DATA.Eagle.neighborhoods.includes('Shadow Valley'), false);
   assert.equal(CITY_SEO_DATA.Eagle.neighborhoods.includes('Hidden Springs'), false);
   assert.deepEqual(CITY_SEO_DATA.Star.neighborhoods, ['Star River Ranch', 'Star Crossing']);
@@ -125,5 +125,5 @@ test('cities outside the batch keep the shared intro and shared FAQ questions', 
   assert.match(getAreaIntro(other), /one accountable team from feasibility through final walkthrough/);
   assert.equal(AREA_PAGE_FAQS.length, 3);
   assert.equal(AREA_PAGE_FAQS[1].question, 'Are you a registered contractor and insured?');
-  assert.match(AREA_PAGE_FAQS[1].answer, /an Idaho Registered Contractor #8381215, bonded, and insured/);
+  assert.match(AREA_PAGE_FAQS[1].answer, /P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured/);
 });

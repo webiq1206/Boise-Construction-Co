@@ -348,7 +348,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   {
     question: 'Are you a registered contractor and insured?',
     answer:
-      'Yes. Boise Construction Co is an Idaho Registered Contractor #8381215, bonded, and insured for residential construction across the Treasure Valley. Idaho contractor registration details are available upon request.',
+      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured for residential construction across the Treasure Valley. Certificate on request.',
   },
   {
     question: 'Can you build on land I already own?',

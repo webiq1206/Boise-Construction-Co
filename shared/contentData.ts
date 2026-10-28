@@ -74,7 +74,13 @@ export const SERVICES: ServiceData[] = [
     slug: 'home-additions',
     name: 'Home Additions',
     shortDescription: 'Useful new space added to the home you already live in, planned around the structure, utilities, and daily life already there.',
-    planningFrom: 'Talk with us',
+    planningFrom: 'Priced after an in-home review',
+  },
+  {
+    slug: 'adu',
+    name: 'ADUs & Guest Houses',
+    shortDescription: 'Accessory dwellings and guest houses on the lot you already own, planned around setbacks, utilities, and how you will use the space.',
+    planningFrom: 'Priced after a site review',
   },
   {
     slug: 'lot-evaluation',

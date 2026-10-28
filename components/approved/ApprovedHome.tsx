@@ -5,27 +5,74 @@ import {Tabs,TabsList,TabsTrigger,TabsContent} from '@/components/ui/tabs';
 import {Accordion,AccordionItem,AccordionTrigger,AccordionContent} from '@/components/ui/accordion';
 import {FAQSection} from '@/components/FAQSection';
 import {contentImageAlt} from '@/shared/imageAlts';
+import {SERVICES} from '@/shared/contentData';
 import {brands,cities} from './family-content';
-import {ApprovedEstimate} from './ApprovedEstimate';
-import {FOUNDING} from '@/shared/publicFlags';
 const Arrow=()=> <ArrowUpRight size={18} aria-hidden="true"/>;
 function Title({lines}:{lines:string[]}){return <>{lines[0]}<br/><em>{lines[1]}</em></>}
 function Rows({items,numbered=false}:{items:[string,string][];numbered?:boolean}){return <Accordion type="single" collapsible defaultValue="0" className="f-accordion">{items.map(([title,copy],i)=><AccordionItem value={String(i)} key={title}><AccordionTrigger>{numbered&&<span className="f-number">0{i+1}</span>}<span>{title}</span></AccordionTrigger><AccordionContent>{copy}</AccordionContent></AccordionItem>)}</Accordion>}
 
-export function ApprovedHome(){const b=brands['construction'];const home='';const primary='/estimate';const contact='/contact';
+const PLANNING_SERVICES = SERVICES.filter((s) => !s.secondary).slice(0, 6);
+
+export function ApprovedHome(){const b=brands['construction'];const home='';const primary='/estimate';
  const processBlock=<section className="f-section f-container f-two" id="how-we-build"><div className="f-sticky"><p className="f-eyebrow">KNOW WHAT HAPPENS NEXT</p><h2>A clear plan.<br/><em>At every step.</em></h2><p>Good work starts with a shared understanding of the scope, the decisions, and the next step.</p></div><Rows items={b.process} numbered/></section>;
- const approachBlock=<section className="f-section f-container f-two" id="why-choose-us"><div className="f-sticky"><p className="f-eyebrow">THE WAY WE WORK</p><h2>Good work.<br/><em>A better experience.</em></h2><p>{b.id==='handyman'?'Small jobs deserve a clear quote, a dependable visit, and a tidy finish.':'Clear expectations, thoughtful decisions, and someone accountable for the work. That is the P5 standard.'}</p></div><Rows items={b.approach}/></section>;
+ const approachBlock=<section className="f-section f-container f-two" id="why-choose-us"><div className="f-sticky"><p className="f-eyebrow">THE WAY WE WORK</p><h2>Good work.<br/><em>A better experience.</em></h2><p>Clear expectations, thoughtful decisions, and someone accountable for the work. That is the P5 standard.</p></div><Rows items={b.approach}/></section>;
 
 return <div className={`family-site family-${b.id}`} style={{'--f-accent':b.accent} as CSSProperties}>
- <section className="f-hero"><img src={b.hero} alt={contentImageAlt(b.hero)||(b.id==='construction'?'White board-and-batten house with a dark gable roof and a covered front porch':b.id==='remodeling'?'Open kitchen and living space with warm wood and stone':b.id==='handyman'?'Careful adjustment of an interior door hinge':'Compact detached dwelling with cedar accents and a covered entrance')} fetchPriority="high" width="1600" height="1000"/><div className="f-hero-shade"/><div className="f-hero-copy"><p className="f-eyebrow">{b.kicker}</p><p className="f-eyebrow f-hero-stamp">Representative imagery</p><h1>Custom homes in Boise.<br/><em>Built around you.</em></h1>{b.id==='construction'&&<p className="f-hero-summary">{FOUNDING.idahoBuilder} Custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and Garden City. Phone (208) 477-1169. Ranges are planning estimates, not quotes.</p>}<p>{b.title.join(" ")} {b.intro}</p><div className="f-actions"><a className="f-button" href={primary}>{b.action}<Arrow/></a><a className="f-link" href="#services">{b.secondary}<ArrowRight size={18}/></a></div><span className="estimator-promise">Describe your project. Our team will review it and prepare your estimate.</span></div></section>
+ <section className="f-hero"><img src={b.hero} alt={contentImageAlt(b.hero)||'Mountain-modern custom home with charcoal stucco, ledgestone, and a dark metal roof'} fetchPriority="high" width="1600" height="1000"/><div className="f-hero-shade"/><div className="f-hero-copy"><p className="f-eyebrow">{b.kicker}</p><h1>Custom homes in Boise.<br/><em>Built around you.</em></h1><p className="f-hero-summary">{b.intro}</p><p>From bare lot to the keys, one accountable team carries the drawings, the permits and the build.</p><div className="f-actions"><a className="f-button" href={primary}>{b.action}<Arrow/></a><a className="f-link" href="#services">{b.secondary}<ArrowRight size={18}/></a></div><span className="estimator-promise">Describe your project. Our team replies within one business day.</span></div></section>
  <div className="f-proof">{b.proof.map((p,i)=><div key={p}><span>0{i+1}</span><p>{p}</p></div>)}</div>
  <section className="f-section f-container" id="services"><div className="f-section-top"><div><p className="f-eyebrow">FIND YOUR STARTING POINT</p><h2><Title lines={b.serviceTitle}/></h2></div><p>{b.serviceIntro}</p></div><Tabs defaultValue={b.services[0].slug} className="f-explorer"><TabsList className="f-tabs">{b.services.slice(0,3).map(s=><TabsTrigger value={s.slug} key={s.slug}>{s.name}</TabsTrigger>)}</TabsList>{b.services.slice(0,3).map((s,i)=><TabsContent key={s.slug} value={s.slug}><div className="f-scene"><a className="f-scene-image" href={s.live || `/services/${s.slug}`} aria-label={`Explore ${s.name.toLowerCase()}`}><img src={s.image} alt={contentImageAlt(s.image)||s.name} loading="lazy" width="1000" height="750"/></a><div className="f-scene-copy"><p className="f-eyebrow">0{i+1} / {b.name.replace('Boise ','')}</p><h3>{s.name}</h3><p>{s.summary}</p><ul>{s.includes.slice(0,2).map(t=><li key={t}>{t}</li>)}</ul><a className="f-link" href={s.live || `/services/${s.slug}`}>Explore this service <Arrow/></a></div></div></TabsContent>)}</Tabs><a className="f-link f-browse-all" href={`${home}/services`}>View all services <Arrow/></a></section>
- <ApprovedEstimate/>
 
+ <section className="f-section f-container" id="own-a-lot" aria-labelledby="own-a-lot-title">
+  <div className="f-section-top">
+   <div>
+    <p className="f-eyebrow">BEFORE YOU COMMIT TO A PLAN</p>
+    <h2 id="own-a-lot-title">Already own a lot?</h2>
+   </div>
+   <p>A $950 lot evaluation answers the site questions that change the budget before design starts.</p>
+  </div>
+  <ul className="f-accordion" style={{listStyle:'disc',paddingLeft:'1.25rem',display:'grid',gap:'0.75rem'}}>
+   <li>Utilities: power, water, sewer or septic and well options on the parcel</li>
+   <li>Septic and well feasibility when the lot is not on municipal service</li>
+   <li>Soil, slope, access, and setbacks that shape what can be built</li>
+  </ul>
+  <a className="f-button" href="/services/lot-evaluation" style={{marginTop:'1.5rem',display:'inline-flex'}}>Lot evaluation <Arrow/></a>
+ </section>
 
- <section className="f-value"><img src={b.valueImage} alt={contentImageAlt(b.valueImage)||(b.id==='handyman'?'Finish carpentry and trim work':b.id==='construction'?'':b.id==='adu'?'A home and its surrounding property':'Materials and careful preparation for remodeling')} loading="lazy" width="1200" height="900"/><div><p className="f-eyebrow f-hero-stamp">Representative imagery</p><p className="f-eyebrow">{b.id==='adu'?'A SOUND STARTING POINT':'WHERE YOUR MONEY GOES'}</p><h2><Title lines={b.valueTitle}/></h2><p>{b.value}</p><a className="f-link" href={primary}>{b.action}<Arrow/></a></div></section>
+ <section className="approved-estimate" aria-labelledby="planning-ranges-title" id="calculator">
+  <div className="approved-estimate-intro">
+   <div>
+    <p className="f-eyebrow">PLANNING RANGES</p>
+    <h2 id="planning-ranges-title">Start with a planning number.<br/>Then request a quote.</h2>
+   </div>
+   <div>
+    <p>These floors are planning starting points for a modest build of each type in the Treasure Valley. They are not bids. Request a quote and we reply within one business day with next steps.</p>
+   </div>
+  </div>
+  <ul style={{listStyle:'none',margin:0,padding:'0 0 1.5rem',display:'grid',gap:'0.75rem',maxWidth:'40rem'}}>
+   {PLANNING_SERVICES.map((s)=>(
+    <li key={s.slug} style={{display:'flex',justifyContent:'space-between',gap:'1rem',borderBottom:'1px solid color-mix(in srgb, currentColor 12%, transparent)',paddingBottom:'0.75rem'}}>
+     <a href={`/services/${s.slug}`} className="f-link" style={{textDecoration:'none'}}>{s.name}</a>
+     <span>Planning from {s.planningFrom}</span>
+    </li>
+   ))}
+  </ul>
+  <a className="f-button" href={primary}>{b.action}<Arrow/></a>
+ </section>
+
+ <section className="f-value"><img src={b.valueImage} alt={contentImageAlt(b.valueImage)||''} loading="lazy" width="1200" height="900"/><div><p className="f-eyebrow">{b.id==='adu'?'A SOUND STARTING POINT':'WHERE YOUR MONEY GOES'}</p><h2><Title lines={b.valueTitle}/></h2><p>{b.value}</p><a className="f-link" href={primary}>{b.action}<Arrow/></a></div></section>
  {approachBlock}{processBlock}
- <section className="f-image-pair f-container"><img src={b.services[1].image} alt={contentImageAlt(b.services[1].image)||b.services[1].name} loading="lazy" width="1000" height="800"/><div><img src={b.services[2].image} alt={contentImageAlt(b.services[2].image)||b.services[2].name} loading="lazy" width="900" height="675"/><p className="f-eyebrow f-hero-stamp">Representative imagery</p><p className="f-eyebrow">{b.id==='handyman'?'CARE IN THE SMALL DETAILS.':'A HOME THAT WORKS FOR YOU.'}</p><h3>{b.id==='handyman'?'You notice the difference. Every day.':'Thoughtful spaces. Everyday living.'}</h3></div></section>
- <section className="f-area f-section f-container"><p className="f-eyebrow">AT HOME IN IDAHO</p><h2>Local people.<br/><em>Valley-wide reach.</em></h2><p>Serving homeowners throughout the Treasure Valley.</p><div>{cities.map(city=><a key={city} href={b.id==='adu'?`${home}/contact`:`/areas/${city.toLowerCase().replaceAll(" ","-")}`}>{city}<Arrow/></a>)}</div></section>
+ <section className="f-section f-container" id="who-you-are-hiring" aria-labelledby="who-hiring-title">
+  <div className="f-section-top" style={{display:'grid',gap:'1.5rem',gridTemplateColumns:'minmax(0, 180px) minmax(0, 1fr)',alignItems:'start'}}>
+   <img src="/images/about/nick-perkins-portrait-crop.webp" alt="Nick Perkins, founder of Boise Construction Co" width="360" height="360" loading="lazy" style={{width:'100%',height:'auto',aspectRatio:'1',objectFit:'cover'}}/>
+   <div>
+    <p className="f-eyebrow">WHO YOU ARE HIRING</p>
+    <h2 id="who-hiring-title">Nick Perkins, founder</h2>
+    <p>Construction project manager, bachelor&apos;s in Construction, more than a decade of custom homes, remodels and developments. Husband, father of five, Meridian.</p>
+    <p>&ldquo;Work hard. Keep your word. Treat people right.&rdquo;</p>
+    <a className="f-link" href="/about">Read Nick&apos;s story <Arrow/></a>
+   </div>
+  </div>
+ </section>
+ <section className="f-area f-section f-container"><p className="f-eyebrow">AT HOME IN IDAHO</p><h2>Local people.<br/><em>Valley-wide reach.</em></h2><p>Serving homeowners throughout the Treasure Valley.</p><div>{cities.map(city=><a key={city} href={`/areas/${city.toLowerCase().replaceAll(" ","-")}`}>{city}<Arrow/></a>)}</div></section>
  <FAQSection/>
  </div>;}

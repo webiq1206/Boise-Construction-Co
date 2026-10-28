@@ -73,8 +73,8 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
   const middletonLead = city.slug === 'middleton' ? cityCopy?.lead : undefined;
   const images = getAreaImageSet(city.slug);
   const localNote = seo
-    ? `We serve ${city.name} homeowners across ${seo.neighborhoods.slice(0, 3).join(', ')}, and all of ${county}. Confirm the permitting authority for the project address before applying.`
-    : `We serve ${city.name} and all of ${county} with design-build home construction.`;
+    ? `We serve ${city.name} homeowners${seo.neighborhoods.length ? ` across ${seo.neighborhoods.slice(0, 3).join(', ')}` : ''}, and all of ${county}. Addresses outside city limits go through the county instead; we check this for you at the first visit.`
+    : `We serve ${city.name} and all of ${county} with design-build home construction. Addresses outside city limits go through the county instead; we check this for you at the first visit.`;
 
   const neighborhoods = seo?.neighborhoods ?? [];
   const landmarks = seo?.landmarks ?? [];
@@ -121,13 +121,12 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       figure: {
         src:
           city.slug === 'eagle'
-            ? '/images/projects/eagle-farmhouse-exterior.webp'
-            : city.slug === 'meridian'
-              ? '/images/projects/meridian-ranch-exterior.webp'
-              : city.slug === 'boise'
-                ? '/images/projects/boise-craftsman-exterior.webp'
-                : images.breather,
-        caption: `Representative imagery for home building in ${city.name}.`,
+            ? '/images/projects/eagle-mountain-modern/eagle-custom-home-front-exterior.webp'
+            : images.breather,
+        caption:
+          city.slug === 'eagle'
+            ? 'Charcoal stucco, ledgestone, and dark standing-seam roof on a foothills concept home.'
+            : `Concept design imagery for home building in ${city.name}.`,
       },
     },
     {
@@ -145,13 +144,12 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       figure: {
         src:
           city.slug === 'eagle'
-            ? '/images/projects/eagle-farmhouse-great-room.webp'
-            : city.slug === 'meridian'
-              ? '/images/projects/meridian-ranch-living.webp'
-              : city.slug === 'boise'
-                ? '/images/projects/boise-craftsman-living.webp'
-                : CONSTRUCTION_IMAGES.lot,
-        caption: `Representative imagery: living spaces and lots planned for ${city.name}.`,
+            ? '/images/projects/eagle-mountain-modern/eagle-custom-home-great-room.webp'
+            : CONSTRUCTION_IMAGES.lot,
+        caption:
+          city.slug === 'eagle'
+            ? 'Great room with black steel window wall, white oak floor, and ledgestone fireplace.'
+            : `Lot and living-space planning for ${city.name}.`,
       },
     },
     {
@@ -165,15 +163,12 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       ],
       paragraphs: [
         permitGuidance(city.name),
+        'Addresses outside city limits go through the county instead; we check this for you at the first visit.',
         'We confirm the required submissions and inspection steps for your scope, then account for them in the project schedule.',
         seo?.climate
-          ? `Our ${city.name} designs also account for the local ${seo.climate} - from insulation levels and window specification to a building envelope and exterior materials that hold up to freeze-thaw cycles.`
+          ? `Our ${city.name} designs also account for the local ${seo.climate}, from insulation levels and window specification to a building envelope and exterior materials that hold up to freeze-thaw cycles.`
           : `Our designs also account for the Treasure Valley climate, from insulation levels and window specification to a building envelope built for freeze-thaw cycles.`,
       ],
-      figure: {
-        src: CONSTRUCTION_IMAGES.plans,
-        caption: 'Representative imagery: plans reviewed before Ada or Canyon County permitting.',
-      },
     },
   ];
 

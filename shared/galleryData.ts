@@ -1,14 +1,8 @@
 /**
  * Featured concept homes for Boise Construction Co.
  *
- * These are representative design imagery: finished-home photography of
- * cohesive concept properties used to illustrate custom and semi-custom work
- * across the Treasure Valley. They are not photographed customer projects and
- * must not be described as completed jobs.
- *
- * New construction has no remodel-style "before." Each project is a set of
- * rooms and exteriors that belong to one property (materials, windows, and
- * setting stay continuous).
+ * Concept design imagery for one Eagle mountain-modern set. Captions describe
+ * materials and rooms only. These are not photographed customer projects.
  */
 
 export interface GalleryProjectImage {
@@ -26,60 +20,23 @@ export interface GalleryProject {
   images: GalleryProjectImage[];
 }
 
-const p = (name: string) => `/images/projects/${name}.webp`;
+const p = (name: string) => `/images/projects/eagle-mountain-modern/${name}.webp`;
 
 export const GALLERY_PROJECTS: GalleryProject[] = [
   {
     serviceType: "custom-home-builder",
     city: "eagle",
-    title: "Eagle Foothills Modern Farmhouse",
+    title: "Eagle Foothills Mountain-Modern Concept",
     description:
-      "Representative design imagery for a white board-and-batten custom home on the Eagle foothills fringe: dark metal roof, warm wood porch columns, black-framed openings, and interiors that keep the same materials through the great room, kitchen, primary bath, and covered outdoor living.",
+      "Charcoal stucco and dry-stacked grey ledgestone under a dark bronze standing-seam roof, with black steel windows, warm cedar soffits, and interiors in white oak, plaster, and limestone through the great room, kitchen, and primary bath.",
     images: [
-      { src: p("eagle-farmhouse-exterior"), label: "Exterior" },
-      { src: p("eagle-farmhouse-great-room"), label: "Great room" },
-      { src: p("eagle-farmhouse-kitchen"), label: "Kitchen" },
-      { src: p("eagle-farmhouse-bath"), label: "Primary bath" },
-      { src: p("eagle-farmhouse-outdoor"), label: "Outdoor living" },
-    ],
-  },
-  {
-    serviceType: "semi-custom-homes",
-    city: "meridian",
-    title: "Meridian Semi-Custom Ranch",
-    description:
-      "Representative design imagery for a single-story gray ranch suited to Meridian neighborhoods: stone-wrapped porch columns, white trim, and matching soft-gray living, kitchen, and bath finishes under bright Treasure Valley daylight.",
-    images: [
-      { src: p("meridian-ranch-exterior"), label: "Exterior" },
-      { src: p("meridian-ranch-living"), label: "Living room" },
-      { src: p("meridian-ranch-kitchen"), label: "Kitchen" },
-      { src: p("meridian-ranch-bath"), label: "Bath" },
-    ],
-  },
-  {
-    serviceType: "custom-home-builder",
-    city: "boise",
-    title: "Boise Craftsman Two-Story",
-    description:
-      "Representative design imagery for a two-story craftsman in a Boise neighborhood: sage lap siding, cedar-shake gables, stacked stone, and continuous cream, wood, and stone interiors from the foyer through the kitchen and family room.",
-    images: [
-      { src: p("boise-craftsman-exterior"), label: "Exterior" },
-      { src: p("boise-craftsman-foyer"), label: "Foyer" },
-      { src: p("boise-craftsman-kitchen"), label: "Kitchen" },
-      { src: p("boise-craftsman-living"), label: "Family room" },
-    ],
-  },
-  {
-    serviceType: "build-on-your-lot",
-    city: "eagle",
-    title: "Build on Your Lot: Foothills Farmhouse",
-    description:
-      "Representative design imagery showing how a foothills lot can carry a modern farmhouse from curb to covered patio, with site views kept visible through black-framed glass.",
-    images: [
-      { src: p("eagle-farmhouse-exterior"), label: "Exterior" },
-      { src: p("eagle-farmhouse-outdoor"), label: "Outdoor living" },
-      { src: p("eagle-farmhouse-great-room"), label: "Great room" },
-      { src: p("eagle-farmhouse-kitchen"), label: "Kitchen" },
+      { src: p("eagle-custom-home-front-exterior"), label: "Front exterior" },
+      { src: p("eagle-custom-home-great-room"), label: "Great room" },
+      { src: p("eagle-custom-home-kitchen"), label: "Kitchen" },
+      { src: p("eagle-custom-home-primary-bath"), label: "Primary bath" },
+      { src: p("eagle-custom-home-rear-patio"), label: "Rear patio" },
+      { src: p("eagle-custom-home-framing"), label: "Framing" },
+      { src: p("eagle-custom-home-lot-before"), label: "Lot before" },
     ],
   },
 ];

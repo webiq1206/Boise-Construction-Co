@@ -29,7 +29,15 @@ export const HOMEPAGE_FAQS: HomepageFaq[] = [
   },
   {
     q: "Are the budget ranges quotes?",
-    a: "A written quote comes first: a firm proposal follows a site visit and a lot review, and ranges are planning estimates, not quotes. See \"How much does it cost to build a house in Boise and the Treasure Valley?\" for the planning ranges already published on this page. Design-build means one accountable team handles architectural design, engineering, estimating, Ada and Canyon County permitting, and construction under a single contract, backed by a written line-item scope before the foundation is poured.",
+    a: "No. Planning ranges on this site are starting points, not bids. A written scope and proposal follow a site visit and a lot review. Request a quote and we reply within one business day. Design-build means one accountable team handles architectural design, engineering, Ada and Canyon County permitting, and construction under a single contract, backed by a written line-item scope before the foundation is poured.",
+  },
+  {
+    q: "What is excluded from the planning number?",
+    a: "Land, well and septic, driveway beyond the apron, landscaping, window coverings, and appliances sit outside the planning number unless your written scope says otherwise. Site costs such as utility runs and grading are listed on their own lines so they do not hide inside a square-foot figure.",
+  },
+  {
+    q: "What is the deposit and how do draws work with my lender?",
+    a: "Deposit and draw timing are set in your construction contract and aligned with your lender's schedule. Most clients use a construction-to-permanent loan that funds the build in stages called draws. We provide the budgets, plans, and draw documentation lenders ask for, and we schedule inspections to line up with those milestones so financing does not stall the build.",
   },
   {
     q: "How much does it cost to build a house in Boise and the Treasure Valley?",
@@ -81,7 +89,7 @@ export const HOMEPAGE_FAQS: HomepageFaq[] = [
   },
   {
     q: "What is your workmanship warranty?",
-    a: "We provide a written workmanship warranty on the home we build. If something we built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it at no charge. We also pass through every manufacturer warranty on the products we install, including appliances, windows, roofing, and mechanical equipment.",
+    a: "We provide a 1-year workmanship warranty on new builds. If something we built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it at no charge. Ask us whether a 10-year structural warranty applies to your contract. We also pass through manufacturer warranties on the products we install.",
   },
   {
     q: "What does the free planning consultation include?",

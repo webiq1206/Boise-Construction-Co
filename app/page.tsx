@@ -13,23 +13,7 @@ import { CONSULT_BULLETS,SITE_TAGLINE } from "@/shared/siteContent";
 import { SITE_IMAGES } from "@/shared/siteImages";
 import { ArrowUpRight, Check } from "lucide-react";
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 import Image from "next/image";
-
-const EstimateCalculator = dynamic(
-  () =>
-    import("@/components/EstimateCalculator").then((mod) => mod.EstimateCalculator),
-  {
-    loading: () => (
-      <div
-        id="calculator"
-        className="container scroll-mt-20 px-4 py-16 text-center text-sm text-muted-foreground"
-      >
-        Loading estimate calculator...
-      </div>
-    ),
-  },
-);
 
 export const metadata: Metadata = withBrandPageMetadata(({
   // 55 chars. Leads with the primary term ("custom home builder Boise") rather
@@ -83,7 +67,7 @@ export default function HomePage() {
           number land well; everything below it answers what the number raised. */}
       <HomePageSchema />
       <ApprovedHome />
-      <ProjectGallerySection limit={3} />
+      <ProjectGallerySection limit={1} />
       <BudgetInclusionsSection />
       <div id="contact" className="scroll-mt-24" aria-hidden="true" />
       <Section id="consult" divider className="relative overflow-hidden scroll-mt-16 pb-28 md:pb-28">

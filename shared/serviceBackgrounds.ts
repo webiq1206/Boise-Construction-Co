@@ -18,6 +18,7 @@ export const SERVICE_BACKGROUNDS: ServiceBackgroundConfig = {
   "design-build": CONSTRUCTION_IMAGES.meeting,
   "home-plans-design": CONSTRUCTION_IMAGES.plans,
   "home-additions": CONSTRUCTION_IMAGES.framing,
+  adu: CONSTRUCTION_IMAGES.lot,
   "lot-evaluation": CONSTRUCTION_IMAGES.ruralSite,
   "shop-homes-barndominiums": CONSTRUCTION_IMAGES.shopHome,
   "energy-efficient-homes": CONSTRUCTION_IMAGES.insulation,
@@ -75,6 +76,11 @@ const SERVICE_IMAGE_SETS: Record<string, LandingImageSet> = {
     hero: CONSTRUCTION_IMAGES.framing,
     breather: CONSTRUCTION_IMAGES.interior,
     process: CONSTRUCTION_IMAGES.meeting,
+  },
+  adu: {
+    hero: CONSTRUCTION_IMAGES.lot,
+    breather: CONSTRUCTION_IMAGES.interior,
+    process: CONSTRUCTION_IMAGES.framing,
   },
   "lot-evaluation": {
     hero: CONSTRUCTION_IMAGES.ruralSite,

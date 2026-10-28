@@ -6,7 +6,7 @@ export interface CityServicePageCopy {
 }
 
 /**
- * Per-service, per-city intros and FAQs for the 81 Construction service pages.
+ * Per-service, per-city intros and FAQs for the 90 Construction service pages.
  * getCityServiceIntro and getCityServiceFaqs read this map and keep the
  * shared generator as the fallback for any pair that is not listed.
  */
@@ -363,7 +363,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "eagle": {
-      intro: "In Eagle, an energy-efficient home suits owners who plan to stay put. Near Floating Feather and throughout Eagle, a high-performance house must still meet local building requirements and pass inspection in sequence. An efficient home goes best when one design-build team owns both drawings and construction. In Eagle that means a budget broken out by line, written updates each week, and a written warranty behind our workmanship. A free planning consultation about an efficient Eagle home is a good first step, or let the estimator produce a planning range from your square footage.",
+      intro: "In Eagle, an energy-efficient home suits owners who plan to stay put. Throughout Eagle, including Banbury, a high-performance house must still meet local building requirements and pass inspection in sequence. An efficient home goes best when one design-build team owns both drawings and construction. In Eagle that means a budget broken out by line, written updates each week, and a written warranty behind our workmanship. A free planning consultation about an efficient Eagle home is a good first step, or request a quote with your square footage and goals.",
       faqs: [
         {
           question: "How much does energy-efficient homes cost in Eagle?",
@@ -1152,7 +1152,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "eagle": {
-      intro: "Home design and plans in Eagle have to suit the lot and the code at the same time. Drawings for a home near Floating Feather, or anywhere else in Eagle, are prepared around the city's building requirements and the inspections that come with them. Drawing and building under one design-build roof means the plans and the budget move together. In Eagle you'll get an itemized cost list, a written progress report weekly once we're building, and our workmanship warranted in writing. Book a free planning consultation to start your Eagle plans, or open the estimator and see a planning range for the home the drawings describe.",
+      intro: "Home design and plans in Eagle, including Banbury have to suit the lot and the code at the same time. Drawings for a home in Eagle are prepared around the city's building requirements and the inspections that come with them. Drawing and building under one design-build roof means the plans and the budget move together. In Eagle you'll get an itemized cost list, a written progress report weekly once we're building, and our workmanship warranted in writing. Book a free planning consultation to start your Eagle plans, or request a quote for the home the drawings describe.",
       faqs: [
         {
           question: "How much does home design & plans cost in Eagle?",
@@ -1415,7 +1415,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "eagle": {
-      intro: "Have land in Eagle and want a house on it? From Banbury to Floating Feather, a home on your own lot still has to be laid out for Eagle's building requirements and the inspection steps that follow. It's one design-build contract covering the house on your lot: an itemized budget, a written update each week, and our workmanship warranty in writing. Bring your Eagle lot's details to a free planning consultation, or run the estimator first and get a planning range for the home you're picturing.",
+      intro: "Have land in Eagle and want a house on it? Including Banbury, a home on your own lot still has to be laid out for Eagle's building requirements and the inspection steps that follow. It's one design-build contract covering the house on your lot: an itemized budget, a written update each week, and our workmanship warranty in writing. Bring your Eagle lot's details to a free planning consultation, or request a quote for the home you are picturing.",
       faqs: [
         {
           question: "How much does build on your lot cost in Eagle?",
@@ -1560,7 +1560,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "garden-city": {
-      intro: "Building on your own lot in Garden City? Ada County plan review, impact fees, and Garden City lot conditions are familiar to us, and the house gets designed around all of them. Garden City infill lots can be tight, and one design-build team keeps the house and the site in the same plan. Expect an itemized budget, a short written note on progress weekly, and a written guarantee on our craftsmanship. Bring your Garden City address along to a free planning consultation, or plug the basics into the estimator and see a planning range right away.",
+      intro: "Building on your own lot in Garden City? Ada County plan review, impact fees, and Garden City lot conditions are familiar to us, and the house gets designed around all of them. Garden City infill lots can be tight, and one design-build team keeps the house and the site in the same plan. Expect an itemized budget, a short written note on progress weekly, and a written guarantee on our craftsmanship. Bring your Garden City address along to a free planning consultation, or request a quote with the basics right away.",
       faqs: [
         {
           question: "How much does build on your lot cost in Garden City?",
@@ -1941,7 +1941,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "eagle": {
-      intro: "Lot evaluation and feasibility in Eagle can save you from a parcel that costs far more to build on than it looks. Near Floating Feather and throughout Eagle, city building rules and the inspection process limit what a lot can hold, and the evaluation considers them alongside the soil and slope. A lot that passes our review can go straight into design-build with the same team. That brings an itemized budget, weekly written updates, and a workmanship warranty you keep in writing. See a planning range for an Eagle build in the estimator, or bring the listing to a free planning consultation.",
+      intro: "Lot evaluation and feasibility in Eagle, including Banbury can save you from a parcel that costs far more to build on than it looks. Throughout Eagle, city building rules and the inspection process limit what a lot can hold, and the evaluation considers them alongside the soil and slope. A lot that passes our review can go straight into design-build with the same team. That brings an itemized budget, weekly written updates, and a workmanship warranty you keep in writing. Request a quote for an Eagle build, or bring the listing to a free planning consultation.",
       faqs: [
         {
           question: "How much does lot evaluation & feasibility cost in Eagle?",
@@ -2369,12 +2369,113 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "How do I get a budget for design-build in Garden City?",
-          answer: "First, use our online estimator, which returns a planning range. Then ask for a free planning consultation and bring your budget ceiling. When a lot is under consideration, we walk it together and flag its site cost drivers.",
+          answer: "First, request a quote for a planning conversation. Then ask for a free planning consultation and bring your budget ceiling. When a lot is under consideration, we walk it together and flag its site cost drivers.",
         },
         {
           question: "When does Garden City start reviewing a permit application?",
           answer: "According to its residential building permit page, Garden City routes an application for review only once the complete package and the required fees are in. Design-build helps here, because drawings, engineering, and fees are assembled together before we submit.",
         },
+      ],
+    },
+  },
+  "adu": {
+    "boise": {
+      intro: "ADUs and guest houses in Boise add living space on a lot you already own. Boise Construction Co handles accessory dwelling projects for Boise and Ada County, including detached units, garage conversions, and interior or basement units when the property allows. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      faqs: [
+        { question: "How much does adus & guest houses cost in Boise?", answer: "ADU cost in Boise depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
+        { question: "Can every property in Boise have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Boise or Ada County requirements. A site-specific review is needed before confirming what can be built." },
+        { question: "Do you build detached ADUs and conversions?", answer: "Yes. Detached ADUs, garage conversions, and basement or interior units are in scope when the property supports them. The suitable route depends on your lot and how the space will be used." },
+        { question: "Do you build in Boise?", answer: "Yes. Boise is inside our Treasure Valley service area, and ADU projects there run through Boise Construction Co." },
+        { question: "How do I get a budget for adus & guest houses in Boise?", answer: "Request a quote with the address, intended use, and any photos or plans. We reply within one business day and schedule a site review before writing a line-item budget." },
+        { question: "Who permits an ADU in Boise?", answer: "Property inside Boise city limits is permitted by the city building office; unincorporated addresses go through Ada County. We check jurisdiction at the first visit and handle permits in-house." },
+      ],
+    },
+    "meridian": {
+      intro: "ADUs and guest houses in Meridian add living space on a lot you already own. Boise Construction Co handles accessory dwelling projects for Meridian and Ada County, including detached units, garage conversions, and interior or basement units when the property allows. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      faqs: [
+        { question: "How much does adus & guest houses cost in Meridian?", answer: "ADU cost in Meridian depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
+        { question: "Can every property in Meridian have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Meridian or Ada County requirements. A site-specific review is needed before confirming what can be built." },
+        { question: "Do you build detached ADUs and conversions?", answer: "Yes. Detached ADUs, garage conversions, and basement or interior units are in scope when the property supports them. The suitable route depends on your lot and how the space will be used." },
+        { question: "Do you build in Meridian?", answer: "Yes. Meridian is inside our Treasure Valley service area, and ADU projects there run through Boise Construction Co." },
+        { question: "How do I get a budget for adus & guest houses in Meridian?", answer: "Request a quote with the address, intended use, and any photos or plans. We reply within one business day and schedule a site review before writing a line-item budget." },
+        { question: "Who permits an ADU in Meridian?", answer: "Property inside Meridian city limits is permitted by the city building office; unincorporated addresses go through Ada County. We check jurisdiction at the first visit and handle permits in-house." },
+      ],
+    },
+    "eagle": {
+      intro: "ADUs and guest houses in Eagle, including Banbury, add living space on a lot you already own. Boise Construction Co handles accessory dwelling projects for Eagle and Ada County, including detached units, garage conversions, and interior or basement units when the property allows. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      faqs: [
+        { question: "How much does adus & guest houses cost in Eagle?", answer: "ADU cost in Eagle depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
+        { question: "Can every property in Eagle have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Eagle or Ada County requirements. A site-specific review is needed before confirming what can be built." },
+        { question: "Do you build detached ADUs and conversions?", answer: "Yes. Detached ADUs, garage conversions, and basement or interior units are in scope when the property supports them. The suitable route depends on your lot and how the space will be used." },
+        { question: "Do you build in Eagle?", answer: "Yes. Eagle is inside our Treasure Valley service area, and ADU projects there run through Boise Construction Co." },
+        { question: "How do I get a budget for adus & guest houses in Eagle?", answer: "Request a quote with the address, intended use, and any photos or plans. We reply within one business day and schedule a site review before writing a line-item budget." },
+        { question: "Who permits an ADU in Eagle?", answer: "Property inside Eagle city limits is permitted by the city building office; unincorporated addresses go through Ada County. We check jurisdiction at the first visit and handle permits in-house." },
+      ],
+    },
+    "nampa": {
+      intro: "ADUs and guest houses in Nampa add living space on a lot you already own. Boise Construction Co handles accessory dwelling projects for Nampa and Canyon County, including detached units, garage conversions, and interior or basement units when the property allows. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      faqs: [
+        { question: "How much does adus & guest houses cost in Nampa?", answer: "ADU cost in Nampa depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
+        { question: "Can every property in Nampa have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Nampa or Canyon County requirements. A site-specific review is needed before confirming what can be built." },
+        { question: "Do you build detached ADUs and conversions?", answer: "Yes. Detached ADUs, garage conversions, and basement or interior units are in scope when the property supports them. The suitable route depends on your lot and how the space will be used." },
+        { question: "Do you build in Nampa?", answer: "Yes. Nampa is inside our Treasure Valley service area, and ADU projects there run through Boise Construction Co." },
+        { question: "How do I get a budget for adus & guest houses in Nampa?", answer: "Request a quote with the address, intended use, and any photos or plans. We reply within one business day and schedule a site review before writing a line-item budget." },
+        { question: "Who permits an ADU in Nampa?", answer: "Property inside Nampa city limits is permitted by the city building office; unincorporated addresses go through Canyon County. We check jurisdiction at the first visit and handle permits in-house." },
+      ],
+    },
+    "kuna": {
+      intro: "ADUs and guest houses in Kuna add living space on a lot you already own. Boise Construction Co handles accessory dwelling projects for Kuna and Ada County, including detached units, garage conversions, and interior or basement units when the property allows. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      faqs: [
+        { question: "How much does adus & guest houses cost in Kuna?", answer: "ADU cost in Kuna depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
+        { question: "Can every property in Kuna have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Kuna or Ada County requirements. A site-specific review is needed before confirming what can be built." },
+        { question: "Do you build detached ADUs and conversions?", answer: "Yes. Detached ADUs, garage conversions, and basement or interior units are in scope when the property supports them. The suitable route depends on your lot and how the space will be used." },
+        { question: "Do you build in Kuna?", answer: "Yes. Kuna is inside our Treasure Valley service area, and ADU projects there run through Boise Construction Co." },
+        { question: "How do I get a budget for adus & guest houses in Kuna?", answer: "Request a quote with the address, intended use, and any photos or plans. We reply within one business day and schedule a site review before writing a line-item budget." },
+        { question: "Who permits an ADU in Kuna?", answer: "Property inside Kuna city limits is permitted by the city building office; unincorporated addresses go through Ada County. We check jurisdiction at the first visit and handle permits in-house." },
+      ],
+    },
+    "star": {
+      intro: "ADUs and guest houses in Star add living space on a lot you already own. Boise Construction Co handles accessory dwelling projects for Star and Ada County, including detached units, garage conversions, and interior or basement units when the property allows. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      faqs: [
+        { question: "How much does adus & guest houses cost in Star?", answer: "ADU cost in Star depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
+        { question: "Can every property in Star have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Star or Ada County requirements. A site-specific review is needed before confirming what can be built." },
+        { question: "Do you build detached ADUs and conversions?", answer: "Yes. Detached ADUs, garage conversions, and basement or interior units are in scope when the property supports them. The suitable route depends on your lot and how the space will be used." },
+        { question: "Do you build in Star?", answer: "Yes. Star is inside our Treasure Valley service area, and ADU projects there run through Boise Construction Co." },
+        { question: "How do I get a budget for adus & guest houses in Star?", answer: "Request a quote with the address, intended use, and any photos or plans. We reply within one business day and schedule a site review before writing a line-item budget." },
+        { question: "Who permits an ADU in Star?", answer: "Property inside Star city limits is permitted by the city building office; unincorporated addresses go through Ada County. We check jurisdiction at the first visit and handle permits in-house." },
+      ],
+    },
+    "middleton": {
+      intro: "ADUs and guest houses in Middleton add living space on a lot you already own. Boise Construction Co handles accessory dwelling projects for Middleton and Canyon County, including detached units, garage conversions, and interior or basement units when the property allows. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      faqs: [
+        { question: "How much does adus & guest houses cost in Middleton?", answer: "ADU cost in Middleton depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
+        { question: "Can every property in Middleton have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Middleton or Canyon County requirements. A site-specific review is needed before confirming what can be built." },
+        { question: "Do you build detached ADUs and conversions?", answer: "Yes. Detached ADUs, garage conversions, and basement or interior units are in scope when the property supports them. The suitable route depends on your lot and how the space will be used." },
+        { question: "Do you build in Middleton?", answer: "Yes. Middleton is inside our Treasure Valley service area, and ADU projects there run through Boise Construction Co." },
+        { question: "How do I get a budget for adus & guest houses in Middleton?", answer: "Request a quote with the address, intended use, and any photos or plans. We reply within one business day and schedule a site review before writing a line-item budget." },
+        { question: "Who permits an ADU in Middleton?", answer: "Property inside Middleton city limits is permitted by the city building office; unincorporated addresses go through Canyon County. We check jurisdiction at the first visit and handle permits in-house." },
+      ],
+    },
+    "caldwell": {
+      intro: "ADUs and guest houses in Caldwell add living space on a lot you already own. Boise Construction Co handles accessory dwelling projects for Caldwell and Canyon County, including detached units, garage conversions, and interior or basement units when the property allows. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      faqs: [
+        { question: "How much does adus & guest houses cost in Caldwell?", answer: "ADU cost in Caldwell depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
+        { question: "Can every property in Caldwell have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Caldwell or Canyon County requirements. A site-specific review is needed before confirming what can be built." },
+        { question: "Do you build detached ADUs and conversions?", answer: "Yes. Detached ADUs, garage conversions, and basement or interior units are in scope when the property supports them. The suitable route depends on your lot and how the space will be used." },
+        { question: "Do you build in Caldwell?", answer: "Yes. Caldwell is inside our Treasure Valley service area, and ADU projects there run through Boise Construction Co." },
+        { question: "How do I get a budget for adus & guest houses in Caldwell?", answer: "Request a quote with the address, intended use, and any photos or plans. We reply within one business day and schedule a site review before writing a line-item budget." },
+        { question: "Who permits an ADU in Caldwell?", answer: "Property inside Caldwell city limits is permitted by the city building office; unincorporated addresses go through Canyon County. We check jurisdiction at the first visit and handle permits in-house." },
+      ],
+    },
+    "garden-city": {
+      intro: "ADUs and guest houses in Garden City add living space on a lot you already own. Boise Construction Co handles accessory dwelling projects for Garden City and Ada County, including detached units, garage conversions, and interior or basement units when the property allows. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      faqs: [
+        { question: "How much does adus & guest houses cost in Garden City?", answer: "ADU cost in Garden City depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
+        { question: "Can every property in Garden City have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Garden City or Ada County requirements. A site-specific review is needed before confirming what can be built." },
+        { question: "Do you build detached ADUs and conversions?", answer: "Yes. Detached ADUs, garage conversions, and basement or interior units are in scope when the property supports them. The suitable route depends on your lot and how the space will be used." },
+        { question: "Do you build in Garden City?", answer: "Yes. Garden City is inside our Treasure Valley service area, and ADU projects there run through Boise Construction Co." },
+        { question: "How do I get a budget for adus & guest houses in Garden City?", answer: "Request a quote with the address, intended use, and any photos or plans. We reply within one business day and schedule a site review before writing a line-item budget." },
+        { question: "Who permits an ADU in Garden City?", answer: "Property inside Garden City city limits is permitted by the city building office; unincorporated addresses go through Ada County. We check jurisdiction at the first visit and handle permits in-house." },
       ],
     },
   },

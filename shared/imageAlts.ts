@@ -93,6 +93,26 @@ const ALTS: Record<string, string> = {
     "Open kitchen with white cabinets, pale counters, and a window to a suburban yard",
   "/images/projects/meridian-ranch-bath.webp":
     "Hall bath with a light vanity, white tile shower, and frosted window",
+  "/images/projects/eagle-mountain-modern/eagle-custom-home-front-exterior.webp":
+    "Mountain-modern custom home with charcoal stucco, ledgestone, and dark standing-seam roof",
+  "/images/projects/eagle-mountain-modern/eagle-custom-home-rear-patio.webp":
+    "Cantilevered covered patio with cedar soffit facing a sage foothills slope",
+  "/images/projects/eagle-mountain-modern/eagle-custom-home-great-room.webp":
+    "Great room with black steel window wall, white oak floor, and ledgestone fireplace",
+  "/images/projects/eagle-mountain-modern/eagle-custom-home-kitchen.webp":
+    "Kitchen with rift-cut white oak cabinets and a honed black quartzite island",
+  "/images/projects/eagle-mountain-modern/eagle-custom-home-primary-bath.webp":
+    "Primary bath with limestone tile, freestanding tub, and floating white oak vanity",
+  "/images/projects/eagle-mountain-modern/eagle-custom-home-framing.webp":
+    "Same mountain-modern house at framing stage on a foothills lot",
+  "/images/projects/eagle-mountain-modern/eagle-custom-home-lot-before.webp":
+    "Empty foothills lot with sage slope and survey stakes before construction",
+  "/images/about/perkins-family-meridian-idaho.webp":
+    "Nick Perkins with his wife and five children at a pumpkin patch",
+  "/images/about/perkins-family-portrait.webp":
+    "The Perkins family, Nick, his wife and their five children, on a beach",
+  "/images/about/nick-perkins-portrait-crop.webp":
+    "Nick Perkins, founder of Boise Construction Co",
   "/images/projects/boise-craftsman-exterior.webp":
     "Two-story sage craftsman with cedar-shake gables and stacked stone",
   "/images/projects/boise-craftsman-foyer.webp":

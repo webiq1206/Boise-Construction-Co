@@ -141,6 +141,7 @@ const SERVICE_TITLE_OVERRIDES: Record<string, string> = {
   'design-build': 'Treasure Valley Design-Build Homes',
   'home-plans-design': 'Custom Home Plans & Design, Idaho',
   'home-additions': 'Home Additions in the Treasure Valley',
+  adu: 'ADU Builder in Boise, Idaho',
   'lot-evaluation': 'Lot Evaluation & Feasibility, Idaho',
   'shop-homes-barndominiums': 'Idaho Shop Homes & Barndominiums',
   'energy-efficient-homes': 'Energy-Efficient Homes in Idaho',

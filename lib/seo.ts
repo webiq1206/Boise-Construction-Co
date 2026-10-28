@@ -390,7 +390,7 @@ export const CITY_SEO_DATA: Record<string, {
     population: '24,011',
     founded: '1992',
     zipCodes: ['83634'],
-    neighborhoods: ['Crimson Point', 'Black Cat'],
+    neighborhoods: ['Crimson Point'],
     // Kuna Caves and Swan Falls Dam sit south of the city. The City of Kuna
     // map marks both "down the road," and the city tells visitors to drive out
     // to Swan Falls. Bernie Fisher Park is a city park at Main and Linder.
@@ -421,7 +421,7 @@ export const CITY_SEO_DATA: Record<string, {
     founded: '1864',
     zipCodes: ['83616'],
     // Shadow Valley is Boise 83714 / unincorporated Ada County, not Eagle.
-    neighborhoods: ['Banbury', 'The Estates', 'Floating Feather'],
+    neighborhoods: ['Banbury'],
     landmarks: ['Eagle Island State Park', 'Heritage Park', 'Eagle Hills Golf Course'],
     climate: 'semi-arid with distinct four seasons',
     coordinates: { lat: 43.6954, lng: -116.3540 },
@@ -452,7 +452,7 @@ export const CITY_SEO_DATA: Record<string, {
     population: '108,188',
     founded: '1886',
     zipCodes: ['83651', '83653', '83686', '83687'],
-    neighborhoods: ['Downtown Nampa', 'Karcher', 'Greenhurst'],
+    neighborhoods: ['Downtown Nampa'],
     // Lake Lowell is Deer Flat National Wildlife Refuge, outside Nampa city limits.
     landmarks: ['Ford Idaho Center', 'Nampa Train Depot'],
     climate: 'semi-arid with hot summers and cold winters',
@@ -462,7 +462,7 @@ export const CITY_SEO_DATA: Record<string, {
     population: '65,359',
     founded: '1883',
     zipCodes: ['83605', '83607'],
-    neighborhoods: ['Wilson', 'Ustick', 'Cleveland Blvd'],
+    neighborhoods: ['Wilson'],
     landmarks: ['Indian Creek Plaza', 'Caldwell Night Rodeo', 'College of Idaho'],
     climate: 'semi-arid high desert with four distinct seasons',
     coordinates: { lat: 43.6629, lng: -116.6874 },
