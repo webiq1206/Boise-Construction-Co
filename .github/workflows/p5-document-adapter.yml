@@ -51,9 +51,17 @@ jobs:
           # Existing prebuild scripts regenerate these assets, including PDF timestamps.
           # Keep every maintained source file protected against test-time mutation.
           git diff --exit-code -- . ':(exclude)public/downloads/*.pdf'
-      - uses: actions/upload-artifact@v4
+      - name: Bound complete evidence without truncation
+        id: branding_evidence
         if: always()
+        run: |
+          node --test tests/branding-ci-evidence-bound.test.mjs
+          node scripts/branding-ci-evidence-bound.mjs document-adapter-verification
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.branding_evidence.outputs.ready == 'true'
         with:
           name: document-adapter-verification
-          path: document-adapter-verification
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
+          compression-level: 0
+          if-no-files-found: error

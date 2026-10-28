@@ -29,11 +29,13 @@ test('gbp description interpolates and does not keep a literal template', () => 
   assert.match(read('shared/gbpProfile.ts'), /`[\s\S]*\$\{FOUNDING\.gbpFoundedSentence\}/);
 });
 
-test('share image is the supplied year-free card at the public preview path', () => {
+test('share image is the approved year-free family branding card at the public preview path', () => {
   assert.equal(BRAND_PAGE_IMAGE.endsWith('/brand/page-preview.png'), true);
   const file = path.join(root, 'public/brand/page-preview.png');
   const hash = crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
-  assert.equal(hash, '62170364be2f94a0c72658764181cdc60d73dde9de46b6bfa5c366edee3a324b');
+  // Pixel-reviewed 2026-10-28: approved lockup on charcoal, no founding year.
+  // Retain the exact raster guard against unreviewed public image claims.
+  assert.equal(hash, '941dc8eeaba976a82d316defc3c3bf65a5fe969d7a7874d67f908da4e8b62a6d');
   assert.equal(fs.existsSync(path.join(root, 'public/brand/page-preview-year-free.png')), false);
   assert.equal(read('public/brand/BRAND.md').includes('Est. 2020'), false);
   assert.match(read('scripts/brand/generate-brand-assets.mjs'), /Est\. 2020/);
