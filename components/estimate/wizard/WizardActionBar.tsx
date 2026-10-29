@@ -81,7 +81,7 @@ export function WizardActionBar({
       ([entry]) => {
         setWizardInView(entry.isIntersecting);
       },
-      { root: null, threshold: 0, rootMargin: "80px 0px 80px 0px" },
+      { root: null, threshold: 0, rootMargin: "0px 0px 0px 0px" },
     );
     observer.observe(node);
     return () => observer.disconnect();

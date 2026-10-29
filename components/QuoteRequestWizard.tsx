@@ -137,21 +137,15 @@ const PROJECT_LABEL_LOOKUP: Record<string, string> = {
   ...Object.fromEntries(DETAIL_CHOICES.map((o) => [o.value, o.label])),
 };
 
-type StepId = "project" | "detail" | "name" | "prefer" | "reach" | "site" | "review";
+type StepId = "project" | "detail" | "contact" | "site" | "review";
 
-/** Older drafts stored the combined contact step as `contact`. */
+/** Older drafts may still store split contact steps (name / prefer / reach). */
 function normalizeDraftStep(step: string | undefined): StepId | undefined {
   if (!step) return undefined;
-  if (step === "contact") return "name";
-  if (
-    step === "project" ||
-    step === "detail" ||
-    step === "name" ||
-    step === "prefer" ||
-    step === "reach" ||
-    step === "site" ||
-    step === "review"
-  ) {
+  if (step === "name" || step === "prefer" || step === "reach" || step === "contact") {
+    return "contact";
+  }
+  if (step === "project" || step === "detail" || step === "site" || step === "review") {
     return step;
   }
   return undefined;
@@ -247,10 +241,8 @@ export function QuoteRequestWizard({
     if (detailPending || projectType === SOMETHING_ELSE) {
       list.push({ id: "detail", label: "Details" });
     }
-    // C10 fit sequence #1: one keyboard field per text step.
-    list.push({ id: "name", label: "Name" });
-    list.push({ id: "prefer", label: "Prefer" });
-    list.push({ id: "reach", label: "Reach" });
+    // Premium path: one dense contact step (name + prefer + reach), not empty one-field screens.
+    list.push({ id: "contact", label: "Contact" });
     if (!searchingForLand) {
       list.push({ id: "site", label: "Site" });
     }
@@ -575,29 +567,21 @@ export function QuoteRequestWizard({
       }
       return true;
     }
-    if (id === "name") {
-      const ok = await form.trigger("name");
-      if (!ok) {
+    if (id === "contact") {
+      const nameOk = await form.trigger("name");
+      if (!nameOk) {
         setStepError("Please enter your name.");
         return false;
       }
-      return true;
-    }
-    if (id === "prefer") {
-      const ok = await form.trigger("preferredContact");
-      if (!ok) {
+      const preferOk = await form.trigger("preferredContact");
+      if (!preferOk) {
         setStepError("Please choose how we should reach you.");
         return false;
       }
-      return true;
-    }
-    if (id === "reach") {
       const method = form.getValues("preferredContact");
-      const contactOk =
-        method === "email"
-          ? await form.trigger("email")
-          : await form.trigger("phone");
-      if (!contactOk) {
+      const reachOk =
+        method === "email" ? await form.trigger("email") : await form.trigger("phone");
+      if (!reachOk) {
         setStepError(
           method === "email"
             ? "Please enter a valid email address."
@@ -915,125 +899,31 @@ export function QuoteRequestWizard({
         </WizardStep>
       )}
 
-      {stepId === "name" && (
+      {stepId === "contact" && (
         <WizardStep
           as="h3"
           compact
-          heading="What's your name?"
-          instructions="So we know who to reply to."
-          data-testid="consult-step-name"
+          heading="How can we reach you?"
+          instructions="Name, preferred method, and one way to reply. We respond within one business day."
+          data-testid="consult-step-contact"
           tone={mode === "app" ? "inverse" : "default"}
         >
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className={labelClass}>
-                  Full name
-                  <RequiredMark />
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Jane Smith"
-                    autoComplete="name"
-                    aria-required="true"
-                    data-testid="input-name"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </WizardStep>
-      )}
-
-      {stepId === "prefer" && (
-        <WizardStep
-          as="h3"
-          compact
-          heading="How should we reach you?"
-          instructions="Email, phone call, or text."
-          data-testid="consult-step-prefer"
-          tone={mode === "app" ? "inverse" : "default"}
-        >
-          <FormField
-            control={form.control}
-            name="preferredContact"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className={labelClass}>
-                  Preferred contact
-                  <RequiredMark />
-                </FormLabel>
-                <FormControl>
-                  <div
-                    role="radiogroup"
-                    aria-label="Preferred contact method"
-                    className="grid grid-cols-3 gap-2"
-                  >
-                    {CONTACT_METHODS.map((method) => {
-                      const selected = field.value === method.value;
-                      return (
-                        <button
-                          key={method.value}
-                          type="button"
-                          role="radio"
-                          aria-checked={selected}
-                          onClick={() => field.onChange(method.value)}
-                          className={cn(
-                            "min-h-12 rounded-sm border px-3 py-2.5 text-sm font-normal transition-colors",
-                            selected
-                              ? "border-foreground bg-foreground text-background"
-                              : "border-border bg-transparent text-foreground",
-                          )}
-                          data-testid={`button-preferred-contact-${method.value}`}
-                        >
-                          {method.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </FormControl>
-              </FormItem>
-            )}
-          />
-        </WizardStep>
-      )}
-
-      {stepId === "reach" && (
-        <WizardStep
-          as="h3"
-          compact
-          heading={preferredContact === "email" ? "What's your email?" : "What's your number?"}
-          instructions={
-            preferredContact === "email"
-              ? "We'll reply within one business day."
-              : preferredContact === "text"
-                ? "A mobile number we can text."
-                : "A number we can call."
-          }
-          data-testid="consult-step-reach"
-          tone={mode === "app" ? "inverse" : "default"}
-        >
-          {preferredContact === "email" ? (
+          <div className="space-y-4">
             <FormField
               control={form.control}
-              name="email"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className={labelClass}>
-                    Email
+                    Full name
                     <RequiredMark />
                   </FormLabel>
                   <FormControl>
                     <Input
-                      type="email"
-                      placeholder="jane@example.com"
-                      autoComplete="email"
+                      placeholder="Jane Smith"
+                      autoComplete="name"
                       aria-required="true"
-                      data-testid="input-email"
+                      data-testid="input-name"
                       {...field}
                     />
                   </FormControl>
@@ -1041,31 +931,99 @@ export function QuoteRequestWizard({
                 </FormItem>
               )}
             />
-          ) : (
+
             <FormField
               control={form.control}
-              name="phone"
+              name="preferredContact"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className={labelClass}>
-                    Phone
+                    Preferred contact
                     <RequiredMark />
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      type="tel"
-                      placeholder="(208) 555-0000"
-                      autoComplete="tel"
-                      aria-required="true"
-                      data-testid="input-phone"
-                      {...field}
-                    />
+                    <div
+                      role="radiogroup"
+                      aria-label="Preferred contact method"
+                      className="grid grid-cols-3 gap-2"
+                    >
+                      {CONTACT_METHODS.map((method) => {
+                        const selected = field.value === method.value;
+                        return (
+                          <button
+                            key={method.value}
+                            type="button"
+                            role="radio"
+                            aria-checked={selected}
+                            onClick={() => field.onChange(method.value)}
+                            className={cn(
+                              "min-h-12 rounded-sm border px-3 py-2.5 text-sm font-normal transition-colors",
+                              selected
+                                ? "border-foreground bg-foreground text-background"
+                                : "border-border bg-transparent text-foreground",
+                            )}
+                            data-testid={`button-preferred-contact-${method.value}`}
+                          >
+                            {method.label}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
-          )}
+
+            {preferredContact === "email" ? (
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={labelClass}>
+                      Email
+                      <RequiredMark />
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="jane@example.com"
+                        autoComplete="email"
+                        aria-required="true"
+                        data-testid="input-email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : (
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={labelClass}>
+                      Phone
+                      <RequiredMark />
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="tel"
+                        placeholder="(208) 555-0000"
+                        autoComplete="tel"
+                        aria-required="true"
+                        data-testid="input-phone"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+          </div>
         </WizardStep>
       )}
 

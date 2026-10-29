@@ -112,7 +112,7 @@ export function ProjectGallerySection({
       <div className="ed-shell">
         <div className="grid gap-[var(--ed-gutter)] lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <Reveal>
-            <p className="ed-eyebrow">Concept design</p>
+            <p className="ed-eyebrow">Illustrative concept</p>
             <h2 className="ed-h2 ed-statement">
               {lead.title}
             </h2>

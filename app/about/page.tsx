@@ -149,67 +149,112 @@ export default function AboutPage() {
             </div>
           </InteriorHero>
 
+          <section className="relative bg-[#1c1f1e]" aria-label="Treasure Valley custom home exterior">
+            <Image
+              src="/images/projects/eagle-mountain-modern/eagle-custom-home-front-exterior.webp"
+              alt="Illustrative mountain-modern custom home exterior in the Eagle foothills"
+              width={1600}
+              height={1000}
+              sizes="100vw"
+              className="w-full h-auto max-h-[70vh] object-cover"
+              loading="lazy"
+            />
+            <p className="px-6 py-3 text-xs uppercase tracking-[0.04em] text-[#fbfaf6]/90">
+              Illustrative concept · Eagle foothills mountain-modern
+            </p>
+          </section>
+
           <Section divider>
-            <div className="ed-shell max-w-3xl space-y-6">
-              <SectionHeader
-                eyebrow="What we build"
-                title={<>Custom homes, semi-custom homes, and ADUs</>}
-                description="We build on your lot or a lot we help you evaluate. Remodels sit with Boise Remodeling Co; RE-10 lists sit with Boise Handyman Co."
-                className="mb-0 max-w-none"
-              />
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. See{' '}
-                <Link href="/services/adu" className="underline underline-offset-2">
-                  ADUs &amp; guest houses
-                </Link>
-                .
-              </p>
+            <div className="ed-shell grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+              <div className="space-y-6">
+                <SectionHeader
+                  eyebrow="What we build"
+                  title={<>Custom homes, semi-custom homes, and ADUs</>}
+                  description="We build on your lot or a lot we help you evaluate. Remodels sit with Boise Remodeling Co; RE-10 lists sit with Boise Handyman Co."
+                  className="mb-0 max-w-none"
+                />
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. See{' '}
+                  <Link href="/services/adu" className="underline underline-offset-2">
+                    ADUs &amp; guest houses
+                  </Link>
+                  .
+                </p>
+              </div>
+              <div className="relative aspect-[4/3] overflow-hidden bg-[#f1ede4]">
+                <Image
+                  src="/images/construction/great-room-evening.webp"
+                  alt="Evening great room in a Treasure Valley custom home"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  className="object-cover"
+                  loading="lazy"
+                />
+              </div>
             </div>
           </Section>
 
           <Section variant="greige" divider>
-            <div className="ed-shell max-w-3xl">
-              <SectionHeader
-                eyebrow="How we work"
-                title={<>Five things every Construction project includes</>}
-                className="mb-8 max-w-none"
-              />
-              <ul className="grid gap-3 sm:grid-cols-1">
-                {CONSTRUCTION_STANDARDS.map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm text-muted-foreground">
-                    <Check className="h-4 w-4 text-accent-legible flex-shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-8 text-sm text-muted-foreground leading-relaxed">
-                The P5 standard is simple: one written scope before any price, a weekly written update, and a workmanship
-                warranty you can read before you sign.
-              </p>
-              <div className="mt-8 pt-8 border-t border-border">
-                <p className="ed-eyebrow">Where the budget lands</p>
-                <h3 className="ed-h4">Your budget builds the house, not the company</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  A larger builder&apos;s offices, model homes, and branded trucks are real costs, and they are quietly
-                  recovered inside the price per square foot you are quoted. We keep our footprint small on purpose, so a
-                  bigger share of what you spend goes into the foundation, the framing, the envelope, and the finishes you
-                  chose.
+            <div className="ed-shell grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+              <div className="relative aspect-[4/5] overflow-hidden bg-[#fbfaf6]">
+                <Image
+                  src="/images/construction/plans-and-selections.webp"
+                  alt="Home plans and finish selections laid out for a planning conversation"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  className="object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div>
+                <SectionHeader
+                  eyebrow="How we work"
+                  title={<>Five things every Construction project includes</>}
+                  className="mb-8 max-w-none"
+                />
+                <ul className="grid gap-3 sm:grid-cols-1">
+                  {CONSTRUCTION_STANDARDS.map((item) => (
+                    <li key={item} className="flex items-start gap-3 text-sm text-muted-foreground">
+                      <Check className="h-4 w-4 text-accent-legible flex-shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-8 text-sm text-muted-foreground leading-relaxed">
+                  The P5 standard is simple: one written scope before any price, a weekly written update, and a workmanship
+                  warranty you can read before you sign.
                 </p>
+                <div className="mt-8 pt-8 border-t border-border">
+                  <p className="ed-eyebrow">Where the budget lands</p>
+                  <h3 className="ed-h4">Your budget builds the house, not the company</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    A larger builder&apos;s offices, model homes, and branded trucks are real costs, and they are quietly
+                    recovered inside the price per square foot you are quoted. We keep our footprint small on purpose, so a
+                    bigger share of what you spend goes into the foundation, the framing, the envelope, and the finishes you
+                    chose.
+                  </p>
+                </div>
               </div>
             </div>
           </Section>
 
           <section className="relative bg-[#f1ede4]" aria-label="The Perkins family">
-            <Image
-              src="/images/about/perkins-family-meridian-idaho.webp"
-              alt="Nick Perkins with his wife and five children at a pumpkin patch"
-              width={2048}
-              height={2048}
-              sizes="100vw"
-              className="w-full h-auto object-contain"
-              loading="lazy"
-            />
-            <p className="px-6 py-4 ed-small text-muted-foreground">The Perkins family</p>
+            <div className="ed-shell py-10 md:py-14">
+              <p className="ed-eyebrow">WHO YOU ARE HIRING</p>
+              <h2 className="ed-h2 mb-6 max-w-3xl">The Perkins family, Meridian</h2>
+              <Image
+                src="/images/about/perkins-family-meridian-idaho.webp"
+                alt="Nick Perkins with his wife and five children at a pumpkin patch"
+                width={2048}
+                height={2048}
+                sizes="(max-width: 1260px) 100vw, 1260px"
+                className="w-full h-auto max-w-3xl object-contain bg-[#f1ede4]"
+                loading="lazy"
+              />
+              <p className="mt-4 ed-small text-muted-foreground">
+                Nick Perkins with his family. Complete heads, full frame, Meridian.
+              </p>
+            </div>
           </section>
 
           <Section divider>

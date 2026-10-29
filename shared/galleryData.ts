@@ -28,7 +28,7 @@ export const GALLERY_PROJECTS: GalleryProject[] = [
     city: "eagle",
     title: "Eagle Foothills Mountain-Modern Concept",
     description:
-      "Charcoal stucco and dry-stacked grey ledgestone under a dark bronze standing-seam roof, with black steel windows, warm cedar soffits, and interiors in white oak, plaster, and limestone through the great room, kitchen, and primary bath.",
+      "Illustrative concept. Charcoal stucco and dry-stacked grey ledgestone under a dark bronze standing-seam roof, with black steel windows, warm cedar soffits, and interiors in white oak, plaster, and limestone through the great room, kitchen, and primary bath.",
     images: [
       { src: p("eagle-custom-home-front-exterior"), label: "Front exterior" },
       { src: p("eagle-custom-home-great-room"), label: "Great room" },
@@ -36,7 +36,33 @@ export const GALLERY_PROJECTS: GalleryProject[] = [
       { src: p("eagle-custom-home-primary-bath"), label: "Primary bath" },
       { src: p("eagle-custom-home-rear-patio"), label: "Rear patio" },
       { src: p("eagle-custom-home-framing"), label: "Framing" },
-      { src: p("eagle-custom-home-lot-before"), label: "Lot before" },
+    ],
+  },
+  {
+    serviceType: "semi-custom-homes",
+    city: "eagle",
+    title: "Eagle Farmhouse Concept",
+    description:
+      "Illustrative concept. Warm board-and-batten exterior, covered porch, and open great-room living with a kitchen that opens to everyday family life.",
+    images: [
+      { src: "/images/projects/eagle-farmhouse-exterior.webp", label: "Exterior" },
+      { src: "/images/projects/eagle-farmhouse-great-room.webp", label: "Great room" },
+      { src: "/images/projects/eagle-farmhouse-kitchen.webp", label: "Kitchen" },
+      { src: "/images/projects/eagle-farmhouse-bath.webp", label: "Bath" },
+      { src: "/images/projects/eagle-farmhouse-outdoor.webp", label: "Outdoor" },
+    ],
+  },
+  {
+    serviceType: "custom-home-builder",
+    city: "boise",
+    title: "Boise Craftsman Concept",
+    description:
+      "Illustrative concept. Craftsman proportions with a welcoming foyer, kitchen, and living spaces designed for Treasure Valley light.",
+    images: [
+      { src: "/images/projects/boise-craftsman-exterior.webp", label: "Exterior" },
+      { src: "/images/projects/boise-craftsman-foyer.webp", label: "Foyer" },
+      { src: "/images/projects/boise-craftsman-kitchen.webp", label: "Kitchen" },
+      { src: "/images/projects/boise-craftsman-living.webp", label: "Living" },
     ],
   },
 ];
