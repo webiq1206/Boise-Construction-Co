@@ -48,7 +48,7 @@ function buildFooterGroups(): { title: string; links: FooterLink[] }[] {
     },
     {
       title: "Company",
-      links: [{ label: "About", href: "/about" }, { label: "Why Choose Us", href: "/#why-choose-us" }, { label: "How We Build", href: "/#how-we-build" }, { label: "RE-10 Repairs", href: "/re-10-repairs-boise" }, { label: "Contact", href: "/contact" }],
+      links: [{ label: "About", href: "/about" }, { label: "Why Choose Us", href: "/#why-choose-us" }, { label: "How We Build", href: "/#how-we-build" }, { label: "Warranty", href: "/warranty" }, { label: "Contact", href: "/contact" }],
     },
     {
       title: "Resources",
@@ -139,10 +139,19 @@ export function Footer() {
               <p className="py-2 text-sm text-inverse-muted">
                 Public representative: {SITE_CONFIG.publicRepresentative}. {SITE_CONFIG.address.street}, {SITE_CONFIG.address.city}, {SITE_CONFIG.address.state} {SITE_CONFIG.address.postalCode}. Service-area business, not a staffed storefront.
               </p>
+              <p className="py-2 text-sm text-inverse-muted">
+                Hours: Mon to Fri 9 to 6, Sat 9 to 4 Mountain. Closed Sunday.
+              </p>
+              <p className="py-2 text-sm text-inverse-muted">
+                Boise ADU Co projects currently run through Boise Construction Co; its site is coming.{" "}
+                <Link href="/services/adu" className="underline underline-offset-2 transition-colors hover:text-inverse-foreground">
+                  ADUs &amp; guest houses
+                </Link>
+              </p>
             </div>
             <div className="mt-4 flex flex-wrap items-center gap-4">
               <Button variant="brandInverseOutline" size="sm" asChild>
-                <SaveContactLink showIcon />
+                <SaveContactLink showIcon>Save our contact</SaveContactLink>
               </Button>
               {GBP_SOCIAL.facebook && (<a href={GBP_SOCIAL.facebook} className="-m-3 flex min-h-[44px] min-w-[44px] items-center justify-center p-3 text-accent-legible transition-colors hover:text-inverse-foreground" rel="noopener noreferrer" target="_blank" aria-label={`${SITE_CONFIG.name} on Facebook`} data-testid="link-footer-facebook"><Facebook className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" /></a>)}
             </div>
@@ -185,12 +194,6 @@ export function Footer() {
               {SITE_CONFIG.name} is a DBA of{" "}
               <a href="https://p5homeco.com" className="underline underline-offset-2 transition-colors hover:text-inverse-foreground">
                 P5 Home Co LLC
-              </a>
-            </span>
-            <span>
-              Built by{" "}
-              <a href="https://webiq.co" target="_blank" rel="noopener" className="underline underline-offset-2 transition-colors hover:text-inverse-foreground">
-                webIQ
               </a>
             </span>
           </div>

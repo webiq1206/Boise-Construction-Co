@@ -1,4 +1,5 @@
 import { BUSINESS_INFO } from "@/lib/seo";
+import { CONTRACTOR_REGISTRATION_LABEL } from "@/shared/contractorRegistration";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 
 /** Escape special characters per vCard 3.0 (RFC 2426). */
@@ -41,6 +42,8 @@ export function buildBusinessVCard(): string {
   // not ship a link that may point at the wrong or a defunct account.
   const note = [
     "Treasure Valley design-build home builder.",
+    `${CONTRACTOR_REGISTRATION_LABEL}.`,
+    `${SITE_CONFIG.name} is a DBA of ${SITE_CONFIG.legalName}.`,
     `Public representative: ${SITE_CONFIG.publicRepresentative}.`,
     "Service-area business, not a staffed storefront.",
     SITE_CONFIG.address.serviceArea,

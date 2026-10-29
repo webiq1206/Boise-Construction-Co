@@ -29,6 +29,7 @@ import './approved-family.css'
 import './approved-system.css'
 import './approved-interiors.css'
 import './audit-accessibility.css'
+import './design-v2-compliance.css'
 import './design-refresh.css'
 import './contractor-registration.css'
 

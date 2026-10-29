@@ -1,0 +1,134 @@
+/**
+ * Design Standard v2.3 compliance layer for Boise Construction Co.
+ * Loaded after audit-accessibility so C5 / C14 / D2 tokens win the cascade.
+ */
+
+.approved-shell {
+  --motion-fast: 200ms;
+  --motion-base: 300ms;
+  --choice-card-min-h: 48px;
+}
+
+/* B6 choice cards */
+.approved-shell [data-testid^="consult-project-"],
+.approved-shell [data-testid^="consult-detail-"],
+.approved-shell [data-testid^="proof-project-"] {
+  min-height: var(--choice-card-min-h);
+  transition: border-color var(--motion-fast) ease-out, background-color var(--motion-fast) ease-out;
+}
+
+/* Wizard step transitions */
+.approved-shell [data-testid="consultation-wizard"] [data-testid^="consult-step-"] {
+  animation: quote-step-in var(--motion-base) ease-out;
+}
+@keyframes quote-step-in {
+  from { opacity: 0; transform: translateX(8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .approved-shell [data-testid="consultation-wizard"] [data-testid^="consult-step-"] {
+    animation: none;
+  }
+  .family-site * {
+    transition: none !important;
+  }
+}
+
+/* ─── C14 PlanningRangeExplorer ─── */
+.approved-shell .planning-range-grid {
+  display: grid;
+  gap: 32px;
+  align-items: start;
+}
+@media (min-width: 1024px) {
+  .approved-shell .planning-range-grid {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 48px;
+  }
+}
+.approved-shell .planning-range-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+@media (min-width: 640px) {
+  .approved-shell .planning-range-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.approved-shell .planning-range-label {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #62645f;
+  margin: 0 0 12px;
+}
+.approved-shell .planning-range-slider-wrap {
+  margin-top: 24px;
+}
+.approved-shell .planning-range-sqft-row {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+.approved-shell .planning-range-slider {
+  width: 100%;
+  accent-color: #C48D3F;
+  height: 48px;
+}
+.approved-shell .planning-range-sqft-bounds {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #62645f;
+  margin-top: 4px;
+}
+.approved-shell .planning-range-result {
+  border: 1px solid color-mix(in srgb, #2c302f 14%, transparent);
+  background: #f1ede4;
+  padding: 24px;
+  border-radius: 2px;
+}
+.approved-shell .planning-range-value {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin: 12px 0 0;
+  color: #2c302f;
+}
+.approved-shell .planning-range-band {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #2c302f;
+}
+.approved-shell .planning-range-note,
+.approved-shell .planning-range-empty {
+  margin-top: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #62645f;
+}
+
+/*
+ * C5: keep one reassurance line near the primary CTA when hero budgets allow
+ * (360×640+). Override audit-accessibility phone hide; short-phone exception below.
+ */
+@media (max-width: 700px) {
+  .approved-shell .family-site .f-hero .estimator-promise {
+    display: block !important;
+    margin-top: 10px;
+    font-size: 12px;
+    line-height: 1.45;
+    max-width: 34ch;
+    opacity: 0.9;
+  }
+}
+
+/* Short-phone C3 exception only (320×568-class). Keep 360×640 C5 visible. */
+@media (max-width: 360px) and (max-height: 600px) {
+  .approved-shell .family-site .f-hero .estimator-promise {
+    display: none !important;
+  }
+}

@@ -18,7 +18,7 @@ export interface AreaCityCopy {
 
 const MIDDLETON_LEAD = [
   'Looking for a custom home builder in Middleton? Boise Construction Co is a design-build home builder serving Middleton and Canyon County. We build fully custom homes, semi-custom plans, and homes on land you already own - with one accountable team from feasibility through the final walkthrough.',
-  'Middleton is a homeowner\'s town: about 90% of occupied homes are owner-occupied, and nearly half of all housing (47%) has been built since 2010, per Census ACS 2020–2024 estimates. We build for clients here and throughout Canyon County. Confirm the permitting authority for the project address before applying.',
+  'Middleton is a homeowner\'s town: about 90% of occupied homes are owner-occupied, and nearly half of all housing (47%) has been built since 2010, per Census ACS 2020–2024 estimates. We build for clients here and throughout Canyon County. Addresses outside city limits go through the county instead; we check this for you at the first visit.',
 ] as const;
 
 const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
@@ -34,12 +34,12 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. We\'re an Idaho Registered Contractor #8381215, bonded, and insured, and our Idaho contractor registration details are yours on request. That matters here: the City of Boise homeowner guide says anyone other than the owner who performs permitted trade work must be registered and licensed with the State of Idaho.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured, and our Idaho contractor registration details are yours on request. That matters here: the City of Boise homeowner guide says anyone other than the owner who performs permitted trade work must be registered and licensed with the State of Idaho.',
       },
       {
         question: 'How do I start a project?',
         answer:
-          'Three ways: call (208) 477-1169, get a planning range from our construction estimator, or book the free planning consultation on our website. Have the Boise address handy, because we review the parcel\'s setbacks, utilities, soil, and slope before putting a price on the house.',
+          'Three ways: call (208) 477-1169, request a quote, or book the free planning consultation on our website. Have the Boise address handy, because we review the parcel\'s setbacks, utilities, soil, and slope before putting a price on the house.',
       },
       {
         question: 'Do you build in Boise, Idaho?',
@@ -75,12 +75,12 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. We\'re an Idaho Registered Contractor #8381215, bonded, and insured. Ask any time for our Idaho contractor registration details. Permitting sits inside our design-build scope, which matters in Meridian: the city fee schedule sets double permit fees as the minimum charge when work starts without a permit.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Ask any time for our Idaho contractor registration details. Permitting sits inside our design-build scope, which matters in Meridian: the city fee schedule sets double permit fees as the minimum charge when work starts without a permit.',
       },
       {
         question: 'How do I start a project?',
         answer:
-          'Phone us, try the estimator for a ballpark planning range, or set up a free planning consultation online. Estimator ranges are planning estimates, not quotes; a firm proposal for a Meridian home follows a site visit and a lot review.',
+          'Phone us, request a quote, or set up a free planning consultation online. Planning ranges are starting points, not quotes; a firm proposal for a Meridian home follows a site visit and a lot review.',
       },
       {
         question: 'Do you build in Meridian, Idaho?',
@@ -116,17 +116,17 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. We\'re an Idaho Registered Contractor #8381215, bonded, and insured. Want our Idaho contractor registration details? Just ask. Nampa\'s residential FAQ says that when a homeowner isn\'t doing the work, a State of Idaho registered building contractor or licensed trade sub-contractor must pull the permit and perform it.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Want our Idaho contractor registration details? Just ask. Nampa\'s residential FAQ says that when a homeowner isn\'t doing the work, a State of Idaho registered building contractor or licensed trade sub-contractor must pull the permit and perform it.',
       },
       {
         question: 'How do I start a project?',
         answer:
-          'Pick whichever is easiest: a phone call, a planning range from the build estimator, or a free consultation scheduled through our site. Our free in-home visit runs 60 to 90 minutes and covers planning guidance and design direction, with no obligation.',
+          'Pick whichever is easiest: a phone call, a quote request, or a free consultation scheduled through our site. Our free in-home visit runs 60 to 90 minutes and covers planning guidance and design direction, with no obligation.',
       },
       {
         question: 'Do you build in Nampa, Idaho?',
         answer:
-          'Yes, Nampa is one of the Treasure Valley cities we serve, Downtown Nampa and Karcher among them. Whether it\'s a custom home, a semi-custom plan, or a house on your property, we build it here, and a Nampa lot can be evaluated before purchase so soil, access, and utility questions are answered early.',
+          'Yes, Nampa is one of the Treasure Valley cities we serve, including Downtown Nampa. Whether it\'s a custom home, a semi-custom plan, or a house on your property, we build it here, and a Nampa lot can be evaluated before purchase so soil, access, and utility questions are answered early.',
       },
       {
         question: 'Which county is Nampa in?',
@@ -157,17 +157,17 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'We are. The company is an Idaho Registered Contractor #8381215, bonded, and insured, and we\'ll share Idaho contractor registration details with any Eagle homeowner who requests them.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Certificate on request.',
       },
       {
         question: 'How do I start a project?',
         answer:
-          'Start with a call, a planning range from the online estimator, or a free planning consultation you book on our website. If your Eagle lot is on a slope, read our Eagle Foothills building guide first; sloped sites and shared wells change the numbers.',
+          'Start with a call, a quote request, or a free planning consultation you book on our website. If your Eagle lot is on a slope, read our Eagle Foothills building guide first; sloped sites and shared wells change the numbers.',
       },
       {
         question: 'Do you build in Eagle, Idaho?',
         answer:
-          'Yes. Eagle falls within our Treasure Valley service area, from Banbury to Floating Feather. Custom and semi-custom homes, plus builds on land you own, are all on offer, and an Eagle lot can be assessed before you sign for it.',
+          'Yes. Eagle falls within our Treasure Valley service area, including Banbury and The Estates. Custom and semi-custom homes, plus builds on land you own, are all on offer, and an Eagle lot can be assessed before you sign for it.',
       },
       {
         question: 'Which county is Eagle in?',
@@ -198,17 +198,17 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. We\'re an Idaho Registered Contractor #8381215, bonded, and insured. Before a Kuna project begins you can request our Idaho contractor registration details and we\'ll send them.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Before a Kuna project begins you can request our Idaho contractor registration details and we\'ll send them.',
       },
       {
         question: 'How do I start a project?',
         answer:
-          'Give us a ring, run the construction estimator to see a rough planning range, or reserve a free planning consultation on the site. Kuna\'s building department processes residential applications in the order received, so a complete plan set keeps a project moving.',
+          'Give us a ring, request a quote, or reserve a free planning consultation on the site. Kuna\'s building department processes residential applications in the order received, so a complete plan set keeps a project moving.',
       },
       {
         question: 'Do you build in Kuna, Idaho?',
         answer:
-          'We do. Kuna is in our Treasure Valley coverage, including Black Cat and Crimson Point. Expect the full range here (custom, semi-custom, or your own lot), and ask us to look at a Kuna parcel before you close on it.',
+          'We do. Kuna is in our Treasure Valley coverage, including Crimson Point. Expect the full range here (custom, semi-custom, or your own lot), and ask us to look at a Kuna parcel before you close on it.',
       },
       {
         question: 'Which county is Kuna in?',
@@ -239,27 +239,27 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. We\'re an Idaho Registered Contractor #8381215, bonded, and insured. Our registration details from the State of Idaho are available on request, and Caldwell\'s permit packet includes a contractor registration declaration under Idaho Code 54-5209, so that number appears on the permit.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Our registration details from the State of Idaho are available on request, and Caldwell\'s permit packet includes a contractor registration declaration under Idaho Code 54-5209, so that number appears on the permit.',
       },
       {
         question: 'How do I start a project?',
         answer:
-          'Call, check the estimator\'s planning range, or request a free planning consultation through the website. Whichever route you take, a Caldwell build gets a line-item budget before we break ground.',
+          'Call, request a quote, or book a free planning consultation through the website. Whichever route you take, a Caldwell build gets a line-item budget before we break ground.',
       },
       {
         question: 'Do you build in Caldwell, Idaho?',
         answer:
-          'Yes. Caldwell is covered by our Treasure Valley service area, Cleveland Blvd and Ustick included. We\'ll build a custom or semi-custom home or a house on land you already have, and we can review a Caldwell lot ahead of your purchase.',
+          'Yes. Caldwell is covered by our Treasure Valley service area, including Wilson. We\'ll build a custom or semi-custom home or a house on land you already have, and we can review a Caldwell lot ahead of your purchase.',
       },
       {
         question: 'Which county is Caldwell in?',
         answer:
-          'Caldwell is a Canyon County city. Its Department of Building Safety (205 S. 6th Ave.) issues permits inside city limits. To see how the Canyon County and Ada County paths differ, use our permit-flow comparison.',
+          'Caldwell is a Canyon County city. Its Department of Building Safety (205 S. 6th Ave.) issues permits inside city limits. Addresses outside city limits go through the county instead; we check this for you at the first visit. To see how the Canyon County and Ada County paths differ, use our permit-flow comparison.',
       },
       {
         question: 'How long does Caldwell plan review take?',
         answer:
-          'Caldwell\'s residential permit packet estimates plan review at no more than 5 to 7 working days for a complete set of plans and supporting documents. Parcels that aren\'t part of a platted subdivision take longer, and projects in a designated flood plain need a flood plain certificate.',
+          'Caldwell\'s first plan review typically takes 7 to 10 business days for a complete set of plans and supporting documents. Parcels that aren\'t part of a platted subdivision take longer, and projects in a designated flood plain need a flood plain certificate.',
       },
       {
         question: 'How are Caldwell building permit fees calculated?',
@@ -280,12 +280,12 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. We\'re an Idaho Registered Contractor #8381215, bonded, and insured, and we provide our Idaho contractor registration details when asked. Star\'s building FAQ notes that contractors need a current, valid State of Idaho license to apply for permits in the city.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured, and we provide our Idaho contractor registration details when asked. Star\'s building FAQ notes that contractors need a current, valid State of Idaho license to apply for permits in the city.',
       },
       {
         question: 'How do I start a project?',
         answer:
-          'Ring (208) 477-1169, see a planning range in the construction estimator, or schedule the free consultation through our website. If operating costs are a priority, ask about our energy-efficient homes, which are verified by blower-door testing.',
+          'Ring (208) 477-1169, request a quote, or schedule the free consultation through our website. If operating costs are a priority, ask about our energy-efficient homes, which are verified by blower-door testing.',
       },
       {
         question: 'Do you build in Star, Idaho?',
@@ -321,12 +321,12 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. We\'re an Idaho Registered Contractor #8381215, bonded, and insured. You can ask for our Idaho contractor registration details at any point. Middleton\'s online permit portal links the state\'s contractor registration search and cites Idaho Code 54-5209, which ties a registration number to each building permit.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. You can ask for our Idaho contractor registration details at any point. Middleton\'s online permit portal links the state\'s contractor registration search and cites Idaho Code 54-5209, which ties a registration number to each building permit.',
       },
       {
         question: 'How do I start a project?',
         answer:
-          'Call (208) 477-1169, see what the construction estimator gives as a planning range, or get a free planning consultation on the calendar through our website. Middleton permits are applied for, paid, and tracked through the city\'s Citizenserve online portal, and permitting is part of what our team handles.',
+          'Call (208) 477-1169, request a quote, or get a free planning consultation on the calendar through our website. Middleton permits are applied for, paid, and tracked through the city\'s Citizenserve online portal, and permitting is part of what our team handles.',
       },
       {
         question: 'Do you build in Middleton, Idaho?',
@@ -362,7 +362,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Who is a custom home builder in Middleton for?',
         answer:
-          'Homeowners who want a home designed from a blank page, an adapted plan, or a build on land they already own - not a catalog-only production home. Start with a free planning consultation or our construction estimator for a planning range.',
+          'Homeowners who want a home designed from a blank page, an adapted plan, or a build on land they already own, not a catalog-only production home. Start with a free planning consultation or request a quote.',
       },
     ],
   },
@@ -378,12 +378,12 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. Boise Construction Co is an Idaho Registered Contractor #8381215, bonded, and insured, and Idaho contractor registration details are yours if you ask for them.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Certificate on request.',
       },
       {
         question: 'How do I start a project?',
         answer:
-          'You can call, pull a planning range from the online construction estimator, or book a free planning consultation through the website. Garden City wants the full application package with fees paid before an application is routed for review, so we assemble the complete set before filing.',
+          'You can call, request a quote, or book a free planning consultation through the website. Garden City wants the full application package with fees paid before an application is routed for review, so we assemble the complete set before filing.',
       },
       {
         question: 'Do you build in Garden City, Idaho?',
@@ -393,12 +393,12 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Which county is Garden City in?',
         answer:
-          'Garden City is an Ada County city. Building permits inside city limits come from Garden City\'s own building department, and our permit-flow resource lays out how the Ada County and Canyon County processes differ.',
+          'Garden City is an Ada County city. Building permits inside city limits come from City of Garden City Development Services at City Hall, 6015 N Glenwood St. Addresses outside city limits go through the county instead; we check this for you at the first visit. Our permit-flow resource lays out how the Ada County and Canyon County processes differ.',
       },
       {
         question: 'What does Garden City review on a new home application?',
         answer:
-          'Garden City\'s residential building permit page lists the typical fees: administrative setup, a building permit covering standard inspections, structural review, design compliance review and inspection, and floodplain review when the lot is in a floodplain. A general erosion and sediment control permit is required for any land-disturbing activity, with Public Works fees attached.',
+          'City of Garden City Development Services at City Hall, 6015 N Glenwood St, reviews residential building applications. Typical fees cover administrative setup, a building permit with standard inspections, structural review, design compliance, and floodplain review when the lot is in a floodplain. A general erosion and sediment control permit is required for any land-disturbing activity, with Public Works fees attached.',
       },
       {
         question: 'What kind of housing is in Garden City?',

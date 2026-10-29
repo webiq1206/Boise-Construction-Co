@@ -6,15 +6,15 @@ export function InteriorPage({children,kind='detail'}:{children:ReactNode;kind?:
   return <div className={`approved-interior interior-${kind}`}>{children}</div>;
 }
 
-export function InteriorEstimateLink({label='Get my online estimate'}:{label?:string}) {
+export function InteriorEstimateLink({label='Request a quote'}:{label?:string}) {
   return <a className="interior-estimate-link" href="/estimate">{label}<ArrowUpRight size={18} aria-hidden="true"/></a>;
 }
 
 /** The approved split-detail and editorial-introduction compositions. */
-export function InteriorHero({children,imageSrc,imageAlt='',imageCaption,layout='split',estimateAction=false}:{children:ReactNode;imageSrc?:string;imageAlt?:string;imageCaption?:string;layout?:'split'|'editorial'|'contact';estimateAction?:boolean}) {
+export function InteriorHero({children,imageSrc,imageAlt='',imageCaption,layout='split',estimateAction=false,peopleSafe=false}:{children:ReactNode;imageSrc?:string;imageAlt?:string;imageCaption?:string;layout?:'split'|'editorial'|'contact';estimateAction?:boolean;peopleSafe?:boolean}) {
   return <section className={`interior-hero interior-hero-${layout}${imageSrc?'':' interior-hero-text'}`}>
     <div className="interior-hero-copy">{children}{estimateAction&&<div className="interior-hero-action"><InteriorEstimateLink/></div>}</div>
-    {imageSrc&&<div className="interior-hero-image"><img src={imageSrc} alt={imageAlt} width={1400} height={1100} fetchPriority="high"/></div>}
+    {imageSrc&&<div className={`interior-hero-image${peopleSafe?' interior-hero-image--people':''}`}><img src={imageSrc} alt={imageAlt} width={1400} height={1100} fetchPriority="high"/></div>}
     {imageCaption&&<p className="interior-hero-caption">{imageCaption}</p>}
   </section>;
 }

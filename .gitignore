@@ -44,3 +44,11 @@ scripts/brand/preview/
 
 # Private local free-growth working state and receipts
 /.backlink-state/
+
+# Current Construction quote wizard browser contract.
+!/scripts/construction-quote-browser.mjs
+
+# Canonical verification entry helpers, selectively synchronized.
+!/scripts/lib/
+!/scripts/lib/quoteEntry.mjs
+!/scripts/lib/navigationEntry.mjs

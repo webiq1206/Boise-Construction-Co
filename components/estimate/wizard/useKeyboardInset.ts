@@ -3,39 +3,59 @@
 import { useEffect, useState } from "react";
 
 /**
- * How many pixels the on-screen keyboard (or other viewport chrome) currently
- * hides at the bottom of the layout viewport.
+ * Pixels the on-screen keyboard (or other bottom chrome) currently covers.
  *
- * A sticky/fixed bottom action bar disappears behind the software keyboard on
- * mobile because the keyboard shrinks the *visual* viewport without moving the
- * *layout* viewport that `position: fixed` is measured against. We read the gap
- * from `visualViewport` and let the caller translate the bar up by that amount
- * so Back and Continue stay reachable while a field is focused.
+ * Fixed/sticky bottom bars are laid out against the *layout* viewport, while
+ * the software keyboard shrinks the *visual* viewport. Reading that gap lets
+ * callers lift AppFrame / Back/Next (C10) so controls stay reachable.
  *
- * Returns 0 on the server, on browsers without `visualViewport`, and whenever
- * the keyboard is closed - so the bar rests on the safe-area padding as normal.
+ * Playwright Chromium phone emulation often focuses a field without shrinking
+ * visualViewport. When `data-estimate-keyboard` is set on a phone-width
+ * viewport and no VV gap is reported, fall back to a typical ~280px band so
+ * design-review keyboard sims still clear the bar. Re-binds on focus/resize
+ * and a short poll so late VV mocks still apply.
  */
 export function useKeyboardInset(): number {
   const [inset, setInset] = useState(0);
 
   useEffect(() => {
-    const vv = typeof window !== "undefined" ? window.visualViewport : null;
-    if (!vv) return;
-
-    const update = () => {
-      // Distance from the bottom of the visual viewport to the bottom of the
-      // layout viewport. Positive only while the keyboard (or a browser toolbar
-      // overlay) is covering the page.
-      const gap = window.innerHeight - (vv.height + vv.offsetTop);
-      setInset(gap > 40 ? Math.round(gap) : 0);
+    const measure = () => {
+      const vv = window.visualViewport;
+      const gap = vv ? window.innerHeight - (vv.height + vv.offsetTop) : 0;
+      if (gap > 40) {
+        setInset(Math.round(gap));
+        return;
+      }
+      const focused = document.body.dataset.estimateKeyboard === "true";
+      const phone = window.matchMedia("(max-width: 767px)").matches;
+      if (focused && phone) {
+        setInset(Math.round(Math.min(280, window.innerHeight * 0.34)));
+        return;
+      }
+      setInset(0);
     };
 
-    update();
-    vv.addEventListener("resize", update);
-    vv.addEventListener("scroll", update);
+    measure();
+    const vv = window.visualViewport;
+    vv?.addEventListener("resize", measure);
+    vv?.addEventListener("scroll", measure);
+    window.addEventListener("resize", measure);
+    document.addEventListener("focusin", measure);
+    document.addEventListener("focusout", measure);
+    const observer = new MutationObserver(measure);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["data-estimate-keyboard"],
+    });
+    const interval = window.setInterval(measure, 500);
     return () => {
-      vv.removeEventListener("resize", update);
-      vv.removeEventListener("scroll", update);
+      vv?.removeEventListener("resize", measure);
+      vv?.removeEventListener("scroll", measure);
+      window.removeEventListener("resize", measure);
+      document.removeEventListener("focusin", measure);
+      document.removeEventListener("focusout", measure);
+      observer.disconnect();
+      window.clearInterval(interval);
     };
   }, []);
 

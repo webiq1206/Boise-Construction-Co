@@ -52,7 +52,7 @@ export interface PageMetaInput {
  */
 const CORE_SERVICES = ['custom-home-builder','semi-custom-homes','build-on-your-lot','design-build'];
 const CORE_CITIES = ['boise','meridian','eagle','nampa'];
-const SECONDARY_SERVICES = ['home-plans-design','home-additions','lot-evaluation','energy-efficient-homes'];
+const SECONDARY_SERVICES = ['home-plans-design','home-additions','adu','lot-evaluation','energy-efficient-homes'];
 const SECONDARY_CITIES = ['boise','meridian'];
 const EXTRA_INDEXABLE = ['shop-homes-barndominiums/meridian','shop-homes-barndominiums/eagle','shop-homes-barndominiums/nampa','shop-homes-barndominiums/kuna'];
 
@@ -141,6 +141,7 @@ const SERVICE_TITLE_OVERRIDES: Record<string, string> = {
   'design-build': 'Treasure Valley Design-Build Homes',
   'home-plans-design': 'Custom Home Plans & Design, Idaho',
   'home-additions': 'Home Additions in the Treasure Valley',
+  adu: 'ADU Builder in Boise, Idaho',
   'lot-evaluation': 'Lot Evaluation & Feasibility, Idaho',
   'shop-homes-barndominiums': 'Idaho Shop Homes & Barndominiums',
   'energy-efficient-homes': 'Energy-Efficient Homes in Idaho',

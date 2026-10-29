@@ -12,6 +12,7 @@ Design-build means one accountable team handles architectural design, engineerin
 - [Design-Build](https://boiseconstruction.co/services/design-build): Design and construction under one contract, so the drawings and the budget never drift apart.
 - [Home Design & Plans](https://boiseconstruction.co/services/home-plans-design): Architectural design, engineering, and permit-ready drawings for a home built to your site.
 - [Home Additions](https://boiseconstruction.co/services/home-additions): Useful new space added to the home you already live in, planned around the structure, utilities, and daily life already there.
+- [ADUs & Guest Houses](https://boiseconstruction.co/services/adu): Accessory dwellings and guest houses on the lot you already own, planned around setbacks, utilities, and how you will use the space.
 - [Lot Evaluation & Feasibility](https://boiseconstruction.co/services/lot-evaluation): Soils, utilities, access, setbacks, and slope reviewed before you commit to a parcel.
 - [Shop Homes & Barndominiums](https://boiseconstruction.co/services/shop-homes-barndominiums): Post-frame and steel-framed homes that pair finished living space with real working shop square footage.
 - [Energy-Efficient Homes](https://boiseconstruction.co/services/energy-efficient-homes): High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.
@@ -60,4 +61,4 @@ Design-build means one accountable team handles architectural design, engineerin
 - [RSS feed](https://boiseconstruction.co/feed.xml): guides and articles, newest first, with publication and revision dates.
 - [Full text for LLMs](https://boiseconstruction.co/llms-full.txt): expanded reference copy of the core facts.
 
-Last updated: 2026-10-17.
+Last updated: 2026-10-29.

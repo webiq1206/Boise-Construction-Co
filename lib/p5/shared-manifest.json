@@ -265,7 +265,7 @@
     "scripts/p5-build-price-book.mjs": "714a76f8a9f29077d052304456aca38769fc9485022774856eae816b2e847450",
     "scripts/p5-cli-acceptance.mts": "ed5b8fc80231c03b3c2b54de486fb6db7f259947e855ecf4985a9caf6f4ea6b8",
     "scripts/p5-component-review.mjs": "7035921690a6dc0648b1c3142b054ad09d67535c706e108817369e9e6de6ab26",
-    "scripts/p5-estimator-browser.mjs": "de11d0c9634460d64d489c85764a12032120b7d735f3ea327c4dc874d785c6ba",
+    "scripts/p5-estimator-browser.mjs": "bffb531858149b6289acbea84afc003c2df6a8a15eab23b13eb2388a81bbf975",
     "scripts/p5-host-build.mjs": "1d83b593096c24575847b9f290253c7d32e74dfaa640d22ac68b427307599b3f",
     "scripts/p5-hub-notification-check.mjs": "e2d4216777feeb2e4099b93986ca257e4760f671312a6b343014ef7677148f06",
     "scripts/p5-intake-browser-fixture.mts": "438c997dfdf18d8f11383059cdb93df31de0275f79dfb43af845c143a10f0872",
@@ -273,7 +273,7 @@
     "scripts/p5-live-journey.mjs": "1b72a8e19aa3df096bb37c72b11bad74abe9f25d2a94e53ee6b36102d7f6c1c1",
     "scripts/p5-migration-state.mjs": "e24599671bb21e9791c9c02ede57c5abecaa2a582857aab3dfe3d7f46137d184",
     "scripts/p5-mobile-matrix.mjs": "ca427c0b9a49697d3e605a4ebeb709b582e24d29521a5928bad8cb027ef712f6",
-    "scripts/p5-mobile-navigation.mjs": "731c469cc2fdda63beb7657d10de5aca825ad1879bcba2b3d20ed0ffa37ef984",
+    "scripts/p5-mobile-navigation.mjs": "86fcb7ac3a283a54897c5e84ee78f139ee3d35cc5d48c3a3b9049cb627a81660",
     "scripts/p5-pricing-qualification-ledger.mts": "c195e4758c3ce767f3e6162a9178a545883fdb35df3e1c5d2bcc0ecc535d5920",
     "scripts/p5-project-record-qualify.mts": "f5bde995c87d637f20d92a55072b213761d011101e99f683634bc2c86a7aeeee",
     "scripts/p5-project-review-ui.test.mts": "71b79d377a646aa1b68f9d5819a413e769cef00800f96d070ef6fa37995b4660",
@@ -496,11 +496,11 @@
     "components/P5ExitOffer.tsx": "5b5e76460bbee7577cfa8ce092bfb67e31bdc11ba07d7df815b2c7bfbf06fbce",
     "components/P5ExitOffer.module.css": "88f45092817c319fa06ee60b102a8b439412f29747f25bd95ebdf9ea28b99461",
     "tests/p5-exit-callback.test.ts": "fb985b096b8397d0d424d3ec31cd48a444c0546cfbc012736343cd5b94b450a3",
-    "scripts/p5-exit-browser.mjs": "c6897d0453c2b1d2d7840ad84f041130b102162ecc5879098466b62f1f5bf9ee",
+    "scripts/p5-exit-browser.mjs": "6b0556f4c8b17cd5f314f60d84246363b60e4dc54e191f91010e78374cf44a97",
     "lib/p5/intakeIntent.ts": "5f77bf876278b307a1fee4e49e8ac4a144e99bd7bd4e5f6b186491fd0888b360",
     "tests/p5-intake-intent.test.ts": "b7be17dd3d8c5a7e7b15f5bbd205ebaa719617ef25791294825570e1679c1513",
     "scripts/test-p5-intake-intent.mts": "cf2ec47bdf7a5cf5cab221991ca2d45c96c479fad9f160427d14d16dc8e95425",
-    "scripts/p5-intake-intent-browser.mjs": "40ba115deb0e6bfadf5c75b402f7c3b324d281a6403f16c325dda7a2c2b0145e",
+    "scripts/p5-intake-intent-browser.mjs": "0daa6f89b57d2d945076549cb4433059396be0708a86ebb8b31ce188ce485a21",
     "scripts/p5-intake-progression-browser.mjs": "04bad0ff80bb43e9306c09aea428272707e370822d5c03a0a6c9f66bf7b8ae5d",
     "scripts/p5-intake-conflict-browser.mjs": "24baa3da4aafb51b3201622667bee1ec2b6cd41e809dc51d02201c2251763d29",
     "scripts/p5-contact-first-browser.mjs": "92f3646a7736ddf0169e8d700134ae1f4789c6eb01f6d28394deebaa792564f2",
@@ -513,7 +513,10 @@
     "lib/p5/intakeReferenceStore.ts": "2c023fd0c62dd4583021db6f1767df8b8bfe4813cd9d6933d445c4fb31a97216",
     "tests/p5-intake-pdf.test.ts": "cb331ce30787d6df4154885531aaa05c2dec4e29e51cea3315392636bb0d1758",
     "lib/leadAttribution.ts": "aec4191c4984d381ede0fbb585bd29cc1b4b7eeb4270a553a377b0074a4eee35",
-    "lib/leadAttributionBrowser.ts": "06514c0dd38cf186ffbec763c2ab47df1085e3991a1e7a7ad73ec657e80f4780"
+    "lib/leadAttributionBrowser.ts": "06514c0dd38cf186ffbec763c2ab47df1085e3991a1e7a7ad73ec657e80f4780",
+    "scripts/lib/quoteEntry.mjs": "7c998f9e2633e3da0c9a96829455e7de87a9a2e734a64eec4b4d213ee574d915",
+    "scripts/lib/navigationEntry.mjs": "570c630761ee2ceb966c3894650ae68b54e2349aeb7f9b47b4aa5fa82b8ece3e",
+    "tests/p5-navigation-entry.test.mjs": "e5565b108ca00d4aa9b3571f1d0fcb4530326a3acc6ce6ef487508a195753b12"
   },
   "coordinatedIntakeBatch": {
     "base": "e6e125b83468a402264be2f1e82e5c0466baa178",
@@ -563,5 +566,100 @@
       "scripts/p5-contact-first-browser.mjs"
     ],
     "note": "Explicit phone-only callback entry preserves drafts and reuses the existing retry-safe callback endpoint."
-  }
+  },
+  "selectiveVerificationBatches": [
+    {
+      "source": "p5-home-co",
+      "commit": "10b5ef5caacb0c113d2e07a174deab862112dc54",
+      "files": [
+        {
+          "file": "scripts/lib/quoteEntry.mjs",
+          "before": null,
+          "after": "2479e992466a6241d73027e23fba7c4bc218f16e1a4372ea132b1b2db94a43ba"
+        },
+        {
+          "file": "scripts/lib/navigationEntry.mjs",
+          "before": null,
+          "after": "570c630761ee2ceb966c3894650ae68b54e2349aeb7f9b47b4aa5fa82b8ece3e"
+        },
+        {
+          "file": "scripts/p5-mobile-navigation.mjs",
+          "before": "731c469cc2fdda63beb7657d10de5aca825ad1879bcba2b3d20ed0ffa37ef984",
+          "after": "e998b31087c2df1ddd3c969911b5608d437aae59c8a06245eadd1952119cd089"
+        },
+        {
+          "file": "scripts/p5-estimator-browser.mjs",
+          "before": "de11d0c9634460d64d489c85764a12032120b7d735f3ea327c4dc874d785c6ba",
+          "after": "41fb63afc215bf7fcf5f20a0c1745c9b1637c20465063dcf6d6ac503a4158f74"
+        },
+        {
+          "file": "scripts/p5-intake-intent-browser.mjs",
+          "before": "40ba115deb0e6bfadf5c75b402f7c3b324d281a6403f16c325dda7a2c2b0145e",
+          "after": "0daa6f89b57d2d945076549cb4433059396be0708a86ebb8b31ce188ce485a21"
+        },
+        {
+          "file": "scripts/p5-exit-browser.mjs",
+          "before": "c6897d0453c2b1d2d7840ad84f041130b102162ecc5879098466b62f1f5bf9ee",
+          "after": "6b0556f4c8b17cd5f314f60d84246363b60e4dc54e191f91010e78374cf44a97"
+        },
+        {
+          "file": "tests/p5-navigation-entry.test.mjs",
+          "before": null,
+          "after": "b3305e09b5d1e243ad672a728a325213374e7a8771bb3cdb72dff845b28aaf60"
+        }
+      ],
+      "note": "Only listed verification files synchronized; other files and provenance retained."
+    },
+    {
+      "source": "p5-home-co",
+      "commit": "076cf80b189280301361c81ee25631316e53cf05",
+      "files": [
+        {
+          "file": "scripts/p5-mobile-navigation.mjs",
+          "before": "e998b31087c2df1ddd3c969911b5608d437aae59c8a06245eadd1952119cd089",
+          "after": "438bf5433f64fb84366e9214e1e2e22bb3f3cabe42c11842f58e1fc6a6b2c1d1"
+        }
+      ],
+      "note": "Only listed verification files synchronized; other files and provenance retained."
+    },
+    {
+      "source": "p5-home-co",
+      "commit": "1b9a916b6eb3ec14faff6c4e0a2485b18a6ee8b9",
+      "files": [
+        {
+          "file": "scripts/lib/quoteEntry.mjs",
+          "before": "2479e992466a6241d73027e23fba7c4bc218f16e1a4372ea132b1b2db94a43ba",
+          "after": "ecd978be5a45e0472de4f352fbc20c7ae99f0b635270d959769d9d77e1665993"
+        },
+        {
+          "file": "scripts/p5-mobile-navigation.mjs",
+          "before": "438bf5433f64fb84366e9214e1e2e22bb3f3cabe42c11842f58e1fc6a6b2c1d1",
+          "after": "86fcb7ac3a283a54897c5e84ee78f139ee3d35cc5d48c3a3b9049cb627a81660"
+        },
+        {
+          "file": "scripts/p5-estimator-browser.mjs",
+          "before": "41fb63afc215bf7fcf5f20a0c1745c9b1637c20465063dcf6d6ac503a4158f74",
+          "after": "bffb531858149b6289acbea84afc003c2df6a8a15eab23b13eb2388a81bbf975"
+        },
+        {
+          "file": "tests/p5-navigation-entry.test.mjs",
+          "before": "b3305e09b5d1e243ad672a728a325213374e7a8771bb3cdb72dff845b28aaf60",
+          "after": "e5565b108ca00d4aa9b3571f1d0fcb4530326a3acc6ce6ef487508a195753b12"
+        }
+      ],
+      "note": "Only listed verification files synchronized; other files and provenance retained."
+    },
+    {
+      "source": "p5-home-co",
+      "commit": "9d08d955cf40b9cfb781edba2b11c24df15b051d",
+      "files": [
+        {
+          "file": "scripts/lib/quoteEntry.mjs",
+          "before": "ecd978be5a45e0472de4f352fbc20c7ae99f0b635270d959769d9d77e1665993",
+          "after": "7c998f9e2633e3da0c9a96829455e7de87a9a2e734a64eec4b4d213ee574d915"
+        }
+      ],
+      "note": "Only explicitly listed files synchronized; other files and provenance retained. Runtime scope is restricted to mobile-action and route-presentation compatibility."
+    }
+  ]
 }

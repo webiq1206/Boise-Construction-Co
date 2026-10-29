@@ -1,5 +1,4 @@
 "use client";
-import { useP5MobileActions } from "@/components/P5MobileActions";
 import { ApprovedBrand } from "@/components/approved/ApprovedBrand";
 
 
@@ -34,7 +33,6 @@ export function Navigation() {
 
 function MarketingNavigation() {
   const pathname = usePathname();
-  const mobileActionsVisible = useP5MobileActions(pathname);
   // The estimator is a one-page app with its own brand bar, step progress and exit control.
   // Stacking the marketing header on top of it cost about a third of a phone screen before any
   // content, and gave the customer a hamburger out of the flow they were in (owner 2026-09-23).
@@ -88,7 +86,7 @@ function MarketingNavigation() {
             : "bg-background/95 backdrop-blur border-b border-border",
         )}
       >
-        <nav className="container flex h-[60px] items-center justify-between gap-4 px-4 md:px-6">
+        <nav className="container flex h-16 items-center justify-between gap-4 px-4 md:h-[76px] md:px-6">
           <Logo />
 
           <div className="hidden min-[1180px]:flex items-center gap-0">
@@ -328,36 +326,25 @@ function MarketingNavigation() {
         </nav>
       </header>
 
-      {/* Sticky bottom bar: one primary conversion action (Get an estimate)
-          plus one secondary utility action (Call). Text remains reachable in
-          the header and mobile menu, but doesn't compete for space here -
-          three equal actions diluted which one visitors actually tap. */}
+      {/* C7: one primary + one secondary. Chat stays in header/menu only. */}
       <div
         data-mobile-nav-bar=""
-        data-p5-actions-ready={mobileActionsVisible}
-        className={cn("fixed left-0 right-0 bottom-0 z-[100] min-[1180px]:hidden pb-safe border-t bg-background border-border", (mobileOpen || pathname?.startsWith("/estimate")) && "invisible pointer-events-none")}
+        data-p5-actions-ready={true}
+        className={cn("fixed left-0 right-0 bottom-0 z-[100] min-[1180px]:hidden border-t bg-background border-border", (mobileOpen || pathname?.startsWith("/estimate")) && "invisible pointer-events-none")}
+        style={{ paddingTop: 12, paddingBottom: 'calc(12px + env(safe-area-inset-bottom, 0px))' }}
       >
-        <div className="flex items-stretch gap-2 p-2">
+        <div className="flex items-stretch gap-3 px-3">
           <a
             href={SITE_CONFIG.phoneHref}
-            className="flex min-h-14 w-[76px] shrink-0 flex-col gap-1 items-center justify-center rounded-sm border border-border text-foreground hover-elevate active-elevate-2"
+            className="flex h-12 w-[76px] shrink-0 flex-col gap-0.5 items-center justify-center rounded-sm border border-border text-foreground hover-elevate active-elevate-2"
             aria-label={`Call ${SITE_CONFIG.phone}`}
             data-testid="button-call-mobile"
           >
-            <Phone className="h-5 w-5" strokeWidth={1.5} /><span className="text-xs font-medium">Call</span>
+            <Phone className="h-4 w-4" strokeWidth={1.5} /><span className="text-xs font-medium">Call</span>
           </a>
-          <button
-            type="button"
-            onClick={() => window.dispatchEvent(new Event("p5:assistant-open"))}
-            className="flex min-h-14 w-[76px] shrink-0 flex-col gap-1 items-center justify-center rounded-sm border border-border text-foreground hover-elevate active-elevate-2"
-            aria-label="Chat with our estimating assistant"
-            data-testid="button-chat-mobile"
-          >
-            <MessageSquare className="h-5 w-5" strokeWidth={1.5} /><span className="text-xs font-medium">Chat</span>
-          </button>
           <NavEstimateButton
             variant="brand"
-            className="min-h-14 flex-1 text-base"
+            className="h-12 min-h-12 flex-1 text-base"
             data-testid="button-begin-conversation-mobile"
             trackingLocation="mobile_sticky_bar"
           >

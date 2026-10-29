@@ -75,40 +75,44 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
 
   const sectionFigureByService: Record<string, { src: string; caption: string }> = {
     'custom-home-builder': {
-      src: '/images/projects/eagle-farmhouse-kitchen.webp',
-      caption: 'Representative imagery: kitchen finishes continuous with the foothills farmhouse concept exterior.',
+      src: '/images/projects/eagle-mountain-modern/eagle-custom-home-kitchen.webp',
+      caption: 'Rift-cut white oak cabinets and a honed black quartzite island in the Eagle mountain-modern concept.',
     },
     'semi-custom-homes': {
-      src: '/images/projects/meridian-ranch-living.webp',
-      caption: 'Representative imagery: living room finishes continuous with the Meridian ranch concept exterior.',
+      src: '/images/projects/eagle-mountain-modern/eagle-custom-home-great-room.webp',
+      caption: 'Great room with white oak floors, plaster walls, and a ledgestone fireplace.',
     },
     'build-on-your-lot': {
-      src: '/images/projects/eagle-farmhouse-outdoor.webp',
-      caption: 'Representative imagery: covered outdoor living tied to the same foothills farmhouse concept.',
+      src: '/images/projects/eagle-mountain-modern/eagle-custom-home-rear-patio.webp',
+      caption: 'Covered rear patio with foothills view on the Eagle mountain-modern concept.',
     },
     'design-build': {
       src: CONSTRUCTION_IMAGES.plans,
-      caption: 'Representative imagery: plans and selections coordinated before construction.',
+      caption: 'Plans and selections coordinated before construction.',
     },
     'home-plans-design': {
       src: CONSTRUCTION_IMAGES.plans,
-      caption: 'Representative imagery: drawings and finish samples reviewed together.',
+      caption: 'Drawings and finish samples reviewed together.',
     },
     'home-additions': {
       src: CONSTRUCTION_IMAGES.framing,
-      caption: 'Representative imagery: framing that ties new space into an existing home.',
+      caption: 'Framing that ties new space into an existing home.',
+    },
+    adu: {
+      src: '/images/projects/treasure-valley-adu-finished.webp',
+      caption: 'Finished modern ADU with standing-seam metal roof beside a Treasure Valley home.',
     },
     'lot-evaluation': {
       src: CONSTRUCTION_IMAGES.foothills,
-      caption: 'Representative imagery: foothills building pad review before design.',
+      caption: 'Foothills building pad review before design.',
     },
     'shop-homes-barndominiums': {
       src: CONSTRUCTION_IMAGES.shopHome,
-      caption: 'Representative imagery: shop home with living wing on a rural Treasure Valley lot.',
+      caption: 'Shop home with living wing on a rural Treasure Valley lot.',
     },
     'energy-efficient-homes': {
       src: CONSTRUCTION_IMAGES.insulation,
-      caption: 'Representative imagery: insulation and air sealing before drywall.',
+      caption: 'Insulation and air sealing before drywall.',
     },
   };
   const longFormFigure = sectionFigureByService[service.slug];
@@ -134,7 +138,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
       ],
       figure: {
         src: CONSTRUCTION_IMAGES.interior,
-        caption: 'Representative imagery: finished living space planned as a connected addition.',
+        caption: 'Finished living space planned as a connected addition.',
       },
     },
   ] : [
@@ -172,16 +176,16 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
         // restating them here in prose was pure repetition. This paragraph
         // now adds only what those lists don't: the fixed-price framing and
         // the draw schedule.
-        `You get a written, fixed price before we break ground and a published draw schedule through the build.`,
+        `You get a line-item budget with written allowances before we break ground and a published draw schedule through the build.`,
       ],
       figure: featuredProject?.images[1]
         ? {
             src: featuredProject.images[1].src,
-            caption: `Representative imagery: ${featuredProject.images[1].label.toLowerCase()} from the ${featuredProject.title} concept set.`,
+            caption: `${featuredProject.images[1].label} from the ${featuredProject.title}.`,
           }
         : {
             src: images.breather,
-            caption: 'Representative imagery: interior finishes for Treasure Valley home building.',
+            caption: 'Interior finishes planned for Treasure Valley home building.',
           },
     },
   ];

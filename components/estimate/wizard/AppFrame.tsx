@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
+import { useEffect, type CSSProperties, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { requestHideMobileNavBar } from "@/lib/mobileNavBar";
+import { useKeyboardInset } from "./useKeyboardInset";
 
 export interface AppFrameStep {
   id: string;
@@ -36,15 +37,9 @@ export interface AppFrameProps {
  * document scroll is locked while the frame is mounted - and the mobile
  * Call/Text bar steps aside so it never stacks on the footer.
  *
- * Measured before this existed: the /estimate page scrolled to 5,110px on a
- * phone and the first choice sat at 558px, under a hero. The brief for this
- * frame was "no scrolling whatsoever", and every step is designed to fit a
- * 390x844 phone with the browser chrome open. The body keeps `overflow-y:
- * auto` purely as a safety net for an unusually short viewport, because content
- * that cannot be reached at all is worse than content that scrolls.
- *
- * The same frame on all four sites: family rhythm and type, each site's own
- * ground and accent.
+ * C10: when the software keyboard covers the layout viewport, the frame's
+ * bottom edge tracks `visualViewport` via `useKeyboardInset` so Back/Next stay
+ * in the usable band above the keyboard.
  */
 export function AppFrame({
   title,
@@ -57,6 +52,8 @@ export function AppFrame({
   hideProgress = false,
   className,
 }: AppFrameProps) {
+  const keyboardInset = useKeyboardInset();
+
   // Own the screen: lock the document scroll and hide the global mobile bar for
   // as long as the frame is mounted. Both are released on unmount.
   useEffect(() => {
@@ -84,24 +81,48 @@ export function AppFrame({
   return (
     <div
       className={cn(
-        "fixed inset-x-0 bottom-0 z-[90] flex flex-col bg-inverse text-inverse-foreground",
+        "fixed inset-x-0 z-[90] flex flex-col bg-inverse text-inverse-foreground",
         "top-[var(--app-header-h,60px)]",
         className,
       )}
       id="calculator"
       data-testid="estimate-app-frame"
+      data-keyboard-aware="true"
+      data-keyboard-inset={keyboardInset > 0 ? String(keyboardInset) : undefined}
+      style={
+        {
+          // Keep the registration visible without covering Continue. Its measured
+          // height also accounts for wrapping, zoom and the safe-area inset.
+          bottom: `max(${keyboardInset}px, var(--contractor-registration-height, 0px))`,
+          ["--ew-keyboard-inset"]: `${keyboardInset}px`,
+        } as CSSProperties
+      }
     >
-      {/* HEADER - shrink-0, never scrolls. */}
-      <header className="ed-shell shrink-0 pt-[clamp(12px,2.2vh,22px)] pb-[clamp(8px,1.4vh,14px)]">
+      {/* HEADER - shrink-0, never scrolls. Under keyboard inset, collapse chrome
+          (C10 fit sequence #4) so the focused field + Back/Next still fit. */}
+      <header
+        className={cn(
+          "ed-shell shrink-0",
+          keyboardInset > 0
+            ? "pt-2 pb-1.5"
+            : "pt-[clamp(12px,2.2vh,22px)] pb-[clamp(8px,1.4vh,14px)]",
+        )}
+      >
         <div className="mx-auto w-full max-w-3xl">
           <div className="flex items-end justify-between gap-4">
             <div className="min-w-0">
-              {eyebrow && (
+              {eyebrow && keyboardInset === 0 && (
                 <p className="ed-eyebrow !mb-1.5" style={{ color: "var(--ed-accent)" }}>
                   {eyebrow}
                 </p>
               )}
-              <h1 className="ed-h3 truncate !leading-[1.05]" data-testid="app-frame-title">
+              <h1
+                className={cn(
+                  "truncate !leading-[1.05]",
+                  keyboardInset > 0 ? "ed-h4" : "ed-h3",
+                )}
+                data-testid="app-frame-title"
+              >
                 {title}
               </h1>
             </div>
@@ -116,7 +137,10 @@ export function AppFrame({
           </div>
           {!hideProgress && total > 0 && (
             <>
-              <ol className="mt-3 flex items-center gap-1" aria-hidden="true">
+              <ol
+                className={cn("flex items-center gap-1", keyboardInset > 0 ? "mt-1.5" : "mt-3")}
+                aria-hidden="true"
+              >
                 {steps.map((s, i) => (
                   <li key={s.id} className="flex-1">
                     <span
@@ -138,22 +162,38 @@ export function AppFrame({
 
       {/* BODY - the step. Fills the space between header and footer. Short steps
           centre vertically so a two-choice question does not sit in the top
-          third of an empty screen; tall steps top-align and fall back to an
-          internal scroll rather than clipping. */}
-      <div className="ed-shell min-h-0 flex-1 overflow-y-auto overscroll-contain" data-testid="app-frame-body">
-        <div className="mx-auto flex min-h-full w-full max-w-3xl flex-col justify-center py-1">
+          third of an empty screen; tall steps top-align. While the keyboard is
+          open, overflow is hidden so C10 forbids an inner scroll container. */}
+      <div
+        className={cn(
+          "ed-shell min-h-0 flex-1 overscroll-contain",
+          keyboardInset > 0 ? "overflow-hidden" : "overflow-y-auto",
+        )}
+        data-testid="app-frame-body"
+      >
+        <div
+          className={cn(
+            "mx-auto flex w-full max-w-3xl flex-col",
+            keyboardInset > 0 ? "min-h-0 justify-start py-0" : "min-h-full justify-center py-1",
+          )}
+        >
           {children}
         </div>
       </div>
 
-      {/* FOOTER - pinned to the bottom edge, safe-area aware. */}
+      {/* FOOTER - pinned to the bottom edge of the (keyboard-shrunk) frame. */}
       {(footer || footerAccessory) && (
         <footer
-          className="ed-shell shrink-0 border-t border-inverse-foreground/[0.12] bg-inverse pb-safe pt-2 backdrop-blur-md"
+          className={cn(
+            "ed-shell shrink-0 border-t border-inverse-foreground/[0.12] bg-inverse backdrop-blur-md",
+            keyboardInset > 0 ? "pt-1.5 pb-1.5" : "pt-2 pb-safe",
+          )}
           data-testid="app-frame-footer"
         >
           <div className="mx-auto w-full max-w-3xl">
-            {footerAccessory && <div className="mb-2">{footerAccessory}</div>}
+            {footerAccessory && keyboardInset === 0 && (
+              <div className="mb-2">{footerAccessory}</div>
+            )}
             {footer}
           </div>
         </footer>

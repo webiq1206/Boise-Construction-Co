@@ -42,7 +42,7 @@ function ProjectImageGrid({
       <div className={`relative ${lead ? "aspect-[16/10]" : "aspect-[4/3]"}`}>
         <Image
           src={hero.src}
-          alt={contentImageAlt(hero.src) || `Representative image: ${hero.label}`}
+          alt={contentImageAlt(hero.src) || hero.label}
           fill
           sizes={lead ? "(max-width: 1024px) 100vw, 60vw" : "(max-width: 768px) 85vw, 31vw"}
           className="object-cover img-brand-grade"
@@ -64,7 +64,7 @@ function ProjectImageGrid({
             >
               <Image
                 src={image.src}
-                alt={contentImageAlt(image.src) || `Representative image: ${image.label}`}
+                alt={contentImageAlt(image.src) || image.label}
                 fill
                 sizes={lead ? "(max-width: 640px) 50vw, 15vw" : "(max-width: 768px) 28vw, 10vw"}
                 className="object-cover img-brand-grade"
@@ -96,7 +96,7 @@ interface ProjectGallerySectionProps {
  * a visual rhythm instead of a text wall, and the set reads as one home.
  */
 export function ProjectGallerySection({
-  limit = 6,
+  limit = 1,
   showViewAll = true,
   excludeServiceTypes = [],
 }: ProjectGallerySectionProps) {
@@ -105,15 +105,16 @@ export function ProjectGallerySection({
   ).slice(0, limit);
   const [lead, ...rest] = projects;
   if (!lead) return null;
+  const showRail = rest.length > 0 && limit > 1;
 
   return (
     <Section id="gallery" surface="bone" spacing="xl" edge className="overflow-hidden">
       <div className="ed-shell">
         <div className="grid gap-[var(--ed-gutter)] lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <Reveal>
-            <p className="ed-eyebrow">Representative imagery</p>
+            <p className="ed-eyebrow">Concept design</p>
             <h2 className="ed-h2 ed-statement">
-              Homes across the Treasure Valley
+              {lead.title}
             </h2>
             <div className="mt-10 hidden lg:block">
               <ProjectMeta project={lead} lead />
@@ -130,7 +131,7 @@ export function ProjectGallerySection({
           </Reveal>
         </div>
 
-        {rest.length > 0 && (
+        {showRail && (
           <Reveal delay={120}>
             <div className="mt-[clamp(48px,6vw,88px)] flex items-end justify-between gap-6">
               <p className="ed-eyebrow !mb-0">More concept homes</p>

@@ -3,9 +3,9 @@
   "counts": {
     "blog": 35,
     "guide": 17,
-    "service": 9,
+    "service": 10,
     "city": 9,
-    "cityService": 81
+    "cityService": 90
   },
   "pages": {
     "/blog/ada-vs-canyon-county-permit-timelines": {
@@ -1814,6 +1814,582 @@
         }
       ]
     },
+    "/services/adu/boise": {
+      "type": "city-service",
+      "title": "ADUs & Guest Houses in Boise, Idaho",
+      "anchor": "ADUs & Guest Houses in Boise",
+      "url": "/services/adu/boise",
+      "links": [
+        {
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 2.05
+        },
+        {
+          "url": "/services/adu/kuna",
+          "anchor": "ADUs & Guest Houses in Kuna",
+          "title": "ADUs & Guest Houses in Kuna, Idaho",
+          "type": "city-service",
+          "score": 1.9
+        },
+        {
+          "url": "/services/adu/caldwell",
+          "anchor": "ADUs & Guest Houses in Caldwell",
+          "title": "ADUs & Guest Houses in Caldwell, Idaho",
+          "type": "city-service",
+          "score": 1.838
+        },
+        {
+          "url": "/services/adu/eagle",
+          "anchor": "ADUs & Guest Houses in Eagle",
+          "title": "ADUs & Guest Houses in Eagle, Idaho",
+          "type": "city-service",
+          "score": 1.838
+        },
+        {
+          "url": "/services/home-additions",
+          "anchor": "Home Additions",
+          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 0.658
+        },
+        {
+          "url": "/areas/boise",
+          "anchor": "Home Building in Boise",
+          "title": "Home Building in Boise, Idaho",
+          "type": "city",
+          "score": 0.4
+        },
+        {
+          "url": "/blog/adu-cost-boise",
+          "anchor": "ADU Cost in Boise",
+          "title": "ADU Cost in Boise",
+          "type": "blog",
+          "score": 0.214
+        },
+        {
+          "url": "/blog/production-vs-custom-home-builder",
+          "anchor": "Production Builder vs Custom Builder",
+          "title": "Production Builder vs Custom Builder",
+          "type": "blog",
+          "score": 0.13
+        }
+      ]
+    },
+    "/services/adu/caldwell": {
+      "type": "city-service",
+      "title": "ADUs & Guest Houses in Caldwell, Idaho",
+      "anchor": "ADUs & Guest Houses in Caldwell",
+      "url": "/services/adu/caldwell",
+      "links": [
+        {
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 1.948
+        },
+        {
+          "url": "/services/adu/boise",
+          "anchor": "ADUs & Guest Houses in Boise",
+          "title": "ADUs & Guest Houses in Boise, Idaho",
+          "type": "city-service",
+          "score": 1.838
+        },
+        {
+          "url": "/services/adu/kuna",
+          "anchor": "ADUs & Guest Houses in Kuna",
+          "title": "ADUs & Guest Houses in Kuna, Idaho",
+          "type": "city-service",
+          "score": 1.798
+        },
+        {
+          "url": "/services/adu/meridian",
+          "anchor": "ADUs & Guest Houses in Meridian",
+          "title": "ADUs & Guest Houses in Meridian, Idaho",
+          "type": "city-service",
+          "score": 1.782
+        },
+        {
+          "url": "/services/home-additions",
+          "anchor": "Home Additions",
+          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 0.61
+        },
+        {
+          "url": "/areas/caldwell",
+          "anchor": "Home Building in Caldwell",
+          "title": "Home Building in Caldwell, Idaho",
+          "type": "city",
+          "score": 0.459
+        },
+        {
+          "url": "/blog/adu-cost-boise",
+          "anchor": "ADU Cost in Boise",
+          "title": "ADU Cost in Boise",
+          "type": "blog",
+          "score": 0.073
+        },
+        {
+          "url": "/blog/shop-homes-and-barndominiums-idaho",
+          "anchor": "Shop Homes and Barndominiums in Idaho",
+          "title": "Shop Homes and Barndominiums in Idaho",
+          "type": "blog",
+          "score": 0.021
+        }
+      ]
+    },
+    "/services/adu/eagle": {
+      "type": "city-service",
+      "title": "ADUs & Guest Houses in Eagle, Idaho",
+      "anchor": "ADUs & Guest Houses in Eagle",
+      "url": "/services/adu/eagle",
+      "links": [
+        {
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 1.908
+        },
+        {
+          "url": "/services/adu/boise",
+          "anchor": "ADUs & Guest Houses in Boise",
+          "title": "ADUs & Guest Houses in Boise, Idaho",
+          "type": "city-service",
+          "score": 1.798
+        },
+        {
+          "url": "/services/adu/middleton",
+          "anchor": "ADUs & Guest Houses in Middleton",
+          "title": "ADUs & Guest Houses in Middleton, Idaho",
+          "type": "city-service",
+          "score": 1.782
+        },
+        {
+          "url": "/services/adu/nampa",
+          "anchor": "ADUs & Guest Houses in Nampa",
+          "title": "ADUs & Guest Houses in Nampa, Idaho",
+          "type": "city-service",
+          "score": 1.782
+        },
+        {
+          "url": "/services/home-additions",
+          "anchor": "Home Additions",
+          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 0.57
+        },
+        {
+          "url": "/areas/eagle",
+          "anchor": "Home Building in Eagle",
+          "title": "Home Building in Eagle, Idaho",
+          "type": "city",
+          "score": 0.459
+        },
+        {
+          "url": "/blog/adu-cost-boise",
+          "anchor": "ADU Cost in Boise",
+          "title": "ADU Cost in Boise",
+          "type": "blog",
+          "score": 0.033
+        },
+        {
+          "url": "/blog/build-vs-buy-boise",
+          "anchor": "Building vs Buying a Home in the Treasure Valley",
+          "title": "Building vs Buying a Home in the Treasure Valley",
+          "type": "blog",
+          "score": -0.011
+        }
+      ]
+    },
+    "/services/adu/garden-city": {
+      "type": "city-service",
+      "title": "ADUs & Guest Houses in Garden City, Idaho",
+      "anchor": "ADUs & Guest Houses in Garden City",
+      "url": "/services/adu/garden-city",
+      "links": [
+        {
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 1.812
+        },
+        {
+          "url": "/services/adu/star",
+          "anchor": "ADUs & Guest Houses in Star",
+          "title": "ADUs & Guest Houses in Star, Idaho",
+          "type": "city-service",
+          "score": 1.733
+        },
+        {
+          "url": "/services/adu/boise",
+          "anchor": "ADUs & Guest Houses in Boise",
+          "title": "ADUs & Guest Houses in Boise, Idaho",
+          "type": "city-service",
+          "score": 1.702
+        },
+        {
+          "url": "/services/adu/kuna",
+          "anchor": "ADUs & Guest Houses in Kuna",
+          "title": "ADUs & Guest Houses in Kuna, Idaho",
+          "type": "city-service",
+          "score": 1.702
+        },
+        {
+          "url": "/services/home-additions",
+          "anchor": "Home Additions",
+          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 0.522
+        },
+        {
+          "url": "/areas/garden-city",
+          "anchor": "Home Building in Garden City",
+          "title": "Home Building in Garden City, Idaho",
+          "type": "city",
+          "score": 0.511
+        },
+        {
+          "url": "/blog/adu-cost-boise",
+          "anchor": "ADU Cost in Boise",
+          "title": "ADU Cost in Boise",
+          "type": "blog",
+          "score": -0.009
+        },
+        {
+          "url": "/blog/production-vs-custom-home-builder",
+          "anchor": "Production Builder vs Custom Builder",
+          "title": "Production Builder vs Custom Builder",
+          "type": "blog",
+          "score": -0.011
+        }
+      ]
+    },
+    "/services/adu/kuna": {
+      "type": "city-service",
+      "title": "ADUs & Guest Houses in Kuna, Idaho",
+      "anchor": "ADUs & Guest Houses in Kuna",
+      "url": "/services/adu/kuna",
+      "links": [
+        {
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 1.89
+        },
+        {
+          "url": "/services/adu/caldwell",
+          "anchor": "ADUs & Guest Houses in Caldwell",
+          "title": "ADUs & Guest Houses in Caldwell, Idaho",
+          "type": "city-service",
+          "score": 1.798
+        },
+        {
+          "url": "/services/adu/eagle",
+          "anchor": "ADUs & Guest Houses in Eagle",
+          "title": "ADUs & Guest Houses in Eagle, Idaho",
+          "type": "city-service",
+          "score": 1.798
+        },
+        {
+          "url": "/services/adu/meridian",
+          "anchor": "ADUs & Guest Houses in Meridian",
+          "title": "ADUs & Guest Houses in Meridian, Idaho",
+          "type": "city-service",
+          "score": 1.798
+        },
+        {
+          "url": "/services/adu/garden-city",
+          "anchor": "ADUs & Guest Houses in Garden City",
+          "title": "ADUs & Guest Houses in Garden City, Idaho",
+          "type": "city-service",
+          "score": 1.782
+        },
+        {
+          "url": "/services/home-additions",
+          "anchor": "Home Additions",
+          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 0.498
+        },
+        {
+          "url": "/areas/kuna",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
+          "type": "city",
+          "score": 0.4
+        },
+        {
+          "url": "/blog/shop-homes-and-barndominiums-idaho",
+          "anchor": "Shop Homes and Barndominiums in Idaho",
+          "title": "Shop Homes and Barndominiums in Idaho",
+          "type": "blog",
+          "score": -0.019
+        }
+      ]
+    },
+    "/services/adu/meridian": {
+      "type": "city-service",
+      "title": "ADUs & Guest Houses in Meridian, Idaho",
+      "anchor": "ADUs & Guest Houses in Meridian",
+      "url": "/services/adu/meridian",
+      "links": [
+        {
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 1.788
+        },
+        {
+          "url": "/services/adu/middleton",
+          "anchor": "ADUs & Guest Houses in Middleton",
+          "title": "ADUs & Guest Houses in Middleton, Idaho",
+          "type": "city-service",
+          "score": 1.742
+        },
+        {
+          "url": "/services/adu/nampa",
+          "anchor": "ADUs & Guest Houses in Nampa",
+          "title": "ADUs & Guest Houses in Nampa, Idaho",
+          "type": "city-service",
+          "score": 1.742
+        },
+        {
+          "url": "/services/adu/star",
+          "anchor": "ADUs & Guest Houses in Star",
+          "title": "ADUs & Guest Houses in Star, Idaho",
+          "type": "city-service",
+          "score": 1.742
+        },
+        {
+          "url": "/areas/meridian",
+          "anchor": "Home Building in Meridian",
+          "title": "Home Building in Meridian, Idaho",
+          "type": "city",
+          "score": 0.459
+        },
+        {
+          "url": "/services/home-additions",
+          "anchor": "Home Additions",
+          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 0.45
+        },
+        {
+          "url": "/blog/build-vs-buy-boise",
+          "anchor": "Building vs Buying a Home in the Treasure Valley",
+          "title": "Building vs Buying a Home in the Treasure Valley",
+          "type": "blog",
+          "score": -0.051
+        },
+        {
+          "url": "/blog/production-vs-custom-home-builder",
+          "anchor": "Production Builder vs Custom Builder",
+          "title": "Production Builder vs Custom Builder",
+          "type": "blog",
+          "score": -0.051
+        }
+      ]
+    },
+    "/services/adu/middleton": {
+      "type": "city-service",
+      "title": "ADUs & Guest Houses in Middleton, Idaho",
+      "anchor": "ADUs & Guest Houses in Middleton",
+      "url": "/services/adu/middleton",
+      "links": [
+        {
+          "url": "/services/adu/caldwell",
+          "anchor": "ADUs & Guest Houses in Caldwell",
+          "title": "ADUs & Guest Houses in Caldwell, Idaho",
+          "type": "city-service",
+          "score": 1.782
+        },
+        {
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 1.748
+        },
+        {
+          "url": "/services/adu/garden-city",
+          "anchor": "ADUs & Guest Houses in Garden City",
+          "title": "ADUs & Guest Houses in Garden City, Idaho",
+          "type": "city-service",
+          "score": 1.733
+        },
+        {
+          "url": "/services/adu/boise",
+          "anchor": "ADUs & Guest Houses in Boise",
+          "title": "ADUs & Guest Houses in Boise, Idaho",
+          "type": "city-service",
+          "score": 1.718
+        },
+        {
+          "url": "/services/adu/kuna",
+          "anchor": "ADUs & Guest Houses in Kuna",
+          "title": "ADUs & Guest Houses in Kuna, Idaho",
+          "type": "city-service",
+          "score": 1.718
+        },
+        {
+          "url": "/areas/middleton",
+          "anchor": "Home Building in Middleton",
+          "title": "Home Building in Middleton, Idaho",
+          "type": "city",
+          "score": 0.459
+        },
+        {
+          "url": "/services/shop-homes-barndominiums",
+          "anchor": "Shop Homes & Barndominiums",
+          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 0.443
+        },
+        {
+          "url": "/blog/first-meeting-with-a-home-builder",
+          "anchor": "What Happens at Your First Meeting With a Builder",
+          "title": "What Happens at Your First Meeting With a Builder",
+          "type": "blog",
+          "score": -0.054
+        }
+      ]
+    },
+    "/services/adu/nampa": {
+      "type": "city-service",
+      "title": "ADUs & Guest Houses in Nampa, Idaho",
+      "anchor": "ADUs & Guest Houses in Nampa",
+      "url": "/services/adu/nampa",
+      "links": [
+        {
+          "url": "/services/adu/middleton",
+          "anchor": "ADUs & Guest Houses in Middleton",
+          "title": "ADUs & Guest Houses in Middleton, Idaho",
+          "type": "city-service",
+          "score": 1.782
+        },
+        {
+          "url": "/services/adu/star",
+          "anchor": "ADUs & Guest Houses in Star",
+          "title": "ADUs & Guest Houses in Star, Idaho",
+          "type": "city-service",
+          "score": 1.782
+        },
+        {
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 1.708
+        },
+        {
+          "url": "/services/adu/caldwell",
+          "anchor": "ADUs & Guest Houses in Caldwell",
+          "title": "ADUs & Guest Houses in Caldwell, Idaho",
+          "type": "city-service",
+          "score": 1.702
+        },
+        {
+          "url": "/services/adu/eagle",
+          "anchor": "ADUs & Guest Houses in Eagle",
+          "title": "ADUs & Guest Houses in Eagle, Idaho",
+          "type": "city-service",
+          "score": 1.702
+        },
+        {
+          "url": "/services/adu/meridian",
+          "anchor": "ADUs & Guest Houses in Meridian",
+          "title": "ADUs & Guest Houses in Meridian, Idaho",
+          "type": "city-service",
+          "score": 1.702
+        },
+        {
+          "url": "/areas/nampa",
+          "anchor": "Home Building in Nampa",
+          "title": "Home Building in Nampa, Idaho",
+          "type": "city",
+          "score": 0.459
+        },
+        {
+          "url": "/services/energy-efficient-homes",
+          "anchor": "Energy-Efficient Homes",
+          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 0.41
+        }
+      ]
+    },
+    "/services/adu/star": {
+      "type": "city-service",
+      "title": "ADUs & Guest Houses in Star, Idaho",
+      "anchor": "ADUs & Guest Houses in Star",
+      "url": "/services/adu/star",
+      "links": [
+        {
+          "url": "/services/adu/eagle",
+          "anchor": "ADUs & Guest Houses in Eagle",
+          "title": "ADUs & Guest Houses in Eagle, Idaho",
+          "type": "city-service",
+          "score": 1.782
+        },
+        {
+          "url": "/services/adu/meridian",
+          "anchor": "ADUs & Guest Houses in Meridian",
+          "title": "ADUs & Guest Houses in Meridian, Idaho",
+          "type": "city-service",
+          "score": 1.782
+        },
+        {
+          "url": "/services/adu/middleton",
+          "anchor": "ADUs & Guest Houses in Middleton",
+          "title": "ADUs & Guest Houses in Middleton, Idaho",
+          "type": "city-service",
+          "score": 1.702
+        },
+        {
+          "url": "/services/adu/nampa",
+          "anchor": "ADUs & Guest Houses in Nampa",
+          "title": "ADUs & Guest Houses in Nampa, Idaho",
+          "type": "city-service",
+          "score": 1.702
+        },
+        {
+          "url": "/services/adu/garden-city",
+          "anchor": "ADUs & Guest Houses in Garden City",
+          "title": "ADUs & Guest Houses in Garden City, Idaho",
+          "type": "city-service",
+          "score": 1.693
+        },
+        {
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 1.668
+        },
+        {
+          "url": "/areas/star",
+          "anchor": "Home Building in Star",
+          "title": "Home Building in Star, Idaho",
+          "type": "city",
+          "score": 0.459
+        },
+        {
+          "url": "/services/home-additions",
+          "anchor": "Home Additions",
+          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 0.41
+        }
+      ]
+    },
     "/services/build-on-your-lot/boise": {
       "type": "city-service",
       "title": "Build on Your Lot in Boise, Idaho",
@@ -1860,14 +2436,7 @@
           "anchor": "Home Building in Boise",
           "title": "Home Building in Boise, Idaho",
           "type": "city",
-          "score": 0.4
-        },
-        {
-          "url": "/blog/production-vs-custom-home-builder",
-          "anchor": "Production Builder vs Custom Builder",
-          "title": "Production Builder vs Custom Builder",
-          "type": "blog",
-          "score": 0.174
+          "score": 0.36
         },
         {
           "url": "/blog/design-build-vs-general-contractor",
@@ -1875,6 +2444,13 @@
           "title": "Design-Build vs General Contractor for a New Home",
           "type": "blog",
           "score": 0.16
+        },
+        {
+          "url": "/blog/luxury-home-building-cost-boise",
+          "anchor": "What a Luxury Home Costs to Build in Boise",
+          "title": "What a Luxury Home Costs to Build in Boise",
+          "type": "blog",
+          "score": 0.132
         }
       ]
     },
@@ -1924,21 +2500,21 @@
           "anchor": "Home Building in Caldwell",
           "title": "Home Building in Caldwell, Idaho",
           "type": "city",
-          "score": 0.483
+          "score": 0.443
         },
         {
-          "url": "/blog/adu-cost-boise",
-          "anchor": "ADU Cost in Boise",
-          "title": "ADU Cost in Boise",
+          "url": "/blog/ada-vs-canyon-county-permit-timelines",
+          "anchor": "Ada vs Canyon County: What Differs When You Build",
+          "title": "Ada vs Canyon County: What Differs When You Build",
           "type": "blog",
-          "score": 0.054
+          "score": 0.031
         },
         {
-          "url": "/blog/shop-homes-and-barndominiums-idaho",
-          "anchor": "Shop Homes and Barndominiums in Idaho",
-          "title": "Shop Homes and Barndominiums in Idaho",
+          "url": "/blog/design-build-vs-general-contractor",
+          "anchor": "Design-Build vs General Contractor for a New Home",
+          "title": "Design-Build vs General Contractor for a New Home",
           "type": "blog",
-          "score": 0.048
+          "score": 0.017
         }
       ]
     },
@@ -1977,32 +2553,32 @@
           "score": 1.639
         },
         {
-          "url": "/services/home-additions",
-          "anchor": "Home Additions",
-          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "url": "/services/design-build",
+          "anchor": "Design-Build",
+          "title": "Design-Build in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.492
+          "score": 0.466
         },
         {
           "url": "/areas/eagle",
           "anchor": "Home Building in Eagle",
           "title": "Home Building in Eagle, Idaho",
           "type": "city",
-          "score": 0.483
+          "score": 0.443
+        },
+        {
+          "url": "/blog/covered-outdoor-living-new-home",
+          "anchor": "Designing Covered Outdoor Living Into a New Home",
+          "title": "Designing Covered Outdoor Living Into a New Home",
+          "type": "blog",
+          "score": 0.013
         },
         {
           "url": "/blog/ada-vs-canyon-county-permit-timelines",
           "anchor": "Ada vs Canyon County: What Differs When You Build",
           "title": "Ada vs Canyon County: What Differs When You Build",
           "type": "blog",
-          "score": 0.031
-        },
-        {
-          "url": "/blog/luxury-home-building-cost-boise",
-          "anchor": "What a Luxury Home Costs to Build in Boise",
-          "title": "What a Luxury Home Costs to Build in Boise",
-          "type": "blog",
-          "score": 0.031
+          "score": -0.009
         }
       ]
     },
@@ -2045,28 +2621,28 @@
           "anchor": "Home Building in Garden City",
           "title": "Home Building in Garden City, Idaho",
           "type": "city",
-          "score": 0.554
+          "score": 0.514
         },
         {
-          "url": "/services/design-build",
-          "anchor": "Design-Build",
-          "title": "Design-Build in Boise & Treasure Valley, Idaho",
+          "url": "/services/home-plans-design",
+          "anchor": "Home Design & Plans",
+          "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.457
+          "score": 0.418
         },
         {
-          "url": "/blog/production-vs-custom-home-builder",
-          "anchor": "Production Builder vs Custom Builder",
-          "title": "Production Builder vs Custom Builder",
+          "url": "/blog/luxury-home-building-cost-boise",
+          "anchor": "What a Luxury Home Costs to Build in Boise",
+          "title": "What a Luxury Home Costs to Build in Boise",
           "type": "blog",
-          "score": 0.029
+          "score": -0.01
         },
         {
-          "url": "/blog/design-build-vs-general-contractor",
-          "anchor": "Design-Build vs General Contractor for a New Home",
-          "title": "Design-Build vs General Contractor for a New Home",
+          "url": "/blog/boise-building-permit-guide",
+          "anchor": "Building Permits in Boise: What a New Home Needs",
+          "title": "Building Permits in Boise: What a New Home Needs",
           "type": "blog",
-          "score": 0.014
+          "score": -0.013
         }
       ]
     },
@@ -2119,18 +2695,18 @@
           "score": 1.65
         },
         {
-          "url": "/services/home-additions",
-          "anchor": "Home Additions",
-          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "url": "/services/design-build",
+          "anchor": "Design-Build",
+          "title": "Design-Build in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.453
+          "score": 0.438
         },
         {
           "url": "/areas/kuna",
           "anchor": "Home Building in Kuna",
           "title": "Home Building in Kuna, Idaho",
           "type": "city",
-          "score": 0.4
+          "score": 0.36
         }
       ]
     },
@@ -2173,28 +2749,28 @@
           "anchor": "Home Building in Meridian",
           "title": "Home Building in Meridian, Idaho",
           "type": "city",
-          "score": 0.483
+          "score": 0.443
         },
         {
           "url": "/services/design-build",
           "anchor": "Design-Build",
           "title": "Design-Build in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.426
+          "score": 0.386
+        },
+        {
+          "url": "/blog/energy-efficient-home-building-boise",
+          "anchor": "Building an Energy-Efficient Home in Boise",
+          "title": "Building an Energy-Efficient Home in Boise",
+          "type": "blog",
+          "score": -0.026
         },
         {
           "url": "/blog/covered-outdoor-living-new-home",
           "anchor": "Designing Covered Outdoor Living Into a New Home",
           "title": "Designing Covered Outdoor Living Into a New Home",
           "type": "blog",
-          "score": 0.013
-        },
-        {
-          "url": "/blog/shop-homes-and-barndominiums-idaho",
-          "anchor": "Shop Homes and Barndominiums in Idaho",
-          "title": "Shop Homes and Barndominiums in Idaho",
-          "type": "blog",
-          "score": 0.008
+          "score": -0.027
         }
       ]
     },
@@ -2237,28 +2813,28 @@
           "anchor": "Home Building in Middleton",
           "title": "Home Building in Middleton, Idaho",
           "type": "city",
-          "score": 0.483
+          "score": 0.443
         },
         {
           "url": "/services/home-plans-design",
           "anchor": "Home Design & Plans",
           "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.42
+          "score": 0.38
         },
         {
-          "url": "/blog/build-vs-buy-boise",
-          "anchor": "Building vs Buying a Home in the Treasure Valley",
-          "title": "Building vs Buying a Home in the Treasure Valley",
+          "url": "/blog/new-home-walkthrough-and-warranty",
+          "anchor": "The Final Walkthrough and What the Warranty Covers",
+          "title": "The Final Walkthrough and What the Warranty Covers",
           "type": "blog",
-          "score": -0.006
+          "score": -0.047
         },
         {
           "url": "/blog/ada-vs-canyon-county-permit-timelines",
           "anchor": "Ada vs Canyon County: What Differs When You Build",
           "title": "Ada vs Canyon County: What Differs When You Build",
           "type": "blog",
-          "score": -0.009
+          "score": -0.049
         }
       ]
     },
@@ -2308,21 +2884,21 @@
           "anchor": "Home Building in Nampa",
           "title": "Home Building in Nampa, Idaho",
           "type": "city",
-          "score": 0.483
+          "score": 0.443
         },
         {
-          "url": "/services/home-additions",
-          "anchor": "Home Additions",
-          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "url": "/services/energy-efficient-homes",
+          "anchor": "Energy-Efficient Homes",
+          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.412
+          "score": 0.37
         },
         {
           "url": "/blog/boise-building-permit-guide",
           "anchor": "Building Permits in Boise: What a New Home Needs",
           "title": "Building Permits in Boise: What a New Home Needs",
           "type": "blog",
-          "score": -0.009
+          "score": -0.049
         }
       ]
     },
@@ -2372,21 +2948,21 @@
           "anchor": "Home Building in Star",
           "title": "Home Building in Star, Idaho",
           "type": "city",
-          "score": 0.483
+          "score": 0.443
         },
         {
-          "url": "/services/energy-efficient-homes",
-          "anchor": "Energy-Efficient Homes",
-          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
+          "url": "/services/semi-custom-homes",
+          "anchor": "Semi-Custom Homes",
+          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.41
+          "score": 0.37
         },
         {
-          "url": "/blog/production-vs-custom-home-builder",
-          "anchor": "Production Builder vs Custom Builder",
-          "title": "Production Builder vs Custom Builder",
+          "url": "/blog/home-builder-red-flags",
+          "anchor": "Home Builder Red Flags",
+          "title": "Home Builder Red Flags",
           "type": "blog",
-          "score": -0.009
+          "score": -0.057
         }
       ]
     },
@@ -2425,32 +3001,32 @@
           "score": 1.77
         },
         {
-          "url": "/services/home-additions",
-          "anchor": "Home Additions",
-          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "url": "/services/semi-custom-homes",
+          "anchor": "Semi-Custom Homes",
+          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.466
+          "score": 0.421
         },
         {
           "url": "/areas/boise",
           "anchor": "Home Building in Boise",
           "title": "Home Building in Boise, Idaho",
           "type": "city",
-          "score": 0.36
+          "score": 0.32
+        },
+        {
+          "url": "/blog/custom-home-cost-per-square-foot-boise",
+          "anchor": "Custom Home Cost Per Square Foot in Boise",
+          "title": "Custom Home Cost Per Square Foot in Boise",
+          "type": "blog",
+          "score": 0.083
         },
         {
           "url": "/blog/luxury-home-building-cost-boise",
           "anchor": "What a Luxury Home Costs to Build in Boise",
           "title": "What a Luxury Home Costs to Build in Boise",
           "type": "blog",
-          "score": 0.12
-        },
-        {
-          "url": "/blog/home-builder-red-flags",
-          "anchor": "Home Builder Red Flags",
-          "title": "Home Builder Red Flags",
-          "type": "blog",
-          "score": 0.113
+          "score": 0.08
         }
       ]
     },
@@ -2489,25 +3065,18 @@
           "score": 1.647
         },
         {
-          "url": "/services/semi-custom-homes",
-          "anchor": "Semi-Custom Homes",
-          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": 0.457
-        },
-        {
           "url": "/areas/caldwell",
           "anchor": "Home Building in Caldwell",
           "title": "Home Building in Caldwell, Idaho",
           "type": "city",
-          "score": 0.437
+          "score": 0.397
         },
         {
-          "url": "/blog/new-home-walkthrough-and-warranty",
-          "anchor": "The Final Walkthrough and What the Warranty Covers",
-          "title": "The Final Walkthrough and What the Warranty Covers",
-          "type": "blog",
-          "score": 0.023
+          "url": "/services/semi-custom-homes",
+          "anchor": "Semi-Custom Homes",
+          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 0.377
         },
         {
           "url": "/blog/choosing-finishes-for-a-new-home",
@@ -2515,6 +3084,13 @@
           "title": "Choosing Finishes for a New Home Without Blowing the Budget",
           "type": "blog",
           "score": 0.001
+        },
+        {
+          "url": "/blog/new-home-walkthrough-and-warranty",
+          "anchor": "The Final Walkthrough and What the Warranty Covers",
+          "title": "The Final Walkthrough and What the Warranty Covers",
+          "type": "blog",
+          "score": -0.017
         }
       ]
     },
@@ -2557,28 +3133,28 @@
           "anchor": "Home Building in Eagle",
           "title": "Home Building in Eagle, Idaho",
           "type": "city",
-          "score": 0.437
+          "score": 0.397
         },
         {
-          "url": "/services/home-additions",
-          "anchor": "Home Additions",
-          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "url": "/services/shop-homes-barndominiums",
+          "anchor": "Shop Homes & Barndominiums",
+          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.42
+          "score": 0.37
         },
         {
-          "url": "/blog/energy-efficient-home-building-boise",
-          "anchor": "Building an Energy-Efficient Home in Boise",
-          "title": "Building an Energy-Efficient Home in Boise",
+          "url": "/blog/allowances-explained-new-home",
+          "anchor": "How Allowances Work in a New Home Contract",
+          "title": "How Allowances Work in a New Home Contract",
           "type": "blog",
-          "score": 0.001
+          "score": -0.026
         },
         {
-          "url": "/blog/shop-homes-and-barndominiums-idaho",
-          "anchor": "Shop Homes and Barndominiums in Idaho",
-          "title": "Shop Homes and Barndominiums in Idaho",
+          "url": "/blog/home-builder-red-flags",
+          "anchor": "Home Builder Red Flags",
+          "title": "Home Builder Red Flags",
           "type": "blog",
-          "score": -0.009
+          "score": -0.031
         }
       ]
     },
@@ -2621,28 +3197,28 @@
           "anchor": "Home Building in Garden City",
           "title": "Home Building in Garden City, Idaho",
           "type": "city",
-          "score": 0.503
+          "score": 0.463
         },
         {
-          "url": "/services/semi-custom-homes",
-          "anchor": "Semi-Custom Homes",
-          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
+          "url": "/services/home-plans-design",
+          "anchor": "Home Design & Plans",
+          "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.413
+          "score": 0.335
         },
         {
-          "url": "/blog/build-vs-buy-boise",
-          "anchor": "Building vs Buying a Home in the Treasure Valley",
-          "title": "Building vs Buying a Home in the Treasure Valley",
+          "url": "/blog/energy-efficient-home-building-boise",
+          "anchor": "Building an Energy-Efficient Home in Boise",
+          "title": "Building an Energy-Efficient Home in Boise",
           "type": "blog",
-          "score": -0.013
+          "score": -0.041
         },
         {
-          "url": "/blog/production-vs-custom-home-builder",
-          "anchor": "Production Builder vs Custom Builder",
-          "title": "Production Builder vs Custom Builder",
+          "url": "/blog/choosing-finishes-for-a-new-home",
+          "anchor": "Choosing Finishes for a New Home Without Blowing the Budget",
+          "title": "Choosing Finishes for a New Home Without Blowing the Budget",
           "type": "blog",
-          "score": -0.017
+          "score": -0.042
         }
       ]
     },
@@ -2681,32 +3257,32 @@
           "score": 1.61
         },
         {
-          "url": "/services/shop-homes-barndominiums",
-          "anchor": "Shop Homes & Barndominiums",
-          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
+          "url": "/services/semi-custom-homes",
+          "anchor": "Semi-Custom Homes",
+          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.41
+          "score": 0.341
         },
         {
           "url": "/areas/kuna",
           "anchor": "Home Building in Kuna",
           "title": "Home Building in Kuna, Idaho",
           "type": "city",
-          "score": 0.36
+          "score": 0.32
         },
         {
-          "url": "/blog/new-home-walkthrough-and-warranty",
-          "anchor": "The Final Walkthrough and What the Warranty Covers",
-          "title": "The Final Walkthrough and What the Warranty Covers",
+          "url": "/blog/shop-homes-and-barndominiums-idaho",
+          "anchor": "Shop Homes and Barndominiums in Idaho",
+          "title": "Shop Homes and Barndominiums in Idaho",
           "type": "blog",
-          "score": -0.013
+          "score": -0.047
         },
         {
-          "url": "/blog/custom-home-cost-per-square-foot-boise",
-          "anchor": "Custom Home Cost Per Square Foot in Boise",
-          "title": "Custom Home Cost Per Square Foot in Boise",
+          "url": "/blog/production-vs-custom-home-builder",
+          "anchor": "Production Builder vs Custom Builder",
+          "title": "Production Builder vs Custom Builder",
           "type": "blog",
-          "score": -0.017
+          "score": -0.049
         }
       ]
     },
@@ -2749,28 +3325,28 @@
           "anchor": "Home Building in Meridian",
           "title": "Home Building in Meridian, Idaho",
           "type": "city",
-          "score": 0.437
+          "score": 0.397
         },
         {
-          "url": "/services/home-additions",
-          "anchor": "Home Additions",
-          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "url": "/services/energy-efficient-homes",
+          "anchor": "Energy-Efficient Homes",
+          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.38
+          "score": 0.33
         },
         {
-          "url": "/blog/luxury-home-building-cost-boise",
-          "anchor": "What a Luxury Home Costs to Build in Boise",
-          "title": "What a Luxury Home Costs to Build in Boise",
+          "url": "/blog/new-home-walkthrough-and-warranty",
+          "anchor": "The Final Walkthrough and What the Warranty Covers",
+          "title": "The Final Walkthrough and What the Warranty Covers",
           "type": "blog",
-          "score": -0.023
+          "score": -0.057
         },
         {
-          "url": "/blog/allowances-explained-new-home",
-          "anchor": "How Allowances Work in a New Home Contract",
-          "title": "How Allowances Work in a New Home Contract",
+          "url": "/blog/custom-home-cost-per-square-foot-boise",
+          "anchor": "Custom Home Cost Per Square Foot in Boise",
+          "title": "Custom Home Cost Per Square Foot in Boise",
           "type": "blog",
-          "score": -0.026
+          "score": -0.06
         }
       ]
     },
@@ -2813,28 +3389,28 @@
           "anchor": "Home Building in Middleton",
           "title": "Home Building in Middleton, Idaho",
           "type": "city",
-          "score": 0.437
+          "score": 0.397
         },
         {
-          "url": "/services/home-plans-design",
-          "anchor": "Home Design & Plans",
-          "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
+          "url": "/services/shop-homes-barndominiums",
+          "anchor": "Shop Homes & Barndominiums",
+          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.378
+          "score": 0.33
         },
         {
-          "url": "/blog/design-build-vs-general-contractor",
-          "anchor": "Design-Build vs General Contractor for a New Home",
-          "title": "Design-Build vs General Contractor for a New Home",
+          "url": "/blog/construction-loan-basics-idaho",
+          "anchor": "How Construction Loans Work in Idaho",
+          "title": "How Construction Loans Work in Idaho",
           "type": "blog",
-          "score": -0.026
+          "score": -0.063
         },
         {
-          "url": "/blog/first-meeting-with-a-home-builder",
-          "anchor": "What Happens at Your First Meeting With a Builder",
-          "title": "What Happens at Your First Meeting With a Builder",
+          "url": "/blog/luxury-home-building-cost-boise",
+          "anchor": "What a Luxury Home Costs to Build in Boise",
+          "title": "What a Luxury Home Costs to Build in Boise",
           "type": "blog",
-          "score": -0.029
+          "score": -0.063
         }
       ]
     },
@@ -2877,28 +3453,28 @@
           "anchor": "Home Building in Nampa",
           "title": "Home Building in Nampa, Idaho",
           "type": "city",
-          "score": 0.437
+          "score": 0.397
         },
         {
-          "url": "/services/semi-custom-homes",
-          "anchor": "Semi-Custom Homes",
-          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
+          "url": "/services/home-additions",
+          "anchor": "Home Additions",
+          "title": "Home Additions in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.377
+          "score": 0.3
         },
         {
-          "url": "/blog/home-builder-red-flags",
-          "anchor": "Home Builder Red Flags",
-          "title": "Home Builder Red Flags",
+          "url": "/blog/why-home-building-bids-vary",
+          "anchor": "Why Home Building Bids Vary So Much",
+          "title": "Why Home Building Bids Vary So Much",
           "type": "blog",
-          "score": -0.031
+          "score": -0.063
         },
         {
-          "url": "/blog/choosing-finishes-for-a-new-home",
-          "anchor": "Choosing Finishes for a New Home Without Blowing the Budget",
-          "title": "Choosing Finishes for a New Home Without Blowing the Budget",
+          "url": "/blog/allowances-explained-new-home",
+          "anchor": "How Allowances Work in a New Home Contract",
+          "title": "How Allowances Work in a New Home Contract",
           "type": "blog",
-          "score": -0.039
+          "score": -0.066
         }
       ]
     },
@@ -2941,28 +3517,28 @@
           "anchor": "Home Building in Star",
           "title": "Home Building in Star, Idaho",
           "type": "city",
-          "score": 0.437
+          "score": 0.397
         },
         {
-          "url": "/services/energy-efficient-homes",
-          "anchor": "Energy-Efficient Homes",
-          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
+          "url": "/services/home-plans-design",
+          "anchor": "Home Design & Plans",
+          "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.37
+          "score": 0.298
         },
         {
-          "url": "/blog/energy-efficient-home-building-boise",
-          "anchor": "Building an Energy-Efficient Home in Boise",
-          "title": "Building an Energy-Efficient Home in Boise",
+          "url": "/blog/design-build-vs-general-contractor",
+          "anchor": "Design-Build vs General Contractor for a New Home",
+          "title": "Design-Build vs General Contractor for a New Home",
           "type": "blog",
-          "score": -0.039
+          "score": -0.066
         },
         {
-          "url": "/blog/shop-homes-and-barndominiums-idaho",
-          "anchor": "Shop Homes and Barndominiums in Idaho",
-          "title": "Shop Homes and Barndominiums in Idaho",
+          "url": "/blog/first-meeting-with-a-home-builder",
+          "anchor": "What Happens at Your First Meeting With a Builder",
+          "title": "What Happens at Your First Meeting With a Builder",
           "type": "blog",
-          "score": -0.049
+          "score": -0.069
         }
       ]
     },
@@ -2980,13 +3556,6 @@
           "score": 1.9
         },
         {
-          "url": "/services/design-build",
-          "anchor": "Design-Build",
-          "title": "Design-Build in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": 1.81
-        },
-        {
           "url": "/services/design-build/caldwell",
           "anchor": "Design-Build in Caldwell",
           "title": "Design-Build in Caldwell, Idaho",
@@ -3001,32 +3570,39 @@
           "score": 1.8
         },
         {
+          "url": "/services/design-build",
+          "anchor": "Design-Build",
+          "title": "Design-Build in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 1.77
+        },
+        {
           "url": "/services/home-plans-design",
           "anchor": "Home Design & Plans",
           "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.408
+          "score": 0.328
         },
         {
           "url": "/areas/boise",
           "anchor": "Home Building in Boise",
           "title": "Home Building in Boise, Idaho",
           "type": "city",
-          "score": 0.32
+          "score": 0.28
         },
         {
           "url": "/blog/design-build-vs-general-contractor",
           "anchor": "Design-Build vs General Contractor for a New Home",
           "title": "Design-Build vs General Contractor for a New Home",
           "type": "blog",
-          "score": 0.143
+          "score": 0.103
         },
         {
-          "url": "/blog/adu-cost-boise",
-          "anchor": "ADU Cost in Boise",
-          "title": "ADU Cost in Boise",
+          "url": "/blog/fixed-price-vs-cost-plus",
+          "anchor": "Fixed Price vs Cost Plus for a New Home Build",
+          "title": "Fixed Price vs Cost Plus for a New Home Build",
           "type": "blog",
-          "score": 0.08
+          "score": 0.034
         }
       ]
     },
@@ -3062,35 +3638,35 @@
           "anchor": "Design-Build",
           "title": "Design-Build in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.67
+          "score": 1.63
         },
         {
           "url": "/areas/caldwell",
           "anchor": "Home Building in Caldwell",
           "title": "Home Building in Caldwell, Idaho",
           "type": "city",
-          "score": 0.411
+          "score": 0.371
         },
         {
-          "url": "/services/shop-homes-barndominiums",
-          "anchor": "Shop Homes & Barndominiums",
-          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
+          "url": "/services/energy-efficient-homes",
+          "anchor": "Energy-Efficient Homes",
+          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.37
+          "score": 0.29
         },
         {
           "url": "/blog/design-build-vs-general-contractor",
           "anchor": "Design-Build vs General Contractor for a New Home",
           "title": "Design-Build vs General Contractor for a New Home",
           "type": "blog",
-          "score": 0
+          "score": -0.04
         },
         {
           "url": "/blog/covered-outdoor-living-new-home",
           "anchor": "Designing Covered Outdoor Living Into a New Home",
           "title": "Designing Covered Outdoor Living Into a New Home",
           "type": "blog",
-          "score": -0.026
+          "score": -0.066
         }
       ]
     },
@@ -3126,35 +3702,35 @@
           "anchor": "Design-Build",
           "title": "Design-Build in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.63
+          "score": 1.59
         },
         {
           "url": "/areas/eagle",
           "anchor": "Home Building in Eagle",
           "title": "Home Building in Eagle, Idaho",
           "type": "city",
-          "score": 0.411
+          "score": 0.371
         },
         {
-          "url": "/services/home-plans-design",
-          "anchor": "Home Design & Plans",
-          "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
+          "url": "/services/shop-homes-barndominiums",
+          "anchor": "Shop Homes & Barndominiums",
+          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.361
+          "score": 0.29
         },
         {
           "url": "/blog/design-build-vs-general-contractor",
           "anchor": "Design-Build vs General Contractor for a New Home",
           "title": "Design-Build vs General Contractor for a New Home",
           "type": "blog",
-          "score": -0.04
+          "score": -0.08
         },
         {
           "url": "/blog/multigenerational-home-design",
           "anchor": "Designing a Home for Multiple Generations",
           "title": "Designing a Home for Multiple Generations",
           "type": "blog",
-          "score": -0.057
+          "score": -0.097
         }
       ]
     },
@@ -3190,35 +3766,35 @@
           "anchor": "Design-Build",
           "title": "Design-Build in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.508
+          "score": 1.468
         },
         {
           "url": "/areas/garden-city",
           "anchor": "Home Building in Garden City",
           "title": "Home Building in Garden City, Idaho",
           "type": "city",
-          "score": 0.487
+          "score": 0.447
         },
         {
-          "url": "/services/energy-efficient-homes",
-          "anchor": "Energy-Efficient Homes",
-          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
+          "url": "/services/home-plans-design",
+          "anchor": "Home Design & Plans",
+          "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.33
+          "score": 0.275
         },
         {
           "url": "/blog/why-home-building-bids-vary",
           "anchor": "Why Home Building Bids Vary So Much",
           "title": "Why Home Building Bids Vary So Much",
           "type": "blog",
-          "score": -0.06
+          "score": -0.1
         },
         {
           "url": "/blog/allowances-explained-new-home",
           "anchor": "How Allowances Work in a New Home Contract",
           "title": "How Allowances Work in a New Home Contract",
           "type": "blog",
-          "score": -0.063
+          "score": -0.103
         }
       ]
     },
@@ -3268,21 +3844,21 @@
           "anchor": "Design-Build",
           "title": "Design-Build in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.65
-        },
-        {
-          "url": "/services/shop-homes-barndominiums",
-          "anchor": "Shop Homes & Barndominiums",
-          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": 0.33
+          "score": 1.61
         },
         {
           "url": "/areas/kuna",
           "anchor": "Home Building in Kuna",
           "title": "Home Building in Kuna, Idaho",
           "type": "city",
-          "score": 0.32
+          "score": 0.28
+        },
+        {
+          "url": "/services/semi-custom-homes",
+          "anchor": "Semi-Custom Homes",
+          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 0.258
         }
       ]
     },
@@ -3318,35 +3894,35 @@
           "anchor": "Design-Build",
           "title": "Design-Build in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.51
+          "score": 1.47
         },
         {
           "url": "/areas/meridian",
           "anchor": "Home Building in Meridian",
           "title": "Home Building in Meridian, Idaho",
           "type": "city",
-          "score": 0.411
+          "score": 0.371
         },
         {
-          "url": "/services/home-plans-design",
-          "anchor": "Home Design & Plans",
-          "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
+          "url": "/services/energy-efficient-homes",
+          "anchor": "Energy-Efficient Homes",
+          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.321
+          "score": 0.25
         },
         {
-          "url": "/blog/fixed-price-vs-cost-plus",
-          "anchor": "Fixed Price vs Cost Plus for a New Home Build",
-          "title": "Fixed Price vs Cost Plus for a New Home Build",
+          "url": "/blog/single-story-vs-two-story-home",
+          "anchor": "Single Story vs Two Story: Cost, Lot, and Livability",
+          "title": "Single Story vs Two Story: Cost, Lot, and Livability",
           "type": "blog",
-          "score": -0.069
+          "score": -0.104
         },
         {
-          "url": "/blog/design-build-vs-general-contractor",
-          "anchor": "Design-Build vs General Contractor for a New Home",
-          "title": "Design-Build vs General Contractor for a New Home",
+          "url": "/blog/covered-outdoor-living-new-home",
+          "anchor": "Designing Covered Outdoor Living Into a New Home",
+          "title": "Designing Covered Outdoor Living Into a New Home",
           "type": "blog",
-          "score": -0.08
+          "score": -0.106
         }
       ]
     },
@@ -3382,35 +3958,35 @@
           "anchor": "Design-Build",
           "title": "Design-Build in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.47
+          "score": 1.43
         },
         {
           "url": "/areas/middleton",
           "anchor": "Home Building in Middleton",
           "title": "Home Building in Middleton, Idaho",
           "type": "city",
-          "score": 0.411
+          "score": 0.371
         },
         {
-          "url": "/services/semi-custom-homes",
-          "anchor": "Semi-Custom Homes",
-          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
+          "url": "/services/lot-evaluation",
+          "anchor": "Lot Evaluation & Feasibility",
+          "title": "Lot Evaluation & Feasibility in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.295
+          "score": 0.25
         },
         {
-          "url": "/blog/ada-vs-canyon-county-permit-timelines",
-          "anchor": "Ada vs Canyon County: What Differs When You Build",
-          "title": "Ada vs Canyon County: What Differs When You Build",
+          "url": "/blog/fixed-price-vs-cost-plus",
+          "anchor": "Fixed Price vs Cost Plus for a New Home Build",
+          "title": "Fixed Price vs Cost Plus for a New Home Build",
           "type": "blog",
-          "score": -0.084
+          "score": -0.109
         },
         {
-          "url": "/blog/build-vs-buy-boise",
-          "anchor": "Building vs Buying a Home in the Treasure Valley",
-          "title": "Building vs Buying a Home in the Treasure Valley",
+          "url": "/blog/shop-homes-and-barndominiums-idaho",
+          "anchor": "Shop Homes and Barndominiums in Idaho",
+          "title": "Shop Homes and Barndominiums in Idaho",
           "type": "blog",
-          "score": -0.084
+          "score": -0.111
         }
       ]
     },
@@ -3446,35 +4022,35 @@
           "anchor": "Design-Build",
           "title": "Design-Build in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.43
+          "score": 1.39
         },
         {
           "url": "/areas/nampa",
           "anchor": "Home Building in Nampa",
           "title": "Home Building in Nampa, Idaho",
           "type": "city",
-          "score": 0.411
+          "score": 0.371
         },
         {
-          "url": "/services/energy-efficient-homes",
-          "anchor": "Energy-Efficient Homes",
-          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
+          "url": "/services/shop-homes-barndominiums",
+          "anchor": "Shop Homes & Barndominiums",
+          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.29
+          "score": 0.25
         },
         {
-          "url": "/blog/boise-building-permit-guide",
-          "anchor": "Building Permits in Boise: What a New Home Needs",
-          "title": "Building Permits in Boise: What a New Home Needs",
+          "url": "/blog/design-build-vs-general-contractor",
+          "anchor": "Design-Build vs General Contractor for a New Home",
+          "title": "Design-Build vs General Contractor for a New Home",
           "type": "blog",
-          "score": -0.086
+          "score": -0.12
         },
         {
-          "url": "/blog/multigenerational-home-design",
-          "anchor": "Designing a Home for Multiple Generations",
-          "title": "Designing a Home for Multiple Generations",
+          "url": "/blog/ada-vs-canyon-county-permit-timelines",
+          "anchor": "Ada vs Canyon County: What Differs When You Build",
+          "title": "Ada vs Canyon County: What Differs When You Build",
           "type": "blog",
-          "score": -0.097
+          "score": -0.124
         }
       ]
     },
@@ -3510,35 +4086,35 @@
           "anchor": "Design-Build",
           "title": "Design-Build in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.39
+          "score": 1.35
         },
         {
           "url": "/areas/star",
           "anchor": "Home Building in Star",
           "title": "Home Building in Star, Idaho",
           "type": "city",
-          "score": 0.411
+          "score": 0.371
         },
         {
-          "url": "/services/shop-homes-barndominiums",
-          "anchor": "Shop Homes & Barndominiums",
-          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
+          "url": "/services/home-plans-design",
+          "anchor": "Home Design & Plans",
+          "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.29
+          "score": 0.241
         },
         {
-          "url": "/blog/why-home-building-bids-vary",
-          "anchor": "Why Home Building Bids Vary So Much",
-          "title": "Why Home Building Bids Vary So Much",
+          "url": "/blog/build-vs-buy-boise",
+          "anchor": "Building vs Buying a Home in the Treasure Valley",
+          "title": "Building vs Buying a Home in the Treasure Valley",
           "type": "blog",
-          "score": -0.097
+          "score": -0.124
         },
         {
-          "url": "/blog/allowances-explained-new-home",
-          "anchor": "How Allowances Work in a New Home Contract",
-          "title": "How Allowances Work in a New Home Contract",
+          "url": "/blog/boise-building-permit-guide",
+          "anchor": "Building Permits in Boise: What a New Home Needs",
+          "title": "Building Permits in Boise: What a New Home Needs",
           "type": "blog",
-          "score": -0.1
+          "score": -0.126
         }
       ]
     },
@@ -3556,13 +4132,6 @@
           "score": 1.9
         },
         {
-          "url": "/services/energy-efficient-homes",
-          "anchor": "Energy-Efficient Homes",
-          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": 1.85
-        },
-        {
           "url": "/services/energy-efficient-homes/caldwell",
           "anchor": "Energy-Efficient Homes in Caldwell",
           "title": "Energy-Efficient Homes in Caldwell, Idaho",
@@ -3577,32 +4146,39 @@
           "score": 1.838
         },
         {
+          "url": "/services/energy-efficient-homes",
+          "anchor": "Energy-Efficient Homes",
+          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 1.81
+        },
+        {
           "url": "/services/shop-homes-barndominiums",
           "anchor": "Shop Homes & Barndominiums",
           "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.284
+          "score": 0.244
         },
         {
           "url": "/areas/boise",
           "anchor": "Home Building in Boise",
           "title": "Home Building in Boise, Idaho",
           "type": "city",
-          "score": 0.28
+          "score": 0.24
+        },
+        {
+          "url": "/blog/building-in-the-boise-foothills",
+          "anchor": "What It Costs to Build in the Boise Foothills",
+          "title": "What It Costs to Build in the Boise Foothills",
+          "type": "blog",
+          "score": -0.032
         },
         {
           "url": "/blog/energy-efficient-home-building-boise",
           "anchor": "Building an Energy-Efficient Home in Boise",
           "title": "Building an Energy-Efficient Home in Boise",
           "type": "blog",
-          "score": -0.028
-        },
-        {
-          "url": "/blog/production-vs-custom-home-builder",
-          "anchor": "Production Builder vs Custom Builder",
-          "title": "Production Builder vs Custom Builder",
-          "type": "blog",
-          "score": -0.03
+          "score": -0.068
         }
       ]
     },
@@ -3638,35 +4214,35 @@
           "anchor": "Energy-Efficient Homes",
           "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.748
+          "score": 1.708
         },
         {
           "url": "/areas/caldwell",
           "anchor": "Home Building in Caldwell",
           "title": "Home Building in Caldwell, Idaho",
           "type": "city",
-          "score": 0.339
+          "score": 0.299
         },
         {
           "url": "/services/lot-evaluation",
           "anchor": "Lot Evaluation & Feasibility",
           "title": "Lot Evaluation & Feasibility in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.25
+          "score": 0.21
         },
         {
           "url": "/blog/energy-efficient-home-building-boise",
           "anchor": "Building an Energy-Efficient Home in Boise",
           "title": "Building an Energy-Efficient Home in Boise",
           "type": "blog",
-          "score": -0.072
+          "score": -0.112
         },
         {
           "url": "/blog/shop-homes-and-barndominiums-idaho",
           "anchor": "Shop Homes and Barndominiums in Idaho",
           "title": "Shop Homes and Barndominiums in Idaho",
           "type": "blog",
-          "score": -0.117
+          "score": -0.157
         }
       ]
     },
@@ -3702,35 +4278,35 @@
           "anchor": "Energy-Efficient Homes",
           "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.708
+          "score": 1.668
         },
         {
           "url": "/areas/eagle",
           "anchor": "Home Building in Eagle",
           "title": "Home Building in Eagle, Idaho",
           "type": "city",
-          "score": 0.339
+          "score": 0.299
         },
         {
           "url": "/services/semi-custom-homes",
           "anchor": "Semi-Custom Homes",
           "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.246
+          "score": 0.206
         },
         {
           "url": "/blog/energy-efficient-home-building-boise",
           "anchor": "Building an Energy-Efficient Home in Boise",
           "title": "Building an Energy-Efficient Home in Boise",
           "type": "blog",
-          "score": -0.112
+          "score": -0.152
         },
         {
-          "url": "/blog/build-vs-buy-boise",
-          "anchor": "Building vs Buying a Home in the Treasure Valley",
-          "title": "Building vs Buying a Home in the Treasure Valley",
+          "url": "/blog/well-and-septic-cost-idaho",
+          "anchor": "What a Well and Septic System Costs in Idaho",
+          "title": "What a Well and Septic System Costs in Idaho",
           "type": "blog",
-          "score": -0.131
+          "score": -0.17
         }
       ]
     },
@@ -3766,35 +4342,35 @@
           "anchor": "Energy-Efficient Homes",
           "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.612
+          "score": 1.572
         },
         {
           "url": "/areas/garden-city",
           "anchor": "Home Building in Garden City",
           "title": "Home Building in Garden City, Idaho",
           "type": "city",
-          "score": 0.391
+          "score": 0.351
         },
         {
           "url": "/services/shop-homes-barndominiums",
           "anchor": "Shop Homes & Barndominiums",
           "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.242
+          "score": 0.202
         },
         {
-          "url": "/blog/custom-home-cost-per-square-foot-boise",
-          "anchor": "Custom Home Cost Per Square Foot in Boise",
-          "title": "Custom Home Cost Per Square Foot in Boise",
+          "url": "/blog/build-vs-buy-boise",
+          "anchor": "Building vs Buying a Home in the Treasure Valley",
+          "title": "Building vs Buying a Home in the Treasure Valley",
           "type": "blog",
-          "score": -0.133
+          "score": -0.171
         },
         {
-          "url": "/blog/building-in-the-boise-foothills",
-          "anchor": "What It Costs to Build in the Boise Foothills",
-          "title": "What It Costs to Build in the Boise Foothills",
+          "url": "/blog/production-vs-custom-home-builder",
+          "anchor": "Production Builder vs Custom Builder",
+          "title": "Production Builder vs Custom Builder",
           "type": "blog",
-          "score": -0.134
+          "score": -0.171
         }
       ]
     },
@@ -3844,21 +4420,21 @@
           "anchor": "Energy-Efficient Homes",
           "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.69
+          "score": 1.65
         },
         {
           "url": "/areas/kuna",
           "anchor": "Home Building in Kuna",
           "title": "Home Building in Kuna, Idaho",
           "type": "city",
-          "score": 0.28
+          "score": 0.24
         },
         {
-          "url": "/services/home-additions",
-          "anchor": "Home Additions",
-          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "url": "/services/lot-evaluation",
+          "anchor": "Lot Evaluation & Feasibility",
+          "title": "Lot Evaluation & Feasibility in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.21
+          "score": 0.17
         }
       ]
     },
@@ -3894,35 +4470,35 @@
           "anchor": "Energy-Efficient Homes",
           "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.588
+          "score": 1.548
         },
         {
           "url": "/areas/meridian",
           "anchor": "Home Building in Meridian",
           "title": "Home Building in Meridian, Idaho",
           "type": "city",
-          "score": 0.339
+          "score": 0.299
         },
         {
-          "url": "/services/lot-evaluation",
-          "anchor": "Lot Evaluation & Feasibility",
-          "title": "Lot Evaluation & Feasibility in Boise & Treasure Valley, Idaho",
+          "url": "/services/semi-custom-homes",
+          "anchor": "Semi-Custom Homes",
+          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.21
+          "score": 0.166
         },
         {
-          "url": "/blog/aging-in-place-home-design",
-          "anchor": "Building a Home You Can Age In",
-          "title": "Building a Home You Can Age In",
+          "url": "/blog/construction-loan-basics-idaho",
+          "anchor": "How Construction Loans Work in Idaho",
+          "title": "How Construction Loans Work in Idaho",
           "type": "blog",
-          "score": -0.136
+          "score": -0.173
         },
         {
-          "url": "/blog/single-story-vs-two-story-home",
-          "anchor": "Single Story vs Two Story: Cost, Lot, and Livability",
-          "title": "Single Story vs Two Story: Cost, Lot, and Livability",
+          "url": "/blog/luxury-home-building-cost-boise",
+          "anchor": "What a Luxury Home Costs to Build in Boise",
+          "title": "What a Luxury Home Costs to Build in Boise",
           "type": "blog",
-          "score": -0.137
+          "score": -0.173
         }
       ]
     },
@@ -3965,28 +4541,28 @@
           "anchor": "Energy-Efficient Homes",
           "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.548
+          "score": 1.508
         },
         {
           "url": "/areas/middleton",
           "anchor": "Home Building in Middleton",
           "title": "Home Building in Middleton, Idaho",
           "type": "city",
-          "score": 0.339
+          "score": 0.299
         },
         {
-          "url": "/services/semi-custom-homes",
-          "anchor": "Semi-Custom Homes",
-          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
+          "url": "/services/shop-homes-barndominiums",
+          "anchor": "Shop Homes & Barndominiums",
+          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.206
+          "score": 0.163
         },
         {
-          "url": "/blog/energy-efficient-home-building-boise",
-          "anchor": "Building an Energy-Efficient Home in Boise",
-          "title": "Building an Energy-Efficient Home in Boise",
+          "url": "/blog/multigenerational-home-design",
+          "anchor": "Designing a Home for Multiple Generations",
+          "title": "Designing a Home for Multiple Generations",
           "type": "blog",
-          "score": -0.152
+          "score": -0.174
         }
       ]
     },
@@ -3997,18 +4573,11 @@
       "url": "/services/energy-efficient-homes/nampa",
       "links": [
         {
-          "url": "/services/energy-efficient-homes/middleton",
-          "anchor": "Energy-Efficient Homes in Middleton",
-          "title": "Energy-Efficient Homes in Middleton, Idaho",
+          "url": "/services/energy-efficient-homes/garden-city",
+          "anchor": "Energy-Efficient Homes in Garden City",
+          "title": "Energy-Efficient Homes in Garden City, Idaho",
           "type": "city-service",
-          "score": 1.782
-        },
-        {
-          "url": "/services/energy-efficient-homes/star",
-          "anchor": "Energy-Efficient Homes in Star",
-          "title": "Energy-Efficient Homes in Star, Idaho",
-          "type": "city-service",
-          "score": 1.782
+          "score": 1.733
         },
         {
           "url": "/services/energy-efficient-homes/caldwell",
@@ -4036,21 +4605,28 @@
           "anchor": "Energy-Efficient Homes",
           "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.508
+          "score": 1.468
         },
         {
           "url": "/areas/nampa",
           "anchor": "Home Building in Nampa",
           "title": "Home Building in Nampa, Idaho",
           "type": "city",
-          "score": 0.339
+          "score": 0.299
         },
         {
-          "url": "/services/shop-homes-barndominiums",
-          "anchor": "Shop Homes & Barndominiums",
-          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
+          "url": "/services/home-additions",
+          "anchor": "Home Additions",
+          "title": "Home Additions in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.203
+          "score": 0.13
+        },
+        {
+          "url": "/blog/single-story-vs-two-story-home",
+          "anchor": "Single Story vs Two Story: Cost, Lot, and Livability",
+          "title": "Single Story vs Two Story: Cost, Lot, and Livability",
+          "type": "blog",
+          "score": -0.177
         }
       ]
     },
@@ -4100,21 +4676,21 @@
           "anchor": "Energy-Efficient Homes",
           "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.468
+          "score": 1.428
         },
         {
           "url": "/areas/star",
           "anchor": "Home Building in Star",
           "title": "Home Building in Star, Idaho",
           "type": "city",
-          "score": 0.339
+          "score": 0.299
         },
         {
-          "url": "/services/home-additions",
-          "anchor": "Home Additions",
-          "title": "Home Additions in Boise & Treasure Valley, Idaho",
+          "url": "/services/lot-evaluation",
+          "anchor": "Lot Evaluation & Feasibility",
+          "title": "Lot Evaluation & Feasibility in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.17
+          "score": 0.13
         }
       ]
     },
@@ -4150,35 +4726,35 @@
           "anchor": "Home Additions",
           "title": "Home Additions in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.73
+          "score": 1.69
+        },
+        {
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": 0.298
         },
         {
           "url": "/areas/boise",
           "anchor": "Home Building in Boise",
           "title": "Home Building in Boise, Idaho",
           "type": "city",
-          "score": 0.24
+          "score": 0.2
         },
         {
-          "url": "/services/home-plans-design",
-          "anchor": "Home Design & Plans",
-          "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": 0.213
-        },
-        {
-          "url": "/blog/custom-home-floor-plan-ideas-boise",
-          "anchor": "Floor Plan Ideas That Work in Treasure Valley Homes",
-          "title": "Floor Plan Ideas That Work in Treasure Valley Homes",
+          "url": "/blog/stages-of-building-a-house",
+          "anchor": "The Stages of Building a House, in Order",
+          "title": "The Stages of Building a House, in Order",
           "type": "blog",
-          "score": -0.002
+          "score": -0.035
         },
         {
-          "url": "/blog/first-meeting-with-a-home-builder",
-          "anchor": "What Happens at Your First Meeting With a Builder",
-          "title": "What Happens at Your First Meeting With a Builder",
+          "url": "/blog/questions-to-ask-a-home-builder",
+          "anchor": "Questions to Ask a Home Builder Before You Sign",
+          "title": "Questions to Ask a Home Builder Before You Sign",
           "type": "blog",
-          "score": -0.004
+          "score": -0.039
         }
       ]
     },
@@ -4214,35 +4790,35 @@
           "anchor": "Home Additions",
           "title": "Home Additions in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.623
+          "score": 1.583
         },
         {
           "url": "/areas/caldwell",
           "anchor": "Home Building in Caldwell",
           "title": "Home Building in Caldwell, Idaho",
           "type": "city",
-          "score": 0.303
+          "score": 0.263
         },
         {
-          "url": "/services/lot-evaluation",
-          "anchor": "Lot Evaluation & Feasibility",
-          "title": "Lot Evaluation & Feasibility in Boise & Treasure Valley, Idaho",
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.21
+          "score": 0.25
         },
         {
           "url": "/blog/covered-outdoor-living-new-home",
           "anchor": "Designing Covered Outdoor Living Into a New Home",
           "title": "Designing Covered Outdoor Living Into a New Home",
           "type": "blog",
-          "score": -0.06
+          "score": -0.1
         },
         {
-          "url": "/blog/ada-vs-canyon-county-permit-timelines",
-          "anchor": "Ada vs Canyon County: What Differs When You Build",
-          "title": "Ada vs Canyon County: What Differs When You Build",
+          "url": "/blog/impact-fees-and-utility-connections",
+          "anchor": "Impact Fees and Utility Connections in Ada and Canyon County",
+          "title": "Impact Fees and Utility Connections in Ada and Canyon County",
           "type": "blog",
-          "score": -0.097
+          "score": -0.13
         }
       ]
     },
@@ -4278,35 +4854,35 @@
           "anchor": "Home Additions",
           "title": "Home Additions in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.583
+          "score": 1.543
         },
         {
           "url": "/areas/eagle",
           "anchor": "Home Building in Eagle",
           "title": "Home Building in Eagle, Idaho",
           "type": "city",
-          "score": 0.303
+          "score": 0.263
         },
         {
-          "url": "/services/home-plans-design",
-          "anchor": "Home Design & Plans",
-          "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.172
+          "score": 0.21
+        },
+        {
+          "url": "/blog/ada-vs-canyon-county-permit-timelines",
+          "anchor": "Ada vs Canyon County: What Differs When You Build",
+          "title": "Ada vs Canyon County: What Differs When You Build",
+          "type": "blog",
+          "score": -0.137
         },
         {
           "url": "/blog/new-home-walkthrough-and-warranty",
           "anchor": "The Final Walkthrough and What the Warranty Covers",
           "title": "The Final Walkthrough and What the Warranty Covers",
           "type": "blog",
-          "score": -0.099
-        },
-        {
-          "url": "/blog/covered-outdoor-living-new-home",
-          "anchor": "Designing Covered Outdoor Living Into a New Home",
-          "title": "Designing Covered Outdoor Living Into a New Home",
-          "type": "blog",
-          "score": -0.1
+          "score": -0.139
         }
       ]
     },
@@ -4342,35 +4918,35 @@
           "anchor": "Home Additions",
           "title": "Home Additions in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.485
+          "score": 1.445
         },
         {
           "url": "/areas/garden-city",
           "anchor": "Home Building in Garden City",
           "title": "Home Building in Garden City, Idaho",
           "type": "city",
-          "score": 0.358
+          "score": 0.318
         },
         {
-          "url": "/services/lot-evaluation",
-          "anchor": "Lot Evaluation & Feasibility",
-          "title": "Lot Evaluation & Feasibility in Boise & Treasure Valley, Idaho",
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.168
+          "score": 0.162
         },
         {
-          "url": "/blog/fixed-price-vs-cost-plus",
-          "anchor": "Fixed Price vs Cost Plus for a New Home Build",
-          "title": "Fixed Price vs Cost Plus for a New Home Build",
+          "url": "/blog/covered-outdoor-living-new-home",
+          "anchor": "Designing Covered Outdoor Living Into a New Home",
+          "title": "Designing Covered Outdoor Living Into a New Home",
           "type": "blog",
-          "score": -0.123
+          "score": -0.142
         },
         {
-          "url": "/blog/impact-fees-and-utility-connections",
-          "anchor": "Impact Fees and Utility Connections in Ada and Canyon County",
-          "title": "Impact Fees and Utility Connections in Ada and Canyon County",
+          "url": "/blog/home-builder-red-flags",
+          "anchor": "Home Builder Red Flags",
+          "title": "Home Builder Red Flags",
           "type": "blog",
-          "score": -0.131
+          "score": -0.146
         }
       ]
     },
@@ -4420,21 +4996,21 @@
           "anchor": "Home Additions",
           "title": "Home Additions in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.57
+          "score": 1.53
         },
         {
           "url": "/areas/kuna",
           "anchor": "Home Building in Kuna",
           "title": "Home Building in Kuna, Idaho",
           "type": "city",
-          "score": 0.24
+          "score": 0.2
         },
         {
-          "url": "/services/shop-homes-barndominiums",
-          "anchor": "Shop Homes & Barndominiums",
-          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.166
+          "score": 0.138
         }
       ]
     },
@@ -4470,14 +5046,14 @@
           "anchor": "Home Additions",
           "title": "Home Additions in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.463
+          "score": 1.423
         },
         {
           "url": "/areas/meridian",
           "anchor": "Home Building in Meridian",
           "title": "Home Building in Meridian, Idaho",
           "type": "city",
-          "score": 0.303
+          "score": 0.263
         },
         {
           "url": "/services/home-plans-design",
@@ -4487,18 +5063,18 @@
           "score": 0.132
         },
         {
-          "url": "/blog/stages-of-building-a-house",
-          "anchor": "The Stages of Building a House, in Order",
-          "title": "The Stages of Building a House, in Order",
+          "url": "/blog/choosing-finishes-for-a-new-home",
+          "anchor": "Choosing Finishes for a New Home Without Blowing the Budget",
+          "title": "Choosing Finishes for a New Home Without Blowing the Budget",
           "type": "blog",
-          "score": -0.137
+          "score": -0.147
         },
         {
-          "url": "/blog/new-home-walkthrough-and-warranty",
-          "anchor": "The Final Walkthrough and What the Warranty Covers",
-          "title": "The Final Walkthrough and What the Warranty Covers",
+          "url": "/blog/fixed-price-vs-cost-plus",
+          "anchor": "Fixed Price vs Cost Plus for a New Home Build",
+          "title": "Fixed Price vs Cost Plus for a New Home Build",
           "type": "blog",
-          "score": -0.139
+          "score": -0.161
         }
       ]
     },
@@ -4534,14 +5110,14 @@
           "anchor": "Home Additions",
           "title": "Home Additions in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.423
+          "score": 1.383
         },
         {
           "url": "/areas/middleton",
           "anchor": "Home Building in Middleton",
           "title": "Home Building in Middleton, Idaho",
           "type": "city",
-          "score": 0.303
+          "score": 0.263
         },
         {
           "url": "/services/lot-evaluation",
@@ -4551,18 +5127,18 @@
           "score": 0.13
         },
         {
-          "url": "/blog/covered-outdoor-living-new-home",
-          "anchor": "Designing Covered Outdoor Living Into a New Home",
-          "title": "Designing Covered Outdoor Living Into a New Home",
+          "url": "/blog/impact-fees-and-utility-connections",
+          "anchor": "Impact Fees and Utility Connections in Ada and Canyon County",
+          "title": "Impact Fees and Utility Connections in Ada and Canyon County",
           "type": "blog",
-          "score": -0.14
+          "score": -0.17
         },
         {
-          "url": "/blog/questions-to-ask-a-home-builder",
-          "anchor": "Questions to Ask a Home Builder Before You Sign",
-          "title": "Questions to Ask a Home Builder Before You Sign",
+          "url": "/blog/shop-homes-and-barndominiums-idaho",
+          "anchor": "Shop Homes and Barndominiums in Idaho",
+          "title": "Shop Homes and Barndominiums in Idaho",
           "type": "blog",
-          "score": -0.141
+          "score": -0.173
         }
       ]
     },
@@ -4598,35 +5174,35 @@
           "anchor": "Home Additions",
           "title": "Home Additions in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.383
+          "score": 1.343
         },
         {
           "url": "/areas/nampa",
           "anchor": "Home Building in Nampa",
           "title": "Home Building in Nampa, Idaho",
           "type": "city",
-          "score": 0.303
+          "score": 0.263
         },
         {
-          "url": "/services/semi-custom-homes",
-          "anchor": "Semi-Custom Homes",
-          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
+          "url": "/services/shop-homes-barndominiums",
+          "anchor": "Shop Homes & Barndominiums",
+          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.13
+          "score": 0.124
         },
         {
-          "url": "/blog/home-builder-red-flags",
-          "anchor": "Home Builder Red Flags",
-          "title": "Home Builder Red Flags",
+          "url": "/blog/ada-vs-canyon-county-permit-timelines",
+          "anchor": "Ada vs Canyon County: What Differs When You Build",
+          "title": "Ada vs Canyon County: What Differs When You Build",
           "type": "blog",
-          "score": -0.144
+          "score": -0.177
         },
         {
-          "url": "/blog/custom-home-floor-plan-ideas-boise",
-          "anchor": "Floor Plan Ideas That Work in Treasure Valley Homes",
-          "title": "Floor Plan Ideas That Work in Treasure Valley Homes",
+          "url": "/blog/boise-building-permit-guide",
+          "anchor": "Building Permits in Boise: What a New Home Needs",
+          "title": "Building Permits in Boise: What a New Home Needs",
           "type": "blog",
-          "score": -0.145
+          "score": -0.177
         }
       ]
     },
@@ -4636,13 +5212,6 @@
       "anchor": "Home Additions in Star",
       "url": "/services/home-additions/star",
       "links": [
-        {
-          "url": "/services/home-additions/caldwell",
-          "anchor": "Home Additions in Caldwell",
-          "title": "Home Additions in Caldwell, Idaho",
-          "type": "city-service",
-          "score": 1.775
-        },
         {
           "url": "/services/home-additions/middleton",
           "anchor": "Home Additions in Middleton",
@@ -4669,28 +5238,35 @@
           "anchor": "Home Additions",
           "title": "Home Additions in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.343
+          "score": 1.303
         },
         {
           "url": "/areas/star",
           "anchor": "Home Building in Star",
           "title": "Home Building in Star, Idaho",
           "type": "city",
-          "score": 0.303
+          "score": 0.263
         },
         {
-          "url": "/services/shop-homes-barndominiums",
-          "anchor": "Shop Homes & Barndominiums",
-          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
+          "url": "/services/home-plans-design",
+          "anchor": "Home Design & Plans",
+          "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 0.124
+          "score": 0.092
         },
         {
-          "url": "/blog/adu-cost-boise",
-          "anchor": "ADU Cost in Boise",
-          "title": "ADU Cost in Boise",
+          "url": "/blog/stages-of-building-a-house",
+          "anchor": "The Stages of Building a House, in Order",
+          "title": "The Stages of Building a House, in Order",
           "type": "blog",
-          "score": -0.146
+          "score": -0.177
+        },
+        {
+          "url": "/blog/new-home-walkthrough-and-warranty",
+          "anchor": "The Final Walkthrough and What the Warranty Covers",
+          "title": "The Final Walkthrough and What the Warranty Covers",
+          "type": "blog",
+          "score": -0.179
         }
       ]
     },
@@ -4726,14 +5302,14 @@
           "anchor": "Home Design & Plans",
           "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.65
+          "score": 1.61
         },
         {
           "url": "/areas/boise",
           "anchor": "Home Building in Boise",
           "title": "Home Building in Boise, Idaho",
           "type": "city",
-          "score": 0.2
+          "score": 0.16
         },
         {
           "url": "/services/semi-custom-homes",
@@ -4743,18 +5319,18 @@
           "score": 0.09
         },
         {
-          "url": "/blog/luxury-home-building-cost-boise",
-          "anchor": "What a Luxury Home Costs to Build in Boise",
-          "title": "What a Luxury Home Costs to Build in Boise",
-          "type": "blog",
-          "score": -0.033
-        },
-        {
           "url": "/blog/how-long-does-it-take-to-build-a-house-boise",
           "anchor": "How Long Does It Take to Build a House in Boise?",
           "title": "How Long Does It Take to Build a House in Boise?",
           "type": "blog",
           "score": -0.037
+        },
+        {
+          "url": "/blog/how-to-buy-a-buildable-lot-boise",
+          "anchor": "How to Tell If a Lot Is Actually Buildable",
+          "title": "How to Tell If a Lot Is Actually Buildable",
+          "type": "blog",
+          "score": -0.064
         }
       ]
     },
@@ -4790,14 +5366,14 @@
           "anchor": "Home Design & Plans",
           "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.519
+          "score": 1.479
         },
         {
           "url": "/areas/caldwell",
           "anchor": "Home Building in Caldwell",
           "title": "Home Building in Caldwell, Idaho",
           "type": "city",
-          "score": 0.283
+          "score": 0.243
         },
         {
           "url": "/services/lot-evaluation",
@@ -4811,14 +5387,14 @@
           "anchor": "Designing a Home for Multiple Generations",
           "title": "Designing a Home for Multiple Generations",
           "type": "blog",
-          "score": -0.106
+          "score": -0.146
         },
         {
           "url": "/blog/aging-in-place-home-design",
           "anchor": "Building a Home You Can Age In",
           "title": "Building a Home You Can Age In",
           "type": "blog",
-          "score": -0.114
+          "score": -0.154
         }
       ]
     },
@@ -4854,14 +5430,14 @@
           "anchor": "Home Design & Plans",
           "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.479
+          "score": 1.439
         },
         {
           "url": "/areas/eagle",
           "anchor": "Home Building in Eagle",
           "title": "Home Building in Eagle, Idaho",
           "type": "city",
-          "score": 0.283
+          "score": 0.243
         },
         {
           "url": "/services/semi-custom-homes",
@@ -4875,14 +5451,14 @@
           "anchor": "Single Story vs Two Story: Cost, Lot, and Livability",
           "title": "Single Story vs Two Story: Cost, Lot, and Livability",
           "type": "blog",
-          "score": -0.117
+          "score": -0.157
         },
         {
-          "url": "/blog/adu-cost-boise",
-          "anchor": "ADU Cost in Boise",
-          "title": "ADU Cost in Boise",
+          "url": "/blog/covered-outdoor-living-new-home",
+          "anchor": "Designing Covered Outdoor Living Into a New Home",
+          "title": "Designing Covered Outdoor Living Into a New Home",
           "type": "blog",
-          "score": -0.146
+          "score": -0.169
         }
       ]
     },
@@ -4918,14 +5494,14 @@
           "anchor": "Home Design & Plans",
           "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.363
+          "score": 1.323
         },
         {
           "url": "/areas/garden-city",
           "anchor": "Home Building in Garden City",
           "title": "Home Building in Garden City, Idaho",
           "type": "city",
-          "score": 0.354
+          "score": 0.314
         },
         {
           "url": "/services/shop-homes-barndominiums",
@@ -4935,18 +5511,18 @@
           "score": 0.05
         },
         {
-          "url": "/blog/multigenerational-home-design",
-          "anchor": "Designing a Home for Multiple Generations",
-          "title": "Designing a Home for Multiple Generations",
+          "url": "/blog/luxury-home-building-cost-boise",
+          "anchor": "What a Luxury Home Costs to Build in Boise",
+          "title": "What a Luxury Home Costs to Build in Boise",
           "type": "blog",
-          "score": -0.149
+          "score": -0.177
         },
         {
-          "url": "/blog/aging-in-place-home-design",
-          "anchor": "Building a Home You Can Age In",
-          "title": "Building a Home You Can Age In",
+          "url": "/blog/why-home-building-bids-vary",
+          "anchor": "Why Home Building Bids Vary So Much",
+          "title": "Why Home Building Bids Vary So Much",
           "type": "blog",
-          "score": -0.157
+          "score": -0.177
         }
       ]
     },
@@ -4996,14 +5572,14 @@
           "anchor": "Home Design & Plans",
           "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.49
+          "score": 1.45
         },
         {
           "url": "/areas/kuna",
           "anchor": "Home Building in Kuna",
           "title": "Home Building in Kuna, Idaho",
           "type": "city",
-          "score": 0.2
+          "score": 0.16
         },
         {
           "url": "/services/lot-evaluation",
@@ -5046,14 +5622,14 @@
           "anchor": "Home Design & Plans",
           "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.359
+          "score": 1.319
         },
         {
           "url": "/areas/meridian",
           "anchor": "Home Building in Meridian",
           "title": "Home Building in Meridian, Idaho",
           "type": "city",
-          "score": 0.283
+          "score": 0.243
         },
         {
           "url": "/services/semi-custom-homes",
@@ -5063,18 +5639,18 @@
           "score": 0.01
         },
         {
-          "url": "/blog/shop-homes-and-barndominiums-idaho",
-          "anchor": "Shop Homes and Barndominiums in Idaho",
-          "title": "Shop Homes and Barndominiums in Idaho",
+          "url": "/blog/multigenerational-home-design",
+          "anchor": "Designing a Home for Multiple Generations",
+          "title": "Designing a Home for Multiple Generations",
           "type": "blog",
-          "score": -0.167
+          "score": -0.186
         },
         {
-          "url": "/blog/boise-building-permit-guide",
-          "anchor": "Building Permits in Boise: What a New Home Needs",
-          "title": "Building Permits in Boise: What a New Home Needs",
+          "url": "/blog/aging-in-place-home-design",
+          "anchor": "Building a Home You Can Age In",
+          "title": "Building a Home You Can Age In",
           "type": "blog",
-          "score": -0.169
+          "score": -0.194
         }
       ]
     },
@@ -5110,14 +5686,14 @@
           "anchor": "Home Design & Plans",
           "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.319
+          "score": 1.279
         },
         {
           "url": "/areas/middleton",
           "anchor": "Home Building in Middleton",
           "title": "Home Building in Middleton, Idaho",
           "type": "city",
-          "score": 0.283
+          "score": 0.243
         },
         {
           "url": "/services/shop-homes-barndominiums",
@@ -5127,18 +5703,18 @@
           "score": 0.01
         },
         {
-          "url": "/blog/construction-loan-basics-idaho",
-          "anchor": "How Construction Loans Work in Idaho",
-          "title": "How Construction Loans Work in Idaho",
+          "url": "/blog/single-story-vs-two-story-home",
+          "anchor": "Single Story vs Two Story: Cost, Lot, and Livability",
+          "title": "Single Story vs Two Story: Cost, Lot, and Livability",
           "type": "blog",
-          "score": -0.169
+          "score": -0.197
         },
         {
-          "url": "/blog/covered-outdoor-living-new-home",
-          "anchor": "Designing Covered Outdoor Living Into a New Home",
-          "title": "Designing Covered Outdoor Living Into a New Home",
+          "url": "/blog/custom-home-floor-plan-ideas-boise",
+          "anchor": "Floor Plan Ideas That Work in Treasure Valley Homes",
+          "title": "Floor Plan Ideas That Work in Treasure Valley Homes",
           "type": "blog",
-          "score": -0.169
+          "score": -0.203
         }
       ]
     },
@@ -5170,18 +5746,11 @@
           "score": 1.653
         },
         {
-          "url": "/services/home-plans-design",
-          "anchor": "Home Design & Plans",
-          "title": "Home Design & Plans in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": 1.279
-        },
-        {
           "url": "/areas/nampa",
           "anchor": "Home Building in Nampa",
           "title": "Home Building in Nampa, Idaho",
           "type": "city",
-          "score": 0.283
+          "score": 0.243
         },
         {
           "url": "/services/lot-evaluation",
@@ -5191,18 +5760,25 @@
           "score": -0.03
         },
         {
-          "url": "/blog/stages-of-building-a-house",
-          "anchor": "The Stages of Building a House, in Order",
-          "title": "The Stages of Building a House, in Order",
-          "type": "blog",
-          "score": -0.169
+          "url": "/services/semi-custom-homes",
+          "anchor": "Semi-Custom Homes",
+          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": -0.03
         },
         {
-          "url": "/blog/choosing-finishes-for-a-new-home",
-          "anchor": "Choosing Finishes for a New Home Without Blowing the Budget",
-          "title": "Choosing Finishes for a New Home Without Blowing the Budget",
+          "url": "/blog/well-and-septic-cost-idaho",
+          "anchor": "What a Well and Septic System Costs in Idaho",
+          "title": "What a Well and Septic System Costs in Idaho",
           "type": "blog",
-          "score": -0.171
+          "score": -0.204
+        },
+        {
+          "url": "/blog/build-vs-buy-boise",
+          "anchor": "Building vs Buying a Home in the Treasure Valley",
+          "title": "Building vs Buying a Home in the Treasure Valley",
+          "type": "blog",
+          "score": -0.206
         }
       ]
     },
@@ -5245,14 +5821,7 @@
           "anchor": "Home Building in Star",
           "title": "Home Building in Star, Idaho",
           "type": "city",
-          "score": 0.283
-        },
-        {
-          "url": "/services/semi-custom-homes",
-          "anchor": "Semi-Custom Homes",
-          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": -0.03
+          "score": 0.243
         },
         {
           "url": "/services/shop-homes-barndominiums",
@@ -5262,11 +5831,18 @@
           "score": -0.03
         },
         {
-          "url": "/blog/luxury-home-building-cost-boise",
-          "anchor": "What a Luxury Home Costs to Build in Boise",
-          "title": "What a Luxury Home Costs to Build in Boise",
+          "url": "/services/lot-evaluation",
+          "anchor": "Lot Evaluation & Feasibility",
+          "title": "Lot Evaluation & Feasibility in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": -0.07
+        },
+        {
+          "url": "/blog/how-to-buy-a-buildable-lot-boise",
+          "anchor": "How to Tell If a Lot Is Actually Buildable",
+          "title": "How to Tell If a Lot Is Actually Buildable",
           "type": "blog",
-          "score": -0.175
+          "score": -0.206
         }
       ]
     },
@@ -5302,35 +5878,35 @@
           "anchor": "Lot Evaluation & Feasibility",
           "title": "Lot Evaluation & Feasibility in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.53
+          "score": 1.49
         },
         {
           "url": "/areas/boise",
           "anchor": "Home Building in Boise",
           "title": "Home Building in Boise, Idaho",
           "type": "city",
-          "score": 0.16
+          "score": 0.12
         },
         {
-          "url": "/services/build-on-your-lot",
-          "anchor": "Build on Your Lot",
-          "title": "Build on Your Lot in Boise & Treasure Valley, Idaho",
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.045
+          "score": 0.02
+        },
+        {
+          "url": "/blog/production-vs-custom-home-builder",
+          "anchor": "Production Builder vs Custom Builder",
+          "title": "Production Builder vs Custom Builder",
+          "type": "blog",
+          "score": -0.106
         },
         {
           "url": "/blog/building-in-the-boise-foothills",
           "anchor": "What It Costs to Build in the Boise Foothills",
           "title": "What It Costs to Build in the Boise Foothills",
           "type": "blog",
-          "score": -0.069
-        },
-        {
-          "url": "/blog/how-to-buy-a-buildable-lot-boise",
-          "anchor": "How to Tell If a Lot Is Actually Buildable",
-          "title": "How to Tell If a Lot Is Actually Buildable",
-          "type": "blog",
-          "score": -0.069
+          "score": -0.109
         }
       ]
     },
@@ -5366,21 +5942,21 @@
           "anchor": "Lot Evaluation & Feasibility",
           "title": "Lot Evaluation & Feasibility in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.407
+          "score": 1.367
         },
         {
           "url": "/areas/caldwell",
           "anchor": "Home Building in Caldwell",
           "title": "Home Building in Caldwell, Idaho",
           "type": "city",
-          "score": 0.237
+          "score": 0.197
         },
         {
-          "url": "/services/semi-custom-homes",
-          "anchor": "Semi-Custom Homes",
-          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.07
+          "score": -0.025
         },
         {
           "url": "/blog/lot-evaluation-checklist",
@@ -5394,7 +5970,7 @@
           "anchor": "Impact Fees and Utility Connections in Ada and Canyon County",
           "title": "Impact Fees and Utility Connections in Ada and Canyon County",
           "type": "blog",
-          "score": -0.167
+          "score": -0.207
         }
       ]
     },
@@ -5430,21 +6006,21 @@
           "anchor": "Lot Evaluation & Feasibility",
           "title": "Lot Evaluation & Feasibility in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.367
+          "score": 1.327
         },
         {
           "url": "/areas/eagle",
           "anchor": "Home Building in Eagle",
           "title": "Home Building in Eagle, Idaho",
           "type": "city",
-          "score": 0.237
+          "score": 0.197
         },
         {
-          "url": "/services/shop-homes-barndominiums",
-          "anchor": "Shop Homes & Barndominiums",
-          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
+          "url": "/services/build-on-your-lot",
+          "anchor": "Build on Your Lot",
+          "title": "Build on Your Lot in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.07
+          "score": -0.05
         },
         {
           "url": "/blog/lot-evaluation-checklist",
@@ -5454,11 +6030,11 @@
           "score": -0.206
         },
         {
-          "url": "/blog/well-and-septic-cost-idaho",
-          "anchor": "What a Well and Septic System Costs in Idaho",
-          "title": "What a Well and Septic System Costs in Idaho",
+          "url": "/blog/how-to-buy-a-buildable-lot-boise",
+          "anchor": "How to Tell If a Lot Is Actually Buildable",
+          "title": "How to Tell If a Lot Is Actually Buildable",
           "type": "blog",
-          "score": -0.206
+          "score": -0.211
         }
       ]
     },
@@ -5494,35 +6070,35 @@
           "anchor": "Lot Evaluation & Feasibility",
           "title": "Lot Evaluation & Feasibility in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": 1.256
+          "score": 1.216
         },
         {
           "url": "/areas/garden-city",
           "anchor": "Home Building in Garden City",
           "title": "Home Building in Garden City, Idaho",
           "type": "city",
-          "score": 0.303
+          "score": 0.263
         },
         {
-          "url": "/services/build-on-your-lot",
-          "anchor": "Build on Your Lot",
-          "title": "Build on Your Lot in Boise & Treasure Valley, Idaho",
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.095
+          "score": -0.07
+        },
+        {
+          "url": "/blog/well-and-septic-cost-idaho",
+          "anchor": "What a Well and Septic System Costs in Idaho",
+          "title": "What a Well and Septic System Costs in Idaho",
+          "type": "blog",
+          "score": -0.247
         },
         {
           "url": "/blog/impact-fees-and-utility-connections",
           "anchor": "Impact Fees and Utility Connections in Ada and Canyon County",
           "title": "Impact Fees and Utility Connections in Ada and Canyon County",
           "type": "blog",
-          "score": -0.208
-        },
-        {
-          "url": "/blog/production-vs-custom-home-builder",
-          "anchor": "Production Builder vs Custom Builder",
-          "title": "Production Builder vs Custom Builder",
-          "type": "blog",
-          "score": -0.208
+          "score": -0.248
         }
       ]
     },
@@ -5568,25 +6144,25 @@
           "score": 1.746
         },
         {
-          "url": "/services/lot-evaluation",
-          "anchor": "Lot Evaluation & Feasibility",
-          "title": "Lot Evaluation & Feasibility in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": 1.37
-        },
-        {
           "url": "/areas/kuna",
           "anchor": "Home Building in Kuna",
           "title": "Home Building in Kuna, Idaho",
           "type": "city",
-          "score": 0.16
+          "score": 0.12
         },
         {
-          "url": "/services/energy-efficient-homes",
-          "anchor": "Energy-Efficient Homes",
-          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
+          "url": "/services/semi-custom-homes",
+          "anchor": "Semi-Custom Homes",
+          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.11
+          "score": -0.07
+        },
+        {
+          "url": "/services/shop-homes-barndominiums",
+          "anchor": "Shop Homes & Barndominiums",
+          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": -0.07
         }
       ]
     },
@@ -5622,35 +6198,35 @@
           "anchor": "Home Building in Meridian",
           "title": "Home Building in Meridian, Idaho",
           "type": "city",
-          "score": 0.237
+          "score": 0.197
         },
         {
-          "url": "/services/semi-custom-homes",
-          "anchor": "Semi-Custom Homes",
-          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
+          "url": "/services/build-on-your-lot",
+          "anchor": "Build on Your Lot",
+          "title": "Build on Your Lot in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.11
+          "score": -0.09
         },
         {
-          "url": "/services/shop-homes-barndominiums",
-          "anchor": "Shop Homes & Barndominiums",
-          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
+          "url": "/services/adu",
+          "anchor": "ADUs & Guest Houses",
+          "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.11
+          "score": -0.105
         },
         {
-          "url": "/blog/single-story-vs-two-story-home",
-          "anchor": "Single Story vs Two Story: Cost, Lot, and Livability",
-          "title": "Single Story vs Two Story: Cost, Lot, and Livability",
+          "url": "/blog/building-in-the-boise-foothills",
+          "anchor": "What It Costs to Build in the Boise Foothills",
+          "title": "What It Costs to Build in the Boise Foothills",
           "type": "blog",
-          "score": -0.227
+          "score": -0.25
         },
         {
-          "url": "/blog/lot-evaluation-checklist",
-          "anchor": "Lot Evaluation Checklist: What to Check Before You Buy",
-          "title": "Lot Evaluation Checklist: What to Check Before You Buy",
+          "url": "/blog/how-to-buy-a-buildable-lot-boise",
+          "anchor": "How to Tell If a Lot Is Actually Buildable",
+          "title": "How to Tell If a Lot Is Actually Buildable",
           "type": "blog",
-          "score": -0.246
+          "score": -0.251
         }
       ]
     },
@@ -5686,35 +6262,35 @@
           "anchor": "Home Building in Middleton",
           "title": "Home Building in Middleton, Idaho",
           "type": "city",
-          "score": 0.237
+          "score": 0.197
         },
         {
-          "url": "/services/build-on-your-lot",
-          "anchor": "Build on Your Lot",
-          "title": "Build on Your Lot in Boise & Treasure Valley, Idaho",
+          "url": "/services/semi-custom-homes",
+          "anchor": "Semi-Custom Homes",
+          "title": "Semi-Custom Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.13
+          "score": -0.11
         },
         {
-          "url": "/services/custom-home-builder",
-          "anchor": "Custom Home Building",
-          "title": "Custom Home Building in Boise & Treasure Valley, Idaho",
+          "url": "/services/shop-homes-barndominiums",
+          "anchor": "Shop Homes & Barndominiums",
+          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.145
+          "score": -0.11
         },
         {
-          "url": "/blog/well-and-septic-cost-idaho",
-          "anchor": "What a Well and Septic System Costs in Idaho",
-          "title": "What a Well and Septic System Costs in Idaho",
+          "url": "/blog/single-story-vs-two-story-home",
+          "anchor": "Single Story vs Two Story: Cost, Lot, and Livability",
+          "title": "Single Story vs Two Story: Cost, Lot, and Livability",
           "type": "blog",
-          "score": -0.246
+          "score": -0.267
         },
         {
-          "url": "/blog/impact-fees-and-utility-connections",
-          "anchor": "Impact Fees and Utility Connections in Ada and Canyon County",
-          "title": "Impact Fees and Utility Connections in Ada and Canyon County",
+          "url": "/blog/lot-evaluation-checklist",
+          "anchor": "Lot Evaluation Checklist: What to Check Before You Buy",
+          "title": "Lot Evaluation Checklist: What to Check Before You Buy",
           "type": "blog",
-          "score": -0.247
+          "score": -0.286
         }
       ]
     },
@@ -5757,28 +6333,28 @@
           "anchor": "Home Building in Nampa",
           "title": "Home Building in Nampa, Idaho",
           "type": "city",
-          "score": 0.237
+          "score": 0.197
         },
         {
-          "url": "/services/design-build",
-          "anchor": "Design-Build",
-          "title": "Design-Build in Boise & Treasure Valley, Idaho",
+          "url": "/services/build-on-your-lot",
+          "anchor": "Build on Your Lot",
+          "title": "Build on Your Lot in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.15
+          "score": -0.13
         },
         {
-          "url": "/services/energy-efficient-homes",
-          "anchor": "Energy-Efficient Homes",
-          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
+          "url": "/services/custom-home-builder",
+          "anchor": "Custom Home Building",
+          "title": "Custom Home Building in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.15
+          "score": -0.145
         },
         {
-          "url": "/blog/production-vs-custom-home-builder",
-          "anchor": "Production Builder vs Custom Builder",
-          "title": "Production Builder vs Custom Builder",
+          "url": "/blog/well-and-septic-cost-idaho",
+          "anchor": "What a Well and Septic System Costs in Idaho",
+          "title": "What a Well and Septic System Costs in Idaho",
           "type": "blog",
-          "score": -0.247
+          "score": -0.286
         }
       ]
     },
@@ -5788,13 +6364,6 @@
       "anchor": "Lot Evaluation & Feasibility in Star",
       "url": "/services/lot-evaluation/star",
       "links": [
-        {
-          "url": "/services/lot-evaluation/caldwell",
-          "anchor": "Lot Evaluation & Feasibility in Caldwell",
-          "title": "Lot Evaluation & Feasibility in Caldwell, Idaho",
-          "type": "city-service",
-          "score": 1.746
-        },
         {
           "url": "/services/lot-evaluation/garden-city",
           "anchor": "Lot Evaluation & Feasibility in Garden City",
@@ -5828,7 +6397,14 @@
           "anchor": "Home Building in Star",
           "title": "Home Building in Star, Idaho",
           "type": "city",
-          "score": 0.237
+          "score": 0.197
+        },
+        {
+          "url": "/services/energy-efficient-homes",
+          "anchor": "Energy-Efficient Homes",
+          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": -0.15
         },
         {
           "url": "/services/semi-custom-homes",
@@ -5838,11 +6414,11 @@
           "score": -0.15
         },
         {
-          "url": "/services/shop-homes-barndominiums",
-          "anchor": "Shop Homes & Barndominiums",
-          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": -0.15
+          "url": "/blog/production-vs-custom-home-builder",
+          "anchor": "Production Builder vs Custom Builder",
+          "title": "Production Builder vs Custom Builder",
+          "type": "blog",
+          "score": -0.287
         }
       ]
     },
@@ -5885,14 +6461,7 @@
           "anchor": "Home Building in Boise",
           "title": "Home Building in Boise, Idaho",
           "type": "city",
-          "score": 0.12
-        },
-        {
-          "url": "/blog/custom-home-floor-plan-ideas-boise",
-          "anchor": "Floor Plan Ideas That Work in Treasure Valley Homes",
-          "title": "Floor Plan Ideas That Work in Treasure Valley Homes",
-          "type": "blog",
-          "score": -0.107
+          "score": 0.08
         },
         {
           "url": "/blog/custom-home-cost-per-square-foot-boise",
@@ -5902,11 +6471,18 @@
           "score": -0.11
         },
         {
-          "url": "/services/custom-home-builder",
-          "anchor": "Custom Home Building",
-          "title": "Custom Home Building in Boise & Treasure Valley, Idaho",
+          "url": "/blog/what-drives-home-building-costs-boise",
+          "anchor": "What Actually Drives Home Building Costs in Boise",
+          "title": "What Actually Drives Home Building Costs in Boise",
+          "type": "blog",
+          "score": -0.111
+        },
+        {
+          "url": "/services/shop-homes-barndominiums",
+          "anchor": "Shop Homes & Barndominiums",
+          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.139
+          "score": -0.113
         }
       ]
     },
@@ -5949,28 +6525,28 @@
           "anchor": "Home Building in Caldwell",
           "title": "Home Building in Caldwell, Idaho",
           "type": "city",
-          "score": 0.187
+          "score": 0.147
         },
         {
-          "url": "/services/design-build",
-          "anchor": "Design-Build",
-          "title": "Design-Build in Boise & Treasure Valley, Idaho",
+          "url": "/services/custom-home-builder",
+          "anchor": "Custom Home Building",
+          "title": "Custom Home Building in Boise & Treasure Valley, Idaho",
           "type": "service",
-          "score": -0.145
+          "score": -0.143
         },
         {
-          "url": "/blog/how-to-budget-a-new-home-boise",
-          "anchor": "How to Budget for a New Home in Boise",
-          "title": "How to Budget for a New Home in Boise",
+          "url": "/blog/cost-to-build-a-house-boise",
+          "anchor": "How Much Does It Cost to Build a House in Boise?",
+          "title": "How Much Does It Cost to Build a House in Boise?",
           "type": "blog",
-          "score": -0.211
+          "score": -0.213
         },
         {
-          "url": "/blog/allowances-explained-new-home",
-          "anchor": "How Allowances Work in a New Home Contract",
-          "title": "How Allowances Work in a New Home Contract",
+          "url": "/blog/choosing-finishes-for-a-new-home",
+          "anchor": "Choosing Finishes for a New Home Without Blowing the Budget",
+          "title": "Choosing Finishes for a New Home Without Blowing the Budget",
           "type": "blog",
-          "score": -0.212
+          "score": -0.214
         }
       ]
     },
@@ -6006,7 +6582,14 @@
           "anchor": "Home Building in Eagle",
           "title": "Home Building in Eagle, Idaho",
           "type": "city",
-          "score": 0.187
+          "score": 0.147
+        },
+        {
+          "url": "/services/design-build",
+          "anchor": "Design-Build",
+          "title": "Design-Build in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": -0.145
         },
         {
           "url": "/services/energy-efficient-homes",
@@ -6016,25 +6599,18 @@
           "score": -0.154
         },
         {
-          "url": "/services/shop-homes-barndominiums",
-          "anchor": "Shop Homes & Barndominiums",
-          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": -0.154
+          "url": "/blog/boise-building-permit-guide",
+          "anchor": "Building Permits in Boise: What a New Home Needs",
+          "title": "Building Permits in Boise: What a New Home Needs",
+          "type": "blog",
+          "score": -0.249
         },
         {
-          "url": "/blog/what-drives-home-building-costs-boise",
-          "anchor": "What Actually Drives Home Building Costs in Boise",
-          "title": "What Actually Drives Home Building Costs in Boise",
+          "url": "/blog/custom-home-floor-plan-ideas-boise",
+          "anchor": "Floor Plan Ideas That Work in Treasure Valley Homes",
+          "title": "Floor Plan Ideas That Work in Treasure Valley Homes",
           "type": "blog",
-          "score": -0.212
-        },
-        {
-          "url": "/blog/cost-to-build-a-house-boise",
-          "anchor": "How Much Does It Cost to Build a House in Boise?",
-          "title": "How Much Does It Cost to Build a House in Boise?",
-          "type": "blog",
-          "score": -0.213
+          "score": -0.249
         }
       ]
     },
@@ -6070,7 +6646,14 @@
           "anchor": "Home Building in Garden City",
           "title": "Home Building in Garden City, Idaho",
           "type": "city",
-          "score": 0.245
+          "score": 0.205
+        },
+        {
+          "url": "/services/shop-homes-barndominiums",
+          "anchor": "Shop Homes & Barndominiums",
+          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
+          "type": "service",
+          "score": -0.156
         },
         {
           "url": "/services/design-build",
@@ -6080,25 +6663,18 @@
           "score": -0.187
         },
         {
-          "url": "/services/energy-efficient-homes",
-          "anchor": "Energy-Efficient Homes",
-          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
-          "type": "service",
-          "score": -0.196
+          "url": "/blog/custom-home-cost-per-square-foot-boise",
+          "anchor": "Custom Home Cost Per Square Foot in Boise",
+          "title": "Custom Home Cost Per Square Foot in Boise",
+          "type": "blog",
+          "score": -0.251
         },
         {
-          "url": "/blog/choosing-finishes-for-a-new-home",
-          "anchor": "Choosing Finishes for a New Home Without Blowing the Budget",
-          "title": "Choosing Finishes for a New Home Without Blowing the Budget",
+          "url": "/blog/how-to-budget-a-new-home-boise",
+          "anchor": "How to Budget for a New Home in Boise",
+          "title": "How to Budget for a New Home in Boise",
           "type": "blog",
-          "score": -0.214
-        },
-        {
-          "url": "/blog/multigenerational-home-design",
-          "anchor": "Designing a Home for Multiple Generations",
-          "title": "Designing a Home for Multiple Generations",
-          "type": "blog",
-          "score": -0.226
+          "score": -0.252
         }
       ]
     },
@@ -6155,12 +6731,12 @@
           "anchor": "Home Building in Kuna",
           "title": "Home Building in Kuna, Idaho",
           "type": "city",
-          "score": 0.12
+          "score": 0.08
         },
         {
-          "url": "/services/shop-homes-barndominiums",
-          "anchor": "Shop Homes & Barndominiums",
-          "title": "Shop Homes & Barndominiums in Boise & Treasure Valley, Idaho",
+          "url": "/services/energy-efficient-homes",
+          "anchor": "Energy-Efficient Homes",
+          "title": "Energy-Efficient Homes in Boise & Treasure Valley, Idaho",
           "type": "service",
           "score": -0.193
         }
@@ -6212,21 +6788,21 @@
           "anchor": "Home Building in Meridian",
           "title": "Home Building in Meridian, Idaho",
           "type": "city",
-          "score": 0.187
+          "score": 0.147
         },
         {
-          "url": "/blog/boise-building-permit-guide",
-          "anchor": "Building Permits in Boise: What a New Home Needs",
-          "title": "Building Permits in Boise: What a New Home Needs",
+          "url": "/blog/what-drives-home-building-costs-boise",
+          "anchor": "What Actually Drives Home Building Costs in Boise",
+          "title": "What Actually Drives Home Building Costs in Boise",
           "type": "blog",
-          "score": -0.249
+          "score": -0.252
         },
         {
-          "url": "/blog/custom-home-cost-per-square-foot-boise",
-          "anchor": "Custom Home Cost Per Square Foot in Boise",
-          "title": "Custom Home Cost Per Square Foot in Boise",
+          "url": "/blog/cost-to-build-a-house-boise",
+          "anchor": "How Much Does It Cost to Build a House in Boise?",
+          "title": "How Much Does It Cost to Build a House in Boise?",
           "type": "blog",
-          "score": -0.251
+          "score": -0.253
         }
       ]
     },
@@ -6276,21 +6852,21 @@
           "anchor": "Home Building in Middleton",
           "title": "Home Building in Middleton, Idaho",
           "type": "city",
-          "score": 0.187
+          "score": 0.147
         },
         {
-          "url": "/blog/how-long-does-it-take-to-build-a-house-boise",
-          "anchor": "How Long Does It Take to Build a House in Boise?",
-          "title": "How Long Does It Take to Build a House in Boise?",
+          "url": "/blog/choosing-finishes-for-a-new-home",
+          "anchor": "Choosing Finishes for a New Home Without Blowing the Budget",
+          "title": "Choosing Finishes for a New Home Without Blowing the Budget",
           "type": "blog",
-          "score": -0.251
+          "score": -0.254
         },
         {
-          "url": "/blog/how-to-budget-a-new-home-boise",
-          "anchor": "How to Budget for a New Home in Boise",
-          "title": "How to Budget for a New Home in Boise",
+          "url": "/blog/multigenerational-home-design",
+          "anchor": "Designing a Home for Multiple Generations",
+          "title": "Designing a Home for Multiple Generations",
           "type": "blog",
-          "score": -0.251
+          "score": -0.264
         }
       ]
     },
@@ -6340,21 +6916,21 @@
           "anchor": "Home Building in Nampa",
           "title": "Home Building in Nampa, Idaho",
           "type": "city",
-          "score": 0.187
+          "score": 0.147
         },
         {
-          "url": "/blog/luxury-home-building-cost-boise",
-          "anchor": "What a Luxury Home Costs to Build in Boise",
-          "title": "What a Luxury Home Costs to Build in Boise",
+          "url": "/blog/shop-homes-and-barndominiums-idaho",
+          "anchor": "Shop Homes and Barndominiums in Idaho",
+          "title": "Shop Homes and Barndominiums in Idaho",
           "type": "blog",
-          "score": -0.251
+          "score": -0.276
         },
         {
-          "url": "/blog/allowances-explained-new-home",
-          "anchor": "How Allowances Work in a New Home Contract",
-          "title": "How Allowances Work in a New Home Contract",
+          "url": "/blog/boise-building-permit-guide",
+          "anchor": "Building Permits in Boise: What a New Home Needs",
+          "title": "Building Permits in Boise: What a New Home Needs",
           "type": "blog",
-          "score": -0.252
+          "score": -0.289
         }
       ]
     },
@@ -6404,21 +6980,21 @@
           "anchor": "Home Building in Star",
           "title": "Home Building in Star, Idaho",
           "type": "city",
-          "score": 0.187
+          "score": 0.147
         },
         {
-          "url": "/blog/what-drives-home-building-costs-boise",
-          "anchor": "What Actually Drives Home Building Costs in Boise",
-          "title": "What Actually Drives Home Building Costs in Boise",
+          "url": "/blog/custom-home-floor-plan-ideas-boise",
+          "anchor": "Floor Plan Ideas That Work in Treasure Valley Homes",
+          "title": "Floor Plan Ideas That Work in Treasure Valley Homes",
           "type": "blog",
-          "score": -0.252
+          "score": -0.289
         },
         {
-          "url": "/blog/adu-cost-boise",
-          "anchor": "ADU Cost in Boise",
-          "title": "ADU Cost in Boise",
+          "url": "/blog/custom-home-cost-per-square-foot-boise",
+          "anchor": "Custom Home Cost Per Square Foot in Boise",
+          "title": "Custom Home Cost Per Square Foot in Boise",
           "type": "blog",
-          "score": -0.253
+          "score": -0.291
         }
       ]
     },
@@ -6468,21 +7044,21 @@
           "anchor": "Home Building in Boise",
           "title": "Home Building in Boise, Idaho",
           "type": "city",
-          "score": 0.08
+          "score": 0.04
         },
         {
           "url": "/blog/shop-homes-and-barndominiums-idaho",
           "anchor": "Shop Homes and Barndominiums in Idaho",
           "title": "Shop Homes and Barndominiums in Idaho",
           "type": "blog",
-          "score": 0.013
+          "score": -0.027
         },
         {
-          "url": "/blog/cost-to-build-a-house-boise",
-          "anchor": "How Much Does It Cost to Build a House in Boise?",
-          "title": "How Much Does It Cost to Build a House in Boise?",
+          "url": "/blog/first-meeting-with-a-home-builder",
+          "anchor": "What Happens at Your First Meeting With a Builder",
+          "title": "What Happens at Your First Meeting With a Builder",
           "type": "blog",
-          "score": -0.126
+          "score": -0.14
         }
       ]
     },
@@ -6532,21 +7108,21 @@
           "anchor": "Home Building in Caldwell",
           "title": "Home Building in Caldwell, Idaho",
           "type": "city",
-          "score": 0.139
+          "score": 0.099
         },
         {
           "url": "/blog/shop-homes-and-barndominiums-idaho",
           "anchor": "Shop Homes and Barndominiums in Idaho",
           "title": "Shop Homes and Barndominiums in Idaho",
           "type": "blog",
-          "score": -0.036
+          "score": -0.076
         },
         {
           "url": "/blog/new-home-walkthrough-and-warranty",
           "anchor": "The Final Walkthrough and What the Warranty Covers",
           "title": "The Final Walkthrough and What the Warranty Covers",
           "type": "blog",
-          "score": -0.211
+          "score": -0.251
         }
       ]
     },
@@ -6596,21 +7172,21 @@
           "anchor": "Home Building in Eagle",
           "title": "Home Building in Eagle, Idaho",
           "type": "city",
-          "score": 0.139
+          "score": 0.099
         },
         {
           "url": "/blog/shop-homes-and-barndominiums-idaho",
           "anchor": "Shop Homes and Barndominiums in Idaho",
           "title": "Shop Homes and Barndominiums in Idaho",
           "type": "blog",
-          "score": -0.076
+          "score": -0.116
         },
         {
-          "url": "/blog/new-home-walkthrough-and-warranty",
-          "anchor": "The Final Walkthrough and What the Warranty Covers",
-          "title": "The Final Walkthrough and What the Warranty Covers",
+          "url": "/blog/cost-to-build-a-house-boise",
+          "anchor": "How Much Does It Cost to Build a House in Boise?",
+          "title": "How Much Does It Cost to Build a House in Boise?",
           "type": "blog",
-          "score": -0.251
+          "score": -0.267
         }
       ]
     },
@@ -6660,21 +7236,21 @@
           "anchor": "Home Building in Garden City",
           "title": "Home Building in Garden City, Idaho",
           "type": "city",
-          "score": 0.191
+          "score": 0.151
         },
         {
           "url": "/blog/shop-homes-and-barndominiums-idaho",
           "anchor": "Shop Homes and Barndominiums in Idaho",
           "title": "Shop Homes and Barndominiums in Idaho",
           "type": "blog",
-          "score": -0.124
+          "score": -0.164
         },
         {
-          "url": "/blog/custom-home-cost-per-square-foot-boise",
-          "anchor": "Custom Home Cost Per Square Foot in Boise",
-          "title": "Custom Home Cost Per Square Foot in Boise",
+          "url": "/blog/new-home-walkthrough-and-warranty",
+          "anchor": "The Final Walkthrough and What the Warranty Covers",
+          "title": "The Final Walkthrough and What the Warranty Covers",
           "type": "blog",
-          "score": -0.264
+          "score": -0.292
         }
       ]
     },
@@ -6724,21 +7300,21 @@
           "anchor": "Home Building in Kuna",
           "title": "Home Building in Kuna, Idaho",
           "type": "city",
-          "score": 0.08
+          "score": 0.04
         },
         {
           "url": "/blog/shop-homes-and-barndominiums-idaho",
           "anchor": "Shop Homes and Barndominiums in Idaho",
           "title": "Shop Homes and Barndominiums in Idaho",
           "type": "blog",
-          "score": -0.147
+          "score": -0.187
         },
         {
-          "url": "/blog/cost-to-build-a-house-boise",
-          "anchor": "How Much Does It Cost to Build a House in Boise?",
-          "title": "How Much Does It Cost to Build a House in Boise?",
+          "url": "/blog/luxury-home-building-cost-boise",
+          "anchor": "What a Luxury Home Costs to Build in Boise",
+          "title": "What a Luxury Home Costs to Build in Boise",
           "type": "blog",
-          "score": -0.266
+          "score": -0.292
         }
       ]
     },
@@ -6788,21 +7364,21 @@
           "anchor": "Home Building in Meridian",
           "title": "Home Building in Meridian, Idaho",
           "type": "city",
-          "score": 0.139
+          "score": 0.099
         },
         {
           "url": "/blog/shop-homes-and-barndominiums-idaho",
           "anchor": "Shop Homes and Barndominiums in Idaho",
           "title": "Shop Homes and Barndominiums in Idaho",
           "type": "blog",
-          "score": -0.196
+          "score": -0.236
         },
         {
-          "url": "/blog/new-home-walkthrough-and-warranty",
-          "anchor": "The Final Walkthrough and What the Warranty Covers",
-          "title": "The Final Walkthrough and What the Warranty Covers",
+          "url": "/blog/covered-outdoor-living-new-home",
+          "anchor": "Designing Covered Outdoor Living Into a New Home",
+          "title": "Designing Covered Outdoor Living Into a New Home",
           "type": "blog",
-          "score": -0.291
+          "score": -0.297
         }
       ]
     },
@@ -6852,21 +7428,21 @@
           "anchor": "Home Building in Middleton",
           "title": "Home Building in Middleton, Idaho",
           "type": "city",
-          "score": 0.139
+          "score": 0.099
         },
         {
           "url": "/blog/shop-homes-and-barndominiums-idaho",
           "anchor": "Shop Homes and Barndominiums in Idaho",
           "title": "Shop Homes and Barndominiums in Idaho",
           "type": "blog",
-          "score": -0.236
+          "score": -0.276
         },
         {
-          "url": "/blog/production-vs-custom-home-builder",
-          "anchor": "Production Builder vs Custom Builder",
-          "title": "Production Builder vs Custom Builder",
+          "url": "/blog/custom-home-cost-per-square-foot-boise",
+          "anchor": "Custom Home Cost Per Square Foot in Boise",
+          "title": "Custom Home Cost Per Square Foot in Boise",
           "type": "blog",
-          "score": -0.291
+          "score": -0.303
         }
       ]
     },
@@ -6916,21 +7492,21 @@
           "anchor": "Home Building in Nampa",
           "title": "Home Building in Nampa, Idaho",
           "type": "city",
-          "score": 0.139
+          "score": 0.099
         },
         {
-          "url": "/blog/shop-homes-and-barndominiums-idaho",
-          "anchor": "Shop Homes and Barndominiums in Idaho",
-          "title": "Shop Homes and Barndominiums in Idaho",
+          "url": "/blog/cost-to-build-a-house-boise",
+          "anchor": "How Much Does It Cost to Build a House in Boise?",
+          "title": "How Much Does It Cost to Build a House in Boise?",
           "type": "blog",
-          "score": -0.276
+          "score": -0.307
         },
         {
-          "url": "/blog/building-in-the-boise-foothills",
-          "anchor": "What It Costs to Build in the Boise Foothills",
-          "title": "What It Costs to Build in the Boise Foothills",
+          "url": "/blog/single-story-vs-two-story-home",
+          "anchor": "Single Story vs Two Story: Cost, Lot, and Livability",
+          "title": "Single Story vs Two Story: Cost, Lot, and Livability",
           "type": "blog",
-          "score": -0.293
+          "score": -0.312
         }
       ]
     },
@@ -6980,21 +7556,21 @@
           "anchor": "Home Building in Star",
           "title": "Home Building in Star, Idaho",
           "type": "city",
-          "score": 0.139
+          "score": 0.099
         },
         {
-          "url": "/blog/luxury-home-building-cost-boise",
-          "anchor": "What a Luxury Home Costs to Build in Boise",
-          "title": "What a Luxury Home Costs to Build in Boise",
+          "url": "/blog/shop-homes-and-barndominiums-idaho",
+          "anchor": "Shop Homes and Barndominiums in Idaho",
+          "title": "Shop Homes and Barndominiums in Idaho",
           "type": "blog",
-          "score": -0.293
+          "score": -0.316
         },
         {
-          "url": "/blog/covered-outdoor-living-new-home",
-          "anchor": "Designing Covered Outdoor Living Into a New Home",
-          "title": "Designing Covered Outdoor Living Into a New Home",
+          "url": "/blog/new-home-walkthrough-and-warranty",
+          "anchor": "The Final Walkthrough and What the Warranty Covers",
+          "title": "The Final Walkthrough and What the Warranty Covers",
           "type": "blog",
-          "score": -0.297
+          "score": -0.331
         }
       ]
     },
@@ -7009,21 +7585,28 @@
           "anchor": "Home Building in Kuna",
           "title": "Home Building in Kuna, Idaho",
           "type": "city",
-          "score": 1.04
+          "score": 1
         },
         {
           "url": "/areas/eagle",
           "anchor": "Home Building in Eagle",
           "title": "Home Building in Eagle, Idaho",
           "type": "city",
-          "score": 0.54
+          "score": 0.5
         },
         {
           "url": "/areas/meridian",
           "anchor": "Home Building in Meridian",
           "title": "Home Building in Meridian, Idaho",
           "type": "city",
-          "score": 0.54
+          "score": 0.5
+        },
+        {
+          "url": "/services/adu/boise",
+          "anchor": "ADUs & Guest Houses in Boise",
+          "title": "ADUs & Guest Houses in Boise, Idaho",
+          "type": "city-service",
+          "score": 0.24
         },
         {
           "url": "/services/energy-efficient-homes/boise",
@@ -7047,16 +7630,9 @@
           "score": 0.2
         },
         {
-          "url": "/services/custom-home-builder/boise",
-          "anchor": "Custom Home Building in Boise",
-          "title": "Custom Home Building in Boise, Idaho",
-          "type": "city-service",
-          "score": 0.2
-        },
-        {
-          "url": "/blog/first-meeting-with-a-home-builder",
-          "anchor": "What Happens at Your First Meeting With a Builder",
-          "title": "What Happens at Your First Meeting With a Builder",
+          "url": "/blog/home-builder-red-flags",
+          "anchor": "Home Builder Red Flags",
+          "title": "Home Builder Red Flags",
           "type": "blog",
           "score": -0.14
         }
@@ -7073,28 +7649,7 @@
           "anchor": "Home Building in Boise",
           "title": "Home Building in Boise, Idaho",
           "type": "city",
-          "score": 0.44
-        },
-        {
-          "url": "/areas/kuna",
-          "anchor": "Home Building in Kuna",
-          "title": "Home Building in Kuna, Idaho",
-          "type": "city",
           "score": 0.4
-        },
-        {
-          "url": "/areas/middleton",
-          "anchor": "Home Building in Middleton",
-          "title": "Home Building in Middleton, Idaho",
-          "type": "city",
-          "score": 0.373
-        },
-        {
-          "url": "/areas/nampa",
-          "anchor": "Home Building in Nampa",
-          "title": "Home Building in Nampa, Idaho",
-          "type": "city",
-          "score": 0.373
         },
         {
           "url": "/services/design-build/caldwell",
@@ -7118,11 +7673,32 @@
           "score": 0.363
         },
         {
+          "url": "/areas/kuna",
+          "anchor": "Home Building in Kuna",
+          "title": "Home Building in Kuna, Idaho",
+          "type": "city",
+          "score": 0.36
+        },
+        {
           "url": "/services/custom-home-builder/caldwell",
           "anchor": "Custom Home Building in Caldwell",
           "title": "Custom Home Building in Caldwell, Idaho",
           "type": "city-service",
           "score": 0.357
+        },
+        {
+          "url": "/services/lot-evaluation/caldwell",
+          "anchor": "Lot Evaluation & Feasibility in Caldwell",
+          "title": "Lot Evaluation & Feasibility in Caldwell, Idaho",
+          "type": "city-service",
+          "score": 0.357
+        },
+        {
+          "url": "/services/home-additions/caldwell",
+          "anchor": "Home Additions in Caldwell",
+          "title": "Home Additions in Caldwell, Idaho",
+          "type": "city-service",
+          "score": 0.343
         }
       ]
     },
@@ -7137,21 +7713,14 @@
           "anchor": "Home Building in Boise",
           "title": "Home Building in Boise, Idaho",
           "type": "city",
-          "score": 0.5
+          "score": 0.46
         },
         {
           "url": "/areas/kuna",
           "anchor": "Home Building in Kuna",
           "title": "Home Building in Kuna, Idaho",
           "type": "city",
-          "score": 0.46
-        },
-        {
-          "url": "/areas/star",
-          "anchor": "Home Building in Star",
-          "title": "Home Building in Star, Idaho",
-          "type": "city",
-          "score": 0.373
+          "score": 0.42
         },
         {
           "url": "/services/design-build/eagle",
@@ -7187,6 +7756,13 @@
           "title": "Lot Evaluation & Feasibility in Eagle, Idaho",
           "type": "city-service",
           "score": 0.357
+        },
+        {
+          "url": "/services/home-additions/eagle",
+          "anchor": "Home Additions in Eagle",
+          "title": "Home Additions in Eagle, Idaho",
+          "type": "city-service",
+          "score": 0.343
         }
       ]
     },
@@ -7246,9 +7822,9 @@
           "score": 0.438
         },
         {
-          "url": "/services/energy-efficient-homes/garden-city",
-          "anchor": "Energy-Efficient Homes in Garden City",
-          "title": "Energy-Efficient Homes in Garden City, Idaho",
+          "url": "/services/adu/garden-city",
+          "anchor": "ADUs & Guest Houses in Garden City",
+          "title": "ADUs & Guest Houses in Garden City, Idaho",
           "type": "city-service",
           "score": 0.431
         }
@@ -7265,21 +7841,7 @@
           "anchor": "Home Building in Boise",
           "title": "Home Building in Boise, Idaho",
           "type": "city",
-          "score": 0.96
-        },
-        {
-          "url": "/areas/eagle",
-          "anchor": "Home Building in Eagle",
-          "title": "Home Building in Eagle, Idaho",
-          "type": "city",
-          "score": 0.5
-        },
-        {
-          "url": "/areas/meridian",
-          "anchor": "Home Building in Meridian",
-          "title": "Home Building in Meridian, Idaho",
-          "type": "city",
-          "score": 0.5
+          "score": 0.92
         },
         {
           "url": "/areas/star",
@@ -7287,6 +7849,27 @@
           "title": "Home Building in Star, Idaho",
           "type": "city",
           "score": 0.5
+        },
+        {
+          "url": "/areas/eagle",
+          "anchor": "Home Building in Eagle",
+          "title": "Home Building in Eagle, Idaho",
+          "type": "city",
+          "score": 0.46
+        },
+        {
+          "url": "/areas/meridian",
+          "anchor": "Home Building in Meridian",
+          "title": "Home Building in Meridian, Idaho",
+          "type": "city",
+          "score": 0.46
+        },
+        {
+          "url": "/services/adu/kuna",
+          "anchor": "ADUs & Guest Houses in Kuna",
+          "title": "ADUs & Guest Houses in Kuna, Idaho",
+          "type": "city-service",
+          "score": 0.24
         },
         {
           "url": "/services/build-on-your-lot/kuna",
@@ -7308,13 +7891,6 @@
           "title": "Energy-Efficient Homes in Kuna, Idaho",
           "type": "city-service",
           "score": 0.24
-        },
-        {
-          "url": "/services/home-additions/kuna",
-          "anchor": "Home Additions in Kuna",
-          "title": "Home Additions in Kuna, Idaho",
-          "type": "city-service",
-          "score": 0.24
         }
       ]
     },
@@ -7329,14 +7905,14 @@
           "anchor": "Home Building in Boise",
           "title": "Home Building in Boise, Idaho",
           "type": "city",
-          "score": 0.42
+          "score": 0.38
         },
         {
           "url": "/areas/kuna",
           "anchor": "Home Building in Kuna",
           "title": "Home Building in Kuna, Idaho",
           "type": "city",
-          "score": 0.42
+          "score": 0.38
         },
         {
           "url": "/services/design-build/meridian",
@@ -7389,13 +7965,6 @@
       "url": "/areas/middleton",
       "links": [
         {
-          "url": "/areas/caldwell",
-          "anchor": "Home Building in Caldwell",
-          "title": "Home Building in Caldwell, Idaho",
-          "type": "city",
-          "score": 0.373
-        },
-        {
           "url": "/services/design-build/middleton",
           "anchor": "Design-Build in Middleton",
           "title": "Design-Build in Middleton, Idaho",
@@ -7436,6 +8005,13 @@
           "title": "Home Additions in Middleton, Idaho",
           "type": "city-service",
           "score": 0.343
+        },
+        {
+          "url": "/services/adu/middleton",
+          "anchor": "ADUs & Guest Houses in Middleton",
+          "title": "ADUs & Guest Houses in Middleton, Idaho",
+          "type": "city-service",
+          "score": 0.339
         },
         {
           "url": "/services/energy-efficient-homes/middleton",
@@ -7495,18 +8071,18 @@
           "score": 0.343
         },
         {
+          "url": "/services/adu/nampa",
+          "anchor": "ADUs & Guest Houses in Nampa",
+          "title": "ADUs & Guest Houses in Nampa, Idaho",
+          "type": "city-service",
+          "score": 0.339
+        },
+        {
           "url": "/services/energy-efficient-homes/nampa",
           "anchor": "Energy-Efficient Homes in Nampa",
           "title": "Energy-Efficient Homes in Nampa, Idaho",
           "type": "city-service",
           "score": 0.339
-        },
-        {
-          "url": "/guides/nampa-home-building-guide",
-          "anchor": "Building a Home in Nampa",
-          "title": "Building a Home in Nampa",
-          "type": "guide",
-          "score": 0.336
         }
       ]
     },
@@ -7559,18 +8135,18 @@
           "score": 0.383
         },
         {
-          "url": "/areas/boise",
-          "anchor": "Home Building in Boise",
-          "title": "Home Building in Boise, Idaho",
-          "type": "city",
-          "score": 0.38
+          "url": "/services/adu/star",
+          "anchor": "ADUs & Guest Houses in Star",
+          "title": "ADUs & Guest Houses in Star, Idaho",
+          "type": "city-service",
+          "score": 0.379
         },
         {
-          "url": "/areas/kuna",
-          "anchor": "Home Building in Kuna",
-          "title": "Home Building in Kuna, Idaho",
-          "type": "city",
-          "score": 0.38
+          "url": "/services/energy-efficient-homes/star",
+          "anchor": "Energy-Efficient Homes in Star",
+          "title": "Energy-Efficient Homes in Star, Idaho",
+          "type": "city-service",
+          "score": 0.379
         }
       ]
     },
@@ -7673,25 +8249,11 @@
           "score": 999
         },
         {
-          "url": "/guides/eagle-home-building-guide",
-          "anchor": "Building a Home in Eagle",
-          "title": "Building a Home in Eagle",
+          "url": "/guides/nampa-home-building-guide",
+          "anchor": "Building a Home in Nampa",
+          "title": "Building a Home in Nampa",
           "type": "guide",
-          "score": 1.163
-        },
-        {
-          "url": "/blog/home-builder-red-flags",
-          "anchor": "Home Builder Red Flags",
-          "title": "Home Builder Red Flags",
-          "type": "blog",
-          "score": 0.065
-        },
-        {
-          "url": "/blog/fixed-price-vs-cost-plus",
-          "anchor": "Fixed Price vs Cost Plus for a New Home Build",
-          "title": "Fixed Price vs Cost Plus for a New Home Build",
-          "type": "blog",
-          "score": 0.058
+          "score": 1.171
         },
         {
           "url": "/blog/questions-to-ask-a-home-builder",
@@ -7699,6 +8261,20 @@
           "title": "Questions to Ask a Home Builder Before You Sign",
           "type": "blog",
           "score": 0.041
+        },
+        {
+          "url": "/blog/stages-of-building-a-house",
+          "anchor": "The Stages of Building a House, in Order",
+          "title": "The Stages of Building a House, in Order",
+          "type": "blog",
+          "score": 0.038
+        },
+        {
+          "url": "/blog/why-home-building-bids-vary",
+          "anchor": "Why Home Building Bids Vary So Much",
+          "title": "Why Home Building Bids Vary So Much",
+          "type": "blog",
+          "score": 0.028
         }
       ]
     },
@@ -7751,18 +8327,18 @@
           "score": 999
         },
         {
-          "url": "/blog/ada-vs-canyon-county-permit-timelines",
-          "anchor": "Ada vs Canyon County: What Differs When You Build",
-          "title": "Ada vs Canyon County: What Differs When You Build",
-          "type": "blog",
-          "score": 0.462
-        },
-        {
           "url": "/blog/first-meeting-with-a-home-builder",
           "anchor": "What Happens at Your First Meeting With a Builder",
           "title": "What Happens at Your First Meeting With a Builder",
           "type": "blog",
           "score": 0.432
+        },
+        {
+          "url": "/blog/ada-vs-canyon-county-permit-timelines",
+          "anchor": "Ada vs Canyon County: What Differs When You Build",
+          "title": "Ada vs Canyon County: What Differs When You Build",
+          "type": "blog",
+          "score": 0.422
         }
       ]
     },
@@ -7815,18 +8391,18 @@
           "score": 999
         },
         {
+          "url": "/blog/fixed-price-vs-cost-plus",
+          "anchor": "Fixed Price vs Cost Plus for a New Home Build",
+          "title": "Fixed Price vs Cost Plus for a New Home Build",
+          "type": "blog",
+          "score": -0.071
+        },
+        {
           "url": "/blog/ada-vs-canyon-county-permit-timelines",
           "anchor": "Ada vs Canyon County: What Differs When You Build",
           "title": "Ada vs Canyon County: What Differs When You Build",
           "type": "blog",
-          "score": -0.032
-        },
-        {
-          "url": "/blog/choosing-finishes-for-a-new-home",
-          "anchor": "Choosing Finishes for a New Home Without Blowing the Budget",
-          "title": "Choosing Finishes for a New Home Without Blowing the Budget",
-          "type": "blog",
-          "score": -0.069
+          "score": -0.072
         }
       ]
     },
@@ -7865,9 +8441,16 @@
           "score": 999
         },
         {
-          "url": "/guides/star-home-building-guide",
-          "anchor": "Building a Home in Star",
-          "title": "Building a Home in Star",
+          "url": "/guides/harris-ranch-home-building-guide",
+          "anchor": "Building in Harris Ranch",
+          "title": "Building in Harris Ranch",
+          "type": "guide",
+          "score": 1.152
+        },
+        {
+          "url": "/guides/eagle-home-building-guide",
+          "anchor": "Building a Home in Eagle",
+          "title": "Building a Home in Eagle",
           "type": "guide",
           "score": 1.136
         },
@@ -7877,13 +8460,6 @@
           "title": "How Construction Loans Work in Idaho",
           "type": "blog",
           "score": -0.042
-        },
-        {
-          "url": "/blog/why-home-building-bids-vary",
-          "anchor": "Why Home Building Bids Vary So Much",
-          "title": "Why Home Building Bids Vary So Much",
-          "type": "blog",
-          "score": -0.055
         },
         {
           "url": "/blog/home-builder-red-flags",
@@ -7947,7 +8523,7 @@
           "anchor": "Design-Build vs General Contractor for a New Home",
           "title": "Design-Build vs General Contractor for a New Home",
           "type": "blog",
-          "score": 0.589
+          "score": 0.549
         },
         {
           "url": "/blog/why-home-building-bids-vary",
@@ -8004,14 +8580,14 @@
           "anchor": "Building a Home You Can Age In",
           "title": "Building a Home You Can Age In",
           "type": "blog",
-          "score": 0.537
+          "score": 0.497
         },
         {
           "url": "/blog/multigenerational-home-design",
           "anchor": "Designing a Home for Multiple Generations",
           "title": "Designing a Home for Multiple Generations",
           "type": "blog",
-          "score": 0.482
+          "score": 0.442
         },
         {
           "url": "/blog/covered-outdoor-living-new-home",
@@ -8071,18 +8647,18 @@
           "score": -0.049
         },
         {
-          "url": "/blog/stages-of-building-a-house",
-          "anchor": "The Stages of Building a House, in Order",
-          "title": "The Stages of Building a House, in Order",
-          "type": "blog",
-          "score": -0.091
-        },
-        {
           "url": "/blog/construction-loan-basics-idaho",
           "anchor": "How Construction Loans Work in Idaho",
           "title": "How Construction Loans Work in Idaho",
           "type": "blog",
           "score": -0.094
+        },
+        {
+          "url": "/blog/how-long-does-it-take-to-build-a-house-boise",
+          "anchor": "How Long Does It Take to Build a House in Boise?",
+          "title": "How Long Does It Take to Build a House in Boise?",
+          "type": "blog",
+          "score": -0.108
         }
       ]
     },
@@ -8114,13 +8690,6 @@
           "score": 999
         },
         {
-          "url": "/guides/star-home-building-guide",
-          "anchor": "Building a Home in Star",
-          "title": "Building a Home in Star",
-          "type": "guide",
-          "score": 1.256
-        },
-        {
           "url": "/guides/nampa-home-building-guide",
           "anchor": "Building a Home in Nampa",
           "title": "Building a Home in Nampa",
@@ -8128,11 +8697,18 @@
           "score": 1.22
         },
         {
-          "url": "/guides/eagle-foothills-home-building-guide",
-          "anchor": "Building in the Eagle Foothills",
-          "title": "Building in the Eagle Foothills",
+          "url": "/guides/star-home-building-guide",
+          "anchor": "Building a Home in Star",
+          "title": "Building a Home in Star",
           "type": "guide",
-          "score": 1.204
+          "score": 1.216
+        },
+        {
+          "url": "/guides/middleton-home-building-guide",
+          "anchor": "Custom Home Building in Middleton",
+          "title": "Custom Home Building in Middleton",
+          "type": "guide",
+          "score": 1.177
         },
         {
           "url": "/guides/caldwell-home-building-guide",
@@ -8146,7 +8722,7 @@
           "anchor": "Home Additions in Eagle",
           "title": "Home Additions in Eagle, Idaho",
           "type": "city-service",
-          "score": 0.08
+          "score": 0.04
         }
       ]
     },
@@ -8199,18 +8775,18 @@
           "score": -0.039
         },
         {
-          "url": "/blog/how-long-does-it-take-to-build-a-house-boise",
-          "anchor": "How Long Does It Take to Build a House in Boise?",
-          "title": "How Long Does It Take to Build a House in Boise?",
+          "url": "/blog/stages-of-building-a-house",
+          "anchor": "The Stages of Building a House, in Order",
+          "title": "The Stages of Building a House, in Order",
           "type": "blog",
-          "score": -0.042
+          "score": -0.066
         },
         {
-          "url": "/blog/design-build-vs-general-contractor",
-          "anchor": "Design-Build vs General Contractor for a New Home",
-          "title": "Design-Build vs General Contractor for a New Home",
+          "url": "/blog/why-home-building-bids-vary",
+          "anchor": "Why Home Building Bids Vary So Much",
+          "title": "Why Home Building Bids Vary So Much",
           "type": "blog",
-          "score": -0.046
+          "score": -0.074
         }
       ]
     },
@@ -8260,21 +8836,21 @@
           "anchor": "Building Permits in Boise: What a New Home Needs",
           "title": "Building Permits in Boise: What a New Home Needs",
           "type": "blog",
-          "score": -0.035
+          "score": -0.075
         },
         {
-          "url": "/blog/questions-to-ask-a-home-builder",
-          "anchor": "Questions to Ask a Home Builder Before You Sign",
-          "title": "Questions to Ask a Home Builder Before You Sign",
+          "url": "/blog/home-builder-red-flags",
+          "anchor": "Home Builder Red Flags",
+          "title": "Home Builder Red Flags",
           "type": "blog",
-          "score": -0.064
+          "score": -0.079
         },
         {
-          "url": "/blog/stages-of-building-a-house",
-          "anchor": "The Stages of Building a House, in Order",
-          "title": "The Stages of Building a House, in Order",
+          "url": "/blog/what-drives-home-building-costs-boise",
+          "anchor": "What Actually Drives Home Building Costs in Boise",
+          "title": "What Actually Drives Home Building Costs in Boise",
           "type": "blog",
-          "score": -0.069
+          "score": -0.079
         }
       ]
     },
@@ -8306,18 +8882,18 @@
           "score": 999
         },
         {
-          "url": "/guides/middleton-home-building-guide",
-          "anchor": "Custom Home Building in Middleton",
-          "title": "Custom Home Building in Middleton",
-          "type": "guide",
-          "score": 1.184
-        },
-        {
           "url": "/guides/nampa-home-building-guide",
           "anchor": "Building a Home in Nampa",
           "title": "Building a Home in Nampa",
           "type": "guide",
           "score": 1.184
+        },
+        {
+          "url": "/guides/caldwell-home-building-guide",
+          "anchor": "Building a Home in Caldwell",
+          "title": "Building a Home in Caldwell",
+          "type": "guide",
+          "score": 1.182
         },
         {
           "url": "/guides/star-home-building-guide",
@@ -8334,11 +8910,11 @@
           "score": 0.074
         },
         {
-          "url": "/blog/aging-in-place-home-design",
-          "anchor": "Building a Home You Can Age In",
-          "title": "Building a Home You Can Age In",
+          "url": "/blog/construction-loan-basics-idaho",
+          "anchor": "How Construction Loans Work in Idaho",
+          "title": "How Construction Loans Work in Idaho",
           "type": "blog",
-          "score": -0.092
+          "score": -0.106
         }
       ]
     },
@@ -8370,16 +8946,16 @@
           "score": 999
         },
         {
+          "url": "/guides/eagle-home-building-guide",
+          "anchor": "Building a Home in Eagle",
+          "title": "Building a Home in Eagle",
+          "type": "guide",
+          "score": 1.149
+        },
+        {
           "url": "/guides/eagle-foothills-home-building-guide",
           "anchor": "Building in the Eagle Foothills",
           "title": "Building in the Eagle Foothills",
-          "type": "guide",
-          "score": 1.118
-        },
-        {
-          "url": "/guides/harris-ranch-home-building-guide",
-          "anchor": "Building in Harris Ranch",
-          "title": "Building in Harris Ranch",
           "type": "guide",
           "score": 1.118
         },
@@ -8434,9 +9010,9 @@
           "score": 999
         },
         {
-          "url": "/guides/eagle-home-building-guide",
-          "anchor": "Building a Home in Eagle",
-          "title": "Building a Home in Eagle",
+          "url": "/guides/star-home-building-guide",
+          "anchor": "Building a Home in Star",
+          "title": "Building a Home in Star",
           "type": "guide",
           "score": 1.177
         },
@@ -8455,11 +9031,11 @@
           "score": 1.149
         },
         {
-          "url": "/guides/caldwell-home-building-guide",
-          "anchor": "Building a Home in Caldwell",
-          "title": "Building a Home in Caldwell",
+          "url": "/guides/eagle-foothills-home-building-guide",
+          "anchor": "Building in the Eagle Foothills",
+          "title": "Building in the Eagle Foothills",
           "type": "guide",
-          "score": 1.146
+          "score": 1.108
         },
         {
           "url": "/services/home-plans-design/middleton",
@@ -8630,7 +9206,7 @@
           "anchor": "Building in the Eagle Foothills",
           "title": "Building in the Eagle Foothills",
           "type": "guide",
-          "score": 0.985
+          "score": 1.025
         },
         {
           "url": "/services/custom-home-builder/garden-city",
@@ -8644,21 +9220,85 @@
           "anchor": "Ada vs Canyon County: What Differs When You Build",
           "title": "Ada vs Canyon County: What Differs When You Build",
           "type": "blog",
-          "score": 0.005
+          "score": -0.035
         },
         {
-          "url": "/blog/build-vs-buy-boise",
-          "anchor": "Building vs Buying a Home in the Treasure Valley",
-          "title": "Building vs Buying a Home in the Treasure Valley",
+          "url": "/blog/home-builder-red-flags",
+          "anchor": "Home Builder Red Flags",
+          "title": "Home Builder Red Flags",
           "type": "blog",
-          "score": -0.069
+          "score": -0.105
         },
         {
-          "url": "/blog/how-long-does-it-take-to-build-a-house-boise",
-          "anchor": "How Long Does It Take to Build a House in Boise?",
-          "title": "How Long Does It Take to Build a House in Boise?",
+          "url": "/blog/what-drives-home-building-costs-boise",
+          "anchor": "What Actually Drives Home Building Costs in Boise",
+          "title": "What Actually Drives Home Building Costs in Boise",
           "type": "blog",
-          "score": -0.069
+          "score": -0.105
+        }
+      ]
+    },
+    "/services/adu": {
+      "type": "service",
+      "title": "ADUs & Guest Houses in Boise & Treasure Valley, Idaho",
+      "anchor": "ADUs & Guest Houses",
+      "url": "/services/adu",
+      "links": [
+        {
+          "url": "/services/adu/nampa",
+          "anchor": "ADUs & Guest Houses in Nampa",
+          "title": "ADUs & Guest Houses in Nampa, Idaho",
+          "type": "city-service",
+          "score": 1.838
+        },
+        {
+          "url": "/services/adu/garden-city",
+          "anchor": "ADUs & Guest Houses in Garden City",
+          "title": "ADUs & Guest Houses in Garden City, Idaho",
+          "type": "city-service",
+          "score": 1.782
+        },
+        {
+          "url": "/services/adu/caldwell",
+          "anchor": "ADUs & Guest Houses in Caldwell",
+          "title": "ADUs & Guest Houses in Caldwell, Idaho",
+          "type": "city-service",
+          "score": 1.718
+        },
+        {
+          "url": "/services/adu/eagle",
+          "anchor": "ADUs & Guest Houses in Eagle",
+          "title": "ADUs & Guest Houses in Eagle, Idaho",
+          "type": "city-service",
+          "score": 1.718
+        },
+        {
+          "url": "/services/adu/meridian",
+          "anchor": "ADUs & Guest Houses in Meridian",
+          "title": "ADUs & Guest Houses in Meridian, Idaho",
+          "type": "city-service",
+          "score": 1.718
+        },
+        {
+          "url": "/services/adu/star",
+          "anchor": "ADUs & Guest Houses in Star",
+          "title": "ADUs & Guest Houses in Star, Idaho",
+          "type": "city-service",
+          "score": 1.718
+        },
+        {
+          "url": "/services/adu/boise",
+          "anchor": "ADUs & Guest Houses in Boise",
+          "title": "ADUs & Guest Houses in Boise, Idaho",
+          "type": "city-service",
+          "score": 1.7
+        },
+        {
+          "url": "/services/adu/kuna",
+          "anchor": "ADUs & Guest Houses in Kuna",
+          "title": "ADUs & Guest Houses in Kuna, Idaho",
+          "type": "city-service",
+          "score": 1.7
         }
       ]
     },
@@ -8747,18 +9387,18 @@
           "score": 1.746
         },
         {
+          "url": "/services/custom-home-builder/boise",
+          "anchor": "Custom Home Building in Boise",
+          "title": "Custom Home Building in Boise, Idaho",
+          "type": "city-service",
+          "score": 1.7
+        },
+        {
           "url": "/services/custom-home-builder/kuna",
           "anchor": "Custom Home Building in Kuna",
           "title": "Custom Home Building in Kuna, Idaho",
           "type": "city-service",
           "score": 1.7
-        },
-        {
-          "url": "/services/custom-home-builder/boise",
-          "anchor": "Custom Home Building in Boise",
-          "title": "Custom Home Building in Boise, Idaho",
-          "type": "city-service",
-          "score": 1.66
         },
         {
           "url": "/services/custom-home-builder/caldwell",
@@ -8861,25 +9501,18 @@
       "url": "/services/energy-efficient-homes",
       "links": [
         {
+          "url": "/services/energy-efficient-homes/middleton",
+          "anchor": "Energy-Efficient Homes in Middleton",
+          "title": "Energy-Efficient Homes in Middleton, Idaho",
+          "type": "city-service",
+          "score": 1.838
+        },
+        {
           "url": "/services/energy-efficient-homes/nampa",
           "anchor": "Energy-Efficient Homes in Nampa",
           "title": "Energy-Efficient Homes in Nampa, Idaho",
           "type": "city-service",
           "score": 1.838
-        },
-        {
-          "url": "/services/energy-efficient-homes/garden-city",
-          "anchor": "Energy-Efficient Homes in Garden City",
-          "title": "Energy-Efficient Homes in Garden City, Idaho",
-          "type": "city-service",
-          "score": 1.782
-        },
-        {
-          "url": "/services/energy-efficient-homes/star",
-          "anchor": "Energy-Efficient Homes in Star",
-          "title": "Energy-Efficient Homes in Star, Idaho",
-          "type": "city-service",
-          "score": 1.758
         },
         {
           "url": "/services/energy-efficient-homes/caldwell",
@@ -8903,16 +9536,23 @@
           "score": 1.718
         },
         {
+          "url": "/services/energy-efficient-homes/star",
+          "anchor": "Energy-Efficient Homes in Star",
+          "title": "Energy-Efficient Homes in Star, Idaho",
+          "type": "city-service",
+          "score": 1.718
+        },
+        {
+          "url": "/services/energy-efficient-homes/garden-city",
+          "anchor": "Energy-Efficient Homes in Garden City",
+          "title": "Energy-Efficient Homes in Garden City, Idaho",
+          "type": "city-service",
+          "score": 1.702
+        },
+        {
           "url": "/services/energy-efficient-homes/boise",
           "anchor": "Energy-Efficient Homes in Boise",
           "title": "Energy-Efficient Homes in Boise, Idaho",
-          "type": "city-service",
-          "score": 1.7
-        },
-        {
-          "url": "/services/energy-efficient-homes/kuna",
-          "anchor": "Energy-Efficient Homes in Kuna",
-          "title": "Energy-Efficient Homes in Kuna, Idaho",
           "type": "city-service",
           "score": 1.7
         }
@@ -8925,13 +9565,6 @@
       "url": "/services/home-additions",
       "links": [
         {
-          "url": "/services/home-additions/nampa",
-          "anchor": "Home Additions in Nampa",
-          "title": "Home Additions in Nampa, Idaho",
-          "type": "city-service",
-          "score": 1.833
-        },
-        {
           "url": "/services/home-additions/garden-city",
           "anchor": "Home Additions in Garden City",
           "title": "Home Additions in Garden City, Idaho",
@@ -8939,11 +9572,11 @@
           "score": 1.775
         },
         {
-          "url": "/services/home-additions/caldwell",
-          "anchor": "Home Additions in Caldwell",
-          "title": "Home Additions in Caldwell, Idaho",
+          "url": "/services/home-additions/kuna",
+          "anchor": "Home Additions in Kuna",
+          "title": "Home Additions in Kuna, Idaho",
           "type": "city-service",
-          "score": 1.713
+          "score": 1.74
         },
         {
           "url": "/services/home-additions/star",
@@ -8953,16 +9586,9 @@
           "score": 1.713
         },
         {
-          "url": "/services/home-additions/kuna",
-          "anchor": "Home Additions in Kuna",
-          "title": "Home Additions in Kuna, Idaho",
-          "type": "city-service",
-          "score": 1.7
-        },
-        {
-          "url": "/services/home-additions/eagle",
-          "anchor": "Home Additions in Eagle",
-          "title": "Home Additions in Eagle, Idaho",
+          "url": "/services/home-additions/caldwell",
+          "anchor": "Home Additions in Caldwell",
+          "title": "Home Additions in Caldwell, Idaho",
           "type": "city-service",
           "score": 1.673
         },
@@ -8979,6 +9605,20 @@
           "title": "Home Additions in Middleton, Idaho",
           "type": "city-service",
           "score": 1.673
+        },
+        {
+          "url": "/services/home-additions/nampa",
+          "anchor": "Home Additions in Nampa",
+          "title": "Home Additions in Nampa, Idaho",
+          "type": "city-service",
+          "score": 1.673
+        },
+        {
+          "url": "/blog/covered-outdoor-living-new-home",
+          "anchor": "Designing Covered Outdoor Living Into a New Home",
+          "title": "Designing Covered Outdoor Living Into a New Home",
+          "type": "blog",
+          "score": -0.297
         }
       ]
     },
@@ -9081,13 +9721,6 @@
           "score": 1.7
         },
         {
-          "url": "/services/lot-evaluation/caldwell",
-          "anchor": "Lot Evaluation & Feasibility in Caldwell",
-          "title": "Lot Evaluation & Feasibility in Caldwell, Idaho",
-          "type": "city-service",
-          "score": 1.697
-        },
-        {
           "url": "/services/lot-evaluation/star",
           "anchor": "Lot Evaluation & Feasibility in Star",
           "title": "Lot Evaluation & Feasibility in Star, Idaho",
@@ -9100,6 +9733,13 @@
           "title": "Lot Evaluation & Feasibility in Garden City, Idaho",
           "type": "city-service",
           "score": 1.666
+        },
+        {
+          "url": "/services/lot-evaluation/caldwell",
+          "anchor": "Lot Evaluation & Feasibility in Caldwell",
+          "title": "Lot Evaluation & Feasibility in Caldwell, Idaho",
+          "type": "city-service",
+          "score": 1.657
         },
         {
           "url": "/services/lot-evaluation/eagle",
@@ -9234,47 +9874,47 @@
           "anchor": "Shop Homes and Barndominiums in Idaho",
           "title": "Shop Homes and Barndominiums in Idaho",
           "type": "blog",
-          "score": -0.307
+          "score": -0.347
         }
       ]
     }
   },
   "incoming": {
-    "/blog/ada-vs-canyon-county-permit-timelines": 8,
-    "/blog/adu-cost-boise": 7,
-    "/blog/aging-in-place-home-design": 9,
-    "/blog/allowances-explained-new-home": 9,
-    "/blog/boise-building-permit-guide": 9,
+    "/blog/ada-vs-canyon-county-permit-timelines": 10,
+    "/blog/adu-cost-boise": 6,
+    "/blog/aging-in-place-home-design": 7,
+    "/blog/allowances-explained-new-home": 7,
+    "/blog/boise-building-permit-guide": 11,
     "/blog/build-vs-buy-boise": 6,
     "/blog/building-in-the-boise-foothills": 8,
     "/blog/choosing-finishes-for-a-new-home": 9,
-    "/blog/construction-loan-basics-idaho": 7,
-    "/blog/cost-to-build-a-house-boise": 10,
-    "/blog/covered-outdoor-living-new-home": 9,
-    "/blog/custom-home-cost-per-square-foot-boise": 9,
+    "/blog/construction-loan-basics-idaho": 9,
+    "/blog/cost-to-build-a-house-boise": 11,
+    "/blog/covered-outdoor-living-new-home": 11,
+    "/blog/custom-home-cost-per-square-foot-boise": 10,
     "/blog/custom-home-floor-plan-ideas-boise": 9,
-    "/blog/design-build-vs-general-contractor": 10,
-    "/blog/energy-efficient-home-building-boise": 9,
+    "/blog/design-build-vs-general-contractor": 9,
+    "/blog/energy-efficient-home-building-boise": 8,
     "/blog/first-meeting-with-a-home-builder": 6,
-    "/blog/fixed-price-vs-cost-plus": 8,
-    "/blog/home-builder-red-flags": 9,
-    "/blog/how-long-does-it-take-to-build-a-house-boise": 11,
-    "/blog/how-to-budget-a-new-home-boise": 9,
-    "/blog/how-to-buy-a-buildable-lot-boise": 7,
+    "/blog/fixed-price-vs-cost-plus": 9,
+    "/blog/home-builder-red-flags": 11,
+    "/blog/how-long-does-it-take-to-build-a-house-boise": 9,
+    "/blog/how-to-budget-a-new-home-boise": 8,
+    "/blog/how-to-buy-a-buildable-lot-boise": 10,
     "/blog/how-to-compare-builder-bids": 8,
     "/blog/impact-fees-and-utility-connections": 9,
     "/blog/lot-evaluation-checklist": 10,
     "/blog/luxury-home-building-cost-boise": 8,
     "/blog/multigenerational-home-design": 8,
-    "/blog/new-home-walkthrough-and-warranty": 10,
-    "/blog/production-vs-custom-home-builder": 8,
-    "/blog/questions-to-ask-a-home-builder": 9,
-    "/blog/shop-homes-and-barndominiums-idaho": 15,
-    "/blog/single-story-vs-two-story-home": 8,
+    "/blog/new-home-walkthrough-and-warranty": 11,
+    "/blog/production-vs-custom-home-builder": 7,
+    "/blog/questions-to-ask-a-home-builder": 8,
+    "/blog/shop-homes-and-barndominiums-idaho": 16,
+    "/blog/single-story-vs-two-story-home": 11,
     "/blog/stages-of-building-a-house": 10,
-    "/blog/well-and-septic-cost-idaho": 8,
-    "/blog/what-drives-home-building-costs-boise": 9,
-    "/blog/why-home-building-bids-vary": 8,
+    "/blog/well-and-septic-cost-idaho": 10,
+    "/blog/what-drives-home-building-costs-boise": 11,
+    "/blog/why-home-building-bids-vary": 10,
     "/guides/boise-home-building-cost-guide": 18,
     "/guides/boise-home-building-process-guide": 10,
     "/guides/buying-land-to-build-boise": 18,
@@ -9297,20 +9937,21 @@
     "/services/build-on-your-lot": 18,
     "/services/design-build": 18,
     "/services/home-plans-design": 18,
-    "/services/home-additions": 17,
+    "/services/home-additions": 18,
+    "/services/adu": 18,
     "/services/lot-evaluation": 18,
-    "/services/shop-homes-barndominiums": 18,
+    "/services/shop-homes-barndominiums": 17,
     "/services/energy-efficient-homes": 18,
     "/areas/boise": 17,
-    "/areas/meridian": 12,
-    "/areas/eagle": 13,
+    "/areas/meridian": 13,
+    "/areas/eagle": 14,
     "/areas/nampa": 11,
     "/areas/kuna": 15,
     "/areas/star": 12,
     "/areas/middleton": 11,
     "/areas/caldwell": 11,
-    "/areas/garden-city": 9,
-    "/services/custom-home-builder/boise": 7,
+    "/areas/garden-city": 10,
+    "/services/custom-home-builder/boise": 6,
     "/services/custom-home-builder/meridian": 5,
     "/services/custom-home-builder/eagle": 5,
     "/services/custom-home-builder/nampa": 5,
@@ -9359,11 +10000,20 @@
     "/services/home-additions/meridian": 5,
     "/services/home-additions/eagle": 5,
     "/services/home-additions/nampa": 5,
-    "/services/home-additions/kuna": 6,
+    "/services/home-additions/kuna": 5,
     "/services/home-additions/star": 5,
     "/services/home-additions/middleton": 5,
     "/services/home-additions/caldwell": 5,
     "/services/home-additions/garden-city": 5,
+    "/services/adu/boise": 6,
+    "/services/adu/meridian": 5,
+    "/services/adu/eagle": 5,
+    "/services/adu/nampa": 5,
+    "/services/adu/kuna": 6,
+    "/services/adu/star": 5,
+    "/services/adu/middleton": 5,
+    "/services/adu/caldwell": 5,
+    "/services/adu/garden-city": 5,
     "/services/lot-evaluation/boise": 6,
     "/services/lot-evaluation/meridian": 5,
     "/services/lot-evaluation/eagle": 5,
@@ -9386,7 +10036,7 @@
     "/services/energy-efficient-homes/meridian": 5,
     "/services/energy-efficient-homes/eagle": 5,
     "/services/energy-efficient-homes/nampa": 5,
-    "/services/energy-efficient-homes/kuna": 6,
+    "/services/energy-efficient-homes/kuna": 5,
     "/services/energy-efficient-homes/star": 5,
     "/services/energy-efficient-homes/middleton": 5,
     "/services/energy-efficient-homes/caldwell": 5,
