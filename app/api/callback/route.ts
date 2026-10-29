@@ -1,3 +1,4 @@
+import { logAuthFailure } from "@/lib/authDiagnostics";
 import { NextRequest, NextResponse } from "next/server";
 import { getSession, getOidcConfig, getExternalUrl, upsertUserFromClaims } from "@/lib/auth";
 import * as client from "openid-client";
@@ -45,14 +46,12 @@ export async function GET(request: NextRequest) {
     try {
       await upsertUserFromClaims(session.claims);
     } catch (dbError) {
-      console.error("Failed to upsert user during callback (continuing login):", dbError);
+      logAuthFailure("callback-user", dbError);
     }
 
     return NextResponse.redirect(getExternalUrl(request, "/api/post-login"));
   } catch (error) {
-    console.error("Callback error:", error);
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error("Callback error details:", errorMessage);
+    logAuthFailure("callback", error);
     return NextResponse.redirect(getExternalUrl(request, "/?login_error=callback_failed"));
   }
 }

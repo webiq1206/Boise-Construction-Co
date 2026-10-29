@@ -143,7 +143,7 @@ export async function upsertUserFromClaims(claims: SessionData["claims"]) {
 
     if (existing.role !== designatedRole && designatedRole === "admin") {
       updateData.role = "admin";
-      console.log(`[AUTH] Upgrading user ${claims.sub} (${claims.email}) from ${existing.role} to admin`);
+      console.info("[auth] Existing administrator designation applied");
     }
 
     await db.update(users).set(updateData).where(eq(users.id, claims.sub));
@@ -159,7 +159,7 @@ export async function upsertUserFromClaims(claims: SessionData["claims"]) {
     role: designatedRole,
   });
 
-  console.log(`[AUTH] Created new user ${claims.sub} (${claims.email}) with role: ${designatedRole}`);
+  console.info("[auth] Site account created");
   return getUserFromDb(claims.sub);
 }
 
