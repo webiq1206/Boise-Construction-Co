@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import type { ButtonProps } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -17,7 +16,7 @@ interface NavEstimateButtonProps extends Omit<ButtonProps, "onClick" | "asChild"
 }
 
 /**
- * Header and mobile-bar estimate entry: homepage scrolls to #calculator;
+ * Header and mobile-bar quote entry uses the current public request wizard;
  * every other page goes to the dedicated /estimate page.
  */
 export function NavEstimateButton({
@@ -28,9 +27,7 @@ export function NavEstimateButton({
   trackingLocation,
   ...props
 }: NavEstimateButtonProps) {
-  const pathname = usePathname();
-  const onHome = pathname === "/";
-  const href = onHome ? "/#calculator" : "/estimate";
+  const href = "/estimate";
   const { variant: _v, size: _s, ...linkAttrs } = props as Record<string, unknown>;
 
   const handleClick = () => {
