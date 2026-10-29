@@ -514,7 +514,7 @@
     "tests/p5-intake-pdf.test.ts": "cb331ce30787d6df4154885531aaa05c2dec4e29e51cea3315392636bb0d1758",
     "lib/leadAttribution.ts": "aec4191c4984d381ede0fbb585bd29cc1b4b7eeb4270a553a377b0074a4eee35",
     "lib/leadAttributionBrowser.ts": "06514c0dd38cf186ffbec763c2ab47df1085e3991a1e7a7ad73ec657e80f4780",
-    "scripts/lib/quoteEntry.mjs": "ecd978be5a45e0472de4f352fbc20c7ae99f0b635270d959769d9d77e1665993",
+    "scripts/lib/quoteEntry.mjs": "7c998f9e2633e3da0c9a96829455e7de87a9a2e734a64eec4b4d213ee574d915",
     "scripts/lib/navigationEntry.mjs": "570c630761ee2ceb966c3894650ae68b54e2349aeb7f9b47b4aa5fa82b8ece3e",
     "tests/p5-navigation-entry.test.mjs": "e5565b108ca00d4aa9b3571f1d0fcb4530326a3acc6ce6ef487508a195753b12"
   },
@@ -648,6 +648,18 @@
         }
       ],
       "note": "Only listed verification files synchronized; other files and provenance retained."
+    },
+    {
+      "source": "p5-home-co",
+      "commit": "9d08d955cf40b9cfb781edba2b11c24df15b051d",
+      "files": [
+        {
+          "file": "scripts/lib/quoteEntry.mjs",
+          "before": "ecd978be5a45e0472de4f352fbc20c7ae99f0b635270d959769d9d77e1665993",
+          "after": "7c998f9e2633e3da0c9a96829455e7de87a9a2e734a64eec4b4d213ee574d915"
+        }
+      ],
+      "note": "Only explicitly listed files synchronized; other files and provenance retained. Runtime scope is restricted to mobile-action and route-presentation compatibility."
     }
   ]
 }
