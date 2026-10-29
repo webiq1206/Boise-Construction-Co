@@ -47,3 +47,8 @@ scripts/brand/preview/
 
 # Current Construction quote wizard browser contract.
 !/scripts/construction-quote-browser.mjs
+
+# Canonical verification entry helpers, selectively synchronized.
+!/scripts/lib/
+!/scripts/lib/quoteEntry.mjs
+!/scripts/lib/navigationEntry.mjs

@@ -32,7 +32,7 @@ for(const width of [320,390,430,768,1024,1440,1920])for(const landOwnership of [
   return route.fulfill({status:404});
  });
  try{
-  await page.goto(`${base}/estimate`);const est=page.locator('[data-p5-estimator]');
+  await page.goto(`${base}/estimate/scope`);const est=page.locator('[data-p5-estimator]');
   await est.getByLabel('Tell us about your project',{exact:true}).fill('Synthetic new home: 2400 square feet, standard finishes. Land ownership: '+landOwnership);
   await est.getByRole('button',{name:'Send message',exact:true}).click();
   // Construction asks its build questions and the optional location and timing questions before
