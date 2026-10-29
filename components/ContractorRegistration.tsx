@@ -1,3 +1,6 @@
+"use client";
+
+import { useLayoutEffect, useRef } from "react";
 import {
   CONTRACTOR_LICENSE_SEARCH_URL,
   CONTRACTOR_REGISTRATION_LABEL,
@@ -23,8 +26,25 @@ export function ContractorRegistrationLink() {
 
 /** Plain text for /estimate. No outbound link on the funnel. */
 export function ContractorRegistrationPlain() {
+  const ref = useRef<HTMLParagraphElement>(null);
+  useLayoutEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const root = document.documentElement;
+    const property = "--contractor-registration-height";
+    const previous = root.style.getPropertyValue(property);
+    const measure = () => root.style.setProperty(property, `${element.getBoundingClientRect().height}px`);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => {
+      observer.disconnect();
+      if (previous) root.style.setProperty(property, previous);
+      else root.style.removeProperty(property);
+    };
+  }, []);
   return (
-    <p className={styles.plain} data-testid="contractor-registration">
+    <p ref={ref} className={styles.plain} data-testid="contractor-registration">
       {CONTRACTOR_REGISTRATION_LABEL}
     </p>
   );

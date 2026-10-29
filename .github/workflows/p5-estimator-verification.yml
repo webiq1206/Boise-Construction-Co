@@ -56,6 +56,8 @@ jobs:
           P5_TEST_BASE_URL=http://127.0.0.1:5000 P5_TEST_BROWSER=webkit node scripts/p5-exit-browser.mjs
           node scripts/p5-admin-pricing-browser.mjs
           node scripts/p5-construction-optional-address.mjs
+          node scripts/construction-quote-browser.mjs
+          P5_TEST_BROWSER=webkit node scripts/construction-quote-browser.mjs
       - name: Bound complete evidence without truncation
         id: branding_evidence
         if: always()

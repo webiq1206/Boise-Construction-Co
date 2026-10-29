@@ -44,3 +44,6 @@ scripts/brand/preview/
 
 # Private local free-growth working state and receipts
 /.backlink-state/
+
+# Current Construction quote wizard browser contract.
+!/scripts/construction-quote-browser.mjs

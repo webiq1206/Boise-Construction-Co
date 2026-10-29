@@ -91,7 +91,9 @@ export function AppFrame({
       data-keyboard-inset={keyboardInset > 0 ? String(keyboardInset) : undefined}
       style={
         {
-          bottom: keyboardInset > 0 ? keyboardInset : 0,
+          // Keep the registration visible without covering Continue. Its measured
+          // height also accounts for wrapping, zoom and the safe-area inset.
+          bottom: `max(${keyboardInset}px, var(--contractor-registration-height, 0px))`,
           ["--ew-keyboard-inset"]: `${keyboardInset}px`,
         } as CSSProperties
       }
