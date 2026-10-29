@@ -150,8 +150,11 @@ test('the root layout installs the Clarity mask before the Clarity tag', () => {
 });
 
 test('the consultation success screen and assistant transcript are masked', () => {
-  const consult = readFileSync(new URL('../components/ConsultationForm.tsx', import.meta.url), 'utf8');
+  const entry = readFileSync(new URL('../components/ConsultationForm.tsx', import.meta.url), 'utf8');
+  assert.match(entry, /export\s*\{\s*QuoteRequestWizard as ConsultationForm,\s*QuoteRequestWizard\s*\}\s*from\s*["']\.\/QuoteRequestWizard["']/);
+  const consult = readFileSync(new URL('../components/QuoteRequestWizard.tsx', import.meta.url), 'utf8');
   const successAt = consult.indexOf('data-testid="consultation-success"');
+  assert.ok(successAt >= 0, 'the active wizard exposes its consultation success screen');
   assert.match(consult.slice(successAt, successAt + 120), /data-clarity-mask="True"/);
   const assistant = readFileSync(new URL('../components/assistant/AssistantWidget.tsx', import.meta.url), 'utf8');
   const logAt = assistant.indexOf('role="log"');
