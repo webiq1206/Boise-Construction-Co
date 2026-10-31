@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { GRAIN_URL } from '@/lib/grain';
 import { contentImageAlt } from '@/shared/imageAlts';
 import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
+import { hasPlanningFigure } from '@/shared/contentData';
 import type { GalleryProject } from '@/shared/galleryData';
 import type { FAQItem } from '@/shared/seoContent';
 import { ArrowRight,ChevronRight,Star } from 'lucide-react';
@@ -267,18 +268,23 @@ export function LandingPageTemplate({
               <a href={consultationHref ?? "/#consult"}>{CTA_SECONDARY}</a>
             </Button>
           </div>
-          {planningFrom && (
+          {planningFrom && hasPlanningFigure(planningFrom) && (
             <p className="mt-8 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-inverse-foreground/80">
               <span className="ed-eyebrow !mb-0" style={{ color: 'rgb(255 255 255 / 0.72)' }}>Planning from</span>
               <span className="brc-display-num text-inverse-foreground text-[1.5rem] leading-none">{planningFrom}</span>
               <span className="ed-small text-inverse-foreground/70">Your exact range is confirmed at the free in-home visit</span>
             </p>
           )}
+          {/* No figure (additions, ADUs): the sentence stands alone, never
+              "Planning from Priced after an in-home review". */}
+          {planningFrom && !hasPlanningFigure(planningFrom) && (
+            <p className="mt-8 ed-small text-inverse-foreground/80">{planningFrom}</p>
+          )}
         </InteriorHero>
 {/* The scope list is this section's content. Area pages pass none, which
           used to leave the heading alone beside the sticky aside with an empty
           column, so the section only renders when there is a list to show. */}
-      {inclusions&&inclusions.length>0&&<div className="interior-detail-body"><div><p className="interior-eyebrow">A CLEAR SCOPE</p><h2>Plan the details.<br/><em>Know the next step.</em></h2><ul className="interior-scope-list">{inclusions.map((item,i)=><li key={item}><span>{String(i+1).padStart(2,'0')}</span>{item}</li>)}</ul></div><InteriorProjectAside>{timeline&&<p className="ed-body mt-6">{timeline}</p>}</InteriorProjectAside></div>}
+      {inclusions&&inclusions.length>0&&<div className="interior-detail-body"><div><p className="interior-eyebrow">A CLEAR SCOPE</p><p className="interior-statement">Plan the details.<br/><em>Know the next step.</em></p><ul className="interior-scope-list">{inclusions.map((item,i)=><li key={item}><span>{String(i+1).padStart(2,'0')}</span>{item}</li>)}</ul></div><InteriorProjectAside>{timeline&&<p className="ed-body mt-6">{timeline}</p>}</InteriorProjectAside></div>}
 
       {/* ─── Cost and timeline expectation ───
           Cost guidance follows the concise scope and estimate sidebar. */}

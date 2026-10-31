@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/marketing/Section";
 import { Button } from "@/components/ui/button";
-import { SERVICES } from "@/shared/contentData";
+import { SERVICES, hasPlanningFigure } from "@/shared/contentData";
 import { servicePath } from "@/lib/seo-routes";
 import { CTA_SECONDARY } from "@/shared/ctaCopy";
 import { getServiceBackground } from "@/shared/serviceBackgrounds";
@@ -80,7 +80,7 @@ export function ServicesGrid() {
                 <h3 className="ed-h2-sm">{lead.name}</h3>
                 <p className="ed-body mt-5">{lead.shortDescription}</p>
                 <p className="ed-small mt-7 flex items-baseline gap-3">
-                  <span className="uppercase tracking-[0.16em]">Planning from</span>
+                  {hasPlanningFigure(lead.planningFrom) && <span className="uppercase tracking-[0.16em]">Planning from</span>}
                   <span
                     className="brc-display-num text-[1.75rem] leading-none"
                     style={{ color: "var(--ed-ink)" }}
@@ -113,7 +113,7 @@ export function ServicesGrid() {
                 </h3>
                 <p className="ed-body max-w-none">{service.shortDescription}</p>
                 <p className="ed-small flex items-baseline gap-2 whitespace-nowrap">
-                  <span className="uppercase tracking-[0.16em]">From</span>
+                  {hasPlanningFigure(service.planningFrom) && <span className="uppercase tracking-[0.16em]">From</span>}
                   <span
                     className="brc-display-num text-[1.25rem] leading-none"
                     style={{ color: "var(--ed-ink)" }}

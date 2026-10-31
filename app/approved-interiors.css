@@ -338,12 +338,12 @@
   top:112px;
   align-self:start
 }
-.interior-project-aside h2 {
+.interior-project-aside :is(h2,.interior-statement) {
   font-size:43px;
   line-height:1.05;
   margin:20px 0
 }
-.interior-project-aside>p:not(.interior-eyebrow) {
+.interior-project-aside>p:not(.interior-eyebrow):not(.interior-statement) {
   font-size:16px;
   line-height:1.8;
   color:#62645f;
@@ -366,7 +366,7 @@
 .interior-detail-body>div {
   min-width:0
 }
-.interior-detail-body h2 {
+.interior-detail-body :is(h2,.interior-statement) {
   font-size:clamp(34px,3.4vw,48px);
   margin:0 0 25px
 }
@@ -800,4 +800,20 @@
 }
 .approved-interior .interior-hero-image--people .interior-hero-image-label {
   position:absolute
+}
+
+/* Display statements that are not section headings. "Plan the details" and
+   "Start with what you know" sat as H2s above the topical content on every
+   landing page; they keep the H2 look but leave the document outline. */
+:where(.approved-interior) .interior-statement {
+  font-family:var(--font-cormorant),Georgia,serif;
+  font-weight:300;
+  letter-spacing:-.035em;
+  line-height:1.08;
+  text-wrap:balance;
+  color:hsl(var(--heading, var(--foreground)))
+}
+:where(.approved-interior) .interior-statement em {
+  font-style:normal;
+  color:var(--audit-accent-ink, var(--approved-accent-ink))
 }

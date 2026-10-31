@@ -36,3 +36,7 @@
    chat launcher that sits in the bottom right. */
 .approved-shell .f-hero .f-hero-imagery{display:inline-block;margin-top:14px;padding:4px 8px;border-radius:2px;background:rgb(28 31 30 / .72);color:#fbfaf6;font-size:13px;line-height:1.4;letter-spacing:0}
 @media(min-width:701px){.approved-shell .f-hero .f-hero-imagery{position:absolute;left:calc((100% - min(1260px, 88%)) / 2);bottom:16px;margin-top:0;z-index:1}}
+/* Homepage hero: "A P5 Home Co company" in the eyebrow, a followed link to the parent. Paper text, not the accent, so it stays legible at eyebrow size. */
+.approved-shell .f-hero .f-hero-family{white-space:nowrap}
+.approved-shell .f-hero .f-hero-family a{color:inherit;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.approved-shell .f-hero .f-hero-family a:hover{text-decoration-thickness:2px}
