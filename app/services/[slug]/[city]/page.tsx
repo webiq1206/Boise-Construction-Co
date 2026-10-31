@@ -10,7 +10,7 @@ landingServiceSchema,
 } from '@/lib/landing-schema';
 import { buildPageMetadata,isCityServiceNoindex } from '@/lib/page-metadata';
 import { generateSpeakableSchema } from '@/lib/schema';
-import { CITY_SEO_DATA,serviceNameInSentence } from '@/lib/seo';
+import { CITY_SEO_DATA,SERVICE_CITY_H1_NAMES,serviceNameInSentence } from '@/lib/seo';
 import {
 cityServicePath,
 getAllCityServiceParams,
@@ -24,6 +24,7 @@ import {
 getCityServiceFaqs,
 getCityServiceIntro,
 getCityServiceSections,
+getScopeSplitSection,
 SERVICE_SEO_CONTENT,
 } from '@/shared/seoContent';
 import { notFound } from 'next/navigation';
@@ -72,11 +73,14 @@ export default async function CityServicePage(
     : undefined;
 
   const overview = getCityServiceIntro(content, city, localFact);
-  const h1 = `${service.name} in ${city.name}, Idaho`;
+  const h1 = `${SERVICE_CITY_H1_NAMES[service.name] ?? service.name} in ${city.name}, Idaho`;
   const faqs = getCityServiceFaqs(content, city);
   const localNote = `For ${serviceNameInSentence(content.name)} in ${city.name}, confirm the property jurisdiction and scope before applying. City addresses and unincorporated county parcels may use different building departments. Confirm required building and trade permits, inspections and review times for the actual address.`;
   const images = getCityServiceImageSet(service.slug, city.slug);
-  const sections = getCityServiceSections(content, city, seo);
+  const scopeSplit = getScopeSplitSection(service.slug, city.name);
+  const sections = scopeSplit
+    ? [scopeSplit, ...getCityServiceSections(content, city, seo)]
+    : getCityServiceSections(content, city, seo);
 
   // Concept-home imagery only. Written testimonials stay hidden until we have
   // genuine, verified reviews (no seeded quotes or star ratings).

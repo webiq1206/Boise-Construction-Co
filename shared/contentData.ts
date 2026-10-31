@@ -73,13 +73,13 @@ export const SERVICES: ServiceData[] = [
   {
     slug: 'home-additions',
     name: 'Home Additions',
-    shortDescription: 'Useful new space added to the home you already live in, planned around the structure, utilities, and daily life already there.',
+    shortDescription: 'New footprint or a second story added to the home you already live in, planned around the structure, utilities, and daily life already there.',
     planningFrom: 'Priced after an in-home review',
   },
   {
     slug: 'adu',
     name: 'ADUs & Guest Houses',
-    shortDescription: 'Accessory dwellings and guest houses on the lot you already own, planned around setbacks, utilities, and how you will use the space.',
+    shortDescription: 'New detached accessory dwellings and guest houses on the lot you already own, planned around setbacks, utilities, and how you will use the space.',
     planningFrom: 'Priced after a site review',
   },
   {
@@ -121,6 +121,20 @@ export const CITIES: CityData[] = [
 ];
 
 export const TREASURE_VALLEY_CITIES = CITIES.map((c) => c.name).join(', ');
+
+/**
+ * True when planningFrom is a figure ("$525k", "$950") rather than a sentence
+ * such as "Priced after an in-home review". Only a figure takes the
+ * "Planning from" label; a sentence reads on its own.
+ */
+export function hasPlanningFigure(planningFrom: string): boolean {
+  return /^\$/.test(planningFrom.trim());
+}
+
+/** "Planning from $525k", or the sentence alone when there is no figure. */
+export function planningLabel(planningFrom: string): string {
+  return hasPlanningFigure(planningFrom) ? `Planning from ${planningFrom}` : planningFrom;
+}
 
 export function getServiceBySlug(slug: string): ServiceData | undefined {
   return SERVICES.find((s) => s.slug === slug);

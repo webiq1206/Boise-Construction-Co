@@ -11,8 +11,8 @@ Design-build means one accountable team handles architectural design, engineerin
 - [Build on Your Lot](https://boiseconstruction.co/services/build-on-your-lot): You already own the land. We handle feasibility, design, permits, and construction from there.
 - [Design-Build](https://boiseconstruction.co/services/design-build): Design and construction under one contract, so the drawings and the budget never drift apart.
 - [Home Design & Plans](https://boiseconstruction.co/services/home-plans-design): Architectural design, engineering, and permit-ready drawings for a home built to your site.
-- [Home Additions](https://boiseconstruction.co/services/home-additions): Useful new space added to the home you already live in, planned around the structure, utilities, and daily life already there.
-- [ADUs & Guest Houses](https://boiseconstruction.co/services/adu): Accessory dwellings and guest houses on the lot you already own, planned around setbacks, utilities, and how you will use the space.
+- [Home Additions](https://boiseconstruction.co/services/home-additions): New footprint or a second story added to the home you already live in, planned around the structure, utilities, and daily life already there.
+- [ADUs & Guest Houses](https://boiseconstruction.co/services/adu): New detached accessory dwellings and guest houses on the lot you already own, planned around setbacks, utilities, and how you will use the space.
 - [Lot Evaluation & Feasibility](https://boiseconstruction.co/services/lot-evaluation): Soils, utilities, access, setbacks, and slope reviewed before you commit to a parcel.
 - [Shop Homes & Barndominiums](https://boiseconstruction.co/services/shop-homes-barndominiums): Post-frame and steel-framed homes that pair finished living space with real working shop square footage.
 - [Energy-Efficient Homes](https://boiseconstruction.co/services/energy-efficient-homes): High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.
@@ -31,7 +31,7 @@ Design-build means one accountable team handles architectural design, engineerin
 ## Local permit and location resources
 
 - [Ada County vs Canyon County permit flow](https://boiseconstruction.co/resources/ada-canyon-permit-flow)
-- City guides: [Building a Home in Boise](https://boiseconstruction.co/guides/boise-home-building-guide), [Building a Home in Meridian](https://boiseconstruction.co/guides/meridian-home-building-guide), [Building a Home in Eagle](https://boiseconstruction.co/guides/eagle-home-building-guide), [Building a Home in Kuna](https://boiseconstruction.co/guides/kuna-home-building-guide), [Building a Home in Star](https://boiseconstruction.co/guides/star-home-building-guide), [Custom Home Building in Middleton](https://boiseconstruction.co/guides/middleton-home-building-guide), [Building a Home in Nampa](https://boiseconstruction.co/guides/nampa-home-building-guide), [Building a Home in Caldwell](https://boiseconstruction.co/guides/caldwell-home-building-guide)
+- City guides: [Building a new home in Boise, Idaho](https://boiseconstruction.co/guides/boise-home-building-guide), [Building a new home in Meridian, Idaho](https://boiseconstruction.co/guides/meridian-home-building-guide), [Building a new home in Eagle, Idaho](https://boiseconstruction.co/guides/eagle-home-building-guide), [Building a new home in Kuna, Idaho](https://boiseconstruction.co/guides/kuna-home-building-guide), [Building a new home in Star, Idaho](https://boiseconstruction.co/guides/star-home-building-guide), [Building a new home in Middleton, Idaho](https://boiseconstruction.co/guides/middleton-home-building-guide), [Building a new home in Nampa, Idaho](https://boiseconstruction.co/guides/nampa-home-building-guide), [Building a new home in Caldwell, Idaho](https://boiseconstruction.co/guides/caldwell-home-building-guide)
 - Neighborhood guides: [Building in the Eagle Foothills](https://boiseconstruction.co/guides/eagle-foothills-home-building-guide), [Building in Hidden Springs](https://boiseconstruction.co/guides/hidden-springs-home-building-guide), [Building in Harris Ranch](https://boiseconstruction.co/guides/harris-ranch-home-building-guide)
 
 ## Blog category hubs
@@ -61,4 +61,4 @@ Design-build means one accountable team handles architectural design, engineerin
 - [RSS feed](https://boiseconstruction.co/feed.xml): guides and articles, newest first, with publication and revision dates.
 - [Full text for LLMs](https://boiseconstruction.co/llms-full.txt): expanded reference copy of the core facts.
 
-Last updated: 2026-10-29.
+Last updated: 2026-10-31.
