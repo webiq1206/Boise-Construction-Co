@@ -71,7 +71,7 @@ ${GBP_NAP.website}`;
 <p>Thank you again for trusting us with your ${projectType} in ${city}. We hope the final walkthrough left everything clear and complete.</p>
 <p>If you have a moment, a Google review helps other ${city} families find a builder they can trust. No script needed - whatever stood out to you (communication, schedule, workmanship) is perfect.</p>
 <p><a href="${reviewLink}">Leave a review on Google</a></p>
-<p>Questions? Call or text <a href="tel:2084771169">${GBP_NAP.phone}</a> anytime.</p>
+<p>Questions? Call or text <a href="tel:+12084771169">${GBP_NAP.phone}</a> anytime.</p>
 <p>- The ${GBP_NAP.name} team<br>${GBP_NAP.name}<br>${GBP_NAP.phone}<br><a href="${GBP_NAP.website}">${GBP_NAP.website.replace(/^https?:\/\//, '')}</a></p>`;
 
   return { subject, preview, bodyText, bodyHtml };

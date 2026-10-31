@@ -50,7 +50,10 @@ const SERVICE_IMAGE_SETS: Record<string, LandingImageSet> = {
   "custom-home-builder": {
     hero: CONSTRUCTION_IMAGES.customHome,
     breather: CONSTRUCTION_IMAGES.interior,
-    process: CONSTRUCTION_IMAGES.framing,
+    // Not framing: the Eagle concept gallery on this page already carries a
+    // framing photo, and the process steps are planning, feasibility and the
+    // line-item budget before the build.
+    process: CONSTRUCTION_IMAGES.plans,
   },
   "semi-custom-homes": {
     hero: CONSTRUCTION_IMAGES.semiCustom,

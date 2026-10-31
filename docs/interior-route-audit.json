@@ -32,7 +32,7 @@
   {
     "route": "/contact",
     "file": "app/contact/page.tsx",
-    "seoSignature": "edab311638ac391d92bd8b98784dbc262da8d519a6c4a2e3f4069e1cce8824fa"
+    "seoSignature": "019f700a63423e4ffdc240eb67fc007fbe1e0b3c39524d06b6a062eb640f2051"
   },
   {
     "route": "/guides/[slug]",
@@ -42,7 +42,7 @@
   {
     "route": "/guides",
     "file": "app/guides/page.tsx",
-    "seoSignature": "58879e69c941ede2189bc0514ddcd1473d95e59985da1c536e38d32254630c51"
+    "seoSignature": "ecebe51b8500065e956a8ab595684d295c8376633a640a3b3d9f8a73a6bacf4b"
   },
   {
     "route": "/privacy-policy",

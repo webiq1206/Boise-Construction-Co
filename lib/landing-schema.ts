@@ -1,7 +1,6 @@
 import {
   generateBreadcrumbSchema,
   generateFAQSchema,
-  generateLocalBusinessSchema,
   generateServiceSchema,
   generateSpeakableSchema,
 } from './schema';
@@ -24,12 +23,6 @@ export function landingServiceSchema(
   city?: string,
 ) {
   return generateServiceSchema(name, description, city);
-}
-
-export function landingAreaBusinessSchema(cityName: string) {
-  // Area pages keep the single Meridian service-area PostalAddress.
-  // The city on the page is already listed in areaServed; it is not a storefront.
-  return generateLocalBusinessSchema(cityName);
 }
 
 export function landingSpeakable(path: string, name: string) {

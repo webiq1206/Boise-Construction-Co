@@ -4,7 +4,7 @@ import {schemaTime} from './schemaTime';
  * Creates structured data for Google rich snippets and search features
  */
 
-import { BUSINESS_INFO, CITY_SEO_DATA, getBaseUrl } from './seo';
+import { BUSINESS_INFO, getBaseUrl } from './seo';
 import { SERVICES } from '@/shared/contentData';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { FOUNDING, PUBLIC_MARK_PATH, SHOW_FOUNDING_YEAR } from '@/shared/publicFlags';
@@ -83,11 +83,26 @@ export const PUBLIC_POSTAL_ADDRESS = {
   addressCountry: 'US',
 } as const;
 
+/**
+ * Schema telephone in E.164 ("+1-208-477-1169"), the same string Remodeling,
+ * Handyman, Cabinet and P5 publish, so the NAP matches across the family and
+ * GBP. The display string "(208) 477-1169" stays on the page.
+ */
+export const SCHEMA_TELEPHONE = SITE_CONFIG.phoneE164;
+
+/**
+ * Geocode of the business address, 4031 W Wapoot St, Meridian, ID 83646
+ * (OpenStreetMap Nominatim; the same pair the sibling family sites publish for
+ * this address). Not the Meridian city-centre pin in CITY_SEO_DATA, which put
+ * this business about 4 miles from its own street address.
+ */
+export const BUSINESS_ADDRESS_GEO = { latitude: 43.6515, longitude: -116.4444 } as const;
+
 /** Named public contact. Role wording is the brief's "public representative". */
 export const PUBLIC_CONTACT_POINT = {
   '@type': 'ContactPoint',
   name: SITE_CONFIG.publicRepresentative,
-  telephone: BUSINESS_INFO.phone,
+  telephone: SCHEMA_TELEPHONE,
   contactType: 'public representative',
   areaServed: 'US-ID',
   availableLanguage: 'English',
@@ -120,13 +135,11 @@ const CITY_WIKIPEDIA: Record<string, string> = {
 };
 
 export function generateLocalBusinessSchema(city?: string): SchemaContext {
-  // A single-location business has ONE set of coordinates (its HQ). Emitting
-  // per-city coordinates under one @id confuses entity disambiguation, so geo
-  // is always the HQ; the service area is expressed via `areaServed`. The
-  // optional `city` only customizes the human-readable description.
-  // HQ geo matches the NAP locality (Meridian) - previously pointed at Kuna.
-  const coordinates = CITY_SEO_DATA.Meridian.coordinates;
-
+  // A single-location business has ONE set of coordinates (its address).
+  // Emitting per-city coordinates under one @id confuses entity
+  // disambiguation, so geo is always the street address; the service area is
+  // expressed via `areaServed`. The optional `city` only customizes the
+  // human-readable description.
   return {
     '@context': 'https://schema.org',
     '@type': [...BUSINESS_TYPES],
@@ -137,16 +150,18 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     logo: LOGO_URL,
     '@id': LOCALBUSINESS_ID,
     url: baseUrl,
-    parentOrganization: { '@id': ORG_ID },
-    telephone: BUSINESS_INFO.phone,
+    // The business is a DBA of P5 Home Co LLC: its parent is P5 (the same
+    // node the Organization schema and the P5 graph use), stated in full so
+    // it resolves on every page, not only where the Organization node renders.
+    parentOrganization: P5_PARENT_ORGANIZATION,
+    telephone: SCHEMA_TELEPHONE,
     email: BUSINESS_INFO.email,
     hasCredential: CONTRACTOR_CREDENTIAL,
     address: PUBLIC_POSTAL_ADDRESS,
     contactPoint: PUBLIC_CONTACT_POINT,
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: coordinates.lat,
-      longitude: coordinates.lng,
+      ...BUSINESS_ADDRESS_GEO,
     },
     openingHoursSpecification: Object.entries(BUSINESS_INFO.hours).map(([day, hours]) => ({
       '@type': 'OpeningHoursSpecification',
@@ -225,7 +240,7 @@ export function generateServiceSchema(serviceName: string, serviceDescription: s
       '@type': [...BUSINESS_TYPES],
       '@id': LOCALBUSINESS_ID,
       name: BUSINESS_INFO.name,
-      telephone: BUSINESS_INFO.phone,
+      telephone: SCHEMA_TELEPHONE,
       email: BUSINESS_INFO.email,
       hasCredential: CONTRACTOR_CREDENTIAL,
       priceRange: '$$',
@@ -302,7 +317,7 @@ export function generateOrganizationSchema(): SchemaContext {
           },
         }
       : {}),
-    telephone: BUSINESS_INFO.phone,
+    telephone: SCHEMA_TELEPHONE,
     email: BUSINESS_INFO.email,
     address: PUBLIC_POSTAL_ADDRESS,
     knowsAbout: [
@@ -322,7 +337,7 @@ export function generateOrganizationSchema(): SchemaContext {
     contactPoint: [
       {
         '@type': 'ContactPoint',
-        telephone: BUSINESS_INFO.phone,
+        telephone: SCHEMA_TELEPHONE,
         contactType: 'Customer Service',
         areaServed: 'US-ID',
         availableLanguage: 'English',
@@ -557,8 +572,11 @@ function stripSchemaContext(schema: SchemaContext): Record<string, unknown> {
 }
 
 /**
- * Consolidated @graph for the homepage so audit crawlers detect LocalBusiness
- * and related entities from a single JSON-LD block.
+ * Consolidated @graph for the homepage. LocalBusiness is NOT in this graph:
+ * the root layout already emits it on every page (including /), and a second
+ * copy under the same `#localbusiness` @id made the homepage carry two
+ * LocalBusiness nodes. The Organization and WebSite nodes here reference it by
+ * @id, which resolves to the layout's node.
  */
 export function generateHomePageSchemaGraph(
   faqs: Array<{ question: string; answer: string }>,
@@ -567,7 +585,6 @@ export function generateHomePageSchemaGraph(
     '@context': 'https://schema.org',
     '@graph': [
       stripSchemaContext(generateOrganizationSchema()),
-      stripSchemaContext(generateLocalBusinessSchema('Boise')),
       stripSchemaContext(generateWebSiteSchema()),
       stripSchemaContext(generateFAQSchema(faqs)),
       stripSchemaContext(

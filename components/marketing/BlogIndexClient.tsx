@@ -117,6 +117,9 @@ export function BlogIndexClient() {
                     aria-label="Search articles"
                     className="h-11 w-full rounded-sm border border-border bg-input pl-9 pr-9 text-base text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-search-cancel-button]:hidden"
                     data-testid="input-blog-search"
+                    // Server HTML carries the mask the beforeInteractive Clarity
+                    // masker adds, so hydration sees matching attributes.
+                    data-clarity-mask="True"
                   />
                   {query && (
                     <button

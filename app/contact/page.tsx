@@ -23,7 +23,6 @@ import { buildPageMetadata } from '@/lib/page-metadata';
 import {
 generateBreadcrumbSchema,
 generateFAQSchema,
-generateLocalBusinessSchema,
 generateWebPageSchema,
 } from '@/lib/schema';
 import { BUSINESS_INFO } from '@/lib/seo';
@@ -181,8 +180,9 @@ export const metadata = withBrandPageMetadata((buildPageMetadata({
 })), "/contact");
 
 export default function ContactPage() {
+  // LocalBusiness comes from the root layout on every page; emitting it here
+  // as well put two LocalBusiness nodes on /contact.
   const schemas = [
-    generateLocalBusinessSchema(),
     generateWebPageSchema({
       title: `Contact ${SITE_CONFIG.name}`,
       description:

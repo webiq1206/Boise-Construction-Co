@@ -17,6 +17,19 @@ import Link from "next/link";
 
 const PUBLISHED_GUIDE_SLUGS = new Set(GUIDE_PAGES.map((g) => g.slug));
 
+/**
+ * The family row. Every sibling footer links the others; this one linked
+ * none, so referrals from here were the weakest in the family. rel="noopener"
+ * only (no noreferrer) so the visit shows as a boiseconstruction.co referral
+ * in each sibling's analytics.
+ */
+const FAMILY_SITES: FooterLink[] = [
+  { label: "P5 Home Co", href: "https://p5homeco.com" },
+  { label: "Boise Remodeling Co", href: "https://boiseremodeling.co" },
+  { label: "Boise Handyman Co", href: "https://boisehandyman.co" },
+  { label: "Boise Cabinet Co", href: "https://boisecabinet.co" },
+];
+
 interface FooterLink {
   label: string;
   href: string;
@@ -180,6 +193,25 @@ export function Footer() {
               >
                 {city.name}, Idaho
               </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Family row, same shape as the service-areas row above. */}
+        <div className="border-b border-inverse-foreground/10 py-6" data-testid="footer-family">
+          <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
+            <span className="font-serif text-label uppercase tracking-[0.12em] text-inverse-muted">
+              Our family of companies
+            </span>
+            {FAMILY_SITES.map((site) => (
+              <a
+                key={site.href}
+                href={site.href}
+                rel="noopener"
+                className="flex min-h-[44px] items-center text-sm text-inverse-muted transition-colors hover:text-inverse-foreground lg:min-h-0"
+              >
+                {site.label}
+              </a>
             ))}
           </div>
         </div>

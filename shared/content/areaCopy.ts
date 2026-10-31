@@ -24,7 +24,7 @@ const MIDDLETON_LEAD = [
 const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
   boise: {
     intro:
-      'Building new in Boise usually means working with what is already there. Census estimates for 2020–2024 put the median Boise home at 1986 vintage, and about 64% of the city\'s housing is detached single-family, so many projects here are infill lots or additions to established houses. Boise Construction Co handles design, engineering, permitting with the city, and construction under one design-build contract, with a written line-item scope before the foundation is poured.',
+      'Building new in Boise usually means working with what is already there. Census estimates for 2020–2024 put the median Boise home at 1986 vintage, and about 64% of the city\'s housing is detached single-family, so many new homes here go on infill lots between established houses. Boise Construction Co handles design, engineering, permitting with the city, and construction under one design-build contract, with a written line-item scope before the foundation is poured.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -57,9 +57,9 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
           'A building permit and the trade permits, plus an erosion and sediment control (ESC) permit for any new one- or two-family dwelling. Boise\'s homeowner guide also sets frost depth at 24 inches minimum below grade where a foundation to frost depth is required. We confirm those submissions and inspections for your scope and account for them in the schedule.',
       },
       {
-        question: 'Does an older Boise house change how an addition is planned?',
+        question: 'Does an older Boise house change how a structural addition is planned?',
         answer:
-          'Often. About 42% of Boise homes were built before 1980 (Census ACS 2020–2024), and an addition has to tie into the existing framing, the existing utilities, and the way the household already lives. In a Boise historic district, windows, siding, and similar exterior work also need a Certificate of Appropriateness from Planning before the building permit, per the city\'s homeowner guide.',
+          'Often. About 42% of Boise homes were built before 1980 (Census ACS 2020–2024), and a structural addition has to tie into the existing framing, the existing utilities, and the way the household already lives. In a Boise historic district, windows, siding, and similar exterior work also need a Certificate of Appropriateness from Planning before the building permit, per the city\'s homeowner guide.',
       },
     ],
   },

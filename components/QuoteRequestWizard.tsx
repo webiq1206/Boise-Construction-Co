@@ -1273,6 +1273,10 @@ export function QuoteRequestWizard({
             autoComplete="off"
             value={website}
             onChange={(event) => setWebsite(event.target.value)}
+            // Rendered here so the server HTML already carries the mask the
+            // beforeInteractive Clarity masker would add (lib/clarityFormMask);
+            // otherwise hydration reports an attribute mismatch.
+            data-clarity-mask="True"
           />
         </div>
 
