@@ -9,7 +9,7 @@ import { ConsultCTA } from "@/components/modals/ConsultCTA";
 import { Reveal } from "@/components/Reveal";
 import { PageHeroBand } from "@/components/sections/PageHeroBand";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { Button } from "@/components/ui/button";
+import { HeroTextLink } from "@/components/approved/PrimaryCta";
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
@@ -21,7 +21,6 @@ import { CITIES,TREASURE_VALLEY_CITIES } from "@/shared/contentData";
 import { CTA_PRIMARY,CTA_SECONDARY } from "@/shared/ctaCopy";
 import { contentImageAlt } from "@/shared/imageAlts";
 import { SITE_IMAGES } from "@/shared/siteImages";
-import { ArrowRight } from "lucide-react";
 
 export const metadata = withBrandPageMetadata((buildPageMetadata({
   kind: "about",
@@ -65,13 +64,10 @@ export default function AreasHubPage() {
           <p className="sr-only" data-speakable="summary">
             Treasure Valley new home construction service areas.
           </p>
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap [&>*]:w-full sm:[&>*]:w-auto">
-            <ConsultCTA variant="brand">
-              {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
-            </ConsultCTA>
-            <Button variant="heroOutline" asChild>
-              <a href="/#consult">{CTA_SECONDARY}</a>
-            </Button>
+          {/* One primary; the consultation is a quiet text action, not a second button. */}
+          <div className="interior-hero-actions">
+            <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
+            <HeroTextLink href="/#consult">{CTA_SECONDARY}</HeroTextLink>
           </div>
         </PageHeroBand>
 

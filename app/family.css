@@ -46,9 +46,12 @@
    * for this system was editorial headings, and a 40px "large" heading is not
    * editorial, it is just a heading.
    */
-  --ed-fs-display: clamp(3rem, 6.2vw, 5.75rem);
-  --ed-fs-h2: clamp(2.5rem, 5vw, 4.5rem);
-  --ed-fs-h2-sm: clamp(2.125rem, 3.6vw, 3.25rem);
+  /* Phase 3 type scale: display (the H1) tops out at 64px and section H2s
+     sit clearly below it, so an H2 never matches the H1 (82px H1 and 82px H2s
+     on /warranty before). */
+  --ed-fs-display: clamp(2.25rem, calc(1.6rem + 2.6vw), 4rem);
+  --ed-fs-h2: clamp(1.75rem, calc(1rem + 2.4vw), 3rem);
+  --ed-fs-h2-sm: clamp(1.5rem, calc(0.9rem + 1.9vw), 2.5rem);
   --ed-fs-h3: clamp(1.5rem, 2.2vw, 2.125rem);
   --ed-fs-h4: clamp(1.1875rem, 1.5vw, 1.4375rem);
 

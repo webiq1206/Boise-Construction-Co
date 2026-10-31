@@ -2,10 +2,10 @@ import { CONCEPT_IMAGERY_LABEL, InteriorHero, InteriorPage } from '@/components/
 import { AreaCard } from '@/components/marketing/AreaCard';
 import { Section } from '@/components/marketing/Section';
 import { SectionHeader } from '@/components/marketing/SectionHeader';
+import { HeroTextLink, PrimaryCta } from '@/components/approved/PrimaryCta';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { Reveal } from '@/components/Reveal';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { Button } from '@/components/ui/button';
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildPageMetadata } from '@/lib/page-metadata';
 import {
@@ -17,10 +17,9 @@ import {
 import { CITY_HERO_IMAGES } from '@/shared/cityServiceImages';
 import { CITIES, TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { CONTRACTOR_REGISTRATION_LABEL } from '@/shared/contractorRegistration';
-import { CTA_PRIMARY, CTA_SECONDARY } from '@/shared/ctaCopy';
+import { CTA_PRIMARY } from '@/shared/ctaCopy';
 import { SITE_CONFIG } from '@/shared/siteConfig';
-import { ArrowRight, Check, ChevronRight } from 'lucide-react';
-import Image from 'next/image';
+import { Check, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
 const ABOUT_FAQS = [
@@ -115,39 +114,42 @@ export default function AboutPage() {
             <p data-speakable="summary" className="sr-only">
               {SPEAKABLE_SUMMARY}
             </p>
-            <p className="ed-eyebrow" style={{ color: 'rgb(255 255 255 / 0.72)' }}>
-              Real people. A higher standard.
-            </p>
-            <h1 className="ed-display ed-statement-display text-inverse-foreground mb-8">
+            <p className="ed-eyebrow">Real people. A higher standard.</p>
+            <h1 className="ed-display ed-statement-display text-inverse-foreground">
               About Boise Construction Co
             </h1>
-            <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-4">
+            {/* One support line; the founder and registration detail opens the
+                first section below the photo (C3 hero budget). */}
+            <p className="interior-hero-support">
               Boise Construction Co is a design-build home builder in Meridian, Idaho, and one of the companies of P5 Home Co.
-              It is run by Nick Perkins, a construction project manager with a bachelor&apos;s degree in Construction with an
-              emphasis in Project Management, and more than a decade of work from small renovations to multimillion-dollar
-              custom homes. He founded P5 in Colorado in 2020 and moved the family and the company to the Treasure Valley in
-              2025. Read the full story on{' '}
-              <a href="https://p5homeco.com/about" rel="noopener" className="underline underline-offset-2">
-                p5homeco.com/about
-              </a>
-              .
             </p>
-            <p className="text-base md:text-lg text-inverse-foreground/75 max-w-2xl leading-relaxed mb-8">
-              {CONTRACTOR_REGISTRATION_LABEL}. Insured, certificate on request. 1-year workmanship warranty on new builds (
-              <Link href="/warranty" className="underline underline-offset-2">
-                warranty details
-              </Link>
-              ).
-            </p>
-            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap [&>*]:w-full sm:[&>*]:w-auto mb-8">
-              <ConsultCTA variant="brand">
-                {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
-              </ConsultCTA>
-              <Button variant="heroOutline" asChild>
-                <a href="/#consult">{CTA_SECONDARY}</a>
-              </Button>
+            <div className="interior-hero-actions">
+              <PrimaryCta trackingLocation="about_hero">{CTA_PRIMARY}</PrimaryCta>
+              <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>
             </div>
           </InteriorHero>
+
+          <section className="interior-hero-more" aria-label="Overview">
+            <div className="interior-hero-more-inner">
+              <p className="interior-hero-more-lede">
+                It is run by Nick Perkins, a construction project manager with a bachelor&apos;s degree in Construction with an
+                emphasis in Project Management, and more than a decade of work from small renovations to multimillion-dollar
+                custom homes. He founded P5 in Colorado in 2020 and moved the family and the company to the Treasure Valley in
+                2025. Read the full story on{' '}
+                <a href="https://p5homeco.com/about" rel="noopener" className="underline underline-offset-2">
+                  p5homeco.com/about
+                </a>
+                .
+              </p>
+              <p>
+                {CONTRACTOR_REGISTRATION_LABEL}. Insured, certificate on request. 1-year workmanship warranty on new builds (
+                <Link href="/warranty" className="underline underline-offset-2">
+                  warranty details
+                </Link>
+                ).
+              </p>
+            </div>
+          </section>
 
           <Section divider>
             <div className="ed-shell max-w-3xl space-y-6">
@@ -199,19 +201,7 @@ export default function AboutPage() {
             </div>
           </Section>
 
-          <section className="relative bg-[#f1ede4]" aria-label="The Perkins family">
-            <Image
-              src="/images/about/perkins-family-meridian-idaho.webp"
-              alt="Nick Perkins with his wife and five children at a pumpkin patch"
-              width={2048}
-              height={2048}
-              sizes="100vw"
-              className="w-full h-auto object-contain"
-              loading="lazy"
-            />
-            <p className="px-6 py-4 ed-small text-muted-foreground">The Perkins family</p>
-          </section>
-
+          {/* The Perkins family photo appears once, in the hero. */}
           <Section divider>
             <div className="container px-4 max-w-3xl">
               <h2 className="ed-h2 mb-6">Common questions</h2>

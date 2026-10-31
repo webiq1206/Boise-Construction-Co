@@ -1,6 +1,6 @@
 import { InteriorHero, InteriorPage } from '@/components/approved/InteriorLayout';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { Button } from '@/components/ui/button';
+import { PrimaryCta } from '@/components/approved/PrimaryCta';
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { fitDescription } from '@/lib/page-metadata';
 import {
@@ -8,7 +8,6 @@ import {
   generateWebPageSchema,
 } from '@/lib/schema';
 import { SITE_CONFIG } from '@/shared/siteConfig';
-import { ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -70,12 +69,7 @@ export default function Re10RepairsPage() {
             RE-10 and inspection repair lists for Boise and the Treasure Valley are handled by Boise Handyman Co,
             with one written price before work starts. Continue there to send your list and photos.
           </p>
-          <Button variant="brand" asChild>
-            <a href={RE10_CANONICAL} rel="noopener noreferrer">
-              Go to Boise Handyman Co
-              <ArrowRight className="h-4 w-4" />
-            </a>
-          </Button>
+          <PrimaryCta href={RE10_CANONICAL} trackingLocation="re10_referral">Go to Boise Handyman Co</PrimaryCta>
           <p className="mt-8 text-sm text-muted-foreground">
             Looking for a new home or ADU instead?{' '}
             <Link href="/estimate" className="underline underline-offset-2">

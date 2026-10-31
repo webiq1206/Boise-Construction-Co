@@ -27,6 +27,12 @@ export interface ServiceSEOContent {
   headline: string;
   primaryKeyword: string;
   overview: string;
+  /**
+   * Hero support line when the overview's first sentence runs past the hero
+   * budget (LandingPageTemplate splitHeroLead). The full overview still renders
+   * directly below the hero.
+   */
+  heroLine?: string;
   benefits: string[];
   inclusions: string[];
   timeline: string;
@@ -464,6 +470,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     name: 'ADUs & Guest Houses',
     headline: 'Detached ADU Builder in Boise, Idaho',
     primaryKeyword: 'detached adu builder boise idaho',
+    heroLine: 'New detached ADUs and guest houses, built as separate structures on the lot you already own.',
     overview:
       'Detached ADU builder in Boise, Idaho: Boise Construction Co plans and builds new accessory dwellings and guest houses as separate structures on the lot you already own, from feasibility and design through permits and construction. Boise ADU Co projects currently run through Boise Construction Co while that brand site is coming.',
     benefits: [

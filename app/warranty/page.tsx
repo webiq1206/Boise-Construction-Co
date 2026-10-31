@@ -1,13 +1,12 @@
 import { InteriorHero, InteriorPage } from '@/components/approved/InteriorLayout';
 import { Section } from '@/components/marketing/Section';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { Button } from '@/components/ui/button';
+import { PrimaryCta } from '@/components/approved/PrimaryCta';
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildCanonical, fitDescription } from '@/lib/page-metadata';
 import { generateBreadcrumbSchema, generateFAQSchema, generateWebPageSchema } from '@/lib/schema';
 import { CTA_PRIMARY } from '@/shared/ctaCopy';
 import { SITE_CONFIG } from '@/shared/siteConfig';
-import { ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -77,11 +76,7 @@ export default function WarrantyPage() {
             New home warranty coverage from Boise Construction Co starts with a 1-year workmanship warranty on new builds.
             Ask us whether a 10-year structural warranty applies to your contract.
           </p>
-          <Button variant="brand" asChild>
-            <Link href="/estimate">
-              {CTA_PRIMARY} <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
+          <PrimaryCta trackingLocation="warranty_hero">{CTA_PRIMARY}</PrimaryCta>
         </InteriorHero>
 
         <Section divider>

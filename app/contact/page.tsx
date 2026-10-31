@@ -16,7 +16,7 @@ AccordionContent,
 AccordionItem,
 AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
+import { HeroTextLink } from '@/components/approved/PrimaryCta';
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { GRAIN_URL } from '@/lib/grain';
 import { buildPageMetadata } from '@/lib/page-metadata';
@@ -404,9 +404,9 @@ export default function ContactPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+                <div className="interior-hero-actions">
                   <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
-                  <Button variant="brandOutline" asChild><a href="#consult">{CTA_SECONDARY}</a></Button>
+                  <HeroTextLink href="#consult">{CTA_SECONDARY}</HeroTextLink>
                 </div>
               </Reveal>
             </div>
@@ -500,11 +500,9 @@ export default function ContactPage() {
                 >
                   Or send us a text message
                 </a>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 [&>*]:w-full sm:[&>*]:w-auto">
+                <div className="mt-8 interior-hero-actions">
                   <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
-                  <Button variant="heroOutline" asChild>
-                    <a href="#consult">{CTA_SECONDARY}</a>
-                  </Button>
+                  <HeroTextLink href="#consult">{CTA_SECONDARY}</HeroTextLink>
                 </div>
 
               </div></div>

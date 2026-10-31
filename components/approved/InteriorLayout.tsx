@@ -1,13 +1,15 @@
 import { ArrowUpRight } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { PrimaryCta } from './PrimaryCta';
 
 /** Public-page layout. Application routes retain their dedicated interfaces. */
 export function InteriorPage({children,kind='detail'}:{children:ReactNode;kind?:string}) {
   return <div className={`approved-interior interior-${kind}`}>{children}</div>;
 }
 
+/** The page-body primary action (PrimaryCta) in its interior placements. */
 export function InteriorEstimateLink({label='Request a quote'}:{label?:string}) {
-  return <a className="interior-estimate-link" href="/estimate">{label}<ArrowUpRight size={18} aria-hidden="true"/></a>;
+  return <PrimaryCta className="interior-estimate-link" href="/estimate">{label}</PrimaryCta>;
 }
 
 /** The label the site uses on generated and concept renders. */

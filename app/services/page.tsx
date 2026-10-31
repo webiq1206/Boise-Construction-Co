@@ -6,7 +6,7 @@ import { Section } from '@/components/marketing/Section';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { Reveal } from '@/components/Reveal';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { Button } from '@/components/ui/button';
+import { HeroTextLink } from '@/components/approved/PrimaryCta';
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildCanonical,FEED_ALTERNATES,fitDescription } from '@/lib/page-metadata';
 import { generateBreadcrumbSchema } from '@/lib/schema';
@@ -139,9 +139,9 @@ export default function ServicesIndexPage() {
               <p className="ed-body">
                 Book a free planning consultation or get an instant build cost range.
               </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 [&>*]:w-full sm:[&>*]:w-auto">
+              <div className="mt-8 interior-hero-actions">
                 <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
-                <Button variant="brandOutline" asChild><a href="/#consult">{CTA_SECONDARY}</a></Button>
+                <HeroTextLink href="/#consult">{CTA_SECONDARY}</HeroTextLink>
               </div>
             </div>
           </div>
