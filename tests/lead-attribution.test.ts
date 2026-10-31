@@ -92,7 +92,7 @@ test('accepted lead conversion ID deduplicates repeated callbacks and sessions',
  }finally{(globalThis as any).window=prior;}
 });
 function adsWindow(events:unknown[][],storage:Map<string,string>){
- return {gtag:(...args:unknown[])=>events.push(args),sessionStorage:{getItem:(k:string)=>storage.get(k)??null,setItem:(k:string,v:string)=>storage.set(k,v)}};
+ return {gtag:(...args:unknown[])=>{if(args[1]==='conversion')events.push(args);},sessionStorage:{getItem:(k:string)=>storage.get(k)??null,setItem:(k:string,v:string)=>storage.set(k,v)}};
 }
 function sendTo(events:unknown[][]){return events.map(event=>(event[2] as {send_to:string}).send_to);}
 test('estimator finishes fire the estimator label and the form label once',()=>{

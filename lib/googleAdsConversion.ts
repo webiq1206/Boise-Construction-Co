@@ -96,6 +96,22 @@ function markSent(storageKey: string) {
   }
 }
 
+/**
+ * GA4 lead event for an accepted estimator finish ('intake:' or 'estimator:'
+ * key). It fires once, in the same place as the Google Ads lead conversion,
+ * so GA4 and Ads count the same leads. Form inquiries ('conv_' ids and other
+ * keys) already send generate_lead from the form, so they are skipped here to
+ * avoid counting one lead twice.
+ */
+export function estimatorLeadGa4Params(ctx: LeadContext, dedupeKey?: string): Record<string, string> | null {
+  if (!dedupeKey || !/^(?:intake|estimator):/.test(dedupeKey)) return null;
+  return {
+    lead_source: dedupeKey.startsWith('intake:') ? 'estimator_intake' : 'estimator',
+    project_type: ctx.service || ctx.projectType || 'unknown',
+    event_id: dedupeKey,
+  };
+}
+
 type PendingConversion = { storageKey?: string; params: Record<string, unknown> };
 
 function pendingConversions(ctx: LeadContext, dedupeKey?: string): PendingConversion[] {
@@ -136,6 +152,10 @@ export function trackGoogleAdsLeadConversion(ctx: LeadContext = {}, dedupeKey?: 
   for (const item of pending) {
     if (item.storageKey) markSent(item.storageKey);
     gtag('event', 'conversion', item.params);
+    if (item.storageKey?.startsWith('google_ads_lead:')) {
+      const ga4Lead = estimatorLeadGa4Params(ctx, dedupeKey);
+      if (ga4Lead) gtag('event', 'generate_lead', ga4Lead);
+    }
   }
   return true;
 }
