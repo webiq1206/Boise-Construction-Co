@@ -45,21 +45,12 @@ function pagePath(meta:Metadata,hint?:string):string{
 const FALLBACK_DESCRIPTION:Record<string,string>={
  construction:'Boise Construction Co, a P5 Home Co company, designs and builds custom and semi-custom homes in Boise and the Treasure Valley with a line-item budget.',
 };
-/** Articles (posts and guides) that carry their own share card keep it; every other page uses the brand card. */
-function articleImages(meta:Metadata){
- const og=meta.openGraph as {type?:string;images?:unknown}|undefined;
- if(og?.type!=='article'||!og.images)return undefined;
- const list=Array.isArray(og.images)?og.images:[og.images];
- return list.length?list:undefined;
-}
 export function withBrandPageMetadata(meta:Metadata,routeHint?:string):Metadata{
  const override=routeHint==='__layout__'?undefined:COPY[brand.id]?.[pagePath(meta,routeHint)];
  const original=titleText(meta);
  const title=override?`${override.title} | ${brand.name}`:original.includes(brand.name)?original:`${original} | ${brand.name}`;
  const description=override?.description||meta.description||(routeHint==='__layout__'?undefined:FALLBACK_DESCRIPTION[brand.id])||undefined;
  const image={url:BRAND_PAGE_IMAGE,width:1200,height:630,alt:`${brand.name} brand seal`};
- const ownImages=articleImages(meta);
- const twitterImages=ownImages?((meta.twitter as {images?:unknown}|undefined)?.images??ownImages):[BRAND_PAGE_IMAGE];
  const icons=routeHint==='__layout__'?{
   ...(typeof meta.icons==='object'&&!Array.isArray(meta.icons)&&!(meta.icons instanceof URL)?meta.icons:{}),
   icon:[{url:BRAND_SEARCH_ICON,sizes:'96x96',type:'image/png'}],
@@ -70,7 +61,9 @@ export function withBrandPageMetadata(meta:Metadata,routeHint?:string):Metadata{
   ...(override?{title:{absolute:title},description}:{}),
   ...(icons?{icons}:{}),
   ...(description&&!meta.description&&!override?{description}:{}),
-  openGraph:{...meta.openGraph,title,description,siteName:brand.name,images:ownImages??[image]},
-  twitter:{...meta.twitter,card:'summary_large_image',title,description,images:twitterImages},
+  // Owner-approved rule (scripts/verify-p5-mobile-seo.mjs): every route, posts
+  // and guides included, shares the brand preview card.
+  openGraph:{...meta.openGraph,title,description,siteName:brand.name,images:[image]},
+  twitter:{...meta.twitter,card:'summary_large_image',title,description,images:[BRAND_PAGE_IMAGE]},
  } as Metadata;
 }
