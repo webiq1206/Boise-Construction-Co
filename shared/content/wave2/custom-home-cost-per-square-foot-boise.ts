@@ -3,9 +3,9 @@ import type { BlogPostData } from '../../blogContent';
 export const customHomeCostPerSquareFootBoise: BlogPostData = {
   slug: 'custom-home-cost-per-square-foot-boise',
   title: 'Custom Home Cost Per Square Foot in Boise',
-  seoTitle: 'Custom Home Cost Per Square Foot in Boise',
+  seoTitle: 'Custom Home Cost per Sq Ft in Boise',
   metaDescription:
-    'What a Boise cost per square foot figure includes, why larger homes cost less per square foot, and why two builders can quote rates that cannot be compared.',
+    'Custom home cost per square foot in Boise: what the figure includes, why bigger homes cost less per foot, and why rates from two builders rarely compare.',
   excerpt:
     'A per-square-foot rate is an output of a finished project, not a price. Here is what it hides, why size and storeys change it, and how to compare builders properly.',
   category: 'Home Building Costs',

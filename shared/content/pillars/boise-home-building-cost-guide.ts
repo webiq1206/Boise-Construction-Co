@@ -3,16 +3,19 @@ import type { GuidePageData } from '../../guideContent';
 export const boiseHomeBuildingCostGuide: GuidePageData = {
   slug: 'boise-home-building-cost-guide',
   title: 'Boise Home Building Cost Guide',
-  seoTitle: 'Boise Home Building Cost Guide (2026)',
+  // The complete planning guide. The two cost posts own the narrower intents:
+  // /blog/cost-to-build-a-house-boise (the overall cost question) and
+  // /blog/custom-home-cost-per-square-foot-boise (the per-square-foot breakdown).
+  seoTitle: 'Boise Home Building Cost Guide 2026',
   metaDescription:
-    'What it costs to build a house in Boise in 2026: per square foot bands, site work, land, design fees, allowances, financing, contingency, and real budgeting.',
+    'Boise home building cost guide for 2026: per square foot bands, site work, land, design fees, allowances, financing and contingency, in one planning guide.',
   excerpt:
     'The complete picture of what a new home costs in the Treasure Valley: the published bands, what the per-square-foot number leaves out, why bids differ, and how to set a budget that survives a real quote.',
   hubSlug: 'home-building-costs',
   guideType: 'hub-pillar',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-20',
-  tags: ['cost', 'budgeting', 'custom home', 'new construction', 'boise', 'treasure valley'],  primaryKeyword: 'cost to build a house in boise',
+  tags: ['cost', 'budgeting', 'custom home', 'new construction', 'boise', 'treasure valley'],  primaryKeyword: 'boise home building cost guide',
   quickAnswer:
     'Building a custom home in the Boise area costs $250 to $400 per finished square foot in 2026, or $600,000 to $960,000 at 2,400 square feet, excluding land. Semi-custom homes run $225 to $300. Site work adds $25,000 to $50,000 on a serviced lot and $80,000 to $150,000 on a rural parcel.',
   keyTakeaways: [
