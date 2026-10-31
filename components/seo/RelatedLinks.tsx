@@ -102,8 +102,10 @@ export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksPro
     return (
       <div className="space-y-10">
         <div>
+          {/* Distinct from the page body's "Home building services in {city}"
+              H2, which this block used to repeat word for word. */}
           <h2 className="ed-h2-sm ed-statement-wide mb-8">
-            Home building services in {city?.name}
+            Choose a service page for {city?.name}
           </h2>
           <div className="ed-grid-balance grid sm:grid-cols-2 gap-4">
             {indexableServices.map((service) => (

@@ -90,13 +90,16 @@ test('misplaced landmarks are corrected only on the city that listed them', () =
 test('Middleton guide title, meta, and intro keep live cost and warranty lines', () => {
   const guide = LOCATION_GUIDES.find((g) => g.slug === 'middleton-home-building-guide');
   assert.ok(guide);
-  assert.equal(guide.title, 'Custom Home Building in Middleton');
+  // Phase 4 SEO: the H1 is re-keyed to the informational "building a new home
+  // in Middleton" intent; /areas/middleton owns "custom home builder".
+  assert.equal(guide.title, 'Building a new home in Middleton, Idaho');
+  assert.equal(guide.primaryKeyword, 'building a new home in middleton');
   // Title and description were 68 and 178 characters rendered (Phase 1 SEO
   // fix): both now fit, in the informational form the location guide owns.
   assert.equal(guide.seoTitle, 'Building a New Home in Middleton, ID');
   assert.equal(
     guide.metaDescription,
-    'Building a new home in Middleton, Idaho: city versus Canyon County permits, subdivision versus acreage lots, site work ranges and how design-build runs the job.',
+    'Building a new home in Middleton, Idaho: city versus Canyon County permits, subdivision versus acreage lots, site work ranges and how design-build works.',
   );
   assert.match(guide.content, /<strong>custom home builder in Middleton<\/strong>/);
   assert.match(guide.content, /href="\/areas\/middleton">Middleton area page<\/a>/);
