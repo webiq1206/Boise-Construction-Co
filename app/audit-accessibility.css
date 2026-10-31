@@ -123,10 +123,17 @@
     max-height: calc(100svh - var(--f-header-h) - 1px);
     background: #1c1f1e;
   }
+  /* Phone crop with a lower horizon: the full-height landscape crop spent the
+     top half of the screen on sky. The photo now sits 18% higher, so the house
+     fills the open upper area above the copy, and fades into the dark ground
+     under the copy instead of ending on an edge. */
+  .approved-shell .family-site .f-hero { overflow: hidden; }
   .approved-shell .family-site .f-hero > img {
-    position: absolute; inset: 0; z-index: -1; grid-area: auto;
+    position: absolute; inset: auto 0 auto 0; top: -18%; z-index: -1; grid-area: auto;
     width: 100%; height: 100%; min-height: 0; max-height: none;
-    object-fit: cover; object-position: 62% 40%;
+    object-fit: cover; object-position: 62% 50%;
+    -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 72%, transparent 100%);
   }
   .approved-shell .family-site .f-hero-shade {
     display: block; position: absolute; inset: 0; z-index: -1;
@@ -141,7 +148,6 @@
   }
   .approved-shell .family-site .f-hero .f-eyebrow { font-size: 13px; margin-bottom: 12px !important; max-width: none; letter-spacing: .06em; }
   .approved-shell .family-site .f-hero h1 { font-size: 36px; line-height: 1.05; margin-bottom: 12px; letter-spacing: -0.02em; }
-  .approved-shell .family-site .f-hero-copy > p.f-hero-summary { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .approved-shell .family-site .f-hero-copy > p.f-hero-support { font-size: 17px; line-height: 1.5; max-width: 34ch; color: #eceae3; margin: 0; }
   .approved-shell .family-site .f-hero .estimator-promise,
   .approved-shell .family-site .f-hero .f-hero-stamp,
@@ -151,7 +157,6 @@
   .approved-shell .family-site .f-actions .f-button { width: 100%; min-width: 0; min-height: 48px; height: 48px; padding: 16px 24px; font-size: 16px; }
 }
 @media (max-width: 390px) {
-  .approved-shell .family-site .f-hero-copy > p.f-hero-support { display: none; }
   .approved-shell .family-site .f-hero-copy { padding-top: 16px; }
   .approved-shell .family-site .f-hero h1 { font-size: 36px; margin-bottom: 10px; }
   .approved-shell .family-site .f-actions { margin-top: 16px; }
@@ -267,7 +272,7 @@
   min-height: 48px !important;
   font-size: 16px !important;
   line-height: 1 !important;
-  padding: 16px 24px !important;
+  padding: 14px 24px !important;
   gap: 12px !important;
 }
 .approved-shell .family-site .f-hero h1 {

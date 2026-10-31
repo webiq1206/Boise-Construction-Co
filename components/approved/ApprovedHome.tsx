@@ -6,6 +6,7 @@ import {Accordion,AccordionItem,AccordionTrigger,AccordionContent} from '@/compo
 import {FAQSection} from '@/components/FAQSection';
 import {contentImageAlt} from '@/shared/imageAlts';
 import {PlanningRangeExplorer} from '@/components/PlanningRangeExplorer';
+import {PrimaryCta} from './PrimaryCta';
 import {brands,cities} from './family-content';
 const Arrow=()=> <ArrowUpRight size={18} aria-hidden="true"/>;
 function Title({lines}:{lines:string[]}){return <>{lines[0]}<br/><em>{lines[1]}</em></>}
@@ -16,7 +17,7 @@ export function ApprovedHome(){const b=brands['construction'];const home='';cons
  const approachBlock=<section className="f-section f-container f-two" id="why-choose-us"><div className="f-sticky"><p className="f-eyebrow">THE WAY WE WORK</p><h2>Good work.<br/><em>A better experience.</em></h2><p>Clear expectations, thoughtful decisions, and someone accountable for the work. That is the P5 standard.</p></div><Rows items={b.approach}/></section>;
 
 return <div className={`family-site family-${b.id}`} style={{'--f-accent':b.accent} as CSSProperties}>
- <section className="f-hero" data-p5-hero><img src={b.hero} alt={contentImageAlt(b.hero)||'Mountain-modern custom home with charcoal stucco, ledgestone, and a dark metal roof'} fetchPriority="high" width="1600" height="1000"/><div className="f-hero-shade"/><div className="f-hero-copy"><p className="f-eyebrow">{b.kicker}<span className="f-hero-family"> · <a href="https://p5homeco.com">A P5 Home Co company</a></span></p><h1>Custom home builder in Boise.<br/><em>Built around you.</em></h1><p className="f-hero-summary">{b.intro}</p><p className="f-hero-support">From bare lot to the keys, one accountable team.</p><div className="f-actions"><a className="f-button" href={primary}>{b.action}<Arrow/></a><a className="f-link f-hero-secondary" href="#services">{b.secondary}<ArrowRight size={18}/></a></div><span className="estimator-promise">Describe your project. Our team replies within one business day.</span><span className="f-hero-imagery">Concept design imagery</span></div></section>
+ <section className="f-hero" data-p5-hero><img src={b.hero} alt={contentImageAlt(b.hero)||'Mountain-modern custom home with charcoal stucco, ledgestone, and a dark metal roof'} fetchPriority="high" width="1600" height="1000"/><div className="f-hero-shade"/><div className="f-hero-copy"><p className="f-eyebrow">{b.kicker}<span className="f-hero-family"> · <a href="https://p5homeco.com">A P5 Home Co company</a></span></p><h1>Custom home builder in Boise.<br/><em>Built around you.</em></h1><p className="f-hero-support">From bare lot to the keys, one accountable team.</p><div className="f-actions"><PrimaryCta className="f-button" href={primary} trackingLocation="home_hero">{b.action}</PrimaryCta><a className="f-link f-hero-secondary" href="#services">{b.secondary}<ArrowRight size={18}/></a></div><span className="estimator-promise">Describe your project. Our team replies within one business day.</span><span className="f-hero-imagery">Concept design imagery</span></div></section>
  <div className="f-proof">{b.proof.map((p,i)=><div key={p}><span>0{i+1}</span><p>{p}</p></div>)}</div>
  <section className="f-section f-container" id="services"><div className="f-section-top"><div><p className="f-eyebrow">FIND YOUR STARTING POINT</p><h2><Title lines={b.serviceTitle}/></h2></div><p>{b.serviceIntro}</p></div><Tabs defaultValue={b.services[0].slug} className="f-explorer"><TabsList className="f-tabs">{b.services.slice(0,3).map(s=><TabsTrigger value={s.slug} key={s.slug}>{s.name}</TabsTrigger>)}</TabsList>{b.services.slice(0,3).map((s,i)=><TabsContent key={s.slug} value={s.slug}><div className="f-scene"><a className="f-scene-image" href={s.live || `/services/${s.slug}`} aria-label={`Explore ${s.name.toLowerCase()}`}><img src={s.image} alt={contentImageAlt(s.image)||s.name} loading="lazy" width="1000" height="750"/></a><div className="f-scene-copy"><p className="f-eyebrow">0{i+1} / {b.name.replace('Boise ','')}</p><h3>{s.name}</h3><p>{s.summary}</p><ul>{s.includes.slice(0,2).map(t=><li key={t}>{t}</li>)}</ul><a className="f-link" href={s.live || `/services/${s.slug}`}>Explore this service <Arrow/></a></div></div></TabsContent>)}</Tabs><a className="f-link f-browse-all" href={`${home}/services`}>View all services <Arrow/></a></section>
 
@@ -33,7 +34,7 @@ return <div className={`family-site family-${b.id}`} style={{'--f-accent':b.acce
    <li>Septic and well feasibility when the lot is not on municipal service</li>
    <li>Soil, slope, access, and setbacks that shape what can be built</li>
   </ul>
-  <a className="f-button" href="/services/lot-evaluation" style={{marginTop:'1.5rem',display:'inline-flex'}}>Lot evaluation <Arrow/></a>
+  <a className="secondary-cta" href="/services/lot-evaluation" style={{marginTop:'1.5rem'}}>Lot evaluation <Arrow/></a>
  </section>
 
  <PlanningRangeExplorer />
