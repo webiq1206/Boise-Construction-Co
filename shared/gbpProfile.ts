@@ -87,13 +87,23 @@ export const GBP_LINKS = {
  * the schema was telling Google the construction company and the remodeling
  * company were one entity.
  *
- * Owner confirmed this Facebook page is the only social channel that currently
- * belongs to Boise Construction Co. Instagram is deliberately absent rather
- * than left pointing somewhere wrong: no entry is neutral, a wrong entry is a
- * false claim. Add it here (and nowhere else) if an account is created.
+ * UPDATED 2026-10-31. Boise Construction Co has no social profile of its own.
+ * The owner's only social profile is the P5 Home Co Facebook page (confirmed
+ * via the Facebook API), so it now lives in P5_SOCIAL below and is asserted on
+ * the P5 Home Co parentOrganization node, never on this brand's own sameAs. A
+ * parent's page in this brand's sameAs would tell search engines that this
+ * business IS P5 Home Co. No entry is neutral, a wrong entry is a false claim.
+ * Add a profile here (and nowhere else) only once one exists for this brand.
  */
-export const GBP_SOCIAL = {
-  facebook: 'https://www.facebook.com/profile.php?id=61592885025074',
+export const GBP_SOCIAL: { facebook?: string } = {};
+
+/**
+ * Social profiles that belong to the parent company, P5 Home Co. These feed
+ * `sameAs` on the P5 parentOrganization node in lib/schema.ts and the footer
+ * link labelled "P5 Home Co on Facebook".
+ */
+export const P5_SOCIAL = {
+  facebook: 'https://www.facebook.com/1228704823655951',
 } as const;
 
 export const GBP_ATTRIBUTES = {
@@ -360,7 +370,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   },
   {
     question: 'Do you build barndominiums or shop homes?',
-    answer: `Yes - post-frame and steel-framed homes pairing finished living space with working shop square footage, mostly on rural Ada and Canyon County acreage. Planning from $150–$250 per square foot blended: ${SITE}/services/shop-homes-barndominiums`,
+    answer: `Yes - post-frame and steel-framed homes pairing finished living space with working shop square footage, mostly on rural Ada and Canyon County acreage. Planning at $150 to $250 per square foot blended, about $200 on average, before land, site work and permits: ${SITE}/services/shop-homes-barndominiums`,
   },
   {
     question: 'What is design-build?',
@@ -457,9 +467,9 @@ export const GBP_CITATION_FIXES = [
     url: 'https://www.promatcher.com/profile/BoiseRemodelingCo',
   },
   {
-    platform: 'Facebook',
-    action: 'Confirm NAP matches canonical record',
-    url: GBP_SOCIAL.facebook,
+    platform: 'Facebook (P5 Home Co parent page)',
+    action: 'Parent company page, not a Boise Construction Co listing; no brand page exists yet',
+    url: P5_SOCIAL.facebook,
   },
   // Instagram dropped from the site, so no NAP to verify there.
   {

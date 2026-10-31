@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { areaPath,servicePath } from "@/lib/seo-routes";
 import { CITIES,SERVICES } from "@/shared/contentData";
 import { CONTENT_HUBS,guidePath } from "@/shared/contentHubs";
-import { GBP_SOCIAL } from "@/shared/gbpProfile";
+import { P5_SOCIAL } from "@/shared/gbpProfile";
 import { GUIDE_PAGES } from "@/shared/guideContent";
 import { ContractorRegistrationLink } from "@/components/ContractorRegistration";
 import { SITE_CONFIG } from "@/shared/siteConfig";
@@ -166,7 +166,7 @@ export function Footer() {
               <Button variant="brandInverseOutline" size="sm" asChild>
                 <SaveContactLink showIcon>Save our contact</SaveContactLink>
               </Button>
-              {GBP_SOCIAL.facebook && (<a href={GBP_SOCIAL.facebook} className="-m-3 flex min-h-[44px] min-w-[44px] items-center justify-center p-3 text-accent-legible transition-colors hover:text-inverse-foreground" rel="noopener noreferrer" target="_blank" aria-label={`${SITE_CONFIG.name} on Facebook`} data-testid="link-footer-facebook"><Facebook className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" /></a>)}
+              {P5_SOCIAL.facebook && (<a href={P5_SOCIAL.facebook} className="-m-3 flex min-h-[44px] min-w-[44px] items-center justify-center p-3 text-accent-legible transition-colors hover:text-inverse-foreground" rel="noopener noreferrer" target="_blank" aria-label="P5 Home Co on Facebook" data-testid="link-footer-facebook"><Facebook className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" /></a>)}
             </div>
             <ul className="m-0 mt-8 list-none space-y-2.5 p-0">
               <FooterCTAs />

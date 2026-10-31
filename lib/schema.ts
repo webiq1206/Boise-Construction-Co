@@ -9,6 +9,7 @@ import { SERVICES } from '@/shared/contentData';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { FOUNDING, PUBLIC_MARK_PATH, SHOW_FOUNDING_YEAR } from '@/shared/publicFlags';
 import { CONTRACTOR_REGISTRATION_NUMBER } from '@/shared/contractorRegistration';
+import { P5_SOCIAL } from '@/shared/gbpProfile';
 
 /** Idaho registers contractors. The same credential is on LocalBusiness, Organization, and Service. */
 const CONTRACTOR_CREDENTIAL = {
@@ -60,6 +61,9 @@ export const P5_PARENT_ORGANIZATION = {
   '@id': P5_ORG_ID,
   name: 'P5 Home Co',
   url: P5_ORIGIN,
+  // The owner's only social profile is P5 Home Co's Facebook page, so it is
+  // asserted here on the parent and kept out of this brand's own sameAs.
+  sameAs: [P5_SOCIAL.facebook],
 } as const;
 
 /**
@@ -203,7 +207,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
         },
       })),
     },
-    sameAs: BUSINESS_INFO.sameAs,
+    ...(BUSINESS_INFO.sameAs.length ? { sameAs: BUSINESS_INFO.sameAs } : {}),
   };
 }
 
@@ -333,7 +337,7 @@ export function generateOrganizationSchema(): SchemaContext {
       'Ada County building permits',
       'Canyon County building permits',
     ],
-    sameAs: BUSINESS_INFO.sameAs,
+    ...(BUSINESS_INFO.sameAs.length ? { sameAs: BUSINESS_INFO.sameAs } : {}),
     contactPoint: [
       {
         '@type': 'ContactPoint',
