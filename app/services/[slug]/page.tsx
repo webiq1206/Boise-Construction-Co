@@ -219,6 +219,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
         h1={content.headline}
         speakableSummary={content.overview}
         overview={content.overview}
+        heroLine={content.heroLine}
         heroImageUrl={SERVICE_SCENES[service.slug]?.src ?? images.hero}
         heroImageAlt={SERVICE_SCENES[service.slug]?.alt}
         breatherImageUrl={images.breather}
@@ -226,7 +227,6 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
         manifestPath={path}
         planningFrom={service.planningFrom}
         estimateHref={isAddition ? '/estimate?project=addition&service=home-additions' : undefined}
-        consultationHref={isAddition ? '/contact?service=home-additions&project=addition#consult' : undefined}
         costGuidance={costGuidance}
         breadcrumbs={[
           { name: 'Home', href: '/' },

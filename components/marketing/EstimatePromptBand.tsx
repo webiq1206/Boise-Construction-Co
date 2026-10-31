@@ -1,7 +1,6 @@
-import { ArrowRight } from "lucide-react";
 import { Section } from "./Section";
 import { Reveal } from "@/components/Reveal";
-import { Button } from "@/components/ui/button";
+import { PrimaryCta } from "@/components/approved/PrimaryCta";
 import { CTA_PRIMARY } from "@/shared/ctaCopy";
 
 interface EstimatePromptBandProps {
@@ -53,12 +52,7 @@ export function EstimatePromptBand({
           <Reveal delay={80}>
             <div className="flex flex-col items-start gap-6">
               <p className="ed-body">{description}</p>
-              <Button variant="brand" size="lg" className="w-full sm:w-auto" asChild>
-                <a href={href}>
-                  {CTA_PRIMARY}
-                  <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
-                </a>
-              </Button>
+              <PrimaryCta href={href} trackingLocation="estimate_prompt_band">{CTA_PRIMARY}</PrimaryCta>
               <p className="ed-small">Free · Not a binding quote</p>
             </div>
           </Reveal>

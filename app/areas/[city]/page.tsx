@@ -22,19 +22,6 @@ import { AREA_PAGE_FAQS,getAreaIntro } from '@/shared/seoContent';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { CONSTRUCTION_IMAGES } from '@/shared/siteImages';
 import { notFound } from 'next/navigation';
-import type { ReactNode } from 'react';
-
-function emphasizePhrase(text: string, phrase: string): ReactNode {
-  const index = text.indexOf(phrase);
-  if (index === -1) return text;
-  return (
-    <>
-      {text.slice(0, index)}
-      <strong>{phrase}</strong>
-      {text.slice(index + phrase.length)}
-    </>
-  );
-}
 
 export function generateStaticParams() {
   return CITY_SLUGS.map((city) => ({ city }));
@@ -235,13 +222,8 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
         h1={h1}
         speakableSummary={overview}
         overview={middletonLead ? overview : `${answerFirst} ${overview}`}
-        overviewParagraphs={
-          middletonLead
-            ? middletonLead.map((paragraph, index) =>
-                index === 0 ? emphasizePhrase(paragraph, 'custom home builder in Middleton') : paragraph,
-              )
-            : undefined
-        }
+        overviewParagraphs={middletonLead}
+        overviewEmphasis={middletonLead ? 'custom home builder in Middleton' : undefined}
         heroImageUrl={images.hero}
         breatherImageUrl={images.breather}
         processImageUrl={images.process}

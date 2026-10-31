@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Metadata } from "next";
 import { Button } from "@/components/ui/button";
+import { PrimaryCta } from "@/components/approved/PrimaryCta";
 import { Card, CardContent } from "@/components/ui/card";
 import { Home, ArrowRight, MessageSquare, Phone, Wrench } from "lucide-react";
 import { DisplayNum } from "@/components/marketing";
@@ -60,12 +61,10 @@ export default function NotFound() {
         </Card>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button variant="brand" size="lg" asChild>
-            <Link href="/">
-              <Home className="h-5 w-5 mr-2" />
-              Go to Homepage
-            </Link>
-          </Button>
+          <PrimaryCta href="/" arrow={false} trackingLocation="not_found">
+            <Home className="h-5 w-5" aria-hidden="true" />
+            Go to Homepage
+          </PrimaryCta>
           <div className="flex flex-col items-center gap-1">
             <Button variant="brandOutline" size="lg" asChild>
               <a href={SITE_CONFIG.phoneHref}>

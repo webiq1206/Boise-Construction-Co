@@ -1,4 +1,5 @@
 import { InteriorHero,InteriorProjectAside } from '@/components/approved/InteriorLayout';
+import { HeroTextLink,PrimaryCta } from '@/components/approved/PrimaryCta';
 import { Section } from '@/components/marketing';
 import { RelatedPostCards } from '@/components/marketing/RelatedPostCards';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
@@ -10,11 +11,11 @@ AccordionContent,
 AccordionItem,
 AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
 import { GRAIN_URL } from '@/lib/grain';
 import { contentImageAlt } from '@/shared/imageAlts';
-import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
+import { CTA_PRIMARY } from '@/shared/ctaCopy';
 import { hasPlanningFigure } from '@/shared/contentData';
+import { SITE_CONFIG } from '@/shared/siteConfig';
 import type { GalleryProject } from '@/shared/galleryData';
 import type { FAQItem } from '@/shared/seoContent';
 import { ArrowRight,ChevronRight,Star } from 'lucide-react';
@@ -32,8 +33,19 @@ interface LandingPageTemplateProps {
   h1: string;
   speakableSummary: string;
   overview: string;
-  /** When set, these render under the H1 instead of the single overview paragraph. */
-  overviewParagraphs?: ReactNode[];
+  /**
+   * When set, these replace the single overview paragraph. The hero carries
+   * only their opening line (see splitHeroLead); the rest opens the first
+   * section below the hero.
+   */
+  overviewParagraphs?: readonly string[];
+  /** A phrase set in bold wherever it falls in the overview (one occurrence). */
+  overviewEmphasis?: string;
+  /**
+   * Explicit hero support line, for an overview whose first sentence runs past
+   * the hero budget. The whole overview then opens the section below the hero.
+   */
+  heroLine?: string;
   breadcrumbs: BreadcrumbItem[];
   heroImageUrl?: string;
   heroImageAlt?: string;
@@ -44,8 +56,6 @@ interface LandingPageTemplateProps {
   planningFrom?: string;
   /** Optional estimator URL that retains the service's project intent. */
   estimateHref?: string;
-  /** Optional consultation URL for service-specific contact context. */
-  consultationHref?: string;
   /**
    * Cost-and-timeline expectation, rendered directly AFTER THE HERO: the first
    * question a visitor researches is what this costs and how long it takes, so
@@ -198,11 +208,52 @@ function sectionId(heading: string): string {
   return 'section-' + heading.toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
+/** Word budget for the hero support line: one short line, never the paragraph. */
+const HERO_LINE_WORDS = 22;
+const wordCount = (text: string) => text.split(/\s+/).filter(Boolean).length;
+
+/**
+ * The interior hero carries one support line: the opening sentence of the
+ * overview, plus the next one while the pair stays inside HERO_LINE_WORDS (so a
+ * lead question keeps its answer). Everything after it moves, unchanged and in
+ * order, into the first section below the hero, so no copy is lost and the CTA
+ * stays inside the first screen at 360x640.
+ */
+export function splitHeroLead(paragraphs: readonly string[], heroLine?: string): { line: string; rest: string[] } {
+  const clean = paragraphs.map((p) => p.trim()).filter(Boolean);
+  if (heroLine) return { line: heroLine, rest: clean };
+  if (clean.length === 0) return { line: '', rest: [] };
+  const sentences = clean[0].match(/[^.?!]+(?:[.?!]+(?=\s|$)|$)/g)?.map((x) => x.trim()).filter(Boolean) ?? [clean[0]];
+  let line = sentences[0];
+  let used = 1;
+  for (const next of sentences.slice(1)) {
+    if (wordCount(`${line} ${next}`) > HERO_LINE_WORDS) break;
+    line = `${line} ${next}`;
+    used++;
+  }
+  const remainder = sentences.slice(used).join(' ');
+  return { line, rest: [...(remainder ? [remainder] : []), ...clean.slice(1)] };
+}
+
+function Emphasis({ text, phrase }: { text: string; phrase?: string }) {
+  const index = phrase ? text.indexOf(phrase) : -1;
+  if (!phrase || index === -1) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, index)}
+      <strong>{phrase}</strong>
+      {text.slice(index + phrase.length)}
+    </>
+  );
+}
+
 export function LandingPageTemplate({
   h1,
   speakableSummary,
   overview,
   overviewParagraphs,
+  overviewEmphasis,
+  heroLine,
   breadcrumbs,
   heroImageUrl,
   heroImageAlt,
@@ -211,7 +262,6 @@ export function LandingPageTemplate({
   manifestPath,
   planningFrom,
   estimateHref,
-  consultationHref,
   costGuidance,
   benefits,
   inclusions,
@@ -233,54 +283,51 @@ export function LandingPageTemplate({
   const breatherImage = breatherImageUrl ?? heroImageUrl;
   const processImage = processImageUrl ?? heroImageUrl;
   const showTimelineBelow = !!timeline && !costGuidance;
+  const lead = splitHeroLead(overviewParagraphs && overviewParagraphs.length > 0 ? overviewParagraphs : [overview], heroLine);
+  const emphasisInHero = !!overviewEmphasis && lead.line.includes(overviewEmphasis);
+  const planningFigure = planningFrom && hasPlanningFigure(planningFrom) ? planningFrom : undefined;
 
   return (
     <div className="flex flex-col ">
-      {/* Approved editorial hero */}
+      {/* Approved split hero, held to the first screen (C3): breadcrumb,
+          eyebrow, H1, ONE support line, the planning figure as a chip, one
+          primary action and the phone as a text link. The rest of the overview
+          opens the section directly below, unchanged. */}
       <InteriorHero imageSrc={heroImageUrl} imageAlt={heroImageAlt ?? contentImageAlt(heroImageUrl)} layout="split">
           <HeroBreadcrumbs items={breadcrumbs} />
           <p data-speakable="summary" className="sr-only">{speakableSummary}</p>
-          {eyebrow && (
-            <p className="ed-eyebrow mt-8" style={{ color: 'rgb(255 255 255 / 0.72)' }}>{eyebrow}</p>
-          )}
+          {eyebrow && <p className="ed-eyebrow interior-hero-eyebrow">{eyebrow}</p>}
           <h1 className="ed-display ed-statement-display text-inverse-foreground">{h1}</h1>
-          {overviewParagraphs && overviewParagraphs.length > 0 ? (
-            overviewParagraphs.map((paragraph, i) => (
-              <p
-                key={i}
-                className={
-                  i === 0
-                    ? 'mt-8 max-w-[60ch] text-base md:text-lg leading-relaxed text-inverse-foreground/95'
-                    : 'mt-4 max-w-[60ch] text-base md:text-lg leading-relaxed text-inverse-foreground/95'
-                }
-              >
-                {paragraph}
-              </p>
-            ))
-          ) : (
-            <p className="mt-8 max-w-[60ch] text-base md:text-lg leading-relaxed text-inverse-foreground/95">{overview}</p>
-          )}
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 [&>*]:w-full sm:[&>*]:w-auto">
-            <ConsultCTA variant="brand" href={estimateHref}>
-              {CTA_PRIMARY} <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </ConsultCTA>
-            <Button variant="heroOutline" asChild>
-              <a href={consultationHref ?? "/#consult"}>{CTA_SECONDARY}</a>
-            </Button>
-          </div>
-          {planningFrom && hasPlanningFigure(planningFrom) && (
-            <p className="mt-8 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-inverse-foreground/80">
-              <span className="ed-eyebrow !mb-0" style={{ color: 'rgb(255 255 255 / 0.72)' }}>Planning from</span>
-              <span className="brc-display-num text-inverse-foreground text-[1.5rem] leading-none">{planningFrom}</span>
-              <span className="ed-small text-inverse-foreground/70">Your exact range is confirmed at the free in-home visit</span>
+          {lead.line && (
+            <p className="interior-hero-support">
+              <Emphasis text={lead.line} phrase={emphasisInHero ? overviewEmphasis : undefined} />
             </p>
           )}
-          {/* No figure (additions, ADUs): the sentence stands alone, never
-              "Planning from Priced after an in-home review". */}
-          {planningFrom && !hasPlanningFigure(planningFrom) && (
-            <p className="mt-8 ed-small text-inverse-foreground/80">{planningFrom}</p>
+          {planningFrom && (
+            <p className="interior-hero-chip">
+              {planningFigure ? (<>Planning from <strong>{planningFigure}</strong></>) : planningFrom}
+            </p>
           )}
+          <div className="interior-hero-actions">
+            <PrimaryCta href={estimateHref ?? '/estimate'} trackingLocation="landing_hero">{CTA_PRIMARY}</PrimaryCta>
+            <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>
+          </div>
         </InteriorHero>
+
+      {(lead.rest.length > 0 || planningFigure) && (
+        <section className="interior-hero-more" aria-label="Overview">
+          <div className="interior-hero-more-inner">
+            {lead.rest.map((paragraph, i) => (
+              <p key={i} className={i === 0 ? 'interior-hero-more-lede' : undefined}>
+                <Emphasis text={paragraph} phrase={!emphasisInHero ? overviewEmphasis : undefined} />
+              </p>
+            ))}
+            {planningFigure && (
+              <p className="interior-hero-more-note">Planning from {planningFigure}. Your exact range is confirmed at the free in-home visit.</p>
+            )}
+          </div>
+        </section>
+      )}
 {/* The scope list is this section's content. Area pages pass none, which
           used to leave the heading alone beside the sticky aside with an empty
           column, so the section only renders when there is a list to show. */}

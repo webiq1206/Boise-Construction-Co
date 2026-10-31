@@ -82,7 +82,7 @@ export default function AdaCanyonPermitFlowPage() {
             <a
               href="/downloads/ada-canyon-permit-guide.pdf"
               download
-              className="inline-flex items-center gap-2 rounded-md bg-accent text-accent-foreground px-4 py-2 text-sm font-normal hover:opacity-90"
+              className="secondary-cta"
             >
               <Download className="h-4 w-4" />
               Download PDF reference
@@ -122,10 +122,7 @@ export default function AdaCanyonPermitFlowPage() {
           </div>
 
           <div className="mt-10 flex flex-wrap gap-4">
-            <ConsultCTA variant="brand">
-              {CTA_PRIMARY}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </ConsultCTA>
+            <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
             <Link
               href="/guides/boise-home-building-process-guide"
               className="inline-flex items-center text-sm text-accent-legible hover:underline"
