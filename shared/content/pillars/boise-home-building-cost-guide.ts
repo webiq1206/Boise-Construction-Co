@@ -103,7 +103,7 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
     {
       question: 'What does a shop home or barndominium cost in Idaho?',
       answer:
-        'Shop homes plan at $150 to $250 per square foot, about $200 on average, blended across finished living space and shop space and before land, site work and permits, because the shop side costs far less per foot than the house side. A 1,600 square foot living area with an attached 1,200 square foot shop commonly runs $265,000 to $500,000 excluding land and site work. The blend depends heavily on how finished the shop is.',
+        'Shop homes plan at $150 to $250 per square foot, about $200 on average, blended across finished living space and shop space and before land, site work and permits, because the shop side costs far less per foot than the house side. A 1,600 square foot living area with an attached 1,200 square foot shop commonly runs $420,000 to $700,000, about $560,000 at the $200 average, before land, site work and permits. The blend depends heavily on how finished the shop is.',
     },
   ],
   content: `
@@ -129,7 +129,7 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
 <tr><td>High-performance home</td><td>$275 to $425 per finished square foot</td></tr>
 <tr><td>Foothills site, steep grade, high detail</td><td>Regularly above $450 per square foot</td></tr>
 <tr><td>Shop home or barndominium</td><td>$150 to $250 per square foot blended, about $200 on average</td></tr>
-<tr><td>Shop home, 1,600 sq ft living plus 1,200 sq ft shop</td><td>$265,000 to $500,000</td></tr>
+<tr><td>Shop home, 1,600 sq ft living plus 1,200 sq ft shop</td><td>$420,000 to $700,000, about $560,000 on average</td></tr>
 </tbody>
 </table>
 <p>The semi-custom band is lower than the custom band for one reason, and it is not construction quality. The design and engineering work on a semi-custom plan is already done and already proven, so you are not paying to draw and stamp a house from scratch, and the plan has already been built enough times that the pricing has fewer unknowns in it. That is the whole saving. Read how we handle each in <a href="/services/custom-home-builder">custom home building</a> and <a href="/services/semi-custom-homes">semi-custom homes</a>. The shop home band is blended because shop space costs far less per square foot than living space, so the ratio between the two moves the number as much as anything else does. There is more on that format in <a href="/services/shop-homes-barndominiums">shop homes and barndominiums</a>.</p>

@@ -299,16 +299,21 @@ const perSf = (s: ScopeSelections, rules = CUSTOM_HOME_RULES, project = "custom-
   t("shop/shop-cheaper-than-living", marginals[2] < livingPerSf * 0.45,
     `shop $${marginals[2].toFixed(0)}/sf vs living $${livingPerSf.toFixed(0)}/sf`);
 
-  // "A 1,600 square foot living area with an attached 1,200 square foot shop
-  // commonly lands between $385,000 and $630,000 excluding land."
+  // Bounds set against the earlier published example ("A 1,600 square foot
+  // living area with an attached 1,200 square foot shop commonly lands between
+  // $385,000 and $630,000 excluding land"). Since 2026-10-31 the site publishes
+  // $420,000 to $700,000 for that example ($150 to $250 per square foot over
+  // 2,800 square feet, about $560,000 at the $200 average); bounds unchanged.
   const publishedLow = shop(1600, 1200, "refresh");
   const publishedHigh = shop(1600, 1200, "mid-range");
   t("shop/published-example-low", publishedLow >= 360_000 && publishedLow <= 470_000, usd(publishedLow));
   t("shop/published-example-high", publishedHigh >= 500_000 && publishedHigh <= 660_000, usd(publishedHigh));
 
-  // "between $140 and $250 per square foot, blended across finished and shop
-  // space". Checked across the four configurations the estimator offers, at the
-  // tiers most shop homes are actually built to.
+  // "between $150 and $250 per square foot, about $200 on average, blended
+  // across finished and shop space" (published as $140 to $250 until
+  // 2026-10-31; the band below was not changed). Checked across the four
+  // configurations the estimator offers, at the tiers most shop homes are
+  // actually built to.
   for (const [living, shopSf] of [[1200, 1200], [1700, 1600], [1600, 2400], [2400, 1800]]) {
     for (const q of ["refresh", "mid-range"] as const) {
       const blended = shop(living, shopSf, q) / (living + shopSf);

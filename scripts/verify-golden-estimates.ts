@@ -47,7 +47,8 @@ type NcScenario = {
 /* Goldens recorded 2026-08-07 against the catalog as shipped, after checking
    each against the published anchors in shared/seoContent.ts ($250-$400/sf
    custom band, "near $225" floor, semi-custom $225-$300/sf, shop-home
-   $140-$250/sf blended). */
+   $140-$250/sf blended; published as $150-$250/sf, about $200 average, since
+   2026-10-31). */
 const NC_SCENARIOS: NcScenario[] = [
   {
     id: "custom-min-essential-exploring",

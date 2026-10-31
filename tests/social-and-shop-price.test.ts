@@ -49,3 +49,28 @@ test('shop home pricing reads $150 to $250 per square foot everywhere', () => {
     assert.match(answer, /land, site work (and|or) permits/);
   }
 });
+
+test('the 1,600 SF living plus 1,200 SF shop example is the same arithmetic everywhere', () => {
+  const files = [
+    'shared/content/wave2/shop-homes-and-barndominiums-idaho.ts',
+    'shared/content/pillars/boise-home-building-cost-guide.ts',
+    'shared/content/pillars/custom-home-design-guide.ts',
+    'shared/seoContent.ts',
+  ];
+  // 2,800 SF at $150 to $250 per SF, about $200 on average.
+  assert.equal(2800 * 150, 420_000);
+  assert.equal(2800 * 250, 700_000);
+  assert.equal(2800 * 200, 560_000);
+  for (const file of files) {
+    const text = readFileSync(file, 'utf8');
+    assert.doesNotMatch(text, /\$265,000|\$385,000|\$630,000|\$500,000/, file);
+    assert.match(text, /\$420,000 (and|to) \$700,000, about \$560,000/, file);
+  }
+  const service = JSON.stringify(SERVICE_SEO_CONTENT['shop-homes-barndominiums']);
+  assert.match(service, /\$420,000 (and|to) \$700,000, about \$560,000 at the \$200 average/);
+});
+
+test('the estimate audit published band matches the published shop home range', async () => {
+  const { PUBLISHED_PER_SF } = await import('../shared/plans/estimateAudit.ts');
+  assert.deepEqual(PUBLISHED_PER_SF['shop-home'], { low: 150, high: 250 });
+});

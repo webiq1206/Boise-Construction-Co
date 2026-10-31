@@ -86,7 +86,7 @@ export const PUBLISHED_PER_SF: Record<string, { low: number; high: number }> = {
   // "vertical construction plans between $225 and $400"; site work separate.
   "build-on-your-lot": { low: 225, high: 400 },
   // Blended living + shop square footage runs well below a finished-only rate.
-  "shop-home": { low: 140, high: 250 },
+  "shop-home": { low: 150, high: 250 },
 };
 
 /** Mirrors the plausibility guards in verify-new-construction.ts. */
