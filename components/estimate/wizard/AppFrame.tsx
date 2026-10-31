@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, type CSSProperties, type ReactNode } from "react";
+import Link from "next/link";
+import { X } from "lucide-react";
+import { ApprovedBrand } from "@/components/approved/ApprovedBrand";
 import { cn } from "@/lib/utils";
+import { SITE_CONFIG } from "@/shared/siteConfig";
 import { requestHideMobileNavBar } from "@/lib/mobileNavBar";
 import { useKeyboardInset } from "./useKeyboardInset";
 
@@ -79,6 +83,31 @@ export function AppFrame({
   const current = steps[clamped];
 
   return (
+    <>
+    {/* Compact brand bar. The marketing header is hidden on estimator routes
+        (owner 2026-09-23: no hamburger out of the flow), but the frame below
+        still starts under --app-header-h, so that band used to render as an
+        empty cream strip with no logo and no way back. It now carries the
+        logo and one exit control, and nothing else. */}
+    <div
+      className="fixed inset-x-0 top-0 z-[90] h-[var(--app-header-h,60px)] border-b border-inverse-foreground/[0.12] bg-inverse text-inverse-foreground"
+      data-testid="estimate-brand-bar"
+    >
+      <div className="ed-shell flex h-full items-center justify-between gap-4">
+        <Link href="/" className="flex min-h-[44px] min-w-0 items-center" aria-label={`${SITE_CONFIG.name} home`}>
+          <ApprovedBrand />
+        </Link>
+        <Link
+          href="/"
+          className="inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center gap-2 text-sm text-inverse-muted transition-colors hover:text-inverse-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-legible"
+          aria-label="Close the quote request and return to the home page"
+          data-testid="estimate-exit"
+        >
+          <span className="hidden sm:inline">Close</span>
+          <X className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+        </Link>
+      </div>
+    </div>
     <div
       className={cn(
         "fixed inset-x-0 z-[90] flex flex-col bg-inverse text-inverse-foreground",
@@ -199,5 +228,6 @@ export function AppFrame({
         </footer>
       )}
     </div>
+    </>
   );
 }
