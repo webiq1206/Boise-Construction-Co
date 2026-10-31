@@ -7,17 +7,10 @@ export const BRAND_PAGE_IMAGE=`https://${brand.domain}/brand/page-preview.png`;
 export const BRAND_SEARCH_ICON=`https://${brand.domain}/brand/search-icon-96.png`;
 type Copy={title:string;description:string};
 const COPY:Record<string,Record<string,Copy>>={
- construction:{
-  "/guides/boise-home-building-cost-guide":{title:"Boise Home Building Costs (2026)",description:"Compare Boise custom home building costs, land and site-work budgets, allowances and finish options. Plan your Treasure Valley home with a clear scope."},
-  "/guides/boise-home-building-process-guide":{title:"Boise Home Building Process",description:"See the steps to build a home in Boise, from lot review and design to permits, construction and handover. Plan your budget, selections and timeline."},
-  "/blog/cost-to-build-a-house-boise":{title:"Cost to Build a House in Boise",description:"Explore Boise house-building costs by square foot, finish level and site conditions. Compare construction costs with land, utilities and site-work budgets."},
-  "/blog/custom-home-cost-per-square-foot-boise":{title:"Boise Custom Home Cost per Sq Ft",description:"Compare custom home costs per square foot in Boise. See how home size, finishes, design complexity and site conditions affect your construction budget."},
-  '/':{title:'Custom Home Builder in Boise, ID',description:'Boise Construction Co builds custom and semi-custom homes in Boise and the Treasure Valley. Residential design-build, build-on-your-lot and clear budgets.'},
-  '/services':{title:'Home Building Services in Boise, ID',description:'Explore custom homes, semi-custom homes, additions and build-on-your-lot services across Boise and the Treasure Valley. Plan your project with our team.'},
-  '/about':{title:'About Our Boise Home Building Team',description:'Learn how Boise Construction Co plans and manages Treasure Valley home builds, from lot evaluation and design through permits, construction and handover.'},
-  '/contact':{title:'Contact a Boise Home Builder',description:'Discuss your new home, building lot or addition with Boise Construction Co. Call our team or request project guidance for Boise and the Treasure Valley.'},
-  '/resources':{title:'Home Building Worksheets & Guides',description:'Download home-building budget worksheets and lot evaluation checklists. Compare Ada and Canyon County permit steps before planning your Idaho build.'},
-  '/blog':{title:'Idaho Home Building Advice & Guides',description:'Read practical Idaho home-building guides on budgets, land, permits, design choices and construction timelines from the Boise Construction Co team.'}},
+ // Construction keeps no copy here: its route metadata (lib/page-metadata.ts and
+ // each route's own metadata export) is the single source for titles and
+ // descriptions, so an edit lands where the author expects it.
+ construction:{},
  remodeling:{
   '/':{title:'Remodeling Contractor in Boise, ID',description:'Plan a kitchen, bathroom or whole-home remodel in Boise and the Treasure Valley. Explore design-build services, project scopes and budget guidance.'},
   '/services':{title:'Kitchen, Bath & Home Remodeling',description:'Explore kitchen, bathroom and whole-home remodeling, additions and ADUs in Boise and the Treasure Valley. See the scope of our design-build services.'},
@@ -48,11 +41,15 @@ function pagePath(meta:Metadata,hint?:string):string{
  if(value){try{return new URL(value,`https://${brand.domain}`).pathname.replace(/\/$/,'')||'/';}catch{}}
  return hint&&!hint.includes('[')&&hint!=='__layout__'?(hint.replace(/\/$/,'')||'/'):'';
 }
+/** Used only when a route supplies no description of its own (not-found states). */
+const FALLBACK_DESCRIPTION:Record<string,string>={
+ construction:'Boise Construction Co, a P5 Home Co company, designs and builds custom and semi-custom homes in Boise and the Treasure Valley with a line-item budget.',
+};
 export function withBrandPageMetadata(meta:Metadata,routeHint?:string):Metadata{
  const override=routeHint==='__layout__'?undefined:COPY[brand.id]?.[pagePath(meta,routeHint)];
  const original=titleText(meta);
  const title=override?`${override.title} | ${brand.name}`:original.includes(brand.name)?original:`${original} | ${brand.name}`;
- const description=override?.description||meta.description||undefined;
+ const description=override?.description||meta.description||(routeHint==='__layout__'?undefined:FALLBACK_DESCRIPTION[brand.id])||undefined;
  const image={url:BRAND_PAGE_IMAGE,width:1200,height:630,alt:`${brand.name} brand seal`};
  const icons=routeHint==='__layout__'?{
   ...(typeof meta.icons==='object'&&!Array.isArray(meta.icons)&&!(meta.icons instanceof URL)?meta.icons:{}),
@@ -63,6 +60,9 @@ export function withBrandPageMetadata(meta:Metadata,routeHint?:string):Metadata{
   ...meta,
   ...(override?{title:{absolute:title},description}:{}),
   ...(icons?{icons}:{}),
+  ...(description&&!meta.description&&!override?{description}:{}),
+  // Owner-approved rule (scripts/verify-p5-mobile-seo.mjs): every route, posts
+  // and guides included, shares the brand preview card.
   openGraph:{...meta.openGraph,title,description,siteName:brand.name,images:[image]},
   twitter:{...meta.twitter,card:'summary_large_image',title,description,images:[BRAND_PAGE_IMAGE]},
  } as Metadata;

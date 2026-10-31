@@ -15,6 +15,7 @@ import {permitGuidanceHtml} from '../../lib/permitGuidance';
  * worth reading has to come from the place-specific fields.
  */
 import type { GuidePageData } from '../guideContent';
+import { getCityBySlug } from '../contentData';
 
 interface PlaceGuide {
   slug: string;
@@ -51,10 +52,10 @@ const PLACES: PlaceGuide[] = [
     citySlug: 'boise',
     county: 'ada',
     guideType: 'location',
-    title: 'Building a Home in Boise',
+    title: 'Building a new home in Boise, Idaho',
     seoTitle: 'Building a New Home in Boise, Idaho',
     metaDescription:
-      'To build a new home in Boise: infill lots, foothills sites, address-specific permit requirements, and what each does to a construction budget.',
+      'Building a new home in Boise, Idaho: infill lots versus foothills sites, address-specific permit requirements, and what each does to a construction budget.',
     excerpt:
       'Boise has two very different building problems: tight infill lots inside the established grid, and foothills parcels where the site costs more than people expect.',
     quickAnswer:
@@ -106,8 +107,8 @@ const PLACES: PlaceGuide[] = [
     citySlug: 'meridian',
     county: 'ada',
     guideType: 'location',
-    title: 'Building a Home in Meridian',
-    seoTitle: 'Building a New Home in Meridian',
+    title: 'Building a new home in Meridian, Idaho',
+    seoTitle: 'Building a New Home in Meridian, ID',
     metaDescription:
       'Building a new home in Meridian: subdivision lots, HOA design review, address-specific permit requirements, and what a serviced lot costs to build on.',
     excerpt:
@@ -161,10 +162,10 @@ const PLACES: PlaceGuide[] = [
     citySlug: 'eagle',
     county: 'ada',
     guideType: 'location',
-    title: 'Building a Home in Eagle',
+    title: 'Building a new home in Eagle, Idaho',
     seoTitle: 'Building a New Home in Eagle, Idaho',
     metaDescription:
-      'Building in Eagle: valley-floor acreage, foothills sites, strict design review, and why Eagle budgets run higher per square foot than Ada County.',
+      'Building a new home in Eagle, Idaho: valley-floor acreage, foothills sites, strict design review, and why Eagle budgets run higher per square foot.',
     excerpt:
       'Eagle covers flat valley acreage and steep foothills within the same city, and the two produce completely different construction budgets.',
     quickAnswer:
@@ -216,7 +217,7 @@ const PLACES: PlaceGuide[] = [
     citySlug: 'kuna',
     county: 'ada',
     guideType: 'location',
-    title: 'Building a Home in Kuna',
+    title: 'Building a new home in Kuna, Idaho',
     seoTitle: 'Building a New Home in Kuna, Idaho',
     metaDescription:
       'Building a new home in Kuna: acreage parcels, well and septic, irrigation laterals, and how rural site work changes a Treasure Valley build budget.',
@@ -271,10 +272,10 @@ const PLACES: PlaceGuide[] = [
     citySlug: 'star',
     county: 'ada',
     guideType: 'location',
-    title: 'Building a Home in Star',
+    title: 'Building a new home in Star, Idaho',
     seoTitle: 'Building a New Home in Star, Idaho',
     metaDescription:
-      'Building in Star: new subdivisions alongside working acreage, address-specific permit requirements, and what each type of parcel does to a build budget.',
+      'Building a new home in Star, Idaho: new subdivisions alongside working acreage, address-specific permits, and what each type of parcel does to a budget.',
     excerpt:
       'Star has both new platted subdivisions and working agricultural acreage, sometimes on the same road, and the two are different builds entirely.',
     quickAnswer:
@@ -326,10 +327,10 @@ const PLACES: PlaceGuide[] = [
     citySlug: 'middleton',
     county: 'canyon',
     guideType: 'location',
-    title: 'Custom Home Building in Middleton',
+    title: 'Building a new home in Middleton, Idaho',
     seoTitle: 'Building a New Home in Middleton, ID',
     metaDescription:
-      'Building a new home in Middleton, Idaho: city versus Canyon County permits, subdivision versus acreage lots, site work ranges and how design-build runs the job.',
+      'Building a new home in Middleton, Idaho: city versus Canyon County permits, subdivision versus acreage lots, site work ranges and how design-build works.',
     intro:
       '<p>This guide is for homeowners and anyone comparing a <strong>custom home builder in Middleton</strong> - covering Canyon County vs city permit paths, subdivision lots vs acreage, irrigation easements, and typical site-work ranges. Pair it with our <a href="/areas/middleton">Middleton area page</a> and <a href="/services/custom-home-builder">Treasure Valley custom home builder</a> service hub.</p>',
     excerpt:
@@ -383,7 +384,7 @@ const PLACES: PlaceGuide[] = [
     citySlug: 'nampa',
     county: 'canyon',
     guideType: 'location',
-    title: 'Building a Home in Nampa',
+    title: 'Building a new home in Nampa, Idaho',
     seoTitle: 'Building a New Home in Nampa, Idaho',
     metaDescription:
       'Building a new home in Nampa: city and county permit requirements, serviced subdivision lots, nearby acreage, and what each does to a construction budget.',
@@ -438,10 +439,10 @@ const PLACES: PlaceGuide[] = [
     citySlug: 'caldwell',
     county: 'canyon',
     guideType: 'location',
-    title: 'Building a Home in Caldwell',
-    seoTitle: 'Building a New Home in Caldwell',
+    title: 'Building a new home in Caldwell, Idaho',
+    seoTitle: 'Building a New Home in Caldwell, ID',
     metaDescription:
-      'Building in Caldwell, Idaho: city and county permit requirements, serviced lots and agricultural acreage, irrigation easements, and site work budgets.',
+      'Building a new home in Caldwell, Idaho: city and county permits, serviced lots and agricultural acreage, irrigation easements, and site work budgets.',
     excerpt:
       'Caldwell puts serviced city lots and working agricultural ground within a few miles of each other, and the site work difference between them is six figures.',
     quickAnswer:
@@ -653,6 +654,11 @@ const PLACES: PlaceGuide[] = [
   },
 ];
 
+/** City name for an area page slug ("garden-city" -> "Garden City"). */
+function cityName(citySlug: string): string {
+  return getCityBySlug(citySlug)?.name ?? citySlug;
+}
+
 /** "Eagle" takes "an". The other place names here start with a consonant sound. */
 function indefiniteArticle(name: string): 'a' | 'an' {
   return /^[aeiou]/i.test(name) ? 'an' : 'a';
@@ -685,7 +691,7 @@ function buildLocationGuide(p: PlaceGuide): GuidePageData {
     `<p>For the full picture of what moves a construction budget, see the <a href="/guides/boise-home-building-cost-guide">Boise home building cost guide</a>, or run your size and finish level through the <a href="/#calculator">estimator</a> for a starting range.</p>`,
     `<h2 id="how-we-build">How we work in ${p.name}</h2>`,
     `<p><strong>We handle design, engineering, permitting, and construction under one contract, which means one accountable team from the first drawing to handover.</strong> That includes submissions and inspections with the authority for your address, utility applications, and any separate septic approval with ${healthDistrict}. You get a line-item budget before we break ground, a published draw schedule, a written progress update every week, and a one-year workmanship warranty after possession. Our <a href="/guides/boise-home-building-process-guide">process guide</a> walks through every stage in order.</p>`,
-    `<p>Services relevant here: <a href="/services/custom-home-builder">${customHomeAnchor}</a>, <a href="/services/semi-custom-homes">semi-custom homes</a>, <a href="/services/build-on-your-lot">build on your lot</a>, and <a href="/services/home-plans-design">home plans and design</a>. See also <a href="/areas/${p.citySlug}">our ${p.citySlug === p.name.toLowerCase() ? p.name : p.citySlug} service area page</a> and the <a href="/guides/treasure-valley-home-building-guide">Treasure Valley home building guide</a>.</p>`,
+    `<p>Services relevant here: <a href="/services/custom-home-builder">${customHomeAnchor}</a>, <a href="/services/semi-custom-homes">semi-custom homes</a>, <a href="/services/build-on-your-lot">build on your lot</a>, and <a href="/services/home-plans-design">home plans and design</a>. See also <a href="/areas/${p.citySlug}">our ${cityName(p.citySlug)} home builder page</a> and the <a href="/guides/treasure-valley-home-building-guide">Treasure Valley home building guide</a>.</p>`,
     `<h2 id="next-steps">Start with the parcel</h2>`,
     `<p>The fastest way to get a real answer about building in ${p.name} is to tell us about the specific parcel, because that is what determines the site budget and frequently the plan. <a href="/contact">Send us the address or parcel number</a> and we will tell you what we see, or start with the <a href="/#calculator">build cost estimator</a> for a planning range.</p>`,
   ].join('\n');
@@ -713,12 +719,17 @@ function buildLocationGuide(p: PlaceGuide): GuidePageData {
     linkedCities: [p.citySlug],
     relatedLinks: [
       { url: '/guides/treasure-valley-home-building-guide', anchor: 'Treasure Valley Home Building Guide' },
-      { url: `/areas/${p.citySlug}`, anchor: `Building in ${p.name}` },
+      // The area page owns the commercial "home builder {city}" term; this guide
+      // owns the informational "building a new home in {city}" one.
+      { url: `/areas/${p.citySlug}`, anchor: `Home builder in ${cityName(p.citySlug)}` },
       { url: '/guides/boise-home-building-cost-guide', anchor: 'Home building costs' },
       { url: '/guides/buying-land-to-build-boise', anchor: 'Buying land to build on' },
       { url: '/services/custom-home-builder', anchor: 'Custom home building' },
     ],
-    primaryKeyword: `home builder ${p.name.toLowerCase()}`,
+    primaryKeyword:
+      p.guideType === 'location'
+        ? `building a new home in ${p.name.toLowerCase()}`
+        : `building a home in ${p.name.toLowerCase()}`,
   };
 }
 

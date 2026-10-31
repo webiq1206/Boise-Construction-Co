@@ -12,12 +12,12 @@ landingFAQSchema,
 landingServiceSchema
 } from '@/lib/landing-schema';
 import { buildPageMetadata,isCityServiceNoindex } from '@/lib/page-metadata';
-import { serviceNameInSentence } from '@/lib/seo';
+import { SERVICE_CITY_H1_NAMES,serviceNameInSentence } from '@/lib/seo';
 import { generateSpeakableSchema } from '@/lib/schema';
 import { SERVICE_SLUGS,getServiceBySlug,servicePath } from '@/lib/seo-routes';
 import { CITIES } from '@/shared/contentData';
 import { getFeaturedGalleryProject } from '@/shared/galleryData';
-import { SERVICE_SEO_CONTENT } from '@/shared/seoContent';
+import { getScopeSplitSection,SERVICE_SEO_CONTENT } from '@/shared/seoContent';
 import { getServiceImageSet } from '@/shared/serviceBackgrounds';
 import { CONSTRUCTION_IMAGES } from '@/shared/siteImages';
 import { notFound } from 'next/navigation';
@@ -54,6 +54,8 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
   const featuredProject = getFeaturedGalleryProject(service.slug);
   const serviceLC = serviceNameInSentence(service.name);
   const isAddition = service.slug === 'home-additions';
+  /** Name used where the page links its city pages ("Detached ADUs & Guest Houses in Boise"). */
+  const cityPageName = SERVICE_CITY_H1_NAMES[service.name] ?? service.name;
 
   /* Cost guidance is no longer one of the long-form sections: it renders as
      the template's dedicated cost-and-timeline band directly after the hero,
@@ -121,15 +123,16 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
   // this indexable parent.
   const indexableCities = CITIES.filter((c) => !isCityServiceNoindex(service.slug, c.slug));
 
-  const sections: LandingSection[] = isAddition ? [
+  const scopeSplit = getScopeSplitSection(service.slug);
+  const serviceSections: LandingSection[] = isAddition ? [
     {
-      heading: 'Room additions across the Treasure Valley',
+      heading: 'Structural home additions across the Treasure Valley',
       paragraphs: [
-        'We plan home additions in Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and Garden City. Local permit paths and the details of an existing home vary, so every project begins with the home itself.',
+        'We plan structural home additions in Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and Garden City. Local permit paths and the details of an existing home vary, so every project begins with the home itself.',
         'Choose a city below for local home addition guidance, or schedule an in-home planning conversation to talk through the space you need.',
       ],
       links: indexableCities.map((c) => ({
-        label: `Home Additions in ${c.name}`,
+        label: `Structural Home Additions in ${c.name}`,
         href: `/services/${service.slug}/${c.slug}`,
       })),
       figure: longFormFigure,
@@ -147,7 +150,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
     },
   ] : [
     {
-      heading: `${service.name} across the Treasure Valley`,
+      heading: `${cityPageName} across the Treasure Valley`,
       paragraphs: [
         `We provide ${serviceLC} services throughout the Treasure Valley, with local pages for the cities listed below. Lot availability, permit paths, impact fees, and HOA design review differ between Ada and Canyon County communities, so each city page covers the details that matter where you plan to build.`,
         `Choose a city below to see local ${serviceLC} guidance, or schedule a free planning consultation to discuss your build directly.`,
@@ -166,7 +169,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
             ]
           : undefined,
       links: indexableCities.map((c) => ({
-        label: `${service.name} in ${c.name}`,
+        label: `${cityPageName} in ${c.name}`,
         href: `/services/${service.slug}/${c.slug}`,
       })),
       figure: longFormFigure,
@@ -193,6 +196,10 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
           },
     },
   ];
+
+  // ADUs and additions open with the split between this site and Boise
+  // Remodeling Co, so the scope is clear before the long-form copy.
+  const sections: LandingSection[] = scopeSplit ? [scopeSplit, ...serviceSections] : serviceSections;
 
   const schemas = [
     landingBreadcrumbs([

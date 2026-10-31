@@ -28,7 +28,7 @@ export default function BlogPage() {
       { name: "Blog", url: "/blog" },
     ]),
     generateCollectionPageSchema({
-      title: "Home Building Insights",
+      title: "Idaho home building advice and guides",
       description:
         "Straight answers for Treasure Valley families building a new home: what it costs, how long it takes, how to read a bid, and what to look for in a lot.",
       url: "/blog",
@@ -50,7 +50,7 @@ export default function BlogPage() {
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Blog" }]} />
         <p className="ed-eyebrow mt-8" style={{ color: "rgb(255 255 255 / 0.72)" }}>Blog</p>
         <h1 className="ed-display ed-statement-display text-inverse-foreground">
-          Home Building Insights
+          Idaho home building advice and guides
         </h1>
         <p className="ed-lede mt-8 max-w-[44ch] text-inverse-foreground/85">
           Straight answers for Treasure Valley families building a new home. What it actually costs,

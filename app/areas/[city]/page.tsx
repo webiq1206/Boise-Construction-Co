@@ -10,12 +10,14 @@ landingFAQSchema,
 import { buildPageMetadata,isCityServiceNoindex } from '@/lib/page-metadata';
 import { permitGuidance, permitSource } from '@/lib/permitGuidance';
 import { generateSpeakableSchema } from '@/lib/schema';
-import { CITY_SEO_DATA, indianCreekDescription } from '@/lib/seo';
+import { CITY_SEO_DATA, SERVICE_CITY_H1_NAMES, indianCreekDescription } from '@/lib/seo';
 import { areaPath,CITY_SLUGS,cityServicePath,getCityBySlug,servicePath } from '@/lib/seo-routes';
 import { getAreaImageSet } from '@/shared/cityServiceImages';
 import { getCountyLabel,SERVICES } from '@/shared/contentData';
 import { getGalleryProjectsForCity } from '@/shared/galleryData';
 import { getAreaCityCopy } from '@/shared/content/areaCopy';
+import { LOCATION_GUIDES } from '@/shared/content/locationGuides';
+import { guidePath } from '@/shared/contentHubs';
 import { AREA_PAGE_FAQS,getAreaIntro } from '@/shared/seoContent';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { CONSTRUCTION_IMAGES } from '@/shared/siteImages';
@@ -51,10 +53,6 @@ export async function generateMetadata(
     cityName: cityData.name,
     citySlug: cityData.slug,
     path: areaPath(cityData.slug),
-    ...(cityData.slug === 'middleton' ? {
-      titleOverride: 'Custom Home Builder in Middleton, ID',
-      descriptionOverride: 'Plan a custom home in Middleton, ID. Share your lot, plans and project details with Boise Construction Co for team review before we prepare your estimate.',
-    } : {}),
   })), "/areas/[city]");
 }
 
@@ -75,6 +73,9 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
     ? `We serve ${city.name} homeowners${seo.neighborhoods.length ? ` across ${seo.neighborhoods.slice(0, 3).join(', ')}` : ''}, and all of ${county}. Addresses outside city limits go through the county instead; we check this for you at the first visit.`
     : `We serve ${city.name} and all of ${county} with design-build home construction. Addresses outside city limits go through the county instead; we check this for you at the first visit.`;
 
+  // The location guide for this city (informational: "building a new home in
+  // {city}"); this page owns the commercial "home builder {city}" term.
+  const guide = LOCATION_GUIDES.find((g) => g.guideType === 'location' && g.linkedCities?.[0] === city.slug);
   const neighborhoods = seo?.neighborhoods ?? [];
   const landmarks = seo?.landmarks ?? [];
   const creek = indianCreekDescription(city.name);
@@ -116,11 +117,15 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       // A city page only where that combination is indexable (the sitemap
       // rule); otherwise the service overview, so no indexable page spends a
       // link on a noindexed combination.
-      links: SERVICES.map((s) =>
-        isCityServiceNoindex(s.slug, city.slug)
-          ? { label: s.name, href: servicePath(s.slug) }
-          : { label: `${s.name} in ${city.name}`, href: cityServicePath(s.slug, city.slug) },
-      ),
+      // Descriptive service anchors. ADUs and additions use the names that
+      // state this site's side of the split (detached ADUs, structural
+      // additions); conversions and interior work belong to Boise Remodeling Co.
+      links: SERVICES.map((s) => {
+        const name = SERVICE_CITY_H1_NAMES[s.name] ?? s.name;
+        return isCityServiceNoindex(s.slug, city.slug)
+          ? { label: `${name} across the Treasure Valley`, href: servicePath(s.slug) }
+          : { label: `${name} in ${city.name}`, href: cityServicePath(s.slug, city.slug) };
+      }),
       figure: {
         src:
           city.slug === 'eagle'
@@ -143,7 +148,14 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
         landmarks.length
           ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand the area's character and how to design a home that fits its street and holds its value.`
           : `As a local team, we understand the area's character and how to design a home that fits its street and holds its value.`,
+        ...(guide && city.slug !== 'middleton'
+          ? [`Lots, permits and budgets are covered in more depth in our guide to building a new home in ${city.name}.`]
+          : []),
       ],
+      paragraphLinks:
+        guide && city.slug !== 'middleton'
+          ? [undefined, undefined, [{ phrase: `building a new home in ${city.name}`, href: guidePath(guide.slug) }]]
+          : undefined,
       figure: {
         src:
           city.slug === 'eagle'

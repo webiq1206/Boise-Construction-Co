@@ -5,7 +5,12 @@
  */
 
 import { SITE_CONFIG } from '@/shared/siteConfig';
-import { SHOW_TRUST } from '@/shared/publicFlags';
+import { CITIES, SERVICES } from '@/shared/contentData';
+import {
+  AREA_META_DESCRIPTIONS,
+  CITY_SERVICE_META_DESCRIPTIONS,
+  SERVICE_META_DESCRIPTIONS,
+} from '@/shared/metaDescriptions';
 import { GBP_SOCIAL, getExternalProfileUrls } from '@/shared/gbpProfile';
 
 interface SEOMetaData {
@@ -128,35 +133,6 @@ export function generatePageTitle(params: ServiceSEOParams): string {
   return `${truncatedService} | ${BRAND}`;
 }
 
-const CITY_DESCRIPTION_VARIANTS: Record<string, string> = {
-  Kuna: "Kuna's trusted design-build",
-  Boise: "Boise's design-build",
-  Meridian: "Meridian's trusted",
-  Eagle: "Eagle's preferred",
-  Star: "Star's reliable",
-  Middleton: "Middleton's expert",
-  Nampa: "Nampa's trusted",
-  Caldwell: "Caldwell's trusted",
-};
-
-/** Original city phrases stay above. While SHOW_TRUST is off, a trusted phrase becomes the city name. */
-function cityDescriptionVariant(city: string): string {
-  const trusted = CITY_DESCRIPTION_VARIANTS[city] || `${city}'s trusted`;
-  if (SHOW_TRUST || !/trusted/i.test(trusted)) return trusted;
-  return city;
-}
-
-const CITY_CTA_VARIANTS: Record<string, string> = {
-  Kuna: "Free planning consultation",
-  Boise: "Treasure Valley design-build",
-  Meridian: "Bonded & insured",
-  Eagle: "Line-item budget upfront",
-  Star: "Weekly written updates",
-  Middleton: "Workmanship warranty",
-  Nampa: "Ada & Canyon County permits",
-  Caldwell: "Design-build home building",
-};
-
 /**
  * Lowercase a service name for use mid-sentence while keeping acronyms intact:
  * "ADUs & Guest Houses" -> "ADUs & guest houses", never "adus & guest houses".
@@ -174,60 +150,92 @@ function sentenceStart(text: string): string {
 }
 
 /**
- * Join a city phrase and a service phrase without repeating a word at the
- * seam: "Boise's design-build" + "design-build" used to render
- * "Boise's design-build design-build".
+ * Meta description budget. Google shows roughly 155 to 160 characters on
+ * desktop; 155 keeps the closing words visible. 140 is the floor for authored
+ * descriptions so the snippet carries the keyword and a reason to click.
+ * scripts/verify-meta-descriptions.ts enforces both in prebuild.
  */
-function joinCityAndService(cityVariant: string, serviceLC: string): string {
-  const lastWord = cityVariant.split(' ').pop()?.toLowerCase() ?? '';
-  if (lastWord && serviceLC.toLowerCase().startsWith(lastWord)) {
-    return `${cityVariant.slice(0, cityVariant.length - lastWord.length).trimEnd()} ${serviceLC}`;
-  }
-  return `${cityVariant} ${serviceLC}`;
+export const META_DESCRIPTION_MIN = 140;
+export const META_DESCRIPTION_MAX = 155;
+
+/**
+ * First candidate inside the 140 to 155 band, else the longest one that fits
+ * 155, else the shortest. Generated descriptions never carry a phone number or
+ * an exclamation mark: the verifier fails the build if one does.
+ */
+export function fitMetaDescription(candidates: string[]): string {
+  const clean = candidates.map((c) => c.replace(/\s+/g, ' ').trim());
+  const inBand = clean.find((c) => c.length >= META_DESCRIPTION_MIN && c.length <= META_DESCRIPTION_MAX);
+  if (inBand) return inBand;
+  const fitting = clean.filter((c) => c.length <= META_DESCRIPTION_MAX).sort((a, b) => b.length - a.length);
+  if (fitting.length) return fitting[0];
+  return [...clean].sort((a, b) => a.length - b.length)[0];
 }
 
-/** First candidate that fits the 160-character description budget. */
-function firstFitting(candidates: string[], max = 160): string {
-  return candidates.find((c) => c.length <= max) ?? candidates[candidates.length - 1];
+function serviceSlugFor(serviceName: string): string | undefined {
+  return SERVICES.find((s) => s.name === serviceName)?.slug;
+}
+
+function citySlugFor(cityName: string): string | undefined {
+  return CITIES.find((c) => c.name === cityName)?.slug;
+}
+
+/** Service phrase as searched: "Detached ADUs and guest houses", "Structural home additions". */
+const SERVICE_SEARCH_PHRASES: Record<string, string> = {
+  adu: 'Detached ADUs and guest houses',
+  'home-additions': 'Structural home additions',
+  'shop-homes-barndominiums': 'Barndominium and shop homes',
+  'lot-evaluation': 'Building lot evaluation',
+};
+
+function serviceSearchPhrase(serviceName: string): string {
+  const slug = serviceSlugFor(serviceName);
+  return (slug && SERVICE_SEARCH_PHRASES[slug]) || sentenceStart(serviceNameInSentence(serviceName).replace(/ & /g, ' and '));
 }
 
 /**
- * Generate SEO-optimized meta description
- * 150-160 characters with phone number, CTA, and unique value prop
- * Phone: (208) 477-1169
+ * Meta description for a service parent, an area page or (with both a service
+ * and a city) a city x service page. Authored copy in
+ * shared/metaDescriptions.ts wins; anything not listed there gets a
+ * keyword-first sentence built from the service's own short description, so a
+ * new service or city can never fall back to a phone-number formula.
  */
 export function generateMetaDescription(params: ServiceSEOParams): string {
   const { serviceName, city } = params;
-  const phone = SITE_CONFIG.phone;
-  
+
   if (params.isHomePage) {
-    return `Design-build home builder serving Boise, Meridian, Eagle & the Treasure Valley. Bonded, insured, line-item budgets. Call ${phone} for a free planning consultation!`;
+    return fitMetaDescription([
+      `Custom home builder in Boise, Idaho. ${BRAND} designs and builds custom and semi-custom homes across the Treasure Valley, with a line-item budget first.`,
+    ]);
   }
-  
-  if (city && serviceName) {
-    const serviceLC = serviceNameInSentence(serviceName);
-    const cityVariant = cityDescriptionVariant(city);
-    const ctaVariant = SHOW_TRUST
-      ? (CITY_CTA_VARIANTS[city] || "Satisfaction guaranteed")
-      : "Free planning consultation";
-    return `${joinCityAndService(cityVariant, serviceLC)} team. Bonded & insured. ${ctaVariant}. Call ${phone} for a free consultation!`;
-  }
-  
+
+  if (city && serviceName) return generateCityServiceDescription(serviceName, city);
+
   if (city) {
-    return `Home builder in ${city}, Idaho. Bonded, insured & locally owned. Call ${phone} for a free planning consultation in ${city}!`;
+    const authored = AREA_META_DESCRIPTIONS[citySlugFor(city) ?? ''];
+    if (authored) return authored;
+    return fitMetaDescription([
+      `Home builder in ${city}, Idaho: custom homes, semi-custom plans and homes on land you already own, with lot evaluation, permits and site costs checked first.`,
+      `Home builder in ${city}, Idaho: custom homes, semi-custom plans and homes on land you already own, with site costs and permits checked before design.`,
+      `Home builder in ${city}, Idaho: custom and semi-custom homes and builds on your own lot, with one design-build team from the lot to the keys.`,
+    ]);
   }
-  
+
   if (!serviceName) {
-    return `New home builder in Boise & the Treasure Valley. Bonded, insured, design-build. Call ${phone} for a free planning consultation and a realistic budget band!`;
+    return fitMetaDescription([
+      `New home builder in Boise and the Treasure Valley. ${BRAND} designs and builds custom and semi-custom homes, with a line-item budget before we build.`,
+    ]);
   }
-  
-  // Sentence case at the start, and a shorter close when a long service name
-  // (Lot Evaluation & Feasibility, Shop Homes & Barndominiums) would push the
-  // full sentence past 160 characters.
-  const service = sentenceStart(serviceNameInSentence(serviceName));
-  return firstFitting([
-    `${service} in Boise & the Treasure Valley. Bonded, insured, with a line-item budget before we build. Call ${phone} for a free consultation!`,
-    `${service} in Boise & the Treasure Valley. Bonded, insured, with a line-item budget before we build. Call ${phone}.`,
+
+  const authored = SERVICE_META_DESCRIPTIONS[serviceSlugFor(serviceName) ?? ''];
+  if (authored) return authored;
+  const service = serviceSearchPhrase(serviceName);
+  const detail = SERVICES.find((s) => s.name === serviceName)?.shortDescription ?? '';
+  return fitMetaDescription([
+    `${service} in Boise and the Treasure Valley. ${detail} One design-build team, with a line-item budget before we build.`,
+    `${service} in Boise and the Treasure Valley. ${detail} One design-build team from start to finish.`,
+    `${service} in Boise and the Treasure Valley. ${detail}`,
+    `${service} in Boise and the Treasure Valley from one design-build team, with a line-item budget before we break ground and a written update every week.`,
   ]);
 }
 
@@ -249,13 +257,46 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
 const SERVICE_KEYWORD_NAMES: Record<string, string> = {
   'Lot Evaluation & Feasibility': 'Lot Evaluation',
   'Shop Homes & Barndominiums': 'Barndominium Builder',
+  'Home Additions': 'Home Additions',
+};
+
+/**
+ * Title names that state which part of the ADU and additions split this site
+ * owns: new detached ADUs and structural additions (new footprint, second
+ * stories). Garage or basement ADU conversions and work inside the existing
+ * footprint belong to Boise Remodeling Co. Used in place of the service name
+ * in city x service titles and H1s.
+ */
+export const SERVICE_CITY_TITLE_NAMES: Record<string, string> = {
+  'ADUs & Guest Houses': 'Detached ADU Builder',
+  'Home Additions': 'Structural Home Additions',
+};
+
+/** H1 name for city x service pages (see SERVICE_CITY_TITLE_NAMES). */
+export const SERVICE_CITY_H1_NAMES: Record<string, string> = {
+  'ADUs & Guest Houses': 'Detached ADUs & Guest Houses',
+  'Home Additions': 'Structural Home Additions',
 };
 
 /** Budget after the layout template appends " | Boise Construction Co" (24). */
 export const CITY_SERVICE_TITLE_BUDGET = 36;
 
-export function generateCityServiceTitle(serviceName: string, cityName: string): string {
+/**
+ * `avoid` is the parent service title: /services/adu is "Detached ADU Builder
+ * in Boise, Idaho", so the Boise child takes the H1 name instead of repeating
+ * the parent's title word for word.
+ */
+export function generateCityServiceTitle(serviceName: string, cityName: string, avoid?: string): string {
   const keyword = SERVICE_KEYWORD_NAMES[serviceName];
+  for (const titleName of [SERVICE_CITY_TITLE_NAMES[serviceName], SERVICE_CITY_H1_NAMES[serviceName]]) {
+    if (!titleName || titleName === serviceName) continue;
+    // "Detached ADU Builder in Boise, ID" would only shorten the parent's
+    // "... in Boise, Idaho"; take the next name instead.
+    if (avoid?.startsWith(`${titleName} in ${cityName}`)) continue;
+    const named = [`${titleName} in ${cityName}, Idaho`, `${titleName} in ${cityName}, ID`, `${titleName} in ${cityName}`, `${titleName}, ${cityName} ID`, `${titleName}, ${cityName}`];
+    const fit = named.find((c) => c.length <= CITY_SERVICE_TITLE_BUDGET && c !== avoid);
+    if (fit) return fit;
+  }
 
   // Degrade the location part, never the searched term: "Idaho" becomes "ID",
   // then the keyword-bearing short name (where one exists) gets the readable
@@ -276,35 +317,30 @@ export function generateCityServiceTitle(serviceName: string, cityName: string):
 }
 
 /**
- * Generate varied city-service meta description
- * Guaranteed under 160 characters
+ * City x service meta description: authored copy for the indexable
+ * combinations, otherwise a keyword-first sentence that names the service and
+ * the city, then the service's own short description. 155 characters at most,
+ * no phone number, no exclamation mark.
  */
 export function generateCityServiceDescription(
   serviceName: string,
   cityName: string,
   shortDescription?: string,
 ): string {
-  const phone = SITE_CONFIG.phone;
-  const serviceLC = serviceNameInSentence(serviceName);
-  const cityVariant = cityDescriptionVariant(cityName);
-  const lead = joinCityAndService(cityVariant, serviceLC);
-  const cityData = CITY_SEO_DATA[cityName as keyof typeof CITY_SEO_DATA];
-  const neighborhood = cityData?.neighborhoods?.[0];
-
-  if (neighborhood) {
-    const withNeighborhood = `${lead}. Serving ${neighborhood} & all ${cityName}. Bonded & insured. Call ${phone}!`;
-    if (withNeighborhood.length <= 160) return withNeighborhood;
-  }
-
-  if (shortDescription) {
-    const desc = `${lead}. ${shortDescription}. Bonded & insured. Call ${phone}!`;
-    if (desc.length <= 160) return desc;
-  }
-
-  const base = `${lead} in ${cityName}, ID. Bonded & insured. Call ${phone} for a free consultation!`;
-  if (base.length <= 160) return base;
-
-  return `${sentenceStart(serviceLC)} in ${cityName}, ID. Bonded & insured builder. Call ${phone} for a free consultation!`;
+  const serviceSlug = serviceSlugFor(serviceName);
+  const citySlug = citySlugFor(cityName);
+  const authored = CITY_SERVICE_META_DESCRIPTIONS[`${serviceSlug}/${citySlug}`];
+  if (authored) return authored;
+  const service = serviceSearchPhrase(serviceName);
+  const detail = shortDescription ?? SERVICES.find((s) => s.name === serviceName)?.shortDescription ?? '';
+  return fitMetaDescription([
+    `${service} in ${cityName}, Idaho. ${detail} One design-build team, line-item budget first.`,
+    `${service} in ${cityName}, Idaho. ${detail} One accountable design-build team.`,
+    `${service} in ${cityName}, Idaho. ${detail} Line-item budget first.`,
+    `${service} in ${cityName}, Idaho. ${detail}`,
+    `${service} in ${cityName}, Idaho, from one design-build team: feasibility, design, permits and construction, with a line-item budget before we build.`,
+    `${service} in ${cityName}, Idaho, from one design-build team, with feasibility, permits and a line-item budget settled first.`,
+  ]);
 }
 
 /** Keep complete authored titles; an optional secondary label may be omitted. */

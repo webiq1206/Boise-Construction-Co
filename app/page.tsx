@@ -19,8 +19,9 @@ export const metadata: Metadata = withBrandPageMetadata(({
   // 55 chars. Leads with the primary term ("custom home builder Boise") rather
   // than the brand, which the suffix carries anyway.
   title: { absolute: `Custom Home Builder in Boise, ID | ${SITE_CONFIG.name}` },
+  // Keyword first, 140 to 155 characters, no phone (scripts/verify-meta-descriptions.ts).
   description:
-    fitDescription("Design-build home builder for Boise, Meridian, Eagle, Nampa & the Treasure Valley. Custom and semi-custom homes, or build on your own lot, with a line-item budget before we break ground."),
+    fitDescription("Custom home builder in Boise, Idaho. Boise Construction Co, a P5 Home Co company, designs and builds custom and semi-custom homes with a line-item budget."),
   alternates: {
     canonical: buildCanonical("/"),
     // Setting `alternates` replaces the root declaration, so the feed link has

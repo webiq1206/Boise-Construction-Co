@@ -462,10 +462,10 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   adu: {
     slug: 'adu',
     name: 'ADUs & Guest Houses',
-    headline: 'ADU Builder in Boise, Idaho',
-    primaryKeyword: 'adu builder boise idaho',
+    headline: 'Detached ADU Builder in Boise, Idaho',
+    primaryKeyword: 'detached adu builder boise idaho',
     overview:
-      'ADU builders in Boise plan accessory dwellings and guest houses on the lot you already own. Boise Construction Co handles feasibility, design, permits, and construction for detached or attached units, and Boise ADU Co projects currently run through Boise Construction Co while that brand site is coming.',
+      'Detached ADU builder in Boise, Idaho: Boise Construction Co plans and builds new accessory dwellings and guest houses as separate structures on the lot you already own, from feasibility and design through permits and construction. Boise ADU Co projects currently run through Boise Construction Co while that brand site is coming.',
     benefits: [
       'Feasibility before design, so setbacks and utilities shape the plan',
       'One accountable team from drawings through the final walkthrough',
@@ -480,7 +480,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       'Construction, inspections, and a written workmanship warranty',
     ],
     timeline:
-      'Timeline depends on the unit size, whether it is attached or detached, utility extensions, and plan review. Many ADUs land inside a shorter window than a full custom home; we set a project-specific schedule after the site review.',
+      'Timeline depends on the unit size, utility extensions, site work, and plan review. Many detached ADUs land inside a shorter window than a full custom home; we set a project-specific schedule after the site review.',
     processSteps: [
       {
         title: 'Talk about the property',
@@ -503,7 +503,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'Who builds ADUs in Boise?',
         answer:
-          'Boise Construction Co builds ADUs and guest houses across the Treasure Valley. Boise ADU Co projects currently run through Boise Construction Co while the ADU brand site is coming.',
+          'Boise Construction Co builds new detached ADUs and guest houses across the Treasure Valley. Boise ADU Co projects currently run through Boise Construction Co while the ADU brand site is coming. Garage and basement conversions are remodeling work, handled by Boise Remodeling Co.',
       },
       {
         question: 'Can every lot have an ADU?',
@@ -513,7 +513,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does an ADU cost in the Treasure Valley?',
         answer:
-          'Cost depends on size, attached or detached configuration, utility extensions, and finishes. We price after a site review rather than quoting a square-foot number without seeing the lot. Request a quote and we reply within one business day.',
+          'Cost depends on size, utility extensions, site work, and finishes. We price after a site review rather than quoting a square-foot number without seeing the lot. Request a quote and we reply within one business day.',
         links: [{ phrase: 'Request a quote', href: '/estimate' }],
       },
       {
@@ -531,7 +531,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Planning an ADU in the Treasure Valley',
       paragraphs: [
-        'An ADU is priced from the property up: setbacks, utilities, access, and whether the unit is attached or detached shape the scope more than a generic square-foot figure.',
+        'A detached ADU is priced from the property up: setbacks, utilities, access, and site work shape the scope more than a generic square-foot figure.',
         'Request a quote and we reply within one business day. A site review comes before a detailed proposal, so the first number you see is grounded in your lot.',
       ],
     },
@@ -540,10 +540,10 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'home-additions': {
     slug: 'home-additions',
     name: 'Home Additions',
-    headline: 'Home Additions in the Treasure Valley',
-    primaryKeyword: 'home additions boise idaho',
+    headline: 'Structural Home Additions in the Treasure Valley',
+    primaryKeyword: 'structural home additions boise idaho',
     overview:
-      'When your home still fits the neighborhood but no longer fits your life, an addition can make room without starting over. Boise Construction Co plans room additions around the house already standing, from the first look at structure and utilities through permits, construction, and the final walkthrough.',
+      'Structural home additions in the Treasure Valley add new footprint or a second story to the house you already live in. Boise Construction Co plans each one around the home already standing, from the first look at structure and utilities through permits, construction, and the final walkthrough.',
     benefits: [
       'Make room for the way your household lives now',
       'Plan the addition around the existing home before construction begins',
@@ -581,7 +581,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'What kinds of home additions do you plan?',
         answer:
-          'Room additions can create a bedroom, a larger living area, a suite, or flexible space for changing household needs. The first step is seeing how the new space can connect to the existing home.',
+          'Structural additions that add new footprint or a second story: a bedroom, a larger living area, a suite, or flexible space for changing household needs. The first step is seeing how the new space can connect to the existing home. Remodeling rooms inside the existing footprint is Boise Remodeling Co work.',
       },
       {
         question: 'Can you add onto the home I already live in?',
@@ -862,6 +862,41 @@ export function getAreaIntro(city: CityData): string {
   if (custom) return custom.intro;
   const county = getCountyLabel(city.county);
   return `Boise Construction Co builds new homes for clients in ${city.name}, Idaho and throughout ${county}. From fully custom homes and semi-custom plans to building on land you already own, you work with one accountable team from feasibility through final walkthrough.`;
+}
+
+/** Sister company that owns remodeling, conversions and interior additions. */
+export const REMODELING_SITE_URL = 'https://boiseremodeling.co';
+
+/**
+ * The ADU and additions split between the two P5 Home Co sites, stated on the
+ * page: this site builds new detached ADUs and structural additions (new
+ * footprint, second stories); Boise Remodeling Co handles interior remodels,
+ * garage or basement ADU conversions and work inside the existing footprint.
+ * One followed contextual link to boiseremodeling.co, never more.
+ */
+export function getScopeSplitSection(serviceSlug: string, cityName?: string): LandingSection | undefined {
+  const where = cityName ? ` in ${cityName}` : '';
+  if (serviceSlug === 'adu') {
+    return {
+      heading: `New detached ADUs${where}, not conversions`,
+      paragraphs: [
+        `Boise Construction Co builds new detached ADUs and guest houses${where}: a separate dwelling on the lot you already own, from setbacks and utilities through permits and construction.`,
+        'Converting a garage or a basement into an attached ADU, or remodeling rooms inside the house, is interior work. Our sister company Boise Remodeling Co handles those projects.',
+      ],
+      paragraphLinks: [undefined, [{ phrase: 'Boise Remodeling Co', href: REMODELING_SITE_URL }]],
+    };
+  }
+  if (serviceSlug === 'home-additions') {
+    return {
+      heading: `Structural additions${where}: new footprint or a second story`,
+      paragraphs: [
+        `Boise Construction Co builds structural home additions${where}: new footprint on the lot or a second story over the house you already live in, tied into the existing structure, roofline and utilities.`,
+        'Reworking rooms inside the existing footprint, such as a kitchen, a bathroom or a basement finish, is interior remodeling. Our sister company Boise Remodeling Co handles that work.',
+      ],
+      paragraphLinks: [undefined, [{ phrase: 'Boise Remodeling Co', href: REMODELING_SITE_URL }]],
+    };
+  }
+  return undefined;
 }
 
 export function getCityServiceIntro(

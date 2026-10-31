@@ -2,10 +2,12 @@ import type { BlogPostData } from '../../blogContent';
 
 export const shopHomesAndBarndominiumsIdaho: BlogPostData = {
   slug: 'shop-homes-and-barndominiums-idaho',
-  title: 'Shop Homes and Barndominiums in Idaho',
-  seoTitle: 'Shop Homes and Barndominiums, Idaho',
+  title: 'Barndominium and shop home costs in Idaho, explained',
+  // Cost angle, so the post stops echoing the service page title
+  // ("Barndominium & Shop Homes" at /services/shop-homes-barndominiums).
+  seoTitle: 'Barndominium Cost in Idaho Explained',
   metaDescription:
-    'Shop homes and barndominiums in Idaho: why they cost $150 to $250 per square foot blended, the real trade-offs, zoning, financing, and insulating a shop.',
+    'Barndominium cost in Idaho explained: why shop homes run $150 to $250 per square foot blended, the real trade-offs, zoning, financing and shop insulation.',
   excerpt:
     'A post-frame or steel-framed building that pairs finished living space with a working shop costs less per square foot than a conventional house. Here is where the savings come from, what you give up, and who these actually suit.',
   category: 'Design & Floor Plans',
@@ -13,9 +15,9 @@ export const shopHomesAndBarndominiumsIdaho: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-07-22',
   tags: ['barndominium', 'shop home', 'post frame', 'new construction', 'idaho'],
-  primaryKeyword: 'shop homes and barndominiums idaho',
+  primaryKeyword: 'barndominium cost idaho',
   secondaryKeywords: [
-    'barndominium cost idaho',
+    'shop homes and barndominiums idaho',
     'shop house treasure valley',
     'post frame home builder boise',
   ],

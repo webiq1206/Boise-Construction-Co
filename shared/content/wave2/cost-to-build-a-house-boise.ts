@@ -3,9 +3,9 @@ import type { BlogPostData } from '../../blogContent';
 export const costToBuildAHouseBoise: BlogPostData = {
   slug: 'cost-to-build-a-house-boise',
   title: 'How Much Does It Cost to Build a House in Boise?',
-  seoTitle: 'Cost to Build a House in Boise (2026)',
+  seoTitle: 'Cost to Build a House in Boise, 2026',
   metaDescription:
-    'Building a custom home in Boise costs $250 to $400 per finished square foot in 2026, or $600,000 to $960,000 at 2,400 square feet, before land.',
+    'Cost to build a house in Boise in 2026: $250 to $400 per finished square foot, or $600,000 to $960,000 at 2,400 square feet, before land and site work.',
   excerpt:
     'A custom home in the Boise area runs $250 to $400 per finished square foot, excluding land. Here is where that money goes and why the band is so wide.',
   category: 'Home Building Costs',

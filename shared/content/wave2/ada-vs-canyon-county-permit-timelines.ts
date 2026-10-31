@@ -3,9 +3,11 @@ import type { BlogPostData } from '../../blogContent';
 export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
   slug: 'ada-vs-canyon-county-permit-timelines',
   title: 'Ada vs Canyon County: What Differs When You Build',
-  seoTitle: 'Ada vs Canyon: Building Differences',
+  // What differs between the counties; /resources/ada-canyon-permit-flow owns
+  // the step-by-step "permit flow".
+  seoTitle: 'Building in Ada vs Canyon County',
   metaDescription:
-    'Building in Ada County versus Canyon County: separate permit portals, different review cadence, impact fee structures, and how rural septic is handled.',
+    'Building in Ada County versus Canyon County: separate permit portals, review cadence, impact fee structures, highway districts and septic health districts.',
   excerpt:
     'The house is the same on both sides of the county line. The submittal path, the fee structure, and the agencies you deal with are not. Here is what changes.',
   category: 'The Building Process',
@@ -13,7 +15,7 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
   author: 'Boise Construction Co',
   publishedAt: '2026-06-24',
   tags: ['permits', 'ada county', 'canyon county', 'building process'],
-  primaryKeyword: 'ada vs canyon county building permits',
+  primaryKeyword: 'building in ada vs canyon county',
   secondaryKeywords: [
     'canyon county building permit',
     'ada county permit process',

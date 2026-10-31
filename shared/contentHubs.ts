@@ -31,6 +31,13 @@ export interface ContentHub {
   pillarSlug: string;
   pillarRoute: ContentRoute;
   description: string;
+  /**
+   * Authored meta description for /blog/category/{hubSlug}: keyword first,
+   * 140 to 155 characters. The route used to append a count phrase to
+   * `description` and slice it at 158 characters, ending every hub snippet
+   * mid-sentence with an ellipsis.
+   */
+  metaDescription: string;
   priorityTier: 1 | 2 | 3 | 4 | 5;
   serviceSlugs: string[];
 }
@@ -55,6 +62,8 @@ export const CONTENT_HUBS: ContentHub[] = [
     pillarRoute: 'guide',
     description:
       'What it costs to build a house in the Treasure Valley, what moves the number, and how to set a budget that survives contact with a real bid.',
+    metaDescription:
+      'Home building cost articles for Boise and the Treasure Valley: what a house costs, cost per square foot, allowances, budgets, loans and luxury builds.',
     priorityTier: 1,
     serviceSlugs: ['custom-home-builder', 'semi-custom-homes', 'build-on-your-lot'],
   },
@@ -66,6 +75,8 @@ export const CONTENT_HUBS: ContentHub[] = [
     pillarRoute: 'guide',
     description:
       'How to vet a Treasure Valley home builder, read a bid properly, and tell the difference between a low price and a short scope.',
+    metaDescription:
+      'Choosing a home builder in the Treasure Valley: questions to ask, red flags, comparing bids, fixed price versus cost plus, and design-build versus a GC.',
     priorityTier: 1,
     serviceSlugs: ['custom-home-builder', 'design-build'],
   },
@@ -77,6 +88,8 @@ export const CONTENT_HUBS: ContentHub[] = [
     pillarRoute: 'guide',
     description:
       'Every stage from first drawing to final walkthrough, including Ada and Canyon County permitting, inspections, and what happens when.',
+    metaDescription:
+      'Home building process articles: Boise permits, Ada versus Canyon County timing, build stages in order, finish selections, the first meeting and handover.',
     priorityTier: 2,
     serviceSlugs: ['design-build', 'custom-home-builder'],
   },
@@ -88,6 +101,8 @@ export const CONTENT_HUBS: ContentHub[] = [
     pillarRoute: 'guide',
     description:
       'Buying a buildable parcel in Ada and Canyon County: utilities, well and septic, soils, slope, access, setbacks, and what a lot really costs to build on.',
+    metaDescription:
+      'Land and lot articles for Treasure Valley buyers: buying a buildable lot, the lot evaluation checklist, foothills sites, well and septic, and impact fees.',
     priorityTier: 1,
     serviceSlugs: ['lot-evaluation', 'build-on-your-lot'],
   },
@@ -99,6 +114,8 @@ export const CONTENT_HUBS: ContentHub[] = [
     pillarRoute: 'guide',
     description:
       'Floor plans, room programming, finish selections, and performance decisions that are cheap on paper and expensive after framing.',
+    metaDescription:
+      'Home design and floor plan articles: layouts for Treasure Valley lots, single versus two story, detached ADUs, shop homes and energy-efficient building.',
     priorityTier: 2,
     serviceSlugs: ['home-plans-design', 'custom-home-builder', 'energy-efficient-homes'],
   },
@@ -110,6 +127,8 @@ export const CONTENT_HUBS: ContentHub[] = [
     pillarRoute: 'guide',
     description:
       'City and neighborhood guides to building a new home across Ada and Canyon County.',
+    metaDescription:
+      'Treasure Valley location guides for building a new home: what changes city by city across Ada and Canyon County, from permits to lots and site work.',
     priorityTier: 1,
     serviceSlugs: ['custom-home-builder', 'semi-custom-homes', 'build-on-your-lot'],
   },
@@ -232,14 +251,14 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
 
   // Hub 6 - Locations
   guide('treasure-valley-home-building-guide', 'Treasure Valley Home Building Guide', 'treasure-valley-locations', 'master', PUBLISHED),
-  guide('boise-home-building-guide', 'Building a Home in Boise', 'treasure-valley-locations', 'location', PUBLISHED),
-  guide('meridian-home-building-guide', 'Building a Home in Meridian', 'treasure-valley-locations', 'location'),
-  guide('eagle-home-building-guide', 'Building a Home in Eagle', 'treasure-valley-locations', 'location'),
-  guide('kuna-home-building-guide', 'Building a Home in Kuna', 'treasure-valley-locations', 'location'),
-  guide('star-home-building-guide', 'Building a Home in Star', 'treasure-valley-locations', 'location'),
-  guide('middleton-home-building-guide', 'Custom Home Building in Middleton', 'treasure-valley-locations', 'location'),
-  guide('nampa-home-building-guide', 'Building a Home in Nampa', 'treasure-valley-locations', 'location'),
-  guide('caldwell-home-building-guide', 'Building a Home in Caldwell', 'treasure-valley-locations', 'location'),
+  guide('boise-home-building-guide', 'Building a new home in Boise, Idaho', 'treasure-valley-locations', 'location', PUBLISHED),
+  guide('meridian-home-building-guide', 'Building a new home in Meridian, Idaho', 'treasure-valley-locations', 'location'),
+  guide('eagle-home-building-guide', 'Building a new home in Eagle, Idaho', 'treasure-valley-locations', 'location'),
+  guide('kuna-home-building-guide', 'Building a new home in Kuna, Idaho', 'treasure-valley-locations', 'location'),
+  guide('star-home-building-guide', 'Building a new home in Star, Idaho', 'treasure-valley-locations', 'location'),
+  guide('middleton-home-building-guide', 'Building a new home in Middleton, Idaho', 'treasure-valley-locations', 'location'),
+  guide('nampa-home-building-guide', 'Building a new home in Nampa, Idaho', 'treasure-valley-locations', 'location'),
+  guide('caldwell-home-building-guide', 'Building a new home in Caldwell, Idaho', 'treasure-valley-locations', 'location'),
   guide('eagle-foothills-home-building-guide', 'Building in the Eagle Foothills', 'treasure-valley-locations', 'neighborhood'),
   guide('hidden-springs-home-building-guide', 'Building in Hidden Springs', 'treasure-valley-locations', 'neighborhood'),
   guide('harris-ranch-home-building-guide', 'Building in Harris Ranch', 'treasure-valley-locations', 'neighborhood'),

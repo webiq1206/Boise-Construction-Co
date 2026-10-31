@@ -16,9 +16,9 @@ import Link from 'next/link';
 export const metadata: Metadata = withBrandPageMetadata((buildPageMetadata({
   kind: 'blog',
   path: '/resources',
-  titleOverride: 'Home Building Planning Resources | Boise Construction Co',
+  titleOverride: 'Home Building Worksheets & Guides',
   descriptionOverride:
-    'Free PDF worksheets and visual guides for building in the Treasure Valley: new home budget worksheet, lot evaluation checklist, and the Ada vs Canyon County permit flow.',
+    'Download home-building budget worksheets and lot evaluation checklists. Compare Ada and Canyon County permit steps before planning your Idaho build.',
 })), "/resources");
 
 export default function ResourcesIndexPage() {

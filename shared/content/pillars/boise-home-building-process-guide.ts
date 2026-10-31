@@ -3,7 +3,7 @@ import type { GuidePageData } from '../../guideContent';
 export const boiseHomeBuildingProcessGuide: GuidePageData = {
   slug: 'boise-home-building-process-guide',
   title: 'The Boise Home Building Process',
-  seoTitle: 'The Boise Home Building Process, Step by Step',
+  seoTitle: 'Boise Home Building Process Guide',
   metaDescription:
     'How building a home in the Treasure Valley works, from the first meeting through design, Ada and Canyon County permits, construction, and the warranty.',
   excerpt:
