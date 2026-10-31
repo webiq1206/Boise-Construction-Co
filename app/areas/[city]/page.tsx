@@ -4,7 +4,6 @@ import type { LandingProof,LandingSection } from '@/components/seo/LandingPageTe
 import { LandingPageTemplate } from '@/components/seo/LandingPageTemplate';
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import {
-landingAreaBusinessSchema,
 landingBreadcrumbs,
 landingFAQSchema,
 } from '@/lib/landing-schema';
@@ -209,7 +208,6 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       { name: 'Service Areas', url: '/areas' },
       { name: city.name, url: path },
     ]),
-    landingAreaBusinessSchema(city.name),
     landingFAQSchema(faqs),
     generateSpeakableSchema({ path, name: h1 }),
   ];
