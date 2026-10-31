@@ -90,7 +90,7 @@ export const customHomeDesignGuide: GuidePageData = {
     {
       question: 'Is a shop home cheaper than a conventional custom home?',
       answer:
-        'Per square foot, yes, because a large share of the building is unfinished shop space. Shop homes and barndominiums run $150 to $250 per square foot blended, and a 1,600 square foot living area with a 1,200 square foot shop commonly lands between $265,000 and $500,000 excluding land. The finished living portion still costs close to what finished space costs anywhere. The blended number is lower because the shop is not finished space.',
+        'Per square foot, yes, because a large share of the building is unfinished shop space. Shop homes and barndominiums run $150 to $250 per square foot blended, about $200 on average, before land, site work and permits. A 1,600 square foot living area with a 1,200 square foot shop commonly lands between $265,000 and $500,000 excluding land. The finished living portion still costs close to what finished space costs anywhere. The blended number is lower because the shop is not finished space.',
     },
   ],
   linkedClusterSlugs: [

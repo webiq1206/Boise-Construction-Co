@@ -103,7 +103,7 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
     {
       question: 'What does a shop home or barndominium cost in Idaho?',
       answer:
-        'Shop homes plan at $150 to $250 per square foot blended across finished living space and shop space, because the shop side costs far less per foot than the house side. A 1,600 square foot living area with an attached 1,200 square foot shop commonly runs $265,000 to $500,000 excluding land and site work. The blend depends heavily on how finished the shop is.',
+        'Shop homes plan at $150 to $250 per square foot, about $200 on average, blended across finished living space and shop space and before land, site work and permits, because the shop side costs far less per foot than the house side. A 1,600 square foot living area with an attached 1,200 square foot shop commonly runs $265,000 to $500,000 excluding land and site work. The blend depends heavily on how finished the shop is.',
     },
   ],
   content: `
@@ -128,7 +128,7 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
 <tr><td>Vertical construction on a lot you already own</td><td>$225 to $400 per finished square foot</td></tr>
 <tr><td>High-performance home</td><td>$275 to $425 per finished square foot</td></tr>
 <tr><td>Foothills site, steep grade, high detail</td><td>Regularly above $450 per square foot</td></tr>
-<tr><td>Shop home or barndominium</td><td>$150 to $250 per square foot blended</td></tr>
+<tr><td>Shop home or barndominium</td><td>$150 to $250 per square foot blended, about $200 on average</td></tr>
 <tr><td>Shop home, 1,600 sq ft living plus 1,200 sq ft shop</td><td>$265,000 to $500,000</td></tr>
 </tbody>
 </table>
