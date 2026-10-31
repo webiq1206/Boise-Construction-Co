@@ -40,7 +40,7 @@ export const metadata: Metadata = withBrandPageMetadata((buildPageMetadata({
   path: '/guides',
   titleOverride: 'Home Building Guides | Boise Construction Co',
   descriptionOverride:
-    'Treasure Valley home building guides: what a custom home costs, how the build runs, buying land, choosing a builder, design decisions and city by city notes.',
+    'Treasure Valley home building guides: what a custom home costs, how the build runs, buying land, choosing a builder, design decisions and city notes.',
 })), "/guides");
 
 const PILLAR_TYPES = new Set(['hub-pillar', 'master']);
@@ -55,7 +55,7 @@ export default function GuidesIndexPage() {
   const webPageSchema = generateWebPageSchema({
     title: 'Home Building Guides',
     description:
-      'Treasure Valley home building guides: what a custom home costs, how the build runs, buying land, choosing a builder, design decisions and city by city notes.',
+      'Treasure Valley home building guides: what a custom home costs, how the build runs, buying land, choosing a builder, design decisions and city notes.',
     url: '/guides',
   });
 

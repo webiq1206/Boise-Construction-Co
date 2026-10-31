@@ -141,10 +141,19 @@ const SERVICE_TITLE_OVERRIDES: Record<string, string> = {
   'design-build': 'Treasure Valley Design-Build Homes',
   'home-plans-design': 'Custom Home Plans & Design, Idaho',
   'home-additions': 'Structural Home Additions in Idaho',
-  adu: 'ADU Builder in Boise, Idaho',
+  adu: 'Detached ADU Builder in Boise, Idaho',
   'lot-evaluation': 'Lot Evaluation & Feasibility, Idaho',
   'shop-homes-barndominiums': 'Idaho Shop Homes & Barndominiums',
   'energy-efficient-homes': 'Energy-Efficient Homes in Idaho',
+};
+
+/**
+ * Middleton keeps its "custom home builder" title: /areas/middleton is the
+ * page closest to page one (position 19.8, "custom home builder middleton"
+ * at 10.5 in Search Console to 29 October).
+ */
+const AREA_TITLE_OVERRIDES: Record<string, string> = {
+  middleton: 'Custom Home Builder in Middleton, ID',
 };
 
 export function buildPageMetadata(input: PageMetaInput): Metadata {
@@ -173,7 +182,9 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
     case 'area':
       // "Home Builder in Middleton, Idaho" is the longest at 32 chars, so no
       // city name pushes this past the 36-char budget or triggers truncation.
-      title = generateSafePageTitle(`Home Builder in ${input.cityName}, Idaho`);
+      title =
+        AREA_TITLE_OVERRIDES[input.citySlug ?? ''] ??
+        generateSafePageTitle(`Home Builder in ${input.cityName}, Idaho`);
       description = generateMetaDescription({
         serviceName: '',
         serviceSlug: '',
@@ -182,26 +193,33 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
       });
       break;
     case 'city-service':
-      title = generateCityServiceTitle(input.serviceName!, input.cityName!);
+      title = generateCityServiceTitle(
+        input.serviceName!,
+        input.cityName!,
+        SERVICE_TITLE_OVERRIDES[input.serviceSlug ?? ''],
+      );
       description = generateCityServiceDescription(
         input.serviceName!,
         input.cityName!,
       );
       break;
+    // These three used to be replaced at render time by a second copy in
+    // lib/brand-page-metadata.ts. That layer is gone for this site: the route
+    // metadata below is the one source, so an edit here is what renders.
     case 'about':
-      title = 'About Us';
+      title = 'About Our Boise Home Building Team';
       description =
-        `Learn about ${SITE_CONFIG.name}, a Treasure Valley design-build home builder. Bonded, insured, and committed to line-item budgets and clear communication.`;
+        `Learn how ${SITE_CONFIG.name} plans and manages Treasure Valley home builds, from lot evaluation and design through permits, construction and handover.`;
       break;
     case 'contact':
-      title = 'Contact Us';
+      title = 'Contact a Boise Home Builder';
       description =
-        `Contact ${SITE_CONFIG.name} for a free planning consultation. Call ${SITE_CONFIG.phone} or schedule online. Serving Boise, Meridian, Eagle & the Treasure Valley.`;
+        `Contact ${SITE_CONFIG.name} about a new home, a building lot or a structural addition in Boise and the Treasure Valley. We reply within one business day.`;
       break;
     case 'blog':
-      title = 'Home Building Insights & Ideas';
+      title = 'Idaho Home Building Advice & Guides';
       description =
-        `Honest home building advice for Idaho: budgets, lot selection, permits, timelines, and design-build guidance from ${SITE_CONFIG.name}.`;
+        `Idaho home building advice and guides from ${SITE_CONFIG.name}: budgets, land and lots, permits, design choices, timelines and how to choose a builder.`;
       break;
     default:
       title = input.titleOverride || SITE_CONFIG.name;

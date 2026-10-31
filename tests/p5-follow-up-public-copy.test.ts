@@ -41,29 +41,31 @@ test('share image is the approved year-free family branding card at the public p
   assert.match(read('scripts/brand/generate-brand-assets.mjs'), /Est\. 2020/);
 });
 
-test('trusted city descriptions stay in source and render as the city name', () => {
+// Phase 4 SEO (31 October): the city x service descriptions are now authored
+// in shared/metaDescriptions.ts or built keyword-first by lib/seo.ts. The old
+// "{City}'s trusted design-build ... Call (208) 477-1169!" formula, and the
+// per-city "trusted" phrases it switched on SHOW_TRUST, are gone on purpose,
+// so this test pins the new contract instead of the retained source phrases.
+test('city descriptions are keyword-first with no trust claim, phone or exclamation', () => {
   assert.equal(SHOW_TRUST, false);
-  const source = read('lib/seo.ts');
-  for (const phrase of ["Kuna's trusted design-build", "Meridian's trusted", "Nampa's trusted", "Caldwell's trusted", "${city}'s trusted"]) {
-    assert.equal(source.includes(phrase), true, phrase);
-  }
-  const trustedCities = ['Kuna', 'Meridian', 'Nampa', 'Caldwell', 'Garden City'];
   let count = 0;
   for (const service of SERVICES) {
     for (const city of CITIES) {
-      if (!trustedCities.includes(city.name)) continue;
       count++;
       for (const text of [
         generateCityServiceDescription(service.name, city.name, service.shortDescription),
         generateMetaDescription({ serviceName: service.name, city: city.name }),
       ]) {
         assert.equal(/trusted/i.test(text), false, text);
-        assert.equal(text.startsWith(`${city.name} `), true, text);
+        assert.equal(/\(208\)|477-1169|!/.test(text), false, text);
+        assert.ok(text.length <= 155, text);
+        assert.match(text, new RegExp(`\\b${city.name}, Idaho\\b`), text);
+        assert.equal(text.charAt(0), text.charAt(0).toUpperCase(), text);
       }
     }
   }
-  assert.equal(count, 50);
-  assert.match(generateMetaDescription({ serviceName: 'Custom Home Building', city: 'Boise' }), /^Boise's design-build /);
+  assert.equal(count, 90);
+  assert.match(generateMetaDescription({ serviceName: 'Custom Home Building', city: 'Boise' }), /^Custom home building in Boise, Idaho/);
   const subcontractor = read('app/subcontractor/page.tsx');
   assert.match(subcontractor, /trusted subcontractors/);
   assert.match(subcontractor, /network of subcontractors/);
@@ -156,8 +158,7 @@ test('contractor registration is on the footer, plain on the estimator, and in s
   const garden = generateMetaDescription({ serviceName: 'Custom Home Building', city: 'Garden City' });
   assert.equal(SHOW_TRUST, false);
   assert.equal(garden.includes('Satisfaction guaranteed'), false);
-  assert.match(garden, /Free planning consultation/);
-  assert.match(read('lib/seo.ts'), /Satisfaction guaranteed/);
+  assert.equal(/\(208\)|!/.test(garden), false, garden);
   assert.match(read('public/brand/brand-kit.html'), /<meta name="robots" content="noindex">/);
 });
 

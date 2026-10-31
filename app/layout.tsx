@@ -68,7 +68,7 @@ export const metadata: Metadata = withBrandPageMetadata(({
     default: `Custom Home Builder in Boise, Idaho | ${SITE_CONFIG.name}`,
     template: `%s | ${SITE_CONFIG.name}`,
   },
-  description: `Boise custom home builder and new home construction across Meridian, Eagle, Nampa, Kuna & the Treasure Valley. Custom and semi-custom homes, design-build, and builds on your lot, with a line-item budget before we break ground.`,
+  description: `Custom home builder in Boise and the Treasure Valley: custom and semi-custom homes, design-build and builds on your own lot, with a line-item budget first.`,
   manifest: '/site.webmanifest',
   // Feed discovery for readers, aggregators, and AI/answer-engine crawlers.
   alternates: {
