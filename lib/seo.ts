@@ -604,11 +604,11 @@ export const BUSINESS_INFO = {
   rating: 0,
   reviewCount: 0,
   yearlyServicesCompleted: 0,
-  // Instagram is intentionally omitted: it is being dropped from the site
-  // alongside the footer, and its handle still carries the old slug. Facebook
-  // stays as the one confirmed profile.
+  // This brand has no social profile of its own. The owner's Facebook page
+  // belongs to P5 Home Co, so it sits on the parentOrganization node in
+  // lib/schema.ts, not here. GBP_SOCIAL stays the slot for a brand profile.
   sameAs: [
-    GBP_SOCIAL.facebook,
+    ...(GBP_SOCIAL.facebook ? [GBP_SOCIAL.facebook] : []),
     ...getExternalProfileUrls(),
   ],
 };
