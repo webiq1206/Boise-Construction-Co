@@ -398,12 +398,24 @@ html :where(.ed-small) {
   .ed-cards-3 > :last-child:nth-child(odd) { grid-column: 2 / span 2; }
   .ed-cards-3 > :only-child:nth-child(n) { grid-column: 1 / -1; }
 }
+/*
+ * Laptops and up: rows of three, and the leftover is resolved at the TOP as a
+ * deliberate featured row, never at the bottom. The old rule widened the last
+ * two cards to half width (3+3+2 stretched) or parked one card alone in the
+ * middle (blog index, 34 posts). Now:
+ *   3n     -> threes
+ *   3n + 2 -> two featured halves, then threes   (8 = 2+3+3, 11 = 2+3+3+3)
+ *   3n + 1 -> two rows of featured halves, then threes (7 = 2+2+3, 34 = 2+2+3x10)
+ * Every card in a row has the same width, and the order is preserved.
+ */
 @media (min-width: 1024px) {
   .ed-cards-3 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  /* :last-child:nth-child(n) outranks the tablet rule that centres an odd
+     last card, which still matches at this width. */
+  .ed-cards-3 > *,
   .ed-cards-3 > :last-child:nth-child(n) { grid-column: span 2; }
-  .ed-cards-3 > :nth-last-child(2):nth-child(3n + 1),
-  .ed-cards-3 > :last-child:nth-child(3n + 2) { grid-column: span 3; }
-  .ed-cards-3 > :last-child:nth-child(3n + 1) { grid-column: 3 / span 2; }
+  .ed-cards-3:has(> :last-child:nth-child(3n + 2)) > :nth-child(-n + 2),
+  .ed-cards-3:has(> :last-child:nth-child(3n + 4)) > :nth-child(-n + 4) { grid-column: span 3; }
   /* A single card takes two thirds of the row, centred, instead of one small
      card beside empty space. */
   .ed-cards-3 > :only-child:nth-child(n) { grid-column: 2 / span 4; }

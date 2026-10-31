@@ -1,4 +1,4 @@
-import { InteriorHero, InteriorPage } from '@/components/approved/InteriorLayout';
+import { CONCEPT_IMAGERY_LABEL, InteriorHero, InteriorPage } from '@/components/approved/InteriorLayout';
 import { AreaCard } from '@/components/marketing/AreaCard';
 import { Section } from '@/components/marketing/Section';
 import { SectionHeader } from '@/components/marketing/SectionHeader';
@@ -110,7 +110,7 @@ export default function AboutPage() {
       <>
         <JsonLd data={schemas} />
         <div className="flex flex-col">
-          <InteriorHero layout="editorial" peopleSafe imageSrc="/images/about/perkins-family-meridian-idaho.webp" imageAlt="Nick Perkins with his wife and five children at a pumpkin patch">
+          <InteriorHero layout="editorial" peopleSafe imageLabel={false} imageSrc="/images/about/perkins-family-meridian-idaho.webp" imageAlt="Nick Perkins with his wife and five children at a pumpkin patch">
             <HeroBreadcrumbs />
             <p data-speakable="summary" className="sr-only">
               {SPEAKABLE_SUMMARY}
@@ -127,7 +127,7 @@ export default function AboutPage() {
               emphasis in Project Management, and more than a decade of work from small renovations to multimillion-dollar
               custom homes. He founded P5 in Colorado in 2020 and moved the family and the company to the Treasure Valley in
               2025. Read the full story on{' '}
-              <a href="https://p5homeco.com/about" className="underline underline-offset-2">
+              <a href="https://p5homeco.com/about" rel="noopener" className="underline underline-offset-2">
                 p5homeco.com/about
               </a>
               .
@@ -225,15 +225,15 @@ export default function AboutPage() {
               </div>
               <p className="mt-8 text-sm leading-relaxed text-muted-foreground">
                 Boise Construction Co is a trade name of P5 Home Co LLC. Related companies:{' '}
-                <a href="https://boiseremodeling.co" className="underline underline-offset-2">
+                <a href="https://boiseremodeling.co" rel="noopener" className="underline underline-offset-2">
                   Boise Remodeling Co
                 </a>
                 ,{' '}
-                <a href="https://boisehandyman.co" className="underline underline-offset-2">
+                <a href="https://boisehandyman.co" rel="noopener" className="underline underline-offset-2">
                   Boise Handyman Co
                 </a>
                 , and{' '}
-                <a href="https://boisecabinet.co" className="underline underline-offset-2">
+                <a href="https://boisecabinet.co" rel="noopener" className="underline underline-offset-2">
                   Boise Cabinet Co
                 </a>
                 .
@@ -261,6 +261,7 @@ export default function AboutPage() {
                   </Reveal>
                 ))}
               </div>
+              <p className="ed-small mt-4 text-muted-foreground">{CONCEPT_IMAGERY_LABEL}</p>
             </div>
           </Section>
 

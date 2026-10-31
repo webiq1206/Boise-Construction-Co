@@ -78,7 +78,10 @@ export default function ResourcesIndexPage() {
         <h2 id="document-section-1" className="text-sm font-normal uppercase tracking-wider text-muted-foreground mb-4">
           PDF worksheets
         </h2>
-        <div className="ed-grid-balance grid gap-4 sm:grid-cols-2 mb-12">
+        {/* Three worksheets: one list down the document column, three across
+            only where the column is wide enough. Two columns stretched the
+            third card across the row (2+1). */}
+        <div className={`grid gap-4 mb-12${pdfs.length % 3 === 0 ? ' xl:grid-cols-3' : pdfs.length % 2 === 0 ? ' sm:grid-cols-2' : ''}`}>
           {pdfs.map((r) => (
             <MarketingCard key={r.id} className="p-5 flex flex-col h-full">
               <FileText className="h-5 w-5 text-accent-legible mb-3" />
@@ -99,7 +102,9 @@ export default function ResourcesIndexPage() {
         <h2 id="document-section-2" className="text-sm font-normal uppercase tracking-wider text-muted-foreground mb-4">
           Visual guides
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2">
+        {/* One visual guide: full column width, not half a row beside an
+            empty slot. Pairs once there are two or more. */}
+        <div className={`grid gap-4${visuals.length > 1 ? ' ed-grid-balance sm:grid-cols-2' : ''}`}>
           {visuals.map((r) => (
             <MarketingCard key={r.id} className="p-5 flex flex-col h-full">
               <Workflow className="h-5 w-5 text-accent-legible mb-3" />

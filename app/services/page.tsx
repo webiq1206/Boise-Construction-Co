@@ -1,4 +1,4 @@
-import { InteriorHero,InteriorPage } from '@/components/approved/InteriorLayout';
+import { CONCEPT_IMAGERY_LABEL,InteriorHero,InteriorPage } from '@/components/approved/InteriorLayout';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { AreaCard } from '@/components/marketing/AreaCard';
 import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
@@ -124,6 +124,7 @@ export default function ServicesIndexPage() {
               </Reveal>
             ))}
           </div>
+          <p className="ed-small mt-4 text-muted-foreground">{CONCEPT_IMAGERY_LABEL}</p>
         </div>
       </Section>
 

@@ -1,4 +1,4 @@
-import { InteriorPage } from '@/components/approved/InteriorLayout';
+import { CONCEPT_IMAGERY_LABEL,InteriorPage } from "@/components/approved/InteriorLayout";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { AreaCard } from "@/components/marketing/AreaCard";
 import { BlogEndCta } from "@/components/marketing/BlogEndCta";
@@ -90,6 +90,7 @@ export default function AreasHubPage() {
                 </Reveal>
               ))}
             </div>
+            <p className="ed-small mt-4 text-muted-foreground">{CONCEPT_IMAGERY_LABEL}</p>
           </div>
         </Section>
 

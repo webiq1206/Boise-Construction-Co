@@ -29,3 +29,10 @@
 
 /* Hero lettering stays neutral over photography; brand accents remain in the lockup and details. */
 .approved-shell :is(.f-hero,.hero,.ed-hero) :is(h1,h2,h3) em{color:#FBFAF6}
+
+/* Homepage hero render label. In flow under the hero copy on phones (nothing
+   can overlap the CTA or the reassurance line); a chip in the hero's bottom
+   left corner from tablet up, aligned to the copy column and clear of the
+   chat launcher that sits in the bottom right. */
+.approved-shell .f-hero .f-hero-imagery{display:inline-block;margin-top:14px;padding:4px 8px;border-radius:2px;background:rgb(28 31 30 / .72);color:#fbfaf6;font-size:13px;line-height:1.4;letter-spacing:0}
+@media(min-width:701px){.approved-shell .f-hero .f-hero-imagery{position:absolute;left:calc((100% - min(1260px, 88%)) / 2);bottom:16px;margin-top:0;z-index:1}}

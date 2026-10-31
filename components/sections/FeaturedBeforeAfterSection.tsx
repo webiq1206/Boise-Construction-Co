@@ -27,6 +27,14 @@ export function FeaturedBeforeAfterSection({
 }: FeaturedBeforeAfterSectionProps) {
   const [hero, ...rooms] = project.images;
   if (!hero) return null;
+  // Columns follow the count so the strip never ends in empty slots: six
+  // rooms in fours left two blank cells (4+2). Fours only when they divide
+  // evenly, threes when they do, otherwise pairs.
+  const roomColumns = rooms.length % 4 === 0 ? 4 : rooms.length % 3 === 0 ? 3 : 2;
+  const roomGridClass =
+    roomColumns === 4 ? "md:grid-cols-4" : roomColumns === 3 ? "md:grid-cols-3" : "md:grid-cols-2";
+  const roomSizes =
+    roomColumns === 4 ? "(max-width: 768px) 50vw, 25vw" : roomColumns === 3 ? "(max-width: 768px) 50vw, 34vw" : "50vw";
 
   return (
     <Section divider>
@@ -53,7 +61,7 @@ export function FeaturedBeforeAfterSection({
             </div>
             {rooms.length > 0 && (
               <div
-                className="grid grid-cols-2 md:grid-cols-4"
+                className={`grid grid-cols-2 ${roomGridClass}`}
                 style={{ borderTop: "1px solid var(--ed-line)" }}
               >
                 {rooms.map((image) => (
@@ -66,7 +74,7 @@ export function FeaturedBeforeAfterSection({
                       src={image.src}
                       alt={contentImageAlt(image.src) || `Representative image: ${image.label}`}
                       fill
-                      sizes="(max-width: 768px) 50vw, 25vw"
+                      sizes={roomSizes}
                       className="object-cover img-brand-grade"
                       loading="lazy"
                     />
