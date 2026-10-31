@@ -10,7 +10,7 @@ landingServiceSchema,
 } from '@/lib/landing-schema';
 import { buildPageMetadata,isCityServiceNoindex } from '@/lib/page-metadata';
 import { generateSpeakableSchema } from '@/lib/schema';
-import { CITY_SEO_DATA } from '@/lib/seo';
+import { CITY_SEO_DATA,serviceNameInSentence } from '@/lib/seo';
 import {
 cityServicePath,
 getAllCityServiceParams,
@@ -74,7 +74,7 @@ export default async function CityServicePage(
   const overview = getCityServiceIntro(content, city, localFact);
   const h1 = `${service.name} in ${city.name}, Idaho`;
   const faqs = getCityServiceFaqs(content, city);
-  const localNote = `For ${content.name.toLowerCase()} in ${city.name}, confirm the property jurisdiction and scope before applying. City addresses and unincorporated county parcels may use different building departments. Confirm required building and trade permits, inspections and review times for the actual address.`;
+  const localNote = `For ${serviceNameInSentence(content.name)} in ${city.name}, confirm the property jurisdiction and scope before applying. City addresses and unincorporated county parcels may use different building departments. Confirm required building and trade permits, inspections and review times for the actual address.`;
   const images = getCityServiceImageSet(service.slug, city.slug);
   const sections = getCityServiceSections(content, city, seo);
 

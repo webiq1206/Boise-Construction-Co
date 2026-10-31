@@ -11,7 +11,8 @@ landingBreadcrumbs,
 landingFAQSchema,
 landingServiceSchema
 } from '@/lib/landing-schema';
-import { buildPageMetadata } from '@/lib/page-metadata';
+import { buildPageMetadata,isCityServiceNoindex } from '@/lib/page-metadata';
+import { serviceNameInSentence } from '@/lib/seo';
 import { generateSpeakableSchema } from '@/lib/schema';
 import { SERVICE_SLUGS,getServiceBySlug,servicePath } from '@/lib/seo-routes';
 import { CITIES } from '@/shared/contentData';
@@ -51,7 +52,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
   const faqs = content.faqs;
   const images = getServiceImageSet(service.slug);
   const featuredProject = getFeaturedGalleryProject(service.slug);
-  const serviceLC = service.name.toLowerCase();
+  const serviceLC = serviceNameInSentence(service.name);
   const isAddition = service.slug === 'home-additions';
 
   /* Cost guidance is no longer one of the long-form sections: it renders as
@@ -116,15 +117,18 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
     },
   };
   const longFormFigure = sectionFigureByService[service.slug];
+  // Only the city pages that are indexable (the sitemap rule) are linked from
+  // this indexable parent.
+  const indexableCities = CITIES.filter((c) => !isCityServiceNoindex(service.slug, c.slug));
 
   const sections: LandingSection[] = isAddition ? [
     {
       heading: 'Room additions across the Treasure Valley',
       paragraphs: [
         'We plan home additions in Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and Garden City. Local permit paths and the details of an existing home vary, so every project begins with the home itself.',
-        'Choose your city for local home addition guidance, or schedule an in-home planning conversation to talk through the space you need.',
+        'Choose a city below for local home addition guidance, or schedule an in-home planning conversation to talk through the space you need.',
       ],
-      links: CITIES.map((c) => ({
+      links: indexableCities.map((c) => ({
         label: `Home Additions in ${c.name}`,
         href: `/services/${service.slug}/${c.slug}`,
       })),
@@ -145,8 +149,8 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
     {
       heading: `${service.name} across the Treasure Valley`,
       paragraphs: [
-        `We provide ${serviceLC} services throughout the Treasure Valley, with dedicated local pages for each city we serve. Lot availability, permit paths, impact fees, and HOA design review differ between Ada and Canyon County communities, so each city page covers the details that matter where you plan to build.`,
-        `Choose your city below to see local ${serviceLC} guidance, or schedule a free planning consultation to discuss your build directly.`,
+        `We provide ${serviceLC} services throughout the Treasure Valley, with local pages for the cities listed below. Lot availability, permit paths, impact fees, and HOA design review differ between Ada and Canyon County communities, so each city page covers the details that matter where you plan to build.`,
+        `Choose a city below to see local ${serviceLC} guidance, or schedule a free planning consultation to discuss your build directly.`,
         ...(service.slug === 'custom-home-builder'
           ? [
               'Middleton (Canyon County) has its own city vs county permit path - see the area page.',
@@ -161,7 +165,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
               [{ phrase: 'area page', href: '/areas/middleton' }],
             ]
           : undefined,
-      links: CITIES.map((c) => ({
+      links: indexableCities.map((c) => ({
         label: `${service.name} in ${c.name}`,
         href: `/services/${service.slug}/${c.slug}`,
       })),

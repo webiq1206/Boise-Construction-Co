@@ -158,6 +158,40 @@ const CITY_CTA_VARIANTS: Record<string, string> = {
 };
 
 /**
+ * Lowercase a service name for use mid-sentence while keeping acronyms intact:
+ * "ADUs & Guest Houses" -> "ADUs & guest houses", never "adus & guest houses".
+ */
+export function serviceNameInSentence(name: string): string {
+  return name
+    .split(' ')
+    .map((word) => (/^[A-Z]{2,}s?$/.test(word) ? word : word.toLowerCase()))
+    .join(' ');
+}
+
+/** Capitalize the first letter so a description never starts lowercase. */
+function sentenceStart(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+/**
+ * Join a city phrase and a service phrase without repeating a word at the
+ * seam: "Boise's design-build" + "design-build" used to render
+ * "Boise's design-build design-build".
+ */
+function joinCityAndService(cityVariant: string, serviceLC: string): string {
+  const lastWord = cityVariant.split(' ').pop()?.toLowerCase() ?? '';
+  if (lastWord && serviceLC.toLowerCase().startsWith(lastWord)) {
+    return `${cityVariant.slice(0, cityVariant.length - lastWord.length).trimEnd()} ${serviceLC}`;
+  }
+  return `${cityVariant} ${serviceLC}`;
+}
+
+/** First candidate that fits the 160-character description budget. */
+function firstFitting(candidates: string[], max = 160): string {
+  return candidates.find((c) => c.length <= max) ?? candidates[candidates.length - 1];
+}
+
+/**
  * Generate SEO-optimized meta description
  * 150-160 characters with phone number, CTA, and unique value prop
  * Phone: (208) 477-1169
@@ -171,12 +205,12 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
   }
   
   if (city && serviceName) {
-    const serviceLC = serviceName.toLowerCase();
+    const serviceLC = serviceNameInSentence(serviceName);
     const cityVariant = cityDescriptionVariant(city);
     const ctaVariant = SHOW_TRUST
       ? (CITY_CTA_VARIANTS[city] || "Satisfaction guaranteed")
       : "Free planning consultation";
-    return `${cityVariant} ${serviceLC} team. Bonded & insured. ${ctaVariant}. Call ${phone} for a free consultation!`;
+    return `${joinCityAndService(cityVariant, serviceLC)} team. Bonded & insured. ${ctaVariant}. Call ${phone} for a free consultation!`;
   }
   
   if (city) {
@@ -187,8 +221,14 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
     return `New home builder in Boise & the Treasure Valley. Bonded, insured, design-build. Call ${phone} for a free planning consultation and a realistic budget band!`;
   }
   
-  const serviceLC = serviceName.toLowerCase();
-  return `${serviceLC} in Boise & the Treasure Valley. Bonded, insured, with a line-item budget before we build. Call ${phone} for a free consultation!`;
+  // Sentence case at the start, and a shorter close when a long service name
+  // (Lot Evaluation & Feasibility, Shop Homes & Barndominiums) would push the
+  // full sentence past 160 characters.
+  const service = sentenceStart(serviceNameInSentence(serviceName));
+  return firstFitting([
+    `${service} in Boise & the Treasure Valley. Bonded, insured, with a line-item budget before we build. Call ${phone} for a free consultation!`,
+    `${service} in Boise & the Treasure Valley. Bonded, insured, with a line-item budget before we build. Call ${phone}.`,
+  ]);
 }
 
 /**
@@ -198,32 +238,35 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
  */
 
 /**
- * Shorter display names for the longest services, used only when the full name
- * would push a city-service title past the budget. Keyed by the `name` values
- * in shared/contentData.ts.
+ * Keyword-bearing short names, used only when even "{full name}, {City}"
+ * cannot fit. Each keeps the term people actually search: the old ladder cut
+ * "Energy-Efficient Homes" to "Efficient Homes" (lost "energy"), "Shop Homes &
+ * Barndominiums" to "Shop Homes" (lost "barndominium"), "Home Design & Plans"
+ * to "Home Plans" and "Custom Home Building" to "Custom Homes". Every name not
+ * listed here fits at some rung of the ladder with its full name.
+ * Keyed by the `name` values in shared/contentData.ts.
  */
-const SERVICE_SHORT_NAMES: Record<string, string> = {
-  'Custom Home Building': 'Custom Homes',
+const SERVICE_KEYWORD_NAMES: Record<string, string> = {
   'Lot Evaluation & Feasibility': 'Lot Evaluation',
-  'Shop Homes & Barndominiums': 'Shop Homes',
-  'Home Design & Plans': 'Home Plans',
-  'Energy-Efficient Homes': 'Efficient Homes',
+  'Shop Homes & Barndominiums': 'Barndominium Builder',
 };
 
 /** Budget after the layout template appends " | Boise Construction Co" (24). */
-const CITY_SERVICE_TITLE_BUDGET = 36;
+export const CITY_SERVICE_TITLE_BUDGET = 36;
 
 export function generateCityServiceTitle(serviceName: string, cityName: string): string {
-  const short = SERVICE_SHORT_NAMES[serviceName] ?? serviceName;
+  const keyword = SERVICE_KEYWORD_NAMES[serviceName];
 
-  // Degrade in steps rather than truncating mid-word: full name with "Idaho",
-  // then the short name, then the "ID" abbreviation. Every service/city pair in
-  // the current matrix resolves at one of these levels.
+  // Degrade the location part, never the searched term: "Idaho" becomes "ID",
+  // then the keyword-bearing short name (where one exists) gets the readable
+  // "in {City}" form, and only then does the "in" go.
+  const inCity = (name: string) => [`${name} in ${cityName}, Idaho`, `${name} in ${cityName}, ID`];
+  const commaCity = (name: string) => [`${name}, ${cityName} ID`, `${name}, ${cityName}`];
   const candidates = [
-    `${serviceName} in ${cityName}, Idaho`,
-    `${short} in ${cityName}, Idaho`,
-    `${short} in ${cityName}, ID`,
-    `${short}, ${cityName}`,
+    ...inCity(serviceName),
+    ...(keyword ? inCity(keyword) : []),
+    ...commaCity(serviceName),
+    ...(keyword ? commaCity(keyword) : []),
   ];
 
   return (
@@ -242,25 +285,26 @@ export function generateCityServiceDescription(
   shortDescription?: string,
 ): string {
   const phone = SITE_CONFIG.phone;
-  const serviceLC = serviceName.toLowerCase();
+  const serviceLC = serviceNameInSentence(serviceName);
   const cityVariant = cityDescriptionVariant(cityName);
+  const lead = joinCityAndService(cityVariant, serviceLC);
   const cityData = CITY_SEO_DATA[cityName as keyof typeof CITY_SEO_DATA];
   const neighborhood = cityData?.neighborhoods?.[0];
 
   if (neighborhood) {
-    const withNeighborhood = `${cityVariant} ${serviceLC}. Serving ${neighborhood} & all ${cityName}. Bonded & insured. Call ${phone}!`;
+    const withNeighborhood = `${lead}. Serving ${neighborhood} & all ${cityName}. Bonded & insured. Call ${phone}!`;
     if (withNeighborhood.length <= 160) return withNeighborhood;
   }
 
   if (shortDescription) {
-    const desc = `${cityVariant} ${serviceLC}. ${shortDescription}. Bonded & insured. Call ${phone}!`;
+    const desc = `${lead}. ${shortDescription}. Bonded & insured. Call ${phone}!`;
     if (desc.length <= 160) return desc;
   }
 
-  const base = `${cityVariant} ${serviceLC} in ${cityName}, ID. Bonded & insured. Call ${phone} for a free consultation!`;
+  const base = `${lead} in ${cityName}, ID. Bonded & insured. Call ${phone} for a free consultation!`;
   if (base.length <= 160) return base;
 
-  return `${serviceLC} in ${cityName}, ID. Bonded & insured builder. Call ${phone} for a free consultation!`;
+  return `${sentenceStart(serviceLC)} in ${cityName}, ID. Bonded & insured builder. Call ${phone} for a free consultation!`;
 }
 
 /** Keep complete authored titles; an optional secondary label may be omitted. */

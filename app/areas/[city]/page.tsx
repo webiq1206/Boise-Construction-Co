@@ -7,11 +7,11 @@ import {
 landingBreadcrumbs,
 landingFAQSchema,
 } from '@/lib/landing-schema';
-import { buildPageMetadata } from '@/lib/page-metadata';
+import { buildPageMetadata,isCityServiceNoindex } from '@/lib/page-metadata';
 import { permitGuidance, permitSource } from '@/lib/permitGuidance';
 import { generateSpeakableSchema } from '@/lib/schema';
 import { CITY_SEO_DATA, indianCreekDescription } from '@/lib/seo';
-import { areaPath,CITY_SLUGS,getCityBySlug } from '@/lib/seo-routes';
+import { areaPath,CITY_SLUGS,cityServicePath,getCityBySlug,servicePath } from '@/lib/seo-routes';
 import { getAreaImageSet } from '@/shared/cityServiceImages';
 import { getCountyLabel,SERVICES } from '@/shared/contentData';
 import { getGalleryProjectsForCity } from '@/shared/galleryData';
@@ -111,12 +111,16 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       heading: `Home building services in ${city.name}`,
       paragraphs: [
         `${SITE_CONFIG.name} is a design-build home builder serving ${city.name} and the surrounding ${county} area. Whether you are building a fully custom home, adapting a semi-custom plan, or building on land you already own, every project runs through one accountable team - from the first planning consultation and lot review, through design, permits, construction, and the day you get the keys.`,
-        `Explore the specific services we offer in ${city.name} below. Each links to a dedicated ${city.name} page with local details, typical scope, and budget guidance.`,
+        `Explore the services we offer in ${city.name} below, each with its typical scope and budget guidance.`,
       ],
-      links: SERVICES.map((s) => ({
-        label: `${s.name} in ${city.name}`,
-        href: `/services/${s.slug}/${city.slug}`,
-      })),
+      // A city page only where that combination is indexable (the sitemap
+      // rule); otherwise the service overview, so no indexable page spends a
+      // link on a noindexed combination.
+      links: SERVICES.map((s) =>
+        isCityServiceNoindex(s.slug, city.slug)
+          ? { label: s.name, href: servicePath(s.slug) }
+          : { label: `${s.name} in ${city.name}`, href: cityServicePath(s.slug, city.slug) },
+      ),
       figure: {
         src:
           city.slug === 'eagle'

@@ -2,6 +2,7 @@ import { BLOG_POSTS, type BlogPostData } from "../../shared/blogContent";
 import { GUIDE_PAGES } from "../../shared/guideContent";
 import { getHubBySlug, getHubPillarSlug, guidePath } from "../../shared/contentHubs";
 import { PRIORITY_SERVICES, CITIES, type ServiceData, type CityData } from "../../shared/contentData";
+import { isCityServiceNoindex } from "../../lib/page-metadata";
 
 export type PageType = "blog" | "guide" | "service" | "city" | "city-service";
 
@@ -18,6 +19,13 @@ export interface PageNode {
   citySlug?: string;
   tokens: Set<string>;
   overrides?: Array<{ url: string; anchor?: string; forced?: boolean }>;
+  /**
+   * False for the city-service combos that render `noindex, follow`. They keep
+   * their own related links (as a source) but are never a link target, the
+   * same rule the sitemap applies, so indexable pages stop spending links on
+   * pages that cannot rank.
+   */
+  indexable?: boolean;
 }
 
 export interface LinkEntry {
@@ -196,6 +204,7 @@ export function buildPages(): PageNode[] {
         tags: [svc.slug, city.slug],
         serviceSlug: svc.slug,
         citySlug: city.slug,
+        indexable: !isCityServiceNoindex(svc.slug, city.slug),
         tokens: tokenSet(svc.name, city.name, svc.shortDescription, svc.slug.replace(/-/g, " ")),
       });
     }
@@ -296,6 +305,7 @@ function quotasFor(from: PageNode): Quota {
 
 function eligible(from: PageNode, to: PageNode): boolean {
   if (from.id === to.id) return false;
+  if (to.indexable === false) return false;
 
   if (from.type === "city-service") {
     if (to.type === "city-service") {
@@ -357,7 +367,7 @@ export function buildManifest(pages: PageNode[]): Manifest {
         if (top.length >= limit) break;
         if (taken.has(ov.url)) continue;
         const target = pageById.get(ov.url);
-        if (!target) continue;
+        if (!target || target.indexable === false) continue;
         // Canonical hub-pillar links (forced) are always honored. Manual
         // related-link overrides respect the soft incoming cap so a single
         // popular target (e.g. the cost guide) can't over-concentrate equity.

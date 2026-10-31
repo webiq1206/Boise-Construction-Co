@@ -327,9 +327,9 @@ const PLACES: PlaceGuide[] = [
     county: 'canyon',
     guideType: 'location',
     title: 'Custom Home Building in Middleton',
-    seoTitle: 'Custom Home Building Guide for Middleton, ID',
+    seoTitle: 'Building a New Home in Middleton, ID',
     metaDescription:
-      'Guide for custom home builders and homeowners in Middleton: Canyon County vs city permits, subdivision vs acreage, site work ranges, and how a design-build team runs the project.',
+      'Building a new home in Middleton, Idaho: city versus Canyon County permits, subdivision versus acreage lots, site work ranges and how design-build runs the job.',
     intro:
       '<p>This guide is for homeowners and anyone comparing a <strong>custom home builder in Middleton</strong> - covering Canyon County vs city permit paths, subdivision lots vs acreage, irrigation easements, and typical site-work ranges. Pair it with our <a href="/areas/middleton">Middleton area page</a> and <a href="/services/custom-home-builder">Treasure Valley custom home builder</a> service hub.</p>',
     excerpt:
