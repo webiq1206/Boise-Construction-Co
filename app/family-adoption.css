@@ -30,3 +30,60 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+/* Quote form landing (owner, 1 November: every quote link lands ON the form).
+   The id="consult" block is the form itself. The root scroll-padding already clears
+   the sticky header (styles/family-chrome.css), so the generic :target margin from
+   audit-accessibility.css would only push the form further down the screen. */
+[data-quote-anchor] {
+  scroll-margin-top: 0 !important;
+}
+
+/* Contact: below 1024px the form leads and the intro follows it. Above, the intro
+   keeps its column beside the form (design-refresh.css owns the two columns). */
+@media (max-width: 1023px) {
+  .interior-contact-grid.quote-form-first {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  .interior-contact-grid.quote-form-first > [data-quote-anchor] {
+    order: -1;
+  }
+  .interior-contact-grid.quote-form-first > .interior-contact-intro {
+    margin-bottom: 0;
+  }
+}
+
+/* /estimate on short phones (320x568): the pinned footer (call, text, callback switch,
+   send) would leave the fields a sliver. Below 641px tall the whole frame scrolls
+   instead, so the heading and the fields come first and the send area follows them. */
+@media (max-width: 1023px) and (max-height: 640px) {
+  .quote-request-app-frame {
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+  }
+  .quote-request-app-frame [data-testid="app-frame-body"] {
+    flex: none !important;
+    overflow: visible !important;
+    min-height: auto !important;
+  }
+  .quote-request-app-frame [data-testid="app-frame-body"] > div {
+    min-height: 0 !important;
+  }
+}
+
+/* The quote form heading takes programmatic focus on arrival (tabindex=-1) so screen
+   readers announce it. It is not an interactive control, so no focus ring. */
+.approved-shell [data-quote-form-heading]:focus,
+[data-quote-form-heading]:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* The one-screen quote form reads top down: heading, then the first field. The frame's
+   vertical centring suits a two-choice wizard step, not a form, a callback or a
+   success message, so this page top-aligns. */
+.quote-request-app-frame [data-testid="app-frame-body"] > div {
+  justify-content: flex-start !important;
+}

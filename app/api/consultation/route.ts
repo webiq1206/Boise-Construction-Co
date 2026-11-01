@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse, after } from "next/server";
-import {sanitizeAttribution,appendAttributionEvidence} from '@/lib/leadAttribution';
+import {appendAttributionEvidence} from '@/lib/leadAttribution';
 import { createHash } from "crypto";
 import { z } from "zod";
 import { getUncachableEmailClient } from "@/server/services/emailTransport";
@@ -31,7 +31,10 @@ import {
   PROJECT_LABELS,
   type EstimateRefinements,
 } from "@/shared/estimateEngine";
-import { estimateSchema } from "@/shared/estimatePayload";
+import {
+  consultationBodySchema,
+  optionalEstimateSchema,
+} from "@/server/services/consultationRequest";
 import { resolveQuotedRange } from "@/shared/costs/resolve";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import { readUnitCostOverrides } from "@/server/services/unitCostOverrides";
@@ -49,63 +52,9 @@ import {
   buildProjectGoals,
 } from "@/server/services/leadRecord";
 
-const propertyProfileSchema = z
-  .object({
-    formattedAddress: z.string().max(300),
-    city: z.string().max(120),
-    state: z.string().max(60),
-    zip: z.string().max(20),
-  })
-  .passthrough()
-  .optional()
-  .nullable();
-
-// The consultation form may arrive with no estimate at all (someone who came
-// straight to the contact page), so the shared object is wrapped as optional.
-const optionalEstimateSchema = estimateSchema.optional().nullable();
-
-const bodySchema = z
-  .object({
-    name: z.string().min(2).max(120),
-    /**
-     * Only the visitor's chosen contact method is required (see superRefine
-     * below) - matches the same preferred-contact pattern already shipped in
-     * the RE-10 wizard. Defaults to "email" so older cached client bundles
-     * that never send this field behave exactly as before (email required).
-     */
-    preferredContact: z.enum(["email", "phone", "text"]).optional().default("email"),
-    phone: z.string().max(50).optional().default(""),
-    email: z.string().max(254).optional().default(""),
-    /**
-     * Optional because a new-build enquiry from someone who has not bought land
-     * yet has no site to name. The client requires a locatable site for every
-     * other project type; see LAND_SEARCH_PROJECT_TYPE in ConsultationForm.
-     */
-    address: z.string().max(300).optional().default(""),
-    zip: z.string().max(20).optional(),
-    projectType: z.string().min(1).max(100),
-    message: z.string().max(5_000).optional(),
-    propertyProfile: propertyProfileSchema,
-    attribution: z.unknown().optional().transform(sanitizeAttribution),
-    estimate: optionalEstimateSchema,
-    inquiryKey: z.string().max(124).regex(/^inq_[A-Za-z0-9_-]{16,120}$/).optional(),
-    submissionKind: z.enum(["initial", "followup"]).optional().default("initial"),
-    formStartedAt: z.number().finite().int(),
-    website: z.string().max(200).optional().default(""),
-    /* Set by the client when the visitor already submitted the estimate gate,
-       which already sent admin + customer emails via /api/estimate-lead.
-       Prevents duplicate email sends when the same person submits both forms. */
-    skipEmail: z.boolean().optional(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.preferredContact === "email") {
-      if (!z.string().email().safeParse(data.email).success) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["email"], message: "Valid email required" });
-      }
-    } else if (data.phone.replace(/\D/g, "").length < 10) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["phone"], message: "Valid phone required" });
-    }
-  });
+// The body schema lives in server/services/consultationRequest.ts so the full
+// request and the "have us call you" callback shape are tested without a database.
+const bodySchema = consultationBodySchema;
 
 function deliveryRevisionKey(
   data: z.infer<typeof bodySchema>,
@@ -339,6 +288,8 @@ export async function POST(request: NextRequest) {
       zip: data.zip,
       projectType: data.projectType,
       message: data.message,
+      preferredContact: data.preferredContact,
+      requestKind: data.requestKind,
     };
     const crmProfile = (data.propertyProfile as PropertyEnrichment | null) ?? null;
     // Share this between the claimed channels so every destination uses the
@@ -347,6 +298,7 @@ export async function POST(request: NextRequest) {
     const lead = {
       name: data.name, phone: data.phone, email: data.email, address: data.address,
       zip: data.zip, projectType: data.projectType, message: data.message,
+      preferredContact: data.preferredContact, requestKind: data.requestKind,
     };
     const claimedRevisionKey =
       data.submissionKind === "followup" ? null : revisionKey;

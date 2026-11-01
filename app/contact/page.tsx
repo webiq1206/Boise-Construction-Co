@@ -1,6 +1,7 @@
 import { InteriorEstimateLink,InteriorHero,InteriorPage } from '@/components/approved/InteriorLayout';
 import { BusinessPhoneContact } from '@/components/BusinessPhoneContact';
 import { ConsultationForm } from '@/components/ConsultationForm';
+import { QuoteFormAnchor } from '@/components/QuoteFormAnchor';
 import { Section } from '@/components/marketing';
 import { Hairline } from '@/components/marketing/Hairline';
 import { MarketingCard } from '@/components/marketing/MarketingCard';
@@ -220,9 +221,9 @@ export default function ContactPage() {
           </InteriorHero>
 
         {/* ─── Inline consultation form ─── */}
-        <Section id="consult" divider className="scroll-mt-24">
+        <Section divider reveal={false}>
           <div className="container px-4">
-            <div className="interior-contact-grid">
+            <div className="interior-contact-grid quote-form-first">
               <div className="interior-contact-intro">
                 <Reveal>
                   <p className="ed-eyebrow">Request your consultation</p>
@@ -263,9 +264,13 @@ export default function ContactPage() {
                   </div>
                 </Reveal>
               </div>
-              <MarketingCard className="interior-contact-form p-4 sm:p-7 md:p-10" padding="lg">
-                <ConsultationForm />
-              </MarketingCard>
+              {/* Every "#consult" link lands here, on the form itself (QuoteFormAnchor). */}
+              <div id="consult" data-quote-anchor="" className="interior-contact-form">
+                <QuoteFormAnchor />
+                <MarketingCard className="p-4 sm:p-7 md:p-10" padding="lg">
+                  <ConsultationForm />
+                </MarketingCard>
+              </div>
             </div>
           </div>
         </Section>

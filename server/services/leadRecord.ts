@@ -335,6 +335,11 @@ export function buildLeadNotes(
       `Name: ${lead.name}`,
       `Phone: ${lead.phone}`,
       `Email: ${lead.email}`,
+      ...(lead.requestKind === "callback"
+        ? ["Request: CALLBACK REQUEST (call this number back)"]
+        : lead.preferredContact
+          ? [`Preferred contact: ${{ phone: "Call", text: "Text", email: "Email" }[lead.preferredContact]}`]
+          : []),
       `Address: ${lead.address || "Not provided"}${lead.zip ? ` ${lead.zip}` : ""}`,
       `Stated budget: ${lead.budget || "Not provided"}`,
     ])

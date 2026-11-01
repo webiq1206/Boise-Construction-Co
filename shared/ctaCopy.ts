@@ -6,8 +6,10 @@ export const CTA_SECONDARY = "Schedule a consultation";
 export const CTA_SECONDARY_ALT = "Schedule a free consultation";
 export const CTA_QUOTE = "Request a quote";
 
-/** Consultation / short request form send label. */
-export const CTA_FORM_SEND = "Request a quote";
+/** Send label on the one-screen quote form (owner, 1 November: plain words). */
+export const CTA_FORM_SEND = "Send my request";
+/** Send label when the visitor switched on "Have us call you". */
+export const CTA_FORM_CALLBACK = "Request a callback";
 /** @deprecated Superseded by the single-step CTA_FORM_SEND. */
 export const CTA_FORM_REVIEW = "Review my request";
 /** @deprecated Superseded by the single-step CTA_FORM_SEND. */
