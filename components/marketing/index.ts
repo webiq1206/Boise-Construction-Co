@@ -11,5 +11,7 @@ export { BlogCard, type BlogCardProps } from "./BlogCard";
 export { BlogEndCta } from "./BlogEndCta";
 export { BlogPostLayout } from "./BlogPostLayout";
 export { BlogHeroBanner, HubHeroBanner } from "./BlogHeroBanner";
-export { BlogIndexClient } from "./BlogIndexClient";
 export { RelatedPostCards } from "./RelatedPostCards";
+// BlogIndexClient is deliberately NOT re-exported: it is a client component that
+// imports every blog post body, and any client file importing this barrel pulled
+// it (about 565 KB of script) into every page. Import it from its own file.

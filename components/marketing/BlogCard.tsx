@@ -7,8 +7,20 @@ import { Chip } from "./Chip";
 import type { BlogPostData } from "@/shared/blogContent";
 import { getBlogImageAlt, getBlogThumbnail } from "@/shared/blogImages";
 
+/** The fields a card shows. The blog index sends only these to the browser. */
+export type BlogCardPost = Pick<
+  BlogPostData,
+  "slug" | "title" | "excerpt" | "category" | "hubSlug" | "tags" | "publishedAt" | "thumbnail"
+>;
+
+/** Strip a post to its card fields (server side), leaving the article body behind. */
+export function toBlogCardPost(post: BlogPostData): BlogCardPost {
+  const { slug, title, excerpt, category, hubSlug, tags, publishedAt, thumbnail } = post;
+  return { slug, title, excerpt, category, hubSlug, tags, publishedAt, ...(thumbnail ? { thumbnail } : {}) };
+}
+
 export interface BlogCardProps {
-  post: BlogPostData;
+  post: BlogCardPost;
   featured?: boolean;
   formatDate: (date: string) => string;
 }

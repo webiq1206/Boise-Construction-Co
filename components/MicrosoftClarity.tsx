@@ -1,4 +1,5 @@
 import Script from 'next/script';
+import { deferVendorLoad,vendorScriptTag } from '@/lib/deferredVendorScript';
 
 /**
  * Clarity project "boiseconstruction.co" (y1sf0nz948).
@@ -20,6 +21,14 @@ import Script from 'next/script';
 const CLARITY_PROJECT_ID =
   process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID ?? 'y1sf0nz948';
 
+/**
+ * The clarity() queue stub runs once the page is interactive; the tag file
+ * from www.clarity.ms waits for the first interaction (pointerdown, keydown,
+ * scroll, touchstart) or 5 seconds after load, whichever comes first
+ * (lib/deferredVendorScript.ts). Calls made before then queue on the stub and
+ * flush when the tag loads. The form mask (lib/clarityFormMask, installed
+ * beforeInteractive in app/layout.tsx) is in place long before either.
+ */
 export function MicrosoftClarity() {
   // Production-only: keep dev sessions out of Clarity heatmaps/recordings.
   if (process.env.NODE_ENV !== 'production') return null;
@@ -27,13 +36,10 @@ export function MicrosoftClarity() {
   return (
     <Script
       id="clarity-script"
-      strategy="lazyOnload"
+      strategy="afterInteractive"
       dangerouslySetInnerHTML={{
-        __html: `(function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/${CLARITY_PROJECT_ID}?ref=bwt";
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "${CLARITY_PROJECT_ID}");`,
+        __html: `(function(c,a){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};})(window,"clarity");
+${deferVendorLoad(vendorScriptTag(`https://www.clarity.ms/tag/${CLARITY_PROJECT_ID}?ref=bwt`))}`,
       }}
     />
   );

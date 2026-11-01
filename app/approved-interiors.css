@@ -749,6 +749,26 @@
 .interior-contact-actions .interior-estimate-link {
   max-width:100%
 }
+/* Phone, text and facts moved out of the contact hero into the form intro
+   (light ground), so they take the light-ground colours. */
+.interior-contact-direct {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:12px
+}
+.interior-contact-direct .ed-hero-facts {
+  align-self:stretch;
+  margin-top:12px;
+  color:#2c302f;
+  border-top-color:#2c302f30
+}
+.interior-contact-direct .ed-hero-facts dt {
+  color:#62645f
+}
+.interior-contact-direct .ed-hero-facts dd {
+  color:#2c302f
+}
 @media(min-width:701px) and (max-width:1023px) {
   .approved-interior .interior-article-grid {
   grid-template-columns:minmax(0,1fr)

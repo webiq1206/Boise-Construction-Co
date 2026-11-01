@@ -1,5 +1,6 @@
 import { InteriorPage } from '@/components/approved/InteriorLayout';
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { toBlogCardPost } from "@/components/marketing/BlogCard";
 import { BlogIndexClient } from "@/components/marketing/BlogIndexClient";
 import { EstimatePromptBand } from "@/components/marketing/EstimatePromptBand";
 import { PageHeroBand } from "@/components/sections/PageHeroBand";
@@ -66,7 +67,7 @@ export default function BlogPage() {
         </Link>
       </PageHeroBand>
 
-      <BlogIndexClient />
+      <BlogIndexClient posts={BLOG_POSTS.map(toBlogCardPost)} />
 
       <EstimatePromptBand
         eyebrow="Ready to plan"

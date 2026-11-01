@@ -5,9 +5,8 @@ import Link from "next/link";
 import { PenLine, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/marketing/Section";
-import { BlogCard } from "@/components/marketing/BlogCard";
+import { BlogCard, type BlogCardPost } from "@/components/marketing/BlogCard";
 import { Chip } from "@/components/marketing/Chip";
-import { BLOG_POSTS } from "@/shared/blogContent";
 import {
   CONTENT_HUBS,
   categoryHubPath,
@@ -23,13 +22,19 @@ function formatDate(dateString: string): string {
   });
 }
 
-export function BlogIndexClient() {
+/**
+ * Posts arrive as card summaries from the server page (toBlogCardPost). This
+ * component used to import BLOG_POSTS itself, which shipped every article body
+ * (about 565 KB of script) to the browser, and desktop headers prefetch /blog
+ * from every page.
+ */
+export function BlogIndexClient({ posts }: { posts: BlogCardPost[] }) {
   const sortedPosts = useMemo(
     () =>
-      [...BLOG_POSTS].sort(
+      [...posts].sort(
         (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
       ),
-    []
+    [posts]
   );
 
   const indexableHubs = useMemo(

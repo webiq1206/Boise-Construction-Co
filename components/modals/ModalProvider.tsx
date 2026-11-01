@@ -8,10 +8,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ConsultationForm } from "@/components/ConsultationForm";
-import { EstimateCalculator } from "@/components/EstimateCalculator";
+import dynamic from "next/dynamic";
 import { requestHideMobileNavBar } from "@/lib/mobileNavBar";
 import { ModalsContext, type ModalType } from "./modalsContext";
+
+// Both bodies render only after a visitor opens a modal, so their code (the
+// quote wizard with its form and validation libraries, the estimator shell)
+// loads on open instead of shipping with the root layout on every page.
+// Pages that render the wizard inline (/, /contact, /estimate) still import
+// it statically, so nothing changes there.
+const ConsultationForm = dynamic(
+  () => import("@/components/ConsultationForm").then((m) => m.ConsultationForm),
+  { loading: () => <p role="status" className="py-8 text-sm text-muted-foreground">Loading the form...</p> },
+);
+const EstimateCalculator = dynamic(() =>
+  import("@/components/EstimateCalculator").then((m) => m.EstimateCalculator),
+);
 
 export function ModalProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState<ModalType>(null);
