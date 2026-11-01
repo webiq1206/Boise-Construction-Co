@@ -11,8 +11,9 @@
 const ALTS: Record<string, string> = {
   "/images/construction/custom-home-exterior.webp":
     "White board-and-batten house with a dark gable roof and a covered front porch",
+  // Not the same picture as /images/construction/custom-home-exterior.webp above.
   "/family/construction-custom-home-exterior.webp":
-    "White board-and-batten house with a dark gable roof and a covered front porch",
+    "Concept design of a mountain-modern custom home with charcoal stucco, ledgestone and a dark metal roof",
   "/images/construction/semi-custom-home.webp":
     "Single-story gray house with stone-wrapped porch columns, a covered entry and a garage",
   "/images/construction/home-under-framing.webp":

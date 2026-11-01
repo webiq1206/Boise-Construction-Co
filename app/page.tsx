@@ -1,4 +1,5 @@
 import { ApprovedHome } from "@/components/approved/ApprovedHome";
+import { HomeHero } from "@/components/approved/HomeHero";
 import { ConsultationForm } from "@/components/ConsultationForm";
 import { MarketingCard } from "@/components/marketing/MarketingCard";
 import { Section } from "@/components/marketing/Section";
@@ -67,6 +68,7 @@ export default function HomePage() {
           thing they came for. Everything above it now exists only to make the
           number land well; everything below it answers what the number raised. */}
       <HomePageSchema />
+      <HomeHero />
       <ApprovedHome />
       <ProjectGallerySection limit={1} />
       <BudgetInclusionsSection />
