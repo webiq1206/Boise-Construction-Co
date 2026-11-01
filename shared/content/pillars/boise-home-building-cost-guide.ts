@@ -2,7 +2,7 @@ import type { GuidePageData } from '../../guideContent';
 
 export const boiseHomeBuildingCostGuide: GuidePageData = {
   slug: 'boise-home-building-cost-guide',
-  title: 'Boise Home Building Cost Guide',
+  title: 'Boise home building cost guide',
   // The complete planning guide. The two cost posts own the narrower intents:
   // /blog/cost-to-build-a-house-boise (the overall cost question) and
   // /blog/custom-home-cost-per-square-foot-boise (the per-square-foot breakdown).
@@ -40,13 +40,13 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
   linkedServices: ['custom-home-builder', 'semi-custom-homes', 'build-on-your-lot'],
   linkedCities: ['boise', 'meridian', 'eagle', 'nampa'],
   relatedLinks: [
-    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to Build a House in Boise' },
-    { url: '/blog/custom-home-cost-per-square-foot-boise', anchor: 'Custom Home Cost Per Square Foot' },
-    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to Budget for a New Home' },
-    { url: '/blog/allowances-explained-new-home', anchor: 'How Allowances Work' },
-    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying Land to Build in Boise' },
-    { url: '/guides/choose-home-builder-boise', anchor: 'Choosing a Home Builder in Boise' },
-    { url: '/services/custom-home-builder', anchor: 'Custom Home Building' },
+    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to build a house in Boise' },
+    { url: '/blog/custom-home-cost-per-square-foot-boise', anchor: 'Custom home cost per square foot' },
+    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to budget for a new home' },
+    { url: '/blog/allowances-explained-new-home', anchor: 'How allowances work' },
+    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying land to build in Boise' },
+    { url: '/guides/choose-home-builder-boise', anchor: 'Choosing a home builder in Boise' },
+    { url: '/services/custom-home-builder', anchor: 'Custom home building' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

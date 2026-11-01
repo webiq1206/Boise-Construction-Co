@@ -10,7 +10,7 @@ export const shopHomesAndBarndominiumsIdaho: BlogPostData = {
     'Barndominium cost in Idaho explained: what a 1,600 sq ft home with a 1,200 sq ft shop costs by finish, the trade-offs, zoning, financing and insulation.',
   excerpt:
     'A post-frame or steel-framed building that pairs finished living space with a working shop costs less per square foot than a conventional house. Here is where the savings come from, what you give up, and who these actually suit.',
-  category: 'Design & Floor Plans',
+  category: 'Design & floor plans',
   hubSlug: 'home-design-and-plans',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-22',
@@ -35,11 +35,11 @@ export const shopHomesAndBarndominiumsIdaho: BlogPostData = {
     'Fire separation, fume control, and sound isolation between the shop and the living space all need to be designed in.',
   ],
   relatedLinks: [
-    { url: '/services/shop-homes-barndominiums', anchor: 'Shop Homes and Barndominiums' },
-    { url: '/guides/custom-home-design-guide', anchor: 'Designing a Custom Home in the Treasure Valley' },
-    { url: '/blog/energy-efficient-home-building-boise', anchor: 'Building an Energy-Efficient Home' },
-    { url: '/blog/how-to-buy-a-buildable-lot-boise', anchor: 'How to Tell If a Lot Is Buildable' },
-    { url: '/blog/construction-loan-basics-idaho', anchor: 'How Construction Loans Work in Idaho' },
+    { url: '/services/shop-homes-barndominiums', anchor: 'Shop homes and barndominiums' },
+    { url: '/guides/custom-home-design-guide', anchor: 'Designing a custom home in the Treasure Valley' },
+    { url: '/blog/energy-efficient-home-building-boise', anchor: 'Building an energy-efficient home' },
+    { url: '/blog/how-to-buy-a-buildable-lot-boise', anchor: 'How to tell if a lot is buildable' },
+    { url: '/blog/construction-loan-basics-idaho', anchor: 'How construction loans work in Idaho' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

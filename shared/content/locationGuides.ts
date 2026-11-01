@@ -718,7 +718,7 @@ function buildLocationGuide(p: PlaceGuide): GuidePageData {
     faqs: p.faqs,
     linkedCities: [p.citySlug],
     relatedLinks: [
-      { url: '/guides/treasure-valley-home-building-guide', anchor: 'Treasure Valley Home Building Guide' },
+      { url: '/guides/treasure-valley-home-building-guide', anchor: 'Treasure Valley home building guide' },
       // The area page owns the commercial "home builder {city}" term; this guide
       // owns the informational "building a new home in {city}" one.
       { url: `/areas/${p.citySlug}`, anchor: `Home builder in ${cityName(p.citySlug)}` },

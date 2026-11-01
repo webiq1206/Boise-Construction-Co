@@ -2,7 +2,7 @@ import type { GuidePageData } from '../../guideContent';
 
 export const customHomeDesignGuide: GuidePageData = {
   slug: 'custom-home-design-guide',
-  title: 'Designing a Custom Home in the Treasure Valley',
+  title: 'Designing a custom home in the Treasure Valley',
   seoTitle: 'Custom Home Design, Treasure Valley',
   metaDescription:
     'Design a custom home in the Treasure Valley: start with the lot, program the plan, and settle geometry, performance, and finishes in the right order.',
@@ -106,13 +106,13 @@ export const customHomeDesignGuide: GuidePageData = {
   linkedServices: ['home-plans-design', 'custom-home-builder', 'energy-efficient-homes'],
   linkedCities: ['boise', 'meridian', 'eagle', 'nampa'],
   relatedLinks: [
-    { url: '/blog/custom-home-floor-plan-ideas-boise', anchor: 'Floor Plan Ideas That Work Here' },
-    { url: '/blog/single-story-vs-two-story-home', anchor: 'Single Story vs Two Story' },
-    { url: '/blog/energy-efficient-home-building-boise', anchor: 'Building an Energy-Efficient Home' },
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
-    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise Home Building Process' },
-    { url: '/services/home-plans-design', anchor: 'Home Plans and Design' },
-    { url: '/services/custom-home-builder', anchor: 'Custom Home Builder' },
+    { url: '/blog/custom-home-floor-plan-ideas-boise', anchor: 'Floor plan ideas that work here' },
+    { url: '/blog/single-story-vs-two-story-home', anchor: 'Single story vs two story' },
+    { url: '/blog/energy-efficient-home-building-boise', anchor: 'Building an energy-efficient home' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
+    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise home building process' },
+    { url: '/services/home-plans-design', anchor: 'Home plans and design' },
+    { url: '/services/custom-home-builder', anchor: 'Custom home builder' },
     { url: '/contact', anchor: 'Contact' },
   ],
   content: `

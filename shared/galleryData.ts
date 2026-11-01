@@ -26,7 +26,7 @@ export const GALLERY_PROJECTS: GalleryProject[] = [
   {
     serviceType: "custom-home-builder",
     city: "eagle",
-    title: "Eagle Foothills Mountain-Modern Concept",
+    title: "Eagle Foothills mountain-modern concept",
     description:
       "Charcoal stucco and dry-stacked grey ledgestone under a dark bronze standing-seam roof, with black steel windows, warm cedar soffits, and interiors in white oak, plaster, and limestone through the great room, kitchen, and primary bath.",
     images: [

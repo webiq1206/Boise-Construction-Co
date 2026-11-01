@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const choosingFinishesForANewHome: BlogPostData = {
   slug: 'choosing-finishes-for-a-new-home',
-  title: 'Choosing Finishes for a New Home Without Blowing the Budget',
+  title: 'Choosing finishes for a new home without blowing the budget',
   seoTitle: 'Finishes Without Blowing the Budget',
   metaDescription:
     'Selections in a new build: selection schedule, what to decide before framing, long-lead items, allowances, and where finish money is worth spending.',
   excerpt:
     'Selections are a schedule problem before they are a taste problem. Here is when each decision is due, how allowances behave, and where finish money actually earns its keep.',
-  category: 'The Building Process',
+  category: 'The building process',
   hubSlug: 'home-building-process',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-10',
@@ -36,12 +36,12 @@ export const choosingFinishesForANewHome: BlogPostData = {
     'Choosing a whole-house palette early beats choosing room by room as each trade arrives.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise Home Building Process' },
-    { url: '/blog/stages-of-building-a-house', anchor: 'The Stages of Building a House' },
-    { url: '/blog/how-long-does-it-take-to-build-a-house-boise', anchor: 'How Long a Boise Build Takes' },
-    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to Budget for a New Home' },
-    { url: '/blog/why-home-building-bids-vary', anchor: 'Why Home Building Bids Vary' },
-    { url: '/#calculator', anchor: 'Cost Calculator' },
+    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise home building process' },
+    { url: '/blog/stages-of-building-a-house', anchor: 'The stages of building a house' },
+    { url: '/blog/how-long-does-it-take-to-build-a-house-boise', anchor: 'How long a Boise build takes' },
+    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to budget for a new home' },
+    { url: '/blog/why-home-building-bids-vary', anchor: 'Why home building bids vary' },
+    { url: '/#calculator', anchor: 'Cost calculator' },
   ],
   faqs: [
     {

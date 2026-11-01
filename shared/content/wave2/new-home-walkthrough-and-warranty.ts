@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const newHomeWalkthroughAndWarranty: BlogPostData = {
   slug: 'new-home-walkthrough-and-warranty',
-  title: 'The Final Walkthrough and What the Warranty Covers',
+  title: 'The final walkthrough and what the warranty covers',
   seoTitle: 'New Home Walkthrough and Warranty',
   metaDescription:
     'How the pre-drywall and final walkthrough work, how a punch list is handled, what a one-year warranty covers, and how to tell a defect from settling.',
   excerpt:
     'The walkthrough is a working inspection, not a ceremony. Here is what we look at, how the punch list is closed, and where the warranty line actually falls.',
-  category: 'The Building Process',
+  category: 'The building process',
   hubSlug: 'home-building-process',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-18',
@@ -36,11 +36,11 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
     'Report issues in writing so there is one record, and report urgent items immediately.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise Home Building Process' },
-    { url: '/blog/stages-of-building-a-house', anchor: 'The Stages of Building a House' },
-    { url: '/blog/how-long-does-it-take-to-build-a-house-boise', anchor: 'How Long a Boise Build Takes' },
-    { url: '/blog/questions-to-ask-a-home-builder', anchor: 'Questions to Ask a Home Builder' },
-    { url: '/blog/first-meeting-with-a-home-builder', anchor: 'Your First Meeting With a Builder' },
+    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise home building process' },
+    { url: '/blog/stages-of-building-a-house', anchor: 'The stages of building a house' },
+    { url: '/blog/how-long-does-it-take-to-build-a-house-boise', anchor: 'How long a Boise build takes' },
+    { url: '/blog/questions-to-ask-a-home-builder', anchor: 'Questions to ask a home builder' },
+    { url: '/blog/first-meeting-with-a-home-builder', anchor: 'Your first meeting with a builder' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

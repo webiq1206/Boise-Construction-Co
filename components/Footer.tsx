@@ -5,7 +5,7 @@ import { ApprovedBrand } from "@/components/approved/ApprovedBrand";
 import { FooterCTAs } from "@/components/modals/FooterCTAs";
 import { Button } from "@/components/ui/button";
 import { areaPath,servicePath } from "@/lib/seo-routes";
-import { CITIES,SERVICES } from "@/shared/contentData";
+import { CITIES,SERVICES,serviceLabel } from "@/shared/contentData";
 import { CONTENT_HUBS,guidePath } from "@/shared/contentHubs";
 import { P5_SOCIAL } from "@/shared/gbpProfile";
 import { GUIDE_PAGES } from "@/shared/guideContent";
@@ -64,19 +64,19 @@ function buildFooterGroups(): { title: string; links: FooterLink[] }[] {
     {
       title: "Services",
       links: [
-        ...SERVICES.map((s) => ({ label: s.name, href: servicePath(s.slug) })),
+        ...SERVICES.map((s) => ({ label: serviceLabel(s), href: servicePath(s.slug) })),
         { label: "All services", href: "/services" },
       ],
     },
     {
       title: "Company",
-      links: [{ label: "About", href: "/about" }, { label: "Why Choose Us", href: "/#why-choose-us" }, { label: "How We Build", href: "/#how-we-build" }, { label: "Warranty", href: "/warranty" }, { label: "Contact", href: "/contact" }],
+      links: [{ label: "About", href: "/about" }, { label: "Why choose us", href: "/#why-choose-us" }, { label: "How we build", href: "/#how-we-build" }, { label: "Warranty", href: "/warranty" }, { label: "Contact", href: "/contact" }],
     },
     {
       title: "Resources",
       links: [
-        { label: "Home Building Guides", href: "/guides" },
-        { label: "Planning Downloads", href: "/resources" },
+        { label: "Home building guides", href: "/guides" },
+        { label: "Planning downloads", href: "/resources" },
         { label: "Blog", href: "/blog" },
         ...pillarGuides,
       ],
@@ -240,10 +240,10 @@ export function Footer() {
             </span>
           </div>
           <div className="flex flex-wrap gap-4">
-            <Link href="/sitemap" className="transition-colors hover:text-inverse-foreground">Site Map</Link>
-            <Link href="/privacy-policy" className="transition-colors hover:text-inverse-foreground">Privacy Policy</Link>
-            <Link href="/terms-of-service" className="transition-colors hover:text-inverse-foreground">Terms of Service</Link>
-            <a href="/api/login" rel="nofollow" className="transition-colors hover:text-inverse-foreground">Subcontractor Login</a>
+            <Link href="/sitemap" className="transition-colors hover:text-inverse-foreground">Site map</Link>
+            <Link href="/privacy-policy" className="transition-colors hover:text-inverse-foreground">Privacy policy</Link>
+            <Link href="/terms-of-service" className="transition-colors hover:text-inverse-foreground">Terms of service</Link>
+            <a href="/api/login" rel="nofollow" className="transition-colors hover:text-inverse-foreground">Subcontractor login</a>
           </div>
         </div>
       </div>

@@ -39,13 +39,13 @@ export default function NotFound() {
 
         <Card className="marketing-card mb-8 text-left">
           <CardContent className="pt-6">
-            <h3 className="font-normal mb-4 text-foreground">Popular Pages</h3>
+            <h3 className="font-normal mb-4 text-foreground">Popular pages</h3>
             <div className="grid grid-cols-2 gap-2">
               {[
-                { href: "/services", label: "Our Services" },
-                { href: "/#consult", label: "Free Consultation" },
-                { href: "/blog", label: "Blog and Ideas" },
-                { href: "/#calculator", label: "Project Estimator" },
+                { href: "/services", label: "Our services" },
+                { href: "/#consult", label: "Free consultation" },
+                { href: "/blog", label: "Blog and ideas" },
+                { href: "/#calculator", label: "Project estimator" },
               ].map((item) => (
                 <Link
                   key={item.href}

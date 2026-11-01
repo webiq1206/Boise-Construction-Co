@@ -56,7 +56,7 @@ export interface ContentManifestEntry {
 export const CONTENT_HUBS: ContentHub[] = [
   {
     hubSlug: 'home-building-costs',
-    title: 'Home Building Costs',
+    title: 'Home building costs',
     categoryLabel: 'Home Building Costs',
     pillarSlug: 'boise-home-building-cost-guide',
     pillarRoute: 'guide',
@@ -69,7 +69,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   },
   {
     hubSlug: 'choosing-a-builder',
-    title: 'Choosing a Builder',
+    title: 'Choosing a builder',
     categoryLabel: 'Choosing a Builder',
     pillarSlug: 'choose-home-builder-boise',
     pillarRoute: 'guide',
@@ -82,7 +82,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   },
   {
     hubSlug: 'home-building-process',
-    title: 'The Building Process',
+    title: 'The building process',
     categoryLabel: 'The Building Process',
     pillarSlug: 'boise-home-building-process-guide',
     pillarRoute: 'guide',
@@ -95,7 +95,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   },
   {
     hubSlug: 'land-and-lots',
-    title: 'Land & Lots',
+    title: 'Land & lots',
     categoryLabel: 'Land & Lots',
     pillarSlug: 'buying-land-to-build-boise',
     pillarRoute: 'guide',
@@ -108,7 +108,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   },
   {
     hubSlug: 'home-design-and-plans',
-    title: 'Design & Floor Plans',
+    title: 'Design & floor plans',
     categoryLabel: 'Design & Floor Plans',
     pillarSlug: 'custom-home-design-guide',
     pillarRoute: 'guide',
@@ -121,7 +121,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   },
   {
     hubSlug: 'treasure-valley-locations',
-    title: 'Treasure Valley Locations',
+    title: 'Treasure Valley locations',
     categoryLabel: 'Treasure Valley Locations',
     pillarSlug: 'treasure-valley-home-building-guide',
     pillarRoute: 'guide',
@@ -200,7 +200,7 @@ function guide(
  */
 export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   // Hub 1 - Costs
-  { slug: 'boise-home-building-cost-guide', title: 'Boise Home Building Cost Guide', ...hubPillar('home-building-costs'), status: PUBLISHED },
+  { slug: 'boise-home-building-cost-guide', title: 'Boise home building cost guide', ...hubPillar('home-building-costs'), status: PUBLISHED },
   cluster('cost-to-build-a-house-boise', 'How Much Does It Cost to Build a House in Boise?', 'home-building-costs', PUBLISHED, 'whole-home-remodel-cost-boise'),
   cluster('custom-home-cost-per-square-foot-boise', 'Custom Home Cost Per Square Foot in Boise', 'home-building-costs', PUBLISHED, 'remodel-cost-per-square-foot-boise'),
   cluster('what-drives-home-building-costs-boise', 'What Actually Drives Home Building Costs in Boise', 'home-building-costs', PUBLISHED, 'what-impacts-remodeling-costs-boise'),
@@ -211,7 +211,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('allowances-explained-new-home', 'How Allowances Work in a New Home Contract', 'home-building-costs'),
 
   // Hub 2 - Choosing a builder
-  { slug: 'choose-home-builder-boise', title: 'How to Choose a Home Builder in Boise', ...hubPillar('choosing-a-builder'), status: PUBLISHED },
+  { slug: 'choose-home-builder-boise', title: 'How to choose a home builder in Boise', ...hubPillar('choosing-a-builder'), status: PUBLISHED },
   cluster('questions-to-ask-a-home-builder', 'Questions to Ask a Home Builder Before You Sign', 'choosing-a-builder', PUBLISHED, 'questions-to-ask-remodeling-contractor'),
   cluster('home-builder-red-flags', 'Home Builder Red Flags', 'choosing-a-builder', PUBLISHED, 'remodeling-contractor-red-flags'),
   cluster('design-build-vs-general-contractor', 'Design-Build vs General Contractor', 'choosing-a-builder'),
@@ -221,7 +221,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('production-vs-custom-home-builder', 'Production Builder vs Custom Builder', 'choosing-a-builder'),
 
   // Hub 3 - Process
-  { slug: 'boise-home-building-process-guide', title: 'The Boise Home Building Process', ...hubPillar('home-building-process'), status: PUBLISHED },
+  { slug: 'boise-home-building-process-guide', title: 'The Boise home building process', ...hubPillar('home-building-process'), status: PUBLISHED },
   cluster('how-long-does-it-take-to-build-a-house-boise', 'How Long Does It Take to Build a House in Boise?', 'home-building-process', PUBLISHED, 'whole-home-remodel-timeline'),
   cluster('boise-building-permit-guide', 'Building Permits in Boise: What a New Home Needs', 'home-building-process', PUBLISHED, 'boise-permit-guide'),
   cluster('ada-vs-canyon-county-permit-timelines', 'Ada vs Canyon County Permit Timelines', 'home-building-process'),
@@ -231,7 +231,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('first-meeting-with-a-home-builder', 'What Happens at Your First Meeting With a Builder', 'home-building-process', PUBLISHED, 'consultation-process-remodeling'),
 
   // Hub 4 - Land and lots
-  { slug: 'buying-land-to-build-boise', title: 'Buying Land to Build On in the Treasure Valley', ...hubPillar('land-and-lots'), status: PUBLISHED },
+  { slug: 'buying-land-to-build-boise', title: 'Buying land to build on in the Treasure Valley', ...hubPillar('land-and-lots'), status: PUBLISHED },
   cluster('how-to-buy-a-buildable-lot-boise', 'How to Tell If a Lot Is Actually Buildable', 'land-and-lots'),
   cluster('well-and-septic-cost-idaho', 'What a Well and Septic System Costs in Idaho', 'land-and-lots'),
   cluster('lot-evaluation-checklist', 'Lot Evaluation Checklist: 14 Things to Check Before You Buy', 'land-and-lots'),
@@ -239,7 +239,7 @@ export const CONTENT_MANIFEST: ContentManifestEntry[] = [
   cluster('impact-fees-and-utility-connections', 'Impact Fees and Utility Connections in Ada and Canyon County', 'land-and-lots'),
 
   // Hub 5 - Design and plans
-  { slug: 'custom-home-design-guide', title: 'Designing a Custom Home in the Treasure Valley', ...hubPillar('home-design-and-plans'), status: PUBLISHED },
+  { slug: 'custom-home-design-guide', title: 'Designing a custom home in the Treasure Valley', ...hubPillar('home-design-and-plans'), status: PUBLISHED },
   cluster('custom-home-floor-plan-ideas-boise', 'Floor Plan Ideas That Work in Treasure Valley Homes', 'home-design-and-plans', PUBLISHED, 'kitchen-layout-ideas-boise-homes'),
   cluster('single-story-vs-two-story-home', 'Single Story vs Two Story: Cost, Lot, and Livability', 'home-design-and-plans'),
   cluster('adu-cost-boise', 'ADU Cost in Boise', 'home-design-and-plans'),

@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const buildVsBuyBoise: BlogPostData = {
   slug: 'build-vs-buy-boise',
-  title: 'Building vs Buying a Home in the Treasure Valley',
+  title: 'Building vs buying a home in the Treasure Valley',
   seoTitle: 'Build vs Buy a Home, Treasure Valley',
   metaDescription:
     'An honest comparison of building and buying in the Treasure Valley: total cost, timeline, financing, compromise, and when buying is clearly better.',
   excerpt:
     'We build houses, so treat this with appropriate suspicion. Then read it anyway, because there are several situations where buying an existing home is the better answer.',
-  category: 'Home Building Costs',
+  category: 'Home building costs',
   hubSlug: 'home-building-costs',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-06',
@@ -35,11 +35,11 @@ export const buildVsBuyBoise: BlogPostData = {
     'If you need to move soon or want a fixed number today, buy.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
-    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to Build a House in Boise' },
-    { url: '/blog/construction-loan-basics-idaho', anchor: 'How Construction Loans Work in Idaho' },
-    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to Budget for a New Home' },
-    { url: '/services/semi-custom-homes', anchor: 'Semi-Custom Homes' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
+    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to build a house in Boise' },
+    { url: '/blog/construction-loan-basics-idaho', anchor: 'How construction loans work in Idaho' },
+    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to budget for a new home' },
+    { url: '/services/semi-custom-homes', anchor: 'Semi-custom homes' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

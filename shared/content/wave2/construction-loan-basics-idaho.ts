@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const constructionLoanBasicsIdaho: BlogPostData = {
   slug: 'construction-loan-basics-idaho',
-  title: 'How Construction Loans Work in Idaho',
+  title: 'How construction loans work in Idaho',
   seoTitle: 'How Construction Loans Work in Idaho',
   metaDescription:
     'How construction loans work in Idaho: draw schedules, appraisals from plans and specs, land as equity, and what a lender needs from your builder.',
   excerpt:
     'A construction loan funds a house that does not exist yet, so it works nothing like a mortgage. Here are the mechanics, explained by the builder rather than the lender.',
-  category: 'Home Building Costs',
+  category: 'Home building costs',
   hubSlug: 'home-building-costs',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-13',
@@ -36,11 +36,11 @@ export const constructionLoanBasicsIdaho: BlogPostData = {
     'Every term here varies by lender, so compare several before committing.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
-    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to Budget for a New Home' },
-    { url: '/blog/build-vs-buy-boise', anchor: 'Building vs Buying in the Treasure Valley' },
-    { url: '/blog/allowances-explained-new-home', anchor: 'How Allowances Work' },
-    { url: '/services/build-on-your-lot', anchor: 'Build on Your Lot' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
+    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to budget for a new home' },
+    { url: '/blog/build-vs-buy-boise', anchor: 'Building vs buying in the Treasure Valley' },
+    { url: '/blog/allowances-explained-new-home', anchor: 'How allowances work' },
+    { url: '/services/build-on-your-lot', anchor: 'Build on your lot' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

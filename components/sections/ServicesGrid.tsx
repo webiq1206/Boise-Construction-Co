@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/marketing/Section";
 import { Button } from "@/components/ui/button";
-import { SERVICES, hasPlanningFigure } from "@/shared/contentData";
+import { SERVICES, hasPlanningFigure, serviceLabel } from "@/shared/contentData";
 import { servicePath } from "@/lib/seo-routes";
 import { CTA_SECONDARY } from "@/shared/ctaCopy";
 import { getServiceBackground } from "@/shared/serviceBackgrounds";
@@ -109,7 +109,7 @@ export function ServicesGrid() {
                 style={{ borderBottom: "1px solid var(--ed-line)" }}
               >
                 <h3 className="ed-h3 transition-colors group-hover:[color:var(--ed-accent)]">
-                  {service.name}
+                  {serviceLabel(service)}
                 </h3>
                 <p className="ed-body max-w-none">{service.shortDescription}</p>
                 <p className="ed-small flex items-baseline gap-2 whitespace-nowrap">

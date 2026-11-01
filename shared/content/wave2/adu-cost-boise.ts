@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const aduCostBoise: BlogPostData = {
   slug: 'adu-cost-boise',
-  title: 'ADU Cost in Boise',
+  title: 'ADU cost in Boise',
   seoTitle: 'ADU Cost to Build in Boise',
   metaDescription:
     'What an ADU costs to build in Boise: detached vs attached, size and zoning limits, utility connections, septic capacity, and real per square foot costs.',
   excerpt:
     'An accessory dwelling unit is a small house, and it prices like one. Here is what a detached or attached ADU costs to build in Ada and Canyon County, and what the zoning, utility, and septic questions do to the number.',
-  category: 'Design & Floor Plans',
+  category: 'Design & floor plans',
   hubSlug: 'home-design-and-plans',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-24',
@@ -32,12 +32,12 @@ export const aduCostBoise: BlogPostData = {
     'Zoning decides size, setbacks, height, and parking before design starts, and the rules differ across Ada and Canyon County.',
   ],
   relatedLinks: [
-    { url: '/guides/custom-home-design-guide', anchor: 'Designing a Custom Home in the Treasure Valley' },
-    { url: '/blog/multigenerational-home-design', anchor: 'Designing a Home for Multiple Generations' },
-    { url: '/blog/aging-in-place-home-design', anchor: 'Building a Home You Can Age In' },
-    { url: '/blog/well-and-septic-cost-idaho', anchor: 'Well and Septic Cost in Idaho' },
-    { url: '/blog/impact-fees-and-utility-connections', anchor: 'Impact Fees and Utility Connections' },
-    { url: '/services/build-on-your-lot', anchor: 'Build on Your Lot' },
+    { url: '/guides/custom-home-design-guide', anchor: 'Designing a custom home in the Treasure Valley' },
+    { url: '/blog/multigenerational-home-design', anchor: 'Designing a home for multiple generations' },
+    { url: '/blog/aging-in-place-home-design', anchor: 'Building a home you can age in' },
+    { url: '/blog/well-and-septic-cost-idaho', anchor: 'Well and septic cost in Idaho' },
+    { url: '/blog/impact-fees-and-utility-connections', anchor: 'Impact fees and utility connections' },
+    { url: '/services/build-on-your-lot', anchor: 'Build on your lot' },
   ],
   faqs: [
     {
