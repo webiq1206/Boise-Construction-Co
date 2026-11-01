@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const productionVsCustomHomeBuilder: BlogPostData = {
   slug: 'production-vs-custom-home-builder',
-  title: 'Production Builder vs Custom Builder',
+  title: 'Production builder vs custom builder',
   seoTitle: 'Production Builder vs Custom Builder',
   metaDescription:
     'Production builder vs custom builder: plan flexibility, lot choice, selections, price predictability, timeline, and an honest look at who each one suits.',
   excerpt:
     'A production builder is the right answer for a lot of people, and saying otherwise would be a sales pitch. Here is where the two models genuinely differ.',
-  category: 'Choosing a Builder',
+  category: 'Choosing a builder',
   hubSlug: 'choosing-a-builder',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-22',
@@ -35,11 +35,11 @@ export const productionVsCustomHomeBuilder: BlogPostData = {
     'If you cannot name three things you would change about a production plan, buy the production home.',
   ],
   relatedLinks: [
-    { url: '/guides/choose-home-builder-boise', anchor: 'How to Choose a Home Builder in Boise' },
-    { url: '/services/semi-custom-homes', anchor: 'Semi-Custom Homes' },
-    { url: '/services/custom-home-builder', anchor: 'Custom Home Building' },
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
-    { url: '/blog/questions-to-ask-a-home-builder', anchor: 'Questions to Ask a Home Builder' },
+    { url: '/guides/choose-home-builder-boise', anchor: 'How to choose a home builder in Boise' },
+    { url: '/services/semi-custom-homes', anchor: 'Semi-custom homes' },
+    { url: '/services/custom-home-builder', anchor: 'Custom home building' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
+    { url: '/blog/questions-to-ask-a-home-builder', anchor: 'Questions to ask a home builder' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

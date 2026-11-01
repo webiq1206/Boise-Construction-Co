@@ -105,6 +105,30 @@ export const SERVICES: ServiceData[] = [
   },
 ];
 
+/**
+ * Sentence-case display labels for headings, cards, breadcrumbs and menus
+ * (owner decision C, 1 November 2026: same words as `name`, only letter case
+ * changes; acronyms keep their capitals). `name` stays the title-case identity
+ * used for title tags, schema and the keyed maps in lib/seo.ts.
+ */
+export const SERVICE_LABELS: Record<string, string> = {
+  'custom-home-builder': 'Custom home building',
+  'semi-custom-homes': 'Semi-custom homes',
+  'build-on-your-lot': 'Build on your lot',
+  'design-build': 'Design-build',
+  'home-plans-design': 'Home design & plans',
+  'home-additions': 'Home additions',
+  adu: 'ADUs & guest houses',
+  'lot-evaluation': 'Lot evaluation & feasibility',
+  'shop-homes-barndominiums': 'Shop homes & barndominiums',
+  'energy-efficient-homes': 'Energy-efficient homes',
+};
+
+/** Sentence-case label for a service, by slug; falls back to its name. */
+export function serviceLabel(service: { slug: string; name: string }): string {
+  return SERVICE_LABELS[service.slug] ?? service.name;
+}
+
 // Alias so existing imports stay compatible
 export const PRIORITY_SERVICES = SERVICES;
 

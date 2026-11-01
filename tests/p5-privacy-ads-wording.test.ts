@@ -56,7 +56,8 @@ test('the privacy page keeps ad click ids and campaign tags for 90 days with the
 test('the privacy page places the cookies section before data security', () => {
   const privacy = fs.readFileSync(new URL('../app/privacy-policy/page.tsx', import.meta.url), 'utf8');
   const toc =
-    '{"id":"document-section-4","label":"Information Sharing"},{"id":"cookies-analytics-advertising","label":"Cookies, analytics and advertising"},{"id":"document-section-5","label":"Data Security"}';
+    // Labels in sentence case since owner decision C (1 November 2026); the order is what this pins.
+    '{"id":"document-section-4","label":"Information sharing"},{"id":"cookies-analytics-advertising","label":"Cookies, analytics and advertising"},{"id":"document-section-5","label":"Data security"}';
   assert.equal(privacy.includes(toc), true);
   const headingAt = privacy.indexOf('<h2 id="cookies-analytics-advertising">');
   const securityAt = privacy.indexOf('<h2 id="document-section-5">');

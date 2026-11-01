@@ -2,7 +2,7 @@ import type { GuidePageData } from '../../guideContent';
 
 export const boiseHomeBuildingCostGuide: GuidePageData = {
   slug: 'boise-home-building-cost-guide',
-  title: 'Boise Home Building Cost Guide',
+  title: 'Boise home building cost guide',
   // The complete planning guide. The two cost posts own the narrower intents:
   // /blog/cost-to-build-a-house-boise (the overall cost question) and
   // /blog/custom-home-cost-per-square-foot-boise (the per-square-foot breakdown).
@@ -40,13 +40,13 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
   linkedServices: ['custom-home-builder', 'semi-custom-homes', 'build-on-your-lot'],
   linkedCities: ['boise', 'meridian', 'eagle', 'nampa'],
   relatedLinks: [
-    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to Build a House in Boise' },
-    { url: '/blog/custom-home-cost-per-square-foot-boise', anchor: 'Custom Home Cost Per Square Foot' },
-    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to Budget for a New Home' },
-    { url: '/blog/allowances-explained-new-home', anchor: 'How Allowances Work' },
-    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying Land to Build in Boise' },
-    { url: '/guides/choose-home-builder-boise', anchor: 'Choosing a Home Builder in Boise' },
-    { url: '/services/custom-home-builder', anchor: 'Custom Home Building' },
+    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to build a house in Boise' },
+    { url: '/blog/custom-home-cost-per-square-foot-boise', anchor: 'Custom home cost per square foot' },
+    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to budget for a new home' },
+    { url: '/blog/allowances-explained-new-home', anchor: 'How allowances work' },
+    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying land to build in Boise' },
+    { url: '/guides/choose-home-builder-boise', anchor: 'Choosing a home builder in Boise' },
+    { url: '/services/custom-home-builder', anchor: 'Custom home building' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [
@@ -103,7 +103,7 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
     {
       question: 'What does a shop home or barndominium cost in Idaho?',
       answer:
-        'Shop homes plan at $150 to $250 per square foot, about $200 on average, blended across finished living space and shop space and before land, site work and permits, because the shop side costs far less per foot than the house side. A 1,600 square foot living area with an attached 1,200 square foot shop commonly runs $420,000 to $700,000, about $560,000 at the $200 average, before land, site work and permits. The blend depends heavily on how finished the shop is.',
+        'Shop homes cost less per square foot than a conventional house, because the shop side costs far less per foot than the house side. For 1,600 square feet of living space with a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. The blend depends heavily on how finished the shop is.',
     },
   ],
   content: `
@@ -128,11 +128,10 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
 <tr><td>Vertical construction on a lot you already own</td><td>$225 to $400 per finished square foot</td></tr>
 <tr><td>High-performance home</td><td>$275 to $425 per finished square foot</td></tr>
 <tr><td>Foothills site, steep grade, high detail</td><td>Regularly above $450 per square foot</td></tr>
-<tr><td>Shop home or barndominium</td><td>$150 to $250 per square foot blended, about $200 on average</td></tr>
-<tr><td>Shop home, 1,600 sq ft living plus 1,200 sq ft shop</td><td>$420,000 to $700,000, about $560,000 on average</td></tr>
+<tr><td>Shop home, 1,600 sq ft living plus 1,200 sq ft shop</td><td>$385,000 to $520,000 at Essential finish, $465,000 to $630,000 at Signature finish (our estimator, simple lot with city services)</td></tr>
 </tbody>
 </table>
-<p>The semi-custom band is lower than the custom band for one reason, and it is not construction quality. The design and engineering work on a semi-custom plan is already done and already proven, so you are not paying to draw and stamp a house from scratch, and the plan has already been built enough times that the pricing has fewer unknowns in it. That is the whole saving. Read how we handle each in <a href="/services/custom-home-builder">custom home building</a> and <a href="/services/semi-custom-homes">semi-custom homes</a>. The shop home band is blended because shop space costs far less per square foot than living space, so the ratio between the two moves the number as much as anything else does. There is more on that format in <a href="/services/shop-homes-barndominiums">shop homes and barndominiums</a>.</p>
+<p>The semi-custom band is lower than the custom band for one reason, and it is not construction quality. The design and engineering work on a semi-custom plan is already done and already proven, so you are not paying to draw and stamp a house from scratch, and the plan has already been built enough times that the pricing has fewer unknowns in it. That is the whole saving. Read how we handle each in <a href="/services/custom-home-builder">custom home building</a> and <a href="/services/semi-custom-homes">semi-custom homes</a>. The shop home figure is a worked example rather than a per square foot band, because shop space costs far less per square foot than living space, so the ratio between the two moves the number as much as anything else does. There is more on that format in <a href="/services/shop-homes-barndominiums">shop homes and barndominiums</a>.</p>
 
 <h2 id="what-is-included">What the per-square-foot number does include</h2>
 <p><strong>Our bands cover the house from the dirt up: site work and foundation, framing, the weather-tight envelope, mechanical and electrical and plumbing systems, interior finishes, and the soft costs of design, engineering, permits, and supervision.</strong> In practice that means excavation and footings, the foundation, backfill and the driveway approach, the floor system and wall and roof framing, sheathing, roofing, windows and exterior doors, siding, insulation and air sealing, the full plumbing and electrical and HVAC packages, drywall, cabinetry, countertops, flooring, tile, interior doors and trim, paint, plumbing fixtures, and lighting.</p>

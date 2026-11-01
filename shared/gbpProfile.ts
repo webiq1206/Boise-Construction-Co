@@ -98,12 +98,17 @@ export const GBP_LINKS = {
 export const GBP_SOCIAL: { facebook?: string } = {};
 
 /**
- * Social profiles that belong to the parent company, P5 Home Co. These feed
- * `sameAs` on the P5 parentOrganization node in lib/schema.ts and the footer
- * link labelled "P5 Home Co on Facebook".
+ * Profiles that belong to the parent company, P5 Home Co. These feed `sameAs`
+ * on the P5 parentOrganization node in lib/schema.ts and the footer links
+ * labelled "P5 Home Co on Facebook" and "P5 Home Co on Google".
+ *
+ * `google` is the owner's one Google Business Profile, P5 Home Co (category
+ * General contractor, knowledge graph id /g/11ntl1t7dc), added 1 November 2026.
+ * It is the parent's profile: never put it in this brand's own sameAs.
  */
 export const P5_SOCIAL = {
   facebook: 'https://www.facebook.com/1228704823655951',
+  google: 'https://www.google.com/search?kgmid=/g/11ntl1t7dc',
 } as const;
 
 export const GBP_ATTRIBUTES = {
@@ -370,7 +375,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   },
   {
     question: 'Do you build barndominiums or shop homes?',
-    answer: `Yes - post-frame and steel-framed homes pairing finished living space with working shop square footage, mostly on rural Ada and Canyon County acreage. Planning at $150 to $250 per square foot blended, about $200 on average, before land, site work and permits: ${SITE}/services/shop-homes-barndominiums`,
+    answer: `Yes - post-frame and steel-framed homes pairing finished living space with working shop square footage, mostly on rural Ada and Canyon County acreage. For 1,600 sq ft of living space with a 1,200 sq ft shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land: ${SITE}/services/shop-homes-barndominiums`,
   },
   {
     question: 'What is design-build?',

@@ -30,7 +30,7 @@ export const SERVICE_META_DESCRIPTIONS: Record<string, string> = {
   'lot-evaluation':
     'Lot evaluation and feasibility in Idaho before you buy: soils, utilities, access, setbacks and slope reviewed in a written report, starting from $950.',
   'shop-homes-barndominiums':
-    'Barndominium and shop home builder in Idaho: post-frame and steel homes with living and shop space, $150 to $250 per sq ft, about $200 on average.',
+    'Barndominium and shop home builder in Idaho: post-frame and steel homes with living and shop space. 1,600 sq ft with a 1,200 sq ft shop from $385,000.',
   'energy-efficient-homes':
     'Energy-efficient home builder in Idaho: high-performance envelopes, tight ducts and blower-door testing, so low operating costs are verified, not promised.',
 };
@@ -106,13 +106,13 @@ export const CITY_SERVICE_META_DESCRIPTIONS: Record<string, string> = {
   'lot-evaluation/meridian':
     'Building lot evaluation in Meridian, Idaho: utilities, access, setbacks, HOA constraints and jurisdiction confirmed in a written report before you buy.',
   'shop-homes-barndominiums/meridian':
-    'Barndominium builder in Meridian, Idaho. Shop homes pairing living and shop space, planned at $150 to $250 per sq ft blended, about $200 on average.',
+    'Barndominium builder in Meridian, Idaho. Shop homes pairing living and shop space: 1,600 sq ft with a 1,200 sq ft shop from $385,000, before land.',
   'shop-homes-barndominiums/eagle':
     'Barndominium builder in Eagle, Idaho for acreage parcels. Post-frame and steel shop homes with finished living wings, sized to your lot and your budget.',
   'shop-homes-barndominiums/nampa':
     'Barndominium builder in Nampa, Idaho. Shop homes on Canyon County acreage with the shop and the house planned together, and permits handled for you.',
   'shop-homes-barndominiums/kuna':
-    'Barndominium builder in Kuna, Idaho for rural lots with well, septic and irrigation to solve. Shop homes at $150 to $250 per sq ft, about $200 average.',
+    'Barndominium builder in Kuna, Idaho for rural lots with well, septic and irrigation to solve. Shop homes with the shop and the house planned together.',
   'energy-efficient-homes/boise':
     'Energy-efficient homes in Boise, Idaho: tight envelopes, ducts inside, right-sized HVAC and blower-door testing, built to cut operating costs for years.',
   'energy-efficient-homes/meridian':

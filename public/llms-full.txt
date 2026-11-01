@@ -39,12 +39,12 @@ Each service has a dedicated page per city at /services/{service-slug}/{city-slu
 
 Pillar guides (own the head terms):
 
-- Boise Home Building Cost Guide: /guides/boise-home-building-cost-guide
-- The Boise Home Building Process: /guides/boise-home-building-process-guide
-- Buying Land to Build On in the Treasure Valley: /guides/buying-land-to-build-boise
-- How to Choose a Home Builder in Boise: /guides/choose-home-builder-boise
-- Designing a Custom Home in the Treasure Valley: /guides/custom-home-design-guide
-- Treasure Valley Home Building Guide: /guides/treasure-valley-home-building-guide
+- Boise home building cost guide: /guides/boise-home-building-cost-guide
+- The Boise home building process: /guides/boise-home-building-process-guide
+- Buying land to build on in the Treasure Valley: /guides/buying-land-to-build-boise
+- How to choose a home builder in Boise: /guides/choose-home-builder-boise
+- Designing a custom home in the Treasure Valley: /guides/custom-home-design-guide
+- Treasure Valley home building guide: /guides/treasure-valley-home-building-guide
 
 City guides:
 
@@ -65,12 +65,12 @@ Neighborhood guides:
 
 ## Blog category hubs (long-tail questions support the pillars)
 
-- Home Building Costs: /blog/category/home-building-costs
-- Choosing a Builder: /blog/category/choosing-a-builder
-- The Building Process: /blog/category/home-building-process
-- Land & Lots: /blog/category/land-and-lots
-- Design & Floor Plans: /blog/category/home-design-and-plans
-- Treasure Valley Locations: /blog/category/treasure-valley-locations
+- Home building costs: /blog/category/home-building-costs
+- Choosing a builder: /blog/category/choosing-a-builder
+- The building process: /blog/category/home-building-process
+- Land & lots: /blog/category/land-and-lots
+- Design & floor plans: /blog/category/home-design-and-plans
+- Treasure Valley locations: /blog/category/treasure-valley-locations
 
 35 articles across these hubs. Index: /blog
 
@@ -105,4 +105,4 @@ Neighborhood guides:
 
 Boise Construction Co also completes RE-10 and home inspection repairs for real estate agents, buyers and sellers across Boise and the Treasure Valley. An RE-10 is the Idaho inspection response form: after a home inspection the buyer requests specific repairs before closing. We review the RE-10 and inspection report, provide a written scope and pricing, coordinate access, complete the approved work across multiple trades, and supply photo documentation, invoices and receipts for the transaction file. Structural, foundation, mold and asbestos abatement, main electrical service, sewer and septic, HVAC replacement, gas lines and full roof replacement are coordinated to licensed specialists rather than performed in house. We take this work because an inspection repair is a deadline problem rather than a construction problem, and sequencing trades against a date that will not move is the same thing we do on every build. Details: https://boiseconstruction.co/re-10-repairs-boise
 
-Last updated: 2026-10-31. Full sitemap: https://boiseconstruction.co/sitemap.xml
+Last updated: 2026-11-01. Full sitemap: https://boiseconstruction.co/sitemap.xml

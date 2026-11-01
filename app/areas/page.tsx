@@ -51,7 +51,7 @@ export default function AreasHubPage() {
           imageSrc={SITE_IMAGES.hero}
           imageAlt={contentImageAlt(SITE_IMAGES.hero)}
         >
-          <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Service Areas" }]} />
+          <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Service areas" }]} />
           <p className="ed-eyebrow mt-8" style={{ color: "rgb(255 255 255 / 0.72)" }}>Treasure Valley</p>
           <h1 className="ed-display ed-statement-display text-inverse-foreground">
             Treasure Valley service{" "}

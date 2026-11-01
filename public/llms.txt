@@ -21,12 +21,12 @@ Design-build means one accountable team handles architectural design, engineerin
 
 ## Authoritative guides
 
-- [Boise Home Building Cost Guide](https://boiseconstruction.co/guides/boise-home-building-cost-guide)
-- [The Boise Home Building Process](https://boiseconstruction.co/guides/boise-home-building-process-guide)
-- [Buying Land to Build On in the Treasure Valley](https://boiseconstruction.co/guides/buying-land-to-build-boise)
-- [How to Choose a Home Builder in Boise](https://boiseconstruction.co/guides/choose-home-builder-boise)
-- [Designing a Custom Home in the Treasure Valley](https://boiseconstruction.co/guides/custom-home-design-guide)
-- [Treasure Valley Home Building Guide](https://boiseconstruction.co/guides/treasure-valley-home-building-guide)
+- [Boise home building cost guide](https://boiseconstruction.co/guides/boise-home-building-cost-guide)
+- [The Boise home building process](https://boiseconstruction.co/guides/boise-home-building-process-guide)
+- [Buying land to build on in the Treasure Valley](https://boiseconstruction.co/guides/buying-land-to-build-boise)
+- [How to choose a home builder in Boise](https://boiseconstruction.co/guides/choose-home-builder-boise)
+- [Designing a custom home in the Treasure Valley](https://boiseconstruction.co/guides/custom-home-design-guide)
+- [Treasure Valley home building guide](https://boiseconstruction.co/guides/treasure-valley-home-building-guide)
 
 ## Local permit and location resources
 
@@ -36,12 +36,12 @@ Design-build means one accountable team handles architectural design, engineerin
 
 ## Blog category hubs
 
-- [Home Building Costs](https://boiseconstruction.co/blog/category/home-building-costs)
-- [Choosing a Builder](https://boiseconstruction.co/blog/category/choosing-a-builder)
-- [The Building Process](https://boiseconstruction.co/blog/category/home-building-process)
-- [Land & Lots](https://boiseconstruction.co/blog/category/land-and-lots)
-- [Design & Floor Plans](https://boiseconstruction.co/blog/category/home-design-and-plans)
-- [Treasure Valley Locations](https://boiseconstruction.co/blog/category/treasure-valley-locations)
+- [Home building costs](https://boiseconstruction.co/blog/category/home-building-costs)
+- [Choosing a builder](https://boiseconstruction.co/blog/category/choosing-a-builder)
+- [The building process](https://boiseconstruction.co/blog/category/home-building-process)
+- [Land & lots](https://boiseconstruction.co/blog/category/land-and-lots)
+- [Design & floor plans](https://boiseconstruction.co/blog/category/home-design-and-plans)
+- [Treasure Valley locations](https://boiseconstruction.co/blog/category/treasure-valley-locations)
 
 ## About and contact
 
@@ -61,4 +61,4 @@ Design-build means one accountable team handles architectural design, engineerin
 - [RSS feed](https://boiseconstruction.co/feed.xml): guides and articles, newest first, with publication and revision dates.
 - [Full text for LLMs](https://boiseconstruction.co/llms-full.txt): expanded reference copy of the core facts.
 
-Last updated: 2026-10-31.
+Last updated: 2026-11-01.

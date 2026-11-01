@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const howToCompareBuilderBids: BlogPostData = {
   slug: 'how-to-compare-builder-bids',
-  title: 'How to Compare Home Builder Bids',
+  title: 'How to compare home builder bids',
   seoTitle: 'How to Compare Home Builder Bids',
   metaDescription:
     'How to normalize home builder bids that are not comparable: matching inclusions, repricing allowances, finding exclusions, site work, contingency and fee.',
   excerpt:
     'Three bids on the same house are almost never comparable as written. Here is a step-by-step method for putting them on the same footing before you choose.',
-  category: 'Choosing a Builder',
+  category: 'Choosing a builder',
   hubSlug: 'choosing-a-builder',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-26',
@@ -35,11 +35,11 @@ export const howToCompareBuilderBids: BlogPostData = {
     'A normalized comparison usually collapses a large gap into a small one, and the small one is the real decision.',
   ],
   relatedLinks: [
-    { url: '/guides/choose-home-builder-boise', anchor: 'How to Choose a Home Builder in Boise' },
-    { url: '/blog/why-home-building-bids-vary', anchor: 'Why Home Building Bids Vary' },
-    { url: '/blog/questions-to-ask-a-home-builder', anchor: 'Questions to Ask a Home Builder' },
-    { url: '/blog/home-builder-red-flags', anchor: 'Home Builder Red Flags' },
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
+    { url: '/guides/choose-home-builder-boise', anchor: 'How to choose a home builder in Boise' },
+    { url: '/blog/why-home-building-bids-vary', anchor: 'Why home building bids vary' },
+    { url: '/blog/questions-to-ask-a-home-builder', anchor: 'Questions to ask a home builder' },
+    { url: '/blog/home-builder-red-flags', anchor: 'Home builder red flags' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

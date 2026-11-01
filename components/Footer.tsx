@@ -5,7 +5,7 @@ import { ApprovedBrand } from "@/components/approved/ApprovedBrand";
 import { FooterCTAs } from "@/components/modals/FooterCTAs";
 import { Button } from "@/components/ui/button";
 import { areaPath,servicePath } from "@/lib/seo-routes";
-import { CITIES,SERVICES } from "@/shared/contentData";
+import { CITIES,SERVICES,serviceLabel } from "@/shared/contentData";
 import { CONTENT_HUBS,guidePath } from "@/shared/contentHubs";
 import { P5_SOCIAL } from "@/shared/gbpProfile";
 import { GUIDE_PAGES } from "@/shared/guideContent";
@@ -14,6 +14,15 @@ import { SITE_CONFIG } from "@/shared/siteConfig";
 import { SITE_TAGLINE } from "@/shared/siteContent";
 import { ChevronDown,Facebook } from "lucide-react";
 import Link from "next/link";
+
+/** Monochrome Google "G" (Simple Icons, CC0) for the P5 Home Co Google Business Profile link. */
+function GoogleGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true" focusable="false">
+      <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
+    </svg>
+  );
+}
 
 const PUBLISHED_GUIDE_SLUGS = new Set(GUIDE_PAGES.map((g) => g.slug));
 
@@ -55,19 +64,19 @@ function buildFooterGroups(): { title: string; links: FooterLink[] }[] {
     {
       title: "Services",
       links: [
-        ...SERVICES.map((s) => ({ label: s.name, href: servicePath(s.slug) })),
+        ...SERVICES.map((s) => ({ label: serviceLabel(s), href: servicePath(s.slug) })),
         { label: "All services", href: "/services" },
       ],
     },
     {
       title: "Company",
-      links: [{ label: "About", href: "/about" }, { label: "Why Choose Us", href: "/#why-choose-us" }, { label: "How We Build", href: "/#how-we-build" }, { label: "Warranty", href: "/warranty" }, { label: "Contact", href: "/contact" }],
+      links: [{ label: "About", href: "/about" }, { label: "Why choose us", href: "/#why-choose-us" }, { label: "How we build", href: "/#how-we-build" }, { label: "Warranty", href: "/warranty" }, { label: "Contact", href: "/contact" }],
     },
     {
       title: "Resources",
       links: [
-        { label: "Home Building Guides", href: "/guides" },
-        { label: "Planning Downloads", href: "/resources" },
+        { label: "Home building guides", href: "/guides" },
+        { label: "Planning downloads", href: "/resources" },
         { label: "Blog", href: "/blog" },
         ...pillarGuides,
       ],
@@ -167,6 +176,7 @@ export function Footer() {
                 <SaveContactLink showIcon>Save our contact</SaveContactLink>
               </Button>
               {P5_SOCIAL.facebook && (<a href={P5_SOCIAL.facebook} className="-m-3 flex min-h-[44px] min-w-[44px] items-center justify-center p-3 text-accent-legible transition-colors hover:text-inverse-foreground" rel="noopener noreferrer" target="_blank" aria-label="P5 Home Co on Facebook" data-testid="link-footer-facebook"><Facebook className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" /></a>)}
+              {P5_SOCIAL.google && (<a href={P5_SOCIAL.google} className="-m-3 flex min-h-[44px] min-w-[44px] items-center justify-center p-3 text-accent-legible transition-colors hover:text-inverse-foreground" rel="noopener noreferrer" target="_blank" aria-label="P5 Home Co on Google" data-testid="link-footer-google"><GoogleGlyph /></a>)}
             </div>
             <ul className="m-0 mt-8 list-none space-y-2.5 p-0">
               <FooterCTAs />
@@ -230,10 +240,10 @@ export function Footer() {
             </span>
           </div>
           <div className="flex flex-wrap gap-4">
-            <Link href="/sitemap" className="transition-colors hover:text-inverse-foreground">Site Map</Link>
-            <Link href="/privacy-policy" className="transition-colors hover:text-inverse-foreground">Privacy Policy</Link>
-            <Link href="/terms-of-service" className="transition-colors hover:text-inverse-foreground">Terms of Service</Link>
-            <a href="/api/login" rel="nofollow" className="transition-colors hover:text-inverse-foreground">Subcontractor Login</a>
+            <Link href="/sitemap" className="transition-colors hover:text-inverse-foreground">Site map</Link>
+            <Link href="/privacy-policy" className="transition-colors hover:text-inverse-foreground">Privacy policy</Link>
+            <Link href="/terms-of-service" className="transition-colors hover:text-inverse-foreground">Terms of service</Link>
+            <a href="/api/login" rel="nofollow" className="transition-colors hover:text-inverse-foreground">Subcontractor login</a>
           </div>
         </div>
       </div>

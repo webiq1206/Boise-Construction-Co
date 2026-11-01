@@ -2,7 +2,7 @@ import type { GuidePageData } from '../../guideContent';
 
 export const chooseHomeBuilderBoise: GuidePageData = {
   slug: 'choose-home-builder-boise',
-  title: 'How to Choose a Home Builder in Boise',
+  title: 'How to choose a home builder in Boise',
   seoTitle: 'Choose a Home Builder in Boise',
   metaDescription:
     'How to choose a home builder in Boise: delivery models, design-build trade-offs, verifying bonding and insurance, reading bids, contracts, and red flags.',
@@ -33,13 +33,13 @@ export const chooseHomeBuilderBoise: GuidePageData = {
     'The contract should define the draw schedule, the change order process, the warranty term and what substantial completion means before you sign it.',
   ],
   relatedLinks: [
-    { url: '/blog/questions-to-ask-a-home-builder', anchor: 'Questions to Ask a Home Builder Before You Sign' },
-    { url: '/blog/home-builder-red-flags', anchor: 'Home Builder Red Flags' },
-    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to Compare Home Builder Bids' },
-    { url: '/blog/fixed-price-vs-cost-plus', anchor: 'Fixed Price vs Cost Plus' },
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
-    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise Home Building Process' },
-    { url: '/services/design-build', anchor: 'Design-Build Home Building' },
+    { url: '/blog/questions-to-ask-a-home-builder', anchor: 'Questions to ask a home builder before you sign' },
+    { url: '/blog/home-builder-red-flags', anchor: 'Home builder red flags' },
+    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to compare home builder bids' },
+    { url: '/blog/fixed-price-vs-cost-plus', anchor: 'Fixed price vs cost plus' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
+    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise home building process' },
+    { url: '/services/design-build', anchor: 'Design-build home building' },
     { url: '/contact', anchor: 'Contact' },
   ],
   linkedClusterSlugs: [

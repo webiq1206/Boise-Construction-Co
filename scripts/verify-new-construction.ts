@@ -33,7 +33,12 @@ import {
   type ResolverRefinements,
 } from "../shared/costs/resolve";
 import {
+  EMPTY_REFINEMENTS,
   NEW_CONSTRUCTION_PROJECT_TYPES,
+  countVisibleUserRefinements,
+  getMaxRefinementFields,
+  getSetRefinementKeys,
+  type EstimateRefinements,
   type ProjectType,
 } from "../shared/estimateEngine";
 
@@ -299,21 +304,43 @@ const perSf = (s: ScopeSelections, rules = CUSTOM_HOME_RULES, project = "custom-
   t("shop/shop-cheaper-than-living", marginals[2] < livingPerSf * 0.45,
     `shop $${marginals[2].toFixed(0)}/sf vs living $${livingPerSf.toFixed(0)}/sf`);
 
-  // Bounds set against the earlier published example ("A 1,600 square foot
-  // living area with an attached 1,200 square foot shop commonly lands between
-  // $385,000 and $630,000 excluding land"). Since 2026-10-31 the site publishes
-  // $420,000 to $700,000 for that example ($150 to $250 per square foot over
-  // 2,800 square feet, about $560,000 at the $200 average); bounds unchanged.
+  // Plausibility bounds on the engine's single customer price for the worked
+  // example (1,600 SF living plus a 1,200 SF shop), unchanged.
   const publishedLow = shop(1600, 1200, "refresh");
   const publishedHigh = shop(1600, 1200, "mid-range");
   t("shop/published-example-low", publishedLow >= 360_000 && publishedLow <= 470_000, usd(publishedLow));
   t("shop/published-example-high", publishedHigh >= 500_000 && publishedHigh <= 660_000, usd(publishedHigh));
 
-  // "between $150 and $250 per square foot, about $200 on average, blended
-  // across finished and shop space" (published as $140 to $250 until
-  // 2026-10-31; the band below was not changed). Checked across the four
-  // configurations the estimator offers, at the tiers most shop homes are
-  // actually built to.
+  // THE PUBLISHED EXAMPLE IS THE ESTIMATOR'S OWN OUTPUT (since 2026-11-01).
+  // The site prints, for 1,600 SF of living space with a 1,200 SF shop and
+  // every other answer left at the estimator default, "$385,000 to $520,000 at
+  // Essential finish and $465,000 to $630,000 at Signature finish". Those are
+  // the quoted ranges the resolver returns on the same path the assistant and
+  // /api/consultation take. Before this the site published a $150 to $250 per
+  // square foot band and a $420,000 to $700,000 example that the estimator did
+  // not return, so a visitor who read one and ran the tool saw another. If a
+  // rate change moves these, update the copy and
+  // tests/social-and-shop-price.test.ts in the same commit.
+  {
+    const refinements = { ...EMPTY_REFINEMENTS, shopSize: 1200 } as EstimateRefinements;
+    const maxFields = getMaxRefinementFields("shop-home");
+    const detail = countVisibleUserRefinements("shop-home", getSetRefinementKeys(refinements));
+    const quoted = (finish: "refresh" | "mid-range") =>
+      resolveQuotedRange("shop-home", finish, 1600, refinements, maxFields > 0 ? detail / maxFields : 0);
+    const essential = quoted("refresh");
+    const signature = quoted("mid-range");
+    t("shop/published-example-essential-is-engine-output",
+      essential?.priceLow === 385_000 && essential?.priceHigh === 520_000,
+      `${usd(essential?.priceLow ?? 0)} to ${usd(essential?.priceHigh ?? 0)}`);
+    t("shop/published-example-signature-is-engine-output",
+      signature?.priceLow === 465_000 && signature?.priceHigh === 630_000,
+      `${usd(signature?.priceLow ?? 0)} to ${usd(signature?.priceHigh ?? 0)}`);
+  }
+
+  // Blended plausibility band (living plus shop) across the four configurations
+  // the estimator offers, at the tiers most shop homes are actually built to.
+  // No per-square-foot band is published for shop homes since 2026-11-01 (it
+  // read $150 to $250 until then); these bounds were not changed.
   for (const [living, shopSf] of [[1200, 1200], [1700, 1600], [1600, 2400], [2400, 1800]]) {
     for (const q of ["refresh", "mid-range"] as const) {
       const blended = shop(living, shopSf, q) / (living + shopSf);

@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const agingInPlaceHomeDesign: BlogPostData = {
   slug: 'aging-in-place-home-design',
-  title: 'Building a Home You Can Age In',
+  title: 'Building a home you can age in',
   seoTitle: 'Building a Home You Can Age In',
   metaDescription:
     'Aging in place is nearly free to design into a new home and expensive to add later: door widths, blocking, curbless showers, thresholds, and lighting.',
   excerpt:
     'Almost everything that makes a house work at eighty costs nothing at framing and a fortune afterwards. Here is the list we work through with clients building a home they intend to stay in.',
-  category: 'Design & Floor Plans',
+  category: 'Design & floor plans',
   hubSlug: 'home-design-and-plans',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-08',
@@ -33,11 +33,11 @@ export const agingInPlaceHomeDesign: BlogPostData = {
     'Widening a hallway does have a real cost, and it is worth knowing what that cost is.',
   ],
   relatedLinks: [
-    { url: '/guides/custom-home-design-guide', anchor: 'Designing a Custom Home in the Treasure Valley' },
-    { url: '/blog/single-story-vs-two-story-home', anchor: 'Single Story vs Two Story' },
-    { url: '/blog/multigenerational-home-design', anchor: 'Designing a Home for Multiple Generations' },
-    { url: '/blog/custom-home-floor-plan-ideas-boise', anchor: 'Floor Plan Ideas That Work Here' },
-    { url: '/services/custom-home-builder', anchor: 'Custom Home Builder' },
+    { url: '/guides/custom-home-design-guide', anchor: 'Designing a custom home in the Treasure Valley' },
+    { url: '/blog/single-story-vs-two-story-home', anchor: 'Single story vs two story' },
+    { url: '/blog/multigenerational-home-design', anchor: 'Designing a home for multiple generations' },
+    { url: '/blog/custom-home-floor-plan-ideas-boise', anchor: 'Floor plan ideas that work here' },
+    { url: '/services/custom-home-builder', anchor: 'Custom home builder' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

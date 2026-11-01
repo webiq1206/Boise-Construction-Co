@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const questionsToAskAHomeBuilder: BlogPostData = {
   slug: 'questions-to-ask-a-home-builder',
-  title: 'Questions to Ask a Home Builder Before You Sign',
+  title: 'Questions to ask a home builder before you sign',
   seoTitle: 'Questions to Ask a Home Builder',
   metaDescription:
     'The questions that actually reveal how a home builder works: scope, pricing, schedule, supervision, warranty, and change orders, with good and bad answers.',
   excerpt:
     'Most builder interview questions get you a rehearsed answer. These ones force specifics, and each comes with what a good answer sounds like and what a bad one sounds like.',
-  category: 'Choosing a Builder',
+  category: 'Choosing a builder',
   hubSlug: 'choosing-a-builder',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-05',
@@ -35,11 +35,11 @@ export const questionsToAskAHomeBuilder: BlogPostData = {
     'Ask the same questions of every builder and compare the answers side by side, not one at a time.',
   ],
   relatedLinks: [
-    { url: '/guides/choose-home-builder-boise', anchor: 'How to Choose a Home Builder in Boise' },
-    { url: '/blog/home-builder-red-flags', anchor: 'Home Builder Red Flags' },
-    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to Compare Home Builder Bids' },
-    { url: '/blog/fixed-price-vs-cost-plus', anchor: 'Fixed Price vs Cost Plus' },
-    { url: '/blog/new-home-walkthrough-and-warranty', anchor: 'Walkthrough and Warranty' },
+    { url: '/guides/choose-home-builder-boise', anchor: 'How to choose a home builder in Boise' },
+    { url: '/blog/home-builder-red-flags', anchor: 'Home builder red flags' },
+    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to compare home builder bids' },
+    { url: '/blog/fixed-price-vs-cost-plus', anchor: 'Fixed price vs cost plus' },
+    { url: '/blog/new-home-walkthrough-and-warranty', anchor: 'Walkthrough and warranty' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

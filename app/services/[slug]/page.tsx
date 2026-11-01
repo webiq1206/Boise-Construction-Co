@@ -12,10 +12,10 @@ landingFAQSchema,
 landingServiceSchema
 } from '@/lib/landing-schema';
 import { buildPageMetadata,isCityServiceNoindex } from '@/lib/page-metadata';
-import { SERVICE_CITY_H1_NAMES,serviceNameInSentence } from '@/lib/seo';
+import { serviceCityHeadingName,serviceNameInSentence } from '@/lib/seo';
 import { generateSpeakableSchema } from '@/lib/schema';
 import { SERVICE_SLUGS,getServiceBySlug,servicePath } from '@/lib/seo-routes';
-import { CITIES } from '@/shared/contentData';
+import { CITIES,serviceLabel } from '@/shared/contentData';
 import { getFeaturedGalleryProject } from '@/shared/galleryData';
 import { getScopeSplitSection,SERVICE_SEO_CONTENT } from '@/shared/seoContent';
 import { getServiceImageSet } from '@/shared/serviceBackgrounds';
@@ -55,7 +55,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
   const serviceLC = serviceNameInSentence(service.name);
   const isAddition = service.slug === 'home-additions';
   /** Name used where the page links its city pages ("Detached ADUs & Guest Houses in Boise"). */
-  const cityPageName = SERVICE_CITY_H1_NAMES[service.name] ?? service.name;
+  const cityPageName = serviceCityHeadingName(service);
 
   /* Cost guidance is no longer one of the long-form sections: it renders as
      the template's dedicated cost-and-timeline band directly after the hero,
@@ -65,7 +65,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
         heading: content.costGuidance.heading,
         paragraphs: content.costGuidance.paragraphs,
         links: [
-          { label: 'Boise Home Building Cost Guide', href: '/guides/boise-home-building-cost-guide' },
+          { label: 'Boise home building cost guide', href: '/guides/boise-home-building-cost-guide' },
           {
             label: isAddition ? 'Start your home addition estimate' : 'Get your build cost range',
             href: isAddition
@@ -132,7 +132,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
         'Choose a city below for local home addition guidance, or schedule an in-home planning conversation to talk through the space you need.',
       ],
       links: indexableCities.map((c) => ({
-        label: `Structural Home Additions in ${c.name}`,
+        label: `Structural home additions in ${c.name}`,
         href: `/services/${service.slug}/${c.slug}`,
       })),
       figure: longFormFigure,
@@ -231,7 +231,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
         breadcrumbs={[
           { name: 'Home', href: '/' },
           { name: 'Services', href: '/services' },
-          { name: service.name },
+          { name: serviceLabel(service) },
         ]}
         benefits={content.benefits}
         inclusions={content.inclusions}

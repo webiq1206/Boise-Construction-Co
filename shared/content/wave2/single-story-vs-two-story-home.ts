@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const singleStoryVsTwoStoryHome: BlogPostData = {
   slug: 'single-story-vs-two-story-home',
-  title: 'Single Story vs Two Story: Cost, Lot, and Livability',
+  title: 'Single story vs two story: cost, lot, and livability',
   seoTitle: 'Single vs Two Story Cost and Lot',
   metaDescription:
     'Single story vs two story for Treasure Valley builds: cost per square foot, lot coverage and setbacks, HVAC, resale, aging in place, and noise.',
   excerpt:
     'A two storey shares one foundation and one roof across twice the finished area, so it costs less per square foot. A single storey needs twice the lot. Here is how the trade really works on a Treasure Valley parcel.',
-  category: 'Design & Floor Plans',
+  category: 'Design & floor plans',
   hubSlug: 'home-design-and-plans',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-19',
@@ -32,11 +32,11 @@ export const singleStoryVsTwoStoryHome: BlogPostData = {
     'A simple single-level plan on a flat valley lot can land near $225 per square foot, because simplicity moves cost more than storey count does.',
   ],
   relatedLinks: [
-    { url: '/guides/custom-home-design-guide', anchor: 'Designing a Custom Home in the Treasure Valley' },
-    { url: '/blog/custom-home-floor-plan-ideas-boise', anchor: 'Floor Plan Ideas That Work Here' },
-    { url: '/blog/aging-in-place-home-design', anchor: 'Building a Home You Can Age In' },
-    { url: '/blog/custom-home-cost-per-square-foot-boise', anchor: 'Custom Home Cost Per Square Foot' },
-    { url: '/services/custom-home-builder', anchor: 'Custom Home Builder' },
+    { url: '/guides/custom-home-design-guide', anchor: 'Designing a custom home in the Treasure Valley' },
+    { url: '/blog/custom-home-floor-plan-ideas-boise', anchor: 'Floor plan ideas that work here' },
+    { url: '/blog/aging-in-place-home-design', anchor: 'Building a home you can age in' },
+    { url: '/blog/custom-home-cost-per-square-foot-boise', anchor: 'Custom home cost per square foot' },
+    { url: '/services/custom-home-builder', anchor: 'Custom home builder' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

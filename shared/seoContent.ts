@@ -1,5 +1,5 @@
 import type { ServiceData, CityData } from './contentData';
-import { getCountyLabel } from './contentData';
+import { getCountyLabel, serviceLabel } from './contentData';
 import { getAreaCityCopy } from './content/areaCopy';
 import { getCityServiceCopy } from './content/cityServiceCopy';
 import { indianCreekDescription } from '../lib/seo';
@@ -58,7 +58,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'custom-home-builder': {
     slug: 'custom-home-builder',
     name: 'Custom Home Building',
-    headline: 'Custom Home Builder in the Treasure Valley',
+    headline: 'Custom home builder in the Treasure Valley',
     primaryKeyword: 'custom home builder boise idaho',
     overview:
       'A custom home starts from a blank page rather than a catalog. Boise Construction Co handles feasibility, design, engineering, permitting, and construction under one contract, so the drawings, the budget, and the schedule stay tied together from the first sketch to the day you get the keys.',
@@ -144,7 +144,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'semi-custom-homes': {
     slug: 'semi-custom-homes',
     name: 'Semi-Custom Homes',
-    headline: 'Semi-Custom Home Building in the Treasure Valley',
+    headline: 'Semi-custom home building in the Treasure Valley',
     primaryKeyword: 'semi custom home builder boise idaho',
     overview:
       'A semi-custom home starts from a floor plan that has already been drawn, engineered, and built, then adapts it to your lot and your selections. You give up some layout freedom and get back a shorter timeline, a narrower budget range, and far fewer decisions.',
@@ -225,7 +225,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'build-on-your-lot': {
     slug: 'build-on-your-lot',
     name: 'Build on Your Lot',
-    headline: 'Build on Your Lot in the Treasure Valley',
+    headline: 'Build on your lot in the Treasure Valley',
     primaryKeyword: 'build on your lot boise idaho',
     overview:
       'You already own the land, whether it is family acreage, an infill parcel, or a lot in a master-planned community. Boise Construction Co takes it from there: feasibility, design that suits the ground, permits, and construction, with the site constraints priced before you commit to a plan.',
@@ -306,7 +306,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'design-build': {
     slug: 'design-build',
     name: 'Design-Build',
-    headline: 'Design-Build Home Construction in the Treasure Valley',
+    headline: 'Design-build home construction in the Treasure Valley',
     primaryKeyword: 'design build home builder boise idaho',
     overview:
       'Design-build puts the drawings and the construction under one contract. Instead of hiring an architect, bidding the finished plans, and discovering the design costs 40 percent more than you budgeted, the design is priced continuously as it develops.',
@@ -387,7 +387,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'home-plans-design': {
     slug: 'home-plans-design',
     name: 'Home Design & Plans',
-    headline: 'Custom Home Design and Plans in the Treasure Valley',
+    headline: 'Custom home design and plans in the Treasure Valley',
     primaryKeyword: 'custom home plans boise idaho',
     overview:
       'Permit-ready drawings for a home designed around your actual lot. We produce architectural design, structural engineering, and the energy compliance documentation Ada and Canyon County require, whether or not you ultimately build with us.',
@@ -468,7 +468,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   adu: {
     slug: 'adu',
     name: 'ADUs & Guest Houses',
-    headline: 'Detached ADU Builder in Boise, Idaho',
+    headline: 'Detached ADU builder in Boise, Idaho',
     primaryKeyword: 'detached adu builder boise idaho',
     heroLine: 'New detached ADUs and guest houses, built as separate structures on the lot you already own.',
     overview:
@@ -547,7 +547,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'home-additions': {
     slug: 'home-additions',
     name: 'Home Additions',
-    headline: 'Structural Home Additions in the Treasure Valley',
+    headline: 'Structural home additions in the Treasure Valley',
     primaryKeyword: 'structural home additions boise idaho',
     overview:
       'Structural home additions in the Treasure Valley add new footprint or a second story to the house you already live in. Boise Construction Co plans each one around the home already standing, from the first look at structure and utilities through permits, construction, and the final walkthrough.',
@@ -623,7 +623,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'lot-evaluation': {
     slug: 'lot-evaluation',
     name: 'Lot Evaluation & Feasibility',
-    headline: 'Lot Evaluation and Site Feasibility in the Treasure Valley',
+    headline: 'Lot evaluation and site feasibility in the Treasure Valley',
     primaryKeyword: 'lot evaluation boise idaho',
     overview:
       'Before you buy a parcel, find out what it will cost to build on it. We review soils, utilities, legal access, setbacks, slope, and floodplain status, then give you a written summary of the site work and permitting costs the lot will carry.',
@@ -704,7 +704,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'shop-homes-barndominiums': {
     slug: 'shop-homes-barndominiums',
     name: 'Shop Homes & Barndominiums',
-    headline: 'Shop Homes and Barndominiums in the Treasure Valley',
+    headline: 'Shop homes and barndominiums in the Treasure Valley',
     primaryKeyword: 'barndominium builder idaho',
     overview:
       'A shop home pairs finished living space with genuine working shop square footage under one structure. Post-frame and steel-framed construction covers large spans efficiently, which is why these builds are popular on Canyon County and rural Ada County acreage.',
@@ -745,7 +745,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does a barndominium cost to build in Idaho?',
         answer:
-          'Shop homes generally plan between $150 and $250 per square foot in 2026, about $200 on average, blended across finished and shop space and before land, site work and permits. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio, since the shop portion costs far less per square foot. A 1,600 square foot living area with an attached 1,200 square foot shop commonly lands between $420,000 and $700,000, about $560,000 at the $200 average, before land, site work and permits. The shop itself runs about $55 to $60 per square foot insulated, with a slab, an overhead door and power.',
+          'Shop homes cost less per square foot than a conventional house because the shop portion costs far less to build than finished living space. For 1,600 square feet of living space with a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio. The shop itself runs about $55 to $60 per square foot insulated, with a slab, an overhead door and power.',
       },
       {
         question: 'Why is a shop home cheaper per square foot than a conventional house?',
@@ -776,7 +776,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Shop home and barndominium cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, shop homes in the Treasure Valley plan between $150 and $250 per square foot, about $200 on average, blended across finished and shop space and before land, site work and permits. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio; a 1,600 square foot living area with an attached 1,200 square foot shop commonly runs $420,000 to $700,000, about $560,000 at the $200 average, before land, site work and permits.',
+        'As of 2026, our estimator prices 1,600 square feet of living space with a 1,200 square foot shop at $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio, since the shop portion costs far less per square foot than the house.',
         'These are planning ranges, not bids. The ratio of finished space to shop space moves the blended cost more than any other variable, which we settle before design begins.',
       ],
     },
@@ -785,7 +785,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'energy-efficient-homes': {
     slug: 'energy-efficient-homes',
     name: 'Energy-Efficient Homes',
-    headline: 'Energy-Efficient Home Building in the Treasure Valley',
+    headline: 'Energy-efficient home building in the Treasure Valley',
     primaryKeyword: 'energy efficient home builder boise idaho',
     overview:
       'A high-performance home costs less to operate and stays comfortable through Treasure Valley temperature swings. The work is unglamorous: a continuous air barrier, generous insulation, sealed ducts inside conditioned space, and verification by blower-door testing rather than assumption.',
@@ -985,14 +985,14 @@ export function getCityServiceSections(
     ...(service.costGuidance
       ? [
           {
-            heading: `${service.name} cost in ${city.name}`,
+            heading: `${serviceLabel(service)} cost in ${city.name}`,
             paragraphs: [
               `Planning ranges for ${city.name} match the broader Treasure Valley market. ${service.costGuidance.paragraphs[0]}`,
               service.costGuidance.paragraphs[1],
             ],
             links: [
               {
-                label: 'Boise Home Building Cost Guide',
+                label: 'Boise home building cost guide',
                 href: '/guides/boise-home-building-cost-guide',
               },
             ],
@@ -1001,7 +1001,7 @@ export function getCityServiceSections(
         ]
       : []),
     {
-      heading: `${service.name} across ${city.name}`,
+      heading: `${serviceLabel(service)} across ${city.name}`,
       paragraphs: [
         neighborhoods.length
           ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}.${creek ? ` ${creek}` : ''} Lot conditions, utility access, and subdivision design standards vary between these areas, so we tailor the site plan, foundation, and elevations to the specific parcel rather than dropping a plan onto it.`

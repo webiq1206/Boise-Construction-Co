@@ -1,5 +1,5 @@
 import Script from 'next/script';
-import { deferVendorLoad,vendorScriptTag } from '@/lib/deferredVendorScript';
+import { loadAtWindowLoad, vendorScriptTag } from '@/lib/deferredVendorScript';
 
 /**
  * Meta dataset "Boise Construction Co" (925837669911613).
@@ -26,17 +26,16 @@ const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID ?? '925837669911613'
 /**
  * The fbq stub, dataset init and the automatic PageView run as soon as the
  * page is interactive (strategy="afterInteractive"), so those calls are queued
- * on the stub from the start. The fbevents.js file itself is held back until
- * the visitor first interacts (pointerdown, keydown, scroll, touchstart) or 5
- * seconds after load, whichever comes first (lib/deferredVendorScript.ts):
- * the family rule is no third-party script before interaction except gtag.
- * When the file arrives it flushes the queue, so PageView and any Lead fired
- * in between are still sent, in order.
+ * on the stub from the start. The fbevents.js file loads at the window load
+ * event (loadAtWindowLoad in lib/deferredVendorScript.ts), with no interaction
+ * wait and no 5 second wait. When the file arrives it flushes the queue, so
+ * PageView and any Lead fired in between are still sent, in order.
  *
- * Known cost of that rule (reported with the Phase 5 change): a visitor who leaves within 5
- * seconds without touching, scrolling or typing no longer registers a
- * PageView (Landing Page View) in Meta. Server-side Lead events via
- * /api/meta-capi are unaffected.
+ * Owner decision, 1 November 2026: prompt loading is kept for Landing Page
+ * View accuracy. Paid-ad landing views matter more than the small
+ * blocking-time saving; the interaction-deferred version lost the PageView of
+ * every visitor who left within 5 seconds without touching the page.
+ * Microsoft Clarity stays deferred to the first interaction or 5 seconds.
  *
  * Conversion events (e.g. Lead on estimate completion) fire from
  * lib/analytics.ts via trackMetaEvent, which guards on fbq existing; the stub
@@ -54,7 +53,7 @@ n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];}(window);
 fbq('set','autoConfig',false,'${META_PIXEL_ID}');
 fbq('init','${META_PIXEL_ID}');
 fbq('track','PageView');
-${deferVendorLoad(vendorScriptTag('https://connect.facebook.net/en_US/fbevents.js'))}`}
+${loadAtWindowLoad(vendorScriptTag('https://connect.facebook.net/en_US/fbevents.js'))}`}
     </Script>
   );
 }
