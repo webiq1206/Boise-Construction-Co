@@ -151,17 +151,9 @@ export const FAMILY_BRAND: FamilyBrand = {
   },
   // P5 Home Co's Facebook page (shared/gbpProfile); nothing renders until its URL exists.
   parentFacebook: { href: P5_SOCIAL.facebook, label: 'P5 Home Co on Facebook' },
-};
-
-/**
- * P5 Home Co's Google Business Profile (owner decision A, 1 November 2026): the
- * owner's one profile, category General contractor, knowledge graph id
- * /g/11ntl1t7dc. It belongs to the parent, so it renders beside the parent's
- * Facebook page in the footer and never joins this brand's own sameAs. The shared
- * FamilyBrand type has no field for it, so components/Footer.tsx renders it
- * through SiteFooter's brandExtra.
- */
-export const PARENT_GOOGLE_PROFILE = {
-  href: 'https://www.google.com/search?kgmid=/g/11ntl1t7dc',
-  label: 'P5 Home Co on Google',
+  // P5 Home Co's Google Business Profile (owner decision A, 1 November 2026): the owner's one
+  // profile, category General contractor, knowledge graph id /g/11ntl1t7dc. It belongs to the
+  // parent, so the footer lists it beside the parent's Facebook page and it never joins this
+  // brand's own sameAs.
+  parentGoogle: { href: P5_SOCIAL.google, label: 'P5 Home Co on Google' },
 };
