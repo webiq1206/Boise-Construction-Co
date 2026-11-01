@@ -375,7 +375,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   },
   {
     question: 'Do you build barndominiums or shop homes?',
-    answer: `Yes - post-frame and steel-framed homes pairing finished living space with working shop square footage, mostly on rural Ada and Canyon County acreage. Planning at $150 to $250 per square foot blended, about $200 on average, before land, site work and permits: ${SITE}/services/shop-homes-barndominiums`,
+    answer: `Yes - post-frame and steel-framed homes pairing finished living space with working shop square footage, mostly on rural Ada and Canyon County acreage. For 1,600 sq ft of living space with a 1,200 sq ft shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land: ${SITE}/services/shop-homes-barndominiums`,
   },
   {
     question: 'What is design-build?',

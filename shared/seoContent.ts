@@ -745,7 +745,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does a barndominium cost to build in Idaho?',
         answer:
-          'Shop homes generally plan between $150 and $250 per square foot in 2026, about $200 on average, blended across finished and shop space and before land, site work and permits. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio, since the shop portion costs far less per square foot. A 1,600 square foot living area with an attached 1,200 square foot shop commonly lands between $420,000 and $700,000, about $560,000 at the $200 average, before land, site work and permits. The shop itself runs about $55 to $60 per square foot insulated, with a slab, an overhead door and power.',
+          'Shop homes cost less per square foot than a conventional house because the shop portion costs far less to build than finished living space. For 1,600 square feet of living space with a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio. The shop itself runs about $55 to $60 per square foot insulated, with a slab, an overhead door and power.',
       },
       {
         question: 'Why is a shop home cheaper per square foot than a conventional house?',
@@ -776,7 +776,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Shop home and barndominium cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, shop homes in the Treasure Valley plan between $150 and $250 per square foot, about $200 on average, blended across finished and shop space and before land, site work and permits. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio; a 1,600 square foot living area with an attached 1,200 square foot shop commonly runs $420,000 to $700,000, about $560,000 at the $200 average, before land, site work and permits.',
+        'As of 2026, our estimator prices 1,600 square feet of living space with a 1,200 square foot shop at $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio, since the shop portion costs far less per square foot than the house.',
         'These are planning ranges, not bids. The ratio of finished space to shop space moves the blended cost more than any other variable, which we settle before design begins.',
       ],
     },

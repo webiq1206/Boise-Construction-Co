@@ -85,8 +85,14 @@ export const PUBLISHED_PER_SF: Record<string, { low: number; high: number }> = {
   "semi-custom-home": { low: 225, high: 300 },
   // "vertical construction plans between $225 and $400"; site work separate.
   "build-on-your-lot": { low: 225, high: 400 },
-  // Blended living + shop square footage runs well below a finished-only rate.
-  "shop-home": { low: 150, high: 250 },
+  // No "shop-home" entry, deliberately. Since 2026-11-01 the site publishes no
+  // per-square-foot band for shop homes, only the estimator's own worked
+  // example (1,600 SF living plus a 1,200 SF shop, priced per finish level and
+  // pinned to the engine in scripts/verify-new-construction.ts and
+  // tests/social-and-shop-price.test.ts). The old $150-$250 blended band was
+  // also the wrong unit here: this audit divides by living area only, while a
+  // blended band divides by living plus shop. Shop homes keep the absolute
+  // floor and ceiling checks below.
 };
 
 /** Mirrors the plausibility guards in verify-new-construction.ts. */

@@ -56,8 +56,7 @@ quote a national average as though it were local.
 | Site work, rural parcel with well, septic and access | $80,000 to $150,000 |
 | Design and engineering | 5 to 12 percent of construction cost, about $9,000 to $35,000 |
 | Written lot evaluation | $950 to $3,500 |
-| Shop home / barndominium | $150 to $250 per square foot blended, about $200 on average, before land, site work and permits |
-| Shop home, 1,600 sq ft living + 1,200 sq ft shop | $420,000 to $700,000, about $560,000 at the $200 average, before land, site work and permits |
+| Shop home, 1,600 sq ft living + 1,200 sq ft shop | Our estimator's own output: $385,000 to $520,000 at Essential finish, $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. No per square foot band is published for shop homes. Pinned to the engine by tests/social-and-shop-price.test.ts and scripts/verify-new-construction.ts |
 | High-performance home | $275 to $425 per finished square foot |
 | Performance upgrades over code minimum | 3 to 8 percent, about $20,000 to $55,000 |
 
