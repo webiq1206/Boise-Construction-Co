@@ -57,7 +57,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   {
     hubSlug: 'home-building-costs',
     title: 'Home building costs',
-    categoryLabel: 'Home Building Costs',
+    categoryLabel: 'Home building costs',
     pillarSlug: 'boise-home-building-cost-guide',
     pillarRoute: 'guide',
     description:
@@ -70,7 +70,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   {
     hubSlug: 'choosing-a-builder',
     title: 'Choosing a builder',
-    categoryLabel: 'Choosing a Builder',
+    categoryLabel: 'Choosing a builder',
     pillarSlug: 'choose-home-builder-boise',
     pillarRoute: 'guide',
     description:
@@ -83,7 +83,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   {
     hubSlug: 'home-building-process',
     title: 'The building process',
-    categoryLabel: 'The Building Process',
+    categoryLabel: 'The building process',
     pillarSlug: 'boise-home-building-process-guide',
     pillarRoute: 'guide',
     description:
@@ -96,7 +96,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   {
     hubSlug: 'land-and-lots',
     title: 'Land & lots',
-    categoryLabel: 'Land & Lots',
+    categoryLabel: 'Land & lots',
     pillarSlug: 'buying-land-to-build-boise',
     pillarRoute: 'guide',
     description:
@@ -109,7 +109,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   {
     hubSlug: 'home-design-and-plans',
     title: 'Design & floor plans',
-    categoryLabel: 'Design & Floor Plans',
+    categoryLabel: 'Design & floor plans',
     pillarSlug: 'custom-home-design-guide',
     pillarRoute: 'guide',
     description:
@@ -122,7 +122,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   {
     hubSlug: 'treasure-valley-locations',
     title: 'Treasure Valley locations',
-    categoryLabel: 'Treasure Valley Locations',
+    categoryLabel: 'Treasure Valley locations',
     pillarSlug: 'treasure-valley-home-building-guide',
     pillarRoute: 'guide',
     description:

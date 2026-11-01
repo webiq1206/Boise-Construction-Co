@@ -31,7 +31,7 @@ export default function NotFound() {
         </div>
 
         <h2 className="text-2xl md:text-3xl font-serif tracking-tight mb-4 text-foreground">
-          Page Not Found
+          Page not found
         </h2>
         <p className="text-lg text-muted-foreground mb-8">
           This page doesn&apos;t exist or may have moved. Let us help you find what you&apos;re looking for.
