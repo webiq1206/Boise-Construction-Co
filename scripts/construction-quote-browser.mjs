@@ -7,6 +7,8 @@ const output='p5-verification/construction-quote';await fs.mkdir(output,{recursi
 // The one-screen form check lives here: scripts/lib/quoteEntry.mjs is a shared estimator
 // file (lib/p5/shared-manifest.json) edited only in boise-remodeling-co.
 const focusedTestId=page=>page.evaluate(()=>document.activeElement?.getAttribute('data-testid'));
+// Validation resolves asynchronously; wait for focus to settle on the expected field.
+const focusSettles=(page,id)=>page.waitForFunction(id=>document.activeElement?.getAttribute('data-testid')===id,id,{timeout:3000}).catch(()=>{});
 const unobstructed=locator=>locator.evaluate(el=>{const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;return x>=0&&x<innerWidth&&y>=0&&y<innerHeight&&el.contains(document.elementFromPoint(x,y));});
 
 /** One screen: the heading and the first field on arrival, validation in place,
@@ -20,7 +22,10 @@ async function fillConstructionQuote(page, method) {
   assert.ok(await name.evaluate(el=>{const r=el.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight;}),'First field visible on arrival');
   assert.notEqual(await focusedTestId(page),'input-name','No text field is auto-focused on arrival');
   const send=page.getByTestId('button-send-request');
-  await send.click();
+  await page.locator('[data-testid="button-send-request"][data-hydrated="true"]').waitFor();
+  // Let fonts and the frame settle so the tap is not lost to a late layout shift.
+  await page.waitForLoadState('load');await page.evaluate(()=>document.fonts.ready.then(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))));
+  await send.click();await focusSettles(page,'input-name');
   assert.equal(await focusedTestId(page),'input-name','Empty send focuses the first error');
   assert.match(await form.innerText(),/Please enter your name/);
   await name.fill('Synthetic Navigation Check');
@@ -28,15 +33,15 @@ async function fillConstructionQuote(page, method) {
   await page.getByTestId('button-preferred-contact-'+method).click();
   const field=page.getByTestId('input-'+(method==='email'?'email':'phone'));
   await field.fill(method==='email'?'invalid':'123');
-  await send.click();
+  await send.click();await focusSettles(page,'input-'+(method==='email'?'email':'phone'));
   assert.equal(await focusedTestId(page),'input-'+(method==='email'?'email':'phone'),'Invalid contact blocks the send');
   await field.fill(method==='email'?'navigation@example.invalid':'2085550102');
   assert.equal(await page.getByTestId('quote-more-detail').evaluate(el=>el.open),false,'Extra detail stays collapsed and optional');
-  await page.getByTestId('switch-callback').click();
+  await page.getByTestId('request-mode-callback').click();
   assert.equal(await form.getAttribute('data-request-kind'),'callback');
   assert.equal(await page.getByTestId('textarea-message').count(),0,'Callback asks for name and number only');
   assert.equal(await page.getByTestId('select-best-time').count(),1);
-  await page.getByTestId('switch-callback').click();
+  await page.getByTestId('request-mode-quote').click();
   assert.equal(await form.getAttribute('data-request-kind'),'quote');
   await page.reload();await form.waitFor();
   await page.waitForFunction(()=>document.querySelector('[data-testid="input-name"]')?.value==='Synthetic Navigation Check');

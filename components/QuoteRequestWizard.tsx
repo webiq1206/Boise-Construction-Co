@@ -4,12 +4,12 @@ import { readLeadAttribution } from "@/lib/leadAttributionBrowser";
 import { EstimatorRecovery } from "@/components/estimate/recovery/EstimatorRecovery";
 import { markEstimatorCompleted } from "@/lib/estimatorSession";
 
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useForm, type FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
-import { Loader2, Phone, MessageSquare, X } from "lucide-react";
+import { Loader2, MessageSquare, MessagesSquare, Phone, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { StoredEstimate } from "@/shared/estimateEngine";
@@ -38,7 +38,8 @@ import { AppFrame } from "@/components/estimate/wizard";
  * (optional unless "Email me" is picked, because the server then needs it).
  * Project type and the build site stay available under "Add more detail
  * (optional)" so a lead can still carry them, never in front of the fields
- * that matter. "Have us call you" reduces the form to name and phone (plus an
+ * that matter. "Have us call you" (the second half of the segmented control under
+ * the heading) reduces the form to name and phone (plus an
  * optional best time) and posts through the same /api/consultation pipeline
  * with requestKind "callback"; the server writes the callback marker into the
  * notes every destination stores (server/services/consultationRequest.ts).
@@ -242,7 +243,10 @@ function Field({
 export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust = false, mode = "embedded" }: QuoteRequestWizardProps = {}) {
   const tone: Tone = mode === "app" ? "inverse" : "default";
   const t = toneClasses(tone);
-  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+  // Stable ids, not useId: the error lookup, labels and aria-describedby must agree
+  // with the server HTML on every load. One instance per surface: the /estimate page,
+  // the in-page form (home or contact) and the consultation dialog.
+  const uid = mode === "app" ? "app" : _showTrust ? "dialog" : "page";
   const ids = {
     heading: `quote-form-heading-${uid}`,
     name: `quote-name-${uid}`,
@@ -251,7 +255,6 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     email: `quote-email-${uid}`,
     best: `quote-best-${uid}`,
     address: `quote-address-${uid}`,
-    callback: `quote-callback-${uid}`,
     next: `quote-next-${uid}`,
   };
   const formId = mode === "app" ? FORM_ID : `${FORM_ID}-${uid}`;
@@ -263,6 +266,10 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
   const [propertyProfile, setPropertyProfile] = useState<PropertyProfile | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [website, setWebsite] = useState("");
+  // Until React has hydrated, the send button is a plain button: a tap before then
+  // must not fall through to a native GET submit that puts the fields in the URL.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
   const lastKeyRef = useRef<string | null>(null);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
   const formMountedAtRef = useRef(Date.now());
@@ -498,6 +505,20 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     target?.focus();
   }
 
+  // Focus the first error once React has committed the error state: a focus moved
+  // inside the submit handler can be lost to the tap that is still landing on the
+  // send button, so it is applied again after the render.
+  const pendingErrorFocus = useRef<FieldErrors<FormData> | null>(null);
+  useEffect(() => {
+    if (!pendingErrorFocus.current) return;
+    const frame = requestAnimationFrame(() => {
+      const fieldErrors = pendingErrorFocus.current;
+      pendingErrorFocus.current = null;
+      if (fieldErrors) focusFirstError(fieldErrors);
+    });
+    return () => cancelAnimationFrame(frame);
+  });
+
   const onSubmit = form.handleSubmit(
     (data) => {
       setSubmitted(data);
@@ -509,6 +530,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         fields: Object.keys(fieldErrors).sort().join(","),
       });
       focusFirstError(fieldErrors);
+      pendingErrorFocus.current = fieldErrors;
     },
   );
 
@@ -603,60 +625,75 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
   const finishLabel = estimate?.finish ? FINISH_LABELS[estimate.finish]?.label : null;
   const nextLine = "We reply within one business day.";
 
-  /** Call, text, or have us call you. Directly above the send button. */
+  // The site assistant is not mounted on /estimate (AssistantWidget), so Chat is offered
+  // only where it can open; there "Text us" takes the full width.
+  const chatAvailable = mode !== "app";
+  const outlineButton = cn(
+    "inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-sm border px-3 text-[0.9375rem] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+    tone === "inverse"
+      ? "border-inverse-foreground/40 text-inverse-foreground hover:bg-inverse-foreground/10 focus-visible:ring-[#e3c08d] focus-visible:ring-offset-[#2c302f]"
+      : "border-foreground/40 text-foreground hover:bg-foreground/5 focus-visible:ring-ring",
+  );
+
+  /** Prefer to talk? Above the send button on phones, beside it on wide screens. */
   const talkPanel = (
-    <div className={cn("grid border-t pt-1", t.rule)} data-testid="quote-talk-options" data-clarity-mask="True">
-      <p className={cn("text-[0.875rem] leading-snug", t.muted)}>
-        Prefer to talk?{" "}
-        <a href={SITE_CONFIG.phoneHref} className={t.link} data-testid="link-quote-call">
-          <Phone className="h-4 w-4" aria-hidden="true" />
-          Call {SITE_CONFIG.phone}
-        </a>{" "}
-        or{" "}
-        <a href={SITE_CONFIG.phoneSmsHref} className={t.link} data-testid="link-quote-text">
+    <div className="grid gap-2" data-testid="quote-talk-options">
+      <p className={cn("text-[0.875rem]", t.muted)}>Prefer to talk?</p>
+      <a href={SITE_CONFIG.phoneHref} className={outlineButton} data-testid="link-quote-call">
+        <Phone className="h-4 w-4" aria-hidden="true" />
+        Call {SITE_CONFIG.phone}
+      </a>
+      <div className={cn("grid gap-2", chatAvailable && "grid-cols-2")}>
+        <a href={SITE_CONFIG.phoneSmsHref} className={outlineButton} data-testid="link-quote-text">
           <MessageSquare className="h-4 w-4" aria-hidden="true" />
-          text us
+          Text us
         </a>
-      </p>
-      <label
-        htmlFor={ids.callback}
-        className={cn("flex min-h-12 cursor-pointer items-center justify-between gap-4", t.text)}
-        data-testid="switch-callback"
-      >
-        <span className="text-[0.9375rem] font-medium">
-          Have us call you <span className={t.hint}>(name and number only)</span>
-        </span>
-        <input
-          id={ids.callback}
-          type="checkbox"
-          role="switch"
-          aria-checked={callback}
-          checked={callback}
-          onChange={(event) => setCallback(event.target.checked)}
-          className="peer sr-only"
-        />
-        <span
-          aria-hidden="true"
-          className={cn(
-            "relative inline-flex h-7 w-12 shrink-0 items-center rounded-full border transition-colors",
-            "peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2",
-            tone === "inverse"
-              ? "border-inverse-foreground/40 peer-checked:border-[#e3c08d] peer-checked:bg-[#e3c08d] peer-focus-visible:ring-[#e3c08d] peer-focus-visible:ring-offset-[#2c302f]"
-              : "border-foreground/40 peer-checked:border-foreground peer-checked:bg-foreground peer-focus-visible:ring-ring",
-            "after:absolute after:left-1 after:h-5 after:w-5 after:rounded-full after:transition-transform",
-            tone === "inverse" ? "after:bg-[#fbfaf6]" : "after:bg-foreground peer-checked:after:bg-background",
-            "peer-checked:after:translate-x-5",
-          )}
-        />
-      </label>
+        {chatAvailable && (
+          <button
+            type="button"
+            className={outlineButton}
+            onClick={() => window.dispatchEvent(new Event("p5:assistant-open"))}
+            data-testid="button-quote-chat"
+          >
+            <MessagesSquare className="h-4 w-4" aria-hidden="true" />
+            Chat
+          </button>
+        )}
+      </div>
     </div>
+  );
+
+  /** "Send a request" | "Have us call you", directly under the heading. */
+  const modeControl = (
+    <fieldset className="grid" data-testid="quote-request-mode">
+      <legend className="sr-only">How would you like to reach us?</legend>
+      <div className="grid grid-cols-2 gap-2">
+        {([
+          { value: false, label: "Send a request", testId: "request-mode-quote" },
+          { value: true, label: "Have us call you", testId: "request-mode-callback" },
+        ] as const).map((option) => (
+          <label key={option.testId} className="relative" data-testid={option.testId}>
+            <input
+              type="radio"
+              name={`${formId}-mode`}
+              value={option.value ? "callback" : "quote"}
+              checked={callback === option.value}
+              onChange={() => setCallback(option.value)}
+              className="peer sr-only"
+            />
+            <span className={cn(t.pill, "font-medium")}>{option.label}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
   );
 
   const submitBlock = (
     <div className="grid gap-2">
       <Button
-        type="submit"
+        type={hydrated ? "submit" : "button"}
         form={formId}
+        data-hydrated={hydrated ? "true" : undefined}
         variant="brand"
         disabled={mutation.isPending}
         aria-busy={mutation.isPending}
@@ -681,14 +718,23 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     </div>
   );
 
+  // Phones: talk options directly above the send button. Wide screens: side by side.
+  const sendArea = (
+    <div className={cn("grid gap-4 lg:grid-cols-2 lg:items-end", mode === "embedded" && cn("border-t pt-4", t.rule))}>
+      {talkPanel}
+      {submitBlock}
+    </div>
+  );
+
   const body = (
     <div className="grid gap-4">
       {mode === "embedded" && (
         <h2 id={ids.heading} tabIndex={-1} className={cn("font-serif text-[1.75rem] leading-tight outline-none", t.text)} data-quote-form-heading="">
-          {callback ? "Have us call you" : "Request a quote"}
+          {callback ? "Request a call" : "Request a quote"}
         </h2>
       )}
-      {mode === "app" && callback && (
+      {modeControl}
+      {callback && (
         <p className={cn("text-[0.9375rem]", t.muted)}>Leave your name and number and we will call you.</p>
       )}
 
@@ -906,12 +952,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         </>
       )}
 
-      {mode === "embedded" && (
-        <>
-          {talkPanel}
-          {submitBlock}
-        </>
-      )}
+      {mode === "embedded" && sendArea}
     </div>
   );
 
@@ -967,12 +1008,11 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
   if (mode === "app") {
     return (
       <AppFrame
-        title={success ? "Request sent" : callback ? "Have us call you" : "Request a quote"}
+        title={success ? "Request sent" : callback ? "Request a call" : "Request a quote"}
         steps={[{ id: "request", label: "Request" }]}
         currentIndex={0}
         hideProgress
-        footer={success ? undefined : submitBlock}
-        footerAccessory={success ? undefined : talkPanel}
+        footer={success ? undefined : sendArea}
         className="quote-request-app-frame"
       >
         {formInner}

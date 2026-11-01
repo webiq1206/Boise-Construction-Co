@@ -9,7 +9,7 @@ export const CTA_QUOTE = "Request a quote";
 /** Send label on the one-screen quote form (owner, 1 November: plain words). */
 export const CTA_FORM_SEND = "Send my request";
 /** Send label when the visitor switched on "Have us call you". */
-export const CTA_FORM_CALLBACK = "Request a callback";
+export const CTA_FORM_CALLBACK = "Request a call";
 /** @deprecated Superseded by the single-step CTA_FORM_SEND. */
 export const CTA_FORM_REVIEW = "Review my request";
 /** @deprecated Superseded by the single-step CTA_FORM_SEND. */
