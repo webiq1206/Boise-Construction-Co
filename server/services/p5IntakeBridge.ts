@@ -111,7 +111,26 @@ export type ConsultationBridgeInput = {
   message?: string | null;
   inquiryId?: string | null;
   inquiryKey?: string | null;
+  /**
+   * The P5 intake contract for the two-step quote form (P5 implements it; extra
+   * fields are ignored by an intake that predates it):
+   * "initial" creates the deal; "details" with the same brand and external_id
+   * merges into that deal instead of creating one.
+   */
+  submissionKind?: "initial" | "details";
+  /** "callback" is the form's "Have us call you". */
+  requestKind?: "quote" | "callback";
+  /** The form's value: "phone" means call. */
+  preferredContact?: "phone" | "text" | "email" | null;
+  bestTime?: string | null;
+  /** Step 2 timing answer, e.g. "1 to 3 months". */
+  timeline?: string | null;
+  /** Stored attachments. Links are unguessable; see server/services/leadFiles.ts. */
+  files?: ReadonlyArray<{ name: string; url: string; contentType: string; size: number }>;
 };
+
+/** p5 contact_preference values. */
+export const P5_CONTACT_PREFERENCE = { phone: "call", text: "text", email: "email" } as const;
 
 /** p5 normalizeEmail, kept local so a bad optional phone cannot 422 a good email. */
 function reachableEmail(raw: string | null | undefined): string | null {
@@ -186,6 +205,32 @@ export function buildP5IntakeBody(input: ConsultationBridgeInput): Record<string
 
   const leadId = input.inquiryKey?.trim() || input.inquiryId?.trim();
   if (leadId) body.externalLeadId = `boiseconstruction-consultation:${leadId}`;
+
+  // The two-step contract. external_id is this site's own request id, stable
+  // across the request and its "Help us prepare" details.
+  const externalId = input.inquiryKey?.trim();
+  if (externalId) {
+    body.external_id = externalId;
+    body.submission_kind = input.submissionKind ?? "initial";
+  }
+  if (input.requestKind) body.request_kind = input.requestKind;
+  if (input.preferredContact) {
+    body.contact_preference =
+      input.requestKind === "callback" ? "call" : P5_CONTACT_PREFERENCE[input.preferredContact];
+  }
+  const bestTime = input.bestTime?.trim();
+  if (bestTime) body.best_time = bestTime;
+  const timeline = input.timeline?.trim();
+  if (timeline) body.timeline = timeline;
+  return body;
+}
+
+/** The posted JSON: the string fields above plus the file links, when there are any. */
+export function buildP5IntakePayload(input: ConsultationBridgeInput): Record<string, unknown> {
+  const body: Record<string, unknown> = buildP5IntakeBody(input);
+  if (input.files?.length) {
+    body.files = input.files.map(({ name, url, contentType, size }) => ({ name, url, contentType, size }));
+  }
   return body;
 }
 
@@ -200,7 +245,7 @@ export async function forwardConsultationToP5Intake(
   fetchImpl: FetchLike = fetch,
 ): Promise<void> {
   try {
-    const body = buildP5IntakeBody(input);
+    const body = buildP5IntakePayload(input);
     const res = await fetchImpl(P5_INTAKE_URL, {
       method: "POST",
       headers: {
@@ -217,7 +262,9 @@ export async function forwardConsultationToP5Intake(
       );
       return;
     }
-    console.info(`[p5-intake] Consultation forwarded (${res.status}).`);
+    console.info(
+      `[p5-intake] Consultation ${input.submissionKind === "details" ? "details" : "request"} forwarded (${res.status}).`,
+    );
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error(`[p5-intake] Bridge failed: ${message}`);

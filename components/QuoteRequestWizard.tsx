@@ -17,12 +17,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2, MessageSquare, MessagesSquare, Phone, X } from "lucide-react";
+import { AttachmentTile, uploadLeadFile, useLeadFiles, type PendingLeadFile } from "@/components/quote/LeadAttachments";
+import { QuoteDetailsStep, type DetailsFields } from "@/components/quote/QuoteDetailsStep";
+import { MAX_LEAD_FILES } from "@/shared/leadFiles";
+import { BEST_TIMES, PROJECT_LABEL_LOOKUP } from "@/shared/quoteFormChoices";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { StoredEstimate } from "@/shared/estimateEngine";
 import { FINISH_LABELS, PROJECT_LABELS, formatPlanningCurrency } from "@/shared/estimateEngine";
 import { DisplayNum } from "@/components/marketing/DisplayNum";
-import { AddressAutocomplete } from "@/components/AddressAutocomplete";
 import { CTA_FORM_CALLBACK, CTA_FORM_SEND } from "@/shared/ctaCopy";
 import { BusinessPhoneContact } from "@/components/BusinessPhoneContact";
 import { SITE_CONFIG } from "@/shared/siteConfig";
@@ -33,23 +36,30 @@ import {
   readInquiryTracking,
   recordInquiryAcceptance,
 } from "@/lib/inquiryTracking";
-import type { PropertyProfile } from "@/shared/propertyProfile";
-import { buildCleanAddress, extractZip } from "@/shared/addressValidation";
+import { extractZip } from "@/shared/addressValidation";
 import { AppFrame } from "@/components/estimate/wizard";
 
 /**
- * THE QUOTE FORM. One short screen (owner, 1 November: "the easiest form ever
- * to use and complete and submit information").
+ * THE QUOTE FORM, in two steps (owner, 1 November: "the easiest user
+ * experience possible ... the more information we have, the better").
  *
- * Visible, in order: name, phone, what you need, how to reach you, email
- * (optional unless "Email me" is picked, because the server then needs it).
- * Project type and the build site stay available under "Add more detail
- * (optional)" so a lead can still carry them, never in front of the fields
- * that matter. "Have us call you" (the second half of the segmented control under
- * the heading) reduces the form to name and phone (plus an
- * optional best time) and posts through the same /api/consultation pipeline
- * with requestKind "callback"; the server writes the callback marker into the
- * notes every destination stores (server/services/consultationRequest.ts).
+ * Step 1, one short screen, in order: what we can help with, an optional
+ * attachment tile, name, phone, email (optional unless Email is the chosen
+ * way to reach you), how to reach you (Call, Text, Email; Text by default
+ * because the site has a text line), send. "Have us call you" (the second half
+ * of the segmented control under the heading) reduces it to name, phone and
+ * an optional best time, and posts through the same /api/consultation
+ * pipeline with requestKind "callback"; the server writes the callback marker
+ * into the notes every destination stores (server/services/consultationRequest.ts).
+ *
+ * Files never ride on the request: the lead is accepted first, then each file
+ * is uploaded on its own (/api/consultation/files) and its link is sent to the
+ * team as details on the same request. A failed upload is named on the success
+ * screen with Retry and a text link; the lead is already safe.
+ *
+ * Step 2, on the success screen: "Help us prepare (optional)" adds project
+ * type, build site, timing, best time, more files and (if missing) email to
+ * the SAME request (components/quote/QuoteDetailsStep.tsx).
  *
  * Kept exactly as before: the endpoint and field names, the attached planning
  * range from the calculator (the server re-prices it), the honeypot and dwell
@@ -63,33 +73,17 @@ import { AppFrame } from "@/components/estimate/wizard";
  */
 
 const CONTACT_METHODS = [
-  { value: "phone", label: "Call me" },
-  { value: "text", label: "Text me" },
-  { value: "email", label: "Email me" },
+  { value: "phone", label: "Call" },
+  { value: "text", label: "Text" },
+  { value: "email", label: "Email" },
 ] as const;
 
 type ContactMethod = (typeof CONTACT_METHODS)[number]["value"];
 
-/** Optional detail. Same values the wizard sent, so CRM mapping is unchanged. */
-const PROJECT_CHOICES = [
-  { value: "custom-home", label: "Custom home" },
-  { value: "semi-custom-home", label: "Semi-custom home" },
-  { value: "build-on-my-lot", label: "Build on my lot" },
-  { value: "shop-home", label: "Shop home" },
-  { value: "looking-for-land", label: "Still looking for land" },
-  { value: "addition", label: "Home addition" },
-  { value: "plans-only", label: "Home design and plans" },
-  { value: "lot-evaluation", label: "Lot evaluation" },
-  { value: "other", label: "Other or not sure yet" },
-] as const;
+/** The default way to reach you: this site has a text line (SITE_CONFIG.phoneSmsHref). */
+const DEFAULT_CONTACT: ContactMethod = "text";
 
-const PROJECT_LABEL_LOOKUP: Record<string, string> = Object.fromEntries(
-  PROJECT_CHOICES.map((o) => [o.value, o.label]),
-);
-
-const BEST_TIMES = ["Morning", "Midday", "Afternoon", "Evening"] as const;
-
-const DRAFT_KEY = "construction_quote_wizard_v1";
+const DRAFT_KEY = "construction_quote_form_v2";
 const FORM_ID = "quote-request-form";
 
 const phoneDigits = (value: string) => value.replace(/\D/g, "").length;
@@ -114,24 +108,20 @@ const formSchema = z
       return;
     }
     if (data.message.trim().length < 2) issue("message", "Please tell us a few words about what you need.");
-    if (data.preferredContact === "email") {
-      if (!z.string().email().safeParse(data.email).success) {
-        issue("email", "Please enter an email address so we can email you.");
-      }
-      if (data.phone.trim() && phoneDigits(data.phone) < 10) {
-        issue("phone", "Please check the number, with area code, or leave it blank.");
-      }
-      return;
-    }
+    // Phone is always asked for: it is how the team follows up on any request.
     if (phoneDigits(data.phone) < 10) {
       issue(
         "phone",
         data.preferredContact === "text"
           ? "Please enter a mobile number we can text, with area code."
-          : "Please enter a phone number we can call, with area code.",
+          : "Please enter a phone number, with area code.",
       );
     }
-    if (data.email && !z.string().email().safeParse(data.email).success) {
+    if (data.preferredContact === "email") {
+      if (!z.string().email().safeParse(data.email).success) {
+        issue("email", "Please enter an email address so we can email you.");
+      }
+    } else if (data.email && !z.string().email().safeParse(data.email).success) {
       issue("email", "Please check the email address, or leave it blank.");
     }
   });
@@ -140,7 +130,7 @@ type FormData = z.infer<typeof formSchema>;
 type FieldName = keyof FormData;
 
 /** Field order, so the first error on submit is the first one on screen. */
-const FIELD_ORDER: FieldName[] = ["name", "phone", "message", "preferredContact", "email"];
+const FIELD_ORDER: FieldName[] = ["message", "name", "phone", "email", "preferredContact"];
 
 function readDraft(): Partial<FormData> {
   try {
@@ -261,7 +251,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     message: `quote-message-${uid}`,
     email: `quote-email-${uid}`,
     best: `quote-best-${uid}`,
-    address: `quote-address-${uid}`,
+    files: `quote-files-${uid}`,
     next: `quote-next-${uid}`,
   };
   const formId = mode === "app" ? FORM_ID : `${FORM_ID}-${uid}`;
@@ -270,8 +260,16 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
   const [attached, setAttached] = useState(true);
   const [success, setSuccess] = useState(false);
   const [submitted, setSubmitted] = useState<FormData | null>(null);
-  const [propertyProfile, setPropertyProfile] = useState<PropertyProfile | null>(null);
-  const [detailsOpen, setDetailsOpen] = useState(false);
+  // Files chosen on Step 1. They upload only after the request is accepted.
+  const attachments = useLeadFiles();
+  // Issued by /api/consultation: lets this visitor add files and details to the
+  // same request for two hours.
+  const [auth, setAuth] = useState<{ inquiryKey: string; token: string } | null>(null);
+  const [uploadPhase, setUploadPhase] = useState<"idle" | "uploading" | "done">("idle");
+  // Stored file ids the team has not been sent yet, and the chain that keeps
+  // details posts in order so one file is never announced twice.
+  const unsentFileIds = useRef<string[]>([]);
+  const detailsChain = useRef<Promise<unknown>>(Promise.resolve());
   const [website, setWebsite] = useState("");
   // Until React has hydrated, the send button is a plain button: a tap before then
   // must not fall through to a native GET submit that puts the fields in the URL.
@@ -301,7 +299,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
       name: "",
       phone: "",
       message: "",
-      preferredContact: "phone",
+      preferredContact: DEFAULT_CONTACT,
       email: "",
       callback: false,
       bestTimeToCall: "",
@@ -325,7 +323,6 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     });
     if (draft.preferredContact) setValue("preferredContact", draft.preferredContact, { shouldValidate: false });
     if (draft.callback) setValue("callback", true, { shouldValidate: false });
-    if (draft.projectType || draft.address) setDetailsOpen(true);
   }, [setValue]);
 
   useEffect(() => {
@@ -333,15 +330,9 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     writeDraft(watched);
   }, [watched, success]);
 
-  function handleProfileResolved(profile: PropertyProfile | null) {
-    setPropertyProfile(profile);
-    if (profile) {
-      const clean = buildCleanAddress(profile);
-      if (clean) setValue("address", clean, { shouldValidate: false });
-    }
-  }
-
-  const deriveZip = (addr: string) => propertyProfile?.zip?.slice(0, 5) || extractZip(addr) || "";
+  // The build site is asked on Step 2; a site typed earlier in the calculator
+  // gate (lead prefill) still rides along on the request.
+  const deriveZip = (addr: string) => extractZip(addr) || "";
 
   useEffect(() => {
     function applyPrefill() {
@@ -411,6 +402,82 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     el?.focus({ preventScroll: true });
   }, [success]);
 
+  /** Upload files one at a time for the accepted request; resolves with the stored ids. */
+  async function uploadFiles(
+    list: PendingLeadFile[],
+    update: (key: string, patch: Partial<PendingLeadFile>) => void,
+    granted = auth,
+  ): Promise<string[]> {
+    if (!granted) return [];
+    const ids: string[] = [];
+    for (const item of list) {
+      update(item.key, { status: "uploading", error: undefined });
+      const result = await uploadLeadFile(item.file, granted);
+      if (result.ok) {
+        ids.push(result.id);
+        update(item.key, { status: "uploaded", storedId: result.id });
+      } else {
+        update(item.key, { status: "failed", error: result.message });
+      }
+    }
+    return ids;
+  }
+
+  /** Details and file links for the same request, posted one at a time and in order. */
+  function sendDetails(
+    fields: DetailsFields,
+    fileIds: string[],
+    granted = auth,
+  ): Promise<{ ok: true } | { ok: false; message: string }> {
+    const run = async (): Promise<{ ok: true } | { ok: false; message: string }> => {
+      if (!granted) return { ok: false, message: "We could not save these details. Please text or call us." };
+      const ids = [...new Set([...unsentFileIds.current, ...fileIds])];
+      unsentFileIds.current = [];
+      try {
+        const res = await fetch("/api/consultation/details", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ inquiryKey: granted.inquiryKey, token: granted.token, ...fields, fileIds: ids, website: "" }),
+        });
+        if (res.ok) return { ok: true };
+        unsentFileIds.current.push(...ids);
+        const err = (await res.json().catch(() => ({}))) as { reason?: string };
+        return {
+          ok: false,
+          message:
+            err.reason === "expired"
+              ? "This page has been open a while, so we could not save this. Please text or call us with the details."
+              : "We could not save these details. Please try again, or text us.",
+        };
+      } catch {
+        unsentFileIds.current.push(...ids);
+        return { ok: false, message: "We could not save these details. Check your connection and try again." };
+      }
+    };
+    const next = detailsChain.current.then(run, run);
+    detailsChain.current = next;
+    return next;
+  }
+
+  /** Step 1 files go up after the request is safe, then their links go to the team. */
+  async function uploadStepOneFiles(granted: { inquiryKey: string; token: string }) {
+    const pending = attachments.filesRef.current.filter((f) => f.status === "ready" || f.status === "failed");
+    if (!pending.length) return;
+    setUploadPhase("uploading");
+    const ids = await uploadFiles(pending, attachments.update, granted);
+    if (ids.length) await sendDetails({}, ids, granted);
+    setUploadPhase("done");
+  }
+
+  async function retryFile(key: string) {
+    const item = attachments.filesRef.current.find((f) => f.key === key);
+    if (!item || !auth) return;
+    setUploadPhase("uploading");
+    const ids = await uploadFiles([item], attachments.update);
+    if (ids.length) await sendDetails({}, ids);
+    setUploadPhase("done");
+  }
+
   const mutation = useMutation({
     mutationFn: async (data: FormData) => {
       const existingTracking = readInquiryTracking();
@@ -432,7 +499,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         formStartedAt: formMountedAtRef.current,
         website,
         zip: isCallback ? "" : deriveZip(data.address),
-        propertyProfile: isCallback ? null : propertyProfile,
+        propertyProfile: null,
         skipEmail: hasPassedGate() ? true : undefined,
         estimate:
           estimate && attached
@@ -465,7 +532,12 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
               : err.message || "Something went wrong",
         );
       }
-      const response = (await res.json()) as { accepted?: boolean; inquiryKey?: string; conversionId?: string };
+      const response = (await res.json()) as {
+        accepted?: boolean;
+        inquiryKey?: string;
+        conversionId?: string;
+        detailsToken?: string;
+      };
       if (
         response.accepted !== true ||
         typeof response.inquiryKey !== "string" ||
@@ -477,6 +549,11 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     },
     onSuccess: ({ response }, variables) => {
       setSuccess(true);
+      if (response.detailsToken) {
+        const granted = { inquiryKey: response.inquiryKey!, token: response.detailsToken };
+        setAuth(granted);
+        if (!variables.callback) void uploadStepOneFiles(granted);
+      }
       clearDraft();
       sessionStorage.removeItem("brc_estimate");
       markEstimatorCompleted("consultation");
@@ -563,6 +640,41 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
 
   const firstName = submitted?.name.trim().split(/\s+/)[0] ?? "";
 
+  const failedUploads = attachments.files.filter((f) => f.status === "failed");
+  const addedUploads = attachments.files.filter((f) => f.status === "uploaded");
+  const uploadSummary =
+    uploadPhase === "uploading"
+      ? `Uploading your files (${addedUploads.length + failedUploads.length + 1} of ${attachments.files.length})`
+      : failedUploads.length
+        ? `${failedUploads.length === 1 ? `${failedUploads[0].file.name} did not upload` : `${failedUploads.length} files did not upload`}.`
+        : `${addedUploads.length === 1 ? "1 file" : `${addedUploads.length} files`} added to your request.`;
+  // The same chips, read-only apart from Retry on a failed file.
+  const uploadList = (
+    <ul className="grid gap-1.5" aria-label="Your files">
+      {attachments.files.map((f) => (
+        <li key={f.key} className="flex min-h-11 items-center justify-between gap-3 text-sm" data-testid="quote-upload-item" data-status={f.status}>
+          <span className={cn("min-w-0 truncate", t.text)} data-clarity-mask="True">
+            {f.file.name}
+          </span>
+          <span className={cn("flex flex-shrink-0 items-center gap-2", f.status === "failed" ? (tone === "inverse" ? "text-[#f4c3b4]" : "text-destructive") : t.muted)}>
+            {f.status === "uploading" && <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />}
+            {{ ready: "Waiting", uploading: "Uploading", uploaded: "Added", failed: "Did not upload" }[f.status]}
+            {f.status === "failed" && (
+              <button
+                type="button"
+                onClick={() => void retryFile(f.key)}
+                className={cn("inline-flex min-h-11 items-center px-1 font-medium underline underline-offset-4", t.text)}
+                data-testid="button-retry-file"
+              >
+                Retry
+              </button>
+            )}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+
   const successBlock = (
     <div className="flex flex-col items-start space-y-4 py-2" data-testid="consultation-success" data-clarity-mask="True">
       <img
@@ -631,6 +743,38 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
           <p className={cn("text-xs", t.muted)}>A confirmation email is on its way to your inbox.</p>
         )}
       </div>
+      {attachments.files.length > 0 && (
+        <div className="grid w-full gap-2" data-testid="quote-upload-status" data-phase={uploadPhase}>
+          <p className={cn("text-[0.9375rem] font-medium", t.text)} aria-live="polite">
+            {uploadSummary}
+          </p>
+          {uploadList}
+          {failedUploads.length > 0 && (
+            <p className={cn("text-sm", t.muted)}>
+              Your request is saved either way. Retry, or{" "}
+              <a href={SITE_CONFIG.phoneSmsHref} className={cn("underline underline-offset-4", t.text)} data-testid="link-upload-text-us">
+                text the files to us
+              </a>
+              .
+            </p>
+          )}
+        </div>
+      )}
+      {auth && (
+        <QuoteDetailsStep
+          tone={tone}
+          uid={uid}
+          ask={{
+            projectType: !submitted?.projectType,
+            address: !submitted?.address?.trim(),
+            bestTime: !(submitted?.callback && submitted.bestTimeToCall),
+            email: !submitted?.email?.trim() || !!submitted?.callback,
+          }}
+          filesRemaining={Math.max(0, MAX_LEAD_FILES - attachments.files.length)}
+          uploadFiles={(list, update) => uploadFiles(list, update)}
+          saveDetails={(fields, ids) => sendDetails(fields, ids)}
+        />
+      )}
     </div>
   );
 
@@ -769,6 +913,38 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         </div>
       )}
 
+      {!callback && (
+        <>
+          <Field id={ids.message} label="What can we help with?" error={errors.message?.message} tone={tone}>
+            <textarea
+              id={ids.message}
+              rows={3}
+              aria-required="true"
+              aria-invalid={errors.message ? true : undefined}
+              aria-describedby={describedBy(ids.message, false, errors.message?.message)}
+              placeholder="For example: a single-level custom home on land we own near Star, with a shop if the budget allows."
+              className={cn(t.control, "min-h-[7.5rem] py-2.5 leading-relaxed", errors.message && t.invalid)}
+              data-testid="textarea-message"
+              data-clarity-mask="True"
+              {...register("message")}
+            />
+          </Field>
+        </>
+      )}
+
+      {!callback && (
+        <AttachmentTile
+          id={ids.files}
+          label="Add photos, plans or files"
+          files={attachments.files}
+          problems={attachments.problems}
+          onAdd={attachments.add}
+          onRemove={attachments.remove}
+          tone={tone}
+          disabled={mutation.isPending}
+        />
+      )}
+
       <Field id={ids.name} label="Your name" error={errors.name?.message} tone={tone}>
         <input
           id={ids.name}
@@ -789,7 +965,6 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
       <Field
         id={ids.phone}
         label="Phone"
-        optional={!callback && preferredContact === "email"}
         error={errors.phone?.message}
         tone={tone}
       >
@@ -799,7 +974,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
           inputMode="tel"
           autoComplete="tel"
           enterKeyHint="next"
-          aria-required={callback || preferredContact !== "email" ? "true" : undefined}
+          aria-required="true"
           aria-invalid={errors.phone ? true : undefined}
           aria-describedby={describedBy(ids.phone, false, errors.phone?.message)}
           className={cn(t.control, "h-12", errors.phone && t.invalid)}
@@ -828,44 +1003,6 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         </Field>
       ) : (
         <>
-          <Field id={ids.message} label="What do you need?" error={errors.message?.message} tone={tone}>
-            <textarea
-              id={ids.message}
-              rows={3}
-              aria-required="true"
-              aria-invalid={errors.message ? true : undefined}
-              aria-describedby={describedBy(ids.message, false, errors.message?.message)}
-              placeholder="A custom home, a build on your lot, an addition, or not sure yet. A sentence or two is plenty."
-              className={cn(t.control, "min-h-[7.5rem] py-2.5 leading-relaxed", errors.message && t.invalid)}
-              data-testid="textarea-message"
-              data-clarity-mask="True"
-              {...register("message")}
-            />
-          </Field>
-
-          <fieldset className="grid gap-1.5">
-            <legend className={cn(t.label, "mb-1.5")}>How should we reach you?</legend>
-            <div className="grid grid-cols-3 gap-2">
-              {CONTACT_METHODS.map((method) => (
-                <label key={method.value} className="relative" data-testid={`button-preferred-contact-${method.value}`}>
-                  <input
-                    type="radio"
-                    value={method.value}
-                    className="peer sr-only"
-                    {...register("preferredContact", {
-                      onChange: () => {
-                        if (formState.touchedFields.phone) void form.trigger("phone");
-                        if (formState.touchedFields.email) void form.trigger("email");
-                        else form.clearErrors("email");
-                      },
-                    })}
-                  />
-                  <span className={t.pill}>{method.label}</span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-
           <Field
             id={ids.email}
             label="Email"
@@ -891,57 +1028,28 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
             />
           </Field>
 
-          <details
-            className={cn("group border-t pt-1", t.rule)}
-            open={detailsOpen}
-            onToggle={(event) => setDetailsOpen((event.currentTarget as HTMLDetailsElement).open)}
-            data-testid="quote-more-detail"
-          >
-            <summary
-              className={cn(
-                "flex min-h-12 cursor-pointer list-none items-center justify-between text-[0.9375rem] font-medium [&::-webkit-details-marker]:hidden",
-                t.text,
-              )}
-            >
-              <span>
-                Add more detail <span className={t.hint}>(optional)</span>
-              </span>
-              <span aria-hidden="true" className={cn("text-xl leading-none transition-transform group-open:rotate-45", t.muted)}>
-                +
-              </span>
-            </summary>
-            <div className="grid gap-4 pb-2 pt-2">
-              <fieldset className="grid gap-1.5">
-                <legend className={cn(t.label, "mb-1.5")}>What are you planning?</legend>
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  {PROJECT_CHOICES.map((choice) => (
-                    <label key={choice.value} className="relative" data-testid={`consult-project-${choice.value}`}>
-                      <input type="radio" value={choice.value} className="peer sr-only" {...register("projectType")} />
-                      <span className={cn(t.pill, "justify-start px-3 text-left")}>{choice.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-              <div className="grid gap-1.5">
-                <label htmlFor={ids.address} className={t.label}>
-                  Build site address <span className={t.hint}>(optional)</span>
+          <fieldset className="grid gap-1.5">
+            <legend className={cn(t.label, "mb-1.5")}>How should we reach you?</legend>
+            <div className="grid grid-cols-3 gap-2">
+              {CONTACT_METHODS.map((method) => (
+                <label key={method.value} className="relative" data-testid={`button-preferred-contact-${method.value}`}>
+                  <input
+                    type="radio"
+                    value={method.value}
+                    className="peer sr-only"
+                    {...register("preferredContact", {
+                      onChange: () => {
+                        if (formState.touchedFields.phone) void form.trigger("phone");
+                        if (formState.touchedFields.email) void form.trigger("email");
+                        else form.clearErrors("email");
+                      },
+                    })}
+                  />
+                  <span className={t.pill}>{method.label}</span>
                 </label>
-                <p id={`${ids.address}-hint`} className={t.hint}>
-                  Street address, parcel number, or lot and subdivision. We look up county records before we meet.
-                </p>
-                <AddressAutocomplete
-                  id={ids.address}
-                  value={watched.address}
-                  onChange={(value) => setValue("address", value, { shouldDirty: true })}
-                  onProfileResolved={handleProfileResolved}
-                  aria-label="Build site address"
-                  aria-describedby={`${ids.address}-hint`}
-                  variant={tone === "inverse" ? "inverse" : "default"}
-                  data-testid="input-address"
-                />
-              </div>
+              ))}
             </div>
-          </details>
+          </fieldset>
 
           {estimate && attached && (
             <div className="flex items-center justify-between gap-2 text-xs" data-testid="text-estimate-summary">
@@ -990,6 +1098,14 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         engaged={formState.isDirty}
         submitted={success}
       />
+      {success ? (
+        // The success screen carries its own "Help us prepare" form, so it sits
+        // outside the request form (forms cannot nest). Same test id and step
+        // marker the request form had once sent.
+        <div data-testid="consultation-wizard" data-step="sent" data-request-kind={callback ? "callback" : "quote"}>
+          {successBlock}
+        </div>
+      ) : (
       <form
         id={formId}
         noValidate
@@ -1001,7 +1117,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         aria-labelledby={mode === "embedded" ? ids.heading : undefined}
         aria-label={mode === "app" ? "Request a quote" : undefined}
         data-testid="consultation-wizard"
-        data-step={success ? "sent" : "project"}
+        data-step="project"
         data-request-kind={callback ? "callback" : "quote"}
         data-clarity-mask="True"
       >
@@ -1022,8 +1138,9 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
           />
         </div>
 
-        {success && mode === "app" ? successBlock : body}
+        {body}
       </form>
+      )}
     </>
   );
 

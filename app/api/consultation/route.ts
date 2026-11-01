@@ -41,6 +41,7 @@ import { readUnitCostOverrides } from "@/server/services/unitCostOverrides";
 import { createDrizzleInquiryIntake } from "@/server/services/inquiryIntake";
 import { deliverInquiryChannel, type InquiryDeliveryResult } from "@/server/services/inquiryDelivery";
 import { forwardConsultationToP5Intake } from "@/server/services/p5IntakeBridge";
+import { issueDetailsToken } from "@/server/services/consultationDetails";
 import { inspectLeadTrap, LeadRequestError, readBoundedJson } from "@/server/services/leadRequestGuard";
 import { clientKeyFrom, rateLimit } from "@/lib/rateLimit";
 import {
@@ -162,6 +163,14 @@ function verifyEstimate(
   };
 }
 
+function detailsTokenFor(inquiryKey: string): string | undefined {
+  try {
+    return issueDetailsToken(inquiryKey, process.env.SESSION_SECRET ?? "");
+  } catch {
+    return undefined;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const limit = rateLimit(clientKeyFrom(request.headers, "consultation"), 6, 10 * 60 * 1000);
@@ -246,6 +255,7 @@ export async function POST(request: NextRequest) {
         conversionId: intakeResult.conversionId,
         newInquiry: intakeResult.inserted,
         conversionEligible: intakeResult.conversionEligible,
+        detailsToken: detailsTokenFor(intakeResult.inquiryKey),
         delivery: [],
       });
     }
@@ -270,6 +280,10 @@ export async function POST(request: NextRequest) {
           projectType: data.projectType,
           message: data.message,
           inquiryKey: intakeResult.inquiryKey,
+          submissionKind: "initial",
+          requestKind: data.requestKind,
+          preferredContact: data.preferredContact,
+          bestTime: data.requestKind === "callback" ? data.bestTimeToCall : undefined,
         });
         after(() => bridge);
       } catch (bridgeErr) {
@@ -398,6 +412,9 @@ export async function POST(request: NextRequest) {
       conversionId: intakeResult.conversionId,
       newInquiry: intakeResult.inserted,
       conversionEligible: intakeResult.conversionEligible,
+      // Lets this visitor add details and files to the same request
+      // (/api/consultation/details, /api/consultation/files) for two hours.
+      detailsToken: detailsTokenFor(intakeResult.inquiryKey),
       delivery: delivery.map(({ channel, attempted, delivered }) => ({ channel, attempted, delivered })),
     });
   } catch (err) {

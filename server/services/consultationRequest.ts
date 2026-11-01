@@ -8,7 +8,7 @@ import { estimateSchema } from "@/shared/estimatePayload";
  * without a database (tests/p5-consultation-callback.test.ts).
  */
 
-const propertyProfileSchema = z
+export const propertyProfileSchema = z
   .object({
     formattedAddress: z.string().max(300),
     city: z.string().max(120),
