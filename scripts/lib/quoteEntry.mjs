@@ -48,54 +48,32 @@ export async function verifyQuoteEntry(page, path) {
 
 export const isConstruction = brand => ['construction','boise-construction-co'].includes(brand);
 
-/** Public Construction quote form (one screen), separate from the retained typed estimator. */
+/** Public Construction wizard, separate from the retained typed estimator. */
 export async function verifyConstructionEntry(page, path) {
   if(path==='/' || path==='/#calculator'){
     await page.locator('a[href="/estimate"]:visible').first().click();
     await page.waitForURL(url=>url.pathname==='/estimate');
   }
-  await fillConstructionQuote(page,'email');
-  // Stop before a valid send; caller blocks all external and business requests.
-}
-
-const focusedTestId=page=>page.evaluate(()=>document.activeElement?.getAttribute('data-testid'));
-const unobstructed=locator=>locator.evaluate(el=>{const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;return x>=0&&x<innerWidth&&y>=0&&y<innerHeight&&el.contains(document.elementFromPoint(x,y));});
-
-/** One screen: the heading and the first field on arrival, validation in place,
- * "Have us call you" reducing the form, the draft surviving a reload. Never sends. */
-export async function fillConstructionQuote(page, method) {
   const form=page.getByTestId('consultation-wizard');
-  await form.waitFor();
-  assert.equal(await form.getAttribute('data-step'),'project');
-  assert.equal(await page.getByTestId('consult-wizard-actions').count(),0,'No Continue: the request is one screen');
-  const name=page.getByTestId('input-name');
-  assert.ok(await name.evaluate(el=>{const r=el.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight;}),'First field visible on arrival');
-  assert.notEqual(await focusedTestId(page),'input-name','No text field is auto-focused on arrival');
-  const send=page.getByTestId('button-send-request');
-  await send.click();
-  assert.equal(await focusedTestId(page),'input-name','Empty send focuses the first error');
-  assert.match(await form.innerText(),/Please enter your name/);
-  await name.fill('Synthetic Navigation Check');
+  const step=value=>page.waitForFunction(value=>document.querySelector('[data-testid="consultation-wizard"]')?.dataset.step===value,value);
+  const next=()=>page.getByTestId('consult-wizard-actions').getByRole('button',{name:'Continue',exact:true}).click();
+  await step('project');await next();assert.equal(await form.getAttribute('data-step'),'project');
+  await page.getByTestId('consult-project-looking-for-land').click();await next();await step('name');
+  await next();assert.equal(await form.getAttribute('data-step'),'name');
+  await page.getByTestId('input-name').fill('Synthetic Navigation Check');await next();await step('prefer');
+  await page.getByTestId('button-preferred-contact-email').click();await next();await step('reach');
+  await page.getByTestId('input-email').fill('invalid');await next();assert.equal(await form.getAttribute('data-step'),'reach');
+  await page.getByTestId('input-email').fill('navigation@example.invalid');await next();await step('review');
+  assert.match(await form.innerText(),/Synthetic Navigation Check/);
+  assert.match(await form.innerText(),/Still Looking for Land/);
+  assert.equal(await page.getByTestId('input-address').count(),0);
+  await page.getByTestId('button-add-note').click();
   await page.getByTestId('textarea-message').fill('Synthetic local-only test. '+'LongUnbrokenMaterialSpecification'.repeat(20));
-  await page.getByTestId('button-preferred-contact-'+method).click();
-  const field=page.getByTestId('input-'+(method==='email'?'email':'phone'));
-  await field.fill(method==='email'?'invalid':'123');
-  await send.click();
-  assert.equal(await focusedTestId(page),'input-'+(method==='email'?'email':'phone'),'Invalid contact blocks the send');
-  await field.fill(method==='email'?'navigation@example.invalid':'2085550102');
-  assert.equal(await page.getByTestId('quote-more-detail').evaluate(el=>el.open),false,'Extra detail stays collapsed and optional');
-  await page.getByTestId('switch-callback').click();
-  assert.equal(await form.getAttribute('data-request-kind'),'callback');
-  assert.equal(await page.getByTestId('textarea-message').count(),0,'Callback asks for name and number only');
-  assert.equal(await page.getByTestId('select-best-time').count(),1);
-  await page.getByTestId('switch-callback').click();
-  assert.equal(await form.getAttribute('data-request-kind'),'quote');
-  await page.reload();await form.waitFor();
-  await page.waitForFunction(()=>document.querySelector('[data-testid="input-name"]')?.value==='Synthetic Navigation Check');
-  assert.match(await page.getByTestId('textarea-message').inputValue(),/Synthetic local-only test/);
-  for(const link of ['link-quote-call','link-quote-text']) assert.equal(await page.getByTestId(link).count(),1);
-  await send.scrollIntoViewIfNeeded();assert.ok(await unobstructed(send),'Quote action must be unobstructed');
+  await page.reload();await step('review');assert.match(await form.innerText(),/Synthetic Navigation Check/);
+  const send=page.getByTestId('consult-wizard-actions').getByRole('button').last();
+  await send.scrollIntoViewIfNeeded();assert.ok(await send.evaluate(el=>{const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;return x>=0&&x<innerWidth&&y>=0&&y<innerHeight&&el.contains(document.elementFromPoint(x,y));}),'Quote action must be unobstructed');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Quote horizontal overflow');
+  // Stop before final Send; caller blocks all external and business requests.
 }
 
 export async function verifyConstructionRe10Handoff(page) {
