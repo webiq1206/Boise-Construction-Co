@@ -6,6 +6,7 @@ import {
   VENDOR_LOAD_EVENTS,
   VENDOR_LOAD_TIMEOUT_MS,
   deferVendorLoad,
+  loadAtWindowLoad,
   vendorScriptTag,
 } from '../lib/deferredVendorScript.ts';
 
@@ -92,21 +93,38 @@ test('a page that already finished loading starts the five second clock at once'
   assert.deepEqual(s.inserted, [SRC]);
 });
 
-test('the Meta stub queues PageView and later events until fbevents.js loads', () => {
+test('Meta loads at the window load event: no interaction wait, no 5 second wait', () => {
+  const s = sandbox();
+  s.run(loadAtWindowLoad(vendorScriptTag(SRC)));
+  assert.deepEqual(s.inserted, [], 'nothing before load');
+  for (const event of VENDOR_LOAD_EVENTS) s.fire(event);
+  assert.deepEqual(s.inserted, [], 'interaction alone does not load it before the load event');
+  s.fire('load');
+  assert.deepEqual(s.inserted, [SRC], 'loaded at the load event, with no timer');
+  s.fire('load');
+  s.advance(VENDOR_LOAD_TIMEOUT_MS * 2);
+  assert.deepEqual(s.inserted, [SRC], 'loaded exactly once');
+  const done = sandbox('complete');
+  done.run(loadAtWindowLoad(vendorScriptTag(SRC)));
+  assert.deepEqual(done.inserted, [SRC], 'a page that already loaded requests it at once');
+});
+
+test('the Meta stub queues PageView and later events, and fbevents.js loads at window load', () => {
   const pixel = readFileSync(new URL('../components/MetaPixel.tsx', import.meta.url), 'utf8');
-  // The vendor file is only ever requested through the deferred loader.
-  assert.match(pixel, /deferVendorLoad\(vendorScriptTag\('https:\/\/connect\.facebook\.net\/en_US\/fbevents\.js'\)\)/);
+  // Owner decision 1 November 2026: Meta loads at window load, not deferred to interaction.
+  assert.match(pixel, /loadAtWindowLoad\(vendorScriptTag\('https:\/\/connect\.facebook\.net\/en_US\/fbevents\.js'\)\)/);
+  assert.doesNotMatch(pixel, /deferVendorLoad/);
   assert.equal(pixel.match(/https:\/\/connect\.facebook\.net/g)?.length, 1);
   const inline = pixel.slice(pixel.indexOf('{`') + 2, pixel.indexOf('`}'))
     .replaceAll('${META_PIXEL_ID}', 'TEST')
-    .replace(/\$\{deferVendorLoad\(vendorScriptTag\('([^']+)'\)\)\}/, (_, src) => deferVendorLoad(vendorScriptTag(src)));
+    .replace(/\$\{loadAtWindowLoad\(vendorScriptTag\('([^']+)'\)\)\}/, (_, src) => loadAtWindowLoad(vendorScriptTag(src)));
   const s = sandbox();
   s.run(inline);
   assert.deepEqual(s.inserted, []);
   s.run("fbq('track','Lead',{},{eventID:'e1'})");
   const queue = Array.from((s.context.fbq as { queue: unknown[][] }).queue, (args) => [...args].slice(0, 2).join(' '));
   assert.deepEqual(queue, ['set autoConfig', 'init TEST', 'track PageView', 'track Lead']);
-  s.fire('pointerdown');
+  s.fire('load');
   assert.deepEqual(s.inserted, ['https://connect.facebook.net/en_US/fbevents.js']);
 });
 
