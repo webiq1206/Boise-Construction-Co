@@ -4,7 +4,14 @@ import { readLeadAttribution } from "@/lib/leadAttributionBrowser";
 import { EstimatorRecovery } from "@/components/estimate/recovery/EstimatorRecovery";
 import { markEstimatorCompleted } from "@/lib/estimatorSession";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+
+// useLayoutEffect on the client (no flash when the desktop layout applies), a no-op
+// warning-free effect on the server.
+const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+/** Wide screens keep "Prefer to talk?" beside the pinned send button on /estimate. */
+const WIDE_QUERY = "(min-width: 1024px)";
 import { useForm, type FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -270,6 +277,16 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
   // must not fall through to a native GET submit that puts the fields in the URL.
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
+  // /estimate on phones pins only the send button; the talk options join the fields.
+  const [wide, setWide] = useState(false);
+  useIsomorphicLayoutEffect(() => {
+    const query = window.matchMedia(WIDE_QUERY);
+    const update = () => setWide(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  const talkInFooter = mode === "app" && wide;
   const lastKeyRef = useRef<string | null>(null);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
   const formMountedAtRef = useRef(Date.now());
@@ -953,6 +970,11 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
       )}
 
       {mode === "embedded" && sendArea}
+      {mode === "app" && !talkInFooter && (
+        // Phones: in the normal flow at the end of the fields, directly above the
+        // pinned send button, so nothing scrolls behind a panel.
+        <div className={cn("border-t pt-4", t.rule)}>{talkPanel}</div>
+      )}
     </div>
   );
 
@@ -1012,7 +1034,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         steps={[{ id: "request", label: "Request" }]}
         currentIndex={0}
         hideProgress
-        footer={success ? undefined : sendArea}
+        footer={success ? undefined : talkInFooter ? sendArea : submitBlock}
         className="quote-request-app-frame"
       >
         {formInner}

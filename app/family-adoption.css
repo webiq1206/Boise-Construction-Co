@@ -55,24 +55,6 @@
   }
 }
 
-/* /estimate on short phones (320x568): the pinned footer (call, text, callback switch,
-   send) would leave the fields a sliver. Below 641px tall the whole frame scrolls
-   instead, so the heading and the fields come first and the send area follows them. */
-@media (max-width: 1023px) and (max-height: 640px) {
-  .quote-request-app-frame {
-    overflow-y: auto !important;
-    overscroll-behavior: contain;
-  }
-  .quote-request-app-frame [data-testid="app-frame-body"] {
-    flex: none !important;
-    overflow: visible !important;
-    min-height: auto !important;
-  }
-  .quote-request-app-frame [data-testid="app-frame-body"] > div {
-    min-height: 0 !important;
-  }
-}
-
 /* The quote form heading takes programmatic focus on arrival (tabindex=-1) so screen
    readers announce it. It is not an interactive control, so no focus ring. */
 .approved-shell [data-quote-form-heading]:focus,
