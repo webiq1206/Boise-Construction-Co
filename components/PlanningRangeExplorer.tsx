@@ -12,7 +12,7 @@ import {
   formatPlanningCurrency,
   type NewConstructionProjectType,
 } from "@/shared/estimateEngine";
-import { DisplayNum } from "@/components/marketing";
+import { DisplayNum } from "@/components/marketing/DisplayNum";
 
 /**
  * Homepage interactive proof (C14): pick a project type, set finished living
