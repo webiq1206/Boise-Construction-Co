@@ -1101,8 +1101,10 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
       {success ? (
         // The success screen carries its own "Help us prepare" form, so it sits
         // outside the request form (forms cannot nest). Same test id and step
-        // marker the request form had once sent.
-        <div data-testid="consultation-wizard" data-step="sent" data-request-kind={callback ? "callback" : "quote"}>
+        // marker the request form had once sent. data-family-bar-yield (here and on the form):
+        // the family mobile bar steps aside while either is on screen
+        // (components/family/MobileActionBar.tsx).
+        <div data-testid="consultation-wizard" data-step="sent" data-request-kind={callback ? "callback" : "quote"} data-family-bar-yield="">
           {successBlock}
         </div>
       ) : (
@@ -1119,6 +1121,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         data-testid="consultation-wizard"
         data-step="project"
         data-request-kind={callback ? "callback" : "quote"}
+        data-family-bar-yield=""
         data-clarity-mask="True"
       >
         <div aria-hidden="true" className="pointer-events-none absolute left-[-10000px] top-auto h-px w-px overflow-hidden">
