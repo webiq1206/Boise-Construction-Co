@@ -7,7 +7,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { HomeHero } from '../components/approved/HomeHero.tsx';
 import { Footer } from '../components/Footer.tsx';
 import { matchesRoute } from '../lib/family/types.ts';
-import { FAMILY_BRAND, PARENT_GOOGLE_PROFILE } from '../lib/familyBrand.ts';
+import { FAMILY_BRAND } from '../lib/familyBrand.ts';
 import { BUSINESS_VCARD_PATH } from '../lib/vcard.ts';
 import { CITIES, SERVICES } from '../shared/contentData.ts';
 import { P5_SOCIAL } from '../shared/gbpProfile.ts';
@@ -31,7 +31,7 @@ test('the brand config carries this site’s facts, one CTA and one destination'
   assert.equal(FAMILY_BRAND.saveContactHref, BUSINESS_VCARD_PATH);
   assert.equal(FAMILY_BRAND.tagline, `${SITE_TAGLINE}.`);
   assert.equal(FAMILY_BRAND.parentFacebook.href, P5_SOCIAL.facebook);
-  assert.equal(PARENT_GOOGLE_PROFILE.href, 'https://www.google.com/search?kgmid=/g/11ntl1t7dc');
+  assert.deepEqual(FAMILY_BRAND.parentGoogle, { href: 'https://www.google.com/search?kgmid=/g/11ntl1t7dc', label: 'P5 Home Co on Google' });
   assert.match(FAMILY_BRAND.nap.line, /4031 W Wapoot St, Meridian, ID 83646/);
   assert.equal(FAMILY_BRAND.accent, '#c48d3f');
   assert.equal(FAMILY_BRAND.accentInk, '#78531e');
@@ -76,6 +76,8 @@ test('the footer renders the family row, NAP, hours and one registration link, w
   assert.match(html, /is a DBA of <a href="https:\/\/p5homeco\.com" rel="noopener">P5 Home Co LLC<\/a>/);
   assert.match(html, /<a href="\/api\/login" rel="nofollow">Subcontractor login<\/a>/);
   assert.match(html, /<a href="https:\/\/www\.google\.com\/search\?kgmid=\/g\/11ntl1t7dc" rel="noopener" target="_blank" data-testid="link-footer-google">P5 Home Co on Google<\/a>/);
+  assert.equal((html.match(/data-testid="link-footer-google"/g) ?? []).length, 1);
+  assert.equal((html.match(/data-testid="link-footer-facebook"/g) ?? []).length, 1);
   assert.match(html, /Boise ADU Co projects currently run through Boise Construction Co; its site is coming\./);
   assert.equal((html.match(/>P5 Home Co LLC, Idaho Registered Contractor #8381215<\/a>/g) ?? []).length, 1);
   // Boise ADU Co is not in the family row until its own site exists.
