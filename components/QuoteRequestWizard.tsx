@@ -4,33 +4,31 @@ import { readLeadAttribution } from "@/lib/leadAttributionBrowser";
 import { EstimatorRecovery } from "@/components/estimate/recovery/EstimatorRecovery";
 import { markEstimatorCompleted } from "@/lib/estimatorSession";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+
+// useLayoutEffect on the client (no flash when the desktop layout applies), a no-op
+// warning-free effect on the server.
+const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+/** Wide screens keep "Prefer to talk?" beside the pinned send button on /estimate. */
+const WIDE_QUERY = "(min-width: 1024px)";
+import { useForm, type FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Loader2, MessageSquare, MessagesSquare, Phone, X } from "lucide-react";
+import { AttachmentTile, uploadLeadFile, useLeadFiles, type PendingLeadFile } from "@/components/quote/LeadAttachments";
+import { QuoteDetailsStep, type DetailsFields } from "@/components/quote/QuoteDetailsStep";
+import { MAX_LEAD_FILES } from "@/shared/leadFiles";
+import { BEST_TIMES, PROJECT_LABEL_LOOKUP } from "@/shared/quoteFormChoices";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Check, CheckCircle2, Plus, X, ChevronDown } from "lucide-react";
 import type { StoredEstimate } from "@/shared/estimateEngine";
 import { FINISH_LABELS, PROJECT_LABELS, formatPlanningCurrency } from "@/shared/estimateEngine";
 import { DisplayNum } from "@/components/marketing/DisplayNum";
-import { AddressAutocomplete } from "@/components/AddressAutocomplete";
-import { EstimateCTA } from "@/components/modals/EstimateCTA";
-import { CTA_FORM_SEND } from "@/shared/ctaCopy";
-import { CONSULT_BULLETS } from "@/shared/siteContent";
+import { CTA_FORM_CALLBACK, CTA_FORM_SEND } from "@/shared/ctaCopy";
 import { BusinessPhoneContact } from "@/components/BusinessPhoneContact";
+import { SITE_CONFIG } from "@/shared/siteConfig";
 import { trackEvent, trackClaimedLeadConversion } from "@/lib/analytics";
 import { readStoredPrefill, PREFILL_UPDATED_EVENT, hasPassedGate } from "@/lib/leadPrefill";
 import {
@@ -38,146 +36,116 @@ import {
   readInquiryTracking,
   recordInquiryAcceptance,
 } from "@/lib/inquiryTracking";
-import type { PropertyProfile } from "@/shared/propertyProfile";
-import {
-  isLocatableSite,
-  SITE_LOCATION_ERROR_MESSAGE,
-  buildCleanAddress,
-  extractZip,
-} from "@/shared/addressValidation";
-import {
-  AppFrame,
-  SelectableCard,
-  WizardActionBar,
-  WizardProgress,
-  WizardStep,
-} from "@/components/estimate/wizard";
+import { extractZip } from "@/shared/addressValidation";
+import { AppFrame } from "@/components/estimate/wizard";
 
-const LAND_SEARCH_PROJECT_TYPE = "looking-for-land";
-const SOMETHING_ELSE = "something-else";
+/**
+ * THE QUOTE FORM, in two steps (owner, 1 November: "the easiest user
+ * experience possible ... the more information we have, the better").
+ *
+ * Step 1, one short screen, in order: what we can help with, an optional
+ * attachment tile, name, phone, email (optional unless Email is the chosen
+ * way to reach you), how to reach you (Call, Text, Email; Text by default
+ * because the site has a text line), send. "Have us call you" (the second half
+ * of the segmented control under the heading) reduces it to name, phone and
+ * an optional best time, and posts through the same /api/consultation
+ * pipeline with requestKind "callback"; the server writes the callback marker
+ * into the notes every destination stores (server/services/consultationRequest.ts).
+ *
+ * Files never ride on the request: the lead is accepted first, then each file
+ * is uploaded on its own (/api/consultation/files) and its link is sent to the
+ * team as details on the same request. A failed upload is named on the success
+ * screen with Retry and a text link; the lead is already safe.
+ *
+ * Step 2, on the success screen: "Help us prepare (optional)" adds project
+ * type, build site, timing, best time, more files and (if missing) email to
+ * the SAME request (components/quote/QuoteDetailsStep.tsx).
+ *
+ * Kept exactly as before: the endpoint and field names, the attached planning
+ * range from the calculator (the server re-prices it), the honeypot and dwell
+ * time, the session draft, the lead prefill, form_start / form_error, the
+ * claimed generate_lead conversion (GA4, Meta, attribution) and the delegated
+ * call and text tracking (any tel: or sms: link).
+ *
+ * data-step stays "project": scripts/verify-p5-mobile-seo.mjs (owner-approved,
+ * not edited) asserts that attribute on arrival at /estimate. There is only one
+ * step now; the attribute is the pinned marker, not a wizard position.
+ */
 
 const CONTACT_METHODS = [
-  { value: "email", label: "Email" },
-  { value: "phone", label: "Phone call" },
+  { value: "phone", label: "Call" },
   { value: "text", label: "Text" },
+  { value: "email", label: "Email" },
 ] as const;
 
-const DRAFT_KEY = "construction_quote_wizard_v1";
+type ContactMethod = (typeof CONTACT_METHODS)[number]["value"];
+
+/** The default way to reach you: this site has a text line (SITE_CONFIG.phoneSmsHref). */
+const DEFAULT_CONTACT: ContactMethod = "text";
+
+const DRAFT_KEY = "construction_quote_form_v2";
+const FORM_ID = "quote-request-form";
+
+const phoneDigits = (value: string) => value.replace(/\D/g, "").length;
 
 const formSchema = z
   .object({
-    name: z.string().min(2, "Please enter your full name"),
-    preferredContact: z.enum(["email", "phone", "text"]),
+    name: z.string().trim().min(2, "Please enter your name."),
     phone: z.string(),
-    email: z.string(),
-    address: z.string(),
-    projectType: z.string().min(1, "Please select a project type"),
-    message: z.string().optional(),
+    message: z.string().max(5_000, "Please keep this under 5,000 characters."),
+    preferredContact: z.enum(["phone", "text", "email"]),
+    email: z.string().trim(),
+    callback: z.boolean(),
+    bestTimeToCall: z.string(),
+    projectType: z.string(),
+    address: z.string().max(300),
   })
   .superRefine((data, ctx) => {
-    if (data.preferredContact === "email") {
-      if (!z.string().email().safeParse(data.email).success) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["email"],
-          message: "Please enter a valid email address",
-        });
-      }
-    } else if (data.phone.replace(/\D/g, "").length < 10) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["phone"],
-        message:
-          data.preferredContact === "text"
-            ? "Please enter a valid mobile number"
-            : "Please enter a valid phone number",
-      });
-    }
-
-    if (data.projectType === LAND_SEARCH_PROJECT_TYPE || data.projectType === SOMETHING_ELSE) return;
-    const address = data.address.trim();
-    if (address.length < 5) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["address"],
-        message: "Please enter your build site address",
-      });
+    const issue = (path: string, message: string) =>
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: [path], message });
+    if (data.callback) {
+      if (phoneDigits(data.phone) < 10) issue("phone", "Please enter a phone number we can call, with area code.");
       return;
     }
-    if (!isLocatableSite(address)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["address"],
-        message: SITE_LOCATION_ERROR_MESSAGE,
-      });
+    if (data.message.trim().length < 2) issue("message", "Please tell us a few words about what you need.");
+    // Phone is always asked for: it is how the team follows up on any request.
+    if (phoneDigits(data.phone) < 10) {
+      issue(
+        "phone",
+        data.preferredContact === "text"
+          ? "Please enter a mobile number we can text, with area code."
+          : "Please enter a phone number, with area code.",
+      );
+    }
+    if (data.preferredContact === "email") {
+      if (!z.string().email().safeParse(data.email).success) {
+        issue("email", "Please enter an email address so we can email you.");
+      }
+    } else if (data.email && !z.string().email().safeParse(data.email).success) {
+      issue("email", "Please check the email address, or leave it blank.");
     }
   });
 
 type FormData = z.infer<typeof formSchema>;
+type FieldName = keyof FormData;
 
-/** Six primary cards (D2). Remaining types route through Something else. */
-const PRIMARY_CHOICES = [
-  { value: "custom-home", label: "Custom Home", sub: "Drawn from a blank page" },
-  { value: "semi-custom-home", label: "Semi-Custom", sub: "Proven plan, your choices" },
-  { value: "build-on-my-lot", label: "Build on My Lot", sub: "You already own the land" },
-  { value: "shop-home", label: "Shop Home", sub: "House and shop together" },
-  { value: "looking-for-land", label: "Still Looking for Land", sub: "No site address yet" },
-  { value: SOMETHING_ELSE, label: "Something else", sub: "Plans, addition, lot eval, other" },
-] as const;
+/** Field order, so the first error on submit is the first one on screen. */
+const FIELD_ORDER: FieldName[] = ["message", "name", "phone", "email", "preferredContact"];
 
-const DETAIL_CHOICES = [
-  { value: "plans-only", label: "Home Design & Plans", sub: "Drawings without building" },
-  { value: "addition", label: "Home Addition", sub: "New space on an existing home" },
-  { value: "lot-evaluation", label: "Lot Evaluation", sub: "Feasibility before you buy" },
-  { value: "other", label: "Other / Not sure yet", sub: "Tell us in a note" },
-] as const;
-
-const PROJECT_LABEL_LOOKUP: Record<string, string> = {
-  ...Object.fromEntries(PRIMARY_CHOICES.map((o) => [o.value, o.label])),
-  ...Object.fromEntries(DETAIL_CHOICES.map((o) => [o.value, o.label])),
-};
-
-type StepId = "project" | "detail" | "name" | "prefer" | "reach" | "site" | "review";
-
-/** Older drafts stored the combined contact step as `contact`. */
-function normalizeDraftStep(step: string | undefined): StepId | undefined {
-  if (!step) return undefined;
-  if (step === "contact") return "name";
-  if (
-    step === "project" ||
-    step === "detail" ||
-    step === "name" ||
-    step === "prefer" ||
-    step === "reach" ||
-    step === "site" ||
-    step === "review"
-  ) {
-    return step;
-  }
-  return undefined;
-}
-
-const labelClass = "text-xs tracking-wide font-normal uppercase text-muted-foreground";
-
-function RequiredMark() {
-  return (
-    <span className="text-destructive" aria-hidden="true">
-      {" "}*
-    </span>
-  );
-}
-
-function readDraft(): Partial<FormData> & { step?: StepId; detailPending?: boolean } {
+function readDraft(): Partial<FormData> {
   try {
     const raw = sessionStorage.getItem(DRAFT_KEY);
     if (!raw) return {};
-    return JSON.parse(raw) as Partial<FormData> & { step?: StepId; detailPending?: boolean };
+    const parsed = JSON.parse(raw) as Partial<FormData> & { preferredContact?: string };
+    // Drafts from the old wizard defaulted to email; keep a real choice only.
+    if (!CONTACT_METHODS.some((m) => m.value === parsed.preferredContact)) delete parsed.preferredContact;
+    return parsed;
   } catch {
     return {};
   }
 }
 
-function writeDraft(data: Partial<FormData> & { step: StepId; detailPending?: boolean }) {
+function writeDraft(data: Partial<FormData>) {
   try {
     sessionStorage.setItem(DRAFT_KEY, JSON.stringify(data));
   } catch {
@@ -196,28 +164,127 @@ function clearDraft() {
 export interface QuoteRequestWizardProps {
   onRevise?: () => void;
   showTrust?: boolean;
-  /** AppFrame full-screen flow for /estimate; embedded for contact / home / modal. */
+  /** AppFrame full-screen page for /estimate; embedded for the home and contact pages. */
   mode?: "app" | "embedded";
 }
 
-export function QuoteRequestWizard({
-  onRevise,
-  showTrust = false,
-  mode = "embedded",
-}: QuoteRequestWizardProps = {}) {
+type Tone = "inverse" | "default";
+
+function toneClasses(tone: Tone) {
+  const inverse = tone === "inverse";
+  return {
+    label: cn("block text-[0.9375rem] font-medium leading-snug", inverse ? "text-inverse-foreground" : "text-foreground"),
+    hint: cn("text-[0.8125rem] font-normal", inverse ? "text-inverse-muted" : "text-muted-foreground"),
+    error: cn("text-[0.8125rem]", inverse ? "text-[#f4c3b4]" : "text-destructive"),
+    control: cn(
+      "w-full rounded-sm border px-3 text-base transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+      inverse
+        ? "border-inverse-foreground/30 bg-[#fbfaf6] text-[#2c302f] placeholder:text-[#6b6d67] focus-visible:ring-[#e3c08d] focus-visible:ring-offset-[#2c302f]"
+        : "border-input bg-background text-foreground placeholder:text-muted-foreground/80 focus-visible:ring-ring focus-visible:ring-offset-background",
+    ),
+    invalid: inverse ? "border-[#f4c3b4]" : "border-destructive",
+    pill: cn(
+      "flex min-h-12 cursor-pointer items-center justify-center rounded-sm border px-2 text-center text-[0.9375rem] transition-colors",
+      "peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2",
+      inverse
+        ? "border-inverse-foreground/30 text-inverse-foreground peer-checked:border-[#fbfaf6] peer-checked:bg-[#fbfaf6] peer-checked:text-[#2c302f] peer-focus-visible:ring-[#e3c08d] peer-focus-visible:ring-offset-[#2c302f]"
+        : "border-border text-foreground peer-checked:border-foreground peer-checked:bg-foreground peer-checked:text-background peer-focus-visible:ring-ring",
+    ),
+    link: cn(
+      "inline-flex min-h-12 items-center gap-1.5 font-medium underline underline-offset-4",
+      inverse ? "text-inverse-foreground decoration-inverse-foreground/40" : "text-foreground decoration-foreground/30",
+    ),
+    rule: inverse ? "border-inverse-foreground/15" : "border-border",
+    muted: inverse ? "text-inverse-muted" : "text-muted-foreground",
+    text: inverse ? "text-inverse-foreground" : "text-foreground",
+  };
+}
+
+function Field({
+  id,
+  label,
+  optional,
+  hint,
+  error,
+  tone,
+  children,
+}: {
+  id: string;
+  label: string;
+  optional?: boolean;
+  hint?: ReactNode;
+  error?: string;
+  tone: Tone;
+  children: ReactNode;
+}) {
+  const t = toneClasses(tone);
+  return (
+    <div className="grid gap-1.5">
+      <label htmlFor={id} className={t.label}>
+        {label}
+        {optional && <span className={cn("ml-1", t.hint)}>(optional)</span>}
+      </label>
+      {hint && (
+        <p id={`${id}-hint`} className={t.hint}>
+          {hint}
+        </p>
+      )}
+      {children}
+      <p id={`${id}-error`} className={t.error} aria-live="polite">
+        {error ?? ""}
+      </p>
+    </div>
+  );
+}
+
+export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust = false, mode = "embedded" }: QuoteRequestWizardProps = {}) {
+  const tone: Tone = mode === "app" ? "inverse" : "default";
+  const t = toneClasses(tone);
+  // Stable ids, not useId: the error lookup, labels and aria-describedby must agree
+  // with the server HTML on every load. One instance per surface: the /estimate page,
+  // the in-page form (home or contact) and the consultation dialog.
+  const uid = mode === "app" ? "app" : _showTrust ? "dialog" : "page";
+  const ids = {
+    heading: `quote-form-heading-${uid}`,
+    name: `quote-name-${uid}`,
+    phone: `quote-phone-${uid}`,
+    message: `quote-message-${uid}`,
+    email: `quote-email-${uid}`,
+    best: `quote-best-${uid}`,
+    files: `quote-files-${uid}`,
+    next: `quote-next-${uid}`,
+  };
+  const formId = mode === "app" ? FORM_ID : `${FORM_ID}-${uid}`;
+
   const [estimate, setEstimate] = useState<StoredEstimate | null>(null);
-  const [estimateChecked, setEstimateChecked] = useState(false);
   const [attached, setAttached] = useState(true);
   const [success, setSuccess] = useState(false);
   const [submitted, setSubmitted] = useState<FormData | null>(null);
-  const [propertyProfile, setPropertyProfile] = useState<PropertyProfile | null>(null);
-  const [addressInput, setAddressInput] = useState("");
-  const [showNote, setShowNote] = useState(false);
-  const [showAddrInfo, setShowAddrInfo] = useState(false);
+  // Files chosen on Step 1. They upload only after the request is accepted.
+  const attachments = useLeadFiles();
+  // Issued by /api/consultation: lets this visitor add files and details to the
+  // same request for two hours.
+  const [auth, setAuth] = useState<{ inquiryKey: string; token: string } | null>(null);
+  const [uploadPhase, setUploadPhase] = useState<"idle" | "uploading" | "done">("idle");
+  // Stored file ids the team has not been sent yet, and the chain that keeps
+  // details posts in order so one file is never announced twice.
+  const unsentFileIds = useRef<string[]>([]);
+  const detailsChain = useRef<Promise<unknown>>(Promise.resolve());
   const [website, setWebsite] = useState("");
-  const [stepIndex, setStepIndex] = useState(0);
-  const [detailPending, setDetailPending] = useState(false);
-  const [stepError, setStepError] = useState<string | null>(null);
+  // Until React has hydrated, the send button is a plain button: a tap before then
+  // must not fall through to a native GET submit that puts the fields in the URL.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+  // /estimate on phones pins only the send button; the talk options join the fields.
+  const [wide, setWide] = useState(false);
+  useIsomorphicLayoutEffect(() => {
+    const query = window.matchMedia(WIDE_QUERY);
+    const update = () => setWide(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  const talkInFooter = mode === "app" && wide;
   const lastKeyRef = useRef<string | null>(null);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
   const formMountedAtRef = useRef(Date.now());
@@ -225,176 +292,70 @@ export function QuoteRequestWizard({
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    // Validate on blur, then on every change once a field has been touched.
     mode: "onTouched",
+    shouldFocusError: false,
     defaultValues: {
       name: "",
-      preferredContact: "email",
       phone: "",
-      email: "",
-      address: "",
-      projectType: "",
       message: "",
+      preferredContact: DEFAULT_CONTACT,
+      email: "",
+      callback: false,
+      bestTimeToCall: "",
+      projectType: "",
+      address: "",
     },
   });
-
-  const preferredContact = form.watch("preferredContact");
-  const projectType = form.watch("projectType");
-  const searchingForLand = projectType === LAND_SEARCH_PROJECT_TYPE;
-  const watched = form.watch();
-
-  const steps = useMemo(() => {
-    const list: { id: StepId; label: string }[] = [{ id: "project", label: "Project" }];
-    if (detailPending || projectType === SOMETHING_ELSE) {
-      list.push({ id: "detail", label: "Details" });
-    }
-    // C10 fit sequence #1: one keyboard field per text step.
-    list.push({ id: "name", label: "Name" });
-    list.push({ id: "prefer", label: "Prefer" });
-    list.push({ id: "reach", label: "Reach" });
-    if (!searchingForLand) {
-      list.push({ id: "site", label: "Site" });
-    }
-    list.push({ id: "review", label: "Review" });
-    return list;
-  }, [detailPending, projectType, searchingForLand]);
-
-  // Keep stepIndex in range when the step list shrinks (e.g. land search).
-  useEffect(() => {
-    if (stepIndex > steps.length - 1) {
-      setStepIndex(Math.max(0, steps.length - 1));
-    }
-  }, [steps.length, stepIndex]);
+  const { register, formState, setValue, getValues, watch } = form;
+  const errors = formState.errors;
+  const watched = watch();
+  const callback = watched.callback;
+  const preferredContact = watched.preferredContact;
 
   useEffect(() => {
     if (draftHydrated.current) return;
     draftHydrated.current = true;
     const draft = readDraft();
-    if (draft.projectType) {
-      form.setValue("projectType", draft.projectType, { shouldValidate: false });
-      if (draft.detailPending || draft.projectType === SOMETHING_ELSE) {
-        setDetailPending(true);
-      }
-    }
-    if (draft.name) form.setValue("name", draft.name, { shouldValidate: false });
-    if (draft.preferredContact) {
-      form.setValue("preferredContact", draft.preferredContact, { shouldValidate: false });
-    }
-    if (draft.phone) form.setValue("phone", draft.phone, { shouldValidate: false });
-    if (draft.email) form.setValue("email", draft.email, { shouldValidate: false });
-    if (draft.address) {
-      setAddressInput(draft.address);
-      form.setValue("address", draft.address, { shouldValidate: false });
-    }
-    if (draft.message) {
-      form.setValue("message", draft.message, { shouldValidate: false });
-      setShowNote(true);
-    }
-    const restoredStep = normalizeDraftStep(draft.step);
-    if (restoredStep) {
-      // Resolve after steps recompute on next paint
-      requestAnimationFrame(() => {
-        const idx = steps.findIndex((s) => s.id === restoredStep);
-        if (idx >= 0) setStepIndex(idx);
-      });
-    }
-  }, [form, steps]);
-
-  useEffect(() => {
-    if (success) return;
-    const step = steps[stepIndex]?.id ?? "project";
-    writeDraft({
-      projectType: watched.projectType,
-      name: watched.name,
-      preferredContact: watched.preferredContact,
-      phone: watched.phone,
-      email: watched.email,
-      address: watched.address,
-      message: watched.message,
-      step,
-      detailPending,
+    (["name", "phone", "message", "email", "bestTimeToCall", "projectType", "address"] as const).forEach((key) => {
+      const value = draft[key];
+      if (typeof value === "string" && value) setValue(key, value, { shouldValidate: false });
     });
-  }, [watched, stepIndex, success, steps, detailPending]);
+    if (draft.preferredContact) setValue("preferredContact", draft.preferredContact, { shouldValidate: false });
+    if (draft.callback) setValue("callback", true, { shouldValidate: false });
+  }, [setValue]);
 
-  // Embedded mode: keep the focused field above the fixed Back/Next dock when
-  // the software keyboard (or design-review VV mock) is open (C10).
   useEffect(() => {
-    if (mode !== "embedded") return;
-    const onFocusIn = (event: FocusEvent) => {
-      const target = event.target;
-      if (!(target instanceof HTMLElement)) return;
-      if (!target.matches("input, textarea, [contenteditable='true']")) return;
-      window.setTimeout(() => {
-        const bar = document.querySelector<HTMLElement>("[data-wizard-action-bar-docked='true']");
-        const barTop = bar?.getBoundingClientRect().top ?? window.innerHeight;
-        const rect = target.getBoundingClientRect();
-        if (rect.bottom > barTop - 12) {
-          const delta = rect.bottom - barTop + 24;
-          window.scrollBy({ top: delta, behavior: "smooth" });
-        }
-      }, 50);
-    };
-    document.addEventListener("focusin", onFocusIn);
-    return () => document.removeEventListener("focusin", onFocusIn);
-  }, [mode]);
+    if (success || !draftHydrated.current) return;
+    writeDraft(watched);
+  }, [watched, success]);
 
-  // Browser Back restores the previous wizard step (D2).
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const onPop = (e: PopStateEvent) => {
-      const idx = typeof e.state?.quoteStep === "number" ? e.state.quoteStep : null;
-      if (idx !== null && idx >= 0 && idx < steps.length) {
-        setStepIndex(idx);
-        setStepError(null);
-      }
-    };
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
-  }, [steps.length]);
-
-  function handleProfileResolved(profile: PropertyProfile | null) {
-    setPropertyProfile(profile);
-    if (profile) {
-      const clean = buildCleanAddress(profile);
-      if (clean) {
-        setAddressInput(clean);
-        form.setValue("address", clean, { shouldValidate: true });
-      }
-    }
-  }
-
-  const deriveZip = (addr: string) =>
-    propertyProfile?.zip?.slice(0, 5) || extractZip(addr) || "";
+  // The build site is asked on Step 2; a site typed earlier in the calculator
+  // gate (lead prefill) still rides along on the request.
+  const deriveZip = (addr: string) => extractZip(addr) || "";
 
   useEffect(() => {
     function applyPrefill() {
       const pf = readStoredPrefill();
       const fillIfEmpty = (field: "name" | "phone" | "email", value?: string) => {
-        if (value && !form.getValues(field)) {
-          form.setValue(field, value, { shouldValidate: false });
-        }
+        if (value && !getValues(field)) setValue(field, value, { shouldValidate: false });
       };
       fillIfEmpty("name", pf.name);
       fillIfEmpty("phone", pf.phone);
       fillIfEmpty("email", pf.email);
-      if (pf.address && !form.getValues("address")) {
-        setAddressInput(pf.address);
-        form.setValue("address", pf.address, { shouldValidate: false });
-      }
+      if (pf.address && !getValues("address")) setValue("address", pf.address, { shouldValidate: false });
     }
     applyPrefill();
-    if (
-      new URLSearchParams(window.location.search).get("service") === "home-additions" &&
-      !form.getValues("projectType")
-    ) {
-      form.setValue("projectType", "addition", { shouldValidate: false });
+    if (new URLSearchParams(window.location.search).get("service") === "home-additions" && !getValues("projectType")) {
+      setValue("projectType", "addition", { shouldValidate: false });
     }
     window.addEventListener(PREFILL_UPDATED_EVENT, applyPrefill);
     return () => window.removeEventListener(PREFILL_UPDATED_EVENT, applyPrefill);
-  }, [form]);
+  }, [getValues, setValue]);
 
+  // A planning range built in the calculator rides along; the server re-prices it.
   useEffect(() => {
     function loadEstimate() {
-      setEstimateChecked(true);
       try {
         const raw = sessionStorage.getItem("brc_estimate");
         if (!raw) {
@@ -409,13 +370,13 @@ export function QuoteRequestWizard({
         lastKeyRef.current = key;
         setEstimate(parsed);
         setAttached(true);
-        form.setValue("projectType", parsed.project, { shouldValidate: false });
+        setValue("projectType", parsed.project, { shouldValidate: false });
       } catch {}
     }
     loadEstimate();
     window.addEventListener("brc_estimate_updated", loadEstimate);
     return () => window.removeEventListener("brc_estimate_updated", loadEstimate);
-  }, [form]);
+  }, [setValue]);
 
   useEffect(() => {
     if (!success) return;
@@ -425,10 +386,7 @@ export function QuoteRequestWizard({
       let scrolledContainer = false;
       while (ancestor && ancestor !== document.body && ancestor !== document.documentElement) {
         const overflowY = getComputedStyle(ancestor).overflowY;
-        if (
-          (overflowY === "auto" || overflowY === "scroll") &&
-          ancestor.scrollHeight > ancestor.clientHeight
-        ) {
+        if ((overflowY === "auto" || overflowY === "scroll") && ancestor.scrollHeight > ancestor.clientHeight) {
           ancestor.scrollTo({ top: 0, behavior: "auto" });
           scrolledContainer = true;
           break;
@@ -436,34 +394,112 @@ export function QuoteRequestWizard({
         ancestor = ancestor.parentElement;
       }
       if (!scrolledContainer) {
-        const top = el.getBoundingClientRect().top + window.scrollY - 80;
+        const header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-height")) || 64;
+        const top = el.getBoundingClientRect().top + window.scrollY - header - 16;
         window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
       }
     }
     el?.focus({ preventScroll: true });
   }, [success]);
 
-  function handleRevise() {
-    if (onRevise) {
-      onRevise();
-    } else {
-      document.getElementById("calculator")?.scrollIntoView({ behavior: "smooth" });
+  /** Upload files one at a time for the accepted request; resolves with the stored ids. */
+  async function uploadFiles(
+    list: PendingLeadFile[],
+    update: (key: string, patch: Partial<PendingLeadFile>) => void,
+    granted = auth,
+  ): Promise<string[]> {
+    if (!granted) return [];
+    const ids: string[] = [];
+    for (const item of list) {
+      update(item.key, { status: "uploading", error: undefined });
+      const result = await uploadLeadFile(item.file, granted);
+      if (result.ok) {
+        ids.push(result.id);
+        update(item.key, { status: "uploaded", storedId: result.id });
+      } else {
+        update(item.key, { status: "failed", error: result.message });
+      }
     }
+    return ids;
+  }
+
+  /** Details and file links for the same request, posted one at a time and in order. */
+  function sendDetails(
+    fields: DetailsFields,
+    fileIds: string[],
+    granted = auth,
+  ): Promise<{ ok: true } | { ok: false; message: string }> {
+    const run = async (): Promise<{ ok: true } | { ok: false; message: string }> => {
+      if (!granted) return { ok: false, message: "We could not save these details. Please text or call us." };
+      const ids = [...new Set([...unsentFileIds.current, ...fileIds])];
+      unsentFileIds.current = [];
+      try {
+        const res = await fetch("/api/consultation/details", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ inquiryKey: granted.inquiryKey, token: granted.token, ...fields, fileIds: ids, website: "" }),
+        });
+        if (res.ok) return { ok: true };
+        unsentFileIds.current.push(...ids);
+        const err = (await res.json().catch(() => ({}))) as { reason?: string };
+        return {
+          ok: false,
+          message:
+            err.reason === "expired"
+              ? "This page has been open a while, so we could not save this. Please text or call us with the details."
+              : "We could not save these details. Please try again, or text us.",
+        };
+      } catch {
+        unsentFileIds.current.push(...ids);
+        return { ok: false, message: "We could not save these details. Check your connection and try again." };
+      }
+    };
+    const next = detailsChain.current.then(run, run);
+    detailsChain.current = next;
+    return next;
+  }
+
+  /** Step 1 files go up after the request is safe, then their links go to the team. */
+  async function uploadStepOneFiles(granted: { inquiryKey: string; token: string }) {
+    const pending = attachments.filesRef.current.filter((f) => f.status === "ready" || f.status === "failed");
+    if (!pending.length) return;
+    setUploadPhase("uploading");
+    const ids = await uploadFiles(pending, attachments.update, granted);
+    if (ids.length) await sendDetails({}, ids, granted);
+    setUploadPhase("done");
+  }
+
+  async function retryFile(key: string) {
+    const item = attachments.filesRef.current.find((f) => f.key === key);
+    if (!item || !auth) return;
+    setUploadPhase("uploading");
+    const ids = await uploadFiles([item], attachments.update);
+    if (ids.length) await sendDetails({}, ids);
+    setUploadPhase("done");
   }
 
   const mutation = useMutation({
     mutationFn: async (data: FormData) => {
       const existingTracking = readInquiryTracking();
       const tracking = getOrCreateInquiryTracking();
+      const isCallback = data.callback;
       const payload = {
-        ...data,
+        name: data.name.trim(),
+        // A callback is a call; the server enforces the same rule.
+        preferredContact: isCallback ? "phone" : data.preferredContact,
+        phone: data.phone.trim(),
+        email: isCallback ? "" : data.email.trim(),
+        address: isCallback ? "" : data.address.trim(),
+        projectType: data.projectType || undefined,
+        message: data.message.trim() || undefined,
+        requestKind: isCallback ? "callback" : "quote",
+        bestTimeToCall: isCallback && data.bestTimeToCall ? data.bestTimeToCall : undefined,
         inquiryKey: tracking.inquiryKey,
-        submissionKind:
-          hasPassedGate() || existingTracking?.acceptedAt ? "followup" : "initial",
+        submissionKind: hasPassedGate() || existingTracking?.acceptedAt ? "followup" : "initial",
         formStartedAt: formMountedAtRef.current,
         website,
-        zip: deriveZip(data.address),
-        propertyProfile,
+        zip: isCallback ? "" : deriveZip(data.address),
+        propertyProfile: null,
         skipEmail: hasPassedGate() ? true : undefined,
         estimate:
           estimate && attached
@@ -488,12 +524,19 @@ export function QuoteRequestWizard({
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err.message || "Something went wrong");
+        throw new Error(
+          res.status === 429 && err.message === "Please wait before submitting"
+            ? "Please wait a moment, then send again."
+            : err.message === "Invalid request"
+              ? "Please check your details and try again."
+              : err.message || "Something went wrong",
+        );
       }
       const response = (await res.json()) as {
         accepted?: boolean;
         inquiryKey?: string;
         conversionId?: string;
+        detailsToken?: string;
       };
       if (
         response.accepted !== true ||
@@ -506,6 +549,11 @@ export function QuoteRequestWizard({
     },
     onSuccess: ({ response }, variables) => {
       setSuccess(true);
+      if (response.detailsToken) {
+        const granted = { inquiryKey: response.inquiryKey!, token: response.detailsToken };
+        setAuth(granted);
+        if (!variables.callback) void uploadStepOneFiles(granted);
+      }
       clearDraft();
       sessionStorage.removeItem("brc_estimate");
       markEstimatorCompleted("consultation");
@@ -513,17 +561,18 @@ export function QuoteRequestWizard({
         inquiryKey: response.inquiryKey!,
         conversionId: response.conversionId!,
       });
+      const projectType = variables.projectType || "other";
       void trackClaimedLeadConversion({
         inquiryKey: acceptedTracking.inquiryKey,
         claimKey: acceptedTracking.claimKey,
         conversionId: response.conversionId!,
         ga4Params: {
           form: "consultation",
-          project_type: variables.projectType,
+          project_type: projectType,
           has_estimate: !!estimate && attached,
         },
         metaParams: {
-          content_name: variables.projectType,
+          content_name: projectType,
           content_category: "consultation_request",
         },
       });
@@ -540,124 +589,94 @@ export function QuoteRequestWizard({
     trackEvent("form_start", { form: "consultation" });
   }
 
-  const goBack = useCallback(() => {
-    setStepError(null);
-    setStepIndex((i) => {
-      const next = Math.max(0, i - 1);
-      if (typeof window !== "undefined") {
-        window.history.pushState({ quoteStep: next }, "");
-      }
-      return next;
+  function focusFirstError(fieldErrors: FieldErrors<FormData>) {
+    const first = FIELD_ORDER.find((name) => fieldErrors[name]);
+    if (!first) return;
+    const target =
+      first === "preferredContact"
+        ? document.querySelector<HTMLInputElement>(`#${formId} input[name="preferredContact"]:checked`)
+        : document.getElementById(ids[first as "name" | "phone" | "message" | "email"]);
+    target?.focus();
+  }
+
+  // Focus the first error once React has committed the error state: a focus moved
+  // inside the submit handler can be lost to the tap that is still landing on the
+  // send button, so it is applied again after the render.
+  const pendingErrorFocus = useRef<FieldErrors<FormData> | null>(null);
+  useEffect(() => {
+    if (!pendingErrorFocus.current) return;
+    const frame = requestAnimationFrame(() => {
+      const fieldErrors = pendingErrorFocus.current;
+      pendingErrorFocus.current = null;
+      if (fieldErrors) focusFirstError(fieldErrors);
     });
-  }, []);
+    return () => cancelAnimationFrame(frame);
+  });
 
-  async function validateStep(id: StepId): Promise<boolean> {
-    setStepError(null);
-    if (id === "project") {
-      const ok = await form.trigger("projectType");
-      const value = form.getValues("projectType");
-      if (!ok || !value || value === SOMETHING_ELSE) {
-        if (value === SOMETHING_ELSE) {
-          setDetailPending(true);
-          return true;
-        }
-        setStepError("Please choose what you want to build.");
-        return false;
-      }
-      setDetailPending(false);
-      return true;
-    }
-    if (id === "detail") {
-      const value = form.getValues("projectType");
-      if (!DETAIL_CHOICES.some((c) => c.value === value)) {
-        setStepError("Please choose a more specific project type.");
-        return false;
-      }
-      return true;
-    }
-    if (id === "name") {
-      const ok = await form.trigger("name");
-      if (!ok) {
-        setStepError("Please enter your name.");
-        return false;
-      }
-      return true;
-    }
-    if (id === "prefer") {
-      const ok = await form.trigger("preferredContact");
-      if (!ok) {
-        setStepError("Please choose how we should reach you.");
-        return false;
-      }
-      return true;
-    }
-    if (id === "reach") {
-      const method = form.getValues("preferredContact");
-      const contactOk =
-        method === "email"
-          ? await form.trigger("email")
-          : await form.trigger("phone");
-      if (!contactOk) {
-        setStepError(
-          method === "email"
-            ? "Please enter a valid email address."
-            : "Please enter a valid phone number.",
-        );
-        return false;
-      }
-      return true;
-    }
-    if (id === "site") {
-      if (form.getValues("projectType") === LAND_SEARCH_PROJECT_TYPE) return true;
-      const ok = await form.trigger("address");
-      if (!ok) {
-        setStepError("Please enter your build site address.");
-        return false;
-      }
-      return true;
-    }
-    return true;
+  const onSubmit = form.handleSubmit(
+    (data) => {
+      setSubmitted(data);
+      mutation.mutate(data);
+    },
+    (fieldErrors) => {
+      trackEvent("form_error", {
+        form: "consultation",
+        fields: Object.keys(fieldErrors).sort().join(","),
+      });
+      focusFirstError(fieldErrors);
+      pendingErrorFocus.current = fieldErrors;
+    },
+  );
+
+  function setCallback(on: boolean) {
+    setValue("callback", on, { shouldDirty: true });
+    // Re-check only what is still on screen, and only what was already touched.
+    form.clearErrors(["message", "email"]);
+    if (formState.touchedFields.phone) void form.trigger("phone");
   }
 
-  async function goNext() {
-    const id = steps[stepIndex]?.id;
-    if (!id) return;
-    const ok = await validateStep(id);
-    if (!ok) return;
-    if (stepIndex < steps.length - 1) {
-      const next = stepIndex + 1;
-      setStepIndex(next);
-      if (typeof window !== "undefined") {
-        window.history.pushState({ quoteStep: next }, "");
-      }
-      return;
-    }
-    // Guard: never submit with the something-else sentinel.
-    if (form.getValues("projectType") === SOMETHING_ELSE) {
-      setStepError("Please choose a more specific project type.");
-      return;
-    }
-    form.handleSubmit(
-      (data) => {
-        setSubmitted(data);
-        mutation.mutate(data);
-      },
-      (errors) => {
-        trackEvent("form_error", {
-          form: "consultation",
-          fields: Object.keys(errors).sort().join(","),
-        });
-        setStepError("Please fix the highlighted fields.");
-      },
-    )();
-  }
+  const describedBy = (id: string, hasHint: boolean, error?: string) =>
+    [hasHint ? `${id}-hint` : null, error ? `${id}-error` : null].filter(Boolean).join(" ") || undefined;
+
+  const firstName = submitted?.name.trim().split(/\s+/)[0] ?? "";
+
+  const failedUploads = attachments.files.filter((f) => f.status === "failed");
+  const addedUploads = attachments.files.filter((f) => f.status === "uploaded");
+  const uploadSummary =
+    uploadPhase === "uploading"
+      ? `Uploading your files (${addedUploads.length + failedUploads.length + 1} of ${attachments.files.length})`
+      : failedUploads.length
+        ? `${failedUploads.length === 1 ? `${failedUploads[0].file.name} did not upload` : `${failedUploads.length} files did not upload`}.`
+        : `${addedUploads.length === 1 ? "1 file" : `${addedUploads.length} files`} added to your request.`;
+  // The same chips, read-only apart from Retry on a failed file.
+  const uploadList = (
+    <ul className="grid gap-1.5" aria-label="Your files">
+      {attachments.files.map((f) => (
+        <li key={f.key} className="flex min-h-11 items-center justify-between gap-3 text-sm" data-testid="quote-upload-item" data-status={f.status}>
+          <span className={cn("min-w-0 truncate", t.text)} data-clarity-mask="True">
+            {f.file.name}
+          </span>
+          <span className={cn("flex flex-shrink-0 items-center gap-2", f.status === "failed" ? (tone === "inverse" ? "text-[#f4c3b4]" : "text-destructive") : t.muted)}>
+            {f.status === "uploading" && <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />}
+            {{ ready: "Waiting", uploading: "Uploading", uploaded: "Added", failed: "Did not upload" }[f.status]}
+            {f.status === "failed" && (
+              <button
+                type="button"
+                onClick={() => void retryFile(f.key)}
+                className={cn("inline-flex min-h-11 items-center px-1 font-medium underline underline-offset-4", t.text)}
+                data-testid="button-retry-file"
+              >
+                Retry
+              </button>
+            )}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
 
   const successBlock = (
-    <div
-      className="flex flex-col items-start space-y-4 py-2"
-      data-testid="consultation-success"
-      data-clarity-mask="True"
-    >
+    <div className="flex flex-col items-start space-y-4 py-2" data-testid="consultation-success" data-clarity-mask="True">
       <img
         src="/brand/svg/icon/boise-construction-co-icon-accent.svg"
         alt="Boise Construction Co"
@@ -666,61 +685,96 @@ export function QuoteRequestWizard({
         className="h-12 w-12"
       />
       <div>
-        <h3
+        <h2
           ref={successHeadingRef}
           tabIndex={-1}
           data-clarity-mask="True"
-          className="font-serif text-2xl text-foreground outline-none"
+          className={cn("font-serif text-2xl outline-none", t.text)}
         >
-          Request received{submitted ? `, ${submitted.name.split(" ")[0]}` : ""}.
-        </h3>
-        {submitted && (
-          <p className="mt-1 text-sm text-muted-foreground" data-clarity-mask="True">
-            {PROJECT_LABEL_LOOKUP[submitted.projectType] ?? submitted.projectType}
+          Thanks{firstName ? `, ${firstName}` : ""}. We have your request.
+        </h2>
+        {submitted && !submitted.callback && submitted.projectType && (
+          <p className={cn("mt-1 text-sm", t.muted)} data-clarity-mask="True">
+            {PROJECT_LABEL_LOOKUP[submitted.projectType] ?? PROJECT_LABELS[submitted.projectType as keyof typeof PROJECT_LABELS]?.label ?? submitted.projectType}
             {submitted.address ? ` · ${submitted.address}` : ""}
           </p>
         )}
       </div>
-      <ol className="space-y-2.5 text-sm text-muted-foreground">
-        <li className="flex gap-3">
-          <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border border-border text-caption font-normal text-foreground">
-            1
-          </span>
-          <span className="pt-0.5">We review your request and any planning range you attached.</span>
-        </li>
-        <li className="flex gap-3">
-          <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border border-border text-caption font-normal text-foreground">
-            2
-          </span>
-          <span className="pt-0.5">We reach out within one business day to find a time that works.</span>
-        </li>
-        <li className="flex gap-3">
-          <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border border-border text-caption font-normal text-foreground">
-            3
-          </span>
-          <span className="pt-0.5">
-            Your free 60 to 90 minute in-home visit: planning guidance, design direction, no
-            obligation.
-          </span>
-        </li>
-      </ol>
+      {submitted?.callback ? (
+        <p className={cn("text-sm", t.muted)} data-testid="consultation-success-callback">
+          We will call you at <span data-clarity-mask="True">{submitted.phone}</span>
+          {submitted.bestTimeToCall ? ` (${submitted.bestTimeToCall.toLowerCase()} works best)` : ""}. We reply within
+          one business day.
+        </p>
+      ) : (
+        <ol className={cn("space-y-2.5 text-sm", t.muted)}>
+          {[
+            "We review your request and any planning range you attached.",
+            "We reach out within one business day to find a time that works.",
+            "Your free 60 to 90 minute planning consultation: planning guidance, design direction, no obligation.",
+          ].map((line, i) => (
+            <li key={line} className="flex gap-3">
+              <span
+                className={cn(
+                  "flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border text-caption font-normal",
+                  t.rule,
+                  t.text,
+                )}
+              >
+                {i + 1}
+              </span>
+              <span className="pt-0.5">{line}</span>
+            </li>
+          ))}
+        </ol>
+      )}
       <div className="flex flex-col gap-1">
-        <p className="text-sm text-muted-foreground">
+        <p className={cn("text-sm", t.muted)}>
           Need us sooner?{" "}
           <BusinessPhoneContact
             inline
             showPhoneIcon
-            phoneClassName="inline-flex items-center gap-1.5 font-normal text-foreground underline-offset-2 hover:underline"
-            saveClassName="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            phoneClassName={cn("inline-flex items-center gap-1.5 font-normal underline-offset-2 hover:underline", t.text)}
+            saveClassName={cn("text-sm transition-colors", t.muted)}
             phoneTestId="link-consult-success-phone"
           />
         </p>
-        {submitted?.email && (
-          <p className="text-xs text-muted-foreground">
-            A confirmation email is on its way to your inbox.
-          </p>
+        {submitted?.email && !submitted.callback && (
+          <p className={cn("text-xs", t.muted)}>A confirmation email is on its way to your inbox.</p>
         )}
       </div>
+      {attachments.files.length > 0 && (
+        <div className="grid w-full gap-2" data-testid="quote-upload-status" data-phase={uploadPhase}>
+          <p className={cn("text-[0.9375rem] font-medium", t.text)} aria-live="polite">
+            {uploadSummary}
+          </p>
+          {uploadList}
+          {failedUploads.length > 0 && (
+            <p className={cn("text-sm", t.muted)}>
+              Your request is saved either way. Retry, or{" "}
+              <a href={SITE_CONFIG.phoneSmsHref} className={cn("underline underline-offset-4", t.text)} data-testid="link-upload-text-us">
+                text the files to us
+              </a>
+              .
+            </p>
+          )}
+        </div>
+      )}
+      {auth && (
+        <QuoteDetailsStep
+          tone={tone}
+          uid={uid}
+          ask={{
+            projectType: !submitted?.projectType,
+            address: !submitted?.address?.trim(),
+            bestTime: !(submitted?.callback && submitted.bestTimeToCall),
+            email: !submitted?.email?.trim() || !!submitted?.callback,
+          }}
+          filesRemaining={Math.max(0, MAX_LEAD_FILES - attachments.files.length)}
+          uploadFiles={(list, update) => uploadFiles(list, update)}
+          saveDetails={(fields, ids) => sendDetails(fields, ids)}
+        />
+      )}
     </div>
   );
 
@@ -730,540 +784,347 @@ export function QuoteRequestWizard({
 
   const projectLabel = estimate?.project ? PROJECT_LABELS[estimate.project]?.label : null;
   const finishLabel = estimate?.finish ? FINISH_LABELS[estimate.finish]?.label : null;
-  const stepId = steps[stepIndex]?.id ?? "project";
-  const primaryLabel =
-    stepIndex === steps.length - 1
-      ? mutation.isPending
-        ? "Sending…"
-        : CTA_FORM_SEND
-      : "Continue";
+  const nextLine = "We reply within one business day.";
 
-  const stepBody = (
-    <>
-      {showTrust && (
-        <ul
-          className="mb-2 grid grid-cols-1 gap-x-4 gap-y-1.5 sm:grid-cols-2"
-          data-testid="consult-trust-bullets"
-        >
-          {CONSULT_BULLETS.map((item) => (
-            <li key={item} className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Check className="h-3.5 w-3.5 flex-shrink-0 text-foreground/60" />
-              {item}
-            </li>
-          ))}
-        </ul>
-      )}
+  // The site assistant is not mounted on /estimate (AssistantWidget), so Chat is offered
+  // only where it can open; there "Text us" takes the full width.
+  const chatAvailable = mode !== "app";
+  const outlineButton = cn(
+    "inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-sm border px-3 text-[0.9375rem] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+    tone === "inverse"
+      ? "border-inverse-foreground/40 text-inverse-foreground hover:bg-inverse-foreground/10 focus-visible:ring-[#e3c08d] focus-visible:ring-offset-[#2c302f]"
+      : "border-foreground/40 text-foreground hover:bg-foreground/5 focus-visible:ring-ring",
+  );
 
-      {estimateChecked && !estimate && stepId === "project" && mode === "embedded" && (
-        <p className="mb-2 text-xs text-muted-foreground" data-testid="estimate-cta-card">
-          Want a ballpark first?{" "}
-          {onRevise ? (
-            <button
-              type="button"
-              onClick={onRevise}
-              className="font-normal text-foreground underline underline-offset-2"
-              data-testid="button-start-estimate"
-            >
-              See planning range
-            </button>
-          ) : (
-            <EstimateCTA
-              size="sm"
-              variant="ghost"
-              className="h-auto p-0 text-xs font-normal text-foreground underline underline-offset-2"
-              data-testid="button-start-estimate"
-            >
-              See planning range
-            </EstimateCTA>
-          )}
-        </p>
-      )}
-
-      {estimate && attached && stepId === "project" && (
-        <div
-          className="mb-3 flex items-center justify-between gap-2 text-xs"
-          data-testid="text-estimate-summary"
-        >
-          <span className="text-muted-foreground">
-            Range attached:{" "}
-            <span className="text-foreground" data-testid="text-estimate-range">
-              <DisplayNum>
-                {formatPlanningCurrency(estimate.priceLow)} to{" "}
-                {formatPlanningCurrency(estimate.priceHigh)}
-              </DisplayNum>
-            </span>
-            {projectLabel ? ` · ${projectLabel}` : ""}
-            {finishLabel ? ` · ${finishLabel}` : ""}
-          </span>
+  /** Prefer to talk? Above the send button on phones, beside it on wide screens. */
+  const talkPanel = (
+    <div className="grid gap-2" data-testid="quote-talk-options">
+      <p className={cn("text-[0.875rem]", t.muted)}>Prefer to talk?</p>
+      <a href={SITE_CONFIG.phoneHref} className={outlineButton} data-testid="link-quote-call">
+        <Phone className="h-4 w-4" aria-hidden="true" />
+        Call {SITE_CONFIG.phone}
+      </a>
+      <div className={cn("grid gap-2", chatAvailable && "grid-cols-2")}>
+        <a href={SITE_CONFIG.phoneSmsHref} className={outlineButton} data-testid="link-quote-text">
+          <MessageSquare className="h-4 w-4" aria-hidden="true" />
+          Text us
+        </a>
+        {chatAvailable && (
           <button
             type="button"
-            onClick={() => setAttached(false)}
-            className="inline-flex flex-shrink-0 items-center gap-1 text-muted-foreground hover:text-foreground"
-            data-testid="button-drop-estimate"
+            className={outlineButton}
+            onClick={() => window.dispatchEvent(new Event("p5:assistant-open"))}
+            data-testid="button-quote-chat"
           >
-            <X className="h-3.5 w-3.5" />
-            Remove
+            <MessagesSquare className="h-4 w-4" aria-hidden="true" />
+            Chat
           </button>
-        </div>
+        )}
+      </div>
+    </div>
+  );
+
+  /** "Send a request" | "Have us call you", directly under the heading. */
+  const modeControl = (
+    <fieldset className="grid" data-testid="quote-request-mode">
+      <legend className="sr-only">How would you like to reach us?</legend>
+      <div className="grid grid-cols-2 gap-2">
+        {([
+          { value: false, label: "Send a request", testId: "request-mode-quote" },
+          { value: true, label: "Have us call you", testId: "request-mode-callback" },
+        ] as const).map((option) => (
+          <label key={option.testId} className="relative" data-testid={option.testId}>
+            <input
+              type="radio"
+              name={`${formId}-mode`}
+              value={option.value ? "callback" : "quote"}
+              checked={callback === option.value}
+              onChange={() => setCallback(option.value)}
+              className="peer sr-only"
+            />
+            <span className={cn(t.pill, "font-medium")}>{option.label}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+
+  const submitBlock = (
+    <div className="grid gap-2">
+      <Button
+        type={hydrated ? "submit" : "button"}
+        form={formId}
+        data-hydrated={hydrated ? "true" : undefined}
+        variant="brand"
+        disabled={mutation.isPending}
+        aria-busy={mutation.isPending}
+        aria-describedby={ids.next}
+        className="min-h-12 w-full text-base"
+        data-testid="button-send-request"
+      >
+        {mutation.isPending ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+            Sending
+          </>
+        ) : callback ? (
+          CTA_FORM_CALLBACK
+        ) : (
+          CTA_FORM_SEND
+        )}
+      </Button>
+      <p id={ids.next} className={cn("text-center text-[0.8125rem]", t.muted)}>
+        {nextLine}
+      </p>
+    </div>
+  );
+
+  // Phones: talk options directly above the send button. Wide screens: side by side.
+  const sendArea = (
+    <div className={cn("grid gap-4 lg:grid-cols-2 lg:items-end", mode === "embedded" && cn("border-t pt-4", t.rule))}>
+      {talkPanel}
+      {submitBlock}
+    </div>
+  );
+
+  const body = (
+    <div className="grid gap-4">
+      {mode === "embedded" && (
+        <h2 id={ids.heading} tabIndex={-1} className={cn("font-serif text-[1.75rem] leading-tight outline-none", t.text)} data-quote-form-heading="">
+          {callback ? "Request a call" : "Request a quote"}
+        </h2>
+      )}
+      {modeControl}
+      {callback && (
+        <p className={cn("text-[0.9375rem]", t.muted)}>Leave your name and number and we will call you.</p>
       )}
 
       {mutation.isError && (
         <div
           role="alert"
-          className="mb-3 rounded-sm border border-destructive/20 bg-destructive/5 p-3 text-sm text-destructive"
+          className="rounded-sm border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive"
+          data-testid="quote-submit-error"
         >
-          {(mutation.error as Error).message || "Something went wrong. Please try again."}
+          {(mutation.error as Error).message || "Something went wrong. Please try again."} You can also call{" "}
+          <a href={SITE_CONFIG.phoneHref} className="underline">
+            {SITE_CONFIG.phone}
+          </a>
+          .
         </div>
       )}
 
-      {stepError && (
-        <div
-          role="alert"
-          className="mb-3 rounded-sm border border-destructive/20 bg-destructive/5 p-3 text-sm text-destructive"
-        >
-          {stepError}
-        </div>
+      {!callback && (
+        <>
+          <Field id={ids.message} label="What can we help with?" error={errors.message?.message} tone={tone}>
+            <textarea
+              id={ids.message}
+              rows={3}
+              aria-required="true"
+              aria-invalid={errors.message ? true : undefined}
+              aria-describedby={describedBy(ids.message, false, errors.message?.message)}
+              placeholder="For example: a single-level custom home on land we own near Star, with a shop if the budget allows."
+              className={cn(t.control, "min-h-[7.5rem] py-2.5 leading-relaxed", errors.message && t.invalid)}
+              data-testid="textarea-message"
+              data-clarity-mask="True"
+              {...register("message")}
+            />
+          </Field>
+        </>
       )}
 
-      {stepId === "project" && (
-        <WizardStep
-          as="h3"
-          compact
-          heading="What are you planning to build?"
-          instructions="One choice. Site and contact details come next."
-          data-testid="consult-step-project"
-          tone={mode === "app" ? "inverse" : "default"}
-        >
-          <div role="radiogroup" aria-label="Project type" className="grid grid-cols-2 gap-2">
-            {PRIMARY_CHOICES.map((opt) => {
-              const selected =
-                projectType === opt.value ||
-                (opt.value === SOMETHING_ELSE &&
-                  (detailPending || DETAIL_CHOICES.some((d) => d.value === projectType)));
-              return (
-                <SelectableCard
-                  key={opt.value}
-                  dense
-                  control="radio"
-                  tone={mode === "app" ? "inverse" : "default"}
-                  selected={selected}
-                  onSelect={() => {
-                    if (opt.value === SOMETHING_ELSE) {
-                      setDetailPending(true);
-                      form.setValue("projectType", SOMETHING_ELSE, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                      });
-                    } else {
-                      setDetailPending(false);
-                      form.setValue("projectType", opt.value, {
-                        shouldValidate: true,
-                        shouldDirty: true,
-                      });
-                    }
-                    setStepError(null);
-                  }}
-                  title={opt.label}
-                  description={opt.sub}
-                  data-testid={`consult-project-${opt.value}`}
-                />
-              );
-            })}
-          </div>
-          <FormField
-            control={form.control}
-            name="projectType"
-            render={() => (
-              <FormItem className="sr-only">
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </WizardStep>
+      {!callback && (
+        <AttachmentTile
+          id={ids.files}
+          label="Add photos, plans or files"
+          files={attachments.files}
+          problems={attachments.problems}
+          onAdd={attachments.add}
+          onRemove={attachments.remove}
+          tone={tone}
+          disabled={mutation.isPending}
+        />
       )}
 
-      {stepId === "detail" && (
-        <WizardStep
-          as="h3"
-          compact
-          heading="Tell us a bit more"
-          instructions="Pick the closest match."
-          data-testid="consult-step-detail"
-          tone={mode === "app" ? "inverse" : "default"}
-        >
-          <div role="radiogroup" aria-label="Project details" className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {DETAIL_CHOICES.map((opt) => (
-              <SelectableCard
-                key={opt.value}
-                dense
-                control="radio"
-                tone={mode === "app" ? "inverse" : "default"}
-                selected={projectType === opt.value}
-                onSelect={() => {
-                  form.setValue("projectType", opt.value, {
-                    shouldValidate: true,
-                    shouldDirty: true,
-                  });
-                  setStepError(null);
-                }}
-                title={opt.label}
-                description={opt.sub}
-                data-testid={`consult-detail-${opt.value}`}
-              />
+      <Field id={ids.name} label="Your name" error={errors.name?.message} tone={tone}>
+        <input
+          id={ids.name}
+          type="text"
+          autoComplete="name"
+          autoCapitalize="words"
+          enterKeyHint="next"
+          aria-required="true"
+          aria-invalid={errors.name ? true : undefined}
+          aria-describedby={describedBy(ids.name, false, errors.name?.message)}
+          className={cn(t.control, "h-12", errors.name && t.invalid)}
+          data-testid="input-name"
+          data-clarity-mask="True"
+          {...register("name")}
+        />
+      </Field>
+
+      <Field
+        id={ids.phone}
+        label="Phone"
+        error={errors.phone?.message}
+        tone={tone}
+      >
+        <input
+          id={ids.phone}
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel"
+          enterKeyHint="next"
+          aria-required="true"
+          aria-invalid={errors.phone ? true : undefined}
+          aria-describedby={describedBy(ids.phone, false, errors.phone?.message)}
+          className={cn(t.control, "h-12", errors.phone && t.invalid)}
+          data-testid="input-phone"
+          data-clarity-mask="True"
+          {...register("phone")}
+        />
+      </Field>
+
+      {callback ? (
+        <Field id={ids.best} label="Best time to call" optional tone={tone}>
+          <select
+            id={ids.best}
+            className={cn(t.control, "h-12 appearance-auto")}
+            data-testid="select-best-time"
+            data-clarity-mask="True"
+            {...register("bestTimeToCall")}
+          >
+            <option value="">Any time</option>
+            {BEST_TIMES.map((time) => (
+              <option key={time} value={time}>
+                {time}
+              </option>
             ))}
-          </div>
-        </WizardStep>
-      )}
+          </select>
+        </Field>
+      ) : (
+        <>
+          <Field
+            id={ids.email}
+            label="Email"
+            optional={preferredContact !== "email"}
+            hint={preferredContact === "email" ? "Needed so we can email you." : undefined}
+            error={errors.email?.message}
+            tone={tone}
+          >
+            <input
+              id={ids.email}
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              autoCapitalize="none"
+              spellCheck={false}
+              aria-required={preferredContact === "email" ? "true" : undefined}
+              aria-invalid={errors.email ? true : undefined}
+              aria-describedby={describedBy(ids.email, preferredContact === "email", errors.email?.message)}
+              className={cn(t.control, "h-12", errors.email && t.invalid)}
+              data-testid="input-email"
+              data-clarity-mask="True"
+              {...register("email")}
+            />
+          </Field>
 
-      {stepId === "name" && (
-        <WizardStep
-          as="h3"
-          compact
-          heading="What's your name?"
-          instructions="So we know who to reply to."
-          data-testid="consult-step-name"
-          tone={mode === "app" ? "inverse" : "default"}
-        >
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className={labelClass}>
-                  Full name
-                  <RequiredMark />
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Jane Smith"
-                    autoComplete="name"
-                    aria-required="true"
-                    data-testid="input-name"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </WizardStep>
-      )}
-
-      {stepId === "prefer" && (
-        <WizardStep
-          as="h3"
-          compact
-          heading="How should we reach you?"
-          instructions="Email, phone call, or text."
-          data-testid="consult-step-prefer"
-          tone={mode === "app" ? "inverse" : "default"}
-        >
-          <FormField
-            control={form.control}
-            name="preferredContact"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className={labelClass}>
-                  Preferred contact
-                  <RequiredMark />
-                </FormLabel>
-                <FormControl>
-                  <div
-                    role="radiogroup"
-                    aria-label="Preferred contact method"
-                    className="grid grid-cols-3 gap-2"
-                  >
-                    {CONTACT_METHODS.map((method) => {
-                      const selected = field.value === method.value;
-                      return (
-                        <button
-                          key={method.value}
-                          type="button"
-                          role="radio"
-                          aria-checked={selected}
-                          onClick={() => field.onChange(method.value)}
-                          className={cn(
-                            "min-h-12 rounded-sm border px-3 py-2.5 text-sm font-normal transition-colors",
-                            selected
-                              ? "border-foreground bg-foreground text-background"
-                              : "border-border bg-transparent text-foreground",
-                          )}
-                          data-testid={`button-preferred-contact-${method.value}`}
-                        >
-                          {method.label}
-                        </button>
-                      );
+          <fieldset className="grid gap-1.5">
+            <legend className={cn(t.label, "mb-1.5")}>How should we reach you?</legend>
+            <div className="grid grid-cols-3 gap-2">
+              {CONTACT_METHODS.map((method) => (
+                <label key={method.value} className="relative" data-testid={`button-preferred-contact-${method.value}`}>
+                  <input
+                    type="radio"
+                    value={method.value}
+                    className="peer sr-only"
+                    {...register("preferredContact", {
+                      onChange: () => {
+                        if (formState.touchedFields.phone) void form.trigger("phone");
+                        if (formState.touchedFields.email) void form.trigger("email");
+                        else form.clearErrors("email");
+                      },
                     })}
-                  </div>
-                </FormControl>
-              </FormItem>
-            )}
-          />
-        </WizardStep>
-      )}
-
-      {stepId === "reach" && (
-        <WizardStep
-          as="h3"
-          compact
-          heading={preferredContact === "email" ? "What's your email?" : "What's your number?"}
-          instructions={
-            preferredContact === "email"
-              ? "We'll reply within one business day."
-              : preferredContact === "text"
-                ? "A mobile number we can text."
-                : "A number we can call."
-          }
-          data-testid="consult-step-reach"
-          tone={mode === "app" ? "inverse" : "default"}
-        >
-          {preferredContact === "email" ? (
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={labelClass}>
-                    Email
-                    <RequiredMark />
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="jane@example.com"
-                      autoComplete="email"
-                      aria-required="true"
-                      data-testid="input-email"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ) : (
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={labelClass}>
-                    Phone
-                    <RequiredMark />
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="tel"
-                      placeholder="(208) 555-0000"
-                      autoComplete="tel"
-                      aria-required="true"
-                      data-testid="input-phone"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-        </WizardStep>
-      )}
-
-      {stepId === "site" && (
-        <WizardStep
-          as="h3"
-          compact
-          heading="Where is the build site?"
-          instructions="Street address, parcel number, or lot and subdivision."
-          data-testid="consult-step-site"
-          tone={mode === "app" ? "inverse" : "default"}
-        >
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className={labelClass}>
-                  Build site address
-                  <RequiredMark />
-                </FormLabel>
-                <FormControl>
-                  <AddressAutocomplete
-                    value={addressInput || field.value}
-                    onChange={(v) => {
-                      setAddressInput(v);
-                      field.onChange(v);
-                    }}
-                    onProfileResolved={handleProfileResolved}
-                    data-testid="input-address"
                   />
-                </FormControl>
-                <button
-                  type="button"
-                  onClick={() => setShowAddrInfo((v) => !v)}
-                  aria-expanded={showAddrInfo}
-                  aria-controls="address-info"
-                  className="mt-1 inline-flex min-h-11 items-center gap-1 py-2 text-xs text-muted-foreground hover:text-foreground [[data-keyboard-inset]_&]:hidden"
-                  data-testid="button-address-info"
-                >
-                  Why we ask
-                  <ChevronDown
-                    className={cn("h-3 w-3 transition-transform", showAddrInfo && "rotate-180")}
-                  />
-                </button>
-                {showAddrInfo && (
-                  <FormDescription
-                    id="address-info"
-                    className="mt-1 text-xs text-muted-foreground [[data-keyboard-inset]_&]:hidden"
-                  >
-                    We pull county parcel records before we meet, so we can tell you what your site
-                    will require. Your information is never shared or sold -{" "}
-                    <Link
-                      href="/privacy-policy"
-                      className="underline underline-offset-2 hover:text-foreground"
-                    >
-                      privacy policy
-                    </Link>
-                    .
-                  </FormDescription>
-                )}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </WizardStep>
-      )}
+                  <span className={t.pill}>{method.label}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
 
-      {stepId === "review" && (
-        <WizardStep
-          as="h3"
-          compact
-          heading="Review and send"
-          instructions="Check the summary, add an optional note, then send."
-          data-testid="consult-step-review"
-          tone={mode === "app" ? "inverse" : "default"}
-        >
-          <div className="space-y-4">
-            <dl className="space-y-2 rounded-sm border border-border bg-muted/30 p-3 text-sm">
-              <div className="flex justify-between gap-3">
-                <dt className="text-muted-foreground">Project</dt>
-                <dd className="text-right font-normal text-foreground">
-                  {PROJECT_LABEL_LOOKUP[form.watch("projectType")] ?? form.watch("projectType")}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-3">
-                <dt className="text-muted-foreground">Name</dt>
-                <dd className="text-right text-foreground" data-clarity-mask="True">
-                  {form.watch("name")}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-3">
-                <dt className="text-muted-foreground">Reach by</dt>
-                <dd className="text-right text-foreground">
-                  {CONTACT_METHODS.find((m) => m.value === preferredContact)?.label}
-                  {preferredContact === "email"
-                    ? ` · ${form.watch("email")}`
-                    : ` · ${form.watch("phone")}`}
-                </dd>
-              </div>
-              {!searchingForLand && (
-                <div className="flex justify-between gap-3">
-                  <dt className="text-muted-foreground">Site</dt>
-                  <dd className="text-right text-foreground" data-clarity-mask="True">
-                    {form.watch("address") || "-"}
-                  </dd>
-                </div>
-              )}
-            </dl>
-
-            {showNote ? (
-              <FormField
-                control={form.control}
-                name="message"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className={labelClass}>
-                      Anything else we should know?{" "}
-                      <span className="normal-case text-muted-foreground">(optional)</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Your home, your vision, or your timeline..."
-                        rows={3}
-                        autoFocus
-                        data-testid="textarea-message"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ) : (
+          {estimate && attached && (
+            <div className="flex items-center justify-between gap-2 text-xs" data-testid="text-estimate-summary">
+              <span className={t.muted}>
+                Range attached:{" "}
+                <span className={t.text} data-testid="text-estimate-range">
+                  <DisplayNum>
+                    {formatPlanningCurrency(estimate.priceLow)} to {formatPlanningCurrency(estimate.priceHigh)}
+                  </DisplayNum>
+                </span>
+                {projectLabel ? ` · ${projectLabel}` : ""}
+                {finishLabel ? ` · ${finishLabel}` : ""}
+              </span>
               <button
                 type="button"
-                onClick={() => setShowNote(true)}
-                className="inline-flex min-h-11 items-center gap-1.5 py-2 text-xs text-muted-foreground hover:text-foreground"
-                data-testid="button-add-note"
+                onClick={() => setAttached(false)}
+                className={cn("inline-flex min-h-12 flex-shrink-0 items-center gap-1", t.muted)}
+                data-testid="button-drop-estimate"
               >
-                <Plus className="h-3.5 w-3.5" />
-                Add a note <span className="text-muted-foreground">(optional)</span>
+                <X className="h-3.5 w-3.5" aria-hidden="true" />
+                Remove
               </button>
-            )}
-
-            <p className="text-xs text-muted-foreground">
-              No spam. We respond within one business day.
-            </p>
-          </div>
-        </WizardStep>
+            </div>
+          )}
+        </>
       )}
-    </>
-  );
 
-  const actionBar = (
-    <WizardActionBar
-      onBack={stepIndex > 0 ? goBack : undefined}
-      onPrimary={() => void goNext()}
-      primaryLabel={primaryLabel}
-      primaryDisabled={mutation.isPending}
-      busy={mutation.isPending}
-      busyLabel="Sending…"
-      primaryIcon={stepIndex === steps.length - 1 ? "none" : "arrow"}
-      ownsBottomEdge
-      pinned={mode !== "app"}
-      tone={mode === "app" ? "inverse" : "default"}
-      data-testid="consult-wizard-actions"
-    />
+      {mode === "embedded" && sendArea}
+      {mode === "app" && !talkInFooter && (
+        // Phones: in the normal flow at the end of the fields, directly above the
+        // pinned send button, so nothing scrolls behind a panel.
+        <div className={cn("border-t pt-4", t.rule)}>{talkPanel}</div>
+      )}
+    </div>
   );
 
   const formInner = (
-    <Form {...form}>
+    <>
       <EstimatorRecovery
         flow="consultation"
-        currentStep={stepId}
-        currentStepIndex={stepIndex}
-        totalSteps={steps.length}
-        lastCompletedStep={stepIndex > 0 ? steps[stepIndex - 1]?.id : undefined}
-        selections={{ project_type: String(form.watch("projectType") ?? "") || null }}
-        validationErrors={Object.keys(form.formState.errors)}
-        engaged={form.formState.isDirty || stepIndex > 0}
+        currentStep={callback ? "callback" : "request"}
+        currentStepIndex={0}
+        totalSteps={1}
+        selections={{ project_type: watched.projectType || null }}
+        validationErrors={Object.keys(errors)}
+        engaged={formState.isDirty}
         submitted={success}
       />
+      {success ? (
+        // The success screen carries its own "Help us prepare" form, so it sits
+        // outside the request form (forms cannot nest). Same test id and step
+        // marker the request form had once sent. data-family-bar-yield (here and on the form):
+        // the family mobile bar steps aside while either is on screen
+        // (components/family/MobileActionBar.tsx).
+        <div data-testid="consultation-wizard" data-step="sent" data-request-kind={callback ? "callback" : "quote"} data-family-bar-yield="">
+          {successBlock}
+        </div>
+      ) : (
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          void goNext();
+        id={formId}
+        noValidate
+        onSubmit={(event) => {
+          event.preventDefault();
+          void onSubmit(event);
         }}
         onFocusCapture={trackFormStart}
-        className={mode === "embedded" ? "space-y-4" : undefined}
+        aria-labelledby={mode === "embedded" ? ids.heading : undefined}
+        aria-label={mode === "app" ? "Request a quote" : undefined}
         data-testid="consultation-wizard"
-        data-step={stepId}
+        data-step="project"
+        data-request-kind={callback ? "callback" : "quote"}
+        data-family-bar-yield=""
         data-clarity-mask="True"
       >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute left-[-10000px] top-auto h-px w-px overflow-hidden"
-        >
+        <div aria-hidden="true" className="pointer-events-none absolute left-[-10000px] top-auto h-px w-px overflow-hidden">
           <label htmlFor="consultation-website">Website</label>
           <input
             id="consultation-website"
@@ -1280,26 +1141,20 @@ export function QuoteRequestWizard({
           />
         </div>
 
-        {mode === "embedded" && (
-          <WizardProgress steps={steps} currentIndex={stepIndex} className="!mb-3" />
-        )}
-
-        {success && mode === "app" ? successBlock : stepBody}
-
-        {mode === "embedded" && !success && actionBar}
+        {body}
       </form>
-    </Form>
+      )}
+    </>
   );
 
   if (mode === "app") {
     return (
       <AppFrame
-        title="Request a quote"
-        eyebrow="Planning conversation"
-        steps={steps}
-        currentIndex={success ? steps.length - 1 : stepIndex}
-        hideProgress={success}
-        footer={success ? undefined : actionBar}
+        title={success ? "Request sent" : callback ? "Request a call" : "Request a quote"}
+        steps={[{ id: "request", label: "Request" }]}
+        currentIndex={0}
+        hideProgress
+        footer={success ? undefined : talkInFooter ? sendArea : submitBlock}
         className="quote-request-app-frame"
       >
         {formInner}

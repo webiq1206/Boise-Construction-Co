@@ -1,6 +1,7 @@
 import { ApprovedHome } from "@/components/approved/ApprovedHome";
 import { HomeHero } from "@/components/approved/HomeHero";
 import { ConsultationForm } from "@/components/ConsultationForm";
+import { QuoteFormAnchor } from "@/components/QuoteFormAnchor";
 import { MarketingCard } from "@/components/marketing/MarketingCard";
 import { Section } from "@/components/marketing/Section";
 import { Reveal } from "@/components/Reveal";
@@ -73,7 +74,7 @@ export default function HomePage() {
       <ProjectGallerySection limit={1} />
       <BudgetInclusionsSection />
       <div id="contact" className="scroll-mt-24" aria-hidden="true" />
-      <Section id="consult" divider className="relative overflow-hidden scroll-mt-16 pb-28 md:pb-28">
+      <Section divider reveal={false} className="relative overflow-hidden pb-28 md:pb-28">
         {/* Warm, dimmed lifestyle photo grounds the closing section. Directional
             scrims keep the left-column copy legible and fade the edges into the
             page ground; the form card floats above on its own shadow. */}
@@ -97,7 +98,9 @@ export default function HomePage() {
             the places a card is actually the right answer. */}
         <div className="ed-shell relative z-10">
           <div className="grid gap-[var(--ed-gutter)] lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-            <div className="lg:sticky lg:top-28">
+            {/* Phones: the form leads and this reassurance follows it. Desktop: it
+                sits beside the form. Never above the landing point. */}
+            <div className="order-2 lg:order-1 lg:sticky lg:top-28">
               <Reveal>
                 <p className="ed-eyebrow">Begin a conversation</p>
                 <h2 className="ed-h2 ed-statement">
@@ -142,9 +145,14 @@ export default function HomePage() {
                 </div>
               </Reveal>
             </div>
-            <MarketingCard className="shadow-2xl" padding="lg">
-              <ConsultationForm />
-            </MarketingCard>
+            {/* Every "#consult" link lands here: the form heading and its first
+                field directly under the sticky header (QuoteFormAnchor). */}
+            <div id="consult" data-quote-anchor="" className="order-1 lg:order-2">
+              <QuoteFormAnchor />
+              <MarketingCard className="shadow-2xl" padding="lg">
+                <ConsultationForm />
+              </MarketingCard>
+            </div>
           </div>
         </div>
       </Section>

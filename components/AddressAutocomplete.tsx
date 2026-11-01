@@ -231,6 +231,9 @@ export function AddressAutocomplete({
       <div className="relative">
         <Input
           id={id}
+          // Same mask the beforeInteractive Clarity masker adds (lib/clarityFormMask), in
+          // the server HTML, so a server-rendered address field hydrates without a mismatch.
+          data-clarity-mask="True"
           value={value}
           onChange={(e) => {
             suggestionsDismissedRef.current = false;

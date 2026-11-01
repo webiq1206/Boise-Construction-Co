@@ -44,3 +44,8 @@ export const estimatorSchemaStatements = [
   "CREATE TABLE IF NOT EXISTS p5_estimator_review_requests (\n      draft_id uuid NOT NULL, revision integer NOT NULL, contact jsonb NOT NULL,\n      scope jsonb NOT NULL, status text NOT NULL DEFAULT 'saved', created_at timestamptz NOT NULL DEFAULT now(),\n      PRIMARY KEY(draft_id,revision))"
 ];
 estimatorSchemaStatements.push("CREATE TABLE IF NOT EXISTS p5_estimator_policy_imports (id text PRIMARY KEY, prior_payload jsonb, imported_payload jsonb NOT NULL, actor text NOT NULL, created_at timestamptz NOT NULL DEFAULT now())");
+// Quote form attachments (server/services/leadFiles.ts) and the RE-10 and
+// compliance documents share this table. It is declared in shared/schema.ts;
+// listing it here makes db:prepare create it where it is missing, so the
+// Replit publish diff never proposes dropping it. Matches the Drizzle columns.
+estimatorSchemaStatements.push("CREATE TABLE IF NOT EXISTS stored_files (id varchar PRIMARY KEY DEFAULT gen_random_uuid(), key text NOT NULL, file_name text NOT NULL, mime_type text NOT NULL, file_size integer NOT NULL, data text NOT NULL, created_at timestamp NOT NULL DEFAULT now(), CONSTRAINT stored_files_key_unique UNIQUE (key))");
