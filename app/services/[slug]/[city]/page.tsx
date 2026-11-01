@@ -10,7 +10,7 @@ landingServiceSchema,
 } from '@/lib/landing-schema';
 import { buildPageMetadata,isCityServiceNoindex } from '@/lib/page-metadata';
 import { generateSpeakableSchema } from '@/lib/schema';
-import { CITY_SEO_DATA,SERVICE_CITY_H1_NAMES,serviceNameInSentence } from '@/lib/seo';
+import { CITY_SEO_DATA,serviceCityHeadingName,serviceNameInSentence } from '@/lib/seo';
 import {
 cityServicePath,
 getAllCityServiceParams,
@@ -18,7 +18,7 @@ getCityBySlug,
 getServiceBySlug,
 } from '@/lib/seo-routes';
 import { getCityServiceImageSet } from '@/shared/cityServiceImages';
-import { getCountyLabel } from '@/shared/contentData';
+import { getCountyLabel,serviceLabel } from '@/shared/contentData';
 import { getGalleryProjectsFor } from '@/shared/galleryData';
 import {
 getCityServiceFaqs,
@@ -73,7 +73,7 @@ export default async function CityServicePage(
     : undefined;
 
   const overview = getCityServiceIntro(content, city, localFact);
-  const h1 = `${SERVICE_CITY_H1_NAMES[service.name] ?? service.name} in ${city.name}, Idaho`;
+  const h1 = `${serviceCityHeadingName(service)} in ${city.name}, Idaho`;
   const faqs = getCityServiceFaqs(content, city);
   const localNote = `For ${serviceNameInSentence(content.name)} in ${city.name}, confirm the property jurisdiction and scope before applying. City addresses and unincorporated county parcels may use different building departments. Confirm required building and trade permits, inspections and review times for the actual address.`;
   const images = getCityServiceImageSet(service.slug, city.slug);
@@ -123,7 +123,7 @@ export default async function CityServicePage(
         planningFrom={service.planningFrom}
         breadcrumbs={[
           { name: 'Home', href: '/' },
-          { name: service.name, href: `/services/${service.slug}` },
+          { name: serviceLabel(service), href: `/services/${service.slug}` },
           { name: `${city.name}, Idaho` },
         ]}
         benefits={content.benefits}

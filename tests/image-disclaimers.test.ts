@@ -81,7 +81,8 @@ test('stock photos keep a representative disclaimer and describe the framing pho
   assert.equal(read('components/seo/LandingPageTemplate.tsx').includes('Proof of work'), false);
 
   const galleryData = read('shared/galleryData.ts');
-  assert.match(galleryData, /Eagle Foothills Mountain-Modern Concept/);
+  // Owner decision C (1 November 2026): heading in sentence case, same words.
+  assert.match(galleryData, /Eagle Foothills mountain-modern concept/);
   assert.equal(galleryData.includes('craftsman'), false);
   assert.equal(galleryData.includes('farmhouse'), false);
 });

@@ -5,7 +5,7 @@
  */
 
 import { SITE_CONFIG } from '@/shared/siteConfig';
-import { CITIES, SERVICES } from '@/shared/contentData';
+import { CITIES, SERVICES, serviceLabel } from '@/shared/contentData';
 import {
   AREA_META_DESCRIPTIONS,
   CITY_SERVICE_META_DESCRIPTIONS,
@@ -277,6 +277,21 @@ export const SERVICE_CITY_H1_NAMES: Record<string, string> = {
   'ADUs & Guest Houses': 'Detached ADUs & Guest Houses',
   'Home Additions': 'Structural Home Additions',
 };
+
+/**
+ * Sentence-case heading names for city x service H1s and section headings
+ * (owner decision C, 1 November 2026). Same words as SERVICE_CITY_H1_NAMES and
+ * the service names, only letter case changes; the title-case maps above stay
+ * for title tags.
+ */
+const SERVICE_CITY_H1_LABELS: Record<string, string> = {
+  adu: 'Detached ADUs & guest houses',
+  'home-additions': 'Structural home additions',
+};
+
+export function serviceCityHeadingName(service: { slug: string; name: string }): string {
+  return SERVICE_CITY_H1_LABELS[service.slug] ?? serviceLabel(service);
+}
 
 /** Budget after the layout template appends " | Boise Construction Co" (24). */
 export const CITY_SERVICE_TITLE_BUDGET = 36;

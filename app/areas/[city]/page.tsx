@@ -10,7 +10,7 @@ landingFAQSchema,
 import { buildPageMetadata,isCityServiceNoindex } from '@/lib/page-metadata';
 import { permitGuidance, permitSource } from '@/lib/permitGuidance';
 import { generateSpeakableSchema } from '@/lib/schema';
-import { CITY_SEO_DATA, SERVICE_CITY_H1_NAMES, indianCreekDescription } from '@/lib/seo';
+import { CITY_SEO_DATA, indianCreekDescription, serviceCityHeadingName } from '@/lib/seo';
 import { areaPath,CITY_SLUGS,cityServicePath,getCityBySlug,servicePath } from '@/lib/seo-routes';
 import { getAreaImageSet } from '@/shared/cityServiceImages';
 import { getCountyLabel,SERVICES } from '@/shared/contentData';
@@ -108,7 +108,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       // state this site's side of the split (detached ADUs, structural
       // additions); conversions and interior work belong to Boise Remodeling Co.
       links: SERVICES.map((s) => {
-        const name = SERVICE_CITY_H1_NAMES[s.name] ?? s.name;
+        const name = serviceCityHeadingName(s);
         return isCityServiceNoindex(s.slug, city.slug)
           ? { label: `${name} across the Treasure Valley`, href: servicePath(s.slug) }
           : { label: `${name} in ${city.name}`, href: cityServicePath(s.slug, city.slug) };
@@ -191,8 +191,8 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
 
   const h1 =
     city.slug === 'middleton'
-      ? 'Custom Home Builder in Middleton, Idaho'
-      : `Home Builder in ${city.name}, Idaho`;
+      ? 'Custom home builder in Middleton, Idaho'
+      : `Home builder in ${city.name}, Idaho`;
   const faqs = cityCopy?.faqs ?? [
     ...AREA_PAGE_FAQS,
     {
@@ -230,7 +230,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
         manifestPath={path}
         breadcrumbs={[
           { name: 'Home', href: '/' },
-          { name: 'Service Areas', href: '/areas' },
+          { name: 'Service areas', href: '/areas' },
           { name: city.name },
         ]}
         benefits={[

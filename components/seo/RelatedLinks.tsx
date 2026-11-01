@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CITIES, SERVICES } from '@/shared/contentData';
+import { CITIES, SERVICES, serviceLabel } from '@/shared/contentData';
 import { CONTENT_HUBS, guidePath } from '@/shared/contentHubs';
 import { GUIDE_PAGES } from '@/shared/guideContent';
 import { isCityServiceNoindex } from '@/lib/page-metadata';
@@ -56,7 +56,7 @@ function ExploreFurther({ serviceSlug }: { serviceSlug?: string }) {
      an internal link on a redirect hop - which is what scripts/internal-links
      audits for. */
   const links: { href: string; label: string }[] = [
-    guide ?? { href: guidePath(MASTER_GUIDE_SLUG), label: 'Treasure Valley Building Guide' },
+    guide ?? { href: guidePath(MASTER_GUIDE_SLUG), label: 'Treasure Valley building guide' },
     { href: '/services', label: 'Compare how we build' },
     { href: '/resources', label: 'Free home building planning worksheets' },
     { href: '/estimate', label: 'Estimate your build cost' },
@@ -111,7 +111,7 @@ export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksPro
             {indexableServices.map((service) => (
               <Link key={service.slug} href={cityServicePath(service.slug, citySlug)}>
                 <div className="ed-card ed-card-link h-full">
-                  <h3 className="ed-h4">{service.name}</h3>
+                  <h3 className="ed-h4">{serviceLabel(service)}</h3>
                   <p className="ed-body mt-2 text-[0.875rem]">{service.shortDescription}</p>
                 </div>
               </Link>
@@ -165,7 +165,7 @@ export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksPro
                   href={cityServicePath(service.slug, citySlug)}
                   className="ed-body text-[0.9375rem] transition-colors hover:[color:var(--ed-accent)]"
                 >
-                  {service.name}
+                  {serviceLabel(service)}
                 </Link>
               </li>
             ))}

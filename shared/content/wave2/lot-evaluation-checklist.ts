@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const lotEvaluationChecklist: BlogPostData = {
   slug: 'lot-evaluation-checklist',
-  title: 'Lot Evaluation Checklist: What to Check Before You Buy',
+  title: 'Lot evaluation checklist: what to check before you buy',
   seoTitle: 'Lot Evaluation Checklist, Before Buy',
   metaDescription:
     'A checklist for Treasure Valley land buyers: access, utilities, ground, zoning, and cost. What to check, who checks it, and what a bad answer costs.',
   excerpt:
     'A usable checklist for buying land in Ada and Canyon County, organised by category, with who does each check and what it costs you to get the answer wrong.',
-  category: 'Land & Lots',
+  category: 'Land & lots',
   hubSlug: 'land-and-lots',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-06',
@@ -32,13 +32,13 @@ export const lotEvaluationChecklist: BlogPostData = {
     'A written lot evaluation runs $950 to $3,500 and turns the unknowns into a number you can act on.',
   ],
   relatedLinks: [
-    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying Land to Build On in the Treasure Valley' },
-    { url: '/blog/how-to-buy-a-buildable-lot-boise', anchor: 'How to Tell If a Lot Is Actually Buildable' },
-    { url: '/blog/well-and-septic-cost-idaho', anchor: 'What a Well and Septic System Costs in Idaho' },
-    { url: '/blog/impact-fees-and-utility-connections', anchor: 'Impact Fees and Utility Connections' },
-    { url: '/blog/building-in-the-boise-foothills', anchor: 'What It Costs to Build in the Boise Foothills' },
-    { url: '/services/lot-evaluation', anchor: 'Lot Evaluation' },
-    { url: '/services/build-on-your-lot', anchor: 'Build on Your Lot' },
+    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying land to build on in the Treasure Valley' },
+    { url: '/blog/how-to-buy-a-buildable-lot-boise', anchor: 'How to tell if a lot is actually buildable' },
+    { url: '/blog/well-and-septic-cost-idaho', anchor: 'What a well and septic system costs in Idaho' },
+    { url: '/blog/impact-fees-and-utility-connections', anchor: 'Impact fees and utility connections' },
+    { url: '/blog/building-in-the-boise-foothills', anchor: 'What it costs to build in the Boise Foothills' },
+    { url: '/services/lot-evaluation', anchor: 'Lot evaluation' },
+    { url: '/services/build-on-your-lot', anchor: 'Build on your lot' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

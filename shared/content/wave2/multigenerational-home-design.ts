@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const multigenerationalHomeDesign: BlogPostData = {
   slug: 'multigenerational-home-design',
-  title: 'Designing a Home for Multiple Generations',
+  title: 'Designing a home for multiple generations',
   seoTitle: 'Designing a Multigenerational Home',
   metaDescription:
     'Design a new home for parents, adult children, or both: separate entrances, real sound separation, a main-floor suite, shared kitchens, and ADU rules.',
   excerpt:
     'Housing three generations under one roof works when the plan gives each household a door, a quiet zone, and a way to be alone. Here is how we design that into a new Treasure Valley home.',
-  category: 'Design & Floor Plans',
+  category: 'Design & floor plans',
   hubSlug: 'home-design-and-plans',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-01',
@@ -33,11 +33,11 @@ export const multigenerationalHomeDesign: BlogPostData = {
     'Talk about money, meals, and an exit plan before you talk about square footage.',
   ],
   relatedLinks: [
-    { url: '/guides/custom-home-design-guide', anchor: 'Designing a Custom Home in the Treasure Valley' },
-    { url: '/blog/adu-cost-boise', anchor: 'ADU Cost in Boise' },
-    { url: '/blog/aging-in-place-home-design', anchor: 'Building a Home You Can Age In' },
-    { url: '/blog/custom-home-floor-plan-ideas-boise', anchor: 'Floor Plan Ideas That Work Here' },
-    { url: '/services/home-plans-design', anchor: 'Home Plans and Design' },
+    { url: '/guides/custom-home-design-guide', anchor: 'Designing a custom home in the Treasure Valley' },
+    { url: '/blog/adu-cost-boise', anchor: 'ADU cost in Boise' },
+    { url: '/blog/aging-in-place-home-design', anchor: 'Building a home you can age in' },
+    { url: '/blog/custom-home-floor-plan-ideas-boise', anchor: 'Floor plan ideas that work here' },
+    { url: '/services/home-plans-design', anchor: 'Home plans and design' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

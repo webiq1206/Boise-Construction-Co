@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const costToBuildAHouseBoise: BlogPostData = {
   slug: 'cost-to-build-a-house-boise',
-  title: 'How Much Does It Cost to Build a House in Boise?',
+  title: 'How much does it cost to build a house in Boise?',
   seoTitle: 'Cost to Build a House in Boise, 2026',
   metaDescription:
     'Cost to build a house in Boise in 2026: $250 to $400 per finished square foot, or $600,000 to $960,000 at 2,400 square feet, before land and site work.',
   excerpt:
     'A custom home in the Boise area runs $250 to $400 per finished square foot, excluding land. Here is where that money goes and why the band is so wide.',
-  category: 'Home Building Costs',
+  category: 'Home building costs',
   hubSlug: 'home-building-costs',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-02',
@@ -36,12 +36,12 @@ export const costToBuildAHouseBoise: BlogPostData = {
     'A per-square-foot number is a planning tool for testing feasibility, not a quote.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
-    { url: '/blog/custom-home-cost-per-square-foot-boise', anchor: 'Custom Home Cost Per Square Foot' },
-    { url: '/blog/what-drives-home-building-costs-boise', anchor: 'What Drives Home Building Costs' },
-    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to Budget for a New Home' },
-    { url: '/blog/allowances-explained-new-home', anchor: 'How Allowances Work' },
-    { url: '/services/custom-home-builder', anchor: 'Custom Home Building' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
+    { url: '/blog/custom-home-cost-per-square-foot-boise', anchor: 'Custom home cost per square foot' },
+    { url: '/blog/what-drives-home-building-costs-boise', anchor: 'What drives home building costs' },
+    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to budget for a new home' },
+    { url: '/blog/allowances-explained-new-home', anchor: 'How allowances work' },
+    { url: '/services/custom-home-builder', anchor: 'Custom home building' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

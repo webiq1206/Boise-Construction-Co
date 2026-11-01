@@ -31,7 +31,7 @@ export default function NotFound() {
         </div>
 
         <h2 className="text-2xl md:text-3xl font-serif tracking-tight mb-4 text-foreground">
-          Page Not Found
+          Page not found
         </h2>
         <p className="text-lg text-muted-foreground mb-8">
           This page doesn&apos;t exist or may have moved. Let us help you find what you&apos;re looking for.
@@ -39,13 +39,13 @@ export default function NotFound() {
 
         <Card className="marketing-card mb-8 text-left">
           <CardContent className="pt-6">
-            <h3 className="font-normal mb-4 text-foreground">Popular Pages</h3>
+            <h3 className="font-normal mb-4 text-foreground">Popular pages</h3>
             <div className="grid grid-cols-2 gap-2">
               {[
-                { href: "/services", label: "Our Services" },
-                { href: "/#consult", label: "Free Consultation" },
-                { href: "/blog", label: "Blog and Ideas" },
-                { href: "/#calculator", label: "Project Estimator" },
+                { href: "/services", label: "Our services" },
+                { href: "/#consult", label: "Free consultation" },
+                { href: "/blog", label: "Blog and ideas" },
+                { href: "/#calculator", label: "Project estimator" },
               ].map((item) => (
                 <Link
                   key={item.href}

@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const firstMeetingWithAHomeBuilder: BlogPostData = {
   slug: 'first-meeting-with-a-home-builder',
-  title: 'What Happens at Your First Meeting With a Builder',
+  title: 'What happens at your first meeting with a builder',
   seoTitle: 'First Meeting With a Home Builder',
   metaDescription:
     'What a free consultation with a Boise home builder covers: what to bring, the questions we ask, and the budget band and schedule you leave with.',
   excerpt:
     'The first meeting is a planning conversation, not a sales appointment. Here is what we cover, what to bring, and what you walk out with, including if you do not own land yet.',
-  category: 'The Building Process',
+  category: 'The building process',
   hubSlug: 'home-building-process',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-25',
@@ -36,12 +36,12 @@ export const firstMeetingWithAHomeBuilder: BlogPostData = {
     'If the numbers do not work, we will say so at this meeting rather than three months in.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise Home Building Process' },
-    { url: '/blog/stages-of-building-a-house', anchor: 'The Stages of Building a House' },
-    { url: '/blog/how-long-does-it-take-to-build-a-house-boise', anchor: 'How Long a Boise Build Takes' },
-    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to Budget for a New Home' },
-    { url: '/blog/lot-evaluation-checklist', anchor: 'Lot Evaluation Checklist' },
-    { url: '/blog/questions-to-ask-a-home-builder', anchor: 'Questions to Ask a Home Builder' },
+    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise home building process' },
+    { url: '/blog/stages-of-building-a-house', anchor: 'The stages of building a house' },
+    { url: '/blog/how-long-does-it-take-to-build-a-house-boise', anchor: 'How long a Boise build takes' },
+    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to budget for a new home' },
+    { url: '/blog/lot-evaluation-checklist', anchor: 'Lot evaluation checklist' },
+    { url: '/blog/questions-to-ask-a-home-builder', anchor: 'Questions to ask a home builder' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

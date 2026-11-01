@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const homeBuilderRedFlags: BlogPostData = {
   slug: 'home-builder-red-flags',
-  title: 'Home Builder Red Flags',
+  title: 'Home builder red flags',
   seoTitle: 'Home Builder Red Flags to Watch For',
   metaDescription:
     'Warning signs before you sign and during the build: low bids, vague scope, big deposits, no change process, unnamed trades, and a builder who goes quiet.',
   excerpt:
     'Every warning sign in home building predicts a specific later problem. Here is what each one actually means, before you sign and once the build is underway.',
-  category: 'Choosing a Builder',
+  category: 'Choosing a builder',
   hubSlug: 'choosing-a-builder',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-12',
@@ -32,11 +32,11 @@ export const homeBuilderRedFlags: BlogPostData = {
     'During the build, silence is the warning sign to act on fastest.',
   ],
   relatedLinks: [
-    { url: '/guides/choose-home-builder-boise', anchor: 'How to Choose a Home Builder in Boise' },
-    { url: '/blog/questions-to-ask-a-home-builder', anchor: 'Questions to Ask a Home Builder' },
-    { url: '/blog/why-home-building-bids-vary', anchor: 'Why Home Building Bids Vary' },
-    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to Compare Home Builder Bids' },
-    { url: '/blog/fixed-price-vs-cost-plus', anchor: 'Fixed Price vs Cost Plus' },
+    { url: '/guides/choose-home-builder-boise', anchor: 'How to choose a home builder in Boise' },
+    { url: '/blog/questions-to-ask-a-home-builder', anchor: 'Questions to ask a home builder' },
+    { url: '/blog/why-home-building-bids-vary', anchor: 'Why home building bids vary' },
+    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to compare home builder bids' },
+    { url: '/blog/fixed-price-vs-cost-plus', anchor: 'Fixed price vs cost plus' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

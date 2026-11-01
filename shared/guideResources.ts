@@ -24,7 +24,7 @@ export interface GuideResource {
 export const GUIDE_RESOURCES: Record<string, GuideResource> = {
   'budget-worksheet': {
     id: 'budget-worksheet',
-    title: 'New Home Budget Worksheet',
+    title: 'New home budget worksheet',
     description:
       'Printable worksheet with 2026 Treasure Valley build cost bands, budget buckets from land through landscaping, and bid comparison checks.',
     kind: 'pdf',
@@ -33,7 +33,7 @@ export const GUIDE_RESOURCES: Record<string, GuideResource> = {
   },
   'lot-checklist': {
     id: 'lot-checklist',
-    title: 'Lot Evaluation Checklist',
+    title: 'Lot evaluation checklist',
     description:
       'What to verify before you buy a parcel: access, utilities, septic feasibility, soils, slope, and setbacks. Bring it to a showing.',
     kind: 'pdf',
@@ -42,7 +42,7 @@ export const GUIDE_RESOURCES: Record<string, GuideResource> = {
   },
   'ada-canyon-permit-pdf': {
     id: 'ada-canyon-permit-pdf',
-    title: 'Ada vs Canyon Permit Guide',
+    title: 'Ada vs Canyon permit guide',
     description:
       'One-page reference: which county reviews your build, what a new-home permit package contains, and the inspection sequence.',
     kind: 'pdf',
@@ -51,7 +51,7 @@ export const GUIDE_RESOURCES: Record<string, GuideResource> = {
   },
   'ada-canyon-permit-flow': {
     id: 'ada-canyon-permit-flow',
-    title: 'Permit Flow Infographic',
+    title: 'Permit flow infographic',
     description: 'Visual walkthrough of Ada vs Canyon County paths and inspection milestones.',
     kind: 'visual',
     href: '/resources/ada-canyon-permit-flow',

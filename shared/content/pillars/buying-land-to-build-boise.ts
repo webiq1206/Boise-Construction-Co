@@ -2,7 +2,7 @@ import type { GuidePageData } from '../../guideContent';
 
 export const buyingLandToBuildBoise: GuidePageData = {
   slug: 'buying-land-to-build-boise',
-  title: 'Buying Land to Build On in the Treasure Valley',
+  title: 'Buying land to build on in the Treasure Valley',
   seoTitle: 'Buying Treasure Valley Land to Build',
   metaDescription:
     'A parcel being for sale does not make it buildable. Check access, zoning, utilities, septic, soils, slope, and irrigation before you buy land near Boise.',
@@ -34,14 +34,14 @@ export const buyingLandToBuildBoise: GuidePageData = {
     'Write the offer so soils, septic feasibility, and utility costs are answered while your money is still refundable.',
   ],
   relatedLinks: [
-    { url: '/blog/how-to-buy-a-buildable-lot-boise', anchor: 'How to Tell If a Lot Is Actually Buildable' },
-    { url: '/blog/lot-evaluation-checklist', anchor: 'Lot Evaluation Checklist' },
-    { url: '/blog/well-and-septic-cost-idaho', anchor: 'What a Well and Septic System Costs in Idaho' },
-    { url: '/blog/impact-fees-and-utility-connections', anchor: 'Impact Fees and Utility Connections' },
-    { url: '/blog/building-in-the-boise-foothills', anchor: 'What It Costs to Build in the Boise Foothills' },
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
-    { url: '/services/lot-evaluation', anchor: 'Lot Evaluation' },
-    { url: '/services/build-on-your-lot', anchor: 'Build on Your Lot' },
+    { url: '/blog/how-to-buy-a-buildable-lot-boise', anchor: 'How to tell if a lot is actually buildable' },
+    { url: '/blog/lot-evaluation-checklist', anchor: 'Lot evaluation checklist' },
+    { url: '/blog/well-and-septic-cost-idaho', anchor: 'What a well and septic system costs in Idaho' },
+    { url: '/blog/impact-fees-and-utility-connections', anchor: 'Impact fees and utility connections' },
+    { url: '/blog/building-in-the-boise-foothills', anchor: 'What it costs to build in the Boise Foothills' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
+    { url: '/services/lot-evaluation', anchor: 'Lot evaluation' },
+    { url: '/services/build-on-your-lot', anchor: 'Build on your lot' },
   ],
   linkedClusterSlugs: [
     'how-to-buy-a-buildable-lot-boise',

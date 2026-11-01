@@ -17,7 +17,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does shop homes & barndominiums cost in Boise?",
-          answer: "Shop home prices in Boise move with the wider Treasure Valley. In 2026, these homes plan at $150 to $250 per square foot, about $200 on average, blended across the finished and shop areas and before land, site work and permits. A lot walkthrough produces a line-item budget for your specific site.",
+          answer: "Shop home prices in Boise move with the wider Treasure Valley. For 1,600 square feet of living space with a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. A lot walkthrough produces a line-item budget for your specific site.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -46,7 +46,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does shop homes & barndominiums cost in Meridian?",
-          answer: "Shop homes in Meridian follow Treasure Valley pricing. As of 2026, they plan at $150 to $250 a square foot, about $200 on average, when the finished space and the shop space are blended together, before land, site work and permits. A walkthrough of your lot leads to a budget itemized for the site.",
+          answer: "Shop homes in Meridian follow Treasure Valley pricing. Our estimator puts 1,600 square feet of living space with a 1,200 square foot shop at $385,000 to $520,000 with Essential finishes and $465,000 to $630,000 with Signature finishes, land excluded, on a simple lot with city services. A walkthrough of your lot leads to a budget itemized for the site.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -75,7 +75,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does shop homes & barndominiums cost in Nampa?",
-          answer: "Nampa costs track the general Treasure Valley market. For 2026, the valleywide planning figure for a shop home is $150 to $250 per square foot, about $200 on average, blending finished and shop space and before land, site work and permits. A walk of your land then leads to an itemized budget for the site.",
+          answer: "Nampa costs track the general Treasure Valley market. Run through our estimator, a 1,600 square foot living area with a 1,200 square foot shop comes to $385,000 to $520,000 at Essential finish or $465,000 to $630,000 at Signature finish, not counting land and assuming a simple lot with city services. A walk of your land then leads to an itemized budget for the site.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -104,7 +104,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does shop homes & barndominiums cost in Eagle?",
-          answer: "Eagle prices run with the wider Treasure Valley market. Valleywide in 2026, a shop home plans at $150 to $250 per square foot, about $200 on average, once the finished and shop areas are blended, before land, site work and permits. After we walk the lot, we prepare an itemized budget for that site.",
+          answer: "Eagle prices run with the wider Treasure Valley market. With 1,600 square feet of living space and a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, before land, on a simple lot with city services. After we walk the lot, we prepare an itemized budget for that site.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -133,7 +133,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does shop homes & barndominiums cost in Kuna?",
-          answer: "Kuna budgets run with the overall Treasure Valley market. Shop homes in the valley are budgeted for 2026 at $150 to $250 a square foot, about $200 on average, with finished and shop space blended, before land, site work and permits. A walk-through of your lot then leads to an itemized budget for it.",
+          answer: "Kuna budgets run with the overall Treasure Valley market. Our estimator budgets a 1,600 square foot home with a 1,200 square foot shop at $385,000 to $520,000 for Essential finishes and $465,000 to $630,000 for Signature finishes, without land and on a simple lot with city services; a well and septic add to that. A walk-through of your lot then leads to an itemized budget for it.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -162,7 +162,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does shop homes & barndominiums cost in Caldwell?",
-          answer: "Caldwell costs run with the overall Treasure Valley. For 2026, shop homes valleywide are budgeted at $150 to $250 per blended square foot, about $200 on average, counting both finished and shop space but not land, site work or permits. Once we walk the lot together, we deliver a line-item budget for the property.",
+          answer: "Caldwell costs run with the overall Treasure Valley. For a 1,600 square foot living area plus a 1,200 square foot shop, our estimator gives $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. Once we walk the lot together, we deliver a line-item budget for the property.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -191,7 +191,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does shop homes & barndominiums cost in Star?",
-          answer: "Star costs line up with the wider Treasure Valley picture. In 2026, shop homes in the valley plan at $150 to $250 per blended square foot, about $200 on average, finished and shop space together, before land, site work and permits. After we walk the lot together, we prepare a line-item budget for that site.",
+          answer: "Star costs line up with the wider Treasure Valley picture. Our estimator prices 1,600 square feet of living space with a 1,200 square foot shop at $385,000 to $520,000 in Essential finish and $465,000 to $630,000 in Signature finish, land not included, on a simple lot with city services. After we walk the lot together, we prepare a line-item budget for that site.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -220,7 +220,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does shop homes & barndominiums cost in Middleton?",
-          answer: "Middleton costs track the overall Treasure Valley. Across the valley, shop homes plan for 2026 at $150 to $250 a square foot, about $200 on average, with shop and finished areas blended and land, site work and permits on top. A walk of your land then produces an itemized budget for your site.",
+          answer: "Middleton costs track the overall Treasure Valley. A 1,600 square foot home with a 1,200 square foot shop comes out of our estimator at $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, with land excluded and a simple lot with city services assumed; a well, septic or long utility run adds to it. A walk of your land then produces an itemized budget for your site.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -249,7 +249,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does shop homes & barndominiums cost in Garden City?",
-          answer: "Garden City costs move with the general Treasure Valley picture. Shop homes across the valley plan in 2026 at $150 to $250 per square foot, about $200 on average, blending shop space with finished space, before land, site work and permits. Arrange a lot walkthrough for an itemized budget for your site.",
+          answer: "Garden City costs move with the general Treasure Valley picture. Our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish for 1,600 square feet of living space with a 1,200 square foot shop, excluding land, on a simple lot with city services. Arrange a lot walkthrough for an itemized budget for your site.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",

@@ -17,7 +17,7 @@ import {
   CONTRACTOR_REGISTRATION_LABEL,
 } from '@/shared/contractorRegistration';
 import { CONTENT_HUBS } from '@/shared/contentHubs';
-import { CITIES, SERVICES } from '@/shared/contentData';
+import { CITIES, SERVICES, serviceLabel } from '@/shared/contentData';
 import { P5_SOCIAL } from '@/shared/gbpProfile';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 
@@ -87,7 +87,7 @@ export const FAMILY_BRAND: FamilyBrand = {
       {
         title: 'Services',
         links: [
-          ...SERVICES.map((service) => ({ label: service.name, href: `/services/${service.slug}` })),
+          ...SERVICES.map((service) => ({ label: serviceLabel(service), href: `/services/${service.slug}` })),
           { label: 'All services', href: '/services' },
         ],
       },

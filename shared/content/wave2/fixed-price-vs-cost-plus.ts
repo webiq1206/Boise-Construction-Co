@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const fixedPriceVsCostPlus: BlogPostData = {
   slug: 'fixed-price-vs-cost-plus',
-  title: 'Fixed Price vs Cost Plus for a New Home Build',
+  title: 'Fixed price vs cost plus for a new home build',
   seoTitle: 'Fixed Price vs Cost Plus, New Home',
   metaDescription:
     'Fixed price vs cost plus for a new home build: who carries the risk over nine to fourteen months, why allowances matter, GMP contracts, and how draws work.',
   excerpt:
     'On a nine to fourteen month house build, the contract structure decides who pays when something costs more than expected. Here is how each one behaves over that long.',
-  category: 'Choosing a Builder',
+  category: 'Choosing a builder',
   hubSlug: 'choosing-a-builder',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-12',
@@ -35,11 +35,11 @@ export const fixedPriceVsCostPlus: BlogPostData = {
     'Draws are tied to milestones under a fixed price and to invoices under cost plus, which changes how your lender behaves.',
   ],
   relatedLinks: [
-    { url: '/guides/choose-home-builder-boise', anchor: 'How to Choose a Home Builder in Boise' },
-    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to Compare Home Builder Bids' },
-    { url: '/blog/why-home-building-bids-vary', anchor: 'Why Home Building Bids Vary' },
-    { url: '/blog/design-build-vs-general-contractor', anchor: 'Design-Build vs General Contractor' },
-    { url: '/blog/construction-loan-basics-idaho', anchor: 'How Construction Loans Work in Idaho' },
+    { url: '/guides/choose-home-builder-boise', anchor: 'How to choose a home builder in Boise' },
+    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to compare home builder bids' },
+    { url: '/blog/why-home-building-bids-vary', anchor: 'Why home building bids vary' },
+    { url: '/blog/design-build-vs-general-contractor', anchor: 'Design-build vs general contractor' },
+    { url: '/blog/construction-loan-basics-idaho', anchor: 'How construction loans work in Idaho' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

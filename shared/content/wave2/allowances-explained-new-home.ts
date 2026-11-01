@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const allowancesExplainedNewHome: BlogPostData = {
   slug: 'allowances-explained-new-home',
-  title: 'How Allowances Work in a New Home Contract',
+  title: 'How allowances work in a new home contract',
   seoTitle: 'Allowances in a New Home Contract',
   metaDescription:
     'What an allowance is, which categories carry one, how a low allowance hides a low bid, how to test if a number is realistic, and how overages are handled.',
   excerpt:
     'An allowance is a placeholder for a decision you have not made yet. Set honestly it keeps a budget intact. Set low it is the most common reason budgets fail.',
-  category: 'Home Building Costs',
+  category: 'Home building costs',
   hubSlug: 'home-building-costs',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-20',
@@ -36,11 +36,11 @@ export const allowancesExplainedNewHome: BlogPostData = {
     'Credits for coming in under allowance are often capped or excluded, so read the clause.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
-    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to Budget for a New Home' },
-    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to Compare Builder Bids' },
-    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to Build a House in Boise' },
-    { url: '/blog/choosing-finishes-for-a-new-home', anchor: 'Choosing Finishes for a New Home' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
+    { url: '/blog/how-to-budget-a-new-home-boise', anchor: 'How to budget for a new home' },
+    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to compare builder bids' },
+    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to build a house in Boise' },
+    { url: '/blog/choosing-finishes-for-a-new-home', anchor: 'Choosing finishes for a new home' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [
