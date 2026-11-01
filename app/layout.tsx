@@ -10,7 +10,7 @@ import { SkipLink } from '@/components/family/SkipLink'
 import { brandStyle } from '@/components/family/brandStyle'
 import { ConditionalFooter } from '@/components/ConditionalFooter'
 import { Footer } from '@/components/Footer'
-import { Toaster } from '@/components/ui/toaster'
+import { DeferredToaster } from '@/components/ui/deferred-toaster'
 import { Providers } from '@/components/Providers'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import { SITE_TAGLINE } from '@/shared/siteContent'
@@ -202,7 +202,7 @@ export default function RootLayout({
             <ConditionalFooter footer={<Footer />} />
             <SiteActionBar />
           </div></ApprovedShell>
-          <Toaster />
+          <DeferredToaster />
           <AssistantWidget />
         </Providers>
         <GoogleAnalytics />
