@@ -1,4 +1,5 @@
 import { InteriorDocument,InteriorPage } from '@/components/approved/InteriorLayout';
+import { familyButtonClass } from "@/components/family/Button";
 import { Section } from '@/components/marketing/Section';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -10,7 +11,7 @@ generateBreadcrumbSchema,
 generateHowToSchema,
 } from '@/lib/schema';
 import { CTA_PRIMARY } from '@/shared/ctaCopy';
-import { ArrowLeft,ArrowRight,Download } from 'lucide-react';
+import { ArrowLeft,Download } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { PermitFlowGraphic } from './PermitFlowGraphic';
@@ -82,17 +83,16 @@ export default function AdaCanyonPermitFlowPage() {
             <a
               href="/downloads/ada-canyon-permit-guide.pdf"
               download
-              className="secondary-cta"
+              className={familyButtonClass({ variant: "secondary", size: "lg", className: "secondary-cta" })}
             >
               <Download className="h-4 w-4" />
               Download PDF reference
             </a>
             <Link
               href="/blog/ada-vs-canyon-county-permit-timelines"
-              className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm hover:bg-muted/50"
+              className={familyButtonClass({ variant: "tertiary" })}
             >
               Read full article
-              <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { familyButtonClass } from "@/components/family/Button";
 import { SelectableCard } from "@/components/estimate/wizard/SelectableCard";
 import {
   EMPTY_REFINEMENTS,
@@ -152,13 +152,12 @@ export function PlanningRangeExplorer() {
               </p>
               <p className="planning-range-note">{PLANNING_DISCLAIMER}</p>
               <a
-                className="f-button"
+                className={familyButtonClass({ variant: "primary", size: "lg" })}
                 href="/estimate"
                 data-testid="proof-cta-estimate"
-                style={{ marginTop: "1.5rem", display: "inline-flex" }}
+                style={{ marginTop: "1.5rem" }}
               >
                 Request a quote
-                <ArrowUpRight size={18} aria-hidden="true" />
               </a>
             </>
           ) : (

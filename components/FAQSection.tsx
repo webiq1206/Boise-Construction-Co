@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Section } from "@/components/marketing/Section";
-import { Button } from "@/components/ui/button";
+import { familyButtonClass } from "@/components/family/Button";
 import { HOMEPAGE_FAQS, INITIAL_FAQ_COUNT } from "@/shared/homepageFaqs";
 
 export { HOMEPAGE_FAQS };
@@ -71,9 +71,9 @@ export function FAQSection() {
             </Accordion>
             {!showAll && HOMEPAGE_FAQS.length > INITIAL_FAQ_COUNT && (
               <div className="mt-8">
-                <Button variant="brandOutline" type="button" onClick={() => setShowAll(true)}>
+                <button type="button" className={familyButtonClass({ variant: "secondary", size: "lg" })} onClick={() => setShowAll(true)}>
                   Show all {HOMEPAGE_FAQS.length} questions
-                </Button>
+                </button>
               </div>
             )}
           </div>
