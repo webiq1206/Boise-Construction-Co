@@ -98,12 +98,17 @@ export const GBP_LINKS = {
 export const GBP_SOCIAL: { facebook?: string } = {};
 
 /**
- * Social profiles that belong to the parent company, P5 Home Co. These feed
- * `sameAs` on the P5 parentOrganization node in lib/schema.ts and the footer
- * link labelled "P5 Home Co on Facebook".
+ * Profiles that belong to the parent company, P5 Home Co. These feed `sameAs`
+ * on the P5 parentOrganization node in lib/schema.ts and the footer links
+ * labelled "P5 Home Co on Facebook" and "P5 Home Co on Google".
+ *
+ * `google` is the owner's one Google Business Profile, P5 Home Co (category
+ * General contractor, knowledge graph id /g/11ntl1t7dc), added 1 November 2026.
+ * It is the parent's profile: never put it in this brand's own sameAs.
  */
 export const P5_SOCIAL = {
   facebook: 'https://www.facebook.com/1228704823655951',
+  google: 'https://www.google.com/search?kgmid=/g/11ntl1t7dc',
 } as const;
 
 export const GBP_ATTRIBUTES = {

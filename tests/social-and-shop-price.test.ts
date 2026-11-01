@@ -9,14 +9,19 @@ import { CITY_SERVICE_COPY } from '../shared/content/cityServiceCopy.ts';
 import { SERVICE_SEO_CONTENT } from '../shared/seoContent.ts';
 
 const P5_FACEBOOK = 'https://www.facebook.com/1228704823655951';
+const P5_GOOGLE = 'https://www.google.com/search?kgmid=/g/11ntl1t7dc';
 const RETIRED_FACEBOOK = 'profile.php?id=61592885025074';
 
-test('the owner Facebook page describes P5 Home Co, not this brand', () => {
+test('the owner Facebook page and Google profile describe P5 Home Co, not this brand', () => {
   assert.equal(P5_SOCIAL.facebook, P5_FACEBOOK);
-  assert.deepEqual([...P5_PARENT_ORGANIZATION.sameAs], [P5_FACEBOOK]);
+  assert.equal(P5_SOCIAL.google, P5_GOOGLE);
+  // Owner decision A (1 November 2026): the one Google Business Profile is
+  // P5 Home Co's, so it joins the Facebook page on the parent node only.
+  assert.deepEqual([...P5_PARENT_ORGANIZATION.sameAs], [P5_FACEBOOK, P5_GOOGLE]);
   assert.equal(GBP_SOCIAL.facebook, undefined);
   assert.equal(BUSINESS_INFO.sameAs.includes(P5_FACEBOOK), false);
-  for (const url of BUSINESS_INFO.sameAs) assert.doesNotMatch(url, /facebook\.com/);
+  assert.equal(BUSINESS_INFO.sameAs.includes(P5_GOOGLE), false);
+  for (const url of BUSINESS_INFO.sameAs) assert.doesNotMatch(url, /facebook\.com|kgmid/);
 });
 
 test('the retired Facebook profile is gone and the footer labels the parent page', () => {
@@ -26,6 +31,8 @@ test('the retired Facebook profile is gone and the footer labels the parent page
   const footer = readFileSync('components/Footer.tsx', 'utf8');
   assert.match(footer, /href=\{P5_SOCIAL\.facebook\}/);
   assert.match(footer, /aria-label="P5 Home Co on Facebook"/);
+  assert.match(footer, /href=\{P5_SOCIAL\.google\}/);
+  assert.match(footer, /aria-label="P5 Home Co on Google"/);
 });
 
 test('shop home pricing reads $150 to $250 per square foot everywhere', () => {
