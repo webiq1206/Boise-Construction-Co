@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Metadata } from "next";
-import { Button } from "@/components/ui/button";
+import { FamilyButton } from "@/components/family/Button";
 import { PrimaryCta } from "@/components/approved/PrimaryCta";
 import { Card, CardContent } from "@/components/ui/card";
 import { Home, ArrowRight, MessageSquare, Phone, Wrench } from "lucide-react";
@@ -61,27 +61,23 @@ export default function NotFound() {
         </Card>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <PrimaryCta href="/" arrow={false} trackingLocation="not_found">
+          <PrimaryCta href="/" trackingLocation="not_found">
             <Home className="h-5 w-5" aria-hidden="true" />
             Go to Homepage
           </PrimaryCta>
           <div className="flex flex-col items-center gap-1">
-            <Button variant="brandOutline" size="lg" asChild>
-              <a href={SITE_CONFIG.phoneHref}>
-                <Phone className="h-5 w-5 mr-2" />
-                Call {SITE_CONFIG.phone}
-              </a>
-            </Button>
+            <FamilyButton href={SITE_CONFIG.phoneHref} variant="secondary" size="lg">
+              <Phone className="h-5 w-5" aria-hidden="true" />
+              Call {SITE_CONFIG.phone}
+            </FamilyButton>
             <SaveContactLink className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Save to contacts
             </SaveContactLink>
           </div>
-          <Button variant="brandOutline" size="lg" asChild>
-            <a href={SITE_CONFIG.phoneSmsHref} data-testid="link-404-text">
-              <MessageSquare className="h-5 w-5 mr-2" />
-              Text us
-            </a>
-          </Button>
+          <FamilyButton href={SITE_CONFIG.phoneSmsHref} variant="secondary" size="lg" data-testid="link-404-text">
+            <MessageSquare className="h-5 w-5" aria-hidden="true" />
+            Text us
+          </FamilyButton>
         </div>
 
         <div className="mt-12">

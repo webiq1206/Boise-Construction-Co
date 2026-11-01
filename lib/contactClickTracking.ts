@@ -38,6 +38,11 @@ export function bindDelegatedContactClicks(target: EventTarget = document): () =
     const link = node?.closest?.('a[href]');
     if (!link) return;
     const pathname = typeof window === 'undefined' ? '' : window.location?.pathname || '';
+    // The family HeroPhoto's primary marks itself data-hero-cta="primary" and carries no
+    // handler of its own; it reports the same cta_click the hero sent before.
+    if (link.getAttribute('data-hero-cta') === 'primary') {
+      trackEvent('cta_click', { cta: 'primary', location: pathname === '/' ? 'home_hero' : pathname });
+    }
     trackDelegatedContactClick(link.getAttribute('href') || '', pathname);
   };
   target.addEventListener('click', onClick, { capture: true });

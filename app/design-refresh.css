@@ -91,35 +91,14 @@
 .approved-shell [data-slot=accordion-trigger] > span:not(.f-number):not(.process-index) { flex: 1; min-width: 0; text-align: left; }
 .approved-shell .f-accordion .f-number { flex: none; min-width: 2.5rem; }
 
-/* Footer clearance for the sticky bar lives here and nowhere else: page
-   wrappers no longer pad themselves, and the footer pads only while the bar
-   can show (below 1180px). The last footer line sits about 24px above the bar.
-   (BRC-05, BRC-06, BCONC-07, BCONC-38, BHC-03, BCC-04) */
-@media (max-width: 1179px) {
-  .approved-shell .site-footer > .container { padding-bottom: 24px; }
-  .approved-shell .site-footer { padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px)); }
-}
-@media (min-width: 768px) and (max-width: 1179px) {
-  .approved-shell .site-footer { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
-}
+/* Footer clearance for the sticky bar: on this site the family MobileActionBar
+   reserves it with its own spacer (styles/family-chrome.css). */
 /* Cabinet's bar is 12px taller (larger buttons), so its footer clears 12px more. */
 @media (max-width: 767px) {
   .site-cabinet .site-footer { padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
 }
 @media (min-width: 768px) and (max-width: 1179px) {
   .site-cabinet .site-footer { padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
-}
-
-/* Tablet range: a compact floating bar at the right, not a phone bar stretched
-   across the screen. (BHC-26, BCC-30, BRC-47) */
-@media (min-width: 768px) and (max-width: 1179px) {
-  .approved-shell [data-mobile-nav-bar] {
-    left: auto; right: 16px; bottom: 16px;
-    width: min(520px, calc(100% - 32px));
-    border: 1px solid rgba(251, 250, 246, .16);
-    box-shadow: 0 12px 32px rgba(28, 31, 30, .28);
-  }
-  .approved-shell .site-footer > .container { width: 88%; max-width: none; padding-inline: 0; }
 }
 
 /* Section rhythm at desktop widths. Phone values are unchanged. Two neighbouring
@@ -197,6 +176,5 @@
 /* Header Call and Chat stay on the phone bar. The wordmark shrinks so those
    44px controls fit beside it at 320px. The homepage hero is unchanged. */
 @media (max-width: 700px) {
-  .approved-shell [data-approved-navigation] > nav { padding-inline: 16px; gap: 6px; }
   .approved-shell .approved-original-wordmark { width: 132px; }
 }

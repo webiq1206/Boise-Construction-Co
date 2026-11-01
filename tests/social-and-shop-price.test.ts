@@ -1,6 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { Footer } from '../components/Footer.tsx';
+import { FAMILY_BRAND } from '../lib/familyBrand.ts';
 import { P5_PARENT_ORGANIZATION } from '../lib/schema.ts';
 import { BUSINESS_INFO } from '../lib/seo.ts';
 import { GBP_SOCIAL, P5_SOCIAL } from '../shared/gbpProfile.ts';
@@ -15,6 +19,8 @@ import {
   getSetRefinementKeys,
   type EstimateRefinements,
 } from '../shared/estimateEngine.ts';
+
+(globalThis as typeof globalThis & { React: typeof React }).React = React;
 
 const P5_FACEBOOK = 'https://www.facebook.com/1228704823655951';
 const P5_GOOGLE = 'https://www.google.com/search?kgmid=/g/11ntl1t7dc';
@@ -36,11 +42,15 @@ test('the retired Facebook profile is gone and the footer labels the parent page
   for (const file of ['shared/gbpProfile.ts', 'lib/seo.ts', 'lib/schema.ts', 'components/Footer.tsx']) {
     assert.equal(readFileSync(file, 'utf8').includes(RETIRED_FACEBOOK), false, file);
   }
-  const footer = readFileSync('components/Footer.tsx', 'utf8');
-  assert.match(footer, /href=\{P5_SOCIAL\.facebook\}/);
-  assert.match(footer, /aria-label="P5 Home Co on Facebook"/);
-  assert.match(footer, /href=\{P5_SOCIAL\.google\}/);
-  assert.match(footer, /aria-label="P5 Home Co on Google"/);
+  // The footer is the shared family SiteFooter (Phase 2); the brand config hands it the
+  // parent's page and its label, and the rendered link carries both.
+  assert.equal(FAMILY_BRAND.parentFacebook.href, P5_SOCIAL.facebook);
+  assert.equal(FAMILY_BRAND.parentFacebook.label, 'P5 Home Co on Facebook');
+  const footer = renderToStaticMarkup(React.createElement(Footer));
+  assert.match(footer, /<a href="https:\/\/www\.facebook\.com\/1228704823655951" rel="noopener" target="_blank" data-testid="link-footer-facebook">P5 Home Co on Facebook<\/a>/);
+  // Owner decision A: the parent's Google profile sits beside its Facebook page.
+  assert.match(footer, /href="https:\/\/www\.google\.com\/search\?kgmid=\/g\/11ntl1t7dc"/);
+  assert.match(footer, />P5 Home Co on Google</);
 });
 
 /*

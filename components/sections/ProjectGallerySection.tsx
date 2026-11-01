@@ -1,10 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/marketing/Section";
-import { Button } from "@/components/ui/button";
+import { FamilyButton } from "@/components/family/Button";
 import {
   GALLERY_PROJECTS,
   type GalleryProject,
@@ -162,9 +161,9 @@ export function ProjectGallerySection({
 
         {showViewAll && (
           <div className="mt-12">
-            <Button variant="brandOutline" asChild>
-              <Link href="/services">See services</Link>
-            </Button>
+            <FamilyButton href="/services" variant="secondary" size="lg">
+              See services
+            </FamilyButton>
           </div>
         )}
       </div>

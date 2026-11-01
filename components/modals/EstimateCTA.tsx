@@ -26,7 +26,6 @@ export function EstimateCTA({ onExtraClick, children, trackingLocation, href: ex
       <PrimaryCta
         href={href}
         className={props.className}
-        arrow={typeof children === "string"}
         trackingLocation={trackingLocation}
         onClick={onExtraClick}
         data-testid={(props as { "data-testid"?: string })["data-testid"]}

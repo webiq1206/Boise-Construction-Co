@@ -4,7 +4,10 @@ import {withBrandPageMetadata} from '@/lib/brand-page-metadata';
 import { generateLocalBusinessSchema } from "@/lib/schema";
 import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
-import { Navigation } from '@/components/Navigation'
+import { Navigation, SiteActionBar } from '@/components/Navigation'
+import { SkipLink } from '@/components/family/SkipLink'
+// The brand accent as --color-accent on the root, so page-content family buttons carry it too.
+import { brandStyle } from '@/components/family/brandStyle'
 import { ConditionalFooter } from '@/components/ConditionalFooter'
 import { Footer } from '@/components/Footer'
 import { Toaster } from '@/components/ui/toaster'
@@ -33,6 +36,11 @@ import './audit-accessibility.css'
 import './design-v2-compliance.css'
 import './design-refresh.css'
 import './contractor-registration.css'
+// Shared P5 Home Co family tokens and chrome (header, menu, bar, footer, hero),
+// synced byte-identical across the family; brand values come from lib/familyBrand.ts.
+import '@/styles/family-tokens.css'
+import '@/styles/family-chrome.css'
+import './family-adoption.css'
 
 // P5 family typefaces, self-hosted. These are the same two files P5 Home Co
 // serves (Manrope and Cormorant Garamond, both variable-weight, both SIL Open
@@ -168,7 +176,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`dark ${manrope.variable} ${cormorant.variable}`} style={{ colorScheme: 'dark' }} suppressHydrationWarning>
+    <html lang="en" className={`dark ${manrope.variable} ${cormorant.variable}`} style={{ colorScheme: 'dark', ...brandStyle() }} suppressHydrationWarning>
       <head suppressHydrationWarning>
         <script id="p5-consent" dangerouslySetInnerHTML={{__html:consentBootstrap()}} />
         <script
@@ -185,18 +193,14 @@ export default function RootLayout({
         <Providers>
           <Suspense fallback={null}><LeadAttribution /></Suspense>
           <ScrollToTop />
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-sm focus:bg-foreground focus:px-4 focus:py-2 focus:text-background focus:shadow-lg"
-          >
-            Skip to content
-          </a>
+          <SkipLink />
           <ApprovedShell><div className="flex flex-col min-h-screen">
             <Navigation />
             <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
               {children}
             </main>
             <ConditionalFooter footer={<Footer />} />
+            <SiteActionBar />
           </div></ApprovedShell>
           <Toaster />
           <AssistantWidget />

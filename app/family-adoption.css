@@ -1,0 +1,32 @@
+/*
+  Boise Construction Co adoption of the shared family chrome. BRAND-OWNED: the shared
+  styles live in styles/family-*.css and are never edited here.
+*/
+
+/* The homepage photograph is a concept render. HeroPhoto has no caption slot, so the
+   honest label sits in this site's wrapper, on the photo's clear corner, above the
+   scrim and clear of the copy (bottom left) and the bottom bar. */
+.home-hero {
+  position: relative;
+}
+.home-hero .home-hero-imagery {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--gutter);
+  z-index: 1;
+  margin: 0;
+  padding: 2px 8px;
+  background: rgba(var(--color-scrim-rgb), 0.55);
+  color: var(--color-paper);
+  font: 600 var(--fs-label) / var(--lh-label) var(--font-sans);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* A link inside the ADU sentence in the footer brand column reads as a link, not as
+   more of the sentence (the shared footer leaves column links plain). */
+.fam-footer[data-family-footer] .footer-adu-note a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

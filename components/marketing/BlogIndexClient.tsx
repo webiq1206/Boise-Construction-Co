@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { PenLine, Search, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { FamilyButton, familyButtonClass } from "@/components/family/Button";
 import { Section } from "@/components/marketing/Section";
 import { BlogCard, type BlogCardPost } from "@/components/marketing/BlogCard";
 import { Chip } from "@/components/marketing/Chip";
@@ -102,9 +102,9 @@ export function BlogIndexClient({ posts }: { posts: BlogCardPost[] }) {
                 <p className="text-muted-foreground max-w-md">
                   We&apos;re writing in-depth guides on budgeting, timelines, and more.
                 </p>
-                <Button variant="brand" asChild>
-                  <Link href="/">Back to home</Link>
-                </Button>
+                <FamilyButton href="/" variant="primary" size="lg">
+                  Back to home
+                </FamilyButton>
               </div>
             ) : (
               <>
@@ -190,9 +190,9 @@ export function BlogIndexClient({ posts }: { posts: BlogCardPost[] }) {
                     <p className="text-sm text-muted-foreground">
                       Try a different phrase, or browse everything.
                     </p>
-                    <Button
-                      variant="brandOutline"
+                    <button
                       type="button"
+                      className={familyButtonClass({ variant: "secondary", size: "lg" })}
                       onClick={() => {
                         setQuery("");
                         setActiveHub(null);
@@ -200,7 +200,7 @@ export function BlogIndexClient({ posts }: { posts: BlogCardPost[] }) {
                       data-testid="button-blog-search-reset"
                     >
                       Show all articles
-                    </Button>
+                    </button>
                   </div>
                 )}
 
