@@ -30,12 +30,16 @@ export function HomeHero() {
   return (
     <>
       <div className="home-hero pt-0" data-p5-hero="">
+        {/* Both files are already sized WebP (1280x720 at 137 KB, 780x1040 at 47 KB), so they
+            are served as is. A /_next/image request for a hero crop can stall and hold the
+            page's load event open, as it did on Boise Remodeling Co. */}
         <HeroPhoto
           image={{
             src: HERO_SRC,
             width: 1280,
             height: 720,
             position: "58% 50%",
+            unoptimized: true,
             alt: contentImageAlt(HERO_SRC),
           }}
           phoneImage={{
@@ -43,6 +47,7 @@ export function HomeHero() {
             width: 780,
             height: 1040,
             position: "42% 0%",
+            unoptimized: true,
           }}
           eyebrow="Custom home building · Treasure Valley"
           title="Custom home builder in Boise."
