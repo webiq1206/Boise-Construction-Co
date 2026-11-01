@@ -4,6 +4,9 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { Footer } from '../components/Footer.tsx';
 import { BRAND_PAGE_IMAGE } from '../lib/brand-page-metadata.ts';
 import { generateCityServiceDescription, generateMetaDescription } from '../lib/seo.ts';
 import { generateLocalBusinessSchema, generateOrganizationSchema, generateServiceSchema } from '../lib/schema.ts';
@@ -18,6 +21,8 @@ import {
   CONTRACTOR_REGISTRATION_LABEL,
   CONTRACTOR_REGISTRATION_NUMBER,
 } from '../shared/contractorRegistration.ts';
+
+(globalThis as typeof globalThis & { React: typeof React }).React = React;
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (file: string) => fs.readFileSync(path.join(root, file), 'utf8');
@@ -110,8 +115,13 @@ test('contractor registration is on the footer, plain on the estimator, and in s
   assert.equal(CONTRACTOR_REGISTRATION_LABEL, 'P5 Home Co LLC, Idaho Registered Contractor #8381215');
   assert.equal(CONTRACTOR_REGISTRATION_LABEL.includes('('), false);
   assert.equal(CONTRACTOR_LICENSE_SEARCH_URL, 'https://edopl.idaho.gov/OnlineServices/?link=PubSearch');
-  const footer = read('components/Footer.tsx');
-  assert.equal(footer.includes('ContractorRegistrationLink'), true);
+  // The footer is the shared family SiteFooter (Phase 2): read what it renders, not its source.
+  const footer = renderToStaticMarkup(React.createElement(Footer));
+  assert.equal((footer.match(/>P5 Home Co LLC, Idaho Registered Contractor #8381215<\/a>/g) ?? []).length, 1);
+  assert.match(
+    footer,
+    /<a href="https:\/\/edopl\.idaho\.gov\/OnlineServices\/\?link=PubSearch" target="_blank" rel="noopener noreferrer" title="Look up P5 Home Co LLC, Idaho Registered Contractor #8381215 on Idaho DOPL" aria-label="Verify with Idaho DOPL: look up P5 Home Co LLC, Idaho Registered Contractor #8381215, opens in a new tab"/,
+  );
   assert.equal(footer.includes('Built by'), false);
   assert.equal(footer.includes('webIQ'), false);
   assert.equal(footer.includes('/re-10-repairs-boise'), false);

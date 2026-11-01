@@ -6,15 +6,11 @@
 .approved-interior .interior-document-heading h1 em { color:var(--audit-accent-ink); }
 .approved-shell :is(a,button,input,select,textarea,summary):focus-visible { outline:3px solid currentColor; outline-offset:4px; }
 @media(max-width:1179px) {
-  .approved-shell:has(input:focus,textarea:focus,select:focus,[contenteditable=true]:focus) [data-mobile-nav-bar] { visibility:hidden; pointer-events:none; }
   .approved-shell { padding-bottom:env(safe-area-inset-bottom,0px); }
 }
 @media(prefers-reduced-motion:reduce) {
   .approved-shell *, .approved-shell *::before, .approved-shell *::after { animation:none!important; scroll-behavior:auto!important; transition:none!important; }
 }
-/* Bottom bar stays visible on marketing pages so C3 hero budgets account for it. */
-[data-mobile-nav-bar][data-p5-actions-ready="false"] { visibility:hidden !important; pointer-events:none !important; }
-[data-mobile-nav-bar][data-p5-actions-ready="true"] { visibility:visible; }
 
 /* Surface-aware text tokens: decorative brand accents stay unchanged. */
 .approved-shell { --accent-legible:var(--accent-on-light); --ed-accent:var(--audit-accent-ink); }
@@ -88,7 +84,6 @@
   .approved-shell :is(.brc-text-link, [data-testid="link-save-contact"], a[href$="contact.vcf"], .interior-estimate-link, a.min-h-9, .min-h-9.rounded-full, .rounded-xl.border > a.inline-flex) { min-height: 44px; }
   /* Topic links in the article sidebar card wrap as whole units rather than mid-link. */
   .approved-shell .rounded-lg.border > a.text-sm { display: inline-flex; align-items: center; min-height: 44px; }
-  .approved-shell footer :is(a, button):not(p a):not(.inline-flex):not(.flex):not(.f-button):not(.button):not([class*="min-h-"]) { display: inline-flex; align-items: center; min-height: 44px; }
   .approved-shell :is(nav[aria-label="Breadcrumb"], .interior-article-header) :is(a, button):not(.inline-flex):not(.flex):not(.f-button):not(.button):not([class*="min-h-"]):not(p a) { padding-block: 12px; margin-block: -12px; }
   /* Stacked hero links take real padding: a negative margin here would overlap their hit areas. */
   .approved-shell .interior-hero-copy :is(a, button):not(.inline-flex):not(.flex):not(.f-button):not(.button):not([class*="min-h-"]):not(p a) { padding-block: 11px; }
@@ -218,20 +213,6 @@
 .approved-shell [data-testid="guide-jump-chips"] > div::-webkit-scrollbar { display: none; }
 .approved-shell [data-testid="guide-jump-chips"] a { flex: none; scroll-snap-align: start; white-space: nowrap; border-radius: 0; }
 
-/* Footer: one screen on a phone. */
-@media (max-width: 1023px) {
-  .approved-shell footer .container { padding-top: 40px; padding-bottom: 24px; }
-  .approved-shell footer .container > div:first-child { gap: 0; }
-  .approved-shell footer .space-y-1 > a { min-height: 44px; }
-  .approved-shell footer .space-y-1 > p { font-size: 12px; line-height: 1.5; padding-block: 6px 10px; }
-  .approved-shell footer [class*="mt-12"] { margin-top: 18px; }
-  .approved-shell footer [class*="py-6"] { padding-top: 12px; padding-bottom: 12px; }
-  .approved-shell footer [class*="items-baseline"] { row-gap: 0; column-gap: 14px; }
-  .approved-shell footer [class*="items-baseline"] a { min-height: 44px; }
-  .approved-shell footer details summary { min-height: 48px; }
-  .approved-shell footer .text-xs, .approved-shell footer .text-xs p { font-size: 11.5px; line-height: 1.55; }
-}
-
 /* Numbered cells of every matrix (li or div) read as a list on phones; accordion titles sit left. */
 @media (max-width: 820px) {
   .approved-shell .ed-matrix > .flex.flex-col { display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); column-gap: 6px; align-items: baseline; }
@@ -252,7 +233,6 @@
 .approved-shell .ed-h4 + .ed-body { margin-top: 8px; }
 .approved-shell .ed-lede + a:not([class*="mt-"]) { display: inline-flex; margin-top: 14px; }
 .approved-shell .f-scene-copy h3 + p, .approved-shell .f-section-top h2 + p { margin-top: 12px; }
-.approved-shell footer .text-xs [class*="flex-wrap"] { row-gap: 10px; }
 .approved-shell [data-testid="guide-jump-chips"] > div { flex-wrap: nowrap; }
 .approved-shell [data-testid="guide-jump-chips"] a { max-width: 78vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; line-height: 40px; }
 /* Open article sections: the marker sits on the heading's first line, not above it. */
