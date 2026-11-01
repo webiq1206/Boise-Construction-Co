@@ -212,33 +212,11 @@ export default function ContactPage() {
               Contact Boise Construction{' '}
               <em className="brc-accent">Co</em>
             </h1>
-            <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-6">
+            <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed">
               Schedule a free 60 to 90 minute planning consultation, call our team, or send your project
               details to our team for an estimate review.
             </p>
-            <BusinessPhoneContact
-              layout="stack"
-              display
-              phoneClassName="text-2xl md:text-3xl text-inverse-foreground hover:text-inverse-foreground/75 transition-colors"
-              saveClassName="text-sm text-inverse-foreground/80 hover:text-inverse-foreground transition-colors"
-              phoneTestId="link-hero-phone"
-            />
-            <a
-              href={SITE_CONFIG.phoneSmsHref}
-              className="block text-sm text-inverse-foreground/80 hover:text-inverse-foreground transition-colors mb-8"
-              data-testid="link-hero-text"
-            >
-              Prefer to text? Message us instead
-            </a>
             <div className="interior-contact-actions"><InteriorEstimateLink/><a href="#consult" className="interior-text-link">Request a consultation</a></div>
-            <dl className="ed-hero-facts">
-              {HERO_STATS.map((stat) => (
-                <div key={stat.label}>
-                  <dt>{stat.label}</dt>
-                  <dd>{stat.num}</dd>
-                </div>
-              ))}
-            </dl>
           </InteriorHero>
 
         {/* ─── Inline consultation form ─── */}
@@ -257,6 +235,32 @@ export default function ContactPage() {
                     your free 60 to 90 minute planning consultation - budget band, schedule, and
                     site requirements, with no obligation.
                   </p>
+                  {/* Moved word for word from the hero so the hero's one primary
+                      action clears the mobile bar (Phase 5 QA). */}
+                  <div className="interior-contact-direct">
+                    <BusinessPhoneContact
+                      layout="stack"
+                      display
+                      phoneClassName="text-2xl md:text-3xl text-foreground hover:text-foreground/75 transition-colors"
+                      saveClassName="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      phoneTestId="link-contact-phone"
+                    />
+                    <a
+                      href={SITE_CONFIG.phoneSmsHref}
+                      className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      data-testid="link-contact-text"
+                    >
+                      Prefer to text? Message us instead
+                    </a>
+                    <dl className="ed-hero-facts">
+                      {HERO_STATS.map((stat) => (
+                        <div key={stat.label}>
+                          <dt>{stat.label}</dt>
+                          <dd>{stat.num}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
                 </Reveal>
               </div>
               <MarketingCard className="interior-contact-form p-4 sm:p-7 md:p-10" padding="lg">
