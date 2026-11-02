@@ -2,18 +2,20 @@ import type { BlogPostData } from '../../blogContent';
 
 export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
   slug: 'ada-vs-canyon-county-permit-timelines',
-  title: 'Ada vs Canyon County: What Differs When You Build',
-  seoTitle: 'Ada vs Canyon County: Building Differences',
+  title: 'Ada vs Canyon County: what differs when you build',
+  // What differs between the counties; /resources/ada-canyon-permit-flow owns
+  // the step-by-step "permit flow".
+  seoTitle: 'Building in Ada vs Canyon County',
   metaDescription:
-    'Building in Ada County versus Canyon County: separate permit portals, different review cadence, impact fee structures, and how rural septic is handled.',
+    'Building in Ada County versus Canyon County: separate permit portals, review cadence, impact fee structures, highway districts and septic health districts.',
   excerpt:
     'The house is the same on both sides of the county line. The submittal path, the fee structure, and the agencies you deal with are not. Here is what changes.',
-  category: 'The Building Process',
+  category: 'The building process',
   hubSlug: 'home-building-process',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-24',
   tags: ['permits', 'ada county', 'canyon county', 'building process'],
-  primaryKeyword: 'ada vs canyon county building permits',
+  primaryKeyword: 'building in ada vs canyon county',
   secondaryKeywords: [
     'canyon county building permit',
     'ada county permit process',
@@ -36,12 +38,12 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
     'Canyon County parcels are more often rural, which changes site cost more than permitting does.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise Home Building Process' },
-    { url: '/blog/boise-building-permit-guide', anchor: 'Building Permits in Boise' },
-    { url: '/blog/how-long-does-it-take-to-build-a-house-boise', anchor: 'How Long a Boise Build Takes' },
-    { url: '/blog/impact-fees-and-utility-connections', anchor: 'Impact Fees and Utility Connections' },
-    { url: '/blog/well-and-septic-cost-idaho', anchor: 'Well and Septic Costs in Idaho' },
-    { url: '/areas', anchor: 'Areas We Build' },
+    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise home building process' },
+    { url: '/blog/boise-building-permit-guide', anchor: 'Building permits in Boise' },
+    { url: '/blog/how-long-does-it-take-to-build-a-house-boise', anchor: 'How long a Boise build takes' },
+    { url: '/blog/impact-fees-and-utility-connections', anchor: 'Impact fees and utility connections' },
+    { url: '/blog/well-and-septic-cost-idaho', anchor: 'Well and septic costs in Idaho' },
+    { url: '/areas', anchor: 'Areas we build' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

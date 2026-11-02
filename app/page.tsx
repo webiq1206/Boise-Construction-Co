@@ -1,41 +1,29 @@
 import { ApprovedHome } from "@/components/approved/ApprovedHome";
+import { HomeHero } from "@/components/approved/HomeHero";
 import { ConsultationForm } from "@/components/ConsultationForm";
+import { QuoteFormAnchor } from "@/components/QuoteFormAnchor";
 import { MarketingCard } from "@/components/marketing/MarketingCard";
 import { Section } from "@/components/marketing/Section";
 import { Reveal } from "@/components/Reveal";
 import { BudgetInclusionsSection } from "@/components/sections/BudgetInclusionsSection";
+import { ProjectGallerySection } from "@/components/sections/ProjectGallerySection";
 import { HomePageSchema } from "@/components/seo/HomePageSchema";
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildCanonical,fitDescription } from "@/lib/page-metadata";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { CONSULT_BULLETS,SITE_TAGLINE } from "@/shared/siteContent";
 import { SITE_IMAGES } from "@/shared/siteImages";
-import { Check } from "lucide-react";
+import { ArrowUpRight, Check } from "lucide-react";
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 import Image from "next/image";
-
-const EstimateCalculator = dynamic(
-  () =>
-    import("@/components/EstimateCalculator").then((mod) => mod.EstimateCalculator),
-  {
-    loading: () => (
-      <div
-        id="calculator"
-        className="container scroll-mt-20 px-4 py-16 text-center text-sm text-muted-foreground"
-      >
-        Loading estimate calculator...
-      </div>
-    ),
-  },
-);
 
 export const metadata: Metadata = withBrandPageMetadata(({
   // 55 chars. Leads with the primary term ("custom home builder Boise") rather
   // than the brand, which the suffix carries anyway.
   title: { absolute: `Custom Home Builder in Boise, ID | ${SITE_CONFIG.name}` },
+  // Keyword first, 140 to 155 characters, no phone (scripts/verify-meta-descriptions.ts).
   description:
-    fitDescription("Design-build home builder for Boise, Meridian, Eagle, Nampa & the Treasure Valley. Custom and semi-custom homes, or build on your own lot, with a line-item budget before we break ground."),
+    fitDescription("Custom home builder in Boise, Idaho. Boise Construction Co, a P5 Home Co company, designs and builds custom and semi-custom homes with a line-item budget."),
   alternates: {
     canonical: buildCanonical("/"),
     // Setting `alternates` replaces the root declaration, so the feed link has
@@ -59,7 +47,7 @@ export const metadata: Metadata = withBrandPageMetadata(({
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col pb-20 md:pb-0 bg-background">
+    <div className="flex flex-col bg-background">
       {/* PAGE ORDER IS THE SALES CONVERSATION, IN THE ORDER A HOMEOWNER HAS IT.
 
           1. Hero            who we are, and the one action we want
@@ -81,9 +69,12 @@ export default function HomePage() {
           thing they came for. Everything above it now exists only to make the
           number land well; everything below it answers what the number raised. */}
       <HomePageSchema />
+      <HomeHero />
       <ApprovedHome />
+      <ProjectGallerySection limit={1} />
       <BudgetInclusionsSection />
-      <Section id="consult" divider className="relative overflow-hidden scroll-mt-16 pb-28 md:pb-28">
+      <div id="contact" className="scroll-mt-24" aria-hidden="true" />
+      <Section divider reveal={false} className="relative overflow-hidden pb-28 md:pb-28">
         {/* Warm, dimmed lifestyle photo grounds the closing section. Directional
             scrims keep the left-column copy legible and fade the edges into the
             page ground; the form card floats above on its own shadow. */}
@@ -107,7 +98,9 @@ export default function HomePage() {
             the places a card is actually the right answer. */}
         <div className="ed-shell relative z-10">
           <div className="grid gap-[var(--ed-gutter)] lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-            <div className="lg:sticky lg:top-28">
+            {/* Phones: the form leads and this reassurance follows it. Desktop: it
+                sits beside the form. Never above the landing point. */}
+            <div className="order-2 lg:order-1 lg:sticky lg:top-28">
               <Reveal>
                 <p className="ed-eyebrow">Begin a conversation</p>
                 <h2 className="ed-h2 ed-statement">
@@ -140,11 +133,26 @@ export default function HomePage() {
                     </li>
                   ))}
                 </ul>
+                <div className="mt-6 grid border-t" style={{ borderColor: "var(--ed-line)" }}>
+                  <a href={SITE_CONFIG.phoneHref} className="flex min-h-12 items-center justify-between gap-4 border-b text-[0.9375rem] font-medium transition-colors hover:[color:var(--ed-accent)]" style={{ borderColor: "var(--ed-line)" }}>
+                    Call {SITE_CONFIG.phone}
+                    <ArrowUpRight className="h-4 w-4 shrink-0" style={{ color: "var(--ed-accent)" }} aria-hidden="true" />
+                  </a>
+                  <a href={SITE_CONFIG.phoneSmsHref} className="flex min-h-12 items-center justify-between gap-4 border-b text-[0.9375rem] font-medium transition-colors hover:[color:var(--ed-accent)]" style={{ borderColor: "var(--ed-line)" }}>
+                    Send a text
+                    <ArrowUpRight className="h-4 w-4 shrink-0" style={{ color: "var(--ed-accent)" }} aria-hidden="true" />
+                  </a>
+                </div>
               </Reveal>
             </div>
-            <MarketingCard className="shadow-2xl" padding="lg">
-              <ConsultationForm />
-            </MarketingCard>
+            {/* Every "#consult" link lands here: the form heading and its first
+                field directly under the sticky header (QuoteFormAnchor). */}
+            <div id="consult" data-quote-anchor="" className="order-1 lg:order-2">
+              <QuoteFormAnchor />
+              <MarketingCard className="shadow-2xl" padding="lg">
+                <ConsultationForm />
+              </MarketingCard>
+            </div>
           </div>
         </div>
       </Section>

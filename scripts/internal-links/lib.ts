@@ -2,6 +2,7 @@ import { BLOG_POSTS, type BlogPostData } from "../../shared/blogContent";
 import { GUIDE_PAGES } from "../../shared/guideContent";
 import { getHubBySlug, getHubPillarSlug, guidePath } from "../../shared/contentHubs";
 import { PRIORITY_SERVICES, CITIES, type ServiceData, type CityData } from "../../shared/contentData";
+import { isCityServiceNoindex } from "../../lib/page-metadata";
 
 export type PageType = "blog" | "guide" | "service" | "city" | "city-service";
 
@@ -18,6 +19,13 @@ export interface PageNode {
   citySlug?: string;
   tokens: Set<string>;
   overrides?: Array<{ url: string; anchor?: string; forced?: boolean }>;
+  /**
+   * False for the city-service combos that render `noindex, follow`. They keep
+   * their own related links (as a source) but are never a link target, the
+   * same rule the sitemap applies, so indexable pages stop spending links on
+   * pages that cannot rank.
+   */
+  indexable?: boolean;
 }
 
 export interface LinkEntry {
@@ -83,7 +91,7 @@ function serviceDisplayTitle(s: ServiceData): string {
 }
 
 function cityAnchor(c: CityData): string {
-  return `Remodeling in ${c.name}`;
+  return `Home Building in ${c.name}`;
 }
 
 function cityServiceAnchor(s: ServiceData, c: CityData): string {
@@ -135,6 +143,12 @@ export function buildPages(): PageNode[] {
   }
 
   for (const guide of GUIDE_PAGES) {
+    // "custom" in the new Middleton H1 retunes unrelated related cards.
+    // Similarity keeps the previous title tokens; visible anchors use guide.title.
+    const tokenTitle =
+      guide.slug === 'middleton-home-building-guide'
+        ? 'Building a Home in Middleton'
+        : guide.title;
     pages.push({
       id: `guide:${guide.slug}`,
       type: "guide",
@@ -144,7 +158,7 @@ export function buildPages(): PageNode[] {
       category: guide.hubSlug,
       hubSlug: guide.hubSlug,
       tags: guide.tags ?? [],
-      tokens: tokenSet(guide.title, guide.excerpt, (guide.tags ?? []).join(" "), guide.hubSlug),
+      tokens: tokenSet(tokenTitle, guide.excerpt, (guide.tags ?? []).join(" "), guide.hubSlug),
       overrides: guide.relatedLinks ?? [],
     });
   }
@@ -169,7 +183,7 @@ export function buildPages(): PageNode[] {
       id: `city:${city.slug}`,
       type: "city",
       url: `/areas/${city.slug}`,
-      title: `Remodeling Services in ${city.name}, Idaho`,
+      title: `Home Building in ${city.name}, Idaho`,
       anchor: cityAnchor(city),
       category: "city",
       tags: [city.slug, city.county],
@@ -190,6 +204,7 @@ export function buildPages(): PageNode[] {
         tags: [svc.slug, city.slug],
         serviceSlug: svc.slug,
         citySlug: city.slug,
+        indexable: !isCityServiceNoindex(svc.slug, city.slug),
         tokens: tokenSet(svc.name, city.name, svc.shortDescription, svc.slug.replace(/-/g, " ")),
       });
     }
@@ -290,6 +305,7 @@ function quotasFor(from: PageNode): Quota {
 
 function eligible(from: PageNode, to: PageNode): boolean {
   if (from.id === to.id) return false;
+  if (to.indexable === false) return false;
 
   if (from.type === "city-service") {
     if (to.type === "city-service") {
@@ -351,7 +367,7 @@ export function buildManifest(pages: PageNode[]): Manifest {
         if (top.length >= limit) break;
         if (taken.has(ov.url)) continue;
         const target = pageById.get(ov.url);
-        if (!target) continue;
+        if (!target || target.indexable === false) continue;
         // Canonical hub-pillar links (forced) are always honored. Manual
         // related-link overrides respect the soft incoming cap so a single
         // popular target (e.g. the cost guide) can't over-concentrate equity.

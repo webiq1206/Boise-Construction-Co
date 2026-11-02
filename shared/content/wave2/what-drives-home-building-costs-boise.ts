@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const whatDrivesHomeBuildingCostsBoise: BlogPostData = {
   slug: 'what-drives-home-building-costs-boise',
-  title: 'What Actually Drives Home Building Costs in Boise',
-  seoTitle: 'What Drives Home Building Costs in Boise',
+  title: 'What actually drives home building costs in Boise',
+  seoTitle: 'Cost Drivers for Boise Home Building',
   metaDescription:
-    'The real cost drivers on a Boise new build, ranked: site conditions, size, storeys, footprint complexity, finish level, glazing, and when you decide things.',
+    'The cost drivers on a Boise new build, ranked: site conditions, size, storeys, footprint complexity, finish level, glazing, and when you decide things.',
   excerpt:
     'Seven things move a new home budget more than anything else. They are ranked here by how far they move it, with the decisions that look cheap on paper flagged.',
-  category: 'Home Building Costs',
+  category: 'Home building costs',
   hubSlug: 'home-building-costs',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-16',
@@ -36,11 +36,11 @@ export const whatDrivesHomeBuildingCostsBoise: BlogPostData = {
     'Late decisions cost more than the same decision made during design.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
-    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to Build a House in Boise' },
-    { url: '/blog/custom-home-cost-per-square-foot-boise', anchor: 'Cost Per Square Foot' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
+    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to build a house in Boise' },
+    { url: '/blog/custom-home-cost-per-square-foot-boise', anchor: 'Cost per square foot' },
     { url: '/blog/building-in-the-boise-foothills', anchor: 'Building in the Boise Foothills' },
-    { url: '/services/lot-evaluation', anchor: 'Lot Evaluation' },
+    { url: '/services/lot-evaluation', anchor: 'Lot evaluation' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

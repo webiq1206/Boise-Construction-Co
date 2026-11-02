@@ -231,6 +231,9 @@ export function AddressAutocomplete({
       <div className="relative">
         <Input
           id={id}
+          // Same mask the beforeInteractive Clarity masker adds (lib/clarityFormMask), in
+          // the server HTML, so a server-rendered address field hydrates without a mismatch.
+          data-clarity-mask="True"
           value={value}
           onChange={(e) => {
             suggestionsDismissedRef.current = false;
@@ -280,7 +283,7 @@ export function AddressAutocomplete({
         {open && suggestions.length > 0 && (
           <ul
             id={listboxId}
-            className="absolute z-50 mt-1 w-full rounded-sm border border-border bg-background shadow-md max-h-56 overflow-auto"
+            className="absolute z-50 mt-1 w-full rounded-sm border border-border bg-background shadow-md max-h-56 overflow-auto [[data-keyboard-inset]_&]:hidden"
             role="listbox"
             aria-label="Address suggestions"
             data-testid="address-suggestions"
@@ -324,7 +327,7 @@ export function AddressAutocomplete({
       {!profile && value.trim().length >= 5 && (
         <button
           type="button"
-          className="mt-1 inline-flex items-center gap-2 rounded-sm border border-border px-3 min-h-11 text-sm text-foreground hover-elevate disabled:opacity-50"
+          className="mt-1 inline-flex items-center gap-2 rounded-sm border border-border px-3 min-h-11 text-sm text-foreground hover-elevate disabled:opacity-50 [[data-keyboard-inset]_&]:hidden"
           onClick={useTypedAddress}
           disabled={disabled || enriching}
           data-testid="button-use-typed-address"

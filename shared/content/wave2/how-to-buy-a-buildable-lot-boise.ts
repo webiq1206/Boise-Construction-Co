@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const howToBuyABuildableLotBoise: BlogPostData = {
   slug: 'how-to-buy-a-buildable-lot-boise',
-  title: 'How to Tell If a Lot Is Actually Buildable',
-  seoTitle: 'How to Tell If a Lot Is Actually Buildable',
+  title: 'How to tell if a lot is actually buildable',
+  seoTitle: 'Is a Lot Actually Buildable',
   metaDescription:
     'A lot being for sale does not make it buildable. Here is how to check access, zoning, setbacks, utilities, septic, floodplain, soils, and slope first.',
   excerpt:
     'Plenty of land in Ada and Canyon County is for sale that no one can build on affordably. Here is how to separate a buildable parcel from an expensive lesson.',
-  category: 'Land & Lots',
+  category: 'Land & lots',
   hubSlug: 'land-and-lots',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-12',
@@ -33,12 +33,12 @@ export const howToBuyABuildableLotBoise: BlogPostData = {
     'Write your offer so the due diligence happens before your money is committed, not after.',
   ],
   relatedLinks: [
-    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying Land to Build On in the Treasure Valley' },
-    { url: '/blog/lot-evaluation-checklist', anchor: 'Lot Evaluation Checklist' },
-    { url: '/blog/well-and-septic-cost-idaho', anchor: 'What a Well and Septic System Costs in Idaho' },
-    { url: '/blog/impact-fees-and-utility-connections', anchor: 'Impact Fees and Utility Connections' },
-    { url: '/services/lot-evaluation', anchor: 'Lot Evaluation' },
-    { url: '/services/build-on-your-lot', anchor: 'Build on Your Lot' },
+    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying land to build on in the Treasure Valley' },
+    { url: '/blog/lot-evaluation-checklist', anchor: 'Lot evaluation checklist' },
+    { url: '/blog/well-and-septic-cost-idaho', anchor: 'What a well and septic system costs in Idaho' },
+    { url: '/blog/impact-fees-and-utility-connections', anchor: 'Impact fees and utility connections' },
+    { url: '/services/lot-evaluation', anchor: 'Lot evaluation' },
+    { url: '/services/build-on-your-lot', anchor: 'Build on your lot' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

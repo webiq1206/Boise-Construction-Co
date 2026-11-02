@@ -44,11 +44,19 @@ export function WizardStep({
   const Heading = as;
 
   return (
-    <div className={cn(className)} data-testid={testId}>
+    <div
+      className={cn(
+        className,
+        // When an ancestor AppFrame reports keyboard inset, tighten the step
+        // chrome so the focused field + Back/Next still fit (C10 #2/#4).
+        "[[data-keyboard-inset]_&]:mt-0",
+      )}
+      data-testid={testId}
+    >
       {eyebrow && !compact && (
         <p
           className={cn(
-            "brc-label mb-3",
+            "brc-label mb-3 [[data-keyboard-inset]_&]:hidden",
             inverse ? "text-inverse-muted" : "text-muted-foreground",
           )}
         >
@@ -68,13 +76,17 @@ export function WizardStep({
         <p
           className={cn(
             compact ? "mt-1.5 text-[0.8125rem] leading-snug" : "mt-3 text-sm leading-relaxed",
+            // C10 #2: drop helper copy under keyboard so the field + bar fit.
+            "[[data-keyboard-inset]_&]:hidden",
             inverse ? "text-inverse-foreground/80" : "text-muted-foreground",
           )}
         >
           {instructions}
         </p>
       )}
-      <div className={compact ? "mt-4" : "mt-6"}>{children}</div>
+      <div className={cn(compact ? "mt-4" : "mt-6", "[[data-keyboard-inset]_&]:mt-2")}>
+        {children}
+      </div>
     </div>
   );
 }

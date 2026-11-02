@@ -3,11 +3,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { PenLine, Search, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { FamilyButton, familyButtonClass } from "@/components/family/Button";
 import { Section } from "@/components/marketing/Section";
-import { BlogCard } from "@/components/marketing/BlogCard";
+import { BlogCard, type BlogCardPost } from "@/components/marketing/BlogCard";
 import { Chip } from "@/components/marketing/Chip";
-import { BLOG_POSTS } from "@/shared/blogContent";
 import {
   CONTENT_HUBS,
   categoryHubPath,
@@ -23,13 +22,19 @@ function formatDate(dateString: string): string {
   });
 }
 
-export function BlogIndexClient() {
+/**
+ * Posts arrive as card summaries from the server page (toBlogCardPost). This
+ * component used to import BLOG_POSTS itself, which shipped every article body
+ * (about 565 KB of script) to the browser, and desktop headers prefetch /blog
+ * from every page.
+ */
+export function BlogIndexClient({ posts }: { posts: BlogCardPost[] }) {
   const sortedPosts = useMemo(
     () =>
-      [...BLOG_POSTS].sort(
+      [...posts].sort(
         (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
       ),
-    []
+    [posts]
   );
 
   const indexableHubs = useMemo(
@@ -84,7 +89,7 @@ export function BlogIndexClient() {
   const [featured, ...rest] = filtered;
 
   return (
-    <div className="flex flex-col pb-20 md:pb-0">
+    <div className="flex flex-col ">
       <Section spacing="default" className="pt-10 md:pt-12">
         <div className="container px-4">
           <div className="max-w-6xl mx-auto">
@@ -97,9 +102,9 @@ export function BlogIndexClient() {
                 <p className="text-muted-foreground max-w-md">
                   We&apos;re writing in-depth guides on budgeting, timelines, and more.
                 </p>
-                <Button variant="brand" asChild>
-                  <Link href="/">Back to home</Link>
-                </Button>
+                <FamilyButton href="/" variant="primary" size="lg">
+                  Back to home
+                </FamilyButton>
               </div>
             ) : (
               <>
@@ -117,6 +122,9 @@ export function BlogIndexClient() {
                     aria-label="Search articles"
                     className="h-11 w-full rounded-sm border border-border bg-input pl-9 pr-9 text-base text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-search-cancel-button]:hidden"
                     data-testid="input-blog-search"
+                    // Server HTML carries the mask the beforeInteractive Clarity
+                    // masker adds, so hydration sees matching attributes.
+                    data-clarity-mask="True"
                   />
                   {query && (
                     <button
@@ -182,9 +190,9 @@ export function BlogIndexClient() {
                     <p className="text-sm text-muted-foreground">
                       Try a different phrase, or browse everything.
                     </p>
-                    <Button
-                      variant="brandOutline"
+                    <button
                       type="button"
+                      className={familyButtonClass({ variant: "secondary", size: "lg" })}
                       onClick={() => {
                         setQuery("");
                         setActiveHub(null);
@@ -192,7 +200,7 @@ export function BlogIndexClient() {
                       data-testid="button-blog-search-reset"
                     >
                       Show all articles
-                    </Button>
+                    </button>
                   </div>
                 )}
 

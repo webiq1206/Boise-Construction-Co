@@ -3,6 +3,7 @@ import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/marketing/Section";
 import { Button } from "@/components/ui/button";
 import { VALUE_MODEL } from "@/shared/siteContent";
+import { contentImageAlt } from "@/shared/imageAlts";
 import { SITE_IMAGES } from "@/shared/siteImages";
 import { CTA_PRIMARY } from "@/shared/ctaCopy";
 
@@ -71,12 +72,13 @@ export function ValueOverheadSection() {
                 <Image
                   src={SITE_IMAGES.valueCraft}
                   loading="lazy"
-                  alt="Construction detail showing framing, plumbing, electrical wiring and ductwork before drywall"
+                  alt={contentImageAlt(SITE_IMAGES.valueCraft)}
                   fill
                   sizes="(max-width: 1024px) 100vw, 40vw"
                   className="object-cover img-brand-grade"
                 />
               </div>
+              <figcaption className="ed-body mt-3 text-[0.875rem]">Representative imagery</figcaption>
             </figure>
           </Reveal>
         </div>

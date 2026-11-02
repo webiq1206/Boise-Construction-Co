@@ -2,8 +2,8 @@ import type { GuidePageData } from '../../guideContent';
 
 export const boiseHomeBuildingProcessGuide: GuidePageData = {
   slug: 'boise-home-building-process-guide',
-  title: 'The Boise Home Building Process',
-  seoTitle: 'The Boise Home Building Process, Step by Step',
+  title: 'The Boise home building process',
+  seoTitle: 'Boise Home Building Process Guide',
   metaDescription:
     'How building a home in the Treasure Valley works, from the first meeting through design, Ada and Canyon County permits, construction, and the warranty.',
   excerpt:
@@ -43,16 +43,16 @@ export const boiseHomeBuildingProcessGuide: GuidePageData = {
   linkedServices: ['design-build', 'custom-home-builder'],
   linkedCities: ['boise', 'meridian', 'eagle', 'nampa'],
   relatedLinks: [
-    { url: '/blog/stages-of-building-a-house', anchor: 'The Stages of Building a House, in Order' },
+    { url: '/blog/stages-of-building-a-house', anchor: 'The stages of building a house, in order' },
     {
       url: '/blog/how-long-does-it-take-to-build-a-house-boise',
-      anchor: 'How Long a Boise Build Takes',
+      anchor: 'How long a Boise build takes',
     },
-    { url: '/blog/boise-building-permit-guide', anchor: 'Building Permits in Boise' },
-    { url: '/blog/new-home-walkthrough-and-warranty', anchor: 'The Walkthrough and Warranty' },
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
-    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying Land to Build On' },
-    { url: '/services/design-build', anchor: 'Design-Build' },
+    { url: '/blog/boise-building-permit-guide', anchor: 'Building permits in Boise' },
+    { url: '/blog/new-home-walkthrough-and-warranty', anchor: 'The walkthrough and warranty' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
+    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying land to build on' },
+    { url: '/services/design-build', anchor: 'Design-build' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

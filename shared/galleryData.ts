@@ -1,33 +1,59 @@
+/**
+ * Featured concept homes for Boise Construction Co.
+ *
+ * Concept design imagery for one Eagle mountain-modern set. Captions describe
+ * materials and rooms only. These are not photographed customer projects.
+ */
+
+export interface GalleryProjectImage {
+  src: string;
+  /** Short room/view label shown in the gallery UI. */
+  label: string;
+}
+
 export interface GalleryProject {
   serviceType: string;
   city: string;
-  beforeImageUrl: string;
-  afterImageUrl: string;
   title: string;
   description: string;
+  /** Cohesive views of one concept home, exterior first. */
+  images: GalleryProjectImage[];
+}
+
+const p = (name: string) => `/images/projects/eagle-mountain-modern/${name}.webp`;
+
+export const GALLERY_PROJECTS: GalleryProject[] = [
+  {
+    serviceType: "custom-home-builder",
+    city: "eagle",
+    title: "Eagle Foothills mountain-modern concept",
+    description:
+      "Charcoal stucco and dry-stacked grey ledgestone under a dark bronze standing-seam roof, with black steel windows, warm cedar soffits, and interiors in white oak, plaster, and limestone through the great room, kitchen, and primary bath.",
+    images: [
+      { src: p("eagle-custom-home-front-exterior"), label: "Front exterior" },
+      { src: p("eagle-custom-home-great-room"), label: "Great room" },
+      { src: p("eagle-custom-home-kitchen"), label: "Kitchen" },
+      { src: p("eagle-custom-home-primary-bath"), label: "Primary bath" },
+      { src: p("eagle-custom-home-rear-patio"), label: "Rear patio" },
+      { src: p("eagle-custom-home-framing"), label: "Framing" },
+      { src: p("eagle-custom-home-lot-before"), label: "Lot before" },
+    ],
+  },
+];
+
+/** Exterior (lead) image for a project. */
+export function projectExteriorSrc(project: GalleryProject): string {
+  return project.images[0]?.src ?? "";
+}
+
+/** Primary interior image for pairing with the exterior in compact proof blocks. */
+export function projectInteriorSrc(project: GalleryProject): string {
+  return project.images[1]?.src ?? project.images[0]?.src ?? "";
 }
 
 /**
- * Empty until real, photographed homes exist for Boise Construction Co.
- *
- * The previous entries were placeholder remodeling projects carrying specific
- * factual claims ("a 1990s Eagle home", "600 sq ft master suite addition").
- * Presenting those as this builder's portfolio would describe work that was
- * never performed, so they are retired rather than relabelled.
- *
- * The before/after shape also does not survive the move to new construction:
- * there is no "before" for a house that did not exist. A rebuilt portfolio
- * should use finished-home photography or clearly labelled concept renderings,
- * which will need a different interface than GalleryProject.
- *
- * Every consumer guards on an empty list, so gallery sections and area-page
- * proof blocks render nothing while this stays empty.
- */
-export const GALLERY_PROJECTS: GalleryProject[] = [];
-
-/**
  * Return gallery projects that match a specific service + city, used to embed
- * local before/after proof on city x service landing pages.
+ * local proof on city x service landing pages.
  */
 export function getGalleryProjectsFor(
   serviceSlug: string,
@@ -44,9 +70,7 @@ export function getGalleryProjectsForCity(citySlug: string): GalleryProject[] {
 }
 
 /**
- * Primary gallery project for a service hub page, if one exists. The old
- * slug-translation map was dropped with the remodeling projects; service slugs
- * and `serviceType` values should match directly when the portfolio returns.
+ * Primary gallery project for a service hub page, if one exists.
  */
 export function getFeaturedGalleryProject(serviceSlug: string): GalleryProject | undefined {
   return GALLERY_PROJECTS.find((p) => p.serviceType === serviceSlug);

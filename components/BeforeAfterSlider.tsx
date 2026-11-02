@@ -158,14 +158,6 @@ export function BeforeAfterSlider({
         />
       </div>
 
-      {/* Corner labels */}
-      <div className="absolute top-3 left-3 md:top-4 md:left-4 px-2.5 py-1 rounded-sm bg-inverse text-inverse-foreground text-caption tracking-[0.12em] uppercase font-normal pointer-events-none max-w-[43%] whitespace-normal break-words text-center">
-        Before
-      </div>
-      <div className="absolute top-3 right-3 md:top-4 md:right-4 px-2.5 py-1 rounded-sm bg-inverse text-inverse-foreground text-caption tracking-[0.12em] uppercase font-normal pointer-events-none max-w-[43%] whitespace-normal break-words text-center">
-        After
-      </div>
-
       {/* Divider line + drag handle */}
       <div
         className="absolute inset-y-0 z-10 w-px bg-inverse-foreground/90 pointer-events-none"
@@ -176,13 +168,13 @@ export function BeforeAfterSlider({
           style={{ left: `clamp(24px, ${pos}%, calc(100% - 24px))` }}
           type="button"
           role="slider"
-          aria-label="Compare before and after"
+          aria-label="Compare the two views"
           aria-orientation="horizontal"
           aria-describedby={instructionsId}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(pos)}
-          aria-valuetext={`${Math.round(pos)}% before image visible`}
+          aria-valuetext={`${Math.round(pos)}% of the left view visible`}
           onKeyDown={(e) => {
             if (["ArrowLeft", "ArrowDown", "ArrowRight", "ArrowUp", "Home", "End"].includes(e.key)) trackInteraction();
             if (e.key === "ArrowLeft" || e.key === "ArrowDown") {

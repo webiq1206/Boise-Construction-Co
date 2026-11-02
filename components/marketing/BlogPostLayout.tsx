@@ -60,7 +60,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
   );
 
   return (
-    <div className="flex flex-col pb-20 md:pb-0">
+    <div className="flex flex-col ">
 
       <Section spacing="sm" className="pt-8 md:pt-10 pb-0">
         <div className="container px-4 max-w-6xl mx-auto">
@@ -172,6 +172,15 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                 </section>
               )}
 
+              {!post.content.includes('/services/custom-home-builder') && (
+                <p className="mt-8 text-sm leading-relaxed">
+                  <Link href="/services/custom-home-builder" className="underline underline-offset-2">
+                    Custom home builder
+                  </Link>{' '}
+                  for a home drawn around your lot, your budget, and how you live.
+                </p>
+              )}
+
               {post.tags && post.tags.length > 0 && (
                 <div className="mt-10 pt-8 border-t border-border lg:hidden">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -188,7 +197,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
               </div>
             </div>
 
-            <aside className="hidden lg:block w-72 xl:w-80 flex-shrink-0 sticky top-24 self-start">
+            <aside className="article-rail hidden lg:block w-72 xl:w-80 flex-shrink-0 sticky top-24 self-start">
               <ArticleSidebar
                 tocHeadings={tocHeadings}
                 ctaDescription="See what your project might cost with a preliminary Treasure Valley planning range."

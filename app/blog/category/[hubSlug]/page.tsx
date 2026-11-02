@@ -9,6 +9,7 @@ import { generateBreadcrumbSchema,generateCollectionPageSchema } from '@/lib/sch
 import { getBaseUrl } from '@/lib/seo';
 import { BLOG_POSTS } from '@/shared/blogContent';
 import { getAbsoluteImageUrl,getBlogImageAlt,getHubHeroImage } from '@/shared/blogImages';
+import { contentImageAlt } from '@/shared/imageAlts';
 import {
 categoryHubPath,
 CONTENT_HUBS,
@@ -45,19 +46,9 @@ export async function generateMetadata(
   const posts = BLOG_POSTS.filter((p) => p.hubSlug === params.hubSlug);
   const indexable = isCategoryHubIndexable(params.hubSlug, posts.length);
   const title = `${hub.title} Articles`;
-  // Benefit-led, unique per hub (uses the hub's own description) and long enough
-  // to earn the click, instead of the old formulaic 60-char template.
-  const countPhrase = posts.length >= 3 ? `${posts.length} in-depth articles` : 'Expert articles';
-  const rawDescription =
-    `${hub.description} ${countPhrase} on ${hub.title.toLowerCase()} for Boise, Meridian, Eagle, Nampa and Treasure Valley families planning to build a new home.`.replace(
-      /\s+/g,
-      ' ',
-    );
-  // Trim to ~158 chars on a word boundary so descriptions never truncate mid-word.
-  const description =
-    rawDescription.length <= 158
-      ? rawDescription
-      : rawDescription.slice(0, 158).replace(/\s+\S*$/, '') + '…';
+  // Authored per hub (keyword first, 140 to 155 characters); no count phrase
+  // and no slicing, so the snippet never ends mid-sentence.
+  const description = hub.metaDescription;
   const heroImage = getHubHeroImage(params.hubSlug);
   const imageUrl = getAbsoluteImageUrl(heroImage, getBaseUrl());
 
@@ -101,7 +92,7 @@ export default async function BlogCategoryHubPage(
 
   const hubHero = getHubHeroImage(params.hubSlug);
   const pillarSlug = hub.pillarSlug;
-  const hubAlt = pillarSlug ? getBlogImageAlt(pillarSlug) : `${hub.title} articles`;
+  const hubAlt = contentImageAlt(hubHero) || (pillarSlug ? getBlogImageAlt(pillarSlug) : `${hub.title} articles`);
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },

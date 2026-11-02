@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const boiseBuildingPermitGuide: BlogPostData = {
   slug: 'boise-building-permit-guide',
-  title: 'Building Permits in Boise: What a New Home Needs',
-  seoTitle: 'Building Permits in Boise: New Home Guide',
+  title: 'Building permits in Boise: what a new home needs',
+  seoTitle: 'Boise New Home Building Permits',
   metaDescription:
     'What a new-home building permit in Boise actually contains: site plan, architectural set, structural engineering, energy compliance, and utility approvals.',
   excerpt:
     'A new-home permit is a package, not a form. Here is what goes into it, who submits it, what plan review looks for, and how inspections run through the build.',
-  category: 'The Building Process',
+  category: 'The building process',
   hubSlug: 'home-building-process',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-15',
@@ -36,11 +36,11 @@ export const boiseBuildingPermitGuide: BlogPostData = {
     'The certificate of occupancy, not the final inspection, is what legally lets you move in.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise Home Building Process' },
+    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise home building process' },
     { url: '/blog/ada-vs-canyon-county-permit-timelines', anchor: 'Ada vs Canyon County' },
-    { url: '/blog/how-long-does-it-take-to-build-a-house-boise', anchor: 'How Long a Boise Build Takes' },
-    { url: '/blog/stages-of-building-a-house', anchor: 'The Stages of Building a House' },
-    { url: '/services/design-build', anchor: 'Design-Build' },
+    { url: '/blog/how-long-does-it-take-to-build-a-house-boise', anchor: 'How long a Boise build takes' },
+    { url: '/blog/stages-of-building-a-house', anchor: 'The stages of building a house' },
+    { url: '/services/design-build', anchor: 'Design-build' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

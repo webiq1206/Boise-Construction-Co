@@ -5,7 +5,7 @@
  */
 type GtagParams = Record<string, string | number | boolean | undefined>;
 
-import { googleAdsLeadParams, type LeadContext } from '@/lib/googleAdsConversion';
+import { trackGoogleAdsLeadConversion, type LeadContext } from '@/lib/googleAdsConversion';
 
 const conversionInFlight = new Set<string>();
 
@@ -33,7 +33,7 @@ function readCookie(name: string): string | undefined {
  * server-side Conversions API, sharing one eventID so Meta deduplicates them
  * (counts the conversion once, but keeps the signal that ad blockers / ITP would
  * otherwise strip from the browser). The Pixel is loaded via components/MetaPixel
- * (lazyOnload). Both paths are best-effort no-ops when unavailable:
+ * (stub at once, fbevents.js at the window load event). Both paths are best-effort no-ops when unavailable:
  * fbq is guarded, and /api/meta-capi silently skips if the CAPI token is unset.
  *
  * Pass a standard event name (e.g. 'Lead'). `userData` (email/phone) is optional
@@ -86,11 +86,7 @@ export function trackMetaEvent(
  * The ID is opaque and server-issued, so no contact information reaches Ads.
  */
 export function trackGoogleAdsLead(conversionId: string, context: LeadContext = {}): void {
-  if (typeof window === 'undefined') return;
-  const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
-  if (typeof gtag !== 'function') return;
-  // Per-lead value for ROAS reporting (lib/googleAdsConversion.ts); no PII.
-  gtag('event', 'conversion', googleAdsLeadParams(context, conversionId));
+  trackGoogleAdsLeadConversion(context,conversionId);
 }
 
 export interface ClaimedLeadConversion {

@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const customHomeFloorPlanIdeasBoise: BlogPostData = {
   slug: 'custom-home-floor-plan-ideas-boise',
-  title: 'Floor Plan Ideas That Work in Treasure Valley Homes',
-  seoTitle: 'Floor Plan Ideas for Treasure Valley Homes',
+  title: 'Floor plan ideas that work in Treasure Valley homes',
+  seoTitle: 'Treasure Valley Floor Plan Ideas',
   metaDescription:
-    'Floor plan ideas that suit how Treasure Valley families actually live: single-level living, the garage to mudroom sequence, suite placement, and circulation.',
+    'Floor plan ideas that suit how Treasure Valley families live: single-level living, the garage to mudroom sequence, suite placement, and circulation.',
   excerpt:
     'The plan decisions that change daily life in a Boise-area house: what stays on one level, the garage to mudroom sequence, kitchen and great room relationships, and why hallways are the most expensive square feet you will ever buy.',
-  category: 'Design & Floor Plans',
+  category: 'Design & floor plans',
   hubSlug: 'home-design-and-plans',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-15',
@@ -32,11 +32,11 @@ export const customHomeFloorPlanIdeasBoise: BlogPostData = {
     'If the budget forces a cut, cut finish level rather than plan geometry, because walls are the expensive thing to change later.',
   ],
   relatedLinks: [
-    { url: '/guides/custom-home-design-guide', anchor: 'Designing a Custom Home in the Treasure Valley' },
-    { url: '/blog/single-story-vs-two-story-home', anchor: 'Single Story vs Two Story' },
-    { url: '/blog/aging-in-place-home-design', anchor: 'Building a Home You Can Age In' },
-    { url: '/blog/covered-outdoor-living-new-home', anchor: 'Covered Outdoor Living' },
-    { url: '/services/home-plans-design', anchor: 'Home Plans and Design' },
+    { url: '/guides/custom-home-design-guide', anchor: 'Designing a custom home in the Treasure Valley' },
+    { url: '/blog/single-story-vs-two-story-home', anchor: 'Single story vs two story' },
+    { url: '/blog/aging-in-place-home-design', anchor: 'Building a home you can age in' },
+    { url: '/blog/covered-outdoor-living-new-home', anchor: 'Covered outdoor living' },
+    { url: '/services/home-plans-design', anchor: 'Home plans and design' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

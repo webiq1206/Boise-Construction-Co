@@ -1,0 +1,71 @@
+/*
+  Boise Construction Co adoption of the shared family chrome. BRAND-OWNED: the shared
+  styles live in styles/family-*.css and are never edited here.
+*/
+
+/* The homepage photograph is a concept render. HeroPhoto has no caption slot, so the
+   honest label sits in this site's wrapper, on the photo's clear corner, above the
+   scrim and clear of the copy (bottom left) and the bottom bar. */
+.home-hero {
+  position: relative;
+}
+.home-hero .home-hero-imagery {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--gutter);
+  z-index: 1;
+  margin: 0;
+  padding: 2px 8px;
+  background: rgba(var(--color-scrim-rgb), 0.55);
+  color: var(--color-paper);
+  font: 600 var(--fs-label) / var(--lh-label) var(--font-sans);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* A link inside the ADU sentence in the footer brand column reads as a link, not as
+   more of the sentence (the shared footer leaves column links plain). */
+.fam-footer[data-family-footer] .footer-adu-note a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Quote form landing (owner, 1 November: every quote link lands ON the form).
+   The id="consult" block is the form itself. The root scroll-padding already clears
+   the sticky header (styles/family-chrome.css), so the generic :target margin from
+   audit-accessibility.css would only push the form further down the screen. */
+[data-quote-anchor] {
+  scroll-margin-top: 0 !important;
+}
+
+/* Contact: below 1024px the form leads and the intro follows it. Above, the intro
+   keeps its column beside the form (design-refresh.css owns the two columns). */
+@media (max-width: 1023px) {
+  .interior-contact-grid.quote-form-first {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  .interior-contact-grid.quote-form-first > [data-quote-anchor] {
+    order: -1;
+  }
+  .interior-contact-grid.quote-form-first > .interior-contact-intro {
+    margin-bottom: 0;
+  }
+}
+
+/* The quote form heading takes programmatic focus on arrival (tabindex=-1) so screen
+   readers announce it. It is not an interactive control, so no focus ring. */
+.approved-shell [data-quote-form-heading]:focus,
+[data-quote-form-heading]:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* The one-screen quote form reads top down: heading, then the first field. The frame's
+   vertical centring suits a two-choice wizard step, not a form, a callback or a
+   success message, so this page top-aligns. */
+.quote-request-app-frame [data-testid="app-frame-body"] > div {
+  justify-content: flex-start !important;
+}

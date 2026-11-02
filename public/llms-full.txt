@@ -1,13 +1,12 @@
 # Boise Construction Co - Full Reference
 
-> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build, founded 2020. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, Garden City. Phone (208) 477-1169.
+> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, Garden City. Phone (208) 477-1169.
 
 ## About
 
-Boise Construction Co is a residential design-build home builder serving the Treasure Valley since 2020. We build new homes: custom homes drawn from a blank page, semi-custom homes personalized from a proven plan, and build-on-your-lot projects for families who already own land. Design-build means design, engineering, permitting, and construction are delivered by one team under one contract, which removes the handoff between an architect and a general contractor and keeps the drawings and the budget on the same schedule. Every project includes a written line-item scope before construction, named allowances for selections, and a workmanship warranty at completion.
+Boise Construction Co is a residential design-build home builder serving the Treasure Valley. We build new homes: custom homes drawn from a blank page, semi-custom homes personalized from a proven plan, and build-on-your-lot projects for families who already own land. Design-build means design, engineering, permitting, and construction are delivered by one team under one contract, which removes the handoff between an architect and a general contractor and keeps the drawings and the budget on the same schedule. Every project includes a written line-item scope before construction, named allowances for selections, and a workmanship warranty at completion.
 
 - Business type: Residential design-build home builder (new construction)
-- Founded: 2020
 - Service model: One accountable team for design, permits, and construction
 - Contact: https://boiseconstruction.co/contact
 - Build estimator: https://boiseconstruction.co/estimate
@@ -28,7 +27,8 @@ Permit paths, impact fees, and inspection sequencing differ between Ada County a
 - Build on Your Lot: /services/build-on-your-lot - You already own the land. We handle feasibility, design, permits, and construction from there.
 - Design-Build: /services/design-build - Design and construction under one contract, so the drawings and the budget never drift apart.
 - Home Design & Plans: /services/home-plans-design - Architectural design, engineering, and permit-ready drawings for a home built to your site.
-- Home Additions: /services/home-additions - Useful new space added to the home you already live in, planned around the structure, utilities, and daily life already there.
+- Home Additions: /services/home-additions - New footprint or a second story added to the home you already live in, planned around the structure, utilities, and daily life already there.
+- ADUs & Guest Houses: /services/adu - New detached accessory dwellings and guest houses on the lot you already own, planned around setbacks, utilities, and how you will use the space.
 - Lot Evaluation & Feasibility: /services/lot-evaluation - Soils, utilities, access, setbacks, and slope reviewed before you commit to a parcel.
 - Shop Homes & Barndominiums: /services/shop-homes-barndominiums - Post-frame and steel-framed homes that pair finished living space with real working shop square footage.
 - Energy-Efficient Homes: /services/energy-efficient-homes - High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.
@@ -39,12 +39,12 @@ Each service has a dedicated page per city at /services/{service-slug}/{city-slu
 
 Pillar guides (own the head terms):
 
-- Boise Home Building Cost Guide: /guides/boise-home-building-cost-guide
-- The Boise Home Building Process: /guides/boise-home-building-process-guide
-- Buying Land to Build On in the Treasure Valley: /guides/buying-land-to-build-boise
-- How to Choose a Home Builder in Boise: /guides/choose-home-builder-boise
-- Designing a Custom Home in the Treasure Valley: /guides/custom-home-design-guide
-- Treasure Valley Home Building Guide: /guides/treasure-valley-home-building-guide
+- Boise home building cost guide: /guides/boise-home-building-cost-guide
+- The Boise home building process: /guides/boise-home-building-process-guide
+- Buying land to build on in the Treasure Valley: /guides/buying-land-to-build-boise
+- How to choose a home builder in Boise: /guides/choose-home-builder-boise
+- Designing a custom home in the Treasure Valley: /guides/custom-home-design-guide
+- Treasure Valley home building guide: /guides/treasure-valley-home-building-guide
 
 City guides:
 
@@ -65,12 +65,12 @@ Neighborhood guides:
 
 ## Blog category hubs (long-tail questions support the pillars)
 
-- Home Building Costs: /blog/category/home-building-costs
-- Choosing a Builder: /blog/category/choosing-a-builder
-- The Building Process: /blog/category/home-building-process
-- Land & Lots: /blog/category/land-and-lots
-- Design & Floor Plans: /blog/category/home-design-and-plans
-- Treasure Valley Locations: /blog/category/treasure-valley-locations
+- Home building costs: /blog/category/home-building-costs
+- Choosing a builder: /blog/category/choosing-a-builder
+- The building process: /blog/category/home-building-process
+- Land & lots: /blog/category/land-and-lots
+- Design & floor plans: /blog/category/home-design-and-plans
+- Treasure Valley locations: /blog/category/treasure-valley-locations
 
 35 articles across these hubs. Index: /blog
 
@@ -105,4 +105,4 @@ Neighborhood guides:
 
 Boise Construction Co also completes RE-10 and home inspection repairs for real estate agents, buyers and sellers across Boise and the Treasure Valley. An RE-10 is the Idaho inspection response form: after a home inspection the buyer requests specific repairs before closing. We review the RE-10 and inspection report, provide a written scope and pricing, coordinate access, complete the approved work across multiple trades, and supply photo documentation, invoices and receipts for the transaction file. Structural, foundation, mold and asbestos abatement, main electrical service, sewer and septic, HVAC replacement, gas lines and full roof replacement are coordinated to licensed specialists rather than performed in house. We take this work because an inspection repair is a deadline problem rather than a construction problem, and sequencing trades against a date that will not move is the same thing we do on every build. Details: https://boiseconstruction.co/re-10-repairs-boise
 
-Last updated: 2026-09-07. Full sitemap: https://boiseconstruction.co/sitemap.xml
+Last updated: 2026-11-01. Full sitemap: https://boiseconstruction.co/sitemap.xml

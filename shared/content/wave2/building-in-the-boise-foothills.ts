@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const buildingInTheBoiseFoothills: BlogPostData = {
   slug: 'building-in-the-boise-foothills',
-  title: 'What It Costs to Build in the Boise Foothills',
-  seoTitle: 'What It Costs to Build in the Boise Foothills',
+  title: 'What it costs to build in the Boise Foothills',
+  seoTitle: 'Build Costs in the Boise Foothills',
   metaDescription:
     'Foothills homes regularly run above $450 per square foot. Here is what slope, excavation, retaining, access, geotech, and wind exposure add to the build.',
   excerpt:
     'The view has a price, and it is mostly paid below grade. Here is what pushes a Boise foothills build above $450 per square foot and which drivers you control.',
-  category: 'Land & Lots',
+  category: 'Land & lots',
   hubSlug: 'land-and-lots',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-17',
@@ -36,12 +36,12 @@ export const buildingInTheBoiseFoothills: BlogPostData = {
     'Slope severity, not the view, is the number that predicts the budget.',
   ],
   relatedLinks: [
-    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying Land to Build On in the Treasure Valley' },
-    { url: '/blog/how-to-buy-a-buildable-lot-boise', anchor: 'How to Tell If a Lot Is Actually Buildable' },
-    { url: '/blog/lot-evaluation-checklist', anchor: 'Lot Evaluation Checklist' },
-    { url: '/blog/well-and-septic-cost-idaho', anchor: 'What a Well and Septic System Costs in Idaho' },
-    { url: '/services/build-on-your-lot', anchor: 'Build on Your Lot' },
-    { url: '/services/custom-home-builder', anchor: 'Custom Home Builder' },
+    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying land to build on in the Treasure Valley' },
+    { url: '/blog/how-to-buy-a-buildable-lot-boise', anchor: 'How to tell if a lot is actually buildable' },
+    { url: '/blog/lot-evaluation-checklist', anchor: 'Lot evaluation checklist' },
+    { url: '/blog/well-and-septic-cost-idaho', anchor: 'What a well and septic system costs in Idaho' },
+    { url: '/services/build-on-your-lot', anchor: 'Build on your lot' },
+    { url: '/services/custom-home-builder', anchor: 'Custom home builder' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const wellAndSepticCostIdaho: BlogPostData = {
   slug: 'well-and-septic-cost-idaho',
-  title: 'What a Well and Septic System Costs in Idaho',
+  title: 'What a well and septic system costs in Idaho',
   seoTitle: 'What a Well and Septic Cost in Idaho',
   metaDescription:
-    'Well and septic are the biggest unknowns on a rural Idaho parcel. What drives the cost, why depth is unknown until drilling, and what sits in $80k to $150k.',
+    'Well and septic are the biggest unknowns on a rural Idaho parcel. What drives cost, why depth is unknown until drilling, and what sits in $80k to $150k.',
   excerpt:
     'On a rural Treasure Valley parcel, the well and the septic system are the two costs nobody can quote you precisely. Here is what actually drives each of them.',
-  category: 'Land & Lots',
+  category: 'Land & lots',
   hubSlug: 'land-and-lots',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-24',
@@ -33,11 +33,11 @@ export const wellAndSepticCostIdaho: BlogPostData = {
     'Septic permitting for rural parcels goes through Central District Health.',
   ],
   relatedLinks: [
-    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying Land to Build On in the Treasure Valley' },
-    { url: '/blog/how-to-buy-a-buildable-lot-boise', anchor: 'How to Tell If a Lot Is Actually Buildable' },
-    { url: '/blog/lot-evaluation-checklist', anchor: 'Lot Evaluation Checklist' },
-    { url: '/services/lot-evaluation', anchor: 'Lot Evaluation' },
-    { url: '/services/build-on-your-lot', anchor: 'Build on Your Lot' },
+    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying land to build on in the Treasure Valley' },
+    { url: '/blog/how-to-buy-a-buildable-lot-boise', anchor: 'How to tell if a lot is actually buildable' },
+    { url: '/blog/lot-evaluation-checklist', anchor: 'Lot evaluation checklist' },
+    { url: '/services/lot-evaluation', anchor: 'Lot evaluation' },
+    { url: '/services/build-on-your-lot', anchor: 'Build on your lot' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

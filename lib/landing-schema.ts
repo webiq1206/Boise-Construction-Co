@@ -1,7 +1,6 @@
 import {
   generateBreadcrumbSchema,
   generateFAQSchema,
-  generateLocalBusinessSchema,
   generateServiceSchema,
   generateSpeakableSchema,
 } from './schema';
@@ -24,10 +23,6 @@ export function landingServiceSchema(
   city?: string,
 ) {
   return generateServiceSchema(name, description, city);
-}
-
-export function landingAreaBusinessSchema(cityName: string) {
-  return generateLocalBusinessSchema(cityName);
 }
 
 export function landingSpeakable(path: string, name: string) {

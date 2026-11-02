@@ -1,6 +1,7 @@
 // Additive snapshot of runtime estimator DDL. The safety tests enforce coverage.
 // Preserve unused tables: removing application code must never remove stored data.
 export const estimatorSchemaStatements = [
+  "CREATE TABLE IF NOT EXISTS p5_project_references (project_id text PRIMARY KEY, reference text NOT NULL UNIQUE, created_at timestamptz NOT NULL DEFAULT now())",
   "CREATE TABLE IF NOT EXISTS p5_estimator_drafts (id uuid PRIMARY KEY, key_hash text NOT NULL, brand text NOT NULL, revision integer NOT NULL DEFAULT 0, status text NOT NULL DEFAULT 'draft', payload jsonb NOT NULL DEFAULT '{}', internal_estimate jsonb, customer_estimate jsonb, submitted_at timestamptz, updated_at timestamptz NOT NULL DEFAULT now(), created_at timestamptz NOT NULL DEFAULT now())",
   "CREATE TABLE IF NOT EXISTS p5_estimator_files (id uuid PRIMARY KEY, draft_id uuid NOT NULL REFERENCES p5_estimator_drafts(id), name text NOT NULL, mime_type text NOT NULL, size_bytes integer NOT NULL, sha256 text NOT NULL, data_base64 text NOT NULL, created_at timestamptz NOT NULL DEFAULT now(), UNIQUE(draft_id, sha256))",
   "ALTER TABLE p5_estimator_files ADD COLUMN IF NOT EXISTS storage_bucket text",
@@ -43,3 +44,8 @@ export const estimatorSchemaStatements = [
   "CREATE TABLE IF NOT EXISTS p5_estimator_review_requests (\n      draft_id uuid NOT NULL, revision integer NOT NULL, contact jsonb NOT NULL,\n      scope jsonb NOT NULL, status text NOT NULL DEFAULT 'saved', created_at timestamptz NOT NULL DEFAULT now(),\n      PRIMARY KEY(draft_id,revision))"
 ];
 estimatorSchemaStatements.push("CREATE TABLE IF NOT EXISTS p5_estimator_policy_imports (id text PRIMARY KEY, prior_payload jsonb, imported_payload jsonb NOT NULL, actor text NOT NULL, created_at timestamptz NOT NULL DEFAULT now())");
+// Quote form attachments (server/services/leadFiles.ts) and the RE-10 and
+// compliance documents share this table. It is declared in shared/schema.ts;
+// listing it here makes db:prepare create it where it is missing, so the
+// Replit publish diff never proposes dropping it. Matches the Drizzle columns.
+estimatorSchemaStatements.push("CREATE TABLE IF NOT EXISTS stored_files (id varchar PRIMARY KEY DEFAULT gen_random_uuid(), key text NOT NULL, file_name text NOT NULL, mime_type text NOT NULL, file_size integer NOT NULL, data text NOT NULL, created_at timestamp NOT NULL DEFAULT now(), CONSTRAINT stored_files_key_unique UNIQUE (key))");

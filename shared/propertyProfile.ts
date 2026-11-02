@@ -68,6 +68,9 @@ export function resolvePropertyProfile(
   base: PropertyProfile | null | undefined
 ): PropertyProfile | null {
   if (!base) return null;
+  // Lead acquisition can occupy the existing JSON envelope without a site address.
+  // It is not a property profile and must not create a blank property editor.
+  if ('_leadAttribution' in base && Object.keys(base).every(key=>key==='_leadAttribution')) return null;
   if (!base.adminOverrides || Object.keys(base.adminOverrides).length === 0) {
     return base;
   }

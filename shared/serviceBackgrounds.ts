@@ -18,6 +18,7 @@ export const SERVICE_BACKGROUNDS: ServiceBackgroundConfig = {
   "design-build": CONSTRUCTION_IMAGES.meeting,
   "home-plans-design": CONSTRUCTION_IMAGES.plans,
   "home-additions": CONSTRUCTION_IMAGES.framing,
+  adu: CONSTRUCTION_IMAGES.adu,
   "lot-evaluation": CONSTRUCTION_IMAGES.ruralSite,
   "shop-homes-barndominiums": CONSTRUCTION_IMAGES.shopHome,
   "energy-efficient-homes": CONSTRUCTION_IMAGES.insulation,
@@ -49,7 +50,10 @@ const SERVICE_IMAGE_SETS: Record<string, LandingImageSet> = {
   "custom-home-builder": {
     hero: CONSTRUCTION_IMAGES.customHome,
     breather: CONSTRUCTION_IMAGES.interior,
-    process: CONSTRUCTION_IMAGES.framing,
+    // Not framing: the Eagle concept gallery on this page already carries a
+    // framing photo, and the process steps are planning, feasibility and the
+    // line-item budget before the build.
+    process: CONSTRUCTION_IMAGES.plans,
   },
   "semi-custom-homes": {
     hero: CONSTRUCTION_IMAGES.semiCustom,
@@ -75,6 +79,11 @@ const SERVICE_IMAGE_SETS: Record<string, LandingImageSet> = {
     hero: CONSTRUCTION_IMAGES.framing,
     breather: CONSTRUCTION_IMAGES.interior,
     process: CONSTRUCTION_IMAGES.meeting,
+  },
+  adu: {
+    hero: CONSTRUCTION_IMAGES.adu,
+    breather: CONSTRUCTION_IMAGES.interior,
+    process: CONSTRUCTION_IMAGES.framing,
   },
   "lot-evaluation": {
     hero: CONSTRUCTION_IMAGES.ruralSite,

@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const howToBudgetANewHomeBoise: BlogPostData = {
   slug: 'how-to-budget-a-new-home-boise',
-  title: 'How to Budget for a New Home in Boise',
-  seoTitle: 'How to Budget for a New Home in Boise',
+  title: 'How to budget for a new home in Boise',
+  seoTitle: 'Budget for a New Home in Boise',
   metaDescription:
     'How to budget a Treasure Valley new build: land, site work, vertical construction, soft costs, allowances, contingency, and the costs most people forget.',
   excerpt:
     'Most blown new-home budgets fail in the same two places: allowances set too low and a contingency that was never funded. Here is how to build a budget that holds.',
-  category: 'Home Building Costs',
+  category: 'Home building costs',
   hubSlug: 'home-building-costs',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-23',
@@ -36,12 +36,12 @@ export const howToBudgetANewHomeBoise: BlogPostData = {
     'Landscaping, fencing, window coverings, appliances, and moving are usually excluded.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
-    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to Build a House in Boise' },
-    { url: '/blog/allowances-explained-new-home', anchor: 'How Allowances Work' },
-    { url: '/blog/construction-loan-basics-idaho', anchor: 'How Construction Loans Work in Idaho' },
-    { url: '/blog/what-drives-home-building-costs-boise', anchor: 'What Drives Home Building Costs' },
-    { url: '/#calculator', anchor: 'Cost Calculator' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
+    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to build a house in Boise' },
+    { url: '/blog/allowances-explained-new-home', anchor: 'How allowances work' },
+    { url: '/blog/construction-loan-basics-idaho', anchor: 'How construction loans work in Idaho' },
+    { url: '/blog/what-drives-home-building-costs-boise', anchor: 'What drives home building costs' },
+    { url: '/#calculator', anchor: 'Cost calculator' },
   ],
   faqs: [
     {

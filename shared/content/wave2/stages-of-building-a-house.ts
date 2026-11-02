@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const stagesOfBuildingAHouse: BlogPostData = {
   slug: 'stages-of-building-a-house',
-  title: 'The Stages of Building a House, in Order',
-  seoTitle: 'The Stages of Building a House, in Order',
+  title: 'The stages of building a house, in order',
+  seoTitle: 'Building a House, Stages in Order',
   metaDescription:
     'Every stage of building a house in order, from feasibility to final walkthrough: what each looks like, how long it takes, and what you decide beforehand.',
   excerpt:
     'A house gets built in a fixed order, and each stage waits on the one before it. Here is the whole sequence with durations and the decisions each stage needs from you.',
-  category: 'The Building Process',
+  category: 'The building process',
   hubSlug: 'home-building-process',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-02',
@@ -36,12 +36,12 @@ export const stagesOfBuildingAHouse: BlogPostData = {
     'The final walkthrough is a checkpoint in the process, not a formality at the end of it.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise Home Building Process' },
-    { url: '/blog/how-long-does-it-take-to-build-a-house-boise', anchor: 'How Long a Boise Build Takes' },
-    { url: '/blog/choosing-finishes-for-a-new-home', anchor: 'Choosing Finishes for a New Home' },
-    { url: '/blog/new-home-walkthrough-and-warranty', anchor: 'The Final Walkthrough and Warranty' },
-    { url: '/blog/boise-building-permit-guide', anchor: 'Building Permits in Boise' },
-    { url: '/blog/lot-evaluation-checklist', anchor: 'Lot Evaluation Checklist' },
+    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise home building process' },
+    { url: '/blog/how-long-does-it-take-to-build-a-house-boise', anchor: 'How long a Boise build takes' },
+    { url: '/blog/choosing-finishes-for-a-new-home', anchor: 'Choosing finishes for a new home' },
+    { url: '/blog/new-home-walkthrough-and-warranty', anchor: 'The final walkthrough and warranty' },
+    { url: '/blog/boise-building-permit-guide', anchor: 'Building permits in Boise' },
+    { url: '/blog/lot-evaluation-checklist', anchor: 'Lot evaluation checklist' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

@@ -10,3 +10,4 @@
 - [Recovery backup verification](recovery-backup-verification.md) — separate immutable publishing inventory from Git backups; account explicitly for changing platform caches.
 - [Background ledger migration](background-ledger-migration.md) — preserve one runnable accounting ledger; request-side ambiguity checks must also cover autonomous workers.
 - [Live qualification accounting](live-qualification-accounting.md) — explicit bounded grants permit conservative accounting, not invoice claims; one canonical ledger prevents accidental budget resets.
+- [Attribution boundaries](attribution-boundaries.md) — preserve business identity and staff flow; pending consent is not revocation; mocked calls do not prove real Google conversions.

@@ -1,3 +1,5 @@
+import { FOUNDING } from "@/shared/publicFlags";
+
 export interface HomepageFaq {
   q: string;
   a: string;
@@ -10,7 +12,7 @@ export interface HomepageFaq {
  * clicked. Lives here (not in the client component) so a server component can
  * import it without crossing the client/server boundary.
  */
-export const INITIAL_FAQ_COUNT = 8;
+export const INITIAL_FAQ_COUNT = 10;
 
 /**
  * Homepage FAQ set. These feed FAQPage schema, so answers lead with the direct
@@ -21,6 +23,22 @@ export const INITIAL_FAQ_COUNT = 8;
  * Treasure Valley construction, excluding land) and with the estimator engine.
  */
 export const HOMEPAGE_FAQS: HomepageFaq[] = [
+  {
+    q: "What is Boise Construction Co?",
+    a: `${FOUNDING.idahoBuilder} The work covers custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. The service area is Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and Garden City. Phone (208) 477-1169.`,
+  },
+  {
+    q: "Are the budget ranges quotes?",
+    a: "No. Planning ranges on this site are starting points, not bids. A written scope and proposal follow a site visit and a lot review. Request a quote and we reply within one business day. Design-build means one accountable team handles architectural design, engineering, Ada and Canyon County permitting, and construction under a single contract, backed by a written line-item scope before the foundation is poured.",
+  },
+  {
+    q: "What is excluded from the planning number?",
+    a: "Land, well and septic, driveway beyond the apron, landscaping, window coverings, and appliances sit outside the planning number unless your written scope says otherwise. Site costs such as utility runs and grading are listed on their own lines so they do not hide inside a square-foot figure.",
+  },
+  {
+    q: "What is the deposit and how do draws work with my lender?",
+    a: "Deposit and draw timing are set in your construction contract and aligned with your lender's schedule. Most clients use a construction-to-permanent loan that funds the build in stages called draws. We provide the budgets, plans, and draw documentation lenders ask for, and we schedule inspections to line up with those milestones so financing does not stall the build.",
+  },
   {
     q: "How much does it cost to build a house in Boise and the Treasure Valley?",
     a: "As of 2026, most Treasure Valley custom homes plan between $250 and $400 per finished square foot excluding land, which puts a 2,400 square foot home roughly between $600,000 and $960,000. Simpler single-level designs on flat valley lots can approach $225 per square foot, while foothills sites, steep grades, and highly detailed interiors regularly exceed $450. Land, site work, and utility connections are separate and vary more between lots than the house itself does, which is why we price them as their own lines rather than folding them into a square-foot number.",
@@ -71,7 +89,7 @@ export const HOMEPAGE_FAQS: HomepageFaq[] = [
   },
   {
     q: "What is your workmanship warranty?",
-    a: "We provide a written workmanship warranty on the home we build. If something we built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it at no charge. We also pass through every manufacturer warranty on the products we install, including appliances, windows, roofing, and mechanical equipment.",
+    a: "We provide a 1-year workmanship warranty on new builds. If something we built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it at no charge. Ask us whether a 10-year structural warranty applies to your contract. We also pass through manufacturer warranties on the products we install.",
   },
   {
     q: "What does the free planning consultation include?",

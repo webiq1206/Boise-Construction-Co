@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const howLongDoesItTakeToBuildAHouseBoise: BlogPostData = {
   slug: 'how-long-does-it-take-to-build-a-house-boise',
-  title: 'How Long Does It Take to Build a House in Boise?',
+  title: 'How long does it take to build a house in Boise?',
   seoTitle: 'How Long to Build a House in Boise?',
   metaDescription:
     'A Boise home usually takes 12 to 18 months from the first design meeting to keys, with 7 to 11 months on site. Here is each phase and what stretches it.',
   excerpt:
     'The construction schedule is only part of the answer. Here is how long design, engineering, permitting, and each phase of the build actually run in the Treasure Valley.',
-  category: 'The Building Process',
+  category: 'The building process',
   hubSlug: 'home-building-process',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-08',
@@ -36,11 +36,11 @@ export const howLongDoesItTakeToBuildAHouseBoise: BlogPostData = {
     'Change orders during framing cost more days than they do dollars.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise Home Building Process' },
-    { url: '/blog/stages-of-building-a-house', anchor: 'The Stages of Building a House, in Order' },
-    { url: '/blog/boise-building-permit-guide', anchor: 'Building Permits in Boise' },
-    { url: '/blog/choosing-finishes-for-a-new-home', anchor: 'Choosing Finishes for a New Home' },
-    { url: '/blog/first-meeting-with-a-home-builder', anchor: 'Your First Meeting With a Builder' },
+    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise home building process' },
+    { url: '/blog/stages-of-building-a-house', anchor: 'The stages of building a house, in order' },
+    { url: '/blog/boise-building-permit-guide', anchor: 'Building permits in Boise' },
+    { url: '/blog/choosing-finishes-for-a-new-home', anchor: 'Choosing finishes for a new home' },
+    { url: '/blog/first-meeting-with-a-home-builder', anchor: 'Your first meeting with a builder' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

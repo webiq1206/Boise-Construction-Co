@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const whyHomeBuildingBidsVary: BlogPostData = {
   slug: 'why-home-building-bids-vary',
-  title: 'Why Home Building Bids Vary So Much',
+  title: 'Why home building bids vary so much',
   seoTitle: 'Why Home Building Bids Vary So Much',
   metaDescription:
-    'Two bids on the same house plan can differ by six figures. Here are the legitimate reasons, the illegitimate ones, and how to tell which you are looking at.',
+    'Two bids on the same house plan can differ by six figures. The legitimate reasons, the illegitimate ones, and how to tell which you are looking at.',
   excerpt:
     'A six-figure gap between two bids on identical drawings is normal and usually explainable. The explanation is almost never that one builder is cheaper.',
-  category: 'Choosing a Builder',
+  category: 'Choosing a builder',
   hubSlug: 'choosing-a-builder',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-03',
@@ -35,11 +35,11 @@ export const whyHomeBuildingBidsVary: BlogPostData = {
     'A bid that cannot explain why it is lower is not a lower price, it is a later invoice.',
   ],
   relatedLinks: [
-    { url: '/guides/choose-home-builder-boise', anchor: 'How to Choose a Home Builder in Boise' },
-    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to Compare Home Builder Bids' },
-    { url: '/blog/home-builder-red-flags', anchor: 'Home Builder Red Flags' },
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
-    { url: '/blog/fixed-price-vs-cost-plus', anchor: 'Fixed Price vs Cost Plus' },
+    { url: '/guides/choose-home-builder-boise', anchor: 'How to choose a home builder in Boise' },
+    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to compare home builder bids' },
+    { url: '/blog/home-builder-red-flags', anchor: 'Home builder red flags' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
+    { url: '/blog/fixed-price-vs-cost-plus', anchor: 'Fixed price vs cost plus' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

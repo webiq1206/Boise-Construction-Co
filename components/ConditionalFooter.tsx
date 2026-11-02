@@ -1,10 +1,17 @@
 "use client";
 
+import { ContractorRegistrationPlain } from "@/components/ContractorRegistration";
 import { isEstimatorPath } from "@/lib/p5/estimatorRoutes";
 import { usePathname } from "next/navigation";
-import { Footer } from "@/components/Footer";
+import type { ReactNode } from "react";
 
-export function ConditionalFooter() {
+/**
+ * The marketing footer arrives as a server-rendered element from the root
+ * layout. Importing Footer here made it a client component, which shipped
+ * every service, city, hub and full guide body it reads for its link lists
+ * (about 270 KB of script) to every page just to render links.
+ */
+export function ConditionalFooter({ footer }: { footer: ReactNode }) {
   const pathname = usePathname();
   const hideFooter =
     pathname?.startsWith("/admin") ||
@@ -16,8 +23,9 @@ export function ConditionalFooter() {
     pathname === "/subcontractor" ||
     pathname?.startsWith("/subcontractor/purchases");
 
-  // The estimator owns the whole screen as a one-page app; a footer below it
-  // would be the one thing on the page that forces a scroll.
-  if (hideFooter || isEstimatorPath(pathname)) return null;
-  return <Footer />;
+  // The estimator owns the screen. The marketing footer would force a scroll,
+  // so the funnel keeps only the registration line, as plain text.
+  if (isEstimatorPath(pathname)) return <ContractorRegistrationPlain />;
+  if (hideFooter) return null;
+  return footer;
 }

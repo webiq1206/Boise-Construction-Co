@@ -1,17 +1,28 @@
 import { ApprovedShell } from "@/components/approved/ApprovedShell";
+import { JsonLd } from "@/components/seo/JsonLd";
 import {withBrandPageMetadata} from '@/lib/brand-page-metadata';
+import { generateLocalBusinessSchema } from "@/lib/schema";
 import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
-import { Navigation } from '@/components/Navigation'
+import { Navigation, SiteActionBar } from '@/components/Navigation'
+import { SkipLink } from '@/components/family/SkipLink'
+// The brand accent as --color-accent on the root, so page-content family buttons carry it too.
+import { brandStyle } from '@/components/family/brandStyle'
 import { ConditionalFooter } from '@/components/ConditionalFooter'
-import { Toaster } from '@/components/ui/toaster'
+import { Footer } from '@/components/Footer'
+import { DeferredToaster } from '@/components/ui/deferred-toaster'
 import { Providers } from '@/components/Providers'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import { SITE_TAGLINE } from '@/shared/siteContent'
 import { SITE_CONFIG } from '@/shared/siteConfig'
 import { GoogleAnalytics } from '@/components/GoogleAnalytics'
+import { LeadAttribution } from '@/components/LeadAttribution'
+import { consentBootstrap } from '@/lib/consentBootstrap'
+import { Suspense } from 'react'
 import { MetaPixel } from '@/components/MetaPixel'
 import { MicrosoftClarity } from '@/components/MicrosoftClarity'
+import { clarityFormMaskScript } from '@/lib/clarityFormMask'
+import Script from 'next/script'
 import { ConversionTracking } from '@/components/ConversionTracking'
 import { AssistantWidget } from '@/components/assistant/AssistantWidget'
 import './globals.css'
@@ -22,6 +33,14 @@ import './approved-family.css'
 import './approved-system.css'
 import './approved-interiors.css'
 import './audit-accessibility.css'
+import './design-v2-compliance.css'
+import './design-refresh.css'
+import './contractor-registration.css'
+// Shared P5 Home Co family tokens and chrome (header, menu, bar, footer, hero),
+// synced byte-identical across the family; brand values come from lib/familyBrand.ts.
+import '@/styles/family-tokens.css'
+import '@/styles/family-chrome.css'
+import './family-adoption.css'
 
 // P5 family typefaces, self-hosted. These are the same two files P5 Home Co
 // serves (Manrope and Cormorant Garamond, both variable-weight, both SIL Open
@@ -58,7 +77,7 @@ export const metadata: Metadata = withBrandPageMetadata(({
     default: `Custom Home Builder in Boise, Idaho | ${SITE_CONFIG.name}`,
     template: `%s | ${SITE_CONFIG.name}`,
   },
-  description: `Boise custom home builder and new home construction across Meridian, Eagle, Nampa, Kuna & the Treasure Valley. Custom and semi-custom homes, design-build, and builds on your lot, with a line-item budget before we break ground.`,
+  description: `Custom home builder in Boise and the Treasure Valley: custom and semi-custom homes, design-build and builds on your own lot, with a line-item budget first.`,
   manifest: '/site.webmanifest',
   // Feed discovery for readers, aggregators, and AI/answer-engine crawlers.
   alternates: {
@@ -157,8 +176,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`dark ${manrope.variable} ${cormorant.variable}`} style={{ colorScheme: 'dark' }} suppressHydrationWarning>
+    <html lang="en" className={`dark ${manrope.variable} ${cormorant.variable}`} style={{ colorScheme: 'dark', ...brandStyle() }} suppressHydrationWarning>
       <head suppressHydrationWarning>
+        <script id="p5-consent" dangerouslySetInnerHTML={{__html:consentBootstrap()}} />
         <script
           dangerouslySetInnerHTML={{
             __html: `document.documentElement.classList.add('js')`,
@@ -166,29 +186,32 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-background font-sans antialiased">
+        <JsonLd data={generateLocalBusinessSchema()} />
         <noscript>
           <style>{`.reveal-init{opacity:1!important;transform:none!important}`}</style>
         </noscript>
         <Providers>
+          <Suspense fallback={null}><LeadAttribution /></Suspense>
           <ScrollToTop />
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-sm focus:bg-foreground focus:px-4 focus:py-2 focus:text-background focus:shadow-lg"
-          >
-            Skip to content
-          </a>
+          <SkipLink />
           <ApprovedShell><div className="flex flex-col min-h-screen">
             <Navigation />
             <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
               {children}
             </main>
-            <ConditionalFooter />
+            <ConditionalFooter footer={<Footer />} />
+            <SiteActionBar />
           </div></ApprovedShell>
-          <Toaster />
+          <DeferredToaster />
           <AssistantWidget />
         </Providers>
         <GoogleAnalytics />
         <MetaPixel />
+        <Script
+          id="clarity-form-mask"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: clarityFormMaskScript }}
+        />
         <MicrosoftClarity />
         <ConversionTracking />
       </body>

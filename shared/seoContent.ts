@@ -1,11 +1,16 @@
 import type { ServiceData, CityData } from './contentData';
-import { getCountyLabel } from './contentData';
+import { getCountyLabel, serviceLabel } from './contentData';
+import { getAreaCityCopy } from './content/areaCopy';
+import { getCityServiceCopy } from './content/cityServiceCopy';
+import { indianCreekDescription } from '../lib/seo';
 import {permitGuidance,permitSource} from '../lib/permitGuidance';
 import type { LandingSection } from '@/components/seo/LandingPageTemplate';
 
 export interface FAQItem {
   question: string;
   answer: string;
+  /** Visible inline anchors. Schema and the answer string stay plain text. */
+  links?: { phrase: string; href: string }[];
 }
 
 /** Minimal shape of a CITY_SEO_DATA entry needed to build local sections. */
@@ -22,6 +27,12 @@ export interface ServiceSEOContent {
   headline: string;
   primaryKeyword: string;
   overview: string;
+  /**
+   * Hero support line when the overview's first sentence runs past the hero
+   * budget (LandingPageTemplate splitHeroLead). The full overview still renders
+   * directly below the hero.
+   */
+  heroLine?: string;
   benefits: string[];
   inclusions: string[];
   timeline: string;
@@ -47,7 +58,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'custom-home-builder': {
     slug: 'custom-home-builder',
     name: 'Custom Home Building',
-    headline: 'Custom Home Builder in the Treasure Valley',
+    headline: 'Custom home builder in the Treasure Valley',
     primaryKeyword: 'custom home builder boise idaho',
     overview:
       'A custom home starts from a blank page rather than a catalog. Boise Construction Co handles feasibility, design, engineering, permitting, and construction under one contract, so the drawings, the budget, and the schedule stay tied together from the first sketch to the day you get the keys.',
@@ -65,7 +76,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       'Blower-door test, final inspections, and a written workmanship warranty',
     ],
     timeline:
-      'Plan on 10 to 14 months end to end: roughly 3 to 5 months for design, engineering, and permitting, then 7 to 10 months of construction depending on size and site complexity.',
+      'Plan on 10 to 16 months end to end: roughly 2 to 4 months for design and selections, 1 to 3 months for permitting, then 7 to 11 months of construction depending on size and site complexity.',
     processSteps: [
       {
         title: 'Planning consultation',
@@ -76,8 +87,8 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
         description: 'Soils, utilities, access, setbacks, and slope get checked so the design suits the ground it sits on.',
       },
       {
-        title: 'Design and fixed scope',
-        description: 'Drawings, selections, and a line-item budget are locked together before we submit for permit.',
+        title: 'Design and line-item budget',
+        description: 'Drawings, selections, and a line-item budget with written allowances are locked together before we submit for permit.',
       },
       {
         title: 'Build and handover',
@@ -93,7 +104,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How long does it take to build a custom home in the Treasure Valley?',
         answer:
-          'Budget 10 to 14 months from the start of design to move-in. Design, engineering, and permitting take 3 to 5 months, and construction runs 7 to 10 months. Plan review timelines in Ada and Canyon County are the most common source of delay.',
+          'Budget 10 to 16 months from the start of design to move-in. Design and selections take 2 to 4 months, permitting takes 1 to 3 months, and construction runs 7 to 11 months. Plan review timelines in Ada and Canyon County are the most common source of delay.',
       },
       {
         question: 'Do I need to own land before I contact a builder?',
@@ -133,7 +144,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'semi-custom-homes': {
     slug: 'semi-custom-homes',
     name: 'Semi-Custom Homes',
-    headline: 'Semi-Custom Home Building in the Treasure Valley',
+    headline: 'Semi-custom home building in the Treasure Valley',
     primaryKeyword: 'semi custom home builder boise idaho',
     overview:
       'A semi-custom home starts from a floor plan that has already been drawn, engineered, and built, then adapts it to your lot and your selections. You give up some layout freedom and get back a shorter timeline, a narrower budget range, and far fewer decisions.',
@@ -214,7 +225,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'build-on-your-lot': {
     slug: 'build-on-your-lot',
     name: 'Build on Your Lot',
-    headline: 'Build on Your Lot in the Treasure Valley',
+    headline: 'Build on your lot in the Treasure Valley',
     primaryKeyword: 'build on your lot boise idaho',
     overview:
       'You already own the land, whether it is family acreage, an infill parcel, or a lot in a master-planned community. Boise Construction Co takes it from there: feasibility, design that suits the ground, permits, and construction, with the site constraints priced before you commit to a plan.',
@@ -295,7 +306,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'design-build': {
     slug: 'design-build',
     name: 'Design-Build',
-    headline: 'Design-Build Home Construction in the Treasure Valley',
+    headline: 'Design-build home construction in the Treasure Valley',
     primaryKeyword: 'design build home builder boise idaho',
     overview:
       'Design-build puts the drawings and the construction under one contract. Instead of hiring an architect, bidding the finished plans, and discovering the design costs 40 percent more than you budgeted, the design is priced continuously as it develops.',
@@ -376,7 +387,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'home-plans-design': {
     slug: 'home-plans-design',
     name: 'Home Design & Plans',
-    headline: 'Custom Home Design and Plans in the Treasure Valley',
+    headline: 'Custom home design and plans in the Treasure Valley',
     primaryKeyword: 'custom home plans boise idaho',
     overview:
       'Permit-ready drawings for a home designed around your actual lot. We produce architectural design, structural engineering, and the energy compliance documentation Ada and Canyon County require, whether or not you ultimately build with us.',
@@ -454,13 +465,92 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     },
   },
 
+  adu: {
+    slug: 'adu',
+    name: 'ADUs & Guest Houses',
+    headline: 'Detached ADU builder in Boise, Idaho',
+    primaryKeyword: 'detached adu builder boise idaho',
+    heroLine: 'New detached ADUs and guest houses, built as separate structures on the lot you already own.',
+    overview:
+      'Detached ADU builder in Boise, Idaho: Boise Construction Co plans and builds new accessory dwellings and guest houses as separate structures on the lot you already own, from feasibility and design through permits and construction. Boise ADU Co projects currently run through Boise Construction Co while that brand site is coming.',
+    benefits: [
+      'Feasibility before design, so setbacks and utilities shape the plan',
+      'One accountable team from drawings through the final walkthrough',
+      'Line-item budget with written allowances before construction',
+      'Boise ADU Co projects currently run through Boise Construction Co',
+    ],
+    inclusions: [
+      'Property and setback review for an accessory dwelling',
+      'Layout planning for family, guests, or independent living',
+      'Permit-ready drawings and local permit coordination',
+      'Utility connection planning called out as separate lines',
+      'Construction, inspections, and a written workmanship warranty',
+    ],
+    timeline:
+      'Timeline depends on the unit size, utility extensions, site work, and plan review. Many detached ADUs land inside a shorter window than a full custom home; we set a project-specific schedule after the site review.',
+    processSteps: [
+      {
+        title: 'Talk about the property',
+        description: 'Share the address, intended use, and what you know about access, utilities, and the existing home.',
+      },
+      {
+        title: 'Review feasibility',
+        description: 'Confirm setbacks, utilities, parking, and jurisdiction rules before anyone draws a floor plan.',
+      },
+      {
+        title: 'Design and budget',
+        description: 'Develop the layout, selections, and a line-item budget with written allowances.',
+      },
+      {
+        title: 'Permits and build',
+        description: 'Coordinate approvals and construction, with written progress updates through handover.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Who builds ADUs in Boise?',
+        answer:
+          'Boise Construction Co builds new detached ADUs and guest houses across the Treasure Valley. Boise ADU Co projects currently run through Boise Construction Co while the ADU brand site is coming. Garage and basement conversions are remodeling work, handled by Boise Remodeling Co.',
+      },
+      {
+        question: 'Can every lot have an ADU?',
+        answer:
+          'No. Feasibility depends on setbacks, lot coverage, utilities, access, and local rules. A site review answers those questions before design starts.',
+      },
+      {
+        question: 'How much does an ADU cost in the Treasure Valley?',
+        answer:
+          'Cost depends on size, utility extensions, site work, and finishes. We price after a site review rather than quoting a square-foot number without seeing the lot. Request a quote and we reply within one business day.',
+        links: [{ phrase: 'Request a quote', href: '/estimate' }],
+      },
+      {
+        question: 'Do ADUs need permits in Boise and Ada County?',
+        answer:
+          'Yes. Most accessory dwellings need plans and a building permit, and some parcels need separate utility or driveway approvals. We coordinate the local path as part of the project.',
+      },
+      {
+        question: 'How do I start an ADU project?',
+        answer:
+          'Request a quote with your address and intended use. We review what the property allows, then outline design, permits, and a planning budget before construction.',
+        links: [{ phrase: 'Request a quote', href: '/estimate' }],
+      },
+    ],
+    costGuidance: {
+      heading: 'Planning an ADU in the Treasure Valley',
+      paragraphs: [
+        'A detached ADU is priced from the property up: setbacks, utilities, access, and site work shape the scope more than a generic square-foot figure.',
+        'Request a quote and we reply within one business day. A site review comes before a detailed proposal, so the first number you see is grounded in your lot.',
+      ],
+    },
+  },
+
   'home-additions': {
     slug: 'home-additions',
     name: 'Home Additions',
-    headline: 'Home Additions in the Treasure Valley',
-    primaryKeyword: 'home additions boise idaho',
+    headline: 'Structural home additions in the Treasure Valley',
+    primaryKeyword: 'structural home additions boise idaho',
     overview:
-      'When your home still fits the neighborhood but no longer fits your life, an addition can make room without starting over. Boise Construction Co plans room additions around the house already standing, from the first look at structure and utilities through permits, construction, and the final walkthrough.',
+      'Structural home additions in the Treasure Valley add new footprint or a second story to the house you already live in. Boise Construction Co plans each one around the home already standing, from the first look at structure and utilities through permits, construction, and the final walkthrough.',
     benefits: [
       'Make room for the way your household lives now',
       'Plan the addition around the existing home before construction begins',
@@ -498,7 +588,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'What kinds of home additions do you plan?',
         answer:
-          'Room additions can create a bedroom, a larger living area, a suite, or flexible space for changing household needs. The first step is seeing how the new space can connect to the existing home.',
+          'Structural additions that add new footprint or a second story: a bedroom, a larger living area, a suite, or flexible space for changing household needs. The first step is seeing how the new space can connect to the existing home. Remodeling rooms inside the existing footprint is Boise Remodeling Co work.',
       },
       {
         question: 'Can you add onto the home I already live in?',
@@ -533,7 +623,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'lot-evaluation': {
     slug: 'lot-evaluation',
     name: 'Lot Evaluation & Feasibility',
-    headline: 'Lot Evaluation and Site Feasibility in the Treasure Valley',
+    headline: 'Lot evaluation and site feasibility in the Treasure Valley',
     primaryKeyword: 'lot evaluation boise idaho',
     overview:
       'Before you buy a parcel, find out what it will cost to build on it. We review soils, utilities, legal access, setbacks, slope, and floodplain status, then give you a written summary of the site work and permitting costs the lot will carry.',
@@ -614,7 +704,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'shop-homes-barndominiums': {
     slug: 'shop-homes-barndominiums',
     name: 'Shop Homes & Barndominiums',
-    headline: 'Shop Homes and Barndominiums in the Treasure Valley',
+    headline: 'Shop homes and barndominiums in the Treasure Valley',
     primaryKeyword: 'barndominium builder idaho',
     overview:
       'A shop home pairs finished living space with genuine working shop square footage under one structure. Post-frame and steel-framed construction covers large spans efficiently, which is why these builds are popular on Canyon County and rural Ada County acreage.',
@@ -655,7 +745,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does a barndominium cost to build in Idaho?',
         answer:
-          'Shop homes generally plan between $140 and $250 per square foot in 2026, blended across finished and shop space. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio, since the shop portion costs far less per square foot. A 1,600 square foot living area with an attached 1,200 square foot shop commonly lands between $385,000 and $630,000 excluding land. The shop itself runs about $55 to $60 per square foot insulated, with a slab, an overhead door and power.',
+          'Shop homes cost less per square foot than a conventional house because the shop portion costs far less to build than finished living space. For 1,600 square feet of living space with a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio. The shop itself runs about $55 to $60 per square foot insulated, with a slab, an overhead door and power.',
       },
       {
         question: 'Why is a shop home cheaper per square foot than a conventional house?',
@@ -686,7 +776,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Shop home and barndominium cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, shop homes in the Treasure Valley plan between $140 and $250 per square foot blended across finished and shop space. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio; a 1,600 square foot living area with an attached 1,200 square foot shop commonly runs $385,000 to $630,000 excluding land and site work.',
+        'As of 2026, our estimator prices 1,600 square feet of living space with a 1,200 square foot shop at $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio, since the shop portion costs far less per square foot than the house.',
         'These are planning ranges, not bids. The ratio of finished space to shop space moves the blended cost more than any other variable, which we settle before design begins.',
       ],
     },
@@ -695,7 +785,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'energy-efficient-homes': {
     slug: 'energy-efficient-homes',
     name: 'Energy-Efficient Homes',
-    headline: 'Energy-Efficient Home Building in the Treasure Valley',
+    headline: 'Energy-efficient home building in the Treasure Valley',
     primaryKeyword: 'energy efficient home builder boise idaho',
     overview:
       'A high-performance home costs less to operate and stays comfortable through Treasure Valley temperature swings. The work is unglamorous: a continuous air barrier, generous insulation, sealed ducts inside conditioned space, and verification by blower-door testing rather than assumption.',
@@ -775,8 +865,45 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
 };
 
 export function getAreaIntro(city: CityData): string {
+  const custom = getAreaCityCopy(city.slug);
+  if (custom) return custom.intro;
   const county = getCountyLabel(city.county);
   return `Boise Construction Co builds new homes for clients in ${city.name}, Idaho and throughout ${county}. From fully custom homes and semi-custom plans to building on land you already own, you work with one accountable team from feasibility through final walkthrough.`;
+}
+
+/** Sister company that owns remodeling, conversions and interior additions. */
+export const REMODELING_SITE_URL = 'https://boiseremodeling.co';
+
+/**
+ * The ADU and additions split between the two P5 Home Co sites, stated on the
+ * page: this site builds new detached ADUs and structural additions (new
+ * footprint, second stories); Boise Remodeling Co handles interior remodels,
+ * garage or basement ADU conversions and work inside the existing footprint.
+ * One followed contextual link to boiseremodeling.co, never more.
+ */
+export function getScopeSplitSection(serviceSlug: string, cityName?: string): LandingSection | undefined {
+  const where = cityName ? ` in ${cityName}` : '';
+  if (serviceSlug === 'adu') {
+    return {
+      heading: `New detached ADUs${where}, not conversions`,
+      paragraphs: [
+        `Boise Construction Co builds new detached ADUs and guest houses${where}: a separate dwelling on the lot you already own, from setbacks and utilities through permits and construction.`,
+        'Converting a garage or a basement into an attached ADU, or remodeling rooms inside the house, is interior work. Our sister company Boise Remodeling Co handles those projects.',
+      ],
+      paragraphLinks: [undefined, [{ phrase: 'Boise Remodeling Co', href: REMODELING_SITE_URL }]],
+    };
+  }
+  if (serviceSlug === 'home-additions') {
+    return {
+      heading: `Structural additions${where}: new footprint or a second story`,
+      paragraphs: [
+        `Boise Construction Co builds structural home additions${where}: new footprint on the lot or a second story over the house you already live in, tied into the existing structure, roofline and utilities.`,
+        'Reworking rooms inside the existing footprint, such as a kitchen, a bathroom or a basement finish, is interior remodeling. Our sister company Boise Remodeling Co handles that work.',
+      ],
+      paragraphLinks: [undefined, [{ phrase: 'Boise Remodeling Co', href: REMODELING_SITE_URL }]],
+    };
+  }
+  return undefined;
 }
 
 export function getCityServiceIntro(
@@ -784,6 +911,8 @@ export function getCityServiceIntro(
   city: CityData,
   localFact?: string,
 ): string {
+  const custom = getCityServiceCopy(service.slug, city.slug);
+  if (custom) return custom.intro;
   const county = getCountyLabel(city.county);
   const fact = localFact
     ? ` ${localFact}`
@@ -792,6 +921,8 @@ export function getCityServiceIntro(
 }
 
 export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): FAQItem[] {
+  const custom = getCityServiceCopy(service.slug, city.slug);
+  if (custom) return custom.faqs;
   const county = getCountyLabel(city.county);
   // First sentence of the cost band, reused as a direct city-level answer for
   // "{service} cost in {city}" queries (voice/AI extractable).
@@ -814,7 +945,7 @@ export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): 
     },
     {
       question: `How do I get a budget for ${service.name.toLowerCase()} in ${city.name}?`,
-      answer: `Use our online estimator for a planning range, then book a free planning consultation. If you have a lot under consideration, we will walk it with you and identify what will drive the site costs.`,
+      answer: `Request a quote for a planning conversation, then book a free planning consultation. If you have a lot under consideration, we will walk it with you and identify what will drive the site costs.`,
     },
   ];
 }
@@ -834,7 +965,19 @@ export function getCityServiceSections(
   const county = getCountyLabel(city.county);
   const neighborhoods = seo?.neighborhoods ?? [];
   const landmarks = seo?.landmarks ?? [];
+  const creek = indianCreekDescription(city.name);
   const serviceLC = service.name.toLowerCase();
+
+  const conceptFigure =
+    city.slug === 'eagle'
+      ? {
+          src: '/images/projects/eagle-mountain-modern/eagle-custom-home-kitchen.webp',
+          caption: `Rift-cut white oak kitchen with black quartzite island for ${city.name} concept design.`,
+        }
+      : {
+          src: '/images/construction/new-home-kitchen.webp',
+          caption: `Kitchen finishes for Treasure Valley ${serviceLC}.`,
+        };
 
   const sections: LandingSection[] = [
     // Server-rendered cost bands (extractable by crawlers and AI engines,
@@ -842,35 +985,49 @@ export function getCityServiceSections(
     ...(service.costGuidance
       ? [
           {
-            heading: `${service.name} cost in ${city.name}`,
+            heading: `${serviceLabel(service)} cost in ${city.name}`,
             paragraphs: [
               `Planning ranges for ${city.name} match the broader Treasure Valley market. ${service.costGuidance.paragraphs[0]}`,
               service.costGuidance.paragraphs[1],
             ],
             links: [
               {
-                label: 'Boise Home Building Cost Guide',
+                label: 'Boise home building cost guide',
                 href: '/guides/boise-home-building-cost-guide',
               },
             ],
+            figure: conceptFigure,
           },
         ]
       : []),
     {
-      heading: `${service.name} across ${city.name}`,
+      heading: `${serviceLabel(service)} across ${city.name}`,
       paragraphs: [
         neighborhoods.length
-          ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}. Lot conditions, utility access, and subdivision design standards vary between these areas, so we tailor the site plan, foundation, and elevations to the specific parcel rather than dropping a plan onto it.`
-          : `We build throughout ${city.name}, tailoring the site plan, foundation design, and elevations to the specific parcel rather than dropping a plan onto it.`,
+          ? `We build throughout ${city.name}, including ${neighborhoods.join(', ')}.${creek ? ` ${creek}` : ''} Lot conditions, utility access, and subdivision design standards vary between these areas, so we tailor the site plan, foundation, and elevations to the specific parcel rather than dropping a plan onto it.`
+          : creek
+            ? `We build throughout ${city.name}. ${creek} We tailor the site plan, foundation design, and elevations to the specific parcel rather than dropping a plan onto it.`
+            : `We build throughout ${city.name}, tailoring the site plan, foundation design, and elevations to the specific parcel rather than dropping a plan onto it.`,
         landmarks.length
           ? `As a local team familiar with ${city.name} landmarks like ${landmarks.slice(0, 3).join(', ')}, we understand how the area is developing and plan ${serviceLC} that fits the neighborhood and holds its value.`
           : `As a local team, we plan ${serviceLC} that fits the neighborhood and holds its value.`,
       ],
+      figure: {
+        src:
+          city.slug === 'eagle'
+            ? '/images/projects/eagle-mountain-modern/eagle-custom-home-front-exterior.webp'
+            : '/images/construction/custom-home-exterior.webp',
+        caption:
+          city.slug === 'eagle'
+            ? `Mountain-modern charcoal stucco and ledgestone exterior for ${serviceLC} in ${city.name}.`
+            : `Concept exterior for ${serviceLC} in ${city.name}.`,
+      },
     },
     {
       heading: `New construction permits and plan review in ${city.name}`,
       paragraphs: [
         permitGuidance(city.name),
+        'Addresses outside city limits go through the county instead; we check this for you at the first visit.',
         seo?.climate
           ? `Our ${city.name} designs also account for the local ${seo.climate}, from insulation and ventilation choices to frost depth, snow load, and materials that hold up to Treasure Valley freeze-thaw cycles.`
           : `Our ${city.name} designs account for the local Treasure Valley climate, including frost depth, snow load, insulation levels, and durable exterior materials.`,
@@ -890,17 +1047,17 @@ export const AREA_PAGE_FAQS: FAQItem[] = [
   {
     question: 'What kinds of homes do you build?',
     answer:
-      'Fully custom homes, semi-custom homes from adapted plans, builds on land you already own, and shop homes. We also provide design and lot evaluation as standalone services.',
+      'Fully custom homes, semi-custom homes from adapted plans, builds on land you already own, shop homes, and ADUs. We also provide design and lot evaluation as standalone services.',
   },
   {
-    question: 'Are you licensed and insured?',
+    question: 'Are you a registered contractor and insured?',
     answer:
-      'Yes. Boise Construction Co is licensed, bonded, and insured. Idaho contractor registration details are available on request.',
+      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Certificate on request.',
   },
   {
     question: 'How do I start a project?',
     answer:
-      'Call us, use our construction estimator for a planning range, or book a free planning consultation through our website.',
+      'Call us, request a quote, or book a free planning consultation through our website.',
   },
 ];
 

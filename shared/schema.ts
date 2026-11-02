@@ -879,9 +879,11 @@ export type PlanJobChunk = typeof planJobChunks.$inferSelect;
  * One row per estimator or lead-form session, keyed by a browser-generated
  * pseudonymous id. It records WHERE a visitor was when they stopped, never who
  * they are: contact fields are filled only from an explicit callback request.
- * A server-side sweep turns an engaged, inactive, incomplete session into one
- * abandonment email; a completed submission cancels it; a completion after the
- * email marks the session recovered. See docs/estimator-recovery.md.
+ * A server-side sweep used to email staff about an engaged, inactive,
+ * incomplete session. That partial-completion mail is disabled
+ * (abandonmentStaffEmailsEnabled). A completed submission is marked completed;
+ * a completion after a historical notification marks the session recovered.
+ * See docs/estimator-recovery.md.
  */
 export const estimatorSessions = pgTable("estimator_sessions", {
   id: varchar("id", { length: 64 }).primaryKey(),

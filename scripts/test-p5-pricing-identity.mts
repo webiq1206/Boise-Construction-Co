@@ -5,17 +5,27 @@ import {pathToFileURL} from 'node:url';
 import path from 'node:path';
 
 await mkdir('node_modules/.cache',{recursive:true});
-const dir=await mkdtemp(path.join(process.cwd(),'node_modules/.cache/p5-pricing-identity-'));
+const isolatedRoot=await mkdtemp(path.join(process.cwd(),'node_modules/.cache/p5-pricing-identity-'));
+const dir=path.join(isolatedRoot,'p5');
 let database:any;
 try{
  await cp('lib/p5',dir,{recursive:true});
+  // Preserve the production sibling import without sharing files between test runs.
+  await cp('lib/leadAttribution.ts',path.join(isolatedRoot,'leadAttribution.ts'));
  await writeFile(path.join(dir,'database.ts'),`import {PGlite} from '@electric-sql/pglite';export const database=new PGlite();export async function query(s:string,v:unknown[]=[]){return (await database.query(s,v)).rows;}`);
  await writeFile(path.join(dir,'scopePricing.ts'),`
  export const PRICING_STAGE_MAX_MS=150000;export const RESEARCH_STAGE_MS=150000;
  export let calls=0;let variant=0;let reverse=false;let interrupt=false;
+ let pricingGate=Promise.resolve();let entered=()=>{};
+ export function holdPricing(){
+   let release:any;const started=new Promise<void>(resolve=>{entered=resolve;});
+   pricingGate=new Promise<void>(resolve=>{release=resolve;});
+   return {started,release:()=>{entered=()=>{};release();pricingGate=Promise.resolve();}};
+ }
  export function scenario(v:number,r=false,pause=false){variant=v;reverse=r;interrupt=pause;}
  export async function requestPricing(instructions:string,input:any){calls++;return {value:{instructions,input},sourceUrls:[]};}
  export async function priceCompleteScope(scope:any,configuration:any,request:any,now:Date){
+   const gate=pricingGate;pricingGate=Promise.resolve();entered();await gate;
    const inputs=[{taskBatch:[{id:'doors',quantity:variant?1:4}],responsibility:variant?'owner supplies three':'contractor supplies four',date:now.toISOString(),configuration},
      {taskBatch:[{id:'trim',quantity:120}],date:now.toISOString(),configuration}];
    if(reverse)inputs.reverse();
@@ -128,7 +138,16 @@ try{
  const raceId=randomUUID(),raceIdentity={...identity,draftId:raceId};
  await store.saveDraft(raceId,randomBytes(32).toString('hex'),ESTIMATOR_BRAND.id,{text:'Test scope',answers:{},extraction:null,reviewed:null,contact:{name:'Synthetic',email:'synthetic@example.invalid',phone:''}},0);
  const beforeRace=provider.calls;
- const raced=await Promise.allSettled([date,new Date('2026-09-20T00:00:01Z')].map(time=>work.priceSavedScope(raceId,scope,{},time,undefined,raceIdentity)));
+ // Keep the first lease active until the second request has attempted it.
+ // Promise.all alone can let the zero-latency fixture finish before that attempt.
+ const gate=provider.holdPricing();
+ const first=work.priceSavedScope(raceId,scope,{},date,undefined,raceIdentity);
+ let second:PromiseSettledResult<unknown>[]=[];
+ try{
+   await Promise.race([gate.started,first.then(()=>{throw new Error('Pricing finished before the overlap gate');})]);
+   second=await Promise.allSettled([work.priceSavedScope(raceId,scope,{},new Date('2026-09-20T00:00:01Z'),undefined,raceIdentity)]);
+ }finally{gate.release();}
+ const raced=[...(await Promise.allSettled([first])),...second];
  assert.equal(raced.filter(result=>result.status==='fulfilled').length,1);
  assert.equal(raced.filter(result=>result.status==='rejected'&&/already running/.test(String(result.reason))).length,1,'concurrent first requests share one lease across midnight');
  assert.equal(provider.calls,beforeRace+2);
@@ -136,5 +155,5 @@ try{
  console.log('PASS: UTC midnight/multi-day replay, legacy revision proof, configuration/source/customer/revision invalidation, cancellation/retry, active leases, frozen status and exact cost/request hashes. Isolated SQL and synthetic responses only.');
 }finally{
  if(database)await database.database.close();
- await rm(dir,{recursive:true,force:true});
+ await rm(isolatedRoot,{recursive:true,force:true});
 }

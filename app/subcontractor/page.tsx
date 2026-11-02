@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { SHOW_TRUST } from "@/shared/publicFlags";
 import { SubcontractorHomeDashboard } from "@/components/subcontractor/SubcontractorHomeDashboard";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -57,7 +58,9 @@ export default function SubcontractorPage() {
               Grow Your Construction Business
             </h2>
             <p className="text-lg text-muted-foreground">
-              Join our network of trusted subcontractors and get access to verified leads in the Kuna, Meridian, and Boise areas. Only pay for the leads you want.
+              {SHOW_TRUST
+                ? "Join our network of trusted subcontractors and get access to verified leads in the Kuna, Meridian, and Boise areas. Only pay for the leads you want."
+                : "Join our network of subcontractors and get access to verified leads in the Kuna, Meridian, and Boise areas. Only pay for the leads you want."}
             </p>
             <div className="space-y-3">
               <div className="flex items-center gap-3">

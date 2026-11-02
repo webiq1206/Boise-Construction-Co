@@ -1,9 +1,8 @@
 import { InteriorEstimateLink,InteriorHero,InteriorPage } from '@/components/approved/InteriorLayout';
 import { BusinessPhoneContact } from '@/components/BusinessPhoneContact';
 import { ConsultationForm } from '@/components/ConsultationForm';
-import { EmailLink } from '@/components/EmailLink';
+import { QuoteFormAnchor } from '@/components/QuoteFormAnchor';
 import { Section } from '@/components/marketing';
-import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
 import { Hairline } from '@/components/marketing/Hairline';
 import { MarketingCard } from '@/components/marketing/MarketingCard';
 import { SectionHeader } from '@/components/marketing/SectionHeader';
@@ -18,14 +17,13 @@ AccordionContent,
 AccordionItem,
 AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
+import { HeroTextLink } from '@/components/approved/PrimaryCta';
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { GRAIN_URL } from '@/lib/grain';
 import { buildPageMetadata } from '@/lib/page-metadata';
 import {
 generateBreadcrumbSchema,
 generateFAQSchema,
-generateLocalBusinessSchema,
 generateWebPageSchema,
 } from '@/lib/schema';
 import { BUSINESS_INFO } from '@/lib/seo';
@@ -34,6 +32,7 @@ import { CITIES,TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { CONSULT_BULLETS,HERO_STATS } from '@/shared/siteContent';
+import { contentImageAlt } from '@/shared/imageAlts';
 import { SITE_IMAGES } from '@/shared/siteImages';
 import { ArrowRight,Check,ChevronRight,Mail,MapPin,MessageSquare,Phone } from 'lucide-react';
 import Image from 'next/image';
@@ -182,8 +181,9 @@ export const metadata = withBrandPageMetadata((buildPageMetadata({
 })), "/contact");
 
 export default function ContactPage() {
+  // LocalBusiness comes from the root layout on every page; emitting it here
+  // as well put two LocalBusiness nodes on /contact.
   const schemas = [
-    generateLocalBusinessSchema(),
     generateWebPageSchema({
       title: `Contact ${SITE_CONFIG.name}`,
       description:
@@ -201,9 +201,9 @@ export default function ContactPage() {
   return (
     <InteriorPage kind="contact"><>
       <JsonLd data={schemas} />
-      <div className="flex flex-col pb-20 md:pb-0">
+      <div className="flex flex-col ">
         {/* Approved editorial hero */}
-        <InteriorHero layout="contact" imageSrc={SITE_IMAGES.hero} imageAlt="White board-and-batten home exterior with a covered front porch">
+        <InteriorHero layout="contact" imageSrc={SITE_IMAGES.hero} imageAlt={contentImageAlt(SITE_IMAGES.hero)}>
             <HeroBreadcrumbs />
             <p data-speakable="summary" className="sr-only">
               {SPEAKABLE_SUMMARY}
@@ -213,39 +213,17 @@ export default function ContactPage() {
               Contact Boise Construction{' '}
               <em className="brc-accent">Co</em>
             </h1>
-            <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed mb-6">
+            <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed">
               Schedule a free 60 to 90 minute planning consultation, call our team, or send your project
               details to our team for an estimate review.
             </p>
-            <BusinessPhoneContact
-              layout="stack"
-              display
-              phoneClassName="text-2xl md:text-3xl text-inverse-foreground hover:text-inverse-foreground/75 transition-colors"
-              saveClassName="text-sm text-inverse-foreground/80 hover:text-inverse-foreground transition-colors"
-              phoneTestId="link-hero-phone"
-            />
-            <a
-              href={SITE_CONFIG.phoneSmsHref}
-              className="block text-sm text-inverse-foreground/80 hover:text-inverse-foreground transition-colors mb-8"
-              data-testid="link-hero-text"
-            >
-              Prefer to text? Message us instead
-            </a>
             <div className="interior-contact-actions"><InteriorEstimateLink/><a href="#consult" className="interior-text-link">Request a consultation</a></div>
-            <dl className="ed-hero-facts">
-              {HERO_STATS.map((stat) => (
-                <div key={stat.label}>
-                  <dt>{stat.label}</dt>
-                  <dd>{stat.num}</dd>
-                </div>
-              ))}
-            </dl>
           </InteriorHero>
 
         {/* ─── Inline consultation form ─── */}
-        <Section id="consult" divider className="scroll-mt-24">
+        <Section divider reveal={false}>
           <div className="container px-4">
-            <div className="interior-contact-grid">
+            <div className="interior-contact-grid quote-form-first">
               <div className="interior-contact-intro">
                 <Reveal>
                   <p className="ed-eyebrow">Request your consultation</p>
@@ -258,11 +236,41 @@ export default function ContactPage() {
                     your free 60 to 90 minute planning consultation - budget band, schedule, and
                     site requirements, with no obligation.
                   </p>
+                  {/* Moved word for word from the hero so the hero's one primary
+                      action clears the mobile bar (Phase 5 QA). */}
+                  <div className="interior-contact-direct">
+                    <BusinessPhoneContact
+                      layout="stack"
+                      display
+                      phoneClassName="text-2xl md:text-3xl text-foreground hover:text-foreground/75 transition-colors"
+                      saveClassName="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      phoneTestId="link-contact-phone"
+                    />
+                    <a
+                      href={SITE_CONFIG.phoneSmsHref}
+                      className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      data-testid="link-contact-text"
+                    >
+                      Prefer to text? Message us instead
+                    </a>
+                    <dl className="ed-hero-facts">
+                      {HERO_STATS.map((stat) => (
+                        <div key={stat.label}>
+                          <dt>{stat.label}</dt>
+                          <dd>{stat.num}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
                 </Reveal>
               </div>
-              <MarketingCard className="md:col-span-3 p-4 sm:p-7 md:p-10" padding="lg">
-                <ConsultationForm />
-              </MarketingCard>
+              {/* Every "#consult" link lands here, on the form itself (QuoteFormAnchor). */}
+              <div id="consult" data-quote-anchor="" className="interior-contact-form">
+                <QuoteFormAnchor />
+                <MarketingCard className="p-4 sm:p-7 md:p-10" padding="lg">
+                  <ConsultationForm />
+                </MarketingCard>
+              </div>
             </div>
           </div>
         </Section>
@@ -288,7 +296,7 @@ export default function ContactPage() {
                   icon={<Phone className="h-5 w-5" strokeWidth={1.5} />}
                   label="Call us"
                   href={SITE_CONFIG.phoneHref}
-                  subtext="Mon – Fri 7 am – 6 pm · Sat 8 am – 4 pm"
+                  subtext="Mon – Fri 9 am – 6 pm · Sat 9 am – 4 pm"
                   featured
                   companion={
                     <SaveContactLink className="text-sm text-muted-foreground hover:text-foreground transition-colors" />
@@ -314,9 +322,10 @@ export default function ContactPage() {
                 <ContactChannel
                   icon={<Mail className="h-5 w-5" strokeWidth={1.5} />}
                   label="Email us"
+                  href={`mailto:${SITE_CONFIG.email}`}
                   subtext="Response within one business day"
                 >
-                  <EmailLink className="text-base hover:text-foreground/70 transition-colors" />
+                  {SITE_CONFIG.email}
                 </ContactChannel>
               </Reveal>
               <Reveal delay={120}>
@@ -329,6 +338,12 @@ export default function ContactPage() {
                     Based in {SITE_CONFIG.address.cityState}
                     <br />
                     Serving the Treasure Valley
+                    <br />
+                    Public representative: {SITE_CONFIG.publicRepresentative}
+                    <br />
+                    {SITE_CONFIG.address.street}, {SITE_CONFIG.address.city}, {SITE_CONFIG.address.state} {SITE_CONFIG.address.postalCode}
+                    <br />
+                    Service-area business, not a staffed storefront.
                   </address>
                 </ContactChannel>
               </Reveal>
@@ -351,7 +366,7 @@ export default function ContactPage() {
             <div className="relative min-h-[260px] md:min-h-[520px] overflow-hidden bg-inverse order-2 md:order-1">
               <Image
                 src={SITE_IMAGES.leadership}
-                alt="Worker checking interior framing on a new home"
+                alt={contentImageAlt(SITE_IMAGES.leadership)}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover img-brand-grade"
@@ -368,6 +383,7 @@ export default function ContactPage() {
                   <br />
                   No pitch. Just answers.
                 </p>
+                <p className="mt-3 text-xs text-inverse-foreground/80">Representative imagery</p>
               </div>
             </div>
 
@@ -397,9 +413,9 @@ export default function ContactPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+                <div className="interior-hero-actions">
                   <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
-                  <Button variant="brandOutline" asChild><a href="#consult">{CTA_SECONDARY}</a></Button>
+                  <HeroTextLink href="#consult">{CTA_SECONDARY}</HeroTextLink>
                 </div>
               </Reveal>
             </div>
@@ -436,16 +452,6 @@ export default function ContactPage() {
 
         <StatementBandSection />
 
-        <EstimatePromptBand
-          title={
-            <>
-              Ready to discuss your{' '}
-              <em className="brc-accent">project</em>?
-            </>
-          }
-          description="Share your project details and plans for our team to review. We may need more information or a site visit before confirming an estimate."
-          variant="canvas"
-        />
 
         {/* ─── Service areas ─── */}
         <Section divider>
@@ -503,11 +509,9 @@ export default function ContactPage() {
                 >
                   Or send us a text message
                 </a>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 [&>*]:w-full sm:[&>*]:w-auto">
+                <div className="mt-8 interior-hero-actions">
                   <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
-                  <Button variant="heroOutline" asChild>
-                    <a href="#consult">{CTA_SECONDARY}</a>
-                  </Button>
+                  <HeroTextLink href="#consult">{CTA_SECONDARY}</HeroTextLink>
                 </div>
 
               </div></div>

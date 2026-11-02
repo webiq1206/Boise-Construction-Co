@@ -1,5 +1,8 @@
 import Link from 'next/link';
-import { CITIES, SERVICES } from '@/shared/contentData';
+import { CITIES, SERVICES, serviceLabel } from '@/shared/contentData';
+import { CONTENT_HUBS, guidePath } from '@/shared/contentHubs';
+import { GUIDE_PAGES } from '@/shared/guideContent';
+import { isCityServiceNoindex } from '@/lib/page-metadata';
 import { areaPath, cityServicePath, servicePath } from '@/lib/seo-routes';
 
 interface RelatedLinksProps {
@@ -8,15 +11,38 @@ interface RelatedLinksProps {
   variant: 'service' | 'area' | 'city-service';
 }
 
+/** The master guide is the fallback, never a service's own pillar. */
+const MASTER_GUIDE_SLUG = 'treasure-valley-home-building-guide';
+
 /**
- * Map each service to the pillar guide it should link "up" to.
- *
- * Intentionally empty until the new-construction pillar guides are published.
- * The old entries pointed at remodeling guides, and relabelling those as home
- * building guides would misdescribe what a reader lands on. Services fall back
- * to the generic guide below until their real pillar exists.
+ * Map each service to the pillar guide it links "up" to, derived from
+ * CONTENT_HUBS[].serviceSlugs (the first hub, in declared order, that lists the
+ * service and whose pillar is published). This used to be an empty map, so all
+ * 49 landing pages linked the generic master guide instead of their pillar.
+ * Services no pillar claims (additions, ADUs, shop homes) keep the master guide.
  */
-const SERVICE_GUIDE: Record<string, { href: string; label: string }> = {};
+const SERVICE_GUIDE: Record<string, { href: string; label: string }> = (() => {
+  const published = new Map(GUIDE_PAGES.map((g) => [g.slug, g]));
+  const map: Record<string, { href: string; label: string }> = {};
+  for (const hub of CONTENT_HUBS) {
+    if (hub.pillarSlug === MASTER_GUIDE_SLUG) continue;
+    const guide = published.get(hub.pillarSlug);
+    if (!guide) continue;
+    for (const slug of hub.serviceSlugs) {
+      map[slug] ??= { href: guidePath(hub.pillarSlug), label: guide.title };
+    }
+  }
+  return map;
+})();
+
+/**
+ * City-service pages that render `noindex, follow` are not linked from these
+ * blocks: the same rule the sitemap uses, so indexable pages stop spending
+ * internal links on pages that cannot rank.
+ */
+function isIndexableCombo(serviceSlug: string, citySlug: string): boolean {
+  return !isCityServiceNoindex(serviceSlug, citySlug);
+}
 
 /**
  * Shared cross-link block rendered on every landing page. Links "up" to the most
@@ -30,7 +56,7 @@ function ExploreFurther({ serviceSlug }: { serviceSlug?: string }) {
      an internal link on a redirect hop - which is what scripts/internal-links
      audits for. */
   const links: { href: string; label: string }[] = [
-    guide ?? { href: '/guides/treasure-valley-home-building-guide', label: 'Treasure Valley Building Guide' },
+    guide ?? { href: guidePath(MASTER_GUIDE_SLUG), label: 'Treasure Valley building guide' },
     { href: '/services', label: 'Compare how we build' },
     { href: '/resources', label: 'Free home building planning worksheets' },
     { href: '/estimate', label: 'Estimate your build cost' },
@@ -58,22 +84,6 @@ export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksPro
   if (variant === 'service' && serviceSlug) {
     return (
       <div className="space-y-10">
-        <div>
-        <h2 className="ed-h2-sm ed-statement-wide mb-8">
-          {SERVICES.find((s) => s.slug === serviceSlug)?.name} by city
-        </h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {CITIES.map((city) => (
-            <Link
-              key={city.slug}
-              href={cityServicePath(serviceSlug, city.slug)}
-              className="ed-body flex min-h-11 items-center border-b py-3 text-[0.9375rem] transition-colors hover:[color:var(--ed-accent)] lg:min-h-0 [border-color:var(--ed-line)]"
-            >
-              {city.name}, Idaho
-            </Link>
-          ))}
-          </div>
-        </div>
         <ExploreFurther serviceSlug={serviceSlug} />
       </div>
     );
@@ -81,17 +91,27 @@ export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksPro
 
   if (variant === 'area' && citySlug) {
     const city = CITIES.find((c) => c.slug === citySlug);
+    const indexableServices = SERVICES.filter((service) => isIndexableCombo(service.slug, citySlug));
+    if (indexableServices.length === 0) {
+      return (
+        <div className="space-y-10">
+          <ExploreFurther />
+        </div>
+      );
+    }
     return (
       <div className="space-y-10">
         <div>
+          {/* Distinct from the page body's "Home building services in {city}"
+              H2, which this block used to repeat word for word. */}
           <h2 className="ed-h2-sm ed-statement-wide mb-8">
-            Home building services in {city?.name}
+            Choose a service page for {city?.name}
           </h2>
           <div className="ed-grid-balance grid sm:grid-cols-2 gap-4">
-            {SERVICES.map((service) => (
+            {indexableServices.map((service) => (
               <Link key={service.slug} href={cityServicePath(service.slug, citySlug)}>
                 <div className="ed-card ed-card-link h-full">
-                  <h3 className="ed-h4">{service.name}</h3>
+                  <h3 className="ed-h4">{serviceLabel(service)}</h3>
                   <p className="ed-body mt-2 text-[0.875rem]">{service.shortDescription}</p>
                 </div>
               </Link>
@@ -104,11 +124,16 @@ export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksPro
   }
 
   if (variant === 'city-service' && serviceSlug && citySlug) {
-    const otherCities = CITIES.filter((c) => c.slug !== citySlug).slice(0, 4);
-    const otherServices = SERVICES.filter((s) => s.slug !== serviceSlug).slice(0, 3);
+    const otherCities = CITIES.filter(
+      (c) => c.slug !== citySlug && isIndexableCombo(serviceSlug, c.slug),
+    ).slice(0, 4);
+    const otherServices = SERVICES.filter(
+      (s) => s.slug !== serviceSlug && isIndexableCombo(s.slug, citySlug),
+    ).slice(0, 3);
     return (
       <div className="space-y-10">
       <div className="grid md:grid-cols-2 gap-10">
+        {otherCities.length > 0 && (
         <div>
           <h2 className="ed-h4 mb-6">
             Same service, nearby cities
@@ -126,7 +151,10 @@ export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksPro
             ))}
           </ul>
         </div>
+        )}
         <div>
+          {otherServices.length > 0 && (
+          <>
           <h2 className="ed-h4 mb-6">
             More services in {CITIES.find((c) => c.slug === citySlug)?.name}
           </h2>
@@ -137,16 +165,18 @@ export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksPro
                   href={cityServicePath(service.slug, citySlug)}
                   className="ed-body text-[0.9375rem] transition-colors hover:[color:var(--ed-accent)]"
                 >
-                  {service.name}
+                  {serviceLabel(service)}
                 </Link>
               </li>
             ))}
           </ul>
-          <div className="mt-8 border-t pt-6" style={{ borderColor: "var(--ed-line)" }}>
+          </>
+          )}
+          <div className={`${otherServices.length > 0 ? 'mt-8 border-t pt-6 ' : ''}flex flex-wrap gap-x-10 gap-y-4`} style={{ borderColor: "var(--ed-line)" }}>
             <Link href={servicePath(serviceSlug)} className="ed-link">
               All {SERVICES.find((s) => s.slug === serviceSlug)?.name} areas →
             </Link>
-            <Link href={areaPath(citySlug)} className="ed-link mt-4 block w-fit">
+            <Link href={areaPath(citySlug)} className="ed-link">
               Home building in {CITIES.find((c) => c.slug === citySlug)?.name} →
             </Link>
           </div>

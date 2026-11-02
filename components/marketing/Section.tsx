@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { observeFirstVisible } from "@/lib/sharedVisibility";
 
 type SectionVariant = "canvas" | "surface" | "greige" | "inverse" | "tint";
 
@@ -65,9 +66,8 @@ export function Section({
     if (!reveal || !el) return;
     // Reduced motion, or a section already scrolled past (a page opened at an anchor), shows at once.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || el.getBoundingClientRect().bottom < 0) { setShown(true); return; }
-    const obs = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setShown(true); obs.disconnect(); } }, { threshold: [0, 0.08], rootMargin: "0px 0px -6% 0px" });
-    obs.observe(el);
-    return () => obs.disconnect();
+    // One observer shared by every section (lib/sharedVisibility), not one per section.
+    return observeFirstVisible(el, { threshold: [0, 0.08], rootMargin: "0px 0px -6% 0px" }, () => setShown(true));
   }, [reveal]);
   return (
     <section

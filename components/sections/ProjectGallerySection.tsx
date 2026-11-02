@@ -1,11 +1,14 @@
 "use client";
 
-import Link from "next/link";
+import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/marketing/Section";
-import { Button } from "@/components/ui/button";
-import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
-import { GALLERY_PROJECTS, type GalleryProject } from "@/shared/galleryData";
+import { FamilyButton } from "@/components/family/Button";
+import {
+  GALLERY_PROJECTS,
+  type GalleryProject,
+} from "@/shared/galleryData";
+import { contentImageAlt } from "@/shared/imageAlts";
 import { CITIES } from "@/shared/contentData";
 
 function cityDisplayName(slug: string) {
@@ -23,6 +26,60 @@ function ProjectMeta({ project, lead = false }: { project: GalleryProject; lead?
   );
 }
 
+function ProjectImageGrid({
+  project,
+  lead = false,
+}: {
+  project: GalleryProject;
+  lead?: boolean;
+}) {
+  const [hero, ...rest] = project.images;
+  if (!hero) return null;
+
+  return (
+    <div className="flex flex-col">
+      <div className={`relative ${lead ? "aspect-[16/10]" : "aspect-[4/3]"}`}>
+        <Image
+          src={hero.src}
+          alt={contentImageAlt(hero.src) || hero.label}
+          fill
+          sizes={lead ? "(max-width: 1024px) 100vw, 60vw" : "(max-width: 768px) 85vw, 31vw"}
+          className="object-cover img-brand-grade"
+        />
+        <span className="absolute left-3 bottom-3 ed-small bg-background/85 px-2 py-1">
+          {hero.label}
+        </span>
+      </div>
+      {rest.length > 0 && (
+        <div
+          className={`grid ${lead ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-3"}`}
+          style={{ borderTop: "1px solid var(--ed-line)" }}
+        >
+          {(lead ? rest : rest.slice(0, 3)).map((image) => (
+            <div
+              key={image.src}
+              className="relative aspect-[4/3]"
+              style={{ borderRight: "1px solid var(--ed-line)" }}
+            >
+              <Image
+                src={image.src}
+                alt={contentImageAlt(image.src) || image.label}
+                fill
+                sizes={lead ? "(max-width: 640px) 50vw, 15vw" : "(max-width: 768px) 28vw, 10vw"}
+                className="object-cover img-brand-grade"
+                loading="lazy"
+              />
+              <span className="absolute left-2 bottom-2 ed-small bg-background/85 px-1.5 py-0.5 text-[0.65rem]">
+                {image.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface ProjectGallerySectionProps {
   limit?: number;
   showViewAll?: boolean;
@@ -31,46 +88,33 @@ interface ProjectGallerySectionProps {
 }
 
 /**
- * Our work.
+ * Our work - cohesive concept homes.
  *
- * WAS six equal before/after cards in a three-column grid with 14px titles.
- * The slider - the one genuinely interactive, genuinely persuasive thing on
- * the page - was rendered at a third of the width and given a caption smaller
- * than the body copy.
- *
- * NOW one project leads at full scale, the heading beside it, so the slider is
- * large enough to actually be dragged and the transformation actually lands.
- * The rest run in a horizontal, scroll-snapping rail: a homeowner browses
- * sideways through the work the way they would flick through a portfolio,
- * and the section stays a single screen tall instead of three rows of cards.
+ * New construction has no remodel before/after. Each featured project shows
+ * exterior and room views that belong to one property, so mobile scroll gets
+ * a visual rhythm instead of a text wall, and the set reads as one home.
  */
 export function ProjectGallerySection({
-  limit = 6,
+  limit = 1,
   showViewAll = true,
   excludeServiceTypes = [],
 }: ProjectGallerySectionProps) {
   const projects = GALLERY_PROJECTS.filter(
     (p) => !excludeServiceTypes.includes(p.serviceType),
   ).slice(0, limit);
-  // Render nothing rather than an empty rail and a "see more" button pointing
-  // at an equally empty page. Returns automatically once real work is added.
   const [lead, ...rest] = projects;
   if (!lead) return null;
+  const showRail = rest.length > 0 && limit > 1;
 
   return (
     <Section id="gallery" surface="bone" spacing="xl" edge className="overflow-hidden">
       <div className="ed-shell">
-        {/* LEAD: the slider at the size it deserves, heading alongside. */}
         <div className="grid gap-[var(--ed-gutter)] lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <Reveal>
-            <p className="ed-eyebrow">Our work</p>
+            <p className="ed-eyebrow">Concept design</p>
             <h2 className="ed-h2 ed-statement">
-              Homes across the Treasure Valley
+              {lead.title}
             </h2>
-            <p className="ed-body mt-7">
-              Recent homes we have designed and built across Boise, Meridian,
-              Eagle, Nampa and the surrounding valley.
-            </p>
             <div className="mt-10 hidden lg:block">
               <ProjectMeta project={lead} lead />
             </div>
@@ -78,13 +122,7 @@ export function ProjectGallerySection({
 
           <Reveal delay={80}>
             <div style={{ border: "1px solid var(--ed-line)" }}>
-              <BeforeAfterSlider
-                beforeSrc={lead.beforeImageUrl}
-                afterSrc={lead.afterImageUrl}
-                beforeAlt={`Before: ${lead.title} in ${cityDisplayName(lead.city)}, Idaho`}
-                afterAlt={`After: ${lead.title} in ${cityDisplayName(lead.city)}, Idaho`}
-                aspectClass="aspect-[4/3]"
-              />
+              <ProjectImageGrid project={lead} lead />
             </div>
             <div className="mt-6 lg:hidden">
               <ProjectMeta project={lead} lead />
@@ -92,31 +130,26 @@ export function ProjectGallerySection({
           </Reveal>
         </div>
 
-        {/* THE RAIL: everything else, browsed sideways. */}
-        {rest.length > 0 && (
+        {showRail && (
           <Reveal delay={120}>
             <div className="mt-[clamp(48px,6vw,88px)] flex items-end justify-between gap-6">
-              <p className="ed-eyebrow !mb-0">More projects</p>
+              <p className="ed-eyebrow !mb-0">More concept homes</p>
               <p className="ed-small hidden sm:block">Scroll sideways</p>
             </div>
             <div
               className="ed-rail mt-6 [scrollbar-color:var(--ed-line)_transparent]"
+              tabIndex={0}
+              role="region"
               style={{ ["--ed-rail-w" as string]: "31%" }}
-              aria-label="More before and after projects"
+              aria-label="More concept homes"
             >
               {rest.map((project) => (
                 <article
-                  key={`${project.serviceType}-${project.city}`}
+                  key={`${project.serviceType}-${project.city}-${project.title}`}
                   className="flex flex-col"
                   style={{ border: "1px solid var(--ed-line)" }}
                 >
-                  <BeforeAfterSlider
-                    beforeSrc={project.beforeImageUrl}
-                    afterSrc={project.afterImageUrl}
-                    beforeAlt={`Before: ${project.title} in ${cityDisplayName(project.city)}, Idaho`}
-                    afterAlt={`After: ${project.title} in ${cityDisplayName(project.city)}, Idaho`}
-                    aspectClass="aspect-[4/3]"
-                  />
+                  <ProjectImageGrid project={project} />
                   <div className="p-6">
                     <ProjectMeta project={project} />
                   </div>
@@ -128,9 +161,9 @@ export function ProjectGallerySection({
 
         {showViewAll && (
           <div className="mt-12">
-            <Button variant="brandOutline" asChild>
-              <Link href="/services">See more of our work</Link>
-            </Button>
+            <FamilyButton href="/services" variant="secondary" size="lg">
+              See services
+            </FamilyButton>
           </div>
         )}
       </div>

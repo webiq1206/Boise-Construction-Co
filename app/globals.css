@@ -52,11 +52,11 @@ html, body {
    as a brand tone. Palette:
      charcoal (ink / dark ground) #2C302F · surface/bands stepped from it
      bone #F7F5F3 · body #E6E3DE · mist #9F9C97 · faint #767370
-     Accent = Ochre #D09A5C (the one brand-distinct color; charcoal +
+     Accent = Ochre #C48D3F (the one brand-distinct color; charcoal +
      bone are shared unchanged). deep ochre #7E6344 = graphic fills/
-     chips/tints · ochre #D09A5C = ALL accent text (accent WORDS,
+     chips/tints · ochre #C48D3F = ALL accent text (accent WORDS,
      eyebrow ticks, links/hover, focus, numerals). AA on charcoal (5.38:1).
-     Never recolor outside charcoal, bone, and #D09A5C.
+     Never recolor outside charcoal, bone, and #C48D3F.
    ═══════════════════════════════════════════════════════════════════ */
 :root, .dark {
   --button-outline: rgba(255,255,255, .08);
@@ -91,11 +91,11 @@ html, body {
   --sidebar: 163 5% 10%;
   --sidebar-foreground: 37 14% 89%;
   --sidebar-border: 163 6% 24%;
-  --sidebar-primary: 32 55% 59%;       /* ochre #D09A5C */
-  --sidebar-primary-foreground: 163 5% 18%;  /* charcoal #2C302F */
+  --sidebar-primary: 35.19 52.99% 50.78%;       /* ochre #C48D3F */
+  --sidebar-primary-foreground: 150 6% 7%;  /* charcoal #2C302F */
   --sidebar-accent: 163 6% 16%;
   --sidebar-accent-foreground: 37 14% 89%;
-  --sidebar-ring: 32 55% 59%;          /* ochre #D09A5C */
+  --sidebar-ring: 35.19 52.99% 50.78%;          /* ochre #C48D3F */
 
   --popover: 163 6% 16%;
   --popover-foreground: 37 14% 89%;
@@ -115,16 +115,16 @@ html, body {
   /* Small accents use a deep, muted ochre #7E6344 (dots, marks, pills,
      tints, icons). Text on an ochre fill uses bone (5.3:1, AA). Accent WORDS
      render bone via .brc-accent; links + focus rings keep the legible ochre
-     --accent-legible. Never recolor outside charcoal, bone, and #D09A5C. */
-  --accent: 32 30% 38%;               /* deep ochre #7E6344 */
-  --accent-foreground: 30 20% 96%;    /* bone text on an ochre fill */
+     --accent-legible. Never recolor outside charcoal, bone, and #C48D3F. */
+  --accent: 35.19 52.99% 50.78%;               /* deep ochre #7E6344 */
+  --accent-foreground: 150 6% 7%;    /* bone text on an ochre fill */
 
   --brass: 32 30% 38%;                /* deep ochre #7E6344 */
   --brass-foreground: 30 20% 96%;
 
   /* Ochre for anything that must stay legible on the dark ground:
      text links (hover) and focus rings. AA on the warm charcoal ground (5.38:1). */
-  --accent-legible: 32 55% 59%;       /* ochre #D09A5C */
+  --accent-legible: 32 55% 59%;       /* ochre #C48D3F */
   /* The same ochre, darkened for use as TEXT on a light (bone) band. The site
      was built dark, so the legible accent is tuned for a charcoal ground and
      falls under AA on bone. This is the brand hue at a lightness that clears
@@ -137,9 +137,9 @@ html, body {
   --destructive-foreground: 30 20% 96%;
 
   --input: 163 6% 13%;                /* input */
-  --ring: 32 55% 59%;                  /* ochre #D09A5C */
+  --ring: 35.19 52.99% 50.78%;                  /* ochre #C48D3F */
 
-  --chart-1: 32 55% 59%;               /* ochre #D09A5C */
+  --chart-1: 32 55% 59%;               /* ochre #C48D3F */
   --chart-2: 163 6% 16%;
   --chart-3: 30 20% 96%;
   --chart-4: 32 4% 61%;
@@ -347,17 +347,17 @@ html, body {
     animation: wizard-step-enter 0.24s ease-out both;
   }
 
-  /* P5's section rhythm: 130px on desktop, stepping down on smaller screens. */
+  /* Part B --section-y: 64 phone / 80 tablet / 96 desktop. */
   .section-y {
-    @apply py-20 md:py-[130px];
+    @apply py-16 md:py-20 lg:py-24;
   }
 
   .section-y-lg {
-    @apply py-24 md:py-[160px];
+    @apply py-20 md:py-24 lg:py-32;
   }
 
   .section-y-sm {
-    @apply py-14 md:py-20;
+    @apply py-8 md:py-12;
   }
 
   .section-divider {
@@ -407,7 +407,7 @@ html, body {
   font-style: italic;
   font-optical-sizing: auto;
   /* Accent WORDS are the serif grace note AND the brand's ochre moment. We use
-     the legible ochre (#D09A5C), not the deep #7E6344, because the deep tone
+     the legible ochre (#C48D3F), not the deep #7E6344, because the deep tone
      fails legibility as text on the charcoal ground - the ochre stays AA
      (5.38:1) at any size while reading unmistakably as the same brand accent.
      Overrides any text-accent on the same element. */
@@ -626,8 +626,12 @@ html, body {
   color: hsl(var(--foreground));
 }
 .blog-content tr:last-child td { border-bottom: none; }
-.blog-content img {
+/* Next `fill` images are absolutely positioned inside a clipped frame; a margin
+   would push them down and expose the frame. (BRC-28, BCONC-27) */
+.blog-content img:not([data-nimg="fill"]) {
   margin: 1.5rem 0;
+}
+.blog-content img {
   max-width: 100%;
 }
 .blog-content hr {
@@ -994,21 +998,64 @@ body:has([data-wizard-action-bar]) .brc-assistant-launcher {
 .article-table-scroll > table { display: table; }
 .article-table-scroll:focus-visible { outline: 2px solid hsl(var(--accent)); outline-offset: 3px; }
 
-/* Estimator navigation scrolls with the questions on phones and tablets. */
+/* AppFrame / guided-flow on phones: the whole frame scrolls, so in-frame
+   footers stay in document flow. Do NOT force static on standalone D2 bars
+   (embedded QuoteRequestWizard /contact): C10 requires a viewport-fixed
+   Back/Next that rides the keyboard inset.
+
+   Keyboard-aware AppFrames (data-keyboard-aware) keep the one-screen flex
+   layout and shrink with visualViewport instead of becoming a tall scroll
+   page that leaves Back/Next behind the keyboard. */
 @media (max-width: 1023px) {
-  [data-testid="wizard-action-bar"],
-  [data-wizard-action-bar],
-  [data-testid="wizard-sticky-nav"],
-  [data-testid="result-sticky-actions"],
-  [data-testid="wizard-mobile-bar"] {
+  [data-testid="estimate-app-frame"] [data-testid="wizard-action-bar"],
+  [data-testid="estimate-app-frame"] [data-wizard-action-bar],
+  [data-testid="estimate-app-frame"] [data-testid="wizard-sticky-nav"],
+  [data-testid="estimate-app-frame"] [data-testid="result-sticky-actions"],
+  [data-testid="estimate-app-frame"] [data-testid="wizard-mobile-bar"],
+  [data-testid="guided-flow-fit"] [data-testid="wizard-action-bar"],
+  [data-testid="guided-flow-fit"] [data-wizard-action-bar],
+  [data-testid="guided-flow-fit"] [data-testid="wizard-sticky-nav"],
+  [data-testid="guided-flow-fit"] [data-testid="result-sticky-actions"],
+  [data-testid="guided-flow-fit"] [data-testid="wizard-mobile-bar"] {
     position: static !important;
     transform: none !important;
     margin-top: 20px;
   }
-  [data-testid="estimate-app-frame"] { overflow-y: auto; overscroll-behavior: contain; }
-  [data-testid="app-frame-body"] { flex: none; overflow: visible; min-height: auto; }
-  [data-testid="app-frame-body"] > div { min-height: 0; }
-  [data-testid="app-frame-footer"] { position: static; margin-top: 20px; }
+  [data-testid="estimate-app-frame"]:not([data-keyboard-aware="true"]) {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  [data-testid="estimate-app-frame"]:not([data-keyboard-aware="true"]) [data-testid="app-frame-body"] {
+    flex: none;
+    overflow: visible;
+    min-height: auto;
+  }
+  [data-testid="estimate-app-frame"]:not([data-keyboard-aware="true"]) [data-testid="app-frame-body"] > div {
+    min-height: 0;
+  }
+  [data-testid="estimate-app-frame"]:not([data-keyboard-aware="true"]) [data-testid="app-frame-footer"] {
+    position: static;
+    margin-top: 20px;
+  }
+  [data-testid="estimate-app-frame"][data-keyboard-aware="true"] {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  [data-testid="estimate-app-frame"][data-keyboard-aware="true"] [data-testid="app-frame-body"] {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  /* C10: no inner scroll while the keyboard inset is open. */
+  [data-testid="estimate-app-frame"][data-keyboard-aware="true"][data-keyboard-inset] [data-testid="app-frame-body"] {
+    overflow: hidden;
+  }
+  [data-testid="estimate-app-frame"][data-keyboard-aware="true"] [data-testid="app-frame-footer"] {
+    position: relative;
+    margin-top: 0;
+    flex-shrink: 0;
+  }
   [data-testid="guided-flow-fit"] { overflow-y: auto; overscroll-behavior: contain; }
   [data-testid="guided-flow-fit"] > * { flex-shrink: 0; }
   [data-guided-step-layout], [data-guided-step-body] { flex: none; overflow: visible; min-height: auto; }
@@ -1033,3 +1080,6 @@ body[data-p5-estimator-active="true"] [data-testid="assistant-launcher"] {
 .brc-swipe::-webkit-scrollbar { display: none; }
 .brc-swipe > * { flex: 0 0 82%; scroll-snap-align: start; }
 @media (min-width: 640px) { .brc-swipe { display: grid; overflow: visible; margin-inline: 0; padding-inline: 0; scroll-snap-type: none; } .brc-swipe > * { flex: initial; } }
+
+/* Site-owned approved palette; shared intake behavior and engine remain unchanged. */
+[data-p5-estimator][data-theme="light"]{--p5-accent:#C48D3F!important;--p5-accent-ink:#78531E!important;--p5-focus:#78531E!important}

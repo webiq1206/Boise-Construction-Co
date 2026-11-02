@@ -12,6 +12,29 @@ const DEFAULT_EMAIL = "hello@boiseconstruction.co";
 // sitemap entry, OG URL, schema @id, and absolute link is built from this value.
 const DEFAULT_SITE_URL = "https://boiseconstruction.co";
 
+/**
+ * E.164 form of a US number ("2084771169" -> "+12084771169"). tel: and sms:
+ * links use it so they dial correctly from any handset, and the schema uses
+ * the hyphenated variant the other family sites publish ("+1-208-477-1169").
+ */
+function toE164Digits(tel: string): string {
+  const digits = tel.replace(/\D/g, "");
+  if (digits.length === 10) return `+1${digits}`;
+  if (digits.length === 11 && digits.startsWith("1")) return `+${digits}`;
+  return tel;
+}
+
+function toE164Hyphenated(tel: string): string {
+  const digits = tel.replace(/\D/g, "");
+  const local = digits.length === 11 && digits.startsWith("1") ? digits.slice(1) : digits;
+  if (local.length === 10) {
+    return `+1-${local.slice(0, 3)}-${local.slice(3, 6)}-${local.slice(6)}`;
+  }
+  return tel;
+}
+
+const PHONE_TEL = process.env.NEXT_PUBLIC_PHONE_TEL ?? DEFAULT_PHONE_TEL;
+
 export const SITE_CONFIG = {
   name: "Boise Construction Co",
   /**
@@ -24,17 +47,20 @@ export const SITE_CONFIG = {
    */
   legalName: "P5 Home Co LLC",
   phone: process.env.NEXT_PUBLIC_PHONE ?? DEFAULT_PHONE,
-  phoneTel: process.env.NEXT_PUBLIC_PHONE_TEL ?? DEFAULT_PHONE_TEL,
-  phoneHref: `tel:${process.env.NEXT_PUBLIC_PHONE_TEL ?? DEFAULT_PHONE_TEL}`,
-  phoneSmsHref: `sms:${process.env.NEXT_PUBLIC_PHONE_TEL ?? DEFAULT_PHONE_TEL}`,
+  phoneTel: PHONE_TEL,
+  /** Schema.org telephone, E.164 with hyphens, matching the sibling sites. */
+  phoneE164: toE164Hyphenated(PHONE_TEL),
+  phoneHref: `tel:${toE164Digits(PHONE_TEL)}`,
+  phoneSmsHref: `sms:${toE164Digits(PHONE_TEL)}`,
   email: process.env.NEXT_PUBLIC_EMAIL ?? DEFAULT_EMAIL,
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL,
-  // Canonical NAP. This is the owner's HOME address, so the street is NEVER
-  // rendered on-page and is NOT emitted in public JSON-LD (which is view-source
-  // visible). It exists here only to supply the full NAP to Google Business
-  // Profile and off-site citation submissions. Public surfaces (schema, footer,
-  // contact) show city/state only: Meridian, ID. Google gets the full street
-  // via GBP, where a service-area business hides the address publicly.
+  /**
+   * Public representative named by the P5 brand brief (section 4.2) and
+   * docs/growth/OPERATIONS.md. Not a storefront staff listing.
+   */
+  publicRepresentative: "Nick Perkins",
+  // Canonical NAP. Street, city, region, and postal code match the authorized
+  // public address. This is a service-area business, not a staffed storefront.
   address: {
     street: "4031 W Wapoot St",
     city: "Meridian",

@@ -150,7 +150,7 @@ export function reportEstimatorProgress(progress: EstimatorProgress, opts: { imm
   if (!timer) timer = setTimeout(() => flush(false), COALESCE_MS);
 }
 
-/** Mark the current flow completed; cancels any pending abandonment summary. */
+/** Mark the current flow completed so the session is not treated as abandoned. */
 export function markEstimatorCompleted(flow: EstimatorFlow): void {
   const base = lastProgress && lastProgress.flow === flow ? lastProgress : { flow, currentStep: "submitted", currentStepIndex: 0, totalSteps: 0 };
   reportEstimatorProgress({ ...base, status: "completed" }, { immediate: true });

@@ -40,7 +40,7 @@ export const metadata: Metadata = withBrandPageMetadata((buildPageMetadata({
   path: '/guides',
   titleOverride: 'Home Building Guides | Boise Construction Co',
   descriptionOverride:
-    'In-depth Treasure Valley home building guides: what a custom home costs, how the build process runs, buying land, choosing a builder, design decisions, and construction financing.',
+    'Treasure Valley home building guides: what a custom home costs, how the build runs, buying land, choosing a builder, design decisions and city notes.',
 })), "/guides");
 
 const PILLAR_TYPES = new Set(['hub-pillar', 'master']);
@@ -55,7 +55,7 @@ export default function GuidesIndexPage() {
   const webPageSchema = generateWebPageSchema({
     title: 'Home Building Guides',
     description:
-      'In-depth Treasure Valley home building guides: what a custom home costs, how the build process runs, buying land, choosing a builder, design decisions, and construction financing.',
+      'Treasure Valley home building guides: what a custom home costs, how the build runs, buying land, choosing a builder, design decisions and city notes.',
     url: '/guides',
   });
 
@@ -81,7 +81,7 @@ export default function GuidesIndexPage() {
       >
         <p className="ed-eyebrow mt-8" style={{ color: "rgb(255 255 255 / 0.72)" }}>Treasure Valley authority</p>
         <h1 className="ed-display ed-statement-display text-inverse-foreground">
-          Home Building Guides
+          Home building guides
         </h1>
         <p className="ed-lede mt-8 max-w-[44ch] text-inverse-foreground/85">
           In-depth guides for Boise, Meridian, Eagle, Nampa, and the rest of the Treasure Valley. What
@@ -103,7 +103,7 @@ export default function GuidesIndexPage() {
           </h2>
           <div className="ed-cards-3 gap-6">
             {pillarGuides.map((guide) => (
-              <MarketingCard key={guide.slug} className="p-0 flex flex-col h-full overflow-hidden">
+              <MarketingCard key={guide.slug} padding="none" className="flex flex-col h-full overflow-hidden">
                 <div className="relative aspect-[16/9] overflow-hidden">
                   <Image
                     src={getBlogHeroImage(guide.slug, guide.heroImage)}
@@ -137,7 +137,7 @@ export default function GuidesIndexPage() {
           </h2>
           <div className="ed-cards-3 gap-4">
             {locationGuides.map((guide) => (
-              <MarketingCard key={guide.slug} className="p-0 flex flex-col h-full overflow-hidden">
+              <MarketingCard key={guide.slug} padding="none" className="flex flex-col h-full overflow-hidden">
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
                     src={getBlogHeroImage(guide.slug, guide.heroImage)}
@@ -150,13 +150,13 @@ export default function GuidesIndexPage() {
                 <div className="p-5 flex flex-col flex-1">
                   <MapPin className="h-4 w-4 text-accent-legible mb-2" />
                   <h3 className="font-normal text-base mb-1">{guide.title}</h3>
-                  <p className="text-sm text-muted-foreground flex-1 mb-2 line-clamp-2">
+                  <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
                     {guide.excerpt}
                   </p>
                   <GuideCardStats guide={guide} />
                   <Link
                     href={guidePath(guide.slug)}
-                    className="text-sm text-accent-legible hover:underline inline-flex items-center"
+                    className="mt-auto text-sm text-accent-legible hover:underline inline-flex items-center"
                   >
                     Read
                     <ArrowRight className="ml-1 h-3 w-3" />

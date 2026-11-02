@@ -10,7 +10,7 @@ landingServiceSchema,
 } from '@/lib/landing-schema';
 import { buildPageMetadata,isCityServiceNoindex } from '@/lib/page-metadata';
 import { generateSpeakableSchema } from '@/lib/schema';
-import { CITY_SEO_DATA } from '@/lib/seo';
+import { CITY_SEO_DATA,serviceCityHeadingName,serviceNameInSentence } from '@/lib/seo';
 import {
 cityServicePath,
 getAllCityServiceParams,
@@ -18,12 +18,13 @@ getCityBySlug,
 getServiceBySlug,
 } from '@/lib/seo-routes';
 import { getCityServiceImageSet } from '@/shared/cityServiceImages';
-import { getCountyLabel } from '@/shared/contentData';
+import { getCountyLabel,serviceLabel } from '@/shared/contentData';
 import { getGalleryProjectsFor } from '@/shared/galleryData';
 import {
 getCityServiceFaqs,
 getCityServiceIntro,
 getCityServiceSections,
+getScopeSplitSection,
 SERVICE_SEO_CONTENT,
 } from '@/shared/seoContent';
 import { notFound } from 'next/navigation';
@@ -72,14 +73,17 @@ export default async function CityServicePage(
     : undefined;
 
   const overview = getCityServiceIntro(content, city, localFact);
-  const h1 = `${service.name} in ${city.name}, Idaho`;
+  const h1 = `${serviceCityHeadingName(service)} in ${city.name}, Idaho`;
   const faqs = getCityServiceFaqs(content, city);
-  const localNote = `For ${content.name.toLowerCase()} in ${city.name}, confirm the property jurisdiction and scope before applying. City addresses and unincorporated county parcels may use different building departments. Confirm required building and trade permits, inspections and review times for the actual address.`;
+  const localNote = `For ${serviceNameInSentence(content.name)} in ${city.name}, confirm the property jurisdiction and scope before applying. City addresses and unincorporated county parcels may use different building departments. Confirm required building and trade permits, inspections and review times for the actual address.`;
   const images = getCityServiceImageSet(service.slug, city.slug);
-  const sections = getCityServiceSections(content, city, seo);
+  const scopeSplit = getScopeSplitSection(service.slug, city.name);
+  const sections = scopeSplit
+    ? [scopeSplit, ...getCityServiceSections(content, city, seo)]
+    : getCityServiceSections(content, city, seo);
 
-  // Real before/after projects only. Written testimonials stay hidden until we
-  // have genuine, verified reviews (no seeded quotes or star ratings).
+  // Concept-home imagery only. Written testimonials stay hidden until we have
+  // genuine, verified reviews (no seeded quotes or star ratings).
   const matchedProjects = getGalleryProjectsFor(service.slug, city.slug);
   const proof: LandingProof | undefined =
     matchedProjects.length > 0
@@ -87,8 +91,8 @@ export default async function CityServicePage(
           projects: matchedProjects.map((p) => ({
             title: p.title,
             description: p.description,
-            beforeImageUrl: p.beforeImageUrl,
-            afterImageUrl: p.afterImageUrl,
+            exteriorImageUrl: p.images[0]?.src ?? "",
+            interiorImageUrl: p.images[1]?.src ?? p.images[0]?.src ?? "",
           })),
         }
       : undefined;
@@ -119,7 +123,7 @@ export default async function CityServicePage(
         planningFrom={service.planningFrom}
         breadcrumbs={[
           { name: 'Home', href: '/' },
-          { name: service.name, href: `/services/${service.slug}` },
+          { name: serviceLabel(service), href: `/services/${service.slug}` },
           { name: `${city.name}, Idaho` },
         ]}
         benefits={content.benefits}
@@ -129,7 +133,6 @@ export default async function CityServicePage(
         localNote={localNote}
         sections={sections}
         proof={proof}
-        proofHeading={`Recent ${city.name} ${service.name.toLowerCase()} work`}
         showEstimatePrompt
         faqs={faqs}
         related={{

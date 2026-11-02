@@ -73,8 +73,14 @@ export const SERVICES: ServiceData[] = [
   {
     slug: 'home-additions',
     name: 'Home Additions',
-    shortDescription: 'Useful new space added to the home you already live in, planned around the structure, utilities, and daily life already there.',
-    planningFrom: 'Talk with us',
+    shortDescription: 'New footprint or a second story added to the home you already live in, planned around the structure, utilities, and daily life already there.',
+    planningFrom: 'Priced after an in-home review',
+  },
+  {
+    slug: 'adu',
+    name: 'ADUs & Guest Houses',
+    shortDescription: 'New detached accessory dwellings and guest houses on the lot you already own, planned around setbacks, utilities, and how you will use the space.',
+    planningFrom: 'Priced after a site review',
   },
   {
     slug: 'lot-evaluation',
@@ -99,6 +105,30 @@ export const SERVICES: ServiceData[] = [
   },
 ];
 
+/**
+ * Sentence-case display labels for headings, cards, breadcrumbs and menus
+ * (owner decision C, 1 November 2026: same words as `name`, only letter case
+ * changes; acronyms keep their capitals). `name` stays the title-case identity
+ * used for title tags, schema and the keyed maps in lib/seo.ts.
+ */
+export const SERVICE_LABELS: Record<string, string> = {
+  'custom-home-builder': 'Custom home building',
+  'semi-custom-homes': 'Semi-custom homes',
+  'build-on-your-lot': 'Build on your lot',
+  'design-build': 'Design-build',
+  'home-plans-design': 'Home design & plans',
+  'home-additions': 'Home additions',
+  adu: 'ADUs & guest houses',
+  'lot-evaluation': 'Lot evaluation & feasibility',
+  'shop-homes-barndominiums': 'Shop homes & barndominiums',
+  'energy-efficient-homes': 'Energy-efficient homes',
+};
+
+/** Sentence-case label for a service, by slug; falls back to its name. */
+export function serviceLabel(service: { slug: string; name: string }): string {
+  return SERVICE_LABELS[service.slug] ?? service.name;
+}
+
 // Alias so existing imports stay compatible
 export const PRIORITY_SERVICES = SERVICES;
 
@@ -115,6 +145,20 @@ export const CITIES: CityData[] = [
 ];
 
 export const TREASURE_VALLEY_CITIES = CITIES.map((c) => c.name).join(', ');
+
+/**
+ * True when planningFrom is a figure ("$525k", "$950") rather than a sentence
+ * such as "Priced after an in-home review". Only a figure takes the
+ * "Planning from" label; a sentence reads on its own.
+ */
+export function hasPlanningFigure(planningFrom: string): boolean {
+  return /^\$/.test(planningFrom.trim());
+}
+
+/** "Planning from $525k", or the sentence alone when there is no figure. */
+export function planningLabel(planningFrom: string): string {
+  return hasPlanningFigure(planningFrom) ? `Planning from ${planningFrom}` : planningFrom;
+}
 
 export function getServiceBySlug(slug: string): ServiceData | undefined {
   return SERVICES.find((s) => s.slug === slug);

@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
+import {appendAttributionEvidence} from '@/lib/leadAttribution';
 import { createHash } from "crypto";
 import { z } from "zod";
 import { getUncachableEmailClient } from "@/server/services/emailTransport";
@@ -30,12 +31,17 @@ import {
   PROJECT_LABELS,
   type EstimateRefinements,
 } from "@/shared/estimateEngine";
-import { estimateSchema } from "@/shared/estimatePayload";
+import {
+  consultationBodySchema,
+  optionalEstimateSchema,
+} from "@/server/services/consultationRequest";
 import { resolveQuotedRange } from "@/shared/costs/resolve";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import { readUnitCostOverrides } from "@/server/services/unitCostOverrides";
 import { createDrizzleInquiryIntake } from "@/server/services/inquiryIntake";
 import { deliverInquiryChannel, type InquiryDeliveryResult } from "@/server/services/inquiryDelivery";
+import { forwardConsultationToP5Intake } from "@/server/services/p5IntakeBridge";
+import { issueDetailsToken } from "@/server/services/consultationDetails";
 import { inspectLeadTrap, LeadRequestError, readBoundedJson } from "@/server/services/leadRequestGuard";
 import { clientKeyFrom, rateLimit } from "@/lib/rateLimit";
 import {
@@ -47,62 +53,9 @@ import {
   buildProjectGoals,
 } from "@/server/services/leadRecord";
 
-const propertyProfileSchema = z
-  .object({
-    formattedAddress: z.string().max(300),
-    city: z.string().max(120),
-    state: z.string().max(60),
-    zip: z.string().max(20),
-  })
-  .passthrough()
-  .optional()
-  .nullable();
-
-// The consultation form may arrive with no estimate at all (someone who came
-// straight to the contact page), so the shared object is wrapped as optional.
-const optionalEstimateSchema = estimateSchema.optional().nullable();
-
-const bodySchema = z
-  .object({
-    name: z.string().min(2).max(120),
-    /**
-     * Only the visitor's chosen contact method is required (see superRefine
-     * below) - matches the same preferred-contact pattern already shipped in
-     * the RE-10 wizard. Defaults to "email" so older cached client bundles
-     * that never send this field behave exactly as before (email required).
-     */
-    preferredContact: z.enum(["email", "phone", "text"]).optional().default("email"),
-    phone: z.string().max(50).optional().default(""),
-    email: z.string().max(254).optional().default(""),
-    /**
-     * Optional because a new-build enquiry from someone who has not bought land
-     * yet has no site to name. The client requires a locatable site for every
-     * other project type; see LAND_SEARCH_PROJECT_TYPE in ConsultationForm.
-     */
-    address: z.string().max(300).optional().default(""),
-    zip: z.string().max(20).optional(),
-    projectType: z.string().min(1).max(100),
-    message: z.string().max(5_000).optional(),
-    propertyProfile: propertyProfileSchema,
-    estimate: optionalEstimateSchema,
-    inquiryKey: z.string().max(124).regex(/^inq_[A-Za-z0-9_-]{16,120}$/).optional(),
-    submissionKind: z.enum(["initial", "followup"]).optional().default("initial"),
-    formStartedAt: z.number().finite().int(),
-    website: z.string().max(200).optional().default(""),
-    /* Set by the client when the visitor already submitted the estimate gate,
-       which already sent admin + customer emails via /api/estimate-lead.
-       Prevents duplicate email sends when the same person submits both forms. */
-    skipEmail: z.boolean().optional(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.preferredContact === "email") {
-      if (!z.string().email().safeParse(data.email).success) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["email"], message: "Valid email required" });
-      }
-    } else if (data.phone.replace(/\D/g, "").length < 10) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["phone"], message: "Valid phone required" });
-    }
-  });
+// The body schema lives in server/services/consultationRequest.ts so the full
+// request and the "have us call you" callback shape are tested without a database.
+const bodySchema = consultationBodySchema;
 
 function deliveryRevisionKey(
   data: z.infer<typeof bodySchema>,
@@ -210,6 +163,14 @@ function verifyEstimate(
   };
 }
 
+function detailsTokenFor(inquiryKey: string): string | undefined {
+  try {
+    return issueDetailsToken(inquiryKey, process.env.SESSION_SECRET ?? "");
+  } catch {
+    return undefined;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const limit = rateLimit(clientKeyFrom(request.headers, "consultation"), 6, 10 * 60 * 1000);
@@ -263,8 +224,8 @@ export async function POST(request: NextRequest) {
           zip: data.zip || "",
           address: data.address,
           city: (profile?.city as string) || null,
-          ...(data.propertyProfile
-            ? { propertyProfile: data.propertyProfile as unknown as PropertyProfile }
+          ...(data.propertyProfile || data.attribution
+            ? { propertyProfile: {...data.propertyProfile,_leadAttribution:data.attribution} as unknown as PropertyProfile }
             : {}),
           projectType: data.projectType,
           message: data.message || null,
@@ -294,8 +255,40 @@ export async function POST(request: NextRequest) {
         conversionId: intakeResult.conversionId,
         newInquiry: intakeResult.inserted,
         conversionEligible: intakeResult.conversionEligible,
+        detailsToken: detailsTokenFor(intakeResult.inquiryKey),
         delivery: [],
       });
+    }
+
+    // HubSpot contact, mapped deal, and lead_created mail live on p5 intake.
+    // Only a newly inserted consultation reaches this block. Honeypot,
+    // too-fast, intake failure, and the followup-only return above do not.
+    if (intakeResult.inserted) {
+      // Started before Resend and the lead-dashboard forward so it overlaps
+      // them, and kept alive with after() so the visitor response does not
+      // wait on it. Failures stay inside the bridge and cannot change this
+      // status or gate those deliveries.
+      const location = (data.propertyProfile as { city?: string; zip?: string } | null) ?? null;
+      try {
+        const bridge = forwardConsultationToP5Intake({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          address: data.address,
+          city: location?.city,
+          zip: data.zip || location?.zip,
+          projectType: data.projectType,
+          message: data.message,
+          inquiryKey: intakeResult.inquiryKey,
+          submissionKind: "initial",
+          requestKind: data.requestKind,
+          preferredContact: data.preferredContact,
+          bestTime: data.requestKind === "callback" ? data.bestTimeToCall : undefined,
+        });
+        after(() => bridge);
+      } catch (bridgeErr) {
+        console.error("[p5-intake] Could not schedule HubSpot bridge:", bridgeErr);
+      }
     }
 
     // Same complete record as the estimate-gate path, so a lead looks identical
@@ -309,6 +302,8 @@ export async function POST(request: NextRequest) {
       zip: data.zip,
       projectType: data.projectType,
       message: data.message,
+      preferredContact: data.preferredContact,
+      requestKind: data.requestKind,
     };
     const crmProfile = (data.propertyProfile as PropertyEnrichment | null) ?? null;
     // Share this between the claimed channels so every destination uses the
@@ -317,6 +312,7 @@ export async function POST(request: NextRequest) {
     const lead = {
       name: data.name, phone: data.phone, email: data.email, address: data.address,
       zip: data.zip, projectType: data.projectType, message: data.message,
+      preferredContact: data.preferredContact, requestKind: data.requestKind,
     };
     const claimedRevisionKey =
       data.submissionKind === "followup" ? null : revisionKey;
@@ -349,7 +345,7 @@ export async function POST(request: NextRequest) {
       // Structured intake fields the estimator can answer. See
       // buildCrmIntakeFields for why the rest stay deliberately empty.
       ...buildCrmIntakeFields(estimate),
-      estimateSummary: buildLeadNotes(crmLead, estimate, crmProfile, costs),
+      estimateSummary: appendAttributionEvidence(buildLeadNotes(crmLead, estimate, crmProfile, costs),data.attribution),
       estimateLow: estimate?.priceLow,
       estimateHigh: estimate?.priceHigh,
       estimateRange: estimate
@@ -416,6 +412,9 @@ export async function POST(request: NextRequest) {
       conversionId: intakeResult.conversionId,
       newInquiry: intakeResult.inserted,
       conversionEligible: intakeResult.conversionEligible,
+      // Lets this visitor add details and files to the same request
+      // (/api/consultation/details, /api/consultation/files) for two hours.
+      detailsToken: detailsTokenFor(intakeResult.inquiryKey),
       delivery: delivery.map(({ channel, attempted, delivered }) => ({ channel, attempted, delivered })),
     });
   } catch (err) {

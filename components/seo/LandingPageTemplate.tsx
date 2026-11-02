@@ -1,6 +1,6 @@
 import { InteriorHero,InteriorProjectAside } from '@/components/approved/InteriorLayout';
+import { HeroTextLink,PrimaryCta } from '@/components/approved/PrimaryCta';
 import { Section } from '@/components/marketing';
-import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
 import { RelatedPostCards } from '@/components/marketing/RelatedPostCards';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { Reveal } from '@/components/Reveal';
@@ -11,14 +11,17 @@ AccordionContent,
 AccordionItem,
 AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
 import { GRAIN_URL } from '@/lib/grain';
-import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
+import { contentImageAlt } from '@/shared/imageAlts';
+import { CTA_PRIMARY } from '@/shared/ctaCopy';
+import { hasPlanningFigure } from '@/shared/contentData';
+import { SITE_CONFIG } from '@/shared/siteConfig';
 import type { GalleryProject } from '@/shared/galleryData';
 import type { FAQItem } from '@/shared/seoContent';
 import { ArrowRight,ChevronRight,Star } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Fragment, type ReactNode } from 'react';
 import { RelatedLinks } from './RelatedLinks';
 
 interface BreadcrumbItem {
@@ -30,8 +33,22 @@ interface LandingPageTemplateProps {
   h1: string;
   speakableSummary: string;
   overview: string;
+  /**
+   * When set, these replace the single overview paragraph. The hero carries
+   * only their opening line (see splitHeroLead); the rest opens the first
+   * section below the hero.
+   */
+  overviewParagraphs?: readonly string[];
+  /** A phrase set in bold wherever it falls in the overview (one occurrence). */
+  overviewEmphasis?: string;
+  /**
+   * Explicit hero support line, for an overview whose first sentence runs past
+   * the hero budget. The whole overview then opens the section below the hero.
+   */
+  heroLine?: string;
   breadcrumbs: BreadcrumbItem[];
   heroImageUrl?: string;
+  heroImageAlt?: string;
   breatherImageUrl?: string;
   processImageUrl?: string;
   manifestPath?: string;
@@ -39,8 +56,6 @@ interface LandingPageTemplateProps {
   planningFrom?: string;
   /** Optional estimator URL that retains the service's project intent. */
   estimateHref?: string;
-  /** Optional consultation URL for service-specific contact context. */
-  consultationHref?: string;
   /**
    * Cost-and-timeline expectation, rendered directly AFTER THE HERO: the first
    * question a visitor researches is what this costs and how long it takes, so
@@ -85,8 +100,55 @@ interface LandingPageTemplateProps {
 export interface LandingSection {
   heading: string;
   paragraphs?: string[];
+  /** Inline anchors for the paragraph at the same index. Schema and other cities stay plain. */
+  paragraphLinks?: Array<{ phrase: string; href: string }[] | undefined>;
+  bullets?: string[];
+  /** Paragraph index after which `bullets` render. Defaults to after the last paragraph. */
+  bulletsAfterParagraph?: number;
   links?: { label: string; href: string }[];
   subsections?: { heading: string; paragraphs: string[] }[];
+  /**
+   * Optional photograph placed after the section copy so mobile scroll keeps a
+   * photography/text rhythm through long-form landing content.
+   */
+  figure?: { src: string; caption?: string };
+}
+
+function InlineLinks({
+  text,
+  links,
+}: {
+  text: string;
+  links?: { phrase: string; href: string }[];
+}) {
+  if (!links?.length) return <>{text}</>;
+  const sorted = [...links].sort((a, b) => b.phrase.length - a.phrase.length);
+  const nodes: ReactNode[] = [];
+  let rest = text;
+  let key = 0;
+  while (rest.length) {
+    let earliest = -1;
+    let match: { phrase: string; href: string } | null = null;
+    for (const link of sorted) {
+      const idx = rest.indexOf(link.phrase);
+      if (idx !== -1 && (earliest === -1 || idx < earliest)) {
+        earliest = idx;
+        match = link;
+      }
+    }
+    if (!match || earliest === -1) {
+      nodes.push(rest);
+      break;
+    }
+    if (earliest > 0) nodes.push(rest.slice(0, earliest));
+    nodes.push(
+      <Link key={key++} href={match.href} className="ed-link ed-link-accent">
+        {match.phrase}
+      </Link>,
+    );
+    rest = rest.slice(earliest + match.phrase.length);
+  }
+  return <>{nodes}</>;
 }
 
 export interface LandingProof {
@@ -94,8 +156,10 @@ export interface LandingProof {
   projects?: {
     title: string;
     description: string;
-    beforeImageUrl: string;
-    afterImageUrl: string;
+    /** Exterior / lead view of the concept home. */
+    exteriorImageUrl: string;
+    /** Matching interior view of the same concept home. */
+    interiorImageUrl: string;
   }[];
 }
 
@@ -123,22 +187,6 @@ function HeroBreadcrumbs({ items }: { items: BreadcrumbItem[] }) {
   );
 }
 
-/**
- * Splits a benefit string into a bold lead phrase and a muted supporting caption.
- * Priority: split on first comma; fallback: split after first 4 words if string > 6 words.
- */
-function splitBenefit(text: string): { lead: string; body: string } {
-  const commaIdx = text.indexOf(',');
-  if (commaIdx > 0 && commaIdx < text.length - 1) {
-    return { lead: text.slice(0, commaIdx).trim(), body: text.slice(commaIdx + 1).trim() };
-  }
-  const words = text.split(' ');
-  if (words.length > 6) {
-    return { lead: words.slice(0, 4).join(' '), body: words.slice(4).join(' ') };
-  }
-  return { lead: text, body: '' };
-}
-
 const accent = { color: 'var(--ed-accent)' } as const;
 const line = { borderColor: 'var(--ed-line)' } as const;
 
@@ -160,18 +208,60 @@ function sectionId(heading: string): string {
   return 'section-' + heading.toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
+/** Word budget for the hero support line: one short line, never the paragraph. */
+const HERO_LINE_WORDS = 22;
+const wordCount = (text: string) => text.split(/\s+/).filter(Boolean).length;
+
+/**
+ * The interior hero carries one support line: the opening sentence of the
+ * overview, plus the next one while the pair stays inside HERO_LINE_WORDS (so a
+ * lead question keeps its answer). Everything after it moves, unchanged and in
+ * order, into the first section below the hero, so no copy is lost and the CTA
+ * stays inside the first screen at 360x640.
+ */
+export function splitHeroLead(paragraphs: readonly string[], heroLine?: string): { line: string; rest: string[] } {
+  const clean = paragraphs.map((p) => p.trim()).filter(Boolean);
+  if (heroLine) return { line: heroLine, rest: clean };
+  if (clean.length === 0) return { line: '', rest: [] };
+  const sentences = clean[0].match(/[^.?!]+(?:[.?!]+(?=\s|$)|$)/g)?.map((x) => x.trim()).filter(Boolean) ?? [clean[0]];
+  let line = sentences[0];
+  let used = 1;
+  for (const next of sentences.slice(1)) {
+    if (wordCount(`${line} ${next}`) > HERO_LINE_WORDS) break;
+    line = `${line} ${next}`;
+    used++;
+  }
+  const remainder = sentences.slice(used).join(' ');
+  return { line, rest: [...(remainder ? [remainder] : []), ...clean.slice(1)] };
+}
+
+function Emphasis({ text, phrase }: { text: string; phrase?: string }) {
+  const index = phrase ? text.indexOf(phrase) : -1;
+  if (!phrase || index === -1) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, index)}
+      <strong>{phrase}</strong>
+      {text.slice(index + phrase.length)}
+    </>
+  );
+}
+
 export function LandingPageTemplate({
   h1,
   speakableSummary,
   overview,
+  overviewParagraphs,
+  overviewEmphasis,
+  heroLine,
   breadcrumbs,
   heroImageUrl,
+  heroImageAlt,
   breatherImageUrl,
   processImageUrl,
   manifestPath,
   planningFrom,
   estimateHref,
-  consultationHref,
   costGuidance,
   benefits,
   inclusions,
@@ -186,41 +276,62 @@ export function LandingPageTemplate({
   faqs,
   related,
 }: LandingPageTemplateProps) {
+  void showEstimatePrompt;
   const eyebrow = breadcrumbs[breadcrumbs.length - 2]?.name;
   const hasProof =
     !!proof && ((proof.testimonials?.length ?? 0) > 0 || (proof.projects?.length ?? 0) > 0);
   const breatherImage = breatherImageUrl ?? heroImageUrl;
   const processImage = processImageUrl ?? heroImageUrl;
   const showTimelineBelow = !!timeline && !costGuidance;
+  const lead = splitHeroLead(overviewParagraphs && overviewParagraphs.length > 0 ? overviewParagraphs : [overview], heroLine);
+  const emphasisInHero = !!overviewEmphasis && lead.line.includes(overviewEmphasis);
+  const planningFigure = planningFrom && hasPlanningFigure(planningFrom) ? planningFrom : undefined;
 
   return (
-    <div className="flex flex-col pb-20 md:pb-0">
-      {/* Approved editorial hero */}
-      <InteriorHero imageSrc={heroImageUrl} imageAlt="" layout="split">
+    <div className="flex flex-col ">
+      {/* Approved split hero, held to the first screen (C3): breadcrumb,
+          eyebrow, H1, ONE support line, the planning figure as a chip, one
+          primary action and the phone as a text link. The rest of the overview
+          opens the section directly below, unchanged. */}
+      <InteriorHero imageSrc={heroImageUrl} imageAlt={heroImageAlt ?? contentImageAlt(heroImageUrl)} layout="split">
           <HeroBreadcrumbs items={breadcrumbs} />
           <p data-speakable="summary" className="sr-only">{speakableSummary}</p>
-          {eyebrow && (
-            <p className="ed-eyebrow mt-8" style={{ color: 'rgb(255 255 255 / 0.72)' }}>{eyebrow}</p>
-          )}
+          {eyebrow && <p className="ed-eyebrow interior-hero-eyebrow">{eyebrow}</p>}
           <h1 className="ed-display ed-statement-display text-inverse-foreground">{h1}</h1>
-          <p className="mt-8 max-w-[60ch] text-base md:text-lg leading-relaxed text-inverse-foreground/95">{overview}</p>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 [&>*]:w-full sm:[&>*]:w-auto">
-            <ConsultCTA variant="brand" href={estimateHref}>
-              {CTA_PRIMARY} <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </ConsultCTA>
-            <Button variant="heroOutline" asChild>
-              <a href={consultationHref ?? "/#consult"}>{CTA_SECONDARY}</a>
-            </Button>
-          </div>
-          {planningFrom && (
-            <p className="mt-8 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-inverse-foreground/80">
-              <span className="ed-eyebrow !mb-0" style={{ color: 'rgb(255 255 255 / 0.72)' }}>Planning from</span>
-              <span className="brc-display-num text-inverse-foreground text-[1.5rem] leading-none">{planningFrom}</span>
-              <span className="ed-small text-inverse-foreground/70">Your exact range is confirmed at the free in-home visit</span>
+          {lead.line && (
+            <p className="interior-hero-support">
+              <Emphasis text={lead.line} phrase={emphasisInHero ? overviewEmphasis : undefined} />
             </p>
           )}
+          {planningFrom && (
+            <p className="interior-hero-chip">
+              {planningFigure ? (<>Planning from <strong>{planningFigure}</strong></>) : planningFrom}
+            </p>
+          )}
+          <div className="interior-hero-actions">
+            <PrimaryCta href={estimateHref ?? '/estimate'} trackingLocation="landing_hero">{CTA_PRIMARY}</PrimaryCta>
+            <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>
+          </div>
         </InteriorHero>
-<div className="interior-detail-body"><div><p className="interior-eyebrow">A CLEAR SCOPE</p><h2>Plan the details.<br/><em>Know the next step.</em></h2>{inclusions&&inclusions.length>0&&<ul className="interior-scope-list">{inclusions.map((item,i)=><li key={item}><span>{String(i+1).padStart(2,'0')}</span>{item}</li>)}</ul>}</div><InteriorProjectAside>{timeline&&<p className="ed-body mt-6">{timeline}</p>}</InteriorProjectAside></div>
+
+      {(lead.rest.length > 0 || planningFigure) && (
+        <section className="interior-hero-more" aria-label="Overview">
+          <div className="interior-hero-more-inner">
+            {lead.rest.map((paragraph, i) => (
+              <p key={i} className={i === 0 ? 'interior-hero-more-lede' : undefined}>
+                <Emphasis text={paragraph} phrase={!emphasisInHero ? overviewEmphasis : undefined} />
+              </p>
+            ))}
+            {planningFigure && (
+              <p className="interior-hero-more-note">Planning from {planningFigure}. Your exact range is confirmed at the free in-home visit.</p>
+            )}
+          </div>
+        </section>
+      )}
+{/* The scope list is this section's content. Area pages pass none, which
+          used to leave the heading alone beside the sticky aside with an empty
+          column, so the section only renders when there is a list to show. */}
+      {inclusions&&inclusions.length>0&&<div className="interior-detail-body"><div><p className="interior-eyebrow">A CLEAR SCOPE</p><p className="interior-statement">Plan the details.<br/><em>Know the next step.</em></p><ul className="interior-scope-list">{inclusions.map((item,i)=><li key={item}><span>{String(i+1).padStart(2,'0')}</span>{item}</li>)}</ul></div><InteriorProjectAside>{timeline&&<p className="ed-body mt-6">{timeline}</p>}</InteriorProjectAside></div>}
 
       {/* ─── Cost and timeline expectation ───
           Cost guidance follows the concise scope and estimate sidebar. */}
@@ -275,18 +386,16 @@ export function LandingPageTemplate({
             <Reveal delay={60}>
               <ul
                 className="ed-matrix mt-[clamp(40px,5vw,72px)] list-none p-0"
-                style={{ ['--ed-cols' as string]: benefits.length === 4 ? 4 : Math.min(benefits.length, 3), ['--ed-cell-h' as string]: '200px' }}
+                style={{ ['--ed-cols' as string]: benefits.length === 4 ? 4 : Math.min(benefits.length, 3), ['--ed-cell-h' as string]: '0' }}
               >
-                {benefits.map((item, i) => {
-                  const { lead, body } = splitBenefit(item);
-                  return (
-                    <li key={item} className="flex flex-col">
-                      <span className="ed-small" style={accent}>{String(i + 1).padStart(2, '0')}</span>
-                      <p className="ed-h4 mt-auto pt-8">{lead}</p>
-                      {body && <p className="ed-body mt-2 text-[0.875rem]">{body}</p>}
-                    </li>
-                  );
-                })}
+                {/* Each benefit is one sentence and renders whole. Splitting it at a
+                    comma or after four words cut titles mid-phrase. (BRC-32, BCONC-06, BHC-12) */}
+                {benefits.map((item, i) => (
+                  <li key={item} className="flex flex-col">
+                    <span className="ed-small" style={accent}>{String(i + 1).padStart(2, '0')}</span>
+                    <p className="ed-h4 mt-5 text-pretty">{item}</p>
+                  </li>
+                ))}
               </ul>
             </Reveal>
           </div>
@@ -295,9 +404,8 @@ export function LandingPageTemplate({
 
       {/* ─── Full-bleed image breather ─── */}
       {breatherImage && (
-        <section className="relative h-[clamp(220px,32vw,400px)] overflow-hidden" aria-hidden>
-          <Image src={breatherImage} alt="" fill sizes="100vw" className="object-cover img-brand-grade" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-inverse/10 to-background/80" />
+        <section className="relative h-[clamp(220px,28vw,360px)] overflow-hidden">
+          <Image src={breatherImage} alt={contentImageAlt(breatherImage)} fill sizes="100vw" className="object-cover img-brand-grade" />
           <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: GRAIN_URL, backgroundRepeat: 'repeat', opacity: 0.03 }} />
         </section>
       )}
@@ -314,7 +422,7 @@ export function LandingPageTemplate({
           <div className="ed-panel ed-panel-reverse">
             <div className="ed-panel-media">
               {processImage && (
-                <Image src={processImage} alt="" fill className="object-cover img-brand-grade" sizes="(max-width: 820px) 100vw, 43vw" />
+                <Image src={processImage} alt={contentImageAlt(processImage)} fill className="object-cover img-brand-grade" sizes="(max-width: 820px) 100vw, (max-width: 1100px) 48vw, 57vw" />
               )}
               <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: GRAIN_URL, backgroundRepeat: 'repeat', opacity: 0.03 }} />
             </div>
@@ -414,9 +522,23 @@ export function LandingPageTemplate({
                 {sections.map((section, i) => (
                   <Reveal key={section.heading} delay={Math.min(i, 4) * 60}>
                     <h2 id={sectionId(section.heading)} className="ed-h2-sm ed-statement-wide scroll-mt-28">{section.heading}</h2>
-                    {section.paragraphs?.map((p, j) => (
-                      <p key={j} className={j === 0 ? 'ed-lede mt-6 max-w-[52ch]' : 'ed-body mt-4 max-w-[62ch]'}>{p}</p>
-                    ))}
+                    {section.paragraphs?.map((p, j) => {
+                      const bulletAt = section.bulletsAfterParagraph ?? (section.paragraphs!.length - 1);
+                      return (
+                        <Fragment key={j}>
+                          <p className={i === 0 && j === 0 && !costGuidance ? 'ed-lede mt-6 max-w-[52ch]' : j === 0 ? 'ed-body mt-6 max-w-[62ch]' : 'ed-body mt-4 max-w-[62ch]'}>
+                            <InlineLinks text={p} links={section.paragraphLinks?.[j]} />
+                          </p>
+                          {section.bullets && bulletAt === j && (
+                            <ul className="ed-body mt-4 max-w-[62ch] list-disc space-y-2 pl-5">
+                              {section.bullets.map((item) => (
+                                <li key={item}>{item}</li>
+                              ))}
+                            </ul>
+                          )}
+                        </Fragment>
+                      );
+                    })}
                     {section.subsections?.map((sub) => (
                       <div key={sub.heading} className="mt-8 border-t pt-6" style={line}>
                         <h3 className="ed-h4">{sub.heading}</h3>
@@ -426,16 +548,39 @@ export function LandingPageTemplate({
                       </div>
                     ))}
                     {section.links && section.links.length > 0 && (
-                      <ul className="mt-6 flex list-none flex-wrap gap-x-8 gap-y-3 p-0">
+                      <ul className="ed-rule-list mt-8">
                         {section.links.map((link) => (
                           <li key={link.href}>
-                            <Link href={link.href} className="ed-link ed-link-accent min-h-11 lg:min-h-0">
+                            <Link href={link.href} className="ed-rule-link">
                               {link.label}
                               <ArrowRight className="h-4 w-4" aria-hidden="true" />
                             </Link>
                           </li>
                         ))}
                       </ul>
+                    )}
+                    {section.figure && (
+                      <figure className="mt-8">
+                        <div className="relative aspect-[16/10] overflow-hidden" style={{ border: '1px solid var(--ed-line)' }}>
+                          <Image
+                            src={section.figure.src}
+                            alt={contentImageAlt(section.figure.src)}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 720px"
+                            className="object-cover img-brand-grade"
+                            loading="lazy"
+                          />
+                        </div>
+                        {section.figure.caption ? (
+                          <figcaption className="ed-small mt-3 text-muted-foreground">
+                            {section.figure.caption}
+                          </figcaption>
+                        ) : (
+                          <figcaption className="ed-small mt-3 text-muted-foreground">
+                            Representative imagery
+                          </figcaption>
+                        )}
+                      </figure>
                     )}
                   </Reveal>
                 ))}
@@ -450,10 +595,8 @@ export function LandingPageTemplate({
         <Section surface="deep" spacing="xl" edge>
           <div className="ed-shell">
             <Reveal>
-              <p className="ed-eyebrow">Proof of work</p>
-              <h2 className="ed-h2 ed-statement-wide">
-                {proofHeading ?? (<>Recent <em className="not-italic" style={accent}>local work</em></>)}
-              </h2>
+              <p className="ed-eyebrow">Representative imagery</p>
+              {proofHeading ? <h2 className="ed-h2 ed-statement-wide">{proofHeading}</h2> : null}
             </Reveal>
 
             {proof?.projects && proof.projects.length > 0 && (
@@ -463,12 +606,10 @@ export function LandingPageTemplate({
                     <article className="flex h-full flex-col" style={{ border: '1px solid var(--ed-line)' }}>
                       <div className="grid grid-cols-2">
                         <div className="relative aspect-[4/3]">
-                          <Image src={project.beforeImageUrl} alt={`${project.title} - before`} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
-                          <span className="absolute bottom-2 left-2 bg-inverse/70 px-2 py-1 text-[0.6875rem] font-bold uppercase tracking-[0.18em] text-inverse-foreground">Before</span>
+                          <Image src={project.exteriorImageUrl} alt={contentImageAlt(project.exteriorImageUrl) || 'Representative image: Exterior view'} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                         </div>
                         <div className="relative aspect-[4/3]">
-                          <Image src={project.afterImageUrl} alt={`${project.title} - after`} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
-                          <span className="absolute bottom-2 left-2 bg-accent px-2 py-1 text-[0.6875rem] font-bold uppercase tracking-[0.18em]" style={{ color: "hsl(var(--accent-foreground))" }}>After</span>
+                          <Image src={project.interiorImageUrl} alt={contentImageAlt(project.interiorImageUrl) || 'Representative image: Interior view'} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                         </div>
                       </div>
                       <div className="p-6">
@@ -503,14 +644,6 @@ export function LandingPageTemplate({
         </Section>
       )}
 
-      {/* ─── Estimator prompt ─── */}
-      {showEstimatePrompt && (
-        <EstimatePromptBand
-          title={<>What might your <em className="not-italic" style={accent}>project</em> cost?</>}
-          description="Get a preliminary planning range based on real Treasure Valley build costs, with no obligation."
-          href={estimateHref ?? (manifestPath === '/services/build-on-your-lot' ? '/estimate' : undefined)}
-        />
-      )}
 
       {/* ─── FAQ: the parent site's split ─── */}
       <Section surface="bone" spacing="xl" edge>
@@ -528,7 +661,9 @@ export function LandingPageTemplate({
                   <AccordionTrigger className="ed-h4 py-6 text-left hover:no-underline [&[data-state=open]]:[color:var(--ed-accent)]">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="ed-body pb-7 text-[0.9375rem]">{faq.answer}</AccordionContent>
+                  <AccordionContent className="ed-body pb-7 text-[0.9375rem]">
+                    <InlineLinks text={faq.answer} links={faq.links} />
+                  </AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>

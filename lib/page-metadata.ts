@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { CITIES, SERVICES } from '@/shared/contentData';
 import {
   generateCityServiceDescription,
   generateCityServiceTitle,
@@ -41,23 +42,32 @@ export interface PageMetaInput {
 }
 
 /**
- * City x service combos flagged as doorway risk. These are secondary services
- * in the smallest markets, where the copy is most generic and there is no local
- * proof or pillar support, plus shop homes in Boise proper where lot sizes and
- * zoning make the service largely implausible. Toggle entries off here once a
- * combo earns unique local content. Keyed as `${serviceSlug}/${citySlug}`.
+ * City x service combos that are allowed into the index. A young domain with no
+ * backlinks or reviews is better served by a smaller set of pages that each
+ * carry real local substance than by a full services-by-cities grid, which
+ * reads as doorway content. Everything outside this list is `noindex, follow`:
+ * it stays crawlable, keeps its internal-link value, and drops out of the
+ * sitemap. Widen a list here once a combo earns unique proof (reviews, local
+ * job photos, neighborhood detail).
  */
-export const NOINDEX_CITY_SERVICE = new Set<string>([
-  'lot-evaluation/kuna',
-  'lot-evaluation/star',
-  'lot-evaluation/middleton',
-  'lot-evaluation/caldwell',
-  'energy-efficient-homes/kuna',
-  'energy-efficient-homes/star',
-  'energy-efficient-homes/middleton',
-  'energy-efficient-homes/caldwell',
-  'shop-homes-barndominiums/boise',
-]);
+const CORE_SERVICES = ['custom-home-builder','semi-custom-homes','build-on-your-lot','design-build'];
+const CORE_CITIES = ['boise','meridian','eagle','nampa'];
+const SECONDARY_SERVICES = ['home-plans-design','home-additions','adu','lot-evaluation','energy-efficient-homes'];
+const SECONDARY_CITIES = ['boise','meridian'];
+const EXTRA_INDEXABLE = ['shop-homes-barndominiums/meridian','shop-homes-barndominiums/eagle','shop-homes-barndominiums/nampa','shop-homes-barndominiums/kuna'];
+
+function isIndexable(serviceSlug: string, citySlug: string): boolean {
+  if (CORE_SERVICES.includes(serviceSlug) && CORE_CITIES.includes(citySlug)) return true;
+  if (SECONDARY_SERVICES.includes(serviceSlug) && SECONDARY_CITIES.includes(citySlug)) return true;
+  return EXTRA_INDEXABLE.includes(`${serviceSlug}/${citySlug}`);
+}
+
+/** Keyed as `${serviceSlug}/${citySlug}`. Derived from the allowlist above. */
+export const NOINDEX_CITY_SERVICE = new Set<string>(
+  SERVICES.flatMap((s) =>
+    CITIES.filter((c) => !isIndexable(s.slug, c.slug)).map((c) => `${s.slug}/${c.slug}`),
+  ),
+);
 
 export function isCityServiceNoindex(serviceSlug: string, citySlug: string): boolean {
   return NOINDEX_CITY_SERVICE.has(`${serviceSlug}/${citySlug}`);
@@ -130,10 +140,20 @@ const SERVICE_TITLE_OVERRIDES: Record<string, string> = {
   'build-on-your-lot': 'Build on Your Lot in Idaho',
   'design-build': 'Treasure Valley Design-Build Homes',
   'home-plans-design': 'Custom Home Plans & Design, Idaho',
-  'home-additions': 'Home Additions in the Treasure Valley',
+  'home-additions': 'Structural Home Additions in Idaho',
+  adu: 'Detached ADU Builder in Boise, Idaho',
   'lot-evaluation': 'Lot Evaluation & Feasibility, Idaho',
   'shop-homes-barndominiums': 'Idaho Shop Homes & Barndominiums',
   'energy-efficient-homes': 'Energy-Efficient Homes in Idaho',
+};
+
+/**
+ * Middleton keeps its "custom home builder" title: /areas/middleton is the
+ * page closest to page one (position 19.8, "custom home builder middleton"
+ * at 10.5 in Search Console to 29 October).
+ */
+const AREA_TITLE_OVERRIDES: Record<string, string> = {
+  middleton: 'Custom Home Builder in Middleton, ID',
 };
 
 export function buildPageMetadata(input: PageMetaInput): Metadata {
@@ -162,7 +182,9 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
     case 'area':
       // "Home Builder in Middleton, Idaho" is the longest at 32 chars, so no
       // city name pushes this past the 36-char budget or triggers truncation.
-      title = generateSafePageTitle(`Home Builder in ${input.cityName}, Idaho`);
+      title =
+        AREA_TITLE_OVERRIDES[input.citySlug ?? ''] ??
+        generateSafePageTitle(`Home Builder in ${input.cityName}, Idaho`);
       description = generateMetaDescription({
         serviceName: '',
         serviceSlug: '',
@@ -171,26 +193,33 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
       });
       break;
     case 'city-service':
-      title = generateCityServiceTitle(input.serviceName!, input.cityName!);
+      title = generateCityServiceTitle(
+        input.serviceName!,
+        input.cityName!,
+        SERVICE_TITLE_OVERRIDES[input.serviceSlug ?? ''],
+      );
       description = generateCityServiceDescription(
         input.serviceName!,
         input.cityName!,
       );
       break;
+    // These three used to be replaced at render time by a second copy in
+    // lib/brand-page-metadata.ts. That layer is gone for this site: the route
+    // metadata below is the one source, so an edit here is what renders.
     case 'about':
-      title = 'About Us';
+      title = 'About Our Boise Home Building Team';
       description =
-        `Learn about ${SITE_CONFIG.name}, a Treasure Valley design-build home builder. Bonded, insured, and committed to line-item budgets and clear communication.`;
+        `Learn how ${SITE_CONFIG.name} plans and manages Treasure Valley home builds, from lot evaluation and design through permits, construction and handover.`;
       break;
     case 'contact':
-      title = 'Contact Us';
+      title = 'Contact a Boise Home Builder';
       description =
-        `Contact ${SITE_CONFIG.name} for a free planning consultation. Call ${SITE_CONFIG.phone} or schedule online. Serving Boise, Meridian, Eagle & the Treasure Valley.`;
+        `Contact ${SITE_CONFIG.name} about a new home, a building lot or a structural addition in Boise and the Treasure Valley. We reply within one business day.`;
       break;
     case 'blog':
-      title = 'Home Building Insights & Ideas';
+      title = 'Idaho Home Building Advice & Guides';
       description =
-        `Honest home building advice for Idaho: budgets, lot selection, permits, timelines, and design-build guidance from ${SITE_CONFIG.name}.`;
+        `Idaho home building advice and guides from ${SITE_CONFIG.name}: budgets, land and lots, permits, design choices, timelines and how to choose a builder.`;
       break;
     default:
       title = input.titleOverride || SITE_CONFIG.name;

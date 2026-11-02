@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { ArrowRight, Check } from "lucide-react";
 import { Section } from "@/components/marketing/Section";
-import { Button } from "@/components/ui/button";
+import { familyButtonClass } from "@/components/family/Button";
 import {
   BUDGET_GUIDANCE_POINTS,
   STANDARD_INCLUSIONS,
@@ -128,9 +128,7 @@ export function BudgetInclusionsSection() {
 
         <Reveal>
           <div className="mt-[clamp(32px,4vw,56px)]">
-            <Button variant="brandOutline" asChild>
-              <a href="#consult">{CTA_SECONDARY}</a>
-            </Button>
+            <a className={familyButtonClass({ variant: "secondary", size: "lg", tone: "dark", className: "secondary-cta" })} href="#consult">{CTA_SECONDARY}</a>
           </div>
         </Reveal>
       </div>

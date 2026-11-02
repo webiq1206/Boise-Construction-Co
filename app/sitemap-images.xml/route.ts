@@ -60,19 +60,16 @@ export async function GET() {
     byPage.set(pageUrl, existing);
   };
 
-  // Before/after project work, declared on the service page that shows it.
+  // Concept-home photography, declared on the service page that shows it.
   for (const project of GALLERY_PROJECTS) {
     const pageUrl = `${baseUrl}/services/${project.serviceType}`;
-    add(pageUrl, {
-      loc: absolute(project.afterImageUrl, baseUrl),
-      title: `${project.title} (after)`,
-      caption: project.description,
-    });
-    add(pageUrl, {
-      loc: absolute(project.beforeImageUrl, baseUrl),
-      title: `${project.title} (before)`,
-      caption: project.description,
-    });
+    for (const image of project.images) {
+      add(pageUrl, {
+        loc: absolute(image.src, baseUrl),
+        title: `${project.title} (${image.label})`,
+        caption: project.description,
+      });
+    }
   }
 
   for (const guide of GUIDE_PAGES) {

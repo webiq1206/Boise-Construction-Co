@@ -1,4 +1,4 @@
-import { ArrowRight, Calculator } from "lucide-react";
+import { Calculator } from "lucide-react";
 import { MarketingCard } from "./MarketingCard";
 import { EstimateCTA } from "@/components/modals/EstimateCTA";
 import { CTA_PRIMARY } from "@/shared/ctaCopy";
@@ -28,10 +28,7 @@ export function InlineEstimateCTA({
           <p className="font-sans font-normal text-base text-foreground mb-1">{title}</p>
           <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
         </div>
-        <EstimateCTA variant="brand" className="flex-shrink-0 w-full sm:w-auto">
-          {CTA_PRIMARY}
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </EstimateCTA>
+        <EstimateCTA variant="brand" className="flex-shrink-0 w-full sm:w-auto">{CTA_PRIMARY}</EstimateCTA>
       </div>
     </MarketingCard>
   );

@@ -5,6 +5,12 @@
  */
 
 import { SITE_CONFIG } from '@/shared/siteConfig';
+import { CITIES, SERVICES, serviceLabel } from '@/shared/contentData';
+import {
+  AREA_META_DESCRIPTIONS,
+  CITY_SERVICE_META_DESCRIPTIONS,
+  SERVICE_META_DESCRIPTIONS,
+} from '@/shared/metaDescriptions';
 import { GBP_SOCIAL, getExternalProfileUrls } from '@/shared/gbpProfile';
 
 interface SEOMetaData {
@@ -127,58 +133,110 @@ export function generatePageTitle(params: ServiceSEOParams): string {
   return `${truncatedService} | ${BRAND}`;
 }
 
-const CITY_DESCRIPTION_VARIANTS: Record<string, string> = {
-  Kuna: "Kuna's trusted design-build",
-  Boise: "Boise's design-build",
-  Meridian: "Meridian's trusted",
-  Eagle: "Eagle's preferred",
-  Star: "Star's reliable",
-  Middleton: "Middleton's expert",
-  Nampa: "Nampa's trusted",
-  Caldwell: "Caldwell's trusted",
-};
+/**
+ * Lowercase a service name for use mid-sentence while keeping acronyms intact:
+ * "ADUs & Guest Houses" -> "ADUs & guest houses", never "adus & guest houses".
+ */
+export function serviceNameInSentence(name: string): string {
+  return name
+    .split(' ')
+    .map((word) => (/^[A-Z]{2,}s?$/.test(word) ? word : word.toLowerCase()))
+    .join(' ');
+}
 
-const CITY_CTA_VARIANTS: Record<string, string> = {
-  Kuna: "Free planning consultation",
-  Boise: "Treasure Valley design-build",
-  Meridian: "Bonded & insured",
-  Eagle: "Line-item budget upfront",
-  Star: "Weekly written updates",
-  Middleton: "Workmanship warranty",
-  Nampa: "Ada & Canyon County permits",
-  Caldwell: "Design-build home building",
-};
+/** Capitalize the first letter so a description never starts lowercase. */
+function sentenceStart(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
 
 /**
- * Generate SEO-optimized meta description
- * 150-160 characters with phone number, CTA, and unique value prop
- * Phone: (208) 477-1169
+ * Meta description budget. Google shows roughly 155 to 160 characters on
+ * desktop; 155 keeps the closing words visible. 140 is the floor for authored
+ * descriptions so the snippet carries the keyword and a reason to click.
+ * scripts/verify-meta-descriptions.ts enforces both in prebuild.
+ */
+export const META_DESCRIPTION_MIN = 140;
+export const META_DESCRIPTION_MAX = 155;
+
+/**
+ * First candidate inside the 140 to 155 band, else the longest one that fits
+ * 155, else the shortest. Generated descriptions never carry a phone number or
+ * an exclamation mark: the verifier fails the build if one does.
+ */
+export function fitMetaDescription(candidates: string[]): string {
+  const clean = candidates.map((c) => c.replace(/\s+/g, ' ').trim());
+  const inBand = clean.find((c) => c.length >= META_DESCRIPTION_MIN && c.length <= META_DESCRIPTION_MAX);
+  if (inBand) return inBand;
+  const fitting = clean.filter((c) => c.length <= META_DESCRIPTION_MAX).sort((a, b) => b.length - a.length);
+  if (fitting.length) return fitting[0];
+  return [...clean].sort((a, b) => a.length - b.length)[0];
+}
+
+function serviceSlugFor(serviceName: string): string | undefined {
+  return SERVICES.find((s) => s.name === serviceName)?.slug;
+}
+
+function citySlugFor(cityName: string): string | undefined {
+  return CITIES.find((c) => c.name === cityName)?.slug;
+}
+
+/** Service phrase as searched: "Detached ADUs and guest houses", "Structural home additions". */
+const SERVICE_SEARCH_PHRASES: Record<string, string> = {
+  adu: 'Detached ADUs and guest houses',
+  'home-additions': 'Structural home additions',
+  'shop-homes-barndominiums': 'Barndominium and shop homes',
+  'lot-evaluation': 'Building lot evaluation',
+};
+
+function serviceSearchPhrase(serviceName: string): string {
+  const slug = serviceSlugFor(serviceName);
+  return (slug && SERVICE_SEARCH_PHRASES[slug]) || sentenceStart(serviceNameInSentence(serviceName).replace(/ & /g, ' and '));
+}
+
+/**
+ * Meta description for a service parent, an area page or (with both a service
+ * and a city) a city x service page. Authored copy in
+ * shared/metaDescriptions.ts wins; anything not listed there gets a
+ * keyword-first sentence built from the service's own short description, so a
+ * new service or city can never fall back to a phone-number formula.
  */
 export function generateMetaDescription(params: ServiceSEOParams): string {
   const { serviceName, city } = params;
-  const phone = SITE_CONFIG.phone;
-  
+
   if (params.isHomePage) {
-    return `Design-build home builder serving Boise, Meridian, Eagle & the Treasure Valley. Bonded, insured, line-item budgets. Call ${phone} for a free planning consultation!`;
+    return fitMetaDescription([
+      `Custom home builder in Boise, Idaho. ${BRAND} designs and builds custom and semi-custom homes across the Treasure Valley, with a line-item budget first.`,
+    ]);
   }
-  
-  if (city && serviceName) {
-    const serviceLC = serviceName.toLowerCase();
-    const cityVariant = CITY_DESCRIPTION_VARIANTS[city] || `${city}'s trusted`;
-    const ctaVariant = CITY_CTA_VARIANTS[city] || "Satisfaction guaranteed";
-    return `${cityVariant} ${serviceLC} team. Bonded & insured. ${ctaVariant}. Call ${phone} for a free consultation!`;
-  }
-  
+
+  if (city && serviceName) return generateCityServiceDescription(serviceName, city);
+
   if (city) {
-    return `Home builder in ${city}, Idaho. Bonded, insured & locally owned. Call ${phone} for a free planning consultation in ${city}!`;
+    const authored = AREA_META_DESCRIPTIONS[citySlugFor(city) ?? ''];
+    if (authored) return authored;
+    return fitMetaDescription([
+      `Home builder in ${city}, Idaho: custom homes, semi-custom plans and homes on land you already own, with lot evaluation, permits and site costs checked first.`,
+      `Home builder in ${city}, Idaho: custom homes, semi-custom plans and homes on land you already own, with site costs and permits checked before design.`,
+      `Home builder in ${city}, Idaho: custom and semi-custom homes and builds on your own lot, with one design-build team from the lot to the keys.`,
+    ]);
   }
-  
+
   if (!serviceName) {
-    return `New home builder in Boise & the Treasure Valley. Bonded, insured, design-build. Call ${phone} for a free planning consultation and a realistic budget band!`;
+    return fitMetaDescription([
+      `New home builder in Boise and the Treasure Valley. ${BRAND} designs and builds custom and semi-custom homes, with a line-item budget before we build.`,
+    ]);
   }
-  
-  const serviceLC = serviceName.toLowerCase();
-  return `${serviceLC} in Boise & the Treasure Valley. Bonded, insured, with a line-item budget before we build. Call ${phone} for a free consultation!`;
+
+  const authored = SERVICE_META_DESCRIPTIONS[serviceSlugFor(serviceName) ?? ''];
+  if (authored) return authored;
+  const service = serviceSearchPhrase(serviceName);
+  const detail = SERVICES.find((s) => s.name === serviceName)?.shortDescription ?? '';
+  return fitMetaDescription([
+    `${service} in Boise and the Treasure Valley. ${detail} One design-build team, with a line-item budget before we build.`,
+    `${service} in Boise and the Treasure Valley. ${detail} One design-build team from start to finish.`,
+    `${service} in Boise and the Treasure Valley. ${detail}`,
+    `${service} in Boise and the Treasure Valley from one design-build team, with a line-item budget before we break ground and a written update every week.`,
+  ]);
 }
 
 /**
@@ -188,32 +246,83 @@ export function generateMetaDescription(params: ServiceSEOParams): string {
  */
 
 /**
- * Shorter display names for the longest services, used only when the full name
- * would push a city-service title past the budget. Keyed by the `name` values
- * in shared/contentData.ts.
+ * Keyword-bearing short names, used only when even "{full name}, {City}"
+ * cannot fit. Each keeps the term people actually search: the old ladder cut
+ * "Energy-Efficient Homes" to "Efficient Homes" (lost "energy"), "Shop Homes &
+ * Barndominiums" to "Shop Homes" (lost "barndominium"), "Home Design & Plans"
+ * to "Home Plans" and "Custom Home Building" to "Custom Homes". Every name not
+ * listed here fits at some rung of the ladder with its full name.
+ * Keyed by the `name` values in shared/contentData.ts.
  */
-const SERVICE_SHORT_NAMES: Record<string, string> = {
-  'Custom Home Building': 'Custom Homes',
+const SERVICE_KEYWORD_NAMES: Record<string, string> = {
   'Lot Evaluation & Feasibility': 'Lot Evaluation',
-  'Shop Homes & Barndominiums': 'Shop Homes',
-  'Home Design & Plans': 'Home Plans',
-  'Energy-Efficient Homes': 'Efficient Homes',
+  'Shop Homes & Barndominiums': 'Barndominium Builder',
+  'Home Additions': 'Home Additions',
 };
 
+/**
+ * Title names that state which part of the ADU and additions split this site
+ * owns: new detached ADUs and structural additions (new footprint, second
+ * stories). Garage or basement ADU conversions and work inside the existing
+ * footprint belong to Boise Remodeling Co. Used in place of the service name
+ * in city x service titles and H1s.
+ */
+export const SERVICE_CITY_TITLE_NAMES: Record<string, string> = {
+  'ADUs & Guest Houses': 'Detached ADU Builder',
+  'Home Additions': 'Structural Home Additions',
+};
+
+/** H1 name for city x service pages (see SERVICE_CITY_TITLE_NAMES). */
+export const SERVICE_CITY_H1_NAMES: Record<string, string> = {
+  'ADUs & Guest Houses': 'Detached ADUs & Guest Houses',
+  'Home Additions': 'Structural Home Additions',
+};
+
+/**
+ * Sentence-case heading names for city x service H1s and section headings
+ * (owner decision C, 1 November 2026). Same words as SERVICE_CITY_H1_NAMES and
+ * the service names, only letter case changes; the title-case maps above stay
+ * for title tags.
+ */
+const SERVICE_CITY_H1_LABELS: Record<string, string> = {
+  adu: 'Detached ADUs & guest houses',
+  'home-additions': 'Structural home additions',
+};
+
+export function serviceCityHeadingName(service: { slug: string; name: string }): string {
+  return SERVICE_CITY_H1_LABELS[service.slug] ?? serviceLabel(service);
+}
+
 /** Budget after the layout template appends " | Boise Construction Co" (24). */
-const CITY_SERVICE_TITLE_BUDGET = 36;
+export const CITY_SERVICE_TITLE_BUDGET = 36;
 
-export function generateCityServiceTitle(serviceName: string, cityName: string): string {
-  const short = SERVICE_SHORT_NAMES[serviceName] ?? serviceName;
+/**
+ * `avoid` is the parent service title: /services/adu is "Detached ADU Builder
+ * in Boise, Idaho", so the Boise child takes the H1 name instead of repeating
+ * the parent's title word for word.
+ */
+export function generateCityServiceTitle(serviceName: string, cityName: string, avoid?: string): string {
+  const keyword = SERVICE_KEYWORD_NAMES[serviceName];
+  for (const titleName of [SERVICE_CITY_TITLE_NAMES[serviceName], SERVICE_CITY_H1_NAMES[serviceName]]) {
+    if (!titleName || titleName === serviceName) continue;
+    // "Detached ADU Builder in Boise, ID" would only shorten the parent's
+    // "... in Boise, Idaho"; take the next name instead.
+    if (avoid?.startsWith(`${titleName} in ${cityName}`)) continue;
+    const named = [`${titleName} in ${cityName}, Idaho`, `${titleName} in ${cityName}, ID`, `${titleName} in ${cityName}`, `${titleName}, ${cityName} ID`, `${titleName}, ${cityName}`];
+    const fit = named.find((c) => c.length <= CITY_SERVICE_TITLE_BUDGET && c !== avoid);
+    if (fit) return fit;
+  }
 
-  // Degrade in steps rather than truncating mid-word: full name with "Idaho",
-  // then the short name, then the "ID" abbreviation. Every service/city pair in
-  // the current matrix resolves at one of these levels.
+  // Degrade the location part, never the searched term: "Idaho" becomes "ID",
+  // then the keyword-bearing short name (where one exists) gets the readable
+  // "in {City}" form, and only then does the "in" go.
+  const inCity = (name: string) => [`${name} in ${cityName}, Idaho`, `${name} in ${cityName}, ID`];
+  const commaCity = (name: string) => [`${name}, ${cityName} ID`, `${name}, ${cityName}`];
   const candidates = [
-    `${serviceName} in ${cityName}, Idaho`,
-    `${short} in ${cityName}, Idaho`,
-    `${short} in ${cityName}, ID`,
-    `${short}, ${cityName}`,
+    ...inCity(serviceName),
+    ...(keyword ? inCity(keyword) : []),
+    ...commaCity(serviceName),
+    ...(keyword ? commaCity(keyword) : []),
   ];
 
   return (
@@ -223,34 +332,30 @@ export function generateCityServiceTitle(serviceName: string, cityName: string):
 }
 
 /**
- * Generate varied city-service meta description
- * Guaranteed under 160 characters
+ * City x service meta description: authored copy for the indexable
+ * combinations, otherwise a keyword-first sentence that names the service and
+ * the city, then the service's own short description. 155 characters at most,
+ * no phone number, no exclamation mark.
  */
 export function generateCityServiceDescription(
   serviceName: string,
   cityName: string,
   shortDescription?: string,
 ): string {
-  const phone = SITE_CONFIG.phone;
-  const serviceLC = serviceName.toLowerCase();
-  const cityVariant = CITY_DESCRIPTION_VARIANTS[cityName] || `${cityName}'s trusted`;
-  const cityData = CITY_SEO_DATA[cityName as keyof typeof CITY_SEO_DATA];
-  const neighborhood = cityData?.neighborhoods?.[0];
-
-  if (neighborhood) {
-    const withNeighborhood = `${cityVariant} ${serviceLC}. Serving ${neighborhood} & all ${cityName}. Bonded & insured. Call ${phone}!`;
-    if (withNeighborhood.length <= 160) return withNeighborhood;
-  }
-
-  if (shortDescription) {
-    const desc = `${cityVariant} ${serviceLC}. ${shortDescription}. Bonded & insured. Call ${phone}!`;
-    if (desc.length <= 160) return desc;
-  }
-
-  const base = `${cityVariant} ${serviceLC} in ${cityName}, ID. Bonded & insured. Call ${phone} for a free consultation!`;
-  if (base.length <= 160) return base;
-
-  return `${serviceLC} in ${cityName}, ID. Bonded & insured builder. Call ${phone} for a free consultation!`;
+  const serviceSlug = serviceSlugFor(serviceName);
+  const citySlug = citySlugFor(cityName);
+  const authored = CITY_SERVICE_META_DESCRIPTIONS[`${serviceSlug}/${citySlug}`];
+  if (authored) return authored;
+  const service = serviceSearchPhrase(serviceName);
+  const detail = shortDescription ?? SERVICES.find((s) => s.name === serviceName)?.shortDescription ?? '';
+  return fitMetaDescription([
+    `${service} in ${cityName}, Idaho. ${detail} One design-build team, line-item budget first.`,
+    `${service} in ${cityName}, Idaho. ${detail} One accountable design-build team.`,
+    `${service} in ${cityName}, Idaho. ${detail} Line-item budget first.`,
+    `${service} in ${cityName}, Idaho. ${detail}`,
+    `${service} in ${cityName}, Idaho, from one design-build team: feasibility, design, permits and construction, with a line-item budget before we build.`,
+    `${service} in ${cityName}, Idaho, from one design-build team, with feasibility, permits and a line-item budget settled first.`,
+  ]);
 }
 
 /** Keep complete authored titles; an optional secondary label may be omitted. */
@@ -380,8 +485,11 @@ export const CITY_SEO_DATA: Record<string, {
     population: '24,011',
     founded: '1992',
     zipCodes: ['83634'],
-    neighborhoods: ['Indian Creek', 'Black Cat', 'Crimson Point', 'Ten Mile Creek'],
-    landmarks: ['Kuna Caves', 'Swan Falls Dam', 'Indian Creek Plaza'],
+    neighborhoods: ['Crimson Point'],
+    // Kuna Caves and Swan Falls Dam sit south of the city. The City of Kuna
+    // map marks both "down the road," and the city tells visitors to drive out
+    // to Swan Falls. Bernie Fisher Park is a city park at Main and Linder.
+    landmarks: ['Bernie Fisher Park'],
     climate: 'semi-arid high desert climate with hot summers and cold winters',
     coordinates: { lat: 43.4913, lng: -116.4201 },
   },
@@ -399,7 +507,7 @@ export const CITY_SEO_DATA: Record<string, {
     founded: '1893',
     zipCodes: ['83642', '83646'],
     neighborhoods: ['Lochsa Falls', 'Tuscany', 'Paramount', 'Meridian Ranch'],
-    landmarks: ['The Village at Meridian', 'Julius M. Kleiner Memorial Park', 'Eagle Island State Park'],
+    landmarks: ['The Village at Meridian', 'Julius M. Kleiner Memorial Park', 'Settlers Park'],
     climate: 'semi-arid with hot, dry summers and cold winters',
     coordinates: { lat: 43.6121, lng: -116.3915 },
   },
@@ -407,7 +515,8 @@ export const CITY_SEO_DATA: Record<string, {
     population: '30,346',
     founded: '1864',
     zipCodes: ['83616'],
-    neighborhoods: ['Shadow Valley', 'Banbury', 'The Estates', 'Floating Feather'],
+    // Shadow Valley is Boise 83714 / unincorporated Ada County, not Eagle.
+    neighborhoods: ['Banbury'],
     landmarks: ['Eagle Island State Park', 'Heritage Park', 'Eagle Hills Golf Course'],
     climate: 'semi-arid with distinct four seasons',
     coordinates: { lat: 43.6954, lng: -116.3540 },
@@ -416,8 +525,10 @@ export const CITY_SEO_DATA: Record<string, {
     population: '12,701',
     founded: '1907',
     zipCodes: ['83669'],
-    neighborhoods: ['Star River Ranch', 'Hillsdale', 'Paramount', 'Star Crossing'],
-    landmarks: ['Boise River', 'Star Riverfront Park', 'Celebration Park'],
+    // Hillsdale and Paramount are Meridian subdivisions. The riverside city
+    // park is Star Riverwalk Park (1000 S. Main Street), not "Star Riverfront Park."
+    neighborhoods: ['Star River Ranch', 'Star Crossing'],
+    landmarks: ['Boise River', 'Star Riverwalk Park', 'Freedom Park'],
     climate: 'semi-arid climate with hot summers and cool winters',
     coordinates: { lat: 43.6921, lng: -116.4939 },
   },
@@ -425,8 +536,10 @@ export const CITY_SEO_DATA: Record<string, {
     population: '10,141',
     founded: '1909',
     zipCodes: ['83644'],
-    neighborhoods: ['Middleton Heights', 'Purple Sage', 'Puckett Estates', 'Windermere'],
-    landmarks: ['Boise River', 'Middleton City Park', 'Purple Sage Golf Course'],
+    // Purple Sage Golf Course is in Caldwell. Middleton's city parks are
+    // Middleton Place, Piccadilly, and Roadside, not "Middleton City Park."
+    neighborhoods: ['Middleton Heights'],
+    landmarks: ['Boise River'],
     climate: 'semi-arid high desert climate with warm summers and cool winters',
     coordinates: { lat: 43.7068, lng: -116.6209 },
   },
@@ -434,8 +547,9 @@ export const CITY_SEO_DATA: Record<string, {
     population: '108,188',
     founded: '1886',
     zipCodes: ['83651', '83653', '83686', '83687'],
-    neighborhoods: ['Downtown Nampa', 'Karcher', 'Greenhurst', 'Columbia Village'],
-    landmarks: ['Ford Idaho Center', 'Lake Lowell', 'Nampa Train Depot'],
+    neighborhoods: ['Downtown Nampa'],
+    // Lake Lowell is Deer Flat National Wildlife Refuge, outside Nampa city limits.
+    landmarks: ['Ford Idaho Center', 'Nampa Train Depot'],
     climate: 'semi-arid with hot summers and cold winters',
     coordinates: { lat: 43.5407, lng: -116.5635 },
   },
@@ -443,12 +557,24 @@ export const CITY_SEO_DATA: Record<string, {
     population: '65,359',
     founded: '1883',
     zipCodes: ['83605', '83607'],
-    neighborhoods: ['Indian Creek', 'Cleveland Blvd', 'Ustick', 'Wilson'],
+    neighborhoods: ['Wilson'],
     landmarks: ['Indian Creek Plaza', 'Caldwell Night Rodeo', 'College of Idaho'],
     climate: 'semi-arid high desert with four distinct seasons',
     coordinates: { lat: 43.6629, lng: -116.6874 },
   },
 };
+
+/**
+ * Indian Creek is a stream, not a neighborhood. Idaho DEQ's Indian Creek
+ * Subbasin Assessment (December 2001) says it "flows through Elmore, Ada and
+ * Canyon counties and the cities of Kuna, Nampa and Caldwell, Idaho."
+ * Indian Creek Plaza is on that creek in downtown Caldwell.
+ * https://www2.deq.idaho.gov/admin/LEIA/api/document/download/11724
+ */
+export function indianCreekDescription(cityName: string): string {
+  if (cityName !== 'Kuna' && cityName !== 'Nampa' && cityName !== 'Caldwell') return '';
+  return 'Indian Creek is the creek that flows through Kuna, Nampa, and Caldwell. Indian Creek Plaza is on that creek in downtown Caldwell.';
+}
 
 /**
  * Business information for NAP consistency
@@ -475,31 +601,29 @@ export const BUSINESS_INFO = {
     country: 'United States',
   },
   hours: {
-    monday: '7:00 AM - 6:00 PM',
-    tuesday: '7:00 AM - 6:00 PM',
-    wednesday: '7:00 AM - 6:00 PM',
-    thursday: '7:00 AM - 6:00 PM',
-    friday: '7:00 AM - 6:00 PM',
-    saturday: '8:00 AM - 4:00 PM',
+    monday: '9:00 AM - 6:00 PM',
+    tuesday: '9:00 AM - 6:00 PM',
+    wednesday: '9:00 AM - 6:00 PM',
+    thursday: '9:00 AM - 6:00 PM',
+    friday: '9:00 AM - 6:00 PM',
+    saturday: '9:00 AM - 4:00 PM',
     sunday: 'Closed',
   },
   founded: '2020',
   serviceArea: ['Boise', 'Meridian', 'Eagle', 'Nampa', 'Kuna', 'Star', 'Middleton', 'Caldwell', 'Garden City'],
   serviceRadius: '35 miles',
-  licenses: ['License details available upon request'],
+  licenses: ['Idaho Registered Contractor #8381215'],
   certifications: ['Design-Build Home Building', 'Bonded & Insured'],
-  // Kept consistent with GBP and the `licenses` field above: the business
-  // publishes bonded/insured status and provides registration details on
-  // request, so nothing here should assert a specific license.
+  // The registration number is published in the footer and in hasCredential.
   insurance: 'Bonded & Insured',
   rating: 0,
   reviewCount: 0,
   yearlyServicesCompleted: 0,
-  // Instagram is intentionally omitted: it is being dropped from the site
-  // alongside the footer, and its handle still carries the old slug. Facebook
-  // stays as the one confirmed profile.
+  // This brand has no social profile of its own. The owner's Facebook page
+  // belongs to P5 Home Co, so it sits on the parentOrganization node in
+  // lib/schema.ts, not here. GBP_SOCIAL stays the slot for a brand profile.
   sameAs: [
-    GBP_SOCIAL.facebook,
+    ...(GBP_SOCIAL.facebook ? [GBP_SOCIAL.facebook] : []),
     ...getExternalProfileUrls(),
   ],
 };

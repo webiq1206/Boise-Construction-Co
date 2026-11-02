@@ -12,6 +12,7 @@ const AccordionItem = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AccordionPrimitive.Item
     ref={ref}
+    data-slot="accordion-item"
     className={cn("border-b", className)}
     {...props}
   />
@@ -25,6 +26,7 @@ const AccordionTrigger = React.forwardRef<
   <AccordionPrimitive.Header className="flex">
     <AccordionPrimitive.Trigger
       ref={ref}
+      data-slot="accordion-trigger"
       className={cn(
         "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180 [&[data-state=open]>svg]:text-accent-legible",
         className
@@ -44,6 +46,11 @@ const AccordionContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <AccordionPrimitive.Content
     ref={ref}
+    data-slot="accordion-content"
+    // forceMount keeps closed answers in the server-rendered HTML (Radix adds
+    // `hidden` while closed), so crawlers and AI answer engines that do not run
+    // JavaScript still read every FAQ answer.
+    forceMount
     className="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
     {...props}
   >

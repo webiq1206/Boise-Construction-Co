@@ -37,7 +37,6 @@ export const BUDGET_WORKSHEET_BLOCKS: PdfBlock[] = [
       ['Custom', '$250', '$400', '___________'],
       ['High performance', '$275', '$425', '___________'],
       ['Foothills / high detail', '$450', 'and above', '___________'],
-      ['Shop home (blended)', '$150', '$250', '___________'],
     ],
   },
   { type: 'heading', text: '3. Budget buckets (land and site work are separate)' },

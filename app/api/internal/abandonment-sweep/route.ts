@@ -6,8 +6,8 @@ export const dynamic = "force-dynamic";
 /**
  * Scheduled sweep for abandoned estimator sessions. The progress endpoint
  * already runs a throttled sweep opportunistically; schedule this every 10
- * minutes (Replit Scheduled Deployment or any cron) so summaries still go out
- * on a quiet site with no new visitors to trigger it.
+ * minutes (Replit Scheduled Deployment or any cron) so retention still runs
+ * on a quiet site. Partial drop-off staff emails are disabled.
  *
  * Auth: Bearer CRON_SECRET (or LEAD_DASHBOARD_KEY, which the delivery retry
  * worker already uses). Refuses to run unauthenticated.

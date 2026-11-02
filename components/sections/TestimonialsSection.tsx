@@ -7,7 +7,7 @@ import { Section } from "@/components/marketing/Section";
 import { SectionHeader } from "@/components/marketing/SectionHeader";
 import { MarketingCard } from "@/components/marketing/MarketingCard";
 import { Button } from "@/components/ui/button";
-import { TESTIMONIALS } from "@/shared/testimonialsData";
+import { SHOW_TESTIMONIALS, TESTIMONIALS } from "@/shared/testimonialsData";
 import { CITIES, SERVICES } from "@/shared/contentData";
 
 function serviceLabel(slug: string) {
@@ -42,7 +42,7 @@ export function TestimonialsSection({ limit = 4, showViewAll = true }: Testimoni
   // "trusted for craftsmanship and communication" above a blank space and a
   // button offering to show reviews that are not there. Returns automatically
   // once the list is populated.
-  if (items.length === 0) return null;
+  if (!SHOW_TESTIMONIALS || items.length === 0) return null;
 
   return (
     <Section id="testimonials" variant="greige" divider>

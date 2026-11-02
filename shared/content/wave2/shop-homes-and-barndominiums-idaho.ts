@@ -2,20 +2,22 @@ import type { BlogPostData } from '../../blogContent';
 
 export const shopHomesAndBarndominiumsIdaho: BlogPostData = {
   slug: 'shop-homes-and-barndominiums-idaho',
-  title: 'Shop Homes and Barndominiums in Idaho',
-  seoTitle: 'Shop Homes and Barndominiums in Idaho',
+  title: 'Barndominium and shop home costs in Idaho, explained',
+  // Cost angle, so the post stops echoing the service page title
+  // ("Barndominium & Shop Homes" at /services/shop-homes-barndominiums).
+  seoTitle: 'Barndominium Cost in Idaho Explained',
   metaDescription:
-    'Shop homes and barndominiums in Idaho: why they cost $150 to $250 per square foot blended, the real trade-offs, zoning, financing, and insulating a shop.',
+    'Barndominium cost in Idaho explained: what a 1,600 sq ft home with a 1,200 sq ft shop costs by finish, the trade-offs, zoning, financing and insulation.',
   excerpt:
     'A post-frame or steel-framed building that pairs finished living space with a working shop costs less per square foot than a conventional house. Here is where the savings come from, what you give up, and who these actually suit.',
-  category: 'Design & Floor Plans',
+  category: 'Design & floor plans',
   hubSlug: 'home-design-and-plans',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-22',
   tags: ['barndominium', 'shop home', 'post frame', 'new construction', 'idaho'],
-  primaryKeyword: 'shop homes and barndominiums idaho',
+  primaryKeyword: 'barndominium cost idaho',
   secondaryKeywords: [
-    'barndominium cost idaho',
+    'shop homes and barndominiums idaho',
     'shop house treasure valley',
     'post frame home builder boise',
   ],
@@ -23,28 +25,28 @@ export const shopHomesAndBarndominiumsIdaho: BlogPostData = {
   featuredSnippetTargets: ['barndominium cost idaho', 'what is a shop home'],
   wordCountTarget: 'cluster',
   quickAnswer:
-    'A shop home or barndominium pairs finished living space with working shop space under one structure, usually post-frame or steel-framed. Blended across the whole building, they run $150 to $250 per square foot excluding land, because the shop portion is far cheaper to build than the living portion and the two share one foundation and one roof.',
+    'A shop home or barndominium pairs finished living space with working shop space under one structure, usually post-frame or steel-framed. They cost less per square foot than a conventional house because the shop portion is far cheaper to build than the living portion and the two share one foundation and one roof. For 1,600 square feet of living space with a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services.',
   keyTakeaways: [
     'The savings come from the shop, not from the house: finished living space costs what finished living space costs.',
-    'A blended $150 to $250 per square foot is the right way to budget, and the ratio of shop to living space moves it.',
-    'A 1,600 square foot living area with a 1,200 square foot shop commonly lands between $265,000 and $500,000 excluding land.',
+    'Budget the living space and the shop separately, then blend them: the ratio of shop to living space moves the per square foot figure more than anything else.',
+    'For 1,600 square feet of living space with a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services.',
     'Zoning, covenants, and appraisal comparables are the three things that stop these projects, not construction.',
     'A shop is a large uninsulated volume by default, and conditioning it properly is a design decision with a real cost.',
     'Fire separation, fume control, and sound isolation between the shop and the living space all need to be designed in.',
   ],
   relatedLinks: [
-    { url: '/services/shop-homes-barndominiums', anchor: 'Shop Homes and Barndominiums' },
-    { url: '/guides/custom-home-design-guide', anchor: 'Designing a Custom Home in the Treasure Valley' },
-    { url: '/blog/energy-efficient-home-building-boise', anchor: 'Building an Energy-Efficient Home' },
-    { url: '/blog/how-to-buy-a-buildable-lot-boise', anchor: 'How to Tell If a Lot Is Buildable' },
-    { url: '/blog/construction-loan-basics-idaho', anchor: 'How Construction Loans Work in Idaho' },
+    { url: '/services/shop-homes-barndominiums', anchor: 'Shop homes and barndominiums' },
+    { url: '/guides/custom-home-design-guide', anchor: 'Designing a custom home in the Treasure Valley' },
+    { url: '/blog/energy-efficient-home-building-boise', anchor: 'Building an energy-efficient home' },
+    { url: '/blog/how-to-buy-a-buildable-lot-boise', anchor: 'How to tell if a lot is buildable' },
+    { url: '/blog/construction-loan-basics-idaho', anchor: 'How construction loans work in Idaho' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [
     {
       question: 'How much does a barndominium cost in Idaho?',
       answer:
-        'Budget $150 to $250 per square foot blended across the whole building, excluding land. A common configuration of 1,600 square feet of living space with a 1,200 square foot shop lands roughly between $265,000 and $500,000. The blended figure moves with the ratio: more shop relative to living space pulls it down, more finished area pulls it toward a conventional house.',
+        'Price the living space and the shop separately, then blend them, because shop space costs a fraction of finished living space. For 1,600 square feet of living space with a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services; a well, septic or a long utility run adds to that. The blended figure moves with the ratio: more shop relative to living space pulls it down, more finished area pulls it toward a conventional house.',
     },
     {
       question: 'Why are shop homes cheaper per square foot?',
@@ -77,10 +79,10 @@ export const shopHomesAndBarndominiumsIdaho: BlogPostData = {
 <p><strong>A shop home, often called a barndominium, is a single building that combines finished living space with working shop space, usually framed as a post-frame or steel structure rather than conventional stick framing.</strong> The living portion is a real house with insulation, drywall, a kitchen, bathrooms, and a mechanical system. The shop portion is a clear-span working space with a concrete slab, large doors, and whatever level of heat, light, and power the owner needs. They share one foundation, one roof, one building permit, and one construction schedule, which is where a large part of the economy comes from. In this valley they show up most often on rural acreage in Kuna, Star, Middleton, and unincorporated Ada and Canyon County, built for people who need serious shop space and would rather not build two structures. We build them, and we also talk a fair number of people out of them, because they suit a specific situation extremely well and other situations poorly. Our service page is <a href="/services/shop-homes-barndominiums">shop homes and barndominiums</a>.</p>
 
 <h2 id="why-cheaper">Where the savings actually come from</h2>
-<p><strong>The shop is cheap; the house is not.</strong> This is the single most misunderstood thing about the category. People see a blended figure of $150 to $250 per square foot against a conventional custom home band of $250 to $400 and conclude that building this way makes a house cheaper. It does not. A finished kitchen costs the same in a post-frame building as it does in a stick-framed one, and so do the bathrooms, the flooring, the windows, the insulation, and the mechanical system. What pulls the blended number down is that a large portion of the total square footage is shop, and shop space has no cabinetry, no tile, almost no plumbing, simple lighting, and often exposed structure overhead. On top of that, the structural system genuinely is more efficient for large spans. Post-frame and steel structures carry loads to widely spaced columns, so you get clear span without interior bearing walls, a simpler roof structure, and less foundation than a conventional building of the same total footprint. Those are real savings, but they apply to the whole envelope, not to the finished rooms inside it.</p>
+<p><strong>The shop is cheap; the house is not.</strong> This is the single most misunderstood thing about the category. People see a blended per square foot figure well under a conventional custom home band of $250 to $400 and conclude that building this way makes a house cheaper. It does not. A finished kitchen costs the same in a post-frame building as it does in a stick-framed one, and so do the bathrooms, the flooring, the windows, the insulation, and the mechanical system. What pulls the blended number down is that a large portion of the total square footage is shop, and shop space has no cabinetry, no tile, almost no plumbing, simple lighting, and often exposed structure overhead. On top of that, the structural system genuinely is more efficient for large spans. Post-frame and steel structures carry loads to widely spaced columns, so you get clear span without interior bearing walls, a simpler roof structure, and less foundation than a conventional building of the same total footprint. Those are real savings, but they apply to the whole envelope, not to the finished rooms inside it.</p>
 
 <h2 id="the-numbers">Reading the blended number properly</h2>
-<p><strong>Budget $150 to $250 per square foot across the entire building, excluding land, and remember that the ratio of shop to living space is what moves it within that band.</strong> A common configuration is 1,600 square feet of living space with a 1,200 square foot shop, which commonly lands between $265,000 and $500,000. Shift that mix and the blended figure shifts with it. A building that is mostly finished living space with a small single-bay shop behaves and prices much more like a conventional house. A building with a modest apartment attached to a large working shop lands near the bottom of the band. That is why comparing a blended per square foot figure between two shop homes tells you very little unless you know the mix. When we price these, we price the living portion and the shop portion separately and then report the blend, because that is the only version of the number that lets you make decisions. It also makes the trade-offs visible: if the budget is tight, you can shrink the finished area without shrinking the shop, and see immediately what that does.</p>
+<p><strong>Price the living space and the shop separately, then blend them, and remember that the ratio of shop to living space is what moves the blended figure.</strong> A common configuration is 1,600 square feet of living space with a 1,200 square foot shop, for which our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. Shift that mix and the blended figure shifts with it. A building that is mostly finished living space with a small single-bay shop behaves and prices much more like a conventional house. A building with a modest apartment attached to a large working shop lands lowest per square foot. That is why comparing a blended per square foot figure between two shop homes tells you very little unless you know the mix. When we price these, we price the living portion and the shop portion separately and then report the blend, because that is the only version of the number that lets you make decisions. It also makes the trade-offs visible: if the budget is tight, you can shrink the finished area without shrinking the shop, and see immediately what that does.</p>
 
 <h2 id="trade-offs">The honest trade-offs</h2>
 <p><strong>You give up flexibility of appearance, some resale breadth, and easy financing, and you take on an envelope that is harder to condition.</strong> Modern shop homes can look excellent, with real siding, good windows, and proper detailing, but the underlying form is a long rectangle with a simple roof, and pushing it too far toward a conventional house appearance erodes the cost advantage that made it attractive. Resale is narrower. In a rural market where buyers want shop space, that is a feature and the pool of interested buyers is healthy. In a suburban market, the pool is smaller and appraisal comparables are thinner. The envelope is the technical trade-off: a shop is a big volume with a lot of exterior surface and very large doors, and heating it in a Treasure Valley January is not free. Finally, these buildings live or die on the separation between the two halves. Shop noise, shop dust, and shop fumes belong in the shop, and keeping them there is a design problem rather than a housekeeping problem.</p>

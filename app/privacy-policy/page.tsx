@@ -54,10 +54,10 @@ export default function PrivacyPolicyPage() {
       />
       <section className="py-16 md:py-24">
         <div className="container px-4">
-          <InteriorDocument heading={<h1>Privacy Policy for Boise Construction Co Services</h1>} contents={[{"id":"document-section-1","label":"Introduction"},{"id":"document-section-2","label":"Information We Collect"},{"id":"document-section-3","label":"How We Use Your Information"},{"id":"document-section-4","label":"Information Sharing"},{"id":"document-section-5","label":"Data Security"},{"id":"document-section-6","label":"Your Rights"},{"id":"document-section-7","label":"Contact Us"}]}>
+          <InteriorDocument heading={<h1>Privacy policy for Boise Construction Co services</h1>} contents={[{"id":"document-section-1","label":"Introduction"},{"id":"document-section-2","label":"Information we collect"},{"id":"document-section-3","label":"How we use your information"},{"id":"document-section-4","label":"Information sharing"},{"id":"cookies-analytics-advertising","label":"Cookies, analytics and advertising"},{"id":"document-section-5","label":"Data security"},{"id":"document-section-6","label":"Your rights"},{"id":"document-section-7","label":"Contact us"}]}>
 
             <p className="lead text-muted-foreground">
-              Last updated: January 2024
+              Last updated: October 17, 2026
             </p>
 
             <h2 id="document-section-1">Introduction</h2>
@@ -65,7 +65,7 @@ export default function PrivacyPolicyPage() {
               Boise Construction Co ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
             </p>
 
-            <h2 id="document-section-2">Information We Collect</h2>
+            <h2 id="document-section-2">Information we collect</h2>
             <p>We may collect information about you in various ways, including:</p>
             <ul>
               <li><strong>Personal Data:</strong> Name, email address, phone number, and mailing address when you request a quote or contact us.</li>
@@ -74,7 +74,7 @@ export default function PrivacyPolicyPage() {
               <li><strong>Usage Data:</strong> Information about how you use our website, including pages visited and features used.</li>
             </ul>
 
-            <h2 id="document-section-3">How We Use Your Information</h2>
+            <h2 id="document-section-3">How we use your information</h2>
             <p>We use the information we collect to:</p>
             <ul>
               <li>Provide and maintain our services</li>
@@ -85,7 +85,7 @@ export default function PrivacyPolicyPage() {
               <li>Send marketing communications (with your consent)</li>
             </ul>
 
-            <h2 id="document-section-4">Information Sharing</h2>
+            <h2 id="document-section-4">Information sharing</h2>
             <p>
               We do not sell your personal information. We may share your information with:
             </p>
@@ -95,12 +95,29 @@ export default function PrivacyPolicyPage() {
               <li>Law enforcement when required by law</li>
             </ul>
 
-            <h2 id="document-section-5">Data Security</h2>
+            <h2 id="cookies-analytics-advertising">Cookies, analytics and advertising</h2>
+            <p>
+              We use Google Analytics 4 (GA4) to understand how visitors use this site and Google Ads to measure which of our ads lead to quote requests, calls and texts. These tools set cookies and receive information about your visit, including your IP address, which Google processes under its own privacy policy (<a href="https://policies.google.com/privacy">https://policies.google.com/privacy</a>). When you tap Call or Text on our site, Google Ads is told that the tap happened, on which page, and the ad click identifier Google's tag saved if you arrived from one of our ads, so we can count calls and texts that come from our ads. The tap itself doesn't send Google your name, your own phone number or what you say or write. Google Analytics also records the tap, including the number tapped, which is our business number.
+            </p>
+            <p>
+              If your call goes through a Google forwarding number, Google connects the call and can see the calling number and call length, but not what's said.
+            </p>
+            <p>
+              We also use Microsoft Clarity to see how visitors use our pages through heatmaps and session recordings; form fields are masked so what you type is not recorded. Microsoft processes this under its own privacy statement (<a href="https://privacy.microsoft.com/privacystatement">https://privacy.microsoft.com/privacystatement</a>).
+            </p>
+            <p>
+              We also use the Meta Pixel and Meta's Conversions API to measure visits and inquiries from our Facebook and Instagram ads. The pixel records a page view. Meta's pixel may also record which buttons you click and basic information about the page, such as its title. Depending on Meta's settings, the pixel may also collect contact details you type into a form, in hashed form. When you submit an inquiry, our server may send Meta the Lead event with the type of project you chose and an inquiry category, the page address, the event time, a matching event id, your IP address, your browser user agent, and the Meta cookies _fbp and _fbc, so it can match the inquiry to an ad. Meta processes this under its own privacy policy (<a href="https://www.facebook.com/privacy/policy">https://www.facebook.com/privacy/policy</a>).
+            </p>
+            <p>
+              If you arrive from one of our ads or a link with campaign tags, our site saves the ad click identifier from that link (such as gclid, gbraid, wbraid or dclid) and the campaign tags in your browser for up to 90 days. If you then send an inquiry, we keep them with your inquiry in our customer records so we can tell which ad or campaign led to it.
+            </p>
+
+            <h2 id="document-section-5">Data security</h2>
             <p>
               We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.
             </p>
 
-            <h2 id="document-section-6">Your Rights</h2>
+            <h2 id="document-section-6">Your rights</h2>
             <p>You have the right to:</p>
             <ul>
               <li>Access your personal information</li>
@@ -109,7 +126,7 @@ export default function PrivacyPolicyPage() {
               <li>Opt-out of marketing communications</li>
             </ul>
 
-            <h2 id="document-section-7">Contact Us</h2>
+            <h2 id="document-section-7">Contact us</h2>
             <p>
               If you have questions about this Privacy Policy, please contact us at:
             </p>

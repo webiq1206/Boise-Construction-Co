@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const designBuildVsGeneralContractor: BlogPostData = {
   slug: 'design-build-vs-general-contractor',
-  title: 'Design-Build vs General Contractor for a New Home',
+  title: 'Design-build vs general contractor for a new home',
   seoTitle: 'Design-Build vs GC for a New Home',
   metaDescription:
     'Design-build vs architect plus general contractor for a new home: who draws it, who engineers it, who prices it, and where the budget gap opens up.',
   excerpt:
     'Building a house from nothing means someone has to draw it, engineer it, price it and permit it. The two delivery models divide that work very differently.',
-  category: 'Choosing a Builder',
+  category: 'Choosing a builder',
   hubSlug: 'choosing-a-builder',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-19',
@@ -35,11 +35,11 @@ export const designBuildVsGeneralContractor: BlogPostData = {
     'Design and engineering cost 5 to 12 percent of construction cost under either model.',
   ],
   relatedLinks: [
-    { url: '/guides/choose-home-builder-boise', anchor: 'How to Choose a Home Builder in Boise' },
-    { url: '/services/design-build', anchor: 'Design-Build Home Building' },
-    { url: '/guides/custom-home-design-guide', anchor: 'Designing a Custom Home' },
-    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to Compare Home Builder Bids' },
-    { url: '/blog/fixed-price-vs-cost-plus', anchor: 'Fixed Price vs Cost Plus' },
+    { url: '/guides/choose-home-builder-boise', anchor: 'How to choose a home builder in Boise' },
+    { url: '/services/design-build', anchor: 'Design-build home building' },
+    { url: '/guides/custom-home-design-guide', anchor: 'Designing a custom home' },
+    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to compare home builder bids' },
+    { url: '/blog/fixed-price-vs-cost-plus', anchor: 'Fixed price vs cost plus' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

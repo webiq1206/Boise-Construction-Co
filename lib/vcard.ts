@@ -1,4 +1,5 @@
 import { BUSINESS_INFO } from "@/lib/seo";
+import { CONTRACTOR_REGISTRATION_LABEL } from "@/shared/contractorRegistration";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 
 /** Escape special characters per vCard 3.0 (RFC 2426). */
@@ -41,6 +42,10 @@ export function buildBusinessVCard(): string {
   // not ship a link that may point at the wrong or a defunct account.
   const note = [
     "Treasure Valley design-build home builder.",
+    `${CONTRACTOR_REGISTRATION_LABEL}.`,
+    `${SITE_CONFIG.name} is a DBA of ${SITE_CONFIG.legalName}.`,
+    `Public representative: ${SITE_CONFIG.publicRepresentative}.`,
+    "Service-area business, not a staffed storefront.",
     SITE_CONFIG.address.serviceArea,
     `Hours: ${hoursSummary}`,
   ].join("\n");
@@ -53,9 +58,8 @@ export function buildBusinessVCard(): string {
     foldLine(`TEL;TYPE=WORK,VOICE:${tel}`),
     foldLine(`EMAIL;TYPE=WORK:${escapeVCard(SITE_CONFIG.email)}`),
     foldLine(`URL:${escapeVCard(SITE_CONFIG.siteUrl)}`),
-    // Locality only - matches public NAP (street is not shown on-site).
     foldLine(
-      `ADR;TYPE=WORK:;;${escapeVCard(SITE_CONFIG.address.city)};${escapeVCard(SITE_CONFIG.address.state)};;${escapeVCard(BUSINESS_INFO.address.country)}`,
+      `ADR;TYPE=WORK:;;${escapeVCard(SITE_CONFIG.address.street)};${escapeVCard(SITE_CONFIG.address.city)};${escapeVCard(SITE_CONFIG.address.state)};${escapeVCard(SITE_CONFIG.address.postalCode)};${escapeVCard(BUSINESS_INFO.address.country)}`,
     ),
     foldLine(`LABEL;TYPE=WORK:${escapeVCard(`${SITE_CONFIG.address.cityState} · ${SITE_CONFIG.address.serviceArea}`)}`),
     foldLine(`NOTE:${escapeVCard(note)}`),

@@ -60,7 +60,13 @@ export interface LeadContact {
   projectType: string;
   budget?: string;
   message?: string;
+  /** How the visitor asked to be reached: "phone" (call), "text" or "email". */
+  preferredContact?: "email" | "phone" | "text";
+  /** "callback" when the visitor used "Have us call you" on the quote form. */
+  requestKind?: "quote" | "callback";
 }
+
+const PREFERRED_CONTACT_LABELS = { phone: "Call", text: "Text", email: "Email" } as const;
 
 /** Optional county property enrichment shown to the internal team only. */
 export interface PropertyEnrichment {
@@ -779,12 +785,13 @@ export function buildAdminEmailHtml(
   const mailtoSubject = encodeURIComponent(`Re: your ${projectLabel} project | ${SITE_CONFIG.name}`);
 
   return wrapEmailHtml({
-    title: "New Consultation Request",
+    title: lead.requestKind === "callback" ? "Callback Request" : "New Consultation Request",
     subtitle: `${lead.name}${estimate ? " · estimate attached" : ""}`,
     content: `
       <p style="margin:0 0 20px;font-size:15px;color:${EMAIL_BRAND.text};line-height:1.6;">
         New lead from the website${estimate ? " with a completed estimate" : ""}. Everything you need to follow up is below, no CRM login required.
       </p>
+      ${lead.requestKind === "callback" ? `<p style="margin:0 0 20px;font-size:15px;font-weight:600;color:${EMAIL_BRAND.text};line-height:1.6;">Callback request: ${escapeHtml(firstName)} asked us to call ${escapeHtml(lead.phone)}.</p>` : ""}
 
       <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 26px;">
         <tr>
@@ -808,6 +815,7 @@ export function buildAdminEmailHtml(
           <tr><td style="${LABEL_CELL}">Name</td><td style="${VALUE_CELL}">${escapeHtml(lead.name)}</td></tr>
           <tr><td style="${LABEL_CELL}">Phone</td><td style="${CELL}"><a href="${escapeHtml(telHref)}" style="color:${EMAIL_BRAND.accent};text-decoration:none;">${escapeHtml(lead.phone)}</a></td></tr>
           <tr><td style="${LABEL_CELL}">Email</td><td style="${CELL}"><a href="mailto:${escapeHtml(lead.email)}" style="color:${EMAIL_BRAND.accent};text-decoration:none;">${escapeHtml(lead.email)}</a></td></tr>
+          ${lead.preferredContact ? `<tr><td style="${LABEL_CELL}">Preferred contact</td><td style="${VALUE_CELL}">${lead.requestKind === "callback" ? "Call back" : PREFERRED_CONTACT_LABELS[lead.preferredContact]}</td></tr>` : ""}
           <tr><td style="${LABEL_CELL}">Address</td><td style="${VALUE_CELL}">${lead.address ? `${escapeHtml(lead.address)}${lead.zip ? ` ${escapeHtml(lead.zip)}` : ""}` : "Not provided"}</td></tr>
           <tr><td style="${LABEL_CELL}">Project</td><td style="${VALUE_CELL}">${escapeHtml(projectLabel)}</td></tr>
           ${lead.budget ? `<tr><td style="${LABEL_CELL}">Desired budget</td><td style="${VALUE_CELL};font-weight:600;">${escapeHtml(lead.budget)}</td></tr>` : ""}
@@ -881,6 +889,7 @@ export function buildCustomerEmailHtml(
 
 export function buildAdminSubject(lead: LeadContact, estimate: VerifiedEstimate | null): string {
   const projectLabel = estimate ? PROJECT_LABELS[estimate.project].label : lead.projectType;
+  if (lead.requestKind === "callback") return `Callback request: ${lead.name} · ${lead.phone}`;
   return estimate
     ? `New lead: ${lead.name} · ${projectLabel} · ${formatUsd(estimate.priceLow)} to ${formatUsd(estimate.priceHigh)}`
     : `New consultation request: ${lead.name}`;

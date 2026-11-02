@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const coveredOutdoorLivingNewHome: BlogPostData = {
   slug: 'covered-outdoor-living-new-home',
-  title: 'Designing Covered Outdoor Living Into a New Home',
+  title: 'Designing covered outdoor living into a new home',
   seoTitle: 'Covered Outdoor Living in a New Home',
   metaDescription:
-    'Covered outdoor space is far cheaper built with the house than added later. Orientation for valley sun, what to rough in at framing, and screened versus open.',
+    'Covered outdoor space is cheaper built with the house than added later. Orientation for valley sun, what to rough in at framing, and screened versus open.',
   excerpt:
     'A covered patio built with the house shares the roof structure, the footings, and one mobilisation of every trade. Added three years later it shares none of them. Here is how to design it properly the first time.',
-  category: 'Design & Floor Plans',
+  category: 'Design & floor plans',
   hubSlug: 'home-design-and-plans',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-28',
@@ -33,11 +33,11 @@ export const coveredOutdoorLivingNewHome: BlogPostData = {
     'Decide screened versus open before framing, because retrofitting screen to a structure not built for it looks like an afterthought.',
   ],
   relatedLinks: [
-    { url: '/guides/custom-home-design-guide', anchor: 'Designing a Custom Home in the Treasure Valley' },
-    { url: '/blog/custom-home-floor-plan-ideas-boise', anchor: 'Floor Plan Ideas That Work Here' },
-    { url: '/blog/energy-efficient-home-building-boise', anchor: 'Building an Energy-Efficient Home' },
-    { url: '/blog/what-drives-home-building-costs-boise', anchor: 'What Drives Home Building Costs' },
-    { url: '/services/custom-home-builder', anchor: 'Custom Home Builder' },
+    { url: '/guides/custom-home-design-guide', anchor: 'Designing a custom home in the Treasure Valley' },
+    { url: '/blog/custom-home-floor-plan-ideas-boise', anchor: 'Floor plan ideas that work here' },
+    { url: '/blog/energy-efficient-home-building-boise', anchor: 'Building an energy-efficient home' },
+    { url: '/blog/what-drives-home-building-costs-boise', anchor: 'What drives home building costs' },
+    { url: '/services/custom-home-builder', anchor: 'Custom home builder' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

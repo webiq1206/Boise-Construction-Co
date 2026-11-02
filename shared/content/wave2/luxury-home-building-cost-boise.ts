@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const luxuryHomeBuildingCostBoise: BlogPostData = {
   slug: 'luxury-home-building-cost-boise',
-  title: 'What a Luxury Home Costs to Build in Boise',
-  seoTitle: 'What a Luxury Home Costs to Build in Boise',
+  title: 'What a luxury home costs to build in Boise',
+  seoTitle: 'Luxury Home Building Cost in Boise',
   metaDescription:
     'Luxury builds in the Boise area regularly exceed $450 per square foot. Here is what separates them from a $300 home, and which of that spend you notice.',
   excerpt:
     'The gap between a $300 and a $450 per square foot home is glazing, roof geometry, millwork, stone, mechanical systems, and site. Some of it shows. Some of it does not.',
-  category: 'Home Building Costs',
+  category: 'Home building costs',
   hubSlug: 'home-building-costs',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-30',
@@ -35,11 +35,11 @@ export const luxuryHomeBuildingCostBoise: BlogPostData = {
     'Some of the best money in a high-end home is invisible once the drywall is up.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
-    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to Build a House in Boise' },
-    { url: '/blog/what-drives-home-building-costs-boise', anchor: 'What Drives Home Building Costs' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
+    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to build a house in Boise' },
+    { url: '/blog/what-drives-home-building-costs-boise', anchor: 'What drives home building costs' },
     { url: '/blog/building-in-the-boise-foothills', anchor: 'Building in the Boise Foothills' },
-    { url: '/services/custom-home-builder', anchor: 'Custom Home Building' },
+    { url: '/services/custom-home-builder', anchor: 'Custom home building' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const customHomeCostPerSquareFootBoise: BlogPostData = {
   slug: 'custom-home-cost-per-square-foot-boise',
-  title: 'Custom Home Cost Per Square Foot in Boise',
-  seoTitle: 'Custom Home Cost Per Square Foot in Boise',
+  title: 'Custom home cost per square foot in Boise',
+  seoTitle: 'Custom Home Cost per Sq Ft in Boise',
   metaDescription:
-    'What a Boise cost per square foot figure includes, why larger homes cost less per square foot, and why two builders can quote rates that cannot be compared.',
+    'Custom home cost per square foot in Boise: what the figure includes, why bigger homes cost less per foot, and why rates from two builders rarely compare.',
   excerpt:
     'A per-square-foot rate is an output of a finished project, not a price. Here is what it hides, why size and storeys change it, and how to compare builders properly.',
-  category: 'Home Building Costs',
+  category: 'Home building costs',
   hubSlug: 'home-building-costs',
   author: 'Boise Construction Co',
   publishedAt: '2026-06-09',
@@ -35,12 +35,12 @@ export const customHomeCostPerSquareFootBoise: BlogPostData = {
     'Comparing two builders on rate alone is meaningless unless the inclusions match.',
   ],
   relatedLinks: [
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise Home Building Cost Guide' },
-    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to Build a House in Boise' },
-    { url: '/blog/what-drives-home-building-costs-boise', anchor: 'What Drives Home Building Costs' },
-    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to Compare Builder Bids' },
-    { url: '/blog/single-story-vs-two-story-home', anchor: 'Single Story vs Two Story' },
-    { url: '/#calculator', anchor: 'Cost Calculator' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'Boise home building cost guide' },
+    { url: '/blog/cost-to-build-a-house-boise', anchor: 'Cost to build a house in Boise' },
+    { url: '/blog/what-drives-home-building-costs-boise', anchor: 'What drives home building costs' },
+    { url: '/blog/how-to-compare-builder-bids', anchor: 'How to compare builder bids' },
+    { url: '/blog/single-story-vs-two-story-home', anchor: 'Single story vs two story' },
+    { url: '/#calculator', anchor: 'Cost calculator' },
   ],
   faqs: [
     {

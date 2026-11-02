@@ -2,13 +2,13 @@ import type { BlogPostData } from '../../blogContent';
 
 export const impactFeesAndUtilityConnections: BlogPostData = {
   slug: 'impact-fees-and-utility-connections',
-  title: 'Impact Fees and Utility Connections in Ada and Canyon County',
+  title: 'Impact fees and utility connections in Ada and Canyon County',
   seoTitle: 'Impact Fees and Utility Connections',
   metaDescription:
-    'Impact fees, connection fees, and meter fees are separate charges from separate agencies. What each pays for in Ada and Canyon County, and why amounts vary.',
+    'Impact fees, connection fees and meter fees are separate charges from separate agencies. What each pays for in Ada and Canyon County, and why amounts vary.',
   excerpt:
     'Impact fees and connection fees are separate charges levied by separate bodies. Here is what each one is, who charges it, and why nobody should quote you a number early.',
-  category: 'Land & Lots',
+  category: 'Land & lots',
   hubSlug: 'land-and-lots',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-28',
@@ -32,13 +32,13 @@ export const impactFeesAndUtilityConnections: BlogPostData = {
     'Rural parcels often trade fees for infrastructure, which is usually the more expensive trade.',
   ],
   relatedLinks: [
-    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying Land to Build On in the Treasure Valley' },
-    { url: '/blog/how-to-buy-a-buildable-lot-boise', anchor: 'How to Tell If a Lot Is Actually Buildable' },
-    { url: '/blog/lot-evaluation-checklist', anchor: 'Lot Evaluation Checklist' },
-    { url: '/blog/building-in-the-boise-foothills', anchor: 'What It Costs to Build in the Boise Foothills' },
-    { url: '/services/lot-evaluation', anchor: 'Lot Evaluation' },
-    { url: '/services/build-on-your-lot', anchor: 'Build on Your Lot' },
-    { url: '/#calculator', anchor: 'Cost Calculator' },
+    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying land to build on in the Treasure Valley' },
+    { url: '/blog/how-to-buy-a-buildable-lot-boise', anchor: 'How to tell if a lot is actually buildable' },
+    { url: '/blog/lot-evaluation-checklist', anchor: 'Lot evaluation checklist' },
+    { url: '/blog/building-in-the-boise-foothills', anchor: 'What it costs to build in the Boise Foothills' },
+    { url: '/services/lot-evaluation', anchor: 'Lot evaluation' },
+    { url: '/services/build-on-your-lot', anchor: 'Build on your lot' },
+    { url: '/#calculator', anchor: 'Cost calculator' },
   ],
   faqs: [
     {

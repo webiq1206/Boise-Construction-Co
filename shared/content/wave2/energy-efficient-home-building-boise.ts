@@ -2,13 +2,14 @@ import type { BlogPostData } from '../../blogContent';
 
 export const energyEfficientHomeBuildingBoise: BlogPostData = {
   slug: 'energy-efficient-home-building-boise',
-  title: 'Building an Energy-Efficient Home in Boise',
-  seoTitle: 'Building an Energy-Efficient Home in Boise',
+  title: 'Building an energy-efficient home in Boise',
+  // How-to intent; the service page owns "energy-efficient homes".
+  seoTitle: 'Energy-Efficient Home Building Guide',
   metaDescription:
     'How to build an energy-efficient home in Boise: air sealing, insulation, window specs, right-sized HVAC, ducts inside, and blower-door verification.',
   excerpt:
     'Performance is bought in a specific order: envelope, then equipment, then verification. Here is what actually works in the Treasure Valley climate, what it costs, and which upgrades pay back and which do not.',
-  category: 'Design & Floor Plans',
+  category: 'Design & floor plans',
   hubSlug: 'home-design-and-plans',
   author: 'Boise Construction Co',
   publishedAt: '2026-07-15',
@@ -33,11 +34,11 @@ export const energyEfficientHomeBuildingBoise: BlogPostData = {
     'High-performance homes run $275 to $425 per finished square foot, and the upgrade over code minimum is about 3 to 8 percent, or roughly $20,000 to $55,000.',
   ],
   relatedLinks: [
-    { url: '/guides/custom-home-design-guide', anchor: 'Designing a Custom Home in the Treasure Valley' },
-    { url: '/services/energy-efficient-homes', anchor: 'Energy-Efficient Homes' },
-    { url: '/blog/single-story-vs-two-story-home', anchor: 'Single Story vs Two Story' },
-    { url: '/blog/custom-home-floor-plan-ideas-boise', anchor: 'Floor Plan Ideas That Work Here' },
-    { url: '/blog/what-drives-home-building-costs-boise', anchor: 'What Drives Home Building Costs' },
+    { url: '/guides/custom-home-design-guide', anchor: 'Designing a custom home in the Treasure Valley' },
+    { url: '/services/energy-efficient-homes', anchor: 'Energy-efficient homes' },
+    { url: '/blog/single-story-vs-two-story-home', anchor: 'Single story vs two story' },
+    { url: '/blog/custom-home-floor-plan-ideas-boise', anchor: 'Floor plan ideas that work here' },
+    { url: '/blog/what-drives-home-building-costs-boise', anchor: 'What drives home building costs' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

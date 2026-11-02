@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Metadata } from "next";
-import { Button } from "@/components/ui/button";
+import { FamilyButton } from "@/components/family/Button";
+import { PrimaryCta } from "@/components/approved/PrimaryCta";
 import { Card, CardContent } from "@/components/ui/card";
 import { Home, ArrowRight, MessageSquare, Phone, Wrench } from "lucide-react";
 import { DisplayNum } from "@/components/marketing";
@@ -30,7 +31,7 @@ export default function NotFound() {
         </div>
 
         <h2 className="text-2xl md:text-3xl font-serif tracking-tight mb-4 text-foreground">
-          Page Not Found
+          Page not found
         </h2>
         <p className="text-lg text-muted-foreground mb-8">
           This page doesn&apos;t exist or may have moved. Let us help you find what you&apos;re looking for.
@@ -38,13 +39,13 @@ export default function NotFound() {
 
         <Card className="marketing-card mb-8 text-left">
           <CardContent className="pt-6">
-            <h3 className="font-normal mb-4 text-foreground">Popular Pages</h3>
+            <h3 className="font-normal mb-4 text-foreground">Popular pages</h3>
             <div className="grid grid-cols-2 gap-2">
               {[
-                { href: "/services", label: "Our Services" },
-                { href: "/#consult", label: "Free Consultation" },
-                { href: "/blog", label: "Blog and Ideas" },
-                { href: "/#calculator", label: "Project Estimator" },
+                { href: "/services", label: "Our services" },
+                { href: "/#consult", label: "Free consultation" },
+                { href: "/blog", label: "Blog and ideas" },
+                { href: "/#calculator", label: "Project estimator" },
               ].map((item) => (
                 <Link
                   key={item.href}
@@ -60,29 +61,23 @@ export default function NotFound() {
         </Card>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button variant="brand" size="lg" asChild>
-            <Link href="/">
-              <Home className="h-5 w-5 mr-2" />
-              Go to Homepage
-            </Link>
-          </Button>
+          <PrimaryCta href="/" trackingLocation="not_found">
+            <Home className="h-5 w-5" aria-hidden="true" />
+            Go to Homepage
+          </PrimaryCta>
           <div className="flex flex-col items-center gap-1">
-            <Button variant="brandOutline" size="lg" asChild>
-              <a href={SITE_CONFIG.phoneHref}>
-                <Phone className="h-5 w-5 mr-2" />
-                Call {SITE_CONFIG.phone}
-              </a>
-            </Button>
+            <FamilyButton href={SITE_CONFIG.phoneHref} variant="secondary" size="lg">
+              <Phone className="h-5 w-5" aria-hidden="true" />
+              Call {SITE_CONFIG.phone}
+            </FamilyButton>
             <SaveContactLink className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Save to contacts
             </SaveContactLink>
           </div>
-          <Button variant="brandOutline" size="lg" asChild>
-            <a href={SITE_CONFIG.phoneSmsHref} data-testid="link-404-text">
-              <MessageSquare className="h-5 w-5 mr-2" />
-              Text us
-            </a>
-          </Button>
+          <FamilyButton href={SITE_CONFIG.phoneSmsHref} variant="secondary" size="lg" data-testid="link-404-text">
+            <MessageSquare className="h-5 w-5" aria-hidden="true" />
+            Text us
+          </FamilyButton>
         </div>
 
         <div className="mt-12">

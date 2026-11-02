@@ -23,12 +23,16 @@ const root = path.join(__dirname, "..", "..");
 const assets = path.join(root, "scripts", "og-assets");
 const brandDir = path.join(root, "public", "brand");
 
+/** Original public/brand/BRAND.md subtitle. The served file omits the year. */
+const BRAND_KIT_SUBTITLE_SOURCE = "Custom Construction · Boise & the Treasure Valley, Idaho · Est. 2020";
+
 const BRAND = {
   name: "Boise Construction Co",
   tagline: "CUSTOM HOME BUILDER",
   region: "TREASURE VALLEY \u00b7 IDAHO",
   established: "EST 2020",
   slug: "boise-construction-co",
+  sourceSubtitle: BRAND_KIT_SUBTITLE_SOURCE,
 };
 
 const COLOR = {

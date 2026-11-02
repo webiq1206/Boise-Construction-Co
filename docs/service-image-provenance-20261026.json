@@ -1,0 +1,10 @@
+[
+  {
+    "route": "/services/custom-home-builder",
+    "publicPath": "/images/service-scenes/home-exterior.webp",
+    "source": "p5-home-exterior-design-concept-1080.webp",
+    "sha256": "a440dd40027b64608011a538a3d9d9dbd775030e24631a04890265eb2a655127",
+    "provenance": "AI-generated architectural service imagery approved October26; not a completed P5 project or location-specific example",
+    "alt": "Stone and pale stucco home with dark pitched roofs, a covered entry and natural landscaping"
+  }
+]

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/marketing";
 import { HOW_WE_BUILD_STEPS } from "@/shared/siteContent";
+import { contentImageAlt } from "@/shared/imageAlts";
 import { SITE_IMAGES } from "@/shared/siteImages";
 import { GRAIN_URL } from "@/lib/grain";
 
@@ -24,12 +25,13 @@ export function ProcessSection() {
         <div className="ed-panel-media">
           <Image
             src={SITE_IMAGES.processInProgress}
-            alt="Worker checking interior framing on a new home"
+            alt={contentImageAlt(SITE_IMAGES.processInProgress)}
             fill
             loading="lazy"
             sizes="(max-width: 820px) 100vw, 43vw"
             className="object-cover img-brand-grade"
           />
+          <p className="absolute bottom-4 left-4 z-10 text-xs text-white">Representative imagery</p>
           <div
             className="pointer-events-none absolute inset-0"
             style={{ backgroundImage: GRAIN_URL, backgroundRepeat: "repeat", opacity: 0.028 }}

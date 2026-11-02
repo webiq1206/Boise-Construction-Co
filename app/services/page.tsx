@@ -1,4 +1,4 @@
-import { InteriorHero,InteriorPage } from '@/components/approved/InteriorLayout';
+import { CONCEPT_IMAGERY_LABEL,InteriorHero,InteriorPage } from '@/components/approved/InteriorLayout';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { AreaCard } from '@/components/marketing/AreaCard';
 import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
@@ -6,15 +6,16 @@ import { Section } from '@/components/marketing/Section';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { Reveal } from '@/components/Reveal';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { Button } from '@/components/ui/button';
+import { HeroTextLink } from '@/components/approved/PrimaryCta';
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildCanonical,FEED_ALTERNATES,fitDescription } from '@/lib/page-metadata';
 import { generateBreadcrumbSchema } from '@/lib/schema';
 import { getBaseUrl } from '@/lib/seo';
 import { servicePath } from '@/lib/seo-routes';
 import { CITY_HERO_IMAGES } from '@/shared/cityServiceImages';
-import { CITIES,SERVICES } from '@/shared/contentData';
+import { CITIES,SERVICES,planningLabel,serviceLabel } from '@/shared/contentData';
 import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
+import { contentImageAlt } from '@/shared/imageAlts';
 import { getServiceBackground } from '@/shared/serviceBackgrounds';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { ArrowRight } from 'lucide-react';
@@ -22,13 +23,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 /*
- * 55 characters once the layout appends " | Boise Construction Co", down from
- * 64. Past roughly 60 Google truncates the tail, and the tail here is the
- * brand. "Home Building" is the term that actually earns the click.
+ * 59 characters once " | Boise Construction Co" is appended. This route is
+ * the one source for the /services title and description (the render-time
+ * copy in lib/brand-page-metadata.ts that used to replace them is gone).
  */
-const TITLE = 'Home Building | Treasure Valley';
+const TITLE = 'Home Building Services in Boise, ID';
 const DESCRIPTION =
-  fitDescription('Design-build home building in Boise, Meridian, Eagle, Nampa and the Treasure Valley. Custom homes, semi-custom homes, builds on your own lot, and permit-ready plans under one accountable team.');
+  fitDescription('Home building services in Boise and the Treasure Valley: custom homes, semi-custom plans, build on your lot, design-build, additions and detached ADUs.');
 
 export const metadata: Metadata = withBrandPageMetadata(({
   title: { absolute: `${TITLE} | ${SITE_CONFIG.name}` },
@@ -77,8 +78,8 @@ export default function ServicesIndexPage() {
         <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Services' }]} />
         <p className="ed-eyebrow mt-8" style={{ color: 'rgb(255 255 255 / 0.72)' }}>Our services</p>
         <h1 className="ed-display ed-statement-display text-inverse-foreground">
-          Practical ways to make{' '}
-            <em className="not-italic" style={{ color: 'var(--ed-accent)' }}>home fit</em> here
+          Home building services in{' '}
+            <em className="not-italic" style={{ color: 'var(--ed-accent)' }}>Boise</em> and the Treasure Valley
         </h1>
         <p className="ed-lede mt-8 max-w-[44ch] text-inverse-foreground/85">
           From a new home on your lot to useful space added to the home you already live in,
@@ -87,7 +88,7 @@ export default function ServicesIndexPage() {
       </InteriorHero>
 
       {/* Approved photo-led service directory. */}
-      <section className="interior-service-grid" aria-label="All services">{SERVICES.map(service=><Link className="interior-service-card" href={servicePath(service.slug)} key={service.slug}><img src={getServiceBackground(service.slug)} alt={service.name} width={900} height={675} loading="lazy"/><div><h2>{service.name}</h2><ArrowRight size={18} aria-hidden="true"/></div><p>{service.shortDescription}</p><p className="interior-price">Planning from {service.planningFrom}</p></Link>)}</section>
+      <section className="interior-service-grid" aria-label="All services">{SERVICES.map(service=><Link className="interior-service-card" href={servicePath(service.slug)} key={service.slug}><img src={getServiceBackground(service.slug)} alt={contentImageAlt(getServiceBackground(service.slug)) || service.name} width={900} height={675} loading="lazy"/><div><h2>{serviceLabel(service)}</h2><ArrowRight size={18} aria-hidden="true"/></div><p>{service.shortDescription}</p><p className="interior-price">{planningLabel(service.planningFrom)}</p></Link>)}</section>
 
       <EstimatePromptBand
         title={
@@ -116,13 +117,14 @@ export default function ServicesIndexPage() {
               </p>
             </Reveal>
           </div>
-          <div className="mt-[clamp(40px,5vw,72px)] grid gap-4 sm:grid-cols-3">
+          <div className="mt-[clamp(40px,5vw,72px)] grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {CITIES.map((city, i) => (
               <Reveal key={city.slug} delay={Math.min(i, 7) * 40}>
                 <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />
               </Reveal>
             ))}
           </div>
+          <p className="ed-small mt-4 text-muted-foreground">{CONCEPT_IMAGERY_LABEL}</p>
         </div>
       </Section>
 
@@ -137,9 +139,9 @@ export default function ServicesIndexPage() {
               <p className="ed-body">
                 Book a free planning consultation or get an instant build cost range.
               </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4 [&>*]:w-full sm:[&>*]:w-auto">
+              <div className="mt-8 interior-hero-actions">
                 <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
-                <Button variant="brandOutline" asChild><a href="/#consult">{CTA_SECONDARY}</a></Button>
+                <HeroTextLink href="/#consult">{CTA_SECONDARY}</HeroTextLink>
               </div>
             </div>
           </div>

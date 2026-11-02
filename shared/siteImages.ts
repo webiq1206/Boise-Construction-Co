@@ -10,8 +10,7 @@ export const SITE_IMAGES = {
   hero: "/images/construction/custom-home-exterior.webp",
   /** Design-build / plan review split panels. */
   process: "/images/construction/plans-and-selections.webp",
-  /** "Where your money goes" value band - a carpenter setting custom cabinetry,
-   *  reinforcing that the budget is spent on craftsmanship, not overhead. */
+  /** "Where your money goes" value band - mechanical rough-in with pipes and wiring. */
   valueCraft: "/images/construction/mechanical-rough-in.webp",
   /** A house being framed - process sections. */
   processInProgress: "/images/framing-in-progress-branded.webp",
@@ -49,6 +48,8 @@ export const CONSTRUCTION_IMAGES = {
   interior: c("new-home-interior"),
   kitchen: c("new-home-kitchen"),
   lot: c("buildable-lot"),
+  /** Finished Treasure Valley ADU - never use empty-lot photos for ADU pages. */
+  adu: "/images/projects/treasure-valley-adu-finished.webp",
   foothills: c("foothills-building-site"),
   ruralSite: c("rural-site-work"),
   plans: c("plans-and-selections"),

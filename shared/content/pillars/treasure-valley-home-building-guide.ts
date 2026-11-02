@@ -2,10 +2,10 @@ import type { GuidePageData } from '../../guideContent';
 
 export const treasureValleyHomeBuildingGuide: GuidePageData = {
   slug: 'treasure-valley-home-building-guide',
-  title: 'Treasure Valley Home Building Guide',
-  seoTitle: 'Treasure Valley Home Building Guide by City',
+  title: 'Treasure Valley home building guide',
+  seoTitle: 'Treasure Valley Home Building Guide',
   metaDescription:
-    'What changes as you build a new home across the Treasure Valley: Ada and Canyon County permits, valley floor versus foothills cost, serviced lots and acreage.',
+    'What changes as you build a new home across the Treasure Valley: Ada and Canyon permits, valley floor versus foothills cost, serviced lots and acreage.',
   excerpt:
     'The parcel sets your budget more than the city name does. Here is what actually changes as you move across the Treasure Valley, from Ada and Canyon County permitting to the foothills, irrigation ditches, and rural site work, with a guide for each of the eight cities we build in.',
   hubSlug: 'treasure-valley-locations',
@@ -34,13 +34,13 @@ export const treasureValleyHomeBuildingGuide: GuidePageData = {
   linkedServices: ['custom-home-builder', 'semi-custom-homes', 'build-on-your-lot'],
   linkedCities: ['boise', 'meridian', 'eagle', 'kuna', 'star', 'middleton', 'nampa', 'caldwell'],
   relatedLinks: [
-    { url: '/guides/boise-home-building-cost-guide', anchor: 'What It Costs to Build a Home in Boise' },
-    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying Land to Build On in the Treasure Valley' },
-    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise Home Building Process' },
-    { url: '/guides/custom-home-design-guide', anchor: 'Designing a Custom Home' },
-    { url: '/guides/choose-home-builder-boise', anchor: 'How to Choose a Home Builder' },
-    { url: '/areas', anchor: 'Treasure Valley Service Areas' },
-    { url: '/services/build-on-your-lot', anchor: 'Build on Your Lot' },
+    { url: '/guides/boise-home-building-cost-guide', anchor: 'What it costs to build a home in Boise' },
+    { url: '/guides/buying-land-to-build-boise', anchor: 'Buying land to build on in the Treasure Valley' },
+    { url: '/guides/boise-home-building-process-guide', anchor: 'The Boise home building process' },
+    { url: '/guides/custom-home-design-guide', anchor: 'Designing a custom home' },
+    { url: '/guides/choose-home-builder-boise', anchor: 'How to choose a home builder' },
+    { url: '/areas', anchor: 'Treasure Valley service areas' },
+    { url: '/services/build-on-your-lot', anchor: 'Build on your lot' },
     { url: '/contact', anchor: 'Contact' },
   ],
   faqs: [

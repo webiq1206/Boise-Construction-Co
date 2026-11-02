@@ -17,12 +17,20 @@ export async function GET(_request: NextRequest, props: { params: Promise<{ key:
       jpeg: "image/jpeg",
       png: "image/png",
       webp: "image/webp",
+      gif: "image/gif",
+      heic: "image/heic",
+      heif: "image/heif",
     };
 
     return new NextResponse(buffer, {
       headers: {
         "Content-Type": mimeTypes[ext ?? ""] ?? "application/octet-stream",
         "Content-Disposition": `inline; filename="${key.split("/").pop()}"`,
+        // Stored files are visitor uploads: never sniffed into another type,
+        // never cached by a shared proxy, never indexed.
+        "X-Content-Type-Options": "nosniff",
+        "Cache-Control": "private, no-store",
+        "X-Robots-Tag": "noindex, nofollow",
       },
     });
   } catch (error) {

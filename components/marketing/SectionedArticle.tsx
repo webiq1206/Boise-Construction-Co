@@ -1,3 +1,4 @@
+import { labelTableCells } from '@/lib/tableLabels';
 import {
   splitHtmlByH2,
   shouldUseCollapsibleSections,
@@ -63,13 +64,13 @@ function renderSectionBody(
 
 export function SectionedArticle({
   html,
-  defaultOpenCount = 3,
+  defaultOpenCount = 99,
   testId = 'article-content',
   forceExpanded = false,
   inlineFigures = [],
 }: SectionedArticleProps) {
   // A focusable region makes wide comparisons usable with keyboard and touch.
-  html = html.replace(/<table\b/gi, '<div role="region" aria-label="Scrollable comparison table" tabindex="0" class="article-table-scroll"><table')
+  html = labelTableCells(html).replace(/<table\b/gi, '<div role="region" aria-label="Scrollable comparison table" tabindex="0" class="article-table-scroll"><table')
     .replace(/<\/table>/gi, '</table></div>');
   const sections = splitHtmlByH2(html);
   const hasInlineFigures = inlineFigures.length > 0;
@@ -127,9 +128,6 @@ export function SectionedArticle({
                 className="blog-content [&_h2]:mt-0 [&_h2]:mb-0 [&_h2]:text-xl md:[&_h2]:text-2xl flex items-start justify-between gap-4"
                 dangerouslySetInnerHTML={{ __html: section.headingHtml }}
               />
-              <span className="text-xs text-muted-foreground mt-1 block group-open:hidden">
-                Expand section
-              </span>
             </summary>
             <div className="blog-content pb-8 pt-0">
               {renderSectionBody(index, section.bodyHtml, inlineFigures, '')}

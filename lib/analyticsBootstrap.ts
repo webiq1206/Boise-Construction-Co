@@ -1,3 +1,4 @@
+import {googlePhoneReplacementBootstrap} from './googlePhoneReplacement.ts';
 /** Gate vendor loading by the actual browser host, including production builds used in QA. */
 export function googleTagBootstrap(options: {
   hostname: string;
@@ -16,13 +17,32 @@ export function googleTagBootstrap(options: {
   if (document.getElementById('p5-google-tag')) return;
   window.dataLayer = window.dataLayer || [];
   window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+  var consentSet = false;
+  for (var i = 0; i < window.dataLayer.length; i++) {
+    var row = window.dataLayer[i];
+    if (row && row[0] === 'consent' && row[1] === 'default') consentSet = true;
+  }
+  if (!consentSet) {
+    window.gtag('consent', 'default', {
+      analytics_storage: 'granted',
+      ad_storage: 'granted',
+      ad_user_data: 'granted',
+      ad_personalization: 'granted',
+      wait_for_update: 500
+    });
+  }
   window.gtag('js', new Date());
   window.gtag('config', config.measurementId);
   window.gtag('config', config.adsId);
-  if (config.phoneConversionLabel && config.phoneNumber) {
-    window.gtag('config', config.adsId + '/' + config.phoneConversionLabel, { phone_conversion_number: config.phoneNumber });
+  ${googlePhoneReplacementBootstrap()}
+  function entryPath() {
+    try {
+      if (window.p5Consent && window.p5Consent.analytics_storage === 'granted') {
+        if (!sessionStorage.getItem('p5_entry_path')) sessionStorage.setItem('p5_entry_path', window.location.pathname);
+      } else if (window.p5ConsentResolved) sessionStorage.removeItem('p5_entry_path');
+    } catch (e) {}
   }
-  try { if (!sessionStorage.getItem('p5_entry_path')) sessionStorage.setItem('p5_entry_path', window.location.pathname); } catch (e) {}
+  window.addEventListener('p5:consent', entryPath); entryPath();
   var script = document.createElement('script');
   script.id = 'p5-google-tag';
   script.async = true;
