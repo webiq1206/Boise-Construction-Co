@@ -7,6 +7,7 @@ import {FAQSection} from '@/components/FAQSection';
 import {contentImageAlt} from '@/shared/imageAlts';
 import {PlanningRangeExplorer} from '@/components/PlanningRangeExplorer';
 import {brands,cities,serviceExtras} from './family-content';
+import {DesignGallery} from '@/components/sections/DesignGallery';
 const Arrow=()=> <ArrowUpRight size={18} aria-hidden="true"/>;
 function Title({lines}:{lines:string[]}){return <>{lines[0]}<br/><em>{lines[1]}</em></>}
 function Rows({items,numbered=false}:{items:[string,string][];numbered?:boolean}){return <Accordion type="single" collapsible defaultValue="0" className="f-accordion">{items.map(([title,copy],i)=><AccordionItem value={String(i)} key={title}><AccordionTrigger>{numbered&&<span className="f-number">0{i+1}</span>}<span>{title}</span></AccordionTrigger><AccordionContent>{copy}</AccordionContent></AccordionItem>)}</Accordion>}
@@ -36,6 +37,24 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
    <a className="f-link" href="/services">View all services <Arrow/></a>
   </div>
  </section>
+
+ {/* 2. The look: six photographs from the company's own campaign library. */}
+ <DesignGallery
+  id="the-homes"
+  eyebrow="HOMES FOR THE FOOTHILLS"
+  title="Built for the view."
+  accent="Made to last."
+  intro="Stone, white oak and big glass, planned around the light and the land. Every home starts with the site, and the rooms are drawn to frame what you came to Idaho for."
+  photos={[
+   {src:'/family/drive/landscape-1-stone-modern-foothill-home.webp',alt:'Stone and dark-sided modern home with large lit windows against the Boise foothills at sunset',label:'Exterior',wide:true},
+   {src:'/family/drive/square-2-stone-entry-with-oak-front-door.webp',alt:'Stacked stone entry with a tall white oak front door and ornamental grasses',label:'Entry'},
+   {src:'/family/drive/square-1-oak-kitchen-with-foothill-view.webp',alt:'White oak kitchen with a stone island and a black-framed window onto the foothills',label:'Kitchen'},
+   {src:'/family/drive/landscape-2-great-room-with-stone-fireplace.webp',alt:'Vaulted great room with a stone fireplace, wood ceiling and floor-to-ceiling windows onto the hills',label:'Great room',wide:true},
+   {src:'/family/drive/landscape-3-covered-patio-with-outdoor-fireplace.webp',alt:'Covered patio with a stacked stone outdoor fireplace and lounge chairs facing the mountains at dusk',label:'Covered patio',wide:true},
+   {src:'/family/drive/square-3-soaking-tub-with-foothill-view.webp',alt:'Freestanding soaking tub beneath a large window looking out on golden foothills',label:'Primary bath'},
+  ]}
+  note="Design imagery showing the quality and character we build toward. Ask to see plans, selections and references from past clients during your planning session."
+ />
 
  {/* 2. The lot question, as an image-and-panel split. */}
  <section className="fr-panel" id="own-a-lot" aria-labelledby="own-a-lot-title">
