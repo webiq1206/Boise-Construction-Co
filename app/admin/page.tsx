@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ACCOUNT_CONFLICT_MESSAGE } from "@/lib/authDiagnostics";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,11 +21,16 @@ export default function AdminLoginPage() {
   const router = useRouter();
   const [checkingAuth, setCheckingAuth] = useState(true);
 
-  const { data: user, isLoading } = useQuery<UserData>({
+  const { data: user, isLoading, error } = useQuery<UserData>({
     queryKey: ["/api/auth/user"],
     queryFn: async () => {
       const res = await fetch("/api/auth/user");
-      if (!res.ok) throw new Error("Not authenticated");
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        if (res.status === 409 && body?.code === 'account_conflict') throw new Error(ACCOUNT_CONFLICT_MESSAGE);
+        if (res.status >= 500) throw new Error('Unable to load your site account. Please contact the site administrator.');
+        throw new Error('Not authenticated');
+      }
       return res.json();
     },
     retry: false,
@@ -73,6 +79,9 @@ export default function AdminLoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {error && error.message !== 'Not authenticated' ? (
+            <Alert variant="destructive"><AlertCircle className="h-4 w-4" /><AlertDescription>{error.message}</AlertDescription></Alert>
+          ) : null}
           {isLoggedInButNotAdmin ? (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />

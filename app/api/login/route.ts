@@ -1,3 +1,4 @@
+import { logAuthFailure } from "@/lib/authDiagnostics";
 import { NextRequest, NextResponse } from "next/server";
 import { getSession, getOidcConfig, getExternalUrl } from "@/lib/auth";
 import * as client from "openid-client";
@@ -33,7 +34,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.redirect(authUrl.href);
   } catch (error) {
-    console.error("Login error:", error);
+    logAuthFailure("login", error);
     return NextResponse.redirect(getExternalUrl(request, "/"));
   }
 }

@@ -1,3 +1,4 @@
+import { logAuthFailure } from "@/lib/authDiagnostics";
 import { NextRequest, NextResponse } from "next/server";
 import { getSession, getUserFromDb, getExternalUrl } from "@/lib/auth";
 
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest) {
     try {
       user = await getUserFromDb(session.userId);
     } catch (dbError) {
-      console.error("Failed to fetch user during post-login (continuing):", dbError);
+      logAuthFailure("post-login-user", dbError);
     }
     const returnTo = session.returnTo;
     delete session.returnTo;
@@ -38,7 +39,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.redirect(getExternalUrl(request, safeReturnTo || "/"));
   } catch (error) {
-    console.error("Post-login error:", error);
+    logAuthFailure("post-login", error);
     return NextResponse.redirect(getExternalUrl(request, "/"));
   }
 }
