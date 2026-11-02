@@ -267,9 +267,9 @@ export default function ContactPage() {
               {/* Every "#consult" link lands here, on the form itself (QuoteFormAnchor). */}
               <div id="consult" data-quote-anchor="" className="interior-contact-form">
                 <QuoteFormAnchor />
-                <MarketingCard className="p-4 sm:p-7 md:p-10" padding="lg">
+                <div className="fr-request-card interior-contact-form" style={{ '--f-accent': '#C48D3F' } as React.CSSProperties}>
                   <ConsultationForm />
-                </MarketingCard>
+                </div>
               </div>
             </div>
           </div>

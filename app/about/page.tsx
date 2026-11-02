@@ -19,7 +19,7 @@ import { CITIES, TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { CONTRACTOR_REGISTRATION_LABEL } from '@/shared/contractorRegistration';
 import { CTA_PRIMARY } from '@/shared/ctaCopy';
 import { SITE_CONFIG } from '@/shared/siteConfig';
-import { Check, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
 const ABOUT_FAQS = [
@@ -109,7 +109,7 @@ export default function AboutPage() {
       <>
         <JsonLd data={schemas} />
         <div className="flex flex-col">
-          <InteriorHero layout="editorial" peopleSafe imageLabel={false} imageSrc="/images/about/perkins-family-meridian-idaho.webp" imageAlt="Nick Perkins with his wife and five children at a pumpkin patch">
+          <InteriorHero layout="editorial">
             <HeroBreadcrumbs />
             <p data-speakable="summary" className="sr-only">
               {SPEAKABLE_SUMMARY}
@@ -129,87 +129,109 @@ export default function AboutPage() {
             </div>
           </InteriorHero>
 
-          <section className="interior-hero-more" aria-label="Overview">
-            <div className="interior-hero-more-inner">
-              <p className="interior-hero-more-lede">
-                It is run by Nick Perkins, a construction project manager with a bachelor&apos;s degree in Construction with an
-                emphasis in Project Management, and more than a decade of work from small renovations to multimillion-dollar
-                custom homes. He founded P5 in Colorado in 2020 and moved the family and the company to the Treasure Valley in
-                2025. Read the full story on{' '}
-                <a href="https://p5homeco.com/about" rel="noopener" className="underline underline-offset-2">
-                  p5homeco.com/about
-                </a>
-                .
-              </p>
-              <p>
-                {CONTRACTOR_REGISTRATION_LABEL}. Insured, certificate on request. 1-year workmanship warranty on new builds (
-                <Link href="/warranty" className="underline underline-offset-2">
-                  warranty details
-                </Link>
-                ).
-              </p>
-            </div>
-          </section>
-
-          <Section divider>
-            <div className="ed-shell max-w-3xl space-y-6">
-              <SectionHeader
-                eyebrow="What we build"
-                title={<>Custom homes, semi-custom homes, and ADUs</>}
-                description="We build on your lot or a lot we help you evaluate. Remodels sit with Boise Remodeling Co; RE-10 lists sit with Boise Handyman Co."
-                className="mb-0 max-w-none"
-              />
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. See{' '}
-                <Link href="/services/adu" className="underline underline-offset-2">
-                  ADUs &amp; guest houses
-                </Link>
-                .
-              </p>
-            </div>
-          </Section>
-
-          <Section variant="greige" divider>
-            <div className="ed-shell max-w-3xl">
-              <SectionHeader
-                eyebrow="How we work"
-                title={<>Five things every Construction project includes</>}
-                className="mb-8 max-w-none"
-              />
-              <ul className="grid gap-3 sm:grid-cols-1">
-                {CONSTRUCTION_STANDARDS.map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm text-muted-foreground">
-                    <Check className="h-4 w-4 text-accent-legible flex-shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-8 text-sm text-muted-foreground leading-relaxed">
-                The P5 standard is simple: one written scope before any price, a weekly written update, and a workmanship
-                warranty you can read before you sign.
-              </p>
-              <div className="mt-8 pt-8 border-t border-border">
-                <p className="ed-eyebrow">Where the budget lands</p>
-                <h3 className="ed-h4">Your budget builds the house, not the company</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  A larger builder&apos;s offices, model homes, and branded trucks are real costs, and they are quietly
-                  recovered inside the price per square foot you are quoted. We keep our footprint small on purpose, so a
-                  bigger share of what you spend goes into the foundation, the framing, the envelope, and the finishes you
-                  chose.
-                </p>
+          {/* Who runs it: the lede beside the one family photograph, full and never
+              cropped, capped to the copy's height instead of a 2560px frame across
+              the whole shell. */}
+          <Section divider className="pt-0">
+            <div className="ed-shell">
+              <div className="ed-split ed-split-narrow ed-split-center">
+                <Reveal>
+                  <p className="ed-eyebrow">The founder</p>
+                  <p className="ed-lede">
+                    It is run by Nick Perkins, a construction project manager with a bachelor&apos;s degree in Construction with an
+                    emphasis in Project Management, and more than a decade of work from small renovations to multimillion-dollar
+                    custom homes. He founded P5 in Colorado in 2020 and moved the family and the company to the Treasure Valley in
+                    2025. Read the full story on{' '}
+                    <a href="https://p5homeco.com/about" rel="noopener" className="underline underline-offset-2">
+                      p5homeco.com/about
+                    </a>
+                    .
+                  </p>
+                  <p className="ed-small mt-6 max-w-2xl">
+                    {CONTRACTOR_REGISTRATION_LABEL}. Insured, certificate on request. 1-year workmanship warranty on new builds (
+                    <Link href="/warranty" className="underline underline-offset-2">
+                      warranty details
+                    </Link>
+                    ).
+                  </p>
+                </Reveal>
+                <img
+                  className="people-safe-photo h-auto w-full"
+                  src="/images/about/perkins-family-meridian-idaho.webp"
+                  alt="Nick Perkins with his wife and five children at a pumpkin patch"
+                  width={2560}
+                  height={1920}
+                  style={{ objectFit: 'contain' }}
+                />
               </div>
             </div>
           </Section>
-
+          <Section divider>
+            <div className="ed-shell">
+              <div className="ed-split ed-split-narrow">
+                <div className="lg:sticky lg:top-28 lg:self-start">
+                  <p className="ed-eyebrow">What we build</p>
+                  <h2 className="ed-h2 ed-statement">Custom homes, semi-custom homes, and ADUs.</h2>
+                </div>
+                <Reveal>
+                  <p className="ed-lede">
+                    We build on your lot or a lot we help you evaluate. Remodels sit with Boise Remodeling Co; RE-10 lists sit with Boise Handyman Co.
+                  </p>
+                  <p className="ed-body mt-6">
+                    Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. See{' '}
+                    <Link href="/services/adu" className="underline underline-offset-2">
+                      ADUs &amp; guest houses
+                    </Link>
+                    .
+                  </p>
+                </Reveal>
+              </div>
+            </div>
+          </Section>
+          <Section variant="greige" divider>
+            <div className="ed-shell">
+              <p className="ed-eyebrow">How we work</p>
+              <h2 className="ed-h2 ed-statement">Five things every Construction project includes.</h2>
+              <ul className="ed-matrix mt-10 list-none p-0" style={{ '--ed-cell-h': '150px' } as React.CSSProperties}>
+                {CONSTRUCTION_STANDARDS.map((item, i) => (
+                  <li key={item} className="flex flex-col gap-4">
+                    <span className="ed-step-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="ed-h4">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="ed-split ed-split-narrow mt-12">
+                <p className="ed-lede">
+                  The P5 standard is simple: one written scope before any price, a weekly written update, and a workmanship
+                  warranty you can read before you sign.
+                </p>
+                <div className="ed-inset">
+                  <p className="ed-eyebrow">Where the budget lands</p>
+                  <h3 className="ed-h3">Your budget builds the house, not the company</h3>
+                  <p className="ed-body mt-3">
+                    A larger builder&apos;s offices, model homes, and branded trucks are real costs, and they are quietly
+                    recovered inside the price per square foot you are quoted. We keep our footprint small on purpose, so a
+                    bigger share of what you spend goes into the foundation, the framing, the envelope, and the finishes you
+                    chose.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Section>
           {/* The Perkins family photo appears once, in the hero. */}
           <Section divider>
-            <div className="container px-4 max-w-3xl">
-              <h2 className="ed-h2 mb-6">Common questions</h2>
+            <div className="ed-shell">
+              <div className="ed-split ed-split-narrow">
+              <div className="lg:sticky lg:top-28 lg:self-start">
+                <p className="ed-eyebrow">Before you commit</p>
+                <h2 className="ed-h2 ed-statement">Common questions</h2>
+              </div>
+              <div>
               <div className="divide-y divide-border border-y border-border">
                 {ABOUT_FAQS.map((faq) => (
                   <details key={faq.question} className="group py-4">
-                    <summary className="cursor-pointer text-base font-medium">{faq.question}</summary>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{faq.answer}</p>
+                    <summary className="cursor-pointer ed-h4 py-2">{faq.question}</summary>
+                    <p className="ed-body mt-3 pb-2">{faq.answer}</p>
                   </details>
                 ))}
               </div>
@@ -228,6 +250,8 @@ export default function AboutPage() {
                 </a>
                 .
               </p>
+              </div>
+              </div>
             </div>
           </Section>
 

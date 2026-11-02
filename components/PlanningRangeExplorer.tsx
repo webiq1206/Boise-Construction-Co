@@ -13,6 +13,7 @@ import {
   type NewConstructionProjectType,
 } from "@/shared/estimateEngine";
 import { DisplayNum } from "@/components/marketing/DisplayNum";
+import { toSentenceCase } from "@/shared/sentenceCase";
 
 /**
  * Homepage interactive proof (C14): pick a project type, set finished living
@@ -26,8 +27,10 @@ const PLANNING_DISCLAIMER =
   "Planning floor only, land not included. Treasure Valley mid-range (Signature) finish. Not a bid. Request a quote for next steps.";
 
 export function PlanningRangeExplorer() {
-  const [project, setProject] = useState<NewConstructionProjectType | null>(null);
-  const [sqft, setSqft] = useState(2400);
+  // The first project type is selected on arrival, so the panel opens on a worked
+  // example (a 2,400 sqft custom home) instead of an empty box; one click changes it.
+  const [project, setProject] = useState<NewConstructionProjectType | null>(PROOF_PROJECTS[0]);
+  const [sqft, setSqft] = useState(PROJECT_SIZE_CONFIG[PROOF_PROJECTS[0]].baselineSqft);
 
   const size = project ? PROJECT_SIZE_CONFIG[project] : null;
 
@@ -49,7 +52,7 @@ export function PlanningRangeExplorer() {
 
   return (
     <section
-      className="approved-estimate"
+      className="approved-estimate fr-band fr-band-estimate"
       aria-labelledby="planning-ranges-title"
       id="calculator"
       data-testid="planning-range-explorer"
@@ -87,7 +90,7 @@ export function PlanningRangeExplorer() {
                 control="radio"
                 selected={project === id}
                 onSelect={() => selectProject(id)}
-                title={PROJECT_LABELS[id].label}
+                title={toSentenceCase(PROJECT_LABELS[id].label)}
                 description={PROJECT_LABELS[id].sub}
                 data-testid={`proof-project-${id}`}
               />
@@ -132,14 +135,14 @@ export function PlanningRangeExplorer() {
         </div>
 
         <aside
-          className="planning-range-result"
+          className="planning-range-result fr-range-result"
           aria-live="polite"
           data-testid="proof-result"
         >
-          <p className="f-eyebrow">Your planning floor</p>
+          <p className="fr-range-result-label">Your planning floor</p>
           {estimate ? (
             <>
-              <p className="planning-range-value" data-testid="proof-range-value">
+              <p className="planning-range-value fr-range-result-figure" data-testid="proof-range-value">
                 From{" "}
                 <DisplayNum>{formatPlanningCurrency(estimate.priceLow)}</DisplayNum>
               </p>

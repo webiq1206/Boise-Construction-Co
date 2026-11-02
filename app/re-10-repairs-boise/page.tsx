@@ -1,4 +1,5 @@
 import { InteriorHero, InteriorPage } from '@/components/approved/InteriorLayout';
+import { Section } from '@/components/marketing/Section';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { PrimaryCta } from '@/components/approved/PrimaryCta';
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
@@ -78,6 +79,30 @@ export default function Re10RepairsPage() {
             from Boise Construction Co.
           </p>
         </InteriorHero>
+        {/* Why the handoff: the reason beside the one action, so the page reads as a
+            designed referral rather than a paragraph under the header. */}
+        <Section divider>
+          <div className="ed-shell">
+            <div className="ed-split ed-split-narrow ed-split-center">
+              <div>
+                <p className="ed-eyebrow">Why Boise Handyman Co</p>
+                <h2 className="ed-h2-sm ed-statement">Small repairs, one written price, one visit.</h2>
+                <p className="ed-body mt-6">
+                  An RE-10 list is a dozen small, unrelated fixes with a closing date behind them. Boise Handyman Co
+                  prices the list from the document, confirms the scope in writing and schedules the work around the
+                  deadline. Boise Construction Co stays focused on new homes, additions and ADUs.
+                </p>
+              </div>
+              <aside className="referral-panel">
+                <div className="referral-panel-body">
+                  <p className="ed-eyebrow">Next step</p>
+                  <p className="referral-panel-title">Send the list and photos. One written price comes back before any work starts.</p>
+                  <a className="f-button f-dark" href={RE10_CANONICAL} rel="noopener" data-cta="primary">Go to Boise Handyman Co</a>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </Section>
       </>
     </InteriorPage>
   );
