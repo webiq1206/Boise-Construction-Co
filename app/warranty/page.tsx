@@ -80,40 +80,67 @@ export default function WarrantyPage() {
         </InteriorHero>
 
         <Section divider>
-          <div className="ed-shell max-w-3xl space-y-8">
-            <div>
-              <h2 className="ed-h2 mb-4">What the 1-year workmanship warranty covers</h2>
-              <p className="ed-body text-muted-foreground">
-                Workmanship on the home we build: if a failure traces to how we built or installed something,
-                we return and correct it during the warranty term. Normal wear, deferred maintenance, owner
-                modifications, and manufacturer defects fall outside workmanship coverage.
-              </p>
-            </div>
-            <div>
-              <h2 className="ed-h2 mb-4">Structural coverage</h2>
-              <p className="ed-body text-muted-foreground">
-                A 10-year structural warranty may apply on some contracts. Confirm with us before you treat it as
-                included. The written contract states which warranty documents apply to your build.
-              </p>
-            </div>
-            <div>
-              <h2 className="ed-h2 mb-4">Common questions</h2>
-              <div className="divide-y divide-border border-y border-border">
-                {FAQS.map((faq) => (
-                  <details key={faq.question} className="group py-4">
-                    <summary className="cursor-pointer text-base font-medium">{faq.question}</summary>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{faq.answer}</p>
-                  </details>
-                ))}
+          <div className="ed-shell">
+            <div className="ed-split ed-split-narrow">
+              <div className="lg:sticky lg:top-28 lg:self-start">
+                <p className="ed-eyebrow">Workmanship</p>
+                <h2 className="ed-h2 ed-statement">What the 1-year workmanship warranty covers</h2>
+              </div>
+              <div>
+                <p className="ed-lede">
+                  Workmanship on the home we build: if a failure traces to how we built or installed something,
+                  we return and correct it during the warranty term.
+                </p>
+                <p className="ed-body mt-6">
+                  Normal wear, deferred maintenance, owner modifications, and manufacturer defects fall outside
+                  workmanship coverage.
+                </p>
               </div>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Learn more about who you are hiring on our{' '}
-              <Link href="/about" className="underline underline-offset-2">
-                About
-              </Link>{' '}
-              page.
-            </p>
+          </div>
+        </Section>
+        <Section variant="greige" divider>
+          <div className="ed-shell">
+            <div className="ed-split ed-split-narrow">
+              <div className="lg:sticky lg:top-28 lg:self-start">
+                <p className="ed-eyebrow">Structure</p>
+                <h2 className="ed-h2 ed-statement">Structural coverage</h2>
+              </div>
+              <div>
+                <p className="ed-lede">
+                  A 10-year structural warranty may apply on some contracts. Confirm with us before you treat it as
+                  included.
+                </p>
+                <p className="ed-body mt-6">The written contract states which warranty documents apply to your build.</p>
+              </div>
+            </div>
+          </div>
+        </Section>
+        <Section divider>
+          <div className="ed-shell">
+            <div className="ed-split ed-split-narrow">
+              <div className="lg:sticky lg:top-28 lg:self-start">
+                <p className="ed-eyebrow">Before you sign</p>
+                <h2 className="ed-h2 ed-statement">Common questions</h2>
+              </div>
+              <div>
+                <div className="divide-y divide-border border-y border-border">
+                  {FAQS.map((faq) => (
+                    <details key={faq.question} className="group py-4">
+                      <summary className="cursor-pointer ed-h4 py-2">{faq.question}</summary>
+                      <p className="ed-body mt-3 pb-2">{faq.answer}</p>
+                    </details>
+                  ))}
+                </div>
+                <p className="ed-body mt-8">
+                  Learn more about who you are hiring on our{' '}
+                  <Link href="/about" className="underline underline-offset-2">
+                    About
+                  </Link>{' '}
+                  page.
+                </p>
+              </div>
+            </div>
           </div>
         </Section>
       </>

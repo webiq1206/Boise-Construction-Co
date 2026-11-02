@@ -12,7 +12,7 @@ export interface HomepageFaq {
  * clicked. Lives here (not in the client component) so a server component can
  * import it without crossing the client/server boundary.
  */
-export const INITIAL_FAQ_COUNT = 10;
+export const INITIAL_FAQ_COUNT = 6;
 
 /**
  * Homepage FAQ set. These feed FAQPage schema, so answers lead with the direct

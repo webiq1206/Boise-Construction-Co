@@ -2,8 +2,6 @@ import { ApprovedHome } from "@/components/approved/ApprovedHome";
 import { HomeHero } from "@/components/approved/HomeHero";
 import { ConsultationForm } from "@/components/ConsultationForm";
 import { QuoteFormAnchor } from "@/components/QuoteFormAnchor";
-import { MarketingCard } from "@/components/marketing/MarketingCard";
-import { Section } from "@/components/marketing/Section";
 import { Reveal } from "@/components/Reveal";
 import { BudgetInclusionsSection } from "@/components/sections/BudgetInclusionsSection";
 import { ProjectGallerySection } from "@/components/sections/ProjectGallerySection";
@@ -12,10 +10,8 @@ import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildCanonical,fitDescription } from "@/lib/page-metadata";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { CONSULT_BULLETS,SITE_TAGLINE } from "@/shared/siteContent";
-import { SITE_IMAGES } from "@/shared/siteImages";
 import { ArrowUpRight, Check } from "lucide-react";
 import type { Metadata } from "next";
-import Image from "next/image";
 
 export const metadata: Metadata = withBrandPageMetadata(({
   // 55 chars. Leads with the primary term ("custom home builder Boise") rather
@@ -74,88 +70,42 @@ export default function HomePage() {
       <ProjectGallerySection limit={1} />
       <BudgetInclusionsSection />
       <div id="contact" className="scroll-mt-24" aria-hidden="true" />
-      <Section divider reveal={false} className="relative overflow-hidden pb-28 md:pb-28">
-        {/* Warm, dimmed lifestyle photo grounds the closing section. Directional
-            scrims keep the left-column copy legible and fade the edges into the
-            page ground; the form card floats above on its own shadow. */}
-        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-          <Image
-            src={SITE_IMAGES.consultBg}
-            unoptimized
-            alt=""
-            fill
-            loading="lazy"
-            sizes="100vw"
-            className="object-cover opacity-[0.52] img-brand-grade"
-          />
-          {/* Directional scrims: solid behind the left-column copy, opening up
-              toward the right where the form card carries its own surface. */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/[0.68] to-background/[0.32]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-transparent to-background" />
-        </div>
-        {/* The ask. Full measure, heading at h2 scale, the form kept in its
-            card because a form needs a defined field to sit in - this is one of
-            the places a card is actually the right answer. */}
-        <div className="ed-shell relative z-10">
-          <div className="grid gap-[var(--ed-gutter)] lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-            {/* Phones: the form leads and this reassurance follows it. Desktop: it
-                sits beside the form. Never above the landing point. */}
-            <div className="order-2 lg:order-1 lg:sticky lg:top-28">
+      {/* The ask. A bone band after the dark budget section, with the form as the one
+          bright object on the screen: white card, accent top rule, deep shadow. Every
+          "#consult" link lands on the form heading and its first field (QuoteFormAnchor).
+          Phones: the form leads and the reassurance follows it. */}
+      <section className="fr-request family-site family-construction" style={{ "--f-accent": "#C48D3F" } as React.CSSProperties} aria-label="Request a quote">
+        <div className="f-section f-container">
+          <div className="fr-request-grid">
+            <div id="consult" data-quote-anchor="" className="order-1 lg:order-2 lg:col-start-2 lg:row-start-1">
+              <QuoteFormAnchor />
+              <div className="fr-request-card">
+                <ConsultationForm />
+              </div>
+            </div>
+            <div className="fr-request-copy order-2 lg:order-1 lg:col-start-1 lg:row-start-1">
               <Reveal>
-                <p className="ed-eyebrow">Begin a conversation</p>
-                <h2 className="ed-h2 ed-statement">
-                  Tell us what you want to{" "}
-                  <em className="not-italic" style={{ color: "var(--ed-accent)" }}>
-                    build
-                  </em>
-                  .
-                </h2>
-                <p className="ed-lede mt-8 max-w-[40ch]">
-                  Send a few details and we will set up a free 60 to 90 minute
-                  planning session, usually within one business day.
-                </p>
-                <p className="ed-body mt-4">
-                  By the end you will have a realistic budget band, a clear-eyed read
-                  on your lot, and no expectation to go any further.
-                </p>
-                <ul
-                  className="mt-8 grid list-none gap-3 border-t p-0 pt-6"
-                  style={{ borderColor: "var(--ed-line)" }}
-                >
+                <p className="f-eyebrow">BEGIN A CONVERSATION</p>
+                <h2>Tell us what you<br /><em style={{ color: "var(--f-accent)" }}>want to build.</em></h2>
+                <p>Send a few details and we will set up a free 60 to 90 minute planning session, usually within one business day.</p>
+                <p>By the end you will have a realistic budget band, a clear-eyed read on your lot, and no expectation to go any further.</p>
+                <ul className="fr-request-list">
                   {CONSULT_BULLETS.map((item) => (
-                    <li key={item} className="ed-body flex items-center gap-3 text-[0.875rem]">
-                      <Check
-                        className="h-4 w-4 flex-shrink-0"
-                        style={{ color: "var(--ed-accent)" }}
-                        aria-hidden="true"
-                      />
-                      {item}
+                    <li key={item}>
+                      <Check className="h-4 w-4" aria-hidden="true" />
+                      <span>{item}</span>
                     </li>
                   ))}
                 </ul>
-                <div className="mt-6 grid border-t" style={{ borderColor: "var(--ed-line)" }}>
-                  <a href={SITE_CONFIG.phoneHref} className="flex min-h-12 items-center justify-between gap-4 border-b text-[0.9375rem] font-medium transition-colors hover:[color:var(--ed-accent)]" style={{ borderColor: "var(--ed-line)" }}>
-                    Call {SITE_CONFIG.phone}
-                    <ArrowUpRight className="h-4 w-4 shrink-0" style={{ color: "var(--ed-accent)" }} aria-hidden="true" />
-                  </a>
-                  <a href={SITE_CONFIG.phoneSmsHref} className="flex min-h-12 items-center justify-between gap-4 border-b text-[0.9375rem] font-medium transition-colors hover:[color:var(--ed-accent)]" style={{ borderColor: "var(--ed-line)" }}>
-                    Send a text
-                    <ArrowUpRight className="h-4 w-4 shrink-0" style={{ color: "var(--ed-accent)" }} aria-hidden="true" />
-                  </a>
-                </div>
+                <ul className="fr-request-list" style={{ borderTop: 0, paddingTop: 0 }}>
+                  <li><a href={SITE_CONFIG.phoneHref} className="f-link">Call {SITE_CONFIG.phone} <ArrowUpRight size={16} aria-hidden="true" /></a></li>
+                  <li><a href={SITE_CONFIG.phoneSmsHref} className="f-link">Send a text <ArrowUpRight size={16} aria-hidden="true" /></a></li>
+                </ul>
               </Reveal>
-            </div>
-            {/* Every "#consult" link lands here: the form heading and its first
-                field directly under the sticky header (QuoteFormAnchor). */}
-            <div id="consult" data-quote-anchor="" className="order-1 lg:order-2">
-              <QuoteFormAnchor />
-              <MarketingCard className="shadow-2xl" padding="lg">
-                <ConsultationForm />
-              </MarketingCard>
             </div>
           </div>
         </div>
-      </Section>
+      </section>
     </div>
   );
 }
