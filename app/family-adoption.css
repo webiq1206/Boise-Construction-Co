@@ -70,6 +70,266 @@
   justify-content: flex-start !important;
 }
 
+/* ------------------------------------------------ mobile polish (under 768) */
+/* Shared phone spec: centered hero, H1 at most 40px, H2 at most 36px,
+   body at least 16px, controls at least 44px, section padding 64 to 96. */
+@media (max-width: 767px) {
+  html .fam-hero[data-family-hero] .fam-hero-copy {
+    margin-inline: auto;
+    text-align: center;
+  }
+  html .fam-hero[data-family-hero] .fam-hero-copy .fam-hero-title,
+  html .approved-interior .interior-hero-editorial h1,
+  html .approved-interior .interior-hero-copy h1 {
+    font-size: 40px;
+    line-height: 1.08;
+  }
+  html .fam-hero[data-family-hero] .fam-hero-support,
+  html .fam-hero[data-family-hero] .fam-hero-micro {
+    margin-inline: auto;
+  }
+  html .fam-hero[data-family-hero] .fam-hero-actions {
+    align-items: center;
+  }
+  html .fam-hero[data-family-hero] .fam-hero-link {
+    align-self: center;
+    justify-content: center;
+  }
+  html .approved-interior .interior-hero-copy .ed-eyebrow,
+  html .approved-interior .interior-hero-copy h1,
+  html .approved-interior .interior-hero-copy .ed-lede,
+  html .approved-interior .interior-hero-copy p.interior-hero-support {
+    text-align: center;
+  }
+  html .approved-interior .interior-hero-copy h1,
+  html .approved-interior .interior-hero-copy .ed-lede {
+    margin-inline: auto;
+  }
+  html .approved-interior .interior-hero-actions {
+    justify-content: center;
+  }
+
+  html .family-site h2,
+  html .fr-gallery h2,
+  html .approved-interior h2,
+  html .approved-interior .ed-h2,
+  html .fr-band-estimate.approved-estimate h2 {
+    font-size: 36px;
+    line-height: 1.08;
+  }
+
+  html .family-site p,
+  html .family-site li,
+  html .approved-shell .ed-body,
+  html .fr-card p,
+  html .fr-gallery-intro,
+  html #budget .ed-body {
+    font-size: 16px;
+  }
+
+  html .approved-shell :is(button, .fam-btn, .f-button, .f-link, .fr-cities a, summary) {
+    min-height: 44px;
+  }
+  html .approved-shell :is(input, select, textarea) {
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  .family-site > section.f-section,
+  .family-site > section.fr-gallery,
+  .family-site > section.fr-panel,
+  .family-site > section.f-area,
+  .family-site > section.fr-cta-strip {
+    padding-block: 64px;
+  }
+  .family-site > section + section:not(.fr-band):not(.f-value) {
+    border-top: 1px solid rgba(56, 56, 55, 0.14);
+  }
+  .family-site > section:nth-of-type(even):not(.fr-band):not(.f-value):not(.fr-cta-strip) {
+    background: #f1ede4;
+  }
+
+  /* Repeat groups become a sideways row. Every card and photo stays in the DOM. */
+  html .fr-cards {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 4px;
+  }
+  html .fr-cards > .fr-card {
+    flex: 0 0 86%;
+    scroll-snap-align: start;
+    flex-direction: column;
+  }
+  html .fr-cards > .fr-card .fr-card-media {
+    flex: none;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+  }
+  html .fr-mosaic {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+  }
+  html .fr-mosaic figure,
+  html .fr-mosaic figure.is-wide,
+  html .fr-mosaic figure:last-child:not(.is-wide) {
+    flex: 0 0 84%;
+    grid-column: auto;
+    aspect-ratio: 4 / 3;
+    scroll-snap-align: start;
+  }
+
+  /* Services index title: three lines, keyword kept. */
+  html .services-index-title {
+    font-size: 40px;
+    line-height: 1.05;
+    max-width: 12em;
+  }
+  html .services-index-title .services-index-line {
+    display: block;
+  }
+
+  #budget .ed-matrix > .budget-fold,
+  #budget .budget-inclusions {
+    min-height: 0;
+  }
+  #budget .budget-fold > summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+  #budget .budget-fold > summary .ed-h4,
+  #budget .budget-inclusions > summary .ed-eyebrow {
+    margin: 0;
+  }
+  #budget .budget-fold[open] > .budget-fold-body {
+    padding: 0 16px 16px;
+  }
+  #budget .budget-inclusions > summary {
+    display: block;
+  }
+
+  html .fr-cards-more {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 12px 20px;
+  }
+  .fr-panel-media img {
+    max-height: 220px;
+    width: 100%;
+    object-fit: cover;
+  }
+  .fr-founder img,
+  .f-value > img {
+    min-height: 0;
+    max-height: 220px;
+    height: 220px;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+  .fr-gallery-inner { padding-block: 0; }
+  .family-site > section.fr-cta-strip { padding-block: 0; }
+  .fr-cta-strip > div { padding-block: 64px; }
+  #gallery .project-film {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 8px;
+  }
+  #gallery .project-film > .grid {
+    display: contents;
+  }
+  #gallery .project-film > *,
+  #gallery .project-film .grid > * {
+    flex: 0 0 86%;
+    scroll-snap-align: start;
+    min-height: 0;
+  }
+  .request-more > summary,
+  .city-fold > summary {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .fam-footer[data-family-footer] details > summary {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    list-style: none;
+  }
+  .fam-footer[data-family-footer] details > summary::-webkit-details-marker { display: none; }
+}
+
+.founder-facts {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.f-value p + p { margin-top: 12px; }
+
+.budget-fold > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.budget-fold > summary::-webkit-details-marker,
+.fam-footer[data-family-footer] details > summary::-webkit-details-marker,
+.request-more > summary::-webkit-details-marker,
+.city-fold > summary::-webkit-details-marker { display: none; }
+@media (min-width: 768px) {
+  #budget .budget-fold > .budget-fold-body {
+    display: block !important;
+  }
+  #budget .ed-matrix > .budget-fold > summary {
+    display: block;
+    pointer-events: none;
+    padding: 0;
+  }
+  #budget .budget-inclusions > summary,
+  #budget .budget-optional > summary {
+    pointer-events: none;
+  }
+  .fam-footer[data-family-footer] details > ul {
+    display: block !important;
+  }
+  .fam-footer[data-family-footer] details > summary {
+    pointer-events: none;
+    list-style: none;
+  }
+  .request-more > ul,
+  .city-fold > nav {
+    display: block !important;
+  }
+  .request-more > summary,
+  .city-fold > summary {
+    display: none;
+  }
+}
+
+/* Brand charcoal for text. Dark surfaces already use --color-charcoal. */
+.family-site { --f-ink: #383837; }
+.family-site,
+.fr-band,
+.fr-gallery { --fr-ink: #383837; }
+.approved-shell {
+  color: #383837;
+  --foreground: 60 0.9% 21.8%;
+  --heading: 60 0.9% 21.8%;
+  --ed-ink: #383837;
+  --ed-bone-ink: #383837;
+}
+
 /* ---------------------------------------------------------------- lot panel */
 /* The lot question is an image with the copy on the same measure as the rest
    of the page. Mobile gutters match .f-container (20px, 40px total). */

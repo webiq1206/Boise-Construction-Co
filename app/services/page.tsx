@@ -77,9 +77,10 @@ export default function ServicesIndexPage() {
       <InteriorHero layout="editorial">
         <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Services' }]} />
         <p className="ed-eyebrow mt-8" style={{ color: 'rgb(255 255 255 / 0.72)' }}>Our services</p>
-        <h1 className="ed-display ed-statement-display text-inverse-foreground">
-          Home building services in{' '}
-            <em className="not-italic" style={{ color: 'var(--ed-accent)' }}>Boise</em> and the Treasure Valley
+        <h1 className="ed-display ed-statement-display text-inverse-foreground services-index-title">
+          <span className="services-index-line">Home building services </span>
+          <span className="services-index-line">in <em className="not-italic" style={{ color: 'var(--ed-accent)' }}>Boise</em> and the </span>
+          <span className="services-index-line">Treasure Valley</span>
         </h1>
         <p className="ed-lede mt-8 max-w-[44ch] text-inverse-foreground/85">
           From a new home on your lot to useful space added to the home you already live in,
