@@ -110,12 +110,22 @@
   }
 
   html .family-site h2,
+  html .family-site .f-value h2,
+  html .family-site .f-contact h2,
   html .fr-gallery h2,
+  html .ed-h2,
   html .approved-interior h2,
   html .approved-interior .ed-h2,
   html .fr-band-estimate.approved-estimate h2 {
-    font-size: 36px;
-    line-height: 1.08;
+    font-size: 32px !important;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+  html .fr-card h3,
+  html .interior-service-card h2 {
+    font-size: 22px;
+    line-height: 1.25;
+    text-wrap: balance;
   }
 
   html .family-site p,
@@ -191,6 +201,105 @@
   }
   html .services-index-title .services-index-line {
     display: block;
+  }
+
+  /* Small labels and meta copy come up to 16px. Headings and display numbers stay larger. */
+  html .approved-shell :is(
+    .text-xs, .text-sm, .ed-small, .ed-eyebrow, .f-eyebrow, .fam-hero-eyebrow, .fam-hero-micro,
+    .home-hero-imagery, .interior-eyebrow, .interior-price, .interior-hero-chip, .interior-hero-more-note,
+    .interior-hero-image-label, .fr-gallery-eyebrow, .fr-gallery-note, .fr-mosaic figcaption,
+    .planning-range-label, .planning-range-sqft-bounds, .planning-range-note, .fr-range-result-label,
+    .fam-proof-label, .fam-proof-text, .fam-btn, .fam-header-call, .fam-header-link,
+    .fam-footer-parent, .fam-footer-tagline, .brc-text-link, .hero-text-link, .interior-text-link,
+    .ed-link, .ed-rule-link, .ed-step-n, .f-link, .f-number,
+    small,
+    [class~="text-[0.8125rem]"],
+    [class~="text-[0.875rem]"],
+    [class~="text-[0.9375rem]"]
+  ) {
+    font-size: 16px !important;
+  }
+  html body :is(.text-xs, .text-sm, [class~="text-[0.8125rem]"], [class~="text-[0.875rem]"], [class~="text-[0.9375rem]"]) {
+    font-size: 16px !important;
+  }
+  html body :is(button, summary, input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not(.sr-only), select, textarea, label:not(.sr-only)) {
+    min-height: 44px;
+  }
+  html body label:not(.sr-only) {
+    display: flex;
+    align-items: center;
+  }
+  html .approved-shell :is(h1, h2, h3) {
+    text-wrap: pretty;
+  }
+  .heading-balance-tail { display: block; }
+  .heading-keep { white-space: nowrap; }
+  html .approved-shell :is(button, summary, .fam-btn, .f-button, .f-link, .ed-link, .brc-text-link, .hero-text-link, .interior-text-link, input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]), select, textarea) {
+    min-height: 44px !important;
+  }
+  html .approved-shell nav a,
+  html .fam-footer[data-family-footer] :is(a, p, li):not(.fam-footer-phone) {
+    font-size: 16px !important;
+  }
+  html .fam-footer[data-family-footer] a {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  html .fam-header[data-family-header] :is(a, button),
+  html .fam-bar[data-family-bar] :is(a, button) {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  html .approved-shell :is(p, li, nav, .ed-body) a {
+    display: inline-flex;
+    align-items: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  html .fam-skip {
+    min-width: 0;
+    min-height: 0;
+  }
+  #budget .budget-optional > summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  #budget .budget-fold > summary .ed-h4 {
+    flex: 1;
+    min-width: 0;
+  }
+  html .fam-proof .fam-proof-list {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+  html .fam-proof .fam-proof-cell {
+    flex: 0 0 80%;
+    scroll-snap-align: start;
+  }
+  footer.fam-footer[data-family-footer] {
+    padding-bottom: calc(var(--bar-height) + env(safe-area-inset-bottom) + 12px);
+  }
+  .fr-request-card .grid.gap-4 {
+    gap: 20px;
+  }
+  html .approved-shell li > span:first-child,
+  html .fr-cards-more > span,
+  html .f-link {
+    font-size: 16px !important;
+  }
+  html [data-testid="estimate-brand-bar"] a,
+  html body a.flex { min-height: 44px !important; }
+  html body :is(nav, ol) a,
+  html body a[class*="text-sm"],
+  html body a[href^="tel:"],
+  html body a[href^="sms:"],
+  html body a[href$=".vcf"],
+  html .approved-shell nav a {
+    display: inline-flex;
+    align-items: center;
+    min-width: 44px;
+    min-height: 44px !important;
   }
 
   #budget .ed-matrix > .budget-fold,

@@ -121,7 +121,7 @@ export function BudgetInclusionsSection() {
             >
               <summary>
                 <p className="ed-eyebrow ed-eyebrow-accent">Optional enhancement</p>
-                <h3 className="ed-h4">{OPTIONAL_ENHANCEMENTS.title}</h3>
+                <h3 className="ed-h4">{OPTIONAL_ENHANCEMENTS.title.replace(/\s+(\S+)$/, "\u00A0$1")}</h3>
               </summary>
               <div className="budget-fold-body">
                 {OPTIONAL_ENHANCEMENTS.body.split(/(?<=\.)\s+/).map((sentence) => (

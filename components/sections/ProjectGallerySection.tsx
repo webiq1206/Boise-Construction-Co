@@ -15,12 +15,17 @@ function cityDisplayName(slug: string) {
   return CITIES.find((c) => c.slug === slug)?.name ?? slug;
 }
 
+/** Keep the last two words together so a heading does not end on one word. */
+function noOrphan(text: string) {
+  return text.replace(/\s+(\S+)$/, "\u00A0$1");
+}
+
 function ProjectMeta({ project, lead = false }: { project: GalleryProject; lead?: boolean }) {
   const cityName = cityDisplayName(project.city);
   return (
     <>
       <p className="ed-eyebrow ed-eyebrow-accent !mb-3">{cityName}, Idaho</p>
-      <h3 className={lead ? "ed-h3" : "ed-h4"}>{project.title}</h3>
+      <h3 className={lead ? "ed-h3" : "ed-h4"}>{noOrphan(project.title)}</h3>
       <p className={`ed-body mt-3 ${lead ? "" : "text-[0.875rem]"}`}>{project.description}</p>
     </>
   );
@@ -113,7 +118,7 @@ export function ProjectGallerySection({
           <Reveal>
             <p className="ed-eyebrow">Concept design</p>
             <h2 className="ed-h2 ed-statement">
-              {lead.title}
+              {noOrphan(lead.title)}
             </h2>
             <div className="mt-10 hidden lg:block">
               <ProjectMeta project={lead} lead />
