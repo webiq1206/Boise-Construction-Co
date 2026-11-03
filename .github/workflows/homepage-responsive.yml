@@ -1,0 +1,59 @@
+name: Homepage responsive review
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - components/approved/ApprovedHome.tsx
+      - components/approved/HomePlanningSections.module.css
+      - components/PlanningRangeExplorer.tsx
+      - scripts/verify-homepage-responsive.cjs
+      - .github/workflows/homepage-responsive.yml
+permissions:
+  contents: read
+concurrency:
+  group: homepage-responsive-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  homepage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container: mcr.microsoft.com/playwright:v1.60.0-noble
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install locked dependencies without lifecycle hooks
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Start isolated homepage preview
+        run: |
+          mkdir -p test-results/homepage-responsive
+          node scripts/offline-run.mjs dev --hostname 127.0.0.1 --port 34863 > test-results/homepage-responsive/server.log 2>&1 &
+          node <<'JS'
+          const start = Date.now();
+          (async () => {
+            while (Date.now()-start < 180000) {
+              try {
+                const response = await fetch('http://127.0.0.1:34863/', {signal: AbortSignal.timeout(10000)});
+                if (response.ok) process.exit(0);
+              } catch {}
+              await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            process.exit(1);
+          })();
+          JS
+      - name: Capture responsive homepage and exercise local controls
+        run: node scripts/verify-homepage-responsive.cjs
+      - name: Upload independent-review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-responsive-${{ github.sha }}
+          path: test-results/homepage-responsive/
+          retention-days: 14
+          if-no-files-found: error
