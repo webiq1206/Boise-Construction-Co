@@ -60,7 +60,7 @@ const pause = page => page.evaluate(() => new Promise(resolve => requestAnimatio
         scrollTo(0,0);
       });
       await pause(page);
-      await page.screenshot({path:path.join(output,`full-${key}.png`),fullPage:true});
+      await page.screenshot({path:path.join(output,`full-${key}.jpg`),fullPage:true,type:'jpeg',quality:80});
       for (const id of ['own-a-lot','calculator']) {
         await page.locator(`#${id}`).scrollIntoViewIfNeeded();
         await pause(page);
@@ -79,10 +79,33 @@ const pause = page => page.evaluate(() => new Promise(resolve => requestAnimatio
         const header=document.querySelector('[data-family-header]');
         const bar=document.querySelector('[data-family-bar]');
         const barVisible=bar && bar.dataset.state==='visible' && getComputedStyle(bar).display!=='none';
-        return {overflow:document.documentElement.scrollWidth>innerWidth+1,calculator:rect(calc),controls:rect(calc.querySelector('.planning-range-controls')),header:rect(header),bottomBar:barVisible?rect(bar):null,cards:[...calc.querySelectorAll('[role=radio]')].map(rect),labelColor:getComputedStyle(calc.querySelector('.planning-range-label')).color,titleSize:getComputedStyle(calc.querySelector('h2')).fontSize,result:rect(calc.querySelector('.planning-range-result')),brokenImages:[...document.images].filter(i=>!i.complete || i.naturalWidth===0).map(i=>i.getAttribute('src'))};
+        const rgba=value=>{
+          const values=value.match(/[\d.]+/g)?.map(Number);
+          if (!value.startsWith('rgb') || !values || values.length<3) return null;
+          return [...values.slice(0,3),values[3]??1];
+        };
+        const over=(front,back)=>front.slice(0,3).map((v,i)=>v*front[3]+back[i]*(1-front[3]));
+        const luminance=rgb=>rgb.map(v=>v/255).map(v=>v<=0.04045?v/12.92:((v+0.055)/1.055)**2.4).reduce((n,v,i)=>n+v*[0.2126,0.7152,0.0722][i],0);
+        const labelContrast=[...calc.querySelectorAll('.planning-range-label, .planning-range-sqft-bounds')].map(label=>{
+          const ancestors=[];
+          for(let element=label;element;element=element.parentElement) ancestors.unshift(element);
+          let background=[255,255,255],supported=true;
+          for(const element of ancestors){
+            const css=getComputedStyle(element),color=rgba(css.backgroundColor);
+            if(!color || css.backgroundImage!=='none' || Number(css.opacity)!==1) supported=false;
+            if(color) background=over(color,background);
+          }
+          const color=rgba(getComputedStyle(label).color);
+          const foreground=color?over(color,background):null;
+          const a=foreground?luminance(foreground):null,b=luminance(background);
+          return {text:label.textContent.trim(),color:getComputedStyle(label).color,background,ratio:supported && a!==null?(Math.max(a,b)+0.05)/(Math.min(a,b)+0.05):null};
+        });
+        return {labelContrast,overflow:document.documentElement.scrollWidth>innerWidth+1,calculator:rect(calc),controls:rect(calc.querySelector('.planning-range-controls')),header:rect(header),bottomBar:barVisible?rect(bar):null,cards:[...calc.querySelectorAll('[role=radio]')].map(rect),labelColor:getComputedStyle(calc.querySelector('.planning-range-label')).color,titleSize:getComputedStyle(calc.querySelector('h2')).fontSize,result:rect(calc.querySelector('.planning-range-result')),brokenImages:[...document.images].filter(i=>!i.complete || i.naturalWidth===0).map(i=>i.getAttribute('src'))};
       });
       const m=record.metrics;
       check(!m.overflow,`${key}: page horizontal overflow`);
+      check(Number.parseFloat(m.titleSize)<=40,`${key}: planning heading exceeds 40px (${m.titleSize})`);
+      check(m.labelContrast.length>=3 && m.labelContrast.every(label=>label.ratio!==null && label.ratio>=4.5),`${key}: planning labels must have measurable 4.5:1 contrast (${JSON.stringify(m.labelContrast)})`);
       check(m.cards.length===4,`${key}: expected four project choices`);
       check(m.cards.every(c=>c.height>=56 && c.width>=44),`${key}: undersized project choice`);
       check(m.controls.y>=m.header.bottom-1 && m.controls.bottom<=height-(m.bottomBar?.height||0)+1,`${key}: active controls do not fit visible viewport`);
@@ -127,12 +150,19 @@ const pause = page => page.evaluate(() => new Promise(resolve => requestAnimatio
       check(page.url()===base.href,`${key}: navigated outside homepage`);
     } catch(error) {
       failures.push(`${key}: ${error.message}`);
-      await page.screenshot({path:path.join(output,`error-${key}.png`),fullPage:true}).catch(()=>{});
+      await page.screenshot({path:path.join(output,`error-${key}.jpg`),fullPage:true,type:'jpeg',quality:80}).catch(()=>{});
     } finally { await page.close(); }
   }
 })().catch(error=>failures.push(error.stack || error.message)).finally(async()=>{
-  if(browser) await browser.close();
-  fs.writeFileSync(path.join(output,'responsive-metrics.json'),JSON.stringify({sha:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),browser:'Chromium, emulated CSS viewports; no physical devices or on-screen keyboard',scope:'Homepage only; API/external requests blocked; no form submission, providers, database, delivery or production checks',rows,blocked,pageErrors,failures},null,2));
+  if(browser) await browser.close().catch(error => failures.push(`Browser cleanup: ${error.message}`));
+  // CI's checkout can have different ownership inside the official container.
+  // Never change Git trust/security settings merely to record provenance.
+  let sha = process.env.GITHUB_SHA || null;
+  if (!sha) {
+    try { sha = execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8',stdio:['ignore','pipe','ignore']}).trim(); }
+    catch { /* Missing local provenance must not discard rendered evidence. */ }
+  }
+  fs.writeFileSync(path.join(output,'responsive-metrics.json'),JSON.stringify({sha,browser:'Chromium, emulated CSS viewports; no physical devices or on-screen keyboard',scope:'Homepage only; API/external requests blocked; no form submission, providers, database, delivery or production checks',rows,blocked,pageErrors,failures},null,2));
   console.log(JSON.stringify({viewports:rows.length,failures,blocked,pageErrors},null,2));
   if(failures.length || pageErrors.length) process.exitCode=1;
 });

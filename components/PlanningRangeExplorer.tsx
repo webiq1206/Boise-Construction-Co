@@ -53,7 +53,7 @@ export function PlanningRangeExplorer() {
 
   return (
     <section
-      className={`approved-estimate fr-band fr-band-estimate ${styles.planningSection}`}
+      className={`approved-estimate fr-band ${styles.planningSection}`}
       aria-labelledby="planning-ranges-title"
       id="calculator"
       data-testid="planning-range-explorer"

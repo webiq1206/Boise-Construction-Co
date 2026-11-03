@@ -106,3 +106,29 @@
   :global(.approved-shell) .planningSection :global(.planning-range-result) { padding: 20px; }
   :global(.approved-shell) .planningSection :global(.planning-range-grid) { gap: 24px; }
 }
+
+/* Short landscape viewports place the two related inputs beside one another,
+   rather than making visitors scroll from project choices down to the slider.
+   The existing dense-card helper text remains available at ordinary heights. */
+@media (min-width: 640px) and (max-height: 500px) {
+  :global(.approved-shell) .planningSection :global(.planning-range-controls) {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    column-gap: 24px;
+    row-gap: 8px;
+    align-items: start;
+  }
+  :global(.approved-shell) .planningSection :global(.planning-range-controls) > :global(.planning-range-label) {
+    grid-column: 1;
+    margin-bottom: 0;
+  }
+  :global(.approved-shell) .planningSection :global(.planning-range-cards) { grid-column: 1; }
+  :global(.approved-shell) .planningSection :global(.planning-range-slider-wrap) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    margin-top: 0;
+  }
+  :global(.approved-shell) .planningSection [data-testid^="proof-project-"] > span:first-child > span:nth-child(2) {
+    display: none;
+  }
+}
