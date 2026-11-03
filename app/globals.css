@@ -69,18 +69,18 @@ html, body {
   --background: 60 0.9% 21.8%;
   --foreground: 40 32% 92%;        /* body text - P5 bone #F1EDE4, the one warm neutral across the family */
   --heading: 30 20% 96%;           /* bone #F7F5F3 */
-  --border: 40 8% 27%;             /* hairline, warmed toward bone like P5's --line */
-  --card: 60 0.9% 21.8%;           /* dark card, brand charcoal #383837 */
+  --border: 60 1.9% 42.4%;         /* #6E6E6A, lighter than the charcoal page */
+  --card: 60 2.1% 28.4%;           /* raised charcoal #4A4A47, lighter than the page */
   --card-foreground: 37 14% 89%;
-  --card-border: 163 5% 24%;
+  --card-border: 60 1.9% 42.4%;
 
   /* Elevated band (footer, statement bands) - brand charcoal #383837 */
   --inverse: 60 0.9% 21.8%;
   --inverse-foreground: 30 20% 96%;   /* bone */
   --inverse-muted: 32 4% 62.5%;      /* mist, 4.5:1 on brand charcoal #383837 */
 
-  --surface-muted: 60 0.9% 21.8%;
-  --surface-greige: 60 0.9% 21.8%;
+  --surface-muted: 60 2.1% 28.4%;
+  --surface-greige: 60 2.1% 28.4%;
 
   /* Section tints - subtle hued dark panels */
   --tint-warm: 60 0.9% 21.8%;
@@ -90,25 +90,25 @@ html, body {
   /* Sidebar - admin/portal (a touch below page base) */
   --sidebar: 60 0.9% 21.8%;
   --sidebar-foreground: 37 14% 89%;
-  --sidebar-border: 163 6% 24%;
+  --sidebar-border: 60 1.9% 42.4%;
   --sidebar-primary: 35.19 52.99% 50.78%;       /* ochre #C48D3F */
-  --sidebar-primary-foreground: 150 6% 7%;  /* charcoal #2C302F */
-  --sidebar-accent: 60 0.9% 21.8%;
+  --sidebar-primary-foreground: 60 0.9% 18%;  /* charcoal ink on ochre; #383837 is 4.04:1 here, 18% holds 4.68:1 */
+  --sidebar-accent: 60 2.1% 28.4%;
   --sidebar-accent-foreground: 37 14% 89%;
   --sidebar-ring: 35.19 52.99% 50.78%;          /* ochre #C48D3F */
 
-  --popover: 60 0.9% 21.8%;
+  --popover: 60 2.1% 28.4%;
   --popover-foreground: 37 14% 89%;
-  --popover-border: 163 6% 24%;
+  --popover-border: 60 1.9% 42.4%;
 
   /* Primary CTA - bone #F7F5F3 fill, charcoal #2C302F text */
   --primary: 30 20% 96%;
   --primary-foreground: 163 5% 18%;   /* charcoal #2C302F */
 
-  --secondary: 60 0.9% 21.8%;
+  --secondary: 60 2.1% 28.4%;
   --secondary-foreground: 37 14% 89%;
 
-  --muted: 60 0.9% 21.8%;
+  --muted: 60 2.1% 28.4%;
   /* Sage secondary text. Lightness holds 4.5:1 on brand charcoal #383837. */
   --muted-foreground: 147 9% 61%;
   --faint: 32 3% 45%;                 /* faint */
@@ -118,7 +118,7 @@ html, body {
      render bone via .brc-accent; links + focus rings keep the legible ochre
      --accent-legible. Never recolor outside charcoal, bone, and #C48D3F. */
   --accent: 35.19 52.99% 50.78%;               /* deep ochre #7E6344 */
-  --accent-foreground: 150 6% 7%;    /* bone text on an ochre fill */
+  --accent-foreground: 60 0.9% 18%;  /* charcoal ink on ochre; brand #383837 is 4.04:1 on #C48D3F */
 
   --brass: 32 30% 38%;                /* deep ochre #7E6344 */
   --brass-foreground: 30 20% 96%;
@@ -137,7 +137,7 @@ html, body {
   --destructive: 10 45% 60%;
   --destructive-foreground: 30 20% 96%;
 
-  --input: 60 0.9% 21.8%;             /* input, brand charcoal #383837 */
+  --input: 60 2.1% 28.4%;             /* input, raised charcoal #4A4A47 */
   --ring: 35.19 52.99% 50.78%;                  /* ochre #C48D3F */
 
   --chart-1: 32 55% 59%;               /* ochre #C48D3F */
@@ -920,7 +920,7 @@ body[data-hide-mobile-nav-bar="true"] [data-mobile-nav-bar] {
     top: 0;
     width: 100%;
     padding: 24px;
-    color: #111;
+    color: #383837;
     background: #fff;
   }
 }

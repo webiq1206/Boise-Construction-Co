@@ -1,5 +1,5 @@
 .dialog { border: 1px solid #c7c7c7; border-radius: 16px; padding: 24px; width: min(440px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow-y: auto; box-sizing: border-box; color: #242827; background: #fff; font: 16px/1.5 system-ui, sans-serif; }
-.dialog::backdrop { background: rgb(0 0 0 / .5); }
+.dialog::backdrop { background: color-mix(in srgb, #383837 72%, transparent); }
 .dialog h2 { margin: 0 0 10px; font-size: 24px; line-height: 1.25; }
 .dialog p { margin: 10px 0; }
 .dialog a, .dialog button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; padding: 10px 14px; font: inherit; cursor: pointer; }

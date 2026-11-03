@@ -3,12 +3,64 @@
   styles live in styles/family-*.css and are never edited here.
 */
 
+/* Hero scrims in the shared chrome read this RGB. Brand charcoal, not near-black. */
+:root {
+  --color-scrim-rgb: 56, 56, 55;
+}
+
+/* 12px accent eyebrows. Brand ochre #C48D3F is 2.8:1 on paper and 4.04:1 on #383837. */
+html .ed-eyebrow-accent {
+  color: hsl(var(--accent-on-light));
+}
+html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) {
+  --ed-accent: hsl(var(--accent-legible));
+}
+html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) .ed-eyebrow-accent {
+  color: hsl(var(--accent-legible));
+}
+
+/* Fields and overlays have to read as separate from the page. */
+html body :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="range"]):not([type="color"]) {
+  background-color: #4a4a47;
+  border-color: #6e6e6a;
+  color: #fbfaf6;
+}
+html .approved-shell :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="range"]):not([type="color"]) {
+  background-color: #fff;
+  border-color: #c8c4ba;
+  color: #383837;
+}
+html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact) :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="range"]):not([type="color"]) {
+  background-color: #4a4a47;
+  border-color: #6e6e6a;
+  color: #fbfaf6;
+}
+
 /* The homepage photograph is a concept render. HeroPhoto has no caption slot, so the
    honest label sits in this site's wrapper, on the photo's clear corner, above the
    scrim and clear of the copy (bottom left) and the bottom bar. */
 .home-hero {
   position: relative;
 }
+.fam-hero[data-family-hero] .fam-hero-inner {
+  background-image: linear-gradient(
+    180deg,
+    rgba(var(--color-scrim-rgb), 0) 0,
+    rgba(var(--color-scrim-rgb), 0.86) var(--fam-hero-fade),
+    rgba(var(--color-scrim-rgb), 0.92) 100%
+  );
+}
+@media (min-width: 1024px) {
+  .fam-hero[data-family-hero] .fam-hero-scrim {
+    background: linear-gradient(
+      90deg,
+      rgba(var(--color-scrim-rgb), 0.92) 0%,
+      rgba(var(--color-scrim-rgb), 0.8) 46%,
+      rgba(var(--color-scrim-rgb), 0) 84%
+    );
+  }
+}
+
 .home-hero .home-hero-imagery {
   position: absolute;
   top: var(--space-3);
@@ -16,7 +68,7 @@
   z-index: 1;
   margin: 0;
   padding: 2px 8px;
-  background: rgba(var(--color-scrim-rgb), 0.55);
+  background: rgba(var(--color-scrim-rgb), 0.88);
   color: var(--color-paper);
   font: 600 var(--fs-label) / var(--lh-label) var(--font-sans);
   letter-spacing: var(--tracking-label);
@@ -250,7 +302,7 @@
     min-width: 44px;
     min-height: 44px;
   }
-  html .approved-shell :is(p, li, nav, .ed-body) a {
+  html .approved-shell nav a {
     display: inline-flex;
     align-items: center;
     min-width: 44px;
@@ -290,8 +342,7 @@
   }
   html [data-testid="estimate-brand-bar"] a,
   html body a.flex { min-height: 44px !important; }
-  html body :is(nav, ol) a,
-  html body a[class*="text-sm"],
+  html body nav a,
   html body a[href^="tel:"],
   html body a[href^="sms:"],
   html body a[href$=".vcf"],
@@ -300,6 +351,12 @@
     align-items: center;
     min-width: 44px;
     min-height: 44px !important;
+  }
+  /* 44px is for standalone controls. A link inside a sentence stays in the line. */
+  html body :is(p, .ed-body, .fam-hero-support, .fr-gallery-note, .footer-adu-note) a[href] {
+    display: inline !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
   }
 
   #budget .ed-matrix > .budget-fold,

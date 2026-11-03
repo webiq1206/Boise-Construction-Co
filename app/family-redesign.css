@@ -529,7 +529,7 @@ html .approved-interior .interior-detail-body h2 { font-size: clamp(2.5rem, 4.4v
   right: 0;
   bottom: 0;
   padding: 40px 18px 14px;
-  background: linear-gradient(180deg, transparent, rgba(20, 22, 21, 0.55));
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--color-charcoal, #383837) 88%, transparent));
   color: #fbfaf6;
   font-size: 12px;
   font-weight: 600;
