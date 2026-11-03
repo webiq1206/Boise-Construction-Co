@@ -1,0 +1,108 @@
+/* Boise Construction homepage only. Uses the approved family tokens without
+   changing shared chrome, typography, pricing, or other page templates. */
+:global(.approved-shell) .lotPanel,
+:global(.approved-shell) .planningSection {
+  width: min(calc(100% - 2 * var(--gutter)), var(--container-max));
+  margin-inline: auto;
+}
+:global(.approved-shell) .lotPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  background: var(--color-bone);
+  margin-bottom: var(--section-y);
+}
+.lotMedia { min-width: 0; }
+.lotMedia img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.lotBody { padding: var(--card-pad); }
+:global(.approved-shell) .lotBody h2 {
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 1.1;
+  margin: 16px 0;
+}
+.lotBody > p:not(:global(.f-eyebrow)) { color: var(--fr-ink-soft); }
+.lotList { list-style: none; padding: 0; margin: 24px 0; }
+.lotList li {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 12px;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--fr-line);
+  font-size: 17px;
+  line-height: 1.6;
+}
+.lotList li:first-child { border-top: 1px solid var(--fr-line); }
+.lotList li > span { color: var(--fr-ink-soft); font-size: 14px; padding-top: 4px; }
+:global(.approved-shell) .planningSection {
+  padding: var(--section-y-compact) var(--card-pad);
+  color: var(--fr-paper);
+}
+:global(.approved-shell) .planningSection h2 {
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -.01em;
+  max-width: 24ch;
+  margin: 16px 0 0;
+  text-wrap: balance;
+}
+:global(.approved-shell) .planningSection :global(.approved-estimate-intro) {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+:global(.approved-shell) .planningSection :global(.approved-estimate-intro) > div > p:not(:global(.f-eyebrow)) {
+  color: var(--fr-paper);
+  font-size: 17px;
+  line-height: 1.6;
+  max-width: 55ch;
+}
+:global(.approved-shell) .planningSection :global(.planning-range-grid) { gap: 24px; }
+:global(.approved-shell) .planningSection :global(.planning-range-controls) { min-width: 0; }
+:global(.approved-shell) .planningSection :global(.planning-range-cards) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+:global(.approved-shell) .planningSection [data-testid^="proof-project-"] {
+  min-height: 56px;
+  padding: 12px;
+  gap: 8px;
+  border-radius: var(--radius-choice);
+}
+:global(.approved-shell) .planningSection [data-testid^="proof-project-"] > span:first-child > span:first-child {
+  font-size: 16px;
+  line-height: 1.3;
+}
+:global(.approved-shell) .planningSection :global(.planning-range-label),
+:global(.approved-shell) .planningSection :global(.planning-range-sqft-bounds) {
+  color: var(--fr-paper);
+  font-size: 14px;
+  line-height: 1.5;
+}
+:global(.approved-shell) .planningSection :global(.planning-range-label) { display: block; margin-bottom: 8px; }
+:global(.approved-shell) .planningSection :global(.planning-range-sqft-row) { color: var(--fr-paper); margin-bottom: 0; }
+:global(.approved-shell) .planningSection :global(.planning-range-slider) { display: block; margin: 0; }
+:global(.approved-shell) .planningSection :global(.planning-range-result) {
+  min-width: 0;
+  padding: var(--card-pad);
+  border-radius: var(--radius-card);
+}
+:global(.approved-shell) .planningSection :global(.planning-range-value) { font-size: clamp(32px, 4vw, 48px); line-height: 1.1; margin-top: 12px; }
+:global(.approved-shell) .planningSection :global(.planning-range-band) { font-size: 15px; margin-top: 12px; }
+:global(.approved-shell) .planningSection :global(.planning-range-note) { margin-top: 16px; color: var(--fr-ink-soft); }
+:global(.approved-shell) .planningSection :global(.fr-range-result-label) { color: var(--fr-ink-soft); font-size: 13px; }
+:global(.approved-shell) .planningSection :global(.planning-range-result) a { margin-top: 24px; }
+@media (min-width: 1024px) {
+  :global(.approved-shell) .lotPanel { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
+  .lotMedia img { height: 100%; }
+  .lotBody { padding: 48px; }
+  :global(.approved-shell) .planningSection :global(.approved-estimate-intro) { grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: end; }
+  :global(.approved-shell) .planningSection :global(.planning-range-grid) { grid-template-columns: 1.1fr .9fr; gap: 32px; }
+}
+@media (max-width: 639px) {
+  :global(.approved-shell) .planningSection { padding-inline: 16px; }
+  :global(.approved-shell) .planningSection :global(.planning-range-result) { padding: 20px; }
+  :global(.approved-shell) .planningSection :global(.planning-range-grid) { gap: 24px; }
+}

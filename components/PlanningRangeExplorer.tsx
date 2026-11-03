@@ -14,6 +14,7 @@ import {
 } from "@/shared/estimateEngine";
 import { DisplayNum } from "@/components/marketing/DisplayNum";
 import { toSentenceCase } from "@/shared/sentenceCase";
+import styles from "@/components/approved/HomePlanningSections.module.css";
 
 /**
  * Homepage interactive proof (C14): pick a project type, set finished living
@@ -52,18 +53,18 @@ export function PlanningRangeExplorer() {
 
   return (
     <section
-      className="approved-estimate fr-band fr-band-estimate"
+      className={`approved-estimate fr-band fr-band-estimate ${styles.planningSection}`}
       aria-labelledby="planning-ranges-title"
       id="calculator"
       data-testid="planning-range-explorer"
+      data-family-bar-yield
     >
       <div className="approved-estimate-intro">
         <div>
           <p className="f-eyebrow">PLANNING RANGES</p>
           <h2 id="planning-ranges-title">
             Start with a planning number.
-            <br />
-            Then request a quote.
+            {" "}Then request a quote.
           </h2>
         </div>
         <div>
@@ -158,7 +159,6 @@ export function PlanningRangeExplorer() {
                 className={familyButtonClass({ variant: "primary", size: "lg" })}
                 href="/estimate"
                 data-testid="proof-cta-estimate"
-                style={{ marginTop: "1.5rem" }}
               >
                 Request a quote
               </a>
