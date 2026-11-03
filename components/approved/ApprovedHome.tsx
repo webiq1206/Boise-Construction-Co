@@ -10,7 +10,7 @@ import {brands,cities,serviceExtras} from './family-content';
 import {DesignGallery} from '@/components/sections/DesignGallery';
 const Arrow=()=> <ArrowUpRight size={18} aria-hidden="true"/>;
 function Title({lines}:{lines:string[]}){return <>{lines[0]}<br/><em>{lines[1]}</em></>}
-function Rows({items,numbered=false}:{items:[string,string][];numbered?:boolean}){return <Accordion type="single" collapsible defaultValue="0" className="f-accordion">{items.map(([title,copy],i)=><AccordionItem value={String(i)} key={title}><AccordionTrigger>{numbered&&<span className="f-number">0{i+1}</span>}<span>{title}</span></AccordionTrigger><AccordionContent>{copy}</AccordionContent></AccordionItem>)}</Accordion>}
+function Rows({items,numbered=false}:{items:[string,string][];numbered?:boolean}){return <Accordion type="single" collapsible className="f-accordion">{items.map(([title,copy],i)=><AccordionItem value={String(i)} key={title}><AccordionTrigger>{numbered&&<span className="f-number">0{i+1}</span>}<span>{title}</span></AccordionTrigger><AccordionContent>{copy}</AccordionContent></AccordionItem>)}</Accordion>}
 
 /**
  * The homepage below the hero, in the order a homeowner has the conversation:
@@ -79,7 +79,7 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
  <section className="f-section f-container f-two" id="why-choose-us"><div className="f-sticky"><p className="f-eyebrow">THE WAY WE WORK</p><h2>Good work.<br/><em>A better experience.</em></h2><p>Clear expectations, thoughtful decisions, and someone accountable for the work. That is the P5 standard.</p></div><Rows items={b.approach}/></section>
 
  {/* 5. Why the budget is fair. */}
- <section className="f-value"><img src={b.valueImage} alt={contentImageAlt(b.valueImage)||''} loading="lazy" width="1200" height="900"/><div><p className="f-eyebrow">WHERE YOUR MONEY GOES</p><h2><Title lines={b.valueTitle}/></h2><p>{b.value}</p><a className="f-link" href={primary}>{b.action}<Arrow/></a></div></section>
+ <section className="f-value"><img src={b.valueImage} alt={contentImageAlt(b.valueImage)||''} loading="lazy" width="1200" height="900"/><div><p className="f-eyebrow">WHERE YOUR MONEY GOES</p><h2><Title lines={b.valueTitle}/></h2>{b.value.split(/(?<=\.)\s+/).map((sentence)=><p key={sentence}>{sentence}</p>)}<a className="f-link" href={primary}>{b.action}<Arrow/></a></div></section>
 
  {/* 6. What happens next. */}
  <section className="f-section f-container f-two" id="how-we-build"><div className="f-sticky"><p className="f-eyebrow">KNOW WHAT HAPPENS NEXT</p><h2>A clear plan.<br/><em>At every step.</em></h2><p>Good work starts with a shared understanding of the scope, the decisions, and the next step.</p></div><Rows items={b.process} numbered/></section>
@@ -91,7 +91,13 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
    <div>
     <p className="f-eyebrow">WHO YOU ARE HIRING</p>
     <h2 id="who-hiring-title">Nick Perkins, founder.</h2>
-    <p>Construction project manager with a bachelor&apos;s degree in Construction with an emphasis in Project Management, and more than a decade of custom homes, remodels and developments. He founded P5 in Colorado in 2020 and moved the family and the company to the Treasure Valley in 2025. Husband, father of five, Meridian.</p>
+    <p>Construction project manager with a bachelor&apos;s degree in Construction with an emphasis in Project Management.</p>
+    <ul className="founder-facts">
+     <li>More than a decade of custom homes, remodels and developments.</li>
+     <li>Founded P5 in Colorado in 2020.</li>
+     <li>Moved the family and the company to the Treasure Valley in 2025.</li>
+     <li>Husband, father of five, Meridian.</li>
+    </ul>
     <blockquote>&ldquo;Work hard. Keep your word. Treat people right.&rdquo;</blockquote>
     <p><a className="f-link" href="/about">Read Nick&apos;s story <Arrow/></a></p>
    </div>
@@ -107,7 +113,7 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
  </section>
 
  {/* 9. Where we build. */}
- <section className="f-area f-section f-container"><p className="f-eyebrow">AT HOME IN IDAHO</p><h2>Local people.<br/><em>Valley-wide reach.</em></h2><p>Serving homeowners throughout the Treasure Valley.</p><nav className="fr-cities" aria-label="Service area cities">{cities.map(city=><a key={city} href={`/areas/${city.toLowerCase().replaceAll(" ","-")}`} aria-label={`Home builders in ${city}`}>{city}</a>)}</nav></section>
+ <section className="f-area f-section f-container"><p className="f-eyebrow">AT HOME IN IDAHO</p><h2>Local people.<br/><em>Valley-wide reach.</em></h2><p>Serving homeowners throughout the Treasure Valley.</p><details className="city-fold"><summary>Cities we serve</summary><nav className="fr-cities" aria-label="Service area cities">{cities.map(city=><a key={city} href={`/areas/${city.toLowerCase().replaceAll(" ","-")}`} aria-label={`Home builders in ${city}`}>{city}</a>)}</nav></details></section>
 
  <FAQSection/>
  </div>;}

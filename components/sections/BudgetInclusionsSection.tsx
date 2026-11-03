@@ -77,13 +77,19 @@ export function BudgetInclusionsSection() {
             style={{ ["--ed-cols" as string]: BUDGET_GUIDANCE_POINTS.length, ["--ed-cell-h" as string]: "230px" }}
           >
             {BUDGET_GUIDANCE_POINTS.map((point, i) => (
-              <div key={point.title} className="flex flex-col">
-                <span className="ed-small" style={{ color: "var(--ed-accent)" }}>
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="ed-h4 mt-8 sm:mt-10 sm:min-h-[2.8em]">{point.title}</h3>
-                <p className="ed-body mt-3 text-[0.875rem]">{point.body}</p>
-              </div>
+              <details key={point.title} className="budget-fold">
+                <summary>
+                  <span className="ed-small" style={{ color: "var(--ed-accent)" }}>
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="ed-h4 sm:mt-10 sm:min-h-[2.8em]">{point.title}</h3>
+                </summary>
+                <div className="budget-fold-body">
+                  {point.body.split(/(?<=\.)\s+/).map((sentence) => (
+                    <p key={sentence} className="ed-body mt-3">{sentence}</p>
+                  ))}
+                </div>
+              </details>
             ))}
           </div>
         </Reveal>
@@ -91,11 +97,13 @@ export function BudgetInclusionsSection() {
         {/* Inclusions and the optional add-on, given their own framed panel. */}
         <Reveal delay={120}>
           <div className="ed-inset mt-[clamp(32px,4vw,56px)] grid gap-[var(--ed-gutter)] lg:grid-cols-[1.1fr_0.9fr]">
-            <div>
-              <p className="ed-eyebrow">Included on every home we build</p>
-              <ul className="m-0 grid list-none gap-3 p-0 sm:grid-cols-2">
+            <details className="budget-fold budget-inclusions">
+              <summary>
+                <p className="ed-eyebrow">Included on every home we build</p>
+              </summary>
+              <ul className="budget-fold-body m-0 grid list-none gap-3 p-0 sm:grid-cols-2">
                 {STANDARD_INCLUSIONS.map((item) => (
-                  <li key={item} className="ed-body flex items-start gap-3 text-[0.875rem]">
+                  <li key={item} className="ed-body flex items-start gap-3">
                     <Check
                       className="mt-1 h-4 w-4 flex-shrink-0"
                       style={{ color: "var(--ed-accent)" }}
@@ -105,24 +113,30 @@ export function BudgetInclusionsSection() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </details>
 
-            <div
-              className="lg:border-l lg:pl-[var(--ed-gutter)]"
+            <details
+              className="budget-fold budget-optional lg:border-l lg:pl-[var(--ed-gutter)]"
               style={{ borderColor: "var(--ed-line)" }}
             >
-              <p className="ed-eyebrow ed-eyebrow-accent">Optional enhancement</p>
-              <h3 className="ed-h4">{OPTIONAL_ENHANCEMENTS.title}</h3>
-              <p className="ed-body mt-3 text-[0.875rem]">{OPTIONAL_ENHANCEMENTS.body}</p>
-              <p className="ed-small mt-3">{OPTIONAL_ENHANCEMENTS.note}</p>
-              <a
-                href="#consult"
-                className="ed-link mt-6 inline-flex min-h-11 items-center lg:min-h-0"
-              >
-                Ask about visualizations
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </a>
-            </div>
+              <summary>
+                <p className="ed-eyebrow ed-eyebrow-accent">Optional enhancement</p>
+                <h3 className="ed-h4">{OPTIONAL_ENHANCEMENTS.title}</h3>
+              </summary>
+              <div className="budget-fold-body">
+                {OPTIONAL_ENHANCEMENTS.body.split(/(?<=\.)\s+/).map((sentence) => (
+                  <p key={sentence} className="ed-body mt-3">{sentence}</p>
+                ))}
+                <p className="ed-small mt-3">{OPTIONAL_ENHANCEMENTS.note}</p>
+                <a
+                  href="#consult"
+                  className="ed-link mt-6 inline-flex min-h-11 items-center lg:min-h-0"
+                >
+                  Ask about visualizations
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </a>
+              </div>
+            </details>
           </div>
         </Reveal>
 

@@ -89,18 +89,21 @@ export default function HomePage() {
                 <h2>Tell us what you<br /><em style={{ color: "var(--f-accent)" }}>want to build.</em></h2>
                 <p>Send a few details and we will set up a free 60 to 90 minute planning session, usually within one business day.</p>
                 <p>By the end you will have a realistic budget band, a clear-eyed read on your lot, and no expectation to go any further.</p>
-                <ul className="fr-request-list">
-                  {CONSULT_BULLETS.map((item) => (
-                    <li key={item}>
-                      <Check className="h-4 w-4" aria-hidden="true" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <ul className="fr-request-list" style={{ borderTop: 0, paddingTop: 0 }}>
-                  <li><a href={SITE_CONFIG.phoneHref} className="f-link">Call {SITE_CONFIG.phone} <ArrowUpRight size={16} aria-hidden="true" /></a></li>
-                  <li><a href={SITE_CONFIG.phoneSmsHref} className="f-link">Send a text <ArrowUpRight size={16} aria-hidden="true" /></a></li>
-                </ul>
+                <details className="request-more">
+                  <summary>What the session covers</summary>
+                  <ul className="fr-request-list">
+                    {CONSULT_BULLETS.map((item) => (
+                      <li key={item}>
+                        <Check className="h-4 w-4" aria-hidden="true" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <ul className="fr-request-list" style={{ borderTop: 0, paddingTop: 0 }}>
+                    <li><a href={SITE_CONFIG.phoneHref} className="f-link">Call {SITE_CONFIG.phone} <ArrowUpRight size={16} aria-hidden="true" /></a></li>
+                    <li><a href={SITE_CONFIG.phoneSmsHref} className="f-link">Send a text <ArrowUpRight size={16} aria-hidden="true" /></a></li>
+                  </ul>
+                </details>
               </Reveal>
             </div>
           </div>

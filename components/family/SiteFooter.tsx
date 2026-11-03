@@ -110,8 +110,8 @@ export function SiteFooter({ hideRegistration = false, brandExtra }: SiteFooterP
           </div>
 
           {footer.groups.map((group) => (
-            <div className="fam-footer-group" key={group.title}>
-              <p className="fam-footer-label">{group.title}</p>
+            <details className="fam-footer-group" key={group.title}>
+              <summary className="fam-footer-label">{group.title}</summary>
               <ul>
                 {group.links.map((link) => (
                   <li key={link.href}>
@@ -119,14 +119,14 @@ export function SiteFooter({ hideRegistration = false, brandExtra }: SiteFooterP
                   </li>
                 ))}
               </ul>
-            </div>
+            </details>
           ))}
         </div>
 
-        <div className="fam-footer-row fam-footer-areas">
-          <Link href={footer.areas.href} className="fam-footer-label fam-footer-row-label">
-            {footer.areas.label}
-          </Link>
+        <details className="fam-footer-row fam-footer-areas">
+          <summary className="fam-footer-label fam-footer-row-label">
+            <Link href={footer.areas.href}>{footer.areas.label}</Link>
+          </summary>
           <ul>
             {footer.areas.links.map((link) => (
               <li key={link.href}>
@@ -134,10 +134,10 @@ export function SiteFooter({ hideRegistration = false, brandExtra }: SiteFooterP
               </li>
             ))}
           </ul>
-        </div>
+        </details>
 
-        <div className="fam-footer-row fam-footer-family" data-family-row="">
-          <p className="fam-footer-label fam-footer-row-label">{brand.family.label}</p>
+        <details className="fam-footer-row fam-footer-family" data-family-row="">
+          <summary className="fam-footer-label fam-footer-row-label">{brand.family.label}</summary>
           <ul>
             {brand.family.companies.map((company) =>
               sameSite(company.href, brand.domain) ? (
@@ -155,7 +155,7 @@ export function SiteFooter({ hideRegistration = false, brandExtra }: SiteFooterP
               ),
             )}
           </ul>
-        </div>
+        </details>
 
         <div className="fam-footer-legal">
           <p className="fam-footer-nap">

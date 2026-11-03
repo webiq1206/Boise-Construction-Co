@@ -37,7 +37,7 @@ function ProjectImageGrid({
   if (!hero) return null;
 
   return (
-    <div className="flex flex-col">
+    <div className="project-film flex flex-col">
       <div className={`relative ${lead ? "aspect-[16/10]" : "aspect-[4/3]"}`}>
         <Image
           src={hero.src}
