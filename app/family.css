@@ -148,9 +148,9 @@
   --foreground: var(--ed-bone-ink-hsl);
   /* Buttons. `brand` fills with --primary, which on these sites IS the bone.
      Without this swap a primary CTA on a bone band is bone-on-bone. */
-  --primary: var(--ed-bone-ink-hsl);
+  --primary: 60 0.9% 21.8%; /* brand charcoal #383837 */
   --primary-foreground: var(--ed-bone-hsl);
-  --primary-border: hsl(var(--ed-bone-ink-hsl));
+  --primary-border: hsl(60 0.9% 21.8%);
   /* `--heading` is separate from `--foreground` on these sites and every h1-h6
      is coloured from it in globals. Missing it here rendered bone headings on a
      bone band at a contrast ratio of 1.00 - literally invisible - which is what

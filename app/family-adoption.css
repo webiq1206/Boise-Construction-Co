@@ -69,3 +69,114 @@
 .quote-request-app-frame [data-testid="app-frame-body"] > div {
   justify-content: flex-start !important;
 }
+
+/* ---------------------------------------------------------------- lot panel */
+/* The lot question is an image with the copy on the same measure as the rest
+   of the page. Mobile gutters match .f-container (20px, 40px total). */
+.fr-panel-media img {
+  width: 100%;
+  height: auto;
+}
+.fr-panel-body {
+  width: min(1260px, 88%);
+  margin-inline: auto;
+  padding-block: clamp(48px, 6vw, 88px);
+}
+.fr-panel-body > p:not(.f-eyebrow) {
+  margin-top: 18px;
+  max-width: 40em;
+  color: var(--fr-ink-soft, #484c47);
+  font-size: 17px;
+  line-height: 1.6;
+}
+.fr-panel-list {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+  width: 100%;
+}
+.fr-panel-list li {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: start;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--fr-ink-soft, #484c47);
+}
+.fr-panel-list li > span {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  line-height: 1.55;
+  color: var(--f-ink, #2c302f);
+}
+.fr-panel-body > .fam-btn {
+  margin-top: 28px;
+}
+@media (max-width: 700px) {
+  .fr-panel-body {
+    width: calc(100% - 40px);
+    padding-block: 36px 48px;
+  }
+}
+
+/* ------------------------------------------------- planning range calculator */
+/* Phone: the dark card uses the same gutter as .f-container. The result is the
+   foot of that card, not a second box floating under it. Desktop keeps the
+   side-by-side grid from design-v2-compliance.css. */
+@media (max-width: 700px) {
+  .approved-shell .fr-band-estimate.approved-estimate {
+    width: calc(100% - 40px);
+  }
+}
+@media (max-width: 1023px) {
+  .approved-shell .fr-band-estimate.approved-estimate {
+    padding-bottom: 0;
+  }
+  .approved-shell .fr-band-estimate .planning-range-grid {
+    gap: 28px 0;
+  }
+  .approved-shell .fr-band-estimate .planning-range-cards {
+    gap: 12px;
+  }
+  .approved-shell .fr-band-estimate .planning-range-cards [data-selected] {
+    min-height: 48px;
+    padding: 12px 16px;
+    border-radius: 4px;
+    background: var(--fr-paper, #fbfaf6);
+    color: var(--f-ink, #2c302f);
+    border: 1px solid rgba(56, 56, 55, 0.18);
+    box-shadow: none;
+  }
+  .approved-shell .fr-band-estimate .planning-range-cards [data-selected="true"] {
+    border-color: var(--f-accent, #c48d3f);
+    box-shadow: inset 3px 0 0 var(--f-accent, #c48d3f);
+  }
+  .approved-shell .fr-band-estimate .planning-range-cards [data-selected="false"] > span:last-child {
+    border-color: rgba(44, 48, 47, 0.4);
+  }
+  .approved-shell .fr-band-estimate .planning-range-result {
+    border: 0;
+    border-top: 6px solid var(--f-accent, #c48d3f);
+    border-radius: 0;
+    box-shadow: none;
+    padding: 28px 20px 32px;
+  }
+  .approved-shell .fr-band-estimate .fr-range-result-label {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+  }
+  .approved-shell .fr-band-estimate .planning-range-band {
+    margin-top: 12px;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .approved-shell .fr-band-estimate .planning-range-note {
+    margin-top: 14px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+}

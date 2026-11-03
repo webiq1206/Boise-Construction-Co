@@ -68,7 +68,7 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
     <li><span>02</span>Septic and well feasibility when the lot is not on municipal service</li>
     <li><span>03</span>Soil, slope, access, and setbacks that shape what can be built</li>
    </ul>
-   <a className={familyButtonClass({variant:'secondary',size:'lg',className:'secondary-cta'})} href="/services/lot-evaluation">Lot evaluation</a>
+   <a className={familyButtonClass({variant:'secondary',size:'lg'})} href="/services/lot-evaluation">Lot evaluation</a>
   </div>
  </section>
 

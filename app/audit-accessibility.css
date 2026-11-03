@@ -116,7 +116,7 @@
     height: calc(100svh - var(--f-header-h) - 1px);
     min-height: 0;
     max-height: calc(100svh - var(--f-header-h) - 1px);
-    background: #1c1f1e;
+    background: var(--color-charcoal);
   }
   /* Phone crop with a lower horizon: the full-height landscape crop spent the
      top half of the screen on sky. The photo now sits 18% higher, so the house

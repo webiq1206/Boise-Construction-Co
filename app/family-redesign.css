@@ -147,7 +147,7 @@
 .fr-band,
 .approved-shell .fr-band,
 .approved-shell .ed-on-dark.fr-band {
-  background: var(--fr-ink);
+  background: var(--color-charcoal);
   color: var(--fr-paper);
 }
 .fr-band .f-eyebrow { color: #d9dbd4; }
@@ -272,8 +272,8 @@
 }
 .fr-cities a:hover,
 .fr-cities a:focus-visible {
-  background: var(--fr-ink);
-  border-color: var(--fr-ink);
+  background: var(--color-charcoal);
+  border-color: var(--color-charcoal);
   color: var(--fr-paper);
 }
 
@@ -419,8 +419,8 @@
 
 /* Brand ground for the shared chrome: this site's footer and hero fallback sit on
    its own deep charcoal, not the parent company's forest green. */
-footer.fam-footer[data-family-footer] { background: #1c1f1e; }
-section.fam-hero[data-family-hero] { background: #2c302f; }
+footer.fam-footer[data-family-footer] { background: var(--color-charcoal); }
+section.fam-hero[data-family-hero] { background: var(--color-charcoal); }
 
 /* One heading scale for the family sections, whatever the site's older approved
    layer says: the editorial h2 is large on purpose. */
