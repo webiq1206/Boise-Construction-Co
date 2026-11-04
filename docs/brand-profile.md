@@ -1,6 +1,6 @@
 # Boise Construction Co: current implementation profile
 
-Profile version: owner-update-20261104, recorded 2026-11-04. This records the existing
+Profile version: owner-update-20261104.1, recorded 2026-11-04. This records the existing
 approved implementation and the owner's current presentation instructions. The approved
 family handoff is dated 2026-09-24 in `docs/approved-design-handoff.md`; the asset
 receipt is `docs/branding-20261028.json`. No later approval date is inferred.
@@ -111,3 +111,8 @@ implementation rules and independent review record, plus
 `skill://user/6adbb2738af481919a1b922c554c84c7/organic-ai-search-visibility/`.
 Saving this profile does not establish adoption by external agents or releases.
 See `docs/organic-search-20261104.md` for scope and observed verification.
+
+
+### November4 narrow-header and menu implementation record
+
+Canonical source `boise-remodeling-co` revision `fa720a579b696af92861fb571fa0aff043e734b0` restores the complete approved SVG below360px in a logo row above the unboxed contact/menu controls. Normal320px prototype height is89px including the border; use the actual measured header/safe-area height, not a fixed clearance. Enlarged text may grow it. Normal360px-and-up header geometry is unchanged. Mobile-menu Call/Text/Chat contact controls are transparent and borderless at rest, retain visible focus and existing destinations/capability, and use the same icons as header/footer. This records the owner-requested consistency repair, not a new identity or approval exception. The independently reviewed prototype is narrower evidence than each final built site; retain exact-head rendering and functional gates.
