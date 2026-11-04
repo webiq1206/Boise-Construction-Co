@@ -10,3 +10,5 @@ Jared owns Git import and publication. No assistant import or publication occurr
 
 
 Current-standard refresh: Organic1.0.2 and all six current references were loaded November4. The archived1.0.0 snapshot remains historical evidence, not current guidance. The seven independent typography source findings were corrected with marketing leaf selectors; exact rendered acceptance remains open.
+
+Bounded homepage gallery correction: six thumbnail views now use2columnsphone/3desktop with accurate50/33/20vw image hints. The lead title/eyebrow appears once; descriptions, seven image entries, nonlead behavior and service link are retained. Sole current consumer is `/`. Independent source review and6focusedtests pass; exactafterrender/CI remain required. Existing calculator/quote-form C10 concerns are separately recorded, not declared passed or rewritten through this correction.

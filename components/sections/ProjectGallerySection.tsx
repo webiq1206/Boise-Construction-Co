@@ -13,8 +13,10 @@ import { contentImageAlt } from "@/shared/imageAlts";
 function ProjectMeta({ project, lead = false }: { project: GalleryProject; lead?: boolean }) {
   return (
     <>
-      <p className="ed-eyebrow ed-eyebrow-accent !mb-3">Architecture and finishes</p>
-      <h3 className={lead ? "ed-h3" : "ed-h4"}>{project.title}</h3>
+      {!lead && <>
+        <p className="ed-eyebrow ed-eyebrow-accent !mb-3">Architecture and finishes</p>
+        <h3 className="ed-h4">{project.title}</h3>
+      </>}
       <p className={`ed-body mt-3 ${lead ? "" : "text-[0.875rem]"}`}>{project.description}</p>
     </>
   );
@@ -46,7 +48,7 @@ function ProjectImageGrid({
       </div>
       {rest.length > 0 && (
         <div
-          className={`grid ${lead ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-3"}`}
+          className={`grid ${lead ? (rest.length === 6 ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-2 sm:grid-cols-4") : "grid-cols-3"}`}
           style={{ borderTop: "1px solid var(--ed-line)" }}
         >
           {(lead ? rest : rest.slice(0, 3)).map((image) => (
@@ -59,7 +61,7 @@ function ProjectImageGrid({
                 src={image.src}
                 alt={contentImageAlt(image.src) || image.label}
                 fill
-                sizes={lead ? "(max-width: 640px) 50vw, 15vw" : "(max-width: 768px) 28vw, 10vw"}
+                sizes={lead ? (rest.length === 6 ? "(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 20vw" : "(max-width: 640px) 50vw, 15vw") : "(max-width: 768px) 28vw, 10vw"}
                 className="object-cover img-brand-grade"
                 loading="lazy"
               />
