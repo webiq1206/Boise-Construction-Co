@@ -1,7 +1,7 @@
 # Boise Construction Co: current implementation profile
 
-Profile version: source-b7b443f, recorded 2026-11-04. This records the existing
-approved implementation; it does not approve a new visual direction. The approved
+Profile version: owner-update-20261104.1, recorded 2026-11-04. This records the existing
+approved implementation and the owner's current presentation instructions. The approved
 family handoff is dated 2026-09-24 in `docs/approved-design-handoff.md`; the asset
 receipt is `docs/branding-20261028.json`. No later approval date is inferred.
 
@@ -47,13 +47,14 @@ receipt is `docs/branding-20261028.json`. No later approval date is inferred.
 ## Imagery, proof and workflows
 
 - Image direction: architectural/service imagery, intentional desktop and phone
-  crops with useful alt text. `shared/galleryData.ts` contains an explicitly
-  labeled Eagle concept set, not photographed client work. The service-image
-  provenance receipt labels generated images as concepts. No Boise project,
+  crops with useful alt text. `shared/galleryData.ts` contains a generated
+  architectural image set, not photographed client work. Keep provenance in
+  project records; public captions describe rooms and materials. No Boise project,
   testimonial, statistic or staff photograph is invented or added.
 - Approved assets: `docs/branding-20261028.json`,
   `docs/service-image-provenance-20261026.json`, current image manifests and
-  `docs/approved-design-handoff.md`. Alt text and concept labeling stay unchanged.
+  `docs/approved-design-handoff.md`. Preserve descriptive alt text and authentic
+  asset records; remove presentation disclaimers under the owner update below.
   The two Boise heroes use a scoped responsive architectural crop. Baseline screenshots are recorded in the task evidence;
   they are observations, not a new aesthetic approval.
 - Writing: direct, practical and answer first. Explain decisions and uncertainty;
@@ -82,10 +83,36 @@ receipt is `docs/branding-20261028.json`. No later approval date is inferred.
 
 ## Standards and review
 
+Owner presentation update, 2026-11-04: realistic AI scenes may be used as generic
+visuals when authentic assets are unavailable, without concept/illustration or
+representative-imagery labels. Remove launch-status, first-project and past-client
+reference disclaimers. They must not become claims of actual completed company
+projects, customer work or factual proof. Preserve useful subject descriptions.
+
+The website publishes service geography, phone, email, hours and appropriate
+contractor-registration details. It does not publish the business street address,
+precise home coordinates, administrative contact labels or storefront disclaimers
+in visible copy, structured data, client configuration or downloads. Business-profile
+verification records remain with the authorized owner outside website output.
+Founder biography and the verified P5 profile link remain appropriate.
+
+Equivalent typography roles use the canonical family token scale: editorial
+section display 36/52/64px; interior H1 and feature title 32/44/52px; content H2
+28/36/40px; H3 22/26/28px; body 17/18/18px; buttons 16px. Use the matching shared
+line-height/tracking tokens. Existing shared hero size and the scoped Boise
+PriorityLanding correction remain. Specialized input geometry is preserved and
+must be checked for inherited type effects. Shared header/footer controls are
+implemented in the canonical family source, not patched in this brand.
+
 Apply the current user-owned `website-design-quality` Version 2.3 master,
 implementation rules and independent review record, plus
-`organic-ai-search-visibility` 1.0.0. Current resources are
+`organic-ai-search-visibility` 1.0.2. Current resources are
 `skill://user/6ade0cb654b88191a3885c7ff3a65f17/website-design-quality/` and
 `skill://user/6adbb2738af481919a1b922c554c84c7/organic-ai-search-visibility/`.
 Saving this profile does not establish adoption by external agents or releases.
 See `docs/organic-search-20261104.md` for scope and observed verification.
+
+
+### November4 narrow-header and menu implementation record
+
+Canonical source `boise-remodeling-co` revision `fa720a579b696af92861fb571fa0aff043e734b0` restores the complete approved SVG below360px in a logo row above the unboxed contact/menu controls. Normal320px prototype height is89px including the border; use the actual measured header/safe-area height, not a fixed clearance. Enlarged text may grow it. Normal360px-and-up header geometry is unchanged. Mobile-menu Call/Text/Chat contact controls are transparent and borderless at rest, retain visible focus and existing destinations/capability, and use the same icons as header/footer. This records the owner-requested consistency repair, not a new identity or approval exception. The independently reviewed prototype is narrower evidence than each final built site; retain exact-head rendering and functional gates.

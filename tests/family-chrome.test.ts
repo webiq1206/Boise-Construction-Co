@@ -32,7 +32,9 @@ test('the brand config carries this site’s facts, one CTA and one destination'
   assert.equal(FAMILY_BRAND.tagline, `${SITE_TAGLINE}.`);
   assert.equal(FAMILY_BRAND.parentFacebook.href, P5_SOCIAL.facebook);
   assert.deepEqual(FAMILY_BRAND.parentGoogle, { href: 'https://www.google.com/search?kgmid=/g/11ntl1t7dc', label: 'P5 Home Co on Google' });
-  assert.match(FAMILY_BRAND.nap.line, /4031 W Wapoot St, Meridian, ID 83646/);
+  assert.equal(FAMILY_BRAND.nap.line, 'Serving Boise and the Treasure Valley');
+  assert.deepEqual(FAMILY_BRAND.header.phoneActions, ['call', 'text', 'chat']);
+  assert.deepEqual(FAMILY_BRAND.chat.hiddenOn, ['/estimate*', '/admin*', '/subcontractor*']);
   assert.equal(FAMILY_BRAND.accent, '#c48d3f');
   assert.equal(FAMILY_BRAND.accentInk, '#78531e');
   // Approved C7 check: the bar is on the first screen below 1180px.
@@ -69,7 +71,8 @@ test('the footer renders the family row, NAP, hours and one registration link, w
   assert.match(html, /<span class="fam-footer-current" aria-current="true">Boise Construction Co<\/span>/);
   assert.equal(/rel="noopener noreferrer">(P5 Home Co|Boise)/.test(html), false);
   assert.match(html, /data-family-row=""/);
-  assert.match(html, /Public representative: Nick Perkins/);
+  assert.match(html, /Serving Boise and the Treasure Valley/);
+  assert.doesNotMatch(html, /4031|Wapoot|Public representative|staffed storefront/);
   assert.match(html, /Hours: Mon to Fri 9 to 6, Sat 9 to 4 Mountain\. Closed Sunday\./);
   assert.match(html, /mailto:hello@boiseconstruction\.co/);
   assert.match(html, /href="\/contact\.vcf"/);
@@ -78,7 +81,8 @@ test('the footer renders the family row, NAP, hours and one registration link, w
   assert.match(html, /<a href="https:\/\/www\.google\.com\/search\?kgmid=\/g\/11ntl1t7dc" rel="noopener" target="_blank" data-testid="link-footer-google">P5 Home Co on Google<\/a>/);
   assert.equal((html.match(/data-testid="link-footer-google"/g) ?? []).length, 1);
   assert.equal((html.match(/data-testid="link-footer-facebook"/g) ?? []).length, 1);
-  assert.match(html, /Boise ADU Co projects currently run through Boise Construction Co; its site is coming\./);
+  assert.match(html, /href="\/services\/adu">ADUs &amp; guest houses/);
+  assert.doesNotMatch(html, /site is coming|projects currently run/);
   assert.equal((html.match(/>P5 Home Co LLC, Idaho Registered Contractor #8381215<\/a>/g) ?? []).length, 1);
   // Boise ADU Co is not in the family row until its own site exists.
   assert.equal(/>Boise ADU Co</.test(html), false);
@@ -96,7 +100,7 @@ test('the homepage hero is the family template with sourced proof', () => {
   assert.equal(cta[1], 'Request a quote');
   assert.match(html, /<a href="tel:\+12084771169" class="fam-hero-link">Call or text \(208\) 477-1169<\/a>/);
   assert.match(html, /<picture class="fam-hero-media"><source media="\(max-width: 1023px\)"/);
-  assert.match(html, /Concept design imagery/);
+  assert.doesNotMatch(html, /Concept design imagery|Representative imag/);
   const support = html.match(/<p class="fam-hero-support">([^<]+)<\/p>/)?.[1] ?? '';
   assert.ok(support.split(/\s+/).length <= 14, support);
   // Proof: only facts already published on the site.

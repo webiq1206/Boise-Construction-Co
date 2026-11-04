@@ -41,7 +41,6 @@ export function HeroSection() {
           className="absolute inset-0 pointer-events-none"
           style={{ backgroundImage: GRAIN_URL, backgroundRepeat: "repeat", opacity: 0.025 }}
         />
-        <p className="absolute bottom-4 left-4 z-10 text-xs text-white">Representative imagery</p>
 
         <div className="relative z-10 container px-4 md:px-8 py-20 md:py-32 pb-16 md:pb-28">
           <div className="ed-hero-copy">

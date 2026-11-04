@@ -31,7 +31,6 @@ export function ProcessSection() {
             sizes="(max-width: 820px) 100vw, 43vw"
             className="object-cover img-brand-grade"
           />
-          <p className="absolute bottom-4 left-4 z-10 text-xs text-white">Representative imagery</p>
           <div
             className="pointer-events-none absolute inset-0"
             style={{ backgroundImage: GRAIN_URL, backgroundRepeat: "repeat", opacity: 0.028 }}

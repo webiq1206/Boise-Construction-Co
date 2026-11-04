@@ -13,6 +13,7 @@ import { generateSpeakableSchema } from '@/lib/schema';
 import { CITY_SEO_DATA, indianCreekDescription, serviceCityHeadingName } from '@/lib/seo';
 import { areaPath,CITY_SLUGS,cityServicePath,getCityBySlug,servicePath } from '@/lib/seo-routes';
 import { getAreaImageSet } from '@/shared/cityServiceImages';
+import { contentImageAlt } from '@/shared/imageAlts';
 import { getCountyLabel,SERVICES } from '@/shared/contentData';
 import { getGalleryProjectsForCity } from '@/shared/galleryData';
 import { getAreaCityCopy } from '@/shared/content/areaCopy';
@@ -120,10 +121,9 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
           city.slug === 'eagle'
             ? '/images/projects/eagle-mountain-modern/eagle-custom-home-front-exterior.webp'
             : images.breather,
-        caption:
-          city.slug === 'eagle'
-            ? 'Charcoal stucco, ledgestone, and dark standing-seam roof on a foothills concept home.'
-            : `Concept design imagery for home building in ${city.name}.`,
+        caption: contentImageAlt(city.slug === 'eagle'
+          ? '/images/projects/eagle-mountain-modern/eagle-custom-home-front-exterior.webp'
+          : images.breather),
       },
     },
     {

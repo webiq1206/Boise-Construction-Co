@@ -58,9 +58,9 @@
 .approved-shell :is(.ed-card,.ed-matrix,.ed-inset,.f-footer) :is(h3,h4) { letter-spacing: -0.01em; }
 
 /* Tracked uppercase labels and links: 11px was under the legibility floor on phones. */
-.approved-shell { --ed-fs-eyebrow: 0.75rem; }
-.approved-shell .f-eyebrow { font-size: 12px; }
-.approved-shell .f-scene-copy .f-eyebrow { font-size: 11px; }
+.approved-shell { --ed-fs-eyebrow: var(--fs-label); }
+.approved-shell .f-eyebrow { font-size: var(--fs-label); line-height:var(--lh-label); letter-spacing:var(--tracking-label); }
+.approved-shell .f-scene-copy .f-eyebrow { font-size: var(--fs-label); line-height:var(--lh-label); letter-spacing:var(--tracking-label); }
 .approved-shell .f-hero-foot { font-size: 11px; }
 
 /* The required mark and error text measured 2.8:1 on the bone form ground. */
@@ -163,18 +163,18 @@
   display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); column-gap: clamp(32px, 6vw, 96px);
   align-items: start; padding-block: 96px;
 }
-.approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > .f-eyebrow { grid-column: 1 / -1; grid-row: 1; }
-.approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > h2 { grid-column: 1; grid-row: 2; font-size: clamp(34px, 3.4vw, 48px); line-height: 1.05; }
-.approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > h2 + p { grid-column: 1; grid-row: 3; margin-top: 18px; max-width: 40ch; font-size: 17px; line-height: 1.65; color: #2c302f; }
-.approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > p + p { grid-column: 2; grid-row: 2 / 4; margin-top: 6px; max-width: 58ch; font-size: 15px; line-height: 1.8; color: #62605a; }
-.approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > ul { grid-column: 1 / -1; grid-row: 4; margin-top: 40px; }
+.approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > .f-eyebrow { grid-column: 1 / -1; grid-row: 1; font-size:var(--fs-label); line-height:var(--lh-label); letter-spacing:var(--tracking-label); }
+.approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > h2 { grid-column: 1; grid-row: 2; font-size: var(--fs-h2); line-height: var(--lh-h2); letter-spacing:var(--tracking-heading); font-weight:var(--weight-display); }
+.approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > h2 + p { grid-column: 1; grid-row: 3; margin-top: var(--stack-heading); max-width: 40ch; font-size: var(--fs-body); line-height: var(--lh-body); color: #2c302f; letter-spacing:0; font-weight:var(--weight-display); }
+.approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > p + p { grid-column: 2; grid-row: 2 / 4; margin-top: var(--stack-heading); max-width: 58ch; font-size: var(--fs-body); line-height: var(--lh-body); color: #62605a; letter-spacing:0; font-weight:var(--weight-display); }
+.approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > ul { grid-column: 1 / -1; grid-row: 4; margin-top: var(--stack-heading); }
 @media (max-width: 820px) {
   .approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) { grid-template-columns: 1fr; padding-block: 80px; }
   .approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > * { grid-column: 1 !important; grid-row: auto !important; }
-  .approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > h2 { font-size: 32px; }
-  .approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > h2 + p { max-width: none; font-size: 16px; }
-  .approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > p + p { margin-top: 14px; font-size: 15px; }
-  .approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > ul { margin-top: 28px; }
+  .approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > h2 { font-size: var(--fs-h2); line-height:var(--lh-h2); letter-spacing:var(--tracking-heading); font-weight:var(--weight-display); }
+  .approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > h2 + p { max-width: none; font-size: var(--fs-body); line-height:var(--lh-body); letter-spacing:0; font-weight:var(--weight-display); }
+  .approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > p + p { margin-top: var(--stack-heading); font-size: var(--fs-body); line-height:var(--lh-body); letter-spacing:0; font-weight:var(--weight-display); }
+  .approved-shell .family-site section.f-section.f-container:not(.f-two):not(.f-area):not(:has(.f-section-top)):has(> h2 + p) > ul { margin-top: var(--stack-heading); }
 }
 
 /* Numbered matrix cells read as a list on phones: number beside the title, no orphan. */
@@ -192,13 +192,13 @@
 .approved-shell .f-accordion [data-slot=accordion-trigger] { font-size: 23px; line-height: 1.25; padding: 20px 0; }
 @media (max-width: 700px) {
   .approved-shell .f-accordion [data-slot=accordion-trigger] { font-size: 21px; padding: 18px 0; }
-  .approved-shell .f-accordion [data-slot=accordion-content] { font-size: 15px; }
+  .approved-shell .f-accordion [data-slot=accordion-content] { font-size: var(--fs-body); line-height:var(--lh-body); letter-spacing:0; }
 }
 /* Article sections render open; the summary row keeps a quiet plus/minus so a reader can fold them. */
 .approved-shell .guide-section-summary > span { display: none; }
 
 /* The sans carries running text; the serif is for display and a single lede. */
-.approved-shell { --ed-fs-lede: clamp(1.1875rem, 1.3vw, 1.3125rem); }
+.approved-shell { --ed-fs-lede: var(--fs-body); }
 
 /* City and section links as a two-column rule list. */
 .approved-shell .ed-rule-list { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; border-top: 1px solid var(--ed-line); }
@@ -227,12 +227,12 @@
    and reviewed the outliers by eye. Rules below give the few places where a
    heading sat flush against its copy a consistent breath, and keep the article
    jump links on one scrolling row. */
-.approved-shell .interior-eyebrow { margin-bottom: 12px; }
+.approved-shell .interior-eyebrow { margin-bottom: 12px; font-size:var(--fs-label); line-height:var(--lh-label); letter-spacing:var(--tracking-label); }
 .approved-shell :is(.ed-h2, .ed-h2-sm, h2.ed-statement) + p:not([class*="mt-"]):not(.ed-eyebrow) { margin-top: 16px; }
 .approved-shell :is(.ed-h3, .ed-h4, h3.ed-h4, h3.font-serif, h3.font-medium) + p:not([class*="mt-"]) { margin-top: 8px; }
 .approved-shell .ed-h4 + .ed-body { margin-top: 8px; }
 .approved-shell .ed-lede + a:not([class*="mt-"]) { display: inline-flex; margin-top: 14px; }
-.approved-shell .f-scene-copy h3 + p, .approved-shell .f-section-top h2 + p { margin-top: 12px; }
+.approved-shell .f-scene-copy h3 + p, .approved-shell .f-section-top h2 + p { margin-top: var(--stack-heading); }
 .approved-shell [data-testid="guide-jump-chips"] > div { flex-wrap: nowrap; }
 .approved-shell [data-testid="guide-jump-chips"] a { max-width: 78vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; line-height: 40px; }
 /* Open article sections: the marker sits on the heading's first line, not above it. */

@@ -589,11 +589,7 @@ export function LandingPageTemplate({
                           <figcaption className="ed-small mt-3 text-muted-foreground">
                             {section.figure.caption}
                           </figcaption>
-                        ) : (
-                          <figcaption className="ed-small mt-3 text-muted-foreground">
-                            Representative imagery
-                          </figcaption>
-                        )}
+                        ) : null}
                       </figure>
                     )}
                   </Reveal>
@@ -609,7 +605,7 @@ export function LandingPageTemplate({
         <Section surface="deep" spacing="xl" edge>
           <div className="ed-shell">
             <Reveal>
-              <p className="ed-eyebrow">Representative imagery</p>
+              <p className="ed-eyebrow">Architecture and finishes</p>
               {proofHeading ? <h2 className="ed-h2 ed-statement-wide">{proofHeading}</h2> : null}
             </Reveal>
 
@@ -620,10 +616,10 @@ export function LandingPageTemplate({
                     <article className="flex h-full flex-col" style={{ border: '1px solid var(--ed-line)' }}>
                       <div className="grid grid-cols-2">
                         <div className="relative aspect-[4/3]">
-                          <Image src={project.exteriorImageUrl} alt={contentImageAlt(project.exteriorImageUrl) || 'Representative image: Exterior view'} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
+                          <Image src={project.exteriorImageUrl} alt={contentImageAlt(project.exteriorImageUrl) || 'Exterior view'} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                         </div>
                         <div className="relative aspect-[4/3]">
-                          <Image src={project.interiorImageUrl} alt={contentImageAlt(project.interiorImageUrl) || 'Representative image: Interior view'} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
+                          <Image src={project.interiorImageUrl} alt={contentImageAlt(project.interiorImageUrl) || 'Interior view'} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                         </div>
                       </div>
                       <div className="p-6">

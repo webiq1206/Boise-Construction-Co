@@ -8,6 +8,7 @@ import {contentImageAlt} from '@/shared/imageAlts';
 import {PlanningRangeExplorer} from '@/components/PlanningRangeExplorer';
 import {brands,cities,serviceExtras} from './family-content';
 import {DesignGallery} from '@/components/sections/DesignGallery';
+import {ServiceArea} from '@/components/family/ServiceArea';
 import styles from './HomePlanningSections.module.css';
 const Arrow=()=> <ArrowUpRight size={18} aria-hidden="true"/>;
 function Title({lines}:{lines:string[]}){return <>{lines[0]}<br/><em>{lines[1]}</em></>}
@@ -54,7 +55,6 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
    {src:'/family/drive/landscape-3-covered-patio-with-outdoor-fireplace.webp',alt:'Covered patio with a stacked stone outdoor fireplace and lounge chairs facing the mountains at dusk',label:'Covered patio',wide:true},
    {src:'/family/drive/square-3-soaking-tub-with-foothill-view.webp',alt:'Freestanding soaking tub beneath a large window looking out on golden foothills',label:'Primary bath'},
   ]}
-  note="Design imagery showing the quality and character we build toward. Ask to see plans, selections and references from past clients during your planning session."
  />
 
  {/* 2. The lot question, as an image-and-panel split. */}
@@ -108,7 +108,7 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
  </section>
 
  {/* 9. Where we build. */}
- <section className="f-area f-section f-container"><p className="f-eyebrow">AT HOME IN IDAHO</p><h2>Local people.<br/><em>Valley-wide reach.</em></h2><p>Serving homeowners throughout the Treasure Valley.</p><nav className="fr-cities" aria-label="Service area cities">{cities.map(city=><a key={city} href={`/areas/${city.toLowerCase().replaceAll(" ","-")}`} aria-label={`Home builders in ${city}`}>{city}</a>)}</nav></section>
+ <ServiceArea image={{src:'/family/drive/square-2-stone-entry-with-oak-front-door.webp',alt:'Oak front door, stone entry and covered eaves',width:1200,height:1200}}><p className="f-eyebrow">AT HOME IN IDAHO</p><h2>Local people.<br/><em>Valley-wide reach.</em></h2><p>Serving homeowners throughout the Treasure Valley.</p><nav className="fr-cities" aria-label="Service area cities">{cities.map(city=><a key={city} href={`/areas/${city.toLowerCase().replaceAll(" ","-")}`} aria-label={`Home builders in ${city}`}>{city}</a>)}</nav></ServiceArea>
 
  <FAQSection/>
  </div>;}

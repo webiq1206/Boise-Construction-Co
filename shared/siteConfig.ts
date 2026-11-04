@@ -54,18 +54,11 @@ export const SITE_CONFIG = {
   phoneSmsHref: `sms:${toE164Digits(PHONE_TEL)}`,
   email: process.env.NEXT_PUBLIC_EMAIL ?? DEFAULT_EMAIL,
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL,
-  /**
-   * Public representative named by the P5 brand brief (section 4.2) and
-   * docs/growth/OPERATIONS.md. Not a storefront staff listing.
-   */
-  publicRepresentative: "Nick Perkins",
-  // Canonical NAP. Street, city, region, and postal code match the authorized
-  // public address. This is a service-area business, not a staffed storefront.
+  // Public geography only. Verification addresses belong in the owner's
+  // business-profile records, never in website markup, downloads or bundles.
   address: {
-    street: "4031 W Wapoot St",
     city: "Meridian",
     state: "ID",
-    postalCode: "83646",
     cityState: "Meridian, ID",
     serviceArea: "Treasure Valley · Ada and Canyon County",
   },
