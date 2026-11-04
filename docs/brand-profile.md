@@ -106,7 +106,7 @@ implemented in the canonical family source, not patched in this brand.
 
 Apply the current user-owned `website-design-quality` Version 2.3 master,
 implementation rules and independent review record, plus
-`organic-ai-search-visibility` 1.0.0. Current resources are
+`organic-ai-search-visibility` 1.0.2. Current resources are
 `skill://user/6ade0cb654b88191a3885c7ff3a65f17/website-design-quality/` and
 `skill://user/6adbb2738af481919a1b922c554c84c7/organic-ai-search-visibility/`.
 Saving this profile does not establish adoption by external agents or releases.
