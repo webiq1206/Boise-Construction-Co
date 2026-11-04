@@ -514,9 +514,9 @@
     "tests/p5-intake-pdf.test.ts": "cb331ce30787d6df4154885531aaa05c2dec4e29e51cea3315392636bb0d1758",
     "lib/leadAttribution.ts": "aec4191c4984d381ede0fbb585bd29cc1b4b7eeb4270a553a377b0074a4eee35",
     "lib/leadAttributionBrowser.ts": "06514c0dd38cf186ffbec763c2ab47df1085e3991a1e7a7ad73ec657e80f4780",
-    "scripts/lib/quoteEntry.mjs": "46f9fb18396b8e100dfdfe05c90b3bf21f7777e7feef45767e0e24432eb3b920",
+    "scripts/lib/quoteEntry.mjs": "e3b09167b0570db009488eba1bba81bc55fe307ce18bbc93a2243b475eda2c9f",
     "scripts/lib/navigationEntry.mjs": "6f9ae022bb7e6df5d86e848b1e2e0da2a402b59522cdb0c1ce3cda15a86a10b4",
-    "tests/p5-navigation-entry.test.mjs": "c3074d9648326b9caf700ffa78089c4170512102b1efc1ee6e76535432baa8be"
+    "tests/p5-navigation-entry.test.mjs": "ed9d0d40604f38a89d26375d4cc03b7352a8de2644cde3ab9cf6c52baac5d4cc"
   },
   "coordinatedIntakeBatch": {
     "base": "e6e125b83468a402264be2f1e82e5c0466baa178",
@@ -657,6 +657,23 @@
           "file": "scripts/lib/quoteEntry.mjs",
           "before": "ecd978be5a45e0472de4f352fbc20c7ae99f0b635270d959769d9d77e1665993",
           "after": "7c998f9e2633e3da0c9a96829455e7de87a9a2e734a64eec4b4d213ee574d915"
+        }
+      ],
+      "note": "Only explicitly listed files synchronized; other files and provenance retained. Runtime scope is restricted to mobile-action and route-presentation compatibility."
+    },
+    {
+      "source": "p5-home-co",
+      "commit": "7789b25d72580fc72cf238b97059cf63f0659f2f",
+      "files": [
+        {
+          "file": "scripts/lib/quoteEntry.mjs",
+          "before": "46f9fb18396b8e100dfdfe05c90b3bf21f7777e7feef45767e0e24432eb3b920",
+          "after": "e3b09167b0570db009488eba1bba81bc55fe307ce18bbc93a2243b475eda2c9f"
+        },
+        {
+          "file": "tests/p5-navigation-entry.test.mjs",
+          "before": "c3074d9648326b9caf700ffa78089c4170512102b1efc1ee6e76535432baa8be",
+          "after": "ed9d0d40604f38a89d26375d4cc03b7352a8de2644cde3ab9cf6c52baac5d4cc"
         }
       ],
       "note": "Only explicitly listed files synchronized; other files and provenance retained. Runtime scope is restricted to mobile-action and route-presentation compatibility."

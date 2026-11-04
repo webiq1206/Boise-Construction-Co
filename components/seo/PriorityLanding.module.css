@@ -1,0 +1,159 @@
+/* Scoped to the two reviewed Boise planning pages. Shared family chrome stays unchanged. */
+.page {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.page :global(.interior-hero) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 0;
+}
+
+.page :global(.interior-hero .interior-hero-copy) {
+  min-width: 0;
+  padding: var(--section-y) var(--gutter);
+  padding-left: max(var(--gutter), calc((100vw - var(--container-max)) / 2));
+}
+
+.page :global(.interior-hero .interior-hero-copy h1) {
+  margin: 0;
+  max-width: 18ch;
+  font-size: var(--fs-h1);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.page :global(.interior-hero .interior-hero-copy .interior-hero-support) {
+  margin: var(--stack-heading) 0 0;
+  max-width: 42ch;
+  font-size: var(--fs-body);
+  line-height: 1.6;
+}
+
+.page :global(.interior-hero .interior-hero-actions) {
+  margin-top: var(--stack-cta);
+}
+
+.page :global(.interior-hero .interior-hero-image) {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 3 / 1;
+}
+
+.page :global(.interior-hero .interior-hero-image img) {
+  object-position: center 55%;
+}
+
+.page :global(.interior-hero .interior-hero-image-label) {
+  font-size: var(--fs-small);
+}
+
+.context {
+  display: grid;
+  min-width: 0;
+  justify-items: start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.context :global(nav),
+.context :global(nav span),
+.context :global(nav a) {
+  color: var(--color-text-muted);
+}
+
+.context :global(.interior-hero-eyebrow),
+.context :global(.interior-hero-chip) {
+  margin: 0;
+}
+
+.context :global(nav a) {
+  min-height: var(--touch-min);
+}
+
+.context > a {
+  max-width: 100%;
+  white-space: normal;
+}
+
+.context :global(nav),
+.context :global(nav ol),
+.context :global(nav li) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.page :global(.ed-step) > *,
+.page :global(.ed-split) > *,
+.page :global(.grid) > * {
+  min-width: 0;
+}
+
+.guide {
+  grid-template-columns: minmax(0, 1fr);
+  overflow-wrap: anywhere;
+}
+
+.guide > * {
+  min-width: 0;
+}
+
+:global(html):has(.page) {
+  scroll-padding-bottom: var(--priority-bar-clearance, var(--bar-height));
+}
+
+:global(body):has(.page) :global(.fam-bar[data-family-bar] .fam-bar-inner) {
+  flex-wrap: wrap;
+}
+
+:global(body):has(.page) :global(.fam-bar[data-family-bar] .fam-bar-primary) {
+  flex-basis: max-content;
+  line-height: 1.3;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+:global(body):has(.page) :global(.fam-bar[data-family-bar] .fam-bar-call) {
+  min-width: 0;
+  line-height: 1.3;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+:global(body):has(.page) :global(.fam-footer[data-family-footer] a) {
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+:global(body):has(.page) :global(.fam-menu[role='dialog'] .fam-menu-foot) {
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+:global(body):has(.page) :global(.fam-menu[role='dialog'] .fam-menu-foot) > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+:global(body):has(.page) :global(.fam-menu[role='dialog'] .fam-btn--block) {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.3;
+}
+
+@media (min-width: 640px) {
+  .page :global(.interior-hero) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .page :global(.interior-hero .interior-hero-image) {
+    aspect-ratio: auto;
+    align-self: stretch;
+  }
+}
