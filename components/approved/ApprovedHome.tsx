@@ -8,6 +8,8 @@ import {contentImageAlt} from '@/shared/imageAlts';
 import {PlanningRangeExplorer} from '@/components/PlanningRangeExplorer';
 import {brands,cities,serviceExtras} from './family-content';
 import {DesignGallery} from '@/components/sections/DesignGallery';
+import {ServiceArea} from '@/components/family/ServiceArea';
+import styles from './HomePlanningSections.module.css';
 const Arrow=()=> <ArrowUpRight size={18} aria-hidden="true"/>;
 function Title({lines}:{lines:string[]}){return <>{lines[0]}<br/><em>{lines[1]}</em></>}
 function Rows({items,numbered=false}:{items:[string,string][];numbered?:boolean}){return <Accordion type="single" collapsible className="f-accordion">{items.map(([title,copy],i)=><AccordionItem value={String(i)} key={title}><AccordionTrigger>{numbered&&<span className="f-number">0{i+1}</span>}<span>{title}</span></AccordionTrigger><AccordionContent>{copy}</AccordionContent></AccordionItem>)}</Accordion>}
@@ -53,17 +55,16 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
    {src:'/family/drive/landscape-3-covered-patio-with-outdoor-fireplace.webp',alt:'Covered patio with a stacked stone outdoor fireplace and lounge chairs facing the mountains at dusk',label:'Covered patio',wide:true},
    {src:'/family/drive/square-3-soaking-tub-with-foothill-view.webp',alt:'Freestanding soaking tub beneath a large window looking out on golden foothills',label:'Primary bath'},
   ]}
-  note="Design imagery showing the quality and character we build toward. Ask to see plans, selections and references from past clients during your planning session."
  />
 
  {/* 2. The lot question, as an image-and-panel split. */}
- <section className="fr-panel" id="own-a-lot" aria-labelledby="own-a-lot-title">
-  <div className="fr-panel-media"><img src="/family/p5-p5-construction-branded.webp" alt={contentImageAlt('/family/p5-p5-construction-branded.webp')||'A Treasure Valley building lot with the foothills behind it'} loading="lazy" width="1200" height="900"/></div>
-  <div className="fr-panel-body">
+ <section className={`fr-panel ${styles.lotPanel}`} id="own-a-lot" aria-labelledby="own-a-lot-title">
+  <div className={`fr-panel-media ${styles.lotMedia}`}><img src="/family/p5-p5-construction-branded.webp" alt={contentImageAlt('/family/p5-p5-construction-branded.webp')||'A Treasure Valley building lot with the foothills behind it'} loading="lazy" width="1200" height="900"/></div>
+  <div className={`fr-panel-body ${styles.lotBody}`}>
    <p className="f-eyebrow">BEFORE YOU COMMIT TO A PLAN</p>
    <h2 id="own-a-lot-title">Already own<br/><em>a lot?</em></h2>
    <p>A $950 lot evaluation answers the site questions that change the budget before design starts.</p>
-   <ul className="fr-panel-list">
+   <ul className={`fr-panel-list ${styles.lotList}`}>
     <li><span>01</span>Utilities: power, water, sewer or septic and well options on the parcel</li>
     <li><span>02</span>Septic and well feasibility when the lot is not on municipal service</li>
     <li><span>03</span>Soil, slope, access, and setbacks that shape what can be built</li>
@@ -113,7 +114,7 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
  </section>
 
  {/* 9. Where we build. */}
- <section className="f-area f-section f-container"><p className="f-eyebrow">AT HOME IN IDAHO</p><h2>Local people.<br/><em>Valley-wide reach.</em></h2><p>Serving homeowners throughout the Treasure Valley.</p><details className="city-fold"><summary>Cities we serve</summary><nav className="fr-cities" aria-label="Service area cities">{cities.map(city=><a key={city} href={`/areas/${city.toLowerCase().replaceAll(" ","-")}`} aria-label={`Home builders in ${city}`}>{city}</a>)}</nav></details></section>
+ <ServiceArea image={{src:'/family/drive/square-2-stone-entry-with-oak-front-door.webp',alt:'Oak front door, stone entry and covered eaves',width:1200,height:1200}}><p className="f-eyebrow">AT HOME IN IDAHO</p><h2>Local people.<br/><em>Valley-wide reach.</em></h2><p>Serving homeowners throughout the Treasure Valley.</p><nav className="fr-cities" aria-label="Service area cities">{cities.map(city=><a key={city} href={`/areas/${city.toLowerCase().replaceAll(" ","-")}`} aria-label={`Home builders in ${city}`}>{city}</a>)}</nav></ServiceArea>
 
  <FAQSection/>
  </div>;}

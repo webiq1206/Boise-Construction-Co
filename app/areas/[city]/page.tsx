@@ -13,9 +13,11 @@ import { generateSpeakableSchema } from '@/lib/schema';
 import { CITY_SEO_DATA, indianCreekDescription, serviceCityHeadingName } from '@/lib/seo';
 import { areaPath,CITY_SLUGS,cityServicePath,getCityBySlug,servicePath } from '@/lib/seo-routes';
 import { getAreaImageSet } from '@/shared/cityServiceImages';
+import { contentImageAlt } from '@/shared/imageAlts';
 import { getCountyLabel,SERVICES } from '@/shared/contentData';
 import { getGalleryProjectsForCity } from '@/shared/galleryData';
 import { getAreaCityCopy } from '@/shared/content/areaCopy';
+import { BOISE_LOT_PLANNING } from '@/shared/content/boisePlanning';
 import { LOCATION_GUIDES } from '@/shared/content/locationGuides';
 import { guidePath } from '@/shared/contentHubs';
 import { AREA_PAGE_FAQS,getAreaIntro } from '@/shared/seoContent';
@@ -68,6 +70,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
   const creek = indianCreekDescription(city.name);
 
   const sections: LandingSection[] = [
+    ...(city.slug === 'boise' ? [BOISE_LOT_PLANNING] : []),
     ...(city.slug === 'middleton'
       ? [
           {
@@ -118,10 +121,9 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
           city.slug === 'eagle'
             ? '/images/projects/eagle-mountain-modern/eagle-custom-home-front-exterior.webp'
             : images.breather,
-        caption:
-          city.slug === 'eagle'
-            ? 'Charcoal stucco, ledgestone, and dark standing-seam roof on a foothills concept home.'
-            : `Concept design imagery for home building in ${city.name}.`,
+        caption: contentImageAlt(city.slug === 'eagle'
+          ? '/images/projects/eagle-mountain-modern/eagle-custom-home-front-exterior.webp'
+          : images.breather),
       },
     },
     {
@@ -219,6 +221,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
     <InteriorPage kind="areas"><>
       <JsonLd data={schemas} />
       <LandingPageTemplate
+        priorityPlanning={city.slug === 'boise'}
         h1={h1}
         speakableSummary={overview}
         overview={middletonLead ? overview : `${answerFirst} ${overview}`}

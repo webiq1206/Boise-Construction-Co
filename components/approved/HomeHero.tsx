@@ -16,9 +16,7 @@ const HERO_SRC = "/family/construction-custom-home-exterior.webp";
  * photograph, one primary to the quote wizard, the phone as the one text link,
  * and the response-time line that was already published here.
  *
- * The photograph is a concept render, so it keeps its "Concept design imagery"
- * label; HeroPhoto has no caption slot, so the label sits beside it in this
- * brand's wrapper (app/family-adoption.css). The phone crop is cut from the same
+ * The phone crop is cut from the same
  * file with the sky trimmed, so the house fills the clear upper part of the screen.
  *
  * The wrapper carries pt-0: app/family.css gives the first block of every page
@@ -57,7 +55,6 @@ export function HomeHero() {
           link={{ label: `Call or text ${FAMILY_BRAND.phone.display}`, href: FAMILY_BRAND.phone.telHref }}
           microcopy="Our team replies within one business day."
         />
-        <p className="home-hero-imagery">Concept design imagery</p>
       </div>
       {/* Facts this site already publishes, nothing new: the line-item budget, the
           Friday updates, one accountable team, and the DOPL-linked registration. */}
@@ -70,8 +67,8 @@ export function HomeHero() {
             label: "Registered",
             text: CONTRACTOR_REGISTRATION_LABEL,
             href: CONTRACTOR_LICENSE_SEARCH_URL,
-            linkTitle: `Look up ${CONTRACTOR_REGISTRATION_LABEL} on Idaho DOPL`,
-            linkLabel: `Verify with Idaho DOPL: look up ${CONTRACTOR_REGISTRATION_LABEL}, opens in a new tab`,
+            linkTitle: 'Idaho contractor registration details',
+            linkLabel: `${CONTRACTOR_REGISTRATION_LABEL}, opens in a new tab`,
             newTab: true,
           },
         ]}

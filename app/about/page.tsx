@@ -1,4 +1,4 @@
-import { CONCEPT_IMAGERY_LABEL, InteriorHero, InteriorPage } from '@/components/approved/InteriorLayout';
+import { InteriorHero, InteriorPage } from '@/components/approved/InteriorLayout';
 import { AreaCard } from '@/components/marketing/AreaCard';
 import { Section } from '@/components/marketing/Section';
 import { SectionHeader } from '@/components/marketing/SectionHeader';
@@ -178,7 +178,7 @@ export default function AboutPage() {
                     We build on your lot or a lot we help you evaluate. Remodels sit with Boise Remodeling Co; RE-10 lists sit with Boise Handyman Co.
                   </p>
                   <p className="ed-body mt-6">
-                    Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. See{' '}
+                    Explore our{' '}
                     <Link href="/services/adu" className="underline underline-offset-2">
                       ADUs &amp; guest houses
                     </Link>
@@ -275,7 +275,6 @@ export default function AboutPage() {
                   </Reveal>
                 ))}
               </div>
-              <p className="ed-small mt-4 text-muted-foreground">{CONCEPT_IMAGERY_LABEL}</p>
             </div>
           </Section>
 

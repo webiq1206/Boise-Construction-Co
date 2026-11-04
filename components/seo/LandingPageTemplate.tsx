@@ -23,6 +23,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment, type ReactNode } from 'react';
 import { RelatedLinks } from './RelatedLinks';
+import priorityStyles from './PriorityLanding.module.css';
+import { PriorityBarClearance } from './PriorityBarClearance';
 
 interface BreadcrumbItem {
   name: string;
@@ -46,6 +48,8 @@ interface LandingPageTemplateProps {
    * the hero budget. The whole overview then opens the section below the hero.
    */
   heroLine?: string;
+  /** Opt-in composition and enlarged-text containment for the reviewed Boise pages. */
+  priorityPlanning?: boolean;
   breadcrumbs: BreadcrumbItem[];
   heroImageUrl?: string;
   heroImageAlt?: string;
@@ -254,6 +258,7 @@ export function LandingPageTemplate({
   overviewParagraphs,
   overviewEmphasis,
   heroLine,
+  priorityPlanning = false,
   breadcrumbs,
   heroImageUrl,
   heroImageAlt,
@@ -288,35 +293,44 @@ export function LandingPageTemplate({
   const planningFigure = planningFrom && hasPlanningFigure(planningFrom) ? planningFrom : undefined;
 
   return (
-    <div className="flex flex-col ">
+    <div className={`flex flex-col${priorityPlanning ? ` ${priorityStyles.page}` : ''}`}>
+      {priorityPlanning && <PriorityBarClearance />}
       {/* Approved split hero, held to the first screen (C3): breadcrumb,
           eyebrow, H1, ONE support line, the planning figure as a chip, one
           primary action and the phone as a text link. The rest of the overview
           opens the section directly below, unchanged. */}
       <InteriorHero imageSrc={heroImageUrl} imageAlt={heroImageAlt ?? contentImageAlt(heroImageUrl)} layout="split">
-          <HeroBreadcrumbs items={breadcrumbs} />
+          {!priorityPlanning && <HeroBreadcrumbs items={breadcrumbs} />}
           <p data-speakable="summary" className="sr-only">{speakableSummary}</p>
-          {eyebrow && <p className="ed-eyebrow interior-hero-eyebrow">{eyebrow}</p>}
+          {!priorityPlanning && eyebrow && <p className="ed-eyebrow interior-hero-eyebrow">{eyebrow}</p>}
           <h1 className="ed-display ed-statement-display text-inverse-foreground">{h1}</h1>
           {lead.line && (
             <p className="interior-hero-support">
               <Emphasis text={lead.line} phrase={emphasisInHero ? overviewEmphasis : undefined} />
             </p>
           )}
-          {planningFrom && (
+          {!priorityPlanning && planningFrom && (
             <p className="interior-hero-chip">
               {planningFigure ? (<>Planning from <strong>{planningFigure}</strong></>) : planningFrom}
             </p>
           )}
           <div className="interior-hero-actions">
             <PrimaryCta href={estimateHref ?? '/estimate'} trackingLocation="landing_hero">{CTA_PRIMARY}</PrimaryCta>
-            <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>
+            {!priorityPlanning && <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>}
           </div>
         </InteriorHero>
 
-      {(lead.rest.length > 0 || planningFigure) && (
+      {(priorityPlanning || lead.rest.length > 0 || planningFigure) && (
         <section className="interior-hero-more" aria-label="Overview">
           <div className="interior-hero-more-inner">
+            {priorityPlanning && (
+              <div className={priorityStyles.context}>
+                <HeroBreadcrumbs items={breadcrumbs} />
+                {eyebrow && <p className="ed-eyebrow interior-hero-eyebrow">{eyebrow}</p>}
+                {planningFrom && !planningFigure && <p className="interior-hero-chip">{planningFrom}</p>}
+                <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>
+              </div>
+            )}
             {lead.rest.map((paragraph, i) => (
               <p key={i} className={i === 0 ? 'interior-hero-more-lede' : undefined}>
                 <Emphasis text={paragraph} phrase={!emphasisInHero ? overviewEmphasis : undefined} />
@@ -498,7 +512,7 @@ export function LandingPageTemplate({
       {sections && sections.length > 0 && (
         <Section surface="dark" spacing="xl" edge>
           <div className="ed-shell">
-            <div className="mx-auto grid max-w-3xl gap-10">
+            <div className={`mx-auto grid max-w-3xl gap-10${priorityPlanning ? ` ${priorityStyles.guide}` : ''}`}>
               {/* Keep the guide index above centered copy at every width. */}
               <aside aria-label="In this guide">
                 <Reveal>
@@ -575,11 +589,7 @@ export function LandingPageTemplate({
                           <figcaption className="ed-small mt-3 text-muted-foreground">
                             {section.figure.caption}
                           </figcaption>
-                        ) : (
-                          <figcaption className="ed-small mt-3 text-muted-foreground">
-                            Representative imagery
-                          </figcaption>
-                        )}
+                        ) : null}
                       </figure>
                     )}
                   </Reveal>
@@ -595,7 +605,7 @@ export function LandingPageTemplate({
         <Section surface="deep" spacing="xl" edge>
           <div className="ed-shell">
             <Reveal>
-              <p className="ed-eyebrow">Representative imagery</p>
+              <p className="ed-eyebrow">Architecture and finishes</p>
               {proofHeading ? <h2 className="ed-h2 ed-statement-wide">{proofHeading}</h2> : null}
             </Reveal>
 
@@ -606,10 +616,10 @@ export function LandingPageTemplate({
                     <article className="flex h-full flex-col" style={{ border: '1px solid var(--ed-line)' }}>
                       <div className="grid grid-cols-2">
                         <div className="relative aspect-[4/3]">
-                          <Image src={project.exteriorImageUrl} alt={contentImageAlt(project.exteriorImageUrl) || 'Representative image: Exterior view'} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
+                          <Image src={project.exteriorImageUrl} alt={contentImageAlt(project.exteriorImageUrl) || 'Exterior view'} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                         </div>
                         <div className="relative aspect-[4/3]">
-                          <Image src={project.interiorImageUrl} alt={contentImageAlt(project.interiorImageUrl) || 'Representative image: Interior view'} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
+                          <Image src={project.interiorImageUrl} alt={contentImageAlt(project.interiorImageUrl) || 'Interior view'} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                         </div>
                       </div>
                       <div className="p-6">
@@ -658,7 +668,7 @@ export function LandingPageTemplate({
             <Accordion type="single" collapsible className="w-full border-t" style={line}>
               {faqs.map((faq, i) => (
                 <AccordionItem key={i} value={`faq-${i}`} className="border-0 border-b" style={line}>
-                  <AccordionTrigger className="ed-h4 py-6 text-left hover:no-underline [&[data-state=open]]:[color:var(--ed-accent)]">
+                  <AccordionTrigger className="ed-h4 py-6 text-left hover:no-underline [&[data-state=open]]:underline [&[data-state=open]]:underline-offset-4">
                     {faq.question}
                   </AccordionTrigger>
                   <AccordionContent className="ed-body pb-7 text-[0.9375rem]">

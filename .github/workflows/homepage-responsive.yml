@@ -1,0 +1,171 @@
+name: Homepage responsive review
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - components/approved/ApprovedHome.tsx
+      - components/approved/HomePlanningSections.module.css
+      - components/PlanningRangeExplorer.tsx
+      - scripts/verify-homepage-responsive.cjs
+      - .github/workflows/homepage-responsive.yml
+permissions:
+  contents: read
+concurrency:
+  group: homepage-responsive-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  homepage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container: mcr.microsoft.com/playwright:v1.60.0-noble
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install locked dependencies without lifecycle hooks
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Start isolated homepage preview
+        run: |
+          mkdir -p test-results/homepage-responsive
+          node scripts/offline-run.mjs dev --hostname 127.0.0.1 --port 34863 > test-results/homepage-responsive/server.log 2>&1 &
+          node <<'JS'
+          const start = Date.now();
+          (async () => {
+            while (Date.now()-start < 180000) {
+              try {
+                const response = await fetch('http://127.0.0.1:34863/', {signal: AbortSignal.timeout(10000)});
+                if (response.ok) process.exit(0);
+              } catch {}
+              await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            process.exit(1);
+          })();
+          JS
+      - name: Capture responsive homepage and exercise local controls
+        run: node scripts/verify-homepage-responsive.cjs
+      - name: Upload metrics and server diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-responsive-metrics-${{ github.sha }}
+          path: |
+            test-results/homepage-responsive/*.json
+            test-results/homepage-responsive/*.log
+          retention-days: 14
+          if-no-files-found: error
+      - name: Upload 320x568 review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-responsive-320x568-${{ github.sha }}
+          path: |
+            test-results/homepage-responsive/*-320x568.png
+            test-results/homepage-responsive/*-320x568.jpg
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Upload 360x640 review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-responsive-360x640-${{ github.sha }}
+          path: |
+            test-results/homepage-responsive/*-360x640.png
+            test-results/homepage-responsive/*-360x640.jpg
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Upload 390x844 review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-responsive-390x844-${{ github.sha }}
+          path: |
+            test-results/homepage-responsive/*-390x844.png
+            test-results/homepage-responsive/*-390x844.jpg
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Upload 430x932 review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-responsive-430x932-${{ github.sha }}
+          path: |
+            test-results/homepage-responsive/*-430x932.png
+            test-results/homepage-responsive/*-430x932.jpg
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Upload 768x1024 review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-responsive-768x1024-${{ github.sha }}
+          path: |
+            test-results/homepage-responsive/*-768x1024.png
+            test-results/homepage-responsive/*-768x1024.jpg
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Upload 1024x768 review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-responsive-1024x768-${{ github.sha }}
+          path: |
+            test-results/homepage-responsive/*-1024x768.png
+            test-results/homepage-responsive/*-1024x768.jpg
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Upload 1280x720 review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-responsive-1280x720-${{ github.sha }}
+          path: |
+            test-results/homepage-responsive/*-1280x720.png
+            test-results/homepage-responsive/*-1280x720.jpg
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Upload 1440x900 review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-responsive-1440x900-${{ github.sha }}
+          path: |
+            test-results/homepage-responsive/*-1440x900.png
+            test-results/homepage-responsive/*-1440x900.jpg
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Upload 1920x1080 review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-responsive-1920x1080-${{ github.sha }}
+          path: |
+            test-results/homepage-responsive/*-1920x1080.png
+            test-results/homepage-responsive/*-1920x1080.jpg
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Upload 844x390 review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-responsive-844x390-${{ github.sha }}
+          path: |
+            test-results/homepage-responsive/*-844x390.png
+            test-results/homepage-responsive/*-844x390.jpg
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Upload 1024x600 review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-responsive-1024x600-${{ github.sha }}
+          path: |
+            test-results/homepage-responsive/*-1024x600.png
+            test-results/homepage-responsive/*-1024x600.jpg
+          retention-days: 14
+          if-no-files-found: warn

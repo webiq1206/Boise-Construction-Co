@@ -591,13 +591,10 @@ export const BUSINESS_INFO = {
   founderName: '',
   phone: SITE_CONFIG.phone,
   email: SITE_CONFIG.email,
-  // Canonical NAP sourced from SITE_CONFIG. Street + ZIP feed structured data
-  // and off-site citations; locality (Meridian, Idaho) stays consistent.
+  // Public service geography. The website does not publish a street address.
   address: {
-    street: SITE_CONFIG.address.street,
     city: SITE_CONFIG.address.city,
     state: 'Idaho',
-    postalCode: SITE_CONFIG.address.postalCode,
     country: 'United States',
   },
   hours: {

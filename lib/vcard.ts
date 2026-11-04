@@ -44,8 +44,6 @@ export function buildBusinessVCard(): string {
     "Treasure Valley design-build home builder.",
     `${CONTRACTOR_REGISTRATION_LABEL}.`,
     `${SITE_CONFIG.name} is a DBA of ${SITE_CONFIG.legalName}.`,
-    `Public representative: ${SITE_CONFIG.publicRepresentative}.`,
-    "Service-area business, not a staffed storefront.",
     SITE_CONFIG.address.serviceArea,
     `Hours: ${hoursSummary}`,
   ].join("\n");
@@ -58,10 +56,6 @@ export function buildBusinessVCard(): string {
     foldLine(`TEL;TYPE=WORK,VOICE:${tel}`),
     foldLine(`EMAIL;TYPE=WORK:${escapeVCard(SITE_CONFIG.email)}`),
     foldLine(`URL:${escapeVCard(SITE_CONFIG.siteUrl)}`),
-    foldLine(
-      `ADR;TYPE=WORK:;;${escapeVCard(SITE_CONFIG.address.street)};${escapeVCard(SITE_CONFIG.address.city)};${escapeVCard(SITE_CONFIG.address.state)};${escapeVCard(SITE_CONFIG.address.postalCode)};${escapeVCard(BUSINESS_INFO.address.country)}`,
-    ),
-    foldLine(`LABEL;TYPE=WORK:${escapeVCard(`${SITE_CONFIG.address.cityState} · ${SITE_CONFIG.address.serviceArea}`)}`),
     foldLine(`NOTE:${escapeVCard(note)}`),
     "END:VCARD",
   ];

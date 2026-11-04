@@ -29,8 +29,6 @@ const PILLAR_GUIDES = CONTENT_HUBS.filter((hub) => hub.priorityTier <= 2)
   .slice(0, 3)
   .map((hub) => ({ label: hub.title, href: `/guides/${hub.pillarSlug}` }));
 
-const { address } = SITE_CONFIG;
-
 export const FAMILY_BRAND: FamilyBrand = {
   id: 'construction',
   name: SITE_CONFIG.name,
@@ -49,8 +47,7 @@ export const FAMILY_BRAND: FamilyBrand = {
     // The approved C7 check (scripts/verify-p5-mobile-seo.mjs) keeps the bottom bar on screen
     // below 1180px, and the header has always switched to the full navigation at 1180.
     desktopFrom: 1180,
-    // Call with its label and Chat beside the menu, as the header carried them before.
-    phoneActions: ['call', 'chat'],
+    phoneActions: ['call', 'text', 'chat'],
   },
   nav: [
     { label: 'Services', href: '/services' },
@@ -64,7 +61,7 @@ export const FAMILY_BRAND: FamilyBrand = {
   // a[href="/estimate"] in the bar.
   cta: { label: 'Request a quote', href: '/estimate' },
   phone: { display: SITE_CONFIG.phone, telHref: SITE_CONFIG.phoneHref, smsHref: SITE_CONFIG.phoneSmsHref },
-  chat: { enabled: true, label: 'Chat', openEvent: 'p5:assistant-open' },
+  chat: { enabled: true, label: 'Chat', openEvent: 'p5:assistant-open', hiddenOn: ['/estimate*', '/admin*', '/subcontractor*'] },
   bar: {
     // Approved C7 decision: the bar is on the first screen, over the hero.
     showOverHero: true,
@@ -126,8 +123,7 @@ export const FAMILY_BRAND: FamilyBrand = {
     disclosure: { before: `${SITE_CONFIG.name} is a DBA of `, linkLabel: SITE_CONFIG.legalName, href: 'https://p5homeco.com', after: '' },
     copyrightName: SITE_CONFIG.name,
   },
-  // Boise ADU Co is left out until its own site exists; its projects run through this
-  // company (the footer says so beside the ADU link, see components/Footer.tsx).
+  // Detached ADUs are offered through this company's existing service pages.
   family: {
     label: 'The P5 Home Co family',
     companies: [
@@ -139,14 +135,14 @@ export const FAMILY_BRAND: FamilyBrand = {
     ],
   },
   nap: {
-    line: `Public representative: ${SITE_CONFIG.publicRepresentative} · ${address.street}, ${address.city}, ${address.state} ${address.postalCode} · Service-area business, not a staffed storefront`,
+    line: 'Serving Boise and the Treasure Valley',
   },
   hours: 'Hours: Mon to Fri 9 to 6, Sat 9 to 4 Mountain. Closed Sunday.',
   registration: {
     text: CONTRACTOR_REGISTRATION_LABEL,
     href: CONTRACTOR_LICENSE_SEARCH_URL,
-    title: `Look up ${CONTRACTOR_REGISTRATION_LABEL} on Idaho DOPL`,
-    ariaLabel: `Verify with Idaho DOPL: look up ${CONTRACTOR_REGISTRATION_LABEL}, opens in a new tab`,
+    title: 'Idaho contractor registration details',
+    ariaLabel: `${CONTRACTOR_REGISTRATION_LABEL}, opens in a new tab`,
     rel: 'noopener noreferrer',
   },
   // P5 Home Co's Facebook page (shared/gbpProfile); nothing renders until its URL exists.

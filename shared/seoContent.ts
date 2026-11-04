@@ -472,7 +472,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     primaryKeyword: 'detached adu builder boise idaho',
     heroLine: 'New detached ADUs and guest houses, built as separate structures on the lot you already own.',
     overview:
-      'Detached ADU builder in Boise, Idaho: Boise Construction Co plans and builds new accessory dwellings and guest houses as separate structures on the lot you already own, from feasibility and design through permits and construction. Boise ADU Co projects currently run through Boise Construction Co while that brand site is coming.',
+      'Detached ADU builder in Boise, Idaho: Boise Construction Co plans and builds new accessory dwellings and guest houses as separate structures on the lot you already own, from feasibility and design through permits and construction.',
     benefits: [
       'Feasibility before design, so setbacks and utilities shape the plan',
       'One accountable team from drawings through the final walkthrough',
@@ -510,7 +510,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'Who builds ADUs in Boise?',
         answer:
-          'Boise Construction Co builds new detached ADUs and guest houses across the Treasure Valley. Boise ADU Co projects currently run through Boise Construction Co while the ADU brand site is coming. Garage and basement conversions are remodeling work, handled by Boise Remodeling Co.',
+          'Boise Construction Co builds new detached ADUs and guest houses across the Treasure Valley. Garage and basement conversions are remodeling work, handled by Boise Remodeling Co.',
       },
       {
         question: 'Can every lot have an ADU?',
@@ -972,7 +972,7 @@ export function getCityServiceSections(
     city.slug === 'eagle'
       ? {
           src: '/images/projects/eagle-mountain-modern/eagle-custom-home-kitchen.webp',
-          caption: `Rift-cut white oak kitchen with black quartzite island for ${city.name} concept design.`,
+          caption: `Rift-cut white oak kitchen with a black quartzite island.`,
         }
       : {
           src: '/images/construction/new-home-kitchen.webp',
@@ -1020,7 +1020,7 @@ export function getCityServiceSections(
         caption:
           city.slug === 'eagle'
             ? `Mountain-modern charcoal stucco and ledgestone exterior for ${serviceLC} in ${city.name}.`
-            : `Concept exterior for ${serviceLC} in ${city.name}.`,
+            : `Home exterior with board-and-batten siding and a covered porch.`,
       },
     },
     {

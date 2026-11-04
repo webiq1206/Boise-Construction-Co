@@ -3,64 +3,12 @@
   styles live in styles/family-*.css and are never edited here.
 */
 
-/* Hero scrims in the shared chrome read this RGB. Brand charcoal, not near-black. */
-:root {
-  --color-scrim-rgb: 56, 56, 55;
-}
-
-/* 12px accent eyebrows. Brand ochre #C48D3F is 2.8:1 on paper and 4.04:1 on #383837. */
-html .ed-eyebrow-accent {
-  color: hsl(var(--accent-on-light));
-}
-html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) {
-  --ed-accent: hsl(var(--accent-legible));
-}
-html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) .ed-eyebrow-accent {
-  color: hsl(var(--accent-legible));
-}
-
-/* Fields and overlays have to read as separate from the page. */
-html body :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="range"]):not([type="color"]) {
-  background-color: #4a4a47;
-  border-color: #6e6e6a;
-  color: #fbfaf6;
-}
-html .approved-shell :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="range"]):not([type="color"]) {
-  background-color: #fff;
-  border-color: #c8c4ba;
-  color: #383837;
-}
-html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact) :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="range"]):not([type="color"]) {
-  background-color: #4a4a47;
-  border-color: #6e6e6a;
-  color: #fbfaf6;
-}
-
 /* The homepage photograph is a concept render. HeroPhoto has no caption slot, so the
    honest label sits in this site's wrapper, on the photo's clear corner, above the
    scrim and clear of the copy (bottom left) and the bottom bar. */
 .home-hero {
   position: relative;
 }
-.fam-hero[data-family-hero] .fam-hero-inner {
-  background-image: linear-gradient(
-    180deg,
-    rgba(var(--color-scrim-rgb), 0) 0,
-    rgba(var(--color-scrim-rgb), 0.86) var(--fam-hero-fade),
-    rgba(var(--color-scrim-rgb), 0.92) 100%
-  );
-}
-@media (min-width: 1024px) {
-  .fam-hero[data-family-hero] .fam-hero-scrim {
-    background: linear-gradient(
-      90deg,
-      rgba(var(--color-scrim-rgb), 0.92) 0%,
-      rgba(var(--color-scrim-rgb), 0.8) 46%,
-      rgba(var(--color-scrim-rgb), 0) 84%
-    );
-  }
-}
-
 .home-hero .home-hero-imagery {
   position: absolute;
   top: var(--space-3);
@@ -121,369 +69,26 @@ html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact) :is(input, textarea, s
 .quote-request-app-frame [data-testid="app-frame-body"] > div {
   justify-content: flex-start !important;
 }
-
-/* ------------------------------------------------ mobile polish (under 768) */
-/* Shared phone spec: centered hero, H1 at most 40px, H2 at most 36px,
-   body at least 16px, controls at least 44px, section padding 64 to 96. */
-@media (max-width: 767px) {
-  html .fam-hero[data-family-hero] .fam-hero-copy {
-    margin-inline: auto;
-    text-align: center;
-  }
-  html .fam-hero[data-family-hero] .fam-hero-copy .fam-hero-title,
-  html .approved-interior .interior-hero-editorial h1,
-  html .approved-interior .interior-hero-copy h1 {
-    font-size: 40px;
-    line-height: 1.08;
-  }
-  html .fam-hero[data-family-hero] .fam-hero-support,
-  html .fam-hero[data-family-hero] .fam-hero-micro {
-    margin-inline: auto;
-  }
-  html .fam-hero[data-family-hero] .fam-hero-actions {
-    align-items: center;
-  }
-  html .fam-hero[data-family-hero] .fam-hero-link {
-    align-self: center;
-    justify-content: center;
-  }
-  html .approved-interior .interior-hero-copy .ed-eyebrow,
-  html .approved-interior .interior-hero-copy h1,
-  html .approved-interior .interior-hero-copy .ed-lede,
-  html .approved-interior .interior-hero-copy p.interior-hero-support {
-    text-align: center;
-  }
-  html .approved-interior .interior-hero-copy h1,
-  html .approved-interior .interior-hero-copy .ed-lede {
-    margin-inline: auto;
-  }
-  html .approved-interior .interior-hero-actions {
-    justify-content: center;
-  }
-
-  html .family-site h2,
-  html .family-site .f-value h2,
-  html .family-site .f-contact h2,
-  html .fr-gallery h2,
-  html .ed-h2,
-  html .approved-interior h2,
-  html .approved-interior .ed-h2,
-  html .fr-band-estimate.approved-estimate h2 {
-    font-size: 32px !important;
-    line-height: 1.15;
-    text-wrap: balance;
-  }
-  html .fr-card h3,
-  html .interior-service-card h2 {
-    font-size: 22px;
-    line-height: 1.25;
-    text-wrap: balance;
-  }
-
-  html .family-site p,
-  html .family-site li,
-  html .approved-shell .ed-body,
-  html .fr-card p,
-  html .fr-gallery-intro,
-  html #budget .ed-body {
-    font-size: 16px;
-  }
-
-  html .approved-shell :is(button, .fam-btn, .f-button, .f-link, .fr-cities a, summary) {
-    min-height: 44px;
-  }
-  html .approved-shell :is(input, select, textarea) {
-    min-height: 44px;
-    font-size: 16px;
-  }
-
-  .family-site > section.f-section,
-  .family-site > section.fr-gallery,
-  .family-site > section.fr-panel,
-  .family-site > section.f-area,
-  .family-site > section.fr-cta-strip {
-    padding-block: 64px;
-  }
-  .family-site > section + section:not(.fr-band):not(.f-value) {
-    border-top: 1px solid rgba(56, 56, 55, 0.14);
-  }
-  .family-site > section:nth-of-type(even):not(.fr-band):not(.f-value):not(.fr-cta-strip) {
-    background: #f1ede4;
-  }
-
-  /* Repeat groups become a sideways row. Every card and photo stays in the DOM. */
-  html .fr-cards {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 4px;
-  }
-  html .fr-cards > .fr-card {
-    flex: 0 0 86%;
-    scroll-snap-align: start;
-    flex-direction: column;
-  }
-  html .fr-cards > .fr-card .fr-card-media {
-    flex: none;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-  }
-  html .fr-mosaic {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 12px;
-  }
-  html .fr-mosaic figure,
-  html .fr-mosaic figure.is-wide,
-  html .fr-mosaic figure:last-child:not(.is-wide) {
-    flex: 0 0 84%;
-    grid-column: auto;
-    aspect-ratio: 4 / 3;
-    scroll-snap-align: start;
-  }
-
-  /* Services index title: three lines, keyword kept. */
-  html .services-index-title {
-    font-size: 40px;
-    line-height: 1.05;
-    max-width: 12em;
-  }
-  html .services-index-title .services-index-line {
-    display: block;
-  }
-
-  /* Small labels and meta copy come up to 16px. Headings and display numbers stay larger. */
-  html .approved-shell :is(
-    .text-xs, .text-sm, .ed-small, .ed-eyebrow, .f-eyebrow, .fam-hero-eyebrow, .fam-hero-micro,
-    .home-hero-imagery, .interior-eyebrow, .interior-price, .interior-hero-chip, .interior-hero-more-note,
-    .interior-hero-image-label, .fr-gallery-eyebrow, .fr-gallery-note, .fr-mosaic figcaption,
-    .planning-range-label, .planning-range-sqft-bounds, .planning-range-note, .fr-range-result-label,
-    .fam-proof-label, .fam-proof-text, .fam-btn, .fam-header-call, .fam-header-link,
-    .fam-footer-parent, .fam-footer-tagline, .brc-text-link, .hero-text-link, .interior-text-link,
-    .ed-link, .ed-rule-link, .ed-step-n, .f-link, .f-number,
-    small,
-    [class~="text-[0.8125rem]"],
-    [class~="text-[0.875rem]"],
-    [class~="text-[0.9375rem]"]
-  ) {
-    font-size: 16px !important;
-  }
-  html body :is(.text-xs, .text-sm, [class~="text-[0.8125rem]"], [class~="text-[0.875rem]"], [class~="text-[0.9375rem]"]) {
-    font-size: 16px !important;
-  }
-  html body :is(button, summary, input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not(.sr-only), select, textarea, label:not(.sr-only)) {
-    min-height: 44px;
-  }
-  html body label:not(.sr-only) {
-    display: flex;
-    align-items: center;
-  }
-  html .approved-shell :is(h1, h2, h3) {
-    text-wrap: pretty;
-  }
-  .heading-balance-tail { display: block; }
-  .heading-keep { white-space: nowrap; }
-  html .approved-shell :is(button, summary, .fam-btn, .f-button, .f-link, .ed-link, .brc-text-link, .hero-text-link, .interior-text-link, input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]), select, textarea) {
-    min-height: 44px !important;
-  }
-  html .approved-shell nav a,
-  html .fam-footer[data-family-footer] :is(a, p, li):not(.fam-footer-phone) {
-    font-size: 16px !important;
-  }
-  html .fam-footer[data-family-footer] a {
-    min-width: 44px;
-    min-height: 44px;
-  }
-  html .fam-header[data-family-header] :is(a, button),
-  html .fam-bar[data-family-bar] :is(a, button) {
-    min-width: 44px;
-    min-height: 44px;
-  }
-  html .approved-shell nav a {
-    display: inline-flex;
-    align-items: center;
-    min-width: 44px;
-    min-height: 44px;
-  }
-  html .fam-skip {
-    min-width: 0;
-    min-height: 0;
-  }
-  #budget .budget-optional > summary {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  #budget .budget-fold > summary .ed-h4 {
-    flex: 1;
-    min-width: 0;
-  }
-  html .fam-proof .fam-proof-list {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-  }
-  html .fam-proof .fam-proof-cell {
-    flex: 0 0 80%;
-    scroll-snap-align: start;
-  }
-  footer.fam-footer[data-family-footer] {
-    padding-bottom: calc(var(--bar-height) + env(safe-area-inset-bottom) + 12px);
-  }
-  .fr-request-card .grid.gap-4 {
-    gap: 20px;
-  }
-  html .approved-shell li > span:first-child,
-  html .fr-cards-more > span,
-  html .f-link {
-    font-size: 16px !important;
-  }
-  html [data-testid="estimate-brand-bar"] a,
-  html body a.flex { min-height: 44px !important; }
-  html body nav a,
-  html body a[href^="tel:"],
-  html body a[href^="sms:"],
-  html body a[href$=".vcf"],
-  html .approved-shell nav a {
-    display: inline-flex;
-    align-items: center;
-    min-width: 44px;
-    min-height: 44px !important;
-  }
-  /* 44px is for standalone controls. A link inside a sentence stays in the line. */
-  html body :is(p, .ed-body, .fam-hero-support, .fr-gallery-note, .footer-adu-note) a[href] {
-    display: inline !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-  }
-
-  #budget .ed-matrix > .budget-fold,
-  #budget .budget-inclusions {
-    min-height: 0;
-  }
-  #budget .budget-fold > summary {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
-  }
-  #budget .budget-fold > summary .ed-h4,
-  #budget .budget-inclusions > summary .ed-eyebrow {
-    margin: 0;
-  }
-  #budget .budget-fold[open] > .budget-fold-body {
-    padding: 0 16px 16px;
-  }
-  #budget .budget-inclusions > summary {
-    display: block;
-  }
-
-  html .fr-cards-more {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 12px 20px;
-  }
-  .fr-panel-media img {
-    max-height: 220px;
-    width: 100%;
-    object-fit: cover;
-  }
-  .fr-founder img,
-  .f-value > img {
-    min-height: 0;
-    max-height: 220px;
-    height: 220px;
-    aspect-ratio: 16 / 10;
-    object-fit: cover;
-  }
-  .fr-gallery-inner { padding-block: 0; }
-  .family-site > section.fr-cta-strip { padding-block: 0; }
-  .fr-cta-strip > div { padding-block: 64px; }
-  #gallery .project-film {
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 8px;
-  }
-  #gallery .project-film > .grid {
-    display: contents;
-  }
-  #gallery .project-film > *,
-  #gallery .project-film .grid > * {
-    flex: 0 0 86%;
-    scroll-snap-align: start;
-    min-height: 0;
-  }
-  .request-more > summary,
-  .city-fold > summary {
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    margin-top: 16px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .fam-footer[data-family-footer] details > summary {
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    list-style: none;
-  }
-  .fam-footer[data-family-footer] details > summary::-webkit-details-marker { display: none; }
+/*
+  Reviewed marketing typography roles, November 4. Dedicated tool and form controls retain their own rules.
+*/
+.fr-card-body > .f-link,
+.fr-cards-more > .f-link,
+.f-value > div > .f-link,
+.fr-founder > div > p > .f-link,
+.fr-cta-strip-actions > .f-link,
+.fr-request-copy .fr-request-list .f-link {
+  font-family: var(--font-sans);
+  font-size: var(--fs-button);
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0;
 }
 
-.founder-facts {
-  list-style: none;
-  margin: 16px 0 0;
-  padding: 0;
-  display: grid;
-  gap: 10px;
-}
-.f-value p + p { margin-top: 12px; }
 
-.budget-fold > summary {
-  list-style: none;
-  cursor: pointer;
-}
-.budget-fold > summary::-webkit-details-marker,
-.fam-footer[data-family-footer] details > summary::-webkit-details-marker,
-.request-more > summary::-webkit-details-marker,
-.city-fold > summary::-webkit-details-marker { display: none; }
-@media (min-width: 768px) {
-  #budget .budget-fold > .budget-fold-body {
-    display: block !important;
-  }
-  #budget .ed-matrix > .budget-fold > summary {
-    display: block;
-    pointer-events: none;
-    padding: 0;
-  }
-  #budget .budget-inclusions > summary,
-  #budget .budget-optional > summary {
-    pointer-events: none;
-  }
-  .fam-footer[data-family-footer] details > ul {
-    display: block !important;
-  }
-  .fam-footer[data-family-footer] details > summary {
-    pointer-events: none;
-    list-style: none;
-  }
-  .request-more > ul,
-  .city-fold > nav {
-    display: block !important;
-  }
-  .request-more > summary,
-  .city-fold > summary {
-    display: none;
-  }
-}
-
-/* Brand charcoal for text. Dark surfaces already use --color-charcoal. */
+/* Charcoal audit reconciliation. Shared chrome and typography keep their current
+   tokens; these overrides belong to Construction's marketing surfaces. */
+:root { --color-scrim-rgb: 56, 56, 55; }
 .family-site { --f-ink: #383837; }
 .family-site,
 .fr-band,
@@ -496,113 +101,144 @@ html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact) :is(input, textarea, s
   --ed-bone-ink: #383837;
 }
 
-/* ---------------------------------------------------------------- lot panel */
-/* The lot question is an image with the copy on the same measure as the rest
-   of the page. Mobile gutters match .f-container (20px, 40px total). */
-.fr-panel-media img {
-  width: 100%;
-  height: auto;
+/* Small accent copy uses the contrast-qualified accent for its surface. */
+html .ed-eyebrow-accent { color: hsl(var(--accent-on-light)); }
+html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) {
+  --ed-accent: hsl(var(--accent-legible));
 }
-.fr-panel-body {
-  width: min(1260px, 88%);
-  margin-inline: auto;
-  padding-block: clamp(48px, 6vw, 88px);
+html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) .ed-eyebrow-accent {
+  color: hsl(var(--accent-legible));
 }
-.fr-panel-body > p:not(.f-eyebrow) {
-  margin-top: 18px;
-  max-width: 40em;
-  color: var(--fr-ink-soft, #484c47);
-  font-size: 17px;
-  line-height: 1.6;
+
+/* Marketing field contrast. Dedicated tool surfaces retain their own sizing. */
+html .approved-shell :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="range"]):not([type="color"]) {
+  background-color: #fff;
+  border-color: #c8c4ba;
+  color: #383837;
 }
-.fr-panel-list {
-  list-style: none;
-  margin: 28px 0 0;
-  padding: 0;
-  display: grid;
-  gap: 16px;
-  width: 100%;
+html .approved-shell :is(.ed-on-gradient, .fr-band, .f-value, .f-contact) :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="range"]):not([type="color"]) {
+  background-color: #4a4a47;
+  border-color: #6e6e6a;
+  color: #fbfaf6;
 }
-.fr-panel-list li {
-  display: grid;
-  grid-template-columns: 2.75rem minmax(0, 1fr);
-  column-gap: 12px;
-  align-items: start;
-  font-size: 16px;
-  line-height: 1.55;
-  color: var(--fr-ink-soft, #484c47);
+
+.fam-hero[data-family-hero] .fam-hero-inner {
+  background-image: linear-gradient(
+    180deg,
+    rgba(var(--color-scrim-rgb), 0) 0,
+    rgba(var(--color-scrim-rgb), 0.86) var(--fam-hero-fade),
+    rgba(var(--color-scrim-rgb), 0.92) 100%
+  );
 }
-.fr-panel-list li > span {
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.04em;
-  line-height: 1.55;
-  color: var(--f-ink, #2c302f);
-}
-.fr-panel-body > .fam-btn {
-  margin-top: 28px;
-}
-@media (max-width: 700px) {
-  .fr-panel-body {
-    width: calc(100% - 40px);
-    padding-block: 36px 48px;
+@media (min-width: 1024px) {
+  .fam-hero[data-family-hero] .fam-hero-scrim {
+    background: linear-gradient(
+      90deg,
+      rgba(var(--color-scrim-rgb), 0.92) 0%,
+      rgba(var(--color-scrim-rgb), 0.8) 46%,
+      rgba(var(--color-scrim-rgb), 0) 84%
+    );
   }
 }
 
-/* ------------------------------------------------- planning range calculator */
-/* Phone: the dark card uses the same gutter as .f-container. The result is the
-   foot of that card, not a second box floating under it. Desktop keeps the
-   side-by-side grid from design-v2-compliance.css. */
-@media (max-width: 700px) {
-  .approved-shell .fr-band-estimate.approved-estimate {
-    width: calc(100% - 40px);
-  }
+.founder-facts {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
 }
-@media (max-width: 1023px) {
-  .approved-shell .fr-band-estimate.approved-estimate {
-    padding-bottom: 0;
+.f-value p + p { margin-top: 12px; }
+
+/* Native folds introduced by the phone audit. No city fold replaces the newer
+   image-led ServiceArea, and no footer implementation is overridden here. */
+#budget .budget-fold > summary {
+  list-style: none;
+  cursor: pointer;
+}
+#budget .budget-fold > summary::-webkit-details-marker,
+.approved-shell .request-more > summary::-webkit-details-marker { display: none; }
+@media (max-width: 767px) {
+  .approved-shell .services-index-title {
+    font-size: var(--fs-h1);
+    line-height: var(--lh-h1);
+    max-width: 12em;
   }
-  .approved-shell .fr-band-estimate .planning-range-grid {
-    gap: 28px 0;
+  .approved-shell .services-index-line,
+  .approved-shell .heading-balance-tail { display: block; }
+  .approved-shell .heading-keep { white-space: nowrap; }
+
+  /* Standalone marketing links and summaries meet the touch target. Input and
+     choice-card heights remain the approved 48px and 56px token roles. */
+  .approved-shell .family-site a.f-link,
+  .approved-shell .fr-cards-more > a,
+  .approved-shell .fr-cities > a,
+  .approved-shell .fr-cta-strip-actions > a,
+  .approved-shell .fr-request-list a.f-link,
+  .approved-shell #budget a.ed-link,
+  .approved-shell #budget summary,
+  .approved-shell .request-more > summary {
+    min-height: var(--touch-min);
   }
-  .approved-shell .fr-band-estimate .planning-range-cards {
+  .approved-shell .fr-cities > a { align-items: center; }
+  .approved-shell .request-more > summary {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #budget .ed-matrix > .budget-fold,
+  #budget .budget-inclusions { min-height: 0; }
+  #budget .budget-fold > summary {
+    display: flex;
+    align-items: center;
     gap: 12px;
+    padding: 14px 16px;
   }
-  .approved-shell .fr-band-estimate .planning-range-cards [data-selected] {
-    min-height: 48px;
-    padding: 12px 16px;
-    border-radius: 4px;
-    background: var(--fr-paper, #fbfaf6);
-    color: var(--f-ink, #2c302f);
-    border: 1px solid rgba(56, 56, 55, 0.18);
-    box-shadow: none;
+  #budget .budget-optional > summary {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  .approved-shell .fr-band-estimate .planning-range-cards [data-selected="true"] {
-    border-color: var(--f-accent, #c48d3f);
-    box-shadow: inset 3px 0 0 var(--f-accent, #c48d3f);
+  #budget .budget-fold > summary .ed-h4 {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
   }
-  .approved-shell .fr-band-estimate .planning-range-cards [data-selected="false"] > span:last-child {
-    border-color: rgba(44, 48, 47, 0.4);
+  #budget .budget-inclusions > summary .ed-eyebrow { margin: 0; }
+  #budget .budget-fold[open] > .budget-fold-body { padding: 0 16px 16px; }
+  #budget .budget-inclusions > summary { display: block; }
+}
+@media (min-width: 768px) {
+  #budget .budget-fold > .budget-fold-body { display: block !important; }
+  #budget .ed-matrix > .budget-fold > summary {
+    display: block;
+    pointer-events: none;
+    padding: 0;
   }
-  .approved-shell .fr-band-estimate .planning-range-result {
-    border: 0;
-    border-top: 6px solid var(--f-accent, #c48d3f);
-    border-radius: 0;
-    box-shadow: none;
-    padding: 28px 20px 32px;
-  }
-  .approved-shell .fr-band-estimate .fr-range-result-label {
-    font-size: 12px;
-    letter-spacing: 0.14em;
-  }
-  .approved-shell .fr-band-estimate .planning-range-band {
-    margin-top: 12px;
-    font-size: 16px;
-    line-height: 1.45;
-  }
-  .approved-shell .fr-band-estimate .planning-range-note {
-    margin-top: 14px;
-    font-size: 14px;
-    line-height: 1.55;
-  }
+  #budget .budget-inclusions > summary,
+  #budget .budget-optional > summary { pointer-events: none; }
+  .approved-shell .request-more > ul { display: block !important; }
+  .approved-shell .request-more > summary { display: none; }
+}
+
+
+/* Exact logo colors for heading emphasis, owner direction November 4.
+   Functional link/focus inks and body copy keep their existing contrast roles. */
+:root { --color-heading-accent: #c48d3f; }
+html .approved-shell main :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm, .interior-statement) {
+  --ed-accent: var(--color-heading-accent);
+}
+html .approved-shell main :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm) :is(em, .brc-accent, .text-accent, .text-accent-legible),
+html .approved-shell main .interior-statement em {
+  color: var(--color-heading-accent);
+}
+/* A thin existing-charcoal context preserves the ochre fill on light grounds.
+   It does not change the type role or add a box. Inspect actual glyphs before acceptance. */
+html .approved-shell main :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm) :is(em, .brc-accent, .text-accent, .text-accent-legible),
+html .approved-shell main .interior-statement em {
+  text-shadow: -1px -1px 0 var(--color-charcoal), 0 -1px 0 var(--color-charcoal), 1px -1px 0 var(--color-charcoal), -1px 0 0 var(--color-charcoal), 1px 0 0 var(--color-charcoal), -1px 1px 0 var(--color-charcoal), 0 1px 0 var(--color-charcoal), 1px 1px 0 var(--color-charcoal);
+}
+html .approved-shell main :is(.fr-band, .f-value, .f-contact, .interior-hero-contact, .ed-on-gradient, .bg-inverse, #budget) :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm, .interior-statement) :is(em, .brc-accent, .text-accent, .text-accent-legible) {
+  text-shadow: none;
 }
