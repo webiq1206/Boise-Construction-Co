@@ -82,6 +82,13 @@ receipt is `docs/branding-20261028.json`. No later approval date is inferred.
 
 ## Standards and review
 
+Owner imagery update, 2026-11-04: realistic AI scenes may be used as generic
+visuals when authentic assets are unavailable, without concept/illustration
+labels on the two affected Boise heroes. They must not be presented as actual
+completed company projects, customer work or factual proof. No new imagery is
+created in this update. This task-specific owner direction supersedes the
+earlier label-preservation instruction for those two uses only.
+
 Apply the current user-owned `website-design-quality` Version 2.3 master,
 implementation rules and independent review record, plus
 `organic-ai-search-visibility` 1.0.0. Current resources are

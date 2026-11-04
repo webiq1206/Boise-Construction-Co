@@ -200,3 +200,15 @@ from the existing1280px container and gutter. No typography, claim, image, URL
 or other template consumer changes. Independent wide composition/C3 re-review
 is required for this correction; prior unaffected interaction evidence retains
 its actual source-revision label.
+
+## Owner imagery preference follow-up
+
+After PR124 merged, the owner permitted realistic AI scenes as generic visuals
+without concept/illustration labels, while prohibiting their use as completed
+company-project or customer proof. A separate bounded follow-up removes the
+absolute hero label only on the same two opted-in Boise routes. Image files,
+alt text, crops, geometry, links, facts, metadata and all other routes remain.
+Handyman's affected imagery already has no such labels and needs no change.
+The explicit owner direction is recorded in the profile; no new asset or claim
+is introduced. Fresh focused image/label review and the normal merge gates
+remain required for this follow-up; source merge is not deployment.

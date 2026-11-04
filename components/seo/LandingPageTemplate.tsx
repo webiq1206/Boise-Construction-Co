@@ -299,7 +299,7 @@ export function LandingPageTemplate({
           eyebrow, H1, ONE support line, the planning figure as a chip, one
           primary action and the phone as a text link. The rest of the overview
           opens the section directly below, unchanged. */}
-      <InteriorHero imageSrc={heroImageUrl} imageAlt={heroImageAlt ?? contentImageAlt(heroImageUrl)} layout="split">
+      <InteriorHero imageSrc={heroImageUrl} imageAlt={heroImageAlt ?? contentImageAlt(heroImageUrl)} imageLabel={priorityPlanning ? '' : undefined} layout="split">
           {!priorityPlanning && <HeroBreadcrumbs items={breadcrumbs} />}
           <p data-speakable="summary" className="sr-only">{speakableSummary}</p>
           {!priorityPlanning && eyebrow && <p className="ed-eyebrow interior-hero-eyebrow">{eyebrow}</p>}
