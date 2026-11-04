@@ -32,6 +32,7 @@ export function HomeHero() {
             are served as is. A /_next/image request for a hero crop can stall and hold the
             page's load event open, as it did on Boise Remodeling Co. */}
         <HeroPhoto
+          fit="viewport"
           image={{
             src: HERO_SRC,
             width: 1280,
