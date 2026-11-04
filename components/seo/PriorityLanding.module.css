@@ -13,6 +13,7 @@
 .page :global(.interior-hero .interior-hero-copy) {
   min-width: 0;
   padding: var(--section-y) var(--gutter);
+  padding-left: max(var(--gutter), calc((100vw - var(--container-max)) / 2));
 }
 
 .page :global(.interior-hero .interior-hero-copy h1) {

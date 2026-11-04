@@ -172,3 +172,31 @@ account access. The plugin independently still resolves the two expected editabl
 projects. No invitation, identity/credential change, Agent operation, import or
 publication occurred. Use the existing authorized owner session/importer; do not
 infer import access from connector metadata or successful baseline deployment.
+
+## Qualified prerequisite and final wide-grid correction
+
+The parent subsequently authorized the narrow canonical prerequisite. A fresh,
+concurrency-checked `webiq1206/p5-home-co` branch produced commit
+`7789b25d72580fc72cf238b97059cf63f0659f2f`, PR195. Independent technical review
+passed: 64 navigation/selective-transport tests, shared-engine guards, and both
+handoffs at five browser widths. The helper checks both links and centers each
+before retaining the unobstructed-point assertion; all earlier policy, heading,
+canonical, body, destination, no-estimator and overflow assertions remain.
+
+Only `scripts/lib/quoteEntry.mjs` and `tests/p5-navigation-entry.test.mjs` were
+transported into this checkout with the existing canonical
+`scripts/p5-sync-selected.mjs`. It verified committed source qualification and
+reconciled target hashes before writing. The child manifest changes those exact
+two hashes and appends `selectiveVerificationBatches` with source commit and
+before/after hashes. Its original global source pin, all other files/hashes and
+previous provenance remain. No broad sync, runtime estimator-policy change,
+P5 production release or Handyman transport occurred. Child navigation and
+shared-engine guards pass; final normal build/remote CI remain separate checks.
+
+A final grid reassessment corrected the earlier visual acceptance at87abf34:
+wide hero text began at48px while the centered header grid began at80px/320px
+on1440px/1920px viewports. The same two-route CSS module now derives left padding
+from the existing1280px container and gutter. No typography, claim, image, URL
+or other template consumer changes. Independent wide composition/C3 re-review
+is required for this correction; prior unaffected interaction evidence retains
+its actual source-revision label.
