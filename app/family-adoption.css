@@ -12,10 +12,10 @@
      inside the measured hero budget without reducing type or section padding. */
   --stack-cta: var(--space-4);
 }
-.home-hero .fam-hero[data-fit='viewport'] {
+.home-hero .fam-hero[data-family-hero][data-fit='viewport'] {
   align-items: stretch;
 }
-.home-hero .fam-hero[data-fit='viewport'] .fam-hero-inner {
+.home-hero .fam-hero[data-family-hero][data-fit='viewport'] .fam-hero-inner {
   display: flex;
   align-items: center;
 }
