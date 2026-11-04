@@ -87,7 +87,8 @@ export function FeaturedBeforeAfterSection({
             )}
             <div className="p-6 md:p-8">
               <h3 className="font-serif font-normal text-lg text-foreground mb-2">
-                {project.title}
+                <span className="heading-balance-tail">{project.title.trim().split(/\s+/).slice(0, -2).join(" ")}</span>{" "}
+                <span className="heading-keep">{project.title.trim().split(/\s+/).slice(-2).join(" ")}</span>
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 {project.description}

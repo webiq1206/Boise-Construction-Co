@@ -59,7 +59,8 @@
 .approved-shell .planning-range-label {
   font-size: 14px;
   line-height: 1.5;
-  color: #62645f;
+  /* #d9dbd4 on brand charcoal #383837 is 8.4:1 (WCAG AA). */
+  color: #d9dbd4;
   margin: 0 0 12px;
 }
 .approved-shell .planning-range-slider-wrap {
@@ -80,7 +81,8 @@
   display: flex;
   justify-content: space-between;
   font-size: 13px;
-  color: #62645f;
+  /* Same on-dark label tone as .planning-range-label. */
+  color: #d9dbd4;
   margin-top: 4px;
 }
 .approved-shell .planning-range-result {

@@ -24,19 +24,19 @@
    Tailwind colour utilities (button, accents) follow. (BRC-01, BCONC-01) */
 #budget.ed-photo-copy {
   --foreground: 48 38% 97.5%;
-  --background: 165 4% 12%;
+  --background: 60 0.9% 21.8%; /* brand charcoal #383837 */
   --muted-foreground: 60 6% 84%;
   --border: 48 38% 97.5%;
   --ed-ink: #fbfaf6;
   --ed-muted-ink: #dddfd5;
   --ed-line: rgba(251, 250, 246, .22);
   --ed-accent: var(--f-accent, #b9bfb4);
-  background: #1c1f1e;
+  background: var(--color-charcoal);
   color: #fbfaf6;
 }
 #budget.ed-photo-copy > [aria-hidden="true"] img { opacity: .5; }
 #budget.ed-photo-copy > [aria-hidden="true"] > div {
-  background: linear-gradient(180deg, rgba(28, 31, 30, .82) 0%, rgba(28, 31, 30, .66) 45%, rgba(28, 31, 30, .86) 100%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--color-charcoal) 82%, transparent) 0%, color-mix(in srgb, var(--color-charcoal) 66%, transparent) 45%, color-mix(in srgb, var(--color-charcoal) 86%, transparent) 100%);
 }
 #budget.ed-photo-copy :is(h2, h3, h4, .ed-h2, .ed-h3, .ed-h4) { color: #fbfaf6; }
 #budget.ed-photo-copy :is(p, li, .ed-body, .ed-small) { color: #e7e6df; }

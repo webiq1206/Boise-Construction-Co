@@ -29,7 +29,7 @@
   z-index: 1;
   margin: 0;
   padding: 2px 8px;
-  background: rgba(var(--color-scrim-rgb), 0.55);
+  background: rgba(var(--color-scrim-rgb), 0.88);
   color: var(--color-paper);
   font: 600 var(--fs-label) / var(--lh-label) var(--font-sans);
   letter-spacing: var(--tracking-label);
@@ -96,4 +96,162 @@
   line-height: 1;
   font-weight: 600;
   letter-spacing: 0;
+}
+
+
+/* Charcoal audit reconciliation. Shared chrome and typography keep their current
+   tokens; these overrides belong to Construction's marketing surfaces. */
+:root { --color-scrim-rgb: 56, 56, 55; }
+.family-site { --f-ink: #383837; }
+.family-site,
+.fr-band,
+.fr-gallery { --fr-ink: #383837; }
+.approved-shell {
+  color: #383837;
+  --foreground: 60 0.9% 21.8%;
+  --heading: 60 0.9% 21.8%;
+  --ed-ink: #383837;
+  --ed-bone-ink: #383837;
+}
+
+/* Small accent copy uses the contrast-qualified accent for its surface. */
+html .ed-eyebrow-accent { color: hsl(var(--accent-on-light)); }
+html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) {
+  --ed-accent: hsl(var(--accent-legible));
+}
+html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) .ed-eyebrow-accent {
+  color: hsl(var(--accent-legible));
+}
+
+/* Marketing field contrast. Dedicated tool surfaces retain their own sizing. */
+html .approved-shell :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="range"]):not([type="color"]) {
+  background-color: #fff;
+  border-color: #c8c4ba;
+  color: #383837;
+}
+html .approved-shell :is(.ed-on-gradient, .fr-band, .f-value, .f-contact) :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="range"]):not([type="color"]) {
+  background-color: #4a4a47;
+  border-color: #6e6e6a;
+  color: #fbfaf6;
+}
+
+.fam-hero[data-family-hero] .fam-hero-inner {
+  background-image: linear-gradient(
+    180deg,
+    rgba(var(--color-scrim-rgb), 0) 0,
+    rgba(var(--color-scrim-rgb), 0.86) var(--fam-hero-fade),
+    rgba(var(--color-scrim-rgb), 0.92) 100%
+  );
+}
+@media (min-width: 1024px) {
+  .fam-hero[data-family-hero] .fam-hero-scrim {
+    background: linear-gradient(
+      90deg,
+      rgba(var(--color-scrim-rgb), 0.92) 0%,
+      rgba(var(--color-scrim-rgb), 0.8) 46%,
+      rgba(var(--color-scrim-rgb), 0) 84%
+    );
+  }
+}
+
+.founder-facts {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.f-value p + p { margin-top: 12px; }
+
+/* Native folds introduced by the phone audit. No city fold replaces the newer
+   image-led ServiceArea, and no footer implementation is overridden here. */
+#budget .budget-fold > summary {
+  list-style: none;
+  cursor: pointer;
+}
+#budget .budget-fold > summary::-webkit-details-marker,
+.approved-shell .request-more > summary::-webkit-details-marker { display: none; }
+@media (max-width: 767px) {
+  .approved-shell .services-index-title {
+    font-size: var(--fs-h1);
+    line-height: var(--lh-h1);
+    max-width: 12em;
+  }
+  .approved-shell .services-index-line,
+  .approved-shell .heading-balance-tail { display: block; }
+  .approved-shell .heading-keep { white-space: nowrap; }
+
+  /* Standalone marketing links and summaries meet the touch target. Input and
+     choice-card heights remain the approved 48px and 56px token roles. */
+  .approved-shell .family-site a.f-link,
+  .approved-shell .fr-cards-more > a,
+  .approved-shell .fr-cities > a,
+  .approved-shell .fr-cta-strip-actions > a,
+  .approved-shell .fr-request-list a.f-link,
+  .approved-shell #budget a.ed-link,
+  .approved-shell #budget summary,
+  .approved-shell .request-more > summary {
+    min-height: var(--touch-min);
+  }
+  .approved-shell .fr-cities > a { align-items: center; }
+  .approved-shell .request-more > summary {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #budget .ed-matrix > .budget-fold,
+  #budget .budget-inclusions { min-height: 0; }
+  #budget .budget-fold > summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+  #budget .budget-optional > summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  #budget .budget-fold > summary .ed-h4 {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+  }
+  #budget .budget-inclusions > summary .ed-eyebrow { margin: 0; }
+  #budget .budget-fold[open] > .budget-fold-body { padding: 0 16px 16px; }
+  #budget .budget-inclusions > summary { display: block; }
+}
+@media (min-width: 768px) {
+  #budget .budget-fold > .budget-fold-body { display: block !important; }
+  #budget .ed-matrix > .budget-fold > summary {
+    display: block;
+    pointer-events: none;
+    padding: 0;
+  }
+  #budget .budget-inclusions > summary,
+  #budget .budget-optional > summary { pointer-events: none; }
+  .approved-shell .request-more > ul { display: block !important; }
+  .approved-shell .request-more > summary { display: none; }
+}
+
+
+/* Exact logo colors for heading emphasis, owner direction November 4.
+   Functional link/focus inks and body copy keep their existing contrast roles. */
+:root { --color-heading-accent: #c48d3f; }
+html .approved-shell main :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm, .interior-statement) {
+  --ed-accent: var(--color-heading-accent);
+}
+html .approved-shell main :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm) :is(em, .brc-accent, .text-accent, .text-accent-legible),
+html .approved-shell main .interior-statement em {
+  color: var(--color-heading-accent);
+}
+/* A thin existing-charcoal context preserves the ochre fill on light grounds.
+   It does not change the type role or add a box. Inspect actual glyphs before acceptance. */
+html .approved-shell main :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm) :is(em, .brc-accent, .text-accent, .text-accent-legible),
+html .approved-shell main .interior-statement em {
+  text-shadow: -1px -1px 0 var(--color-charcoal), 0 -1px 0 var(--color-charcoal), 1px -1px 0 var(--color-charcoal), -1px 0 0 var(--color-charcoal), 1px 0 0 var(--color-charcoal), -1px 1px 0 var(--color-charcoal), 0 1px 0 var(--color-charcoal), 1px 1px 0 var(--color-charcoal);
+}
+html .approved-shell main :is(.fr-band, .f-value, .f-contact, .interior-hero-contact, .ed-on-gradient, .bg-inverse, #budget) :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm, .interior-statement) :is(em, .brc-accent, .text-accent, .text-accent-legible) {
+  text-shadow: none;
 }

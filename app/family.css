@@ -119,7 +119,7 @@
 .ed-on-dark { color: var(--ed-ink); background: var(--ed-ground); }
 /* Measured at 82% the step from dark was five RGB points - a difference you
    can prove but not see. 68% puts it clearly below the page ground. */
-.ed-on-deep { color: var(--ed-ink); background: color-mix(in srgb, hsl(var(--background)) 68%, #000); }
+.ed-on-deep { color: var(--ed-ink); background: var(--color-charcoal, #383837); }
 .ed-on-bone { color: var(--ed-bone-ink); background: var(--ed-bone); }
 .ed-on-muted { color: var(--ed-bone-ink); background: color-mix(in srgb, hsl(var(--primary)) 93%, hsl(var(--accent))); }
 .ed-on-gradient {
@@ -148,9 +148,9 @@
   --foreground: var(--ed-bone-ink-hsl);
   /* Buttons. `brand` fills with --primary, which on these sites IS the bone.
      Without this swap a primary CTA on a bone band is bone-on-bone. */
-  --primary: var(--ed-bone-ink-hsl);
+  --primary: 60 0.9% 21.8%; /* brand charcoal #383837 */
   --primary-foreground: var(--ed-bone-hsl);
-  --primary-border: hsl(var(--ed-bone-ink-hsl));
+  --primary-border: hsl(60 0.9% 21.8%);
   /* `--heading` is separate from `--foreground` on these sites and every h1-h6
      is coloured from it in globals. Missing it here rendered bone headings on a
      bone band at a contrast ratio of 1.00 - literally invisible - which is what
@@ -184,7 +184,8 @@
    * - under the 4.5:1 floor for body text. 74% clears 5:1 with headroom.
    */
   --ed-muted-ink: color-mix(in srgb, hsl(var(--ed-bone-ink-hsl)) 74%, hsl(var(--ed-bone-hsl)));
-  --ed-accent: color-mix(in srgb, hsl(var(--accent)) 58%, #000);
+  /* 35% accent / 65% charcoal keeps a 12px eyebrow at 6:1 on bone. */
+  --ed-accent: color-mix(in srgb, hsl(var(--accent)) 35%, var(--color-charcoal, #383837));
 }
 
 /* Hairline separation between adjacent bands of the same value. */
@@ -441,7 +442,7 @@ html :where(.ed-small), .approved-shell .ed-small {
 .ed-panel-media::after {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 62%, rgb(0 0 0 / 0.5));
+  background: linear-gradient(180deg, transparent 62%, color-mix(in srgb, var(--color-charcoal, #383837) 88%, transparent));
   content: "";
   pointer-events: none;
 }

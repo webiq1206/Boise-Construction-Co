@@ -668,7 +668,7 @@ export function LandingPageTemplate({
             <Accordion type="single" collapsible className="w-full border-t" style={line}>
               {faqs.map((faq, i) => (
                 <AccordionItem key={i} value={`faq-${i}`} className="border-0 border-b" style={line}>
-                  <AccordionTrigger className="ed-h4 py-6 text-left hover:no-underline [&[data-state=open]]:[color:var(--ed-accent)]">
+                  <AccordionTrigger className="ed-h4 py-6 text-left hover:no-underline [&[data-state=open]]:underline [&[data-state=open]]:underline-offset-4">
                     {faq.question}
                   </AccordionTrigger>
                   <AccordionContent className="ed-body pb-7 text-[0.9375rem]">

@@ -10,12 +10,17 @@ import {
 } from "@/shared/galleryData";
 import { contentImageAlt } from "@/shared/imageAlts";
 
+/** Keep the last two words together so a heading does not end on one word. */
+function noOrphan(text: string) {
+  return text.replace(/\s+(\S+)$/, "\u00A0$1");
+}
+
 function ProjectMeta({ project, lead = false }: { project: GalleryProject; lead?: boolean }) {
   return (
     <>
       {!lead && <>
         <p className="ed-eyebrow ed-eyebrow-accent !mb-3">Architecture and finishes</p>
-        <h3 className="ed-h4">{project.title}</h3>
+        <h3 className="ed-h4">{noOrphan(project.title)}</h3>
       </>}
       <p className={`ed-body mt-3 ${lead ? "" : "text-[0.875rem]"}`}>{project.description}</p>
     </>
@@ -33,7 +38,7 @@ function ProjectImageGrid({
   if (!hero) return null;
 
   return (
-    <div className="flex flex-col">
+    <div className="project-film flex flex-col">
       <div className={`relative ${lead ? "aspect-[16/10]" : "aspect-[4/3]"}`}>
         <Image
           src={hero.src}
@@ -109,7 +114,7 @@ export function ProjectGallerySection({
           <Reveal>
             <p className="ed-eyebrow">Architecture and finishes</p>
             <h2 className="ed-h2 ed-statement">
-              {lead.title}
+              {noOrphan(lead.title)}
             </h2>
             <div className="mt-10 hidden lg:block">
               <ProjectMeta project={lead} lead />

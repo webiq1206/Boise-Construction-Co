@@ -290,7 +290,7 @@
   color:#62645f
 }
 .approved-interior .interior-hero-contact {
-  background:#2c302f;
+  background:var(--color-charcoal);
   color:#fbfaf6
 }
 .approved-interior .interior-hero-contact .interior-hero-copy {
@@ -569,7 +569,7 @@
 }
 .approved-interior [data-article-sidebar-cta] {
   border-radius:0;
-  background:#2c302f;
+  background:var(--color-charcoal);
   padding:28px
 }
 .approved-interior .article-table-scroll {
@@ -596,7 +596,7 @@
   font-weight:var(--weight-display)
 }
 .approved-interior .ed-on-gradient {
-  background:#2c302f;
+  background:var(--color-charcoal);
   color:#fbfaf6
 }
 .approved-interior .ed-on-gradient :is(h2,h3,p) {
@@ -900,7 +900,7 @@
   padding:14px 24px;
   border:1px solid transparent;
   border-radius:0;
-  background:#2c302f;
+  background:var(--color-charcoal);
   color:#fbfaf6;
   font:600 16px/1 var(--font-manrope),Arial,sans-serif;
   letter-spacing:0;

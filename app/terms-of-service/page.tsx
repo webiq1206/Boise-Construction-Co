@@ -84,7 +84,7 @@ export default function TermsOfServicePage() {
               <li>Recurring service customers may set up automatic billing</li>
             </ul>
 
-            <h2 id="document-section-5">Scheduling and cancellation</h2>
+            <h2 id="document-section-5"><span className="heading-balance-tail">Scheduling</span> and cancellation</h2>
             <ul>
               <li>Service schedules are weather-dependent and may be adjusted as needed</li>
               <li>We will make reasonable efforts to notify you of schedule changes</li>

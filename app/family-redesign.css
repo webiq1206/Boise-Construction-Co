@@ -26,7 +26,7 @@
   --fr-bone: #f1ede4;
   --fr-line: rgba(44, 48, 47, 0.16);
   --fr-line-on-dark: rgba(251, 250, 246, 0.24);
-  --fr-accent-on-dark: color-mix(in srgb, var(--f-accent) 68%, #fbfaf6);
+  --fr-accent-on-dark: var(--color-heading-accent, var(--f-accent));
 }
 .family-site { font-size: var(--fs-body); line-height: var(--lh-body); letter-spacing: 0; }
 /* A band that sits outside the family frame still gets its heading and label colours. */
@@ -150,7 +150,7 @@
 .fr-band,
 .approved-shell .fr-band,
 .approved-shell .ed-on-dark.fr-band {
-  background: var(--fr-ink);
+  background: var(--color-charcoal);
   color: var(--fr-paper);
 }
 .fr-band .f-eyebrow { color: #d9dbd4; font-size: var(--fs-label); line-height: var(--lh-label); letter-spacing: var(--tracking-label); }
@@ -275,8 +275,8 @@
 }
 .fr-cities a:hover,
 .fr-cities a:focus-visible {
-  background: var(--fr-ink);
-  border-color: var(--fr-ink);
+  background: var(--color-charcoal);
+  border-color: var(--color-charcoal);
   color: var(--fr-paper);
 }
 
@@ -422,8 +422,8 @@
 
 /* Brand ground for the shared chrome: this site's footer and hero fallback sit on
    its own deep charcoal, not the parent company's forest green. */
-footer.fam-footer[data-family-footer] { background: #1c1f1e; }
-section.fam-hero[data-family-hero] { background: #2c302f; }
+footer.fam-footer[data-family-footer] { background: var(--color-charcoal); }
+section.fam-hero[data-family-hero] { background: var(--color-charcoal); }
 
 /* One heading scale for the family sections, whatever the site's older approved
    layer says: the editorial h2 is large on purpose. */
@@ -458,8 +458,8 @@ html .family-site .f-section-top { align-items: end; }
   html .fr-cards:has(> :last-child:nth-child(odd)) > :first-child { grid-column: 1 / -1; }
   html .fr-cards:has(> :last-child:nth-child(odd)) > :first-child .fr-card-media { aspect-ratio: 2 / 1; }
 }
-/* The accent second line on a dark band: a brighter step of the brand hue. */
-.family-site, .fr-band { --fr-accent-on-dark: color-mix(in srgb, var(--f-accent) 55%, #fbfaf6); }
+/* Dark-band headings preserve the supplied logo hue. */
+.family-site, .fr-band { --fr-accent-on-dark: var(--color-heading-accent, var(--f-accent)); }
 
 /* A force-mounted accordion keeps closed answers in the server HTML for crawlers;
    Radix does not add `hidden` to a force-mounted panel, so the closed state must
@@ -535,7 +535,7 @@ html .approved-interior .interior-detail-body h2 { font-size: var(--fs-h2); line
   right: 0;
   bottom: 0;
   padding: 40px 18px 14px;
-  background: linear-gradient(180deg, transparent, rgba(20, 22, 21, 0.55));
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--color-charcoal, #383837) 88%, transparent));
   color: #fbfaf6;
   font-size: var(--fs-small);
   font-weight: 600;

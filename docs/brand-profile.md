@@ -21,7 +21,7 @@ receipt is `docs/branding-20261028.json`. No later approval date is inferred.
 - Palette source: `styles/family-tokens.css` plus the brand-owned overrides in
   `lib/familyBrand.ts`. Background `#fbfaf6`, alternate `#f1ede4`, surface
   `#fbfaf6`, border `rgba(32,35,31,0.15)`, text `#20231f`, muted `#343934`, primary
-  `#2c302f`, Construction ochre `#c48d3f`, accent ink `#78531e`, success `#3f6b4a`,
+  `#383837` (also header/menu/footer chrome), Construction ochre `#c48d3f`, accent ink `#78531e`, success `#3f6b4a`,
   warning `#8a6a1f`, error `#a33a2c`. No secondary accent is introduced. Primary
   quote actions use the existing charcoal/light treatment and ochre detail.
 - Typography: self-hosted variable Manrope (200–800) for UI/body and Cormorant
@@ -116,3 +116,20 @@ See `docs/organic-search-20261104.md` for scope and observed verification.
 ### November4 narrow-header and menu implementation record
 
 Canonical source `boise-remodeling-co` revision `fa720a579b696af92861fb571fa0aff043e734b0` restores the complete approved SVG below360px in a logo row above the unboxed contact/menu controls. Normal320px prototype height is89px including the border; use the actual measured header/safe-area height, not a fixed clearance. Enlarged text may grow it. Normal360px-and-up header geometry is unchanged. Mobile-menu Call/Text/Chat contact controls are transparent and borderless at rest, retain visible focus and existing destinations/capability, and use the same icons as header/footer. This records the owner-requested consistency repair, not a new identity or approval exception. The independently reviewed prototype is narrower evidence than each final built site; retain exact-head rendering and functional gates.
+
+
+### Exact heading accent, November 4 owner instruction
+
+Heading emphasis uses the actual approved logo/icon pop `#c48d3f` through the site-owned
+`--color-heading-accent` role. It is not mixed with paper or replaced by accent ink.
+The approved SVG bytes, existing type families/sizes/weights, neutral palette and
+functional text/focus roles are preserved. Public H1/H2 and editorial display emphasis,
+interior statement/aside titles, legacy hero emphasis and dark planning bands consume
+this exact role. The shared HeroPhoto uses the same heading role after canonical transport.
+Small FAQ open states and related/service title hover states retain readable neutral text;
+underline/chevron affordances convey their state without adding a different heading hue.
+Light-ground ochre emphasis uses a scoped 1px existing-charcoal glyph context; dark contexts keep their current surface.
+This is a source implementation record, not a rendered contrast or visual acceptance.
+Actual font pixels, photograph contrast, all listed template consumers and independent
+review remain required at the exact final revision. Source evidence lives in the private
+`evidence/brand-heading-accent-inventory.json` and implementation ledger.
