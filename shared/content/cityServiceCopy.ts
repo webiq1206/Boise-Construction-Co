@@ -539,7 +539,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
   },
   "custom-home-builder": {
     "boise": {
-      intro: "Thinking about custom home building in Boise, Idaho? Around the North End and elsewhere in the city, a new house usually has to be laid out around Boise's building rules and its inspection calendar. We build custom homes design-build. One team owns the design and the construction, the budget is laid out line by line, a written report reaches you every week, and a written warranty covers our workmanship. Most Boise custom homes we build start with a free planning consultation, and the estimator gives you a planning range if you'd like a starting figure.",
+      intro: "Boise Construction Co designs and builds custom homes in Boise, Idaho. One design-build team handles feasibility, design, engineering, permitting and construction, with a line-item budget, weekly written updates and a written workmanship warranty. Start with your lot, room needs and budget priorities. Use the estimator for a planning range, then request a planning consultation to review the scope and next steps.",
       faqs: [
         {
           question: "How much does custom home building cost in Boise?",

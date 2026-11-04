@@ -20,6 +20,7 @@ getServiceBySlug,
 import { getCityServiceImageSet } from '@/shared/cityServiceImages';
 import { getCountyLabel,serviceLabel } from '@/shared/contentData';
 import { getGalleryProjectsFor } from '@/shared/galleryData';
+import { BOISE_CUSTOM_HOME_PLANNING } from '@/shared/content/boisePlanning';
 import {
 getCityServiceFaqs,
 getCityServiceIntro,
@@ -78,9 +79,12 @@ export default async function CityServicePage(
   const localNote = `For ${serviceNameInSentence(content.name)} in ${city.name}, confirm the property jurisdiction and scope before applying. City addresses and unincorporated county parcels may use different building departments. Confirm required building and trade permits, inspections and review times for the actual address.`;
   const images = getCityServiceImageSet(service.slug, city.slug);
   const scopeSplit = getScopeSplitSection(service.slug, city.name);
-  const sections = scopeSplit
+  const sharedSections = scopeSplit
     ? [scopeSplit, ...getCityServiceSections(content, city, seo)]
     : getCityServiceSections(content, city, seo);
+  const sections = service.slug === 'custom-home-builder' && city.slug === 'boise'
+    ? [BOISE_CUSTOM_HOME_PLANNING, ...sharedSections]
+    : sharedSections;
 
   // Concept-home imagery only. Written testimonials stay hidden until we have
   // genuine, verified reviews (no seeded quotes or star ratings).

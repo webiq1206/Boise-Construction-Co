@@ -16,6 +16,7 @@ import { getAreaImageSet } from '@/shared/cityServiceImages';
 import { getCountyLabel,SERVICES } from '@/shared/contentData';
 import { getGalleryProjectsForCity } from '@/shared/galleryData';
 import { getAreaCityCopy } from '@/shared/content/areaCopy';
+import { BOISE_LOT_PLANNING } from '@/shared/content/boisePlanning';
 import { LOCATION_GUIDES } from '@/shared/content/locationGuides';
 import { guidePath } from '@/shared/contentHubs';
 import { AREA_PAGE_FAQS,getAreaIntro } from '@/shared/seoContent';
@@ -68,6 +69,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
   const creek = indianCreekDescription(city.name);
 
   const sections: LandingSection[] = [
+    ...(city.slug === 'boise' ? [BOISE_LOT_PLANNING] : []),
     ...(city.slug === 'middleton'
       ? [
           {
