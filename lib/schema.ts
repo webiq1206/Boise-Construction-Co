@@ -6,10 +6,10 @@ import {schemaTime} from './schemaTime';
 
 import { BUSINESS_INFO, getBaseUrl } from './seo';
 import { SERVICES } from '@/shared/contentData';
-import { SITE_CONFIG } from '@/shared/siteConfig';
 import { FOUNDING, PUBLIC_MARK_PATH, SHOW_FOUNDING_YEAR } from '@/shared/publicFlags';
 import { CONTRACTOR_REGISTRATION_NUMBER } from '@/shared/contractorRegistration';
 import { P5_SOCIAL } from '@/shared/gbpProfile';
+import { SITE_CONFIG } from '@/shared/siteConfig';
 
 /** Idaho registers contractors. The same credential is on LocalBusiness, Organization, and Service. */
 const CONTRACTOR_CREDENTIAL = {
@@ -75,40 +75,17 @@ export const P5_PARENT_ORGANIZATION = {
 export const BUSINESS_TYPES = ['HomeAndConstructionBusiness', 'GeneralContractor'] as const;
 
 /**
- * Public PostalAddress for JSON-LD. Values come from SITE_CONFIG, which matches
- * the authorized P5 street address. areaServed still carries the service area.
- * Publishing the street does not make this a staffed storefront.
- */
-export const PUBLIC_POSTAL_ADDRESS = {
-  '@type': 'PostalAddress',
-  streetAddress: SITE_CONFIG.address.street,
-  addressLocality: SITE_CONFIG.address.city,
-  addressRegion: SITE_CONFIG.address.state,
-  postalCode: SITE_CONFIG.address.postalCode,
-  addressCountry: 'US',
-} as const;
-
-/**
  * Schema telephone in E.164 ("+1-208-477-1169"), the same string Remodeling,
  * Handyman, Cabinet and P5 publish, so the NAP matches across the family and
  * GBP. The display string "(208) 477-1169" stays on the page.
  */
 export const SCHEMA_TELEPHONE = SITE_CONFIG.phoneE164;
 
-/**
- * Geocode of the business address, 4031 W Wapoot St, Meridian, ID 83646
- * (OpenStreetMap Nominatim; the same pair the sibling family sites publish for
- * this address). Not the Meridian city-centre pin in CITY_SEO_DATA, which put
- * this business about 4 miles from its own street address.
- */
-export const BUSINESS_ADDRESS_GEO = { latitude: 43.6515, longitude: -116.4444 } as const;
-
-/** Named public contact. Role wording is the brief's "public representative". */
+/** Business contact details, without a personal administrative label. */
 export const PUBLIC_CONTACT_POINT = {
   '@type': 'ContactPoint',
-  name: SITE_CONFIG.publicRepresentative,
   telephone: SCHEMA_TELEPHONE,
-  contactType: 'public representative',
+  contactType: 'Customer Service',
   areaServed: 'US-ID',
   availableLanguage: 'English',
 } as const;
@@ -140,11 +117,8 @@ const CITY_WIKIPEDIA: Record<string, string> = {
 };
 
 export function generateLocalBusinessSchema(city?: string): SchemaContext {
-  // A single-location business has ONE set of coordinates (its address).
-  // Emitting per-city coordinates under one @id confuses entity
-  // disambiguation, so geo is always the street address; the service area is
-  // expressed via `areaServed`. The optional `city` only customizes the
-  // human-readable description.
+  // Public geography is expressed through areaServed. The optional city
+  // customizes the description without implying a customer-facing location.
   return {
     '@context': 'https://schema.org',
     '@type': [...BUSINESS_TYPES],
@@ -162,12 +136,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     telephone: SCHEMA_TELEPHONE,
     email: BUSINESS_INFO.email,
     hasCredential: CONTRACTOR_CREDENTIAL,
-    address: PUBLIC_POSTAL_ADDRESS,
     contactPoint: PUBLIC_CONTACT_POINT,
-    geo: {
-      '@type': 'GeoCoordinates',
-      ...BUSINESS_ADDRESS_GEO,
-    },
     openingHoursSpecification: Object.entries(BUSINESS_INFO.hours).map(([day, hours]) => ({
       '@type': 'OpeningHoursSpecification',
       dayOfWeek: day.charAt(0).toUpperCase() + day.slice(1),
@@ -249,7 +218,6 @@ export function generateServiceSchema(serviceName: string, serviceDescription: s
       email: BUSINESS_INFO.email,
       hasCredential: CONTRACTOR_CREDENTIAL,
       priceRange: '$$',
-      address: PUBLIC_POSTAL_ADDRESS,
       contactPoint: PUBLIC_CONTACT_POINT,
     },
     // The page city is the area served, not a second PostalAddress.
@@ -324,7 +292,6 @@ export function generateOrganizationSchema(): SchemaContext {
       : {}),
     telephone: SCHEMA_TELEPHONE,
     email: BUSINESS_INFO.email,
-    address: PUBLIC_POSTAL_ADDRESS,
     knowsAbout: [
       'custom home building',
       'semi-custom home building',
@@ -339,16 +306,7 @@ export function generateOrganizationSchema(): SchemaContext {
       'Canyon County building permits',
     ],
     ...(BUSINESS_INFO.sameAs.length ? { sameAs: BUSINESS_INFO.sameAs } : {}),
-    contactPoint: [
-      {
-        '@type': 'ContactPoint',
-        telephone: SCHEMA_TELEPHONE,
-        contactType: 'Customer Service',
-        areaServed: 'US-ID',
-        availableLanguage: 'English',
-      },
-      PUBLIC_CONTACT_POINT,
-    ],
+    contactPoint: [PUBLIC_CONTACT_POINT],
   };
 }
 

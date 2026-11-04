@@ -212,3 +212,73 @@ Handyman's affected imagery already has no such labels and needs no change.
 The explicit owner direction is recorded in the profile; no new asset or claim
 is introduced. Fresh focused image/label review and the normal merge gates
 remain required for this follow-up; source merge is not deployment.
+
+## Portfolio presentation and privacy update
+
+The owner subsequently expanded this same branch/PR125 to the six-site
+presentation task, including all public Construction pages. The current profile
+is `owner-update-20261104`; master/implementation rules remain 2.3 and organic
+search remains 1.0.0. The current owner's explicit directions supersede the old
+image-label and public-address preservation requirements in the historical
+sections above. No earlier completion or deployment claim is extended to this
+revision.
+
+Fresh source check: main `faf92a66115cbddaaf0ee103dcab3e0b66ccc5bd`, label branch
+`e9831f80ec990d8807341d0c4a7e38fa3d97b69d`, preserved Cursor branch head
+`1189d1e4b750f8eb77d418e39be6e39eb7fa9108`. This agent is the sole Construction
+brand-source writer; the coordinating owner handles canonical family chrome,
+the pictured area-section composition and release review. Jared personally owns
+Git import and publication. No agent import, publication, lead submission,
+provider/estimator operation, access change or spending is authorized here.
+
+The complete known baseline includes 182 public paths and three internal/source-only
+paths, 185 saved HTML artifacts, 120 sitemap URLs and eight public resources.
+The baseline found 181 rendered marketing headers/footers with the street address,
+185 raw responses with that address, 184 responses with address/precise-geographic
+schema and no map element. The complete route/state ledger, source snapshots,
+matching prior public GETs and typography declaration comparisons are retained
+in the task's private `evidence/portfolio-labels` records. This is not a new
+competing site registry or a claim that a sample verified every route.
+
+Changes: remove image disclaimers and launch/reference-status notes, including
+the global footer's ADU note; keep the detached-ADU service link and meaningful
+scope split. Architectural galleries use neutral material/room titles, without
+claiming completed company work. Descriptive image text remains; no asset,
+price, review, customer, project-history or credential is invented.
+
+The website no longer exports the street address or precise home coordinates
+through public config, markup, JSON-LD or the vCard. The administrative contact
+role is replaced by ordinary business contact details; the founder biography,
+verified phone, email, business hours, city/service geography, registration and
+P5 profile link remain. Resource PDF generators and the three generated text
+layers contain no business street/admin wording and need no content change.
+Image-sitemap titles/captions follow the revised gallery and alt data; URL,
+canonical, indexing and intended discovery membership remain unchanged.
+
+Current official Google LocalBusiness documentation still lists address as a
+required property for that specific rich-result eligibility:
+https://developers.google.com/search/docs/appearance/structured-data/local-business
+The explicit privacy instruction takes precedence. Entity IDs/types,
+Organization/Service relationships, areaServed, phone, hours and credentials are
+preserved, but this address-free output is not claimed eligible for that local
+rich result. Google business-profile verification/hidden-address settings remain
+with the coordinating owner; no profile changes were made.
+
+Typography: replace existing brand-owned role declarations with the canonical
+family role tokens. Marketing hero size and the exact scoped PriorityLanding
+Boise correction are unchanged; specialized calculator/wizard/estimator CSS is
+excluded. Existing body inheritance can still affect input screens, so actual
+fit, wrapping and focus checks remain required. No arbitrary important-layer,
+new font family, palette change or estimator logic is introduced. The shared
+15-file chrome manifest is owned by the Remodeling source; the separate P5
+engine guard remains intact.
+
+Observed verification before canonical transport: 39 focused source tests pass,
+including the original interior contracts, all 90 city/service copy expansions,
+92 schema variants, vCard, hours, factual image descriptions and registration.
+Three P5 shared-engine/schema guard tests pass, all 15 family bytes still match
+their recorded source, and the no-em-dash check passes. The current type check
+awaits the coordinating owner's new optional chat.hiddenOn family type; it is
+not marked passed. Build, final rendered comparison, independent F4 review,
+exact-head CI, source commit, merge and live verification remain separate gates.
+No build was started while the disk/build slot was reserved by another site.

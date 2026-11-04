@@ -21,9 +21,11 @@
 }
 .lotBody { padding: var(--card-pad); }
 :global(.approved-shell) .lotBody h2 {
-  font-size: clamp(32px, 4vw, 52px);
-  line-height: 1.1;
-  margin: 16px 0;
+  font-size: var(--fs-h1);
+  line-height: var(--lh-h1);
+  margin: var(--stack-heading) 0;
+  letter-spacing: var(--tracking-display);
+  font-weight: var(--weight-display);
 }
 .lotBody > p:not(:global(.f-eyebrow)) { color: var(--fr-ink-soft); }
 .lotList { list-style: none; padding: 0; margin: 24px 0; }
@@ -33,8 +35,8 @@
   gap: 12px;
   padding-block: 12px;
   border-bottom: 1px solid var(--fr-line);
-  font-size: 17px;
-  line-height: 1.6;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
 }
 .lotList li:first-child { border-top: 1px solid var(--fr-line); }
 .lotList li > span { color: var(--fr-ink-soft); font-size: 14px; padding-top: 4px; }

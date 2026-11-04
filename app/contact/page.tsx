@@ -334,17 +334,7 @@ export default function ContactPage() {
                   label="Where we work"
                   subtext={SITE_CONFIG.address.serviceArea}
                 >
-                  <address className="not-italic leading-relaxed">
-                    Based in {SITE_CONFIG.address.cityState}
-                    <br />
-                    Serving the Treasure Valley
-                    <br />
-                    Public representative: {SITE_CONFIG.publicRepresentative}
-                    <br />
-                    {SITE_CONFIG.address.street}, {SITE_CONFIG.address.city}, {SITE_CONFIG.address.state} {SITE_CONFIG.address.postalCode}
-                    <br />
-                    Service-area business, not a staffed storefront.
-                  </address>
+                  <p className="leading-relaxed">Home building across Boise and the Treasure Valley.</p>
                 </ContactChannel>
               </Reveal>
               <Reveal delay={180} className="sm:col-span-2">
@@ -383,7 +373,6 @@ export default function ContactPage() {
                   <br />
                   No pitch. Just answers.
                 </p>
-                <p className="mt-3 text-xs text-inverse-foreground/80">Representative imagery</p>
               </div>
             </div>
 

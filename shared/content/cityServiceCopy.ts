@@ -2380,7 +2380,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
   },
   "adu": {
     "boise": {
-      intro: "Detached ADUs and guest houses in Boise add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Boise and Ada County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      intro: "Detached ADUs and guest houses in Boise add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Boise and Ada County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
       faqs: [
         { question: "How much does adus & guest houses cost in Boise?", answer: "ADU cost in Boise depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
         { question: "Can every property in Boise have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Boise or Ada County requirements. A site-specific review is needed before confirming what can be built." },
@@ -2391,7 +2391,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "meridian": {
-      intro: "Detached ADUs and guest houses in Meridian add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Meridian and Ada County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      intro: "Detached ADUs and guest houses in Meridian add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Meridian and Ada County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
       faqs: [
         { question: "How much does adus & guest houses cost in Meridian?", answer: "ADU cost in Meridian depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
         { question: "Can every property in Meridian have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Meridian or Ada County requirements. A site-specific review is needed before confirming what can be built." },
@@ -2402,7 +2402,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "eagle": {
-      intro: "Detached ADUs and guest houses in Eagle, including Banbury, add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Eagle and Ada County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      intro: "Detached ADUs and guest houses in Eagle, including Banbury, add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Eagle and Ada County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
       faqs: [
         { question: "How much does adus & guest houses cost in Eagle?", answer: "ADU cost in Eagle depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
         { question: "Can every property in Eagle have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Eagle or Ada County requirements. A site-specific review is needed before confirming what can be built." },
@@ -2413,7 +2413,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "nampa": {
-      intro: "Detached ADUs and guest houses in Nampa add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Nampa and Canyon County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      intro: "Detached ADUs and guest houses in Nampa add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Nampa and Canyon County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
       faqs: [
         { question: "How much does adus & guest houses cost in Nampa?", answer: "ADU cost in Nampa depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
         { question: "Can every property in Nampa have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Nampa or Canyon County requirements. A site-specific review is needed before confirming what can be built." },
@@ -2424,7 +2424,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "kuna": {
-      intro: "Detached ADUs and guest houses in Kuna add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Kuna and Ada County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      intro: "Detached ADUs and guest houses in Kuna add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Kuna and Ada County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
       faqs: [
         { question: "How much does adus & guest houses cost in Kuna?", answer: "ADU cost in Kuna depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
         { question: "Can every property in Kuna have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Kuna or Ada County requirements. A site-specific review is needed before confirming what can be built." },
@@ -2435,7 +2435,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "star": {
-      intro: "Detached ADUs and guest houses in Star add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Star and Ada County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      intro: "Detached ADUs and guest houses in Star add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Star and Ada County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
       faqs: [
         { question: "How much does adus & guest houses cost in Star?", answer: "ADU cost in Star depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
         { question: "Can every property in Star have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Star or Ada County requirements. A site-specific review is needed before confirming what can be built." },
@@ -2446,7 +2446,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "middleton": {
-      intro: "Detached ADUs and guest houses in Middleton add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Middleton and Canyon County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      intro: "Detached ADUs and guest houses in Middleton add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Middleton and Canyon County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
       faqs: [
         { question: "How much does adus & guest houses cost in Middleton?", answer: "ADU cost in Middleton depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
         { question: "Can every property in Middleton have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Middleton or Canyon County requirements. A site-specific review is needed before confirming what can be built." },
@@ -2457,7 +2457,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "caldwell": {
-      intro: "Detached ADUs and guest houses in Caldwell add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Caldwell and Canyon County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      intro: "Detached ADUs and guest houses in Caldwell add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Caldwell and Canyon County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
       faqs: [
         { question: "How much does adus & guest houses cost in Caldwell?", answer: "ADU cost in Caldwell depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
         { question: "Can every property in Caldwell have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Caldwell or Canyon County requirements. A site-specific review is needed before confirming what can be built." },
@@ -2468,7 +2468,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "garden-city": {
-      intro: "Detached ADUs and guest houses in Garden City add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Garden City and Ada County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Boise ADU Co projects currently run through Boise Construction Co; that brand site is coming. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
+      intro: "Detached ADUs and guest houses in Garden City add a new, separate dwelling on a lot you already own. Boise Construction Co builds new detached accessory dwellings for Garden City and Ada County; garage, basement and interior conversions are remodeling work for Boise Remodeling Co. Feasibility comes first: access, utilities, setbacks, and local requirements shape the plan before design. Request a quote and we reply within one business day with next steps.",
       faqs: [
         { question: "How much does adus & guest houses cost in Garden City?", answer: "ADU cost in Garden City depends on size, existing conditions, utility connections, site work, and finishes. We price after a site review rather than publishing a single square-foot number that hides those variables." },
         { question: "Can every property in Garden City have an ADU?", answer: "No. Feasibility depends on the parcel, setbacks, utilities, and Garden City or Ada County requirements. A site-specific review is needed before confirming what can be built." },

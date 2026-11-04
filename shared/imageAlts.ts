@@ -13,7 +13,7 @@ const ALTS: Record<string, string> = {
     "White board-and-batten house with a dark gable roof and a covered front porch",
   // Not the same picture as /images/construction/custom-home-exterior.webp above.
   "/family/construction-custom-home-exterior.webp":
-    "Concept design of a mountain-modern custom home with charcoal stucco, ledgestone and a dark metal roof",
+    "Mountain-modern home with charcoal stucco, ledgestone and a dark metal roof",
   "/images/construction/semi-custom-home.webp":
     "Single-story gray house with stone-wrapped porch columns, a covered entry and a garage",
   "/images/construction/home-under-framing.webp":
@@ -105,9 +105,9 @@ const ALTS: Record<string, string> = {
   "/images/projects/eagle-mountain-modern/eagle-custom-home-primary-bath.webp":
     "Primary bath with limestone tile, freestanding tub, and floating white oak vanity",
   "/images/projects/eagle-mountain-modern/eagle-custom-home-framing.webp":
-    "Same mountain-modern house at framing stage on a foothills lot",
+    "Timber framing on a foothills lot",
   "/images/projects/eagle-mountain-modern/eagle-custom-home-lot-before.webp":
-    "Empty foothills lot with sage slope and survey stakes before construction",
+    "Open foothills lot with sage slope and survey stakes",
   "/images/about/perkins-family-meridian-idaho.webp":
     "Nick Perkins with his wife and five children at a pumpkin patch",
   "/images/about/perkins-family-meridian-idaho-1x1.webp":
@@ -135,5 +135,5 @@ export function contentImageAlt(src: string | undefined | null): string {
   const path = src.split("?")[0].split("#")[0];
   const description = ALTS[path] ?? "";
   if (!description) return "";
-  return `Representative image: ${description}`;
+  return description;
 }

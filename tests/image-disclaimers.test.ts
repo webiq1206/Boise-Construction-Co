@@ -9,18 +9,18 @@ import { contentImageAlt } from '../shared/imageAlts.ts';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (file: string) => fs.readFileSync(path.join(root, file), 'utf8');
 
-test('stock photos keep a representative disclaimer and describe the framing photo', () => {
+test('architectural images keep descriptive alt text without presentation disclaimers', () => {
   const framing = contentImageAlt('/images/framing-in-progress-branded.webp');
   assert.equal(
     framing,
-    'Representative image: A worker kneeling beside interior wall framing on a plywood subfloor, with a drill and tape measure nearby',
+    'A worker kneeling beside interior wall framing on a plywood subfloor, with a drill and tape measure nearby',
   );
   assert.equal(
     contentImageAlt('/images/construction/great-room-evening.webp'),
-    'Representative image: Living room with a stone fireplace, wood ceiling beams, and large windows at dusk',
+    'Living room with a stone fireplace, wood ceiling beams, and large windows at dusk',
   );
   assert.equal(contentImageAlt('/family/p5-p5-construction-branded.webp'), framing);
-  const roughIn = 'Representative image: Mechanical rough-in with pipes and wiring inside framed walls';
+  const roughIn = 'Mechanical rough-in with pipes and wiring inside framed walls';
   assert.equal(contentImageAlt('/images/construction/mechanical-rough-in.webp'), roughIn);
   assert.equal(contentImageAlt('/family/construction-mechanical-rough-in.webp'), roughIn);
   assert.equal(
@@ -60,7 +60,7 @@ test('stock photos keep a representative disclaimer and describe the framing pho
     'components/seo/LandingPageTemplate.tsx',
     'app/contact/page.tsx',
   ]) {
-    assert.match(read(file), /Representative imagery|Representative image:/, file);
+    assert.doesNotMatch(read(file), /Representative imagery|Representative image:/, file);
   }
 
   const about = read('app/about/page.tsx');
@@ -76,13 +76,14 @@ test('stock photos keep a representative disclaimer and describe the framing pho
   const gallery = read('components/sections/ProjectGallerySection.tsx');
   assert.equal(gallery.includes('Our work</p>'), false);
   assert.equal(gallery.includes('Recent homes we have designed'), false);
-  assert.match(gallery, /Concept design/);
+  assert.match(gallery, /Architecture and finishes/);
+  assert.doesNotMatch(gallery, />Concept design<|More concept homes/);
   assert.equal(read('app/areas/[city]/page.tsx').includes('Recent ${city.name} projects'), false);
   assert.equal(read('components/seo/LandingPageTemplate.tsx').includes('Proof of work'), false);
 
   const galleryData = read('shared/galleryData.ts');
-  // Owner decision C (1 November 2026): heading in sentence case, same words.
-  assert.match(galleryData, /Eagle Foothills mountain-modern concept/);
+  // Owner update (4 November 2026): neutral subject, without a project-history claim.
+  assert.match(galleryData, /Mountain-modern exterior and interiors/);
   assert.equal(galleryData.includes('craftsman'), false);
   assert.equal(galleryData.includes('farmhouse'), false);
 });

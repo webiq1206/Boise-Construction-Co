@@ -120,7 +120,7 @@ test('contractor registration is on the footer, plain on the estimator, and in s
   assert.equal((footer.match(/>P5 Home Co LLC, Idaho Registered Contractor #8381215<\/a>/g) ?? []).length, 1);
   assert.match(
     footer,
-    /<a href="https:\/\/edopl\.idaho\.gov\/OnlineServices\/\?link=PubSearch" target="_blank" rel="noopener noreferrer" title="Look up P5 Home Co LLC, Idaho Registered Contractor #8381215 on Idaho DOPL" aria-label="Verify with Idaho DOPL: look up P5 Home Co LLC, Idaho Registered Contractor #8381215, opens in a new tab"/,
+    /<a href="https:\/\/edopl\.idaho\.gov\/OnlineServices\/\?link=PubSearch" target="_blank" rel="noopener noreferrer" title="Idaho contractor registration details" aria-label="P5 Home Co LLC, Idaho Registered Contractor #8381215, opens in a new tab"/,
   );
   assert.equal(footer.includes('Built by'), false);
   assert.equal(footer.includes('webIQ'), false);
@@ -132,8 +132,8 @@ test('contractor registration is on the footer, plain on the estimator, and in s
   assert.equal(link.includes('CONTRACTOR_LICENSE_SEARCH_URL'), true);
   assert.match(link, /target="_blank"/);
   assert.match(link, /rel="noopener noreferrer"/);
-  assert.match(link, /title="Look up P5 Home Co LLC, Idaho Registered Contractor #8381215 on Idaho DOPL"/);
-  assert.match(link, /aria-label="Verify with Idaho DOPL: look up P5 Home Co LLC, Idaho Registered Contractor #8381215, opens in a new tab"/);
+  assert.match(link, /title="Idaho contractor registration details"/);
+  assert.match(link, /aria-label="P5 Home Co LLC, Idaho Registered Contractor #8381215, opens in a new tab"/);
   assert.match(link, /function ContractorRegistrationPlain[\s\S]*<p /);
   const plain = link.slice(link.indexOf('function ContractorRegistrationPlain'));
   assert.equal(plain.includes('edopl.idaho.gov'), false);

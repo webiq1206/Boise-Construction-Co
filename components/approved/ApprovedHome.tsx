@@ -54,7 +54,6 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
    {src:'/family/drive/landscape-3-covered-patio-with-outdoor-fireplace.webp',alt:'Covered patio with a stacked stone outdoor fireplace and lounge chairs facing the mountains at dusk',label:'Covered patio',wide:true},
    {src:'/family/drive/square-3-soaking-tub-with-foothill-view.webp',alt:'Freestanding soaking tub beneath a large window looking out on golden foothills',label:'Primary bath'},
   ]}
-  note="Design imagery showing the quality and character we build toward. Ask to see plans, selections and references from past clients during your planning session."
  />
 
  {/* 2. The lot question, as an image-and-panel split. */}

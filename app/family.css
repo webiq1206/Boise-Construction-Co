@@ -49,11 +49,11 @@
   /* Phase 3 type scale: display (the H1) tops out at 64px and section H2s
      sit clearly below it, so an H2 never matches the H1 (82px H1 and 82px H2s
      on /warranty before). */
-  --ed-fs-display: clamp(2.25rem, calc(1.6rem + 2.6vw), 4rem);
-  --ed-fs-h2: clamp(1.75rem, calc(1rem + 2.4vw), 3rem);
-  --ed-fs-h2-sm: clamp(1.5rem, calc(0.9rem + 1.9vw), 2.5rem);
-  --ed-fs-h3: clamp(1.5rem, 2.2vw, 2.125rem);
-  --ed-fs-h4: clamp(1.1875rem, 1.5vw, 1.4375rem);
+  --ed-fs-display: var(--fs-h1);
+  --ed-fs-h2: var(--fs-display);
+  --ed-fs-h2-sm: var(--fs-h2);
+  --ed-fs-h3: var(--fs-h3);
+  --ed-fs-h4: var(--fs-h4);
 
   /*
    * The parent site sets supporting copy at 13px. That is a shade tight for
@@ -61,16 +61,16 @@
    * runs it at 15px with the same generous leading. The editorial feel comes
    * from the CONTRAST between display and body, not from shrinking the body.
    */
-  --ed-fs-lede: clamp(1.0625rem, 1.25vw, 1.3125rem);
-  --ed-fs-body: 1rem;
-  --ed-fs-small: 0.8125rem;
-  --ed-fs-eyebrow: 0.6875rem;
+  --ed-fs-lede: var(--fs-body);
+  --ed-fs-body: var(--fs-body);
+  --ed-fs-small: var(--fs-small);
+  --ed-fs-eyebrow: var(--fs-label);
 
-  --ed-lh-display: 0.94;
-  --ed-lh-heading: 1.05;
-  --ed-lh-body: 1.75;
-  --ed-tracking-display: -0.042em;
-  --ed-tracking-eyebrow: 0.18em;
+  --ed-lh-display: var(--lh-h1);
+  --ed-lh-heading: var(--lh-h3);
+  --ed-lh-body: var(--lh-body);
+  --ed-tracking-display: var(--tracking-display);
+  --ed-tracking-eyebrow: var(--tracking-label);
 
   /* --------------------------------------------------------------- surfaces */
   /* Read from the site's own palette. No literal brand colour appears here. */
@@ -200,16 +200,16 @@
  * then tracked-out uppercase. It tells a skimming reader what KIND of section
  * they have landed on before they read a word of the heading.
  */
-html :where(.ed-eyebrow) {
+html :where(.ed-eyebrow), .approved-shell .ed-eyebrow {
   display: flex;
   align-items: center;
   gap: 12px;
   margin: 0 0 clamp(18px, 2vw, 28px);
   color: var(--ed-muted-ink);
-  font-size: var(--ed-fs-eyebrow);
+  font-size: var(--fs-label);
   font-weight: 700;
-  letter-spacing: var(--ed-tracking-eyebrow);
-  line-height: 1.2;
+  letter-spacing: var(--tracking-label);
+  line-height: var(--lh-label);
   text-transform: uppercase;
 }
 html :where(.ed-eyebrow)::before {
@@ -230,47 +230,50 @@ html :where(.ed-h3) {
   letter-spacing: var(--ed-tracking-display);
   text-wrap: balance;
 }
-html :where(.ed-display) { font-size: var(--ed-fs-display); line-height: var(--ed-lh-display); }
-html :where(.ed-h2) { font-size: var(--ed-fs-h2); line-height: 0.98; }
-html :where(.ed-h2-sm) { font-size: var(--ed-fs-h2-sm); line-height: 1.02; }
-html :where(.ed-h3) {
-  font-size: var(--ed-fs-h3);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: var(--ed-lh-heading);
+html :where(.ed-display), .approved-shell .ed-display { font-size: var(--fs-h1); line-height: var(--lh-h1); letter-spacing: var(--tracking-display); font-weight: var(--weight-display); }
+html :where(.ed-h2), .approved-shell .ed-h2 { font-size: var(--fs-display); line-height: var(--lh-display); letter-spacing: var(--tracking-display); font-weight: var(--weight-display); }
+html :where(.ed-h2-sm), .approved-shell .ed-h2-sm { font-size: var(--fs-h2); line-height: var(--lh-h2); letter-spacing: var(--tracking-heading); font-weight: var(--weight-display); }
+html :where(.ed-h3), .approved-shell .ed-h3 {
+  font-size: var(--fs-h3);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--lh-h3);
 }
-html :where(.ed-h4) {
+html :where(.ed-h4), .approved-shell .ed-h4 {
   font-family: var(--font-cormorant, Georgia, serif);
-  font-size: var(--ed-fs-h4);
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  line-height: 1.2;
+  font-size: var(--fs-h4);
+  font-weight: var(--weight-display);
+  letter-spacing: 0;
+  line-height: var(--lh-h4);
 }
 
 /* Spacing is a default. Page-level mt/mb utilities must win. */
 html :where(.ed-display, .ed-h2, .ed-h3, .ed-h4, .ed-lede, .ed-body) { margin: 0; }
 
 /* The serif lede: one short paragraph that carries the weight of the heading. */
-html :where(.ed-lede) {
+html :where(.ed-lede), .approved-shell .ed-lede {
   font-family: var(--font-cormorant, Georgia, serif);
-  font-size: var(--ed-fs-lede);
+  font-size: var(--fs-body);
   font-weight: 500;
-  line-height: 1.4;
+  line-height: var(--lh-body);
   text-wrap: pretty;
+  letter-spacing: 0;
 }
 
-html :where(.ed-body) {
+html :where(.ed-body), .approved-shell .ed-body {
   max-width: 58ch;
   color: var(--ed-muted-ink);
-  font-size: var(--ed-fs-body);
-  line-height: var(--ed-lh-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
   text-wrap: pretty;
+  letter-spacing: 0;
 }
 html :where(.ed-body + .ed-body) { margin-top: 1.1em; }
-html :where(.ed-small) {
+html :where(.ed-small), .approved-shell .ed-small {
   color: var(--ed-muted-ink);
-  font-size: var(--ed-fs-small);
-  line-height: 1.6;
+  font-size: var(--fs-small);
+  line-height: var(--lh-small);
+  letter-spacing: 0;
 }
 
 /* ==========================================================================

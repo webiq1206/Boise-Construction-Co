@@ -9,17 +9,11 @@ import {
   type GalleryProject,
 } from "@/shared/galleryData";
 import { contentImageAlt } from "@/shared/imageAlts";
-import { CITIES } from "@/shared/contentData";
-
-function cityDisplayName(slug: string) {
-  return CITIES.find((c) => c.slug === slug)?.name ?? slug;
-}
 
 function ProjectMeta({ project, lead = false }: { project: GalleryProject; lead?: boolean }) {
-  const cityName = cityDisplayName(project.city);
   return (
     <>
-      <p className="ed-eyebrow ed-eyebrow-accent !mb-3">{cityName}, Idaho</p>
+      <p className="ed-eyebrow ed-eyebrow-accent !mb-3">Architecture and finishes</p>
       <h3 className={lead ? "ed-h3" : "ed-h4"}>{project.title}</h3>
       <p className={`ed-body mt-3 ${lead ? "" : "text-[0.875rem]"}`}>{project.description}</p>
     </>
@@ -88,7 +82,7 @@ interface ProjectGallerySectionProps {
 }
 
 /**
- * Our work - cohesive concept homes.
+ * Architectural scene gallery, with private provenance in shared/galleryData.
  *
  * New construction has no remodel before/after. Each featured project shows
  * exterior and room views that belong to one property, so mobile scroll gets
@@ -111,7 +105,7 @@ export function ProjectGallerySection({
       <div className="ed-shell">
         <div className="grid gap-[var(--ed-gutter)] lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <Reveal>
-            <p className="ed-eyebrow">Concept design</p>
+            <p className="ed-eyebrow">Architecture and finishes</p>
             <h2 className="ed-h2 ed-statement">
               {lead.title}
             </h2>
@@ -133,7 +127,7 @@ export function ProjectGallerySection({
         {showRail && (
           <Reveal delay={120}>
             <div className="mt-[clamp(48px,6vw,88px)] flex items-end justify-between gap-6">
-              <p className="ed-eyebrow !mb-0">More concept homes</p>
+              <p className="ed-eyebrow !mb-0">More exterior and interior details</p>
               <p className="ed-small hidden sm:block">Scroll sideways</p>
             </div>
             <div
@@ -141,7 +135,7 @@ export function ProjectGallerySection({
               tabIndex={0}
               role="region"
               style={{ ["--ed-rail-w" as string]: "31%" }}
-              aria-label="More concept homes"
+              aria-label="More exterior and interior details"
             >
               {rest.map((project) => (
                 <article

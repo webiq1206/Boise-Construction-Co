@@ -21,7 +21,7 @@ export function FeaturedBeforeAfterSection({
   project,
   title = (
     <>
-      A cohesive <em className="brc-accent">concept home</em>
+      Exterior and <em className="brc-accent">interior details</em>
     </>
   ),
 }: FeaturedBeforeAfterSectionProps) {
@@ -40,9 +40,9 @@ export function FeaturedBeforeAfterSection({
     <Section divider>
       <div className="container px-4 max-w-5xl">
         <SectionHeader
-          eyebrow="Representative imagery"
+          eyebrow="Architecture and finishes"
           title={title}
-          description="Exterior and interior views of one concept property - materials and setting stay continuous from curb to kitchen."
+          description="Charcoal stucco, ledgestone, white oak and limestone, shown across exterior and interior details."
           className="mb-8 max-w-3xl"
         />
         <Reveal>
@@ -50,7 +50,7 @@ export function FeaturedBeforeAfterSection({
             <div className="relative aspect-[16/10] md:aspect-[21/9]">
               <Image
                 src={hero.src}
-                alt={contentImageAlt(hero.src) || `Representative image: ${hero.label}`}
+                alt={contentImageAlt(hero.src) || hero.label}
                 fill
                 sizes="(max-width: 768px) 100vw, 1024px"
                 className="object-cover img-brand-grade"
@@ -72,7 +72,7 @@ export function FeaturedBeforeAfterSection({
                   >
                     <Image
                       src={image.src}
-                      alt={contentImageAlt(image.src) || `Representative image: ${image.label}`}
+                      alt={contentImageAlt(image.src) || image.label}
                       fill
                       sizes={roomSizes}
                       className="object-cover img-brand-grade"

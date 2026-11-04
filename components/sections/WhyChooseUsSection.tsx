@@ -73,7 +73,6 @@ export function WhyChooseUsSection({ limit }: WhyChooseUsSectionProps) {
                     className="object-cover img-brand-grade"
                   />
                 </div>
-                <figcaption className="ed-body mt-3 text-[0.875rem]">Representative imagery</figcaption>
               </figure>
             </Reveal>
           </div>

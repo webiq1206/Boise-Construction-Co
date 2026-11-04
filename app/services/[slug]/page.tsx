@@ -79,7 +79,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
   const sectionFigureByService: Record<string, { src: string; caption: string }> = {
     'custom-home-builder': {
       src: '/images/projects/eagle-mountain-modern/eagle-custom-home-kitchen.webp',
-      caption: 'Rift-cut white oak cabinets and a honed black quartzite island in the Eagle mountain-modern concept.',
+      caption: 'Rift-cut white oak cabinets and a honed black quartzite island.',
     },
     'semi-custom-homes': {
       src: '/images/projects/eagle-mountain-modern/eagle-custom-home-great-room.webp',
@@ -87,7 +87,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
     },
     'build-on-your-lot': {
       src: '/images/projects/eagle-mountain-modern/eagle-custom-home-rear-patio.webp',
-      caption: 'Covered rear patio with foothills view on the Eagle mountain-modern concept.',
+      caption: 'Covered rear patio with a foothills view.',
     },
     'design-build': {
       src: CONSTRUCTION_IMAGES.plans,
