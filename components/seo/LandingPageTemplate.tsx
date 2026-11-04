@@ -23,6 +23,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment, type ReactNode } from 'react';
 import { RelatedLinks } from './RelatedLinks';
+import priorityStyles from './PriorityLanding.module.css';
 
 interface BreadcrumbItem {
   name: string;
@@ -46,6 +47,8 @@ interface LandingPageTemplateProps {
    * the hero budget. The whole overview then opens the section below the hero.
    */
   heroLine?: string;
+  /** Opt-in composition and enlarged-text containment for the reviewed Boise pages. */
+  priorityPlanning?: boolean;
   breadcrumbs: BreadcrumbItem[];
   heroImageUrl?: string;
   heroImageAlt?: string;
@@ -254,6 +257,7 @@ export function LandingPageTemplate({
   overviewParagraphs,
   overviewEmphasis,
   heroLine,
+  priorityPlanning = false,
   breadcrumbs,
   heroImageUrl,
   heroImageAlt,
@@ -288,35 +292,43 @@ export function LandingPageTemplate({
   const planningFigure = planningFrom && hasPlanningFigure(planningFrom) ? planningFrom : undefined;
 
   return (
-    <div className="flex flex-col ">
+    <div className={`flex flex-col${priorityPlanning ? ` ${priorityStyles.page}` : ''}`}>
       {/* Approved split hero, held to the first screen (C3): breadcrumb,
           eyebrow, H1, ONE support line, the planning figure as a chip, one
           primary action and the phone as a text link. The rest of the overview
           opens the section directly below, unchanged. */}
       <InteriorHero imageSrc={heroImageUrl} imageAlt={heroImageAlt ?? contentImageAlt(heroImageUrl)} layout="split">
-          <HeroBreadcrumbs items={breadcrumbs} />
+          {!priorityPlanning && <HeroBreadcrumbs items={breadcrumbs} />}
           <p data-speakable="summary" className="sr-only">{speakableSummary}</p>
-          {eyebrow && <p className="ed-eyebrow interior-hero-eyebrow">{eyebrow}</p>}
+          {!priorityPlanning && eyebrow && <p className="ed-eyebrow interior-hero-eyebrow">{eyebrow}</p>}
           <h1 className="ed-display ed-statement-display text-inverse-foreground">{h1}</h1>
           {lead.line && (
             <p className="interior-hero-support">
               <Emphasis text={lead.line} phrase={emphasisInHero ? overviewEmphasis : undefined} />
             </p>
           )}
-          {planningFrom && (
+          {!priorityPlanning && planningFrom && (
             <p className="interior-hero-chip">
               {planningFigure ? (<>Planning from <strong>{planningFigure}</strong></>) : planningFrom}
             </p>
           )}
           <div className="interior-hero-actions">
             <PrimaryCta href={estimateHref ?? '/estimate'} trackingLocation="landing_hero">{CTA_PRIMARY}</PrimaryCta>
-            <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>
+            {!priorityPlanning && <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>}
           </div>
         </InteriorHero>
 
-      {(lead.rest.length > 0 || planningFigure) && (
+      {(priorityPlanning || lead.rest.length > 0 || planningFigure) && (
         <section className="interior-hero-more" aria-label="Overview">
           <div className="interior-hero-more-inner">
+            {priorityPlanning && (
+              <div className={priorityStyles.context}>
+                <HeroBreadcrumbs items={breadcrumbs} />
+                {eyebrow && <p className="ed-eyebrow interior-hero-eyebrow">{eyebrow}</p>}
+                {planningFrom && !planningFigure && <p className="interior-hero-chip">{planningFrom}</p>}
+                <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>
+              </div>
+            )}
             {lead.rest.map((paragraph, i) => (
               <p key={i} className={i === 0 ? 'interior-hero-more-lede' : undefined}>
                 <Emphasis text={paragraph} phrase={!emphasisInHero ? overviewEmphasis : undefined} />
@@ -498,7 +510,7 @@ export function LandingPageTemplate({
       {sections && sections.length > 0 && (
         <Section surface="dark" spacing="xl" edge>
           <div className="ed-shell">
-            <div className="mx-auto grid max-w-3xl gap-10">
+            <div className={`mx-auto grid max-w-3xl gap-10${priorityPlanning ? ` ${priorityStyles.guide}` : ''}`}>
               {/* Keep the guide index above centered copy at every width. */}
               <aside aria-label="In this guide">
                 <Reveal>

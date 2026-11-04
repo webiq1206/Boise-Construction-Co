@@ -1,0 +1,89 @@
+/* Scoped to the two reviewed Boise planning pages. Shared family chrome stays unchanged. */
+.page :global(.interior-hero) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 0;
+}
+
+.page :global(.interior-hero .interior-hero-copy) {
+  min-width: 0;
+  padding: var(--section-y) var(--gutter);
+}
+
+.page :global(.interior-hero .interior-hero-copy h1) {
+  margin: 0;
+  max-width: 18ch;
+  font-size: var(--fs-h1);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.page :global(.interior-hero .interior-hero-copy .interior-hero-support) {
+  margin: var(--stack-heading) 0 0;
+  max-width: 42ch;
+  font-size: var(--fs-body);
+  line-height: 1.6;
+}
+
+.page :global(.interior-hero .interior-hero-actions) {
+  margin-top: var(--stack-cta);
+}
+
+.page :global(.interior-hero .interior-hero-image) {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 3 / 1;
+}
+
+.page :global(.interior-hero .interior-hero-image img) {
+  object-position: center 55%;
+}
+
+.page :global(.interior-hero .interior-hero-image-label) {
+  font-size: var(--fs-small);
+}
+
+.context {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.context :global(nav),
+.context :global(nav span),
+.context :global(nav a) {
+  color: var(--color-text-muted);
+}
+
+.context :global(.interior-hero-eyebrow),
+.context :global(.interior-hero-chip) {
+  margin: 0;
+}
+
+.context :global(nav a) {
+  min-height: var(--touch-min);
+}
+
+.guide {
+  grid-template-columns: minmax(0, 1fr);
+  overflow-wrap: anywhere;
+}
+
+.guide > * {
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .page :global(.interior-hero) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .page :global(.interior-hero .interior-hero-image) {
+    aspect-ratio: auto;
+    align-self: stretch;
+  }
+}

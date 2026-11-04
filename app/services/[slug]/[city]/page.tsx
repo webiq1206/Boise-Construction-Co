@@ -117,6 +117,7 @@ export default async function CityServicePage(
     <InteriorPage kind="services"><>
       <JsonLd data={schemas} />
       <LandingPageTemplate
+        priorityPlanning={service.slug === 'custom-home-builder' && city.slug === 'boise'}
         h1={h1}
         speakableSummary={overview}
         overview={overview}

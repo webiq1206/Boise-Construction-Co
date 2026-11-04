@@ -122,3 +122,37 @@ Recovery: base main commit above and scoped Git diff/branch. Exact final commit,
 PR, final evidence, review result and release receipts will be appended after
 they exist. Parent retains baseline and follow-up measurement ownership; no
 duplicate schedule or indexing submission was created.
+
+## Bounded review-gate remediation
+
+Parent explicitly authorized repairing the independently verified C3 hero-fit
+and C12 enlarged-text defects on the two affected pages. `priorityPlanning`
+opts in only Boise area and Boise custom-home service. The shared template's
+other 107 generated consumers retain the original branch and styles. The new
+CSS module leaves family chrome and its hash manifest untouched.
+
+The hero retains H1, opening answer and primary quote action. Existing breadcrumb,
+eyebrow, phone and planning detail remain in the immediately adjacent overview.
+No price, timeline, credential, service claim, URL, metadata, form or estimator
+policy changes. Hero padding/type use the established tier tokens; recognizable
+architectural concepts stay labeled. The long-form grid explicitly permits
+shrinkage and word wrapping for enlarged text. Global overflow rules are retained.
+
+Normal build/prebuild, TypeScript and all 22 existing interior-contract tests
+pass after the repair. Matching before/after evidence covers 320x568,360x640,
+390x844,430x932,768x1024,1024x768,1280x720,1440x900,1920x1080. Independent rendered
+acceptance is pending, not inferred from those tests.
+
+The unrelated baseline RE-10 browser-check failure remains open. Its strict
+locator matches both valid handoff links. An assertion-preserving proposed fix
+checks both links, exact destinations and unobstructed access, but the helper
+is protected by the shared-engine manifest. Prebuild rejected a local mirror edit;
+that edit was reverted without changing the guard. Canonical-source ownership
+and sync authorization are needed before this CI repair. Do not bypass the check
+or mark CI passed from the normal build.
+
+Draft PR124 is the reviewable source destination. Merge/publication authority
+was subsequently supplied explicitly, conditional on passing tests and review.
+No import or publication has been attempted. Authenticated Replit workspace
+inspection and preservation of local-only work remain prerequisites. The browser
+transport is currently unavailable; no outcome is uncertain.

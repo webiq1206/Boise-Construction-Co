@@ -221,6 +221,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
     <InteriorPage kind="areas"><>
       <JsonLd data={schemas} />
       <LandingPageTemplate
+        priorityPlanning={city.slug === 'boise'}
         h1={h1}
         speakableSummary={overview}
         overview={middletonLead ? overview : `${answerFirst} ${overview}`}

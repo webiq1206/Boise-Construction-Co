@@ -34,7 +34,8 @@ receipt is `docs/branding-20261028.json`. No later approval date is inferred.
   reading measure and 640/1024/1280 token tiers. Existing family chrome switches
   navigation at 1180px as explicitly configured in `lib/familyBrand.ts`. The
   landing template controls the editorial content width and section rhythm.
-  This copy edit does not change breakpoints or layout tokens.
+  The bounded review repair uses those existing tokens on the two Boise pages;
+  it does not change breakpoint or layout token values.
 - Shapes/surfaces: current square controls/cards, 4px inputs/choice cards and
   existing pill/circular controls; retain existing border/shadow treatment.
 - Controls and icons: existing `LandingPageTemplate`, family header/footer and
@@ -52,8 +53,8 @@ receipt is `docs/branding-20261028.json`. No later approval date is inferred.
   testimonial, statistic or staff photograph is invented or added.
 - Approved assets: `docs/branding-20261028.json`,
   `docs/service-image-provenance-20261026.json`, current image manifests and
-  `docs/approved-design-handoff.md`. Crops, alt text and concept labeling stay
-  unchanged. Accepted baseline screenshots are recorded in the task evidence;
+  `docs/approved-design-handoff.md`. Alt text and concept labeling stay unchanged.
+  The two Boise heroes use a scoped responsive architectural crop. Baseline screenshots are recorded in the task evidence;
   they are observations, not a new aesthetic approval.
 - Writing: direct, practical and answer first. Explain decisions and uncertainty;
   no em dashes, double hyphens in prose, unsupported project claims, permit
