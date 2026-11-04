@@ -156,3 +156,19 @@ was subsequently supplied explicitly, conditional on passing tests and review.
 No import or publication has been attempted. Authenticated Replit workspace
 inspection and preservation of local-only work remain prerequisites. The browser
 transport is currently unavailable; no outcome is uncertain.
+
+Independent review then exercised actual 200% text resizing, including fixed-pixel
+labels, rather than root-font enlargement alone. It found baseline bar, phone,
+process-grid and email wrapping failures. The second bounded correction inherits
+word wrapping within the same opt-in pages, permits grid children to shrink,
+wraps the existing bar labels and footer email, and observes that bar's rendered
+height to reserve matching spacer/focus clearance. The observer restores its
+page-specific styles on unmount. It adds no overlay or new business workflow.
+All shared chrome/engine bytes and recorded manifests remain unchanged.
+
+The current browser can inspect both exact Replit URLs but shows an authenticated
+access page: the visible display name is Jared and the app owner must grant that
+account access. The plugin independently still resolves the two expected editable
+projects. No invitation, identity/credential change, Agent operation, import or
+publication occurred. Use the existing authorized owner session/importer; do not
+infer import access from connector metadata or successful baseline deployment.

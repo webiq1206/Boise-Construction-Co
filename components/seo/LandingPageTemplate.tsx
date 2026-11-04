@@ -24,6 +24,7 @@ import Link from 'next/link';
 import { Fragment, type ReactNode } from 'react';
 import { RelatedLinks } from './RelatedLinks';
 import priorityStyles from './PriorityLanding.module.css';
+import { PriorityBarClearance } from './PriorityBarClearance';
 
 interface BreadcrumbItem {
   name: string;
@@ -293,6 +294,7 @@ export function LandingPageTemplate({
 
   return (
     <div className={`flex flex-col${priorityPlanning ? ` ${priorityStyles.page}` : ''}`}>
+      {priorityPlanning && <PriorityBarClearance />}
       {/* Approved split hero, held to the first screen (C3): breadcrumb,
           eyebrow, H1, ONE support line, the planning figure as a chip, one
           primary action and the phone as a text link. The rest of the overview

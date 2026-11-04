@@ -1,4 +1,9 @@
 /* Scoped to the two reviewed Boise planning pages. Shared family chrome stays unchanged. */
+.page {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .page :global(.interior-hero) {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -48,6 +53,7 @@
 
 .context {
   display: grid;
+  min-width: 0;
   justify-items: start;
   gap: var(--space-4);
   margin-bottom: var(--space-8);
@@ -68,6 +74,24 @@
   min-height: var(--touch-min);
 }
 
+.context > a {
+  max-width: 100%;
+  white-space: normal;
+}
+
+.context :global(nav),
+.context :global(nav ol),
+.context :global(nav li) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.page :global(.ed-step) > *,
+.page :global(.ed-split) > *,
+.page :global(.grid) > * {
+  min-width: 0;
+}
+
 .guide {
   grid-template-columns: minmax(0, 1fr);
   overflow-wrap: anywhere;
@@ -75,6 +99,33 @@
 
 .guide > * {
   min-width: 0;
+}
+
+:global(html):has(.page) {
+  scroll-padding-bottom: var(--priority-bar-clearance, var(--bar-height));
+}
+
+:global(body):has(.page) :global(.fam-bar[data-family-bar] .fam-bar-inner) {
+  flex-wrap: wrap;
+}
+
+:global(body):has(.page) :global(.fam-bar[data-family-bar] .fam-bar-primary) {
+  flex-basis: max-content;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+:global(body):has(.page) :global(.fam-bar[data-family-bar] .fam-bar-call) {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+:global(body):has(.page) :global(.fam-footer[data-family-footer] a) {
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 @media (min-width: 640px) {
