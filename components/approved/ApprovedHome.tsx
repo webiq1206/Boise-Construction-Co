@@ -8,6 +8,7 @@ import {contentImageAlt} from '@/shared/imageAlts';
 import {PlanningRangeExplorer} from '@/components/PlanningRangeExplorer';
 import {brands,cities,serviceExtras} from './family-content';
 import {DesignGallery} from '@/components/sections/DesignGallery';
+import {ServiceArea} from '@/components/family/ServiceArea';
 import styles from './HomePlanningSections.module.css';
 const Arrow=()=> <ArrowUpRight size={18} aria-hidden="true"/>;
 function Title({lines}:{lines:string[]}){return <>{lines[0]}<br/><em>{lines[1]}</em></>}
@@ -107,7 +108,7 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
  </section>
 
  {/* 9. Where we build. */}
- <section className="f-area f-section f-container"><p className="f-eyebrow">AT HOME IN IDAHO</p><h2>Local people.<br/><em>Valley-wide reach.</em></h2><p>Serving homeowners throughout the Treasure Valley.</p><nav className="fr-cities" aria-label="Service area cities">{cities.map(city=><a key={city} href={`/areas/${city.toLowerCase().replaceAll(" ","-")}`} aria-label={`Home builders in ${city}`}>{city}</a>)}</nav></section>
+ <ServiceArea image={{src:'/family/drive/square-2-stone-entry-with-oak-front-door.webp',alt:'Oak front door, stone entry and covered eaves',width:1200,height:1200}}><p className="f-eyebrow">AT HOME IN IDAHO</p><h2>Local people.<br/><em>Valley-wide reach.</em></h2><p>Serving homeowners throughout the Treasure Valley.</p><nav className="fr-cities" aria-label="Service area cities">{cities.map(city=><a key={city} href={`/areas/${city.toLowerCase().replaceAll(" ","-")}`} aria-label={`Home builders in ${city}`}>{city}</a>)}</nav></ServiceArea>
 
  <FAQSection/>
  </div>;}
