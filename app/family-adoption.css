@@ -8,6 +8,19 @@
    scrim and clear of the copy (bottom left) and the bottom bar. */
 .home-hero {
   position: relative;
+  /* One scale step below the CTA stack token balances this long display title
+     inside the measured hero budget without reducing type or section padding. */
+  --stack-cta: var(--space-4);
+}
+.home-hero .fam-hero[data-family-hero][data-fit='viewport'] {
+  align-items: stretch;
+}
+.home-hero .fam-hero[data-family-hero][data-fit='viewport'] .fam-hero-inner {
+  display: flex;
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .home-hero { --stack-cta: var(--space-6); }
 }
 .home-hero .home-hero-imagery {
   position: absolute;
