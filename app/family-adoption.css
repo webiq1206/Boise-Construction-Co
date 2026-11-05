@@ -22,6 +22,22 @@
 @media (min-width: 1024px) {
   .home-hero { --stack-cta: var(--space-6); }
 }
+@media (max-width: 639px) {
+  /* Budget the larger phone headline with existing spacing roles, retaining
+     the shared type scale and the full section padding. */
+  .home-hero .fam-hero[data-family-hero][data-fit='viewport'] {
+    --construction-hero-eyebrow-gap: var(--space-2);
+    --construction-hero-support-gap: var(--space-4);
+    --construction-hero-cta-gap: var(--space-3);
+    --stack-cta: var(--construction-hero-cta-gap);
+  }
+  .home-hero .fam-hero[data-family-hero][data-fit='viewport'] .fam-hero-eyebrow {
+    margin-bottom: var(--construction-hero-eyebrow-gap);
+  }
+  .home-hero .fam-hero[data-family-hero][data-fit='viewport'] .fam-hero-support {
+    margin-top: var(--construction-hero-support-gap);
+  }
+}
 .home-hero .home-hero-imagery {
   position: absolute;
   top: var(--space-3);
@@ -264,26 +280,26 @@ html .approved-shell main :is(.fr-band, .f-value, .f-contact, .interior-hero-con
 
 /* Exact ochre H1s need the existing dark surface after their glyph halo is
    removed. Limit this treatment to the three affected editorial intros. */
-html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero {
+html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-editorial {
   background: var(--color-charcoal);
 }
-html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-copy,
-html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-copy :is(h1, p, nav, nav a, nav span, [class*="text-inverse"]) {
+html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-editorial .interior-hero-copy,
+html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-editorial .interior-hero-copy :is(h1, p, nav, nav a, nav span, [class*="text-inverse"]) {
   color: var(--color-paper);
 }
-html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-copy :is(.ed-eyebrow, .interior-eyebrow) {
+html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-editorial .interior-hero-copy :is(.ed-eyebrow, .interior-eyebrow) {
   color: #d8dbd4 !important;
 }
 /* Use the same action roles as the existing contact and inverse surfaces. */
-html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero .primary-cta {
+html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-editorial .primary-cta {
   background: var(--color-paper);
   color: #2c302f;
 }
-html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero .primary-cta:hover {
+html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-editorial .primary-cta:hover {
   background: #e5e0d5;
   color: #2c302f;
 }
-html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero .primary-cta:focus-visible {
+html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-editorial .primary-cta:focus-visible {
   outline-color: var(--color-paper);
 }
 

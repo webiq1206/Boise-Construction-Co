@@ -166,6 +166,12 @@ the copy; the desktop directional scrim is opaque through the measured widest
 H1 line, then fades into the right-hand photograph over 80px. These are surface
 contrast repairs, without a heading box, stroke or glyph shadow. Removing the
 H1 shadow and recording this source change do not establish a rendered pass.
+The larger phone headline uses component-scoped existing spacing roles: 8px
+from eyebrow to headline, 16px from headline to support, and 12px before the
+action stack. This keeps the complete 360px hero inside its measured height
+budget while preserving all copy, the shared headline size and 64px section
+padding. These values still require optical review; they are not a spacing
+exception or approval waiver.
 Actual white and ochre glyph contrast, all nine required first-screen viewport
 pairs, unchanged H2 treatment and independent review remain final-revision
 gates.
