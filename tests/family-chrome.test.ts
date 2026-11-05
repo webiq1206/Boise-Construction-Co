@@ -88,7 +88,7 @@ test('the footer renders the family row, NAP, hours and one registration link, w
   assert.equal(/>Boise ADU Co</.test(html), false);
 });
 
-test('the homepage hero is the family template with sourced proof', () => {
+test('the homepage video preserves family content, static fallback and sourced proof', () => {
   const html = renderToStaticMarkup(React.createElement(HomeHero));
   assert.equal((html.match(/<h1\b/g) ?? []).length, 1);
   // Same H1 words as before the rollout.
@@ -99,7 +99,9 @@ test('the homepage hero is the family template with sourced proof', () => {
   assert.match(cta[0], /fam-btn--hero fam-btn--lg/);
   assert.equal(cta[1], 'Request a quote');
   assert.match(html, /<a href="tel:\+12084771169" class="fam-hero-link">Call or text \(208\) 477-1169<\/a>/);
-  assert.match(html, /<picture class="fam-hero-media"><source media="\(max-width: 1023px\)"/);
+  assert.match(html, /<img data-hero-poster="" src="\/images\/construction\/boise-construction-co-poster.jpg" alt=""/);
+  assert.match(html, /<video[^>]*muted=""[^>]*loop=""[^>]*playsinline=""[^>]*preload="none"/);
+  assert.doesNotMatch(html, /<source[^>]*video\//, 'no video request before browser preferences are known');
   assert.doesNotMatch(html, /Concept design imagery|Representative imag/);
   const support = html.match(/<p class="fam-hero-support">([^<]+)<\/p>/)?.[1] ?? '';
   assert.ok(support.split(/\s+/).length <= 14, support);

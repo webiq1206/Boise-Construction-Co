@@ -177,3 +177,26 @@ exception or approval waiver.
 Actual white and ochre glyph contrast, all nine required first-screen viewport
 pairs, unchanged H2 treatment and independent review remain final-revision
 gates.
+
+### November 5 approved cinematic hero
+
+The owner's later explicit direction supersedes the split upper-photo/lower-copy
+composition above. The approved silent 30-second walkthrough covers the entire
+homepage hero at every viewport, with all existing copy and calls to action over
+it. Use the existing charcoal `#383837` as a full-frame gradient, darker behind
+copy and lighter toward the open imagery. Preserve the current type, exact ochre,
+CTA destinations, measured hero height and family chrome. No split column or
+separate text panel. This is a Construction-only edit.
+
+Responsive static assets live in the established `public/images/construction/`
+directory. Phones/tablets use the 720p MP4; desktop prefers 1080p WebM with 1080p
+MP4 fallback. The poster is the static first render and fallback. Reduced motion,
+data saver and slow 2G connections initially keep the poster without video
+requests; visitors may explicitly play. Include an accessible pause/play control
+and suspend playback while the hero is offscreen or the document is hidden.
+Keep media archival/provenance records outside visitor-facing output.
+
+Apply website-design-quality 2.3, its implementation rules and independent
+rendered review, plus organic-ai-search-visibility 1.0.2. See
+`docs/hero-video-20261105.md` for this edit's verification record. Repository
+merge is authorized; Replit import and publication remain with the owner.

@@ -1,60 +1,37 @@
-import { HeroPhoto } from "@/components/family/HeroPhoto";
+import { HeroBackgroundVideo } from "./HeroBackgroundVideo";
+import { FamilyButton } from "@/components/family/Button";
+import { brandStyle } from "@/components/family/brandStyle";
 import { ProofStrip } from "@/components/family/ProofStrip";
 import { FAMILY_BRAND } from "@/lib/familyBrand";
 import {
   CONTRACTOR_LICENSE_SEARCH_URL,
   CONTRACTOR_REGISTRATION_LABEL,
 } from "@/shared/contractorRegistration";
-import { contentImageAlt } from "@/shared/imageAlts";
 
-const HERO_SRC = "/family/construction-custom-home-exterior.webp";
+const HERO_POSTER = "/images/construction/boise-construction-co-poster.jpg";
 
-/**
- * Homepage hero on the shared family HeroPhoto (draft-hero.md, Boise
- * Construction Co: already the closest to the template; one support line, the
- * ochre second line, a lower horizon on phones). Same H1 words as before, same
- * photograph, one primary to the quote wizard, the phone as the one text link,
- * and the response-time line that was already published here.
- *
- * The landscape source also serves the shorter phone photo area, retaining the
- * house and entrance above the lower reading field.
- *
- * The wrapper carries pt-0: app/family.css gives the first block of every page
- * clearance under the header, and this photograph starts flush under it.
- *
- * Server-rendered, so the image and the H1 are in the first HTML.
- */
+/** Construction-owned media, preserving the existing family hero content and styles. */
 export function HomeHero() {
   return (
     <>
       <div className="home-hero pt-0" data-p5-hero="">
-        {/* The source is an already sized WebP, served as is. A /_next/image request for a hero crop can stall and hold the
-            page's load event open, as it did on Boise Remodeling Co. */}
-        <HeroPhoto
-          fit="viewport"
-          image={{
-            src: HERO_SRC,
-            width: 1280,
-            height: 720,
-            position: "58% 50%",
-            unoptimized: true,
-            alt: contentImageAlt(HERO_SRC),
-          }}
-          phoneImage={{
-            src: HERO_SRC,
-            width: 1280,
-            height: 720,
-            position: "58% 50%",
-            unoptimized: true,
-          }}
-          eyebrow="Custom home building · Treasure Valley"
-          title="Custom home builder in Boise."
-          titleAccent="Built around you."
-          support="From bare lot to the keys, one accountable team."
-          primary={{ label: FAMILY_BRAND.cta.label, href: FAMILY_BRAND.cta.href }}
-          link={{ label: `Call or text ${FAMILY_BRAND.phone.display}`, href: FAMILY_BRAND.phone.telHref }}
-          microcopy="Our team replies within one business day."
-        />
+        <section className="fam-hero" data-family-hero="" data-fit="viewport" data-desktop-from={FAMILY_BRAND.header.desktopFrom} style={brandStyle()} aria-labelledby="family-hero-title">
+          <link rel="preload" as="image" href={HERO_POSTER} fetchPriority="high" />
+          <HeroBackgroundVideo />
+          <div className="fam-hero-scrim" aria-hidden="true" />
+          <div className="fam-hero-inner">
+            <div className="fam-hero-copy">
+              <p className="fam-hero-eyebrow">Custom home building · Treasure Valley</p>
+              <h1 className="fam-hero-title" id="family-hero-title">Custom home builder in Boise. <span className="fam-hero-accent">Built around you.</span></h1>
+              <p className="fam-hero-support">From bare lot to the keys, one accountable team.</p>
+              <div className="fam-hero-actions">
+                <FamilyButton href={FAMILY_BRAND.cta.href} variant="hero" size="lg" data-hero-cta="primary" data-cta="primary">{FAMILY_BRAND.cta.label}</FamilyButton>
+                <a href={FAMILY_BRAND.phone.telHref} className="fam-hero-link">Call or text {FAMILY_BRAND.phone.display}</a>
+              </div>
+              <p className="fam-hero-micro">Our team replies within one business day.</p>
+            </div>
+          </div>
+        </section>
       </div>
       {/* Facts this site already publishes, nothing new: the line-item budget, the
           Friday updates, one accountable team, and the DOPL-linked registration. */}
