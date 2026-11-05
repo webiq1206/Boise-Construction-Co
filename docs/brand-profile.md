@@ -160,11 +160,13 @@ use the existing charcoal surface with existing on-dark neutral text and action
 roles. Their text, image, grid, spacing, reading order and destinations stay as
 implemented. Other interior surfaces retain their existing composition.
 
-The homepage retains its existing photograph and copy width. Its existing
-phone/tablet vertical scrim keeps the clear upper photograph and darkens behind
-the copy; the desktop directional scrim is opaque through the measured widest
+The homepage retains its existing photograph and copy width. Phone and tablet
+composition pairs a clear upper house photograph with a charcoal lower reading
+field. The existing landscape source replaces its tall crop in this shorter
+photo area, retaining roof and entrance detail without a new image asset.
+The desktop directional scrim is opaque through the measured widest
 H1 line, then fades into the right-hand photograph over 80px. These are surface
-contrast repairs, without a heading box, stroke or glyph shadow. Removing the
+contrast repairs, without a stroke or glyph shadow. Removing the
 H1 shadow and recording this source change do not establish a rendered pass.
 The larger phone headline uses component-scoped existing spacing roles: 8px
 from eyebrow to headline, 16px from headline to support, and 12px before the

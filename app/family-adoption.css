@@ -156,9 +156,34 @@ html .approved-shell :is(.ed-on-gradient, .fr-band, .f-value, .f-contact) :is(in
     background-image: linear-gradient(
       180deg,
       rgba(var(--color-scrim-rgb), 0) 0,
-      rgba(var(--color-scrim-rgb), 0.94) var(--fam-hero-fade),
-      rgba(var(--color-scrim-rgb), 0.96) 100%
+      rgba(var(--color-scrim-rgb), 0.72) var(--fam-hero-fade),
+      rgba(var(--color-scrim-rgb), 0.88) 100%
     );
+  }
+  .home-hero .fam-hero[data-family-hero] .fam-hero-media {
+    height: 50%;
+    bottom: auto;
+  }
+  .home-hero .fam-hero[data-family-hero] .fam-hero-img {
+    object-position: 58% 50%;
+  }
+  .home-hero .fam-hero[data-family-hero] .fam-hero-copy {
+    position: relative;
+    isolation: isolate;
+  }
+  .home-hero .fam-hero[data-family-hero] .fam-hero-accent {
+    position: relative;
+  }
+  .home-hero .fam-hero[data-family-hero] .fam-hero-accent::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    bottom: -100svh;
+    left: calc(-1 * var(--gutter));
+    width: 100vw;
+    background: var(--color-charcoal);
+    pointer-events: none;
   }
 }
 @media (min-width: 1024px) {
