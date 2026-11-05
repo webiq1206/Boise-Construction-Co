@@ -10,6 +10,7 @@ on:
       - public/images/construction/boise-construction-co-*
       - tests/family-chrome.test.ts
       - scripts/verify-hero-video.cjs
+      - scripts/verify-hero-fold.cjs
       - components/approved/HomePlanningSections.module.css
       - components/PlanningRangeExplorer.tsx
       - scripts/verify-homepage-responsive.cjs
@@ -56,6 +57,21 @@ jobs:
           JS
       - name: Capture responsive homepage and exercise local controls
         run: node scripts/verify-homepage-responsive.cjs
+      - name: Verify measured hero fold and persistent UI states
+        run: node scripts/verify-hero-fold.cjs
+      - name: Bound hero fold evidence to64MiB
+        id: hero_fold_evidence
+        if: always()
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/hero-fold/*'
+      - name: Upload hero fold geometry and screenshots
+        if: ${{ always() && steps.hero_fold_evidence.outcome == 'success' && steps.hero_fold_evidence.outputs.ready == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: hero-fold-review-${{ github.sha }}
+          path: branding-ci-evidence/complete.tar.gz
+          retention-days: 14
+          compression-level: 0
+          if-no-files-found: error
       - name: Verify approved hero video, preferences and playback controls
         run: |
           node --import tsx --test tests/family-chrome.test.ts
