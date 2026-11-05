@@ -97,10 +97,12 @@ verification records remain with the authorized owner outside website output.
 Founder biography and the verified P5 profile link remain appropriate.
 
 Equivalent typography roles use the canonical family token scale: editorial
-section display 36/52/64px; interior H1 and feature title 32/44/52px; content H2
-28/36/40px; H3 22/26/28px; body 17/18/18px; buttons 16px. Use the matching shared
-line-height/tracking tokens. Existing shared hero size and the scoped Boise
-PriorityLanding correction remain. Specialized input geometry is preserved and
+section display 36/52/64px; interior H1 40/44/52px; feature title 32/44/52px;
+content H2 28/36/40px; H3 22/26/28px; body 17/18/18px; buttons 16px. Ordinary
+H1s consume the page-title role without enlarging feature H3s. Phone hero H1s
+use `clamp(44px, 13.333vw, 56px)`; tablet and desktop hero sizing and the scoped
+Boise PriorityLanding correction retain their existing roles. Use the matching
+shared line-height/tracking tokens. Specialized input geometry is preserved and
 must be checked for inherited type effects. Shared header/footer controls are
 implemented in the canonical family source, not patched in this brand.
 
@@ -128,8 +130,42 @@ interior statement/aside titles, legacy hero emphasis and dark planning bands co
 this exact role. The shared HeroPhoto uses the same heading role after canonical transport.
 Small FAQ open states and related/service title hover states retain readable neutral text;
 underline/chevron affordances convey their state without adding a different heading hue.
-Light-ground ochre emphasis uses a scoped 1px existing-charcoal glyph context; dark contexts keep their current surface.
+Light-ground H2 and statement emphasis retains its scoped 1px existing-charcoal
+glyph context; dark contexts keep their current surface. The November 5 owner
+direction below supersedes that treatment for H1s.
 This is a source implementation record, not a rendered contrast or visual acceptance.
 Actual font pixels, photograph contrast, all listed template consumers and independent
 review remain required at the exact final revision. Source evidence lives in the private
 `evidence/brand-heading-accent-inventory.json` and implementation ledger.
+
+### November 5 heading revision
+
+The owner requested removal of H1 shadows, larger and stronger mobile H1s, and
+consistent mobile alignment restored only where source history proves that
+headings or sections were previously left aligned. This is the direction's
+record, not a separate approval date or a rendered acceptance record.
+
+H1 emphasis retains exact logo ochre `#c48d3f` without a glyph halo. Existing H2,
+statement and control styling remains separate. Construction's November 3
+mobile-centering overrides were already removed by the November 4 reconciliation;
+current public heading alignment therefore stays as implemented. Shared size
+changes originate in the canonical family source and require its qualified
+transport and per-site review. Specialized task headings retain their own
+qualified geometry.
+
+Bare ochre on paper is below the 3:1 large-text threshold, which enlargement
+alone does not correct. The affected `/services`, `/areas` and `/resources`
+editorial introductions and the internal `/style-guide` H1 specimen therefore
+use the existing charcoal surface with existing on-dark neutral text and action
+roles. Their text, image, grid, spacing, reading order and destinations stay as
+implemented. Other interior surfaces retain their existing composition.
+
+The homepage retains its existing photograph and copy width. Its existing
+phone/tablet vertical scrim keeps the clear upper photograph and darkens behind
+the copy; the desktop directional scrim is opaque through the measured widest
+H1 line, then fades into the right-hand photograph over 80px. These are surface
+contrast repairs, without a heading box, stroke or glyph shadow. Removing the
+H1 shadow and recording this source change do not establish a rendered pass.
+Actual white and ochre glyph contrast, all nine required first-screen viewport
+pairs, unchanged H2 treatment and independent review remain final-revision
+gates.
