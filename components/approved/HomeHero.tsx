@@ -16,8 +16,8 @@ const HERO_SRC = "/family/construction-custom-home-exterior.webp";
  * photograph, one primary to the quote wizard, the phone as the one text link,
  * and the response-time line that was already published here.
  *
- * The phone crop is cut from the same
- * file with the sky trimmed, so the house fills the clear upper part of the screen.
+ * The landscape source also serves the shorter phone photo area, retaining the
+ * house and entrance above the lower reading field.
  *
  * The wrapper carries pt-0: app/family.css gives the first block of every page
  * clearance under the header, and this photograph starts flush under it.
@@ -28,8 +28,7 @@ export function HomeHero() {
   return (
     <>
       <div className="home-hero pt-0" data-p5-hero="">
-        {/* Both files are already sized WebP (1280x720 at 137 KB, 780x1040 at 47 KB), so they
-            are served as is. A /_next/image request for a hero crop can stall and hold the
+        {/* The source is an already sized WebP, served as is. A /_next/image request for a hero crop can stall and hold the
             page's load event open, as it did on Boise Remodeling Co. */}
         <HeroPhoto
           fit="viewport"
@@ -42,10 +41,10 @@ export function HomeHero() {
             alt: contentImageAlt(HERO_SRC),
           }}
           phoneImage={{
-            src: "/family/construction-custom-home-exterior-phone.webp",
-            width: 780,
-            height: 1040,
-            position: "42% 0%",
+            src: HERO_SRC,
+            width: 1280,
+            height: 720,
+            position: "58% 50%",
             unoptimized: true,
           }}
           eyebrow="Custom home building · Treasure Valley"

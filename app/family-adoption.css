@@ -19,20 +19,24 @@
   display: flex;
   align-items: center;
 }
-/* Preserve the exact logo ochre over the photo with a thin charcoal surround. */
-.home-hero .fam-hero[data-family-hero] .fam-hero-copy .fam-hero-accent {
-  text-shadow:
-    -1px -1px 0 var(--color-charcoal),
-     0 -1px 0 var(--color-charcoal),
-     1px -1px 0 var(--color-charcoal),
-     1px  0 0 var(--color-charcoal),
-     1px  1px 0 var(--color-charcoal),
-     0  1px 0 var(--color-charcoal),
-    -1px  1px 0 var(--color-charcoal),
-    -1px  0 0 var(--color-charcoal);
-}
 @media (min-width: 1024px) {
   .home-hero { --stack-cta: var(--space-6); }
+}
+@media (max-width: 639px) {
+  /* Budget the larger phone headline with existing spacing roles, retaining
+     the shared type scale and the full section padding. */
+  .home-hero .fam-hero[data-family-hero][data-fit='viewport'] {
+    --construction-hero-eyebrow-gap: var(--space-2);
+    --construction-hero-support-gap: var(--space-4);
+    --construction-hero-cta-gap: var(--space-3);
+    --stack-cta: var(--construction-hero-cta-gap);
+  }
+  .home-hero .fam-hero[data-family-hero][data-fit='viewport'] .fam-hero-eyebrow {
+    margin-bottom: var(--construction-hero-eyebrow-gap);
+  }
+  .home-hero .fam-hero[data-family-hero][data-fit='viewport'] .fam-hero-support {
+    margin-top: var(--construction-hero-support-gap);
+  }
 }
 .home-hero .home-hero-imagery {
   position: absolute;
@@ -147,21 +151,53 @@ html .approved-shell :is(.ed-on-gradient, .fr-band, .f-value, .f-contact) :is(in
   color: #fbfaf6;
 }
 
-.fam-hero[data-family-hero] .fam-hero-inner {
-  background-image: linear-gradient(
-    180deg,
-    rgba(var(--color-scrim-rgb), 0) 0,
-    rgba(var(--color-scrim-rgb), 0.86) var(--fam-hero-fade),
-    rgba(var(--color-scrim-rgb), 0.92) 100%
-  );
+@media (max-width: 1023px) {
+  .home-hero .fam-hero[data-family-hero] .fam-hero-inner {
+    --fam-hero-fade: var(--space-16);
+    background-image: linear-gradient(
+      180deg,
+      rgba(var(--color-scrim-rgb), 0) 0,
+      rgba(var(--color-scrim-rgb), 0.72) var(--fam-hero-fade),
+      rgba(var(--color-scrim-rgb), 0.88) 100%
+    );
+  }
+  .home-hero .fam-hero[data-family-hero] .fam-hero-media {
+    height: 50%;
+    bottom: auto;
+  }
+  .home-hero .fam-hero[data-family-hero] .fam-hero-img {
+    object-position: 58% 50%;
+  }
+  .home-hero .fam-hero[data-family-hero] .fam-hero-copy {
+    position: relative;
+    isolation: isolate;
+  }
+  .home-hero .fam-hero[data-family-hero] .fam-hero-accent {
+    position: relative;
+  }
+  .home-hero .fam-hero[data-family-hero] .fam-hero-accent::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    bottom: -100svh;
+    left: calc(-1 * var(--gutter));
+    width: 100vw;
+    background: var(--color-charcoal);
+    pointer-events: none;
+  }
 }
 @media (min-width: 1024px) {
-  .fam-hero[data-family-hero] .fam-hero-scrim {
+  .home-hero .fam-hero[data-family-hero] .fam-hero-scrim {
+    /* The widest existing title line measures under 6.3 em at each desktop
+       size. Keep the original copy width, with charcoal through its glyphs
+       and an 80px fade into the unobscured right side of the photograph. */
+    --construction-hero-glyph-end: calc(max(var(--gutter), (100vw - var(--container-max)) / 2) + var(--fs-hero) * 6.3);
     background: linear-gradient(
       90deg,
-      rgba(var(--color-scrim-rgb), 0.92) 0%,
-      rgba(var(--color-scrim-rgb), 0.8) 46%,
-      rgba(var(--color-scrim-rgb), 0) 84%
+      var(--color-charcoal) 0,
+      var(--color-charcoal) var(--construction-hero-glyph-end),
+      rgba(var(--color-scrim-rgb), 0) calc(var(--construction-hero-glyph-end) + 80px)
     );
   }
 }
@@ -258,12 +294,47 @@ html .approved-shell main :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm) :is(em, .b
 html .approved-shell main .interior-statement em {
   color: var(--color-heading-accent);
 }
-/* A thin existing-charcoal context preserves the ochre fill on light grounds.
-   It does not change the type role or add a box. Inspect actual glyphs before acceptance. */
-html .approved-shell main :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm) :is(em, .brc-accent, .text-accent, .text-accent-legible),
-html .approved-shell main .interior-statement em {
+/* Preserve the existing H2 and statement treatment. The November 5 owner
+   direction removes H1 glyph shadows, including H1s with display classes. */
+html .approved-shell main :is(h2, .ed-display, .ed-h2, .ed-h2-sm):not(h1) :is(em, .brc-accent, .text-accent, .text-accent-legible),
+html .approved-shell main .interior-statement:not(h1) em {
   text-shadow: -1px -1px 0 var(--color-charcoal), 0 -1px 0 var(--color-charcoal), 1px -1px 0 var(--color-charcoal), -1px 0 0 var(--color-charcoal), 1px 0 0 var(--color-charcoal), -1px 1px 0 var(--color-charcoal), 0 1px 0 var(--color-charcoal), 1px 1px 0 var(--color-charcoal);
 }
 html .approved-shell main :is(.fr-band, .f-value, .f-contact, .interior-hero-contact, .ed-on-gradient, .bg-inverse, #budget) :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm, .interior-statement) :is(em, .brc-accent, .text-accent, .text-accent-legible) {
   text-shadow: none;
+}
+
+/* Exact ochre H1s need the existing dark surface after their glyph halo is
+   removed. Limit this treatment to the three affected editorial intros. */
+html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-editorial {
+  background: var(--color-charcoal);
+}
+html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-editorial .interior-hero-copy,
+html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-editorial .interior-hero-copy :is(h1, p, nav, nav a, nav span, [class*="text-inverse"]) {
+  color: var(--color-paper);
+}
+html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-editorial .interior-hero-copy :is(.ed-eyebrow, .interior-eyebrow) {
+  color: #d8dbd4 !important;
+}
+/* Use the same action roles as the existing contact and inverse surfaces. */
+html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-editorial .primary-cta {
+  background: var(--color-paper);
+  color: #2c302f;
+}
+html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-editorial .primary-cta:hover {
+  background: #e5e0d5;
+  color: #2c302f;
+}
+html .approved-interior:is(.interior-services, .interior-areas, .interior-resources) .interior-hero-editorial .primary-cta:focus-visible {
+  outline-color: var(--color-paper);
+}
+
+/* The internal typography sample is the only other mounted light-ground
+   H1 with ochre emphasis. Keep its existing section geometry and content. */
+html .approved-shell main .heading-contrast-specimen {
+  background: var(--color-charcoal);
+  color: var(--color-paper);
+}
+html .approved-shell main .heading-contrast-specimen :is(h1, h2, p, .text-foreground, .text-muted-foreground) {
+  color: var(--color-paper);
 }

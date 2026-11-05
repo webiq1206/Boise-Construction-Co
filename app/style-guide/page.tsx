@@ -46,7 +46,7 @@ export default function StyleGuidePage() {
         </div>
       </Section>
 
-      <Section divider>
+      <Section variant="inverse" divider className="heading-contrast-specimen">
         <div className="container px-4 max-w-4xl space-y-6">
           <h2 className="text-section-title font-serif">Typography</h2>
           <p className="brc-label">Eyebrow label</p>
