@@ -8,6 +8,7 @@ on:
       - components/PlanningRangeExplorer.tsx
       - scripts/verify-homepage-responsive.cjs
       - .github/workflows/homepage-responsive.yml
+      - scripts/branding-ci-evidence-bound.mjs
 permissions:
   contents: read
 concurrency:
@@ -49,123 +50,159 @@ jobs:
           JS
       - name: Capture responsive homepage and exercise local controls
         run: node scripts/verify-homepage-responsive.cjs
-      - name: Upload metrics and server diagnostics
+      - name: Bound complete artifact group 1 to64MiB
+        id: bounded_artifact_01
         if: always()
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/homepage-responsive/*.json' 'test-results/homepage-responsive/*.log'
+      - name: Upload metrics and server diagnostics
+        if: ${{ always() && steps.bounded_artifact_01.outcome == 'success' && steps.bounded_artifact_01.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: homepage-responsive-metrics-${{ github.sha }}
-          path: |
-            test-results/homepage-responsive/*.json
-            test-results/homepage-responsive/*.log
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
+          compression-level: 0
           if-no-files-found: error
-      - name: Upload 320x568 review screenshots
+      - name: Bound complete artifact group 2 to64MiB
+        id: bounded_artifact_02
         if: always()
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/homepage-responsive/*-320x568.png' 'test-results/homepage-responsive/*-320x568.jpg'
+      - name: Upload 320x568 review screenshots
+        if: ${{ always() && steps.bounded_artifact_02.outcome == 'success' && steps.bounded_artifact_02.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: homepage-responsive-320x568-${{ github.sha }}
-          path: |
-            test-results/homepage-responsive/*-320x568.png
-            test-results/homepage-responsive/*-320x568.jpg
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
-          if-no-files-found: warn
-      - name: Upload 360x640 review screenshots
+          compression-level: 0
+          if-no-files-found: error
+      - name: Bound complete artifact group 3 to64MiB
+        id: bounded_artifact_03
         if: always()
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/homepage-responsive/*-360x640.png' 'test-results/homepage-responsive/*-360x640.jpg'
+      - name: Upload 360x640 review screenshots
+        if: ${{ always() && steps.bounded_artifact_03.outcome == 'success' && steps.bounded_artifact_03.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: homepage-responsive-360x640-${{ github.sha }}
-          path: |
-            test-results/homepage-responsive/*-360x640.png
-            test-results/homepage-responsive/*-360x640.jpg
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
-          if-no-files-found: warn
-      - name: Upload 390x844 review screenshots
+          compression-level: 0
+          if-no-files-found: error
+      - name: Bound complete artifact group 4 to64MiB
+        id: bounded_artifact_04
         if: always()
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/homepage-responsive/*-390x844.png' 'test-results/homepage-responsive/*-390x844.jpg'
+      - name: Upload 390x844 review screenshots
+        if: ${{ always() && steps.bounded_artifact_04.outcome == 'success' && steps.bounded_artifact_04.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: homepage-responsive-390x844-${{ github.sha }}
-          path: |
-            test-results/homepage-responsive/*-390x844.png
-            test-results/homepage-responsive/*-390x844.jpg
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
-          if-no-files-found: warn
-      - name: Upload 430x932 review screenshots
+          compression-level: 0
+          if-no-files-found: error
+      - name: Bound complete artifact group 5 to64MiB
+        id: bounded_artifact_05
         if: always()
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/homepage-responsive/*-430x932.png' 'test-results/homepage-responsive/*-430x932.jpg'
+      - name: Upload 430x932 review screenshots
+        if: ${{ always() && steps.bounded_artifact_05.outcome == 'success' && steps.bounded_artifact_05.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: homepage-responsive-430x932-${{ github.sha }}
-          path: |
-            test-results/homepage-responsive/*-430x932.png
-            test-results/homepage-responsive/*-430x932.jpg
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
-          if-no-files-found: warn
-      - name: Upload 768x1024 review screenshots
+          compression-level: 0
+          if-no-files-found: error
+      - name: Bound complete artifact group 6 to64MiB
+        id: bounded_artifact_06
         if: always()
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/homepage-responsive/*-768x1024.png' 'test-results/homepage-responsive/*-768x1024.jpg'
+      - name: Upload 768x1024 review screenshots
+        if: ${{ always() && steps.bounded_artifact_06.outcome == 'success' && steps.bounded_artifact_06.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: homepage-responsive-768x1024-${{ github.sha }}
-          path: |
-            test-results/homepage-responsive/*-768x1024.png
-            test-results/homepage-responsive/*-768x1024.jpg
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
-          if-no-files-found: warn
-      - name: Upload 1024x768 review screenshots
+          compression-level: 0
+          if-no-files-found: error
+      - name: Bound complete artifact group 7 to64MiB
+        id: bounded_artifact_07
         if: always()
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/homepage-responsive/*-1024x768.png' 'test-results/homepage-responsive/*-1024x768.jpg'
+      - name: Upload 1024x768 review screenshots
+        if: ${{ always() && steps.bounded_artifact_07.outcome == 'success' && steps.bounded_artifact_07.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: homepage-responsive-1024x768-${{ github.sha }}
-          path: |
-            test-results/homepage-responsive/*-1024x768.png
-            test-results/homepage-responsive/*-1024x768.jpg
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
-          if-no-files-found: warn
-      - name: Upload 1280x720 review screenshots
+          compression-level: 0
+          if-no-files-found: error
+      - name: Bound complete artifact group 8 to64MiB
+        id: bounded_artifact_08
         if: always()
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/homepage-responsive/*-1280x720.png' 'test-results/homepage-responsive/*-1280x720.jpg'
+      - name: Upload 1280x720 review screenshots
+        if: ${{ always() && steps.bounded_artifact_08.outcome == 'success' && steps.bounded_artifact_08.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: homepage-responsive-1280x720-${{ github.sha }}
-          path: |
-            test-results/homepage-responsive/*-1280x720.png
-            test-results/homepage-responsive/*-1280x720.jpg
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
-          if-no-files-found: warn
-      - name: Upload 1440x900 review screenshots
+          compression-level: 0
+          if-no-files-found: error
+      - name: Bound complete artifact group 9 to64MiB
+        id: bounded_artifact_09
         if: always()
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/homepage-responsive/*-1440x900.png' 'test-results/homepage-responsive/*-1440x900.jpg'
+      - name: Upload 1440x900 review screenshots
+        if: ${{ always() && steps.bounded_artifact_09.outcome == 'success' && steps.bounded_artifact_09.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: homepage-responsive-1440x900-${{ github.sha }}
-          path: |
-            test-results/homepage-responsive/*-1440x900.png
-            test-results/homepage-responsive/*-1440x900.jpg
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
-          if-no-files-found: warn
-      - name: Upload 1920x1080 review screenshots
+          compression-level: 0
+          if-no-files-found: error
+      - name: Bound complete artifact group 10 to64MiB
+        id: bounded_artifact_10
         if: always()
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/homepage-responsive/*-1920x1080.png' 'test-results/homepage-responsive/*-1920x1080.jpg'
+      - name: Upload 1920x1080 review screenshots
+        if: ${{ always() && steps.bounded_artifact_10.outcome == 'success' && steps.bounded_artifact_10.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: homepage-responsive-1920x1080-${{ github.sha }}
-          path: |
-            test-results/homepage-responsive/*-1920x1080.png
-            test-results/homepage-responsive/*-1920x1080.jpg
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
-          if-no-files-found: warn
-      - name: Upload 844x390 review screenshots
+          compression-level: 0
+          if-no-files-found: error
+      - name: Bound complete artifact group 11 to64MiB
+        id: bounded_artifact_11
         if: always()
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/homepage-responsive/*-844x390.png' 'test-results/homepage-responsive/*-844x390.jpg'
+      - name: Upload 844x390 review screenshots
+        if: ${{ always() && steps.bounded_artifact_11.outcome == 'success' && steps.bounded_artifact_11.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: homepage-responsive-844x390-${{ github.sha }}
-          path: |
-            test-results/homepage-responsive/*-844x390.png
-            test-results/homepage-responsive/*-844x390.jpg
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
-          if-no-files-found: warn
-      - name: Upload 1024x600 review screenshots
+          compression-level: 0
+          if-no-files-found: error
+      - name: Bound complete artifact group 12 to64MiB
+        id: bounded_artifact_12
         if: always()
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/homepage-responsive/*-1024x600.png' 'test-results/homepage-responsive/*-1024x600.jpg'
+      - name: Upload 1024x600 review screenshots
+        if: ${{ always() && steps.bounded_artifact_12.outcome == 'success' && steps.bounded_artifact_12.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: homepage-responsive-1024x600-${{ github.sha }}
-          path: |
-            test-results/homepage-responsive/*-1024x600.png
-            test-results/homepage-responsive/*-1024x600.jpg
+          path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
-          if-no-files-found: warn
+          compression-level: 0
+          if-no-files-found: error
