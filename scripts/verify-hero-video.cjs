@@ -12,7 +12,7 @@ const base = new URL(process.env.E2E_BASE_URL || 'http://127.0.0.1:34863');
 if (base.href !== 'http://127.0.0.1:34863/') {
   throw new Error('Hero QA only supports http://127.0.0.1:34863/');
 }
-const output = path.resolve('test-results/hero-uniform-final');
+const output = path.resolve('test-results/hero-video-no-controls');
 fs.mkdirSync(output, { recursive: true });
 const viewports = [[320,568],[360,640],[390,844],[430,932],[768,1024],[1024,768],[1280,720],[1440,900],[1920,1080]];
 const failures = [], failureRecords = [], rows = [], states = [], pageErrors = [], blocked = {};
@@ -21,15 +21,36 @@ const mediaPath = /\/boise-construction-co-background(?:-\d+p)?\.(?:mp4|webm)$/;
 // Cover every whole second and both sides of the scene dissolves and loop.
 const sampleTimes = [...new Set([...Array.from({length:30},(_,index)=>index),5.75,6.25,11.75,12.25,17.75,18.25,23.75,24.25,29.75,29.966])].sort((a,b)=>a-b);
 const screenshotTimes = new Set([0,6,12,18,24,29]);
-// A bounded supplement can finish fallback evidence without repeating an
-// already completed video scan. Normal CI invocation always runs every phase.
+// Bounded behavior/fallback supplements avoid repeating an unchanged video
+// contrast scan. Normal CI invocation always runs every phase.
 const fallbacksOnly=process.argv.includes('--fallbacks-only');
+const behaviorOnly=process.argv.includes('--behavior-only');
 let browser;
 let firstContrastConflictReported=false;
 
 async function contextFor(options = {}) {
-  const { saveData = false, effectiveType, failMedia = false, failWebm = false, ...browserOptions } = options;
+  const { saveData = false, effectiveType, failMedia = false, failWebm = false, corruptMedia = false, denyAutoplay = false, ...browserOptions } = options;
   const context = await browser.newContext({ serviceWorkers: 'block', ...browserOptions });
+  // Test instrumentation records real app play attempts. It is not shipped UI.
+  await context.addInitScript(({denyAutoplay})=>{
+    window.__heroPlayAttempts=[];
+    window.__heroControlViolations=[];
+    new MutationObserver(()=>{
+      const hero=document.querySelector('.home-hero section.fam-hero');
+      if(!hero) return;
+      const video=hero.querySelector('video');
+      const custom=hero.querySelectorAll('button,[role="button"],[role="switch"],[role="slider"],input,select,textarea,.hero-video-control').length;
+      if(custom || video?.controls || (video && video.tabIndex>=0)) window.__heroControlViolations.push({custom,native:video?.controls,videoTabIndex:video?.tabIndex});
+    }).observe(document,{childList:true,subtree:true,attributes:true,attributeFilter:['controls','role','tabindex']});
+    const play=HTMLMediaElement.prototype.play;
+    HTMLMediaElement.prototype.play=function(...args) {
+      if(this.closest('.home-hero')) {
+        window.__heroPlayAttempts.push({muted:this.muted,loop:this.loop,playsInline:this.playsInline,denied:denyAutoplay});
+        if(denyAutoplay) return Promise.reject(new DOMException('Autoplay denied by test browser policy','NotAllowedError'));
+      }
+      return play.apply(this,args);
+    };
+  },{denyAutoplay});
   if (saveData || effectiveType) {
     await context.addInitScript(({ saveData, effectiveType }) => {
       const connection = new EventTarget();
@@ -51,6 +72,10 @@ async function contextFor(options = {}) {
     const image = url.pathname === '/_next/image' && (url.searchParams.get('url') || '').startsWith('/') && !(url.searchParams.get('url') || '').startsWith('//');
     const allowed = url.origin === base.origin && request.method() === 'GET' && !url.pathname.startsWith('/api/') && (url.pathname === '/' || asset || next || image);
     const expectedMediaFailure = isMedia && (failMedia || (failWebm && url.pathname.endsWith('.webm')));
+    if(allowed && isMedia && corruptMedia) {
+      blocked['expected-decode-failure']=(blocked['expected-decode-failure']||0)+1;
+      return route.fulfill({status:200,contentType:url.pathname.endsWith('.webm')?'video/webm':'video/mp4',body:'Invalid media bytes: deliberate local decode-failure fixture'});
+    }
     if (!allowed || expectedMediaFailure) {
       const category = expectedMediaFailure ? 'expected-media-failure' : url.origin !== base.origin ? 'external' : url.pathname.startsWith('/api/') ? 'api' : 'other';
       blocked[category] = (blocked[category] || 0) + 1;
@@ -95,21 +120,17 @@ async function observedState(label,predicate,timeout=30000) {
 
 async function fallbackReady(page,settings,requests) {
   const started=Date.now();
-  const initialControlCount=await page.locator('.home-hero button.hero-video-control').count();
   const poster=page.locator('.home-hero [data-hero-poster]');
   await observedState('decoded hero poster',()=>poster.evaluate(image=>image.complete && image.naturalWidth>0));
   await poster.evaluate(image=>image.decode());
-  if(settings.failMedia) {
+  if(settings.failMedia || settings.corruptMedia) {
     const terminal=page.viewportSize().width>=1024?'background-1080p.mp4':'background-720p.mp4';
     await observedState('terminal hero media request',()=>requests.some(url=>url.endsWith(terminal)));
-    await observedState('terminal media failure and control removal',async()=>
-      await page.locator('.home-hero video source').count()===0 &&
-      await page.locator('.home-hero button.hero-video-control').count()===0);
-  } else if(settings.javaScriptEnabled!==false) {
-    // The control is omitted from SSR until the preference effect has run.
-    await page.getByRole('button',{name:'Play background video',exact:true}).waitFor({state:'visible',timeout:30000});
+    await observedState('terminal media failure poster',()=>page.locator('.home-hero video').evaluate(video=>video.paused && video.querySelectorAll('source').length===0 && getComputedStyle(video).opacity==='0'));
+  } else if(settings.denyAutoplay) {
+    await page.waitForFunction(()=>window.__heroPlayAttempts?.some(attempt=>attempt.denied) && document.querySelector('.home-hero video')?.paused && getComputedStyle(document.querySelector('.home-hero video')).opacity==='0',null,{timeout:30000});
   }
-  return {initialControlCount,elapsedMs:Date.now()-started,posterDecoded:true};
+  return {elapsedMs:Date.now()-started,posterDecoded:true};
 }
 
 async function frame(page, seconds) {
@@ -135,8 +156,6 @@ async function geometry(page) {
     const barRect = bar && getComputedStyle(bar).display !== 'none' && bar.dataset.state === 'visible' ? rect(bar) : null;
     const cta = hero.querySelector('[data-hero-cta="primary"]');
     const proof = document.querySelector('.fam-proof');
-    const control = hero.querySelector('button.hero-video-control');
-    const controlRect = control && getComputedStyle(control).display !== 'none' ? rect(control) : null;
     const accessible = element => {
       const r = element.getBoundingClientRect();
       const hit = document.elementFromPoint(r.x+r.width/2, r.y+r.height/2);
@@ -146,7 +165,8 @@ async function geometry(page) {
       hero:rect(hero), video:rect(video), poster:rect(poster), header:header?rect(header):null,
       headline:rect(hero.querySelector('h1')), copy:rect(hero.querySelector('.fam-hero-copy')),
       cta:{...rect(cta),href:cta.getAttribute('href'),text:cta.textContent.trim(),unobstructed:accessible(cta)},
-      control:controlRect?{...controlRect,unobstructed:accessible(control)}:null,
+      playbackControls:{custom:hero.querySelectorAll('button,[role="button"],[role="switch"],[role="slider"],input,select,textarea,.hero-video-control').length,native:video.controls,nativeAttribute:video.hasAttribute('controls'),videoTabIndex:video.tabIndex,observedViolations:window.__heroControlViolations??[]},
+      playAttempts:window.__heroPlayAttempts??[],
       bottomBar:barRect, horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1,
       visualViewport:window.visualViewport?{height:visualViewport.height,width:visualViewport.width,offsetTop:visualViewport.offsetTop}:null,
       proof:proof?rect(proof):null,
@@ -177,7 +197,7 @@ async function overlayContract(page) {
       if(Number(value.opacity)!==1 || value.filter!=='none' || (value.backdropFilter && value.backdropFilter!=='none') || value.mixBlendMode!=='normal') ancestorEffects.push(value);
     }
     for(const element of [hero,...hero.querySelectorAll('*')]) {
-      if(element.matches('.hero-video-control,[data-hero-cta="primary"]') || element.closest('.hero-video-control,[data-hero-cta="primary"]')) continue;
+      if(element.matches('[data-hero-cta="primary"]') || element.closest('[data-hero-cta="primary"]')) continue;
       const css=getComputedStyle(element);
       const label=`${element.tagName.toLowerCase()}.${[...element.classList].join('.')}`;
       if(element!==hero && element!==overlay && css.display!=='none' && (!transparent(css.backgroundColor) || css.backgroundImage!=='none' || css.boxShadow!=='none' || css.filter!=='none' || (css.backdropFilter && css.backdropFilter!=='none') || css.mixBlendMode!=='normal' || Number(css.opacity)!==1)) {
@@ -210,7 +230,13 @@ function assertOverlay(contract,label) {
   verify(!contract.textShadows.length,`${label}: hero text has a shadow`);
 }
 
-function assertLayout(m,label,width,height,{requireControl=true}={}) {
+function assertNoControls(m,label) {
+  check(m.playbackControls.custom===0 && !m.playbackControls.native && !m.playbackControls.nativeAttribute && m.playbackControls.videoTabIndex<0,`${label}: custom, native, hidden or keyboard-focusable playback controls remain`);
+  check(m.playbackControls.observedViolations.length===0,`${label}: a playback control appeared during initialization or a transition`);
+  check(m.links.length===2,`${label}: unexpected hero action could expose a renamed playback toggle`);
+}
+
+function assertLayout(m,label,width,height) {
   const verify=(ok,message)=>check(ok,message,'layoutFold');
   const visualBottom=m.visualViewport?m.visualViewport.height+m.visualViewport.offsetTop:height;
   const floor=m.bottomBar?.y??Math.min(height,visualBottom);
@@ -232,7 +258,7 @@ function assertLayout(m,label,width,height,{requireControl=true}={}) {
   verify(m.headline.y>=m.header.bottom-1 && m.headline.bottom<=floor+1,`${label}: headline outside first screen`);
   verify(m.cta.y>=m.header.bottom-1 && m.cta.bottom<=floor+1 && m.cta.unobstructed,`${label}: primary CTA outside first screen or obstructed`);
   if(width>=360) verify(m.copy.bottom<=floor+1,`${label}: complete hero copy does not fit first screen`);
-  if(requireControl || m.control) verify(m.control && m.control.width>=44 && m.control.height>=44 && m.control.unobstructed,`${label}: pause/play control is not reachable at 44px minimum`);
+  assertNoControls(m,label);
   return fold;
 }
 
@@ -372,12 +398,22 @@ async function responsive() {
   }
 }
 
+async function continuedPlayback(page) {
+  const time=await page.locator('.home-hero video').evaluate(video=>video.currentTime);
+  await page.waitForFunction(({time,started})=>{
+    const video=document.querySelector('.home-hero video');
+    return video && !video.paused && video.readyState>=2 && performance.now()-started>=500 && Math.abs(video.currentTime-time)>0.25;
+  },{time,started:await page.evaluate(()=>performance.now())},{timeout:10000});
+}
+
 async function interactions() {
   const {context}=await contextFor({viewport:{width:1440,height:900},reducedMotion:'no-preference'});
-  const record={name:'playback-controls-and-lifecycle'}; states.push(record);
+  const record={name:'automatic-playback-and-lifecycle'}; states.push(record);
   try {
     const page=await open(context,record.name);
     await playing(page);
+    record.initial=await geometry(page); assertNoControls(record.initial,record.name);
+    check(record.initial.playAttempts.length>0 && record.initial.playAttempts.every(attempt=>attempt.muted && attempt.loop && attempt.playsInline),'default autoplay was not attempted with muted inline looping flags');
     await page.locator('.home-hero video').evaluate(video=>{video.currentTime=29.7;});
     await page.waitForFunction(()=>{const v=document.querySelector('.home-hero video');return v && v.currentTime>0 && v.currentTime<1 && !v.paused;},null,{timeout:10000});
     record.naturalLoop=true;
@@ -386,91 +422,114 @@ async function interactions() {
       await page.setViewportSize({width,height});
       await page.waitForFunction(source=>document.querySelector('.home-hero video')?.currentSrc.endsWith(source),source,{timeout:30000});
       await playing(page);
-      record.resizes.push({width,height,src:await page.locator('.home-hero video').evaluate(video=>video.currentSrc)});
+      const m=await geometry(page); assertNoControls(m,`${record.name} resize ${width}`);
+      record.resizes.push({width,height,src:m.media.src,playAttempts:m.playAttempts});
     }
-    const pause=page.getByRole('button',{name:'Pause background video',exact:true});
-    await pause.focus();
-    record.focus=await pause.evaluate(button=>({focused:document.activeElement===button,outlineStyle:getComputedStyle(button).outlineStyle,outlineWidth:getComputedStyle(button).outlineWidth}));
-    check(record.focus.focused && record.focus.outlineStyle!=='none' && parseFloat(record.focus.outlineWidth)>0,'video control lacks visible keyboard focus');
-    await page.keyboard.press('Space'); await paused(page);
-    await page.getByRole('button',{name:'Play background video',exact:true}).waitFor();
-    record.keyboardPause=true;
-    await page.screenshot({path:path.join(output,'control-keyboard-paused.png')});
-    const time=await page.locator('video').evaluate(video=>video.currentTime);
-    await page.evaluate(()=>scrollTo(0,document.querySelector('.home-hero').getBoundingClientRect().bottom+scrollY+innerHeight));
-    await page.waitForTimeout(250); await page.evaluate(()=>scrollTo(0,0)); await page.waitForTimeout(250);
-    check(await page.locator('.home-hero video').evaluate((video,time)=>video.paused && Math.abs(video.currentTime-time)<0.1,time),'manual pause was lost across off-screen return');
-    record.manualPausePersists=true;
-    await page.getByRole('button',{name:'Play background video',exact:true}).focus(); await page.keyboard.press('Enter'); await playing(page);
-    record.keyboardPlay=true;
     await page.evaluate(()=>scrollTo(0,document.querySelector('.home-hero').getBoundingClientRect().bottom+scrollY+innerHeight));
     await paused(page); record.offScreenPause=true;
+    assertNoControls(await geometry(page),'offscreen state');
     await page.evaluate(()=>scrollTo(0,0)); await playing(page); record.offScreenResume=true;
-    // Browser foregrounding is unreliable in headless contexts. Exercise the
-    // Page Visibility listener with controlled document visibility, recorded as emulation.
+    // Headless foregrounding is unreliable. This deliberately exercises the
+    // Page Visibility listener as API emulation, not physical tab switching.
     await page.evaluate(()=>{
       Object.defineProperty(document,'visibilityState',{configurable:true,get:()=> 'hidden'});
       Object.defineProperty(document,'hidden',{configurable:true,get:()=> true});
       document.dispatchEvent(new Event('visibilitychange'));
     });
     await paused(page); record.hiddenTabPause='Page Visibility API emulation';
+    assertNoControls(await geometry(page),'hidden-tab state');
     await page.evaluate(()=>{
       delete document.visibilityState; delete document.hidden;
       document.dispatchEvent(new Event('visibilitychange'));
     });
     await playing(page); record.visibleTabResume='Page Visibility API emulation';
-    await page.emulateMedia({reducedMotion:'reduce'}); await paused(page);
-    record.runtimeReducedMotionPause=true;
+    await page.emulateMedia({reducedMotion:'reduce'}); await continuedPlayback(page);
+    await page.emulateMedia({reducedMotion:'no-preference'}); await continuedPlayback(page);
+    record.runtimeReducedMotionDoesNotPause=true;
+    record.final=await geometry(page); assertNoControls(record.final,'after lifecycle transitions');
+    await page.screenshot({path:path.join(output,'automatic-playback-lifecycle.png')});
   } catch(error) { failures.push(`${record.name}: ${error.message}`); }
   finally { await context.close(); }
 }
 
-async function fallbacks() {
-  for(const options of [
+async function preferencePlayback() {
+  const preferences=[
     {name:'reduced-motion',reducedMotion:'reduce'},
     {name:'data-saver',saveData:true},
     {name:'slow-connection',effectiveType:'2g'},
     {name:'slow-2g-connection',effectiveType:'slow-2g'},
+  ];
+  for(const [width,height] of [[390,844],[1440,900]]) for(const options of preferences) {
+    const {name,...settings}=options;
+    const label=`autoplay-${name}-${width}x${height}`;
+    const {context,requests}=await contextFor({viewport:{width,height},...settings});
+    const record={name:label,kind:'preference-autoplay',viewport:`${width}x${height}`}; states.push(record);
+    try {
+      const page=await open(context,label);
+      await playing(page); await continuedPlayback(page);
+      record.geometry=await geometry(page); record.requests=[...requests];
+      record.overlay=await overlayContract(page); assertOverlay(record.overlay,label);
+      record.fold=assertLayout(record.geometry,label,width,height);
+      check(record.geometry.playAttempts.length>0 && record.geometry.playAttempts.every(attempt=>attempt.muted && attempt.loop && attempt.playsInline),`${label}: no muted inline looping autoplay attempt`);
+      check(record.requests.length>0 && !record.geometry.media.paused && Number(record.geometry.media.opacity)===1,`${label}: preference setting suppressed video playback`);
+      check(width<1024?/background-720p\.mp4$/.test(record.geometry.media.src):/background(?:-1080p\.mp4|\.webm)$/.test(record.geometry.media.src),`${label}: preference setting selected wrong responsive source`);
+      check(Math.abs(record.geometry.media.duration-30)<0.1,`${label}: approved duration changed`);
+      if(settings.saveData || settings.effectiveType) {
+        await page.evaluate(()=>{
+          navigator.connection.saveData=!navigator.connection.saveData;
+          navigator.connection.effectiveType=navigator.connection.effectiveType==='4g'?'slow-2g':'4g';
+          navigator.connection.dispatchEvent(new Event('change'));
+        });
+        await continuedPlayback(page);
+        await page.evaluate(()=>{
+          navigator.connection.saveData=true;
+          navigator.connection.effectiveType='slow-2g';
+          navigator.connection.dispatchEvent(new Event('change'));
+        });
+        await continuedPlayback(page);
+        record.runtimeConnectionChangesDoNotPause=true;
+      }
+      assertNoControls(await geometry(page),`${label} after preference changes`);
+      // Freeze only for deterministic screenshot/contrast measurement after
+      // actual moving playback and preference behavior have been established.
+      await frame(page,12);
+      await page.screenshot({path:path.join(output,`${label}.png`)});
+      record.contrast=await textContrast(page,`${label} 12s`);
+      record.ctaFill=await ctaFill(page,`${label} 12s`);
+    } catch(error) { failures.push(`${label}: ${error.message}`); }
+    finally { await context.close(); }
+  }
+}
+
+async function fallbacks() {
+  for(const options of [
     {name:'failed-media',failMedia:true},
     {name:'desktop-all-media-failed',failMedia:true,viewport:{width:1440,height:900}},
+    {name:'decode-failure',corruptMedia:true},
+    {name:'desktop-decode-failure',corruptMedia:true,viewport:{width:1440,height:900}},
+    {name:'autoplay-denied',denyAutoplay:true},
+    {name:'desktop-autoplay-denied',denyAutoplay:true,viewport:{width:1440,height:900}},
     {name:'no-javascript',javaScriptEnabled:false},
   ]) {
     const {name,...settings}=options, {context,requests}=await contextFor({viewport:{width:390,height:844},...settings});
-    const record={name}; states.push(record);
+    const record={name,kind:'technical-static-poster'}; states.push(record);
     try {
       const page=await open(context,name);
       record.readiness=await fallbackReady(page,settings,requests);
       record.requests=[...requests]; record.geometry=await geometry(page);
-      record.overlay=await overlayContract(page);
-      assertOverlay(record.overlay,name);
-      const viewport=page.viewportSize();
-      record.viewport=`${viewport.width}x${viewport.height}`;
-      record.fold=assertLayout(record.geometry,name,viewport.width,viewport.height,{requireControl:!settings.failMedia && settings.javaScriptEnabled!==false});
+      record.overlay=await overlayContract(page); assertOverlay(record.overlay,name);
+      const viewport=page.viewportSize(); record.viewport=`${viewport.width}x${viewport.height}`;
+      record.fold=assertLayout(record.geometry,name,viewport.width,viewport.height);
       check(record.geometry.posterLoaded,`${name}: poster not available`);
       check(record.geometry.cta.unobstructed,`${name}: CTA obstructed`);
-      if(!settings.failMedia) check(!requests.length,`${name}: video fetched despite static fallback`);
-      check(await page.locator('.home-hero video').evaluate(video=>video.paused),`${name}: static fallback video is playing`);
-      check(Number(record.geometry.media.opacity)===0,`${name}: static fallback does not reveal poster`);
-      if(settings.failMedia) {
-        await page.locator('.home-hero button.hero-video-control').waitFor({state:'hidden',timeout:10000});
-        check(await page.locator('.home-hero button.hero-video-control').count()===0,`${name}: failed media leaves an unusable playback control`);
-      }
+      check(await page.locator('.home-hero video').evaluate(video=>video.paused),`${name}: technical fallback video is playing`);
+      check(Number(record.geometry.media.opacity)===0,`${name}: technical fallback does not reveal poster`);
+      if(settings.denyAutoplay) check(record.geometry.playAttempts.some(attempt=>attempt.denied && attempt.muted && attempt.loop && attempt.playsInline),`${name}: browser policy denial was not reached through an app autoplay attempt`);
+      if(settings.javaScriptEnabled===false) check(!requests.length && record.geometry.playAttempts.length===0,`${name}: video initiated despite unavailable JavaScript`);
       await page.screenshot({path:path.join(output,`fallback-${name}.png`)});
       record.contrast=await textContrast(page,`${name} static poster`);
       record.ctaFill=await ctaFill(page,`${name} static poster`);
-      if(!settings.failMedia) check(!requests.length,`${name}: static overlay/geometry/contrast checks triggered a video fetch`);
-      if(name==='reduced-motion') {
-        await page.getByRole('button',{name:'Play background video',exact:true}).click();
-        await playing(page); record.explicitPlayOverride=true;
-        await page.getByRole('button',{name:'Pause background video',exact:true}).click();
-        await paused(page); record.explicitPause=true;
-      }
-      if(name==='data-saver') {
-        await page.evaluate(()=>{navigator.connection.saveData=false;navigator.connection.dispatchEvent(new Event('change'));});
-        await playing(page); record.preferenceChangeResume=true;
-        await page.evaluate(()=>{navigator.connection.saveData=true;navigator.connection.dispatchEvent(new Event('change'));});
-        await paused(page); record.preferenceChangePause=true;
-      }
+      assertNoControls(await geometry(page),`${name} after fallback checks`);
     } catch(error) { failures.push(`${name}: ${error.message}`); }
     finally { await context.close(); }
   }
@@ -485,7 +544,7 @@ async function sourceFallback() {
     record.geometry=await geometry(page); record.requests=requests;
     check(/background-1080p\.mp4$/.test(record.geometry.media.src),'desktop WebM failure did not fall back to approved 1080p MP4');
     check(record.geometry.media.width===1920 && record.geometry.media.height===1080,'desktop MP4 fallback has incorrect dimensions');
-    await page.getByRole('button',{name:'Pause background video',exact:true}).waitFor();
+    assertNoControls(record.geometry,record.name);
     await page.screenshot({path:path.join(output,'fallback-webm-to-mp4.png')});
   } catch(error) { failures.push(`${record.name}: ${error.message}`); }
   finally { await context.close(); }
@@ -539,7 +598,8 @@ function contrastSummary() {
     failedTextFrames:failed.length,
     failuresByText:[...new Set(failed.map(run=>run.text))].map(text=>({text,failedFrames:failed.filter(run=>run.text===text).length,worst:brief(failed.find(run=>run.text===text))})),
     contrastFailures:failed.map(brief),
-    staticFallbacks:states.filter(record=>record.contrast).map(record=>({name:record.name,viewport:record.viewport,minimaByRole:minima(record.contrast.map(run=>({...run,viewport:record.viewport,time:'poster',actualTime:null}))),failedRuns:record.contrast.filter(run=>run.minimum===null || run.minimum<run.required).length})),
+    staticFallbacks:states.filter(record=>record.kind==='technical-static-poster' && record.contrast).map(record=>({name:record.name,viewport:record.viewport,minimaByRole:minima(record.contrast.map(run=>({...run,viewport:record.viewport,time:'poster',actualTime:null}))),failedRuns:record.contrast.filter(run=>run.minimum===null || run.minimum<run.required).length})),
+    preferenceAutoplay:states.filter(record=>record.kind==='preference-autoplay' && record.contrast).map(record=>({name:record.name,viewport:record.viewport,minimaByRole:minima(record.contrast.map(run=>({...run,viewport:record.viewport,time:12,actualTime:12}))),failedRuns:record.contrast.filter(run=>run.minimum===null || run.minimum<run.required).length})),
     opaqueWhiteHypothesis:{
       assumption:'Numerical recomputation from the same background samples with fully opaque #ffffff for text over the video. CTA text remains unchanged. Existing size/weight thresholds retained. No fonts, text colors, media or styles were changed to produce this hypothesis.',
       wouldPass:whiteMeasurements.length? !whiteFailures.length:null,
@@ -551,9 +611,10 @@ function contrastSummary() {
 
 (async()=>{
   browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_CHROMIUM_PATH?{executablePath:process.env.PLAYWRIGHT_CHROMIUM_PATH}:{})});
-  if(!fallbacksOnly) { await responsive(); await interactions(); await sourceFallback(); }
+  if(!fallbacksOnly && !behaviorOnly) await responsive();
+  if(!fallbacksOnly) { await interactions(); await sourceFallback(); await preferencePlayback(); }
   await fallbacks();
-  if(!fallbacksOnly) await grids();
+  if(!fallbacksOnly && !behaviorOnly) await grids();
 })().catch(error=>failures.push(error.stack||error.message)).finally(async()=>{
   if(browser) await browser.close().catch(error=>failures.push(`Browser cleanup: ${error.message}`));
   let sha=process.env.GITHUB_SHA||null;
@@ -563,9 +624,9 @@ function contrastSummary() {
   const recorded=new Set(failureRecords.map(record=>record.message));
   failureCategories.execution=failures.filter(message=>!recorded.has(message));
   const failureCounts=Object.fromEntries(Object.entries(failureCategories).map(([category,items])=>[category,items.length]));
-  const result={sha,phase:fallbacksOnly?'fallback supplement':'complete hero verification',browser:'Chromium; emulated CSS viewports, reduced motion and connection hints',scope:'Homepage hero only; authorized single uniform 71% black overlay and visible-fold contract; local GET assets; external/API requests blocked; no submissions, providers, database or publication',viewports:rows,states,blocked,pageErrors,failures,failureCategories,failureCounts,contrastSummary:summary};
-  fs.writeFileSync(path.join(output,fallbacksOnly?'fallback-only-metrics.json':'hero-video-metrics.json'),JSON.stringify(result,null,2));
-  fs.writeFileSync(path.join(output,fallbacksOnly?'fallback-only-contrast-summary.json':'contrast-summary.json'),JSON.stringify(summary,null,2));
+  const result={sha,phase:fallbacksOnly?'technical fallback supplement':behaviorOnly?'behavior supplement':'complete hero verification',browser:'Chromium; emulated CSS viewports, reduced motion and connection hints',scope:'Homepage hero only; user-directed autoplay independent of motion/data preferences, no visitor controls, uniform 71% black overlay and visible-fold contract; local GET assets; external/API requests blocked; no submissions, providers, database or publication',accessibilityTradeoff:'Automatic moving content over five seconds has no visitor pause mechanism; WCAG 2.2.2 is not met. No full WCAG compliance is claimed. Browser/OS autoplay restrictions and unavailable JavaScript can still prevent playback.',viewports:rows,states,blocked,pageErrors,failures,failureCategories,failureCounts,contrastSummary:summary};
+  fs.writeFileSync(path.join(output,fallbacksOnly?'fallback-only-metrics.json':behaviorOnly?'behavior-only-metrics.json':'hero-video-metrics.json'),JSON.stringify(result,null,2));
+  fs.writeFileSync(path.join(output,fallbacksOnly?'fallback-only-contrast-summary.json':behaviorOnly?'behavior-only-contrast-summary.json':'contrast-summary.json'),JSON.stringify(summary,null,2));
   console.log(JSON.stringify({viewports:rows.length,states:states.length,sampledFrames:summary.sampledFrames,failureCount:failures.length,failureCounts,failures:failures.slice(0,12),failedTextFrames:summary.failedTextFrames,minimaByRole:summary.minimaByRole,opaqueWhiteWouldPass:summary.opaqueWhiteHypothesis.wouldPass,pageErrors,blocked},null,2));
   if(failures.length||pageErrors.length) process.exitCode=1;
 });

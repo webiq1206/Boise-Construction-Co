@@ -183,17 +183,15 @@ gates.
 The owner's later explicit direction supersedes the split upper-photo/lower-copy
 composition above. The approved silent 30-second walkthrough covers the entire
 homepage hero at every viewport, with all existing copy and calls to action over
-it. Use the existing charcoal `#383837` as a full-frame gradient, darker behind
-copy and lighter toward the open imagery. Preserve the current type, exact ochre,
+it. Use the current single uniform black overlay recorded below. Preserve the current type, exact ochre,
 CTA destinations, measured hero height and family chrome. No split column or
 separate text panel. This is a Construction-only edit.
 
 Responsive static assets live in the established `public/images/construction/`
 directory. Phones/tablets use the 720p MP4; desktop prefers 1080p WebM with 1080p
-MP4 fallback. The poster is the static first render and fallback. Reduced motion,
-data saver and slow 2G connections initially keep the poster without video
-requests; visitors may explicitly play. Include an accessible pause/play control
-and suspend playback while the hero is offscreen or the document is hidden.
+MP4 fallback. The poster is the static first render and technical-failure fallback. The latest
+owner direction below requires autoplay without visitor controls or preference
+exclusions. Suspend playback while the hero is offscreen or the document is hidden.
 Keep media archival/provenance records outside visitor-facing output.
 
 Apply website-design-quality 2.3, its implementation rules and independent
@@ -226,8 +224,33 @@ charcoal alternative. Actual video scenes must remain visibly recognizable on
 phone, tablet and desktop; numeric compliance alone is insufficient.
 
 Preserve exact brand text colors and CTA styling, approved ungraded video bytes,
-responsive sources, playback/fallback controls, content and destinations. Retain
+responsive sources, technical-failure poster, lifecycle behavior, content and destinations. Retain
 the merged visible-fold correction. Final full-scene contrast and independent
 rendered review remain release gates. Current evidence is in
 `docs/hero-overlay-fold-20261105.md`. Scope is Construction only; other websites
 have separate workers. Publication remains with the owner.
+
+
+### November 5 owner direction: autoplay without visitor controls
+
+The owner explicitly removed all Play/Pause/Stop background-video controls and
+subsequently rejected reduced-motion, data-saver, slow-connection and device
+exclusions. Attempt muted, inline, looping playback on all supported devices,
+regardless of these preferences. Retain responsive media selection, approved
+footage, the exact uniform 71% black overlay, full-fold geometry and hero content.
+Do not substitute native controls, hidden toggles or renamed visitor controls.
+Offscreen/hidden-tab resource pausing remains, with playback resumed when visible.
+
+Technical failure remains different from an application preference exclusion.
+Keep the poster if media cannot load/decode or browser/OS policy declines autoplay.
+Browser autoplay policy cannot be overridden or guaranteed away. JavaScript being
+unavailable also leaves the first-render poster; no universal-playback guarantee
+is claimed. See `docs/hero-autoplay-20261105.md` for evidence and limitations.
+
+This is an explicit user-directed accessibility trade-off: the nonessential
+30-second motion starts automatically alongside text and has no visitor pause,
+stop or hide mechanism. WCAG 2.2 SC 2.2.2 (Level A) is not met for this hero. Reduced-motion
+support alone would not establish compliance and is also removed here by the
+latest instruction. Preserve all other accessibility protections; do not claim
+full WCAG compliance or silently restore a control. Repository merge is authorized
+under the existing release approval; publication remains with the owner.

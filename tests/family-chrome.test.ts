@@ -88,7 +88,7 @@ test('the footer renders the family row, NAP, hours and one registration link, w
   assert.equal(/>Boise ADU Co</.test(html), false);
 });
 
-test('the homepage video preserves family content, static fallback and sourced proof', () => {
+test('the homepage video preserves family content, technical poster fallback and sourced proof without playback controls', () => {
   const html = renderToStaticMarkup(React.createElement(HomeHero));
   assert.equal((html.match(/<h1\b/g) ?? []).length, 1);
   // Same H1 words as before the rollout.
@@ -101,7 +101,11 @@ test('the homepage video preserves family content, static fallback and sourced p
   assert.match(html, /<a href="tel:\+12084771169" class="fam-hero-link">Call or text \(208\) 477-1169<\/a>/);
   assert.match(html, /<img data-hero-poster="" src="\/images\/construction\/boise-construction-co-poster.jpg" alt=""/);
   assert.match(html, /<video[^>]*muted=""[^>]*loop=""[^>]*playsinline=""[^>]*preload="none"/);
-  assert.doesNotMatch(html, /<source[^>]*video\//, 'no video request before browser preferences are known');
+  const video = html.match(/<video\b[^>]*>/)?.[0];
+  assert.ok(video, 'decorative background video');
+  assert.doesNotMatch(video, /\scontrols(?:\s|=|>)/i, 'no native playback controls');
+  assert.doesNotMatch(html, /<button\b|role="(?:button|switch|slider)"/i, 'no custom, renamed or hidden hero playback controls');
+  assert.doesNotMatch(html, /<source[^>]*video\//, 'video sources wait only for browser responsive-media initialization');
   assert.doesNotMatch(html, /Concept design imagery|Representative imag/);
   const support = html.match(/<p class="fam-hero-support">([^<]+)<\/p>/)?.[1] ?? '';
   assert.ok(support.split(/\s+/).length <= 14, support);

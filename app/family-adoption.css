@@ -173,29 +173,6 @@ html .approved-shell :is(.ed-on-gradient, .fr-band, .f-value, .f-contact) :is(in
   /* One flat layer; 71% is the lowest whole-percent value passing scene tuning. */
   background: rgba(0, 0, 0, 0.71);
 }
-.home-hero .hero-video-control {
-  position: absolute;
-  z-index: 1;
-  top: var(--space-3);
-  right: var(--gutter);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  min-width: 44px;
-  min-height: 44px;
-  padding: var(--space-3) var(--space-5);
-  border: 1px solid rgba(251, 250, 246, .5);
-  background: var(--color-charcoal);
-  color: var(--color-paper);
-  font: 600 var(--fs-small) / var(--lh-small) var(--font-sans);
-  cursor: pointer;
-}
-.home-hero .hero-video-control:hover { background: #20231f; }
-.home-hero .hero-video-control:focus-visible {
-  outline: 2px solid var(--color-paper);
-  outline-offset: 3px;
-}
 .founder-facts {
   list-style: none;
   margin: 16px 0 0;
