@@ -153,6 +153,7 @@ html .approved-shell :is(.ed-on-gradient, .fr-band, .f-value, .f-contact) :is(in
 
 @media (max-width: 1023px) {
   .home-hero .fam-hero[data-family-hero] .fam-hero-inner {
+    --fam-hero-fade: var(--space-16);
     background-image: linear-gradient(
       180deg,
       rgba(var(--color-scrim-rgb), 0) 0,
