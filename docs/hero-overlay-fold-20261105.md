@@ -147,3 +147,33 @@ the independent review and PR/CI receipts. Physical browser chrome, real safe-ar
 hardware/keyboard, assistive technology and OS/browser text settings remain
 unverified; CSS enlargement is only a simulation. No production publication or
 new field-performance claim is made. Recovery is a normal revert of this PR.
+
+## CI fallback-readiness regression
+
+The first exact-head homepage run, `42063610496`, passed all 360 contrast
+samples, raster/overlay guards and playback interactions, but failed four
+restricted-preference control geometry assertions. Its evidence records a null
+control at the initial snapshot, followed by successful explicit Play and
+data-saver change interactions. The fixed 500ms fallback delay sampled the
+server-rendered poster before client preference initialization completed.
+
+The harness now requires the expected Play control to become visible before
+restricted-mode geometry is measured. Failed-media readiness requires an actual
+media attempt followed by the terminal poster-only state. No-JavaScript remains
+a decoded-poster case without a control. Bounded readiness failures still fail
+the check; the 44px size, hit-testing, no-video-fetch, contrast and overlay
+assertions are retained. No runtime website files change for this correction.
+
+PASS: the focused seven-context fallback run on the production preview, with
+zero failures in every category and no page errors. The original complete
+360-frame metrics are preserved separately; this supplement does not relabel
+the failed CI run as a pass.
+
+PASS: a separate temporary fixture held Next.js responses until 900ms after
+server-rendered copy/font readiness. All four restricted contexts initially had
+no control; semantic readiness completed after 1317–1330ms with an unobstructed
+133.16x47px Play control and zero media requests. Both media-failure contexts
+observed the required terminal MP4 attempt before source/control removal.
+No-JavaScript decoded its poster without a control or media fetch. All seven
+delayed contexts passed, with no browser errors. The delay fixture is not a
+runtime or CI behavior change.

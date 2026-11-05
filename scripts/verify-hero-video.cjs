@@ -84,6 +84,34 @@ async function paused(page) {
   await page.waitForFunction(() => document.querySelector('.home-hero video')?.paused, null, { timeout: 10000 });
 }
 
+async function observedState(label,predicate,timeout=30000) {
+  const deadline=Date.now()+timeout;
+  while(Date.now()<deadline) {
+    if(await predicate()) return;
+    await new Promise(resolve=>setTimeout(resolve,50));
+  }
+  throw new Error(`Timed out waiting for ${label}`);
+}
+
+async function fallbackReady(page,settings,requests) {
+  const started=Date.now();
+  const initialControlCount=await page.locator('.home-hero button.hero-video-control').count();
+  const poster=page.locator('.home-hero [data-hero-poster]');
+  await observedState('decoded hero poster',()=>poster.evaluate(image=>image.complete && image.naturalWidth>0));
+  await poster.evaluate(image=>image.decode());
+  if(settings.failMedia) {
+    const terminal=page.viewportSize().width>=1024?'background-1080p.mp4':'background-720p.mp4';
+    await observedState('terminal hero media request',()=>requests.some(url=>url.endsWith(terminal)));
+    await observedState('terminal media failure and control removal',async()=>
+      await page.locator('.home-hero video source').count()===0 &&
+      await page.locator('.home-hero button.hero-video-control').count()===0);
+  } else if(settings.javaScriptEnabled!==false) {
+    // The control is omitted from SSR until the preference effect has run.
+    await page.getByRole('button',{name:'Play background video',exact:true}).waitFor({state:'visible',timeout:30000});
+  }
+  return {initialControlCount,elapsedMs:Date.now()-started,posterDecoded:true};
+}
+
 async function frame(page, seconds) {
   await page.locator('.home-hero video').evaluate(async (video, seconds) => {
     video.pause();
@@ -411,7 +439,7 @@ async function fallbacks() {
     const record={name}; states.push(record);
     try {
       const page=await open(context,name);
-      await page.waitForTimeout(settings.failMedia?1500:500);
+      record.readiness=await fallbackReady(page,settings,requests);
       record.requests=[...requests]; record.geometry=await geometry(page);
       record.overlay=await overlayContract(page);
       assertOverlay(record.overlay,name);
