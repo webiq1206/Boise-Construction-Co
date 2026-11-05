@@ -4,6 +4,12 @@ on:
     branches: [main]
     paths:
       - components/approved/ApprovedHome.tsx
+      - components/approved/HomeHero.tsx
+      - components/approved/HeroBackgroundVideo.tsx
+      - app/family-adoption.css
+      - public/images/construction/boise-construction-co-*
+      - tests/family-chrome.test.ts
+      - scripts/verify-hero-video.cjs
       - components/approved/HomePlanningSections.module.css
       - components/PlanningRangeExplorer.tsx
       - scripts/verify-homepage-responsive.cjs
@@ -50,6 +56,23 @@ jobs:
           JS
       - name: Capture responsive homepage and exercise local controls
         run: node scripts/verify-homepage-responsive.cjs
+      - name: Verify approved hero video, preferences and playback controls
+        run: |
+          node --import tsx --test tests/family-chrome.test.ts
+          node scripts/verify-hero-video.cjs
+      - name: Bound hero video evidence to 64MiB
+        id: hero_video_evidence
+        if: always()
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/hero-video/*'
+      - name: Upload hero video browser evidence
+        if: ${{ always() && steps.hero_video_evidence.outcome == 'success' && steps.hero_video_evidence.outputs.ready == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: hero-video-review-${{ github.sha }}
+          path: branding-ci-evidence/complete.tar.gz
+          retention-days: 14
+          compression-level: 0
+          if-no-files-found: error
       - name: Bound complete artifact group 1 to64MiB
         id: bounded_artifact_01
         if: always()
