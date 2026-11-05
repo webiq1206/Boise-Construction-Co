@@ -142,13 +142,20 @@ async function textContrast(page, label) {
     }
     return result;
   });
+  const foregroundPixels=await sharp(await page.screenshot()).removeAlpha().raw().toBuffer({resolveWithObject:true});
   const style = await page.addStyleTag({ content: '.home-hero .fam-hero-copy, .home-hero .fam-hero-copy * { transition:none !important; color:transparent !important; text-shadow:none !important; }' });
   let pixels;
   try { pixels = await sharp(await page.screenshot()).removeAlpha().raw().toBuffer({ resolveWithObject:true }); }
-  finally { await style.evaluate(element => element.remove()); }
+  finally {
+    await style.evaluate(async element=>{
+      element.textContent='.home-hero .fam-hero-copy, .home-hero .fam-hero-copy * { transition:none !important; }';
+      await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+      element.remove();
+    });
+  }
   const luminance = rgb => rgb.map(v=>v/255).map(v=>v<=0.04045?v/12.92:((v+0.055)/1.055)**2.4).reduce((n,v,i)=>n+v*[0.2126,0.7152,0.0722][i],0);
   const results = runs.map(run => {
-    let minimum = Infinity;
+    let minimum = Infinity, actualInkPixels=0;
     const left=Math.max(0,Math.ceil(run.x)), top=Math.max(0,Math.ceil(run.y));
     const right=Math.min(pixels.info.width,Math.floor(run.x+run.width)), bottom=Math.min(pixels.info.height,Math.floor(run.y+run.height));
     for(let y=top;y<bottom;y+=2) for(let x=left;x<right;x+=2) {
@@ -158,11 +165,42 @@ async function textContrast(page, label) {
       const a=luminance(foreground), b=luminance(background);
       minimum=Math.min(minimum,(Math.max(a,b)+0.05)/(Math.min(a,b)+0.05));
     }
+    if(run.fontSize>=32 && run.color[3]===1) {
+      // Trim the range's leading/trailing metric space so neighboring line
+      // glyphs cannot satisfy a dimmed line's foreground-color requirement.
+      const inset=Math.ceil(run.height*0.12);
+      for(let y=top+inset;y<bottom-inset;y++) for(let x=left;x<right;x++) {
+        const index=(y*foregroundPixels.info.width+x)*foregroundPixels.info.channels;
+        const actual=[...foregroundPixels.data.subarray(index,index+3)];
+        if(Math.max(...actual.map((value,index)=>Math.abs(value-run.color[index])))<=5) actualInkPixels++;
+      }
+    }
     const required=run.fontSize>=24 || (run.fontSize>=18.66 && run.weight>=700)?3:4.5;
-    return {...run,minimum:Number.isFinite(minimum)?minimum:null,required};
+    return {...run,minimum:Number.isFinite(minimum)?minimum:null,required,...(run.fontSize>=32&&run.color[3]===1?{actualInkPixels}:{})};
   });
   check(results.length>0 && results.every(run=>run.minimum!==null && run.minimum>=run.required),`${label}: text contrast failed (${results.filter(run=>run.minimum===null || run.minimum<run.required).map(run=>`${run.text}: ${run.minimum?.toFixed(2)} / ${run.required}`).join('; ')})`);
+  check(results.filter(run=>run.actualInkPixels!==undefined).every(run=>run.actualInkPixels>=8),`${label}: a hero scrim dims the expected opaque H1 glyph color`);
   return results;
+}
+
+// A background scrim must not paint over the established solid CTA surface.
+// Sample clear fill above/below its label to catch foreground stacking defects.
+async function ctaFill(page, label) {
+  const geometry=await page.locator('.home-hero [data-hero-cta="primary"]').evaluate(button=>{
+    const r=button.getBoundingClientRect(), color=getComputedStyle(button).backgroundColor.match(/[\d.]+/g)?.map(Number);
+    return {x:r.x,y:r.y,width:r.width,height:r.height,color};
+  });
+  const pixels=await sharp(await page.screenshot()).removeAlpha().raw().toBuffer({resolveWithObject:true});
+  const samples=[];
+  for(const fraction of [0.25,0.5,0.75]) for(const inset of [5,geometry.height-5]) {
+    const x=Math.round(geometry.x+geometry.width*fraction), y=Math.round(geometry.y+inset);
+    const index=(y*pixels.info.width+x)*pixels.info.channels;
+    const actual=[...pixels.data.subarray(index,index+3)];
+    const difference=geometry.color?Math.max(...actual.map((value,index)=>Math.abs(value-geometry.color[index]))):Infinity;
+    samples.push({x,y,actual,difference});
+  }
+  check(geometry.color && (geometry.color[3]??1)===1 && samples.every(sample=>sample.difference<=5),`${label}: hero scrim or overlay paints over the solid primary CTA fill`);
+  return {expected:geometry.color,samples};
 }
 
 async function responsive() {
@@ -193,13 +231,14 @@ async function responsive() {
       check(m.control && m.control.width>=44 && m.control.height>=44 && m.control.unobstructed,`${label}: pause/play control is not reachable at 44px minimum`);
       await page.screenshot({path:path.join(output,`after-${label}.png`)});
       row.contrast=await textContrast(page,`${label} first frame`);
+      row.ctaFill=await ctaFill(page,`${label} first frame`);
       // Show both ends and an interior in the two representative compositions.
       if(width===390 || width===1440) {
         row.sceneContrast=[];
         for(const time of [12,24,29]) {
           await frame(page,time);
           await page.screenshot({path:path.join(output,`scene-${time}s-${label}.png`)});
-          row.sceneContrast.push({time,runs:await textContrast(page,`${label} at ${time}s`)});
+          row.sceneContrast.push({time,runs:await textContrast(page,`${label} at ${time}s`),ctaFill:await ctaFill(page,`${label} at ${time}s`)});
         }
       }
     } catch(error) { failures.push(`${label}: ${error.message}`); }

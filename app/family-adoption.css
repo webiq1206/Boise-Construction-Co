@@ -169,8 +169,8 @@ html .approved-shell :is(.ed-on-gradient, .fr-band, .f-value, .f-contact) :is(in
 .home-hero .hero-video-media video[data-has-frame='true'] { opacity: 1; }
 .home-hero .fam-hero[data-family-hero] .fam-hero-inner { background: none; }
 .home-hero .fam-hero[data-family-hero] .fam-hero-scrim {
-  /* Charcoal over the full moving frame; strongest beneath the reading field. */
-  background: linear-gradient(180deg, rgba(56, 56, 55, .50), rgba(56, 56, 55, .94) 15%, rgba(56, 56, 55, .97) 45%, rgba(56, 56, 55, .97));
+  /* Keep the moving architecture visible throughout the full phone frame. */
+  background: linear-gradient(180deg, rgba(56, 56, 55, .40), rgba(56, 56, 55, .76) 12%, rgba(56, 56, 55, .76) 85%, rgba(56, 56, 55, .60));
 }
 .home-hero .hero-video-control {
   position: absolute;
@@ -194,6 +194,28 @@ html .approved-shell :is(.ed-on-gradient, .fr-band, .f-value, .f-contact) :is(in
 .home-hero .hero-video-control:focus-visible {
   outline: 2px solid var(--color-paper);
   outline-offset: 3px;
+}
+@media (max-width: 1023px) {
+  .home-hero .fam-hero-copy {
+    position: relative;
+    isolation: isolate;
+  }
+  .home-hero .fam-hero-accent {
+    position: relative;
+  }
+  .home-hero .fam-hero-accent::before {
+    /* The negative layer belongs to the entire copy stack, keeping every
+       glyph and action above this feathered scrim as the ochre line wraps. */
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: calc(-1 * var(--space-10));
+    bottom: calc(-1 * var(--space-10));
+    left: calc(-1 * var(--gutter));
+    width: 100vw;
+    background: linear-gradient(180deg, transparent, rgba(56, 56, 55, .68) var(--space-6), rgba(56, 56, 55, .68) calc(100% - var(--space-6)), transparent);
+    pointer-events: none;
+  }
 }
 @media (min-width: 1024px) {
   .home-hero .fam-hero[data-family-hero] .fam-hero-scrim {

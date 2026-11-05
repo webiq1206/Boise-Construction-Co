@@ -11,6 +11,9 @@ across the entire hero on every device, superseding the earlier split mobile
 photo/copy composition. Construction-owned code and CSS retain family tokens
 and leave canonical shared files intact. Overlay uses existing charcoal
 `#383837`; emphasis retains `#c48d3f`. Existing hero height and text remain.
+Phone/tablet imagery stays visible through a lighter full-frame overlay, with a
+soft charcoal gradient following the ochre line. That gradient sits behind the
+entire copy stack so adjacent white glyphs and the light CTA remain intact.
 
 ## Media
 
@@ -68,8 +71,11 @@ Baseline screenshots and final browser metrics/screenshots are in
   exhausted-source poster fallback and desktop WebM-to-MP4 recovery. Hidden-tab
   lifecycle used Page Visibility API emulation, not a physical tab/device test.
 - PASS: actual composited-background samples beneath visible text, including
-  12/24/29-second scenes on phone and desktop. Minimum ratios: white H1 9.62:1,
-  ochre H1 3.47:1 (large text), body/microcopy 8.00:1, primary CTA 10.91:1.
+  12/24/29-second scenes on phone and desktop. Final minimum ratios: white H1
+  5.47:1, ochre H1 3.20:1 (large text), body/microcopy 4.98:1, primary CTA 11.24:1.
+  Actual rendered H1 foreground pixels are checked, and all sampled CTA-fill
+  pixels match its original solid surface exactly. These regression guards
+  catch a scrim accidentally painting over foreground text or actions.
 - PASS: existing `verify-homepage-responsive.cjs` at 11 viewport sizes,
   zero failures/errors, including adjacent homepage controls and full-page
   screenshots. Its reduced-motion run is separate from real playback QA.
@@ -101,6 +107,11 @@ It inspected all nine final first-screen sizes, the before/after grid, scene and
 fallback screenshots, adjacent page content, and independently exercised live
 Chromium phone playback, keyboard control, offscreen pause and the settled menu.
 The scoped visual and functional review passed without a requested correction.
+Final phone/tablet pixel review specifically confirmed recognizable exterior
+stone/entry/garage and interior cabinetry/island/pendant detail across the full
+hero, intact white text and CTA fill, and a smooth gradient without a separate
+solid text panel. This review assessed rendered imagery as well as bounds and
+contrast. The final refinement supersedes the initial darker mobile treatment.
 
 | F4 dimension | Result and scope |
 | --- | --- |
