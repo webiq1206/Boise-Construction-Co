@@ -12,7 +12,7 @@ const base = new URL(process.env.E2E_BASE_URL || 'http://127.0.0.1:34863');
 if (base.href !== 'http://127.0.0.1:34863/') {
   throw new Error('Hero QA only supports http://127.0.0.1:34863/');
 }
-const output = path.resolve('test-results/hero-overlay-fold');
+const output = path.resolve('test-results/hero-uniform-final');
 fs.mkdirSync(output, { recursive: true });
 const viewports = [[320,568],[360,640],[390,844],[430,932],[768,1024],[1024,768],[1280,720],[1440,900],[1920,1080]];
 const failures = [], failureRecords = [], rows = [], states = [], pageErrors = [], blocked = {};
@@ -173,7 +173,7 @@ async function overlayContract(page) {
 function assertOverlay(contract,label) {
   const overlay=contract.overlay;
   const verify=(ok,message)=>check(ok,message,'overlayContract');
-  verify(overlay.backgroundColor==='rgba(0, 0, 0, 0.4)' && overlay.backgroundImage==='none',`${label}: overlay must be exactly uniform rgba(0, 0, 0, 0.4), without a background image`);
+  verify(overlay.backgroundColor==='rgba(0, 0, 0, 0.71)' && overlay.backgroundImage==='none',`${label}: overlay must be exactly uniform rgba(0, 0, 0, 0.71), without a background image`);
   verify(overlay.opacity==='1' && overlay.filter==='none' && (!overlay.backdropFilter || overlay.backdropFilter==='none') && overlay.mixBlendMode==='normal' && overlay.boxShadow==='none',`${label}: overlay has compounded opacity, filtering, blending or shadow`);
   verify(['x','y','width','height'].every(key=>Math.abs(overlay.rect[key]-contract.hero[key])<=1),`${label}: uniform overlay does not fill the hero`);
   verify(!contract.otherPaintedLayers.length && !contract.paintedPseudos.length,`${label}: additional hero background or pseudo layers (${JSON.stringify({layers:contract.otherPaintedLayers,pseudos:contract.paintedPseudos})})`);
@@ -535,7 +535,7 @@ function contrastSummary() {
   const recorded=new Set(failureRecords.map(record=>record.message));
   failureCategories.execution=failures.filter(message=>!recorded.has(message));
   const failureCounts=Object.fromEntries(Object.entries(failureCategories).map(([category,items])=>[category,items.length]));
-  const result={sha,phase:fallbacksOnly?'fallback supplement':'complete hero verification',browser:'Chromium; emulated CSS viewports, reduced motion and connection hints',scope:'Homepage hero only; exact uniform 40% black overlay and visible-fold contract; local GET assets; external/API requests blocked; no submissions, providers, database or publication',viewports:rows,states,blocked,pageErrors,failures,failureCategories,failureCounts,contrastSummary:summary};
+  const result={sha,phase:fallbacksOnly?'fallback supplement':'complete hero verification',browser:'Chromium; emulated CSS viewports, reduced motion and connection hints',scope:'Homepage hero only; authorized single uniform 71% black overlay and visible-fold contract; local GET assets; external/API requests blocked; no submissions, providers, database or publication',viewports:rows,states,blocked,pageErrors,failures,failureCategories,failureCounts,contrastSummary:summary};
   fs.writeFileSync(path.join(output,fallbacksOnly?'fallback-only-metrics.json':'hero-video-metrics.json'),JSON.stringify(result,null,2));
   fs.writeFileSync(path.join(output,fallbacksOnly?'fallback-only-contrast-summary.json':'contrast-summary.json'),JSON.stringify(summary,null,2));
   console.log(JSON.stringify({viewports:rows.length,states:states.length,sampledFrames:summary.sampledFrames,failureCount:failures.length,failureCounts,failures:failures.slice(0,12),failedTextFrames:summary.failedTextFrames,minimaByRole:summary.minimaByRole,opaqueWhiteWouldPass:summary.opaqueWhiteHypothesis.wouldPass,pageErrors,blocked},null,2));

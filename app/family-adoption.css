@@ -170,8 +170,8 @@ html .approved-shell :is(.ed-on-gradient, .fr-band, .f-value, .f-contact) :is(in
 .home-hero .hero-video-media video[data-has-frame='true'] { opacity: 1; }
 .home-hero .fam-hero[data-family-hero] .fam-hero-inner { background: none; }
 .home-hero .fam-hero[data-family-hero] .fam-hero-scrim {
-  /* Owner direction: one uniform black layer, 60% transparent / 40% opaque. */
-  background: rgba(0, 0, 0, 0.4);
+  /* One flat layer; 71% is the lowest whole-percent value passing scene tuning. */
+  background: rgba(0, 0, 0, 0.71);
 }
 .home-hero .hero-video-control {
   position: absolute;
