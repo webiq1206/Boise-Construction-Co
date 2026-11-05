@@ -210,3 +210,24 @@ only an occupied bottom action bar, counting each safe area once. Remove the
 900px desktop cap. Retain natural content growth and the320x568 headline/primary
 CTA exception, without clipping or empty spacers. This fold change is independent
 of the separately reviewed overlay. See `docs/hero-fold-20261105.md`.
+
+### November 5 owner correction: uniform black overlay
+
+The later owner authorization permits darkening as necessary for text contrast,
+and permits brand charcoal if black looks wrong. It supersedes the initial fixed
+40% opacity constraint. Keep one consistent flat layer across devices, without
+gradients, localized scrims, solid text panels, halos or stacked overlays.
+
+Construction uses uniform black `rgba(0, 0, 0, 0.71)`. Bounded tuning of 69%, 70%
+and 71% found 71% to be the lowest whole-percent candidate passing all 20 critical
+scene/viewport combinations; 70% still failed the unchanged ochre headline. Black
+retains more source variation at this contrast level than the much more opaque
+charcoal alternative. Actual video scenes must remain visibly recognizable on
+phone, tablet and desktop; numeric compliance alone is insufficient.
+
+Preserve exact brand text colors and CTA styling, approved ungraded video bytes,
+responsive sources, playback/fallback controls, content and destinations. Retain
+the merged visible-fold correction. Final full-scene contrast and independent
+rendered review remain release gates. Current evidence is in
+`docs/hero-overlay-fold-20261105.md`. Scope is Construction only; other websites
+have separate workers. Publication remains with the owner.

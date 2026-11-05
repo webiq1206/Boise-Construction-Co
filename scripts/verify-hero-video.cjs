@@ -12,13 +12,20 @@ const base = new URL(process.env.E2E_BASE_URL || 'http://127.0.0.1:34863');
 if (base.href !== 'http://127.0.0.1:34863/') {
   throw new Error('Hero QA only supports http://127.0.0.1:34863/');
 }
-const output = path.resolve('test-results/hero-video');
+const output = path.resolve('test-results/hero-uniform-final');
 fs.mkdirSync(output, { recursive: true });
 const viewports = [[320,568],[360,640],[390,844],[430,932],[768,1024],[1024,768],[1280,720],[1440,900],[1920,1080]];
-const failures = [], rows = [], states = [], pageErrors = [], blocked = {};
-const check = (ok, message) => { if (!ok) failures.push(message); };
+const failures = [], failureRecords = [], rows = [], states = [], pageErrors = [], blocked = {};
+const check = (ok, message, category='functional') => { if (!ok) { failures.push(message); failureRecords.push({category,message}); } };
 const mediaPath = /\/boise-construction-co-background(?:-\d+p)?\.(?:mp4|webm)$/;
+// Cover every whole second and both sides of the scene dissolves and loop.
+const sampleTimes = [...new Set([...Array.from({length:30},(_,index)=>index),5.75,6.25,11.75,12.25,17.75,18.25,23.75,24.25,29.75,29.966])].sort((a,b)=>a-b);
+const screenshotTimes = new Set([0,6,12,18,24,29]);
+// A bounded supplement can finish fallback evidence without repeating an
+// already completed video scan. Normal CI invocation always runs every phase.
+const fallbacksOnly=process.argv.includes('--fallbacks-only');
 let browser;
+let firstContrastConflictReported=false;
 
 async function contextFor(options = {}) {
   const { saveData = false, effectiveType, failMedia = false, failWebm = false, ...browserOptions } = options;
@@ -77,6 +84,34 @@ async function paused(page) {
   await page.waitForFunction(() => document.querySelector('.home-hero video')?.paused, null, { timeout: 10000 });
 }
 
+async function observedState(label,predicate,timeout=30000) {
+  const deadline=Date.now()+timeout;
+  while(Date.now()<deadline) {
+    if(await predicate()) return;
+    await new Promise(resolve=>setTimeout(resolve,50));
+  }
+  throw new Error(`Timed out waiting for ${label}`);
+}
+
+async function fallbackReady(page,settings,requests) {
+  const started=Date.now();
+  const initialControlCount=await page.locator('.home-hero button.hero-video-control').count();
+  const poster=page.locator('.home-hero [data-hero-poster]');
+  await observedState('decoded hero poster',()=>poster.evaluate(image=>image.complete && image.naturalWidth>0));
+  await poster.evaluate(image=>image.decode());
+  if(settings.failMedia) {
+    const terminal=page.viewportSize().width>=1024?'background-1080p.mp4':'background-720p.mp4';
+    await observedState('terminal hero media request',()=>requests.some(url=>url.endsWith(terminal)));
+    await observedState('terminal media failure and control removal',async()=>
+      await page.locator('.home-hero video source').count()===0 &&
+      await page.locator('.home-hero button.hero-video-control').count()===0);
+  } else if(settings.javaScriptEnabled!==false) {
+    // The control is omitted from SSR until the preference effect has run.
+    await page.getByRole('button',{name:'Play background video',exact:true}).waitFor({state:'visible',timeout:30000});
+  }
+  return {initialControlCount,elapsedMs:Date.now()-started,posterDecoded:true};
+}
+
 async function frame(page, seconds) {
   await page.locator('.home-hero video').evaluate(async (video, seconds) => {
     video.pause();
@@ -99,6 +134,7 @@ async function geometry(page) {
     const bar = document.querySelector('[data-family-bar]');
     const barRect = bar && getComputedStyle(bar).display !== 'none' && bar.dataset.state === 'visible' ? rect(bar) : null;
     const cta = hero.querySelector('[data-hero-cta="primary"]');
+    const proof = document.querySelector('.fam-proof');
     const control = hero.querySelector('button.hero-video-control');
     const controlRect = control && getComputedStyle(control).display !== 'none' ? rect(control) : null;
     const accessible = element => {
@@ -112,6 +148,8 @@ async function geometry(page) {
       cta:{...rect(cta),href:cta.getAttribute('href'),text:cta.textContent.trim(),unobstructed:accessible(cta)},
       control:controlRect?{...controlRect,unobstructed:accessible(control)}:null,
       bottomBar:barRect, horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1,
+      visualViewport:window.visualViewport?{height:visualViewport.height,width:visualViewport.width,offsetTop:visualViewport.offsetTop}:null,
+      proof:proof?rect(proof):null,
       media:{src:video.currentSrc,muted:video.muted,loop:video.loop,playsInline:video.playsInline,duration:video.duration,width:video.videoWidth,height:video.videoHeight,objectFit:getComputedStyle(video).objectFit,opacity:getComputedStyle(video).opacity,paused:video.paused},
       posterLoaded:poster.complete && poster.naturalWidth>0,
       heading:hero.querySelector('h1').textContent.trim(),
@@ -120,9 +158,87 @@ async function geometry(page) {
   });
 }
 
+async function overlayContract(page) {
+  return page.evaluate(()=>{
+    const hero=document.querySelector('.home-hero section.fam-hero');
+    const overlay=hero.querySelector('.fam-hero-scrim');
+    const paint=element=>{
+      const css=getComputedStyle(element);
+      return {backgroundColor:css.backgroundColor,backgroundImage:css.backgroundImage,opacity:css.opacity,filter:css.filter,backdropFilter:css.backdropFilter,mixBlendMode:css.mixBlendMode,boxShadow:css.boxShadow};
+    };
+    const transparent=color=>{
+      const values=color.match(/[\d.]+/g)?.map(Number);
+      return color==='transparent' || (values?.length===4 && values[3]===0);
+    };
+    const otherPaintedLayers=[],paintedPseudos=[],ancestorEffects=[],ancestors=[],rootPseudos=[];
+    for(let element=hero;element;element=element.parentElement) {
+      const value={element:`${element.tagName.toLowerCase()}.${[...element.classList].join('.')}`,...paint(element)};
+      ancestors.push(value);
+      if(Number(value.opacity)!==1 || value.filter!=='none' || (value.backdropFilter && value.backdropFilter!=='none') || value.mixBlendMode!=='normal') ancestorEffects.push(value);
+    }
+    for(const element of [hero,...hero.querySelectorAll('*')]) {
+      if(element.matches('.hero-video-control,[data-hero-cta="primary"]') || element.closest('.hero-video-control,[data-hero-cta="primary"]')) continue;
+      const css=getComputedStyle(element);
+      const label=`${element.tagName.toLowerCase()}.${[...element.classList].join('.')}`;
+      if(element!==hero && element!==overlay && css.display!=='none' && (!transparent(css.backgroundColor) || css.backgroundImage!=='none' || css.boxShadow!=='none' || css.filter!=='none' || (css.backdropFilter && css.backdropFilter!=='none') || css.mixBlendMode!=='normal' || Number(css.opacity)!==1)) {
+        // Video opacity zero is the static-poster fallback, not another overlay.
+        if(!(element.tagName==='VIDEO' && Number(css.opacity)===0 && transparent(css.backgroundColor) && css.backgroundImage==='none' && css.boxShadow==='none' && css.filter==='none' && (!css.backdropFilter || css.backdropFilter==='none') && css.mixBlendMode==='normal')) otherPaintedLayers.push({element:label,...paint(element)});
+      }
+      for(const pseudo of ['::before','::after']) {
+        const style=getComputedStyle(element,pseudo);
+        if(element===hero || element===overlay) rootPseudos.push({element:label,pseudo,content:style.content,display:style.display,backgroundColor:style.backgroundColor,backgroundImage:style.backgroundImage,opacity:style.opacity,filter:style.filter,backdropFilter:style.backdropFilter,mixBlendMode:style.mixBlendMode});
+        if(style.display!=='none' && !['none','normal'].includes(style.content) && (!transparent(style.backgroundColor) || style.backgroundImage!=='none' || style.boxShadow!=='none' || style.filter!=='none' || (style.backdropFilter && style.backdropFilter!=='none') || style.mixBlendMode!=='normal')) paintedPseudos.push({element:label,pseudo,content:style.content,backgroundColor:style.backgroundColor,backgroundImage:style.backgroundImage,boxShadow:style.boxShadow,filter:style.filter,backdropFilter:style.backdropFilter,mixBlendMode:style.mixBlendMode});
+      }
+    }
+    const accent=hero.querySelector('.fam-hero-accent');
+    const accentPseudos=['::before','::after'].map(pseudo=>{const css=getComputedStyle(accent,pseudo);return {pseudo,content:css.content,display:css.display};});
+    const rect=element=>{const r=element.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};
+    const textShadows=[...hero.querySelectorAll('.fam-hero-copy,.fam-hero-copy *')].map(element=>({element:element.tagName.toLowerCase(),textShadow:getComputedStyle(element).textShadow})).filter(item=>item.textShadow!=='none');
+    return {overlay:{...paint(overlay),rect:rect(overlay)},hero:rect(hero),otherPaintedLayers,paintedPseudos,accentPseudos,textShadows,ancestors,ancestorEffects,rootPseudos};
+  });
+}
+
+function assertOverlay(contract,label) {
+  const overlay=contract.overlay;
+  const verify=(ok,message)=>check(ok,message,'overlayContract');
+  verify(overlay.backgroundColor==='rgba(0, 0, 0, 0.71)' && overlay.backgroundImage==='none',`${label}: overlay must be exactly uniform rgba(0, 0, 0, 0.71), without a background image`);
+  verify(overlay.opacity==='1' && overlay.filter==='none' && (!overlay.backdropFilter || overlay.backdropFilter==='none') && overlay.mixBlendMode==='normal' && overlay.boxShadow==='none',`${label}: overlay has compounded opacity, filtering, blending or shadow`);
+  verify(['x','y','width','height'].every(key=>Math.abs(overlay.rect[key]-contract.hero[key])<=1),`${label}: uniform overlay does not fill the hero`);
+  verify(!contract.otherPaintedLayers.length && !contract.paintedPseudos.length,`${label}: additional hero background or pseudo layers (${JSON.stringify({layers:contract.otherPaintedLayers,pseudos:contract.paintedPseudos})})`);
+  verify(!contract.ancestorEffects.length,`${label}: hero or ancestor opacity, filtering or blending compounds the overlay (${JSON.stringify(contract.ancestorEffects)})`);
+  verify(contract.accentPseudos.every(pseudo=>pseudo.display==='none' || ['none','normal'].includes(pseudo.content)),`${label}: localized accent pseudo scrim remains`);
+  verify(!contract.textShadows.length,`${label}: hero text has a shadow`);
+}
+
+function assertLayout(m,label,width,height,{requireControl=true}={}) {
+  const verify=(ok,message)=>check(ok,message,'layoutFold');
+  const visualBottom=m.visualViewport?m.visualViewport.height+m.visualViewport.offsetTop:height;
+  const floor=m.bottomBar?.y??Math.min(height,visualBottom);
+  const same=(a,b)=>['x','y','width','height'].every(key=>Math.abs(a[key]-b[key])<=1);
+  const fold={visibleBottom:floor,heroBottom:m.hero.bottom,delta:m.hero.bottom-floor,actualHeaderHeight:m.header?.height,actualBottomBarHeight:m.bottomBar?.height??0,naturalContentException:width===320?'320px: headline and primary CTA must fit; remaining copy may naturally scroll':null};
+  verify(same(m.hero,m.video) && same(m.hero,m.poster),`${label}: video/poster do not fill the complete hero`);
+  verify(Math.abs(m.hero.y-m.header.bottom)<=1,`${label}: hero does not begin directly below the actual persistent header`);
+  verify(m.hero.bottom>=floor-1,`${label}: hero ends above the visible fold (${m.hero.bottom.toFixed(2)} vs ${floor.toFixed(2)})`);
+  if(width>=360) verify(Math.abs(m.hero.bottom-floor)<=1,`${label}: hero does not exactly fill the visible fold after actual header/bar clearance (${m.hero.bottom.toFixed(2)} vs ${floor.toFixed(2)})`);
+  fold.proofVisible=!!m.proof && m.proof.y<floor-1 && m.proof.bottom>m.header.bottom;
+  verify(!fold.proofVisible,`${label}: proof/next section peeks into the initial visible fold`);
+  verify(!m.horizontalOverflow,`${label}: horizontal overflow`);
+  verify(m.posterLoaded,`${label}: poster did not decode`);
+  verify(m.media.muted && m.media.loop && m.media.playsInline,`${label}: muted inline looping flags missing`);
+  verify(m.media.objectFit==='cover',`${label}: video object-fit must cover`);
+  verify(m.cta.href==='/estimate' && m.cta.text==='Request a quote',`${label}: changed primary CTA`);
+  verify(m.links.some(a=>a.href==='tel:+12084771169' && a.text==='Call or text (208) 477-1169'),`${label}: changed telephone action`);
+  verify(m.heading==='Custom home builder in Boise. Built around you.',`${label}: changed headline`);
+  verify(m.headline.y>=m.header.bottom-1 && m.headline.bottom<=floor+1,`${label}: headline outside first screen`);
+  verify(m.cta.y>=m.header.bottom-1 && m.cta.bottom<=floor+1 && m.cta.unobstructed,`${label}: primary CTA outside first screen or obstructed`);
+  if(width>=360) verify(m.copy.bottom<=floor+1,`${label}: complete hero copy does not fit first screen`);
+  if(requireControl || m.control) verify(m.control && m.control.width>=44 && m.control.height>=44 && m.control.unobstructed,`${label}: pause/play control is not reachable at 44px minimum`);
+  return fold;
+}
+
 // Measure actual composited background pixels under each rendered text line.
 // Sampling each line's whole box is conservative: spaces are checked too.
-async function textContrast(page, label) {
+async function textContrast(page, label, {raster=true}={}) {
   const runs = await page.evaluate(() => {
     const root = document.querySelector('.home-hero .fam-hero-copy');
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -142,20 +258,31 @@ async function textContrast(page, label) {
     }
     return result;
   });
-  const foregroundPixels=await sharp(await page.screenshot()).removeAlpha().raw().toBuffer({resolveWithObject:true});
-  const style = await page.addStyleTag({ content: '.home-hero .fam-hero-copy, .home-hero .fam-hero-copy * { transition:none !important; color:transparent !important; text-shadow:none !important; }' });
+  const foregroundPixels=raster?await sharp(await page.screenshot()).removeAlpha().raw().toBuffer({resolveWithObject:true}):null;
+  // Insert synchronously: addStyleTag waits for a load-event callback which
+  // cannot run in the deliberately JavaScript-disabled fallback context.
+  const style = await page.evaluateHandle(()=>{
+    const element=document.createElement('style');
+    element.textContent='.home-hero .fam-hero-copy, .home-hero .fam-hero-copy * { transition:none !important; color:transparent !important; text-shadow:none !important; }';
+    document.head.appendChild(element);
+    getComputedStyle(document.querySelector('.home-hero .fam-hero-copy')).color;
+    return element;
+  });
   let pixels;
   try { pixels = await sharp(await page.screenshot()).removeAlpha().raw().toBuffer({ resolveWithObject:true }); }
   finally {
-    await style.evaluate(async element=>{
+    await style.evaluate(element=>{
       element.textContent='.home-hero .fam-hero-copy, .home-hero .fam-hero-copy * { transition:none !important; }';
-      await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+      // A style flush restores the text without a color transition and works
+      // when page JavaScript is disabled (animation-frame callbacks do not).
+      getComputedStyle(document.querySelector('.home-hero .fam-hero-copy')).color;
       element.remove();
     });
+    await style.dispose();
   }
   const luminance = rgb => rgb.map(v=>v/255).map(v=>v<=0.04045?v/12.92:((v+0.055)/1.055)**2.4).reduce((n,v,i)=>n+v*[0.2126,0.7152,0.0722][i],0);
   const results = runs.map(run => {
-    let minimum = Infinity, actualInkPixels=0;
+    let minimum = Infinity, opaqueWhiteMinimum=Infinity, actualInkPixels=0;
     const left=Math.max(0,Math.ceil(run.x)), top=Math.max(0,Math.ceil(run.y));
     const right=Math.min(pixels.info.width,Math.floor(run.x+run.width)), bottom=Math.min(pixels.info.height,Math.floor(run.y+run.height));
     for(let y=top;y<bottom;y+=2) for(let x=left;x<right;x+=2) {
@@ -164,8 +291,9 @@ async function textContrast(page, label) {
       const foreground=run.color.slice(0,3).map((v,i)=>v*run.color[3]+background[i]*(1-run.color[3]));
       const a=luminance(foreground), b=luminance(background);
       minimum=Math.min(minimum,(Math.max(a,b)+0.05)/(Math.min(a,b)+0.05));
+      opaqueWhiteMinimum=Math.min(opaqueWhiteMinimum,1.05/(b+0.05));
     }
-    if(run.fontSize>=32 && run.color[3]===1) {
+    if(raster && run.fontSize>=32 && run.color[3]===1) {
       // Trim the range's leading/trailing metric space so neighboring line
       // glyphs cannot satisfy a dimmed line's foreground-color requirement.
       const inset=Math.ceil(run.height*0.12);
@@ -176,10 +304,17 @@ async function textContrast(page, label) {
       }
     }
     const required=run.fontSize>=24 || (run.fontSize>=18.66 && run.weight>=700)?3:4.5;
-    return {...run,minimum:Number.isFinite(minimum)?minimum:null,required,...(run.fontSize>=32&&run.color[3]===1?{actualInkPixels}:{})};
+    return {...run,minimum:Number.isFinite(minimum)?minimum:null,opaqueWhiteMinimum:Number.isFinite(opaqueWhiteMinimum)?opaqueWhiteMinimum:null,required,...(raster&&run.fontSize>=32&&run.color[3]===1?{actualInkPixels}:{})};
   });
-  check(results.length>0 && results.every(run=>run.minimum!==null && run.minimum>=run.required),`${label}: text contrast failed (${results.filter(run=>run.minimum===null || run.minimum<run.required).map(run=>`${run.text}: ${run.minimum?.toFixed(2)} / ${run.required}`).join('; ')})`);
-  check(results.filter(run=>run.actualInkPixels!==undefined).every(run=>run.actualInkPixels>=8),`${label}: a hero scrim dims the expected opaque H1 glyph color`);
+  check(results.length>0 && results.every(run=>run.minimum!==null && run.minimum>=run.required),`${label}: text contrast failed (${results.filter(run=>run.minimum===null || run.minimum<run.required).map(run=>`${run.text}: ${run.minimum?.toFixed(2)} / ${run.required}`).join('; ')})`,'contrast');
+  if(!firstContrastConflictReported) {
+    const conflict=results.find(run=>run.minimum===null || run.minimum<run.required);
+    if(conflict) {
+      firstContrastConflictReported=true;
+      console.log(JSON.stringify({firstContrastConflict:{label,text:conflict.text,ratio:conflict.minimum,required:conflict.required}}));
+    }
+  }
+  check(results.filter(run=>run.actualInkPixels!==undefined).every(run=>run.actualInkPixels>=8),`${label}: a hero scrim dims the expected opaque H1 glyph color`,'raster');
   return results;
 }
 
@@ -199,7 +334,7 @@ async function ctaFill(page, label) {
     const difference=geometry.color?Math.max(...actual.map((value,index)=>Math.abs(value-geometry.color[index]))):Infinity;
     samples.push({x,y,actual,difference});
   }
-  check(geometry.color && (geometry.color[3]??1)===1 && samples.every(sample=>sample.difference<=5),`${label}: hero scrim or overlay paints over the solid primary CTA fill`);
+  check(geometry.color && (geometry.color[3]??1)===1 && samples.every(sample=>sample.difference<=5),`${label}: hero scrim or overlay paints over the solid primary CTA fill`,'raster');
   return {expected:geometry.color,samples};
 }
 
@@ -210,37 +345,28 @@ async function responsive() {
     try {
       const page=await open(context,label);
       await playing(page);
-      await frame(page,0.5);
+      await frame(page,0);
       row.geometry=await geometry(page); row.requests=requests;
-      const m=row.geometry, floor=m.bottomBar?.y??height;
-      const same=(a,b)=>['x','y','width','height'].every(key=>Math.abs(a[key]-b[key])<=1);
-      check(same(m.hero,m.video) && same(m.hero,m.poster),`${label}: video/poster do not fill the complete hero`);
-      check(!m.horizontalOverflow,`${label}: horizontal overflow`);
-      check(m.posterLoaded,`${label}: poster did not decode`);
-      check(m.media.muted && m.media.loop && m.media.playsInline,`${label}: muted inline looping flags missing`);
-      check(m.media.objectFit==='cover',`${label}: video object-fit must cover`);
+      row.overlay=await overlayContract(page);
+      assertOverlay(row.overlay,label);
+      const m=row.geometry;
+      row.fold=assertLayout(m,label,width,height);
       check(Math.abs(m.media.duration-30)<0.1,`${label}: expected approved 30-second video`);
       check(m.media.width===(width<1024?1280:1920) && m.media.height===(width<1024?720:1080),`${label}: wrong responsive media dimensions`);
       check(width<1024?/background-720p\.mp4$/.test(m.media.src):/background(?:-1080p\.mp4|\.webm)$/.test(m.media.src),`${label}: wrong responsive source (${m.media.src})`);
-      check(m.cta.href==='/estimate' && m.cta.text==='Request a quote',`${label}: changed primary CTA`);
-      check(m.links.some(a=>a.href==='tel:+12084771169' && a.text==='Call or text (208) 477-1169'),`${label}: changed telephone action`);
-      check(m.heading==='Custom home builder in Boise. Built around you.',`${label}: changed headline`);
-      check(m.headline.y>=m.header.bottom-1 && m.headline.bottom<=floor+1,`${label}: headline outside first screen`);
-      check(m.cta.y>=m.header.bottom-1 && m.cta.bottom<=floor+1 && m.cta.unobstructed,`${label}: primary CTA outside first screen or obstructed`);
-      if(width>=360) check(m.copy.bottom<=floor+1,`${label}: complete hero copy does not fit first screen`);
-      check(m.control && m.control.width>=44 && m.control.height>=44 && m.control.unobstructed,`${label}: pause/play control is not reachable at 44px minimum`);
       await page.screenshot({path:path.join(output,`after-${label}.png`)});
-      row.contrast=await textContrast(page,`${label} first frame`);
-      row.ctaFill=await ctaFill(page,`${label} first frame`);
-      // Show both ends and an interior in the two representative compositions.
-      if(width===390 || width===1440) {
-        row.sceneContrast=[];
-        for(const time of [12,24,29]) {
-          await frame(page,time);
-          await page.screenshot({path:path.join(output,`scene-${time}s-${label}.png`)});
-          row.sceneContrast.push({time,runs:await textContrast(page,`${label} at ${time}s`),ctaFill:await ctaFill(page,`${label} at ${time}s`)});
-        }
+      row.sceneContrast=[];
+      for(const time of sampleTimes) {
+        if(time!==0) await frame(page,time);
+        const representative=(width===390 || width===1440) && screenshotTimes.has(time);
+        const raster=time===0 || representative;
+        if(representative) await page.screenshot({path:path.join(output,`scene-${time}s-${label}.png`)});
+        const sample={time,actualTime:await page.locator('.home-hero video').evaluate(video=>video.currentTime),runs:await textContrast(page,`${label} at ${time}s`,{raster})};
+        if(raster) sample.ctaFill=await ctaFill(page,`${label} at ${time}s`);
+        row.sceneContrast.push(sample);
+        if(time===0) {row.contrast=sample.runs;row.ctaFill=sample.ctaFill;}
       }
+      console.log(`${label}: sampled ${row.sceneContrast.length} video times; ${row.sceneContrast.filter(scene=>scene.runs.some(run=>run.minimum===null || run.minimum<run.required)).length} frames have text contrast failures`);
     } catch(error) { failures.push(`${label}: ${error.message}`); }
     finally { await context.close(); }
   }
@@ -313,8 +439,13 @@ async function fallbacks() {
     const record={name}; states.push(record);
     try {
       const page=await open(context,name);
-      await page.waitForTimeout(settings.failMedia?1500:500);
+      record.readiness=await fallbackReady(page,settings,requests);
       record.requests=[...requests]; record.geometry=await geometry(page);
+      record.overlay=await overlayContract(page);
+      assertOverlay(record.overlay,name);
+      const viewport=page.viewportSize();
+      record.viewport=`${viewport.width}x${viewport.height}`;
+      record.fold=assertLayout(record.geometry,name,viewport.width,viewport.height,{requireControl:!settings.failMedia && settings.javaScriptEnabled!==false});
       check(record.geometry.posterLoaded,`${name}: poster not available`);
       check(record.geometry.cta.unobstructed,`${name}: CTA obstructed`);
       if(!settings.failMedia) check(!requests.length,`${name}: video fetched despite static fallback`);
@@ -325,6 +456,9 @@ async function fallbacks() {
         check(await page.locator('.home-hero button.hero-video-control').count()===0,`${name}: failed media leaves an unusable playback control`);
       }
       await page.screenshot({path:path.join(output,`fallback-${name}.png`)});
+      record.contrast=await textContrast(page,`${name} static poster`);
+      record.ctaFill=await ctaFill(page,`${name} static poster`);
+      if(!settings.failMedia) check(!requests.length,`${name}: static overlay/geometry/contrast checks triggered a video fetch`);
       if(name==='reduced-motion') {
         await page.getByRole('button',{name:'Play background video',exact:true}).click();
         await playing(page); record.explicitPlayOverride=true;
@@ -373,15 +507,65 @@ async function grids() {
   await sharp({create:{width:640,height:Math.ceil(tiles.length/2)*268,channels:3,background:'#383837'}}).composite(tiles.map((input,index)=>({input,left:(index%2)*320,top:Math.floor(index/2)*268}))).png().toFile(path.join(output,'before-after-grid.png'));
 }
 
+function contrastSummary() {
+  const measurements=rows.flatMap(row=>(row.sceneContrast??[]).flatMap(scene=>scene.runs.map(run=>({...run,viewport:row.viewport,time:scene.time,actualTime:scene.actualTime}))));
+  const role=run=>run.text==='Request a quote'?'primary CTA':run.fontSize>=32?(run.color[0]===196?'ochre H1':'white H1'):run.text.startsWith('Our team replies')?'microcopy':run.text.includes('Custom home building')?'eyebrow':run.text.startsWith('From bare lot')?'support':'telephone action';
+  const brief=run=>({text:run.text,viewport:run.viewport,time:run.time,actualTime:run.actualTime,ratio:run.minimum,required:run.required,x:run.x,y:run.y,width:run.width,height:run.height});
+  const minima=items=>Object.fromEntries([...new Set(items.map(role))].map(name=>{
+    const selected=items.filter(run=>role(run)===name);
+    const worst=selected.reduce((a,b)=>(a.minimum??-Infinity)<(b.minimum??-Infinity)?a:b);
+    return [name,brief(worst)];
+  }));
+  const worstByTextFrame=new Map();
+  for(const run of measurements) {
+    const key=JSON.stringify([run.viewport,run.time,run.text]);
+    const prior=worstByTextFrame.get(key);
+    if(!prior || (run.minimum??-Infinity)<(prior.minimum??-Infinity)) worstByTextFrame.set(key,run);
+  }
+  const failed=[...worstByTextFrame.values()].filter(run=>run.minimum===null || run.minimum<run.required).sort((a,b)=>(a.minimum??-Infinity)-(b.minimum??-Infinity));
+  const whiteMeasurements=measurements.filter(run=>role(run)!=='primary CTA').map(run=>({...run,minimum:run.opaqueWhiteMinimum}));
+  const whiteByTextFrame=new Map();
+  for(const run of whiteMeasurements) {
+    const key=JSON.stringify([run.viewport,run.time,run.text]);
+    const prior=whiteByTextFrame.get(key);
+    if(!prior || (run.minimum??-Infinity)<(prior.minimum??-Infinity)) whiteByTextFrame.set(key,run);
+  }
+  const whiteFailures=[...whiteByTextFrame.values()].filter(run=>run.minimum===null || run.minimum<run.required);
+  return {
+    method:'Actual composited background pixels sampled every 2 CSS pixels within rendered text-line boxes, including spaces; conservative minimum. H1 ink and solid CTA fill pixel guards run at first frames and saved representative scenes. Viewport emulation only; no field performance or physical-device claim.',
+    sampleTimes,sampledFrames:rows.reduce((total,row)=>total+(row.sceneContrast?.length??0),0),
+    minimaByRole:minima(measurements),
+    byViewport:rows.map(row=>({viewport:row.viewport,frames:row.sceneContrast?.length??0,minimaByRole:minima(measurements.filter(run=>run.viewport===row.viewport))})),
+    failedTextFrames:failed.length,
+    failuresByText:[...new Set(failed.map(run=>run.text))].map(text=>({text,failedFrames:failed.filter(run=>run.text===text).length,worst:brief(failed.find(run=>run.text===text))})),
+    contrastFailures:failed.map(brief),
+    staticFallbacks:states.filter(record=>record.contrast).map(record=>({name:record.name,viewport:record.viewport,minimaByRole:minima(record.contrast.map(run=>({...run,viewport:record.viewport,time:'poster',actualTime:null}))),failedRuns:record.contrast.filter(run=>run.minimum===null || run.minimum<run.required).length})),
+    opaqueWhiteHypothesis:{
+      assumption:'Numerical recomputation from the same background samples with fully opaque #ffffff for text over the video. CTA text remains unchanged. Existing size/weight thresholds retained. No fonts, text colors, media or styles were changed to produce this hypothesis.',
+      wouldPass:whiteMeasurements.length? !whiteFailures.length:null,
+      failedTextFrames:whiteFailures.length,
+      minimaByOriginalRole:minima(whiteMeasurements),
+    },
+  };
+}
+
 (async()=>{
   browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_CHROMIUM_PATH?{executablePath:process.env.PLAYWRIGHT_CHROMIUM_PATH}:{})});
-  await responsive(); await interactions(); await sourceFallback(); await fallbacks(); await grids();
+  if(!fallbacksOnly) { await responsive(); await interactions(); await sourceFallback(); }
+  await fallbacks();
+  if(!fallbacksOnly) await grids();
 })().catch(error=>failures.push(error.stack||error.message)).finally(async()=>{
   if(browser) await browser.close().catch(error=>failures.push(`Browser cleanup: ${error.message}`));
   let sha=process.env.GITHUB_SHA||null;
   if(!sha) try { sha=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8',stdio:['ignore','pipe','ignore']}).trim(); } catch {}
-  const result={sha,browser:'Chromium; emulated CSS viewports, reduced motion and connection hints',scope:'Homepage hero only; local GET assets; external/API requests blocked; no submissions, providers, database or publication',viewports:rows,states,blocked,pageErrors,failures};
-  fs.writeFileSync(path.join(output,'hero-video-metrics.json'),JSON.stringify(result,null,2));
-  console.log(JSON.stringify({viewports:rows.length,states:states.length,failures,pageErrors,blocked},null,2));
+  const summary=contrastSummary();
+  const failureCategories=Object.fromEntries(['overlayContract','layoutFold','contrast','raster','functional'].map(category=>[category,failureRecords.filter(record=>record.category===category).map(record=>record.message)]));
+  const recorded=new Set(failureRecords.map(record=>record.message));
+  failureCategories.execution=failures.filter(message=>!recorded.has(message));
+  const failureCounts=Object.fromEntries(Object.entries(failureCategories).map(([category,items])=>[category,items.length]));
+  const result={sha,phase:fallbacksOnly?'fallback supplement':'complete hero verification',browser:'Chromium; emulated CSS viewports, reduced motion and connection hints',scope:'Homepage hero only; authorized single uniform 71% black overlay and visible-fold contract; local GET assets; external/API requests blocked; no submissions, providers, database or publication',viewports:rows,states,blocked,pageErrors,failures,failureCategories,failureCounts,contrastSummary:summary};
+  fs.writeFileSync(path.join(output,fallbacksOnly?'fallback-only-metrics.json':'hero-video-metrics.json'),JSON.stringify(result,null,2));
+  fs.writeFileSync(path.join(output,fallbacksOnly?'fallback-only-contrast-summary.json':'contrast-summary.json'),JSON.stringify(summary,null,2));
+  console.log(JSON.stringify({viewports:rows.length,states:states.length,sampledFrames:summary.sampledFrames,failureCount:failures.length,failureCounts,failures:failures.slice(0,12),failedTextFrames:summary.failedTextFrames,minimaByRole:summary.minimaByRole,opaqueWhiteWouldPass:summary.opaqueWhiteHypothesis.wouldPass,pageErrors,blocked},null,2));
   if(failures.length||pageErrors.length) process.exitCode=1;
 });

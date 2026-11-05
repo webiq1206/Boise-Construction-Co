@@ -79,12 +79,12 @@ jobs:
       - name: Bound hero video evidence to 64MiB
         id: hero_video_evidence
         if: always()
-        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/hero-video/*'
+        run: node scripts/branding-ci-evidence-bound.mjs --strict-64m 'test-results/hero-uniform-final/*'
       - name: Upload hero video browser evidence
         if: ${{ always() && steps.hero_video_evidence.outcome == 'success' && steps.hero_video_evidence.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v4
         with:
-          name: hero-video-review-${{ github.sha }}
+          name: hero-uniform-overlay-review-${{ github.sha }}
           path: branding-ci-evidence/complete.tar.gz
           retention-days: 14
           compression-level: 0
