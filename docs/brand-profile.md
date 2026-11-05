@@ -210,3 +210,19 @@ only an occupied bottom action bar, counting each safe area once. Remove the
 900px desktop cap. Retain natural content growth and the320x568 headline/primary
 CTA exception, without clipping or empty spacers. This fold change is independent
 of the separately reviewed overlay. See `docs/hero-fold-20261105.md`.
+
+### November 5 owner correction: uniform black overlay
+
+The later explicit owner correction supersedes all earlier charcoal-gradient,
+localized-scrim and split-photo directions for the homepage hero. Use exactly one
+uniform `#000000` overlay at 60% transparency: `rgba(0, 0, 0, 0.4)`. No gradient,
+charcoal tint, extra accent-line scrim, separate solid text panel or compounded
+overlay. Preserve the approved video, responsive sources, playback/fallback
+controls, content and CTA destinations.
+
+Measure actual text contrast across all approved video scenes. The exact overlay
+must not be secretly increased, compounded or replaced to produce a contrast
+pass. Any conflict with existing brand text requires a precise failed-scene/text
+record and a proposed compliant correction before final acceptance. Current
+record: `docs/hero-overlay-fold-20261105.md`. Scope here is Construction only;
+other websites have separate workers. Publication remains with the owner.
