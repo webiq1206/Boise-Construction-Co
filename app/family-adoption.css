@@ -6,12 +6,28 @@
 /* Construction-owned homepage composition; canonical family chrome stays shared. */
 .home-hero {
   position: relative;
+  --construction-hero-viewport: 100svh;
+  /* Shared observers publish measured heights without their own safe areas. */
+  --construction-hero-header: calc(var(--header-height) + env(safe-area-inset-top, 0px));
+  --construction-hero-bar: calc(var(--bar-height) + env(safe-area-inset-bottom, 0px));
   /* One scale step below the CTA stack token balances this long display title
      inside the measured hero budget without reducing type or section padding. */
   --stack-cta: var(--space-4);
 }
-.home-hero .fam-hero[data-family-hero][data-fit='viewport'] {
+.home-hero .fam-hero[data-family-hero][data-fit='viewport'][data-desktop-from='1180'] {
   align-items: stretch;
+  --fam-hero-available: calc(var(--construction-hero-viewport) - var(--construction-hero-header) - var(--construction-hero-bar));
+  min-height: var(--fam-hero-available);
+}
+@supports (height: 100dvh) {
+  .home-hero { --construction-hero-viewport: 100dvh; }
+}
+/* Hidden controls occupy no visible fold space. The desktop bar is retired at1180px. */
+body:has([data-family-bar][data-state='hidden']) .home-hero {
+  --construction-hero-bar: 0px;
+}
+@media (min-width: 1180px) {
+  .home-hero { --construction-hero-bar: 0px; }
 }
 .home-hero .fam-hero[data-family-hero][data-fit='viewport'] .fam-hero-inner {
   display: flex;

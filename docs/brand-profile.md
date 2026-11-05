@@ -200,3 +200,13 @@ Apply website-design-quality 2.3, its implementation rules and independent
 rendered review, plus organic-ai-search-visibility 1.0.2. See
 `docs/hero-video-20261105.md` for this edit's verification record. Repository
 merge is authorized; Replit import and publication remain with the owner.
+
+### November 5 owner correction: visible fold
+
+The homepage hero reaches the actual visible fold with no proof strip or next
+section peeking into the initial viewport. Use current dynamic viewport height
+when supported with a small-viewport fallback. Subtract the measured header and
+only an occupied bottom action bar, counting each safe area once. Remove the
+900px desktop cap. Retain natural content growth and the320x568 headline/primary
+CTA exception, without clipping or empty spacers. This fold change is independent
+of the separately reviewed overlay. See `docs/hero-fold-20261105.md`.
