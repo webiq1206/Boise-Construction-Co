@@ -48,6 +48,11 @@ interface LandingPageTemplateProps {
    * the hero budget. The whole overview then opens the section below the hero.
    */
   heroLine?: string;
+  /**
+   * Plain answer paragraph placed directly under the H1, above the hero
+   * support line. No card. When set, it is the speakable summary.
+   */
+  answer?: string;
   /** Opt-in composition and enlarged-text containment for the reviewed Boise pages. */
   priorityPlanning?: boolean;
   breadcrumbs: BreadcrumbItem[];
@@ -258,6 +263,7 @@ export function LandingPageTemplate({
   overviewParagraphs,
   overviewEmphasis,
   heroLine,
+  answer,
   priorityPlanning = false,
   breadcrumbs,
   heroImageUrl,
@@ -301,9 +307,13 @@ export function LandingPageTemplate({
           opens the section directly below, unchanged. */}
       <InteriorHero imageSrc={heroImageUrl} imageAlt={heroImageAlt ?? contentImageAlt(heroImageUrl)} layout="split">
           {!priorityPlanning && <HeroBreadcrumbs items={breadcrumbs} />}
-          <p data-speakable="summary" className="sr-only">{speakableSummary}</p>
           {!priorityPlanning && eyebrow && <p className="ed-eyebrow interior-hero-eyebrow">{eyebrow}</p>}
           <h1 className="ed-display ed-statement-display text-inverse-foreground">{h1}</h1>
+          {answer ? (
+            <p className="interior-hero-answer" data-speakable="summary">{answer}</p>
+          ) : (
+            <p data-speakable="summary" className="sr-only">{speakableSummary}</p>
+          )}
           {lead.line && (
             <p className="interior-hero-support">
               <Emphasis text={lead.line} phrase={emphasisInHero ? overviewEmphasis : undefined} />
@@ -315,8 +325,9 @@ export function LandingPageTemplate({
             </p>
           )}
           <div className="interior-hero-actions">
-            <PrimaryCta href={estimateHref ?? '/estimate'} trackingLocation="landing_hero">{CTA_PRIMARY}</PrimaryCta>
-            {!priorityPlanning && <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>}
+            <PrimaryCta href={SITE_CONFIG.phoneHref} trackingLocation="landing_hero">Call or text us about your project.</PrimaryCta>
+            <HeroTextLink href={SITE_CONFIG.phoneSmsHref}>Text {SITE_CONFIG.phone}</HeroTextLink>
+            <HeroTextLink href={estimateHref ?? '/estimate'}>{CTA_PRIMARY}</HeroTextLink>
           </div>
         </InteriorHero>
 
@@ -407,7 +418,11 @@ export function LandingPageTemplate({
                 {benefits.map((item, i) => (
                   <li key={item} className="flex flex-col">
                     <span className="ed-small" style={accent}>{String(i + 1).padStart(2, '0')}</span>
-                    <p className="ed-h4 mt-5 text-pretty">{item}</p>
+                    <p className="ed-h4 mt-5 text-pretty">
+                      {item.includes('Boise ADU Co') ? (
+                        <InlineLinks text={item} links={[{ phrase: 'Boise ADU Co', href: 'https://p5homeco.com/quote/adu' }]} />
+                      ) : item}
+                    </p>
                   </li>
                 ))}
               </ul>

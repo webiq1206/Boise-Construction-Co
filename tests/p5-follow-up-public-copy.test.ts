@@ -127,7 +127,9 @@ test('contractor registration is on the footer, plain on the estimator, and in s
   assert.equal(footer.includes('/re-10-repairs-boise'), false);
   assert.match(footer, /Save our contact/);
   assert.match(footer, /Mon to Fri 9 to 6/);
-  assert.match(footer, /\/services\/adu/);
+  assert.match(footer, /https:\/\/p5homeco\.com\/quote\/adu/);
+  assert.doesNotMatch(footer, /boiseadu\.co/);
+  assert.doesNotMatch(footer, /\/services\/adu/);
   const link = read('components/ContractorRegistration.tsx');
   assert.equal(link.includes('CONTRACTOR_LICENSE_SEARCH_URL'), true);
   assert.match(link, /target="_blank"/);

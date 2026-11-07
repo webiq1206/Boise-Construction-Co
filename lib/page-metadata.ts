@@ -148,12 +148,12 @@ const SERVICE_TITLE_OVERRIDES: Record<string, string> = {
 };
 
 /**
- * Middleton keeps its "custom home builder" title: /areas/middleton is the
- * page closest to page one (position 19.8, "custom home builder middleton"
- * at 10.5 in Search Console to 29 October).
+ * Rendered titles (layout appends " | Boise Construction Co", 24 characters):
+ * Middleton 53, Nampa 49. Both lead with the city plus "Custom Home Builder".
  */
 const AREA_TITLE_OVERRIDES: Record<string, string> = {
-  middleton: 'Custom Home Builder in Middleton, ID',
+  middleton: 'Middleton Custom Home Builder',
+  nampa: 'Nampa Custom Home Builder',
 };
 
 export function buildPageMetadata(input: PageMetaInput): Metadata {
@@ -162,6 +162,10 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
 
   let title: string;
   let description: string;
+  // Absolute titles are the full rendered <title>. The layout template must
+  // not append the brand again (about already names the company; the ADU
+  // hand-off ends in "Boise Construction", not "Boise Construction Co").
+  let titleIsAbsolute = false;
 
   switch (input.kind) {
     case 'home':
@@ -171,9 +175,15 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
     case 'service':
       // Intentional, full titles (no truncation/ellipsis). Each stays <= 60
       // chars once the layout template appends " | Boise Construction Co" (24).
-      title =
-        SERVICE_TITLE_OVERRIDES[input.serviceSlug ?? ''] ??
-        generateSafePageTitle(`${input.serviceName} in the Treasure Valley`);
+      // /services/adu is the exception: its approved title is already complete.
+      if (input.serviceSlug === 'adu') {
+        title = 'ADUs in Boise: Start With Boise ADU Co | Boise Construction';
+        titleIsAbsolute = true;
+      } else {
+        title =
+          SERVICE_TITLE_OVERRIDES[input.serviceSlug ?? ''] ??
+          generateSafePageTitle(`${input.serviceName} in the Treasure Valley`);
+      }
       description = generateMetaDescription({
         serviceName: input.serviceName!,
         serviceSlug: input.serviceSlug!,
@@ -207,9 +217,10 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
     // lib/brand-page-metadata.ts. That layer is gone for this site: the route
     // metadata below is the one source, so an edit here is what renders.
     case 'about':
-      title = 'About Our Boise Home Building Team';
+      title = 'About Boise Construction Co: Treasure Valley Home Builder';
       description =
-        `Learn how ${SITE_CONFIG.name} plans and manages Treasure Valley home builds, from lot evaluation and design through permits, construction and handover.`;
+        'Know where your build stands: one contract, a line-item budget before groundbreaking, lender draw and inspection scheduling, and written progress updates.';
+      titleIsAbsolute = true;
       break;
     case 'contact':
       title = 'Contact a Boise Home Builder';
@@ -226,18 +237,22 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
       description = input.descriptionOverride || '';
   }
 
-  if (input.titleOverride) title = input.titleOverride;
+  if (input.titleOverride) {
+    title = input.titleOverride;
+    titleIsAbsolute = false;
+  }
   if (input.descriptionOverride) description = input.descriptionOverride;
 
   // The root layout template appends the brand; ensure the child title never
   // carries it itself (prevents a duplicated brand in the rendered <title>).
-  title = fitTitle(stripBrandSuffix(title));
+  // Absolute titles are already the full string and must be left intact.
+  title = titleIsAbsolute ? fitTitle(title) : fitTitle(stripBrandSuffix(title));
   description = fitDescription(description);
 
   const ogImage = getDefaultOgImage();
 
   return {
-    title,
+    title: titleIsAbsolute ? { absolute: title } : title,
     description,
     alternates: { canonical, types: FEED_ALTERNATES },
     ...(input.noindex ? { robots: { index: false, follow: true } } : {}),

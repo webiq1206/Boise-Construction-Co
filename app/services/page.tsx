@@ -89,7 +89,19 @@ export default function ServicesIndexPage() {
       </InteriorHero>
 
       {/* Approved photo-led service directory. */}
-      <section className="interior-service-grid" aria-label="All services">{SERVICES.map(service=><Link className="interior-service-card" href={servicePath(service.slug)} key={service.slug}><img src={getServiceBackground(service.slug)} alt={contentImageAlt(getServiceBackground(service.slug)) || service.name} width={900} height={675} loading="lazy"/><div><h2>{serviceLabel(service)}</h2><ArrowRight size={18} aria-hidden="true"/></div><p>{service.shortDescription}</p><p className="interior-price">{planningLabel(service.planningFrom)}</p></Link>)}</section>
+      <section className="interior-service-grid" aria-label="All services">{SERVICES.map(service=>{
+        const handoff=service.slug==='adu';
+        const href=handoff?'https://p5homeco.com/quote/adu':servicePath(service.slug);
+        const body=(<>
+          <img src={getServiceBackground(service.slug)} alt={contentImageAlt(getServiceBackground(service.slug)) || service.name} width={900} height={675} loading="lazy"/>
+          <div><h2>{serviceLabel(service)}</h2><ArrowRight size={18} aria-hidden="true"/></div>
+          <p>{handoff?'Start your ADU request with the right P5 team. ADUs are built by sister company Boise ADU Co, part of P5 Home Co.':service.shortDescription}</p>
+          {!handoff&&<p className="interior-price">{planningLabel(service.planningFrom)}</p>}
+        </>);
+        return handoff
+          ? <a className="interior-service-card" href={href} rel="noopener" key={service.slug}>{body}</a>
+          : <Link className="interior-service-card" href={href} key={service.slug}>{body}</Link>;
+      })}</section>
 
       <EstimatePromptBand
         title={

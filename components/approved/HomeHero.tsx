@@ -34,11 +34,11 @@ export function HomeHero() {
         </section>
       </div>
       {/* Facts this site already publishes, nothing new: the line-item budget, the
-          Friday updates, one accountable team, and the DOPL-linked registration. */}
+          written progress updates, one accountable team, and the DOPL-linked registration. */}
       <ProofStrip
         items={[
           { label: "Budget", text: "Line-item budget before construction" },
-          { label: "Updates", text: "Written updates every Friday" },
+          { label: "Updates", text: "Written progress updates" },
           { label: "One team", text: "One accountable design-build team" },
           {
             label: "Registered",

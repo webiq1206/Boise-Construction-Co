@@ -1,5 +1,4 @@
 import { SiteFooter } from "@/components/family/SiteFooter";
-import Link from "next/link";
 
 /**
  * Boise Construction Co footer: the shared family SiteFooter, set up by
@@ -19,8 +18,7 @@ export function Footer() {
     <SiteFooter
       brandExtra={
         <p className="fam-footer-tagline footer-adu-note" data-testid="footer-adu-note">
-          Explore our{" "}
-          <Link href="/services/adu">ADUs &amp; guest houses</Link>
+          <a href="https://p5homeco.com/quote/adu" rel="noopener">ADUs: Boise ADU Co</a>
         </p>
       }
     />

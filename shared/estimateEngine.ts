@@ -1700,7 +1700,7 @@ export const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, Price
   adu: {
     "mid-range": {
       low: 155000, high: 221000, roi: 70,
-      included: ["Full design-build ADU", "Mid-range kitchen and bath finishes", "Separate HVAC system", "Permit coordination through CO"],
+      included: ["Complete ADU scope by Boise ADU Co", "Mid-range kitchen and bath finishes", "Separate HVAC system", "Permit coordination through CO"],
     },
     "high-end": {
       low: 221000, high: 309000, roi: 65,

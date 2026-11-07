@@ -1,5 +1,8 @@
 import { SERVICE_SCENES } from '@/shared/serviceSceneImages';
-import { InteriorPage } from '@/components/approved/InteriorLayout';
+import { InteriorHero, InteriorPage } from '@/components/approved/InteriorLayout';
+import { PrimaryCta } from '@/components/approved/PrimaryCta';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { Section } from '@/components/marketing/Section';
 import { JsonLd } from '@/components/seo/JsonLd';
 import {
 LandingPageTemplate,
@@ -21,6 +24,25 @@ import { getScopeSplitSection,SERVICE_SEO_CONTENT } from '@/shared/seoContent';
 import { getServiceImageSet } from '@/shared/serviceBackgrounds';
 import { CONSTRUCTION_IMAGES } from '@/shared/siteImages';
 import { notFound } from 'next/navigation';
+
+const ADU_QUOTE_URL = 'https://p5homeco.com/quote/adu';
+const ADU_QUOTE_PHRASE = 'p5homeco.com/quote/adu';
+
+function QuotePhrase({ text }: { text: string }) {
+  const parts = text.split(ADU_QUOTE_PHRASE);
+  return (
+    <>
+      {parts.map((part, index) => (
+        <span key={index}>
+          {part}
+          {index < parts.length - 1 ? (
+            <a href={ADU_QUOTE_URL} rel="noopener">{ADU_QUOTE_PHRASE}</a>
+          ) : null}
+        </span>
+      ))}
+    </>
+  );
+}
 
 export function generateStaticParams() {
   return SERVICE_SLUGS.map((slug) => ({ slug }));
@@ -50,6 +72,53 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
 
   const path = servicePath(service.slug);
   const faqs = content.faqs;
+
+  // Hand-off page. One H1, one CTA, two FAQs. No build, cost, or setback copy,
+  // and no page-level Call, Text, or consultation action.
+  if (service.slug === 'adu') {
+    const schemas = [
+      landingBreadcrumbs([
+        { name: 'Home', url: '/' },
+        { name: 'Services', url: '/services' },
+        { name: service.name, url: path },
+      ]),
+      landingFAQSchema(faqs),
+      generateSpeakableSchema({ path, name: content.headline }),
+    ];
+    return (
+      <InteriorPage kind="services">
+        <>
+          <JsonLd data={schemas} />
+          <InteriorHero layout="editorial">
+            <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Services', href: '/services' }, { name: 'ADUs' }]} />
+            <h1 className="ed-display ed-statement-display text-inverse-foreground">{content.headline}</h1>
+            <p className="interior-hero-answer" data-speakable="summary">{content.overview}</p>
+            <div className="interior-hero-actions">
+              <PrimaryCta href={ADU_QUOTE_URL} trackingLocation="adu_handoff">Start your ADU request</PrimaryCta>
+            </div>
+          </InteriorHero>
+          <Section divider>
+            <div className="ed-shell">
+              <div className="ed-split ed-split-narrow">
+                <div className="lg:sticky lg:top-28 lg:self-start">
+                  <p className="ed-eyebrow">Common questions</p>
+                  <h2 className="ed-h2 ed-statement">Frequently asked questions</h2>
+                </div>
+                <div className="divide-y divide-border border-y border-border">
+                  {faqs.map((faq) => (
+                    <details key={faq.question} className="group py-4" open>
+                      <summary className="cursor-pointer ed-h4 py-2">{faq.question}</summary>
+                      <p className="ed-body mt-3 pb-2"><QuotePhrase text={faq.answer} /></p>
+                    </details>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Section>
+        </>
+      </InteriorPage>
+    );
+  }
   const images = getServiceImageSet(service.slug);
   const featuredProject = getFeaturedGalleryProject(service.slug);
   const serviceLC = serviceNameInSentence(service.name);
@@ -178,7 +247,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
       heading: `Why design-build for your ${serviceLC}`,
       paragraphs: [
         `As a design-build home builder, we bring architectural design, engineering, estimating, permitting, and construction under one contract and one accountable team. That removes the handoffs and finger-pointing that happen when the architect, the plan reviewer, and the general contractor all answer to someone different - and it keeps your ${serviceLC} on a single, coordinated schedule.`,
-        // The line-item budget, allowances, weekly updates, and warranty are
+        // The line-item budget, allowances, written progress updates, and warranty are
         // already stated as scannable bullets above (benefits/inclusions) -
         // restating them here in prose was pure repetition. This paragraph
         // now adds only what those lists don't: the fixed-price framing and

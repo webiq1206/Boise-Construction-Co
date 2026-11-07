@@ -16,7 +16,8 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
     const copy = getAreaCityCopy(slug);
     assert.ok(copy, slug);
     assert.equal(getAreaIntro(city), copy.intro);
-    assert.equal(copy.faqs.length, slug === 'middleton' ? 9 : 7);
+    const appended = slug === 'middleton' || slug === 'nampa' ? 2 : 0;
+    assert.equal(copy.faqs.length, (slug === 'middleton' ? 9 : 7) + appended);
     if (slug === 'middleton') {
       assert.equal(copy.lead?.join(' '), copy.intro);
       assert.match(copy.intro, /Looking for a custom home builder in Middleton\?/);
@@ -41,6 +42,21 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
     assert.doesNotMatch(copy.faqs[1].answer, /(?:we(?:'|’)re|we are|the company is|fully) licensed|licensed, bonded|carries a license/i);
     assert.match(copy.faqs[1].answer, /bond/i);
     assert.match(copy.faqs[1].answer, /insur/i);
+    if (slug === 'middleton') {
+      assert.equal(copy.faqs[9].question, 'Can you build on land I already own in Middleton?');
+      assert.equal(copy.faqs[9].answer, 'Yes. We build fully custom homes, semi-custom plans and homes on land you already own, and we check whether your address goes through the city or Canyon County at the first visit.');
+      assert.equal(copy.faqs[10].question, 'What warranty comes with a new home?');
+      assert.equal(copy.faqs[10].answer, 'New builds carry a written workmanship warranty from Boise Construction Co.');
+      assert.doesNotMatch(copy.faqs[10].answer, /\d+\s*-?\s*year/i);
+    }
+    if (slug === 'nampa') {
+      assert.doesNotMatch(copy.faqs[2].answer, /60 to 90/);
+      assert.doesNotMatch(copy.faqs[5].answer, /\$10/);
+      assert.equal(copy.faqs[7].question, 'Can you build on acreage near Nampa?');
+      assert.equal(copy.faqs[7].answer, 'Yes. We build on serviced subdivision lots and nearby acreage, and site costs are itemized before construction starts.');
+      assert.equal(copy.faqs[8].question, 'What happens at the in-home consultation?');
+      assert.equal(copy.faqs[8].answer, 'We discuss your plans, site needs and design direction so you can understand the next steps.');
+    }
     assert.doesNotMatch(copy.intro + copy.faqs.map((f) => f.question + f.answer).join(' '), /Jared/);
     const schema = landingFAQSchema(copy.faqs) as {
       mainEntity: Array<{ name: string; acceptedAnswer: { text: string } }>;

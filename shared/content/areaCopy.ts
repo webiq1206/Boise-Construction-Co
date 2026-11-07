@@ -18,13 +18,13 @@ export interface AreaCityCopy {
 
 const MIDDLETON_LEAD = [
   'Looking for a custom home builder in Middleton? Boise Construction Co is a design-build home builder serving Middleton and Canyon County. We build fully custom homes, semi-custom plans, and homes on land you already own - with one accountable team from feasibility through the final walkthrough.',
-  'Middleton is a homeowner\'s town: about 90% of occupied homes are owner-occupied, and nearly half of all housing (47%) has been built since 2010, per Census ACS 2020–2024 estimates. We build for clients here and throughout Canyon County. Addresses outside city limits go through the county instead; we check this for you at the first visit.',
+  'Middleton is a homeowner\'s town: about 90% of occupied homes are owner-occupied, and nearly half of all housing (47%) has been built since 2010, per Census ACS 2020 to 2024 estimates. We build for clients here and throughout Canyon County. Addresses outside city limits go through the county instead; we check this for you at the first visit.',
 ] as const;
 
 const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
   boise: {
     intro:
-      'Building new in Boise usually means working with what is already there. Census estimates for 2020–2024 put the median Boise home at 1986 vintage, and about 64% of the city\'s housing is detached single-family, so many new homes here go on infill lots between established houses. Boise Construction Co handles design, engineering, permitting with the city, and construction under one design-build contract, with a written line-item scope before the foundation is poured.',
+      'Building new in Boise usually means working with what is already there. Census estimates for 2020 to 2024 put the median Boise home at 1986 vintage, and about 64% of the city\'s housing is detached single-family, so many new homes here go on infill lots between established houses. Boise Construction Co handles design, engineering, permitting with the city, and construction under one design-build contract, with a written line-item scope before the foundation is poured.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -59,13 +59,13 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Does an older Boise house change how a structural addition is planned?',
         answer:
-          'Often. About 42% of Boise homes were built before 1980 (Census ACS 2020–2024), and a structural addition has to tie into the existing framing, the existing utilities, and the way the household already lives. In a Boise historic district, windows, siding, and similar exterior work also need a Certificate of Appropriateness from Planning before the building permit, per the city\'s homeowner guide.',
+          'Often. About 42% of Boise homes were built before 1980 (Census ACS 2020 to 2024), and a structural addition has to tie into the existing framing, the existing utilities, and the way the household already lives. In a Boise historic district, windows, siding, and similar exterior work also need a Certificate of Appropriateness from Planning before the building permit, per the city\'s homeowner guide.',
       },
     ],
   },
   meridian: {
     intro:
-      'Meridian is one of the newest housing markets we work in. The Census Bureau\'s 2020–2024 estimates put the city\'s median home at 2007, and close to 82% of homes are detached single-family houses. Boise Construction Co, a service-area builder based in Meridian, plans and builds custom and semi-custom homes here with one accountable design-build team, from lot review and design through the city permit and the final walkthrough.',
+      'Meridian is one of the newest housing markets we work in. The Census Bureau\'s 2020 to 2024 estimates put the city\'s median home at 2007, and close to 82% of homes are detached single-family houses. Boise Construction Co, a service-area builder based in Meridian, plans and builds custom and semi-custom homes here with one accountable design-build team, from lot review and design through the city permit and the final walkthrough.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -95,7 +95,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'What city fees belong in a Meridian new-home budget?',
         answer:
-          'Meridian\'s published fee schedule lists a $150 non-refundable application fee for new residential projects, applied to the building permit, and a permit fee of $50 plus $5.50 per $1,000 of project value. Impact fees scale with climate-controlled floor area; for a 1,701–2,500 sq ft home the schedule shows $995 fire, $4,119 parks, and $402 police. Confirm current amounts with the city before you budget.',
+          'Meridian\'s published fee schedule lists a $150 non-refundable application fee for new residential projects, applied to the building permit, and a permit fee of $50 plus $5.50 per $1,000 of project value. Impact fees scale with climate-controlled floor area; for a 1,701 to 2,500 sq ft home the schedule shows $995 fire, $4,119 parks, and $402 police. Confirm current amounts with the city before you budget.',
       },
       {
         question: 'How deep do foundations go in Meridian?',
@@ -106,7 +106,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
   },
   nampa: {
     intro:
-      'Nampa mixes older and newer housing more than most Treasure Valley cities. Census figures for 2020–2024 show about 26% of its homes built before 1980 and roughly 22% built since 2010. We build new homes across Nampa and Canyon County, from fully custom designs to houses on land you already own, and one team carries each project from drawings to keys.',
+      'Nampa mixes older and newer housing more than most Treasure Valley cities. Census figures for 2020 to 2024 show about 26% of its homes built before 1980 and roughly 22% built since 2010. We build new homes across Nampa and Canyon County, from fully custom designs to houses on land you already own, and one team carries each project from drawings to keys.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -121,7 +121,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'How do I start a project?',
         answer:
-          'Pick whichever is easiest: a phone call, a quote request, or a free consultation scheduled through our site. Our free in-home visit runs 60 to 90 minutes and covers planning guidance and design direction, with no obligation.',
+          'Pick whichever is easiest: a phone call, a quote request, or a free consultation scheduled through our site. The consultation covers planning guidance and design direction, with no obligation.',
       },
       {
         question: 'Do you build in Nampa, Idaho?',
@@ -136,18 +136,28 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Which Nampa projects need a building permit?',
         answer:
-          'Nampa\'s residential FAQ lists new one- and two-family dwellings, finishing an attic, garage, or basement, decks more than 12 inches high, re-roofing, siding or stucco replacement, and detached sheds over 200 sq ft, or of any size if hardwired for 120 V. Residential fences need a separate $10 Planning and Zoning fence permit.',
+          'Nampa\'s residential FAQ lists new one- and two-family dwellings, finishing an attic, garage, or basement, decks more than 12 inches high, re-roofing, siding or stucco replacement, and detached sheds over 200 sq ft, or of any size if hardwired for 120 V. Residential fences need a separate Planning and Zoning fence permit.',
       },
       {
         question: 'How does Nampa\'s climate shape a new home?',
         answer:
-          'NOAA\'s 1991–2020 normals for the Nampa Sugar Factory station show about 11 inches of precipitation a year, roughly 59 days at 90°F or hotter, and 132 nights at or below freezing. That mix of heat and frost is why our Nampa designs pay close attention to insulation levels, window specification, and an envelope built for freeze-thaw cycles.',
+          'NOAA\'s 1991 to 2020 normals for the Nampa Sugar Factory station show about 11 inches of precipitation a year, roughly 59 days at 90°F or hotter, and 132 nights at or below freezing. That mix of heat and frost is why our Nampa designs pay close attention to insulation levels, window specification, and an envelope built for freeze-thaw cycles.',
+      },
+      {
+        question: 'Can you build on acreage near Nampa?',
+        answer:
+          'Yes. We build on serviced subdivision lots and nearby acreage, and site costs are itemized before construction starts.',
+      },
+      {
+        question: 'What happens at the in-home consultation?',
+        answer:
+          'We discuss your plans, site needs and design direction so you can understand the next steps.',
       },
     ],
   },
   eagle: {
     intro:
-      'Eagle homeowners tend to build for the long haul: 84% of occupied homes in the city are owner-occupied, and 43% of its housing has gone up since 2010, per Census ACS 2020–2024. Boise Construction Co designs and builds custom homes, semi-custom homes, and shop homes in Eagle, including foothills parcels where slope and access drive the budget, keeping design, permits, and construction under a single contract.',
+      'Eagle homeowners tend to build for the long haul: 84% of occupied homes in the city are owner-occupied, and 43% of its housing has gone up since 2010, per Census ACS 2020 to 2024. Boise Construction Co designs and builds custom homes, semi-custom homes, and shop homes in Eagle, including foothills parcels where slope and access drive the budget, keeping design, permits, and construction under a single contract.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -188,7 +198,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
   },
   kuna: {
     intro:
-      'Kuna is overwhelmingly a single-family town: 92% of its homes are detached houses, and the median home dates to 2008, based on Census ACS 2020–2024 estimates. Our design-build team takes Kuna clients through it, whether that means a fully custom design, a personalized semi-custom plan, or a house on land you already own, with one accountable contact from feasibility to keys.',
+      'Kuna is overwhelmingly a single-family town: 92% of its homes are detached houses, and the median home dates to 2008, based on Census ACS 2020 to 2024 estimates. Our design-build team takes Kuna clients through it, whether that means a fully custom design, a personalized semi-custom plan, or a house on land you already own, with one accountable contact from feasibility to keys.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -229,7 +239,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
   },
   caldwell: {
     intro:
-      'Caldwell\'s housing covers a wide span of eras, with roughly 29% of homes built before 1980 and about 32% since 2010 (Census ACS 2020–2024). Boise Construction Co builds new homes for Caldwell and Canyon County clients, from blank-page custom designs to semi-custom plans and homes on your own land, and every Caldwell build starts from a written, line-item scope.',
+      'Caldwell\'s housing covers a wide span of eras, with roughly 29% of homes built before 1980 and about 32% since 2010 (Census ACS 2020 to 2024). Boise Construction Co builds new homes for Caldwell and Canyon County clients, from blank-page custom designs to semi-custom plans and homes on your own land, and every Caldwell build starts from a written, line-item scope.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -264,13 +274,13 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'How are Caldwell building permit fees calculated?',
         answer:
-          'Under the city\'s FY2026 schedule (Resolution 300-25), the permit fee comes from total project valuation: for example, $846.27 plus about 0.45% of value above $100,000 in the $100,000–$499,999 range. Residential plan review adds 40% of the permit fee, Planning and Zoning review 35% (minimum $55), and engineering review 20%.',
+          'Under the city\'s FY2026 schedule (Resolution 300-25), the permit fee comes from total project valuation: for example, $846.27 plus about 0.45% of value above $100,000 in the $100,000 to $499,999 range. Residential plan review adds 40% of the permit fee, Planning and Zoning review 35% (minimum $55), and engineering review 20%.',
       },
     ],
   },
   star: {
     intro:
-      'Star is the newest city on our service map: its median home was built in 2011, and about 22% of homes date from 2020 or later, according to Census ACS 2020–2024 estimates. In Star we build custom and semi-custom homes and houses on clients\' own land, planned by one design-build team covering design, engineering, the city permit, and construction.',
+      'Star is the newest city on our service map: its median home was built in 2011, and about 22% of homes date from 2020 or later, according to Census ACS 2020 to 2024 estimates. In Star we build custom and semi-custom homes and houses on clients\' own land, planned by one design-build team covering design, engineering, the city permit, and construction.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -346,7 +356,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'How much heating does a Middleton home need?',
         answer:
-          'Plenty. The closest long-term NOAA station sits at the Nampa Sugar Factory, about 7 miles from Middleton to the south-southeast, and it logs roughly 5,550 heating degree days a year in its 1991–2020 normals, plus about 13 days whose high stays below freezing. That\'s why insulation, air sealing, and window choices get early attention in our designs, and our energy-efficient homes are verified with blower-door testing.',
+          'Plenty. The closest long-term NOAA station sits at the Nampa Sugar Factory, about 7 miles from Middleton to the south-southeast, and it logs roughly 5,550 heating degree days a year in its 1991 to 2020 normals, plus about 13 days whose high stays below freezing. That\'s why insulation, air sealing, and window choices get early attention in our designs, and our energy-efficient homes are verified with blower-door testing.',
       },
       {
         question: 'Do you build custom homes in Middleton?',
@@ -364,11 +374,21 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
         answer:
           'Homeowners who want a home designed from a blank page, an adapted plan, or a build on land they already own, not a catalog-only production home. Start with a free planning consultation or request a quote.',
       },
+      {
+        question: 'Can you build on land I already own in Middleton?',
+        answer:
+          'Yes. We build fully custom homes, semi-custom plans and homes on land you already own, and we check whether your address goes through the city or Canyon County at the first visit.',
+      },
+      {
+        question: 'What warranty comes with a new home?',
+        answer:
+          'New builds carry a written workmanship warranty from Boise Construction Co.',
+      },
     ],
   },
   'garden-city': {
     intro:
-      'Garden City\'s housing is a mix: Census ACS 2020–2024 estimates put detached single-family homes at about 51% of units, with attached houses, apartments, and manufactured homes making up the rest, and a median build year of 1995. Boise Construction Co builds new homes here and across Ada County: fully custom homes, semi-custom plans, and houses on land you already own, each run by one accountable team from feasibility to the final walkthrough.',
+      'Garden City\'s housing is a mix: Census ACS 2020 to 2024 estimates put detached single-family homes at about 51% of units, with attached houses, apartments, and manufactured homes making up the rest, and a median build year of 1995. Boise Construction Co builds new homes here and across Ada County: fully custom homes, semi-custom plans, and houses on land you already own, each run by one accountable team from feasibility to the final walkthrough.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -403,7 +423,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'What kind of housing is in Garden City?',
         answer:
-          'A real mix. Census ACS 2020–2024 estimates show about 14% of Garden City\'s homes are mobile or manufactured homes, 13.5% are attached single-family houses, and roughly 22% are in buildings with two or more units. The city also requires engineering drawings for structural changes to a manufactured or mobile home. That variety shapes what a lot can hold, which is why we evaluate each parcel first.',
+          'A real mix. Census ACS 2020 to 2024 estimates show about 14% of Garden City\'s homes are mobile or manufactured homes, 13.5% are attached single-family houses, and roughly 22% are in buildings with two or more units. The city also requires engineering drawings for structural changes to a manufactured or mobile home. That variety shapes what a lot can hold, which is why we evaluate each parcel first.',
       },
     ],
   },

@@ -66,7 +66,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       'One team and one contract from feasibility through final walkthrough',
       'Line-item budget you can see, not a single lump-sum number',
       'Allowance amounts set from real local pricing, not placeholder figures',
-      'Written weekly schedule and cost updates for the life of the build',
+      'Written progress updates for the life of the build',
     ],
     inclusions: [
       'Site and soils review before design begins',
@@ -92,7 +92,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       },
       {
         title: 'Build and handover',
-        description: 'Weekly updates through construction, then testing, walkthrough, and your warranty documents.',
+        description: 'Written progress updates through construction, then testing, walkthrough, and your warranty documents.',
       },
     ],
     faqs: [
@@ -119,7 +119,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How do you handle budget changes during construction?',
         answer:
-          'Every change is priced and approved in writing before the work happens. You see the running cost against the original line-item budget in your weekly update, so there is no reconciliation surprise at the end.',
+          'Every change is priced and approved in writing before the work happens. You see the running cost against the original line-item budget in your written progress updates, so there is no reconciliation surprise at the end.',
       },
       {
         question: 'Do you build on rural acreage outside city limits?',
@@ -468,16 +468,16 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   adu: {
     slug: 'adu',
     name: 'ADUs & Guest Houses',
-    headline: 'Detached ADU builder in Boise, Idaho',
-    primaryKeyword: 'detached adu builder boise idaho',
-    heroLine: 'New detached ADUs and guest houses, built as separate structures on the lot you already own.',
+    headline: 'Start your ADU request with Boise ADU Co',
+    primaryKeyword: 'adu builder boise',
+    heroLine:
+      'Start your ADU request with the right P5 team. ADUs are built by sister company Boise ADU Co, part of P5 Home Co. Tell the team about your ADU or guest house through the P5 intake page, with a written scope before the work is priced.',
     overview:
-      'Detached ADU builder in Boise, Idaho: Boise Construction Co plans and builds new accessory dwellings and guest houses as separate structures on the lot you already own, from feasibility and design through permits and construction.',
+      'Start your ADU request with the right P5 team. ADUs are built by sister company Boise ADU Co, part of P5 Home Co. Tell the team about your ADU or guest house through the P5 intake page, with a written scope before the work is priced.',
     benefits: [
       'Feasibility before design, so setbacks and utilities shape the plan',
       'One accountable team from drawings through the final walkthrough',
       'Line-item budget with written allowances before construction',
-      'Boise ADU Co projects currently run through Boise Construction Co',
     ],
     inclusions: [
       'Property and setback review for an accessory dwelling',
@@ -508,31 +508,14 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     ],
     faqs: [
       {
-        question: 'Who builds ADUs in Boise?',
+        question: 'Does Boise Construction Co build ADUs?',
         answer:
-          'Boise Construction Co builds new detached ADUs and guest houses across the Treasure Valley. Garage and basement conversions are remodeling work, handled by Boise Remodeling Co.',
-      },
-      {
-        question: 'Can every lot have an ADU?',
-        answer:
-          'No. Feasibility depends on setbacks, lot coverage, utilities, access, and local rules. A site review answers those questions before design starts.',
-      },
-      {
-        question: 'How much does an ADU cost in the Treasure Valley?',
-        answer:
-          'Cost depends on size, utility extensions, site work, and finishes. We price after a site review rather than quoting a square-foot number without seeing the lot. Request a quote and we reply within one business day.',
-        links: [{ phrase: 'Request a quote', href: '/estimate' }],
-      },
-      {
-        question: 'Do ADUs need permits in Boise and Ada County?',
-        answer:
-          'Yes. Most accessory dwellings need plans and a building permit, and some parcels need separate utility or driveway approvals. We coordinate the local path as part of the project.',
+          'No. ADUs are built by sister company Boise ADU Co, part of P5 Home Co. Start your ADU request at p5homeco.com/quote/adu.',
       },
       {
         question: 'How do I start an ADU project?',
         answer:
-          'Request a quote with your address and intended use. We review what the property allows, then outline design, permits, and a planning budget before construction.',
-        links: [{ phrase: 'Request a quote', href: '/estimate' }],
+          'Send one request at p5homeco.com/quote/adu. It reaches Boise ADU Co, and you get a written scope before any price.',
       },
     ],
     costGuidance: {
@@ -875,10 +858,10 @@ export function getAreaIntro(city: CityData): string {
 export const REMODELING_SITE_URL = 'https://boiseremodeling.co';
 
 /**
- * The ADU and additions split between the two P5 Home Co sites, stated on the
- * page: this site builds new detached ADUs and structural additions (new
- * footprint, second stories); Boise Remodeling Co handles interior remodels,
- * garage or basement ADU conversions and work inside the existing footprint.
+ * The ADU and additions split, stated on the page: ADUs are built by sister
+ * company Boise ADU Co, part of P5 Home Co. Structural additions are new
+ * footprint or a second story. Boise Remodeling Co handles interior remodels,
+ * garage or basement conversions, and work inside the existing footprint.
  * One followed contextual link to boiseremodeling.co, never more.
  */
 export function getScopeSplitSection(serviceSlug: string, cityName?: string): LandingSection | undefined {
@@ -887,10 +870,13 @@ export function getScopeSplitSection(serviceSlug: string, cityName?: string): La
     return {
       heading: `New detached ADUs${where}, not conversions`,
       paragraphs: [
-        `Boise Construction Co builds new detached ADUs and guest houses${where}: a separate dwelling on the lot you already own, from setbacks and utilities through permits and construction.`,
-        'Converting a garage or a basement into an attached ADU, or remodeling rooms inside the house, is interior work. Our sister company Boise Remodeling Co handles those projects.',
+        'Detached ADUs start at p5homeco.com/quote/adu.',
+        'Converting a garage or a basement into an attached ADU, or remodeling rooms inside the house, is interior work. Sister company Boise Remodeling Co handles those projects.',
       ],
-      paragraphLinks: [undefined, [{ phrase: 'Boise Remodeling Co', href: REMODELING_SITE_URL }]],
+      paragraphLinks: [
+        [{ phrase: 'p5homeco.com/quote/adu', href: 'https://p5homeco.com/quote/adu' }],
+        [{ phrase: 'Boise Remodeling Co', href: REMODELING_SITE_URL }],
+      ],
     };
   }
   if (serviceSlug === 'home-additions') {
@@ -898,7 +884,7 @@ export function getScopeSplitSection(serviceSlug: string, cityName?: string): La
       heading: `Structural additions${where}: new footprint or a second story`,
       paragraphs: [
         `Boise Construction Co builds structural home additions${where}: new footprint on the lot or a second story over the house you already live in, tied into the existing structure, roofline and utilities.`,
-        'Reworking rooms inside the existing footprint, such as a kitchen, a bathroom or a basement finish, is interior remodeling. Our sister company Boise Remodeling Co handles that work.',
+        'Reworking rooms inside the existing footprint, such as a kitchen, a bathroom or a basement finish, is interior remodeling. Sister company Boise Remodeling Co handles that work.',
       ],
       paragraphLinks: [undefined, [{ phrase: 'Boise Remodeling Co', href: REMODELING_SITE_URL }]],
     };
@@ -917,7 +903,7 @@ export function getCityServiceIntro(
   const fact = localFact
     ? ` ${localFact}`
     : ` We know ${county} plan review requirements, impact fees, and the lot conditions common around ${city.name}.`;
-  return `Planning ${service.name.toLowerCase()} in ${city.name}, Idaho?${fact} Boise Construction Co works design-build, with a line-item budget, weekly written updates, and a written workmanship warranty. Book a free planning consultation or use our estimator for a planning range.`;
+  return `Planning ${service.name.toLowerCase()} in ${city.name}, Idaho?${fact} Boise Construction Co works design-build, with a line-item budget, written progress updates, and a written workmanship warranty. Book a free planning consultation or use our estimator for a planning range.`;
 }
 
 export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): FAQItem[] {
@@ -1047,7 +1033,8 @@ export const AREA_PAGE_FAQS: FAQItem[] = [
   {
     question: 'What kinds of homes do you build?',
     answer:
-      'Fully custom homes, semi-custom homes from adapted plans, builds on land you already own, shop homes, and ADUs. We also provide design and lot evaluation as standalone services.',
+      'Fully custom homes, semi-custom homes from adapted plans, builds on land you already own, and shop homes. ADUs are built by sister company Boise ADU Co, part of P5 Home Co. We also provide design and lot evaluation as standalone services.',
+    links: [{ phrase: 'Boise ADU Co', href: 'https://p5homeco.com/quote/adu' }],
   },
   {
     question: 'Are you a registered contractor and insured?',
@@ -1070,7 +1057,7 @@ export const HOMEPAGE_FAQS_FOR_SCHEMA: FAQItem[] = [
   {
     question: 'How are you different from other home builders in the Treasure Valley?',
     answer:
-      'We publish our numbers. You get a line-item budget rather than a lump sum, allowance amounts based on real local pricing, and a written weekly cost and schedule update for the life of the build.',
+      'We publish our numbers. You get a line-item budget rather than a lump sum, allowance amounts based on real local pricing, and written progress updates for the life of the build.',
   },
   {
     question: 'What areas do you serve?',
