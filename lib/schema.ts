@@ -90,6 +90,13 @@ const LOGO_URL = `${baseUrl}${PUBLIC_MARK_PATH}`;
 const LOGO_SIZE = 512;
 
 /**
+ * Organization JSON-LD only. Visible pages and meta descriptions do not read
+ * this sentence. FOUNDING.schemaDescription stays the gated source text.
+ */
+export const ORGANIZATION_DESCRIPTION =
+  'Design-build home builder serving the Treasure Valley. Custom homes, semi-custom homes, builds on client-owned land, and shop homes. Insured, with written line-item budgets before construction.';
+
+/**
  * Generate LocalBusiness schema for homepage and location pages
  */
 /**
@@ -281,7 +288,7 @@ export function generateOrganizationSchema(): SchemaContext {
       width: LOGO_SIZE,
       height: LOGO_SIZE,
     },
-    description: FOUNDING.schemaDescription,
+    description: ORGANIZATION_DESCRIPTION,
     hasCredential: CONTRACTOR_CREDENTIAL,
     ...(SHOW_FOUNDING_YEAR ? { foundingDate: BUSINESS_INFO.founded } : {}),
     // founder is gated: only emitted once a real named founder is supplied in

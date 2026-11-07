@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { generateHomePageSchemaGraph, generateLocalBusinessSchema, generateOrganizationSchema, generateReviewSchema } from '../lib/schema.ts';
+import { generateHomePageSchemaGraph, generateLocalBusinessSchema, generateOrganizationSchema, generateReviewSchema, ORGANIZATION_DESCRIPTION } from '../lib/schema.ts';
 import { BRAND_SAME_AS, P5_SAME_AS } from '../lib/seo.ts';
 import { CITIES, SERVICES } from '../shared/contentData.ts';
 import { HOMEPAGE_FAQS, INITIAL_FAQ_COUNT } from '../shared/homepageFaqs.ts';
@@ -102,6 +102,13 @@ test('homepage JSON-LD is valid, has one business node, and does not repeat an @
   assert.equal(new Set(ids).size, ids.length);
 
   const organization = generateOrganizationSchema();
+  assert.equal(
+    organization.description,
+    'Design-build home builder serving the Treasure Valley. Custom homes, semi-custom homes, builds on client-owned land, and shop homes. Insured, with written line-item budgets before construction.',
+  );
+  assert.equal(organization.description, ORGANIZATION_DESCRIPTION);
+  assert.equal(String(organization.description).includes('Bonded'), false);
+  assert.equal(organization.hasCredential && (organization.hasCredential as { identifier?: string }).identifier, '8381215');
   assert.deepEqual(organization.parentOrganization, { '@id': 'https://p5homeco.com/#business' });
   const review = generateReviewSchema([{ author: 'Pat', rating: 5, text: 'Helpful' }]);
   assert.equal('aggregateRating' in review, false);
