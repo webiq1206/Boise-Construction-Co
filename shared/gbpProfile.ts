@@ -400,7 +400,7 @@ export const GBP_POSTS_STARTER: GbpPost[] = [
   {
     week: 1,
     headline: 'Custom home building in Boise',
-    body: 'Line-item budget before construction, weekly written cost and schedule updates, and a written workmanship warranty.',
+    body: 'Line-item budget before construction, written cost and schedule updates, and a written workmanship warranty.',
     buttonLabel: 'Learn more',
     buttonUrl: `${SITE}/services/custom-home-builder/boise`,
     photoHint: 'Best completed home exterior',
