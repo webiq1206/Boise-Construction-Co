@@ -26,7 +26,7 @@ const ABOUT_FAQS = [
   {
     question: 'What is Boise Construction Co?',
     answer:
-      'Boise Construction Co is a design-build home builder in Meridian, Idaho, and one of the companies of P5 Home Co. It builds custom and semi-custom homes across the Treasure Valley. ADUs are built by our sister company Boise ADU Co, part of P5 Home Co.',
+      'Boise Construction Co is a design-build home builder in Meridian, Idaho, and one of the companies of P5 Home Co. It builds custom and semi-custom homes across the Treasure Valley. ADUs are built by sister company Boise ADU Co, part of P5 Home Co.',
   },
   {
     question: 'Who runs Boise Construction Co?',
@@ -103,7 +103,7 @@ export default function AboutPage() {
     generateWebPageSchema({
       title: `About ${SITE_CONFIG.name}`,
       description:
-        'About Boise Construction Co: founder Nick Perkins, custom and semi-custom homes across the Treasure Valley. ADUs are built by our sister company Boise ADU Co, part of P5 Home Co.',
+        'About Boise Construction Co: founder Nick Perkins, custom and semi-custom homes across the Treasure Valley. ADUs are built by sister company Boise ADU Co, part of P5 Home Co.',
       url: '/about',
       speakable: true,
     }),
@@ -183,7 +183,7 @@ export default function AboutPage() {
                 <div className="lg:sticky lg:top-28 lg:self-start">
                   <p className="ed-eyebrow">What we build</p>
                   <h2 className="ed-h2 ed-statement">
-                    Custom homes and semi-custom homes. ADUs are built by our sister company{' '}
+                    Custom homes and semi-custom homes. ADUs are built by sister company{' '}
                     <a href="https://p5homeco.com/quote/adu" rel="noopener" className="underline underline-offset-2">Boise ADU Co</a>
                     , part of P5 Home Co.
                   </h2>

@@ -26,7 +26,7 @@ export const SERVICE_META_DESCRIPTIONS: Record<string, string> = {
     'Custom home plans and design in Idaho: architectural design, engineering and permit-ready drawings for a home built to your site, as a standalone service.',
   'home-additions':
     'Structural home additions in Boise and the Treasure Valley: new footprint or a second story, planned around the structure and utilities already in place.',
-  adu: 'Start your Boise ADU request with the right P5 team. Our sister company Boise ADU Co plans and builds ADUs. Begin at p5homeco.com/quote/adu with your project.',
+  adu: 'Start your Boise ADU request with the right P5 team. Sister company Boise ADU Co plans and builds ADUs. Begin at p5homeco.com/quote/adu with your project.',
   'lot-evaluation':
     'Lot evaluation and feasibility in Idaho before you buy: soils, utilities, access, setbacks and slope reviewed in a written report, starting from $950.',
   'shop-homes-barndominiums':
@@ -88,7 +88,7 @@ export const CITY_SERVICE_META_DESCRIPTIONS: Record<string, string> = {
   'design-build/eagle':
     'Design-build homes in Eagle, Idaho. Design, engineering, Eagle design review, permits and construction with one accountable team and an itemized budget.',
   'design-build/nampa':
-    'Design-build homes in Nampa, Idaho. Drawings and budget developed together, Canyon County or city permits handled, and written progress updates.',
+    'Design-build homes in Nampa, Idaho. Drawings and budget developed together, Canyon County or city permits handled, and the scope is set before building.',
   'home-plans-design/boise':
     'Custom home plans in Boise, Idaho: design, engineering and permit-ready drawings fitted to an infill lot or a foothills site, standalone or design-build.',
   'home-plans-design/meridian':

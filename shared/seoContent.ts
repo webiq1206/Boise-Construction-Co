@@ -471,14 +471,14 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     headline: 'Start your ADU request with Boise ADU Co',
     primaryKeyword: 'adu builder boise',
     heroLine:
-      'Start your ADU request with the right P5 team. Boise ADU Co is our sister company and part of P5 Home Co. Tell the team about your ADU or guest house through the P5 intake page, with a written scope before the work is priced.',
+      'Start your ADU request with the right P5 team. Boise ADU Co is a sister company and part of P5 Home Co. Tell the team about your ADU or guest house through the P5 intake page, with a written scope before the work is priced.',
     overview:
-      'Start your ADU request with the right P5 team. Boise ADU Co is our sister company and part of P5 Home Co. Tell the team about your ADU or guest house through the P5 intake page, with a written scope before the work is priced.',
+      'Start your ADU request with the right P5 team. Boise ADU Co is a sister company and part of P5 Home Co. Tell the team about your ADU or guest house through the P5 intake page, with a written scope before the work is priced.',
     benefits: [
       'Feasibility before design, so setbacks and utilities shape the plan',
       'One accountable team from drawings through the final walkthrough',
       'Line-item budget with written allowances before construction',
-      'ADUs are built by our sister company Boise ADU Co, part of P5 Home Co.',
+      'ADUs are built by sister company Boise ADU Co, part of P5 Home Co.',
     ],
     inclusions: [
       'Property and setback review for an accessory dwelling',
@@ -511,7 +511,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'Does Boise Construction Co build ADUs?',
         answer:
-          'No. ADUs are built by our sister company Boise ADU Co, part of P5 Home Co. Start your ADU request at p5homeco.com/quote/adu.',
+          'No. ADUs are built by sister company Boise ADU Co, part of P5 Home Co. Start your ADU request at p5homeco.com/quote/adu.',
       },
       {
         question: 'How do I start an ADU project?',
@@ -871,8 +871,8 @@ export function getScopeSplitSection(serviceSlug: string, cityName?: string): La
     return {
       heading: `New detached ADUs${where}, not conversions`,
       paragraphs: [
-        'ADUs are built by our sister company Boise ADU Co, part of P5 Home Co.',
-        'Converting a garage or a basement into an attached ADU, or remodeling rooms inside the house, is interior work. Our sister company Boise Remodeling Co handles those projects.',
+        'ADUs are built by sister company Boise ADU Co, part of P5 Home Co.',
+        'Converting a garage or a basement into an attached ADU, or remodeling rooms inside the house, is interior work. Sister company Boise Remodeling Co handles those projects.',
       ],
       paragraphLinks: [
         [{ phrase: 'Boise ADU Co', href: 'https://p5homeco.com/quote/adu' }],
@@ -885,7 +885,7 @@ export function getScopeSplitSection(serviceSlug: string, cityName?: string): La
       heading: `Structural additions${where}: new footprint or a second story`,
       paragraphs: [
         `Boise Construction Co builds structural home additions${where}: new footprint on the lot or a second story over the house you already live in, tied into the existing structure, roofline and utilities.`,
-        'Reworking rooms inside the existing footprint, such as a kitchen, a bathroom or a basement finish, is interior remodeling. Our sister company Boise Remodeling Co handles that work.',
+        'Reworking rooms inside the existing footprint, such as a kitchen, a bathroom or a basement finish, is interior remodeling. Sister company Boise Remodeling Co handles that work.',
       ],
       paragraphLinks: [undefined, [{ phrase: 'Boise Remodeling Co', href: REMODELING_SITE_URL }]],
     };
@@ -1034,7 +1034,7 @@ export const AREA_PAGE_FAQS: FAQItem[] = [
   {
     question: 'What kinds of homes do you build?',
     answer:
-      'Fully custom homes, semi-custom homes from adapted plans, builds on land you already own, and shop homes. ADUs are built by our sister company Boise ADU Co, part of P5 Home Co. We also provide design and lot evaluation as standalone services.',
+      'Fully custom homes, semi-custom homes from adapted plans, builds on land you already own, and shop homes. ADUs are built by sister company Boise ADU Co, part of P5 Home Co. We also provide design and lot evaluation as standalone services.',
     links: [{ phrase: 'Boise ADU Co', href: 'https://p5homeco.com/quote/adu' }],
   },
   {
