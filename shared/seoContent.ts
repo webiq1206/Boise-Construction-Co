@@ -471,9 +471,9 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     headline: 'Start your ADU request with Boise ADU Co',
     primaryKeyword: 'adu builder boise',
     heroLine:
-      'Start your ADU request with the right P5 team. Boise ADU Co is a sister company and part of P5 Home Co. Tell the team about your ADU or guest house through the P5 intake page, with a written scope before the work is priced.',
+      'Start your ADU request with the right P5 team. ADUs are built by sister company Boise ADU Co, part of P5 Home Co. Tell the team about your ADU or guest house through the P5 intake page, with a written scope before the work is priced.',
     overview:
-      'Start your ADU request with the right P5 team. Boise ADU Co is a sister company and part of P5 Home Co. Tell the team about your ADU or guest house through the P5 intake page, with a written scope before the work is priced.',
+      'Start your ADU request with the right P5 team. ADUs are built by sister company Boise ADU Co, part of P5 Home Co. Tell the team about your ADU or guest house through the P5 intake page, with a written scope before the work is priced.',
     benefits: [
       'Feasibility before design, so setbacks and utilities shape the plan',
       'One accountable team from drawings through the final walkthrough',
@@ -859,10 +859,10 @@ export function getAreaIntro(city: CityData): string {
 export const REMODELING_SITE_URL = 'https://boiseremodeling.co';
 
 /**
- * The ADU and additions split between the two P5 Home Co sites, stated on the
- * page: this site builds new detached ADUs and structural additions (new
- * footprint, second stories); Boise Remodeling Co handles interior remodels,
- * garage or basement ADU conversions and work inside the existing footprint.
+ * The ADU and additions split, stated on the page: ADUs are built by sister
+ * company Boise ADU Co, part of P5 Home Co. Structural additions are new
+ * footprint or a second story. Boise Remodeling Co handles interior remodels,
+ * garage or basement conversions, and work inside the existing footprint.
  * One followed contextual link to boiseremodeling.co, never more.
  */
 export function getScopeSplitSection(serviceSlug: string, cityName?: string): LandingSection | undefined {
