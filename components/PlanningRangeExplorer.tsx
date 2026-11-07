@@ -1,175 +1,52 @@
-"use client";
-
-import { useMemo, useState } from "react";
-import { familyButtonClass } from "@/components/family/Button";
-import { SelectableCard } from "@/components/estimate/wizard/SelectableCard";
-import {
-  EMPTY_REFINEMENTS,
-  NEW_CONSTRUCTION_PROJECT_TYPES,
-  PROJECT_LABELS,
-  PROJECT_SIZE_CONFIG,
-  calculateEstimate,
-  formatPlanningCurrency,
-  type NewConstructionProjectType,
-} from "@/shared/estimateEngine";
-import { DisplayNum } from "@/components/marketing/DisplayNum";
-import { toSentenceCase } from "@/shared/sentenceCase";
-import styles from "@/components/approved/HomePlanningSections.module.css";
+import { PhoneIcon, TextIcon } from '@/components/family/Icons';
+import styles from '@/components/approved/HomePlanningSections.module.css';
+import { FAMILY_BRAND } from '@/lib/familyBrand';
 
 /**
- * Homepage interactive proof (C14): pick a project type, set finished living
- * area, see a planning floor immediately. No email gate. Figures come from
- * `calculateEstimate` (Treasure Valley mid-range / Signature spec) aligned with
- * the published $225–$400 finished / sqft band and contentData planning floors.
+ * Homepage quote ask. The planning-range explorer used to show dollar bands
+ * here. Call and text use the same numbers and delegated click tracking as the
+ * header and footer. The #calculator id stays so existing in-page links still
+ * land on this ask.
  */
-const PROOF_PROJECTS = NEW_CONSTRUCTION_PROJECT_TYPES;
-
-const PLANNING_DISCLAIMER =
-  "Planning floor only, land not included. Treasure Valley mid-range (Signature) finish. Not a bid. Request a quote for next steps.";
-
 export function PlanningRangeExplorer() {
-  // The first project type is selected on arrival, so the panel opens on a worked
-  // example (a 2,400 sqft custom home) instead of an empty box; one click changes it.
-  const [project, setProject] = useState<NewConstructionProjectType | null>(PROOF_PROJECTS[0]);
-  const [sqft, setSqft] = useState(PROJECT_SIZE_CONFIG[PROOF_PROJECTS[0]].baselineSqft);
-
-  const size = project ? PROJECT_SIZE_CONFIG[project] : null;
-
-  const estimate = useMemo(() => {
-    if (!project || !size) return null;
-    const clamped = Math.min(size.max, Math.max(size.min, sqft));
-    return calculateEstimate({
-      project,
-      finish: "mid-range",
-      sqft: clamped,
-      refinements: { ...EMPTY_REFINEMENTS },
-    });
-  }, [project, sqft, size]);
-
-  function selectProject(next: NewConstructionProjectType) {
-    setProject(next);
-    setSqft(PROJECT_SIZE_CONFIG[next].baselineSqft);
-  }
-
+  const phone = FAMILY_BRAND.phone;
   return (
     <section
       className={`approved-estimate fr-band ${styles.planningSection}`}
-      aria-labelledby="planning-ranges-title"
+      aria-labelledby="free-quote-title"
       id="calculator"
-      data-testid="planning-range-explorer"
+      data-testid="free-quote-cta"
       data-family-bar-yield
     >
       <div className="approved-estimate-intro">
         <div>
-          <p className="f-eyebrow">PLANNING RANGES</p>
-          <h2 id="planning-ranges-title">
-            Start with a planning number.
-            {" "}Then request a quote.
-          </h2>
+          <h2 id="free-quote-title">Get a free quote</h2>
         </div>
         <div>
-          <p>
-            Choose a project type and finished living area. You get a planning
-            floor right away, no email required. Request a quote and we reply
-            within one business day.
-          </p>
+          <p>Call or text us about your project and we&apos;ll get back to you with a quote.</p>
         </div>
       </div>
-
-      <div className="planning-range-grid">
-        <div className="planning-range-controls">
-          <p className="planning-range-label">1. What are you building?</p>
-          <div
-            role="radiogroup"
-            aria-label="Project type"
-            className="planning-range-cards"
-          >
-            {PROOF_PROJECTS.map((id) => (
-              <SelectableCard
-                key={id}
-                dense
-                control="radio"
-                selected={project === id}
-                onSelect={() => selectProject(id)}
-                title={toSentenceCase(PROJECT_LABELS[id].label)}
-                description={PROJECT_LABELS[id].sub}
-                data-testid={`proof-project-${id}`}
-              />
-            ))}
-          </div>
-
-          {project && size && (
-            <div className="planning-range-slider-wrap">
-              <label className="planning-range-label" htmlFor="planning-sqft">
-                2. Finished living area
-              </label>
-              <div className="planning-range-sqft-row">
-                <span data-testid="proof-sqft-value">
-                  <DisplayNum>{sqft.toLocaleString()}</DisplayNum> sqft
-                </span>
-              </div>
-              <input
-                id="planning-sqft"
-                type="range"
-                min={size.min}
-                max={size.max}
-                step={size.step}
-                value={Math.min(size.max, Math.max(size.min, sqft))}
-                onChange={(e) => setSqft(Number(e.target.value))}
-                className="planning-range-slider"
-                data-testid="proof-sqft-slider"
-                aria-valuemin={size.min}
-                aria-valuemax={size.max}
-                aria-valuenow={sqft}
-                aria-label="Finished living area in square feet"
-              />
-              <div className="planning-range-sqft-bounds">
-                <span>
-                  <DisplayNum>{size.min.toLocaleString()}</DisplayNum>
-                </span>
-                <span>
-                  <DisplayNum>{size.max.toLocaleString()}</DisplayNum>
-                </span>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <aside
-          className="planning-range-result fr-range-result"
-          aria-live="polite"
-          data-testid="proof-result"
+      <div className="fam-contact-actions fam-contact-actions--footer" aria-label="Call or text for a free quote">
+        <a
+          className="fam-contact-action"
+          href={phone.telHref}
+          aria-label={`Call ${phone.display}`}
+          title={`Call ${phone.display}`}
+          data-testid="link-free-quote-call"
         >
-          <p className="fr-range-result-label">Your planning floor</p>
-          {estimate ? (
-            <>
-              <p className="planning-range-value fr-range-result-figure" data-testid="proof-range-value">
-                From{" "}
-                <DisplayNum>{formatPlanningCurrency(estimate.priceLow)}</DisplayNum>
-              </p>
-              <p className="planning-range-band">
-                Typical band{" "}
-                <DisplayNum>{formatPlanningCurrency(estimate.priceLow)}</DisplayNum>
-                {" to "}
-                <DisplayNum>{formatPlanningCurrency(estimate.priceHigh)}</DisplayNum>
-                {" · land not included"}
-              </p>
-              <p className="planning-range-note">{PLANNING_DISCLAIMER}</p>
-              <a
-                className={familyButtonClass({ variant: "primary", size: "lg" })}
-                href="/estimate"
-                data-testid="proof-cta-estimate"
-              >
-                Request a quote
-              </a>
-            </>
-          ) : (
-            <p className="planning-range-empty">
-              Choose a project type and living area to see a planning floor. No
-              email required.
-            </p>
-          )}
-        </aside>
+          <PhoneIcon />
+          <span className="fam-contact-label">Call</span>
+        </a>
+        <a
+          className="fam-contact-action"
+          href={phone.smsHref}
+          aria-label={`Text ${phone.display}`}
+          title={`Text ${phone.display}`}
+          data-testid="link-free-quote-text"
+        >
+          <TextIcon />
+          <span className="fam-contact-label">Text</span>
+        </a>
       </div>
     </section>
   );

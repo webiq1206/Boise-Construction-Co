@@ -5,7 +5,7 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
   title: 'The final walkthrough and what the warranty covers',
   seoTitle: 'New Home Walkthrough and Warranty',
   metaDescription:
-    'How the pre-drywall and final walkthrough work, how a punch list is handled, what a one-year warranty covers, and how to tell a defect from settling.',
+    'How pre-drywall and final walkthroughs work, how a punch list is handled, what a written workmanship warranty covers, and how defects differ from settling.',
   excerpt:
     'The walkthrough is a working inspection, not a ceremony. Here is what we look at, how the punch list is closed, and where the warranty line actually falls.',
   category: 'The building process',
@@ -16,7 +16,7 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
   primaryKeyword: 'new home final walkthrough and warranty',
   secondaryKeywords: [
     'new construction punch list',
-    'one year builder warranty',
+    'written workmanship warranty',
     'pre drywall walkthrough checklist',
   ],
   searchIntent: 'informational',
@@ -26,12 +26,12 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
   ],
   wordCountTarget: 'cluster',
   quickAnswer:
-    'A new home gets two important walkthroughs: one before drywall, when everything inside the walls is still visible, and one before possession, which produces a written punch list. A one-year workmanship warranty covers defects in our work and installation. It does not cover normal settling, seasonal movement, wear, or homeowner maintenance.',
+    'A new home gets two important walkthroughs: one before drywall, when everything inside the walls is still visible, and one before possession, which produces a written punch list. A written workmanship warranty covers defects in our work and installation. It does not cover normal settling, seasonal movement, wear, or homeowner maintenance.',
   keyTakeaways: [
     'The pre-drywall walkthrough is the more valuable of the two and is often skipped.',
     'The final walkthrough produces a written punch list with named items and owners.',
     'A punch list is a normal part of finishing a house, not evidence of a bad build.',
-    'A one-year workmanship warranty covers defects in workmanship and installation.',
+    'A written workmanship warranty covers defects in workmanship and installation.',
     'Normal settling, seasonal movement, and maintenance items are not warranty claims.',
     'Report issues in writing so there is one record, and report urgent items immediately.',
   ],
@@ -55,9 +55,9 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
         'A punch list is the written record of items to be corrected before or shortly after possession, created during the final walkthrough. Each item names the location, the issue, and who is responsible. Typical entries are paint touch-ups, a door that needs adjustment, a missing switch plate, or a scratch in a surface. Every house has one.',
     },
     {
-      question: 'What does a one-year workmanship warranty cover?',
+      question: 'What does a written workmanship warranty cover?',
       answer:
-        'Defects in our workmanship and installation over the first year after possession. That includes things like a door that will not stay adjusted, a fixture installed incorrectly, trim separating at a joint because of installation, a leak from a connection we made, or drywall finishing that fails. Product defects are handled through the manufacturer warranty on that product.',
+        'Defects in our workmanship and installation after possession. That includes things like a door that will not stay adjusted, a fixture installed incorrectly, trim separating at a joint because of installation, a leak from a connection we made, or drywall finishing that fails. Product defects are handled through the manufacturer warranty on that product.',
     },
     {
       question: 'What is not covered by a builder warranty?',
@@ -82,7 +82,7 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
   ],
   content: `
 <h2 id="short-answer">Two walkthroughs, one punch list, one warranty</h2>
-<p><strong>Your house gets walked twice in a way that matters: once before drywall covers the systems, and once before you take possession.</strong> The first is a chance to change things while changing them is cheap. The second produces a written punch list and starts the countdown on the one-year workmanship warranty that follows possession.</p>
+<p><strong>Your house gets walked twice in a way that matters: once before drywall covers the systems, and once before you take possession.</strong> The first is a chance to change things while changing them is cheap. The second produces a written punch list and starts the countdown on the written workmanship warranty that follows possession.</p>
 <p>These are working inspections, not ceremonies, and the more critical you are during them the better they work. Nobody here is offended by a list. A homeowner who walks their house carefully and writes down twenty items is doing exactly what we want. This article is part of our <a href="/guides/boise-home-building-process-guide">Boise home building process guide</a> and picks up where <a href="/blog/stages-of-building-a-house">the stages of building a house</a> leaves off.</p>
 
 <h2 id="pre-drywall">The pre-drywall walkthrough</h2>
@@ -101,8 +101,8 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
 <p><strong>A punch list is a written record of items to be corrected, with a location, a description, and a responsible party for each, and every house has one.</strong> If a builder tells you their houses do not need one, they have either not looked or are hoping you will not.</p>
 <p>Typical items are small: paint touch-up, a door that needs adjusting, a scratch in a surface, a missing switch plate, caulk that needs redoing, a cabinet door out of alignment. Occasionally something larger surfaces, and it goes on the same list. We work through the list, mark items complete, and walk the closed items with you rather than declaring them done by email. Some items depend on a supplier or a replacement part and will close after possession, which is normal and should be stated on the list with an expected timeframe rather than left vague.</p>
 
-<h2 id="warranty-covers">What the one-year workmanship warranty covers</h2>
-<p><strong>We provide a one-year workmanship warranty after possession, which covers defects in our work and our installation.</strong> The test is whether something failed because of how it was built or installed, rather than because of what it is or what has happened to it since.</p>
+<h2 id="warranty-covers">What the written workmanship warranty covers</h2>
+<p><strong>We provide a written workmanship warranty after possession, which covers defects in our work and our installation.</strong> The test is whether something failed because of how it was built or installed, rather than because of what it is or what has happened to it since.</p>
 <p>Examples that are squarely inside it: a door or window that will not stay properly adjusted, trim separating at a joint because of how it was fastened, a leak at a connection we made, drywall finishing that fails beyond normal seasonal cracking, tile or grout failing because of installation, a fixture that was installed incorrectly, a hardware item that was not set right, or exterior work that is not shedding water the way it was built to. If it is our work and it is not performing, it is ours to fix, and we would rather hear about it in month three than in month thirteen.</p>
 
 <h2 id="warranty-excludes">What it does not cover</h2>
@@ -119,8 +119,8 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
 <p>One practical tip: keep a running note during your first year rather than reporting each small thing individually. Cosmetic drywall touch-up in particular is best batched and handled near the end of the first year, once seasonal movement has done what it is going to do, so it gets fixed once instead of three times.</p>
 
 <h2 id="first-year">How the first year is meant to go</h2>
-<p><strong>A well-run warranty year has a rhythm to it: urgent items handled immediately, routine items batched, and a deliberate look at the house before the year is up.</strong> The pattern we see is that the first two months produce a handful of small adjustment items, the middle of the year is usually quiet, and the last quarter is when the seasonal movement items become visible.</p>
-<p>Plan on a review before the twelve months expire rather than on the day they do. Walk the house the same way you walked it before possession, with the same discipline and the same low-angle light, and write down anything that has changed. Doors that have shifted, trim joints that have opened, grout or caulk that has cracked, and drywall touch-up all belong in that pass. It is also worth checking the exterior grading after a full year of watering and a spring runoff, because settlement in backfilled areas can change how water moves near the foundation, and that is worth catching early whether or not it is a warranty item.</p>
+<p><strong>A well-run warranty has a rhythm to it: urgent items handled immediately, routine items batched, and a deliberate look at the house before coverage ends.</strong> The pattern we see is that the first two months produce a handful of small adjustment items, the middle is usually quiet, and later on the seasonal movement items become visible.</p>
+<p>Plan the review before coverage ends rather than on the day it does. Walk the house the same way you walked it before possession, with the same discipline and the same low-angle light, and write down anything that has changed. Doors that have shifted, trim joints that have opened, grout or caulk that has cracked, and drywall touch-up all belong in that pass. It is also worth checking the exterior grading after a full year of watering and a spring runoff, because settlement in backfilled areas can change how water moves near the foundation, and that is worth catching early whether or not it is a warranty item.</p>
 
 <h2 id="next-steps">Ask about this before you sign, not after</h2>
 <p><strong>The time to understand a builder's walkthrough and warranty process is while you are choosing them, because every builder sounds accommodating before the contract and the difference shows up afterward.</strong> Ask whether a pre-drywall walkthrough is standard, how the punch list is documented, what exactly the warranty covers, and how a claim is reported and tracked. Ask what happens if an item cannot be fixed before possession.</p>

@@ -1050,9 +1050,9 @@ export const AREA_PAGE_FAQS: FAQItem[] = [
       'Fully custom homes, semi-custom homes from adapted plans, builds on land you already own, shop homes, and ADUs. We also provide design and lot evaluation as standalone services.',
   },
   {
-    question: 'Are you a registered contractor and insured?',
+    question: 'Are the P5 companies registered and insured?',
     answer:
-      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Certificate on request.',
+      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.',
   },
   {
     question: 'How do I start a project?',

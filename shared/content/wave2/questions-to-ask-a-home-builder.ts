@@ -76,7 +76,7 @@ export const questionsToAskAHomeBuilder: BlogPostData = {
     {
       question: 'Is it rude to ask a builder about their finances?',
       answer:
-        'No, and a professional expects it. Ask whether they are bonded and insured, ask for certificates rather than a verbal yes, and ask how they pay their trades. A builder who pays trades late will eventually have trouble getting them to show up on your site, which becomes your schedule problem rather than theirs.',
+        'No, and a professional expects it. Ask whether they are insured, ask for certificates rather than a verbal yes, and ask how they pay their trades. A builder who pays trades late will eventually have trouble getting them to show up on your site, which becomes your schedule problem rather than theirs.',
     },
   ],
   content: `
@@ -115,7 +115,7 @@ export const questionsToAskAHomeBuilder: BlogPostData = {
 
 <h2 id="warranty">Warranty: what happens after I move in?</h2>
 <p><strong>Ask what is covered, for how long, what is excluded, and who answers the phone in month eight.</strong> The warranty conversation is more revealing than most because it is about a period when the builder has already been paid.</p>
-<p>A good answer is written and includes exclusions. "A one-year workmanship warranty after possession. Manufacturer warranties on appliances, windows and roofing pass through to you and here is the binder. Here is the process for a warranty call and the response time. Drywall cracks from seasonal movement in the first year are normal in this climate; we fix them once at the end of the year rather than chasing each one." Read more on <a href="/blog/new-home-walkthrough-and-warranty">the final walkthrough and what the warranty covers</a>.</p>
+<p>A good answer is written and includes exclusions. "A written workmanship warranty after possession. Manufacturer warranties on appliances, windows and roofing pass through to you and here is the binder. Here is the process for a warranty call and the response time." Read more on <a href="/blog/new-home-walkthrough-and-warranty">the final walkthrough and what the warranty covers</a>.</p>
 <p>A bad answer is warm and unwritten. "We take care of our clients" is not a warranty. Neither is a warranty document you are told you will receive at closing but are not allowed to read now.</p>
 
 <h2 id="change-orders">Change orders: how does a change get priced?</h2>

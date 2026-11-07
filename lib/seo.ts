@@ -419,7 +419,7 @@ export function generateLogoAltTag(params: ServiceSEOParams): string {
   
   if (city && serviceName) {
     // City-specific alt tag with service context
-    return `${BRAND} logo - ${serviceName} in ${city} Idaho - Bonded and insured home builder`;
+    return `${BRAND} logo for ${serviceName} in ${city}, Idaho. Insured home builder.`;
   }
   
   if (city) {
@@ -610,9 +610,9 @@ export const BUSINESS_INFO = {
   serviceArea: ['Boise', 'Meridian', 'Eagle', 'Nampa', 'Kuna', 'Star', 'Middleton', 'Caldwell', 'Garden City'],
   serviceRadius: '35 miles',
   licenses: ['Idaho Registered Contractor #8381215'],
-  certifications: ['Design-Build Home Building', 'Bonded & Insured'],
+  certifications: ['Design-Build Home Building', 'Insured'],
   // The registration number is published in the footer and in hasCredential.
-  insurance: 'Bonded & Insured',
+  insurance: 'Insured',
   rating: 0,
   reviewCount: 0,
   yearlyServicesCompleted: 0,

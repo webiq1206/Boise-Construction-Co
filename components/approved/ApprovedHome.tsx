@@ -73,7 +73,7 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
   </div>
  </section>
 
- {/* 3. The number, on its own band. */}
+ {/* 3. A free quote, on its own band. */}
  <PlanningRangeExplorer />
 
  {/* 4. The way we work (paper, between the two dark bands). */}

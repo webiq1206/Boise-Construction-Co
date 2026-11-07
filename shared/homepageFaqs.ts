@@ -89,7 +89,7 @@ export const HOMEPAGE_FAQS: HomepageFaq[] = [
   },
   {
     q: "What is your workmanship warranty?",
-    a: "We provide a 1-year workmanship warranty on new builds. If something we built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it at no charge. Ask us whether a 10-year structural warranty applies to your contract. We also pass through manufacturer warranties on the products we install.",
+    a: "We provide a written workmanship warranty on new builds. If something we built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it at no charge. Ask us whether a structural warranty applies to your contract. We also pass through manufacturer warranties on the products we install.",
   },
   {
     q: "What does the free planning consultation include?",
