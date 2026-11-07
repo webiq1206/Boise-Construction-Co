@@ -152,7 +152,8 @@ test('contractor registration is on the footer, plain on the estimator, and in s
   const gbp = GBP_QA_SEED.find((entry) => /registered contractor/i.test(entry.question));
   assert.ok(gbp);
   assert.equal(gbp.question, 'Are you a registered contractor and insured?');
-  assert.equal(gbp.answer, 'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.');
+  assert.doesNotMatch(gbp.answer, /\bbonded\b/i);
+  assert.match(gbp.answer, /#8381215, insured/);
   assert.equal(AREA_PAGE_FAQS[1].question, 'Are you a registered contractor and insured?');
   assert.match(AREA_PAGE_FAQS[1].answer, /Idaho Registered Contractor #8381215, insured/);
   assert.doesNotMatch(AREA_PAGE_FAQS[1].answer, /\bbonded\b/i);

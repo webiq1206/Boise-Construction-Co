@@ -34,7 +34,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured, and our Idaho contractor registration details are yours on request. That matters here: the City of Boise homeowner guide says anyone other than the owner who performs permitted trade work must be registered and licensed with the State of Idaho.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured, and our Idaho contractor registration details are yours on request. That matters here: the City of Boise homeowner guide says anyone other than the owner who performs permitted trade work must be registered with the State of Idaho.',
       },
       {
         question: 'How do I start a project?',

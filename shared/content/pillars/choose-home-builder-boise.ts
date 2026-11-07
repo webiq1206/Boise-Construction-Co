@@ -57,7 +57,7 @@ export const chooseHomeBuilderBoise: GuidePageData = {
     {
       question: 'Do home builders need a license in Idaho?',
       answer:
-        'Idaho registers residential contractors rather than licensing them. Registration confirms a contractor filed with the state and carries the required insurance and bond. It is not a test of skill or a review of past work. That is why we say bonded and insured, with Idaho contractor registration available on request, and why the vetting a homeowner does matters more here than in states with a licensing exam.',
+        'Idaho registers residential contractors rather than licensing them. Registration confirms a contractor filed with the state and carries the required insurance and bond. It is not a test of skill or a review of past work. That is why we say insured, with Idaho contractor registration available on request, and why the vetting a homeowner does matters more here than in states with a licensing exam.',
     },
     {
       question: 'How do I verify a Boise builder is bonded and insured?',
@@ -154,7 +154,7 @@ export const chooseHomeBuilderBoise: GuidePageData = {
 
 <h2 id="idaho-contractor-registration">How Idaho regulates residential contractors</h2>
 <p><strong>Idaho registers residential contractors rather than licensing them, which means the word "licensed" does not mean what most homeowners assume it means.</strong> Registration confirms that a contractor filed with the state and carries the required insurance and bond. It does not involve an examination of construction knowledge, a review of completed projects, or an assessment of financial stability.</p>
-<p>That matters twice over. The verification work a licensing board would do elsewhere falls to you, because a registration number tells you a company exists and filed paperwork, not whether it can build your house. It should also make you alert to how builders describe themselves. We say bonded and insured, with Idaho contractor registration available on request, because that is accurate. A company advertising itself as a licensed home builder in Idaho is either being loose with language or hoping you do not know the difference.</p>
+<p>That matters twice over. The verification work a licensing board would do elsewhere falls to you, because a registration number tells you a company exists and filed paperwork, not whether it can build your house. It should also make you alert to how builders describe themselves. We say insured, with Idaho contractor registration available on request, because that is accurate. A company advertising itself as a licensed home builder in Idaho is either being loose with language or hoping you do not know the difference.</p>
 <p>Ask for the registration number in writing, verify it against the state record yourself rather than accepting a screenshot, and confirm the name on the registration matches the name on the contract you are being asked to sign. The individual trades are a separate matter: the people doing electrical, plumbing and mechanical work carry their own state credentials, which do not transfer to the general contractor's registration.</p>
 
 <h2 id="verifying-bonding-and-insurance">Verifying bonding and insurance, and what to ask the insurer</h2>
@@ -211,6 +211,6 @@ export const chooseHomeBuilderBoise: GuidePageData = {
 
 <h2 id="next-steps">Where to start</h2>
 <p><strong>Get a cost range before you get attached to a plan, then test one real proposal against the checks on this page.</strong> Run a size and finish level through the <a href="/#calculator">build cost calculator</a> to see the band your project sits in, then read how we work on the <a href="/services/custom-home-builder">custom home builder</a> page. If you already have proposals in hand, we will read a competing bid with you and tell you what it is missing, including when the answer is that the other builder has priced it fairly.</p>
-<p>We are a design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton and Caldwell. We are bonded and insured, and our Idaho contractor registration is available on request. We handle permits, plan review, engineering and utility applications in-house for Ada and Canyon County, we publish our draw schedule, we set allowances at what things actually cost here, and we send a written update every week. If that is how you want to build, <a href="/contact">send us your lot and your plan</a> and we will tell you honestly whether we are the right fit.</p>
+<p>We are a design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton and Caldwell. We are insured, and our Idaho contractor registration is available on request. We handle permits, plan review, engineering and utility applications in-house for Ada and Canyon County, we publish our draw schedule, we set allowances at what things actually cost here, and we send a written update every week. If that is how you want to build, <a href="/contact">send us your lot and your plan</a> and we will tell you honestly whether we are the right fit.</p>
 `.trim(),
 };

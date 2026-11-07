@@ -361,7 +361,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   {
     question: 'Are you a registered contractor and insured?',
     answer:
-      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.',
+      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. Certificate on request.',
   },
   {
     question: 'Can you build on land I already own?',
