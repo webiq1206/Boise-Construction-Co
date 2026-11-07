@@ -25,6 +25,13 @@ import { SITE_CONFIG } from '@/shared/siteConfig';
 import { CONSTRUCTION_IMAGES } from '@/shared/siteImages';
 import { notFound } from 'next/navigation';
 
+const AREA_ANSWERS: Record<string, string> = {
+  middleton:
+    'Plan your Middleton home with the lot, design and budget considered together. Boise Construction Co is a design-build custom home builder serving Middleton and Canyon County, with lot evaluation, design, engineering, permits and construction under one contract. You get a line-item budget before we break ground and a written workmanship warranty.',
+  nampa:
+    'Plan your Nampa home with site needs and budget decisions considered together. Boise Construction Co builds on serviced subdivision lots and nearby acreage, with design and construction under one contract. We handle Canyon County and city permits, itemize site costs before construction and provide a line-item budget before groundbreaking.',
+};
+
 export function generateStaticParams() {
   return CITY_SLUGS.map((city) => ({ city }));
 }
@@ -223,7 +230,8 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
       <LandingPageTemplate
         priorityPlanning={city.slug === 'boise'}
         h1={h1}
-        speakableSummary={overview}
+        answer={AREA_ANSWERS[city.slug]}
+        speakableSummary={AREA_ANSWERS[city.slug] ?? overview}
         overview={middletonLead ? overview : `${answerFirst} ${overview}`}
         overviewParagraphs={middletonLead}
         overviewEmphasis={middletonLead ? 'custom home builder in Middleton' : undefined}

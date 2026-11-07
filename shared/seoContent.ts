@@ -468,11 +468,12 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   adu: {
     slug: 'adu',
     name: 'ADUs & Guest Houses',
-    headline: 'Detached ADU builder in Boise, Idaho',
-    primaryKeyword: 'detached adu builder boise idaho',
-    heroLine: 'New detached ADUs and guest houses, built as separate structures on the lot you already own.',
+    headline: 'Start your ADU request with Boise ADU Co',
+    primaryKeyword: 'adu builder boise',
+    heroLine:
+      'Start your ADU request with the right P5 team. Boise ADU Co is our sister company and part of P5 Home Co. Tell the team about your ADU or guest house through the P5 intake page, with a written scope before the work is priced.',
     overview:
-      'Detached ADU builder in Boise, Idaho: Boise Construction Co plans and builds new accessory dwellings and guest houses as separate structures on the lot you already own, from feasibility and design through permits and construction.',
+      'Start your ADU request with the right P5 team. Boise ADU Co is our sister company and part of P5 Home Co. Tell the team about your ADU or guest house through the P5 intake page, with a written scope before the work is priced.',
     benefits: [
       'Feasibility before design, so setbacks and utilities shape the plan',
       'One accountable team from drawings through the final walkthrough',
@@ -508,31 +509,14 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     ],
     faqs: [
       {
-        question: 'Who builds ADUs in Boise?',
+        question: 'Does Boise Construction Co build ADUs?',
         answer:
-          'Boise Construction Co builds new detached ADUs and guest houses across the Treasure Valley. Garage and basement conversions are remodeling work, handled by Boise Remodeling Co.',
-      },
-      {
-        question: 'Can every lot have an ADU?',
-        answer:
-          'No. Feasibility depends on setbacks, lot coverage, utilities, access, and local rules. A site review answers those questions before design starts.',
-      },
-      {
-        question: 'How much does an ADU cost in the Treasure Valley?',
-        answer:
-          'Cost depends on size, utility extensions, site work, and finishes. We price after a site review rather than quoting a square-foot number without seeing the lot. Request a quote and we reply within one business day.',
-        links: [{ phrase: 'Request a quote', href: '/estimate' }],
-      },
-      {
-        question: 'Do ADUs need permits in Boise and Ada County?',
-        answer:
-          'Yes. Most accessory dwellings need plans and a building permit, and some parcels need separate utility or driveway approvals. We coordinate the local path as part of the project.',
+          'No. ADUs are built by our sister company Boise ADU Co, part of P5 Home Co. Start your ADU request at p5homeco.com/quote/adu.',
       },
       {
         question: 'How do I start an ADU project?',
         answer:
-          'Request a quote with your address and intended use. We review what the property allows, then outline design, permits, and a planning budget before construction.',
-        links: [{ phrase: 'Request a quote', href: '/estimate' }],
+          'Send one request at p5homeco.com/quote/adu. It reaches Boise ADU Co, and you get a written scope before any price.',
       },
     ],
     costGuidance: {

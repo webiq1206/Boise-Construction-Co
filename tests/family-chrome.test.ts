@@ -81,7 +81,10 @@ test('the footer renders the family row, NAP, hours and one registration link, w
   assert.match(html, /<a href="https:\/\/www\.google\.com\/search\?kgmid=\/g\/11ntl1t7dc" rel="noopener" target="_blank" data-testid="link-footer-google">P5 Home Co on Google<\/a>/);
   assert.equal((html.match(/data-testid="link-footer-google"/g) ?? []).length, 1);
   assert.equal((html.match(/data-testid="link-footer-facebook"/g) ?? []).length, 1);
-  assert.match(html, /href="\/services\/adu">ADUs &amp; guest houses/);
+  assert.match(html, /href="https:\/\/p5homeco\.com\/quote\/adu" rel="noopener">ADUs: Boise ADU Co/);
+  assert.match(html, /href="https:\/\/p5homeco\.com\/quote\/adu"[^>]*>ADUs \(Boise ADU Co\)/);
+  assert.doesNotMatch(html, /boiseadu\.co/);
+  assert.doesNotMatch(html, /href="\/services\/adu"/);
   assert.doesNotMatch(html, /site is coming|projects currently run/);
   assert.equal((html.match(/>P5 Home Co LLC, Idaho Registered Contractor #8381215<\/a>/g) ?? []).length, 1);
   // Boise ADU Co is not in the family row until its own site exists.

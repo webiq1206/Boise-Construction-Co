@@ -984,6 +984,16 @@
   line-height:1.6;
   color:#4c4f4b
 }
+.approved-interior .interior-hero-copy p.interior-hero-answer {
+  margin:22px 0 0;
+  max-width:62ch;
+  font-size:17px;
+  line-height:1.65;
+  color:#2c302f
+}
+.approved-interior .interior-hero-copy p.interior-hero-answer + p.interior-hero-support {
+  margin-top:16px
+}
 .approved-interior .interior-hero-copy p.interior-hero-chip {
   display:inline-block;
   margin:16px 0 0;
@@ -1039,7 +1049,8 @@
   .approved-interior .interior-hero-copy .interior-hero-eyebrow {
     margin-top:12px
   }
-  .approved-interior .interior-hero-copy p.interior-hero-support {
+  .approved-interior .interior-hero-copy p.interior-hero-support,
+  .approved-interior .interior-hero-copy p.interior-hero-answer {
     font-size:16px;
     line-height:1.55
   }

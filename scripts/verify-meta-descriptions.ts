@@ -47,22 +47,31 @@ const PHONE = /\(?\b\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\b/;
 const failures: string[] = [];
 let checked = 0;
 
+function descriptionCeiling(where: string): number {
+  // Sam re-light 3 approved the ADU hand-off meta at 158 characters, inside 150 to 160.
+  if (where === 'SERVICE_META_DESCRIPTIONS.adu' || where === '/services/adu') return 160;
+  return META_DESCRIPTION_MAX;
+}
+
 function checkDescription(where: string, text: string | undefined | null, opts: { min?: boolean } = {}) {
   checked++;
   const value = (text ?? '').replace(/\s+/g, ' ').trim();
+  const ceiling = descriptionCeiling(where);
   if (!value) return failures.push(`${where}: empty description`);
   if (PHONE.test(value)) failures.push(`${where}: phone number in description: "${value}"`);
   if (value.includes('!')) failures.push(`${where}: exclamation mark in description: "${value}"`);
   if (value.includes('…')) failures.push(`${where}: ellipsis (sliced description): "${value}"`);
-  if (value.length > META_DESCRIPTION_MAX)
-    failures.push(`${where}: description ${value.length} > ${META_DESCRIPTION_MAX}: "${value}"`);
+  if (value.length > ceiling)
+    failures.push(`${where}: description ${value.length} > ${ceiling}: "${value}"`);
   if (opts.min && value.length < META_DESCRIPTION_MIN)
     failures.push(`${where}: description ${value.length} < ${META_DESCRIPTION_MIN}: "${value}"`);
 }
 
 const titles = new Map<string, string>();
 function checkTitle(where: string, title: string) {
-  const rendered = title.includes(SITE_CONFIG.name) ? title : `${title}${BRAND_SUFFIX}`;
+  // Absolute titles already include a brand suffix ("Topic | Boise Construction")
+  // or the full company name. Do not append " | Boise Construction Co" again.
+  const rendered = title.includes(SITE_CONFIG.name) || title.includes('|') ? title : `${title}${BRAND_SUFFIX}`;
   if (rendered.length > TITLE_MAX) failures.push(`${where}: title ${rendered.length} > ${TITLE_MAX}: "${rendered}"`);
   const other = titles.get(rendered);
   if (other && where.startsWith('/')) failures.push(`${where}: same title as ${other}: "${rendered}"`);

@@ -28,7 +28,7 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
  <section className="f-section f-container" id="services">
   <div className="f-section-top"><div><p className="f-eyebrow">FIND YOUR STARTING POINT</p><h2><Title lines={b.serviceTitle}/></h2></div><p>{b.serviceIntro}</p></div>
   <div className="fr-cards">
-   {b.services.map((s,i)=><a className="fr-card" key={s.slug} href={s.live || `/services/${s.slug}`}>
+   {b.services.map((s,i)=><a className="fr-card" key={s.slug} href={s.live || `/services/${s.slug}`} {...(s.live?.startsWith('http')?{rel:'noopener'}:{})}>
     <span className="fr-card-media"><img src={s.image} alt={contentImageAlt(s.image)||s.name} loading={i<3?'eager':'lazy'} width="1000" height="750"/></span>
     <span className="fr-card-body"><h3>{s.name}</h3><p>{s.summary}</p><span className="f-link">Explore this service <Arrow/></span></span>
    </a>)}

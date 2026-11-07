@@ -26,7 +26,7 @@ const ABOUT_FAQS = [
   {
     question: 'What is Boise Construction Co?',
     answer:
-      'Boise Construction Co is a design-build home builder in Meridian, Idaho, and one of the companies of P5 Home Co. It builds custom and semi-custom homes and ADUs across the Treasure Valley under one accountable team.',
+      'Boise Construction Co is a design-build home builder in Meridian, Idaho, and one of the companies of P5 Home Co. It builds custom and semi-custom homes across the Treasure Valley. ADUs are built by our sister company Boise ADU Co, part of P5 Home Co.',
   },
   {
     question: 'Who runs Boise Construction Co?',
@@ -36,6 +36,16 @@ const ABOUT_FAQS = [
   {
     question: 'Are you a registered contractor?',
     answer: `Yes. ${CONTRACTOR_REGISTRATION_LABEL}. Insured; certificate on request.`,
+  },
+  {
+    question: 'How will I know where my build stands?',
+    answer:
+      'You get written progress updates through the build, and we schedule lender draws and inspections for you.',
+  },
+  {
+    question: 'Can you build on my lot?',
+    answer:
+      'Yes. We build on land you already own, starting with a lot evaluation so site needs and permits are clear before design.',
   },
 ];
 
@@ -47,8 +57,8 @@ const CONSTRUCTION_STANDARDS = [
   'Friday written update through the build',
 ];
 
-const SPEAKABLE_SUMMARY =
-  'Boise Construction Co is a design-build home builder in Meridian, Idaho, run by Nick Perkins. It builds custom and semi-custom homes and ADUs across the Treasure Valley.';
+const ABOUT_ANSWER =
+  'Plan your Treasure Valley home with clear responsibilities from design through construction. Boise Construction Co is a design-build home builder and part of P5 Home Co. Your project scope sets out a line-item budget before groundbreaking, lender draw and inspection scheduling, written progress updates and a written workmanship warranty.';
 
 function HeroBreadcrumbs() {
   const items = [
@@ -93,7 +103,7 @@ export default function AboutPage() {
     generateWebPageSchema({
       title: `About ${SITE_CONFIG.name}`,
       description:
-        'About Boise Construction Co: founder Nick Perkins, custom and semi-custom homes and ADUs, and the P5 Home Co standard in the Treasure Valley.',
+        'About Boise Construction Co: founder Nick Perkins, custom and semi-custom homes across the Treasure Valley. ADUs are built by our sister company Boise ADU Co, part of P5 Home Co.',
       url: '/about',
       speakable: true,
     }),
@@ -111,13 +121,13 @@ export default function AboutPage() {
         <div className="flex flex-col">
           <InteriorHero layout="editorial">
             <HeroBreadcrumbs />
-            <p data-speakable="summary" className="sr-only">
-              {SPEAKABLE_SUMMARY}
-            </p>
             <p className="ed-eyebrow">Real people. A higher standard.</p>
             <h1 className="ed-display ed-statement-display text-inverse-foreground">
               About Boise Construction Co
             </h1>
+            <p className="interior-hero-answer" data-speakable="summary">
+              {ABOUT_ANSWER}
+            </p>
             {/* One support line; the founder and registration detail opens the
                 first section below the photo (C3 hero budget). */}
             <p className="interior-hero-support">
@@ -148,7 +158,7 @@ export default function AboutPage() {
                     .
                   </p>
                   <p className="ed-small mt-6 max-w-2xl">
-                    {CONTRACTOR_REGISTRATION_LABEL}. Insured, certificate on request. 1-year workmanship warranty on new builds (
+                    {CONTRACTOR_REGISTRATION_LABEL}. Insured, certificate on request. Written workmanship warranty on new builds (
                     <Link href="/warranty" className="underline underline-offset-2">
                       warranty details
                     </Link>
@@ -171,18 +181,16 @@ export default function AboutPage() {
               <div className="ed-split ed-split-narrow">
                 <div className="lg:sticky lg:top-28 lg:self-start">
                   <p className="ed-eyebrow">What we build</p>
-                  <h2 className="ed-h2 ed-statement">Custom homes, semi-custom homes, and ADUs.</h2>
+                  <h2 className="ed-h2 ed-statement">Custom homes and semi-custom homes. ADUs are built by our sister company Boise ADU Co, part of P5 Home Co.</h2>
                 </div>
                 <Reveal>
                   <p className="ed-lede">
                     We build on your lot or a lot we help you evaluate. Remodels sit with Boise Remodeling Co; RE-10 lists sit with Boise Handyman Co.
                   </p>
                   <p className="ed-body mt-6">
-                    Explore our{' '}
-                    <Link href="/services/adu" className="underline underline-offset-2">
-                      ADUs &amp; guest houses
-                    </Link>
-                    .
+                    <a href="https://p5homeco.com/quote/adu" rel="noopener" className="underline underline-offset-2">
+                      ADUs: Boise ADU Co
+                    </a>
                   </p>
                 </Reveal>
               </div>

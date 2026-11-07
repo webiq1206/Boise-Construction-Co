@@ -48,7 +48,10 @@ const FALLBACK_DESCRIPTION:Record<string,string>={
 export function withBrandPageMetadata(meta:Metadata,routeHint?:string):Metadata{
  const override=routeHint==='__layout__'?undefined:COPY[brand.id]?.[pagePath(meta,routeHint)];
  const original=titleText(meta);
- const title=override?`${override.title} | ${brand.name}`:original.includes(brand.name)?original:`${original} | ${brand.name}`;
+ // A title that already names the brand, or is already a full "Topic | Brand"
+ // string, is the rendered title. Appending the brand again would double it.
+ const complete=original.includes(brand.name)||original.includes('|');
+ const title=override?`${override.title} | ${brand.name}`:complete?original:`${original} | ${brand.name}`;
  const description=override?.description||meta.description||(routeHint==='__layout__'?undefined:FALLBACK_DESCRIPTION[brand.id])||undefined;
  const image={url:BRAND_PAGE_IMAGE,width:1200,height:630,alt:`${brand.name} brand seal`};
  const icons=routeHint==='__layout__'?{

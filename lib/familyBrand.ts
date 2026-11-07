@@ -84,7 +84,11 @@ export const FAMILY_BRAND: FamilyBrand = {
       {
         title: 'Services',
         links: [
-          ...SERVICES.map((service) => ({ label: serviceLabel(service), href: `/services/${service.slug}` })),
+          ...SERVICES.map((service) =>
+            service.slug === 'adu'
+              ? { label: 'ADUs (Boise ADU Co)', href: 'https://p5homeco.com/quote/adu' }
+              : { label: serviceLabel(service), href: `/services/${service.slug}` },
+          ),
           { label: 'All services', href: '/services' },
         ],
       },

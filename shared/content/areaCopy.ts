@@ -116,12 +116,12 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Want our Idaho contractor registration details? Just ask. Nampa\'s residential FAQ says that when a homeowner isn\'t doing the work, a State of Idaho registered building contractor or licensed trade sub-contractor must pull the permit and perform it.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. Want our Idaho contractor registration details? Just ask. Nampa\'s residential FAQ says that when a homeowner isn\'t doing the work, a State of Idaho registered building contractor or licensed trade sub-contractor must pull the permit and perform it.',
       },
       {
         question: 'How do I start a project?',
         answer:
-          'Pick whichever is easiest: a phone call, a quote request, or a free consultation scheduled through our site. Our free in-home visit runs 60 to 90 minutes and covers planning guidance and design direction, with no obligation.',
+          'Pick whichever is easiest: a phone call, a quote request, or a free consultation scheduled through our site. The consultation covers planning guidance and design direction, with no obligation.',
       },
       {
         question: 'Do you build in Nampa, Idaho?',
@@ -136,12 +136,22 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Which Nampa projects need a building permit?',
         answer:
-          'Nampa\'s residential FAQ lists new one- and two-family dwellings, finishing an attic, garage, or basement, decks more than 12 inches high, re-roofing, siding or stucco replacement, and detached sheds over 200 sq ft, or of any size if hardwired for 120 V. Residential fences need a separate $10 Planning and Zoning fence permit.',
+          'Nampa\'s residential FAQ lists new one- and two-family dwellings, finishing an attic, garage, or basement, decks more than 12 inches high, re-roofing, siding or stucco replacement, and detached sheds over 200 sq ft, or of any size if hardwired for 120 V. Residential fences need a separate Planning and Zoning fence permit.',
       },
       {
         question: 'How does Nampa\'s climate shape a new home?',
         answer:
           'NOAA\'s 1991–2020 normals for the Nampa Sugar Factory station show about 11 inches of precipitation a year, roughly 59 days at 90°F or hotter, and 132 nights at or below freezing. That mix of heat and frost is why our Nampa designs pay close attention to insulation levels, window specification, and an envelope built for freeze-thaw cycles.',
+      },
+      {
+        question: 'Can you build on acreage near Nampa?',
+        answer:
+          'Yes. We build on serviced subdivision lots and nearby acreage, and site costs are itemized before construction starts.',
+      },
+      {
+        question: 'What happens at the in-home consultation?',
+        answer:
+          'We discuss your plans, site needs and design direction so you can understand the next steps.',
       },
     ],
   },
@@ -321,7 +331,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. You can ask for our Idaho contractor registration details at any point. Middleton\'s online permit portal links the state\'s contractor registration search and cites Idaho Code 54-5209, which ties a registration number to each building permit.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. You can ask for our Idaho contractor registration details at any point. Middleton\'s online permit portal links the state\'s contractor registration search and cites Idaho Code 54-5209, which ties a registration number to each building permit.',
       },
       {
         question: 'How do I start a project?',
@@ -363,6 +373,16 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
         question: 'Who is a custom home builder in Middleton for?',
         answer:
           'Homeowners who want a home designed from a blank page, an adapted plan, or a build on land they already own, not a catalog-only production home. Start with a free planning consultation or request a quote.',
+      },
+      {
+        question: 'Can you build on land I already own in Middleton?',
+        answer:
+          'Yes. We build fully custom homes, semi-custom plans and homes on land you already own, and we check whether your address goes through the city or Canyon County at the first visit.',
+      },
+      {
+        question: 'What warranty comes with a new home?',
+        answer:
+          'New builds carry a written workmanship warranty from Boise Construction Co.',
       },
     ],
   },

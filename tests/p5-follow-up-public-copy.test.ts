@@ -127,7 +127,9 @@ test('contractor registration is on the footer, plain on the estimator, and in s
   assert.equal(footer.includes('/re-10-repairs-boise'), false);
   assert.match(footer, /Save our contact/);
   assert.match(footer, /Mon to Fri 9 to 6/);
-  assert.match(footer, /\/services\/adu/);
+  assert.match(footer, /https:\/\/p5homeco\.com\/quote\/adu/);
+  assert.doesNotMatch(footer, /boiseadu\.co/);
+  assert.doesNotMatch(footer, /\/services\/adu/);
   const link = read('components/ContractorRegistration.tsx');
   assert.equal(link.includes('CONTRACTOR_LICENSE_SEARCH_URL'), true);
   assert.match(link, /target="_blank"/);
@@ -158,7 +160,12 @@ test('contractor registration is on the footer, plain on the estimator, and in s
   for (const slug of ['boise', 'meridian', 'nampa', 'eagle', 'kuna', 'caldwell', 'star', 'middleton', 'garden-city']) {
     const faq = getAreaCityCopy(slug)?.faqs[1];
     assert.equal(faq?.question, 'Are you a registered contractor and insured?', slug);
-    assert.match(faq?.answer || '', /P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured/);
+    if (slug === 'nampa' || slug === 'middleton') {
+      assert.match(faq?.answer || '', /P5 Home Co LLC, Idaho Registered Contractor #8381215, insured/);
+      assert.doesNotMatch(faq?.answer || '', /bonded/i, slug);
+    } else {
+      assert.match(faq?.answer || '', /P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured/);
+    }
   }
   const designBuildBoise = getCityServiceCopy('design-build', 'boise');
   const designBuildStar = getCityServiceCopy('design-build', 'star');

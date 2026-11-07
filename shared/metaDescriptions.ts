@@ -26,7 +26,7 @@ export const SERVICE_META_DESCRIPTIONS: Record<string, string> = {
     'Custom home plans and design in Idaho: architectural design, engineering and permit-ready drawings for a home built to your site, as a standalone service.',
   'home-additions':
     'Structural home additions in Boise and the Treasure Valley: new footprint or a second story, planned around the structure and utilities already in place.',
-  adu: 'Detached ADU builder in Boise, Idaho. We plan and build new accessory dwellings and guest houses on your lot, from setbacks and utilities to the handover.',
+  adu: 'Start your Boise ADU request with the right P5 team. Our sister company Boise ADU Co plans and builds ADUs. Begin at p5homeco.com/quote/adu with your project.',
   'lot-evaluation':
     'Lot evaluation and feasibility in Idaho before you buy: soils, utilities, access, setbacks and slope reviewed in a written report, starting from $950.',
   'shop-homes-barndominiums':
@@ -44,11 +44,11 @@ export const AREA_META_DESCRIPTIONS: Record<string, string> = {
   eagle:
     'Home builder in Eagle, Idaho for valley-floor acreage and foothills sites with strict design review. One team from lot evaluation to the final walkthrough.',
   nampa:
-    'Home builder in Nampa, Idaho for serviced subdivision lots and nearby acreage. Canyon County and city permits, with site costs itemized before we build.',
+    'Build in Nampa with clearer decisions: site costs itemized before we build, design and building under one contract, and county and city permits handled.',
   kuna: 'Home builder in Kuna, Idaho for acreage parcels with well, septic and irrigation laterals. Rural site work is priced separately so the budget holds.',
   star: 'Home builder in Star, Idaho for new subdivisions and working acreage. Jurisdiction, utilities and site costs are checked before anyone draws a plan.',
   middleton:
-    'Custom home builder in Middleton, Idaho for city lots and Canyon County acreage. Lot evaluation, design, permits and construction under one contract.',
+    'Plan your Middleton home with lot review, design, permits and building under one contract, plus a line-item budget before ground breaks, on lot or acreage.',
   caldwell:
     'Home builder in Caldwell, Idaho for serviced city lots and agricultural acreage with irrigation easements. Canyon County and city permits handled.',
   'garden-city':
