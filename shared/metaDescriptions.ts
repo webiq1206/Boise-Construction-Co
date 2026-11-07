@@ -88,7 +88,7 @@ export const CITY_SERVICE_META_DESCRIPTIONS: Record<string, string> = {
   'design-build/eagle':
     'Design-build homes in Eagle, Idaho. Design, engineering, Eagle design review, permits and construction with one accountable team and an itemized budget.',
   'design-build/nampa':
-    'Design-build homes in Nampa, Idaho. Drawings and budget developed together, Canyon County or city permits handled, and a written update every week.',
+    'Design-build homes in Nampa, Idaho. Drawings and budget developed together, Canyon County or city permits handled, and written progress updates.',
   'home-plans-design/boise':
     'Custom home plans in Boise, Idaho: design, engineering and permit-ready drawings fitted to an infill lot or a foothills site, standalone or design-build.',
   'home-plans-design/meridian':

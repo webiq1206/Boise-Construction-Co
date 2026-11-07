@@ -24,7 +24,7 @@ const MIDDLETON_LEAD = [
 const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
   boise: {
     intro:
-      'Building new in Boise usually means working with what is already there. Census estimates for 2020–2024 put the median Boise home at 1986 vintage, and about 64% of the city\'s housing is detached single-family, so many new homes here go on infill lots between established houses. Boise Construction Co handles design, engineering, permitting with the city, and construction under one design-build contract, with a written line-item scope before the foundation is poured.',
+      'Building new in Boise usually means working with what is already there. Census estimates for 2020 to 2024 put the median Boise home at 1986 vintage, and about 64% of the city\'s housing is detached single-family, so many new homes here go on infill lots between established houses. Boise Construction Co handles design, engineering, permitting with the city, and construction under one design-build contract, with a written line-item scope before the foundation is poured.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -59,13 +59,13 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Does an older Boise house change how a structural addition is planned?',
         answer:
-          'Often. About 42% of Boise homes were built before 1980 (Census ACS 2020–2024), and a structural addition has to tie into the existing framing, the existing utilities, and the way the household already lives. In a Boise historic district, windows, siding, and similar exterior work also need a Certificate of Appropriateness from Planning before the building permit, per the city\'s homeowner guide.',
+          'Often. About 42% of Boise homes were built before 1980 (Census ACS 2020 to 2024), and a structural addition has to tie into the existing framing, the existing utilities, and the way the household already lives. In a Boise historic district, windows, siding, and similar exterior work also need a Certificate of Appropriateness from Planning before the building permit, per the city\'s homeowner guide.',
       },
     ],
   },
   meridian: {
     intro:
-      'Meridian is one of the newest housing markets we work in. The Census Bureau\'s 2020–2024 estimates put the city\'s median home at 2007, and close to 82% of homes are detached single-family houses. Boise Construction Co, a service-area builder based in Meridian, plans and builds custom and semi-custom homes here with one accountable design-build team, from lot review and design through the city permit and the final walkthrough.',
+      'Meridian is one of the newest housing markets we work in. The Census Bureau\'s 2020 to 2024 estimates put the city\'s median home at 2007, and close to 82% of homes are detached single-family houses. Boise Construction Co, a service-area builder based in Meridian, plans and builds custom and semi-custom homes here with one accountable design-build team, from lot review and design through the city permit and the final walkthrough.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -157,7 +157,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
   },
   eagle: {
     intro:
-      'Eagle homeowners tend to build for the long haul: 84% of occupied homes in the city are owner-occupied, and 43% of its housing has gone up since 2010, per Census ACS 2020–2024. Boise Construction Co designs and builds custom homes, semi-custom homes, and shop homes in Eagle, including foothills parcels where slope and access drive the budget, keeping design, permits, and construction under a single contract.',
+      'Eagle homeowners tend to build for the long haul: 84% of occupied homes in the city are owner-occupied, and 43% of its housing has gone up since 2010, per Census ACS 2020 to 2024. Boise Construction Co designs and builds custom homes, semi-custom homes, and shop homes in Eagle, including foothills parcels where slope and access drive the budget, keeping design, permits, and construction under a single contract.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -198,7 +198,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
   },
   kuna: {
     intro:
-      'Kuna is overwhelmingly a single-family town: 92% of its homes are detached houses, and the median home dates to 2008, based on Census ACS 2020–2024 estimates. Our design-build team takes Kuna clients through it, whether that means a fully custom design, a personalized semi-custom plan, or a house on land you already own, with one accountable contact from feasibility to keys.',
+      'Kuna is overwhelmingly a single-family town: 92% of its homes are detached houses, and the median home dates to 2008, based on Census ACS 2020 to 2024 estimates. Our design-build team takes Kuna clients through it, whether that means a fully custom design, a personalized semi-custom plan, or a house on land you already own, with one accountable contact from feasibility to keys.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -239,7 +239,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
   },
   caldwell: {
     intro:
-      'Caldwell\'s housing covers a wide span of eras, with roughly 29% of homes built before 1980 and about 32% since 2010 (Census ACS 2020–2024). Boise Construction Co builds new homes for Caldwell and Canyon County clients, from blank-page custom designs to semi-custom plans and homes on your own land, and every Caldwell build starts from a written, line-item scope.',
+      'Caldwell\'s housing covers a wide span of eras, with roughly 29% of homes built before 1980 and about 32% since 2010 (Census ACS 2020 to 2024). Boise Construction Co builds new homes for Caldwell and Canyon County clients, from blank-page custom designs to semi-custom plans and homes on your own land, and every Caldwell build starts from a written, line-item scope.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -274,13 +274,13 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'How are Caldwell building permit fees calculated?',
         answer:
-          'Under the city\'s FY2026 schedule (Resolution 300-25), the permit fee comes from total project valuation: for example, $846.27 plus about 0.45% of value above $100,000 in the $100,000–$499,999 range. Residential plan review adds 40% of the permit fee, Planning and Zoning review 35% (minimum $55), and engineering review 20%.',
+          'Under the city\'s FY2026 schedule (Resolution 300-25), the permit fee comes from total project valuation: for example, $846.27 plus about 0.45% of value above $100,000 in the $100,000 to $499,999 range. Residential plan review adds 40% of the permit fee, Planning and Zoning review 35% (minimum $55), and engineering review 20%.',
       },
     ],
   },
   star: {
     intro:
-      'Star is the newest city on our service map: its median home was built in 2011, and about 22% of homes date from 2020 or later, according to Census ACS 2020–2024 estimates. In Star we build custom and semi-custom homes and houses on clients\' own land, planned by one design-build team covering design, engineering, the city permit, and construction.',
+      'Star is the newest city on our service map: its median home was built in 2011, and about 22% of homes date from 2020 or later, according to Census ACS 2020 to 2024 estimates. In Star we build custom and semi-custom homes and houses on clients\' own land, planned by one design-build team covering design, engineering, the city permit, and construction.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -388,7 +388,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
   },
   'garden-city': {
     intro:
-      'Garden City\'s housing is a mix: Census ACS 2020–2024 estimates put detached single-family homes at about 51% of units, with attached houses, apartments, and manufactured homes making up the rest, and a median build year of 1995. Boise Construction Co builds new homes here and across Ada County: fully custom homes, semi-custom plans, and houses on land you already own, each run by one accountable team from feasibility to the final walkthrough.',
+      'Garden City\'s housing is a mix: Census ACS 2020 to 2024 estimates put detached single-family homes at about 51% of units, with attached houses, apartments, and manufactured homes making up the rest, and a median build year of 1995. Boise Construction Co builds new homes here and across Ada County: fully custom homes, semi-custom plans, and houses on land you already own, each run by one accountable team from feasibility to the final walkthrough.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -423,7 +423,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'What kind of housing is in Garden City?',
         answer:
-          'A real mix. Census ACS 2020–2024 estimates show about 14% of Garden City\'s homes are mobile or manufactured homes, 13.5% are attached single-family houses, and roughly 22% are in buildings with two or more units. The city also requires engineering drawings for structural changes to a manufactured or mobile home. That variety shapes what a lot can hold, which is why we evaluate each parcel first.',
+          'A real mix. Census ACS 2020 to 2024 estimates show about 14% of Garden City\'s homes are mobile or manufactured homes, 13.5% are attached single-family houses, and roughly 22% are in buildings with two or more units. The city also requires engineering drawings for structural changes to a manufactured or mobile home. That variety shapes what a lot can hold, which is why we evaluate each parcel first.',
       },
     ],
   },

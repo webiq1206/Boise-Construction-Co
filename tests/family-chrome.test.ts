@@ -114,7 +114,7 @@ test('the homepage video preserves family content, technical poster fallback and
   assert.ok(support.split(/\s+/).length <= 14, support);
   // Proof: only facts already published on the site.
   assert.match(html, /Line-item budget before construction/);
-  assert.match(html, /Written updates every Friday/);
+  assert.match(html, /Written progress updates/);
   assert.match(html, /One accountable design-build team/);
   assert.match(html, /P5 Home Co LLC, Idaho Registered Contractor #8381215/);
 });

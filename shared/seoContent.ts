@@ -66,7 +66,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       'One team and one contract from feasibility through final walkthrough',
       'Line-item budget you can see, not a single lump-sum number',
       'Allowance amounts set from real local pricing, not placeholder figures',
-      'Written weekly schedule and cost updates for the life of the build',
+      'Written progress updates for the life of the build',
     ],
     inclusions: [
       'Site and soils review before design begins',
@@ -92,7 +92,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       },
       {
         title: 'Build and handover',
-        description: 'Weekly updates through construction, then testing, walkthrough, and your warranty documents.',
+        description: 'Written progress updates through construction, then testing, walkthrough, and your warranty documents.',
       },
     ],
     faqs: [
@@ -119,7 +119,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How do you handle budget changes during construction?',
         answer:
-          'Every change is priced and approved in writing before the work happens. You see the running cost against the original line-item budget in your weekly update, so there is no reconciliation surprise at the end.',
+          'Every change is priced and approved in writing before the work happens. You see the running cost against the original line-item budget in your written progress updates, so there is no reconciliation surprise at the end.',
       },
       {
         question: 'Do you build on rural acreage outside city limits?',
@@ -904,7 +904,7 @@ export function getCityServiceIntro(
   const fact = localFact
     ? ` ${localFact}`
     : ` We know ${county} plan review requirements, impact fees, and the lot conditions common around ${city.name}.`;
-  return `Planning ${service.name.toLowerCase()} in ${city.name}, Idaho?${fact} Boise Construction Co works design-build, with a line-item budget, weekly written updates, and a written workmanship warranty. Book a free planning consultation or use our estimator for a planning range.`;
+  return `Planning ${service.name.toLowerCase()} in ${city.name}, Idaho?${fact} Boise Construction Co works design-build, with a line-item budget, written progress updates, and a written workmanship warranty. Book a free planning consultation or use our estimator for a planning range.`;
 }
 
 export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): FAQItem[] {
@@ -1058,7 +1058,7 @@ export const HOMEPAGE_FAQS_FOR_SCHEMA: FAQItem[] = [
   {
     question: 'How are you different from other home builders in the Treasure Valley?',
     answer:
-      'We publish our numbers. You get a line-item budget rather than a lump sum, allowance amounts based on real local pricing, and a written weekly cost and schedule update for the life of the build.',
+      'We publish our numbers. You get a line-item budget rather than a lump sum, allowance amounts based on real local pricing, and written progress updates for the life of the build.',
   },
   {
     question: 'What areas do you serve?',
