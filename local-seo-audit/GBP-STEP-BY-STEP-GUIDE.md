@@ -18,7 +18,6 @@ Use these exact details everywhere — on Google, Yelp, Facebook, Instagram, Bin
 | Email | hello@boiseremodeling.co |
 | Website | https://boiseremodeling.co |
 | Public location | Meridian, ID (do not show a street address publicly) |
-| Year founded | 2017 |
 
 **Hours**
 
@@ -152,14 +151,13 @@ Upload when prompted. Wait for approval before continuing to Phase 3.
 
 Plan about 2 hours. Have project photos ready on your computer.
 
-### Step 3.1 — Opening date and contact links
+### Step 3.1: Contact links
 
-1. Set **year opened** to **2017**.
-2. Confirm phone: **(208) 477-1169**
-3. Set **website** to: `https://boiseremodeling.co`
-4. Set **appointment link** to: `https://boiseremodeling.co/contact`
-5. Turn **Google messaging ON**.
-6. Set messaging welcome message to:
+1. Confirm phone: **(208) 477-1169**
+2. Set **website** to: `https://boiseremodeling.co`
+3. Set **appointment link** to: `https://boiseremodeling.co/contact`
+4. Turn **Google messaging ON**.
+5. Set messaging welcome message to:
 
 > Thanks for reaching out to Boise Remodeling Co. We respond within one business day. For faster help, call (208) 477-1169 or schedule a visit at boiseremodeling.co/contact
 
@@ -185,14 +183,14 @@ Add categories in this exact order:
 
 Go to **Edit profile → Business description**. Paste this exactly (748 characters):
 
-> Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles design, Ada and Canyon County permits, and construction for kitchen remodels, bathroom remodels, whole-home renovations, room additions, ADUs, garage conversions, and basement finishing. Every project includes a written scope before construction, a dedicated project manager, weekly written progress updates, and a written workmanship guarantee. Founded in 2017. Bonded and insured. Schedule a free 60 to 90 minute in-home visit and leave with a planning range and design direction - no pressure, no obligation.
+> Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles design, Ada and Canyon County permits, and construction for kitchen remodels, bathroom remodels, whole-home renovations, room additions, ADUs, garage conversions, and basement finishing. Every project includes a written scope before construction, a dedicated project manager, written progress updates, and a written workmanship warranty. Insured. Schedule a free 60 to 90 minute in-home visit and leave with a planning range and design direction. No pressure, no obligation.
 
 ### Step 3.5 — Add all services
 
 Go to **Edit profile → Services**. Add each service below. Include the starting price where noted.
 
 **Kitchen remodeling**  
-Custom kitchen renovations from cabinet refreshes to full gut-and-rebuild. Written scope, permits, and weekly updates included.  
+Custom kitchen renovations from cabinet refreshes to full gut-and-rebuild. Written scope, permits, and written progress updates included.  
 Starting price: $15,000
 
 **Bathroom remodeling**  
@@ -253,7 +251,7 @@ Each product has a **Product URL** field — paste the full link for each item. 
 |--------------|-------|-------------|-------------|
 | Kitchen Remodel | From $15,000 | https://boiseremodeling.co/services/kitchen-remodel | Design-build kitchen remodels in the Treasure Valley. Cabinet refresh to full gut-and-rebuild. Free in-home planning visit. |
 | Bathroom Remodel | From $18,000 | https://boiseremodeling.co/services/bathroom-remodel | Guest and primary bathroom remodels with written scope before construction. Ada and Canyon County permits handled in-house. |
-| Whole-Home Remodel | From $150,000 | https://boiseremodeling.co/services/whole-home-remodel | Single project manager from design through final walkthrough. Weekly written updates and workmanship guarantee included. |
+| Whole-Home Remodel | From $150,000 | https://boiseremodeling.co/services/whole-home-remodel | Single project manager from design through final walkthrough. Written progress updates and a written workmanship warranty included. |
 | Room Addition | From $80,000 | https://boiseremodeling.co/services/room-addition | Bump-outs, primary suites, and second-story additions that look original to your home. |
 | ADU / Guest House | From $90,000 | https://boiseremodeling.co/services/adu | Attached, detached, and garage-conversion ADUs. Feasibility review and Boise ordinance guidance. |
 | Garage Conversion | From $90,000 | https://boiseremodeling.co/services/adu | Convert existing garage space into livable ADU or guest quarters. |
@@ -352,7 +350,7 @@ As of 2026, planning ranges run roughly $15,000 for a cosmetic refresh, $35,000-
 Guest baths typically plan $18,000-$45,000; primary baths $35,000-$85,000+ depending on layout and finishes. Written scope after your free visit confirms the number. Guide: https://boiseremodeling.co/guides/boise-bathroom-remodeling-guide
 
 **Q6: Are you licensed and insured?**  
-Yes. Boise Remodeling Co is bonded and insured for residential remodeling across the Treasure Valley. Idaho contractor license details are available upon request.
+Yes. Boise Remodeling Co is insured for residential remodeling across the Treasure Valley. Idaho contractor license details are available upon request.
 
 **Q7: Do you build ADUs?**  
 Yes - attached, detached, and garage-conversion ADUs. Planning ranges from $90,000 for garage conversions to $180,000-$300,000+ for detached new builds. Guide: https://boiseremodeling.co/guides/boise-adu-guide
@@ -381,7 +379,7 @@ Post **once per week**. Every post must link to a specific page on your website 
 ### Week 1 — Project showcase
 
 - **Headline:** Kitchen clarity in Boise
-- **Body:** North End kitchen remodel - written scope before demo, weekly Friday updates, final walkthrough with workmanship guarantee.
+- **Body:** North End kitchen remodel. Written scope before demo, written progress updates, final walkthrough with a written workmanship warranty.
 - **Button:** Learn more
 - **Link:** https://boiseremodeling.co/services/kitchen-remodel/boise
 - **Photo:** Your best kitchen after photo
@@ -491,7 +489,7 @@ Either way, thank you again for choosing Boise Remodeling Co.
 
 **Positive review template:**
 
-> Thank you, [Name]. We enjoyed your [city] [project type] - especially [something specific they mentioned]. Glad the weekly updates and written scope kept things clear. - the owner, Boise Remodeling Co
+> Thank you, [Name]. We enjoyed your [city] [project type], especially [something specific they mentioned]. Glad the written progress updates and written scope kept things clear. The owner, Boise Remodeling Co
 
 **Negative review:** Respond once, factually, offer to resolve offline. Never argue publicly.
 

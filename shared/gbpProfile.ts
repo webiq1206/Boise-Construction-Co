@@ -64,7 +64,7 @@ export const GBP_CATEGORIES = {
 } as const;
 
 export const GBP_DESCRIPTION =
-  `Boise Construction Co is a design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles feasibility, design, Ada and Canyon County permits, and construction for custom homes, semi-custom homes, builds on land you already own, and shop homes. Every project includes a line-item budget before construction, a dedicated project manager, weekly written cost and schedule updates, and a written workmanship warranty. We also offer lot evaluation and permit-ready home design as standalone services. ${FOUNDING.gbpFoundedSentence}Bonded and insured. Book a free planning consultation and leave with a realistic budget band and clear next steps.`;
+  `Boise Construction Co is a design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles feasibility, design, Ada and Canyon County permits, and construction for custom homes, semi-custom homes, builds on land you already own, and shop homes. Every project includes a line-item budget before construction, a dedicated project manager, written cost and schedule updates, and a written workmanship warranty. We also offer lot evaluation and permit-ready home design as standalone services. ${FOUNDING.gbpFoundedSentence}Insured. Book a free planning consultation and leave with clear next steps.`;
 
 export const GBP_LINKS = {
   website: SITE,
@@ -134,7 +134,7 @@ export const GBP_SERVICES: GbpService[] = [
   {
     name: 'Custom home building',
     description:
-      'Fully custom homes designed from a blank page around your lot and budget. Line-item budget, permits, and weekly updates included.',
+      'Fully custom homes designed from a blank page around your lot and budget. Line-item budget, permits, and written progress updates included.',
     startingPrice: '$525,000',
   },
   {
@@ -187,7 +187,7 @@ export const GBP_SERVICES: GbpService[] = [
   {
     name: 'Home building consultation',
     description:
-      'Free planning consultation. Leave with a realistic budget band and clear next steps. No obligation.',
+      'Free planning consultation. Leave with clear next steps. No obligation.',
   },
 ];
 
@@ -301,7 +301,7 @@ export const GBP_PRODUCTS: GbpProduct[] = [
     price: 'Free',
     url: `${SITE}/contact`,
     description:
-      'Talk through your lot, your program, and a realistic budget band. No pressure, no obligation.',
+      'Talk through your lot and your program. No pressure, no obligation.',
   },
   {
     category: 'Consultation & Tools',
@@ -337,7 +337,7 @@ export interface GbpQaEntry {
 export const GBP_QA_SEED: GbpQaEntry[] = [
   {
     question: 'Do you provide free estimates?',
-    answer: `Yes. We offer a free planning consultation where we talk through your lot, your program, and a realistic budget band - no pressure, no obligation. You can also get a preliminary planning range online at ${SITE}/#calculator`,
+    answer: `Yes. We offer a free planning consultation where we talk through your lot and your program. No pressure, no obligation. You can also get a preliminary planning range online at ${SITE}/#calculator`,
   },
   {
     question: 'What areas do you serve?',
@@ -363,7 +363,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   {
     question: 'Are you a registered contractor and insured?',
     answer:
-      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured for residential construction across the Treasure Valley. Certificate on request.',
+      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.',
   },
   {
     question: 'Can you build on land I already own?',
@@ -400,7 +400,7 @@ export const GBP_POSTS_STARTER: GbpPost[] = [
   {
     week: 1,
     headline: 'Custom home building in Boise',
-    body: 'Line-item budget before construction, weekly written cost and schedule updates, and a written workmanship warranty.',
+    body: 'Line-item budget before construction, written cost and schedule updates, and a written workmanship warranty.',
     buttonLabel: 'Learn more',
     buttonUrl: `${SITE}/services/custom-home-builder/boise`,
     photoHint: 'Best completed home exterior',
@@ -424,7 +424,7 @@ export const GBP_POSTS_STARTER: GbpPost[] = [
   {
     week: 4,
     headline: 'Free planning consultation',
-    body: 'Talk through your lot, your program, and a realistic budget band. One team from feasibility to final walkthrough.',
+    body: 'Talk through your lot and your program. One team from feasibility to final walkthrough.',
     buttonLabel: 'Book a consultation',
     buttonUrl: `${SITE}/contact`,
     photoHint: 'Team or consultation photo',
