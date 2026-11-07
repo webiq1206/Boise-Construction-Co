@@ -16,7 +16,7 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
     const copy = getAreaCityCopy(slug);
     assert.ok(copy, slug);
     assert.equal(getAreaIntro(city), copy.intro);
-    const appended = slug === 'middleton' ? 1 : slug === 'nampa' ? 2 : 0;
+    const appended = slug === 'middleton' || slug === 'nampa' ? 2 : 0;
     assert.equal(copy.faqs.length, (slug === 'middleton' ? 9 : 7) + appended);
     if (slug === 'middleton') {
       assert.equal(copy.lead?.join(' '), copy.intro);
@@ -45,7 +45,9 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
     if (slug === 'middleton') {
       assert.equal(copy.faqs[9].question, 'Can you build on land I already own in Middleton?');
       assert.equal(copy.faqs[9].answer, 'Yes. We build fully custom homes, semi-custom plans and homes on land you already own, and we check whether your address goes through the city or Canyon County at the first visit.');
-      assert.equal(copy.faqs.map((faq) => faq.question).includes('What warranty comes with a new home?'), false);
+      assert.equal(copy.faqs[10].question, 'What warranty comes with a new home?');
+      assert.equal(copy.faqs[10].answer, 'New builds carry a written workmanship warranty from Boise Construction Co.');
+      assert.doesNotMatch(copy.faqs[10].answer, /\d+\s*-?\s*year/i);
     }
     if (slug === 'nampa') {
       assert.doesNotMatch(copy.faqs[2].answer, /60 to 90/);

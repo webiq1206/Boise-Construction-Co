@@ -27,7 +27,7 @@ import { notFound } from 'next/navigation';
 
 const AREA_ANSWERS: Record<string, string> = {
   middleton:
-    'Plan your Middleton home with the lot, design and budget considered together. Boise Construction Co is a design-build custom home builder serving Middleton and Canyon County, with lot evaluation, design, engineering, permits and construction under one contract. You get a line-item budget before we break ground.',
+    'Plan your Middleton home with the lot, design and budget considered together. Boise Construction Co is a design-build custom home builder serving Middleton and Canyon County, with lot evaluation, design, engineering, permits and construction under one contract. You get a line-item budget before we break ground and a written workmanship warranty.',
   nampa:
     'Plan your Nampa home with site needs and budget decisions considered together. Boise Construction Co builds on serviced subdivision lots and nearby acreage, with design and construction under one contract. We handle Canyon County and city permits, itemize site costs before construction and provide a line-item budget before groundbreaking.',
 };

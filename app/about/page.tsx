@@ -58,7 +58,7 @@ const CONSTRUCTION_STANDARDS = [
 ];
 
 const ABOUT_ANSWER =
-  'Plan your Treasure Valley home with clear responsibilities from design through construction. Boise Construction Co is a design-build home builder and part of P5 Home Co. Your project scope sets out a line-item budget before groundbreaking, lender draw and inspection scheduling, and written progress updates.';
+  'Plan your Treasure Valley home with clear responsibilities from design through construction. Boise Construction Co is a design-build home builder and part of P5 Home Co. Your project scope sets out a line-item budget before groundbreaking, lender draw and inspection scheduling, written progress updates and a written workmanship warranty.';
 
 function HeroBreadcrumbs() {
   const items = [
@@ -159,7 +159,11 @@ export default function AboutPage() {
                     .
                   </p>
                   <p className="ed-small mt-6 max-w-2xl">
-                    {CONTRACTOR_REGISTRATION_LABEL}. Insured; certificate on request.
+                    {CONTRACTOR_REGISTRATION_LABEL}. Insured; certificate on request. Written workmanship warranty on new builds (
+                    <Link href="/warranty" className="underline underline-offset-2">
+                      warranty details
+                    </Link>
+                    ).
                   </p>
                 </Reveal>
                 <img

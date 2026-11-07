@@ -379,6 +379,11 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
         answer:
           'Yes. We build fully custom homes, semi-custom plans and homes on land you already own, and we check whether your address goes through the city or Canyon County at the first visit.',
       },
+      {
+        question: 'What warranty comes with a new home?',
+        answer:
+          'New builds carry a written workmanship warranty from Boise Construction Co.',
+      },
     ],
   },
   'garden-city': {
