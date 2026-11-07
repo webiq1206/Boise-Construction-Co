@@ -135,7 +135,6 @@ export const GBP_SERVICES: GbpService[] = [
     name: 'Custom home building',
     description:
       'Fully custom homes designed from a blank page around your lot and budget. Line-item budget, permits, and written progress updates included.',
-    startingPrice: '$525,000',
   },
   {
     name: 'Semi-custom home building',
@@ -153,7 +152,6 @@ export const GBP_SERVICES: GbpService[] = [
     name: 'Design-build home construction',
     description:
       'Design and construction under one contract, with the design priced continuously so the drawings never outrun the budget.',
-    startingPrice: '$525,000',
   },
   {
     name: 'Custom home design and plans',

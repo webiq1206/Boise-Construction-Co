@@ -183,16 +183,14 @@ Add categories in this exact order:
 
 Go to **Edit profile → Business description**. Paste this exactly (748 characters):
 
-> Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles design, Ada and Canyon County permits, and construction for kitchen remodels, bathroom remodels, whole-home renovations, room additions, ADUs, garage conversions, and basement finishing. Every project includes a written scope before construction, a dedicated project manager, written progress updates, and a written workmanship warranty. Insured. Schedule a free 60 to 90 minute in-home visit and leave with a planning range and design direction. No pressure, no obligation.
+> Boise Remodeling Co is a design-build remodeling contractor serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles design, Ada and Canyon County permits, and construction for kitchen remodels, bathroom remodels, whole-home renovations, room additions, ADUs, garage conversions, and basement finishing. Every project includes a written scope before construction, a dedicated project manager, written progress updates, and a written workmanship warranty. Insured. Schedule a free in-home visit and leave with a planning range and design direction. No pressure, no obligation.
 
 ### Step 3.5 — Add all services
 
 Go to **Edit profile → Services**. Add each service below. Include the starting price where noted.
 
 **Kitchen remodeling**  
-Custom kitchen renovations from cabinet refreshes to full gut-and-rebuild. Written scope, permits, and written progress updates included.  
-Starting price: $15,000
-
+Custom kitchen renovations from cabinet refreshes to full gut-and-rebuild. Written scope, permits, and written progress updates included.
 **Bathroom remodeling**  
 Spa-quality bathroom transformations designed around how you actually live. Guest and primary baths.  
 Starting price: $18,000
@@ -251,7 +249,7 @@ Each product has a **Product URL** field — paste the full link for each item. 
 |--------------|-------|-------------|-------------|
 | Kitchen Remodel | From $15,000 | https://boiseremodeling.co/services/kitchen-remodel | Design-build kitchen remodels in the Treasure Valley. Cabinet refresh to full gut-and-rebuild. Free in-home planning visit. |
 | Bathroom Remodel | From $18,000 | https://boiseremodeling.co/services/bathroom-remodel | Guest and primary bathroom remodels with written scope before construction. Ada and Canyon County permits handled in-house. |
-| Whole-Home Remodel | From $150,000 | https://boiseremodeling.co/services/whole-home-remodel | Single project manager from design through final walkthrough. Written progress updates and a written workmanship warranty included. |
+| Whole-Home Remodel | | https://boiseremodeling.co/services/whole-home-remodel | Single project manager from design through final walkthrough. Written progress updates and a written workmanship warranty included. |
 | Room Addition | From $80,000 | https://boiseremodeling.co/services/room-addition | Bump-outs, primary suites, and second-story additions that look original to your home. |
 | ADU / Guest House | From $90,000 | https://boiseremodeling.co/services/adu | Attached, detached, and garage-conversion ADUs. Feasibility review and Boise ordinance guidance. |
 | Garage Conversion | From $90,000 | https://boiseremodeling.co/services/adu | Convert existing garage space into livable ADU or guest quarters. |
