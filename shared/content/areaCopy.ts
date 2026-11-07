@@ -32,7 +32,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
           'Four kinds of new-home work: blank-page custom homes, semi-custom homes adapted from an existing plan, builds on a lot you already own, and shop homes. Design and lot evaluation can also be hired on their own, which helps on Boise infill parcels where setbacks and utilities need checking before anyone commits to a plan.',
       },
       {
-        question: 'Are you registered and insured?',
+        question: 'Are the P5 companies registered and insured?',
         answer:
           'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.',
       },
@@ -73,7 +73,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
           'Here in Meridian, where we\'re based, the menu is fully custom, semi-custom from an adapted plan, build-on-your-lot, and shop homes. Still deciding? Our design service and our lot evaluation can each be booked separately, before you commit to a full build.',
       },
       {
-        question: 'Are you registered and insured?',
+        question: 'Are the P5 companies registered and insured?',
         answer:
           'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.',
       },
@@ -114,7 +114,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
           'Nampa clients come to us for fully custom homes, for semi-custom houses based on proven plans we adapt, for construction on property they already hold, and for shop homes. Lot evaluation and design work are sold as separate services too, useful when a Canyon County parcel needs a feasibility check first.',
       },
       {
-        question: 'Are you registered and insured?',
+        question: 'Are the P5 companies registered and insured?',
         answer:
           'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.',
       },
@@ -155,7 +155,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
           'Custom homes drawn from scratch, semi-custom homes from adapted plans, houses built on the Eagle land you already own, and shop homes. Weighing a foothills parcel? Our design and lot evaluation services stand alone, so you can hire either before deciding.',
       },
       {
-        question: 'Are you registered and insured?',
+        question: 'Are the P5 companies registered and insured?',
         answer:
           'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.',
       },
@@ -196,7 +196,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
           'In Kuna that means a fully custom home, a semi-custom plan we adapt to you, a home on a lot you own, or a shop home, including post-frame and steel-framed designs that pair living space with real shop square footage. Design and lot evaluation are also offered by themselves.',
       },
       {
-        question: 'Are you registered and insured?',
+        question: 'Are the P5 companies registered and insured?',
         answer:
           'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.',
       },
@@ -237,7 +237,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
           'Caldwell projects can be fully custom homes, semi-custom homes adapted from a plan, houses on property you hold, or shop homes. We also take on design or lot evaluation by itself, which suits Caldwell parcels outside a platted subdivision that need extra review.',
       },
       {
-        question: 'Are you registered and insured?',
+        question: 'Are the P5 companies registered and insured?',
         answer:
           'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.',
       },
@@ -278,7 +278,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
           'Any of our four home types: custom from a blank page, semi-custom starting from an adapted plan, a build on land you own, or a shop home. Want a Star parcel checked before committing? Design and lot evaluation are each available without a full build contract.',
       },
       {
-        question: 'Are you registered and insured?',
+        question: 'Are the P5 companies registered and insured?',
         answer:
           'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.',
       },
@@ -319,7 +319,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
           'For Middleton clients the options are a custom home designed from nothing, a semi-custom home built from an adapted plan, a build on property you already own, or a shop home. We also take on design work or lot evaluation as standalone services, which helps when a Canyon County parcel still has open questions.',
       },
       {
-        question: 'Are you registered and insured?',
+        question: 'Are the P5 companies registered and insured?',
         answer:
           'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.',
       },
@@ -376,7 +376,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
           'Four options in Garden City: a fully custom design, a semi-custom plan we adapt, a home built on the parcel you hold today, or a shop home. Design and lot evaluation are also sold separately, a sensible first step where a parcel may sit in a mapped floodplain.',
       },
       {
-        question: 'Are you registered and insured?',
+        question: 'Are the P5 companies registered and insured?',
         answer:
           'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.',
       },

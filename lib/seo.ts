@@ -419,7 +419,7 @@ export function generateLogoAltTag(params: ServiceSEOParams): string {
   
   if (city && serviceName) {
     // City-specific alt tag with service context
-    return `${BRAND} logo - ${serviceName} in ${city} Idaho - Insured home builder`;
+    return `${BRAND} logo for ${serviceName} in ${city}, Idaho. Insured home builder.`;
   }
   
   if (city) {

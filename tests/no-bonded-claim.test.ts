@@ -18,7 +18,7 @@ const SOURCE_DIRS = ['app', 'components', 'lib', 'public', 'shared'];
 const ALLOW = new Set(['shared/gbpProfile.ts']);
 const SOURCE_EXT = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.json', '.html', '.css', '.txt', '.md']);
 
-const INSURED_FAQ_QUESTION = 'Are you registered and insured?';
+const INSURED_FAQ_QUESTION = 'Are the P5 companies registered and insured?';
 const INSURED_FAQ_ANSWER = 'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.';
 
 function sourceHits(): string[] {

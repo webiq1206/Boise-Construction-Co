@@ -154,11 +154,11 @@ test('contractor registration is on the footer, plain on the estimator, and in s
   assert.ok(gbp);
   assert.equal(gbp.question, 'Are you a registered contractor and insured?');
   assert.match(gbp.answer, /P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured/);
-  assert.equal(AREA_PAGE_FAQS[1].question, 'Are you registered and insured?');
+  assert.equal(AREA_PAGE_FAQS[1].question, 'Are the P5 companies registered and insured?');
   assert.equal(AREA_PAGE_FAQS[1].answer, 'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.');
   for (const slug of ['boise', 'meridian', 'nampa', 'eagle', 'kuna', 'caldwell', 'star', 'middleton', 'garden-city']) {
     const faq = getAreaCityCopy(slug)?.faqs[1];
-    assert.equal(faq?.question, 'Are you registered and insured?', slug);
+    assert.equal(faq?.question, 'Are the P5 companies registered and insured?', slug);
     assert.equal(faq?.answer, 'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.');
     const schema = landingFAQSchema(getAreaCityCopy(slug)?.faqs || []) as {
       mainEntity: Array<{ name: string; acceptedAnswer: { text: string } }>;
