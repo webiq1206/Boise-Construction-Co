@@ -97,7 +97,8 @@ test('the published shop home example is the estimator output, per finish level'
   );
   for (const file of [
     'shared/content/wave2/shop-homes-and-barndominiums-idaho.ts',
-    'shared/content/pillars/boise-home-building-cost-guide.ts',
+    // The home building cost guide no longer publishes this example. See
+    // tests/construction-cost-guide-no-prices.test.ts.
     'shared/content/pillars/custom-home-design-guide.ts',
     'shared/seoContent.ts',
     'shared/gbpProfile.ts',
