@@ -1052,7 +1052,7 @@ export const AREA_PAGE_FAQS: FAQItem[] = [
   {
     question: 'Are you a registered contractor and insured?',
     answer:
-      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Certificate on request.',
+      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. Certificate on request.',
   },
   {
     question: 'How do I start a project?',

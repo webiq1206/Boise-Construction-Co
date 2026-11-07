@@ -135,7 +135,6 @@ export const GBP_SERVICES: GbpService[] = [
     name: 'Custom home building',
     description:
       'Fully custom homes designed from a blank page around your lot and budget. Line-item budget, permits, and written progress updates included.',
-    startingPrice: '$525,000',
   },
   {
     name: 'Semi-custom home building',
@@ -153,7 +152,6 @@ export const GBP_SERVICES: GbpService[] = [
     name: 'Design-build home construction',
     description:
       'Design and construction under one contract, with the design priced continuously so the drawings never outrun the budget.',
-    startingPrice: '$525,000',
   },
   {
     name: 'Custom home design and plans',
@@ -363,7 +361,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   {
     question: 'Are you a registered contractor and insured?',
     answer:
-      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.',
+      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. Certificate on request.',
   },
   {
     question: 'Can you build on land I already own?',

@@ -15,7 +15,7 @@ export const FOUNDING_YEAR_COPY = {
     valleyWork:
       'Boise Construction Co has worked in Treasure Valley residential construction since 2020.',
     schemaDescription:
-      'Design-build home builder serving the Treasure Valley since 2020. Custom homes, semi-custom homes, builds on client-owned land, and shop homes. Bonded, insured, and committed to line-item budgets before construction.',
+      'Design-build home builder serving the Treasure Valley since 2020. Custom homes, semi-custom homes, builds on client-owned land, and shop homes. Insured and committed to line-item budgets before construction.',
     gbpFoundedSentence: 'Founded in 2020. ',
     llmsFoundedClause: ', founded 2020',
     llmsSinceClause: ' since 2020',
@@ -26,7 +26,7 @@ export const FOUNDING_YEAR_COPY = {
     idahoBuilder: 'Boise Construction Co is a design-build home builder in Boise, Idaho.',
     valleyWork: 'Boise Construction Co works in Treasure Valley residential construction.',
     schemaDescription:
-      'Design-build home builder serving the Treasure Valley. Custom homes, semi-custom homes, builds on client-owned land, and shop homes. Bonded, insured, and committed to line-item budgets before construction.',
+      'Design-build home builder serving the Treasure Valley. Custom homes, semi-custom homes, builds on client-owned land, and shop homes. Insured and committed to line-item budgets before construction.',
     gbpFoundedSentence: '',
     llmsFoundedClause: '',
     llmsSinceClause: '',

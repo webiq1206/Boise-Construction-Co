@@ -34,7 +34,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured, and our Idaho contractor registration details are yours on request. That matters here: the City of Boise homeowner guide says anyone other than the owner who performs permitted trade work must be registered and licensed with the State of Idaho.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured, and our Idaho contractor registration details are yours on request. That matters here: the City of Boise homeowner guide says anyone other than the owner who performs permitted trade work must be registered with the State of Idaho.',
       },
       {
         question: 'How do I start a project?',
@@ -75,7 +75,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Ask any time for our Idaho contractor registration details. Permitting sits inside our design-build scope, which matters in Meridian: the city fee schedule sets double permit fees as the minimum charge when work starts without a permit.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. Ask any time for our Idaho contractor registration details. Permitting sits inside our design-build scope, which matters in Meridian: the city fee schedule sets double permit fees as the minimum charge when work starts without a permit.',
       },
       {
         question: 'How do I start a project?',
@@ -116,7 +116,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Want our Idaho contractor registration details? Just ask. Nampa\'s residential FAQ says that when a homeowner isn\'t doing the work, a State of Idaho registered building contractor or licensed trade sub-contractor must pull the permit and perform it.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. Want our Idaho contractor registration details? Just ask. Nampa\'s residential FAQ says that when a homeowner isn\'t doing the work, a State of Idaho registered building contractor or licensed trade sub-contractor must pull the permit and perform it.',
       },
       {
         question: 'How do I start a project?',
@@ -157,7 +157,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Certificate on request.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. Certificate on request.',
       },
       {
         question: 'How do I start a project?',
@@ -198,7 +198,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Before a Kuna project begins you can request our Idaho contractor registration details and we\'ll send them.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. Before a Kuna project begins you can request our Idaho contractor registration details and we\'ll send them.',
       },
       {
         question: 'How do I start a project?',
@@ -239,7 +239,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Our registration details from the State of Idaho are available on request, and Caldwell\'s permit packet includes a contractor registration declaration under Idaho Code 54-5209, so that number appears on the permit.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. Our registration details from the State of Idaho are available on request, and Caldwell\'s permit packet includes a contractor registration declaration under Idaho Code 54-5209, so that number appears on the permit.',
       },
       {
         question: 'How do I start a project?',
@@ -280,7 +280,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured, and we provide our Idaho contractor registration details when asked. Star\'s building FAQ notes that contractors need a current, valid State of Idaho license to apply for permits in the city.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured, and we provide our Idaho contractor registration details when asked. Star\'s building FAQ notes that contractors need a current, valid State of Idaho license to apply for permits in the city.',
       },
       {
         question: 'How do I start a project?',
@@ -321,7 +321,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. You can ask for our Idaho contractor registration details at any point. Middleton\'s online permit portal links the state\'s contractor registration search and cites Idaho Code 54-5209, which ties a registration number to each building permit.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. You can ask for our Idaho contractor registration details at any point. Middleton\'s online permit portal links the state\'s contractor registration search and cites Idaho Code 54-5209, which ties a registration number to each building permit.',
       },
       {
         question: 'How do I start a project?',
@@ -378,7 +378,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Certificate on request.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. Certificate on request.',
       },
       {
         question: 'How do I start a project?',
