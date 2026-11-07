@@ -148,7 +148,7 @@ export default function AboutPage() {
                     .
                   </p>
                   <p className="ed-small mt-6 max-w-2xl">
-                    {CONTRACTOR_REGISTRATION_LABEL}. Insured, certificate on request. written workmanship warranty on new builds (
+                    {CONTRACTOR_REGISTRATION_LABEL}. Insured, certificate on request. Written workmanship warranty on new builds (
                     <Link href="/warranty" className="underline underline-offset-2">
                       warranty details
                     </Link>
