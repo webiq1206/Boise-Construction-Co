@@ -5,7 +5,7 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
   title: 'The final walkthrough and what the warranty covers',
   seoTitle: 'New Home Walkthrough and Warranty',
   metaDescription:
-    'How the pre-drywall and final walkthrough work, how a punch list is handled, what a written workmanship warranty covers, and how to tell a defect from settling.',
+    'How pre-drywall and final walkthroughs work, how a punch list is handled, what a written workmanship warranty covers, and how defects differ from settling.',
   excerpt:
     'The walkthrough is a working inspection, not a ceremony. Here is what we look at, how the punch list is closed, and where the warranty line actually falls.',
   category: 'The building process',
