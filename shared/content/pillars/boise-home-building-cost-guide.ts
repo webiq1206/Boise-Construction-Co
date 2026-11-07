@@ -13,9 +13,9 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
   // /blog/custom-home-cost-per-square-foot-boise (the per-square-foot breakdown).
   seoTitle: 'Boise Home Building Cost Guide 2026',
   metaDescription:
-    'What a Boise new home costs depends on the lot, size, finishes, site work, permits and utilities. Your written quote sets the line-item budget.',
+    'Plan your Boise new home with a written quote covering lot, size, finishes, site work, permits and utilities. Know your line-item budget before building.',
   excerpt:
-    'What a new home in the Treasure Valley depends on: the lot, the size, the finishes, site work, permits and utilities, and a written quote that sets the line-item budget.',
+    'Plan your new home in the Treasure Valley with a written quote covering the lot, size, finishes, site work, permits and utilities, with a line-item budget for your project.',
   hubSlug: 'home-building-costs',
   guideType: 'hub-pillar',
   author: 'Boise Construction Co',

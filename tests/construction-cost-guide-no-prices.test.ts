@@ -120,9 +120,31 @@ test('the cost guide keeps one H1 and a normal title and meta length', () => {
   assert.equal(source.includes(String.fromCharCode(0x2013)), false);
 });
 
-test('the progress-update and warranty sentence is left for the other open pull request', () => {
-  assert.match(
-    guide.content,
-    /a written progress update every week, and a one-year workmanship warranty after possession\. We are bonded and insured, and Idaho contractor registration is available on request\./,
+/*
+ * Known pending for draft PR #135, which merges first and rewrites the
+ * next-steps sentence (currently line 205). That sentence still says
+ * "every week", "one-year", and "bonded". This test must not require those
+ * words, or a rebase onto #135 would put the claims back. Until that
+ * sentence changes, it is skipped. Everything else in the guide is checked.
+ */
+const PENDING_135_SENTENCE =
+  'a written progress update every week, and a one-year workmanship warranty after possession. We are bonded and insured, and Idaho contractor registration is available on request.';
+
+test('the cost guide does not publish bonded, warranty-length, or weekly claims', () => {
+  const published = [
+    guide.title,
+    guide.seoTitle ?? '',
+    guide.metaDescription,
+    guide.excerpt,
+    guide.quickAnswer ?? '',
+    ...(guide.keyTakeaways ?? []),
+    ...guide.faqs.flatMap((faq) => [faq.question, faq.answer]),
+    guide.content.replace(PENDING_135_SENTENCE, ''),
+  ].join('\n');
+  assert.equal(published.toLowerCase().includes('bonded'), false);
+  assert.doesNotMatch(published, /every week|weekly|every friday|each friday/i);
+  assert.doesNotMatch(
+    published,
+    /warrant\w{0,12}(?:\W+\w+){0,8}\W+(?:one-year|one year|\d+[ -]?years?|\d+[ -]?months?|years?|months?)|(?:one-year|one year|\d+[ -]?years?|\d+[ -]?months?)\W+(?:\w+\W+){0,8}warrant/i,
   );
 });
