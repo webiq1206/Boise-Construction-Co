@@ -76,7 +76,7 @@ export const questionsToAskAHomeBuilder: BlogPostData = {
     {
       question: 'Is it rude to ask a builder about their finances?',
       answer:
-        'No, and a professional expects it. Ask whether they are bonded and insured, ask for certificates rather than a verbal yes, and ask how they pay their trades. A builder who pays trades late will eventually have trouble getting them to show up on your site, which becomes your schedule problem rather than theirs.',
+        'No, and a professional expects it. Ask whether they are insured, ask for certificates rather than a verbal yes, and ask how they pay their trades. A builder who pays trades late will eventually have trouble getting them to show up on your site, which becomes your schedule problem rather than theirs.',
     },
   ],
   content: `

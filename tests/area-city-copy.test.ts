@@ -33,13 +33,13 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
       assert.equal(copy.lead, undefined);
     }
     assert.equal(copy.faqs[0].question, 'What kinds of homes do you build?');
-    assert.equal(copy.faqs[1].question, 'Are you a registered contractor and insured?');
+    assert.equal(copy.faqs[1].question, 'Are you registered and insured?');
     assert.equal(copy.faqs[2].question, 'How do I start a project?');
     assert.equal(copy.faqs[3].question, `Do you build in ${city.name}, Idaho?`);
     assert.equal(copy.faqs[4].question, `Which county is ${city.name} in?`);
-    assert.match(copy.faqs[1].answer, /P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured/);
+    assert.equal(copy.faqs[1].answer, 'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.');
     assert.doesNotMatch(copy.faqs[1].answer, /(?:we(?:'|’)re|we are|the company is|fully) licensed|licensed, bonded|carries a license/i);
-    assert.match(copy.faqs[1].answer, /bond/i);
+    assert.doesNotMatch(copy.faqs[1].answer, /bonded/i);
     assert.match(copy.faqs[1].answer, /insur/i);
     assert.doesNotMatch(copy.intro + copy.faqs.map((f) => f.question + f.answer).join(' '), /Jared/);
     const schema = landingFAQSchema(copy.faqs) as {
@@ -129,6 +129,6 @@ test('cities outside the batch keep the shared intro and shared FAQ questions', 
   assert.match(getAreaIntro(other), /throughout Ada County/);
   assert.match(getAreaIntro(other), /one accountable team from feasibility through final walkthrough/);
   assert.equal(AREA_PAGE_FAQS.length, 3);
-  assert.equal(AREA_PAGE_FAQS[1].question, 'Are you a registered contractor and insured?');
-  assert.match(AREA_PAGE_FAQS[1].answer, /P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured/);
+  assert.equal(AREA_PAGE_FAQS[1].question, 'Are you registered and insured?');
+  assert.equal(AREA_PAGE_FAQS[1].answer, 'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215. Insured; certificate on request.');
 });
