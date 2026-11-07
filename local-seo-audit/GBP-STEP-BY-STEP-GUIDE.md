@@ -151,7 +151,7 @@ Upload when prompted. Wait for approval before continuing to Phase 3.
 
 Plan about 2 hours. Have project photos ready on your computer.
 
-### Step 3.1 — Contact links
+### Step 3.1: Contact links
 
 1. Confirm phone: **(208) 477-1169**
 2. Set **website** to: `https://boiseremodeling.co`
