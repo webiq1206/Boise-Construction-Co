@@ -478,7 +478,6 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       'Feasibility before design, so setbacks and utilities shape the plan',
       'One accountable team from drawings through the final walkthrough',
       'Line-item budget with written allowances before construction',
-      'ADUs are built by sister company Boise ADU Co, part of P5 Home Co.',
     ],
     inclusions: [
       'Property and setback review for an accessory dwelling',
@@ -871,11 +870,11 @@ export function getScopeSplitSection(serviceSlug: string, cityName?: string): La
     return {
       heading: `New detached ADUs${where}, not conversions`,
       paragraphs: [
-        'ADUs are built by sister company Boise ADU Co, part of P5 Home Co.',
+        'Detached ADUs start at p5homeco.com/quote/adu.',
         'Converting a garage or a basement into an attached ADU, or remodeling rooms inside the house, is interior work. Sister company Boise Remodeling Co handles those projects.',
       ],
       paragraphLinks: [
-        [{ phrase: 'Boise ADU Co', href: 'https://p5homeco.com/quote/adu' }],
+        [{ phrase: 'p5homeco.com/quote/adu', href: 'https://p5homeco.com/quote/adu' }],
         [{ phrase: 'Boise Remodeling Co', href: REMODELING_SITE_URL }],
       ],
     };

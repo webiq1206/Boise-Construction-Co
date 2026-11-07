@@ -38,7 +38,19 @@ test('all 90 service-city pages use the draft intro and six FAQs, and schema mat
       assert.equal(faqs.length, 6);
       assert.deepEqual(faqs, copy.faqs);
       assert.equal(faqs[0].question, `How much does ${service.name.toLowerCase()} cost in ${city.name}?`);
-      assert.equal(faqs[3].question, `Do you build in ${city.name}?`);
+      assert.equal(
+        faqs[3].question,
+        service.slug === 'adu'
+          ? `Can I start an ADU request in ${city.name}?`
+          : `Do you build in ${city.name}?`,
+      );
+      if (service.slug === 'adu') {
+        assert.equal(faqs[3].answer, 'Yes. ADUs are built by sister company Boise ADU Co, part of P5 Home Co. Start at p5homeco.com/quote/adu.');
+        const sentence = 'ADUs are built by sister company Boise ADU Co, part of P5 Home Co.';
+        assert.equal(copy.intro.split(sentence).length - 1, 1);
+        assert.equal(faqs.reduce((count, faq) => count + (faq.answer.split(sentence).length - 1), 0), 1);
+        assert.equal((content.benefits ?? []).join(' ').includes(sentence), false);
+      }
       assert.equal(faqs[4].question, `How do I get a budget for ${service.name.toLowerCase()} in ${city.name}?`);
       const visible = copy.intro + faqs.map((faq) => faq.question + faq.answer).join(' ');
       assert.doesNotMatch(visible, /Jared/);
