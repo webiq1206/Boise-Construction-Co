@@ -325,8 +325,9 @@ export function LandingPageTemplate({
             </p>
           )}
           <div className="interior-hero-actions">
-            <PrimaryCta href={estimateHref ?? '/estimate'} trackingLocation="landing_hero">{CTA_PRIMARY}</PrimaryCta>
-            {!priorityPlanning && <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>}
+            <PrimaryCta href={SITE_CONFIG.phoneHref} trackingLocation="landing_hero">Call or text us about your project.</PrimaryCta>
+            <HeroTextLink href={SITE_CONFIG.phoneSmsHref}>Text {SITE_CONFIG.phone}</HeroTextLink>
+            <HeroTextLink href={estimateHref ?? '/estimate'}>{CTA_PRIMARY}</HeroTextLink>
           </div>
         </InteriorHero>
 
@@ -417,7 +418,11 @@ export function LandingPageTemplate({
                 {benefits.map((item, i) => (
                   <li key={item} className="flex flex-col">
                     <span className="ed-small" style={accent}>{String(i + 1).padStart(2, '0')}</span>
-                    <p className="ed-h4 mt-5 text-pretty">{item}</p>
+                    <p className="ed-h4 mt-5 text-pretty">
+                      {item.includes('Boise ADU Co') ? (
+                        <InlineLinks text={item} links={[{ phrase: 'Boise ADU Co', href: 'https://p5homeco.com/quote/adu' }]} />
+                      ) : item}
+                    </p>
                   </li>
                 ))}
               </ul>

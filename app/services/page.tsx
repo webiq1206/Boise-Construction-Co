@@ -95,7 +95,7 @@ export default function ServicesIndexPage() {
         const body=(<>
           <img src={getServiceBackground(service.slug)} alt={contentImageAlt(getServiceBackground(service.slug)) || service.name} width={900} height={675} loading="lazy"/>
           <div><h2>{serviceLabel(service)}</h2><ArrowRight size={18} aria-hidden="true"/></div>
-          <p>{handoff?'Built by our sister company Boise ADU Co, part of P5 Home Co. Start your ADU request.':service.shortDescription}</p>
+          <p>{handoff?'Start your ADU request with the right P5 team. ADUs are built by our sister company Boise ADU Co, part of P5 Home Co.':service.shortDescription}</p>
           {!handoff&&<p className="interior-price">{planningLabel(service.planningFrom)}</p>}
         </>);
         return handoff

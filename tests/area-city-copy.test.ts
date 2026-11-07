@@ -16,7 +16,7 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
     const copy = getAreaCityCopy(slug);
     assert.ok(copy, slug);
     assert.equal(getAreaIntro(city), copy.intro);
-    const appended = slug === 'middleton' || slug === 'nampa' ? 2 : 0;
+    const appended = slug === 'middleton' ? 1 : slug === 'nampa' ? 2 : 0;
     assert.equal(copy.faqs.length, (slug === 'middleton' ? 9 : 7) + appended);
     if (slug === 'middleton') {
       assert.equal(copy.lead?.join(' '), copy.intro);
@@ -38,24 +38,18 @@ test('batch city pages use per-city intro and seven FAQs whose schema matches th
     assert.equal(copy.faqs[2].question, 'How do I start a project?');
     assert.equal(copy.faqs[3].question, `Do you build in ${city.name}, Idaho?`);
     assert.equal(copy.faqs[4].question, `Which county is ${city.name} in?`);
-    if (slug === 'middleton' || slug === 'nampa') {
-      assert.match(copy.faqs[1].answer, /P5 Home Co LLC, Idaho Registered Contractor #8381215, insured/);
-      assert.doesNotMatch(copy.faqs[1].answer, /bonded/i);
-    } else {
-      assert.match(copy.faqs[1].answer, /P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured/);
-      assert.match(copy.faqs[1].answer, /bond/i);
-    }
+    assert.match(copy.faqs[1].answer, /P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured/);
     assert.doesNotMatch(copy.faqs[1].answer, /(?:we(?:'|’)re|we are|the company is|fully) licensed|licensed, bonded|carries a license/i);
+    assert.match(copy.faqs[1].answer, /bond/i);
     assert.match(copy.faqs[1].answer, /insur/i);
     if (slug === 'middleton') {
       assert.equal(copy.faqs[9].question, 'Can you build on land I already own in Middleton?');
       assert.equal(copy.faqs[9].answer, 'Yes. We build fully custom homes, semi-custom plans and homes on land you already own, and we check whether your address goes through the city or Canyon County at the first visit.');
-      assert.equal(copy.faqs[10].question, 'What warranty comes with a new home?');
-      assert.equal(copy.faqs[10].answer, 'New builds carry a written workmanship warranty from Boise Construction Co.');
+      assert.equal(copy.faqs.map((faq) => faq.question).includes('What warranty comes with a new home?'), false);
     }
     if (slug === 'nampa') {
       assert.doesNotMatch(copy.faqs[2].answer, /60 to 90/);
-      assert.doesNotMatch(copy.faqs.map((faq) => faq.answer).join(' '), /\$|bonded/i);
+      assert.doesNotMatch(copy.faqs[5].answer, /\$10/);
       assert.equal(copy.faqs[7].question, 'Can you build on acreage near Nampa?');
       assert.equal(copy.faqs[7].answer, 'Yes. We build on serviced subdivision lots and nearby acreage, and site costs are itemized before construction starts.');
       assert.equal(copy.faqs[8].question, 'What happens at the in-home consultation?');

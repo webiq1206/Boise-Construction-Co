@@ -478,7 +478,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       'Feasibility before design, so setbacks and utilities shape the plan',
       'One accountable team from drawings through the final walkthrough',
       'Line-item budget with written allowances before construction',
-      'Boise ADU Co projects currently run through Boise Construction Co',
+      'ADUs are built by our sister company Boise ADU Co, part of P5 Home Co.',
     ],
     inclusions: [
       'Property and setback review for an accessory dwelling',
@@ -871,10 +871,13 @@ export function getScopeSplitSection(serviceSlug: string, cityName?: string): La
     return {
       heading: `New detached ADUs${where}, not conversions`,
       paragraphs: [
-        `Boise Construction Co builds new detached ADUs and guest houses${where}: a separate dwelling on the lot you already own, from setbacks and utilities through permits and construction.`,
+        'ADUs are built by our sister company Boise ADU Co, part of P5 Home Co.',
         'Converting a garage or a basement into an attached ADU, or remodeling rooms inside the house, is interior work. Our sister company Boise Remodeling Co handles those projects.',
       ],
-      paragraphLinks: [undefined, [{ phrase: 'Boise Remodeling Co', href: REMODELING_SITE_URL }]],
+      paragraphLinks: [
+        [{ phrase: 'Boise ADU Co', href: 'https://p5homeco.com/quote/adu' }],
+        [{ phrase: 'Boise Remodeling Co', href: REMODELING_SITE_URL }],
+      ],
     };
   }
   if (serviceSlug === 'home-additions') {
@@ -1031,7 +1034,8 @@ export const AREA_PAGE_FAQS: FAQItem[] = [
   {
     question: 'What kinds of homes do you build?',
     answer:
-      'Fully custom homes, semi-custom homes from adapted plans, builds on land you already own, shop homes, and ADUs. We also provide design and lot evaluation as standalone services.',
+      'Fully custom homes, semi-custom homes from adapted plans, builds on land you already own, and shop homes. ADUs are built by our sister company Boise ADU Co, part of P5 Home Co. We also provide design and lot evaluation as standalone services.',
+    links: [{ phrase: 'Boise ADU Co', href: 'https://p5homeco.com/quote/adu' }],
   },
   {
     question: 'Are you a registered contractor and insured?',

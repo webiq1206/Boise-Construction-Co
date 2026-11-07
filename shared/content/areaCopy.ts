@@ -18,7 +18,7 @@ export interface AreaCityCopy {
 
 const MIDDLETON_LEAD = [
   'Looking for a custom home builder in Middleton? Boise Construction Co is a design-build home builder serving Middleton and Canyon County. We build fully custom homes, semi-custom plans, and homes on land you already own - with one accountable team from feasibility through the final walkthrough.',
-  'Middleton is a homeowner\'s town: about 90% of occupied homes are owner-occupied, and nearly half of all housing (47%) has been built since 2010, per Census ACS 2020–2024 estimates. We build for clients here and throughout Canyon County. Addresses outside city limits go through the county instead; we check this for you at the first visit.',
+  'Middleton is a homeowner\'s town: about 90% of occupied homes are owner-occupied, and nearly half of all housing (47%) has been built since 2010, per Census ACS 2020 to 2024 estimates. We build for clients here and throughout Canyon County. Addresses outside city limits go through the county instead; we check this for you at the first visit.',
 ] as const;
 
 const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
@@ -95,7 +95,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'What city fees belong in a Meridian new-home budget?',
         answer:
-          'Meridian\'s published fee schedule lists a $150 non-refundable application fee for new residential projects, applied to the building permit, and a permit fee of $50 plus $5.50 per $1,000 of project value. Impact fees scale with climate-controlled floor area; for a 1,701–2,500 sq ft home the schedule shows $995 fire, $4,119 parks, and $402 police. Confirm current amounts with the city before you budget.',
+          'Meridian\'s published fee schedule lists a $150 non-refundable application fee for new residential projects, applied to the building permit, and a permit fee of $50 plus $5.50 per $1,000 of project value. Impact fees scale with climate-controlled floor area; for a 1,701 to 2,500 sq ft home the schedule shows $995 fire, $4,119 parks, and $402 police. Confirm current amounts with the city before you budget.',
       },
       {
         question: 'How deep do foundations go in Meridian?',
@@ -106,7 +106,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
   },
   nampa: {
     intro:
-      'Nampa mixes older and newer housing more than most Treasure Valley cities. Census figures for 2020–2024 show about 26% of its homes built before 1980 and roughly 22% built since 2010. We build new homes across Nampa and Canyon County, from fully custom designs to houses on land you already own, and one team carries each project from drawings to keys.',
+      'Nampa mixes older and newer housing more than most Treasure Valley cities. Census figures for 2020 to 2024 show about 26% of its homes built before 1980 and roughly 22% built since 2010. We build new homes across Nampa and Canyon County, from fully custom designs to houses on land you already own, and one team carries each project from drawings to keys.',
     faqs: [
       {
         question: 'What kinds of homes do you build?',
@@ -116,7 +116,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. Want our Idaho contractor registration details? Just ask. Nampa\'s residential FAQ says that when a homeowner isn\'t doing the work, a State of Idaho registered building contractor or licensed trade sub-contractor must pull the permit and perform it.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Want our Idaho contractor registration details? Just ask. Nampa\'s residential FAQ says that when a homeowner isn\'t doing the work, a State of Idaho registered building contractor or licensed trade sub-contractor must pull the permit and perform it.',
       },
       {
         question: 'How do I start a project?',
@@ -141,7 +141,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'How does Nampa\'s climate shape a new home?',
         answer:
-          'NOAA\'s 1991–2020 normals for the Nampa Sugar Factory station show about 11 inches of precipitation a year, roughly 59 days at 90°F or hotter, and 132 nights at or below freezing. That mix of heat and frost is why our Nampa designs pay close attention to insulation levels, window specification, and an envelope built for freeze-thaw cycles.',
+          'NOAA\'s 1991 to 2020 normals for the Nampa Sugar Factory station show about 11 inches of precipitation a year, roughly 59 days at 90°F or hotter, and 132 nights at or below freezing. That mix of heat and frost is why our Nampa designs pay close attention to insulation levels, window specification, and an envelope built for freeze-thaw cycles.',
       },
       {
         question: 'Can you build on acreage near Nampa?',
@@ -331,7 +331,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'Are you a registered contractor and insured?',
         answer:
-          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. You can ask for our Idaho contractor registration details at any point. Middleton\'s online permit portal links the state\'s contractor registration search and cites Idaho Code 54-5209, which ties a registration number to each building permit.',
+          'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. You can ask for our Idaho contractor registration details at any point. Middleton\'s online permit portal links the state\'s contractor registration search and cites Idaho Code 54-5209, which ties a registration number to each building permit.',
       },
       {
         question: 'How do I start a project?',
@@ -356,7 +356,7 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
       {
         question: 'How much heating does a Middleton home need?',
         answer:
-          'Plenty. The closest long-term NOAA station sits at the Nampa Sugar Factory, about 7 miles from Middleton to the south-southeast, and it logs roughly 5,550 heating degree days a year in its 1991–2020 normals, plus about 13 days whose high stays below freezing. That\'s why insulation, air sealing, and window choices get early attention in our designs, and our energy-efficient homes are verified with blower-door testing.',
+          'Plenty. The closest long-term NOAA station sits at the Nampa Sugar Factory, about 7 miles from Middleton to the south-southeast, and it logs roughly 5,550 heating degree days a year in its 1991 to 2020 normals, plus about 13 days whose high stays below freezing. That\'s why insulation, air sealing, and window choices get early attention in our designs, and our energy-efficient homes are verified with blower-door testing.',
       },
       {
         question: 'Do you build custom homes in Middleton?',
@@ -378,11 +378,6 @@ const AREA_CITY_COPY: Record<string, AreaCityCopy> = {
         question: 'Can you build on land I already own in Middleton?',
         answer:
           'Yes. We build fully custom homes, semi-custom plans and homes on land you already own, and we check whether your address goes through the city or Canyon County at the first visit.',
-      },
-      {
-        question: 'What warranty comes with a new home?',
-        answer:
-          'New builds carry a written workmanship warranty from Boise Construction Co.',
       },
     ],
   },

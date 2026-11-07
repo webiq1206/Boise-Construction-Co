@@ -54,11 +54,11 @@ const CONSTRUCTION_STANDARDS = [
   'Allowances set at real local pricing',
   'Site costs on their own lines',
   'Lender draw and inspection scheduling',
-  'Friday written update through the build',
+  'Written progress updates through the build',
 ];
 
 const ABOUT_ANSWER =
-  'Plan your Treasure Valley home with clear responsibilities from design through construction. Boise Construction Co is a design-build home builder and part of P5 Home Co. Your project scope sets out a line-item budget before groundbreaking, lender draw and inspection scheduling, written progress updates and a written workmanship warranty.';
+  'Plan your Treasure Valley home with clear responsibilities from design through construction. Boise Construction Co is a design-build home builder and part of P5 Home Co. Your project scope sets out a line-item budget before groundbreaking, lender draw and inspection scheduling, and written progress updates.';
 
 function HeroBreadcrumbs() {
   const items = [
@@ -134,8 +134,9 @@ export default function AboutPage() {
               Boise Construction Co is a design-build home builder in Meridian, Idaho, and one of the companies of P5 Home Co.
             </p>
             <div className="interior-hero-actions">
-              <PrimaryCta trackingLocation="about_hero">{CTA_PRIMARY}</PrimaryCta>
-              <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>
+              <PrimaryCta href={SITE_CONFIG.phoneHref} trackingLocation="about_hero">Call or text us about your project.</PrimaryCta>
+              <HeroTextLink href={SITE_CONFIG.phoneSmsHref}>Text {SITE_CONFIG.phone}</HeroTextLink>
+              <HeroTextLink href="/estimate">{CTA_PRIMARY}</HeroTextLink>
             </div>
           </InteriorHero>
 
@@ -158,11 +159,7 @@ export default function AboutPage() {
                     .
                   </p>
                   <p className="ed-small mt-6 max-w-2xl">
-                    {CONTRACTOR_REGISTRATION_LABEL}. Insured, certificate on request. Written workmanship warranty on new builds (
-                    <Link href="/warranty" className="underline underline-offset-2">
-                      warranty details
-                    </Link>
-                    ).
+                    {CONTRACTOR_REGISTRATION_LABEL}. Insured; certificate on request.
                   </p>
                 </Reveal>
                 <img
@@ -181,7 +178,11 @@ export default function AboutPage() {
               <div className="ed-split ed-split-narrow">
                 <div className="lg:sticky lg:top-28 lg:self-start">
                   <p className="ed-eyebrow">What we build</p>
-                  <h2 className="ed-h2 ed-statement">Custom homes and semi-custom homes. ADUs are built by our sister company Boise ADU Co, part of P5 Home Co.</h2>
+                  <h2 className="ed-h2 ed-statement">
+                    Custom homes and semi-custom homes. ADUs are built by our sister company{' '}
+                    <a href="https://p5homeco.com/quote/adu" rel="noopener" className="underline underline-offset-2">Boise ADU Co</a>
+                    , part of P5 Home Co.
+                  </h2>
                 </div>
                 <Reveal>
                   <p className="ed-lede">
@@ -199,7 +200,7 @@ export default function AboutPage() {
           <Section variant="greige" divider>
             <div className="ed-shell">
               <p className="ed-eyebrow">How we work</p>
-              <h2 className="ed-h2 ed-statement">Five things every Construction project includes.</h2>
+              <h2 className="ed-h2 ed-statement">Know what your project includes before construction</h2>
               <ul className="ed-matrix mt-10 list-none p-0" style={{ '--ed-cell-h': '150px' } as React.CSSProperties}>
                 {CONSTRUCTION_STANDARDS.map((item, i) => (
                   <li key={item} className="flex flex-col gap-4">
@@ -210,8 +211,7 @@ export default function AboutPage() {
               </ul>
               <div className="ed-split ed-split-narrow mt-12">
                 <p className="ed-lede">
-                  The P5 standard is simple: one written scope before any price, a weekly written update, and a workmanship
-                  warranty you can read before you sign.
+                  Understand your project before work starts, with a written scope before pricing and written progress updates through construction.
                 </p>
                 <div className="ed-inset">
                   <p className="ed-eyebrow">Where the budget lands</p>
