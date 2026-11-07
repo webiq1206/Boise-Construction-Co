@@ -66,7 +66,7 @@ test('architectural images keep descriptive alt text without presentation discla
   const about = read('app/about/page.tsx');
   assert.match(about, /About Boise Construction Co/);
   assert.match(about, /P5 Home Co LLC, Idaho Registered Contractor #8381215|CONTRACTOR_REGISTRATION_LABEL/);
-  assert.match(about, /1-year workmanship warranty|\/warranty/);
+  assert.match(about, /written workmanship warranty on new builds/);
 
   const slider = read('components/BeforeAfterSlider.tsx');
   assert.equal(slider.includes('>Before<'), false);

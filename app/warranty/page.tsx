@@ -12,19 +12,19 @@ import Link from 'next/link';
 
 const TITLE = 'New Home Warranty in Boise, Idaho';
 const DESCRIPTION = fitDescription(
-  'New home warranty from Boise Construction Co: 1-year workmanship on new builds. Ask whether a 10-year structural warranty applies to your contract.',
+  'New home warranty from Boise Construction Co: written workmanship warranty on new builds. Ask whether a structural warranty applies to your contract.',
 );
 
 const FAQS = [
   {
     question: 'What workmanship warranty do you provide on a new build?',
     answer:
-      'Boise Construction Co provides a 1-year workmanship warranty on new builds. If something we built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it.',
+      'Boise Construction Co provides a written workmanship warranty on new builds. If something we built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it.',
   },
   {
-    question: 'Do you offer a 10-year structural warranty?',
+    question: 'Do you offer a structural warranty?',
     answer:
-      'Ask us whether a 10-year structural warranty applies to your contract. It is offered on some projects and is not claimed here as always included.',
+      'Ask us whether a structural warranty applies to your contract. It is offered on some projects and is not claimed here as always included.',
   },
   {
     question: 'How do manufacturer warranties work?',
@@ -73,8 +73,8 @@ export default function WarrantyPage() {
             New home warranty in Boise, Idaho
           </h1>
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed mb-8">
-            New home warranty coverage from Boise Construction Co starts with a 1-year workmanship warranty on new builds.
-            Ask us whether a 10-year structural warranty applies to your contract.
+            New home warranty coverage from Boise Construction Co starts with a written workmanship warranty on new builds.
+            Ask us whether a structural warranty applies to your contract.
           </p>
           <PrimaryCta trackingLocation="warranty_hero">{CTA_PRIMARY}</PrimaryCta>
         </InteriorHero>
@@ -84,7 +84,7 @@ export default function WarrantyPage() {
             <div className="ed-split ed-split-narrow">
               <div className="lg:sticky lg:top-28 lg:self-start">
                 <p className="ed-eyebrow">Workmanship</p>
-                <h2 className="ed-h2 ed-statement">What the 1-year workmanship warranty covers</h2>
+                <h2 className="ed-h2 ed-statement">What the written workmanship warranty covers</h2>
               </div>
               <div>
                 <p className="ed-lede">
@@ -108,7 +108,7 @@ export default function WarrantyPage() {
               </div>
               <div>
                 <p className="ed-lede">
-                  A 10-year structural warranty may apply on some contracts. Confirm with us before you treat it as
+                  A structural warranty may apply on some contracts. Confirm with us before you treat it as
                   included.
                 </p>
                 <p className="ed-body mt-6">The written contract states which warranty documents apply to your build.</p>

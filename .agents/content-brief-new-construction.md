@@ -25,7 +25,7 @@ disagrees with an article, the article is wrong.
 - A written progress update every week.
 - Permits, plan review, engineering, and utility applications handled in-house
   for Ada and Canyon County.
-- A one-year workmanship warranty after possession.
+- A written workmanship warranty after possession.
 
 ### Claims that are forbidden
 
