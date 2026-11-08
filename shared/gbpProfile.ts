@@ -64,7 +64,7 @@ export const GBP_CATEGORIES = {
 } as const;
 
 export const GBP_DESCRIPTION =
-  `Boise Construction Co is a design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles feasibility, design, Ada and Canyon County permits, and construction for custom homes, semi-custom homes, builds on land you already own, and shop homes. Every project includes a line-item budget before construction, a dedicated project manager, weekly written cost and schedule updates, and a written workmanship warranty. We also offer lot evaluation and permit-ready home design as standalone services. ${FOUNDING.gbpFoundedSentence}Bonded and insured. Book a free planning consultation and leave with a realistic budget band and clear next steps.`;
+  `Boise Construction Co is a design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho. One accountable team handles feasibility, design, Ada and Canyon County permits, and construction for custom homes, semi-custom homes, builds on land you already own, and shop homes. Every project includes a line-item budget before construction, a dedicated project manager, weekly written cost and schedule updates, and a written workmanship warranty. We also offer lot evaluation and permit-ready home design as standalone services. ${FOUNDING.gbpFoundedSentence}Insured. Book a free planning consultation and leave with a realistic budget band and clear next steps.`;
 
 export const GBP_LINKS = {
   website: SITE,
@@ -152,7 +152,7 @@ export const GBP_SERVICES: GbpService[] = [
   {
     name: 'Design-build home construction',
     description:
-      'Design and construction under one contract, with the design priced continuously so the drawings never outrun the budget.',
+      'Design and construction with one accountable company, with the design priced continuously so the drawings never outrun the budget.',
     startingPrice: '$525,000',
   },
   {
@@ -237,7 +237,7 @@ export const GBP_PRODUCTS: GbpProduct[] = [
     price: 'From $525,000',
     url: `${SITE}/services/design-build`,
     description:
-      'Design and construction under one contract. The design is priced as it develops, so it never outruns your budget.',
+      'Design and construction with one accountable company and one point of contact. The design is priced as it develops, so it never outruns your budget.',
   },
   {
     category: 'Home Building Services',
@@ -309,7 +309,7 @@ export const GBP_PRODUCTS: GbpProduct[] = [
     price: 'Free',
     url: `${SITE}/#calculator`,
     description:
-      'Instant planning range for a new build. Size, finish level, and site conditions. Not a bid - a starting point for conversation.',
+      'Planning range for a new build from project type and finished living area, land not included. Not a bid, a starting point for conversation.',
   },
   {
     category: 'Consultation & Tools',
@@ -363,7 +363,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   {
     question: 'Are you a registered contractor and insured?',
     answer:
-      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured for residential construction across the Treasure Valley. Certificate on request.',
+      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured for residential construction across the Treasure Valley. Certificate on request.',
   },
   {
     question: 'Can you build on land I already own?',
@@ -379,7 +379,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   },
   {
     question: 'What is design-build?',
-    answer: `Design and construction sit under one contract with one company, and the design is priced continuously as it develops rather than bid after it is finished. That prevents the most expensive failure in home building: a completed design that comes in far over budget. Learn more: ${SITE}/about`,
+    answer: `Design and construction sit with one accountable company and one point of contact for your project, and the design is priced continuously as it develops rather than bid after it is finished. That prevents the most expensive failure in home building: a completed design that comes in far over budget. Learn more: ${SITE}/about`,
   },
   {
     question: 'How do I get started?',

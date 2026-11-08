@@ -148,7 +148,7 @@ export default function AboutPage() {
                     .
                   </p>
                   <p className="ed-small mt-6 max-w-2xl">
-                    {CONTRACTOR_REGISTRATION_LABEL}. Insured, certificate on request. 1-year workmanship warranty on new builds from documented Final Completion (
+                    {CONTRACTOR_REGISTRATION_LABEL}. Insured, certificate on request. 1-year workmanship warranty on our own team's work on new builds from documented Final Completion; subcontractor work carries the subcontractor's own warranty (
                     <Link href="/warranty" className="underline underline-offset-2">
                       warranty details
                     </Link>

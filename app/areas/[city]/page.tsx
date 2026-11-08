@@ -76,7 +76,7 @@ export default async function AreaPage(props: { params: Promise<{ city: string }
           {
             heading: 'Custom home builder serving Middleton',
             paragraphs: [
-              'Home builders in Middleton work with both city lots and Canyon County acreage. As your custom home builder in Middleton, we handle lot evaluation, design, engineering, permitting, and construction under one contract so drawings, budget, and schedule stay tied together.',
+              'Home builders in Middleton work with both city lots and Canyon County acreage. As your custom home builder in Middleton, we handle lot evaluation, design, engineering, permitting, and construction as one accountable company with one point of contact, so drawings, budget, and schedule stay tied together.',
               'For local permit and land detail, read our Middleton home building guide. For Treasure Valley process and planning ranges, see custom home builder.',
             ],
             paragraphLinks: [

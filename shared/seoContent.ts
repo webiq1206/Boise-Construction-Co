@@ -61,9 +61,9 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     headline: 'Custom home builder in the Treasure Valley',
     primaryKeyword: 'custom home builder boise idaho',
     overview:
-      'A custom home starts from a blank page rather than a catalog. Boise Construction Co handles feasibility, design, engineering, permitting, and construction under one contract, so the drawings, the budget, and the schedule stay tied together from the first sketch to the day you get the keys.',
+      'A custom home starts from a blank page rather than a catalog. Boise Construction Co handles feasibility, design, engineering, permitting, and construction as one accountable company, so the drawings, the budget, and the schedule stay tied together from the first sketch to the day you get the keys.',
     benefits: [
-      'One team and one contract from feasibility through final walkthrough',
+      'One accountable company and one point of contact from feasibility through final walkthrough',
       'Line-item budget you can see, not a single lump-sum number',
       'Allowance amounts set from real local pricing, not placeholder figures',
       'Written weekly schedule and cost updates for the life of the build',
@@ -114,7 +114,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'What is not included in a per-square-foot price?',
         answer:
-          'Per-square-foot figures cover vertical construction. Land, site work, well and septic on rural parcels, impact fees, landscaping, fencing, and window coverings sit outside that number. We itemize each one so nothing surfaces late.',
+          'Our per-square-foot figures are planning ranges for the house itself, excluding land. Site work, impact fees and utility connections are estimated separately for your lot, and well and septic on rural parcels, landscaping, fencing, and window coverings sit outside that number too. We itemize each one so nothing surfaces late.',
       },
       {
         question: 'How do you handle budget changes during construction?',
@@ -309,10 +309,10 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     headline: 'Design-build home construction in the Treasure Valley',
     primaryKeyword: 'design build home builder boise idaho',
     overview:
-      'Design-build puts the drawings and the construction under one contract. Instead of hiring an architect, bidding the finished plans, and discovering the design costs 40 percent more than you budgeted, the design is priced continuously as it develops.',
+      'Design-build puts the drawings and the construction with one accountable company. Instead of hiring an architect, bidding the finished plans, and discovering the design costs 40 percent more than you budgeted, the design is priced continuously as it develops.',
     benefits: [
       'Design priced as it develops, so the drawings never outrun the budget',
-      'One contract and one point of accountability instead of two',
+      'One accountable company and one point of contact instead of two',
       'No re-drawing cycle after bids come back over budget',
       'Constructability reviewed by the people who will actually build it',
     ],
@@ -347,7 +347,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'What does design-build mean for a new home?',
         answer:
-          'Design and construction sit under one contract with one company. You have a single point of accountability, and the design is priced continuously rather than bid once it is finished.',
+          'Design and construction sit with one accountable company and one point of contact for your project. You have a single point of accountability, and the design is priced continuously rather than bid once it is finished.',
       },
       {
         question: 'Is design-build cheaper than hiring an architect separately?',
@@ -378,7 +378,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Design-build cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, design-build homes in the Treasure Valley plan between $250 and $400 per finished square foot excluding land. The design and engineering portion typically represents 5 to 12 percent of construction cost, or about $9,000 to $35,000 for a typical home, and is folded into a single contract rather than billed separately.',
+        'As of 2026, design-build homes in the Treasure Valley plan between $250 and $400 per finished square foot excluding land. The design and engineering portion typically represents 5 to 12 percent of construction cost, or about $9,000 to $35,000 for a typical home, and its scope and price are agreed in writing before design work starts.',
         'These are planning ranges, not bids. The advantage of design-build is that your number gets more precise at every design milestone instead of arriving all at once when drawings go out to bid.',
       ],
     },
@@ -1052,7 +1052,7 @@ export const AREA_PAGE_FAQS: FAQItem[] = [
   {
     question: 'Are you a registered contractor and insured?',
     answer:
-      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, bonded and insured. Certificate on request.',
+      'Yes. P5 Home Co LLC, Idaho Registered Contractor #8381215, insured. Certificate on request.',
   },
   {
     question: 'How do I start a project?',

@@ -40,7 +40,7 @@ const SUMMARY =
 
 const POSITIONING =
   `Design-build means one accountable team handles architectural design, engineering, ` +
-  `estimating, Ada and Canyon County permitting, and construction under a single contract, ` +
+  `estimating, Ada and Canyon County permitting, and construction, with one point of contact, ` +
   `backed by a written line-item scope before the foundation is poured. Budget ranges are ` +
   `produced by an on-site estimator from house geometry and specification level rather than ` +
   `a flat price per square foot, because the same 2,400 square feet costs very different ` +
@@ -118,10 +118,13 @@ function buildFull(): string {
     `${SITE_CONFIG.name} is a residential design-build home builder serving the Treasure Valley${FOUNDING.llmsSinceClause}. We build new homes: custom homes drawn from a blank page, semi-custom homes ` +
       `personalized from a proven plan, and build-on-your-lot projects for families who already ` +
       `own land. Design-build means design, engineering, permitting, and construction are ` +
-      `delivered by one team under one contract, which removes the handoff between an architect ` +
+      `delivered by one accountable company, which removes the handoff between an architect ` +
       `and a general contractor and keeps the drawings and the budget on the same schedule. ` +
       `Every project includes a written line-item scope before construction, named allowances ` +
-      `for selections, and a workmanship warranty from documented Final Completion.`,
+      `for selections, and a one-year workmanship warranty from documented Final Completion on work ` +
+      `performed by our own team. Subcontractor work is covered by that subcontractor's own warranty, ` +
+      `and at the end of every project we provide a complete list of the subcontractors who worked ` +
+      `on it, with their contact information.`,
     '',
   );
   lines.push('- Business type: Residential design-build home builder (new construction)');

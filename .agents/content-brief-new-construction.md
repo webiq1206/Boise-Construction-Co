@@ -12,7 +12,7 @@ disagrees with an article, the article is wrong.
   houses. It is not a remodeler and must never be described as one.
 - **Where:** Boise, Idaho. Serves Boise, Meridian, Eagle, Nampa, Kuna, Star,
   Middleton, and Caldwell, across Ada and Canyon County.
-- **Since:** 2020. Bonded and insured. Idaho contractor registration on request.
+- **Since:** 2020. Insured. Idaho contractor registration on request.
 - **Author byline for all posts:** `Boise Construction Co`
 
 ### Claims that are true and may be used
@@ -34,7 +34,7 @@ disagrees with an article, the article is wrong.
 - Any named client, testimonial, review, or quotation from a customer.
 - Any specific completed project presented as ours.
 - "Licensed" as a bare claim. Idaho registers residential contractors rather
-  than licensing them. Use "bonded and insured" and "Idaho contractor
+  than licensing them. Use "insured" (never "bonded") and "Idaho contractor
   registration available on request".
 
 ## Published cost figures

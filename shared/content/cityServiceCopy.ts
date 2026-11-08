@@ -158,7 +158,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "caldwell": {
-      intro: "Shop homes and barndominiums make sense on Caldwell's larger lots. Along Indian Creek, the creek that flows through Kuna, Nampa, and Caldwell, and throughout Caldwell, the home-and-shop building must still follow city code and pass inspections in turn. Ours is a design-build process, which brings a budget with every line shown, a written warranty covering workmanship, and weekly written updates. Our estimator gives a planning range in minutes; the first planning consultation is free.",
+      intro: "Shop homes and barndominiums make sense on Caldwell's larger lots. Along Indian Creek, the creek that flows through Kuna, Nampa, and Caldwell, and throughout Caldwell, the home-and-shop building must still follow city code and pass inspections in turn. Ours is a design-build process, which brings a budget with every line shown, a written warranty covering workmanship, and weekly written updates. Our estimator gives a planning range; the first planning consultation is free.",
       faqs: [
         {
           question: "How much does shop homes & barndominiums cost in Caldwell?",
@@ -588,7 +588,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "How do I get a budget for custom home building in Meridian?",
-          answer: "Our online estimator puts a planning range on a Meridian custom home in a few minutes. Then reserve a free planning consultation; if a lot is on your list, we'll tour it with you and show which conditions are likely to raise site costs.",
+          answer: "Our online estimator puts a planning range on a Meridian custom home. Then reserve a free planning consultation; if a lot is on your list, we'll tour it with you and show which conditions are likely to raise site costs.",
         },
         {
           question: "What does Meridian charge to permit a new house?",
@@ -597,7 +597,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "nampa": {
-      intro: "Looking at custom home building in Nampa, Idaho? From Downtown Nampa out to the newer edges of town, a new home's layout has to respect the city's building code and the timing of each inspection. The whole custom home runs design-build. You'll have an itemized budget, a written note from us each week on where the job stands, and our workmanship backed by a written warranty. Within a few minutes the estimator can show what a Nampa custom home might cost as a planning range, and your first planning consultation costs nothing.",
+      intro: "Looking at custom home building in Nampa, Idaho? From Downtown Nampa out to the newer edges of town, a new home's layout has to respect the city's building code and the timing of each inspection. The whole custom home runs design-build. You'll have an itemized budget, a written note from us each week on where the job stands, and our workmanship backed by a written warranty. The estimator can show what a Nampa custom home might cost as a planning range, and your first planning consultation costs nothing.",
       faqs: [
         {
           question: "How much does custom home building cost in Nampa?",
@@ -675,7 +675,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "How do I get a budget for custom home building in Kuna?",
-          answer: "The estimator gives a planning range in minutes. Next, book a free planning consultation; sketches or a wish list are welcome. Thinking about a particular lot? We'll walk it with you and explain the conditions behind its site costs.",
+          answer: "The estimator gives a planning range. Next, book a free planning consultation; sketches or a wish list are welcome. Thinking about a particular lot? We'll walk it with you and explain the conditions behind its site costs.",
         },
         {
           question: "What will a Kuna building permit cost for a new home?",
@@ -684,7 +684,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "caldwell": {
-      intro: "Custom home building in Caldwell, Idaho can mean an in-town lot or acreage at the edge of Canyon County farmland. Wherever it sits, from lots along Indian Creek, the creek that flows through Kuna, Nampa, and Caldwell, outward, a new home's layout has to follow Caldwell's code and fit its inspection calendar. We design and build under one contract. Each cost of the house is itemized, a written update covers every week of the job, and you hold a workmanship warranty in writing. For a first number on a Caldwell custom home, run the estimator's planning range; for a real conversation, request a free planning consultation.",
+      intro: "Custom home building in Caldwell, Idaho can mean an in-town lot or acreage at the edge of Canyon County farmland. Wherever it sits, from lots along Indian Creek, the creek that flows through Kuna, Nampa, and Caldwell, outward, a new home's layout has to follow Caldwell's code and fit its inspection calendar. We design and build as one accountable company, with one point of contact for your project. Each cost of the house is itemized, a written update covers every week of the job, and you hold a workmanship warranty in writing. For a first number on a Caldwell custom home, run the estimator's planning range; for a real conversation, request a free planning consultation.",
       faqs: [
         {
           question: "How much does custom home building cost in Caldwell?",
@@ -1268,7 +1268,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "middleton": {
-      intro: "Home design and plans for Middleton are drawn to the codes the city has adopted. A plan for Middleton Heights, or any other Middleton lot, has to answer to that code and to the inspections that follow permit issuance. Plans we draw stay with the same design-build team through construction, with a line-item budget, a weekly written update, and a written workmanship warranty. Our estimator returns a planning range in minutes, and the planning consultation for Middleton plans is free.",
+      intro: "Home design and plans for Middleton are drawn to the codes the city has adopted. A plan for Middleton Heights, or any other Middleton lot, has to answer to that code and to the inspections that follow permit issuance. Plans we draw stay with the same design-build team through construction, with a line-item budget, a weekly written update, and a written workmanship warranty. Our estimator returns a planning range, and the planning consultation for Middleton plans is free.",
       faqs: [
         {
           question: "How much does home design & plans cost in Middleton?",
@@ -1357,7 +1357,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "meridian": {
-      intro: "Already own land in Meridian? Building on your lot here still means matching the house to local building requirements and the city's inspection schedule, from Lochsa Falls to the edges of town. As a design-build firm we keep it under one contract with a line-by-line budget, written weekly updates, and a workmanship warranty in writing. Tell the estimator about the home you picture on your Meridian lot and it returns a planning range; for a deeper look, reserve a free planning consultation.",
+      intro: "Already own land in Meridian? Building on your lot here still means matching the house to local building requirements and the city's inspection schedule, from Lochsa Falls to the edges of town. As a design-build firm we keep it with one accountable company and one point of contact, with a line-by-line budget, written weekly updates, and a workmanship warranty in writing. Tell the estimator about the home you picture on your Meridian lot and it returns a planning range; for a deeper look, reserve a free planning consultation.",
       faqs: [
         {
           question: "How much does build on your lot cost in Meridian?",
@@ -2125,7 +2125,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does design-build mean for a new home?",
-          answer: "One company, one contract, covering both the design and the construction. You have a single party accountable for the result, and the house is priced the whole time it is being designed instead of bid after the drawings are done.",
+          answer: "One accountable company, and one point of contact, for both the design and the construction. You have a single party accountable for the result, and the house is priced the whole time it is being designed instead of bid after the drawings are done.",
         },
         {
           question: "Is design-build cheaper than hiring an architect separately?",
@@ -2154,7 +2154,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does design-build mean for a new home?",
-          answer: "It means a single company and a single contract handle the design and the construction of your house. Accountability sits with one party, and pricing continues throughout design rather than arriving as a bid when the plans are finished.",
+          answer: "It means one accountable company and one point of contact handle the design and the construction of your house. Accountability sits with one party, and pricing continues throughout design rather than arriving as a bid when the plans are finished.",
         },
         {
           question: "Is design-build cheaper than hiring an architect separately?",
@@ -2183,7 +2183,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does design-build mean for a new home?",
-          answer: "Design and construction come from one company under one contract. That gives you one point of accountability, and the house is priced continually as it's designed rather than being sent out to bid once the drawings are complete.",
+          answer: "Design and construction come from one accountable company, with one point of contact for your project. That gives you one point of accountability, and the house is priced continually as it's designed rather than being sent out to bid once the drawings are complete.",
         },
         {
           question: "Is design-build cheaper than hiring an architect separately?",
@@ -2212,7 +2212,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does design-build mean for a new home?",
-          answer: "It's one contract with one company covering design and the build. There's one point of accountability, and instead of bidding a finished design, we price it continuously while it's drawn.",
+          answer: "It's one accountable company and one point of contact covering design and the build. There's one point of accountability, and instead of bidding a finished design, we price it continuously while it's drawn.",
         },
         {
           question: "Is design-build cheaper than hiring an architect separately?",
@@ -2233,7 +2233,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       ],
     },
     "kuna": {
-      intro: "With design-build in Kuna, the same team takes your home from concept to keys. Near Indian Creek, the creek that flows through Kuna, Nampa, and Caldwell, and across Kuna, a new house must satisfy the city's code and its inspection sequence, and a single team that both draws and builds keeps those in sync. We design and build on one contract, so the budget shows each line, a written progress report reaches you weekly, and a written warranty backs our workmanship. Running the estimator takes a few minutes and yields a planning range for a design-build home in Kuna; the planning consultation that follows is free.",
+      intro: "With design-build in Kuna, the same team takes your home from concept to keys. Near Indian Creek, the creek that flows through Kuna, Nampa, and Caldwell, and across Kuna, a new house must satisfy the city's code and its inspection sequence, and a single team that both draws and builds keeps those in sync. We design and build as one accountable company with one point of contact, so the budget shows each line, a written progress report reaches you weekly, and a written warranty backs our workmanship. The estimator gives a planning range for a design-build home in Kuna; the planning consultation that follows is free.",
       faqs: [
         {
           question: "How much does design-build cost in Kuna?",
@@ -2241,7 +2241,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does design-build mean for a new home?",
-          answer: "In short: one contract and one company for both design and construction. A single party answers for how it turns out, and the house is priced continuously while it's designed instead of bid once the drawings are finished.",
+          answer: "In short: one accountable company and one point of contact for both design and construction. A single party answers for how it turns out, and the house is priced continuously while it's designed instead of bid once the drawings are finished.",
         },
         {
           question: "Is design-build cheaper than hiring an architect separately?",
@@ -2270,7 +2270,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does design-build mean for a new home?",
-          answer: "Both design and construction sit under one contract from one firm. Accountability rests with one party, and the house is priced as it's designed rather than going out to bid when the plans are complete.",
+          answer: "Both design and construction sit with one accountable company and one point of contact. Accountability rests with one party, and the house is priced as it's designed rather than going out to bid when the plans are complete.",
         },
         {
           question: "Is design-build cheaper than hiring an architect separately?",
@@ -2299,7 +2299,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does design-build mean for a new home?",
-          answer: "Put simply: a single contract with a single company, covering design through construction. One party is accountable to you, and the price is tracked continuously during design, not bid once it's finished.",
+          answer: "Put simply: one accountable company and one point of contact, covering design through construction. One party is accountable to you, and the price is tracked continuously during design, not bid once it's finished.",
         },
         {
           question: "Is design-build cheaper than hiring an architect separately?",
@@ -2328,7 +2328,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does design-build mean for a new home?",
-          answer: "Design and construction come under one contract from one firm. The result is one party accountable, and the design is priced continuously instead of being bid after the drawings are done.",
+          answer: "Design and construction come from one accountable company with one point of contact. The result is one party accountable, and the design is priced continuously instead of being bid after the drawings are done.",
         },
         {
           question: "Is design-build cheaper than hiring an architect separately?",
@@ -2357,7 +2357,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does design-build mean for a new home?",
-          answer: "A single firm holds one contract covering design and the build. Accountability sits in one place, and rather than bidding the plans at the end, the design gets priced the whole way while it's drawn.",
+          answer: "One accountable company, with one point of contact, covers design and the build. Accountability sits in one place, and rather than bidding the plans at the end, the design gets priced the whole way while it's drawn.",
         },
         {
           question: "Is design-build cheaper than hiring an architect separately?",
