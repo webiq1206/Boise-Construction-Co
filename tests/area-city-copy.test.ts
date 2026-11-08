@@ -104,7 +104,7 @@ test('Middleton guide title, meta, and intro keep live cost and warranty lines',
   assert.match(guide.content, /<strong>custom home builder in Middleton<\/strong>/);
   assert.match(guide.content, /href="\/areas\/middleton">Middleton area page<\/a>/);
   assert.match(guide.content, /href="\/services\/custom-home-builder">Treasure Valley custom home builder<\/a>/);
-  assert.match(guide.content, /a one-year workmanship warranty after possession/);
+  assert.match(guide.content, /a one-year workmanship warranty from documented Final Completion/);
   assert.match(guide.content, /\$225 to \$300 per finished square foot/);
   assert.match(guide.content, /\$250 to \$400 for custom/);
   assert.match(guide.content, /\$25,000 to \$50,000/);

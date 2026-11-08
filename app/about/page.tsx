@@ -148,7 +148,7 @@ export default function AboutPage() {
                     .
                   </p>
                   <p className="ed-small mt-6 max-w-2xl">
-                    {CONTRACTOR_REGISTRATION_LABEL}. Insured, certificate on request. 1-year workmanship warranty on new builds (
+                    {CONTRACTOR_REGISTRATION_LABEL}. Insured, certificate on request. 1-year workmanship warranty on new builds from documented Final Completion (
                     <Link href="/warranty" className="underline underline-offset-2">
                       warranty details
                     </Link>
@@ -284,7 +284,7 @@ export default function AboutPage() {
                 <h2 className="ed-h2-sm ed-statement-wide">Ready to start your project?</h2>
                 <div>
                   <p className="ed-body">
-                    Request a quote and we reply within one business day with the next planning step.
+                    Request a quote and we answer your questions and help you work out the next planning step.
                   </p>
                   <div className="mt-8">
                     <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>

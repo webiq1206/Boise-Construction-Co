@@ -1,7 +1,7 @@
 import { InteriorHero, InteriorPage } from '@/components/approved/InteriorLayout';
 import { Section } from '@/components/marketing/Section';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { PrimaryCta } from '@/components/approved/PrimaryCta';
+import { HeroTextLink, PrimaryCta } from '@/components/approved/PrimaryCta';
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildCanonical, fitDescription } from '@/lib/page-metadata';
 import { generateBreadcrumbSchema, generateFAQSchema, generateWebPageSchema } from '@/lib/schema';
@@ -12,19 +12,45 @@ import Link from 'next/link';
 
 const TITLE = 'New Home Warranty in Boise, Idaho';
 const DESCRIPTION = fitDescription(
-  'New home warranty from Boise Construction Co: 1-year workmanship on new builds. Ask whether a 10-year structural warranty applies to your contract.',
+  'New home warranty from Boise Construction Co: 1-year workmanship on new builds from documented Final Completion, and how existing customers get help.',
 );
+
+/** What to send so a warranty report can be reviewed without a second round of questions. */
+const HELP_DETAILS = [
+  'Your name',
+  'The project address',
+  'The affected item and where it is in the home',
+  'When it started',
+  'A short description of what you are seeing',
+  'Photos, if you have them',
+];
+
+const HELP_SUBJECT = 'Help with a completed project';
+const HELP_BODY = [
+  'Name:',
+  'Project address:',
+  'Affected item and location:',
+  'When it started:',
+  'Description:',
+  'Photos attached (if available):',
+].join('\n');
+const HELP_MAILTO = `mailto:${SITE_CONFIG.email}?subject=${encodeURIComponent(HELP_SUBJECT)}&body=${encodeURIComponent(HELP_BODY)}`;
 
 const FAQS = [
   {
     question: 'What workmanship warranty do you provide on a new build?',
     answer:
-      'Boise Construction Co provides a 1-year workmanship warranty on new builds. If something we built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it.',
+      'Boise Construction Co provides a 1-year workmanship warranty on new builds, starting at documented Final Completion: the agreed work is complete, required inspections have passed, and the walkthrough and handover records are done. It covers work by our own team and our subcontractors. If something we built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it.',
   },
   {
     question: 'Do you offer a 10-year structural warranty?',
     answer:
       'Ask us whether a 10-year structural warranty applies to your contract. It is offered on some projects and is not claimed here as always included.',
+  },
+  {
+    question: 'How do I report a problem with a completed project?',
+    answer:
+      `Email ${SITE_CONFIG.email} or call ${SITE_CONFIG.phone} with your name, the project address, the affected item and its location, when it started, a description, and photos if you have them. We review the report, inspect where needed, and explain what is covered and the plan to correct it. Your signed agreement says how formal warranty notice must be given, and that method controls a formal claim.`,
   },
   {
     question: 'How do manufacturer warranties work?',
@@ -73,12 +99,55 @@ export default function WarrantyPage() {
             New home warranty in Boise, Idaho
           </h1>
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed mb-8">
-            New home warranty coverage from Boise Construction Co starts with a 1-year workmanship warranty on new builds.
-            Ask us whether a 10-year structural warranty applies to your contract.
+            New home warranty coverage from Boise Construction Co starts with a 1-year workmanship warranty on new builds,
+            from documented Final Completion. Ask us whether a 10-year structural warranty applies to your contract.
           </p>
-          <PrimaryCta trackingLocation="warranty_hero">{CTA_PRIMARY}</PrimaryCta>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+            <PrimaryCta href="#get-help" trackingLocation="warranty_hero_help">
+              Get help with a completed project
+            </PrimaryCta>
+            <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>
+          </div>
         </InteriorHero>
 
+        <Section variant="greige" divider id="get-help">
+          <div className="ed-shell">
+            <div className="ed-split ed-split-narrow">
+              <div className="lg:sticky lg:top-28 lg:self-start">
+                <p className="ed-eyebrow">Existing customers</p>
+                <h2 className="ed-h2 ed-statement">Get help with a completed project</h2>
+              </div>
+              <div>
+                <p className="ed-lede">
+                  Email or call us and we will answer your questions and help you work out the next step. Please include:
+                </p>
+                <ul className="ed-body mt-6 list-disc pl-5 space-y-1">
+                  {HELP_DETAILS.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+                <p className="ed-body mt-6">
+                  <a href={HELP_MAILTO} className="underline underline-offset-2">
+                    Email {SITE_CONFIG.email}
+                  </a>{' '}
+                  or call{' '}
+                  <a href={SITE_CONFIG.phoneHref} className="underline underline-offset-2">
+                    {SITE_CONFIG.phone}
+                  </a>
+                  . We review the report, inspect where needed, and explain what is covered and the plan to correct it.
+                </p>
+                <p className="ed-body mt-6">
+                  Your signed agreement says how formal warranty notice must be given. That notice method controls a
+                  formal warranty claim, so follow it as well as getting in touch here.
+                </p>
+                <p className="ed-body mt-6">
+                  If there is immediate danger, such as a gas smell, active water or an electrical hazard, contact
+                  emergency services or the utility first, then let us know.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Section>
         <Section divider>
           <div className="ed-shell">
             <div className="ed-split ed-split-narrow">
@@ -88,8 +157,17 @@ export default function WarrantyPage() {
               </div>
               <div>
                 <p className="ed-lede">
-                  Workmanship on the home we build: if a failure traces to how we built or installed something,
-                  we return and correct it during the warranty term.
+                  Workmanship on the home we build, including our subcontractors' work: if a failure traces to how
+                  we built or installed something, we return and correct it during the one-year term, which starts at
+                  documented Final Completion.
+                </p>
+                <p className="ed-body mt-6">
+                  Final Completion means the agreed work and any written changes are complete, required inspections
+                  have passed, and the walkthrough and handover records are done. Your signed agreement defines it for
+                  your project.
+                </p>
+                <p className="ed-body mt-6">
+                  Manufacturer and product warranties are separate and follow each maker's terms.
                 </p>
                 <p className="ed-body mt-6">
                   Normal wear, deferred maintenance, owner modifications, and manufacturer defects fall outside
@@ -137,7 +215,11 @@ export default function WarrantyPage() {
                   <Link href="/about" className="underline underline-offset-2">
                     About
                   </Link>{' '}
-                  page.
+                  page. Planning a new build instead?{' '}
+                  <Link href="/estimate" className="underline underline-offset-2">
+                    {CTA_PRIMARY}
+                  </Link>
+                  .
                 </p>
               </div>
             </div>

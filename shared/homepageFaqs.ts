@@ -29,7 +29,7 @@ export const HOMEPAGE_FAQS: HomepageFaq[] = [
   },
   {
     q: "Are the budget ranges quotes?",
-    a: "No. Planning ranges on this site are starting points, not bids. A written scope and proposal follow a site visit and a lot review. Request a quote and we reply within one business day. Design-build means one accountable team handles architectural design, engineering, Ada and Canyon County permitting, and construction under a single contract, backed by a written line-item scope before the foundation is poured.",
+    a: "No. Planning ranges on this site are starting points, not bids. A written scope and proposal follow a site visit and a lot review. Request a quote and we answer your questions and help you work out the next step. Design-build means one accountable team handles architectural design, engineering, Ada and Canyon County permitting, and construction under a single contract, backed by a written line-item scope before the foundation is poured.",
   },
   {
     q: "What is excluded from the planning number?",
@@ -89,7 +89,7 @@ export const HOMEPAGE_FAQS: HomepageFaq[] = [
   },
   {
     q: "What is your workmanship warranty?",
-    a: "We provide a 1-year workmanship warranty on new builds. If something we built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it at no charge. Ask us whether a 10-year structural warranty applies to your contract. We also pass through manufacturer warranties on the products we install.",
+    a: "We provide a 1-year workmanship warranty on new builds, starting at documented Final Completion. If something we or our subcontractors built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it at no charge. Ask us whether a 10-year structural warranty applies to your contract. We also pass through manufacturer warranties on the products we install.",
   },
   {
     q: "What does the free planning consultation include?",
