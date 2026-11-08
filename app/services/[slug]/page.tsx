@@ -177,7 +177,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
     {
       heading: `Why design-build for your ${serviceLC}`,
       paragraphs: [
-        `As a design-build home builder, we bring architectural design, engineering, estimating, permitting, and construction under one contract and one accountable team. That removes the handoffs and finger-pointing that happen when the architect, the plan reviewer, and the general contractor all answer to someone different - and it keeps your ${serviceLC} on a single, coordinated schedule.`,
+        `As a design-build home builder, we bring architectural design, engineering, estimating, permitting, and construction with one accountable company and one point of contact for your project. That removes the handoffs and finger-pointing that happen when the architect, the plan reviewer, and the general contractor all answer to someone different - and it keeps your ${serviceLC} on a single, coordinated schedule.`,
         // The line-item budget, allowances, weekly updates, and warranty are
         // already stated as scannable bullets above (benefits/inclusions) -
         // restating them here in prose was pure repetition. This paragraph

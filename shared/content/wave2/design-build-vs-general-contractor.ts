@@ -26,7 +26,7 @@ export const designBuildVsGeneralContractor: BlogPostData = {
   ],
   wordCountTarget: 'cluster',
   quickAnswer:
-    'Design-build puts drawing, engineering, pricing, permitting and construction under one contract, so the house is priced while it is still being designed. The architect plus general contractor route separates design from construction and prices the drawings after they are finished. Design-build closes the gap between the plan and the budget earlier; separate architects give you design independence.',
+    'Design-build puts drawing, engineering, pricing, permitting and construction with one accountable company, so the house is priced while it is still being designed. The architect plus general contractor route separates design from construction and prices the drawings after they are finished. Design-build closes the gap between the plan and the budget earlier; separate architects give you design independence.',
   keyTakeaways: [
     'On a new house, the two models differ most in when the design gets priced.',
     'Design-build prices during drawing; architect plus GC prices after the drawings are done.',
@@ -115,7 +115,7 @@ export const designBuildVsGeneralContractor: BlogPostData = {
 <p>A concrete version: a client wants a 2,800 square foot single level with a heavy timber entry, a large window package facing the Boise foothills, and a walkout on a sloped lot. Drawn without pricing, that house can easily land above $450 per finished square foot when the excavation, the retaining, the glazing and the structure are all counted. Drawn with pricing alongside, the same client sees at week three that the walkout is adding a significant excavation and foundation cost, and gets to decide whether the walkout or the window package matters more while both are still lines on paper. Neither model makes the house cheaper. One of them tells you earlier. See <a href="/blog/why-home-building-bids-vary">why home building bids vary so much</a> for how much of that gap is scope rather than price.</p>
 
 <h2 id="accountability">What happens when something goes wrong</h2>
-<p><strong>Under one contract, a problem is a problem. Under two, a problem is first a question about whose problem it is.</strong> Something on your build will not go as drawn. A detail will not assemble the way it was shown, a specified product will be discontinued, an inspector will read a condition differently than expected.</p>
+<p><strong>With one accountable company, a problem is a problem. With two, a problem is first a question about whose problem it is.</strong> Something on your build will not go as drawn. A detail will not assemble the way it was shown, a specified product will be discontinued, an inspector will read a condition differently than expected.</p>
 <p>With design-build, the team evaluates it, prices the fix and brings you a recommendation. With separate design and construction, the contractor stops, the question goes to the architect, revised information comes back, and the cost is negotiated, sometimes with a genuine disagreement about whether the drawing was deficient or the construction was. Most of those disputes resolve reasonably. They all cost days, and on a nine to fourteen month build a handful of them costs weeks.</p>
 
 <h2 id="when-architect">When an architect plus a general contractor is the better choice</h2>

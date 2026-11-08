@@ -57,7 +57,7 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
     {
       question: 'What does a one-year workmanship warranty cover?',
       answer:
-        'Defects in our workmanship, workmanship by our subcontractors, and our installation over the first year after documented Final Completion. That includes things like a door that will not stay adjusted, a fixture installed incorrectly, trim separating at a joint because of installation, a leak from a connection we made, or drywall finishing that fails. Product defects are handled through the manufacturer warranty on that product.',
+        'Defects in work performed by our own team, including our installation, over the first year after documented Final Completion. Work performed by subcontractors, such as licensed plumbing, electrical or HVAC, is covered by that subcontractor\'s own warranty, and at the end of every project we provide a complete list of the subcontractors who worked on it, with their contact information. That includes things like a door that will not stay adjusted, a fixture installed incorrectly, trim separating at a joint because of installation, a leak from a connection we made, or drywall finishing that fails. Product defects are handled through the manufacturer warranty on that product.',
     },
     {
       question: 'What is not covered by a builder warranty?',
@@ -82,7 +82,7 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
   ],
   content: `
 <h2 id="short-answer">Two walkthroughs, one punch list, one warranty</h2>
-<p><strong>Your house gets walked twice in a way that matters: once before drywall covers the systems, and once before you take possession.</strong> The first is a chance to change things while changing them is cheap. The second produces a written punch list and starts the countdown on the one-year workmanship warranty that follows possession.</p>
+<p><strong>Your house gets walked twice in a way that matters: once before drywall covers the systems, and once before you take possession.</strong> The first is a chance to change things while changing them is cheap. The second produces a written punch list and leads to documented Final Completion, which starts the one-year workmanship warranty.</p>
 <p>These are working inspections, not ceremonies, and the more critical you are during them the better they work. Nobody here is offended by a list. A homeowner who walks their house carefully and writes down twenty items is doing exactly what we want. This article is part of our <a href="/guides/boise-home-building-process-guide">Boise home building process guide</a> and picks up where <a href="/blog/stages-of-building-a-house">the stages of building a house</a> leaves off.</p>
 
 <h2 id="pre-drywall">The pre-drywall walkthrough</h2>
@@ -102,7 +102,7 @@ export const newHomeWalkthroughAndWarranty: BlogPostData = {
 <p>Typical items are small: paint touch-up, a door that needs adjusting, a scratch in a surface, a missing switch plate, caulk that needs redoing, a cabinet door out of alignment. Occasionally something larger surfaces, and it goes on the same list. We work through the list, mark items complete, and walk the closed items with you rather than declaring them done by email. Some items depend on a supplier or a replacement part and will close after possession, which is normal and should be stated on the list with an expected timeframe rather than left vague.</p>
 
 <h2 id="warranty-covers">What the one-year workmanship warranty covers</h2>
-<p><strong>We provide a one-year workmanship warranty from documented Final Completion, which covers defects in our work, our subcontractors' work and our installation.</strong> Final Completion means the agreed work is complete, required inspections have passed, and the walkthrough and handover records are done. The test is whether something failed because of how it was built or installed, rather than because of what it is or what has happened to it since.</p>
+<p><strong>We provide a one-year workmanship warranty from documented Final Completion, which covers defects in work performed by our own team, including our installation.</strong> Work performed by subcontractors, such as licensed plumbing, electrical or HVAC, is covered by that subcontractor's own warranty, and at the end of every project we provide a complete list of the subcontractors who worked on it, with their contact information. Final Completion means the agreed work is complete, required inspections have passed, and the walkthrough and handover records are done. The test is whether something failed because of how it was built or installed, rather than because of what it is or what has happened to it since.</p>
 <p>Examples that are squarely inside it: a door or window that will not stay properly adjusted, trim separating at a joint because of how it was fastened, a leak at a connection we made, drywall finishing that fails beyond normal seasonal cracking, tile or grout failing because of installation, a fixture that was installed incorrectly, a hardware item that was not set right, or exterior work that is not shedding water the way it was built to. If it is our work and it is not performing, it is ours to fix, and we would rather hear about it in month three than in month thirteen.</p>
 
 <h2 id="warranty-excludes">What it does not cover</h2>
