@@ -18,9 +18,16 @@ import styles from "@/components/approved/HomePlanningSections.module.css";
 
 /**
  * Homepage interactive proof (C14): pick a project type, set finished living
- * area, see a planning floor immediately. No email gate. Figures come from
- * `calculateEstimate` (Treasure Valley mid-range / Signature spec) aligned with
- * the published $225–$400 finished / sqft band and contentData planning floors.
+ * area, see a planning floor immediately. No email gate.
+ *
+ * What actually runs: the simple matrix estimator, `calculateEstimate` in
+ * shared/estimateEngine.ts, called with the chosen project type, the clamped
+ * square footage, finish fixed at "mid-range" (Signature) and
+ * EMPTY_REFINEMENTS. That is the per-project low/high matrix scaled by size,
+ * with the starting band only (no visitor detail to tighten it). It does NOT
+ * run the detailed line-item takeoff in shared/costs/newConstructionRules.ts,
+ * and it has no lot, site, utility, design or permit input, so the figure is a
+ * planning range, not a lot-specific or all-in number.
  */
 const PROOF_PROJECTS = NEW_CONSTRUCTION_PROJECT_TYPES;
 
@@ -70,8 +77,8 @@ export function PlanningRangeExplorer() {
         <div>
           <p>
             Choose a project type and finished living area. You get a planning
-            floor right away, no email required. Request a quote and we reply
-            within one business day.
+            floor right away, no email required. Request a quote and we answer
+            your questions and help you work out the next step.
           </p>
         </div>
       </div>

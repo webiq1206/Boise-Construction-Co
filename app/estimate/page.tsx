@@ -9,7 +9,7 @@ import type { Metadata } from 'next';
 
 const TITLE = 'Request a quote';
 const DESCRIPTION = fitDescription(
-  'Request a quote for a custom home, semi-custom home, ADU, or addition in Boise and the Treasure Valley. We reply within one business day.',
+  'Request a quote for a custom home, semi-custom home, ADU, or addition in Boise and the Treasure Valley. We answer your questions and plan next steps.',
 );
 
 export const metadata: Metadata = withBrandPageMetadata(

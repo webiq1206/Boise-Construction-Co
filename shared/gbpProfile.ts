@@ -121,7 +121,7 @@ export const GBP_ATTRIBUTES = {
 
 export const GBP_MESSAGING = {
   welcomeMessage:
-    'Thanks for reaching out to Boise Construction Co. We respond within one business day. For faster help, call (208) 477-1169 or book a planning consultation at boiseconstruction.co/contact',
+    'Thanks for reaching out to Boise Construction Co. We answer your questions and help you work out the next step. To talk it through, call (208) 477-1169 or book a planning consultation at boiseconstruction.co/contact',
 } as const;
 
 export interface GbpService {
@@ -337,7 +337,7 @@ export interface GbpQaEntry {
 export const GBP_QA_SEED: GbpQaEntry[] = [
   {
     question: 'Do you provide free estimates?',
-    answer: `Yes. We offer a free planning consultation where we talk through your lot, your program, and a realistic budget band - no pressure, no obligation. You can also get a preliminary planning range online at ${SITE}/#calculator`,
+    answer: `Yes. We offer a free planning consultation where we talk through your lot, your program, and a realistic budget band - no pressure, no obligation. Your first conversation and project review are free. Paid planning, design or feasibility work is only started after you approve its scope and price in writing. You can also get a preliminary planning range online at ${SITE}/#calculator`,
   },
   {
     question: 'What areas do you serve?',
@@ -383,7 +383,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   },
   {
     question: 'How do I get started?',
-    answer: `Call (208) 477-1169, text us at the same number, or book online: ${SITE}/contact. We respond within one business day.`,
+    answer: `Call (208) 477-1169, text us at the same number, or book online: ${SITE}/contact. We answer your questions and help you work out the next step.`,
   },
 ];
 

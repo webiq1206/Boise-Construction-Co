@@ -214,7 +214,7 @@ export function buildPageMetadata(input: PageMetaInput): Metadata {
     case 'contact':
       title = 'Contact a Boise Home Builder';
       description =
-        `Contact ${SITE_CONFIG.name} about a new home, a building lot or a structural addition in Boise and the Treasure Valley. We reply within one business day.`;
+        `Contact ${SITE_CONFIG.name} about a new home, a building lot or a structural addition in Boise and the Treasure Valley. We answer your questions.`;
       break;
     case 'blog':
       title = 'Idaho Home Building Advice & Guides';

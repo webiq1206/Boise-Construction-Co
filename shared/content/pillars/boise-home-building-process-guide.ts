@@ -29,7 +29,7 @@ export const boiseHomeBuildingProcessGuide: GuidePageData = {
     'The two things that most often delay a Treasure Valley build are late selections and plan revisions after permit submission.',
     'Payments follow a published draw schedule tied to completed milestones, and every change is priced in writing before the work happens.',
     'Nothing is covered before it passes inspection, which is why the rough-in and drywall sequence cannot be compressed.',
-    'A one-year workmanship warranty starts at possession, and the final walkthrough that precedes it is a working inspection rather than a formality.',
+    'A one-year workmanship warranty starts at documented Final Completion, and the final walkthrough that precedes it is a working inspection rather than a formality.',
   ],
   linkedClusterSlugs: [
     'how-long-does-it-take-to-build-a-house-boise',
@@ -104,7 +104,7 @@ export const boiseHomeBuildingProcessGuide: GuidePageData = {
     {
       question: 'Do I get a warranty on a new home?',
       answer:
-        'We provide a one-year workmanship warranty that begins at possession, covering defects in our work and our installation. Manufacturer warranties on appliances, mechanical equipment, and fixtures run separately and are often longer. Normal settling, seasonal movement, routine maintenance, and damage after possession sit outside the workmanship warranty, and we would rather explain that boundary before handover than argue it afterward.',
+        'We provide a one-year workmanship warranty that begins at documented Final Completion (agreed work complete, required inspections passed, walkthrough and handover records done), covering defects in our work, work by our subcontractors, and our installation. Manufacturer warranties on appliances, mechanical equipment, and fixtures run separately and are often longer. Normal settling, seasonal movement, routine maintenance, and damage after possession sit outside the workmanship warranty, and we would rather explain that boundary before handover than argue it afterward.',
     },
     {
       question: 'Can I move in as soon as the final inspection passes?',
@@ -217,7 +217,7 @@ export const boiseHomeBuildingProcessGuide: GuidePageData = {
 <p><strong>The last 2 to 5 weeks cover final inspections, the certificate of occupancy, the walkthrough and punch list, punch work, and handover, and the certificate of occupancy is what legally lets you move in.</strong> Not the final framing sign-off, and not the day the house looks finished.</p>
 <p>Each trade has a final inspection, and site-specific items are inspected by whoever permitted them, so a septic system is inspected by Central District Health and a driveway approach may be inspected by the road authority. Once all of them pass, the certificate of occupancy is issued. Lenders and insurers look for that document, and a closing date that assumes occupancy before it exists is a date at risk. When winter makes landscaping or flatwork impossible, a jurisdiction will sometimes issue a temporary certificate with a deadline to finish, which is a normal accommodation we flag in advance rather than at the closing table.</p>
 <p>The final walkthrough is a working inspection, not a ceremony. Plan a couple of hours, do it in daylight, bring somebody who is not emotionally invested in loving the house, and write down everything. A thorough homeowner produces twenty items and that is exactly what we want. Those items go on a written punch list with a location, a description, and a responsible party, and they get closed and walked with you rather than declared done by email.</p>
-<p>Handover is the orientation: the main water shutoff, how the heating and cooling is zoned and what filter it takes, the electrical panel and its labeling, the irrigation controller and how to winterize it, and which surfaces need which care. Then the one-year workmanship warranty begins at possession, covering defects in our work and our installation. Manufacturer warranties on equipment and fixtures run separately and are often longer. <a href="/blog/new-home-walkthrough-and-warranty">The final walkthrough and what the warranty covers</a> goes through both in detail, including how to tell normal first-year movement from an actual defect.</p>
+<p>Handover is the orientation: the main water shutoff, how the heating and cooling is zoned and what filter it takes, the electrical panel and its labeling, the irrigation controller and how to winterize it, and which surfaces need which care. Then the one-year workmanship warranty begins at documented Final Completion, covering defects in our work and our installation. Manufacturer warranties on equipment and fixtures run separately and are often longer. <a href="/blog/new-home-walkthrough-and-warranty">The final walkthrough and what the warranty covers</a> goes through both in detail, including how to tell normal first-year movement from an actual defect.</p>
 
 <h2 id="next-steps">Where to start</h2>
 <p><strong>The useful first move is a conversation, not a decision, and it costs nothing.</strong> We will look at your lot or your lot search, put a realistic band around the house you described, tell you what the sequence looks like for your specific parcel and jurisdiction, and be straight with you if the number and the house do not meet.</p>
