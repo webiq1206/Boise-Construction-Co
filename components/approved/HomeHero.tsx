@@ -28,7 +28,7 @@ export function HomeHero() {
                 <FamilyButton href={FAMILY_BRAND.cta.href} variant="hero" size="lg" data-hero-cta="primary" data-cta="primary">{FAMILY_BRAND.cta.label}</FamilyButton>
                 <a href={FAMILY_BRAND.phone.telHref} className="fam-hero-link">Call or text {FAMILY_BRAND.phone.display}</a>
               </div>
-              <p className="fam-hero-micro">We answer your questions and help you work out the next step.</p>
+              <p className="fam-hero-micro">We answer your questions, start to finish.</p>
             </div>
           </div>
         </section>
