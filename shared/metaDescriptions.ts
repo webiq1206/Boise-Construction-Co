@@ -21,7 +21,7 @@ export const SERVICE_META_DESCRIPTIONS: Record<string, string> = {
   'build-on-your-lot':
     'Build on your lot in Idaho with one team. You own the land; we handle feasibility, design, permits and construction, with site costs shown separately.',
   'design-build':
-    'Design-build home builder for Boise and the Treasure Valley: design and construction under one contract, so the drawings and the budget never drift apart.',
+    'Design-build home builder for Boise and the Treasure Valley: design and construction from one accountable company, so drawings and budget stay aligned.',
   'home-plans-design':
     'Custom home plans and design in Idaho: architectural design, engineering and permit-ready drawings for a home built to your site, as a standalone service.',
   'home-additions':
@@ -48,7 +48,7 @@ export const AREA_META_DESCRIPTIONS: Record<string, string> = {
   kuna: 'Home builder in Kuna, Idaho for acreage parcels with well, septic and irrigation laterals. Rural site work is priced separately so the budget holds.',
   star: 'Home builder in Star, Idaho for new subdivisions and working acreage. Jurisdiction, utilities and site costs are checked before anyone draws a plan.',
   middleton:
-    'Custom home builder in Middleton, Idaho for city lots and Canyon County acreage. Lot evaluation, design, permits and construction under one contract.',
+    'Custom home builder in Middleton, Idaho for city lots and Canyon County acreage. Lot evaluation, design, permits and construction from one company.',
   caldwell:
     'Home builder in Caldwell, Idaho for serviced city lots and agricultural acreage with irrigation easements. Canyon County and city permits handled.',
   'garden-city':
@@ -60,7 +60,7 @@ export const CITY_SERVICE_META_DESCRIPTIONS: Record<string, string> = {
   'custom-home-builder/boise':
     'Custom home building in Boise, Idaho, on infill lots inside the grid and foothills parcels above the bench, with a line-item budget and permits handled.',
   'custom-home-builder/meridian':
-    'Custom home building in Meridian, Idaho, from Lochsa Falls to Paramount. Subdivision design review, permits and a line-item budget under one contract.',
+    'Custom home building in Meridian, Idaho, from Lochsa Falls to Paramount. Subdivision design review, permits and a line-item budget from one company.',
   'custom-home-builder/eagle':
     'Custom home building in Eagle, Idaho, where design review is strict and foothills sites cost more per square foot. One team from feasibility to the keys.',
   'custom-home-builder/nampa':
@@ -82,9 +82,9 @@ export const CITY_SERVICE_META_DESCRIPTIONS: Record<string, string> = {
   'build-on-your-lot/nampa':
     'Build on your lot in Nampa, Idaho. We confirm jurisdiction, utilities and fees for your Canyon County parcel, then design and build to a line-item budget.',
   'design-build/boise':
-    'Design-build homes in Boise, Idaho. Drawings, engineering, permits and construction under one contract, with design and budget reconciled before we build.',
+    'Design-build homes in Boise, Idaho. Drawings, engineering, permits and construction from one company, with design and budget reconciled before we build.',
   'design-build/meridian':
-    'Design-build homes in Meridian, Idaho. One contract for design and construction, HOA and city review handled, and every change priced in writing first.',
+    'Design-build homes in Meridian, Idaho. One company for design and construction, HOA and city review handled, and every change priced in writing first.',
   'design-build/eagle':
     'Design-build homes in Eagle, Idaho. Design, engineering, Eagle design review, permits and construction with one accountable team and an itemized budget.',
   'design-build/nampa':

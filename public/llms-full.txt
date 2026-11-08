@@ -4,7 +4,7 @@
 
 ## About
 
-Boise Construction Co is a residential design-build home builder serving the Treasure Valley. We build new homes: custom homes drawn from a blank page, semi-custom homes personalized from a proven plan, and build-on-your-lot projects for families who already own land. Design-build means design, engineering, permitting, and construction are delivered by one team under one contract, which removes the handoff between an architect and a general contractor and keeps the drawings and the budget on the same schedule. Every project includes a written line-item scope before construction, named allowances for selections, and a workmanship warranty from documented Final Completion.
+Boise Construction Co is a residential design-build home builder serving the Treasure Valley. We build new homes: custom homes drawn from a blank page, semi-custom homes personalized from a proven plan, and build-on-your-lot projects for families who already own land. Design-build means design, engineering, permitting, and construction are delivered by one accountable company, which removes the handoff between an architect and a general contractor and keeps the drawings and the budget on the same schedule. Every project includes a written line-item scope before construction, named allowances for selections, and a one-year workmanship warranty from documented Final Completion on work performed by our own team. Subcontractor work is covered by that subcontractor's own warranty, and at the end of every project we provide a complete list of the subcontractors who worked on it, with their contact information.
 
 - Business type: Residential design-build home builder (new construction)
 - Service model: One accountable team for design, permits, and construction
@@ -25,7 +25,7 @@ Permit paths, impact fees, and inspection sequencing differ between Ada County a
 - Custom Home Building: /services/custom-home-builder - A home drawn from a blank page around your lot, your budget, and how you actually live.
 - Semi-Custom Homes: /services/semi-custom-homes - Start from a proven floor plan and personalize it, for a shorter timeline and a tighter budget range.
 - Build on Your Lot: /services/build-on-your-lot - You already own the land. We handle feasibility, design, permits, and construction from there.
-- Design-Build: /services/design-build - Design and construction under one contract, so the drawings and the budget never drift apart.
+- Design-Build: /services/design-build - Design and construction with one accountable company, so the drawings and the budget never drift apart.
 - Home Design & Plans: /services/home-plans-design - Architectural design, engineering, and permit-ready drawings for a home built to your site.
 - Home Additions: /services/home-additions - New footprint or a second story added to the home you already live in, planned around the structure, utilities, and daily life already there.
 - ADUs & Guest Houses: /services/adu - New detached accessory dwellings and guest houses on the lot you already own, planned around setbacks, utilities, and how you will use the space.

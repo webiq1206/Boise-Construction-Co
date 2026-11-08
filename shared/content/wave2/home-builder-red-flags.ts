@@ -56,7 +56,7 @@ export const homeBuilderRedFlags: BlogPostData = {
         'Treat it as though the promise does not exist, because legally it mostly does not. Builders who intend to honor a commitment have no reason to keep it verbal. The refusal is rarely about paperwork burden; it is about preserving room to reinterpret the commitment later, which is exactly the situation the writing would prevent.',
     },
     {
-      question: 'How do I check that a builder is bonded and insured?',
+      question: 'How do I check that a builder is insured and registered?',
       answer:
         'Ask for certificates rather than a verbal confirmation, and ask that the certificate come from the insurer or agent rather than as a forwarded PDF. Check that general liability and workers compensation are both current. In Idaho, residential contractors are registered rather than licensed, so also ask for the contractor registration, which any legitimate builder can produce.',
     },

@@ -29,7 +29,7 @@ export const HOMEPAGE_FAQS: HomepageFaq[] = [
   },
   {
     q: "Are the budget ranges quotes?",
-    a: "No. Planning ranges on this site are starting points, not bids. A written scope and proposal follow a site visit and a lot review. Request a quote and we answer your questions and help you work out the next step. Design-build means one accountable team handles architectural design, engineering, Ada and Canyon County permitting, and construction under a single contract, backed by a written line-item scope before the foundation is poured.",
+    a: "No. Planning ranges on this site are starting points, not bids. A written scope and proposal follow a site visit and a lot review. Request a quote and we answer your questions and help you work out the next step. Design-build means one accountable team handles architectural design, engineering, Ada and Canyon County permitting, and construction, with one point of contact for your project, backed by a written line-item scope before the foundation is poured.",
   },
   {
     q: "What is excluded from the planning number?",
@@ -45,7 +45,7 @@ export const HOMEPAGE_FAQS: HomepageFaq[] = [
   },
   {
     q: "How are you different from other home builders in the Treasure Valley?",
-    a: "You get a line-item budget before we break ground, not a price per square foot that changes once the foundation is in. We set allowances for flooring, cabinetry, plumbing, and lighting at what those things genuinely cost here, so an allowance is not a hidden overage waiting to surface. We work as a true design-build firm, meaning design, engineering, permitting, and construction sit under one contract with one project manager, and we send a written update every Friday rather than waiting for you to call. Any change during construction requires a written change order with a price and a schedule impact before the work happens.",
+    a: "You get a line-item budget before we break ground, not a price per square foot that changes once the foundation is in. We set allowances for flooring, cabinetry, plumbing, and lighting at what those things genuinely cost here, so an allowance is not a hidden overage waiting to surface. We work as a true design-build firm, meaning design, engineering, permitting, and construction sit with one accountable company and one point of contact for your project, and we send a written update every Friday rather than waiting for you to call. Any change during construction requires a written change order with a price and a schedule impact before the work happens.",
   },
   {
     q: "Do I need to own land before I contact you?",
@@ -81,7 +81,7 @@ export const HOMEPAGE_FAQS: HomepageFaq[] = [
   },
   {
     q: "How does design-build compare to hiring an architect and a builder separately?",
-    a: "With design-build, the designer, estimator, and construction lead work together from day one under one contract, so the plan gets priced as it is drawn rather than after. That tends to prevent the most common failure in the separate model, which is finishing a design you cannot afford and paying to have it redrawn. It also means one accountable party if something needs to change. Hiring separately can make sense when you want a specific architect for a highly unusual home, and it gives you an independent designer advocating for the design rather than the budget.",
+    a: "With design-build, the designer, estimator, and construction lead work together from day one inside one accountable company, so the plan gets priced as it is drawn rather than after. That tends to prevent the most common failure in the separate model, which is finishing a design you cannot afford and paying to have it redrawn. It also means one accountable party if something needs to change. Hiring separately can make sense when you want a specific architect for a highly unusual home, and it gives you an independent designer advocating for the design rather than the budget.",
   },
   {
     q: "Do you use your own crews or subcontractors?",
@@ -89,7 +89,7 @@ export const HOMEPAGE_FAQS: HomepageFaq[] = [
   },
   {
     q: "What is your workmanship warranty?",
-    a: "We provide a 1-year workmanship warranty on new builds, starting at documented Final Completion. If something we or our subcontractors built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it at no charge. Ask us whether a 10-year structural warranty applies to your contract. We also pass through manufacturer warranties on the products we install.",
+    a: "We provide a 1-year workmanship warranty on new builds, starting at documented Final Completion. It covers work performed by our own team: if something our team built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it at no charge. Work performed by subcontractors, such as licensed plumbing, electrical or HVAC, is covered by that subcontractor's own warranty, and at the end of every project we provide a complete list of the subcontractors who worked on it, with their contact information. Ask us whether a 10-year structural warranty applies to your contract. We also pass through manufacturer warranties on the products we install.",
   },
   {
     q: "What does the free planning consultation include?",

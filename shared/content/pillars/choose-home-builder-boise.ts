@@ -22,7 +22,7 @@ export const chooseHomeBuilderBoise: GuidePageData = {
     'new construction',
   ],  primaryKeyword: 'how to choose a home builder boise',
   quickAnswer:
-    'Choose a Boise home builder by comparing scope, not price. Confirm they are bonded and insured and will show Idaho contractor registration on request, read the exclusions page of every bid, reprice allowances at real local costs, check three references including one difficult build, and read the contract before the brochure.',
+    'Choose a Boise home builder by comparing scope, not price. Confirm they are insured and will show Idaho contractor registration on request, read the exclusions page of every bid, reprice allowances at real local costs, check three references including one difficult build, and read the contract before the brochure.',
   keyTakeaways: [
     'Idaho registers residential contractors rather than licensing them, so verifying bonding, insurance and references is your job rather than the state\u2019s.',
     'Builders differ in scope discipline, allowance honesty, communication cadence and subcontractor relationships, not in the quality claims they all make identically.',
@@ -57,10 +57,10 @@ export const chooseHomeBuilderBoise: GuidePageData = {
     {
       question: 'Do home builders need a license in Idaho?',
       answer:
-        'Idaho registers residential contractors rather than licensing them. Registration confirms a contractor filed with the state and carries the required insurance and bond. It is not a test of skill or a review of past work. That is why we say bonded and insured, with Idaho contractor registration available on request, and why the vetting a homeowner does matters more here than in states with a licensing exam.',
+        'Idaho registers residential contractors rather than licensing them. Registration confirms a contractor filed with the state and carries the required insurance. It is not a test of skill or a review of past work. That is why we say insured, with Idaho contractor registration available on request, and why the vetting a homeowner does matters more here than in states with a licensing exam.',
     },
     {
-      question: 'How do I verify a Boise builder is bonded and insured?',
+      question: 'How do I verify a Boise builder is insured?',
       answer:
         'Ask for a certificate of insurance sent directly from the insurance agent rather than forwarded by the builder, then call the agent listed on it. Ask whether the policy is current, whether it covers residential new construction, whether workers compensation is in force, and whether any cancellation is pending. Also ask for the Idaho contractor registration number and check it against the state record yourself.',
     },
@@ -77,7 +77,7 @@ export const chooseHomeBuilderBoise: GuidePageData = {
     {
       question: 'What is the difference between design-build and hiring an architect and a general contractor?',
       answer:
-        'Design-build puts design and construction under one contract, so pricing happens during design and one company owns the outcome. Hiring an architect separately gives you an independent designer whose only client is you, followed by competitive bidding of finished drawings. Design-build usually saves time and rework. Separate contracts usually produce a stronger independent check on both design intent and price.',
+        'Design-build puts design and construction with one accountable company, so pricing happens during design and one company owns the outcome. Hiring an architect separately gives you an independent designer whose only client is you, followed by competitive bidding of finished drawings. Design-build usually saves time and rework. Separate contracts usually produce a stronger independent check on both design intent and price.',
     },
     {
       question: 'What should be in a home building contract?',
@@ -142,7 +142,7 @@ export const chooseHomeBuilderBoise: GuidePageData = {
 <p>If a production builder's plan already fits how you live, buying it is not a compromise. You will pay less and finish sooner than you would with us. The comparison is worked through in <a href="/blog/production-vs-custom-home-builder">production builder versus custom builder</a>, and our middle option is on the <a href="/services/semi-custom-homes">semi-custom homes</a> page.</p>
 
 <h2 id="design-build-or-architect-and-gc">Design-build or an architect and a general contractor</h2>
-<p><strong>Design-build puts design and construction under one contract so that pricing happens during design; hiring an architect and a general contractor separately gives you an independent designer and a competitive bid on finished drawings.</strong> Both are legitimate, and the way each one fails is what you should be choosing between.</p>
+<p><strong>Design-build puts design and construction with one accountable company so that pricing happens during design; hiring an architect and a general contractor separately gives you an independent designer and a competitive bid on finished drawings.</strong> Both are legitimate, and the way each one fails is what you should be choosing between.</p>
 <p>Under design-build, the company that will build the house is costing it while it is still on paper. A wall gets moved when moving it is free, and there is no gap between the drawings being finished and the construction being priced. It also means one phone number when something goes wrong, and nobody in a position to say the problem belongs to the other party.</p>
 <p>Under the separate route, you hire an architect whose only client is you. They carry no construction risk, so they have no financial reason to steer you toward what is easy to build. You get a complete set of drawings, send them to three builders, and get three prices for the same thing, which is the cleanest comparison available in residential construction. The cost is time, a design fee fully separate from construction, and the risk that the drawings come back over budget after you have paid for them. The two models are compared line by line in <a href="/blog/design-build-vs-general-contractor">design-build versus general contractor</a>, and our own reasoning is on the <a href="/services/design-build">design-build</a> page.</p>
 
@@ -154,7 +154,7 @@ export const chooseHomeBuilderBoise: GuidePageData = {
 
 <h2 id="idaho-contractor-registration">How Idaho regulates residential contractors</h2>
 <p><strong>Idaho registers residential contractors rather than licensing them, which means the word "licensed" does not mean what most homeowners assume it means.</strong> Registration confirms that a contractor filed with the state and carries the required insurance and bond. It does not involve an examination of construction knowledge, a review of completed projects, or an assessment of financial stability.</p>
-<p>That matters twice over. The verification work a licensing board would do elsewhere falls to you, because a registration number tells you a company exists and filed paperwork, not whether it can build your house. It should also make you alert to how builders describe themselves. We say bonded and insured, with Idaho contractor registration available on request, because that is accurate. A company advertising itself as a licensed home builder in Idaho is either being loose with language or hoping you do not know the difference.</p>
+<p>That matters twice over. The verification work a licensing board would do elsewhere falls to you, because a registration number tells you a company exists and filed paperwork, not whether it can build your house. It should also make you alert to how builders describe themselves. We say insured, with Idaho contractor registration available on request, because that is accurate. A company advertising itself as a licensed home builder in Idaho is either being loose with language or hoping you do not know the difference.</p>
 <p>Ask for the registration number in writing, verify it against the state record yourself rather than accepting a screenshot, and confirm the name on the registration matches the name on the contract you are being asked to sign. The individual trades are a separate matter: the people doing electrical, plumbing and mechanical work carry their own state credentials, which do not transfer to the general contractor's registration.</p>
 
 <h2 id="verifying-bonding-and-insurance">Verifying bonding and insurance, and what to ask the insurer</h2>
@@ -211,6 +211,6 @@ export const chooseHomeBuilderBoise: GuidePageData = {
 
 <h2 id="next-steps">Where to start</h2>
 <p><strong>Get a cost range before you get attached to a plan, then test one real proposal against the checks on this page.</strong> Run a size and finish level through the <a href="/#calculator">build cost calculator</a> to see the band your project sits in, then read how we work on the <a href="/services/custom-home-builder">custom home builder</a> page. If you already have proposals in hand, we will read a competing bid with you and tell you what it is missing, including when the answer is that the other builder has priced it fairly.</p>
-<p>We are a design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton and Caldwell. We are bonded and insured, and our Idaho contractor registration is available on request. We handle permits, plan review, engineering and utility applications in-house for Ada and Canyon County, we publish our draw schedule, we set allowances at what things actually cost here, and we send a written update every week. If that is how you want to build, <a href="/contact">send us your lot and your plan</a> and we will tell you honestly whether we are the right fit.</p>
+<p>We are a design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton and Caldwell. We are insured, and our Idaho contractor registration is available on request. We handle permits, plan review, engineering and utility applications in-house for Ada and Canyon County, we publish our draw schedule, we set allowances at what things actually cost here, and we send a written update every week. If that is how you want to build, <a href="/contact">send us your lot and your plan</a> and we will tell you honestly whether we are the right fit.</p>
 `.trim(),
 };

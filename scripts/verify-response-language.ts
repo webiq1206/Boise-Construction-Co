@@ -40,8 +40,44 @@ const PROHIBITED: Array<{ label: string; re: RegExp }> = [
   { label: 'response counter', re: /\b(?:to|until) (?:reply|respond|response)\b[^.]{0,20}\b(?:day|hour|minute)s?\b|\b(?:day|hour|minute)s? to (?:reply|respond)\b/i },
 ];
 
+/**
+ * Owner decisions, release 2 (Nov 8 2026): public claims that must not ship.
+ * - "bonded": not a verified credential. Insured and registration claims stay.
+ * - Instant or minutes-fast estimate claims: there is no instant estimator.
+ * - One/single invoice or contract promises: say "one accountable company and
+ *   one point of contact" instead.
+ * - Same-day financing approval: unverified.
+ */
+const INV = 'in' + 'voice';
+const PROHIBITED_CLAIMS: Array<{ label: string; re: RegExp }> = [
+  { label: 'bonded claim', re: /\bbonded\b/i },
+  { label: 'instant estimate', re: /\binstant(?:ly)?\b[^.]{0,30}\b(?:estimate|estimator|price|pricing|quote|range|cost|bid)s?\b/i },
+  { label: 'estimate in minutes', re: /\b(?:estimate|estimator|calculator|range|price|quote)s?\b[^.]{0,60}\b(?:in|within) (?:a few |\d+ |just )?minutes?\b/i },
+  { label: 'one invoice', re: new RegExp(`\\b(?:one|single|a single)\\s+${INV}\\b`, 'i') },
+  { label: 'one contract', re: /\b(?:one|single|a single)\s+contract\b/i },
+  { label: 'same-day financing', re: /\bsame[\s-]day\b[^.]{0,40}\b(?:financing|approval|approved|pre-?approval)\b/i },
+];
+
+export function findProhibitedClaims(text: string): string[] {
+  const normalized = normalize(text);
+  const hits: string[] = [];
+  for (const { label, re } of PROHIBITED_CLAIMS) {
+    const global = new RegExp(re.source, re.flags.includes('g') ? re.flags : re.flags + 'g');
+    for (const m of normalized.matchAll(global)) {
+      const start = Math.max(0, (m.index ?? 0) - 60);
+      hits.push(`${label}: "...${normalized.slice(start, (m.index ?? 0) + m[0].length + 40).trim()}..."`);
+    }
+  }
+  return hits;
+}
+
 /** Files that may legitimately contain matching text, with the reason. */
 const ALLOWED_FILES = new Map<string, string>([]);
+
+/** Files exempt from the public-claims check only, with the reason. */
+const CLAIMS_ALLOWED_FILES = new Map<string, string>([
+  ['shared/costs/re10Repairs.ts', 'pricing-engine code comment explaining routing, not customer copy'],
+]);
 
 function walk(dir: string, out: string[]): void {
   let entries: string[];
@@ -96,9 +132,28 @@ function main(): void {
     "Caldwell's first plan review typically takes 7 to 10 business days",
     'The estimator gives a planning range in minutes.',
   ];
+  const claimsMustCatch = [
+    'Bonded and insured.',
+    'P5 Home Co LLC, bonded & insured',
+    'Book a free planning consultation or get an instant build cost range.',
+    'Instant planning range for a new build.',
+    'Our estimator gives a planning range in minutes.',
+    'One contract, one project manager, one invoice.',
+    'Design and construction under a single contract.',
+    'Same-day financing approval.',
+  ];
+  const claimsMustPass = [
+    'Insured, certificate on request.',
+    'One accountable company and one point of contact for your project.',
+    'They do not coordinate with each other or send you one bill.',
+    'Explore planning ranges',
+    'Cancellation of scheduled services requires 24-hour advance notice',
+  ];
   const selfTestFailures = [
     ...mustCatch.filter((s) => findProhibited(s).length === 0).map((s) => `guard missed: ${s}`),
     ...mustPass.filter((s) => findProhibited(s).length > 0).map((s) => `guard over-matched: ${s}`),
+    ...claimsMustCatch.filter((s) => findProhibitedClaims(s).length === 0).map((s) => `claims guard missed: ${s}`),
+    ...claimsMustPass.filter((s) => findProhibitedClaims(s).length > 0).map((s) => `claims guard over-matched: ${s}`),
   ];
   if (selfTestFailures.length) {
     console.error('verify-response-language self-test failed:\n' + selfTestFailures.join('\n'));
@@ -112,14 +167,16 @@ function main(): void {
   for (const file of files) {
     const rel = relative(ROOT, file).split(sep).join('/');
     if (ALLOWED_FILES.has(rel)) continue;
-    const hits = findProhibited(readFileSync(file, 'utf8'));
-    for (const h of hits) problems.push(`${rel}: ${h}`);
+    const text = readFileSync(file, 'utf8');
+    for (const h of findProhibited(text)) problems.push(`${rel}: ${h}`);
+    if (!CLAIMS_ALLOWED_FILES.has(rel)) for (const h of findProhibitedClaims(text)) problems.push(`${rel}: ${h}`);
   }
 
   if (problems.length) {
     console.error(
-      `verify-response-language: ${problems.length} inquiry response-time promise(s) found.\n` +
-        'Say that we answer questions and help with the next step, without a time frame.\n\n' +
+      `verify-response-language: ${problems.length} prohibited promise(s) or claim(s) found.\n` +
+        'Say that we answer questions and help with the next step, without a time frame. Do not claim\n' +
+        'bonded, an instant estimate, one contract or invoice, or same-day financing.\n\n' +
         problems.join('\n'),
     );
     process.exit(1);

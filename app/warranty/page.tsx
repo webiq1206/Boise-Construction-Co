@@ -40,7 +40,12 @@ const FAQS = [
   {
     question: 'What workmanship warranty do you provide on a new build?',
     answer:
-      'Boise Construction Co provides a 1-year workmanship warranty on new builds, starting at documented Final Completion: the agreed work is complete, required inspections have passed, and the walkthrough and handover records are done. It covers work by our own team and our subcontractors. If something we built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it.',
+      'Boise Construction Co provides a 1-year workmanship warranty on new builds, starting at documented Final Completion: the agreed work is complete, required inspections have passed, and the walkthrough and handover records are done. It covers work performed by our own team. If something our team built or installed fails because of workmanship, rather than normal wear, deferred maintenance, or later modifications, we come back and fix it. Work performed by subcontractors, such as licensed plumbing, electrical or HVAC, is covered by that subcontractor\'s own warranty, and at the end of every project we provide a complete list of the subcontractors who worked on it, with their contact information.',
+  },
+  {
+    question: 'Who covers work done by subcontractors?',
+    answer:
+      "Work performed by subcontractors, such as licensed plumbing, electrical or HVAC, is covered by that subcontractor's own warranty. At the end of every project we provide a complete list of the subcontractors who worked on it, with their contact information. If you are not sure who did a piece of work, contact us and we can point you to the right subcontractor from the list.",
   },
   {
     question: 'Do you offer a 10-year structural warranty?',
@@ -137,6 +142,10 @@ export default function WarrantyPage() {
                   . We review the report, inspect where needed, and explain what is covered and the plan to correct it.
                 </p>
                 <p className="ed-body mt-6">
+                  For work a subcontractor performed, we can point you to the right subcontractor from the list we
+                  provide at the end of your project.
+                </p>
+                <p className="ed-body mt-6">
                   Your signed agreement says how formal warranty notice must be given. That notice method controls a
                   formal warranty claim, so follow it as well as getting in touch here.
                 </p>
@@ -157,9 +166,14 @@ export default function WarrantyPage() {
               </div>
               <div>
                 <p className="ed-lede">
-                  Workmanship on the home we build, including our subcontractors' work: if a failure traces to how
-                  we built or installed something, we return and correct it during the one-year term, which starts at
-                  documented Final Completion.
+                  Workmanship performed by our own team: if a failure traces to how our team built or installed
+                  something, we return and correct it during the one-year term, which starts at documented Final
+                  Completion.
+                </p>
+                <p className="ed-body mt-6">
+                  Work performed by subcontractors, such as licensed plumbing, electrical or HVAC, is covered by that
+                  subcontractor's own warranty. At the end of every project we provide a complete list of the
+                  subcontractors who worked on it, with their contact information.
                 </p>
                 <p className="ed-body mt-6">
                   Final Completion means the agreed work and any written changes are complete, required inspections

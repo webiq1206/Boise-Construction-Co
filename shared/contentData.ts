@@ -61,7 +61,7 @@ export const SERVICES: ServiceData[] = [
   {
     slug: 'design-build',
     name: 'Design-Build',
-    shortDescription: 'Design and construction under one contract, so the drawings and the budget never drift apart.',
+    shortDescription: 'Design and construction with one accountable company, so the drawings and the budget never drift apart.',
     planningFrom: '$525k',
   },
   {
