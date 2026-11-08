@@ -258,6 +258,10 @@ html .approved-shell :is(.ed-on-gradient, .fr-band, .f-value, .f-contact) :is(in
 /* Exact logo colors for heading emphasis, owner direction November 4.
    Functional link/focus inks and body copy keep their existing contrast roles. */
 :root { --color-heading-accent: #c48d3f; }
+/* Same hue as the logo gold. Logo gold is 2.78:1 on paper #fbfaf6, under the
+   3:1 large-text threshold. This step clears 4.5:1 on that cream (5.08:1) and
+   on bone #f1ede4 (4.54:1) with no stroke or shadow. */
+:root { --color-heading-accent-on-light: #8b642d; }
 html .approved-shell main :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm, .interior-statement) {
   --ed-accent: var(--color-heading-accent);
 }
@@ -265,13 +269,15 @@ html .approved-shell main :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm) :is(em, .b
 html .approved-shell main .interior-statement em {
   color: var(--color-heading-accent);
 }
-/* Preserve the existing H2 and statement treatment. The November 5 owner
-   direction removes H1 glyph shadows, including H1s with display classes. */
+/* Light-ground H2 and statement emphasis stays gold, without the charcoal
+   glyph stroke. Dark bands keep the exact logo gold. */
 html .approved-shell main :is(h2, .ed-display, .ed-h2, .ed-h2-sm):not(h1) :is(em, .brc-accent, .text-accent, .text-accent-legible),
 html .approved-shell main .interior-statement:not(h1) em {
-  text-shadow: -1px -1px 0 var(--color-charcoal), 0 -1px 0 var(--color-charcoal), 1px -1px 0 var(--color-charcoal), -1px 0 0 var(--color-charcoal), 1px 0 0 var(--color-charcoal), -1px 1px 0 var(--color-charcoal), 0 1px 0 var(--color-charcoal), 1px 1px 0 var(--color-charcoal);
+  color: var(--color-heading-accent-on-light);
+  text-shadow: none;
 }
 html .approved-shell main :is(.fr-band, .f-value, .f-contact, .interior-hero-contact, .ed-on-gradient, .bg-inverse, #budget) :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm, .interior-statement) :is(em, .brc-accent, .text-accent, .text-accent-legible) {
+  color: var(--color-heading-accent);
   text-shadow: none;
 }
 
