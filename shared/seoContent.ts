@@ -520,7 +520,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does an ADU cost in the Treasure Valley?',
         answer:
-          'Cost depends on size, utility extensions, site work, and finishes. We price after a site review rather than quoting a square-foot number without seeing the lot. Request a quote and we reply within one business day.',
+          'Cost depends on size, utility extensions, site work, and finishes. We price after a site review rather than quoting a square-foot number without seeing the lot. Request a quote and we answer your questions and help you work out the next step.',
         links: [{ phrase: 'Request a quote', href: '/estimate' }],
       },
       {
@@ -539,7 +539,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       heading: 'Planning an ADU in the Treasure Valley',
       paragraphs: [
         'A detached ADU is priced from the property up: setbacks, utilities, access, and site work shape the scope more than a generic square-foot figure.',
-        'Request a quote and we reply within one business day. A site review comes before a detailed proposal, so the first number you see is grounded in your lot.',
+        'Request a quote and we answer your questions and help you work out the next step. A site review comes before a detailed proposal, so the first number you see is grounded in your lot.',
       ],
     },
   },

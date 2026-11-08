@@ -297,7 +297,7 @@ export const CONSULT_BULLETS = [
   "Nobody in the room works on commission",
   "No pressure to sign anything on the spot",
   "A written budget band that is yours to keep",
-  "We reply within one business day",
+  "We answer your questions and help you work out the next step",
 ];
 
 /**

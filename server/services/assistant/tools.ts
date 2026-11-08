@@ -484,7 +484,7 @@ async function executeSubmitLead(input: unknown, origin: string): Promise<string
     }
     return JSON.stringify({
       success: true,
-      message: `Lead submitted. The visitor will get a confirmation email at ${data.email}, and the team follows up within one business day.`,
+      message: `Lead submitted. A confirmation email should follow at ${data.email}, and the team will reach out to answer the visitor's questions and help with the next step. Do not promise a response time.`,
     });
   } catch (err) {
     console.error("[assistant] submit_lead error:", err);

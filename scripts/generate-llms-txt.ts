@@ -121,7 +121,7 @@ function buildFull(): string {
       `delivered by one team under one contract, which removes the handoff between an architect ` +
       `and a general contractor and keeps the drawings and the budget on the same schedule. ` +
       `Every project includes a written line-item scope before construction, named allowances ` +
-      `for selections, and a workmanship warranty at completion.`,
+      `for selections, and a workmanship warranty from documented Final Completion.`,
     '',
   );
   lines.push('- Business type: Residential design-build home builder (new construction)');

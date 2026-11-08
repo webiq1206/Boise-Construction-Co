@@ -568,7 +568,7 @@ async function grids() {
 
 function contrastSummary() {
   const measurements=rows.flatMap(row=>(row.sceneContrast??[]).flatMap(scene=>scene.runs.map(run=>({...run,viewport:row.viewport,time:scene.time,actualTime:scene.actualTime}))));
-  const role=run=>run.text==='Request a quote'?'primary CTA':run.fontSize>=32?(run.color[0]===196?'ochre H1':'white H1'):run.text.startsWith('Our team replies')?'microcopy':run.text.includes('Custom home building')?'eyebrow':run.text.startsWith('From bare lot')?'support':'telephone action';
+  const role=run=>run.text==='Request a quote'?'primary CTA':run.fontSize>=32?(run.color[0]===196?'ochre H1':'white H1'):run.text.startsWith('We answer your questions')?'microcopy':run.text.includes('Custom home building')?'eyebrow':run.text.startsWith('From bare lot')?'support':'telephone action';
   const brief=run=>({text:run.text,viewport:run.viewport,time:run.time,actualTime:run.actualTime,ratio:run.minimum,required:run.required,x:run.x,y:run.y,width:run.width,height:run.height});
   const minima=items=>Object.fromEntries([...new Set(items.map(role))].map(name=>{
     const selected=items.filter(run=>role(run)===name);

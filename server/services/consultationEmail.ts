@@ -871,11 +871,11 @@ export function buildCustomerEmailHtml(
       <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">Thanks, ${escapeHtml(firstName)}. Here is the planning range you built.</p>
       ${buildEstimateSectionsHtml(estimate, overrides)}
       ${budgetNote}
-      <p style="color:${EMAIL_BRAND.text};line-height:1.6;">We will reach out within one business day to book your free planning consultation, where we confirm the scope and give you a firm number. Until then, reply here or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> with any questions.</p>
+      <p style="color:${EMAIL_BRAND.text};line-height:1.6;">We will reach out to answer your questions and book your free planning consultation, where we confirm the scope and give you a firm number. Until then, reply here or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> with any questions.</p>
       <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The ${escapeHtml(SITE_CONFIG.name)} team</p>
     `
     : `
-      <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">We received your consultation request and will reach out within one business day to schedule your free planning consultation.</p>
+      <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">We received your consultation request. We will reach out to answer your questions and schedule your free planning consultation.</p>
       <p style="color:${EMAIL_BRAND.text};line-height:1.6;">In the meantime, feel free to call us at <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a>, <a href="${SITE_CONFIG.phoneSmsHref}" style="color:${EMAIL_BRAND.accent};">send us a text</a>, or reply to this email with any questions.</p>
       <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The ${escapeHtml(SITE_CONFIG.name)} team</p>
     `;

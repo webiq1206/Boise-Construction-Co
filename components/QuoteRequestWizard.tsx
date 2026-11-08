@@ -703,14 +703,14 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
       {submitted?.callback ? (
         <p className={cn("text-sm", t.muted)} data-testid="consultation-success-callback">
           We will call you at <span data-clarity-mask="True">{submitted.phone}</span>
-          {submitted.bestTimeToCall ? ` (${submitted.bestTimeToCall.toLowerCase()} works best)` : ""}. We reply within
-          one business day.
+          {submitted.bestTimeToCall ? ` (${submitted.bestTimeToCall.toLowerCase()} works best)` : ""}. We will answer your questions and help you work out
+          the next step.
         </p>
       ) : (
         <ol className={cn("space-y-2.5 text-sm", t.muted)}>
           {[
             "We review your request and any planning range you attached.",
-            "We reach out within one business day to find a time that works.",
+            "We reach out to answer your questions and find a time that works.",
             "Your free 60 to 90 minute planning consultation: planning guidance, design direction, no obligation.",
           ].map((line, i) => (
             <li key={line} className="flex gap-3">
@@ -740,7 +740,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
           />
         </p>
         {submitted?.email && !submitted.callback && (
-          <p className={cn("text-xs", t.muted)}>A confirmation email is on its way to your inbox.</p>
+          <p className={cn("text-xs", t.muted)}>Your request is saved. A confirmation email should follow at the address you gave.</p>
         )}
       </div>
       {attachments.files.length > 0 && (
@@ -784,7 +784,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
 
   const projectLabel = estimate?.project ? PROJECT_LABELS[estimate.project]?.label : null;
   const finishLabel = estimate?.finish ? FINISH_LABELS[estimate.finish]?.label : null;
-  const nextLine = "We reply within one business day.";
+  const nextLine = "We answer your questions and help you work out the next step.";
 
   // The site assistant is not mounted on /estimate (AssistantWidget), so Chat is offered
   // only where it can open; there "Text us" takes the full width.

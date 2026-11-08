@@ -40,9 +40,9 @@ import Link from 'next/link';
 
 const CONTACT_FAQS = [
   {
-    question: 'How quickly will you respond to my inquiry?',
+    question: 'What happens after I get in touch?',
     answer:
-      'We respond within one business day. Call us during business hours for an immediate conversation, or submit the form and we will reach out to schedule your free planning consultation.',
+      'We answer your questions and help you work out the next step. Call us during business hours to talk it through, or submit the form and we will reach out to schedule your free planning consultation.',
   },
   {
     question: 'Is the planning consultation really free?',
@@ -232,7 +232,7 @@ export default function ContactPage() {
                     <em className="brc-accent">build</em>.
                   </h2>
                   <p className="text-base leading-relaxed mb-8 text-muted-foreground">
-                    Send a few details and we will reach out within one business day to schedule
+                    Send a few details and we will reach out to answer your questions and schedule
                     your free 60 to 90 minute planning consultation - budget band, schedule, and
                     site requirements, with no obligation.
                   </p>
@@ -287,7 +287,7 @@ export default function ContactPage() {
                   <em className="brc-accent">connect</em>
                 </>
               }
-              description="Call, email, or visit - we respond within one business day and never use high-pressure sales tactics."
+              description="Call, email, or visit. We answer your questions, help you work out the next step, and never use high-pressure sales tactics."
               className="max-w-3xl"
             />
             <div className="ed-grid-balance grid sm:grid-cols-2 gap-4">
@@ -323,7 +323,7 @@ export default function ContactPage() {
                   icon={<Mail className="h-5 w-5" strokeWidth={1.5} />}
                   label="Email us"
                   href={`mailto:${SITE_CONFIG.email}`}
-                  subtext="Response within one business day"
+                  subtext="Send your questions and we will answer them"
                 >
                   {SITE_CONFIG.email}
                 </ContactChannel>

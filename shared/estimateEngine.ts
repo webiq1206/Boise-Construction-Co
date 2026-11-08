@@ -1472,10 +1472,13 @@ export const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, Price
   /*
    * NEW CONSTRUCTION. These cells serve a narrower purpose than the remodel ones.
    *
-   * The number a visitor sees comes from the line-item takeoff in
-   * shared/costs/newConstructionRules.ts, not from here. What these do is feed
-   * `marketCeiling`, the guard that stops the takeoff quoting above what the
-   * business is willing to charge. They are therefore set with deliberate
+   * These cells are read directly by `calculateEstimate`, which is what the
+   * homepage planning range (components/PlanningRangeExplorer.tsx) calls, with
+   * mid-range finish and empty refinements, so the homepage figure IS this
+   * matrix, not the takeoff. The line-item takeoff in
+   * shared/costs/newConstructionRules.ts is a separate path; there these cells
+   * also feed `marketCeiling`, the guard that stops the takeoff quoting above
+   * what the business is willing to charge. They are therefore set with deliberate
    * headroom above the takeoff at baseline size, roughly 15 percent, so the guard
    * stays out of the way at ordinary configurations and only fires on genuinely
    * extreme scope (a steep foothills lot, a well and septic, and a bespoke

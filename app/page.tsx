@@ -87,7 +87,7 @@ export default function HomePage() {
               <Reveal>
                 <p className="f-eyebrow">BEGIN A CONVERSATION</p>
                 <h2>Tell us what you<br /><em style={{ color: "var(--f-accent)" }}>want to build.</em></h2>
-                <p>Send a few details and we will set up a free 60 to 90 minute planning session, usually within one business day.</p>
+                <p>Send a few details and we will set up a free 60 to 90 minute planning session. We answer your questions and help you work out the next step.</p>
                 <p>By the end you will have a realistic budget band, a clear-eyed read on your lot, and no expectation to go any further.</p>
                 <details className="request-more">
                   <summary>What the session covers</summary>
