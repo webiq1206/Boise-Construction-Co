@@ -70,7 +70,7 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
     {
       question: 'Is it cheaper to build in Canyon County?',
       answer:
-        'Construction cost per square foot is driven by the house, not the county. What often differs is land and site work. Canyon County parcels are more frequently rural, and a rural parcel needing a well, septic, and access commonly adds $80,000 to $150,000 before a foundation is poured, compared with $25,000 to $50,000 on a serviced subdivision lot.',
+        'Construction cost per square foot is driven by the house, not the county. What often differs is land and site work. Canyon County parcels are more frequently rural, and a rural parcel needing a well, septic, and access commonly adds $130,000 to $205,000 before a foundation is poured, compared with $40,000 to $65,000 on a serviced subdivision lot.',
     },
     {
       question: 'Do I need a different builder for Canyon County?',
@@ -108,7 +108,7 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
 <p>The practical consequence is sequencing. A site plan cannot be finalized without a septic layout, because the drainfield, the replacement area, and their required separations from the well, the house, and property lines all constrain where the house can sit. Start the septic track late and you have a building permit application waiting on a health department approval, which is a genuinely avoidable delay. Our post on <a href="/blog/well-and-septic-cost-idaho">what a well and septic system costs in Idaho</a> covers the numbers.</p>
 
 <h2 id="site-cost">Where the real cost difference shows up</h2>
-<p><strong>The meaningful cost difference between the two counties is usually site conditions, not permitting.</strong> Construction cost per finished square foot is driven by the house you build. A serviced subdivision lot typically carries $25,000 to $50,000 of site work. A rural parcel needing a well, a septic system, and access commonly runs $80,000 to $150,000 before a foundation is poured, excluding land.</p>
+<p><strong>The meaningful cost difference between the two counties is usually site conditions, not permitting.</strong> Construction cost per finished square foot is driven by the house you build. A serviced subdivision lot typically carries $40,000 to $65,000 of site work. A rural parcel needing a well, a septic system, and access commonly runs $130,000 to $205,000 before a foundation is poured, excluding land.</p>
 <p>Canyon County has proportionally more rural and agricultural parcels, so that second scenario comes up more often there. Ada County has the foothills, where slope, access, geotechnical requirements, and wildland-urban interface considerations push costs the other direction. Neither county is simply cheaper. The parcel is what is cheap or expensive, and two lots in the same subdivision can differ by tens of thousands once you account for grade, soils, and utility runs.</p>
 
 <h2 id="utilities">Utilities are an address question, not a county question</h2>

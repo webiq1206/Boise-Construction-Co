@@ -28,7 +28,7 @@ export const BUDGET_WORKSHEET_BLOCKS: PdfBlock[] = [
       'Target finished square feet: _____________________',
     ],
   },
-  { type: 'heading', text: '2. Vertical construction bands (2026, excludes land)' },
+  { type: 'heading', text: '2. House bands per finished sq ft (2026, excludes land and site work)' },
   {
     type: 'table',
     headers: ['Build type', 'Low per sq ft', 'High per sq ft', 'Your target'],
@@ -45,10 +45,10 @@ export const BUDGET_WORKSHEET_BLOCKS: PdfBlock[] = [
     headers: ['Category', 'Planned $', 'Notes'],
     rows: [
       ['Land', '___________', 'Not included in per sq ft figures'],
-      ['Site work, serviced lot', '___________', 'Commonly $25k to $50k'],
-      ['Site work, rural parcel', '___________', 'Commonly $80k to $150k'],
-      ['Design and engineering', '___________', '5 to 12 percent of construction'],
-      ['Permits and impact fees', '___________', 'Varies by jurisdiction'],
+      ['Site work, serviced lot', '___________', 'Commonly $40k to $65k, not in the bands above'],
+      ['Site work, rural parcel', '___________', 'Commonly $130k to $205k'],
+      ['Design and engineering', '___________', '5 to 12 percent, already inside the bands'],
+      ['Impact fees and utility connections', '___________', 'Separate; varies by jurisdiction'],
       ['Construction contract', '___________', 'Finished sq ft x rate above'],
       ['Appliances', '___________', 'Client-supplied, not in contract'],
       ['Landscaping beyond front yard', '___________', 'Often excluded'],
@@ -157,7 +157,7 @@ export const LOT_CHECKLIST_BLOCKS: PdfBlock[] = [
     items: [
       'Make the offer contingent on septic feasibility and a soils review',
       'Give yourself enough inspection period to get real quotes, not guesses',
-      'A written lot evaluation runs $950 to $3,500 and is credited toward design if you build with us',
+      'A written lot evaluation runs $950 to $5,500 and is credited toward design if you build with us',
       `Lot evaluation: ${SITE_CONFIG.siteUrl}/services/lot-evaluation`,
       `Land guide: ${SITE_CONFIG.siteUrl}/guides/buying-land-to-build-boise`,
     ],

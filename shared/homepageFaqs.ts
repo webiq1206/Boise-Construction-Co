@@ -41,7 +41,7 @@ export const HOMEPAGE_FAQS: HomepageFaq[] = [
   },
   {
     q: "How much does it cost to build a house in Boise and the Treasure Valley?",
-    a: "As of 2026, most Treasure Valley custom homes plan between $250 and $400 per finished square foot excluding land, which puts a 2,400 square foot home roughly between $600,000 and $960,000. Simpler single-level designs on flat valley lots can approach $225 per square foot, while foothills sites, steep grades, and highly detailed interiors regularly exceed $450. Land, site work, and utility connections are separate and vary more between lots than the house itself does, which is why we price them as their own lines rather than folding them into a square-foot number.",
+    a: "As of 2026, most Treasure Valley custom homes plan between $250 and $400 per finished square foot at Essential to Signature finish, excluding land, which puts a 2,400 square foot home roughly between $600,000 and $960,000. Simpler single-level designs on flat valley lots can approach $225 per square foot, while foothills sites, steep grades, and highly detailed interiors regularly exceed $450. Land, site work, and utility connections are separate and vary more between lots than the house itself does, which is why we price them as their own lines rather than folding them into a square-foot number.",
   },
   {
     q: "How are you different from other home builders in the Treasure Valley?",

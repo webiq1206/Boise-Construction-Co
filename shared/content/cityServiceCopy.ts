@@ -1336,7 +1336,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does it cost to build on land I already own?",
-          answer: "Plan on $225 to $400 per finished square foot for the vertical construction in 2026, with site work separate and highly variable. On a serviced lot in a Meridian subdivision, figure $25,000 to $50,000 of it; on rural acreage where a well, septic, and access must be added, $80,000 to $150,000 is possible.",
+          answer: "Plan on $225 to $400 per finished square foot for the vertical construction in 2026, with site work separate and highly variable. On a serviced lot in a Meridian subdivision, figure $40,000 to $65,000 of it; on rural acreage where a well, septic, and access must be added, $130,000 to $205,000 is possible.",
         },
         {
           question: "How do I know if my lot is actually buildable?",
@@ -1365,7 +1365,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does it cost to build on land I already own?",
-          answer: "For 2026, the house itself plans at $225\u2013$400 a finished square foot; site work is priced apart from that and swings widely. Here in Meridian, a serviced subdivision lot might call for site work in the $25,000\u2013$50,000 range, whereas rural acreage that requires a well, septic, and access can reach $80,000 to $150,000.",
+          answer: "For 2026, the house itself plans at $225\u2013$400 a finished square foot; site work is priced apart from that and swings widely. Here in Meridian, a serviced subdivision lot might call for site work in the $40,000\u2013$65,000 range, whereas rural acreage that requires a well, septic, and access can reach $130,000 to $205,000.",
         },
         {
           question: "How do I know if my lot is actually buildable?",
@@ -1394,7 +1394,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does it cost to build on land I already own?",
-          answer: "For 2026, budget the house itself at $225\u2013$400 per finished square foot. Site costs come on top and vary a great deal: a serviced lot in a Meridian subdivision could need $25,000 to $50,000 in site work, while raw rural ground that needs its own well, septic, and access drive might run $80,000 to $150,000. Nampa parcels fall all along that range.",
+          answer: "For 2026, budget the house itself at $225\u2013$400 per finished square foot. Site costs come on top and vary a great deal: a serviced lot in a Meridian subdivision could need $40,000 to $65,000 in site work, while raw rural ground that needs its own well, septic, and access drive might run $130,000 to $205,000. Nampa parcels fall all along that range.",
         },
         {
           question: "How do I know if my lot is actually buildable?",
@@ -1423,7 +1423,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does it cost to build on land I already own?",
-          answer: "Plan on $225\u2013$400 per finished square foot for the house in 2026, with site work as a separate number that swings widely: roughly $25,000\u2013$50,000 for a serviced lot in a Meridian subdivision versus $80,000\u2013$150,000 for rural acreage needing a well, septic, and access.",
+          answer: "Plan on $225\u2013$400 per finished square foot for the house in 2026, with site work as a separate number that swings widely: roughly $40,000\u2013$65,000 for a serviced lot in a Meridian subdivision versus $130,000\u2013$205,000 for rural acreage needing a well, septic, and access.",
         },
         {
           question: "How do I know if my lot is actually buildable?",
@@ -1452,7 +1452,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does it cost to build on land I already own?",
-          answer: "The house is the predictable part, at roughly $225\u2013$400 per finished square foot this year. Site work is the variable, running $25,000 to $50,000 on a serviced Meridian subdivision lot and $80,000 to $150,000 on rural acreage that needs a well, septic, and access.",
+          answer: "The house is the predictable part, at roughly $225\u2013$400 per finished square foot this year. Site work is the variable, running $40,000 to $65,000 on a serviced Meridian subdivision lot and $130,000 to $205,000 on rural acreage that needs a well, septic, and access.",
         },
         {
           question: "How do I know if my lot is actually buildable?",
@@ -1481,7 +1481,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does it cost to build on land I already own?",
-          answer: "For 2026, the structure itself runs $225 to $400 per finished square foot of house. The site is priced separately and can vary a great deal. In a Meridian subdivision with services at the lot, $25,000\u2013$50,000 is typical; acreage that still needs a well, septic, and an access drive can reach $80,000\u2013$150,000.",
+          answer: "For 2026, the structure itself runs $225 to $400 per finished square foot of house. The site is priced separately and can vary a great deal. In a Meridian subdivision with services at the lot, $40,000\u2013$65,000 is typical; acreage that still needs a well, septic, and an access drive can reach $130,000\u2013$205,000.",
         },
         {
           question: "How do I know if my lot is actually buildable?",
@@ -1510,7 +1510,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does it cost to build on land I already own?",
-          answer: "This year the house itself plans at $225\u2013$400 for each square foot of finished space. Site work sits outside that, and the range is huge: a serviced Meridian subdivision lot may call for $25,000\u2013$50,000, whereas rural acreage without a well, septic, or access yet can cost $80,000\u2013$150,000.",
+          answer: "This year the house itself plans at $225\u2013$400 for each square foot of finished space. Site work sits outside that, and the range is huge: a serviced Meridian subdivision lot may call for $40,000\u2013$65,000, whereas rural acreage without a well, septic, or access yet can cost $130,000\u2013$205,000.",
         },
         {
           question: "How do I know if my lot is actually buildable?",
@@ -1539,7 +1539,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does it cost to build on land I already own?",
-          answer: "Plan on a range of $225 to $400 per square foot of finished house in 2026. Site work is separate and depends heavily on the parcel. A Meridian subdivision lot with services already in might need $25,000\u2013$50,000; rural ground needing a well, septic, and an access drive, $80,000\u2013$150,000.",
+          answer: "Plan on a range of $225 to $400 per square foot of finished house in 2026. Site work is separate and depends heavily on the parcel. A Meridian subdivision lot with services already in might need $40,000\u2013$65,000; rural ground needing a well, septic, and an access drive, $130,000\u2013$205,000.",
         },
         {
           question: "How do I know if my lot is actually buildable?",
@@ -1568,7 +1568,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
         },
         {
           question: "What does it cost to build on land I already own?",
-          answer: "Expect two budgets. In 2026 the house itself runs $225\u2013$400 per finished square foot. Site work is a separate budget with an enormous spread: a serviced lot inside a Meridian subdivision might total $25,000\u2013$50,000 of it, and rural acreage still lacking a well, septic, and access can take it to $80,000\u2013$150,000.",
+          answer: "Expect two budgets. In 2026 the house itself runs $225\u2013$400 per finished square foot. Site work is a separate budget with an enormous spread: a serviced lot inside a Meridian subdivision might total $40,000\u2013$65,000 of it, and rural acreage still lacking a well, septic, and access can take it to $130,000\u2013$205,000.",
         },
         {
           question: "How do I know if my lot is actually buildable?",
@@ -1858,7 +1858,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does lot evaluation & feasibility cost in Boise?",
-          answer: "Lot evaluation in Boise is priced in line with the Treasure Valley market. A written evaluation of a lot runs $950 to $3,500 across the valley in 2026. Our walk of the lot feeds a line-by-line budget for the site.",
+          answer: "Lot evaluation in Boise is priced in line with the Treasure Valley market. A written evaluation of a lot runs $950 to $5,500 across the valley in 2026. Our walk of the lot feeds a line-by-line budget for the site.",
         },
         {
           question: "What makes a lot expensive to build on?",
@@ -1887,7 +1887,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does lot evaluation & feasibility cost in Meridian?",
-          answer: "Meridian lot evaluations are priced like the rest of the Treasure Valley. A written evaluation runs $950 to $3,500 in the valley as of 2026. After we walk the lot, you get a budget broken out line by line for it.",
+          answer: "Meridian lot evaluations are priced like the rest of the Treasure Valley. A written evaluation runs $950 to $5,500 in the valley as of 2026. After we walk the lot, you get a budget broken out line by line for it.",
         },
         {
           question: "What makes a lot expensive to build on?",
@@ -1916,7 +1916,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does lot evaluation & feasibility cost in Nampa?",
-          answer: "Nampa budgets line up with the overall Treasure Valley market. A written lot evaluation in the valley costs $950 to $3,500 as of 2026. Walk the property with us and we'll prepare an itemized budget for that parcel.",
+          answer: "Nampa budgets line up with the overall Treasure Valley market. A written lot evaluation in the valley costs $950 to $5,500 as of 2026. Walk the property with us and we'll prepare an itemized budget for that parcel.",
         },
         {
           question: "What makes a lot expensive to build on?",
@@ -1945,7 +1945,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does lot evaluation & feasibility cost in Eagle?",
-          answer: "Eagle pricing tracks the larger Treasure Valley picture. This year, a written lot evaluation in the valley runs $950 to $3,500. The next step is a walk-through of your lot, which yields a line-by-line budget for that parcel.",
+          answer: "Eagle pricing tracks the larger Treasure Valley picture. This year, a written lot evaluation in the valley runs $950 to $5,500. The next step is a walk-through of your lot, which yields a line-by-line budget for that parcel.",
         },
         {
           question: "What makes a lot expensive to build on?",
@@ -1974,7 +1974,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does lot evaluation & feasibility cost in Kuna?",
-          answer: "Kuna prices follow the broader Treasure Valley. For 2026, a written lot evaluation in this valley typically costs between $950 and $3,500, depending on the parcel. Ask us to walk the lot and you'll get a line-by-line budget tailored to that land.",
+          answer: "Kuna prices follow the broader Treasure Valley. For 2026, a written lot evaluation in this valley typically costs between $950 and $5,500, depending on the parcel. Ask us to walk the lot and you'll get a line-by-line budget tailored to that land.",
         },
         {
           question: "What makes a lot expensive to build on?",
@@ -2003,7 +2003,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does lot evaluation & feasibility cost in Caldwell?",
-          answer: "Caldwell costs run with the wider Treasure Valley picture. As of 2026, written lot evaluations across the valley cost between $950 and $3,500. Book a lot walkthrough to get an itemized budget for that exact parcel.",
+          answer: "Caldwell costs run with the wider Treasure Valley picture. As of 2026, written lot evaluations across the valley cost between $950 and $5,500. Book a lot walkthrough to get an itemized budget for that exact parcel.",
         },
         {
           question: "What makes a lot expensive to build on?",
@@ -2032,7 +2032,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does lot evaluation & feasibility cost in Star?",
-          answer: "Star pricing follows the wider Treasure Valley market. This year, written lot evaluations in the valley range from $950 to $3,500. A lot walkthrough then leads to a budget split into line items for that parcel.",
+          answer: "Star pricing follows the wider Treasure Valley market. This year, written lot evaluations in the valley range from $950 to $5,500. A lot walkthrough then leads to a budget split into line items for that parcel.",
         },
         {
           question: "What makes a lot expensive to build on?",
@@ -2061,7 +2061,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does lot evaluation & feasibility cost in Middleton?",
-          answer: "Middleton budgets track the wider Treasure Valley. In 2026, expect $950 to $3,500 for a written lot evaluation in the valley. A lot walkthrough then results in a line-item budget for your parcel.",
+          answer: "Middleton budgets track the wider Treasure Valley. In 2026, expect $950 to $5,500 for a written lot evaluation in the valley. A lot walkthrough then results in a line-item budget for your parcel.",
         },
         {
           question: "What makes a lot expensive to build on?",
@@ -2090,7 +2090,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does lot evaluation & feasibility cost in Garden City?",
-          answer: "Garden City budgets follow the broader Treasure Valley picture. Valleywide, written lot evaluations are priced at $950 to $3,500 in 2026. Request a lot walkthrough and you'll get an itemized budget for your particular site.",
+          answer: "Garden City budgets follow the broader Treasure Valley picture. Valleywide, written lot evaluations are priced at $950 to $5,500 in 2026. Request a lot walkthrough and you'll get an itemized budget for your particular site.",
         },
         {
           question: "What makes a lot expensive to build on?",
