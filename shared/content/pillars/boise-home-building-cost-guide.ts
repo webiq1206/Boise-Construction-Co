@@ -17,13 +17,13 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
   publishedAt: '2026-06-20',
   tags: ['cost', 'budgeting', 'custom home', 'new construction', 'boise', 'treasure valley'],  primaryKeyword: 'boise home building cost guide',
   quickAnswer:
-    'Building a custom home in the Boise area costs $250 to $400 per finished square foot in 2026, or $600,000 to $960,000 at 2,400 square feet, excluding land. Semi-custom homes run $245 to $375. Site work adds $40,000 to $65,000 on a serviced lot and $130,000 to $205,000 on a rural parcel.',
+    'Building a custom home in the Boise area costs $250 to $400 per finished square foot in 2026, or $600,000 to $960,000 at 2,400 square feet, excluding land. Semi-custom homes run $225 to $300. Site work adds $40,000 to $65,000 on a serviced lot and $130,000 to $205,000 on a rural parcel.',
   keyTakeaways: [
-    'Custom homes in the Treasure Valley plan at $250 to $400 per finished square foot and semi-custom homes at $245 to $375, both excluding land.',
+    'Custom homes in the Treasure Valley plan at $250 to $400 per finished square foot and semi-custom homes at $225 to $300, both excluding land.',
     'A per-square-foot figure is a feasibility filter, not a quote, because it carries every decision the reference project made.',
     'Site work swings from $40,000 on a serviced subdivision lot to $205,000 on a rural parcel needing a well, septic, and access.',
     'Land is always a separate purchase, and the lot you choose also changes what the house costs to build on it.',
-    'Design and engineering run 5 to 12 percent of construction cost, roughly $9,000 to $75,000.',
+    'Design and engineering run 5 to 12 percent of construction cost, roughly $9,000 to $35,000.',
     'Allowances are where a low bid usually hides, so test them against what materials actually cost here before you compare totals.',
     'Budget the house, the land, the site work, the soft costs, the exclusions, and a contingency, or the number will move on you later.',
   ],
@@ -53,7 +53,7 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
     {
       question: 'How much does it cost to build a house in Boise in 2026?',
       answer:
-        'Plan on $250 to $400 per finished square foot for a custom home, which is $600,000 to $960,000 at 2,400 square feet, excluding land. A semi-custom home adapted from an existing plan runs $245 to $375 per finished square foot, or about $490,000 to $750,000 at 2,000 square feet. Simple single-level designs on flat, serviced valley lots can come in near $225.',
+        'Plan on $250 to $400 per finished square foot for a custom home, which is $600,000 to $960,000 at 2,400 square feet, excluding land. A semi-custom home adapted from an existing plan runs $225 to $300 per finished square foot, or about $450,000 to $600,000 at 2,000 square feet. Simple single-level designs on flat, serviced valley lots can come in near $225.',
     },
     {
       question: 'Does the cost per square foot include the land?',
@@ -73,7 +73,7 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
     {
       question: 'How much should I budget for design and engineering?',
       answer:
-        'Design and engineering typically run 5 to 12 percent of construction cost, which lands around $9,000 to $75,000 on a Treasure Valley home. The percentage falls as the house gets larger and rises with structural complexity, long spans, steep sites, and custom detailing that has to be drawn rather than specified from a catalogue. A written lot evaluation is separate, at $950 to $5,500.',
+        'Design and engineering typically run 5 to 12 percent of construction cost, which lands around $9,000 to $35,000 on a Treasure Valley home. The percentage falls as the house gets larger and rises with structural complexity, long spans, steep sites, and custom detailing that has to be drawn rather than specified from a catalogue. A written lot evaluation is separate, at $950 to $5,500.',
     },
     {
       question: 'What is a realistic contingency on a new home build?',
@@ -108,7 +108,7 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
   ],
   content: `
 <h2 id="the-honest-answer">What it costs to build a house in Boise</h2>
-<p><strong>A custom home in the Treasure Valley plans at $250 to $400 per finished square foot in 2026, which puts a 2,400 square foot house between $600,000 and $960,000, and none of that includes land.</strong> A semi-custom home adapted from an existing plan runs $245 to $375 per finished square foot, or roughly $490,000 to $750,000 at 2,000 square feet. A simple single-level design on a flat, serviced valley lot can land near $225. A steep foothills site with a high level of interior detail regularly goes above $450. Those are the bands we plan against, and they are wide on purpose, because the cheapest and the most expensive versions of the same square footage are genuinely different houses on genuinely different pieces of ground.</p>
+<p><strong>A custom home in the Treasure Valley plans at $250 to $400 per finished square foot in 2026, which puts a 2,400 square foot house between $600,000 and $960,000, and none of that includes land.</strong> A semi-custom home adapted from an existing plan runs $225 to $300 per finished square foot, or roughly $450,000 to $600,000 at 2,000 square feet. A simple single-level design on a flat, serviced valley lot can land near $225. A steep foothills site with a high level of interior detail regularly goes above $450. Those are the bands we plan against, and they are wide on purpose, because the cheapest and the most expensive versions of the same square footage are genuinely different houses on genuinely different pieces of ground.</p>
 <p>A range that wide is not much use on its own, and we would rather say that plainly than pretend otherwise. What makes it useful is knowing which end of it you are standing at and why. That is what this guide is for. It covers what the per-square-foot number does and does not buy, how the lot changes the arithmetic, where the soft costs sit, how allowances get set and how they get gamed, and how to build a budget that survives contact with a real bid instead of collapsing at the first line item. If you only want the short version of the headline figure, read <a href="/blog/cost-to-build-a-house-boise">how much it costs to build a house in Boise</a> and come back.</p>
 
 <h2 id="per-square-foot-is-a-planning-tool">Why per square foot is a planning tool and not a quote</h2>
@@ -120,8 +120,8 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
 <table>
 <thead><tr><th>Project type</th><th>2026 planning band, excluding land</th></tr></thead>
 <tbody>
-<tr><td>Semi-custom home</td><td>$245 to $375 per finished square foot</td></tr>
-<tr><td>Semi-custom, 2,000 sq ft</td><td>$490,000 to $750,000</td></tr>
+<tr><td>Semi-custom home</td><td>$225 to $300 per finished square foot</td></tr>
+<tr><td>Semi-custom, 2,000 sq ft</td><td>$450,000 to $600,000</td></tr>
 <tr><td>Custom home</td><td>$250 to $400 per finished square foot</td></tr>
 <tr><td>Custom, 2,400 sq ft</td><td>$600,000 to $960,000</td></tr>
 <tr><td>Simple single-level on a flat valley lot</td><td>Near $225 per square foot</td></tr>
@@ -161,7 +161,7 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
 <p>There is a third cost that never appears on a settlement statement. A narrow lot with tight setbacks may rule out the single-level plan you wanted and push you into two storeys. A steep lot may need a daylight basement you did not plan to pay for. A parcel with a septic drainfield in the only sensible place for the house rearranges the site plan. None of that is a reason to avoid difficult land, and some of the best sites in the valley are difficult. It is a reason to understand the total before you sign. Our full treatment of that is in <a href="/guides/buying-land-to-build-boise">buying land to build in Boise</a>. If you already own your ground, <a href="/services/build-on-your-lot">building on your lot</a> is the path that starts from what you have.</p>
 
 <h2 id="design-and-engineering">Design and engineering, as a percentage</h2>
-<p><strong>Design and engineering typically run 5 to 12 percent of construction cost, which is roughly $9,000 to $75,000 on a Treasure Valley home.</strong> The percentage falls as the house gets larger, because a bigger house is not proportionally harder to draw, and rises with structural complexity, long spans, steep sites, and custom detailing that has to be designed rather than selected from a catalogue. A semi-custom plan sits at the bottom of that range or below it, because the drawings already exist and only need adapting to your lot and your changes.</p>
+<p><strong>Design and engineering typically run 5 to 12 percent of construction cost, which is roughly $9,000 to $35,000 on a Treasure Valley home.</strong> The percentage falls as the house gets larger, because a bigger house is not proportionally harder to draw, and rises with structural complexity, long spans, steep sites, and custom detailing that has to be designed rather than selected from a catalogue. A semi-custom plan sits at the bottom of that range or below it, because the drawings already exist and only need adapting to your lot and your changes.</p>
 <p>Two things are worth saying about this money. The first is that it produces no visible square footage, which makes it the easiest line for a buyer to resent and the easiest for a proposal to omit. The second is that it is the cheapest place in the whole project to make expensive decisions. Moving a wall on a drawing costs an hour. Moving it after framing costs the new work, the removal of the old work, the trades that have to come back, and any engineering or inspection that has to be repeated. Permits, plan review, and utility applications sit alongside design in the soft cost bucket. Ada County covers Boise, Meridian, Eagle, Kuna, and Star, and Canyon County covers Nampa, Caldwell, and Middleton. The two use different portals and different review cadences, and we handle both in-house.</p>
 
 <h2 id="allowances">How allowances work, and how they get gamed</h2>

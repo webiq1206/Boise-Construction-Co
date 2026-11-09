@@ -81,9 +81,8 @@ export const PUBLISHED_PER_SF: Record<string, { low: number; high: number }> = {
   // "most Treasure Valley custom homes plan between $250 and $400 per finished
   // square foot", with "$525,000 ... near $225 per square foot" as the floor.
   "custom-home": { low: 225, high: 400 },
-  // "semi-custom homes generally plan between $245 and $375" (2026 copy,
-  // checked against the owner price book on 2026-11-09)
-  "semi-custom-home": { low: 245, high: 375 },
+  // "semi-custom homes generally plan between $225 and $300"
+  "semi-custom-home": { low: 225, high: 300 },
   // "vertical construction plans between $225 and $400"; site work separate.
   "build-on-your-lot": { low: 225, high: 400 },
   // No "shop-home" entry, deliberately. Since 2026-11-01 the site publishes no

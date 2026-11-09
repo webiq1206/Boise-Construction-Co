@@ -185,7 +185,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does a semi-custom home cost in the Treasure Valley?',
         answer:
-          'Semi-custom homes generally plan between $245 and $375 per finished square foot in 2026 at Essential to Signature finish, excluding land and site work, with our simplest plans starting near $425,000. A common 2,000 square foot home lands between $490,000 and $750,000.',
+          'Semi-custom homes generally plan between $225 and $300 per finished square foot in 2026, excluding land and site work, with our simplest plans starting near $425,000. A common 2,000 square foot home lands between $450,000 and $600,000.',
       },
       {
         question: 'What is the difference between semi-custom and fully custom?',
@@ -216,7 +216,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Semi-custom home cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, semi-custom homes in the Treasure Valley plan between $245 and $375 per finished square foot at Essential to Signature finish, excluding land, site work, impact fees, and utility connections. Our published planning-from figure of $425,000 reflects the simplest plans; a common 2,000 square foot home lands between $490,000 and $750,000. The savings against a fully custom build come from design and engineering work that is already complete, not from cheaper construction.',
+        'As of 2026, semi-custom homes in the Treasure Valley plan between $225 and $300 per finished square foot, excluding land, site work, impact fees, and utility connections. Our published planning-from figure of $425,000 reflects the simplest plans; a common 2,000 square foot home lands between $450,000 and $600,000. The savings against a fully custom build come from design and engineering work that is already complete, not from cheaper construction.',
         'These are planning ranges, not bids. Lot conditions, plan modifications, and finish level move the number, which we confirm with a line-item budget once a plan and lot are matched.',
       ],
     },
@@ -367,7 +367,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does the design phase cost?',
         answer:
-          'Design, engineering, and permit-ready documents typically run 5 to 12 percent of construction cost, which is roughly $9,000 to $75,000 for most Treasure Valley homes. On a design-build contract a portion of that credits toward construction.',
+          'Design, engineering, and permit-ready documents typically run 5 to 12 percent of construction cost, which is roughly $9,000 to $35,000 for most Treasure Valley homes. On a design-build contract a portion of that credits toward construction.',
       },
       {
         question: 'What happens if the design comes in over budget anyway?',
@@ -378,7 +378,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Design-build cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, design-build homes in the Treasure Valley plan between $250 and $400 per finished square foot excluding land. The design and engineering portion typically represents 5 to 12 percent of construction cost, or about $9,000 to $75,000 for a typical home, and its scope and price are agreed in writing before design work starts.',
+        'As of 2026, design-build homes in the Treasure Valley plan between $250 and $400 per finished square foot excluding land. The design and engineering portion typically represents 5 to 12 percent of construction cost, or about $9,000 to $35,000 for a typical home, and its scope and price are agreed in writing before design work starts.',
         'These are planning ranges, not bids. The advantage of design-build is that your number gets more precise at every design milestone instead of arriving all at once when drawings go out to bid.',
       ],
     },
@@ -428,7 +428,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much do custom home plans cost in Idaho?',
         answer:
-          'A permit-ready set with structural engineering typically runs 5 to 12 percent of construction cost, roughly $9,000 to $75,000 for most Treasure Valley homes. Small or simple homes sit at the low end; large or architecturally complex homes sit above it.',
+          'A permit-ready set with structural engineering typically runs 5 to 12 percent of construction cost, roughly $9,000 to $35,000 for most Treasure Valley homes. Small or simple homes sit at the low end; large or architecturally complex homes sit above it.',
       },
       {
         question: 'Do I own the plans when they are finished?',
@@ -459,7 +459,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Home design and plan cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, a permit-ready custom home drawing set with structural engineering and energy compliance runs roughly $9,000 to $75,000 in the Treasure Valley, or about 5 to 12 percent of construction cost. Simple single-level homes sit near the bottom of that range and large or complex designs above it.',
+        'As of 2026, a permit-ready custom home drawing set with structural engineering and energy compliance runs roughly $9,000 to $35,000 in the Treasure Valley, or about 5 to 12 percent of construction cost. Simple single-level homes sit near the bottom of that range and large or complex designs above it.',
         'These are planning ranges, not bids. Home size, structural complexity, and the number of design revision rounds drive the final figure, which we fix in writing after a programming session.',
       ],
     },
@@ -745,7 +745,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does a barndominium cost to build in Idaho?',
         answer:
-          'Shop homes cost less per square foot than a conventional house because the shop portion costs far less to build than finished living space. For 1,600 square feet of living space with a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio. The shop itself runs about $85 to $110 per square foot insulated, with a slab, an overhead door and power.',
+          'Shop homes cost less per square foot than a conventional house because the shop portion costs far less to build than finished living space. For 1,600 square feet of living space with a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio. The shop itself runs about $55 to $60 per square foot insulated, with a slab, an overhead door and power.',
       },
       {
         question: 'Why is a shop home cheaper per square foot than a conventional house?',

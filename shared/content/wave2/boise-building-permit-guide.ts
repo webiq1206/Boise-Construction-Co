@@ -62,7 +62,7 @@ export const boiseBuildingPermitGuide: BlogPostData = {
     {
       question: 'What does the building permit cost?',
       answer:
-        'Permit and impact fees vary by jurisdiction and by house size, so we price them from the current published schedules for your specific address rather than a rule of thumb. Design and engineering, which is a separate cost from the fees themselves, commonly runs 5 to 12 percent of construction cost, roughly $9,000 to $75,000, excluding land.',
+        'Permit and impact fees vary by jurisdiction and by house size, so we price them from the current published schedules for your specific address rather than a rule of thumb. Design and engineering, which is a separate cost from the fees themselves, commonly runs 5 to 12 percent of construction cost, roughly $9,000 to $35,000, excluding land.',
     },
     {
       question: 'What inspections happen during construction?',
@@ -113,7 +113,7 @@ export const boiseBuildingPermitGuide: BlogPostData = {
 
 <h2 id="fees">Fees, and why we do not quote them from memory</h2>
 <p><strong>Permit fees and impact fees are set by each jurisdiction, revised periodically, and calculated from house size and valuation, so a number quoted from memory is a number that will be wrong.</strong> We pull the current published schedule for your specific address and put the real figure in your line-item budget before you sign anything.</p>
-<p>What we can generalize: fees are a small share of a new-home budget compared with construction, but they are not trivial, and impact fees in particular differ meaningfully between jurisdictions. Design and engineering, which is separate from jurisdiction fees, commonly runs 5 to 12 percent of construction cost, or roughly $9,000 to $75,000, excluding land. Both belong in the budget from the start rather than appearing as a surprise later.</p>
+<p>What we can generalize: fees are a small share of a new-home budget compared with construction, but they are not trivial, and impact fees in particular differ meaningfully between jurisdictions. Design and engineering, which is separate from jurisdiction fees, commonly runs 5 to 12 percent of construction cost, or roughly $9,000 to $35,000, excluding land. Both belong in the budget from the start rather than appearing as a surprise later.</p>
 
 <h2 id="other-permits">The permits that are not the building permit</h2>
 <p><strong>A new house usually needs several approvals that are issued by other agencies and run on their own schedules.</strong> People assume the building permit is one document that covers everything, and then discover a separate application sitting in the critical path.</p>

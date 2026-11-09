@@ -66,7 +66,7 @@ export const questionsToAskAHomeBuilder: BlogPostData = {
     {
       question: 'How much should design and engineering cost?',
       answer:
-        'In the Treasure Valley, design and engineering commonly run 5 to 12 percent of construction cost, roughly $9,000 to $75,000 depending on the complexity of the house and whether structural engineering is heavy. Ask whether that is inside the quoted price or billed separately, because builders differ on this and it is a common reason two bids are not comparable.',
+        'In the Treasure Valley, design and engineering commonly run 5 to 12 percent of construction cost, roughly $9,000 to $35,000 depending on the complexity of the house and whether structural engineering is heavy. Ask whether that is inside the quoted price or billed separately, because builders differ on this and it is a common reason two bids are not comparable.',
     },
     {
       question: 'What questions should I ask about the schedule?',

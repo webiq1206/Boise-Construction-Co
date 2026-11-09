@@ -31,7 +31,7 @@ export const productionVsCustomHomeBuilder: BlogPostData = {
     'A production builder sells a product; a custom builder sells a process.',
     'Production pricing is predictable because the plan and the lot are already solved.',
     'Custom building is worth paying for when the lot or the way you live is unusual.',
-    'Semi-custom sits between the two at $245 to $375 per finished square foot and suits a lot of families.',
+    'Semi-custom sits between the two at $225 to $300 per finished square foot and suits a lot of families.',
     'If you cannot name three things you would change about a production plan, buy the production home.',
   ],
   relatedLinks: [
@@ -51,7 +51,7 @@ export const productionVsCustomHomeBuilder: BlogPostData = {
     {
       question: 'Is a custom home always more expensive than a production home?',
       answer:
-        'Usually, yes, and not always by as much as people assume. Production builders buy in volume and repeat the same plan, which genuinely lowers cost. A custom home in the Treasure Valley plans between $250 and $400 per finished square foot excluding land, while a semi-custom home runs $245 to $375. The larger difference is often the lot rather than the house.',
+        'Usually, yes, and not always by as much as people assume. Production builders buy in volume and repeat the same plan, which genuinely lowers cost. A custom home in the Treasure Valley plans between $250 and $400 per finished square foot excluding land, while a semi-custom home runs $225 to $300. The larger difference is often the lot rather than the house.',
     },
     {
       question: 'Can I change the floor plan with a production builder?',
@@ -61,7 +61,7 @@ export const productionVsCustomHomeBuilder: BlogPostData = {
     {
       question: 'What is a semi-custom home?',
       answer:
-        'A semi-custom home starts from an existing plan and modifies it for your lot and your family, rather than designing from a blank page. It keeps most of the cost and schedule advantages of a proven plan while allowing real changes. In the Treasure Valley it commonly runs $245 to $375 per finished square foot excluding land, or $490,000 to $750,000 for 2,000 square feet.',
+        'A semi-custom home starts from an existing plan and modifies it for your lot and your family, rather than designing from a blank page. It keeps most of the cost and schedule advantages of a proven plan while allowing real changes. In the Treasure Valley it commonly runs $225 to $300 per finished square foot excluding land, or $450,000 to $600,000 for 2,000 square feet.',
     },
     {
       question: 'Do production builders build on my land?',
@@ -89,7 +89,7 @@ export const productionVsCustomHomeBuilder: BlogPostData = {
 
 <h2 id="semi-custom">Semi-custom: the middle most people actually want</h2>
 <p><strong>Semi-custom starts from an existing plan and changes it for your lot and your family, and it is the right answer more often than either extreme.</strong> You keep the advantages of a plan that has been drawn, engineered and built before, and you spend your design effort on the handful of things that genuinely matter to you.</p>
-<p>The pricing reflects that. Semi-custom homes in the Treasure Valley commonly run $245 to $375 per finished square foot excluding land, or roughly $490,000 to $750,000 for 2,000 square feet, against $250 to $400 per finished square foot for a fully custom home. The saving is mostly design and engineering, not construction, because the house still gets built the same way by the same trades. If your list of changes is five items long rather than fifty, <a href="/services/semi-custom-homes">semi-custom</a> will get you there faster and cheaper than starting from a blank page.</p>
+<p>The pricing reflects that. Semi-custom homes in the Treasure Valley commonly run $225 to $300 per finished square foot excluding land, or roughly $450,000 to $600,000 for 2,000 square feet, against $250 to $400 per finished square foot for a fully custom home. The saving is mostly design and engineering, not construction, because the house still gets built the same way by the same trades. If your list of changes is five items long rather than fifty, <a href="/services/semi-custom-homes">semi-custom</a> will get you there faster and cheaper than starting from a blank page.</p>
 
 <h2 id="plan-flexibility">Plan flexibility</h2>
 <p><strong>Production offers options; custom offers changes.</strong> The distinction sounds like semantics and is not.</p>
@@ -119,7 +119,7 @@ export const productionVsCustomHomeBuilder: BlogPostData = {
 <tr><td>Plan</td><td>Fixed catalog</td><td>Existing plan, modified</td><td>Drawn for you</td></tr>
 <tr><td>Lot</td><td>Builder controlled</td><td>Yours or theirs</td><td>Yours</td></tr>
 <tr><td>Selections</td><td>Design center menu</td><td>Guided, wider</td><td>Open</td></tr>
-<tr><td>Typical cost per finished sq ft</td><td>Lowest of the three</td><td>$245 to $375</td><td>$250 to $400</td></tr>
+<tr><td>Typical cost per finished sq ft</td><td>Lowest of the three</td><td>$225 to $300</td><td>$250 to $400</td></tr>
 <tr><td>Predictability</td><td>Highest</td><td>High</td><td>Depends on the specification</td></tr>
 <tr><td>Your time commitment</td><td>Weeks</td><td>Months</td><td>Most of a year</td></tr>
 </tbody>

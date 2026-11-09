@@ -56,7 +56,7 @@ export const designBuildVsGeneralContractor: BlogPostData = {
     {
       question: 'Is design-build cheaper than hiring an architect and a builder separately?',
       answer:
-        'Not automatically cheaper, but usually more predictable. Design and engineering cost roughly 5 to 12 percent of construction cost either way, about $9,000 to $75,000. What design-build tends to avoid is the redesign cycle that follows a set of finished plans coming in over budget, which costs both fees and months.',
+        'Not automatically cheaper, but usually more predictable. Design and engineering cost roughly 5 to 12 percent of construction cost either way, about $9,000 to $35,000. What design-build tends to avoid is the redesign cycle that follows a set of finished plans coming in over budget, which costs both fees and months.',
     },
     {
       question: 'Who pulls the building permit for a new house?',
@@ -123,7 +123,7 @@ export const designBuildVsGeneralContractor: BlogPostData = {
 <p>The same applies if you have a difficult or unusual site where the design problem is the hard part, if you already have a relationship with an architect whose work you want, or if you specifically want the independence of a designer with no financial interest in the construction cost. That independence is real. A design-build firm pricing its own design has an inherent tension in it, and the honest answer is that you manage that tension by asking for a line-item budget and checking the allowances rather than by pretending it does not exist. If competitive bidding on identical drawings is important to you, the separate route is the only one that provides it.</p>
 
 <h2 id="what-it-costs">What it costs either way</h2>
-<p><strong>Design and engineering run about 5 to 12 percent of construction cost under both models, commonly $9,000 to $75,000 depending on the complexity of the house.</strong> Design-build does not make design free; it usually structures it as a paid design phase that flows into a construction agreement.</p>
+<p><strong>Design and engineering run about 5 to 12 percent of construction cost under both models, commonly $9,000 to $35,000 depending on the complexity of the house.</strong> Design-build does not make design free; it usually structures it as a paid design phase that flows into a construction agreement.</p>
 <p>Construction itself sits in the same band regardless of who drew it. Most Treasure Valley custom homes plan between $250 and $400 per finished square foot excluding land, which puts a 2,400 square foot house between $600,000 and $960,000. Simple single-level designs on flat valley lots can come in near $225 per square foot. Foothills sites with steep grade and high interior detail regularly run above $450. The delivery model affects how confidently you can predict where in that band you will land, not the band itself.</p>
 
 <h2 id="how-to-choose">How to choose between them</h2>

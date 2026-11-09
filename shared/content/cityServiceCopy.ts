@@ -806,7 +806,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does semi-custom homes cost in Boise?",
-          answer: "In Boise, costs move with the rest of the Treasure Valley. Valleywide, semi-custom homes are planning at $245\u2013$375 a finished square foot in 2026, before land. We price your exact site after a lot walkthrough, with a budget laid out line by line.",
+          answer: "In Boise, costs move with the rest of the Treasure Valley. Valleywide, semi-custom homes are planning at $225\u2013$300 a finished square foot in 2026, before land. We price your exact site after a lot walkthrough, with a budget laid out line by line.",
         },
         {
           question: "What is the difference between semi-custom and fully custom?",
@@ -835,7 +835,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does semi-custom homes cost in Meridian?",
-          answer: "Meridian prices follow the wider Treasure Valley market. In 2026, semi-custom homes across the region plan for $245\u2013$375 for each finished square foot, with land left out. Once we walk the lot, you receive a budget itemized for that particular site.",
+          answer: "Meridian prices follow the wider Treasure Valley market. In 2026, semi-custom homes across the region plan for $225\u2013$300 for each finished square foot, with land left out. Once we walk the lot, you receive a budget itemized for that particular site.",
         },
         {
           question: "What is the difference between semi-custom and fully custom?",
@@ -864,7 +864,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does semi-custom homes cost in Nampa?",
-          answer: "Nampa prices line up with the wider Treasure Valley. Across the valley in 2026, semi-custom homes plan between $245 and $375 for each square foot of finished space, land excluded. After a walk of your lot, we price that site in a line-item budget.",
+          answer: "Nampa prices line up with the wider Treasure Valley. Across the valley in 2026, semi-custom homes plan between $225 and $300 for each square foot of finished space, land excluded. After a walk of your lot, we price that site in a line-item budget.",
         },
         {
           question: "What is the difference between semi-custom and fully custom?",
@@ -893,7 +893,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does semi-custom homes cost in Eagle?",
-          answer: "Eagle pricing follows the overall Treasure Valley market. Semi-custom homes across the valley are budgeted at $245\u2013$375 for each finished square foot this year, land not included. Once we've walked your lot, you'll have a line-by-line budget for it.",
+          answer: "Eagle pricing follows the overall Treasure Valley market. Semi-custom homes across the valley are budgeted at $225\u2013$300 for each finished square foot this year, land not included. Once we've walked your lot, you'll have a line-by-line budget for it.",
         },
         {
           question: "What is the difference between semi-custom and fully custom?",
@@ -922,7 +922,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does semi-custom homes cost in Kuna?",
-          answer: "Kuna pricing moves with the broader Treasure Valley. Semi-custom homes in the valley are budgeting $245 to $375 per finished square foot for 2026, land excluded. After a walk of the lot together, you'll have an itemized budget for that parcel.",
+          answer: "Kuna pricing moves with the broader Treasure Valley. Semi-custom homes in the valley are budgeting $225 to $300 per finished square foot for 2026, land excluded. After a walk of the lot together, you'll have an itemized budget for that parcel.",
         },
         {
           question: "What is the difference between semi-custom and fully custom?",
@@ -951,7 +951,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does semi-custom homes cost in Caldwell?",
-          answer: "Caldwell budgets follow the larger Treasure Valley. Across the valley, 2026 semi-custom homes are budgeting roughly $245 to $375 per finished square foot, with land a separate cost. Once we walk the lot together, we put together a line-item budget for it.",
+          answer: "Caldwell budgets follow the larger Treasure Valley. Across the valley, 2026 semi-custom homes are budgeting roughly $225 to $300 per finished square foot, with land a separate cost. Once we walk the lot together, we put together a line-item budget for it.",
         },
         {
           question: "What is the difference between semi-custom and fully custom?",
@@ -980,7 +980,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does semi-custom homes cost in Star?",
-          answer: "Star prices line up with the general Treasure Valley market. Semi-custom homes in the valley carry a 2026 planning range of about $245\u2013$375 per square foot of finished house, without land. A walk of your site then produces an itemized budget for it.",
+          answer: "Star prices line up with the general Treasure Valley market. Semi-custom homes in the valley carry a 2026 planning range of about $225\u2013$300 per square foot of finished house, without land. A walk of your site then produces an itemized budget for it.",
         },
         {
           question: "What is the difference between semi-custom and fully custom?",
@@ -1009,7 +1009,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does semi-custom homes cost in Middleton?",
-          answer: "Middleton prices mirror the wider Treasure Valley. Valleywide, semi-custom homes plan for 2026 at $245 up to $375 a finished square foot, and the land is extra. When we walk the lot in person, we write an itemized budget for that site.",
+          answer: "Middleton prices mirror the wider Treasure Valley. Valleywide, semi-custom homes plan for 2026 at $225 up to $300 a finished square foot, and the land is extra. When we walk the lot in person, we write an itemized budget for that site.",
         },
         {
           question: "What is the difference between semi-custom and fully custom?",
@@ -1038,7 +1038,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does semi-custom homes cost in Garden City?",
-          answer: "Garden City pricing tracks the overall Treasure Valley. In 2026, semi-custom homes in the valley plan at roughly $245 to $375 for every square foot of finished space, before land. A lot walkthrough then yields an itemized budget for that lot.",
+          answer: "Garden City pricing tracks the overall Treasure Valley. In 2026, semi-custom homes in the valley plan at roughly $225 to $300 for every square foot of finished space, before land. A lot walkthrough then yields an itemized budget for that lot.",
         },
         {
           question: "What is the difference between semi-custom and fully custom?",
@@ -1069,7 +1069,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does home design & plans cost in Boise?",
-          answer: "Boise design fees follow the broader Treasure Valley market. In 2026, a full custom home plan set that is ready for permit, including the structural engineering and the energy compliance work, costs roughly $9,000 to $75,000 here, which works out to roughly 5\u201312% of the build cost. After we walk your lot, the site gets its own itemized budget.",
+          answer: "Boise design fees follow the broader Treasure Valley market. In 2026, a full custom home plan set that is ready for permit, including the structural engineering and the energy compliance work, costs roughly $9,000 to $35,000 here, which works out to roughly 5\u201312% of the build cost. After we walk your lot, the site gets its own itemized budget.",
         },
         {
           question: "Do I own the plans when they are finished?",
@@ -1098,7 +1098,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does home design & plans cost in Meridian?",
-          answer: "In Meridian, design costs follow the Treasure Valley market. A custom home drawing set that's ready for permit, structural engineering and energy compliance included, runs roughly $9,000 to $75,000 here as of 2026, or around 5 to 12 percent of the construction cost. Walk the lot with us for a budget itemized to your site.",
+          answer: "In Meridian, design costs follow the Treasure Valley market. A custom home drawing set that's ready for permit, structural engineering and energy compliance included, runs roughly $9,000 to $35,000 here as of 2026, or around 5 to 12 percent of the construction cost. Walk the lot with us for a budget itemized to your site.",
         },
         {
           question: "Do I own the plans when they are finished?",
@@ -1127,7 +1127,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does home design & plans cost in Nampa?",
-          answer: "Nampa pricing lines up with the wider Treasure Valley. As of 2026, a permit-ready drawing set for a custom home, including structural engineering and energy compliance, costs about $9,000 to $75,000, roughly 5 to 12 percent of construction. After we walk the property, you get a line-item budget for that site.",
+          answer: "Nampa pricing lines up with the wider Treasure Valley. As of 2026, a permit-ready drawing set for a custom home, including structural engineering and energy compliance, costs about $9,000 to $35,000, roughly 5 to 12 percent of construction. After we walk the property, you get a line-item budget for that site.",
         },
         {
           question: "Do I own the plans when they are finished?",
@@ -1156,7 +1156,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does home design & plans cost in Eagle?",
-          answer: "Eagle costs run with the general Treasure Valley market. For 2026, a custom home plan set that's ready to permit, with the structural engineering and energy compliance work included, typically costs $9,000 to $75,000 in this valley, about 5 to 12 percent of what the home costs to build. Once we've walked your site, we write an itemized budget for it.",
+          answer: "Eagle costs run with the general Treasure Valley market. For 2026, a custom home plan set that's ready to permit, with the structural engineering and energy compliance work included, typically costs $9,000 to $35,000 in this valley, about 5 to 12 percent of what the home costs to build. Once we've walked your site, we write an itemized budget for it.",
         },
         {
           question: "Do I own the plans when they are finished?",
@@ -1185,7 +1185,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does home design & plans cost in Kuna?",
-          answer: "Kuna budgets track the overall Treasure Valley. In 2026, a permit-ready custom home plan set, its structural engineering and energy compliance finished, is about $9,000\u2013$75,000 across the region, or 5\u201312% of construction cost. After we walk your parcel, an itemized budget for it follows.",
+          answer: "Kuna budgets track the overall Treasure Valley. In 2026, a permit-ready custom home plan set, its structural engineering and energy compliance finished, is about $9,000\u2013$35,000 across the region, or 5\u201312% of construction cost. After we walk your parcel, an itemized budget for it follows.",
         },
         {
           question: "Do I own the plans when they are finished?",
@@ -1214,7 +1214,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does home design & plans cost in Caldwell?",
-          answer: "Caldwell budgets run with the general Treasure Valley. Permit-ready plans for a custom home, with the structural engineering and energy compliance done, cost about $9,000\u2013$75,000 valleywide as of 2026, approximately 5\u201312% of construction cost. Set up a lot walkthrough and we'll prepare a line-item budget for that parcel.",
+          answer: "Caldwell budgets run with the general Treasure Valley. Permit-ready plans for a custom home, with the structural engineering and energy compliance done, cost about $9,000\u2013$35,000 valleywide as of 2026, approximately 5\u201312% of construction cost. Set up a lot walkthrough and we'll prepare a line-item budget for that parcel.",
         },
         {
           question: "Do I own the plans when they are finished?",
@@ -1243,7 +1243,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does home design & plans cost in Star?",
-          answer: "Star pricing follows the general Treasure Valley picture. This year, drawings for a custom home that are ready for permit, including structural engineering and energy compliance, typically cost from $9,000 up to $75,000 across the region, roughly 5 to 12 percent of construction cost. Arrange a walkthrough of the lot to get a line-item budget for your site.",
+          answer: "Star pricing follows the general Treasure Valley picture. This year, drawings for a custom home that are ready for permit, including structural engineering and energy compliance, typically cost from $9,000 up to $35,000 across the region, roughly 5 to 12 percent of construction cost. Arrange a walkthrough of the lot to get a line-item budget for your site.",
         },
         {
           question: "Do I own the plans when they are finished?",
@@ -1272,7 +1272,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does home design & plans cost in Middleton?",
-          answer: "Middleton costs track the larger Treasure Valley. In 2026, permit-ready custom home drawings with structural engineering and energy compliance typically run $9,000 to $75,000 regionally, or about 5\u201312 percent of construction cost. A lot walkthrough then produces an itemized budget for that parcel.",
+          answer: "Middleton costs track the larger Treasure Valley. In 2026, permit-ready custom home drawings with structural engineering and energy compliance typically run $9,000 to $35,000 regionally, or about 5\u201312 percent of construction cost. A lot walkthrough then produces an itemized budget for that parcel.",
         },
         {
           question: "Do I own the plans when they are finished?",
@@ -1301,7 +1301,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does home design & plans cost in Garden City?",
-          answer: "Garden City prices mirror the broader Treasure Valley. A custom home's permit-ready plans, structural engineering and energy compliance included, generally cost about $9,000\u2013$75,000 in the Treasure Valley this year, around 5 to 12 percent of construction cost. Once we've walked your site, the line-by-line budget follows.",
+          answer: "Garden City prices mirror the broader Treasure Valley. A custom home's permit-ready plans, structural engineering and energy compliance included, generally cost about $9,000\u2013$35,000 in the Treasure Valley this year, around 5 to 12 percent of construction cost. Once we've walked your site, the line-by-line budget follows.",
         },
         {
           question: "Do I own the plans when they are finished?",

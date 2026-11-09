@@ -33,7 +33,7 @@ export const BUDGET_WORKSHEET_BLOCKS: PdfBlock[] = [
     type: 'table',
     headers: ['Build type', 'Low per sq ft', 'High per sq ft', 'Your target'],
     rows: [
-      ['Semi-custom', '$245', '$375', '___________'],
+      ['Semi-custom', '$225', '$300', '___________'],
       ['Custom', '$250', '$400', '___________'],
       ['High performance', '$275', '$425', '___________'],
       ['Foothills / high detail', '$450', 'and above', '___________'],
