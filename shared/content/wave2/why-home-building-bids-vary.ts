@@ -51,7 +51,7 @@ export const whyHomeBuildingBidsVary: BlogPostData = {
     {
       question: 'Why would one builder be $100,000 cheaper?',
       answer:
-        'The usual causes are site work excluded, design and engineering billed separately, and allowances set below local cost. On a rural Ada or Canyon County parcel, site work with a well, a septic system and an access drive runs $80,000 to $150,000 against $25,000 to $50,000 on a serviced lot, so a single assumption about the lot can produce most of a six-figure gap on its own.',
+        'The usual causes are site work excluded, design and engineering billed separately, and allowances set below local cost. On a rural Ada or Canyon County parcel, site work with a well, a septic system and an access drive runs $130,000 to $205,000 against $40,000 to $65,000 on a serviced lot, so a single assumption about the lot can produce most of a six-figure gap on its own.',
     },
     {
       question: 'Do builders pay different prices for materials?',
@@ -80,7 +80,7 @@ export const whyHomeBuildingBidsVary: BlogPostData = {
 
 <h2 id="anatomy">Anatomy of a six-figure gap</h2>
 <p><strong>You can build a $150,000 gap on the same 2,400 square foot plan out of two assumptions, without either builder quoting a single item differently.</strong></p>
-<p>Take a rural parcel outside Kuna. One builder walks it, sees no city water or sewer at the road, and carries a well, a septic system designed through Central District Health, and an access drive: $80,000 to $150,000. The other builder prices the house and notes site work as excluded, or carries a serviced-lot allowance of $25,000 to $50,000 because that is what most of their projects need. That single difference in reading the lot is worth up to $125,000.</p>
+<p>Take a rural parcel outside Kuna. One builder walks it, sees no city water or sewer at the road, and carries a well, a septic system designed through Central District Health, and an access drive: $130,000 to $205,000. The other builder prices the house and notes site work as excluded, or carries a serviced-lot allowance of $40,000 to $65,000 because that is what most of their projects need. That single difference in reading the lot is worth up to $125,000.</p>
 <p>Now add design and engineering. One bid carries it at 5 to 12 percent of construction cost, commonly $9,000 to $35,000. The other bills it separately. The gap is now larger than the entire finish budget most people argue about, and the two builders have not disagreed about the price of anything. Published planning bands are wide for the same reason: most Treasure Valley custom homes fall between $250 and $400 per finished square foot excluding land, which on 2,400 square feet is $600,000 to $960,000, and the spread inside that band is mostly scope. Our <a href="/guides/boise-home-building-cost-guide">Boise home building cost guide</a> breaks the band down further.</p>
 
 <h2 id="allowances">Allowance levels</h2>

@@ -36,7 +36,8 @@ export interface CityData {
  *
  * planningFrom figures are budget floors for a modest build of that type in the
  * Treasure Valley, derived from the 2026 local range of roughly $225 to $400
- * per finished square foot excluding land. They are deliberately conservative:
+ * per finished square foot excluding land (checked 2026-11-09 against the owner's
+ * P5 price book at P5 margin policy). They are deliberately conservative:
  * the real number comes from the estimator and a site visit.
  */
 export const SERVICES: ServiceData[] = [

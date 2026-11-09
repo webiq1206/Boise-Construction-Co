@@ -122,7 +122,7 @@ export const fixedPriceVsCostPlus: BlogPostData = {
 <h2 id="discovery">What happens when something turns up in the ground</h2>
 <p><strong>Discovery is the moment the two structures behave most differently, and it usually happens in the first month.</strong> Rock at the excavation depth, soft soils requiring over-excavation and structural fill, groundwater higher than expected, or a utility not where the plat said it was.</p>
 <p>Under a fixed price, this is a change order: the builder documents the condition, prices the remedy, and you approve it before work continues. The base price protects you from the ordinary risks the builder priced, not from a condition nobody could have priced. Under cost plus, the additional cost simply appears in the next billing, which is faster but gives you no decision point.</p>
-<p>The way to reduce this exposure under either structure is to know the lot before you sign. A written lot evaluation runs $950 to $3,500 and typically pays for itself the first time it tells you the site work on a rural parcel is closer to $80,000 to $150,000 than the $25,000 to $50,000 a serviced subdivision lot would need.</p>
+<p>The way to reduce this exposure under either structure is to know the lot before you sign. A written lot evaluation runs $950 to $5,500 and typically pays for itself the first time it tells you the site work on a rural parcel is closer to $130,000 to $205,000 than the $40,000 to $65,000 a serviced subdivision lot would need.</p>
 
 <h2 id="escalation">Escalation and who owns a price increase</h2>
 <p><strong>Read the escalation clause before you read the price.</strong> Over a nine to fourteen month build, a category of material can move meaningfully, and contracts handle that in three different ways.</p>

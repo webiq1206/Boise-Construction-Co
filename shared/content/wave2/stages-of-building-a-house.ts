@@ -98,7 +98,7 @@ export const stagesOfBuildingAHouse: BlogPostData = {
 
 <h2 id="site-foundation">Stage four: site work, excavation, and foundation</h2>
 <p><strong>Three to eight weeks on a serviced lot, considerably longer on a rural parcel that needs a well, a septic system, and access.</strong> Clearing, staking, excavation, footings, stem walls or slab, waterproofing, underground plumbing, backfill, and rough grading.</p>
-<p>What it looks like: the loudest, dustiest, most weather-sensitive stage of the job. A hard freeze or a wet stretch pushes concrete work, and there is no way around that. Site work on a serviced subdivision lot typically runs $25,000 to $50,000. A rural parcel needing a well, septic, and a private access commonly runs $80,000 to $150,000, excluding land.</p>
+<p>What it looks like: the loudest, dustiest, most weather-sensitive stage of the job. A hard freeze or a wet stretch pushes concrete work, and there is no way around that. Site work on a serviced subdivision lot typically runs $40,000 to $65,000. A rural parcel needing a well, septic, and a private access commonly runs $130,000 to $205,000, excluding land.</p>
 <p>Before this stage you need: the permit in hand, the final house placement and elevation agreed on the lot, and any basement decision locked. Where the house sits is nearly impossible to change once footings are formed.</p>
 
 <h2 id="framing">Stage five: framing, roof, and dry-in</h2>
