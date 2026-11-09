@@ -88,7 +88,7 @@ export const homeBuilderRedFlags: BlogPostData = {
 <p>Some of these are occasionally true. What makes it a red flag is the combination of urgency with incomplete information: you are being asked to commit before you have a scope you can read or a budget you can check. A builder who is confident in their number is content for you to take it to someone else, because they know what it contains. Pressure exists to prevent comparison, and comparison is exactly what protects you.</p>
 
 <h2 id="deposit">A deposit that funds the business rather than your house</h2>
-<p><strong>Ask what the deposit pays for, and expect the answer to be traceable to invoices.</strong> A deposit covering design, engineering and permit applications is normal. Design and engineering commonly run 5 to 12 percent of construction cost, roughly $9,000 to $35,000, and someone has to pay for it before drawings exist.</p>
+<p><strong>Ask what the deposit pays for, and expect the answer to be traceable to invoices.</strong> A deposit covering design, engineering and permit applications is normal. Design and engineering commonly run 5 to 12 percent of construction cost, roughly $9,000 to $75,000, and someone has to pay for it before drawings exist.</p>
 <p>A large percentage of the total contract, demanded before anything happens on your lot, is a different thing. It predicts trouble in two ways. It suggests the builder is using your money for working capital, which usually means they are covering a previous job with your funds, and it strips your leverage at the exact moment you need it most. A builder holding a large sum of your money and behind on your schedule has very little reason to hurry.</p>
 
 <h2 id="change-orders">No written change order process</h2>

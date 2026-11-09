@@ -83,7 +83,7 @@ export const stagesOfBuildingAHouse: BlogPostData = {
 
 <h2 id="feasibility">Stage one: feasibility and budget</h2>
 <p><strong>Two to six weeks of establishing whether the house you want, on the land you have or want, fits the money you have.</strong> Nothing is drawn yet. We look at the parcel, the utilities, the access, the zoning, and the rough size and quality level you have in mind, and we produce a budget band rather than a bid.</p>
-<p>What it looks like: conversations, a site visit, and a set of numbers that may or may not be welcome. Custom homes in the Treasure Valley commonly plan at $250 to $400 per finished square foot excluding land, which puts a 2,400 square foot home between $600,000 and $960,000. Semi-custom runs $225 to $300. If the house you described and the budget you named do not intersect, this is the stage where you find out, and it is much cheaper to find out here.</p>
+<p>What it looks like: conversations, a site visit, and a set of numbers that may or may not be welcome. Custom homes in the Treasure Valley commonly plan at $250 to $400 per finished square foot excluding land, which puts a 2,400 square foot home between $600,000 and $960,000. Semi-custom runs $245 to $375. If the house you described and the budget you named do not intersect, this is the stage where you find out, and it is much cheaper to find out here.</p>
 <p>Before this stage you need: an honest number you are willing to spend, a rough size, and either a lot or a lot search underway. Our <a href="/blog/lot-evaluation-checklist">lot evaluation checklist</a> is the right reading if you are still shopping.</p>
 
 <h2 id="design">Stage two: design</h2>
@@ -93,12 +93,12 @@ export const stagesOfBuildingAHouse: BlogPostData = {
 
 <h2 id="engineering-permits">Stage three: engineering and permitting</h2>
 <p><strong>Four to ten weeks to assemble the permit package, then several weeks of jurisdiction review, with correction cycles adding more.</strong> Structural engineering, energy compliance, the site plan, and utility or septic approvals all come together into one submittal.</p>
-<p>What it looks like: almost nothing, from your side. This is the quiet stretch that makes people wonder whether anything is happening. It is, and it is the work that determines whether construction goes smoothly. Design and engineering commonly runs 5 to 12 percent of construction cost, roughly $9,000 to $35,000, excluding land.</p>
+<p>What it looks like: almost nothing, from your side. This is the quiet stretch that makes people wonder whether anything is happening. It is, and it is the work that determines whether construction goes smoothly. Design and engineering commonly runs 5 to 12 percent of construction cost, roughly $9,000 to $75,000, excluding land.</p>
 <p>Before this stage you need: a frozen plan. Structural engineering priced against a design that then changes has to be redone. See <a href="/blog/boise-building-permit-guide">what a new-home permit package contains</a> for the detail.</p>
 
 <h2 id="site-foundation">Stage four: site work, excavation, and foundation</h2>
 <p><strong>Three to eight weeks on a serviced lot, considerably longer on a rural parcel that needs a well, a septic system, and access.</strong> Clearing, staking, excavation, footings, stem walls or slab, waterproofing, underground plumbing, backfill, and rough grading.</p>
-<p>What it looks like: the loudest, dustiest, most weather-sensitive stage of the job. A hard freeze or a wet stretch pushes concrete work, and there is no way around that. Site work on a serviced subdivision lot typically runs $25,000 to $50,000. A rural parcel needing a well, septic, and a private access commonly runs $80,000 to $150,000, excluding land.</p>
+<p>What it looks like: the loudest, dustiest, most weather-sensitive stage of the job. A hard freeze or a wet stretch pushes concrete work, and there is no way around that. Site work on a serviced subdivision lot typically runs $40,000 to $65,000. A rural parcel needing a well, septic, and a private access commonly runs $130,000 to $205,000, excluding land.</p>
 <p>Before this stage you need: the permit in hand, the final house placement and elevation agreed on the lot, and any basement decision locked. Where the house sits is nearly impossible to change once footings are formed.</p>
 
 <h2 id="framing">Stage five: framing, roof, and dry-in</h2>

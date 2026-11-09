@@ -48,7 +48,7 @@ export const firstMeetingWithAHomeBuilder: BlogPostData = {
     {
       question: 'Is the first meeting with a builder free?',
       answer:
-        'Yes. The planning consultation costs nothing and carries no obligation. We meet at our office or on your lot, spend an hour or so on your project, and give you a cost band, a schedule, and an honest read on the site. A written lot evaluation, which is a deeper piece of work, is a separate service that runs $950 to $3,500.',
+        'Yes. The planning consultation costs nothing and carries no obligation. We meet at our office or on your lot, spend an hour or so on your project, and give you a cost band, a schedule, and an honest read on the site. A written lot evaluation, which is a deeper piece of work, is a separate service that runs $950 to $5,500.',
     },
     {
       question: 'Can I meet a builder before I own land?',
@@ -88,7 +88,7 @@ export const firstMeetingWithAHomeBuilder: BlogPostData = {
 
 <h2 id="who-comes">Most people come before they own land</h2>
 <p><strong>You do not need a lot, a plan, or a lender to have this conversation, and coming early is usually the better sequence.</strong> A large share of the people we sit down with are still looking at parcels, or are trying to work out whether building makes sense for them at all.</p>
-<p>That order helps you. A lot that looks like a bargain can carry $80,000 to $150,000 of site work if it needs a well, a septic system, and access, while a serviced subdivision lot typically runs $25,000 to $50,000, excluding land in both cases. Knowing that before you write an offer changes which listings you take seriously. If you are shopping now, bring us the listings. We will read them with you, and our <a href="/blog/lot-evaluation-checklist">lot evaluation checklist</a> is a good primer beforehand.</p>
+<p>That order helps you. A lot that looks like a bargain can carry $130,000 to $205,000 of site work if it needs a well, a septic system, and access, while a serviced subdivision lot typically runs $40,000 to $65,000, excluding land in both cases. Knowing that before you write an offer changes which listings you take seriously. If you are shopping now, bring us the listings. We will read them with you, and our <a href="/blog/lot-evaluation-checklist">lot evaluation checklist</a> is a good primer beforehand.</p>
 
 <h2 id="where">Where we meet, and why it matters</h2>
 <p><strong>We meet at our office or on your property, and if you have a parcel we would rather be standing on it.</strong> An hour at a table is efficient. An hour on the land is more informative, because access, grade, drainage, sun, neighbors, views, existing trees, and utility locations are all obvious in person and invisible on paper.</p>
@@ -105,13 +105,13 @@ export const firstMeetingWithAHomeBuilder: BlogPostData = {
 <p>The single most valuable item is the honest budget number. People often shade it downward at a first meeting, trying not to be quoted up to it. It backfires: we design to what you told us, and the house that comes back is smaller than the one you could have had.</p>
 
 <h2 id="budget">The money conversation</h2>
-<p><strong>We will put your project against real local numbers in the meeting rather than sending them later.</strong> Custom homes in the Treasure Valley commonly plan at $250 to $400 per finished square foot excluding land, which puts a 2,400 square foot home between $600,000 and $960,000. Semi-custom runs $225 to $300, so a 2,000 square foot home lands between $450,000 and $600,000.</p>
-<p>Where you fall in those bands is mostly about complexity and finish rather than size. A simple single-level on a flat valley lot can come in near $225 per square foot. Foothills sites with steep grade and high detail regularly go above $450. Design and engineering is a separate line, commonly 5 to 12 percent of construction cost or roughly $9,000 to $35,000.</p>
+<p><strong>We will put your project against real local numbers in the meeting rather than sending them later.</strong> Custom homes in the Treasure Valley commonly plan at $250 to $400 per finished square foot excluding land, which puts a 2,400 square foot home between $600,000 and $960,000. Semi-custom runs $245 to $375, so a 2,000 square foot home lands between $490,000 and $750,000.</p>
+<p>Where you fall in those bands is mostly about complexity and finish rather than size. A simple single-level on a flat valley lot can come in near $225 per square foot. Foothills sites with steep grade and high detail regularly go above $450. Design and engineering is a separate line, commonly 5 to 12 percent of construction cost or roughly $9,000 to $75,000.</p>
 <p>If your number and your description do not meet, we will say so and show you the levers: less square footage, a simpler form and roof, a different finish level, a semi-custom path, or more time to save. <a href="/blog/how-to-budget-a-new-home-boise">How to budget for a new home</a> goes deeper on holding a number once you have set it.</p>
 
 <h2 id="leave-with">What you leave with</h2>
 <p><strong>Three things: a cost band for the house you described, a realistic schedule, and a read on the site.</strong> All three are useful whether or not you ever hire us.</p>
-<p>The cost band is a range with the reasoning behind it, not a bid, because a real bid needs a design and a defined scope. The schedule is the honest one: commonly 12 to 18 months from first design meeting to keys, with 7 to 11 months of that on site, and the parts we control marked separately from the parts we do not. <a href="/blog/how-long-does-it-take-to-build-a-house-boise">How long a Boise build takes</a> covers that in detail. The site read is what we noticed about your parcel and what it will likely cost to make buildable. If you want that in writing with real depth, a written lot evaluation is a separate service at $950 to $3,500.</p>
+<p>The cost band is a range with the reasoning behind it, not a bid, because a real bid needs a design and a defined scope. The schedule is the honest one: commonly 12 to 18 months from first design meeting to keys, with 7 to 11 months of that on site, and the parts we control marked separately from the parts we do not. <a href="/blog/how-long-does-it-take-to-build-a-house-boise">How long a Boise build takes</a> covers that in detail. The site read is what we noticed about your parcel and what it will likely cost to make buildable. If you want that in writing with real depth, a written lot evaluation is a separate service at $950 to $5,500.</p>
 
 <h2 id="lender">Where financing comes up</h2>
 <p><strong>We will ask whether you have spoken to a lender, and if you have not, we will suggest doing it in parallel rather than afterward.</strong> A construction loan works differently from a mortgage on an existing house, and understanding that early prevents a set of avoidable surprises.</p>

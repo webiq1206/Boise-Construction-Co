@@ -31,7 +31,7 @@ export const costToBuildAHouseBoise: BlogPostData = {
     'Custom homes in the Treasure Valley plan at $250 to $400 per finished square foot, excluding land.',
     'At 2,400 square feet that is roughly $600,000 to $960,000 for the house itself.',
     'Interior finishes and the structural shell together account for about half the build.',
-    'Site work runs $25,000 to $50,000 on a serviced lot and $80,000 to $150,000 on a rural parcel.',
+    'Site work runs $40,000 to $65,000 on a serviced lot and $130,000 to $205,000 on a rural parcel.',
     'Land is a separate purchase and is never included in a per-square-foot build figure.',
     'A per-square-foot number is a planning tool for testing feasibility, not a quote.',
   ],
@@ -48,17 +48,17 @@ export const costToBuildAHouseBoise: BlogPostData = {
     {
       question: 'How much does it cost to build a house in Boise in 2026?',
       answer:
-        'Plan on $250 to $400 per finished square foot for a custom home, which is $600,000 to $960,000 for a 2,400 square foot house. Land is separate. A semi-custom home built from an adapted plan runs $225 to $300 per finished square foot. Simple single-level designs on flat, serviced valley lots can come in near $225.',
+        'Plan on $250 to $400 per finished square foot for a custom home, which is $600,000 to $960,000 for a 2,400 square foot house. Land is separate. A semi-custom home built from an adapted plan runs $245 to $375 per finished square foot. Simple single-level designs on flat, serviced valley lots can come in near $225.',
     },
     {
       question: 'Does the cost per square foot include the land?',
       answer:
-        'No. Every figure we publish is for the house and its site work, not the dirt underneath it. Land in the Treasure Valley varies enormously by city, lot size, and services, so folding it into a per-square-foot rate would make the rate meaningless. Budget for land as a separate line, and remember that the lot you choose also changes the site work number.',
+        'No. Every per-square-foot figure we publish is for the house itself, not the dirt underneath it, and site work, impact fees and utility connections are estimated separately for your lot. Land in the Treasure Valley varies enormously by city, lot size, and services, so folding it into a per-square-foot rate would make the rate meaningless. Budget for land as a separate line, and remember that the lot you choose also changes the site work number.',
     },
     {
       question: 'What is included in a per-square-foot build cost?',
       answer:
-        'Our bands cover site work and foundation, framing, the weather-tight envelope, mechanical and electrical and plumbing systems, interior finishes, and the soft costs of design, engineering, permits, and supervision. They do not cover land, appliances, furniture, or work outside the contract boundary such as extensive landscaping beyond the immediate yard.',
+        'Our bands cover the foundation, framing, the weather-tight envelope, mechanical and electrical and plumbing systems, interior finishes, and the soft costs of design, engineering, permits, and supervision, at Essential to Signature finish. They do not cover land, site work, impact fees, utility connections, appliances, furniture, or work outside the contract boundary such as extensive landscaping beyond the immediate yard.',
     },
     {
       question: 'Why is the range from $250 to $400 so wide?',
@@ -68,12 +68,12 @@ export const costToBuildAHouseBoise: BlogPostData = {
     {
       question: 'How much does site work cost in the Treasure Valley?',
       answer:
-        'On a serviced subdivision lot in Boise, Meridian, or Nampa, expect $25,000 to $50,000 for excavation, utility connections, and the driveway approach. A rural parcel in Ada or Canyon County that needs a well, a septic system, and access improvements commonly runs $80,000 to $150,000 before a foundation is poured.',
+        'On a serviced subdivision lot in Boise, Meridian, or Nampa, expect $40,000 to $65,000 for excavation, utility connections, and the driveway approach. A rural parcel in Ada or Canyon County that needs a well, a septic system, and access improvements commonly runs $130,000 to $205,000 before a foundation is poured.',
     },
     {
       question: 'What do design and engineering cost on a new home?',
       answer:
-        'Design and engineering typically run 5 to 12 percent of construction cost, which on a Treasure Valley custom home is roughly $9,000 to $35,000. The percentage falls as the house gets bigger and rises with structural complexity, unusual spans, steep sites, and heavy custom detailing that has to be drawn rather than specified from a catalogue.',
+        'Design and engineering typically run 5 to 12 percent of construction cost, which on a Treasure Valley custom home is roughly $9,000 to $75,000. The percentage falls as the house gets bigger and rises with structural complexity, unusual spans, steep sites, and heavy custom detailing that has to be drawn rather than specified from a catalogue.',
     },
     {
       question: 'Can I get a fixed price before design is finished?',
@@ -83,7 +83,7 @@ export const costToBuildAHouseBoise: BlogPostData = {
   ],
   content: `
 <h2 id="the-number">What it costs to build a house in Boise</h2>
-<p><strong>A custom home in the Boise area costs $250 to $400 per finished square foot in 2026, which puts a 2,400 square foot house between $600,000 and $960,000, excluding land.</strong> A semi-custom home adapted from an existing plan runs $225 to $300 per finished square foot, or about $450,000 to $600,000 at 2,000 square feet. A simple single-level design on a flat, serviced valley lot can come in near $225. A steep foothills site with a high level of interior detail regularly goes above $450. Those are the planning bands we use, and the rest of this article breaks them apart so you can work out where your own project is likely to sit. It is part of our <a href="/guides/boise-home-building-cost-guide">Boise home building cost guide</a>.</p>
+<p><strong>A custom home in the Boise area costs $250 to $400 per finished square foot in 2026, which puts a 2,400 square foot house between $600,000 and $960,000, excluding land.</strong> A semi-custom home adapted from an existing plan runs $245 to $375 per finished square foot, or about $490,000 to $750,000 at 2,000 square feet. A simple single-level design on a flat, serviced valley lot can come in near $225. A steep foothills site with a high level of interior detail regularly goes above $450. Those are the planning bands we use, and the rest of this article breaks them apart so you can work out where your own project is likely to sit. It is part of our <a href="/guides/boise-home-building-cost-guide">Boise home building cost guide</a>.</p>
 
 <h2 id="why-so-wide">Why the band is $360,000 wide</h2>
 <p><strong>The spread between the low end and the high end is not uncertainty about the market, it is the difference between two genuinely different houses.</strong> At 2,400 square feet, $600,000 buys a rectangular single-storey with a simple gable roof, standard-sized windows, a straightforward kitchen, and quality but unexceptional finishes on a flat lot with city water and sewer at the property line. At $960,000 you are looking at a house with a broken footprint, multiple roof planes, large glazing, custom cabinetry throughout, stone and tile in place of laminate and vinyl, and probably a site that needed more than a bulldozer and an afternoon. Almost all of the gap comes from decisions you control. That is the useful part: the range is wide because your choices matter, not because nobody can price the work.</p>
@@ -104,7 +104,7 @@ export const costToBuildAHouseBoise: BlogPostData = {
 </table>
 
 <h2 id="site-work">Site work and foundation</h2>
-<p><strong>Site work is the single most variable line in a Treasure Valley build, and it is settled before you own the lot rather than after.</strong> On a serviced subdivision lot in Boise, Meridian, Nampa, or Kuna, plan on $25,000 to $50,000 for excavation, footings, backfill, utility connections, and the driveway approach. On a rural parcel in Ada or Canyon County that needs a well, a septic system routed through Central District Health, and sometimes a private road or a power extension, the same phase commonly runs $80,000 to $150,000. That is a six-figure swing decided by which piece of ground you buy, which is why we recommend a written lot evaluation, typically $950 to $3,500, before a purchase closes rather than after.</p>
+<p><strong>Site work is the single most variable line in a Treasure Valley build, and it is settled before you own the lot rather than after.</strong> On a serviced subdivision lot in Boise, Meridian, Nampa, or Kuna, plan on $40,000 to $65,000 for excavation, footings, backfill, utility connections, and the driveway approach. On a rural parcel in Ada or Canyon County that needs a well, a septic system routed through Central District Health, and sometimes a private road or a power extension, the same phase commonly runs $130,000 to $205,000. That is a six-figure swing decided by which piece of ground you buy, which is why we recommend a written lot evaluation, typically $950 to $5,500, before a purchase closes rather than after.</p>
 
 <h2 id="shell">The shell</h2>
 <p><strong>Framing is the largest single trade on most new homes and the one where design complexity converts directly into dollars.</strong> The shell is the floor system, the walls, the engineered beams, the roof structure, and the labour to put it all up. It is priced from geometry: linear feet of wall, square feet of roof, the number of corners, and the size of any span that has to be engineered rather than framed conventionally. Two houses with identical square footage can differ by tens of thousands in framing alone if one is a clean rectangle and the other has five bump-outs and a vaulted great room. This is the stage where a floor plan stops being a drawing and starts being a bill, and it is why we price plans during design rather than after.</p>
@@ -120,10 +120,10 @@ export const costToBuildAHouseBoise: BlogPostData = {
 <p>The advice we give clients here is to spend unevenly. Put money into the kitchen, the primary bathroom, the flooring, and anything that would require demolition to change later. Take the standard option in a guest bedroom, in a closet, and anywhere the upgrade is preference rather than durability. Spreading a finish budget evenly across every room is how people spend a great deal and feel afterwards that nothing in particular improved.</p>
 
 <h2 id="soft-costs">Soft costs</h2>
-<p><strong>Design, engineering, permits, plan review, utility applications, insurance, and construction supervision are real costs that produce no visible square footage.</strong> Design and engineering alone typically run 5 to 12 percent of construction cost, roughly $9,000 to $35,000 on a Treasure Valley custom home. Permits route through Ada County for Boise, Meridian, Eagle, Kuna, and Star, and through Canyon County for Nampa, Caldwell, and Middleton, and the two use different portals with different review cadences. We handle plan review, engineering coordination, and utility applications in-house for both counties. When a builder's number looks well below everyone else's, soft costs are one of the first places to check, because they are easy to leave off a proposal and impossible to leave out of a project.</p>
+<p><strong>Design, engineering, permits, plan review, utility applications, insurance, and construction supervision are real costs that produce no visible square footage.</strong> Design and engineering alone typically run 5 to 12 percent of construction cost, roughly $9,000 to $75,000 on a Treasure Valley custom home. Permits route through Ada County for Boise, Meridian, Eagle, Kuna, and Star, and through Canyon County for Nampa, Caldwell, and Middleton, and the two use different portals with different review cadences. We handle plan review, engineering coordination, and utility applications in-house for both counties. When a builder's number looks well below everyone else's, soft costs are one of the first places to check, because they are easy to leave off a proposal and impossible to leave out of a project.</p>
 
 <h2 id="land">Land is separate, and it changes the build number too</h2>
-<p><strong>Every figure in this article excludes land, and the lot you buy also moves the construction cost, not just the purchase price.</strong> Two buyers with the same $250,000 land budget can end up in very different places: one buys a flat serviced lot in Meridian and spends $35,000 on site work, the other buys acreage outside Star and spends $120,000 getting water, power, and septic to a building pad. The second buyer has effectively paid $85,000 more for the same house. Judge land on the total of purchase price plus site work plus the design compromises the lot forces on you. Our <a href="/services/lot-evaluation">lot evaluation</a> exists for exactly that arithmetic.</p>
+<p><strong>Every figure in this article excludes land, and the lot you buy also moves the construction cost, not just the purchase price.</strong> Two buyers with the same $250,000 land budget can end up in very different places: one buys a flat serviced lot in Meridian and spends $50,000 on site work, the other buys acreage outside Star and spends $165,000 getting water, power, and septic to a building pad. The second buyer has effectively paid $115,000 more for the same house. Judge land on the total of purchase price plus site work plus the design compromises the lot forces on you. Our <a href="/services/lot-evaluation">lot evaluation</a> exists for exactly that arithmetic.</p>
 
 <h2 id="per-square-foot-limits">Why per square foot is a planning tool and not a quote</h2>
 <p><strong>A per-square-foot figure tells you whether a project is roughly feasible; it cannot tell you what your house will cost.</strong> The number is an output of a completed project, not an input to a new one. Divide any finished build by its finished area and you get a rate, but that rate carries every decision that project made: its site, its shape, its glazing, its finish level, and what the builder included in the total. Two builders quoting the same house can publish rates $60 apart purely because one includes site work and allowances and the other does not. Use the band to sanity-check feasibility, then move to a line-item budget as fast as you can. We go deeper on this in <a href="/blog/custom-home-cost-per-square-foot-boise">custom home cost per square foot in Boise</a>.</p>

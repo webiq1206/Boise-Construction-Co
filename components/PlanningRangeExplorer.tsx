@@ -32,7 +32,7 @@ import styles from "@/components/approved/HomePlanningSections.module.css";
 const PROOF_PROJECTS = NEW_CONSTRUCTION_PROJECT_TYPES;
 
 const PLANNING_DISCLAIMER =
-  "Planning floor only, land not included. Site work, impact fees and utility connections are estimated separately. Treasure Valley mid-range (Signature) finish. Not a bid. Request a quote for next steps.";
+  "2026 planning floor only, land not included. Site work, impact fees and utility connections are estimated separately. Treasure Valley mid-range (Signature) finish. Not a bid. Request a quote for next steps.";
 
 export function PlanningRangeExplorer() {
   // The first project type is selected on arrival, so the panel opens on a worked

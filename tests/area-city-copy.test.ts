@@ -105,11 +105,11 @@ test('Middleton guide title, meta, and intro keep live cost and warranty lines',
   assert.match(guide.content, /href="\/areas\/middleton">Middleton area page<\/a>/);
   assert.match(guide.content, /href="\/services\/custom-home-builder">Treasure Valley custom home builder<\/a>/);
   assert.match(guide.content, /a one-year workmanship warranty from documented Final Completion/);
-  assert.match(guide.content, /\$225 to \$300 per finished square foot/);
+  assert.match(guide.content, /\$245 to \$375 per finished square foot/);
   assert.match(guide.content, /\$250 to \$400 for custom/);
-  assert.match(guide.content, /\$25,000 to \$50,000/);
-  assert.match(guide.content, /\$80,000 to \$150,000/);
-  assert.match(guide.content, /\$950 to \$3,500/);
+  assert.match(guide.content, /\$40,000 to \$65,000/);
+  assert.match(guide.content, /\$130,000 to \$205,000/);
+  assert.match(guide.content, /\$950 to \$5,500/);
 });
 
 test('Hidden Springs is its own community on the Boise side, not an Eagle neighborhood', () => {
