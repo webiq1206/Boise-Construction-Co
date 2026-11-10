@@ -18,6 +18,9 @@
 import { CONSTRUCTION_IMAGES, SITE_IMAGES } from "./siteImages";
 import { type LandingImageSet } from "./serviceBackgrounds";
 
+/** Hero photograph for /services/adu/[city] only. */
+const ADU_CITY_HERO = "/images/construction/adu-guest-house-hero.webp";
+
 const CITY_SLUGS = [
   "boise",
   "meridian",
@@ -182,6 +185,12 @@ export function getCityServiceImageSet(
     CITY_SERVICE_IMAGES[`${serviceSlug}/${citySlug}`] ??
     SERVICE_FALLBACK_IMAGES[serviceSlug] ??
     SITE_IMAGES.hero;
+
+  // ADU city pages have no rotation, so every slot used to fall back to
+  // SITE_IMAGES.hero. Only the hero slot changes here.
+  if (serviceSlug === "adu") {
+    return { hero: ADU_CITY_HERO, breather: hero, process: hero };
+  }
 
   if (!rotation || cityIndex < 0) {
     return { hero, breather: hero, process: hero };

@@ -116,6 +116,8 @@ const ALTS: Record<string, string> = {
     "Nick Perkins with his wife and five children at a pumpkin patch",
   "/images/about/perkins-family-portrait.webp":
     "The Perkins family, Nick, his wife and their five children, on a beach",
+  "/images/construction/adu-guest-house-hero.webp":
+    "Single-story dark board-and-batten guest house with lit windows at dusk",
   "/images/projects/treasure-valley-adu-finished.webp":
     "Finished modern ADU with standing-seam metal roof beside a Treasure Valley home",
   "/family/p5-p5-adu.webp":
