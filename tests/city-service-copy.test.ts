@@ -87,8 +87,8 @@ test('landmark lists and Indian Creek follow the approved corrections', () => {
   assert.doesNotMatch(kunaIntro, /in Indian Creek/i);
 });
 
-test('only the 28 allowlisted city-service pages are indexable', () => {
-  assert.equal(NOINDEX_CITY_SERVICE.size, SERVICES.length * CITIES.length - 28);
+test('only the 30 allowlisted city-service pages are indexable', () => {
+  assert.equal(NOINDEX_CITY_SERVICE.size, SERVICES.length * CITIES.length - 30);
   for (const key of NOINDEX) assert.equal(NOINDEX_CITY_SERVICE.has(key), true, key);
   for (const key of INDEXED) assert.equal(NOINDEX_CITY_SERVICE.has(key), false, key);
 });
