@@ -4,21 +4,15 @@ import { readLeadAttribution } from "@/lib/leadAttributionBrowser";
 import { EstimatorRecovery } from "@/components/estimate/recovery/EstimatorRecovery";
 import { markEstimatorCompleted } from "@/lib/estimatorSession";
 
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-
-// useLayoutEffect on the client (no flash when the desktop layout applies), a no-op
-// warning-free effect on the server.
-const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
-
-/** Wide screens keep "Prefer to talk?" beside the pinned send button on /estimate. */
-const WIDE_QUERY = "(min-width: 1024px)";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useForm, type FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
-import { Loader2, MessageSquare, MessagesSquare, Phone, X } from "lucide-react";
-import { AttachmentTile, uploadLeadFile, useLeadFiles, type PendingLeadFile } from "@/components/quote/LeadAttachments";
+import { Check, ChevronDown, Loader2, X } from "lucide-react";
+import { uploadLeadFile, type PendingLeadFile } from "@/components/quote/LeadAttachments";
 import { QuoteDetailsStep, type DetailsFields } from "@/components/quote/QuoteDetailsStep";
+import { QuoteSteps } from "@/components/quote/QuoteSteps";
 import { MAX_LEAD_FILES } from "@/shared/leadFiles";
 import { BEST_TIMES, PROJECT_LABEL_LOOKUP } from "@/shared/quoteFormChoices";
 import { Button } from "@/components/ui/button";
@@ -41,25 +35,36 @@ import { AppFrame } from "@/components/estimate/wizard";
 
 /**
  * THE QUOTE FORM, in two steps (owner, 1 November: "the easiest user
- * experience possible ... the more information we have, the better").
+ * experience possible ... the more information we have, the better"; owner,
+ * 11 November, after a client found a family form confusing because "it just
+ * kept asking more questions": nothing optional is shown until asked for, and
+ * the steps line above the form says plainly where the visitor is,
+ * components/quote/QuoteSteps.tsx).
  *
- * Step 1, one short screen, in order: what we can help with, an optional
- * attachment tile, name, phone, email (optional unless Email is the chosen
- * way to reach you), how to reach you (Call, Text, Email; Text by default
- * because the site has a text line), send. "Have us call you" (the second half
- * of the segmented control under the heading) reduces it to name, phone and
- * an optional best time, and posts through the same /api/consultation
- * pipeline with requestKind "callback"; the server writes the callback marker
- * into the notes every destination stores (server/services/consultationRequest.ts).
+ * Step 1, "Your request": only what we need to call back, in order.
+ *   [Send a request | Have us call you]  (quiet underline tabs)
+ *   What can we help with?
+ *   Your name, Phone
+ *   "Add an email or choose how we reach you (optional)": ONE closed dropdown
+ *     holding Email and How should we reach you (Call, Text, Email; Text by
+ *     default because the site has a text line). Its fields stay in the form
+ *     while it is closed, so the request posts the same fields and defaults.
+ *   Send my request, then one line: that is all we need.
+ *   Prefer to talk? Call, text, chat  (one quiet line of links)
+ * "Have us call you" reduces it to name, phone and an optional best time, and
+ * posts through the same /api/consultation pipeline with requestKind
+ * "callback"; the server writes the callback marker into the notes every
+ * destination stores (server/services/consultationRequest.ts).
  *
- * Files never ride on the request: the lead is accepted first, then each file
- * is uploaded on its own (/api/consultation/files) and its link is sent to the
- * team as details on the same request. A failed upload is named on the success
- * screen with Retry and a text link; the lead is already safe.
+ * Step 2, on the success screen: the confirmation that the request is sent and
+ * nothing else is needed, then ONE closed dropdown, "Add photos, plans or
+ * project details (optional)", that adds project type, build site, timing,
+ * best time, files and (if missing) email to the SAME request
+ * (components/quote/QuoteDetailsStep.tsx).
  *
- * Step 2, on the success screen: "Help us prepare (optional)" adds project
- * type, build site, timing, best time, more files and (if missing) email to
- * the SAME request (components/quote/QuoteDetailsStep.tsx).
+ * Files are added on Step 2 only, after the lead is accepted: each file is
+ * uploaded on its own (/api/consultation/files) and its link is sent to the
+ * team as details on the same request. The lead never waits on an upload.
  *
  * Kept exactly as before: the endpoint and field names, the attached planning
  * range from the calculator (the server re-prices it), the honeypot and dwell
@@ -190,8 +195,25 @@ function toneClasses(tone: Tone) {
         ? "border-inverse-foreground/30 text-inverse-foreground peer-checked:border-[#fbfaf6] peer-checked:bg-[#fbfaf6] peer-checked:text-[#2c302f] peer-focus-visible:ring-[#e3c08d] peer-focus-visible:ring-offset-[#2c302f]"
         : "border-border text-foreground peer-checked:border-foreground peer-checked:bg-foreground peer-checked:text-background peer-focus-visible:ring-ring",
     ),
+    // The "Send a request" | "Have us call you" switch: quiet underline tabs. As
+    // filled pills, the active one looked exactly like the send button.
+    tab: cn(
+      "flex min-h-12 cursor-pointer items-center justify-center border-b-2 px-1.5 text-center text-[0.9375rem] font-medium transition-colors",
+      "peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2",
+      inverse
+        ? "border-inverse-foreground/20 text-inverse-muted hover:text-inverse-foreground peer-checked:border-inverse-foreground peer-checked:text-inverse-foreground peer-focus-visible:ring-[#e3c08d] peer-focus-visible:ring-offset-[#2c302f]"
+        : "border-foreground/20 text-muted-foreground hover:text-foreground peer-checked:border-foreground peer-checked:text-foreground peer-focus-visible:ring-ring",
+    ),
+    // A closed-by-default dropdown that holds everything optional.
+    disclosure: cn("group rounded-sm border", inverse ? "border-inverse-foreground/30" : "border-foreground/30"),
+    summary: cn(
+      "flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 rounded-sm px-3 py-2 text-[0.9375rem] font-medium leading-snug focus-visible:outline-none focus-visible:ring-2 [&::-webkit-details-marker]:hidden",
+      inverse
+        ? "text-inverse-foreground hover:bg-inverse-foreground/[0.06] focus-visible:ring-[#e3c08d]"
+        : "text-foreground hover:bg-foreground/[0.04] focus-visible:ring-ring",
+    ),
     link: cn(
-      "inline-flex min-h-12 items-center gap-1.5 font-medium underline underline-offset-4",
+      "py-2 font-medium underline underline-offset-4 hover:no-underline",
       inverse ? "text-inverse-foreground decoration-inverse-foreground/40" : "text-foreground decoration-foreground/30",
     ),
     rule: inverse ? "border-inverse-foreground/15" : "border-border",
@@ -251,7 +273,6 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     message: `quote-message-${uid}`,
     email: `quote-email-${uid}`,
     best: `quote-best-${uid}`,
-    files: `quote-files-${uid}`,
     next: `quote-next-${uid}`,
   };
   const formId = mode === "app" ? FORM_ID : `${FORM_ID}-${uid}`;
@@ -260,12 +281,11 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
   const [attached, setAttached] = useState(true);
   const [success, setSuccess] = useState(false);
   const [submitted, setSubmitted] = useState<FormData | null>(null);
-  // Files chosen on Step 1. They upload only after the request is accepted.
-  const attachments = useLeadFiles();
+  // The Step 1 dropdown of optional fields (email, how to reach you); closed until asked for.
+  const [optionsOpen, setOptionsOpen] = useState(false);
   // Issued by /api/consultation: lets this visitor add files and details to the
   // same request for two hours.
   const [auth, setAuth] = useState<{ inquiryKey: string; token: string } | null>(null);
-  const [uploadPhase, setUploadPhase] = useState<"idle" | "uploading" | "done">("idle");
   // Stored file ids the team has not been sent yet, and the chain that keeps
   // details posts in order so one file is never announced twice.
   const unsentFileIds = useRef<string[]>([]);
@@ -275,16 +295,6 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
   // must not fall through to a native GET submit that puts the fields in the URL.
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
-  // /estimate on phones pins only the send button; the talk options join the fields.
-  const [wide, setWide] = useState(false);
-  useIsomorphicLayoutEffect(() => {
-    const query = window.matchMedia(WIDE_QUERY);
-    const update = () => setWide(query.matches);
-    update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
-  }, []);
-  const talkInFooter = mode === "app" && wide;
   const lastKeyRef = useRef<string | null>(null);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
   const formMountedAtRef = useRef(Date.now());
@@ -323,6 +333,8 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     });
     if (draft.preferredContact) setValue("preferredContact", draft.preferredContact, { shouldValidate: false });
     if (draft.callback) setValue("callback", true, { shouldValidate: false });
+    // Anything already entered in the optional dropdown is shown, never hidden.
+    if (draft.email || (draft.preferredContact && draft.preferredContact !== DEFAULT_CONTACT)) setOptionsOpen(true);
   }, [setValue]);
 
   useEffect(() => {
@@ -343,6 +355,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
       fillIfEmpty("name", pf.name);
       fillIfEmpty("phone", pf.phone);
       fillIfEmpty("email", pf.email);
+      if (getValues("email")) setOptionsOpen(true);
       if (pf.address && !getValues("address")) setValue("address", pf.address, { shouldValidate: false });
     }
     applyPrefill();
@@ -459,25 +472,6 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     return next;
   }
 
-  /** Step 1 files go up after the request is safe, then their links go to the team. */
-  async function uploadStepOneFiles(granted: { inquiryKey: string; token: string }) {
-    const pending = attachments.filesRef.current.filter((f) => f.status === "ready" || f.status === "failed");
-    if (!pending.length) return;
-    setUploadPhase("uploading");
-    const ids = await uploadFiles(pending, attachments.update, granted);
-    if (ids.length) await sendDetails({}, ids, granted);
-    setUploadPhase("done");
-  }
-
-  async function retryFile(key: string) {
-    const item = attachments.filesRef.current.find((f) => f.key === key);
-    if (!item || !auth) return;
-    setUploadPhase("uploading");
-    const ids = await uploadFiles([item], attachments.update);
-    if (ids.length) await sendDetails({}, ids);
-    setUploadPhase("done");
-  }
-
   const mutation = useMutation({
     mutationFn: async (data: FormData) => {
       const existingTracking = readInquiryTracking();
@@ -552,7 +546,6 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
       if (response.detailsToken) {
         const granted = { inquiryKey: response.inquiryKey!, token: response.detailsToken };
         setAuth(granted);
-        if (!variables.callback) void uploadStepOneFiles(granted);
       }
       clearDraft();
       sessionStorage.removeItem("brc_estimate");
@@ -592,6 +585,9 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
   function focusFirstError(fieldErrors: FieldErrors<FormData>) {
     const first = FIELD_ORDER.find((name) => fieldErrors[name]);
     if (!first) return;
+    // Email and the reach choice sit in the optional dropdown: open it so the
+    // field can take focus (the focus is applied again after the render).
+    if (first === "email" || first === "preferredContact") setOptionsOpen(true);
     const target =
       first === "preferredContact"
         ? document.querySelector<HTMLInputElement>(`#${formId} input[name="preferredContact"]:checked`)
@@ -640,58 +636,26 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
 
   const firstName = submitted?.name.trim().split(/\s+/)[0] ?? "";
 
-  const failedUploads = attachments.files.filter((f) => f.status === "failed");
-  const addedUploads = attachments.files.filter((f) => f.status === "uploaded");
-  const uploadSummary =
-    uploadPhase === "uploading"
-      ? `Uploading your files (${addedUploads.length + failedUploads.length + 1} of ${attachments.files.length})`
-      : failedUploads.length
-        ? `${failedUploads.length === 1 ? `${failedUploads[0].file.name} did not upload` : `${failedUploads.length} files did not upload`}.`
-        : `${addedUploads.length === 1 ? "1 file" : `${addedUploads.length} files`} added to your request.`;
-  // The same chips, read-only apart from Retry on a failed file.
-  const uploadList = (
-    <ul className="grid gap-1.5" aria-label="Your files">
-      {attachments.files.map((f) => (
-        <li key={f.key} className="flex min-h-11 items-center justify-between gap-3 text-sm" data-testid="quote-upload-item" data-status={f.status}>
-          <span className={cn("min-w-0 truncate", t.text)} data-clarity-mask="True">
-            {f.file.name}
-          </span>
-          <span className={cn("flex flex-shrink-0 items-center gap-2", f.status === "failed" ? (tone === "inverse" ? "text-[#f4c3b4]" : "text-destructive") : t.muted)}>
-            {f.status === "uploading" && <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />}
-            {{ ready: "Waiting", uploading: "Uploading", uploaded: "Added", failed: "Did not upload" }[f.status]}
-            {f.status === "failed" && (
-              <button
-                type="button"
-                onClick={() => void retryFile(f.key)}
-                className={cn("inline-flex min-h-11 items-center px-1 font-medium underline underline-offset-4", t.text)}
-                data-testid="button-retry-file"
-              >
-                Retry
-              </button>
-            )}
-          </span>
-        </li>
-      ))}
-    </ul>
-  );
-
   const successBlock = (
-    <div className="flex flex-col items-start space-y-4 py-2" data-testid="consultation-success" data-clarity-mask="True">
-      <img
-        src="/brand/svg/icon/boise-construction-co-icon-accent.svg"
-        alt="Boise Construction Co"
-        width={48}
-        height={48}
-        className="h-12 w-12"
-      />
+    <div className="flex flex-col items-start space-y-4 py-2" data-testid="consultation-success" data-clarity-mask="True" data-quote-follow-up="" data-family-bar-yield="">
+      <QuoteSteps sent tone={tone} />
       <div>
         <h2
           ref={successHeadingRef}
           tabIndex={-1}
           data-clarity-mask="True"
-          className={cn("font-serif text-2xl outline-none", t.text)}
+          className={cn("flex items-start gap-3 font-serif text-2xl outline-none", t.text)}
         >
-          Thanks{firstName ? `, ${firstName}` : ""}. We have your request.
+          <span
+            className={cn(
+              "mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-sm",
+              tone === "inverse" ? "bg-[#fbfaf6] text-[#2c302f]" : "bg-foreground text-background",
+            )}
+            aria-hidden="true"
+          >
+            <Check className="h-4 w-4" />
+          </span>
+          <span>Thanks{firstName ? `, ${firstName}` : ""}. We have your request.</span>
         </h2>
         {submitted && !submitted.callback && submitted.projectType && (
           <p className={cn("mt-1 text-sm", t.muted)} data-clarity-mask="True">
@@ -707,7 +671,11 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
           the next step.
         </p>
       ) : (
-        <ol className={cn("space-y-2.5 text-sm", t.muted)}>
+        <div className="grid gap-2.5">
+        <p id={`${ids.next}-list`} className={cn("text-[0.9375rem] font-medium", t.text)}>
+          What happens next
+        </p>
+        <ol className={cn("space-y-2.5 text-sm", t.muted)} aria-labelledby={`${ids.next}-list`}>
           {[
             "We review your request and any planning range you attached.",
             "We reach out to answer your questions and find a time that works.",
@@ -727,7 +695,11 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
             </li>
           ))}
         </ol>
+        </div>
       )}
+      <p className={cn("text-[0.9375rem] font-medium", t.text)} data-testid="quote-all-set">
+        You are all set. Nothing else is needed.
+      </p>
       <div className="flex flex-col gap-1">
         <p className={cn("text-sm", t.muted)}>
           Need us sooner?{" "}
@@ -743,23 +715,6 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
           <p className={cn("text-xs", t.muted)}>Your request is saved. A confirmation email should follow at the address you gave.</p>
         )}
       </div>
-      {attachments.files.length > 0 && (
-        <div className="grid w-full gap-2" data-testid="quote-upload-status" data-phase={uploadPhase}>
-          <p className={cn("text-[0.9375rem] font-medium", t.text)} aria-live="polite">
-            {uploadSummary}
-          </p>
-          {uploadList}
-          {failedUploads.length > 0 && (
-            <p className={cn("text-sm", t.muted)}>
-              Your request is saved either way. Retry, or{" "}
-              <a href={SITE_CONFIG.phoneSmsHref} className={cn("underline underline-offset-4", t.text)} data-testid="link-upload-text-us">
-                text the files to us
-              </a>
-              .
-            </p>
-          )}
-        </div>
-      )}
       {auth && (
         <QuoteDetailsStep
           tone={tone}
@@ -770,7 +725,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
             bestTime: !(submitted?.callback && submitted.bestTimeToCall),
             email: !submitted?.email?.trim() || !!submitted?.callback,
           }}
-          filesRemaining={Math.max(0, MAX_LEAD_FILES - attachments.files.length)}
+          filesRemaining={MAX_LEAD_FILES}
           uploadFiles={(list, update) => uploadFiles(list, update)}
           saveDetails={(fields, ids) => sendDetails(fields, ids)}
         />
@@ -784,51 +739,47 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
 
   const projectLabel = estimate?.project ? PROJECT_LABELS[estimate.project]?.label : null;
   const finishLabel = estimate?.finish ? FINISH_LABELS[estimate.finish]?.label : null;
-  const nextLine = "We answer your questions and help you work out the next step.";
+  const nextLine = callback
+    ? "We call you back during business hours."
+    : "That is all we need. You can add photos or plans after you send.";
 
-  // The site assistant is not mounted on /estimate (AssistantWidget), so Chat is offered
-  // only where it can open; there "Text us" takes the full width.
+  // The site assistant is not mounted on /estimate (AssistantWidget), so chat is offered
+  // only where it can open.
   const chatAvailable = mode !== "app";
-  const outlineButton = cn(
-    "inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-sm border px-3 text-[0.9375rem] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-    tone === "inverse"
-      ? "border-inverse-foreground/40 text-inverse-foreground hover:bg-inverse-foreground/10 focus-visible:ring-[#e3c08d] focus-visible:ring-offset-[#2c302f]"
-      : "border-foreground/40 text-foreground hover:bg-foreground/5 focus-visible:ring-ring",
-  );
 
-  /** Prefer to talk? Above the send button on phones, beside it on wide screens. */
+  /** Prefer to talk? One quiet line of links under the send button, never a second set of buttons. */
   const talkPanel = (
-    <div className="grid gap-2" data-testid="quote-talk-options">
-      <p className={cn("text-[0.875rem]", t.muted)}>Prefer to talk?</p>
-      <a href={SITE_CONFIG.phoneHref} className={outlineButton} data-testid="link-quote-call">
-        <Phone className="h-4 w-4" aria-hidden="true" />
+    <p className={cn("text-[0.875rem] leading-relaxed", t.muted)} data-testid="quote-talk-options">
+      Prefer to talk?{" "}
+      <a href={SITE_CONFIG.phoneHref} className={t.link} data-testid="link-quote-call">
         Call {SITE_CONFIG.phone}
       </a>
-      <div className={cn("grid gap-2", chatAvailable && "grid-cols-2")}>
-        <a href={SITE_CONFIG.phoneSmsHref} className={outlineButton} data-testid="link-quote-text">
-          <MessageSquare className="h-4 w-4" aria-hidden="true" />
-          Text us
-        </a>
-        {chatAvailable && (
+      {chatAvailable ? ", " : " or "}
+      <a href={SITE_CONFIG.phoneSmsHref} className={t.link} aria-label={`Text us at ${SITE_CONFIG.phone}`} data-testid="link-quote-text">
+        text us
+      </a>
+      {chatAvailable && (
+        <>
+          {" or "}
           <button
             type="button"
-            className={outlineButton}
+            className={t.link}
             onClick={() => window.dispatchEvent(new Event("p5:assistant-open"))}
             data-testid="button-quote-chat"
           >
-            <MessagesSquare className="h-4 w-4" aria-hidden="true" />
-            Chat
+            chat
           </button>
-        )}
-      </div>
-    </div>
+        </>
+      )}
+      .
+    </p>
   );
 
   /** "Send a request" | "Have us call you", directly under the heading. */
   const modeControl = (
     <fieldset className="grid" data-testid="quote-request-mode">
       <legend className="sr-only">How would you like to reach us?</legend>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2">
         {([
           { value: false, label: "Send a request", testId: "request-mode-quote" },
           { value: true, label: "Have us call you", testId: "request-mode-callback" },
@@ -842,7 +793,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
               onChange={() => setCallback(option.value)}
               className="peer sr-only"
             />
-            <span className={cn(t.pill, "font-medium")}>{option.label}</span>
+            <span className={t.tab}>{option.label}</span>
           </label>
         ))}
       </div>
@@ -879,11 +830,12 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     </div>
   );
 
-  // Phones: talk options directly above the send button. Wide screens: side by side.
+  // The one send button, then the quiet talk line under it. On /estimate both sit
+  // in the frame's pinned footer.
   const sendArea = (
-    <div className={cn("grid gap-4 lg:grid-cols-2 lg:items-end", mode === "embedded" && cn("border-t pt-4", t.rule))}>
-      {talkPanel}
+    <div className={mode === "embedded" ? cn("grid gap-4 border-t pt-4", t.rule) : "grid gap-1.5 text-center"}>
       {submitBlock}
+      {talkPanel}
     </div>
   );
 
@@ -894,6 +846,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
           {callback ? "Request a call" : "Request a quote"}
         </h2>
       )}
+      <QuoteSteps sent={false} tone={tone} />
       {modeControl}
       {callback && (
         <p className={cn("text-[0.9375rem]", t.muted)}>Leave your name and number and we will call you.</p>
@@ -930,19 +883,6 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
             />
           </Field>
         </>
-      )}
-
-      {!callback && (
-        <AttachmentTile
-          id={ids.files}
-          label="Add photos, plans or files"
-          files={attachments.files}
-          problems={attachments.problems}
-          onAdd={attachments.add}
-          onRemove={attachments.remove}
-          tone={tone}
-          disabled={mutation.isPending}
-        />
       )}
 
       <Field id={ids.name} label="Your name" error={errors.name?.message} tone={tone}>
@@ -1003,6 +943,21 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         </Field>
       ) : (
         <>
+          {/* Everything optional lives in this one closed dropdown. Its fields stay
+              registered while it is closed, so the request posts the same values. */}
+          <details
+            className={t.disclosure}
+            open={optionsOpen}
+            onToggle={(event) => setOptionsOpen(event.currentTarget.open)}
+            data-testid="quote-options"
+          >
+            <summary className={t.summary}>
+              <span>
+                Add an email or choose how we reach you <span className={cn("font-normal", t.muted)}>(optional)</span>
+              </span>
+              <ChevronDown className="h-5 w-5 flex-none transition-transform group-open:rotate-180" aria-hidden="true" />
+            </summary>
+            <div className={cn("grid gap-4 border-t p-3", tone === "inverse" ? "border-inverse-foreground/20" : "border-foreground/20")}>
           <Field
             id={ids.email}
             label="Email"
@@ -1050,6 +1005,8 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
               ))}
             </div>
           </fieldset>
+            </div>
+          </details>
 
           {estimate && attached && (
             <div className="flex items-center justify-between gap-2 text-xs" data-testid="text-estimate-summary">
@@ -1078,11 +1035,6 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
       )}
 
       {mode === "embedded" && sendArea}
-      {mode === "app" && !talkInFooter && (
-        // Phones: in the normal flow at the end of the fields, directly above the
-        // pinned send button, so nothing scrolls behind a panel.
-        <div className={cn("border-t pt-4", t.rule)}>{talkPanel}</div>
-      )}
     </div>
   );
 
@@ -1099,7 +1051,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         submitted={success}
       />
       {success ? (
-        // The success screen carries its own "Help us prepare" form, so it sits
+        // The success screen carries its own optional details form, so it sits
         // outside the request form (forms cannot nest). Same test id and step
         // marker the request form had once sent. data-family-bar-yield (here and on the form):
         // the family mobile bar steps aside while either is on screen
@@ -1154,7 +1106,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         steps={[{ id: "request", label: "Request" }]}
         currentIndex={0}
         hideProgress
-        footer={success ? undefined : talkInFooter ? sendArea : submitBlock}
+        footer={success ? undefined : sendArea}
         className="quote-request-app-frame"
       >
         {formInner}
