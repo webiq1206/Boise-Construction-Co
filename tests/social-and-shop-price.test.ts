@@ -6,7 +6,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { Footer } from '../components/Footer.tsx';
 import { FAMILY_BRAND } from '../lib/familyBrand.ts';
 import { P5_PARENT_ORGANIZATION } from '../lib/schema.ts';
-import { BUSINESS_INFO } from '../lib/seo.ts';
+import { BRAND_SAME_AS, BUSINESS_INFO, P5_SAME_AS } from '../lib/seo.ts';
 import { GBP_SOCIAL, P5_SOCIAL } from '../shared/gbpProfile.ts';
 import { CITY_SERVICE_META_DESCRIPTIONS, SERVICE_META_DESCRIPTIONS } from '../shared/metaDescriptions.ts';
 import { CITY_SERVICE_COPY } from '../shared/content/cityServiceCopy.ts';
@@ -29,13 +29,22 @@ const RETIRED_FACEBOOK = 'profile.php?id=61592885025074';
 test('the owner Facebook page and Google profile describe P5 Home Co, not this brand', () => {
   assert.equal(P5_SOCIAL.facebook, P5_FACEBOOK);
   assert.equal(P5_SOCIAL.google, P5_GOOGLE);
-  // Owner decision A (1 November 2026): the one Google Business Profile is
-  // P5 Home Co's, so it joins the Facebook page on the parent node only.
-  assert.deepEqual([...P5_PARENT_ORGANIZATION.sameAs], [P5_FACEBOOK, P5_GOOGLE]);
+  // Directory listings are P5-only. The parent sameAs is the verified pack
+  // plus the existing kgmid. This brand's sameAs is not those listings.
+  assert.deepEqual([...P5_PARENT_ORGANIZATION.sameAs], [...P5_SAME_AS]);
+  assert.ok(P5_SAME_AS.includes(P5_GOOGLE));
+  assert.equal(P5_SAME_AS.includes('https://www.facebook.com/p5homeco'), true);
   assert.equal(GBP_SOCIAL.facebook, undefined);
+  assert.deepEqual([...BUSINESS_INFO.sameAs], [...BRAND_SAME_AS]);
   assert.equal(BUSINESS_INFO.sameAs.includes(P5_FACEBOOK), false);
   assert.equal(BUSINESS_INFO.sameAs.includes(P5_GOOGLE), false);
-  for (const url of BUSINESS_INFO.sameAs) assert.doesNotMatch(url, /facebook\.com|kgmid/);
+  assert.equal(BUSINESS_INFO.sameAs.includes('https://www.facebook.com/p5homeco'), false);
+  for (const url of BUSINESS_INFO.sameAs) {
+    assert.doesNotMatch(url, /facebook\.com|kgmid|nextdoor|yelp|houzz|bbb\.org|buildzoom|ezlocal|cylex|maps\?cid/);
+  }
+  for (const blocked of ['bbb.org', 'houzz.com', 'buildzoom.com']) {
+    assert.equal([...P5_SAME_AS].some((url) => url.includes(blocked)), false, blocked);
+  }
 });
 
 test('the retired Facebook profile is gone and the footer labels the parent page', () => {
