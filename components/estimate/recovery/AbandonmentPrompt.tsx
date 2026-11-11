@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { MessageSquare, Phone, PhoneCall } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { SITE_CONFIG } from "@/shared/siteConfig";
@@ -85,104 +85,89 @@ export function AbandonmentPrompt({ open, flow, method, leaving, onStay, onConti
         data-testid="abandonment-prompt"
         aria-describedby="abandonment-prompt-desc"
       >
-        <p className="ed-eyebrow !mb-2" style={{ color: "var(--ed-accent)" }}>
-          {leaving ? "Before you go" : "Need a hand?"}
-        </p>
         <DialogTitle className="ed-h3 !leading-tight">
           {state === "sent" ? "We will call you back." : "Prefer to talk it through instead?"}
         </DialogTitle>
         <DialogDescription id="abandonment-prompt-desc" className="ed-body mt-2 text-[0.9375rem] text-inverse-muted">
           {state === "sent"
-            ? "Thanks. We have your number and someone from the team will call you to answer your questions. You can keep going here or close this window."
-            : `Call or text with your questions and we will answer them. Or leave a number and we will call you back.`}
+            ? "Thanks. We have your number. Nothing else is needed."
+            : "Leave a number and we will call you back."}
         </DialogDescription>
 
         {state !== "sent" && (
-          <>
-            <div className="mt-5 grid grid-cols-2 gap-2.5">
-              <a
-                href={SITE_CONFIG.phoneHref}
-                onClick={onCall}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-sm border border-inverse-foreground/70 bg-inverse-foreground/[0.08] px-3 text-[11px] font-bold uppercase tracking-[0.14em] text-inverse-foreground transition-colors hover:bg-inverse-foreground hover:text-inverse"
-                data-testid="recovery-call"
-              >
-                <Phone className="h-4 w-4" strokeWidth={1.5} aria-hidden /> Call
-              </a>
-              <a
-                href={SITE_CONFIG.phoneSmsHref}
-                onClick={onText}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-sm border border-inverse-foreground/70 bg-inverse-foreground/[0.08] px-3 text-[11px] font-bold uppercase tracking-[0.14em] text-inverse-foreground transition-colors hover:bg-inverse-foreground hover:text-inverse"
-                data-testid="recovery-text"
-              >
-                <MessageSquare className="h-4 w-4" strokeWidth={1.5} aria-hidden /> Text
-              </a>
-            </div>
-
-            <form onSubmit={submitCallback} noValidate className="mt-5 border-t border-inverse-foreground/[0.12] pt-5" data-testid="recovery-callback-form">
-              <p className="mb-2 text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-inverse-muted">Or request a callback</p>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_auto]">
-                <label className="sr-only" htmlFor="recovery-phone">Your phone number</label>
-                <input
-                  id="recovery-phone"
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  placeholder="(208) 555-0100"
-                  value={phone}
-                  onChange={(e) => { setPhone(e.target.value); if (state === "error") setState("idle"); }}
-                  className="h-12 w-full rounded-sm border border-inverse-foreground/25 bg-inverse-foreground/[0.06] px-3 text-base text-inverse-foreground placeholder:text-inverse-muted/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-legible"
-                  aria-invalid={state === "error" || undefined}
-                  aria-describedby={message ? "recovery-callback-msg" : undefined}
-                  data-testid="recovery-phone"
-                />
-                <Button type="submit" variant="brand" className="min-h-12 px-5" disabled={state === "sending"} data-testid="recovery-callback-submit">
-                  <PhoneCall className="h-4 w-4" strokeWidth={1.5} aria-hidden />
-                  {state === "sending" ? "Sending…" : "Call me"}
-                </Button>
-              </div>
-              <label className="sr-only" htmlFor="recovery-name">Your name (optional)</label>
+          <form onSubmit={submitCallback} noValidate className="mt-5 grid gap-4" data-testid="recovery-callback-form">
+            <div className="grid gap-1.5">
+              <label className="block text-[0.9375rem] font-medium leading-snug text-inverse-foreground" htmlFor="recovery-phone">
+                Phone
+              </label>
               <input
-                id="recovery-name"
-                type="text"
-                autoComplete="name"
-                placeholder="Your name (optional)"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="mt-2 h-11 w-full rounded-sm border border-inverse-foreground/25 bg-inverse-foreground/[0.06] px-3 text-sm text-inverse-foreground placeholder:text-inverse-muted/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-legible"
+                id="recovery-phone"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                value={phone}
+                onChange={(e) => { setPhone(e.target.value); if (state === "error") setState("idle"); }}
+                className="h-12 w-full rounded-sm border border-inverse-foreground/25 bg-inverse-foreground/[0.06] px-3 text-base text-inverse-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-legible"
+                aria-required="true"
+                aria-invalid={state === "error" || undefined}
+                aria-describedby={message ? "recovery-callback-msg" : undefined}
+                data-testid="recovery-phone"
               />
               {message && (
-                <p id="recovery-callback-msg" role="alert" className="mt-2 text-[0.8125rem] text-red-300">
+                <p id="recovery-callback-msg" role="alert" className="text-[0.8125rem] text-red-300">
                   {message}
                 </p>
               )}
-            </form>
-          </>
+            </div>
+            {/* The number is all a callback needs; the optional name sits behind one quiet text toggle. */}
+            <details className="group" data-testid="recovery-options">
+              <summary className="inline-flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-sm text-[0.875rem] text-inverse-muted hover:text-inverse-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-legible [&::-webkit-details-marker]:hidden">
+                <Plus className="h-4 w-4 flex-none transition-transform group-open:rotate-45" aria-hidden />
+                Add your name (optional)
+              </summary>
+              <div className="grid gap-1.5 pt-2">
+                <label className="block text-[0.9375rem] font-medium leading-snug text-inverse-foreground" htmlFor="recovery-name">
+                  Your name
+                </label>
+                <input
+                  id="recovery-name"
+                  type="text"
+                  autoComplete="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="h-12 w-full rounded-sm border border-inverse-foreground/25 bg-inverse-foreground/[0.06] px-3 text-base text-inverse-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-legible"
+                />
+              </div>
+            </details>
+            <Button type="submit" variant="brand" className="min-h-12 w-full text-base" disabled={state === "sending"} data-testid="recovery-callback-submit">
+              {state === "sending" ? "Sending" : "Call me"}
+            </Button>
+            <p className="text-[0.875rem] leading-relaxed text-inverse-muted">
+              Or{" "}
+              <a href={SITE_CONFIG.phoneHref} onClick={onCall} className="py-2 text-inverse-foreground underline underline-offset-4 hover:no-underline" data-testid="recovery-call">
+                call {SITE_CONFIG.phone}
+              </a>
+              {" or "}
+              <span className="[white-space:nowrap]">
+                <a href={SITE_CONFIG.phoneSmsHref} onClick={onText} className="py-2 text-inverse-foreground underline underline-offset-4 hover:no-underline" data-testid="recovery-text">
+                  text us
+                </a>
+                .
+              </span>
+            </p>
+          </form>
         )}
 
-        <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <button
-            type="button"
-            onClick={() => dismiss(leaving ? "continue" : "stay")}
-            className="min-h-11 text-left text-[0.8125rem] text-inverse-muted underline underline-offset-4 hover:text-inverse-foreground"
-            data-testid="recovery-dismiss"
-          >
-            {leaving ? "No thanks, continue" : "No thanks"}
-          </button>
-          {state !== "sent" ? (
-            <button
-              type="button"
-              onClick={() => dismiss("stay")}
-              className="min-h-11 text-[0.8125rem] font-semibold text-inverse-foreground underline underline-offset-4"
-              data-testid="recovery-stay"
-            >
-              Keep going with my estimate
-            </button>
-          ) : (
-            <Button type="button" variant="brandOutline" className="min-h-11 border-inverse-foreground/70 text-inverse-foreground" onClick={() => (leaving ? onContinue() : onStay())}>
-              {leaving ? "Continue" : "Close"}
-            </Button>
-          )}
-        </div>
+        {/* One way out. Leaving: carry on leaving (Escape, the close button and the
+            backdrop all stay). Not leaving: back to the estimate. */}
+        <button
+          type="button"
+          onClick={() => (state === "sent" ? (leaving ? onContinue() : onStay()) : dismiss(leaving ? "continue" : "stay"))}
+          className="mt-4 min-h-11 text-left text-[0.875rem] text-inverse-muted underline underline-offset-4 hover:text-inverse-foreground"
+          data-testid="recovery-dismiss"
+        >
+          {state === "sent" ? (leaving ? "Continue" : "Close") : leaving ? "No thanks, continue" : "No thanks"}
+        </button>
       </DialogContent>
     </Dialog>
   );

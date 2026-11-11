@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AddressAutocomplete } from "@/components/AddressAutocomplete";
 import { trackEvent } from "@/lib/analytics";
@@ -12,10 +12,15 @@ import type { PropertyProfile } from "@/shared/propertyProfile";
 import { AttachmentTile, useLeadFiles, type PendingLeadFile } from "@/components/quote/LeadAttachments";
 
 /**
- * "Help us prepare (optional)": Step 2, on the success screen, below the
- * confirmation. Every field is optional and native; nothing Step 1 already
- * has is asked again. Saving posts to /api/consultation/details, which merges
- * into the SAME request and tells the team (email, lead dashboard, P5 intake).
+ * Step 2, on the success screen, below the confirmation: ONE quiet text toggle
+ * (a native details with no box), "Add photos, plans or details (optional)".
+ * It used to sit open under the confirmation as "Help us prepare", and a
+ * client on a family site read it as the form asking for more before the
+ * request counted (owner, 11 November). Leaving it closed is skipping, so
+ * there is no Skip button. Every field is optional and native; nothing Step 1
+ * already has is asked again. Saving posts to /api/consultation/details, which
+ * merges into the SAME request and tells the team (email, lead dashboard, P5
+ * intake).
  *
  * Analytics: `lead_details_added` once per save, with field names and a file
  * count only. No contact details, and never a second generate_lead.
@@ -77,14 +82,13 @@ export function QuoteDetailsStep({
   const [bestTime, setBestTime] = useState("");
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [state, setState] = useState<"open" | "saving" | "saved" | "skipped">("open");
+  const [state, setState] = useState<"open" | "saving" | "saved">("open");
   const [error, setError] = useState("");
   const tile = useLeadFiles(filesRemaining);
 
-  if (state === "skipped") return null;
   if (state === "saved") {
     return (
-      <div className={cn("w-full border-t pt-4", inverse ? "border-inverse-foreground/15" : "border-border")}>
+      <div className="w-full" data-testid="quote-details-step">
         <p className={cn("text-[0.9375rem] font-medium", text)} role="status" data-testid="quote-details-saved">
           Saved. Thank you.
         </p>
@@ -130,7 +134,7 @@ export function QuoteDetailsStep({
       setError(
         pending.length
           ? "Those files did not upload. Retry, or text them to us."
-          : "Add a detail or a file first, or choose Skip.",
+          : "Add a detail or a file first. If you have nothing to add, you are already done.",
       );
       setState("open");
       return;
@@ -156,20 +160,24 @@ export function QuoteDetailsStep({
 
   return (
     <section
-      className={cn("grid w-full gap-4 border-t pt-5", inverse ? "border-inverse-foreground/15" : "border-border")}
+      className="w-full"
       aria-labelledby={`quote-details-heading-${uid}`}
       data-testid="quote-details-step"
     >
-      <div className="grid gap-1">
-        <h3 id={`quote-details-heading-${uid}`} className={cn("font-serif text-xl", text)}>
-          Help us prepare <span className={cn("text-base font-normal", muted)}>(optional)</span>
-        </h3>
-        <p className={cn("text-[0.9375rem]", muted)}>A few details help us give you a closer quote on the first call.</p>
-      </div>
-
+      <details className="group" data-testid="quote-details-disclosure">
+        <summary
+          id={`quote-details-heading-${uid}`}
+          className={cn(
+            "inline-flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-sm text-[0.875rem] focus-visible:outline-none focus-visible:ring-2 [&::-webkit-details-marker]:hidden",
+            inverse ? "text-inverse-muted hover:text-inverse-foreground focus-visible:ring-[#e3c08d]" : "text-muted-foreground hover:text-foreground focus-visible:ring-ring",
+          )}
+        >
+          <Plus className="h-4 w-4 flex-none transition-transform group-open:rotate-45" aria-hidden="true" />
+          Add photos, plans or details (optional)
+        </summary>
       <form
         noValidate
-        className="grid gap-4"
+        className="grid gap-4 pt-2"
         onSubmit={(event) => {
           event.preventDefault();
           void onSave();
@@ -291,7 +299,7 @@ export function QuoteDetailsStep({
         {filesRemaining > 0 && (
           <AttachmentTile
             id={fieldIds.files}
-            label="Add more photos, plans or files"
+            label="Add photos, plans or files"
             files={tile.files}
             problems={tile.problems}
             onAdd={tile.add}
@@ -308,35 +316,25 @@ export function QuoteDetailsStep({
           </p>
         )}
 
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <Button
-            type="submit"
-            variant="brand"
-            disabled={saving}
-            aria-busy={saving}
-            className="min-h-12 px-6 text-base"
-            data-testid="button-save-details"
-          >
-            {saving ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
-                Saving
-              </>
-            ) : (
-              "Save details"
-            )}
-          </Button>
-          <button
-            type="button"
-            onClick={() => setState("skipped")}
-            disabled={saving}
-            className={cn("inline-flex min-h-12 items-center px-1 text-[0.9375rem] underline underline-offset-4", muted)}
-            data-testid="button-skip-details"
-          >
-            Skip
-          </button>
-        </div>
+        <Button
+          type="submit"
+          variant="brand"
+          disabled={saving}
+          aria-busy={saving}
+          className="min-h-12 justify-self-start px-6 text-base"
+          data-testid="button-save-details"
+        >
+          {saving ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+              Saving
+            </>
+          ) : (
+            "Save details"
+          )}
+        </Button>
       </form>
+      </details>
     </section>
   );
 }
