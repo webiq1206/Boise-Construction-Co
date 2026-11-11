@@ -100,6 +100,15 @@ body:has([data-family-bar][data-state='hidden']) .home-hero {
 .quote-request-app-frame [data-testid="app-frame-body"] > div {
   justify-content: flex-start !important;
 }
+/* The quote form is longer than a one-question wizard step, so its fields keep
+   scrolling above the pinned send button while the on-screen keyboard is open.
+   Without this, a field could sit behind the bar on a small phone with no way
+   to reach it. */
+@media (max-width: 1023px) {
+  .quote-request-app-frame[data-keyboard-aware="true"][data-keyboard-inset] [data-testid="app-frame-body"] {
+    overflow-y: auto;
+  }
+}
 /*
   Reviewed marketing typography roles, November 4. Dedicated tool and form controls retain their own rules.
 */

@@ -93,6 +93,13 @@ type ContactMethod = (typeof CONTACT_METHODS)[number]["value"];
 const DEFAULT_CONTACT: ContactMethod = "text";
 
 const DRAFT_KEY = "construction_quote_form_v2";
+/**
+ * /estimate pins the send area to the bottom of the screen. While the on-screen
+ * keyboard is up (AppFrame sets data-keyboard-inset), the two lines under the
+ * button step aside so only the button is pinned and the field being typed in
+ * keeps its room on a small phone. They return when the keyboard closes.
+ */
+const KEYBOARD_YIELD = "[[data-keyboard-inset]_&]:hidden";
 const FORM_ID = "quote-request-form";
 
 const phoneDigits = (value: string) => value.replace(/\D/g, "").length;
@@ -581,6 +588,20 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     trackEvent("form_start", { form: "consultation" });
   }
 
+  /**
+   * /estimate pins the send area and the frame shrinks when the on-screen
+   * keyboard opens. Once that layout has settled, bring the field that took
+   * focus fully into the space above the pinned bar, so no field (the ones the
+   * optional toggle reveals included) is left behind it on a small phone.
+   */
+  function keepFieldInView(target: EventTarget) {
+    if (!(target instanceof HTMLElement) || !target.matches("input, textarea, select")) return;
+    const field = target.closest("label") ?? target;
+    window.setTimeout(() => {
+      if (document.activeElement === target) field.scrollIntoView({ block: "nearest" });
+    }, 350);
+  }
+
   function focusFirstError(fieldErrors: FieldErrors<FormData>) {
     const first = FIELD_ORDER.find((name) => fieldErrors[name]);
     if (!first) return;
@@ -683,10 +704,12 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
       )}
       <p className={t.small}>
         Prefer to talk?{" "}
-        <a href={SITE_CONFIG.phoneHref} className={t.link} data-testid="link-consult-success-phone">
-          Call {SITE_CONFIG.phone}
-        </a>
-        .
+        <span className="[white-space:nowrap]">
+          <a href={SITE_CONFIG.phoneHref} className={t.link} data-testid="link-consult-success-phone">
+            Call {SITE_CONFIG.phone}
+          </a>
+          .
+        </span>
       </p>
     </div>
   );
@@ -733,6 +756,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     <fieldset
       className={cn(
         "min-w-0 rounded-sm has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-offset-2",
+        KEYBOARD_YIELD,
         t.small,
         tone === "inverse" ? "has-[input:focus-visible]:ring-[#e3c08d] has-[input:focus-visible]:ring-offset-[#2c302f]" : "has-[input:focus-visible]:ring-ring",
       )}
@@ -751,7 +775,11 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
             Call {SITE_CONFIG.phone}
           </a>
           {" or "}
-          {modeRadio(modeOptions[1])}.{modeRadio(modeOptions[0])}
+          {/* The last link and its full stop stay together, so the stop never wraps alone.
+              An arbitrary class, not whitespace-nowrap: app/family.css turns that utility
+              off on phones, which is exactly where this matters. */}
+          <span className="[white-space:nowrap]">{modeRadio(modeOptions[1])}.</span>
+          {modeRadio(modeOptions[0])}
         </>
       )}
     </fieldset>
@@ -783,7 +811,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         )}
       </Button>
       {talkLine}
-      <p className={t.small}>
+      <p className={cn(t.small, KEYBOARD_YIELD)}>
         No obligation.{" "}
         {/* A new tab, so reading the policy never costs the visitor what they typed. */}
         <a href="/privacy-policy" target="_blank" rel="noopener" className={t.link}>
@@ -933,7 +961,6 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
           <Field
             id={ids.email}
             label="Email"
-            optional={preferredContact !== "email"}
             hint={preferredContact === "email" ? "Needed so we can email you." : undefined}
             error={errors.email?.message}
             tone={tone}
@@ -1031,7 +1058,10 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
           event.preventDefault();
           void onSubmit(event);
         }}
-        onFocusCapture={trackFormStart}
+        onFocusCapture={(event) => {
+          trackFormStart();
+          if (mode === "app") keepFieldInView(event.target);
+        }}
         aria-labelledby={mode === "embedded" && !inDialog ? ids.heading : undefined}
         aria-label={mode === "app" || inDialog ? (callback ? "Request a call" : "Request a quote") : undefined}
         data-testid="consultation-wizard"

@@ -50,6 +50,11 @@ async function fillConstructionQuote(page, method) {
   const address=options.getByTestId('input-project-address');
   assert.deepEqual(await address.evaluate(el=>({type:el.type,autocomplete:el.autocomplete,required:el.required||el.getAttribute('aria-required')==='true',first:el===el.closest('details').querySelector('input,select,textarea'),label:el.labels[0]?.textContent.trim(),hint:document.getElementById(el.id+'-hint')?.textContent.trim()})),{type:'text',autocomplete:'street-address',required:false,first:true,label:'Project address',hint:'Leave blank if you do not have one yet.'});
   assert.equal(await address.isVisible(),false,'The address is hidden until the toggle is opened');
+  // The toggle says "(optional)" once; no label inside it repeats the word.
+  assert.deepEqual(await options.evaluate(el=>[...el.querySelectorAll('label,legend,p')].map(n=>n.textContent.replace(/\s+/g,' ').trim()).filter(t=>/optional/i.test(t))),[],'No label inside the toggle repeats (optional)');
+  assert.equal(await page.getByTestId('input-email').evaluate(el=>el.labels[0].textContent.trim()),'Email');
+  // The full stop after the last link never wraps alone: it shares a no-wrap span with the link.
+  assert.equal(await page.getByTestId('request-mode-callback').evaluate(el=>{const span=el.parentElement;return span.tagName==='SPAN'&&getComputedStyle(span).whiteSpace==='nowrap'&&span.textContent.trim().endsWith('.')&&(()=>{const r=document.createRange();r.selectNodeContents([...span.childNodes].reverse().find(n=>n.nodeType===3));const dot=r.getBoundingClientRect(),link=el.getBoundingClientRect();return dot.top<link.bottom&&dot.bottom>link.top;})();}),true,'The talk line keeps its last link and full stop together');
   for(const id of ['input-email','button-preferred-contact-phone','button-preferred-contact-text','button-preferred-contact-email']){
     assert.equal(await options.getByTestId(id).count(),1,id+' sits inside the optional dropdown');
     assert.equal(await page.getByTestId(id).isVisible(),false,id+' is hidden until the dropdown is opened');

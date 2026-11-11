@@ -148,10 +148,12 @@ export function AbandonmentPrompt({ open, flow, method, leaving, onStay, onConti
                 call {SITE_CONFIG.phone}
               </a>
               {" or "}
-              <a href={SITE_CONFIG.phoneSmsHref} onClick={onText} className="py-2 text-inverse-foreground underline underline-offset-4 hover:no-underline" data-testid="recovery-text">
-                text us
-              </a>
-              .
+              <span className="[white-space:nowrap]">
+                <a href={SITE_CONFIG.phoneSmsHref} onClick={onText} className="py-2 text-inverse-foreground underline underline-offset-4 hover:no-underline" data-testid="recovery-text">
+                  text us
+                </a>
+                .
+              </span>
             </p>
           </form>
         )}
