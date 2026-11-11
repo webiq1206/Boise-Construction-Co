@@ -136,6 +136,16 @@ test("the team sees the callback in the email subject, the email body and the CR
   assert.match(notes, /Request: CALLBACK REQUEST/);
 });
 
+test("an optional step 1 project address reaches the team; a blank one stays blank", () => {
+  const blank = consultationBodySchema.parse(fullRequest);
+  assert.equal(blank.address, "", "no address sends the same blank the form has always sent");
+  const parsed = consultationBodySchema.parse({ ...fullRequest, address: "123 Example Lane, Star, ID 83669", zip: "83669" });
+  assert.equal(parsed.address, "123 Example Lane, Star, ID 83669");
+  const lead = { ...parsed, address: parsed.address };
+  assert.match(buildAdminEmailHtml(lead, null), /123 Example Lane, Star, ID 83669/);
+  assert.match(buildLeadNotes(lead, null), /123 Example Lane, Star, ID 83669/);
+});
+
 test("a full request names the preferred contact method for the team", () => {
   const parsed = consultationBodySchema.parse({ ...fullRequest, preferredContact: "text" });
   const lead = { ...parsed, address: parsed.address };

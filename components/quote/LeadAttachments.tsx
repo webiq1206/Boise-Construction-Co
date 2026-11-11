@@ -13,7 +13,8 @@ import {
 } from "@/shared/leadFiles";
 
 /**
- * "Add photos, plans or files (optional)": one friendly tile instead of the
+ * "Add photos, plans or files": one friendly tile (it sits inside the Step 2
+ * toggle, which already says optional, so the tile does not repeat it) instead of the
  * browser's raw file control. Tapping it opens the native picker (on phones:
  * camera, photo library or files); on desktop files can be dropped on it.
  * Chosen files show as chips with a preview or a PDF icon, their size and a
@@ -192,7 +193,7 @@ export function AttachmentTile({
         <Camera className={cn("h-5 w-5 flex-shrink-0", text)} aria-hidden="true" />
         <span className="grid gap-0.5">
           <span className={cn("text-[0.9375rem] font-medium leading-snug", text)}>
-            {label} <span className={cn("text-[0.8125rem] font-normal", muted)}>(optional)</span>
+            {label}
           </span>
           <span id={`${id}-hint`} className={cn("text-[0.8125rem] leading-snug", muted)}>
             Photos, PDFs or drawings. Up to {limit} files, {MAX_LEAD_FILE_MB} MB each.
