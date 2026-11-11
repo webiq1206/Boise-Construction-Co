@@ -64,17 +64,20 @@ test('existing contact form carries hidden evidence and emits one accepted conve
  });
  await page.goto('/contact?gclid=fixture-contact&utm_campaign=homes');
  await page.evaluate(c=>(window as any).p5UpdateConsent(c),consent);
- // Step 1 asks only for what a callback needs; the email sits in the closed optional dropdown.
+ // Step 1 asks only for what a callback needs; the email sits behind the closed optional toggle.
  await page.getByTestId('textarea-message').fill('Synthetic fixture request.');
  await page.getByTestId('input-name').fill('Synthetic Fixture');
  await page.getByTestId('input-phone').fill('2085550102');
  await expect(page.getByTestId('input-email')).toBeHidden();
  await page.getByTestId('quote-options').locator('summary').click();
+ await page.getByTestId('input-project-address').fill('123 Fixture Lane, Star, ID 83669');
  await page.getByTestId('input-email').fill('fixture@example.invalid');
  await page.locator('[data-testid="button-send-request"][data-hydrated="true"]').click();
  await expect(page.getByTestId('consultation-success')).toBeVisible();
- await expect(page.getByTestId('quote-all-set')).toHaveText('You are all set. Nothing else is needed.');
+ await expect(page.getByTestId('quote-all-set')).toHaveText('We review your request and reach out to answer your questions. Nothing else is needed.');
  expect(payload.email).toBe('fixture@example.invalid');
+ expect(payload.address).toBe('123 Fixture Lane, Star, ID 83669');
+ expect(payload.zip).toBe('83669');
  expect(payload.preferredContact).toBe('text');
  expect(submissions).toBe(1);
  expect(payload.attribution.first.clickIds.gclid).toBe('fixture-contact');

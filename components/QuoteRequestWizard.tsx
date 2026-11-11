@@ -9,19 +9,17 @@ import { useForm, type FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
-import { Check, ChevronDown, Loader2, X } from "lucide-react";
+import { Check, Loader2, Plus } from "lucide-react";
 import { uploadLeadFile, type PendingLeadFile } from "@/components/quote/LeadAttachments";
 import { QuoteDetailsStep, type DetailsFields } from "@/components/quote/QuoteDetailsStep";
-import { QuoteSteps } from "@/components/quote/QuoteSteps";
 import { MAX_LEAD_FILES } from "@/shared/leadFiles";
-import { BEST_TIMES, PROJECT_LABEL_LOOKUP } from "@/shared/quoteFormChoices";
+import { BEST_TIMES } from "@/shared/quoteFormChoices";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { StoredEstimate } from "@/shared/estimateEngine";
 import { FINISH_LABELS, PROJECT_LABELS, formatPlanningCurrency } from "@/shared/estimateEngine";
 import { DisplayNum } from "@/components/marketing/DisplayNum";
 import { CTA_FORM_CALLBACK, CTA_FORM_SEND } from "@/shared/ctaCopy";
-import { BusinessPhoneContact } from "@/components/BusinessPhoneContact";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { trackEvent, trackClaimedLeadConversion } from "@/lib/analytics";
 import { readStoredPrefill, PREFILL_UPDATED_EVENT, hasPassedGate } from "@/lib/leadPrefill";
@@ -35,32 +33,38 @@ import { AppFrame } from "@/components/estimate/wizard";
 
 /**
  * THE QUOTE FORM, in two steps (owner, 1 November: "the easiest user
- * experience possible ... the more information we have, the better"; owner,
- * 11 November, after a client found a family form confusing because "it just
- * kept asking more questions": nothing optional is shown until asked for, and
- * the steps line above the form says plainly where the visitor is,
- * components/quote/QuoteSteps.tsx).
+ * experience possible"; owner, 11 November, twice: nothing optional is shown
+ * until asked for, and then "it cannot look cluttered. It needs to look very
+ * clean"). The form area holds fields, one button and two quiet lines, and
+ * nothing else: no step indicator, no tabs, no footnote, no boxes.
  *
- * Step 1, "Your request": only what we need to call back, in order.
- *   [Send a request | Have us call you]  (quiet underline tabs)
+ * Step 1, top to bottom:
+ *   the heading
  *   What can we help with?
- *   Your name, Phone
- *   "Add an email or choose how we reach you (optional)": ONE closed dropdown
- *     holding Email and How should we reach you (Call, Text, Email; Text by
- *     default because the site has a text line). Its fields stay in the form
- *     while it is closed, so the request posts the same fields and defaults.
- *   Send my request, then one line: that is all we need.
- *   Prefer to talk? Call, text, chat  (one quiet line of links)
- * "Have us call you" reduces it to name, phone and an optional best time, and
- * posts through the same /api/consultation pipeline with requestKind
- * "callback"; the server writes the callback marker into the notes every
- * destination stores (server/services/consultationRequest.ts).
+ *   Your name, Phone  (side by side from 640px)
+ *   "Add address, email or contact preference (optional)": ONE quiet text
+ *     toggle (a native details with no box) holding an optional Project
+ *     address (a new build often has none yet), Email and How should we reach you
+ *     (Call, Text, Email; Text by default because the site has a text line).
+ *     Its fields stay in the form while it is closed, so the request posts
+ *     the same fields and defaults.
+ *   Send my request
+ *   "Prefer to talk? Call (number) or have us call you."
+ *   "No obligation." and the privacy policy link
+ * "Have us call you" is the callback mode: the same two native radios as
+ * before ("Send a request" | "Have us call you", same names and test ids),
+ * drawn as one inline text link. Only the mode you are not in is visible; the
+ * checked one stays in the page for assistive technology. Callback mode asks
+ * for name, phone and a best time, and posts through the same
+ * /api/consultation pipeline with requestKind "callback"; the server writes
+ * the callback marker into the notes every destination stores
+ * (server/services/consultationRequest.ts).
  *
- * Step 2, on the success screen: the confirmation that the request is sent and
- * nothing else is needed, then ONE closed dropdown, "Add photos, plans or
- * project details (optional)", that adds project type, build site, timing,
- * best time, files and (if missing) email to the SAME request
- * (components/quote/QuoteDetailsStep.tsx).
+ * Step 2, on the success screen: a tick, "Thanks, {first name}. We have your
+ * request.", one sentence ending "Nothing else is needed.", then the same
+ * quiet toggle, "Add photos, plans or details (optional)", that adds project
+ * type, build site, timing, best time, files and (if missing) email to the
+ * SAME request (components/quote/QuoteDetailsStep.tsx).
  *
  * Files are added on Step 2 only, after the lead is accepted: each file is
  * uploaded on its own (/api/consultation/files) and its link is sent to the
@@ -103,7 +107,7 @@ const formSchema = z
     callback: z.boolean(),
     bestTimeToCall: z.string(),
     projectType: z.string(),
-    address: z.string().max(300),
+    address: z.string().max(300, "Please keep the address under 300 characters."),
   })
   .superRefine((data, ctx) => {
     const issue = (path: string, message: string) =>
@@ -135,7 +139,7 @@ type FormData = z.infer<typeof formSchema>;
 type FieldName = keyof FormData;
 
 /** Field order, so the first error on submit is the first one on screen. */
-const FIELD_ORDER: FieldName[] = ["message", "name", "phone", "email", "preferredContact"];
+const FIELD_ORDER: FieldName[] = ["message", "name", "phone", "address", "email", "preferredContact"];
 
 function readDraft(): Partial<FormData> {
   try {
@@ -168,6 +172,7 @@ function clearDraft() {
 
 export interface QuoteRequestWizardProps {
   onRevise?: () => void;
+  /** Set by the consultation dialog, whose own title is the one heading. */
   showTrust?: boolean;
   /** AppFrame full-screen page for /estimate; embedded for the home and contact pages. */
   mode?: "app" | "embedded";
@@ -195,27 +200,19 @@ function toneClasses(tone: Tone) {
         ? "border-inverse-foreground/30 text-inverse-foreground peer-checked:border-[#fbfaf6] peer-checked:bg-[#fbfaf6] peer-checked:text-[#2c302f] peer-focus-visible:ring-[#e3c08d] peer-focus-visible:ring-offset-[#2c302f]"
         : "border-border text-foreground peer-checked:border-foreground peer-checked:bg-foreground peer-checked:text-background peer-focus-visible:ring-ring",
     ),
-    // The "Send a request" | "Have us call you" switch: quiet underline tabs. As
-    // filled pills, the active one looked exactly like the send button.
-    tab: cn(
-      "flex min-h-12 cursor-pointer items-center justify-center border-b-2 px-1.5 text-center text-[0.9375rem] font-medium transition-colors",
-      "peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2",
+    // The one quiet text toggle that holds everything optional: a line of muted
+    // text with a small plus, no border, no background, no box.
+    toggle: cn(
+      "inline-flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-sm text-[0.875rem] focus-visible:outline-none focus-visible:ring-2 [&::-webkit-details-marker]:hidden",
       inverse
-        ? "border-inverse-foreground/20 text-inverse-muted hover:text-inverse-foreground peer-checked:border-inverse-foreground peer-checked:text-inverse-foreground peer-focus-visible:ring-[#e3c08d] peer-focus-visible:ring-offset-[#2c302f]"
-        : "border-foreground/20 text-muted-foreground hover:text-foreground peer-checked:border-foreground peer-checked:text-foreground peer-focus-visible:ring-ring",
-    ),
-    // A closed-by-default dropdown that holds everything optional.
-    disclosure: cn("group rounded-sm border", inverse ? "border-inverse-foreground/30" : "border-foreground/30"),
-    summary: cn(
-      "flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 rounded-sm px-3 py-2 text-[0.9375rem] font-medium leading-snug focus-visible:outline-none focus-visible:ring-2 [&::-webkit-details-marker]:hidden",
-      inverse
-        ? "text-inverse-foreground hover:bg-inverse-foreground/[0.06] focus-visible:ring-[#e3c08d]"
-        : "text-foreground hover:bg-foreground/[0.04] focus-visible:ring-ring",
+        ? "text-inverse-muted hover:text-inverse-foreground focus-visible:ring-[#e3c08d]"
+        : "text-muted-foreground hover:text-foreground focus-visible:ring-ring",
     ),
     link: cn(
-      "py-2 font-medium underline underline-offset-4 hover:no-underline",
+      "cursor-pointer underline underline-offset-4 hover:no-underline",
       inverse ? "text-inverse-foreground decoration-inverse-foreground/40" : "text-foreground decoration-foreground/30",
     ),
+    small: cn("text-[0.875rem] leading-7", inverse ? "text-inverse-muted" : "text-muted-foreground"),
     rule: inverse ? "border-inverse-foreground/15" : "border-border",
     muted: inverse ? "text-inverse-muted" : "text-muted-foreground",
     text: inverse ? "text-inverse-foreground" : "text-foreground",
@@ -266,14 +263,16 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
   // with the server HTML on every load. One instance per surface: the /estimate page,
   // the in-page form (home or contact) and the consultation dialog.
   const uid = mode === "app" ? "app" : _showTrust ? "dialog" : "page";
+  // The dialog's title is the one heading there; the form does not add a second.
+  const inDialog = uid === "dialog";
   const ids = {
     heading: `quote-form-heading-${uid}`,
     name: `quote-name-${uid}`,
     phone: `quote-phone-${uid}`,
     message: `quote-message-${uid}`,
     email: `quote-email-${uid}`,
+    address: `quote-address-${uid}`,
     best: `quote-best-${uid}`,
-    next: `quote-next-${uid}`,
   };
   const formId = mode === "app" ? FORM_ID : `${FORM_ID}-${uid}`;
 
@@ -334,7 +333,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     if (draft.preferredContact) setValue("preferredContact", draft.preferredContact, { shouldValidate: false });
     if (draft.callback) setValue("callback", true, { shouldValidate: false });
     // Anything already entered in the optional dropdown is shown, never hidden.
-    if (draft.email || (draft.preferredContact && draft.preferredContact !== DEFAULT_CONTACT)) setOptionsOpen(true);
+    if (draft.address || draft.email || (draft.preferredContact && draft.preferredContact !== DEFAULT_CONTACT)) setOptionsOpen(true);
   }, [setValue]);
 
   useEffect(() => {
@@ -355,7 +354,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
       fillIfEmpty("name", pf.name);
       fillIfEmpty("phone", pf.phone);
       fillIfEmpty("email", pf.email);
-      if (getValues("email")) setOptionsOpen(true);
+      if (getValues("email") || getValues("address")) setOptionsOpen(true);
       if (pf.address && !getValues("address")) setValue("address", pf.address, { shouldValidate: false });
     }
     applyPrefill();
@@ -587,11 +586,11 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
     if (!first) return;
     // Email and the reach choice sit in the optional dropdown: open it so the
     // field can take focus (the focus is applied again after the render).
-    if (first === "email" || first === "preferredContact") setOptionsOpen(true);
+    if (first === "address" || first === "email" || first === "preferredContact") setOptionsOpen(true);
     const target =
       first === "preferredContact"
         ? document.querySelector<HTMLInputElement>(`#${formId} input[name="preferredContact"]:checked`)
-        : document.getElementById(ids[first as "name" | "phone" | "message" | "email"]);
+        : document.getElementById(ids[first as "name" | "phone" | "message" | "email" | "address"]);
     target?.focus();
   }
 
@@ -638,83 +637,35 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
 
   const successBlock = (
     <div className="flex flex-col items-start space-y-4 py-2" data-testid="consultation-success" data-clarity-mask="True" data-quote-follow-up="" data-family-bar-yield="">
-      <QuoteSteps sent tone={tone} />
-      <div>
-        <h2
-          ref={successHeadingRef}
-          tabIndex={-1}
-          data-clarity-mask="True"
-          className={cn("flex items-start gap-3 font-serif text-2xl outline-none", t.text)}
+      <h2
+        ref={successHeadingRef}
+        tabIndex={-1}
+        data-clarity-mask="True"
+        className={cn("flex items-start gap-3 font-serif text-2xl outline-none", t.text)}
+      >
+        <span
+          className={cn(
+            "mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-sm",
+            tone === "inverse" ? "bg-[#fbfaf6] text-[#2c302f]" : "bg-foreground text-background",
+          )}
+          aria-hidden="true"
         >
-          <span
-            className={cn(
-              "mt-0.5 flex h-7 w-7 flex-none items-center justify-center rounded-sm",
-              tone === "inverse" ? "bg-[#fbfaf6] text-[#2c302f]" : "bg-foreground text-background",
-            )}
-            aria-hidden="true"
-          >
-            <Check className="h-4 w-4" />
+          <Check className="h-4 w-4" />
+        </span>
+        <span>Thanks{firstName ? `, ${firstName}` : ""}. We have your request.</span>
+      </h2>
+      {/* One sentence: what happens next, and that nothing else is needed. */}
+      <p className={t.small} data-testid="quote-all-set">
+        {submitted?.callback ? (
+          <span data-testid="consultation-success-callback">
+            We will call you at <span data-clarity-mask="True">{submitted.phone}</span>
+            {submitted.bestTimeToCall ? ` (${submitted.bestTimeToCall.toLowerCase()} works best)` : ""}.
           </span>
-          <span>Thanks{firstName ? `, ${firstName}` : ""}. We have your request.</span>
-        </h2>
-        {submitted && !submitted.callback && submitted.projectType && (
-          <p className={cn("mt-1 text-sm", t.muted)} data-clarity-mask="True">
-            {PROJECT_LABEL_LOOKUP[submitted.projectType] ?? PROJECT_LABELS[submitted.projectType as keyof typeof PROJECT_LABELS]?.label ?? submitted.projectType}
-            {submitted.address ? ` · ${submitted.address}` : ""}
-          </p>
-        )}
-      </div>
-      {submitted?.callback ? (
-        <p className={cn("text-sm", t.muted)} data-testid="consultation-success-callback">
-          We will call you at <span data-clarity-mask="True">{submitted.phone}</span>
-          {submitted.bestTimeToCall ? ` (${submitted.bestTimeToCall.toLowerCase()} works best)` : ""}. We will answer your questions and help you work out
-          the next step.
-        </p>
-      ) : (
-        <div className="grid gap-2.5">
-        <p id={`${ids.next}-list`} className={cn("text-[0.9375rem] font-medium", t.text)}>
-          What happens next
-        </p>
-        <ol className={cn("space-y-2.5 text-sm", t.muted)} aria-labelledby={`${ids.next}-list`}>
-          {[
-            "We review your request and any planning range you attached.",
-            "We reach out to answer your questions and find a time that works.",
-            "Your free 60 to 90 minute planning consultation: planning guidance, design direction, no obligation.",
-          ].map((line, i) => (
-            <li key={line} className="flex gap-3">
-              <span
-                className={cn(
-                  "flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border text-caption font-normal",
-                  t.rule,
-                  t.text,
-                )}
-              >
-                {i + 1}
-              </span>
-              <span className="pt-0.5">{line}</span>
-            </li>
-          ))}
-        </ol>
-        </div>
-      )}
-      <p className={cn("text-[0.9375rem] font-medium", t.text)} data-testid="quote-all-set">
-        You are all set. Nothing else is needed.
+        ) : (
+          "We review your request and reach out to answer your questions."
+        )}{" "}
+        Nothing else is needed.
       </p>
-      <div className="flex flex-col gap-1">
-        <p className={cn("text-sm", t.muted)}>
-          Need us sooner?{" "}
-          <BusinessPhoneContact
-            inline
-            showPhoneIcon
-            phoneClassName={cn("inline-flex items-center gap-1.5 font-normal underline-offset-2 hover:underline", t.text)}
-            saveClassName={cn("text-sm transition-colors", t.muted)}
-            phoneTestId="link-consult-success-phone"
-          />
-        </p>
-        {submitted?.email && !submitted.callback && (
-          <p className={cn("text-xs", t.muted)}>Your request is saved. A confirmation email should follow at the address you gave.</p>
-        )}
-      </div>
       {auth && (
         <QuoteDetailsStep
           tone={tone}
@@ -730,6 +681,13 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
           saveDetails={(fields, ids) => sendDetails(fields, ids)}
         />
       )}
+      <p className={t.small}>
+        Prefer to talk?{" "}
+        <a href={SITE_CONFIG.phoneHref} className={t.link} data-testid="link-consult-success-phone">
+          Call {SITE_CONFIG.phone}
+        </a>
+        .
+      </p>
     </div>
   );
 
@@ -739,69 +697,70 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
 
   const projectLabel = estimate?.project ? PROJECT_LABELS[estimate.project]?.label : null;
   const finishLabel = estimate?.finish ? FINISH_LABELS[estimate.finish]?.label : null;
-  const nextLine = callback
-    ? "We call you back during business hours."
-    : "That is all we need. You can add photos or plans after you send.";
+  const modeOptions = [
+    { value: false, label: "Send a request", text: "Send a request", testId: "request-mode-quote" },
+    { value: true, label: "Have us call you", text: "have us call you", testId: "request-mode-callback" },
+  ] as const;
+  const modeRadio = (option: (typeof modeOptions)[number]) => {
+    const active = callback === option.value;
+    return (
+      // The mode you are in stays in the page, checked, for assistive technology;
+      // only the other one shows, as a plain text link.
+      // data-clarity-mask is rendered here because the beforeInteractive Clarity masker
+      // (lib/clarityFormMask) marks a label that wraps an input; without it, hydration
+      // reports an attribute mismatch.
+      <label key={option.testId} className={active ? "sr-only" : cn("relative inline-block", t.link)} data-testid={option.testId} data-clarity-mask="True">
+        <input
+          type="radio"
+          name={`${formId}-mode`}
+          value={option.value ? "callback" : "quote"}
+          checked={active}
+          onChange={() => setCallback(option.value)}
+          aria-label={option.label}
+          className="sr-only"
+        />
+        {option.text}
+      </label>
+    );
+  };
 
-  // The site assistant is not mounted on /estimate (AssistantWidget), so chat is offered
-  // only where it can open.
-  const chatAvailable = mode !== "app";
-
-  /** Prefer to talk? One quiet line of links under the send button, never a second set of buttons. */
-  const talkPanel = (
-    <p className={cn("text-[0.875rem] leading-relaxed", t.muted)} data-testid="quote-talk-options">
-      Prefer to talk?{" "}
-      <a href={SITE_CONFIG.phoneHref} className={t.link} data-testid="link-quote-call">
-        Call {SITE_CONFIG.phone}
-      </a>
-      {chatAvailable ? ", " : " or "}
-      <a href={SITE_CONFIG.phoneSmsHref} className={t.link} aria-label={`Text us at ${SITE_CONFIG.phone}`} data-testid="link-quote-text">
-        text us
-      </a>
-      {chatAvailable && (
+  /**
+   * The one line under the send button: "Prefer to talk? Call (number) or have
+   * us call you." It carries the "Send a request" | "Have us call you" radios,
+   * the same controls the tabs were.
+   */
+  const talkLine = (
+    <fieldset
+      className={cn(
+        "min-w-0 rounded-sm has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-offset-2",
+        t.small,
+        tone === "inverse" ? "has-[input:focus-visible]:ring-[#e3c08d] has-[input:focus-visible]:ring-offset-[#2c302f]" : "has-[input:focus-visible]:ring-ring",
+      )}
+      data-testid="quote-request-mode"
+    >
+      <legend className="sr-only">How would you like to reach us?</legend>
+      {callback ? (
         <>
+          Rather write it down? {modeRadio(modeOptions[0])}
+          {modeRadio(modeOptions[1])}
+        </>
+      ) : (
+        <>
+          Prefer to talk?{" "}
+          <a href={SITE_CONFIG.phoneHref} className={t.link} data-testid="link-quote-call">
+            Call {SITE_CONFIG.phone}
+          </a>
           {" or "}
-          <button
-            type="button"
-            className={t.link}
-            onClick={() => window.dispatchEvent(new Event("p5:assistant-open"))}
-            data-testid="button-quote-chat"
-          >
-            chat
-          </button>
+          {modeRadio(modeOptions[1])}.{modeRadio(modeOptions[0])}
         </>
       )}
-      .
-    </p>
-  );
-
-  /** "Send a request" | "Have us call you", directly under the heading. */
-  const modeControl = (
-    <fieldset className="grid" data-testid="quote-request-mode">
-      <legend className="sr-only">How would you like to reach us?</legend>
-      <div className="grid grid-cols-2">
-        {([
-          { value: false, label: "Send a request", testId: "request-mode-quote" },
-          { value: true, label: "Have us call you", testId: "request-mode-callback" },
-        ] as const).map((option) => (
-          <label key={option.testId} className="relative" data-testid={option.testId}>
-            <input
-              type="radio"
-              name={`${formId}-mode`}
-              value={option.value ? "callback" : "quote"}
-              checked={callback === option.value}
-              onChange={() => setCallback(option.value)}
-              className="peer sr-only"
-            />
-            <span className={t.tab}>{option.label}</span>
-          </label>
-        ))}
-      </div>
     </fieldset>
   );
 
-  const submitBlock = (
-    <div className="grid gap-2">
+  // The one send button, then the two quiet lines. On /estimate all three sit
+  // in the frame's pinned footer.
+  const sendArea = (
+    <div className={cn("grid gap-3", mode === "app" && "text-center")}>
       <Button
         type={hydrated ? "submit" : "button"}
         form={formId}
@@ -809,7 +768,6 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         variant="brand"
         disabled={mutation.isPending}
         aria-busy={mutation.isPending}
-        aria-describedby={ids.next}
         className="min-h-12 w-full text-base"
         data-testid="button-send-request"
       >
@@ -824,32 +782,23 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
           CTA_FORM_SEND
         )}
       </Button>
-      <p id={ids.next} className={cn("text-center text-[0.8125rem]", t.muted)}>
-        {nextLine}
+      {talkLine}
+      <p className={t.small}>
+        No obligation.{" "}
+        {/* A new tab, so reading the policy never costs the visitor what they typed. */}
+        <a href="/privacy-policy" target="_blank" rel="noopener" className={t.link}>
+          Privacy policy
+        </a>
       </p>
-    </div>
-  );
-
-  // The one send button, then the quiet talk line under it. On /estimate both sit
-  // in the frame's pinned footer.
-  const sendArea = (
-    <div className={mode === "embedded" ? cn("grid gap-4 border-t pt-4", t.rule) : "grid gap-1.5 text-center"}>
-      {submitBlock}
-      {talkPanel}
     </div>
   );
 
   const body = (
     <div className="grid gap-4">
-      {mode === "embedded" && (
+      {mode === "embedded" && !inDialog && (
         <h2 id={ids.heading} tabIndex={-1} className={cn("font-serif text-[1.75rem] leading-tight outline-none", t.text)} data-quote-form-heading="">
           {callback ? "Request a call" : "Request a quote"}
         </h2>
-      )}
-      <QuoteSteps sent={false} tone={tone} />
-      {modeControl}
-      {callback && (
-        <p className={cn("text-[0.9375rem]", t.muted)}>Leave your name and number and we will call you.</p>
       )}
 
       {mutation.isError && (
@@ -876,7 +825,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
               aria-invalid={errors.message ? true : undefined}
               aria-describedby={describedBy(ids.message, false, errors.message?.message)}
               placeholder="For example: a single-level custom home on land we own near Star, with a shop if the budget allows."
-              className={cn(t.control, "min-h-[7.5rem] py-2.5 leading-relaxed", errors.message && t.invalid)}
+              className={cn(t.control, "min-h-[6rem] py-2.5 leading-relaxed", errors.message && t.invalid)}
               data-testid="textarea-message"
               data-clarity-mask="True"
               {...register("message")}
@@ -885,6 +834,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         </>
       )}
 
+      <div className="grid gap-4 sm:grid-cols-2">
       <Field id={ids.name} label="Your name" error={errors.name?.message} tone={tone}>
         <input
           id={ids.name}
@@ -923,6 +873,7 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
           {...register("phone")}
         />
       </Field>
+      </div>
 
       {callback ? (
         <Field id={ids.best} label="Best time to call" optional tone={tone}>
@@ -943,21 +894,42 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
         </Field>
       ) : (
         <>
-          {/* Everything optional lives in this one closed dropdown. Its fields stay
+          {/* Everything optional lives behind this one quiet text toggle. Its fields stay
               registered while it is closed, so the request posts the same values. */}
           <details
-            className={t.disclosure}
+            className="group"
             open={optionsOpen}
             onToggle={(event) => setOptionsOpen(event.currentTarget.open)}
             data-testid="quote-options"
           >
-            <summary className={t.summary}>
-              <span>
-                Add an email or choose how we reach you <span className={cn("font-normal", t.muted)}>(optional)</span>
-              </span>
-              <ChevronDown className="h-5 w-5 flex-none transition-transform group-open:rotate-180" aria-hidden="true" />
+            <summary className={t.toggle}>
+              <Plus className="h-4 w-4 flex-none transition-transform group-open:rotate-45" aria-hidden="true" />
+              Add address, email or contact preference (optional)
             </summary>
-            <div className={cn("grid gap-4 border-t p-3", tone === "inverse" ? "border-inverse-foreground/20" : "border-foreground/20")}>
+            <div className="grid gap-4 pt-2">
+          {/* Optional, first in the toggle (owner, 11 November): a new build often has no
+              address yet. Never required; it posts in the address field the request has
+              always carried, and Step 2 asks for it only when this is blank. */}
+          <Field
+            id={ids.address}
+            label="Project address"
+            hint="Leave blank if you do not have one yet."
+            error={errors.address?.message}
+            tone={tone}
+          >
+            <input
+              id={ids.address}
+              type="text"
+              autoComplete="street-address"
+              maxLength={300}
+              aria-invalid={errors.address ? true : undefined}
+              aria-describedby={describedBy(ids.address, true, errors.address?.message)}
+              className={cn(t.control, "h-12", errors.address && t.invalid)}
+              data-testid="input-project-address"
+              data-clarity-mask="True"
+              {...register("address")}
+            />
+          </Field>
           <Field
             id={ids.email}
             label="Email"
@@ -1009,27 +981,19 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
           </details>
 
           {estimate && attached && (
-            <div className="flex items-center justify-between gap-2 text-xs" data-testid="text-estimate-summary">
-              <span className={t.muted}>
-                Range attached:{" "}
-                <span className={t.text} data-testid="text-estimate-range">
-                  <DisplayNum>
-                    {formatPlanningCurrency(estimate.priceLow)} to {formatPlanningCurrency(estimate.priceHigh)}
-                  </DisplayNum>
-                </span>
-                {projectLabel ? ` · ${projectLabel}` : ""}
-                {finishLabel ? ` · ${finishLabel}` : ""}
+            <p className={t.small} data-testid="text-estimate-summary">
+              Range attached:{" "}
+              <span data-testid="text-estimate-range">
+                <DisplayNum>
+                  {formatPlanningCurrency(estimate.priceLow)} to {formatPlanningCurrency(estimate.priceHigh)}
+                </DisplayNum>
               </span>
-              <button
-                type="button"
-                onClick={() => setAttached(false)}
-                className={cn("inline-flex min-h-12 flex-shrink-0 items-center gap-1", t.muted)}
-                data-testid="button-drop-estimate"
-              >
-                <X className="h-3.5 w-3.5" aria-hidden="true" />
+              {projectLabel ? ` · ${projectLabel}` : ""}
+              {finishLabel ? ` · ${finishLabel}` : ""}.{" "}
+              <button type="button" onClick={() => setAttached(false)} className={t.link} data-testid="button-drop-estimate">
                 Remove
               </button>
-            </div>
+            </p>
           )}
         </>
       )}
@@ -1068,8 +1032,8 @@ export function QuoteRequestWizard({ onRevise: _onRevise, showTrust: _showTrust 
           void onSubmit(event);
         }}
         onFocusCapture={trackFormStart}
-        aria-labelledby={mode === "embedded" ? ids.heading : undefined}
-        aria-label={mode === "app" ? "Request a quote" : undefined}
+        aria-labelledby={mode === "embedded" && !inDialog ? ids.heading : undefined}
+        aria-label={mode === "app" || inDialog ? (callback ? "Request a call" : "Request a quote") : undefined}
         data-testid="consultation-wizard"
         data-step="project"
         data-request-kind={callback ? "callback" : "quote"}

@@ -77,6 +77,9 @@ body:has([data-family-bar][data-state='hidden']) .home-hero {
   }
   .interior-contact-grid.quote-form-first > [data-quote-anchor] {
     order: -1;
+    /* The grid's align-items:start would shrink the form card to its widest line of
+       text; the card always takes the full column. */
+    align-self: stretch;
   }
   .interior-contact-grid.quote-form-first > .interior-contact-intro {
     margin-bottom: 0;

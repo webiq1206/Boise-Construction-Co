@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { ChevronDown, Loader2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AddressAutocomplete } from "@/components/AddressAutocomplete";
 import { trackEvent } from "@/lib/analytics";
@@ -12,14 +12,15 @@ import type { PropertyProfile } from "@/shared/propertyProfile";
 import { AttachmentTile, useLeadFiles, type PendingLeadFile } from "@/components/quote/LeadAttachments";
 
 /**
- * Step 2, on the success screen, below the confirmation: ONE closed dropdown,
- * "Add photos, plans or project details (optional)". It used to sit open under
- * the confirmation as "Help us prepare", and a client on a family site read it
- * as the form asking for more before the request counted (owner, 11 November).
- * Leaving it closed is skipping, so there is no Skip button. Every field is
- * optional and native; nothing Step 1 already has is asked again. Saving posts
- * to /api/consultation/details, which merges into the SAME request and tells
- * the team (email, lead dashboard, P5 intake).
+ * Step 2, on the success screen, below the confirmation: ONE quiet text toggle
+ * (a native details with no box), "Add photos, plans or details (optional)".
+ * It used to sit open under the confirmation as "Help us prepare", and a
+ * client on a family site read it as the form asking for more before the
+ * request counted (owner, 11 November). Leaving it closed is skipping, so
+ * there is no Skip button. Every field is optional and native; nothing Step 1
+ * already has is asked again. Saving posts to /api/consultation/details, which
+ * merges into the SAME request and tells the team (email, lead dashboard, P5
+ * intake).
  *
  * Analytics: `lead_details_added` once per save, with field names and a file
  * count only. No contact details, and never a second generate_lead.
@@ -87,7 +88,7 @@ export function QuoteDetailsStep({
 
   if (state === "saved") {
     return (
-      <div className={cn("w-full border-t pt-4", inverse ? "border-inverse-foreground/15" : "border-border")} data-testid="quote-details-step">
+      <div className="w-full" data-testid="quote-details-step">
         <p className={cn("text-[0.9375rem] font-medium", text)} role="status" data-testid="quote-details-saved">
           Saved. Thank you.
         </p>
@@ -159,39 +160,30 @@ export function QuoteDetailsStep({
 
   return (
     <section
-      className={cn("w-full border-t pt-5", inverse ? "border-inverse-foreground/15" : "border-border")}
+      className="w-full"
       aria-labelledby={`quote-details-heading-${uid}`}
       data-testid="quote-details-step"
     >
-      <details
-        className={cn("group rounded-sm border", inverse ? "border-inverse-foreground/30" : "border-foreground/30")}
-        data-testid="quote-details-disclosure"
-      >
+      <details className="group" data-testid="quote-details-disclosure">
         <summary
+          id={`quote-details-heading-${uid}`}
           className={cn(
-            "flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 rounded-sm px-3 py-2 focus-visible:outline-none focus-visible:ring-2 [&::-webkit-details-marker]:hidden",
-            inverse ? "hover:bg-inverse-foreground/[0.06] focus-visible:ring-[#e3c08d]" : "hover:bg-foreground/[0.04] focus-visible:ring-ring",
+            "inline-flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-sm text-[0.875rem] focus-visible:outline-none focus-visible:ring-2 [&::-webkit-details-marker]:hidden",
+            inverse ? "text-inverse-muted hover:text-inverse-foreground focus-visible:ring-[#e3c08d]" : "text-muted-foreground hover:text-foreground focus-visible:ring-ring",
           )}
         >
-          {/* A heading by role, not an h3 element: the site's heading styles (serif display type) are
-              keyed to the element, and this label has to read as a control. */}
-          <span id={`quote-details-heading-${uid}`} role="heading" aria-level={3} className={cn("text-[0.9375rem] font-medium leading-snug", text)}>
-            Add photos, plans or project details <span className={cn("font-normal", muted)}>(optional)</span>
-          </span>
-          <ChevronDown className={cn("h-5 w-5 flex-none transition-transform group-open:rotate-180", text)} aria-hidden="true" />
+          <Plus className="h-4 w-4 flex-none transition-transform group-open:rotate-45" aria-hidden="true" />
+          Add photos, plans or details (optional)
         </summary>
       <form
         noValidate
-        className={cn("grid gap-4 border-t p-3", inverse ? "border-inverse-foreground/20" : "border-foreground/20")}
+        className="grid gap-4 pt-2"
         onSubmit={(event) => {
           event.preventDefault();
           void onSave();
         }}
         data-clarity-mask="True"
       >
-        <p className={cn("text-[0.9375rem]", muted)}>
-          Answer any of these, or none. Each one helps us give you a closer quote on the first call.
-        </p>
         {ask.projectType && (
           <Group legend="What are you planning?" className={label}>
             <div className="grid grid-cols-2 gap-2">

@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -20,14 +19,13 @@ const ConsultationForm = dynamic(
 export function ConsultDialog({ open, onClose, onRevise }: { open: boolean; onClose: () => void; onRevise: () => void }) {
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="max-w-lg w-[95vw] max-h-[90vh] overflow-y-auto">
+      {/* One heading: the dialog's title. The form inside adds no second heading
+          (showTrust marks the dialog instance), and there is no helper line above it. */}
+      <DialogContent className="max-w-lg w-[95vw] max-h-[90vh] overflow-y-auto" aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle className="font-sans font-light text-xl text-foreground">
-            Schedule your free in-home visit
+          <DialogTitle className="font-serif text-[1.75rem] font-normal leading-tight text-foreground">
+            Request a quote
           </DialogTitle>
-          <DialogDescription className="text-sm text-muted-foreground">
-            No obligation - we&apos;ll walk your space and give you an honest planning range.
-          </DialogDescription>
         </DialogHeader>
         <ConsultationForm onRevise={onRevise} showTrust />
       </DialogContent>
