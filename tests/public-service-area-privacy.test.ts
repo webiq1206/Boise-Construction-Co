@@ -74,7 +74,7 @@ test('a generated interior hero retains its meaningful image without an extra la
     imageSrc: src, imageAlt: contentImageAlt(src), children: 'Plan your home',
   }));
   assert.match(markup, /src="\/images\/construction\/custom-home-exterior.webp"/);
-  assert.match(markup, /alt="White board-and-batten house with a dark gable roof and a covered front porch"/);
+  assert.match(markup, /alt="Two-story house with dark vertical siding, a wood-clad entry and a three-car garage, with dry foothills behind"/);
   assert.match(markup, /Plan your home/);
   assert.doesNotMatch(markup, PRESENTATION_NOTE);
   assert.doesNotMatch(markup, /interior-hero-image-label/);

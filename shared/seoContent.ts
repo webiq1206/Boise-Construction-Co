@@ -1020,7 +1020,7 @@ export function getCityServiceSections(
         caption:
           city.slug === 'eagle'
             ? `Mountain-modern charcoal stucco and ledgestone exterior for ${serviceLC} in ${city.name}.`
-            : `Home exterior with board-and-batten siding and a covered porch.`,
+            : `Home exterior with dark vertical siding and a wood-clad entry.`,
       },
     },
     {

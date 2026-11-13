@@ -17,7 +17,7 @@ test('architectural images keep descriptive alt text without presentation discla
   );
   assert.equal(
     contentImageAlt('/images/construction/great-room-evening.webp'),
-    'Living room with a stone fireplace, wood ceiling beams, and large windows at dusk',
+    'Living room with a gray sofa, a low fireplace in a pale stone wall, large windows onto a back yard and a kitchen island behind',
   );
   assert.equal(contentImageAlt('/family/p5-p5-construction-branded.webp'), framing);
   const roughIn = 'Mechanical rough-in with pipes and wiring inside framed walls';

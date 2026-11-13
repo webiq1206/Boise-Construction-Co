@@ -10,12 +10,12 @@
  */
 const ALTS: Record<string, string> = {
   "/images/construction/custom-home-exterior.webp":
-    "White board-and-batten house with a dark gable roof and a covered front porch",
+    "Two-story house with dark vertical siding, a wood-clad entry and a three-car garage, with dry foothills behind",
   // Not the same picture as /images/construction/custom-home-exterior.webp above.
   "/family/construction-custom-home-exterior.webp":
     "Mountain-modern home with charcoal stucco, ledgestone and a dark metal roof",
   "/images/construction/semi-custom-home.webp":
-    "Single-story blue-gray house with white trim, a small covered entry and an attached garage",
+    "Single-story house with white siding, a dark gable bay, a small covered entry and an attached garage",
   "/images/construction/home-under-framing.webp":
     "Wood-framed house with roof trusses in place and stacked lumber on a gravel lot",
   "/images/construction/foundation-and-excavation.webp":
@@ -23,9 +23,9 @@ const ALTS: Record<string, string> = {
   "/images/construction/new-home-kitchen.webp":
     "Kitchen with white cabinets, a wood island, and a light tile backsplash",
   "/images/construction/new-home-interior.webp":
-    "Open living area with a wood ceiling, stone fireplace, and windows along one wall",
+    "Empty great room with a vaulted ceiling, a linear fireplace in a plaster wall, light wood floors and tall windows onto dry hills",
   "/images/construction/covered-outdoor-living.webp":
-    "Covered outdoor patio with a wood ceiling, dining table, and kitchen counter beside a house",
+    "Covered patio with a wood ceiling on black steel posts, a dining table and a built-in grill counter beside a house",
   "/images/construction/site-meeting.webp":
     "Three people in hard hats standing outdoors reviewing a drawing, with a framed house behind them",
   "/images/construction/foothills-building-site.webp":
@@ -39,7 +39,7 @@ const ALTS: Record<string, string> = {
   "/images/construction/rural-site-work.webp":
     "Rural dirt work site with a trench, excavated soil, a yellow excavator, and a well-drilling rig",
   "/images/construction/shop-home-barndominium.webp":
-    "Metal building with a large shop bay and an attached living wing on a rural lot",
+    "Dark metal building with two tall shop doors and an attached living wing on a rural lot",
   "/images/construction/insulation-and-air-sealing.webp":
     "Wall studs filled with insulation and sealed at the edges before drywall",
   "/images/construction/mechanical-rough-in.webp":
@@ -47,9 +47,9 @@ const ALTS: Record<string, string> = {
   "/family/construction-mechanical-rough-in.webp":
     "Mechanical rough-in with pipes and wiring inside framed walls",
   "/images/construction/great-room-evening.webp":
-    "Living room with a stone fireplace, wood ceiling beams, and large windows at dusk",
+    "Living room with a gray sofa, a low fireplace in a pale stone wall, large windows onto a back yard and a kitchen island behind",
   "/family/construction-great-room-evening.webp":
-    "Living room with a stone fireplace, wood ceiling beams, and large windows at dusk",
+    "Living room with a gray sofa, a low fireplace in a pale stone wall, large windows onto a back yard and a kitchen island behind",
   "/images/framing-in-progress-branded.webp":
     "A worker kneeling beside interior wall framing on a plywood subfloor, with a drill and tape measure nearby",
   "/family/p5-p5-construction-branded.webp":
@@ -67,33 +67,33 @@ const ALTS: Record<string, string> = {
   "/images/areas/eagle.webp":
     "Single-story white stucco house with dark metal roofs and lit windows at dusk, set in gravel and ornamental grasses",
   "/images/areas/nampa.webp":
-    "Single-story red brick ranch house with a wide lawn and young trees",
+    "Single-story stucco house with a wood-clad entry and an attached garage on a new street, with open valley land behind",
   "/images/areas/kuna.webp":
     "Single-story gray stucco house with a dark metal roof and a wood-clad entry on open sagebrush land, with mountains behind",
   "/images/areas/star.webp":
     "Two-story house with dark vertical siding and a covered patio on a lawn beside a tree-lined river",
   "/images/areas/middleton.webp":
-    "A two-story house with light siding and a dark roof beside a lawn and sidewalk",
+    "Two-story house with light siding below and dark siding above, on a lawn beside open fields and a row of trees",
   "/images/areas/caldwell.webp":
-    "Stucco house with a tile roof beside a vineyard",
+    "Single-story stucco house with a dark garage bay, with vineyard rows on the slope behind",
   "/images/projects/eagle-farmhouse-exterior.webp":
-    "White board-and-batten modern farmhouse with a dark metal roof against dry Boise foothills",
+    "Single-story house with gray stucco, a wood-clad central gable and a dark metal roof, with dry foothills behind",
   "/images/projects/eagle-farmhouse-great-room.webp":
-    "Great room with wood beams, a stone fireplace, and black-framed glass looking to foothills",
+    "Great room with a vaulted ceiling, a linear fireplace, and black-framed sliding doors looking to foothills",
   "/images/projects/eagle-farmhouse-kitchen.webp":
     "Kitchen with white cabinets, a wood island, and a foothills view through a black-framed window",
   "/images/projects/eagle-farmhouse-bath.webp":
     "Primary bath with a freestanding tub beside a black-framed window overlooking foothills",
   "/images/projects/eagle-farmhouse-outdoor.webp":
-    "Covered outdoor patio with wood ceiling and black-framed doors facing the foothills",
+    "Covered back patio with a wood ceiling on black steel posts and sliding glass doors, with foothills behind the house",
   "/images/projects/meridian-ranch-exterior.webp":
     "Single-story house with dark horizontal siding, a light panel accent and an attached garage on a lawn",
   "/images/projects/meridian-ranch-living.webp":
-    "Bright living room with light floors, soft gray walls, and a stone fireplace",
+    "Living room with light floors, a low fireplace in a pale tiled wall, and windows onto a fenced back lawn",
   "/images/projects/meridian-ranch-kitchen.webp":
     "Open kitchen with white cabinets, pale counters, and a window to a suburban yard",
   "/images/projects/meridian-ranch-bath.webp":
-    "Hall bath with a light vanity, white tile shower, and frosted window",
+    "Hall bath with a light wood vanity, a white tiled tub and shower, and a frosted window",
   "/images/projects/eagle-mountain-modern/eagle-custom-home-front-exterior.webp":
     "Mountain-modern custom home with charcoal stucco, ledgestone, and dark standing-seam roof",
   "/images/projects/eagle-mountain-modern/eagle-custom-home-rear-patio.webp":
@@ -123,11 +123,11 @@ const ALTS: Record<string, string> = {
   "/images/projects/boise-craftsman-exterior.webp":
     "Two-story white stucco house with a dark siding accent, a wood-clad covered entry and an attached garage",
   "/images/projects/boise-craftsman-foyer.webp":
-    "Two-story foyer with a wood staircase, cream walls, and natural light from sidelights",
+    "Entry hall with a glass front door and sidelights, a wood slat wall, and a staircase with wood treads",
   "/images/projects/boise-craftsman-kitchen.webp":
-    "Craftsman kitchen with cream cabinets, a warm wood island, and pendant lights",
+    "Kitchen with light wood lower cabinets, white upper cabinets, an island with three stools, and a large window",
   "/images/projects/boise-craftsman-living.webp":
-    "Family room with a stacked-stone fireplace and hardwood floors",
+    "Family room with a linear fireplace in a white wall, a sofa and armchair, and tall windows onto trees",
 };
 
 export function contentImageAlt(src: string | undefined | null): string {

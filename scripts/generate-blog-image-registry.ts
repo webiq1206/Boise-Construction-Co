@@ -30,11 +30,11 @@ const area = (name: string) => `/images/areas/${name}.webp`;
 const LIBRARY = {
   customHome: {
     src: img('custom-home-exterior'),
-    alt: 'Newly completed custom home with board-and-batten siding and a covered porch on a Treasure Valley lot',
+    alt: 'Two-story house with dark vertical siding, a wood-clad entry and a three-car garage, with dry foothills behind',
   },
   semiCustom: {
     src: img('semi-custom-home'),
-    alt: 'Single-story blue-gray house with white trim, a small covered entry and an attached garage',
+    alt: 'Single-story house with white siding, a dark gable bay, a small covered entry and an attached garage',
   },
   framing: {
     src: img('home-under-framing'),
@@ -54,7 +54,7 @@ const LIBRARY = {
   },
   interior: {
     src: img('new-home-interior'),
-    alt: 'Finished great room in a new custom home with vaulted ceiling, stone fireplace, and foothills views',
+    alt: 'Empty great room in a newly finished home with a vaulted ceiling, a linear fireplace, light wood floors and tall windows onto dry hills',
   },
   kitchen: {
     src: img('new-home-kitchen'),
@@ -86,15 +86,15 @@ const LIBRARY = {
   },
   outdoor: {
     src: img('covered-outdoor-living'),
-    alt: 'Deep covered patio with a timber ceiling and outdoor kitchen attached to a newly built Idaho home',
+    alt: 'Covered patio with a wood ceiling on black steel posts, a dining table and a built-in grill counter beside a house',
   },
   shopHome: {
     src: img('shop-home-barndominium'),
-    alt: 'Shop home combining a finished living wing with an attached shop under one metal roof on Idaho acreage',
+    alt: 'Shop home with a living wing and two tall shop doors under one dark metal roof on a rural lot',
   },
   customHomeDusk: {
     src: img('custom-home-dusk-exterior'),
-    alt: 'Newly completed modern farmhouse custom home glowing at dusk on a Treasure Valley lot with the Boise foothills behind',
+    alt: 'Single-story house with white stucco walls, a wood-clad entry and a dark metal roof at dusk, with lit windows and dark foothills behind',
   },
   twoStory: {
     src: img('two-story-home-exterior'),
@@ -106,15 +106,15 @@ const LIBRARY = {
   },
   greatRoom: {
     src: img('great-room-evening'),
-    alt: 'Finished great room in a new Idaho home at dusk with a tile fireplace, beamed ceiling, and a steel-frame window wall',
+    alt: 'Living room with a gray sofa, a low fireplace in a pale stone wall, large windows onto a back yard and a kitchen island behind',
   },
   accessibleBath: {
     src: img('accessible-primary-bathroom'),
-    alt: 'Accessible primary bathroom in a new Idaho home with a curbless walk-in shower, fold-down bench, and a floating vanity',
+    alt: 'Accessible bathroom with a curbless walk-in shower, a fold-down bench, a grab bar and a floating vanity',
   },
   staircase: {
     src: img('staircase-foyer'),
-    alt: 'Finished entry staircase in a new Idaho home with white oak treads, black metal balusters, and a two-story foyer',
+    alt: 'Entry hall with a staircase with wood treads and a black metal railing, a black front door and a high window',
   },
   blueprints: {
     src: img('blueprints-drafting'),
@@ -190,15 +190,15 @@ const LIBRARY = {
   },
   middletonArea: {
     src: area('middleton'),
-    alt: 'White farmhouse with a wraparound porch on a Middleton, Idaho parcel surrounded by wheat fields at sunset',
+    alt: 'Two-story house with light siding below and dark siding above, on a lawn beside open fields and a row of trees',
   },
   nampaArea: {
     src: area('nampa'),
-    alt: 'Established brick ranch home on a landscaped corner lot in Nampa, Idaho with farmland behind',
+    alt: 'Single-story stucco house with a wood-clad entry and an attached garage on a new street, with open valley land behind',
   },
   caldwellArea: {
     src: area('caldwell'),
-    alt: 'Stucco custom home overlooking the vineyards of the Sunnyslope wine district near Caldwell, Idaho at sunset',
+    alt: 'Single-story stucco house with a dark garage bay, with vineyard rows on the slope behind',
   },
 } as const;
 

@@ -1,0 +1,302 @@
+[
+  {
+    "publicPath": "/images/construction/custom-home-exterior.webp",
+    "usedOn": "Services index lead card, custom home builder hero, areas index and contact heroes, city and service rotations, two blog heroes",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "60952c36b61b2f17706c3acf8fa3b31c59d4c896ef41b5e3f880f787f8d9057f",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Two-story house with dark vertical siding, a wood-clad entry and a three-car garage, with dry foothills behind",
+    "supersedes": {
+      "sha256": "89e8f0f2a49982b87f557b47ead21e254920f85c4b54f28eb36e862efc1e53d2",
+      "description": "White board-and-batten modern farmhouse with timber porch at golden hour; farmhouse style and golden glow"
+    }
+  },
+  {
+    "publicPath": "/images/construction/new-home-interior.webp",
+    "usedOn": "Breather band on most service pages, city rotations, one blog hero",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "51715a083cb8519faadf02237233348c13126be81e73fa14fd1b746dbd43c81b",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Empty great room with a vaulted ceiling, a linear fireplace in a plaster wall, light wood floors and tall windows onto dry hills",
+    "supersedes": {
+      "sha256": "afcd2e2f0fb96ecac5acc1dd4595ec1e991edf086008f49c82912c74e4fbcd69",
+      "description": "Great room with heavy timber trusses, gridded gable window and a rustic stacked stone fireplace; lodge style"
+    }
+  },
+  {
+    "publicPath": "/images/construction/great-room-evening.webp",
+    "usedOn": "Homepage semi-custom homes card, contact page statement band, two blog heroes, LocalBusiness schema image",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "b8aaadd7f83d92d0b60c88dbafa9395ea6c974ac20be8efb371c70c72fb04cb9",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Living room with a gray sofa, a low fireplace in a pale stone wall, large windows onto a back yard and a kitchen island behind",
+    "supersedes": {
+      "sha256": "864c60d8db2c7721f745542c6195ae175d16dfa40642df03cd9327225ce6ad40",
+      "description": "Dusk great room with fire glow, wood beams, lamp, plants and baskets (and, at hero-great-room, a staged room with potted plants); golden glow and staging"
+    }
+  },
+  {
+    "publicPath": "/family/construction-great-room-evening.webp",
+    "usedOn": "Homepage semi-custom homes card, contact page statement band, two blog heroes, LocalBusiness schema image",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "b8aaadd7f83d92d0b60c88dbafa9395ea6c974ac20be8efb371c70c72fb04cb9",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Living room with a gray sofa, a low fireplace in a pale stone wall, large windows onto a back yard and a kitchen island behind",
+    "supersedes": {
+      "sha256": "864c60d8db2c7721f745542c6195ae175d16dfa40642df03cd9327225ce6ad40",
+      "description": "Dusk great room with fire glow, wood beams, lamp, plants and baskets (and, at hero-great-room, a staged room with potted plants); golden glow and staging"
+    }
+  },
+  {
+    "publicPath": "/images/hero-great-room.webp",
+    "usedOn": "Homepage semi-custom homes card, contact page statement band, two blog heroes, LocalBusiness schema image",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "b8aaadd7f83d92d0b60c88dbafa9395ea6c974ac20be8efb371c70c72fb04cb9",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Living room with a gray sofa, a low fireplace in a pale stone wall, large windows onto a back yard and a kitchen island behind",
+    "supersedes": {
+      "sha256": "86e1bb142ca06f1435ef3572510ed34148756a80ad346baee5ca3540a05dd690",
+      "description": "Dusk great room with fire glow, wood beams, lamp, plants and baskets (and, at hero-great-room, a staged room with potted plants); golden glow and staging"
+    }
+  },
+  {
+    "publicPath": "/images/areas/caldwell.webp",
+    "usedOn": "Caldwell area page hero, area cards, Caldwell guide hero",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "fb0233280f21fa9495d894d40d11321a491a20f5fab93773868a7a2fff004ba4",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Single-story stucco house with a dark garage bay, with vineyard rows on the slope behind",
+    "supersedes": {
+      "sha256": "294fd1de03aafd300de5e106060da453c31030e3aadd1f8eb36ecbbdf230c47c",
+      "description": "Tuscan-style stucco villa with topiary at sunset; sunset glow and ornate style"
+    }
+  },
+  {
+    "publicPath": "/images/areas/middleton.webp",
+    "usedOn": "Middleton area page hero, area cards, Middleton guide hero",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "bcc1a2cfde4449522e21e1f6c07612230de92391cb804c6b4f2176c9ab5e470c",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Two-story house with light siding below and dark siding above, on a lawn beside open fields and a row of trees",
+    "supersedes": {
+      "sha256": "0f58d3c46a402818fbfe765b68abfc24ccff581283b10facea5e50b359304332",
+      "description": "Old white farmhouse with a wraparound porch, rocking chairs and flowers at sunset; farmhouse style, props and glow"
+    }
+  },
+  {
+    "publicPath": "/images/areas/nampa.webp",
+    "usedOn": "Nampa area page hero, area cards, Nampa guide hero",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "79aab64f055d70153e209664a170da5c9571f6ce7cb6be9eef2983bf819ccf8c",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Single-story stucco house with a wood-clad entry and an attached garage on a new street, with open valley land behind",
+    "supersedes": {
+      "sha256": "168bac35844d589b8bae4f858fbb16b0eb44908a9812b57cccdafaed93c46bb6",
+      "description": "Oversaturated 1960s brick ranch on a corner lot; older brick house on a new-construction page, HDR look"
+    }
+  },
+  {
+    "publicPath": "/images/construction/covered-outdoor-living.webp",
+    "usedOn": "Home plans and design breather band, custom home and addition city rotations, one blog hero",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "41e2a8b8dc35f5b4e6b1599f54afd3c4b3ad1991fbf8dd674aa05c9d4edce39e",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Covered patio with a wood ceiling on black steel posts, a dining table and a built-in grill counter beside a house",
+    "supersedes": {
+      "sha256": "6d47f83362acdc086f90db423d57420d41ce682a0e8d24cff3e64ee1fe356f8a",
+      "description": "Patio with heavy timber posts on stone column bases and stacked stone at sunset; lodge style and glow"
+    }
+  },
+  {
+    "publicPath": "/images/construction/shop-home-barndominium.webp",
+    "usedOn": "Shop homes service hero and city pages, one blog hero",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "a6e3e4d3397298c4fcde803e9fa57a9fb159c169ce71516067af90d7f3936642",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Dark metal building with two tall shop doors and an attached living wing on a rural lot",
+    "supersedes": {
+      "sha256": "a6f2627d453367b9770914445ecf507877a0add74121c5fdf4f87264447fa739",
+      "description": "Barndominium with a timber-truss gable porch in golden light; timber truss and glow"
+    }
+  },
+  {
+    "publicPath": "/images/construction/semi-custom-home.webp",
+    "usedOn": "Semi-custom homes service hero, city rotations, one blog hero",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "43d1d67f9d339d2997ce37f76283474cc548df9b8ae49b381e42598fd427a2e3",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Single-story house with white siding, a dark gable bay, a small covered entry and an attached garage",
+    "supersedes": {
+      "sha256": "f4449c2c5f0ffcda95132303364437d771eb866095083cada7825cd57655cca1",
+      "description": "Blue-gray house with white trim and a gabled portico on white posts (placed earlier today); read as traditional"
+    }
+  },
+  {
+    "publicPath": "/images/construction/custom-home-dusk-exterior.webp",
+    "usedOn": "Design-build vs general contractor blog hero",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "82931d1fe59fee9c2d8328b3f120de3bcef1ee057ed4f932145d232b870f430d",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Single-story house with white stucco walls, a wood-clad entry and a dark metal roof at dusk, with lit windows and dark foothills behind",
+    "supersedes": {
+      "sha256": "94e770cfc483de30f68e9a542db72f95ab56cd0efefe7dcda4a70f901a1009d7",
+      "description": "Modern farmhouse glowing at dusk; farmhouse style"
+    }
+  },
+  {
+    "publicPath": "/images/construction/staircase-foyer.webp",
+    "usedOn": "Final walkthrough and warranty blog hero",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "8b6cd320781e02b3ba463479d5df305a51b7c0822dbe4ed3f8bc3b518fd09faa",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Entry hall with a staircase with wood treads and a black metal railing, a black front door and a high window",
+    "supersedes": {
+      "sha256": "1dbf002ddb754993b1e52b435a14651cd6b929913005008c8bb7db11381f5127",
+      "description": "Foyer with wall paneling, a lantern chandelier, a gridded door and a console with a vase of branches; staging and traditional detail"
+    }
+  },
+  {
+    "publicPath": "/images/construction/accessible-primary-bathroom.webp",
+    "usedOn": "Aging in place blog hero",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "2a6fac6d358272cde5b89ea6e1172d5b222d749051d78363c707333c85672210",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Accessible bathroom with a curbless walk-in shower, a fold-down bench, a grab bar and a floating vanity",
+    "supersedes": {
+      "sha256": "2e54b1536af035fb97e07f38ed83c5e2b26246911424cb6dd5134241ab820fa4",
+      "description": "Accessible bathroom dressed with two potted plants, framed art and a hanging towel; staged props"
+    }
+  },
+  {
+    "publicPath": "/images/projects/eagle-farmhouse-exterior.webp",
+    "usedOn": "Not rendered by any page (alt registry only)",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "e5ea17f2c643e169e0aaa30e9cad4c6152d2d9d132f6108c2bd3ba6763cd24e2",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Single-story house with gray stucco, a wood-clad central gable and a dark metal roof, with dry foothills behind",
+    "supersedes": {
+      "sha256": "b18a3910362121c5c625476e1e567362093d45b1b57464965e1c0667e1ec8aa2",
+      "description": "White board-and-batten modern farmhouse with timber porch at golden hour; farmhouse style"
+    }
+  },
+  {
+    "publicPath": "/images/projects/eagle-farmhouse-great-room.webp",
+    "usedOn": "Not rendered by any page (alt registry only)",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "a0a8bc14b328f6f6d9717d7a4436a700801c0078116a095edba6ca54b965ba83",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Great room with a vaulted ceiling, a linear fireplace, and black-framed sliding doors looking to foothills",
+    "supersedes": {
+      "sha256": "a68e02791863ce55ea93218bf2caf07b30e9383f85c0ac42324300ef89b1abee",
+      "description": "Great room with wood beams, stacked stone fireplace, gridded windows and plants in golden light; no longer matched the exterior"
+    }
+  },
+  {
+    "publicPath": "/images/projects/eagle-farmhouse-kitchen.webp",
+    "usedOn": "Not rendered by any page (alt registry only)",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "c60e16b1f27286dc4bc0c0808a4543af55c4e45e44680ad0332f856382ce6e2d",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Kitchen with white cabinets, a wood island, and a foothills view through a black-framed window",
+    "supersedes": {
+      "sha256": "ea692d26d03fe5819a118a562e325231b0cd09dddc000be92d069be5f7d4fb7d",
+      "description": "Farmhouse kitchen with gridded window, cutting boards and potted plants; props, no longer matched the exterior"
+    }
+  },
+  {
+    "publicPath": "/images/projects/eagle-farmhouse-bath.webp",
+    "usedOn": "Not rendered by any page (alt registry only)",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "1f05393b572e44ac07c2ed2fffceb7c15d8dc1824886270d9dd3b055e098aeef",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Primary bath with a freestanding tub beside a black-framed window overlooking foothills",
+    "supersedes": {
+      "sha256": "2276b48c7e0a9f3537efac5855d2264a5e7afcf7b34b59ebefbe6a5ff0b3d0af",
+      "description": "Shiplap bath with sconces and potted plants in golden light; props and glow"
+    }
+  },
+  {
+    "publicPath": "/images/projects/eagle-farmhouse-outdoor.webp",
+    "usedOn": "Not rendered by any page (alt registry only)",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "4d1decc54f6aac5bc42b37a8fa915e01cd25dfc4151bdd0ac1988c6efe4b0f1d",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Covered back patio with a wood ceiling on black steel posts and sliding glass doors, with foothills behind the house",
+    "supersedes": {
+      "sha256": "3e6218525e93f828ab49fb0dc17c111f20ebb8f33a941aecea799c671dea9041",
+      "description": "Farmhouse rear porch on heavy timber posts at golden hour; timber and glow"
+    }
+  },
+  {
+    "publicPath": "/images/projects/boise-craftsman-foyer.webp",
+    "usedOn": "Not rendered by any page (alt registry only)",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "85b802bc69d7e262872bba9d21cd282f7c7b47f83d10f2a7f4268a9f407a4042",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Entry hall with a glass front door and sidelights, a wood slat wall, and a staircase with wood treads",
+    "supersedes": {
+      "sha256": "fa9755f36e150dc2de53cb5ec14ecc6e470729763be51a3e14d9b74e083ed422",
+      "description": "Traditional two-story foyer with turned-baluster staircase, gridded door and plants; did not match the contemporary exterior placed earlier today"
+    }
+  },
+  {
+    "publicPath": "/images/projects/boise-craftsman-kitchen.webp",
+    "usedOn": "Not rendered by any page (alt registry only)",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "5f1c017377a7246704c1344fed239ee0c16b2f13bbdee0d26a9ffcc2bcf7a72e",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Kitchen with light wood lower cabinets, white upper cabinets, an island with three stools, and a large window",
+    "supersedes": {
+      "sha256": "efb725a41b944eded61b64eb4b07fe83be9230c0cee547a1e43819feb9dab9bb",
+      "description": "Craftsman kitchen with lantern pendants, gridded windows and potted plants; Craftsman style and props"
+    }
+  },
+  {
+    "publicPath": "/images/projects/boise-craftsman-living.webp",
+    "usedOn": "Not rendered by any page (alt registry only)",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "5c438d9d91c678db3aa359b44d18214522836896a1e71a68fca58f5b683e2d92",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Family room with a linear fireplace in a white wall, a sofa and armchair, and tall windows onto trees",
+    "supersedes": {
+      "sha256": "85a1c5ce83a0291013bca7c29af1135a6ea316c1a5bf7e5690c021ec7bc2c58f",
+      "description": "Family room with stacked-stone fireplace, gridded windows, plants and framed art; stone and props"
+    }
+  },
+  {
+    "publicPath": "/images/projects/meridian-ranch-living.webp",
+    "usedOn": "Not rendered by any page (alt registry only)",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "31cb3f43f1d0e6219f2d94b16f3578b979bcd88eadb7cacbea7d85ada6b17da1",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Living room with light floors, a low fireplace in a pale tiled wall, and windows onto a fenced back lawn",
+    "supersedes": {
+      "sha256": "007e11bdcad8e92f197960c5784df611d7cf37de041f18d19c07facdebc43d79",
+      "description": "Living room with shiplap, stone fireplace surround and potted plants; props, did not match the exterior placed earlier today"
+    }
+  },
+  {
+    "publicPath": "/images/projects/meridian-ranch-kitchen.webp",
+    "usedOn": "Not rendered by any page (alt registry only)",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "5a13fec4fbc966ade489551c99f0352b2e4350ec711adfc644cc758b805a8248",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Open kitchen with white cabinets, pale counters, and a window to a suburban yard",
+    "supersedes": {
+      "sha256": "a958441d89c60c2bb858cefc88255d5e9bed287ceb18b81f9484a767842792be",
+      "description": "Kitchen with a stone-clad island, glass lantern pendants, gridded window and plants; props"
+    }
+  },
+  {
+    "publicPath": "/images/projects/meridian-ranch-bath.webp",
+    "usedOn": "Not rendered by any page (alt registry only)",
+    "source": "AI-generated photograph (gpt_image_2 through Higgsfield), generated and placed on 13 November 2026",
+    "sha256": "0cc8271b46ec1bddf3fcf00f237bbd3b3bb6624b3768e2caf4551283c9b3cf4d",
+    "provenance": "Representative image made under the owner direction of 13 November 2026 (natural, unstaged photographs; no Craftsman or lodge-style houses). Not a completed P5 project, not a customer home and not a location-specific example",
+    "alt": "Hall bath with a light wood vanity, a white tiled tub and shower, and a frosted window",
+    "supersedes": {
+      "sha256": "ab7740e972dedaf5d208b5990eb32a39c15d43a9062aa078504258d4e3e0e636",
+      "description": "Hall bath with a potted plant and stacked towels on the vanity; props"
+    }
+  }
+]
