@@ -92,7 +92,8 @@ function buildShort(): string {
     `- [About ${SITE_CONFIG.name}](${url('/about')}): design-build home building across the Treasure Valley${FOUNDING.llmsSinceClause}.`,
   );
   lines.push(`- [Contact](${url('/contact')})`);
-  lines.push(`- [Free build estimator](${url('/estimate')})`);
+  lines.push(`- [Instant preliminary estimate](${url('/instant-estimate')}): answer a few questions and see a preliminary price range on screen. A firm written proposal follows a site visit.`);
+  lines.push(`- [Request a quote](${url('/estimate')})`);
   lines.push(`- [Planning resources and worksheets](${url('/resources')})`, '');
 
   lines.push('## Optional', '');
@@ -131,7 +132,8 @@ function buildFull(): string {
   if (FOUNDING.foundedLine) lines.push(`- ${FOUNDING.foundedLine}`);
   lines.push('- Service model: One accountable team for design, permits, and construction');
   lines.push(`- Contact: ${url('/contact')}`);
-  lines.push(`- Build estimator: ${url('/estimate')}`, '');
+  lines.push(`- Instant preliminary estimate: ${url('/instant-estimate')}`);
+  lines.push(`- Request a quote: ${url('/estimate')}`, '');
 
   lines.push('## Service area', '');
   lines.push('We build in the following Treasure Valley cities across Ada and Canyon County:', '');
@@ -213,7 +215,8 @@ function buildFull(): string {
   lines.push(`- About: ${url('/about')}`);
   lines.push(`- Services: ${url('/services')}`);
   lines.push(`- Service areas: ${url('/areas')}`);
-  lines.push(`- Build estimator: ${url('/estimate')}`);
+  lines.push(`- Instant preliminary estimate: ${url('/instant-estimate')}`);
+  lines.push(`- Request a quote: ${url('/estimate')}`);
   lines.push(`- Blog: ${url('/blog')}`);
   lines.push(`- Guides: ${url('/guides')}`);
   lines.push(`- Resources: ${url('/resources')}`);

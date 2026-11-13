@@ -5,6 +5,8 @@ import {familyButtonClass} from '@/components/family/Button';
 import {Accordion,AccordionItem,AccordionTrigger,AccordionContent} from '@/components/ui/accordion';
 import {FAQSection} from '@/components/FAQSection';
 import {contentImageAlt} from '@/shared/imageAlts';
+import {CTA_PRIMARY,CTA_QUOTE} from '@/shared/ctaCopy';
+import {INSTANT_ESTIMATE_PATH} from '@/shared/instantEstimate';
 import {PlanningRangeExplorer} from '@/components/PlanningRangeExplorer';
 import {brands,cities,serviceExtras} from './family-content';
 import {DesignGallery} from '@/components/sections/DesignGallery';
@@ -16,6 +18,8 @@ function Rows({items,numbered=false}:{items:[string,string][];numbered?:boolean}
 
 /**
  * The homepage below the hero, in the order a homeowner has the conversation:
+ * the instant estimate (the family's central estimator, framed at
+ * /instant-estimate; owner decision, 13 November 2026),
  * the ways to build (picture cards), the lot question (a split panel), the
  * planning number (its own dark band), why the budget is fair, the way we work,
  * what happens next, who you are hiring, a quiet mid-page ask, where we build,
@@ -23,6 +27,24 @@ function Rows({items,numbered=false}:{items:[string,string][];numbered?:boolean}
  */
 export function ApprovedHome(){const b=brands['construction'];const primary='/estimate';
  return <div className={`family-site family-${b.id}`} style={{'--f-accent':b.accent} as CSSProperties}>
+
+ {/* 0. The instant estimate, sold once near the top: a headline, one sentence, three short
+     benefits and the button. The quote request stays beside it as the path to a person. */}
+ <section className="fr-cta-strip fr-instant-band" id="instant-estimate" aria-labelledby="instant-estimate-band-title">
+  <div className="f-container">
+   <div>
+    <p className="f-eyebrow">INSTANT ESTIMATE</p>
+    <h2 id="instant-estimate-band-title">See your price range before you talk to a contractor.</h2>
+    <p>Answer a few questions about your home, addition, ADU or shop and see a personalized preliminary price range on screen.</p>
+    <ul className="fr-instant-band-points">
+     <li><span>01</span>Free and open day or night</li>
+     <li><span>02</span>No appointment needed to see your range</li>
+     <li><span>03</span>A preliminary range now, a firm written proposal after we visit</li>
+    </ul>
+   </div>
+   <div className="fr-cta-strip-actions"><a className="f-button f-dark" href={INSTANT_ESTIMATE_PATH} data-cta="primary">{CTA_PRIMARY}</a><a className="f-link" href={primary}>{CTA_QUOTE} <Arrow/></a></div>
+  </div>
+ </section>
 
  {/* 1. Six ways to build, one photograph each. */}
  <section className="f-section f-container" id="services">

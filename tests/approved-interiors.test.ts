@@ -44,5 +44,7 @@ test('interior CSS follows the original family and system layers', () => {
 test('contact hero puts the estimate before the secondary consultation link', () => {
   const source = read('app/contact/page.tsx');
   assert.match(source, /interior-contact-actions[\s\S]*?<InteriorEstimateLink\s*\/>[\s\S]*?href="#consult"/);
-  assert.match(read('components/approved/InteriorLayout.tsx'), /href="\/estimate"/);
+  // Owner decision, 13 November 2026: that link opens the framed estimator at /instant-estimate.
+  assert.match(read('components/approved/InteriorLayout.tsx'), /InteriorEstimateLink\(\{label=CTA_PRIMARY,href=INSTANT_ESTIMATE_PATH\}/);
+  assert.match(read('shared/instantEstimate.ts'), /INSTANT_ESTIMATE_PATH = '\/instant-estimate'/);
 });

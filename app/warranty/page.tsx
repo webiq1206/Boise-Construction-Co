@@ -6,6 +6,7 @@ import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildCanonical, fitDescription } from '@/lib/page-metadata';
 import { generateBreadcrumbSchema, generateFAQSchema, generateWebPageSchema } from '@/lib/schema';
 import { CTA_PRIMARY } from '@/shared/ctaCopy';
+import { INSTANT_ESTIMATE_PATH } from '@/shared/instantEstimate';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -230,7 +231,7 @@ export default function WarrantyPage() {
                     About
                   </Link>{' '}
                   page. Planning a new build instead?{' '}
-                  <Link href="/estimate" className="underline underline-offset-2">
+                  <Link href={INSTANT_ESTIMATE_PATH} className="underline underline-offset-2">
                     {CTA_PRIMARY}
                   </Link>
                   .

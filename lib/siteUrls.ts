@@ -47,6 +47,8 @@ export function getSiteUrlGroups(): SiteUrlGroup[] {
     { path: '/services', label: 'Services', changeFrequency: 'monthly', priority: 0.85 },
     { path: '/about', label: 'About', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/areas', label: 'Service areas', changeFrequency: 'monthly', priority: 0.75 },
+    // The family's central estimator, framed (owner decision, 13 November 2026).
+    { path: '/instant-estimate', label: 'Instant estimate', changeFrequency: 'monthly', priority: 0.9 },
     { path: '/estimate', label: 'Request a quote', changeFrequency: 'monthly', priority: 0.9 },
     { path: '/warranty', label: 'Warranty', changeFrequency: 'monthly', priority: 0.65 },
     { path: '/contact', label: 'Contact', changeFrequency: 'monthly', priority: 0.7 },

@@ -55,7 +55,7 @@ export function ValueOverheadSection() {
 
               <div className="mt-10">
                 <Button variant="brand" asChild>
-                <a href="#calculator">{CTA_PRIMARY}</a>
+                <a href="/instant-estimate">{CTA_PRIMARY}</a>
               </Button>
               </div>
             </div>

@@ -214,8 +214,8 @@ export default function ContactPage() {
               <em className="brc-accent">Co</em>
             </h1>
             <p className="text-base md:text-lg text-inverse-foreground/85 max-w-2xl leading-relaxed">
-              Schedule a free 60 to 90 minute planning consultation, call our team, or send your project
-              details to our team for an estimate review.
+              See an instant preliminary estimate online, schedule a free 60 to 90 minute planning
+              consultation, or call our team.
             </p>
             <div className="interior-contact-actions"><InteriorEstimateLink/><a href="#consult" className="interior-text-link">Request a consultation</a></div>
           </InteriorHero>

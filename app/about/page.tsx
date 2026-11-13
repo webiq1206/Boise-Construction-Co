@@ -17,7 +17,7 @@ import {
 import { CITY_HERO_IMAGES } from '@/shared/cityServiceImages';
 import { CITIES, TREASURE_VALLEY_CITIES } from '@/shared/contentData';
 import { CONTRACTOR_REGISTRATION_LABEL } from '@/shared/contractorRegistration';
-import { CTA_PRIMARY } from '@/shared/ctaCopy';
+import { CTA_PRIMARY, CTA_QUOTE } from '@/shared/ctaCopy';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
@@ -284,10 +284,11 @@ export default function AboutPage() {
                 <h2 className="ed-h2-sm ed-statement-wide">Ready to start your project?</h2>
                 <div>
                   <p className="ed-body">
-                    Request a quote and we answer your questions and help you work out the next planning step.
+                    See a preliminary price range on screen, or request a quote and we answer your questions and help you work out the next planning step.
                   </p>
-                  <div className="mt-8">
+                  <div className="mt-8 interior-hero-actions">
                     <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>
+                    <HeroTextLink href="/estimate">{CTA_QUOTE}</HeroTextLink>
                   </div>
                 </div>
               </div>

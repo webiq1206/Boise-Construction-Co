@@ -57,17 +57,22 @@ export const FAMILY_BRAND: FamilyBrand = {
     { label: 'Blog', href: '/blog' },
     { label: 'Contact', href: '/contact' },
   ],
-  // One label, one destination: the quote wizard. verify-p5-mobile-seo pins exactly one
-  // a[href="/estimate"] in the bar.
-  cta: { label: 'Request a quote', href: '/estimate' },
+  // One label, one destination: the family's central estimator, framed at /instant-estimate
+  // (owner decision, 13 November 2026). The label is short because it has to fit the header;
+  // in-page buttons read "Get an instant estimate" (shared/ctaCopy.ts). The quote request form
+  // stays at /estimate as the path to a person. verify-p5-mobile-seo pins exactly one
+  // a[href="/instant-estimate"] in the bar.
+  cta: { label: 'Instant estimate', href: '/instant-estimate' },
   phone: { display: SITE_CONFIG.phone, telHref: SITE_CONFIG.phoneHref, smsHref: SITE_CONFIG.phoneSmsHref },
   chat: { enabled: true, label: 'Chat', openEvent: 'p5:assistant-open', hiddenOn: ['/estimate*', '/admin*', '/subcontractor*'] },
   bar: {
     // Approved C7 decision: the bar is on the first screen, over the hero.
     showOverHero: true,
     callLabel: 'Call',
-    // The /estimate quote wizard and the estimator own the bottom of the screen.
-    hiddenOn: ['/estimate/*'],
+    // The /estimate quote wizard and the estimator own the bottom of the screen. So does the
+    // framed estimator on /instant-estimate: its questions are sized to the screen, and the bar
+    // would only cover the last control and link to the page the visitor is already on.
+    hiddenOn: ['/estimate/*', '/instant-estimate'],
     // lib/mobileNavBar.ts (modals, the inline estimate bar) and the P5 estimator set these.
     yieldToBodyFlags: ['hideMobileNavBar', 'p5EstimatorActive'],
   },

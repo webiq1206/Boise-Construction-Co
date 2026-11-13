@@ -560,3 +560,37 @@ html .fr-gallery p.fr-gallery-note {
   .fr-mosaic figure:last-child:not(.is-wide) { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
   .fr-mosaic figcaption { padding: 28px 12px 10px; font-size: var(--fs-small); line-height: var(--lh-small); letter-spacing: 0; }
 }
+
+/* ------------------------------------------------------------------ instant estimate band
+   The homepage band for the family's central estimator (owner decision, 13 November 2026).
+   It is the CTA strip with an eyebrow and three short numbered benefits, in the same marks
+   the lot panel list uses. */
+.fr-instant-band > div { padding-block: 56px; }
+.fr-instant-band .f-eyebrow { margin-bottom: 12px; }
+.fr-instant-band h2 { max-width: 24ch; text-wrap: balance; }
+.fr-instant-band p:not(.f-eyebrow) { max-width: 56ch; }
+.fr-instant-band-points {
+  display: grid;
+  gap: 10px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.fr-instant-band-points li {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--fr-ink);
+}
+.fr-instant-band-points span {
+  flex: none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--fr-ink-soft);
+}
+@media (max-width: 900px) {
+  .fr-instant-band > div { padding-block: 44px; }
+}

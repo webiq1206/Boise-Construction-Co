@@ -13,7 +13,8 @@ AccordionTrigger,
 } from '@/components/ui/accordion';
 import { GRAIN_URL } from '@/lib/grain';
 import { contentImageAlt } from '@/shared/imageAlts';
-import { CTA_PRIMARY } from '@/shared/ctaCopy';
+import { CTA_QUOTE } from '@/shared/ctaCopy';
+import { INSTANT_ESTIMATE_ACTION, QUOTE_REQUEST_PATH, type PrimaryAction } from '@/shared/instantEstimate';
 import { hasPlanningFigure } from '@/shared/contentData';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import type { GalleryProject } from '@/shared/galleryData';
@@ -58,8 +59,16 @@ interface LandingPageTemplateProps {
   manifestPath?: string;
   /** Optional planning starting point ("$15k") shown near the hero CTAs. */
   planningFrom?: string;
-  /** Optional estimator URL that retains the service's project intent. */
-  estimateHref?: string;
+  /**
+   * The page's primary action. Defaults to the sitewide one: "Get an instant
+   * estimate", to the framed estimator at /instant-estimate. A service page
+   * passes servicePrimaryAction(slug) from shared/instantEstimate.ts, which
+   * opens the estimator on that service's project, or keeps "Request a quote"
+   * for a service the estimator does not price.
+   */
+  primaryAction?: PrimaryAction;
+  /** Quote request URL for the secondary path to a person, when it carries a project intent. */
+  quoteHref?: string;
   /**
    * Cost-and-timeline expectation, rendered directly AFTER THE HERO: the first
    * question a visitor researches is what this costs and how long it takes, so
@@ -266,7 +275,8 @@ export function LandingPageTemplate({
   processImageUrl,
   manifestPath,
   planningFrom,
-  estimateHref,
+  primaryAction = INSTANT_ESTIMATE_ACTION,
+  quoteHref = QUOTE_REQUEST_PATH,
   costGuidance,
   benefits,
   inclusions,
@@ -315,7 +325,7 @@ export function LandingPageTemplate({
             </p>
           )}
           <div className="interior-hero-actions">
-            <PrimaryCta href={estimateHref ?? '/estimate'} trackingLocation="landing_hero">{CTA_PRIMARY}</PrimaryCta>
+            <PrimaryCta href={primaryAction.href} trackingLocation="landing_hero">{primaryAction.label}</PrimaryCta>
             {!priorityPlanning && <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>}
           </div>
         </InteriorHero>
@@ -345,7 +355,7 @@ export function LandingPageTemplate({
 {/* The scope list is this section's content. Area pages pass none, which
           used to leave the heading alone beside the sticky aside with an empty
           column, so the section only renders when there is a list to show. */}
-      {inclusions&&inclusions.length>0&&<div className="interior-detail-body"><div><p className="interior-eyebrow">A CLEAR SCOPE</p><p className="interior-statement">Plan the details.<br/><em>Know the next step.</em></p><ul className="interior-scope-list">{inclusions.map((item,i)=><li key={item}><span>{String(i+1).padStart(2,'0')}</span>{item}</li>)}</ul></div><InteriorProjectAside>{timeline&&<p className="ed-body mt-6">{timeline}</p>}</InteriorProjectAside></div>}
+      {inclusions&&inclusions.length>0&&<div className="interior-detail-body"><div><p className="interior-eyebrow">A CLEAR SCOPE</p><p className="interior-statement">Plan the details.<br/><em>Know the next step.</em></p><ul className="interior-scope-list">{inclusions.map((item,i)=><li key={item}><span>{String(i+1).padStart(2,'0')}</span>{item}</li>)}</ul></div><InteriorProjectAside action={primaryAction}>{timeline&&<p className="ed-body mt-6">{timeline}</p>}</InteriorProjectAside></div>}
 
       {/* ─── Cost and timeline expectation ───
           Cost guidance follows the concise scope and estimate sidebar. */}
@@ -700,9 +710,23 @@ export function LandingPageTemplate({
               </h2>
             </Reveal>
             <Reveal delay={60}>
-              <p className="ed-lede">Free 60 to 90 minute in-home visit.</p>
-              <p className="ed-body mt-3">Planning guidance, design direction, no obligation.</p>
-              <div className="mt-8"><ConsultCTA variant="brand" href={estimateHref}>{CTA_PRIMARY}</ConsultCTA></div>
+              {primaryAction.instant ? (
+                <>
+                  <p className="ed-lede">Start with an instant preliminary estimate.</p>
+                  <p className="ed-body mt-3">Free, any time, with no appointment. A free 60 to 90 minute in-home visit follows when you are ready, with no obligation.</p>
+                  {/* One primary; the quote request stays beside it as the path to a person. */}
+                  <div className="mt-8 interior-hero-actions">
+                    <ConsultCTA variant="brand" href={primaryAction.href} trackingLocation="landing_bottom">{primaryAction.label}</ConsultCTA>
+                    <HeroTextLink href={quoteHref}>{CTA_QUOTE}</HeroTextLink>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="ed-lede">Free 60 to 90 minute in-home visit.</p>
+                  <p className="ed-body mt-3">Planning guidance, design direction, no obligation.</p>
+                  <div className="mt-8"><ConsultCTA variant="brand" href={primaryAction.href}>{primaryAction.label}</ConsultCTA></div>
+                </>
+              )}
             </Reveal>
           </div>
         </div>
