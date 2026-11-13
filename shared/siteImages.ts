@@ -5,8 +5,9 @@
  */
 
 export const SITE_IMAGES = {
-  /** Homepage hero - modern farmhouse exterior at golden hour; same photo the
-      Custom Home Building service card uses (owner picked it for the hero). */
+  /** Interior-page hero (areas, contact) - dark-sided two-story house with a
+      wood-clad entry in daylight; same photo the Custom Home Building service
+      card uses. */
   hero: "/images/construction/custom-home-exterior.webp",
   /** Design-build / plan review split panels. */
   process: "/images/construction/plans-and-selections.webp",

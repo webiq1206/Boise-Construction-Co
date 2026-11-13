@@ -2,9 +2,15 @@
   {
     "route": "/services/custom-home-builder",
     "publicPath": "/images/service-scenes/home-exterior.webp",
-    "source": "p5-home-exterior-design-concept-1080.webp",
-    "sha256": "a440dd40027b64608011a538a3d9d9dbd775030e24631a04890265eb2a655127",
-    "provenance": "AI-generated architectural service imagery approved October26; not a completed P5 project or location-specific example",
-    "alt": "Stone and pale stucco home with dark pitched roofs, a covered entry and natural landscaping"
+    "source": "Replacement photograph placed at this path on 13 November 2026; its original file name is not recorded in this repository",
+    "sha256": "1b5ec84f7455c2907aaa630a025bfbe16018d40ac3c2ab754f882d905aecced9",
+    "provenance": "Replaced on 13 November 2026 under the owner direction that no photo shows a Craftsman-style house. The origin of the replacement photograph is not recorded in this repository and is for the owner to confirm; not presented as a completed P5 project or location-specific example",
+    "alt": "Two-story house with pale stucco, dark siding and a dark metal roof at dusk, with boulders and grasses in front and a dry hillside behind",
+    "supersedes": {
+      "source": "p5-home-exterior-design-concept-1080.webp",
+      "sha256": "a440dd40027b64608011a538a3d9d9dbd775030e24631a04890265eb2a655127",
+      "provenance": "AI-generated architectural service imagery approved October26; not a completed P5 project or location-specific example",
+      "alt": "Stone and pale stucco home with dark pitched roofs, a covered entry and natural landscaping"
+    }
   }
 ]
