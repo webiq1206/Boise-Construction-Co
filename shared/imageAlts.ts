@@ -15,7 +15,7 @@ const ALTS: Record<string, string> = {
   "/family/construction-custom-home-exterior.webp":
     "Mountain-modern home with charcoal stucco, ledgestone and a dark metal roof",
   "/images/construction/semi-custom-home.webp":
-    "Single-story gray house with stone-wrapped porch columns, a covered entry and a garage",
+    "Single-story blue-gray house with white trim, a small covered entry and an attached garage",
   "/images/construction/home-under-framing.webp":
     "Wood-framed house with roof trusses in place and stacked lumber on a gravel lot",
   "/images/construction/foundation-and-excavation.webp":
@@ -59,19 +59,19 @@ const ALTS: Record<string, string> = {
   "/images/budget-kitchen-detail.webp":
     "Close-up of a white marble waterfall countertop over a light oak Shaker cabinet door",
   "/family/p5-p5-hero.webp":
-    "Stone and stucco house with a metal roof at dusk, with foothills behind",
+    "House with wood and charcoal siding and a dark metal roof on a hillside at dusk, with valley lights below",
   "/images/areas/boise.webp":
-    "Craftsman bungalow with a covered porch on a tree-lined street, with foothills behind",
+    "Street of two-story homes in light stucco and dark siding, lined with young trees, with grassy foothills behind",
   "/images/areas/meridian.webp":
-    "Houses with light siding and dark roofs along a curving street lined with young trees",
+    "Two-story house with white stucco, dark siding, an attached garage and a front lawn",
   "/images/areas/eagle.webp":
-    "Large stone house with a long curving driveway at sunset",
+    "Single-story white stucco house with dark metal roofs and lit windows at dusk, set in gravel and ornamental grasses",
   "/images/areas/nampa.webp":
     "Single-story red brick ranch house with a wide lawn and young trees",
   "/images/areas/kuna.webp":
-    "Single-story stone and board-and-batten house with a metal roof among sagebrush",
+    "Single-story gray stucco house with a dark metal roof and a wood-clad entry on open sagebrush land, with mountains behind",
   "/images/areas/star.webp":
-    "House with wood and stone siding on a lawn beside a tree-lined river",
+    "Two-story house with dark vertical siding and a covered patio on a lawn beside a tree-lined river",
   "/images/areas/middleton.webp":
     "A two-story house with light siding and a dark roof beside a lawn and sidewalk",
   "/images/areas/caldwell.webp":
@@ -87,7 +87,7 @@ const ALTS: Record<string, string> = {
   "/images/projects/eagle-farmhouse-outdoor.webp":
     "Covered outdoor patio with wood ceiling and black-framed doors facing the foothills",
   "/images/projects/meridian-ranch-exterior.webp":
-    "Single-story gray ranch with stone-wrapped porch columns and a concrete driveway",
+    "Single-story house with dark horizontal siding, a light panel accent and an attached garage on a lawn",
   "/images/projects/meridian-ranch-living.webp":
     "Bright living room with light floors, soft gray walls, and a stone fireplace",
   "/images/projects/meridian-ranch-kitchen.webp":
@@ -121,7 +121,7 @@ const ALTS: Record<string, string> = {
   "/family/p5-p5-adu.webp":
     "Finished modern ADU with standing-seam metal roof beside a Treasure Valley home",
   "/images/projects/boise-craftsman-exterior.webp":
-    "Two-story sage craftsman with cedar-shake gables and stacked stone",
+    "Two-story white stucco house with a dark siding accent, a wood-clad covered entry and an attached garage",
   "/images/projects/boise-craftsman-foyer.webp":
     "Two-story foyer with a wood staircase, cream walls, and natural light from sidelights",
   "/images/projects/boise-craftsman-kitchen.webp":

@@ -34,7 +34,7 @@ const LIBRARY = {
   },
   semiCustom: {
     src: img('semi-custom-home'),
-    alt: 'Newly built single-story semi-custom home on a serviced subdivision lot in Meridian, Idaho',
+    alt: 'Single-story blue-gray house with white trim, a small covered entry and an attached garage',
   },
   framing: {
     src: img('home-under-framing'),
@@ -98,11 +98,11 @@ const LIBRARY = {
   },
   twoStory: {
     src: img('two-story-home-exterior'),
-    alt: 'Newly built two-story craftsman home with stone wainscot and a covered front porch on a Meridian, Idaho lot',
+    alt: 'Two-story gray house with horizontal siding, a dark panel accent, a covered entry and an attached garage',
   },
   subdivision: {
     src: img('new-neighborhood-street'),
-    alt: 'Street of recently finished new-construction homes with young trees and fresh sidewalks in a Treasure Valley subdivision',
+    alt: 'Street of new two-story homes in white, gray and black siding with young trees, a framed house at the far end and foothills behind',
   },
   greatRoom: {
     src: img('great-room-evening'),
@@ -142,7 +142,7 @@ const LIBRARY = {
   },
   buildVsBuy: {
     src: img('build-vs-buy-comparison'),
-    alt: 'An existing finished resale home with a yard sign next to a new home under wood framing on a Treasure Valley subdivision street',
+    alt: 'A finished two-story house beside a two-story house still in sheathing and house wrap, with dry hills behind',
   },
   permitPlacard: {
     src: img('building-permit-placard'),
@@ -170,23 +170,23 @@ const LIBRARY = {
   },
   boiseArea: {
     src: area('boise'),
-    alt: 'Established Boise, Idaho neighborhood of craftsman homes with covered porches and the Boise foothills rising behind the street',
+    alt: 'Street of two-story homes in light stucco and dark siding, lined with young trees, with grassy foothills behind',
   },
   meridianArea: {
     src: area('meridian'),
-    alt: 'Newly built craftsman two-story home lit at dusk on a landscaped subdivision lot in Meridian, Idaho',
+    alt: 'Two-story house with white stucco, dark siding, an attached garage and a front lawn',
   },
   eagleArea: {
     src: area('eagle'),
-    alt: 'Luxury custom home on a landscaped Eagle, Idaho acreage lot at sunset with the foothills in the distance',
+    alt: 'Single-story white stucco house with dark metal roofs and lit windows at dusk, set in gravel and ornamental grasses',
   },
   kunaArea: {
     src: area('kuna'),
-    alt: 'Modern farmhouse custom home on rural Kuna, Idaho acreage bordered by sagebrush and open farmland',
+    alt: 'Single-story gray stucco house with a dark metal roof and a wood-clad entry on open sagebrush land, with mountains behind',
   },
   starArea: {
     src: area('star'),
-    alt: 'Riverfront custom home in Star, Idaho with a lawn running down to the Boise River and shade trees along the bank',
+    alt: 'Two-story house with dark vertical siding and a covered patio on a lawn beside a tree-lined river',
   },
   middletonArea: {
     src: area('middleton'),
