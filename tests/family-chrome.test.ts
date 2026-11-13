@@ -21,9 +21,11 @@ import { SITE_TAGLINE } from '../shared/siteContent.ts';
 // lib/familyBrand.ts. These pin that the config says what the site says.
 test('the brand config carries this site’s facts, one CTA and one destination', () => {
   assert.equal(FAMILY_BRAND.id, 'construction');
-  assert.equal(FAMILY_BRAND.cta.label, 'Request a quote');
-  // scripts/verify-p5-mobile-seo.mjs pins exactly one a[href="/estimate"] in the bar.
-  assert.equal(FAMILY_BRAND.cta.href, '/estimate');
+  // Owner decision, 13 November 2026: the one CTA is the family's central estimator, framed at
+  // /instant-estimate. The label is short because it has to fit the header.
+  assert.equal(FAMILY_BRAND.cta.label, 'Instant estimate');
+  // scripts/verify-p5-mobile-seo.mjs pins exactly one a[href="/instant-estimate"] in the bar.
+  assert.equal(FAMILY_BRAND.cta.href, '/instant-estimate');
   assert.equal(FAMILY_BRAND.phone.display, '(208) 477-1169');
   assert.equal(FAMILY_BRAND.phone.telHref, SITE_CONFIG.phoneHref);
   assert.equal(FAMILY_BRAND.phone.smsHref, SITE_CONFIG.phoneSmsHref);
@@ -42,6 +44,8 @@ test('the brand config carries this site’s facts, one CTA and one destination'
   assert.equal(FAMILY_BRAND.header.desktopFrom, 1180);
   // The quote wizard and the estimator own the bottom of the screen.
   for (const path of ['/estimate', '/estimate/scope', '/estimate/p5-preview']) assert.equal(matchesRoute(path, FAMILY_BRAND.bar.hiddenOn), true, path);
+  // So does the framed estimator: its questions are sized to the screen.
+  assert.equal(matchesRoute('/instant-estimate', FAMILY_BRAND.bar.hiddenOn), true);
   for (const path of ['/', '/estimates', '/services']) assert.equal(matchesRoute(path, FAMILY_BRAND.bar.hiddenOn), false, path);
   // Dark header only over the homepage photograph.
   assert.equal(matchesRoute('/', FAMILY_BRAND.header.darkOn), true);
@@ -95,9 +99,9 @@ test('the homepage video preserves family content, technical poster fallback and
   assert.match(html, /<h1 class="fam-hero-title" id="family-hero-title">Custom home builder in Boise\. <span class="fam-hero-accent">Built around you\.<\/span><\/h1>/);
   const cta = html.match(/<a [^>]*data-hero-cta="primary"[^>]*>([^<]+)<\/a>/);
   assert.ok(cta, 'hero primary CTA');
-  assert.match(cta[0], /href="\/estimate"/);
+  assert.match(cta[0], /href="\/instant-estimate"/);
   assert.match(cta[0], /fam-btn--hero fam-btn--lg/);
-  assert.equal(cta[1], 'Request a quote');
+  assert.equal(cta[1], 'Get an instant estimate');
   assert.match(html, /<a href="tel:\+12084771169" class="fam-hero-link">Call or text \(208\) 477-1169<\/a>/);
   assert.match(html, /<img data-hero-poster="" src="\/images\/construction\/boise-construction-co-poster.jpg" alt=""/);
   assert.match(html, /<video[^>]*muted=""[^>]*loop=""[^>]*playsinline=""[^>]*preload="none"/);

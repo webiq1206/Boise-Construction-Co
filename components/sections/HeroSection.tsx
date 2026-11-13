@@ -80,7 +80,7 @@ export function HeroSection() {
                   beside a stray outline. */}
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap mb-6 md:mb-0">
                 <Button variant="brand" className="w-full sm:w-auto" asChild>
-                  <a href="#calculator">{CTA_PRIMARY}</a>
+                  <a href="/instant-estimate">{CTA_PRIMARY}</a>
                 </Button>
                 <Button variant="heroOutline" className="w-full sm:w-auto" asChild>
                   <a href="#consult">{CTA_SECONDARY}</a>

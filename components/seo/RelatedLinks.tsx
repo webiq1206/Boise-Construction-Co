@@ -4,6 +4,7 @@ import { CONTENT_HUBS, guidePath } from '@/shared/contentHubs';
 import { GUIDE_PAGES } from '@/shared/guideContent';
 import { isCityServiceNoindex } from '@/lib/page-metadata';
 import { areaPath, cityServicePath, servicePath } from '@/lib/seo-routes';
+import { INSTANT_ESTIMATE_PATH, servicePrimaryAction } from '@/shared/instantEstimate';
 
 interface RelatedLinksProps {
   serviceSlug?: string;
@@ -59,7 +60,9 @@ function ExploreFurther({ serviceSlug }: { serviceSlug?: string }) {
     guide ?? { href: guidePath(MASTER_GUIDE_SLUG), label: 'Treasure Valley building guide' },
     { href: '/services', label: 'Compare how we build' },
     { href: '/resources', label: 'Free home building planning worksheets' },
-    { href: '/estimate', label: 'Estimate your build cost' },
+    // The instant estimator, on this service's project where it prices one. A service it does
+    // not price keeps the quote request this link has always opened (shared/instantEstimate.ts).
+    { href: serviceSlug ? servicePrimaryAction(serviceSlug).href : INSTANT_ESTIMATE_PATH, label: 'Estimate your build cost' },
   ];
   return (
     <div className="border-t pt-10" style={{ borderColor: "var(--ed-line)" }}>

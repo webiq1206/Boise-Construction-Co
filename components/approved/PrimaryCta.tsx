@@ -6,6 +6,7 @@ import { familyButtonClass } from '@/components/family/Button';
 import { trackEvent } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 import { CTA_PRIMARY } from '@/shared/ctaCopy';
+import { INSTANT_ESTIMATE_PATH } from '@/shared/instantEstimate';
 
 /**
  * The one primary action on a page body, in the family button face
@@ -14,9 +15,13 @@ import { CTA_PRIMARY } from '@/shared/ctaCopy';
  * surrounding `.primary-cta` rules in app/approved-interiors.css flip it to the
  * paper fill, which is the family hero variant. `primary-cta` stays as the
  * layout hook those rules and the interior templates use.
+ *
+ * With no props it is the sitewide primary action: "Get an instant estimate",
+ * to the framed estimator at /instant-estimate (owner decision, 13 November
+ * 2026). Pass href and children for any other action, such as the quote request.
  */
 export function PrimaryCta({
-  href = '/estimate',
+  href = INSTANT_ESTIMATE_PATH,
   children = CTA_PRIMARY,
   className,
   trackingLocation,

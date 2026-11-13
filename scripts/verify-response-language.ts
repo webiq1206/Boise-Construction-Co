@@ -43,7 +43,8 @@ const PROHIBITED: Array<{ label: string; re: RegExp }> = [
 /**
  * Owner decisions, release 2 (Nov 8 2026): public claims that must not ship.
  * - "bonded": not a verified credential. Insured and registration claims stay.
- * - Instant or minutes-fast estimate claims: there is no instant estimator.
+ * - Instant or minutes-fast estimate claims: REVERSED on 13 November 2026, see the
+ *   note on the two patterns below.
  * - One/single invoice or contract promises: say "one accountable company and
  *   one point of contact" instead.
  * - Same-day financing approval: unverified.
@@ -51,8 +52,17 @@ const PROHIBITED: Array<{ label: string; re: RegExp }> = [
 const INV = 'in' + 'voice';
 const PROHIBITED_CLAIMS: Array<{ label: string; re: RegExp }> = [
   { label: 'bonded claim', re: /\bbonded\b/i },
-  { label: 'instant estimate', re: /\binstant(?:ly)?\b[^.]{0,30}\b(?:estimate|estimator|price|pricing|quote|range|cost|bid)s?\b/i },
-  { label: 'estimate in minutes', re: /\b(?:estimate|estimator|calculator|range|price|quote)s?\b[^.]{0,60}\b(?:in|within) (?:a few |\d+ |just )?minutes?\b/i },
+  // Owner decision, 13 November 2026: the central estimator at /instant-estimate gives an
+  // on-screen preliminary range, so instant-estimate wording is accurate and allowed; it must
+  // never be called a quote or a final price.
+  //
+  // The two patterns here used to forbid "instant estimate/estimator/price/range/cost" and
+  // "estimate/price/range ... in minutes". They are narrowed to what is still not allowed:
+  // "instant" set against a quote, a bid or a final, firm, fixed or guaranteed price; a quote
+  // promised in minutes; and an estimate promised in a stated number of minutes.
+  { label: 'instant quote, bid or final price', re: /\binstant(?:ly)?\s+(?:[\w-]+\s+){0,2}(?:quotes?|bids?|(?:final|firm|fixed|guaranteed)\s+(?:price|pricing|cost)s?)\b/i },
+  { label: 'quote in minutes', re: /\bquotes?\b[^.]{0,60}\b(?:in|within) (?:a few |\d+ |just )?minutes?\b/i },
+  { label: 'estimate in a stated number of minutes', re: /\b(?:estimate|estimator|calculator|range|price)s?\b[^.]{0,60}\b(?:in|within) \d+ minutes?\b/i },
   { label: 'one invoice', re: new RegExp(`\\b(?:one|single|a single)\\s+${INV}\\b`, 'i') },
   { label: 'one contract', re: /\b(?:one|single|a single)\s+contract\b/i },
   { label: 'same-day financing', re: /\bsame[\s-]day\b[^.]{0,40}\b(?:financing|approval|approved|pre-?approval)\b/i },
@@ -135,9 +145,14 @@ function main(): void {
   const claimsMustCatch = [
     'Bonded and insured.',
     'P5 Home Co LLC, bonded & insured',
-    'Book a free planning consultation or get an instant build cost range.',
-    'Instant planning range for a new build.',
-    'Our estimator gives a planning range in minutes.',
+    // Still not allowed after the 13 November 2026 reversal: it is never a quote, a bid or
+    // a final price, and no number of minutes is promised.
+    'Get an instant quote for your new build.',
+    'Instant online bids for your addition.',
+    'Get an instant firm price online.',
+    'Instantly see your guaranteed price.',
+    'Get a quote in minutes.',
+    'See your estimate in 5 minutes.',
     'One contract, one project manager, one invoice.',
     'Design and construction under a single contract.',
     'Same-day financing approval.',
@@ -148,6 +163,13 @@ function main(): void {
     'They do not coordinate with each other or send you one bill.',
     'Explore planning ranges',
     'Cancellation of scheduled services requires 24-hour advance notice',
+    // Allowed since the owner decision of 13 November 2026 (these three were caught before).
+    'Book a free planning consultation or get an instant build cost range.',
+    'Instant planning range for a new build.',
+    'Our estimator gives a planning range in minutes.',
+    'Get an instant estimate',
+    'Get an instant estimate, or request a quote and talk to our team.',
+    'See an instant preliminary estimate online, schedule a free 60 to 90 minute planning consultation, or call our team.',
   ];
   const selfTestFailures = [
     ...mustCatch.filter((s) => findProhibited(s).length === 0).map((s) => `guard missed: ${s}`),
@@ -176,7 +198,7 @@ function main(): void {
     console.error(
       `verify-response-language: ${problems.length} prohibited promise(s) or claim(s) found.\n` +
         'Say that we answer questions and help with the next step, without a time frame. Do not claim\n' +
-        'bonded, an instant estimate, one contract or invoice, or same-day financing.\n\n' +
+        'bonded, an instant quote, bid or final price, one contract or invoice, or same-day financing.\n\n' +
         problems.join('\n'),
     );
     process.exit(1);

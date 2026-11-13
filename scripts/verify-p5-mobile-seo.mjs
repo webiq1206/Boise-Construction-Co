@@ -23,9 +23,10 @@ try{
    assert.ok(controls.every(c=>c.height>=44),'Mobile action too small');
    await page.screenshot({path:`${out}/actions-${width}.png`});
    await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await delay(150);assert.equal(await visible(bar),true,'Approved mobile CTA remains available after returning to hero');
-   const primary=bar.locator('a[href="/estimate"]');assert.equal(await primary.count(),1,'One primary quote destination');
+   // Owner decision, 13 November 2026: the bar's one primary action is the family's central estimator, framed at /instant-estimate.
+   const primary=bar.locator('a[href="/instant-estimate"]');assert.equal(await primary.count(),1,'One primary estimate destination');
    assert.ok(await primary.evaluate(el=>{const r=el.getBoundingClientRect();return el.contains(document.elementFromPoint(r.left+r.width/2,r.top+r.height/2));}),'Primary CTA is unobstructed');
-   await primary.click();await page.waitForURL('**/estimate');await page.getByTestId('consultation-wizard').waitFor({state:'visible'});assert.equal(await page.getByTestId('consultation-wizard').getAttribute('data-step'),'project','Current quote wizard starts at project selection');assert.equal(await visible(page.locator('[data-mobile-nav-bar]')),false,'Marketing CTA must yield to the quote wizard');
+   await primary.click();await page.waitForURL('**/instant-estimate');await page.locator('[data-estimator-frame="construction"] iframe').waitFor({state:'attached'});assert.equal(await page.locator('[data-estimator-frame] iframe').count(),1,'The instant estimate page frames the estimator once');assert.equal(await visible(page.locator('[data-mobile-nav-bar]')),false,'Marketing CTA must yield to the framed estimator');
    results.mobile.push({width,visibleOverHero:true,visibleAfterHero:true,callLabeled:true});
   }
  }

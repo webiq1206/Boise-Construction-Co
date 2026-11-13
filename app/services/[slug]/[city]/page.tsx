@@ -20,6 +20,7 @@ getServiceBySlug,
 import { getCityServiceImageSet } from '@/shared/cityServiceImages';
 import { getCountyLabel,serviceLabel } from '@/shared/contentData';
 import { getGalleryProjectsFor } from '@/shared/galleryData';
+import { servicePrimaryAction } from '@/shared/instantEstimate';
 import { BOISE_CUSTOM_HOME_PLANNING } from '@/shared/content/boisePlanning';
 import {
 getCityServiceFaqs,
@@ -118,6 +119,8 @@ export default async function CityServicePage(
       <JsonLd data={schemas} />
       <LandingPageTemplate
         priorityPlanning={service.slug === 'custom-home-builder' && city.slug === 'boise'}
+        // Same rule as the service page: the estimator where it prices this service, the quote request where it does not.
+        primaryAction={servicePrimaryAction(service.slug)}
         h1={h1}
         speakableSummary={overview}
         overview={overview}

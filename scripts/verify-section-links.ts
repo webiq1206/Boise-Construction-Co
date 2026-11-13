@@ -30,6 +30,7 @@ const EXTRA_VALID = new Set<string>([
   '/',
   '/contact',
   '/estimate',
+  '/instant-estimate',
   '/resources',
   '/resources/ada-canyon-permit-flow',
   '/re-10-repairs-boise',

@@ -252,7 +252,8 @@ function assertLayout(m,label,width,height) {
   verify(m.posterLoaded,`${label}: poster did not decode`);
   verify(m.media.muted && m.media.loop && m.media.playsInline,`${label}: muted inline looping flags missing`);
   verify(m.media.objectFit==='cover',`${label}: video object-fit must cover`);
-  verify(m.cta.href==='/estimate' && m.cta.text==='Request a quote',`${label}: changed primary CTA`);
+  // Owner decision, 13 November 2026: the hero's primary action is the family's central estimator, framed at /instant-estimate.
+  verify(m.cta.href==='/instant-estimate' && m.cta.text==='Get an instant estimate',`${label}: changed primary CTA`);
   verify(m.links.some(a=>a.href==='tel:+12084771169' && a.text==='Call or text (208) 477-1169'),`${label}: changed telephone action`);
   verify(m.heading==='Custom home builder in Boise. Built around you.',`${label}: changed headline`);
   verify(m.headline.y>=m.header.bottom-1 && m.headline.bottom<=floor+1,`${label}: headline outside first screen`);
@@ -568,7 +569,7 @@ async function grids() {
 
 function contrastSummary() {
   const measurements=rows.flatMap(row=>(row.sceneContrast??[]).flatMap(scene=>scene.runs.map(run=>({...run,viewport:row.viewport,time:scene.time,actualTime:scene.actualTime}))));
-  const role=run=>run.text==='Request a quote'?'primary CTA':run.fontSize>=32?(run.color[0]===196?'ochre H1':'white H1'):run.text.startsWith('We answer your questions')?'microcopy':run.text.includes('Custom home building')?'eyebrow':run.text.startsWith('From bare lot')?'support':'telephone action';
+  const role=run=>run.text==='Get an instant estimate'?'primary CTA':run.fontSize>=32?(run.color[0]===196?'ochre H1':'white H1'):run.text.startsWith('We answer your questions')?'microcopy':run.text.includes('Custom home building')?'eyebrow':run.text.startsWith('From bare lot')?'support':'telephone action';
   const brief=run=>({text:run.text,viewport:run.viewport,time:run.time,actualTime:run.actualTime,ratio:run.minimum,required:run.required,x:run.x,y:run.y,width:run.width,height:run.height});
   const minima=items=>Object.fromEntries([...new Set(items.map(role))].map(name=>{
     const selected=items.filter(run=>role(run)===name);

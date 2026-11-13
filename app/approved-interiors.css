@@ -1056,3 +1056,45 @@
     width:100%
   }
 }
+
+/* /instant-estimate: the family's central estimator, framed (owner decision,
+   13 November 2026). The intro stays short so the first estimator question is
+   on a phone's first screen. Its measure matches the estimator's own column
+   (760px, 16px gutters), so the heading and the questions share one left edge.
+   The padding sits on the inner measure: the interior shell resets the top
+   padding of a page's first section. */
+.approved-interior .instant-estimate-measure {
+  width:100%;
+  max-width:760px;
+  margin-inline:auto;
+  padding:20px 16px 8px
+}
+.approved-interior .instant-estimate-intro h1 {
+  margin:0;
+  max-width:none
+}
+.approved-interior .instant-estimate-intro p.instant-estimate-support {
+  margin:10px 0 0;
+  max-width:60ch;
+  font-size:16px;
+  line-height:1.5;
+  color:#4a4d4a
+}
+.approved-interior .instant-estimate-frame {
+  width:100%;
+  max-width:960px;
+  margin-inline:auto;
+  padding-bottom:24px
+}
+@media(min-width:701px) {
+  .approved-interior .instant-estimate-measure {
+    padding:44px 16px 12px
+  }
+  .approved-interior .instant-estimate-intro p.instant-estimate-support {
+    font-size:18px;
+    line-height:1.6
+  }
+  .approved-interior .instant-estimate-frame {
+    padding-bottom:48px
+  }
+}

@@ -137,7 +137,7 @@ export default function ServicesIndexPage() {
             </h2>
             <div>
               <p className="ed-body">
-                Book a free planning consultation or request a quote.
+                Get an instant preliminary estimate or book a free planning consultation.
               </p>
               <div className="mt-8 interior-hero-actions">
                 <ConsultCTA variant="brand">{CTA_PRIMARY}</ConsultCTA>

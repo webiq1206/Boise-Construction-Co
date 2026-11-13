@@ -3,6 +3,7 @@ import { FamilyButton } from "@/components/family/Button";
 import { brandStyle } from "@/components/family/brandStyle";
 import { ProofStrip } from "@/components/family/ProofStrip";
 import { FAMILY_BRAND } from "@/lib/familyBrand";
+import { CTA_PRIMARY } from "@/shared/ctaCopy";
 import {
   CONTRACTOR_LICENSE_SEARCH_URL,
   CONTRACTOR_REGISTRATION_LABEL,
@@ -25,7 +26,7 @@ export function HomeHero() {
               <h1 className="fam-hero-title" id="family-hero-title">Custom home builder in Boise. <span className="fam-hero-accent">Built around you.</span></h1>
               <p className="fam-hero-support">From bare lot to the keys, one accountable team.</p>
               <div className="fam-hero-actions">
-                <FamilyButton href={FAMILY_BRAND.cta.href} variant="hero" size="lg" data-hero-cta="primary" data-cta="primary">{FAMILY_BRAND.cta.label}</FamilyButton>
+                <FamilyButton href={FAMILY_BRAND.cta.href} variant="hero" size="lg" data-hero-cta="primary" data-cta="primary">{CTA_PRIMARY}</FamilyButton>
                 <a href={FAMILY_BRAND.phone.telHref} className="fam-hero-link">Call or text {FAMILY_BRAND.phone.display}</a>
               </div>
               <p className="fam-hero-micro">We answer your questions, start to finish.</p>

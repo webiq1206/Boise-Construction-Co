@@ -5,6 +5,7 @@ import { PrimaryCta } from "@/components/approved/PrimaryCta";
 import { Button } from "@/components/ui/button";
 import type { ButtonProps } from "@/components/ui/button";
 import { trackEvent } from "@/lib/analytics";
+import { INSTANT_ESTIMATE_PATH } from "@/shared/instantEstimate";
 
 interface EstimateCTAProps extends Omit<ButtonProps, "onClick" | "asChild"> {
   onExtraClick?: () => void;
@@ -14,9 +15,15 @@ interface EstimateCTAProps extends Omit<ButtonProps, "onClick" | "asChild"> {
   href?: string;
 }
 
+/**
+ * The sitewide primary action. Owner decision, 13 November 2026: it opens the
+ * family's central estimator, framed at /instant-estimate, on every page. It
+ * used to scroll to /#calculator on the homepage and open the /estimate quote
+ * form elsewhere; both are still there, linked as the secondary paths.
+ */
 export function EstimateCTA({ onExtraClick, children, trackingLocation, href: explicitHref, ...props }: EstimateCTAProps) {
   const pathname = usePathname();
-  const href = explicitHref ?? (pathname === "/" ? "/#calculator" : "/estimate");
+  const href = explicitHref ?? INSTANT_ESTIMATE_PATH;
 
   /* The primary action on a page body is one component everywhere: the brand
      variant renders the shared PrimaryCta (charcoal on light, paper on dark)

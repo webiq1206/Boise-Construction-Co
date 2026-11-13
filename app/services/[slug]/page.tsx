@@ -19,6 +19,7 @@ import { CITIES,serviceLabel } from '@/shared/contentData';
 import { getFeaturedGalleryProject } from '@/shared/galleryData';
 import { getScopeSplitSection,SERVICE_SEO_CONTENT } from '@/shared/seoContent';
 import { getServiceImageSet } from '@/shared/serviceBackgrounds';
+import { servicePrimaryAction } from '@/shared/instantEstimate';
 import { CONSTRUCTION_IMAGES } from '@/shared/siteImages';
 import { notFound } from 'next/navigation';
 
@@ -54,6 +55,14 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
   const featuredProject = getFeaturedGalleryProject(service.slug);
   const serviceLC = serviceNameInSentence(service.name);
   const isAddition = service.slug === 'home-additions';
+  /** The addition quote request keeps its project intent; it is now the secondary path to a person. */
+  const quoteHref = isAddition ? '/estimate?project=addition&service=home-additions' : '/estimate';
+  /**
+   * Owner decision, 13 November 2026: a service the family estimator prices opens it on that
+   * project ("Get an instant estimate"). The others keep "Request a quote": a visitor is never
+   * sent to an estimator that cannot price their project (shared/instantEstimate.ts).
+   */
+  const primaryAction = servicePrimaryAction(service.slug, quoteHref);
   /** Name used where the page links its city pages ("Detached ADUs & Guest Houses in Boise"). */
   const cityPageName = serviceCityHeadingName(service);
 
@@ -68,9 +77,7 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
           { label: 'Boise home building cost guide', href: '/guides/boise-home-building-cost-guide' },
           {
             label: isAddition ? 'Start your home addition estimate' : 'Get your build cost range',
-            href: isAddition
-              ? '/estimate?project=addition&service=home-additions'
-              : '/#calculator',
+            href: isAddition ? primaryAction.href : '/#calculator',
           },
         ],
       }
@@ -226,7 +233,8 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
         processImageUrl={images.process}
         manifestPath={path}
         planningFrom={service.planningFrom}
-        estimateHref={isAddition ? '/estimate?project=addition&service=home-additions' : undefined}
+        primaryAction={primaryAction}
+        quoteHref={quoteHref}
         costGuidance={costGuidance}
         breadcrumbs={[
           { name: 'Home', href: '/' },

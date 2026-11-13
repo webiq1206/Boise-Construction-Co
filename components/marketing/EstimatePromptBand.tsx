@@ -1,7 +1,8 @@
 import { Section } from "./Section";
 import { Reveal } from "@/components/Reveal";
-import { PrimaryCta } from "@/components/approved/PrimaryCta";
-import { CTA_PRIMARY } from "@/shared/ctaCopy";
+import { HeroTextLink, PrimaryCta } from "@/components/approved/PrimaryCta";
+import { CTA_PRIMARY, CTA_QUOTE } from "@/shared/ctaCopy";
+import { INSTANT_ESTIMATE_PATH, QUOTE_REQUEST_PATH } from "@/shared/instantEstimate";
 
 interface EstimatePromptBandProps {
   eyebrow?: string;
@@ -17,7 +18,9 @@ interface EstimatePromptBandProps {
 
 /**
  * Contextual estimator prompt for service, area and content pages.
- * Opens the estimator; callers can provide a service-specific destination.
+ * Opens the family's instant estimator at /instant-estimate (owner decision,
+ * 13 November 2026); callers can provide a service-specific destination. The
+ * quote request sits beside it as the path to a person.
  *
  * WAS a card inside a card: a bordered panel with an icon box, a left accent
  * rule and a 36px heading, centred in a 1024px container on a band the same
@@ -33,11 +36,11 @@ export function EstimatePromptBand({
   eyebrow = "Planning your budget",
   title,
   description,
-  href = "/estimate",
+  href = INSTANT_ESTIMATE_PATH,
   bullets = [
-    "Based on real Treasure Valley project costs",
-    "Project details reviewed by our team",
-    "Additional details or a site visit may be needed",
+    "Free and open day or night",
+    "No appointment needed to see your range",
+    "A preliminary range now, a firm written proposal after we visit",
   ],
 }: EstimatePromptBandProps) {
   return (
@@ -52,8 +55,11 @@ export function EstimatePromptBand({
           <Reveal delay={80}>
             <div className="flex flex-col items-start gap-6">
               <p className="ed-body">{description}</p>
-              <PrimaryCta href={href} trackingLocation="estimate_prompt_band">{CTA_PRIMARY}</PrimaryCta>
-              <p className="ed-small">Free · Not a binding quote</p>
+              <div className="interior-hero-actions">
+                <PrimaryCta href={href} trackingLocation="estimate_prompt_band">{CTA_PRIMARY}</PrimaryCta>
+                <HeroTextLink href={QUOTE_REQUEST_PATH}>{CTA_QUOTE}</HeroTextLink>
+              </div>
+              <p className="ed-small">Free · A preliminary range, not a final price</p>
             </div>
           </Reveal>
         </div>

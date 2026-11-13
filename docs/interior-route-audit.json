@@ -98,5 +98,10 @@
     "route": "/estimate",
     "file": "app/estimate/page.tsx",
     "seoSignature": "9717e449122e9b0f7e0891aef58d758dd60f3eca47f73d9388a3d669502ce49e"
+  },
+  {
+    "route": "/instant-estimate",
+    "file": "app/instant-estimate/page.tsx",
+    "seoSignature": "88a845365deb36a4cb1b396d90298287d20a77d5b968ab260c5a8bfc89f7be17"
   }
 ]
