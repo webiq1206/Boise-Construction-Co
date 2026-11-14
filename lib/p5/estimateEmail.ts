@@ -1,5 +1,5 @@
 import {ESTIMATOR_BRAND as brand} from './brand.ts';
-import {embeddedSchedule} from '../../server/services/scheduleEmail.ts';
+import {embeddedSchedule} from './leadSchedule.ts';
 import {estimateLinkUrl} from './estimateLinks.ts';
 import {legalIdentityLine} from './brandIdentity.ts';
 import {buildAdminSummary,adminBasis} from './adminEstimate.ts';

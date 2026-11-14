@@ -1,4 +1,4 @@
-import {embeddedSchedule} from '../../server/services/scheduleEmail.ts';
+import {embeddedSchedule} from './leadSchedule.ts';
 import {intakeContactLabel,intakeChoiceLabel,intakeSavedAt} from './intakeDisplay.ts';
 import {ESTIMATOR_BRAND as brand} from './brand.ts';
 import {INTAKE_SITES,INTAKE_RECIPIENTS} from './intakePolicy.ts';
