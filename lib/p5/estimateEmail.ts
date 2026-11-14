@@ -1,4 +1,5 @@
 import {ESTIMATOR_BRAND as brand} from './brand.ts';
+import {embeddedSchedule} from './leadSchedule.ts';
 import {estimateLinkUrl} from './estimateLinks.ts';
 import {legalIdentityLine} from './brandIdentity.ts';
 import {buildAdminSummary,adminBasis} from './adminEstimate.ts';
@@ -43,6 +44,8 @@ function customerHtml(doc:EstimateDocument,link=''){
  const first=doc.customer.name.split(' ')[0];
  parts.push(`<p style="margin:0 0 14px;font-size:16px;line-height:1.6;color:${C.ink}">${escape(first?`Hi ${first},`:'Hello,')}</p>`);
  parts.push(`<p style="margin:0 0 20px;font-size:16px;line-height:1.6;color:${C.ink}">Thank you for using the ${escape(doc.brand.name)} online estimator. Your preliminary estimate is below, and the complete estimate is attached as a PDF.</p>`);
+ const schedule=embeddedSchedule({kind:'estimate',intent:'walkthrough',accent:doc.brand.accent});
+ parts.push(schedule.html);
  // A signed link opens this saved estimate on any device to review or revise it (estimateLinks.ts).
  if(link)parts.push(`<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;margin:0 0 18px"><tr><td align="center"><a href="${escape(link)}" style="display:inline-block;padding:13px 24px;border-radius:6px;background:${accent};color:#FFFFFF;font-size:15px;font-weight:700;text-decoration:none">View or update your estimate online</a></td></tr></table>`);
  // Total first: the number, what it is, and whether anything requested is still unpriced.
@@ -94,7 +97,8 @@ function customerLayout(doc:EstimateDocument,body:string){
 </table></td></tr></table></body></html>`;
 }
 function customerText(doc:EstimateDocument,link=''){
- const lines:string[]=[doc.brand.name,'PRELIMINARY ONLINE ESTIMATE',doc.title,...(doc.projectName?[doc.projectName]:[]),`Estimate ${doc.reference}${doc.issuedLabel?` | Prepared ${doc.issuedLabel}`:''}`,'',...(link?[`View or update your estimate online: ${link}`,'']:[])];
+ const schedule=embeddedSchedule({kind:'estimate',intent:'walkthrough',accent:doc.brand.accent});
+ const lines:string[]=[doc.brand.name,'PRELIMINARY ONLINE ESTIMATE',doc.title,...(doc.projectName?[doc.projectName]:[]),`Estimate ${doc.reference}${doc.issuedLabel?` | Prepared ${doc.issuedLabel}`:''}`,'',schedule.text,'',...(link?[`View or update your estimate online: ${link}`,'']:[])];
  lines.push(`${(doc.total?.label||'Estimate status').toUpperCase()}: ${doc.total?.amount||'Pricing pending review'}`);if(doc.partialNote)lines.push(doc.partialNote);lines.push('');
  lines.push(doc.finish.heading.toUpperCase(),doc.finish.name,doc.finish.detail,doc.finish.basis,'');
  if(doc.categories.length){lines.push('SCOPE & PRICING');for(const c of doc.categories){lines.push(`${c.number}  ${c.title}${c.amount?`: ${c.amount}`:''}`);for(const w of c.work)lines.push(`  - ${w}`);for(const a of c.allowances)lines.push(`  - Allowance included: ${a}`);}

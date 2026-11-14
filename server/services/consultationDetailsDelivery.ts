@@ -6,10 +6,18 @@ import {
   escapeHtml,
   formatFromAddress,
   getAdminRecipientEmails,
+  getReplyToAddress,
   htmlToPlainText,
   wrapEmailHtml,
 } from "@/server/services/emailLayout";
-import { formatLeadReplyTo } from "@/server/services/consultationEmail";
+import { CALLBACK_MARKER } from "@/server/services/consultationRequest";
+import {
+  buildCustomerEmailHtml,
+  buildCustomerEmailText,
+  buildCustomerSubject,
+  formatLeadReplyTo,
+  type LeadContact,
+} from "@/server/services/consultationEmail";
 import { getUncachableEmailClient } from "@/server/services/emailTransport";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import { forwardConsultationToP5Intake } from "@/server/services/p5IntakeBridge";
@@ -157,6 +165,43 @@ export const detailsDestinations: DetailsDestinations = {
         { idempotencyKey: `consultation-details-${detailsFingerprint(lead.inquiryKey, merge.block ?? "")}-${to}` },
       );
       if (result?.error) throw new Error(`Details email failed: ${result.error.message}`);
+    }
+    // The confirmation goes out once, when this step is what first records an
+    // address. A stored callback stays a phone consult. Anything else is a
+    // home walkthrough. A send failure is logged and does not fail the
+    // internal notice, which already went out above.
+    const addedEmail = merge.lines.some((line) => line.startsWith("Email: "));
+    if (addedEmail && lead.email.trim()) {
+      try {
+        const contact: LeadContact = {
+          name: lead.name,
+          phone: lead.phone,
+          email: lead.email,
+          address: lead.address ?? "",
+          zip: lead.zip,
+          projectType: lead.projectType,
+          message: lead.message ?? "",
+          requestKind: (lead.message ?? "").includes(CALLBACK_MARKER) ? "callback" : "quote",
+        };
+        const html = buildCustomerEmailHtml(contact, null);
+        const sent = await client.emails.send(
+          {
+            from: formatFromAddress(),
+            replyTo: getReplyToAddress(),
+            to: lead.email,
+            subject: buildCustomerSubject(contact, null),
+            html,
+            text: buildCustomerEmailText(contact, null),
+          },
+          { idempotencyKey: `consultation-customer-${lead.inquiryKey}` },
+        );
+        if (sent?.error) console.error("[consultation-details] customer confirmation not sent:", sent.error.message);
+      } catch (error) {
+        console.error(
+          "[consultation-details] customer confirmation failed:",
+          error instanceof Error ? error.message : error,
+        );
+      }
     }
   },
   async crm(lead, merge) {

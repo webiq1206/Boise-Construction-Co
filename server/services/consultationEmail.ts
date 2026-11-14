@@ -1,9 +1,19 @@
 import {
   escapeHtml,
+  htmlToPlainText,
   wrapEmailHtml,
   EMAIL_BRAND,
 } from "@/server/services/emailLayout";
 import { SITE_CONFIG } from "@/shared/siteConfig";
+import {
+  BRAND_ACCENT,
+  contactLine,
+  estimateLeadCard,
+  estimatorConfirmation,
+  paperScheduleCard,
+  requestConfirmation,
+  scheduleIntentFor,
+} from "@/server/services/scheduleEmail";
 import {
   takeoffForRange,
   takeoffForClient,
@@ -843,9 +853,10 @@ export function buildAdminEmailHtml(
 }
 
 /**
- * Lead-facing email. Includes the complete estimate and every selection so the
- * customer has it in writing without ever logging in. Falls back to a warm
- * acknowledgement when no planning range was attached.
+ * Lead-facing email. A saved planning range stays in the message so the
+ * customer has it in writing. Every version leads with Schedule now and the
+ * estimate disclaimer. A callback names the 15 minute phone consult. A
+ * project request names the 1 hour home walkthrough.
  */
 export function buildCustomerEmailHtml(
   lead: LeadContact,
@@ -854,37 +865,91 @@ export function buildCustomerEmailHtml(
 ): string {
   const firstName = firstNameOf(lead.name);
   const projectLabel = estimate ? PROJECT_LABELS[estimate.project].label : lead.projectType;
+  const intent = scheduleIntentFor({ requestKind: lead.requestKind });
+
+  if (!estimate) {
+    const message = requestConfirmation({
+      firstName,
+      brandName: SITE_CONFIG.name,
+      intent,
+      phone: SITE_CONFIG.phone,
+      accent: BRAND_ACCENT,
+    });
+    return wrapEmailHtml({
+      title: "We have your request",
+      content: paperScheduleCard(message.html),
+    });
+  }
+
+  // A phone-consult request still carries the range they built, but the
+  // button tells them to pick 15 minutes. A project request picks 1 hour.
+  const opening = estimateLeadCard({
+    firstName,
+    brandName: SITE_CONFIG.name,
+    project: projectLabel,
+    intent,
+    accent: BRAND_ACCENT,
+  });
 
   // Only when there is no computed comparison to show. Once the estimator has a
-  // real number it renders the solved version - where their budget actually
-  // lands and what would change it - and restating the same figure in a second
+  // real number it renders the solved version, where their budget actually
+  // lands and what would change it, and restating the same figure in a second
   // paragraph reads as though nobody joined the two up. This stays for the
   // consultation form, where someone can give a budget with no estimate behind
   // it and generic reassurance is the honest most we can offer.
   const budgetNote =
-    lead.budget && !estimate?.statedBudget
-    ? `<p style="margin:16px 0;color:${EMAIL_BRAND.text};line-height:1.6;">Your stated project budget is <strong>${escapeHtml(lead.budget)}</strong>. We will do everything we can to recommend solutions that fit within that budget while helping you achieve the goals you have shared. If your ideal scope runs beyond it, we will focus on the rooms and features that matter most to you, look at where a simpler footprint or a different plan buys back real money, and show you what is worth spending on now versus finishing later. Our job is to find the best path forward for your home, never to tell you your budget is not enough.</p>`
-    : "";
+    lead.budget && !estimate.statedBudget
+      ? `<p style="margin:16px 0;color:${EMAIL_BRAND.text};line-height:1.6;">Your stated project budget is <strong>${escapeHtml(lead.budget)}</strong>. We will do everything we can to recommend solutions that fit within that budget while helping you achieve the goals you have shared. If your ideal scope runs beyond it, we will focus on the rooms and features that matter most to you, look at where a simpler footprint or a different plan buys back real money, and show you what is worth spending on now versus finishing later. Our job is to find the best path forward for your home, never to tell you your budget is not enough.</p>`
+      : "";
 
-  const content = estimate
-    ? `
-      <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">Thanks, ${escapeHtml(firstName)}. Here is the planning range you built.</p>
-      ${buildEstimateSectionsHtml(estimate, overrides)}
-      ${budgetNote}
-      <p style="color:${EMAIL_BRAND.text};line-height:1.6;">We will reach out to answer your questions and book your free planning consultation, where we confirm the scope and give you a firm number. Until then, reply here or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> with any questions.</p>
-      <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The ${escapeHtml(SITE_CONFIG.name)} team</p>
-    `
-    : `
-      <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">We received your consultation request. We will reach out to answer your questions and schedule your free planning consultation.</p>
-      <p style="color:${EMAIL_BRAND.text};line-height:1.6;">In the meantime, feel free to call us at <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a>, <a href="${SITE_CONFIG.phoneSmsHref}" style="color:${EMAIL_BRAND.accent};">send us a text</a>, or reply to this email with any questions.</p>
-      <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The ${escapeHtml(SITE_CONFIG.name)} team</p>
-    `;
+  const closing = `<p style="color:${EMAIL_BRAND.text};line-height:1.6;">${escapeHtml(contactLine(SITE_CONFIG.phone))}</p>
+      <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The ${escapeHtml(SITE_CONFIG.name)} team</p>`;
 
   return wrapEmailHtml({
-    title: estimate ? `Your ${projectLabel} planning range` : `Thanks, ${escapeHtml(lead.name)}!`,
-    subtitle: estimate ? "Saved so you have it in writing" : "We received your consultation request",
-    content,
+    title: `Your ${projectLabel} estimate`,
+    subtitle: "Saved so you have it in writing",
+    content: `
+      ${opening.html}
+      ${buildEstimateSectionsHtml(estimate, overrides)}
+      ${budgetNote}
+      ${closing}
+    `,
   });
+}
+
+/** Plain text twin. The booking URL is written out; the button alone is not enough. */
+export function buildCustomerEmailText(
+  lead: LeadContact,
+  estimate: VerifiedEstimate | null,
+  overrides?: UnitCostOverrides
+): string {
+  const firstName = firstNameOf(lead.name);
+  const projectLabel = estimate ? PROJECT_LABELS[estimate.project].label : lead.projectType;
+  const intent = scheduleIntentFor({ requestKind: lead.requestKind });
+  if (!estimate) {
+    return requestConfirmation({
+      firstName,
+      brandName: SITE_CONFIG.name,
+      intent,
+      phone: SITE_CONFIG.phone,
+      accent: BRAND_ACCENT,
+    }).text;
+  }
+  const opening = estimateLeadCard({
+    firstName,
+    brandName: SITE_CONFIG.name,
+    project: projectLabel,
+    intent,
+    accent: BRAND_ACCENT,
+  });
+  const range = htmlToPlainText(buildEstimateSectionsHtml(estimate, overrides));
+  const budget =
+    lead.budget && !estimate.statedBudget
+      ? `Your stated project budget is ${lead.budget}. We will do everything we can to recommend solutions that fit within that budget.`
+      : "";
+  return [opening.text, "", range, budget, contactLine(SITE_CONFIG.phone), "", `The ${SITE_CONFIG.name} team`]
+    .filter(Boolean)
+    .join("\n\n");
 }
 
 export function buildAdminSubject(lead: LeadContact, estimate: VerifiedEstimate | null): string {
@@ -896,8 +961,20 @@ export function buildAdminSubject(lead: LeadContact, estimate: VerifiedEstimate 
 }
 
 export function buildCustomerSubject(lead: LeadContact, estimate: VerifiedEstimate | null): string {
-  const projectLabel = estimate ? PROJECT_LABELS[estimate.project].label : lead.projectType;
-  return estimate
-    ? `Your ${projectLabel} planning range | ${SITE_CONFIG.name}`
-    : `We received your request | ${SITE_CONFIG.name}`;
+  const firstName = firstNameOf(lead.name);
+  const intent = scheduleIntentFor({ requestKind: lead.requestKind });
+  if (!estimate) {
+    return requestConfirmation({
+      firstName,
+      brandName: SITE_CONFIG.name,
+      intent,
+      phone: SITE_CONFIG.phone,
+    }).subject;
+  }
+  return estimatorConfirmation({
+    firstName,
+    brandName: SITE_CONFIG.name,
+    project: PROJECT_LABELS[estimate.project].label,
+    phone: SITE_CONFIG.phone,
+  }).subject;
 }

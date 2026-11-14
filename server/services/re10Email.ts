@@ -1,5 +1,6 @@
 import { escapeHtml, wrapEmailHtml, EMAIL_BRAND } from "@/server/services/emailLayout";
 import { SITE_CONFIG } from "@/shared/siteConfig";
+import { BRAND_ACCENT, contactLine, embeddedSchedule, paperScheduleCard } from "@/server/services/scheduleEmail";
 import { TRADE_LABELS, type Re10Estimate } from "@/shared/costs/re10Repairs";
 import { RE10_PRICING_DISCLAIMER } from "@/shared/content/re10Content";
 
@@ -117,8 +118,10 @@ export function buildRe10CustomerEmail(
         </div>`
       : "";
 
+  const schedule = embeddedSchedule({ kind: "estimate", intent: "walkthrough", accent: BRAND_ACCENT });
   const content = `
     <p class="greeting" style="font-size:18px;color:${EMAIL_BRAND.text};margin:0 0 20px;">Thanks, ${escapeHtml(firstName)}. Here is the price for the repairs on the RE-10 you sent.</p>
+    ${paperScheduleCard(schedule.html)}
 
     <div style="background:${EMAIL_BRAND.raised};border-left:3px solid ${EMAIL_BRAND.accent};padding:24px;margin:24px 0;border-radius:4px;">
       <p style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:0.14em;color:${EMAIL_BRAND.textMuted};">Price for the repairs below</p>
@@ -148,7 +151,7 @@ export function buildRe10CustomerEmail(
       <p style="margin:0;color:#e8dca6;font-size:13px;line-height:1.55;">${escapeHtml(RE10_PRICING_DISCLAIMER)}</p>
     </div>
 
-    <p style="color:${EMAIL_BRAND.text};line-height:1.6;">Next step is a short onsite visit to confirm the scope, price the items listed below as needing a look, and get you on the schedule. Reply here or call <a href="${SITE_CONFIG.phoneHref}" style="color:${EMAIL_BRAND.accent};">${escapeHtml(SITE_CONFIG.phone)}</a> and we will get it scheduled against your deadline.</p>
+    <p style="color:${EMAIL_BRAND.text};line-height:1.6;">${escapeHtml(contactLine(SITE_CONFIG.phone))}</p>
     <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The ${SITE_CONFIG.name} team</p>
   `;
 
