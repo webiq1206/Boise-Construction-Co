@@ -13,6 +13,7 @@ import {
 import {
   buildAdminEmailHtml,
   buildCustomerEmailHtml,
+  buildCustomerEmailText,
   buildAdminSubject,
   buildCustomerSubject,
   formatLeadReplyTo,
@@ -396,7 +397,7 @@ export async function POST(request: NextRequest) {
             to: data.email,
             subject: buildCustomerSubject(lead, estimate),
             html: customerHtml,
-            text: htmlToPlainText(customerHtml),
+            text: buildCustomerEmailText(lead, estimate, costs),
           }, { idempotencyKey: resendIdempotencyKey(intakeResult.inquiryKey, revisionKey, "customer", data.email) });
           if (customerResult?.error) {
             throw new Error(`Customer email failed: ${customerResult.error.message}`);

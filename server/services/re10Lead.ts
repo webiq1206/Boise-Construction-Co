@@ -8,6 +8,7 @@ import {
   getReplyToAddress,
 } from "@/server/services/emailLayout";
 import { formatLeadReplyTo } from "@/server/services/consultationEmail";
+import { BRAND_ACCENT, embeddedSchedule } from "@/server/services/scheduleEmail";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { readLocalFile, isLocalUrl, extractLocalKey } from "@/lib/storage/blob";
@@ -343,13 +344,15 @@ export async function deliverRe10Lead(input: Re10DeliveryInput): Promise<Re10Del
     // has not given an address, and inventing one would bounce.
     if (contact.email) {
       const customerHtml = buildRe10CustomerEmail(contact, input.customerView);
+      const schedule = embeddedSchedule({ kind: "estimate", intent: "walkthrough", accent: BRAND_ACCENT });
       const sent = await client.emails.send({
         from,
         replyTo: getReplyToAddress(),
         to: contact.email,
         subject: buildRe10CustomerSubject(contact),
         html: customerHtml,
-        text: htmlToPlainText(customerHtml),
+        // The button's address is only in the href. Write it out for plain-text clients.
+        text: `${schedule.text}\n\n${htmlToPlainText(customerHtml)}`,
       });
       if (sent?.error) console.error("[re10Lead] customer email failed:", JSON.stringify(sent.error));
       else if (!isNoop) result.customerEmailed = true;
