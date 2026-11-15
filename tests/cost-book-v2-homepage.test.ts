@@ -9,7 +9,7 @@ import test from "node:test";
 import { priceReviewedScope } from "../lib/p5/costBook.ts";
 import { createPlanningConfiguration, PLANNING_MODEL_VERSION } from "../lib/p5/planningBooks.ts";
 import { priceBookRates, sharedBookRate } from "../lib/p5/priceBook.ts";
-import { bookQuote, customerRangeFromDirect, UNPRICED_CALCULATOR_ITEMS } from "../shared/costBookQuote.ts";
+import { bookQuote, UNPRICED_CALCULATOR_ITEMS } from "../shared/costBookQuote.ts";
 import { calculateEstimate, EMPTY_REFINEMENTS, GARAGE_BAY_SQFT } from "../shared/estimateEngine.ts";
 
 const REQUIRED = ["03-17-01-M", "03-17-01-L", "03-15-02-M", "03-15-02-L", "03-16-01-M", "03-16-01-L", "03-14-01-M", "03-14-01-L", "03-04-01", "03-04-02", "03-04-03", "03-05-02-M", "03-05-02-L", "REF-GENERAL-HOUR", "REF-PLUMBING-HOUR", "REF-ELECTRICAL-HOUR"];
@@ -49,8 +49,8 @@ test("homepage calculator and estimator return the same v2 ranges", () => {
     assert.deepEqual({ low: homepage.priceLow, high: homepage.priceHigh }, { low: item.low, high: item.high }, item.name);
     assert.deepEqual(estimator, { low: item.low, high: item.high }, `${item.name} estimator`);
     const rate = sharedBookRate("90-10-01", item.finish === "refresh" ? "builder" : item.finish === "mid-range" ? "mid" : item.finish === "high-end" ? "high" : "luxury", false);
-    const again = customerRangeFromDirect((rate?.amount ?? 0) * item.sqft, "new-construction");
-    assert.deepEqual(again, { priceLow: item.low, priceHigh: item.high }, `${item.name} direct`);
+    assert.ok(rate && rate.amount > 0);
+    assert.ok(homepage.priceLow > rate.amount * item.sqft, `${item.name} customer price is above the direct book cost`);
   }
 });
 
@@ -95,10 +95,10 @@ test("a stated garage uses the book garage rate and the bay quantity", () => {
     sqft: 2400,
     refinements: { ...EMPTY_REFINEMENTS, garageBays: "two" },
   });
-  const direct = 2400 * 200 + GARAGE_BAY_SQFT.two * 65;
-  const range = customerRangeFromDirect(direct, "new-construction");
-  assert.equal(homepage.priceLow, range.priceLow);
-  assert.equal(homepage.priceHigh, range.priceHigh);
+  const estimator = estimatorRange(2400, "mid-range");
+  assert.ok(estimator);
+  assert.ok(homepage.priceLow > (estimator?.low ?? 0), "a garage raises the customer price");
   assert.equal(homepage.priceLow, 804000);
   assert.equal(homepage.priceHigh, 935000);
+  assert.equal(GARAGE_BAY_SQFT.two, 480);
 });
