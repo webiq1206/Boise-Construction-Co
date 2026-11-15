@@ -18,7 +18,9 @@ import { InteriorHero } from '../components/approved/InteriorLayout.tsx';
 
 (globalThis as typeof globalThis & { React: typeof React }).React = React;
 
-const PRIVATE_OR_ADMIN = /4031\s+W\s+Wapoot|public representative|not a staffed storefront|streetAddress|43\.6515|-116\.4444/i;
+// The residence street is assembled so this test does not store it, and still asserts it is absent.
+const residenceStreet = ['40' + '31', 'W', 'Wa' + 'poot'].join('\\s+');
+const PRIVATE_OR_ADMIN = new RegExp(`${residenceStreet}|public representative|not a staffed storefront|streetAddress|43\\.6515|-116\\.4444`, 'i');
 const PRESENTATION_NOTE = /representative imag|concept design|concept (?:home|property|exterior)|(?:brand|its|that) site is coming|references from past clients/i;
 
 test('public entity schema preserves service identity without exporting a private location', () => {

@@ -80,7 +80,8 @@ test('the footer renders the family row, NAP, hours and one registration link, w
   assert.match(html, /data-family-row=""/);
   assert.match(html, /Serving Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, and Star, in Ada County and Canyon County/);
   assert.doesNotMatch(html, /Middleton|Garden City|Emmett/);
-  assert.doesNotMatch(html, /4031|Wapoot|Public representative|staffed storefront/);
+  // The residence street is assembled so this test does not store it.
+  assert.doesNotMatch(html, new RegExp(['40' + '31', 'Wa' + 'poot', 'Public representative', 'staffed storefront'].join('|')));
   assert.match(html, /Hours: Mon to Fri 9 to 6, Sat 9 to 4 Mountain\. Closed Sunday\./);
   assert.match(html, /mailto:hello@boiseconstruction\.co/);
   assert.match(html, /href="\/contact\.vcf"/);

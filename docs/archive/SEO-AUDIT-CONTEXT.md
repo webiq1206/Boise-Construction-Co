@@ -18,7 +18,7 @@
 - Legal: Boise Construction Co LLC
 - Phone: (208) 477-1169
 - Email: hello@boiseconstruction.co
-- Address: 4031 W Wapoot St, Meridian, ID 83646
+- Address: Meridian, ID 83646
 - Founded: 2017
 - Service Area: Kuna, Boise, Meridian, Eagle, Star, Middleton (Idaho Treasure Valley, USDA Zone 6b-7a)
 
