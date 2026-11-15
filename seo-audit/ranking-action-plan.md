@@ -24,7 +24,7 @@ Page one is realistic for "boise handyman" and for "boise home builder" style te
 | Titles and meta | Handyman and construction titles lead with the commercial term (for example "Handyman in Boise, Idaho"). |
 | Duplicate content across your sites | Not an issue. Same-slug articles compare at 4 to 11 percent text similarity, so each site has its own writing. |
 | Reviews | Handyman code sets `rating: 0` and `reviewCount: 0`. No AggregateRating can be emitted. |
-| Shared identity | All brands use the same phone (208) 477-1169, same Meridian address (4031 W Wapoot St), same legal entity (P5 Home Co LLC), same public representative. |
+| Shared identity | All brands use the same phone (208) 477-1169, same public address (Meridian, ID 83646), same legal entity (P5 Home Co LLC), same public representative. |
 | Stale planning files | The handyman repo's `seo-audit/` folder is the remodeling audit. Its keyword map targets "boise remodeling company". Its keyword research file is custom home builder research. No handyman-specific keyword or competitor work exists. |
 | Programmatic share | Handyman 64 of 151 URLs (42 percent). Construction 72 of 160 (45 percent). Remodeling 60 of 200 (30 percent). |
 
