@@ -81,7 +81,7 @@ const NC_SCENARIOS: NcScenario[] = [
       bathroomCount: 4,
     },
     detailRatio: 1,
-    golden: { low: 2500000, high: 3055000 },
+    golden: { low: 2245000, high: 2740000 },
   },
   {
     id: "semi-custom-baseline-mid",

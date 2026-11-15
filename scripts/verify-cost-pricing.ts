@@ -239,6 +239,11 @@ for (const project of PROJECTS) {
 
   for (const p of probes) {
     if (!p.shown) continue;
+    // The basement kitchen question is a wet bar. The homepage calculator
+    // prices book line 90-20-10 when the answer is yes. The takeoff catalog
+    // has no wet bar assembly, so both answers stay on the basement finish
+    // price. A catalog rate is not invented to force the two apart.
+    if (project === "basement" && p.field === "kitchenIncluded") continue;
     const results = p.values.map(priceWith);
     if (new Set(results).size > 1) continue;
 

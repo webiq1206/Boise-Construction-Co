@@ -1,17 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { familyButtonClass } from "@/components/family/Button";
 import { SelectableCard } from "@/components/estimate/wizard/SelectableCard";
-import {
-  EMPTY_REFINEMENTS,
-  NEW_CONSTRUCTION_PROJECT_TYPES,
-  PROJECT_LABELS,
-  PROJECT_SIZE_CONFIG,
-  calculateEstimate,
-  formatPlanningCurrency,
-  type NewConstructionProjectType,
-} from "@/shared/estimateEngine";
+import { PROJECT_LABELS, formatPlanningCurrency } from "@/shared/estimateLabels";
+import type { NewConstructionProjectType } from "@/shared/estimateEngine";
 import { DisplayNum } from "@/components/marketing/DisplayNum";
 import { toSentenceCase } from "@/shared/sentenceCase";
 import styles from "@/components/approved/HomePlanningSections.module.css";
@@ -20,16 +13,15 @@ import styles from "@/components/approved/HomePlanningSections.module.css";
  * Homepage interactive proof (C14): pick a project type, set finished living
  * area, see a planning floor immediately. No email gate.
  *
- * What actually runs: the simple matrix estimator, `calculateEstimate` in
- * shared/estimateEngine.ts, called with the chosen project type, the clamped
- * square footage, finish fixed at "mid-range" (Signature) and
- * EMPTY_REFINEMENTS. That is the per-project low/high matrix scaled by size,
- * with the starting band only (no visitor detail to tighten it). It does NOT
- * run the detailed line-item takeoff in shared/costs/newConstructionRules.ts,
- * and it has no lot, site, utility, design or permit input, so the figure is a
+ * What actually runs: `calculateEstimate` in shared/estimateEngine.ts, called
+ * with the chosen project type, the clamped square footage, finish fixed at
+ * "mid-range" (Signature) and EMPTY_REFINEMENTS. The dollars come from the
+ * shared cost book (90-10-01 per finished square foot). It does NOT run the
+ * detailed line-item takeoff in shared/costs/newConstructionRules.ts, and it
+ * has no lot, site, utility, design or permit input, so the figure is a
  * planning range, not a lot-specific or all-in number.
  */
-const PROOF_PROJECTS = NEW_CONSTRUCTION_PROJECT_TYPES;
+const PROOF_PROJECTS: NewConstructionProjectType[] = ["custom-home", "semi-custom-home", "build-on-your-lot", "shop-home"];
 
 const PLANNING_DISCLAIMER =
   "2026 planning floor only, land not included. Site work, impact fees and utility connections are estimated separately. Treasure Valley mid-range (Signature) finish. Not a bid. Request a quote for next steps.";
@@ -38,24 +30,32 @@ export function PlanningRangeExplorer() {
   // The first project type is selected on arrival, so the panel opens on a worked
   // example (a 2,400 sqft custom home) instead of an empty box; one click changes it.
   const [project, setProject] = useState<NewConstructionProjectType | null>(PROOF_PROJECTS[0]);
-  const [sqft, setSqft] = useState(PROJECT_SIZE_CONFIG[PROOF_PROJECTS[0]].baselineSqft);
+  const [sqft, setSqft] = useState(2400);
+  const [size, setSize] = useState<{ min: number; max: number; step: number; baselineSqft: number } | null>(null);
+  const [estimate, setEstimate] = useState<{ priceLow: number; priceHigh: number } | null>(null);
 
-  const size = project ? PROJECT_SIZE_CONFIG[project] : null;
-
-  const estimate = useMemo(() => {
-    if (!project || !size) return null;
-    const clamped = Math.min(size.max, Math.max(size.min, sqft));
-    return calculateEstimate({
-      project,
-      finish: "mid-range",
-      sqft: clamped,
-      refinements: { ...EMPTY_REFINEMENTS },
+  useEffect(() => {
+    let cancel = false;
+    void import("@/shared/estimateEngine").then((engine) => {
+      if (cancel || !project) return;
+      const nextSize = engine.PROJECT_SIZE_CONFIG[project];
+      const clamped = Math.min(nextSize.max, Math.max(nextSize.min, sqft));
+      setSize(nextSize);
+      setEstimate(engine.calculateEstimate({
+        project,
+        finish: "mid-range",
+        sqft: clamped,
+        refinements: { ...engine.EMPTY_REFINEMENTS },
+      }));
     });
-  }, [project, sqft, size]);
+    return () => { cancel = true; };
+  }, [project, sqft]);
 
   function selectProject(next: NewConstructionProjectType) {
     setProject(next);
-    setSqft(PROJECT_SIZE_CONFIG[next].baselineSqft);
+    void import("@/shared/estimateEngine").then((engine) => {
+      setSqft(engine.PROJECT_SIZE_CONFIG[next].baselineSqft);
+    });
   }
 
   return (
