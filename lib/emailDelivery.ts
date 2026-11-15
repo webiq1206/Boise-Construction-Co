@@ -24,7 +24,12 @@ export function assertEmailAccepted(result: unknown): void {
   const id = response?.data?.id ?? response?.id;
   if (!response || response.error || response.skipped || typeof id !== "string" ||
       !id.trim() || id.trim().toLowerCase() === "noop") {
-    throw new Error("Email provider did not accept the message");
+    // Preserve only the provider status needed for bounded retry decisions.
+    // Keep its raw message and request details out of the thrown error.
+    const statusCode = (response?.error as {statusCode?: unknown} | null)?.statusCode;
+    throw Object.assign(new Error("Email provider did not accept the message"), {
+      ...(Number.isInteger(statusCode) ? {statusCode} : {}),
+    });
   }
 }
 

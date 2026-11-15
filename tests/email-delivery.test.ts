@@ -33,3 +33,15 @@ test("transport preserves attachments and idempotency options and blocks invalid
   const rejected = checkedEmailSender(async (_input: { from: string }) => ({ error: { message: "quota exceeded" } }), "brand.co");
   await assert.rejects(() => rejected({ from: "hello@brand.co" }));
 });
+
+test("provider rejection retains a numeric status for retry without leaking provider details", async () => {
+  const send = checkedEmailSender(async (_input: {from: string}) => ({
+    error: {statusCode: 503, message: "private provider detail"},
+  }), "brand.co");
+  await assert.rejects(() => send({from: "hello@brand.co"}), (error: any) => {
+    assert.equal(error.statusCode, 503);
+    assert.equal(error.message, "Email provider did not accept the message");
+    assert.equal(JSON.stringify(error).includes("private provider detail"), false);
+    return true;
+  });
+});
