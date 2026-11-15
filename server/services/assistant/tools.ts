@@ -39,7 +39,7 @@ import {
   projectTypeSchema,
   refinementsSchema,
 } from "@/shared/estimatePayload";
-import { SERVICES, CITIES } from "@/shared/contentData";
+import { SERVICES, SERVICE_AREA_CITIES } from "@/shared/contentData";
 import { HOW_WE_BUILD_STEPS } from "@/shared/siteContent";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 
@@ -379,7 +379,8 @@ function executeGetBusinessInfo(input: unknown): string {
     case "service_areas":
       return JSON.stringify({
         serviceArea: SITE_CONFIG.address.serviceArea,
-        cities: CITIES.map((c) => ({ name: c.name, county: c.county === "ada" ? "Ada County" : "Canyon County" })),
+        cities: SERVICE_AREA_CITIES.map((c) => ({ name: c.name, county: c.county === "ada" ? "Ada County" : "Canyon County" })),
+        counties: ["Ada County", "Canyon County"],
       });
     case "process":
       return JSON.stringify({

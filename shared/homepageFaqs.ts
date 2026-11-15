@@ -1,3 +1,4 @@
+import { SERVICE_AREA_LINE } from "@/shared/contentData";
 import { FOUNDING } from "@/shared/publicFlags";
 
 export interface HomepageFaq {
@@ -25,7 +26,7 @@ export const INITIAL_FAQ_COUNT = 6;
 export const HOMEPAGE_FAQS: HomepageFaq[] = [
   {
     q: "What is Boise Construction Co?",
-    a: `${FOUNDING.idahoBuilder} The work covers custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. The service area is Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and Garden City. Phone (208) 477-1169.`,
+    a: `${FOUNDING.idahoBuilder} The work covers custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. The service area is ${SERVICE_AREA_LINE}. Phone (208) 477-1169.`,
   },
   {
     q: "Are the budget ranges quotes?",
@@ -77,7 +78,7 @@ export const HOMEPAGE_FAQS: HomepageFaq[] = [
   },
   {
     q: "What areas do you build in?",
-    a: "We build across the Treasure Valley: Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, along with the surrounding areas of Ada and Canyon County. If your lot sits just outside these areas, reach out and we will tell you honestly whether we can take it on.",
+    a: `We build in ${SERVICE_AREA_LINE}.`,
   },
   {
     q: "How does design-build compare to hiring an architect and a builder separately?",

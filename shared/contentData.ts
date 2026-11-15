@@ -1,5 +1,6 @@
 // Content Data for Boise Construction Co
-// Serves the Treasure Valley: Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton
+// Service area (Google Business Profile): Boise, Meridian, Nampa, Eagle, Kuna,
+// Caldwell, Star, plus Ada County and Canyon County. Other town pages stay published.
 
 export interface ServiceData {
   slug: string;
@@ -145,7 +146,49 @@ export const CITIES: CityData[] = [
   { slug: 'garden-city', name: 'Garden City', county: 'ada', isPrimary: false },
 ];
 
+/**
+ * Published town pages. Middleton and Garden City stay here so their pages and
+ * sitemap entries remain. They are not part of the service area list.
+ */
 export const TREASURE_VALLEY_CITIES = CITIES.map((c) => c.name).join(', ');
+
+/**
+ * Service area cities, in Google Business Profile order (owner decision,
+ * 15 November 2026). Visible town lists and schema City nodes use this.
+ * Town pages outside the list stay published.
+ */
+export const SERVICE_AREA_SLUGS = [
+  'boise',
+  'meridian',
+  'nampa',
+  'eagle',
+  'kuna',
+  'caldwell',
+  'star',
+] as const;
+
+export const SERVICE_AREA_CITIES: CityData[] = SERVICE_AREA_SLUGS.map((slug) => {
+  const city = CITIES.find((item) => item.slug === slug);
+  if (!city) throw new Error(`Missing service area city: ${slug}`);
+  return city;
+});
+
+/** Counties on the same profile. Administrative areas, not city pages. */
+export const SERVICE_AREA_COUNTIES = [
+  { name: 'Ada County', sameAs: 'https://en.wikipedia.org/wiki/Ada_County,_Idaho' },
+  { name: 'Canyon County', sameAs: 'https://en.wikipedia.org/wiki/Canyon_County,_Idaho' },
+] as const;
+
+function joinWithAnd(names: readonly string[]): string {
+  if (names.length <= 1) return names[0] ?? '';
+  return `${names.slice(0, -1).join(', ')}, and ${names[names.length - 1]}`;
+}
+
+/** "Boise, Meridian, ... and Star" */
+export const SERVICE_AREA_CITY_LIST = joinWithAnd(SERVICE_AREA_CITIES.map((city) => city.name));
+
+/** Cities, then the two counties, as one natural phrase. */
+export const SERVICE_AREA_LINE = `${SERVICE_AREA_CITY_LIST}, in Ada County and Canyon County`;
 
 /**
  * True when planningFrom is a figure ("$525k", "$950") rather than a sentence

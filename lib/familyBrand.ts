@@ -17,7 +17,7 @@ import {
   CONTRACTOR_REGISTRATION_LABEL,
 } from '@/shared/contractorRegistration';
 import { CONTENT_HUBS } from '@/shared/contentHubs';
-import { CITIES, SERVICES, serviceLabel } from '@/shared/contentData';
+import { SERVICE_AREA_CITIES, SERVICE_AREA_LINE, SERVICES, serviceLabel } from '@/shared/contentData';
 import { P5_SOCIAL } from '@/shared/gbpProfile';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 
@@ -117,7 +117,7 @@ export const FAMILY_BRAND: FamilyBrand = {
     areas: {
       label: 'Service areas',
       href: '/areas',
-      links: CITIES.map((city) => ({ label: `${city.name}, Idaho`, href: `/areas/${city.slug}` })),
+      links: SERVICE_AREA_CITIES.map((city) => ({ label: `${city.name}, Idaho`, href: `/areas/${city.slug}` })),
     },
     legal: [
       { label: 'Site map', href: '/sitemap' },
@@ -141,7 +141,7 @@ export const FAMILY_BRAND: FamilyBrand = {
     ],
   },
   nap: {
-    line: 'Serving Boise and the Treasure Valley',
+    line: `Serving ${SERVICE_AREA_LINE}`,
   },
   hours: 'Hours: Mon to Fri 9 to 6, Sat 9 to 4 Mountain. Closed Sunday.',
   registration: {

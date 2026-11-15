@@ -28,7 +28,7 @@ generateWebPageSchema,
 } from '@/lib/schema';
 import { BUSINESS_INFO } from '@/lib/seo';
 import { areaPath } from '@/lib/seo-routes';
-import { CITIES,TREASURE_VALLEY_CITIES } from '@/shared/contentData';
+import { SERVICE_AREA_CITIES,SERVICE_AREA_CITY_LIST,SERVICE_AREA_LINE } from '@/shared/contentData';
 import { CTA_PRIMARY,CTA_SECONDARY } from '@/shared/ctaCopy';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { CONSULT_BULLETS,HERO_STATS } from '@/shared/siteContent';
@@ -56,7 +56,7 @@ const CONTACT_FAQS = [
   },
   {
     question: 'What areas do you serve?',
-    answer: `We build in ${TREASURE_VALLEY_CITIES}, and surrounding Treasure Valley communities across Ada and Canyon County.`,
+    answer: `We build in ${SERVICE_AREA_LINE}.`,
   },
   {
     question: 'Do you handle permits?',
@@ -332,18 +332,18 @@ export default function ContactPage() {
                 <ContactChannel
                   icon={<MapPin className="h-5 w-5" strokeWidth={1.5} />}
                   label="Where we work"
-                  subtext={SITE_CONFIG.address.serviceArea}
+                  subtext="Ada County and Canyon County"
                 >
-                  <p className="leading-relaxed">Home building across Boise and the Treasure Valley.</p>
+                  <p className="leading-relaxed">Home building in {SERVICE_AREA_CITY_LIST}.</p>
                 </ContactChannel>
               </Reveal>
               <Reveal delay={180} className="sm:col-span-2">
                 <ContactChannel
                   icon={<MapPin className="h-5 w-5" strokeWidth={1.5} />}
                   label="Service area"
-                  subtext="Free planning consultations across the Treasure Valley"
+                  subtext="Free planning consultations in Ada County and Canyon County"
                 >
-                  <span className="text-sm leading-relaxed">{TREASURE_VALLEY_CITIES}</span>
+                  <span className="text-sm leading-relaxed">{SERVICE_AREA_LINE}</span>
                 </ContactChannel>
               </Reveal>
             </div>
@@ -453,11 +453,11 @@ export default function ContactPage() {
                   Where we <em className="brc-accent">work</em>
                 </>
               }
-              description={`We serve homeowners in ${TREASURE_VALLEY_CITIES}, and surrounding communities.`}
+              description={`We serve homeowners in ${SERVICE_AREA_LINE}.`}
               className="max-w-3xl"
             />
             <nav aria-label="Service areas" className="grid grid-cols-2 sm:grid-cols-3 border-t border-l border-border">
-              {CITIES.map((city) => (
+              {SERVICE_AREA_CITIES.map((city) => (
                 <Link
                   key={city.slug}
                   href={areaPath(city.slug)}

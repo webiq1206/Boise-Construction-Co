@@ -111,7 +111,7 @@ export default function SubcontractorPage() {
                 </div>
                 <CardTitle>Local Service Area</CardTitle>
                 <CardDescription>
-                  We focus on the Treasure Valley area - Kuna, Meridian, Boise, Eagle, Nampa, and Caldwell. All leads are from property owners in your service area.
+                  Leads come from property owners in Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, and Star, in Ada County and Canyon County.
                 </CardDescription>
               </CardHeader>
             </Card>

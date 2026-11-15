@@ -15,7 +15,7 @@
 import fs from 'fs';
 import path from 'path';
 import { SITE_CONFIG } from '../shared/siteConfig';
-import { SERVICES, CITIES } from '../shared/contentData';
+import { CITIES, SERVICE_AREA_CITIES, SERVICE_AREA_LINE, SERVICES } from '../shared/contentData';
 import { GUIDE_PAGES } from '../shared/guideContent';
 import { CONTENT_HUBS } from '../shared/contentHubs';
 import { BLOG_POSTS } from '../shared/blogContent';
@@ -25,8 +25,8 @@ const BASE = SITE_CONFIG.siteUrl.replace(/\/$/, '');
 const url = (p: string) => `${BASE}${p}`;
 const today = new Date().toISOString().slice(0, 10);
 
-const adaCities = CITIES.filter((c) => c.county === 'ada').map((c) => c.name);
-const canyonCities = CITIES.filter((c) => c.county === 'canyon').map((c) => c.name);
+const adaCities = SERVICE_AREA_CITIES.filter((c) => c.county === 'ada').map((c) => c.name);
+const canyonCities = SERVICE_AREA_CITIES.filter((c) => c.county === 'canyon').map((c) => c.name);
 
 const pillarGuides = GUIDE_PAGES.filter((g) => g.guideType === 'hub-pillar' || g.guideType === 'master');
 const cityGuides = GUIDE_PAGES.filter((g) => g.guideType === 'location');
@@ -35,7 +35,7 @@ const neighborhoodGuides = GUIDE_PAGES.filter((g) => g.guideType === 'neighborho
 const SUMMARY =
   `New residential construction in Boise, Idaho and the Treasure Valley: custom homes, ` +
   `semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that ` +
-  `precede them. Design-build${FOUNDING.llmsFoundedClause}. Serving ${CITIES.map((c) => c.name).join(', ')}. ` +
+  `precede them. Design-build${FOUNDING.llmsFoundedClause}. Serving ${SERVICE_AREA_LINE}. ` +
   `Phone ${SITE_CONFIG.phone}.`;
 
 const POSITIONING =
@@ -136,7 +136,7 @@ function buildFull(): string {
   lines.push(`- Request a quote: ${url('/estimate')}`, '');
 
   lines.push('## Service area', '');
-  lines.push('We build in the following Treasure Valley cities across Ada and Canyon County:', '');
+  lines.push(`We build in ${SERVICE_AREA_LINE}:`, '');
   if (adaCities.length) lines.push(`- Ada County: ${adaCities.join(', ')}`);
   if (canyonCities.length) lines.push(`- Canyon County: ${canyonCities.join(', ')}`);
   lines.push(
@@ -153,8 +153,9 @@ function buildFull(): string {
   }
   lines.push(
     '',
-    `Each service has a dedicated page per city at /services/{service-slug}/{city-slug} for ` +
-      `${CITIES.map((c) => c.slug).join(', ')}. City service-area hubs live at /areas/{city-slug}.`,
+    `Each service has a dedicated page per city at /services/{service-slug}/{city-slug}. ` +
+      `Published town pages stay at /areas/{city-slug} for ${CITIES.map((c) => c.slug).join(', ')}. ` +
+      `Middleton and Garden City stay published. They are not part of the service area list above.`,
     '',
   );
 

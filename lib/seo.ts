@@ -5,7 +5,7 @@
  */
 
 import { SITE_CONFIG } from '@/shared/siteConfig';
-import { CITIES, SERVICES, serviceLabel } from '@/shared/contentData';
+import { CITIES, SERVICE_AREA_CITIES, SERVICES, serviceLabel } from '@/shared/contentData';
 import {
   AREA_META_DESCRIPTIONS,
   CITY_SERVICE_META_DESCRIPTIONS,
@@ -607,7 +607,7 @@ export const BUSINESS_INFO = {
     sunday: 'Closed',
   },
   founded: '2020',
-  serviceArea: ['Boise', 'Meridian', 'Eagle', 'Nampa', 'Kuna', 'Star', 'Middleton', 'Caldwell', 'Garden City'],
+  serviceArea: SERVICE_AREA_CITIES.map((city) => city.name),
   serviceRadius: '35 miles',
   licenses: ['Idaho Registered Contractor #8381215'],
   certifications: ['Design-Build Home Building', 'Insured'],

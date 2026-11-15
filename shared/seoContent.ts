@@ -1,5 +1,5 @@
 import type { ServiceData, CityData } from './contentData';
-import { getCountyLabel, serviceLabel } from './contentData';
+import { getCountyLabel, SERVICE_AREA_LINE, serviceLabel } from './contentData';
 import { getAreaCityCopy } from './content/areaCopy';
 import { getCityServiceCopy } from './content/cityServiceCopy';
 import { indianCreekDescription } from '../lib/seo';
@@ -1075,7 +1075,7 @@ export const HOMEPAGE_FAQS_FOR_SCHEMA: FAQItem[] = [
   {
     question: 'What areas do you serve?',
     answer:
-      'Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and the greater Treasure Valley.',
+      SERVICE_AREA_LINE + '.',
   },
   {
     question: 'How long does it take to build a new home?',

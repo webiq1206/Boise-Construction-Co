@@ -1,6 +1,6 @@
 # Boise Construction Co - Full Reference
 
-> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, Garden City. Phone (208) 477-1169.
+> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build. Serving Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, and Star, in Ada County and Canyon County. Phone (208) 477-1169.
 
 ## About
 
@@ -14,10 +14,10 @@ Boise Construction Co is a residential design-build home builder serving the Tre
 
 ## Service area
 
-We build in the following Treasure Valley cities across Ada and Canyon County:
+We build in Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, and Star, in Ada County and Canyon County:
 
-- Ada County: Boise, Meridian, Eagle, Kuna, Star, Garden City
-- Canyon County: Nampa, Middleton, Caldwell
+- Ada County: Boise, Meridian, Eagle, Kuna, Star
+- Canyon County: Nampa, Caldwell
 
 Permit paths, impact fees, and inspection sequencing differ between Ada County and Canyon County, and again between incorporated city limits and county jurisdiction. We coordinate submissions, fees, and inspections as part of the design-build contract.
 
@@ -34,7 +34,7 @@ Permit paths, impact fees, and inspection sequencing differ between Ada County a
 - Shop Homes & Barndominiums: /services/shop-homes-barndominiums - Post-frame and steel-framed homes that pair finished living space with real working shop square footage.
 - Energy-Efficient Homes: /services/energy-efficient-homes - High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.
 
-Each service has a dedicated page per city at /services/{service-slug}/{city-slug} for boise, meridian, eagle, nampa, kuna, star, middleton, caldwell, garden-city. City service-area hubs live at /areas/{city-slug}.
+Each service has a dedicated page per city at /services/{service-slug}/{city-slug}. Published town pages stay at /areas/{city-slug} for boise, meridian, eagle, nampa, kuna, star, middleton, caldwell, garden-city. Middleton and Garden City stay published. They are not part of the service area list above.
 
 ## Authoritative guides (https://boiseconstruction.co/guides)
 
@@ -107,4 +107,4 @@ Neighborhood guides:
 
 Boise Construction Co also completes RE-10 and home inspection repairs for real estate agents, buyers and sellers across Boise and the Treasure Valley. An RE-10 is the Idaho inspection response form: after a home inspection the buyer requests specific repairs before closing. We review the RE-10 and inspection report, provide a written scope and pricing, coordinate access, complete the approved work across multiple trades, and supply photo documentation, invoices and receipts for the transaction file. Structural, foundation, mold and asbestos abatement, main electrical service, sewer and septic, HVAC replacement, gas lines and full roof replacement are coordinated to licensed specialists rather than performed in house. We take this work because an inspection repair is a deadline problem rather than a construction problem, and sequencing trades against a date that will not move is the same thing we do on every build. Details: https://boiseconstruction.co/re-10-repairs-boise
 
-Last updated: 2026-11-13. Full sitemap: https://boiseconstruction.co/sitemap.xml
+Last updated: 2026-11-15. Full sitemap: https://boiseconstruction.co/sitemap.xml

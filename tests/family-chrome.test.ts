@@ -9,7 +9,7 @@ import { Footer } from '../components/Footer.tsx';
 import { matchesRoute } from '../lib/family/types.ts';
 import { FAMILY_BRAND } from '../lib/familyBrand.ts';
 import { BUSINESS_VCARD_PATH } from '../lib/vcard.ts';
-import { CITIES, SERVICES } from '../shared/contentData.ts';
+import { SERVICE_AREA_CITIES, SERVICE_AREA_LINE, SERVICES } from '../shared/contentData.ts';
 import { P5_SOCIAL } from '../shared/gbpProfile.ts';
 import { GUIDE_PAGES } from '../shared/guideContent.ts';
 import { SITE_CONFIG } from '../shared/siteConfig.ts';
@@ -34,7 +34,7 @@ test('the brand config carries this site’s facts, one CTA and one destination'
   assert.equal(FAMILY_BRAND.tagline, `${SITE_TAGLINE}.`);
   assert.equal(FAMILY_BRAND.parentFacebook.href, P5_SOCIAL.facebook);
   assert.deepEqual(FAMILY_BRAND.parentGoogle, { href: 'https://www.google.com/search?kgmid=/g/11ntl1t7dc', label: 'P5 Home Co on Google' });
-  assert.equal(FAMILY_BRAND.nap.line, 'Serving Boise and the Treasure Valley');
+  assert.equal(FAMILY_BRAND.nap.line, `Serving ${SERVICE_AREA_LINE}`);
   assert.deepEqual(FAMILY_BRAND.header.phoneActions, ['call', 'text', 'chat']);
   assert.deepEqual(FAMILY_BRAND.chat.hiddenOn, ['/estimate*', '/admin*', '/subcontractor*']);
   assert.equal(FAMILY_BRAND.accent, '#c48d3f');
@@ -63,7 +63,10 @@ test('every footer link group points at a published page', () => {
   for (const link of pillars) assert.ok(published.has(link.href), link.href);
   const services = FAMILY_BRAND.footer.groups.find((group) => group.title === 'Services');
   assert.equal(services?.links.length, SERVICES.length + 1);
-  assert.equal(FAMILY_BRAND.footer.areas.links.length, CITIES.length);
+  assert.deepEqual(
+    FAMILY_BRAND.footer.areas.links.map((link) => link.label),
+    SERVICE_AREA_CITIES.map((city) => `${city.name}, Idaho`),
+  );
 });
 
 test('the footer renders the family row, NAP, hours and one registration link, with no headings', () => {
@@ -75,7 +78,8 @@ test('the footer renders the family row, NAP, hours and one registration link, w
   assert.match(html, /<span class="fam-footer-current" aria-current="true">Boise Construction Co<\/span>/);
   assert.equal(/rel="noopener noreferrer">(P5 Home Co|Boise)/.test(html), false);
   assert.match(html, /data-family-row=""/);
-  assert.match(html, /Serving Boise and the Treasure Valley/);
+  assert.match(html, /Serving Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, and Star, in Ada County and Canyon County/);
+  assert.doesNotMatch(html, /Middleton|Garden City|Emmett/);
   assert.doesNotMatch(html, /4031|Wapoot|Public representative|staffed storefront/);
   assert.match(html, /Hours: Mon to Fri 9 to 6, Sat 9 to 4 Mountain\. Closed Sunday\./);
   assert.match(html, /mailto:hello@boiseconstruction\.co/);
