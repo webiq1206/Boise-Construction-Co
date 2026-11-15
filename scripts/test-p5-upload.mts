@@ -5,9 +5,12 @@ import {pathToFileURL} from 'node:url';
 import path from 'node:path';
 import {PDFDocument} from 'pdf-lib';
 import ExcelJS from 'exceljs';
-const root=process.cwd();await mkdir('node_modules/.cache',{recursive:true});const dir=await mkdtemp(path.join(root,'node_modules/.cache/p5-upload-'));
+const root=process.cwd();await mkdir('node_modules/.cache',{recursive:true});const isolatedRoot=await mkdtemp(path.join(root,'node_modules/.cache/p5-upload-'));
+const dir=path.join(isolatedRoot,'p5');
 try{
  await cp('lib/p5',dir,{recursive:true});
+  // Preserve the production sibling import without sharing files between test runs.
+  await cp('lib/leadAttribution.ts',path.join(isolatedRoot,'leadAttribution.ts'));
  await writeFile(path.join(dir,'database.ts'),`import {PGlite} from '@electric-sql/pglite';export const database=new PGlite();export let hideRead=false;export function simulateStaleRead(value:boolean){hideRead=value;}export async function query(statement:string,values:unknown[]=[]){const rows=(await database.query(statement,values)).rows as any[];return hideRead&&statement.startsWith('SELECT * FROM p5_estimator_drafts')?[]:rows;}`);
  // Provider boundary is simulated. PDF splitting and Office conversion use real libraries.
  process.env.OPENAI_API_KEY='synthetic-test-only';
@@ -47,4 +50,4 @@ try{
  response=await scopeApi.postScope(new Request('http://test.local/api/p5-estimator/scope',{method:'POST',headers:{...headers,'x-p5-draft-key':randomBytes(32).toString('hex')},body:new FormData()}));assert.equal(response.status,404);
  globalThis.fetch=originalFetch;delete process.env.OPENAI_API_KEY;await db.database.close();
  console.log('Upload endpoint checks passed: null-read receipt, two-page PDF, XLSX, CSV, mixed input, mapping, deduplication, provider failure/retry, persistence, invalid PDF, ownership. AI provider simulated; real isolated SQL and parsers.');
-}finally{await rm(dir,{recursive:true,force:true});}
+}finally{await rm(isolatedRoot,{recursive:true,force:true});}

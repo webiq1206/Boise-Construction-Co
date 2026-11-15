@@ -3,7 +3,8 @@ import {mkdtemp,cp,writeFile,rm,mkdir} from 'node:fs/promises';
 import {createHash,randomUUID,randomBytes} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import path from 'node:path';
-await mkdir('node_modules/.cache',{recursive:true});const dir=await mkdtemp(path.join(process.cwd(),'node_modules/.cache/p5-background-'));
+await mkdir('node_modules/.cache',{recursive:true});const isolatedRoot=await mkdtemp(path.join(process.cwd(),'node_modules/.cache/p5-background-'));
+const dir=path.join(isolatedRoot,'p5');
 delete process.env.DATABASE_URL;
 // Requests drive jobs while they stay open; keep the hold short so the script observes intermediate states.
 process.env.P5_JOB_HOLD_MS='200';
@@ -14,6 +15,8 @@ process.env.P5_JOB_HOLD_MS='200';
 // this script unable to observe the state it asserts.
 try{
  await cp('lib/p5',dir,{recursive:true});
+  // Preserve the production sibling import without sharing files between test runs.
+  await cp('lib/leadAttribution.ts',path.join(isolatedRoot,'leadAttribution.ts'));
  await writeFile(path.join(dir,'database.ts'),`import {PGlite} from '@electric-sql/pglite';export const database=new PGlite();let leaseHook:(()=>Promise<void>)|undefined;export function onNextLease(hook:()=>Promise<void>){leaseHook=hook;}export async function query(s:string,v:unknown[]=[]){const rows=(await database.query(s,v)).rows;if(leaseHook&&s.startsWith('UPDATE p5_estimator_work SET lease_token=')&&rows.length){const hook=leaseHook;leaseHook=undefined;await hook();}return rows;}`);
  await writeFile(path.join(dir,'pricingWork.ts'),`export const calls:string[]=[];export function pricingWorkKey(){return 'pricing-fixture';}export async function pricingWorkSnapshot(){return {workKey:'pricing-fixture'};}export async function priceSavedScope(id:string){calls.push(id);return {customer:{range:{low:100,high:150}},internal:{scopePricing:{issues:[]}}};}`);
  await writeFile(path.join(dir,'analysisWork.ts'),`import {query} from './database';import {DraftError} from './store';import {MODEL_POLICY_VERSION,ESTIMATOR_MODEL_SNAPSHOT} from './modelPolicy';export const calls:string[]=[];export let fail:boolean|'unread'=false;export function failure(value:boolean|'unread'){fail=value;}export function analysisWorkKey(draft:any,text:string){return 'analysis-fixture-'+text;}export function analysisProgressWorkKeys(draft:any,text:string){return [analysisWorkKey(draft,text)];}export async function advanceAnalysis(draft:any,text:string){const key=analysisWorkKey(draft,text);const [row]=await query('SELECT payload FROM p5_estimator_work WHERE draft_id=$1 AND work_key=$2',[draft.id,key]);const stage=row?.payload?.stage||0;if(stage>=2)return {pending:false,analysis:{modelPolicy:MODEL_POLICY_VERSION,model:ESTIMATOR_MODEL_SNAPSHOT,extraction:{reviewNotes:[]}}};calls.push(text+stage);if(fail==='unread')throw new DraftError('large-plan.pdf: automatic reading could not finish for page 9. Use Retry document reading.',422);if(fail)throw new Error('Synthetic provider outage');const processing={phase:'reading',message:'Reading original pages '+(stage*8+1)+' to '+(stage*8+8),readPages:stage*8,totalPages:16,updatedAt:new Date().toISOString()};await query('INSERT INTO p5_estimator_work(draft_id,work_key,payload) VALUES($1,$2,$3::jsonb) ON CONFLICT(draft_id,work_key) DO UPDATE SET payload=EXCLUDED.payload',[draft.id,key,JSON.stringify({stage:stage+1,processing})]);await new Promise(r=>setTimeout(r,350));return {pending:true,progress:processing.message};}`);
@@ -213,4 +216,4 @@ try{
  await background.queuedJob(storedRace.payload.input);
  assert.equal(pricer.calls.length,callsBeforeRace+1,'jsonb object ordering on a later poll cannot change the bound original queue hash');
  await db.database.close();console.log('PASS: durable queue, request-driven passes, live page status, continued work without browser polling, no duplicate finished work, expired-lease recovery, failure/retry, and no delivery side effects. SQL real, AI simulated.');
-}finally{await rm(dir,{recursive:true,force:true});}
+}finally{await rm(isolatedRoot,{recursive:true,force:true});}

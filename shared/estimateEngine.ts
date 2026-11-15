@@ -2289,7 +2289,9 @@ export function calculateEstimate(input: EstimateInput, userRefinementCount = 0)
   const { level, percent } = getPlanningDetail(userRefinementCount, maxFields);
   const garageSqft =
     safeInput.refinements.garageBays && safeInput.refinements.garageBays !== "none"
-      ? GARAGE_BAY_SQFT[safeInput.refinements.garageBays]
+      ? (safeInput.refinements.garageSqft && safeInput.refinements.garageSqft > 0
+        ? safeInput.refinements.garageSqft
+        : GARAGE_BAY_SQFT[safeInput.refinements.garageBays])
       : 0;
   const quoted = bookQuote({
     project: safeInput.project,

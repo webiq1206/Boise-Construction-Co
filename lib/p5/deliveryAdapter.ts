@@ -15,7 +15,7 @@ function transientSendError(error:unknown){
   if(status===429||status>=500)return true;
   return /^(?:421|450|451|452)\b/.test(String(current?.message||""))||/socket hang up|timed out/i.test(String(current?.message||""));
 }
-export async function sendEmail(input:{to:string;replyTo?:string;subject:string;text:string;html?:string;attachments:{filename:string;content:Buffer;contentType?:string}[];key:string}){
+export async function sendEmail(input:{to:string;suppressFailureAlert?:boolean;replyTo?:string;subject:string;text:string;html?:string;attachments:{filename:string;content:Buffer;contentType?:string}[];key:string}){
   const {client}=await getUncachableEmailClient("p5homeco.com");
   const sender=client.emails as unknown as {send:(body:unknown,options:unknown)=>Promise<any>};
   let last:unknown;

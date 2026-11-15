@@ -102,3 +102,24 @@ test("a stated garage uses the book garage rate and the bay quantity", () => {
   assert.equal(homepage.priceHigh, 935000);
   assert.equal(GARAGE_BAY_SQFT.two, 480);
 });
+
+
+test("a shop home garage is included in the disclosed direct-cost lines", () => {
+  const quoted = bookQuote({project: "shop-home", finish: "mid-range", sqft: 1600, garageSqft: 480, refinements: {shopSize: 1200, garageBays: "two"}});
+  assert.deepEqual(quoted.lines.map(line => [line.code, line.quantity, line.unitAmount]), [["90-10-01", 1600, 200], ["90-50-13", 1200, 48], ["90-10-03", 480, 65]]);
+  assert.equal(quoted.direct, quoted.lines.reduce((sum, line) => sum + line.direct, 0));
+  assert.equal(quoted.direct, 408800);
+});
+
+
+test("a stated garage area takes precedence over the bay preset", () => {
+  for (const project of ["custom-home", "shop-home"] as const) {
+    const input = {project, finish: "mid-range" as const, sqft: 2400, refinements: {...EMPTY_REFINEMENTS, garageBays: "two" as const, shopSize: 1200}};
+    const preset = calculateEstimate(input);
+    const stated = calculateEstimate({...input, refinements: {...input.refinements, garageSqft: 1000}});
+    const expected = bookQuote({...input, garageSqft: 1000});
+    assert.deepEqual({low: stated.priceLow, high: stated.priceHigh}, {low: expected.priceLow, high: expected.priceHigh});
+    assert.ok(stated.priceLow > preset.priceLow);
+    assert.ok(stated.priceHigh > preset.priceHigh);
+  }
+});

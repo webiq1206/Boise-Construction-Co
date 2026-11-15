@@ -215,6 +215,7 @@ export function bookQuoteLines(input: BookQuoteInput): BookQuoteLine[] {
     case "shop-home":
       pushLine(lines, "Shop home living area", "90-10-01", tier, false, sqft);
       pushLine(lines, "Shop area", "90-50-13", tier, false, ref.shopSize ?? 0);
+      pushLine(lines, "Garage area", "90-10-03", tier, false, garage);
       break;
     case "kitchen":
       pushLine(lines, "Kitchen", "90-20-02", tier, true, sqft);

@@ -65,9 +65,11 @@ const office=await prepareAnalysisFiles([verifyUpload('scope.xlsx',xlsx)]);
 assert.equal(office.manualReview.length,0);assert.ok(office.readable.some(f=>f.data.toString('utf8').includes('Kitchen')));
 
 const cache=path.join(root,'node_modules','.cache');await mkdir(cache,{recursive:true});
-const runtime=await mkdtemp(path.join(cache,'p5-test-'));
+const isolatedRoot=await mkdtemp(path.join(cache,'p5-test-'));
+const runtime=path.join(isolatedRoot,'p5');
 try{
  await cp(path.join(root,'lib/p5'),runtime,{recursive:true});
+ await cp(path.join(root,'lib/leadAttribution.ts'),path.join(isolatedRoot,'leadAttribution.ts'));
  await writeFile(path.join(runtime,'database.ts'),`import {PGlite} from '@electric-sql/pglite'; export const database=new PGlite(); export async function query(statement:string,values:unknown[]=[]){return (await database.query(statement,values)).rows as any[];}`);
  await writeFile(path.join(runtime,'deliveryAdapter.ts'),`import {crmPayload} from './deliveryPayloads.ts'; export const EMAIL_SUPPORTS_IDEMPOTENCY=true; export const attempts:any[]=[]; export const delivered=new Map(); export const failures=new Set<string>(); export async function adminRecipients(){return ['admin@example.invalid'];} export async function sendEmail(input:any){attempts.push(input);if(failures.has(input.to))throw new Error('Synthetic transport failure');if(!delivered.has(input.key))delivered.set(input.key,input);return 'test-'+input.key;} export const ambiguous=new Set<string>(); export async function syncCrm(record:any,key:string){const payload=crmPayload(record,key);attempts.push({crm:key,record,payload});if(failures.has('crm'))throw new Error('Synthetic CRM outage');if(!delivered.has(key))delivered.set(key,record);if(ambiguous.has('crm'))throw new Error('Synthetic acknowledgement lost after CRM accepted');return 'test-lead-'+key;}`);
  await writeFile(path.join(runtime,'adminAuth.ts'),`import {DraftError} from './store';export let enabled=true;export function disable(){enabled=false;}export function enable(){enabled=true;}export async function requireEstimatorAdmin(){if(!enabled)throw new DraftError('Administrator sign-in is required.',403);return {id:'fixture-admin',email:'admin@example.invalid'};}`);
