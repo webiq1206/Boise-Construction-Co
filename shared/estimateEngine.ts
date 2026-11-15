@@ -1,3 +1,6 @@
+/** Private pricing must never execute in a browser, including an accidental direct import. */
+if (typeof window !== "undefined") throw new Error("Private pricing is available on the server only.");
+
 /**
  * PROJECT TYPES SPAN TWO BUSINESSES, AND ONLY ONE IS SOLD.
  *

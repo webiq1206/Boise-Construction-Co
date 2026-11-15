@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
+import {execFileSync} from "node:child_process";
 import {build} from "esbuild";
 
 test("the actual calculator browser graph excludes server pricing, raw cost data and finance policy", async () => {
@@ -15,4 +16,11 @@ test("the actual calculator browser graph excludes server pricing, raw cost data
 test("the pricing route is server-only and the browser crypto workaround is removed", () => {
   assert.match(readFileSync("app/api/planning-range/route.ts", "utf8"), /import ["']server-only["']/);
   assert.doesNotMatch(readFileSync("next.config.js", "utf8"), /client-sha256|data\.request === ['"]node:crypto/);
+});
+
+
+test("direct browser-context imports of either private calculator entry fail closed", () => {
+  for (const file of ["./shared/estimateEngine.ts", "./shared/costBookQuote.ts"]) {
+    execFileSync(process.execPath, ["--import", "tsx", "--input-type=module", "-e", 'globalThis.window={};try{await import(process.argv[1]);throw Error("Browser pricing import unexpectedly succeeded");}catch(error){if(!String(error).includes("Private pricing is available on the server only"))throw error;}', file], {cwd: process.cwd(), stdio: "pipe"});
+  }
 });
