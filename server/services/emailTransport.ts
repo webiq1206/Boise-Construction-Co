@@ -86,14 +86,14 @@ let warnedNoEmailConfig = false;
  * In non-production environments without an API key, returns a no-op client
  * so local runs don't attempt real sends.
  */
-export async function getUncachableEmailClient(): Promise<{
+export async function getUncachableEmailClient(senderDomain = "boiseconstruction.co"): Promise<{
   client: EmailClient;
   fromEmail: string;
 }> {
   try {
     const apiKey = await getResendApiKey();
     const client = new Resend(apiKey);
-    client.emails.send = checkedEmailSender(client.emails.send.bind(client.emails), 'boiseconstruction.co');
+    client.emails.send = checkedEmailSender(client.emails.send.bind(client.emails), senderDomain);
     return {
       client: client as unknown as EmailClient,
       fromEmail: PLATFORM_EMAIL,
