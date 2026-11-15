@@ -35,6 +35,12 @@ function harness({authorized = true, saved = historical, brandId = "remodeling",
   }
   const dependencies = {
     DraftError,
+    // These reference fixtures have no saved scope for copy restoration. Match
+    // the helper's unchanged-copy branch without replacing the issued detail.
+    restoreSavedCustomerCopy: (customer, internal) => {
+      assert.equal(internal?.scope, undefined);
+      return customer;
+    },
     requireEstimatorAdmin: async () => { if (!authorized) throw new DraftError("Unauthorized", 401); },
     ensureReviewSchema: async () => { schemaCalls++; },
     query: async (sql, parameters) => {
