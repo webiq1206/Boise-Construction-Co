@@ -15,7 +15,7 @@ import {
   generateWebPageSchema,
 } from '@/lib/schema';
 import { CITY_HERO_IMAGES } from '@/shared/cityServiceImages';
-import { CITIES, TREASURE_VALLEY_CITIES } from '@/shared/contentData';
+import { SERVICE_AREA_CITIES, SERVICE_AREA_LINE } from '@/shared/contentData';
 import { CONTRACTOR_REGISTRATION_LABEL } from '@/shared/contractorRegistration';
 import { CTA_PRIMARY, CTA_QUOTE } from '@/shared/ctaCopy';
 import { SITE_CONFIG } from '@/shared/siteConfig';
@@ -265,11 +265,11 @@ export default function AboutPage() {
                     Service <em className="brc-accent">areas</em>
                   </>
                 }
-                description={`We serve homeowners in ${TREASURE_VALLEY_CITIES}, and surrounding communities.`}
+                description={`We serve homeowners in ${SERVICE_AREA_LINE}.`}
                 className="max-w-3xl"
               />
               <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {CITIES.map((city, i) => (
+                {SERVICE_AREA_CITIES.map((city, i) => (
                   <Reveal key={city.slug} delay={Math.min(i, 7) * 50}>
                     <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />
                   </Reveal>

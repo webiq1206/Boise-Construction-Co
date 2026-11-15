@@ -5,6 +5,7 @@ import { PrimaryCta } from "@/components/approved/PrimaryCta";
 import { Card, CardContent } from "@/components/ui/card";
 import { Home, ArrowRight, MessageSquare, Phone, Wrench } from "lucide-react";
 import { DisplayNum } from "@/components/marketing";
+import { SERVICE_AREA_CITIES } from "@/shared/contentData";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { SaveContactLink } from "@/components/SaveContactLink";
 
@@ -82,12 +83,12 @@ export default function NotFound() {
 
         <div className="mt-12">
           <p className="text-sm text-muted-foreground mb-3">
-            We serve the full Treasure Valley
+            We serve Ada County and Canyon County
           </p>
           <div className="flex flex-wrap justify-center gap-2">
-            {["Boise", "Meridian", "Eagle", "Nampa", "Kuna", "Star", "Middleton"].map((city) => (
-              <span key={city} className="text-sm text-muted-foreground">
-                {city}
+            {SERVICE_AREA_CITIES.map((city) => (
+              <span key={city.slug} className="text-sm text-muted-foreground">
+                {city.name}
               </span>
             ))}
           </div>

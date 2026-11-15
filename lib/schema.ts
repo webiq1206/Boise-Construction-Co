@@ -5,7 +5,7 @@ import {schemaTime} from './schemaTime';
  */
 
 import { BUSINESS_INFO, getBaseUrl } from './seo';
-import { SERVICES } from '@/shared/contentData';
+import { SERVICE_AREA_CITIES, SERVICE_AREA_COUNTIES, SERVICES } from '@/shared/contentData';
 import { FOUNDING, PUBLIC_MARK_PATH, SHOW_FOUNDING_YEAR } from '@/shared/publicFlags';
 import { CONTRACTOR_REGISTRATION_NUMBER } from '@/shared/contractorRegistration';
 import { P5_SOCIAL } from '@/shared/gbpProfile';
@@ -116,6 +116,25 @@ const CITY_WIKIPEDIA: Record<string, string> = {
   Caldwell: 'https://en.wikipedia.org/wiki/Caldwell,_Idaho',
 };
 
+/**
+ * LocalBusiness and Organization areaServed: the seven profile cities, then
+ * Ada County and Canyon County. No street address.
+ */
+export function businessAreaServed() {
+  return [
+    ...SERVICE_AREA_CITIES.map((city) => ({
+      '@type': 'City' as const,
+      name: city.name,
+      ...(CITY_WIKIPEDIA[city.name] ? { sameAs: CITY_WIKIPEDIA[city.name] } : {}),
+    })),
+    ...SERVICE_AREA_COUNTIES.map((county) => ({
+      '@type': 'AdministrativeArea' as const,
+      name: county.name,
+      sameAs: county.sameAs,
+    })),
+  ];
+}
+
 export function generateLocalBusinessSchema(city?: string): SchemaContext {
   // Public geography is expressed through areaServed. The optional city
   // customizes the description without implying a customer-facing location.
@@ -144,11 +163,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
       closes: hours === 'Closed' ? undefined : schemaTime(hours.split(' - ')[1]),
     })).filter(spec => spec.opens),
     priceRange: '$$',
-    areaServed: BUSINESS_INFO.serviceArea.map(area => ({
-      '@type': 'City',
-      name: area,
-      ...(CITY_WIKIPEDIA[area] ? { sameAs: CITY_WIKIPEDIA[area] } : {}),
-    })),
+    areaServed: businessAreaServed(),
     ...(BUSINESS_INFO.reviewCount > 0
       ? {
           aggregateRating: {
@@ -192,7 +207,7 @@ export function generateWebSiteSchema(): SchemaContext {
     name: BUSINESS_INFO.name,
     url: baseUrl,
     description:
-      'Design-build home builder serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, and the Treasure Valley, Idaho.',
+      'Design-build home builder serving Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, and Star, in Ada County and Canyon County, Idaho.',
     publisher: { '@id': ORG_ID },
     // NOTE: SearchAction intentionally omitted. The previous target
     // (/blog?q={search_term_string}) had no search handler, which advertised a
@@ -226,10 +241,7 @@ export function generateServiceSchema(serviceName: string, serviceDescription: s
       name: city,
       addressCountry: 'US',
       addressRegion: 'ID',
-    } : BUSINESS_INFO.serviceArea.map(area => ({
-      '@type': 'City',
-      name: area,
-    })),
+    } : businessAreaServed(),
     serviceType: serviceName,
     offers: {
       '@type': 'Offer',
@@ -292,6 +304,7 @@ export function generateOrganizationSchema(): SchemaContext {
       : {}),
     telephone: SCHEMA_TELEPHONE,
     email: BUSINESS_INFO.email,
+    areaServed: businessAreaServed(),
     knowsAbout: [
       'custom home building',
       'semi-custom home building',

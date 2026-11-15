@@ -3,6 +3,8 @@
  * Override via env for staging; replace placeholder values before launch.
  */
 
+import { SERVICE_AREA_LINE } from "./contentData";
+
 const DEFAULT_PHONE = "(208) 477-1169";
 const DEFAULT_PHONE_TEL = "2084771169";
 const DEFAULT_EMAIL = "hello@boiseconstruction.co";
@@ -60,7 +62,7 @@ export const SITE_CONFIG = {
     city: "Meridian",
     state: "ID",
     cityState: "Meridian, ID",
-    serviceArea: "Treasure Valley · Ada and Canyon County",
+    serviceArea: SERVICE_AREA_LINE,
   },
 } as const;
 

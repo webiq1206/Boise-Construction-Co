@@ -17,7 +17,7 @@ generateBreadcrumbSchema,
 generateWebPageSchema,
 } from "@/lib/schema";
 import { CITY_HERO_IMAGES } from "@/shared/cityServiceImages";
-import { CITIES,TREASURE_VALLEY_CITIES } from "@/shared/contentData";
+import { SERVICE_AREA_CITIES,SERVICE_AREA_LINE } from "@/shared/contentData";
 import { CTA_PRIMARY,CTA_SECONDARY } from "@/shared/ctaCopy";
 import { contentImageAlt } from "@/shared/imageAlts";
 import { SITE_IMAGES } from "@/shared/siteImages";
@@ -27,14 +27,14 @@ export const metadata = withBrandPageMetadata((buildPageMetadata({
   path: "/areas",
   titleOverride: "Treasure Valley Service Areas",
   descriptionOverride:
-    "Custom home building across the Treasure Valley: Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, and Caldwell, Idaho.",
+    "Custom home building in Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, and Star, across Ada and Canyon County.",
 })), "/areas");
 
 export default function AreasHubPage() {
   const schemas = [
     generateWebPageSchema({
       title: "Treasure Valley Service Areas",
-      description: `Custom and semi-custom home building serving ${TREASURE_VALLEY_CITIES}.`,
+      description: `Custom and semi-custom home building in ${SERVICE_AREA_LINE}.`,
       url: "/areas",
     }),
     generateBreadcrumbSchema([
@@ -58,8 +58,8 @@ export default function AreasHubPage() {
             <em className="brc-accent">areas</em>
           </h1>
           <p className="ed-lede mt-8 max-w-[44ch] text-inverse-foreground/85">
-            We build custom and semi-custom homes across {TREASURE_VALLEY_CITIES}, and the surrounding
-            communities, on lots you own and lots we help you find, under one design-build team.
+            We build custom and semi-custom homes in {SERVICE_AREA_LINE}, on lots you own and lots we
+            help you find, under one design-build team.
           </p>
           <p className="sr-only" data-speakable="summary">
             Treasure Valley new home construction service areas.
@@ -75,12 +75,12 @@ export default function AreasHubPage() {
           <div className="ed-shell">
             <SectionHeader
               eyebrow="Treasure Valley"
-              title={<>Nine cities, one design-build team</>}
-              description="Custom homes, semi-custom homes, and builds on your own lot across Ada and Canyon County."
+              title={<>Seven cities, one design-build team</>}
+              description="Custom homes, semi-custom homes, and builds on your own lot in Ada County and Canyon County."
               align="left"
             />
             <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
-              {CITIES.map((city, i) => (
+              {SERVICE_AREA_CITIES.map((city, i) => (
                 <Reveal key={city.slug} delay={i * 40}>
                   <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />
                 </Reveal>

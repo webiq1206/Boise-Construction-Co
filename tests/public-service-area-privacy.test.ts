@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { generateLocalBusinessSchema, generateOrganizationSchema, generateServiceSchema } from '../lib/schema.ts';
 import { buildBusinessVCard } from '../lib/vcard.ts';
-import { CITIES, SERVICES } from '../shared/contentData.ts';
+import { CITIES, SERVICE_AREA_CITIES, SERVICE_AREA_COUNTIES, SERVICES } from '../shared/contentData.ts';
 import { getCityServiceIntro, getCityServiceSections, SERVICE_SEO_CONTENT } from '../shared/seoContent.ts';
 import { CITY_SEO_DATA } from '../lib/seo.ts';
 import { GALLERY_PROJECTS } from '../shared/galleryData.ts';
@@ -31,9 +31,19 @@ test('public entity schema preserves service identity without exporting a privat
   const local = generateLocalBusinessSchema();
   assert.equal('address' in local, false);
   assert.equal('geo' in local, false);
-  assert.equal((local.areaServed as unknown[]).length, CITIES.length);
+  assert.equal('streetAddress' in local, false);
+  const areas = local.areaServed as { '@type': string; name: string }[];
+  assert.deepEqual(
+    areas.map((area) => area.name),
+    [...SERVICE_AREA_CITIES.map((city) => city.name), ...SERVICE_AREA_COUNTIES.map((county) => county.name)],
+  );
+  assert.deepEqual(areas.slice(0, SERVICE_AREA_CITIES.length).map((area) => area['@type']), SERVICE_AREA_CITIES.map(() => 'City'));
+  assert.deepEqual(areas.slice(SERVICE_AREA_CITIES.length).map((area) => area['@type']), SERVICE_AREA_COUNTIES.map(() => 'AdministrativeArea'));
+  assert.deepEqual(generateOrganizationSchema().areaServed, local.areaServed);
   assert.equal((local.openingHoursSpecification as unknown[]).length, 6);
   assert.equal((generateOrganizationSchema().contactPoint as unknown[]).length, 1);
+  assert.equal(JSON.stringify(local).includes('Middleton'), false);
+  assert.equal(JSON.stringify(local).includes('Garden City'), false);
 });
 
 test('saved business contact retains useful contact details, hours and service geography', () => {
@@ -44,7 +54,7 @@ test('saved business contact retains useful contact details, hours and service g
   assert.match(card, /TEL;TYPE=WORK,VOICE:\+12084771169/);
   assert.match(card, /EMAIL;TYPE=WORK:hello@boiseconstruction.co/);
   assert.match(card, /https:\/\/boiseconstruction.co/);
-  assert.match(card, /Treasure Valley.*Ada and Canyon County/);
+  assert.match(card, /Boise\\, Meridian\\, Nampa\\, Eagle\\, Kuna\\, Caldwell\\, and Star\\, in Ada County and Canyon County/);
   assert.match(card, /Hours: Monday 9:00 AM - 6:00 PM/);
   assert.match(card, /Idaho Registered Contractor #8381215/);
 });

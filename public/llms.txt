@@ -1,6 +1,6 @@
 # Boise Construction Co
 
-> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build. Serving Boise, Meridian, Eagle, Nampa, Kuna, Star, Middleton, Caldwell, Garden City. Phone (208) 477-1169.
+> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build. Serving Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, and Star, in Ada County and Canyon County. Phone (208) 477-1169.
 
 Design-build means one accountable team handles architectural design, engineering, estimating, Ada and Canyon County permitting, and construction, with one point of contact, backed by a written line-item scope before the foundation is poured. Budget ranges are produced by an on-site estimator from house geometry and specification level rather than a flat price per square foot, because the same 2,400 square feet costs very different money on a flat infill lot than on a sloped foothills parcel with a shared well. Ranges are planning estimates, not quotes; a firm proposal follows a site visit and a lot review.
 
@@ -62,4 +62,4 @@ Design-build means one accountable team handles architectural design, engineerin
 - [RSS feed](https://boiseconstruction.co/feed.xml): guides and articles, newest first, with publication and revision dates.
 - [Full text for LLMs](https://boiseconstruction.co/llms-full.txt): expanded reference copy of the core facts.
 
-Last updated: 2026-11-13.
+Last updated: 2026-11-15.
