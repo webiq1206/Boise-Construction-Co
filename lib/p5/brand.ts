@@ -19,6 +19,7 @@ export const ESTIMATOR_BRAND = {
   "defaultService": "new-construction",
   "email": "hello@boiseconstruction.co",
   "phone": "(208) 477-1169",
+  "cityLine": "Meridian, ID 83646",
   "ink": BRAND_CHARCOAL,
   "paper": "#F7F5F3",
   "logo": "/brand/png/wordmark/light/boise-construction-co-wordmark-charcoal-accent-1200w.png",

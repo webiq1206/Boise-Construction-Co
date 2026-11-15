@@ -1,19 +1,40 @@
 import {safeEmailReplyTo} from './emailReplyTo.ts';
 import { getUncachableEmailClient } from "../../server/services/emailTransport";
-import { getAdminRecipientEmails,formatFromAddress } from "../../server/services/emailLayout";
+import { getAdminRecipientEmails } from "../../server/services/emailLayout";
 import { ESTIMATOR_BRAND as brand } from "./brand";
 import { buildCrmPayload } from "./crmPayload";
 import {crmIdentity,deliverKeyedCrm} from "./keyedCrm";
+/** Jared ruling: the From name is P5 Home Co at the P5 sending address. The message itself stays this brand. */
+export const ESTIMATOR_FROM = "P5 Home Co <hello@p5homeco.com>";
 export async function adminRecipients(){return [...new Set(await getAdminRecipientEmails(brand.email))];}
 export const EMAIL_SUPPORTS_IDEMPOTENCY=true;
+function transientSendError(error:unknown){
+  const current=error as {code?:string;statusCode?:number;message?:string};
+  if(["ECONNRESET","ETIMEDOUT","ECONNREFUSED","EAI_AGAIN","EPIPE","ENETUNREACH","EHOSTUNREACH"].includes(String(current?.code||"")))return true;
+  const status=Number(current?.statusCode||0);
+  if(status===429||status>=500)return true;
+  return /^(?:421|450|451|452)\b/.test(String(current?.message||""))||/socket hang up|timed out/i.test(String(current?.message||""));
+}
 export async function sendEmail(input:{to:string;replyTo?:string;subject:string;text:string;html?:string;attachments:{filename:string;content:Buffer;contentType?:string}[];key:string}){
-  const {client,fromEmail}=await getUncachableEmailClient();
+  const {client}=await getUncachableEmailClient("p5homeco.com");
   const sender=client.emails as unknown as {send:(body:unknown,options:unknown)=>Promise<any>};
-  const result=await sender.send({from:formatFromAddress(fromEmail),to:input.to,replyTo:safeEmailReplyTo(input.replyTo,brand.email),subject:input.subject,text:input.text,html:input.html,attachments:input.attachments},{idempotencyKey:input.key});
-  if(result?.error)throw new Error("Email provider rejected delivery");
-  const id=result?.data?.id||result?.id;
-  if(!id||id==="noop"||result?.skipped)throw new Error("Email delivery is not configured");
-  return String(id);
+  let last:unknown;
+  for(let attempt=0;attempt<2;attempt++){
+    try{
+      const result=await sender.send({from:ESTIMATOR_FROM,to:input.to,replyTo:safeEmailReplyTo(input.replyTo,brand.email),subject:input.subject,text:input.text,html:input.html,attachments:input.attachments},{idempotencyKey:input.key});
+      if(result?.error)throw new Error("Email provider rejected delivery");
+      const id=result?.data?.id||result?.id;
+      if(!id||id==="noop"||result?.skipped)throw new Error("Email delivery is not configured");
+      return String(id);
+    }catch(error){
+      last=error;
+      const message=error instanceof Error?error.message:"Delivery failed";
+      console.error(`[p5-delivery] send attempt ${attempt+1} failed: ${message.slice(0,200)}`);
+      if(attempt===0&&transientSendError(error))continue;
+      throw error;
+    }
+  }
+  throw last instanceof Error?last:new Error("Email delivery failed");
 }
 /** Allowlisted codes only: provider messages, URLs and credentials never enter delivery errors. */
 export function crmTransportCode(error:unknown):string{

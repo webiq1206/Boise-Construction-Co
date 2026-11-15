@@ -189,7 +189,8 @@ test("shared estimator and intake customer mail carry the button, and team mail 
   const toCustomer = renderIntakeEmail(snapshot, false, []);
   const toTeam = renderIntakeEmail(snapshot, true, []);
   assert.match(toCustomer.html, /Schedule now/);
-  assert.match(toCustomer.html, /1 hour option for a home walkthrough/);
+  assert.match(toCustomer.html, /home walkthrough/);
+  assert.match(toCustomer.html, /choose the 1 hour option/);
   assert.match(toCustomer.text, /meetings-na2\.hubspot\.com\/client3/);
   assert.doesNotMatch(visible(toCustomer.html), BANNED);
   assert.doesNotMatch(toTeam.html, /Schedule now/);
