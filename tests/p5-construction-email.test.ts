@@ -10,11 +10,14 @@ import {legalIdentityLine} from '../lib/p5/brandIdentity.ts';
 import {ESTIMATOR_FROM} from '../lib/p5/deliveryAdapter.ts';
 import {
   ESTIMATE_DISCLAIMER,
+  INTERNAL_OPS_EMAIL,
   VALUE_TIERS,
   assertCopy,
   emailBrandFrom,
   estimatorTestMode,
+  internalDeliveryTo,
   isRealHref,
+  tierNextStep,
   valueTier,
 } from '../lib/p5/emailKit.ts';
 import {
@@ -71,10 +74,16 @@ test('shared mail reads this brand, and P5 Home Co is only the From header', () 
   assert.equal(isRealHref('https://qbo.intuit.com/app/estimate'), false);
   assert.equal(isRealHref('https://qbo.intuit.com/app/estimate?txnId=73'), true);
   for (const file of SHARED) {
-    assert.doesNotMatch(readFileSync(new URL(`../lib/p5/${file}`, import.meta.url), 'utf8'), /P5 Home Co|p5homeco\.com|#ceb391/, file);
+    const source = readFileSync(new URL(`../lib/p5/${file}`, import.meta.url), 'utf8');
+    assert.doesNotMatch(source, /P5 Home Co|#ceb391/, file);
+    if (file !== 'emailKit.ts') assert.doesNotMatch(source, /p5homeco\.com/, file);
   }
+  assert.equal(INTERNAL_OPS_EMAIL, 'hello@p5homeco.com');
+  assert.equal(internalDeliveryTo('test', ESTIMATOR_BRAND), 'hello@p5homeco.com');
+  assert.equal(internalDeliveryTo('alert', ESTIMATOR_BRAND), 'hello@p5homeco.com');
   const outbox = readFileSync(new URL('../lib/p5/outbox.ts', import.meta.url), 'utf8');
-  assert.match(outbox, /testInbox=brand\.email/);
+  assert.match(outbox, /internalDeliveryTo\('test',brand\)/);
+  assert.match(outbox, /internalDeliveryTo\("alert",brand\)/);
   assert.match(outbox, /CRM_DELIVERY_ENABLED&&!testMode/);
   assert.equal(estimatorTestMode('[QA] Ada Small', {}), false);
   assert.equal(estimatorTestMode('TEST Ada', {}), true);
@@ -99,6 +108,10 @@ test('every construction fixture renders admin and customer mail from the stored
     assertThisBrand(rendered.admin.html, rendered.admin.text, {phone: false});
     assertThisBrand(rendered.customer.html, rendered.customer.text);
     assert.match(rendered.customer.html, /Schedule now/);
+    assert.match(rendered.customer.text, /Boise Construction Co prepared this estimate\./);
+    assert.match(rendered.customer.text, /Meridian, ID 83646/);
+    assert.doesNotMatch(rendered.customer.text, /is a DBA of|P5 Home Co/);
+    assert.ok(rendered.customer.text.includes(tierNextStep(fixture.range?.high ?? null)));
     assert.ok(rendered.customer.text.includes(ESTIMATE_DISCLAIMER));
     assert.match(rendered.customer.html, /https:\/\/meetings-na2\.hubspot\.com\/client3/);
     assert.doesNotMatch(rendered.admin.html, /Open in QuickBooks/);
