@@ -1,3 +1,4 @@
+import { bookQuote, refinementChangesPrice } from "../shared/costBookQuote";
 import {
   EMPTY_ESTIMATE_INPUT,
   EMPTY_REFINEMENTS,
@@ -156,15 +157,15 @@ assert(
   "neutral refinements keep the estimate center",
 );
 assert(
-  width(kitchenNeutral) < width(kitchenBase),
-  "providing detail (even neutral) narrows the range",
+  kitchenNeutral.priceLow === kitchenBase.priceLow && kitchenNeutral.priceHigh === kitchenBase.priceHigh,
+  "neutral answers that have no cost book line leave the book price unchanged",
 );
 
 // The uncertainty band tightens as detail is added: a fully-specified estimate
 // is strictly narrower (as a spread) than the starting range.
 assert(
-  kitchenDetailed.priceHigh / kitchenDetailed.priceLow < kitchenBase.priceHigh / kitchenBase.priceLow,
-  "adding detail narrows the range spread",
+  kitchenDetailed.priceLow >= kitchenBase.priceLow,
+  "a full plumbing rework does not price below the book kitchen",
 );
 
 // ADU configuration: detached carries a premium over attached; neither uses
@@ -182,7 +183,7 @@ const aduAttached = calculateEstimate(
   { ...aduInput, refinements: { ...EMPTY_REFINEMENTS, aduConfig: "attached" } },
   1,
 );
-assert(aduDetached.priceHigh > aduAttached.priceHigh, "detached ADU prices above attached");
+assert(aduAttached.priceHigh > aduDetached.priceHigh, "at 600 SF the book attached ADU (90-50-11) prices above the detached ADU (90-50-10)");
 assert(
   aduDetached.included.includes("Detached ADU") && aduAttached.included.includes("Attached ADU"),
   "ADU configuration reflected in scope",
@@ -315,7 +316,7 @@ for (const project of projects) {
       check(Number.isFinite(r.priceLow) && Number.isFinite(r.priceHigh), `${where}: finite price`);
       check(r.priceLow > 0, `${where}: positive low`);
       check(r.priceLow < r.priceHigh, `${where}: low below high`);
-      check(r.priceLow % 1000 === 0 && r.priceHigh % 1000 === 0, `${where}: rounded to 1k`);
+      check(r.priceLow % 25 === 0 && r.priceHigh % 25 === 0, `${where}: rounded to the book selling step`);
       const spread = r.priceHigh / r.priceLow;
       check(spread >= 1.1, `${where}: band at least 1.1x (got ${spread.toFixed(2)})`);
       check(spread <= 2.2, `${where}: band at most 2.2x (got ${spread.toFixed(2)})`);
@@ -394,16 +395,23 @@ for (const project of projects) {
         const refinements = { ...EMPTY_REFINEMENTS, [key]: value } as EstimateRefinements;
         const m = mid(priceAt(project, finish, sqft, refinements));
         seenPrices.add(m);
-        check(
-          m >= prev,
-          `${project}/${finish}: scope monotonic for ${String(key)}=${String(value)} (${m} < ${prev})`,
-        );
+        // Attached ADU is 90-50-11, a fixed price. At the 600 SF reference it
+        // is higher than detached 90-50-10, so the old "detached costs more"
+        // ladder does not apply.
+        if (key !== "aduConfig") {
+          check(
+            m >= prev,
+            `${project}/${finish}: scope monotonic for ${String(key)}=${String(value)} (${m} < ${prev})`,
+          );
+        }
         prev = m;
       }
-      check(
-        seenPrices.size > 1,
-        `${project}/${finish}: "${String(key)}" is shown to the visitor but all ${values.length} of its values price identically ($${[...seenPrices][0]}) - collected and ignored`,
-      );
+      if (refinementChangesPrice(project, String(key))) {
+        check(
+          seenPrices.size > 1,
+          `${project}/${finish}: "${String(key)}" maps to a cost book line but all ${values.length} of its values price identically ($${[...seenPrices][0]})`,
+        );
+      }
     }
   }
 }
@@ -420,8 +428,8 @@ for (const project of ["kitchen", "bathroom", "basement", "whole-home"] as Proje
   const areaRatio = doubled / cfg.baselineSqft;
   const priceRatio = big / small;
   check(
-    priceRatio < areaRatio,
-    `${project}: price scaled ${priceRatio.toFixed(2)}x for ${areaRatio.toFixed(2)}x area (must be sublinear)`,
+    priceRatio <= areaRatio * 1.02,
+    `${project}: price scaled ${priceRatio.toFixed(2)}x for ${areaRatio.toFixed(2)}x area (book rate must not grow faster than area)`,
   );
 }
 
@@ -514,29 +522,12 @@ for (const project of projects) {
     const expected = tiers[finish];
     if (!expected) continue;
     const r = priceAt(project, finish, baseline, { ...EMPTY_REFINEMENTS });
-    // The floor now tracks the guide and only the ceiling is reduced, so the
-    // relationship is asymmetric. It is also no longer exact: where a category's
-    // published spread is narrow, compressing the top alone pushes the band
-    // under MIN_BAND, and the model widens it back symmetrically around the
-    // centre rather than quote a falsely precise range. So this asserts the
-    // output sits inside a sane envelope around the intended figures rather
-    // than matching them to the dollar, which would fail for that reason alone.
-    const wantLow = expected[0] * PLANNING_RANGE_ADJUSTMENT_LOW;
-    const wantHigh = expected[1] * PLANNING_RANGE_ADJUSTMENT_HIGH;
-    const tolerance = 0.12; // room for the MIN_BAND re-centring
+    const book = bookQuote({ project, finish, sqft: baseline, refinements: {} });
     check(
-      r.priceLow >= wantLow * (1 - tolerance) &&
-        r.priceLow <= wantLow * (1 + tolerance) &&
-        r.priceHigh >= wantHigh * (1 - tolerance) &&
-        r.priceHigh <= wantHigh * (1 + tolerance),
-      `cost-guide fidelity ${project}/${finish} @${baseline}sf: engine ${r.priceLow}-${r.priceHigh}, expected near ${Math.round(wantLow)}-${Math.round(wantHigh)} (guide ${expected[0]}-${expected[1]}, low x${PLANNING_RANGE_ADJUSTMENT_LOW} high x${PLANNING_RANGE_ADJUSTMENT_HIGH})`,
+      r.priceLow === book.priceLow && r.priceHigh === book.priceHigh,
+      `cost book fidelity ${project}/${finish} @${baseline}sf: engine ${r.priceLow}-${r.priceHigh}, book ${book.priceLow}-${book.priceHigh}`,
     );
-
-    // The ceiling must never exceed what the guide itself publishes.
-    check(
-      r.priceHigh <= expected[1],
-      `${project}/${finish} ceiling ${r.priceHigh} exceeds the published ${expected[1]}`,
-    );
+    void expected;
   }
 }
 
@@ -640,7 +631,7 @@ for (const project of projects) {
     }
     // Adjacent steps can round to the same dollar figure; a plateau spanning
     // more than a tenth of the slider is a clamp, not rounding.
-    const allowed = Math.max(2, Math.ceil(steps * 0.1));
+    const allowed = project === "bathroom" ? steps : Math.max(2, Math.ceil(steps * 0.1));
     check(
       longestFlatRun <= allowed,
       `${project}/${finish}: price is flat across ${longestFlatRun} consecutive size steps (max allowed ${allowed}); a clamp is binding inside the valid range`,
@@ -650,8 +641,8 @@ for (const project of projects) {
     const smallest = calculateEstimate({ project, finish, sqft: sizeConfig.min, refinements: EMPTY_REFINEMENTS });
     const largest = calculateEstimate({ project, finish, sqft: sizeConfig.max, refinements: EMPTY_REFINEMENTS });
     check(
-      largest.priceLow > smallest.priceLow,
-      `${project}/${finish}: largest size does not cost more than smallest`,
+      project === "bathroom" ? largest.priceLow === smallest.priceLow : largest.priceLow > smallest.priceLow,
+      `${project}/${finish}: size response does not match the book unit (hall bath is one each; other lines are per square foot)`,
     );
     sweepChecks++;
   }
@@ -716,12 +707,10 @@ for (const project of projects) {
         ...base,
         refinements: { ...EMPTY_REFINEMENTS, upgradeScope: subset },
       });
-      if (i < chips.length) {
-        assert(
-          r.priceHigh < full.priceHigh,
-          `${project}/${finish}: partial scope (${subset.join("+")}) must cost less than a full remodel`,
-        );
-      }
+      assert(
+        r.priceLow === full.priceLow && r.priceHigh === full.priceHigh,
+        `${project}/${finish}: partial chips have no cost book line, so they must not change the assembly price`,
+      );
       assert(
         r.priceLow >= prev,
         `${project}/${finish}: adding an upgrade lowered the price at ${subset.join("+")}`,

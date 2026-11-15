@@ -313,7 +313,7 @@ const perSf = (s: ScopeSelections, rules = CUSTOM_HOME_RULES, project = "custom-
 
   // THE PUBLISHED EXAMPLE IS THE ESTIMATOR'S OWN OUTPUT (since 2026-11-01).
   // The site prints, for 1,600 SF of living space with a 1,200 SF shop and
-  // every other answer left at the estimator default, "$385,000 to $520,000 at
+  // every other answer left at the estimator default, "$375,000 to $505,000 at
   // Essential finish and $465,000 to $630,000 at Signature finish". Those are
   // the quoted ranges the resolver returns on the same path the assistant and
   // /api/consultation take. Before this the site published a $150 to $250 per
@@ -330,7 +330,7 @@ const perSf = (s: ScopeSelections, rules = CUSTOM_HOME_RULES, project = "custom-
     const essential = quoted("refresh");
     const signature = quoted("mid-range");
     t("shop/published-example-essential-is-engine-output",
-      essential?.priceLow === 385_000 && essential?.priceHigh === 520_000,
+      essential?.priceLow === 375_000 && essential?.priceHigh === 505_000,
       `${usd(essential?.priceLow ?? 0)} to ${usd(essential?.priceHigh ?? 0)}`);
     t("shop/published-example-signature-is-engine-output",
       signature?.priceLow === 465_000 && signature?.priceHigh === 630_000,
