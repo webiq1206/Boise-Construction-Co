@@ -125,8 +125,8 @@ export const FAMILY_BRAND: FamilyBrand = {
       { label: 'Terms of service', href: '/terms-of-service' },
       { label: 'Subcontractor login', href: '/api/login', rel: 'nofollow' },
     ],
-    // Required parent-company disclosure: this brand is a DBA of P5 Home Co LLC.
-    disclosure: { before: `${SITE_CONFIG.name} is a DBA of `, linkLabel: SITE_CONFIG.legalName, href: 'https://p5homeco.com', after: '' },
+    // Parent company as customers know it. The registered entity stays in legalName and the registration line.
+    disclosure: { before: `${SITE_CONFIG.name} is a DBA of `, linkLabel: SITE_CONFIG.parentName, href: 'https://p5homeco.com', after: '' },
     copyrightName: SITE_CONFIG.name,
   },
   // Detached ADUs are offered through this company's existing service pages.

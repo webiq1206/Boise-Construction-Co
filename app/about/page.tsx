@@ -236,7 +236,7 @@ export default function AboutPage() {
                 ))}
               </div>
               <p className="mt-8 text-sm leading-relaxed text-muted-foreground">
-                Boise Construction Co is a trade name of P5 Home Co LLC. Related companies:{' '}
+                Boise Construction Co is a trade name of {SITE_CONFIG.parentName}. Related companies:{' '}
                 <a href="https://boiseremodeling.co" rel="noopener" className="underline underline-offset-2">
                   Boise Remodeling Co
                 </a>
