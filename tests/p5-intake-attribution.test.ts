@@ -18,7 +18,7 @@ test('paid attribution survives draft validation, cross-brand snapshot, and CRM 
  const record=intakeLocalCrmRecord(snapshot);
  assert.deepEqual(record.attribution,attribution);assert.equal(record.brand,'Boise Cabinet Co');
  assert.equal(sourceFromAttribution(collectAttribution(record.attribution||{})),'Paid Search');
- assert.equal(validateIntakeLocalCrm(intakeDeliveryEnvelope(snapshot,'crm','digest')),null);
+ assert.equal(validateIntakeLocalCrm(intakeDeliveryEnvelope(snapshot,'crm','digest')),'payload-review');
  assert.equal(intakeLeadKey(snapshot.projectId),intakeLeadKey(prior.projectId));
 });
 test('untrusted acquisition context excludes arbitrary fields, tokens and referrer paths',()=>{

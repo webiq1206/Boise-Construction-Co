@@ -10,6 +10,8 @@
  * deleting. They are not offered on the public calculator.
  */
 import { bookQuote } from "./costBookQuote";
+export { APPLIANCE_DISCLAIMER, FINISH_LABELS, INCLUDED_SCOPE_NOTE, NEW_CONSTRUCTION_FINISH_LABELS, PROJECT_LABELS, formatPlanningCurrency } from "./estimateLabels";
+import { FINISH_LABELS, NEW_CONSTRUCTION_FINISH_LABELS, PROJECT_LABELS, formatPlanningCurrency } from "./estimateLabels";
 
 export type NewConstructionProjectType =
   | "custom-home"
@@ -413,12 +415,6 @@ export interface EstimateResult {
   confidencePercent: number;
   refinementsApplied: number;
 }
-
-export const INCLUDED_SCOPE_NOTE =
-  "Scope reflects the selections above. Your final scope is confirmed during consultation.";
-
-export const APPLIANCE_DISCLAIMER =
-  "Appliances are client-supplied; we'll guide your selection but do not purchase or install them.";
 
 /**
  * The single, unambiguous statement of what this number is. Used verbatim in
@@ -1308,44 +1304,7 @@ export function getPlumbingElectricalOptions(project: ProjectType) {
     : PLUMBING_ELECTRICAL_OPTIONS.remodel;
 }
 
-export const PROJECT_LABELS: Record<ProjectType, { label: string; sub: string }> = {
-  "custom-home": { label: "Custom Home", sub: "Designed from scratch for you" },
-  "semi-custom-home": { label: "Semi-Custom Home", sub: "An existing plan, your choices" },
-  "build-on-your-lot": { label: "Build on My Lot", sub: "You already own the land" },
-  "shop-home": { label: "Shop Home", sub: "A house and a shop, one roof" },
-  kitchen: { label: "Kitchen", sub: "Cabinets, counters, layout" },
-  bathroom: { label: "Bathroom", sub: "Tile, fixtures, vanity" },
-  "whole-home": { label: "Whole-Home", sub: "Multi-room renovation" },
-  addition: { label: "Room Addition", sub: "New square footage" },
-  adu: { label: "ADU / Guest House", sub: "Detached or attached unit" },
-  basement: { label: "Basement Finishing", sub: "Finish your lower level" },
-};
-
-export const FINISH_LABELS: Record<FinishLevel, { label: string; sub: string }> = {
-  refresh: { label: "Essential", sub: "Cosmetic upgrades, repaint" },
-  "mid-range": { label: "Signature", sub: "Replace and upgrade" },
-  "high-end": { label: "Premium", sub: "Premium finishes" },
-  luxury: { label: "Luxury", sub: "No constraints" },
-};
-
-/**
- * The same four internal tiers, named for someone building a house.
- *
- * "Refresh" and "Mid-Range" are remodeling words: there is nothing to refresh in
- * a house that does not exist yet, and a buyer choosing a specification level
- * for a new home is not choosing how much of it to replace. The internal keys
- * stay as they are, because the entire calibrated rate ladder and its invariant
- * suite are keyed on them; only the display names change.
- */
-export const NEW_CONSTRUCTION_FINISH_LABELS: Record<FinishLevel, { label: string; sub: string }> = {
-  /* The subs state concretely what each tier includes: finish level is a
-     major cost driver no plan set can state, so it is always asked, and the
-     cards must make the roughly 2x-per-tier swing understandable. */
-  refresh: { label: "Essential", sub: "Well built, value finishes: laminate counters, LVP and carpet, painted trim" },
-  "mid-range": { label: "Signature", sub: "Our standard spec: quartz counters, tile showers, solid-core doors" },
-  "high-end": { label: "Premium", sub: "Custom cabinetry, stone and hardwood, tall ceilings, upgraded windows" },
-  luxury: { label: "Luxury", sub: "Specified room by room with your designer, no allowances" },
-};
+/** Display names live in estimateLabels so public pages do not load the cost book. */
 
 export function getFinishLabels(project: ProjectType): Record<FinishLevel, { label: string; sub: string }> {
   return isNewConstructionProject(project) ? NEW_CONSTRUCTION_FINISH_LABELS : FINISH_LABELS;
@@ -1780,12 +1739,6 @@ export function getPriceData(project: ProjectType, finish: FinishLevel): PriceDa
     low: quoted.priceLow,
     high: quoted.priceHigh,
   };
-}
-
-export function formatPlanningCurrency(n: number): string {
-  if (n >= 1000000) return `$${(n / 1000000).toFixed(1)}M`;
-  if (n >= 1000) return `$${Math.round(n / 1000)}k`;
-  return `$${n.toLocaleString()}`;
 }
 
 export function getFinishPlanningHint(project: ProjectType, finish: FinishLevel): string {

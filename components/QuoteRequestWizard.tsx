@@ -17,7 +17,7 @@ import { BEST_TIMES } from "@/shared/quoteFormChoices";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { StoredEstimate } from "@/shared/estimateEngine";
-import { FINISH_LABELS, PROJECT_LABELS, formatPlanningCurrency } from "@/shared/estimateEngine";
+import { FINISH_LABELS, PROJECT_LABELS, formatPlanningCurrency } from "@/shared/estimateLabels";
 import { DisplayNum } from "@/components/marketing/DisplayNum";
 import { CTA_FORM_CALLBACK, CTA_FORM_SEND } from "@/shared/ctaCopy";
 import { SITE_CONFIG } from "@/shared/siteConfig";
