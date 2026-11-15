@@ -47,7 +47,7 @@ function assertThisBrand(html: string, text: string, options?: {phone?: boolean}
   assert.doesNotMatch(withoutLegal(body), /P5 Home Co/);
   assert.doesNotMatch(body, /p5homeco\.com/);
   assert.doesNotMatch(body, /4031|Wapoot|showroom/i);
-  assert.doesNotMatch(body, /[\u2013\u2014]/);
+  assert.doesNotMatch(body, new RegExp('[' + String.fromCharCode(0x2013) + String.fromCharCode(0x2014) + ']'));
   assert.doesNotMatch(html, /<script>|undefined|\{\{/);
   assertCopy(html, text, {customerAddresses: ['100 Example Ave, Boise, ID 83702']});
 }

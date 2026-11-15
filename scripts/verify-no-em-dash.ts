@@ -60,6 +60,8 @@ const EXCLUDED_DIRS = new Set([
 const EXCLUDED_FILES = new Set([
   join('scripts', 'verify-no-em-dash.ts'),
   join('scripts', 'fix-em-dash.ts'),
+  // Shared kit, copied byte-identical. Its only match is the dash detector.
+  join('lib', 'p5', 'emailKit.ts'),
 ]);
 
 interface Violation {
