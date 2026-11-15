@@ -65,20 +65,6 @@ const nextConfig = {
       '@/shared': path.resolve(__dirname, 'shared'),
       '@shared': path.resolve(__dirname, 'shared'),
     };
-    // The homepage calculator imports the shared cost book, which hashes the
-    // book with node:crypto. Webpack does not load the node: scheme in the
-    // browser bundle, so that one import is swapped for the same sha256.
-    if (!isServer) {
-      config.plugins.push({
-        apply(compiler) {
-          compiler.hooks.normalModuleFactory.tap('client-sha256', (factory) => {
-            factory.hooks.beforeResolve.tap('client-sha256', (data) => {
-              if (data.request === 'node:crypto') data.request = path.resolve(__dirname, 'lib/client-sha256.cjs');
-            });
-          });
-        },
-      });
-    }
     return config;
   },
 

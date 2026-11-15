@@ -1,0 +1,1770 @@
+{
+  "source": "751ed80ca0e7532aaac9a723c3662c2436c109f3",
+  "scope": "Existing pure calculator customer ranges before public server-boundary change; no providers or persistence.",
+  "cases": [
+    {
+      "name": "custom-home-refresh",
+      "input": {
+        "project": "custom-home",
+        "finish": "refresh",
+        "sqft": 2400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 566000,
+        "priceHigh": 658000
+      }
+    },
+    {
+      "name": "custom-home-mid-range",
+      "input": {
+        "project": "custom-home",
+        "finish": "mid-range",
+        "sqft": 2400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 755000,
+        "priceHigh": 878000
+      }
+    },
+    {
+      "name": "custom-home-high-end",
+      "input": {
+        "project": "custom-home",
+        "finish": "high-end",
+        "sqft": 2400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 1019000,
+        "priceHigh": 1185000
+      }
+    },
+    {
+      "name": "custom-home-luxury",
+      "input": {
+        "project": "custom-home",
+        "finish": "luxury",
+        "sqft": 2400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 1151000,
+        "priceHigh": 1338000
+      }
+    },
+    {
+      "name": "semi-custom-home-refresh",
+      "input": {
+        "project": "semi-custom-home",
+        "finish": "refresh",
+        "sqft": 2200,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 519000,
+        "priceHigh": 604000
+      }
+    },
+    {
+      "name": "semi-custom-home-mid-range",
+      "input": {
+        "project": "semi-custom-home",
+        "finish": "mid-range",
+        "sqft": 2200,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 692000,
+        "priceHigh": 805000
+      }
+    },
+    {
+      "name": "semi-custom-home-high-end",
+      "input": {
+        "project": "semi-custom-home",
+        "finish": "high-end",
+        "sqft": 2200,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 934000,
+        "priceHigh": 1086000
+      }
+    },
+    {
+      "name": "semi-custom-home-luxury",
+      "input": {
+        "project": "semi-custom-home",
+        "finish": "luxury",
+        "sqft": 2200,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 1055000,
+        "priceHigh": 1227000
+      }
+    },
+    {
+      "name": "build-on-your-lot-refresh",
+      "input": {
+        "project": "build-on-your-lot",
+        "finish": "refresh",
+        "sqft": 2400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 566000,
+        "priceHigh": 658000
+      }
+    },
+    {
+      "name": "build-on-your-lot-mid-range",
+      "input": {
+        "project": "build-on-your-lot",
+        "finish": "mid-range",
+        "sqft": 2400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 755000,
+        "priceHigh": 878000
+      }
+    },
+    {
+      "name": "build-on-your-lot-high-end",
+      "input": {
+        "project": "build-on-your-lot",
+        "finish": "high-end",
+        "sqft": 2400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 1019000,
+        "priceHigh": 1185000
+      }
+    },
+    {
+      "name": "build-on-your-lot-luxury",
+      "input": {
+        "project": "build-on-your-lot",
+        "finish": "luxury",
+        "sqft": 2400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 1151000,
+        "priceHigh": 1338000
+      }
+    },
+    {
+      "name": "shop-home-refresh",
+      "input": {
+        "project": "shop-home",
+        "finish": "refresh",
+        "sqft": 1700,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 401000,
+        "priceHigh": 467000
+      }
+    },
+    {
+      "name": "shop-home-mid-range",
+      "input": {
+        "project": "shop-home",
+        "finish": "mid-range",
+        "sqft": 1700,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 535000,
+        "priceHigh": 622000
+      }
+    },
+    {
+      "name": "shop-home-high-end",
+      "input": {
+        "project": "shop-home",
+        "finish": "high-end",
+        "sqft": 1700,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 722000,
+        "priceHigh": 839000
+      }
+    },
+    {
+      "name": "shop-home-luxury",
+      "input": {
+        "project": "shop-home",
+        "finish": "luxury",
+        "sqft": 1700,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 815000,
+        "priceHigh": 948000
+      }
+    },
+    {
+      "name": "kitchen-refresh",
+      "input": {
+        "project": "kitchen",
+        "finish": "refresh",
+        "sqft": 250,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 37800,
+        "priceHigh": 41800
+      }
+    },
+    {
+      "name": "kitchen-mid-range",
+      "input": {
+        "project": "kitchen",
+        "finish": "mid-range",
+        "sqft": 250,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 57000,
+        "priceHigh": 63100
+      }
+    },
+    {
+      "name": "kitchen-high-end",
+      "input": {
+        "project": "kitchen",
+        "finish": "high-end",
+        "sqft": 250,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 86500,
+        "priceHigh": 95800
+      }
+    },
+    {
+      "name": "kitchen-luxury",
+      "input": {
+        "project": "kitchen",
+        "finish": "luxury",
+        "sqft": 250,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 118000,
+        "priceHigh": 131000
+      }
+    },
+    {
+      "name": "bathroom-refresh",
+      "input": {
+        "project": "bathroom",
+        "finish": "refresh",
+        "sqft": 80,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 17100,
+        "priceHigh": 18900
+      }
+    },
+    {
+      "name": "bathroom-mid-range",
+      "input": {
+        "project": "bathroom",
+        "finish": "mid-range",
+        "sqft": 80,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 24000,
+        "priceHigh": 26600
+      }
+    },
+    {
+      "name": "bathroom-high-end",
+      "input": {
+        "project": "bathroom",
+        "finish": "high-end",
+        "sqft": 80,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 33800,
+        "priceHigh": 37400
+      }
+    },
+    {
+      "name": "bathroom-luxury",
+      "input": {
+        "project": "bathroom",
+        "finish": "luxury",
+        "sqft": 80,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 49700,
+        "priceHigh": 55100
+      }
+    },
+    {
+      "name": "whole-home-refresh",
+      "input": {
+        "project": "whole-home",
+        "finish": "refresh",
+        "sqft": 1800,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 173000,
+        "priceHigh": 192000
+      }
+    },
+    {
+      "name": "whole-home-mid-range",
+      "input": {
+        "project": "whole-home",
+        "finish": "mid-range",
+        "sqft": 1800,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 312000,
+        "priceHigh": 345000
+      }
+    },
+    {
+      "name": "whole-home-high-end",
+      "input": {
+        "project": "whole-home",
+        "finish": "high-end",
+        "sqft": 1800,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 396000,
+        "priceHigh": 439000
+      }
+    },
+    {
+      "name": "whole-home-luxury",
+      "input": {
+        "project": "whole-home",
+        "finish": "luxury",
+        "sqft": 1800,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 524000,
+        "priceHigh": 580000
+      }
+    },
+    {
+      "name": "addition-refresh",
+      "input": {
+        "project": "addition",
+        "finish": "refresh",
+        "sqft": 400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 84900,
+        "priceHigh": 98700
+      }
+    },
+    {
+      "name": "addition-mid-range",
+      "input": {
+        "project": "addition",
+        "finish": "mid-range",
+        "sqft": 400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 84900,
+        "priceHigh": 98700
+      }
+    },
+    {
+      "name": "addition-high-end",
+      "input": {
+        "project": "addition",
+        "finish": "high-end",
+        "sqft": 400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 107000,
+        "priceHigh": 125000
+      }
+    },
+    {
+      "name": "addition-luxury",
+      "input": {
+        "project": "addition",
+        "finish": "luxury",
+        "sqft": 400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 139000,
+        "priceHigh": 161000
+      }
+    },
+    {
+      "name": "adu-refresh",
+      "input": {
+        "project": "adu",
+        "finish": "refresh",
+        "sqft": 600,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 196000,
+        "priceHigh": 227000
+      }
+    },
+    {
+      "name": "adu-mid-range",
+      "input": {
+        "project": "adu",
+        "finish": "mid-range",
+        "sqft": 600,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 196000,
+        "priceHigh": 227000
+      }
+    },
+    {
+      "name": "adu-high-end",
+      "input": {
+        "project": "adu",
+        "finish": "high-end",
+        "sqft": 600,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 239000,
+        "priceHigh": 278000
+      }
+    },
+    {
+      "name": "adu-luxury",
+      "input": {
+        "project": "adu",
+        "finish": "luxury",
+        "sqft": 600,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 298000,
+        "priceHigh": 347000
+      }
+    },
+    {
+      "name": "basement-refresh",
+      "input": {
+        "project": "basement",
+        "finish": "refresh",
+        "sqft": 900,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 63700,
+        "priceHigh": 70500
+      }
+    },
+    {
+      "name": "basement-mid-range",
+      "input": {
+        "project": "basement",
+        "finish": "mid-range",
+        "sqft": 900,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 63700,
+        "priceHigh": 70500
+      }
+    },
+    {
+      "name": "basement-high-end",
+      "input": {
+        "project": "basement",
+        "finish": "high-end",
+        "sqft": 900,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 97000,
+        "priceHigh": 107000
+      }
+    },
+    {
+      "name": "basement-luxury",
+      "input": {
+        "project": "basement",
+        "finish": "luxury",
+        "sqft": 900,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 115000,
+        "priceHigh": 127000
+      }
+    },
+    {
+      "name": "kitchen-full",
+      "input": {
+        "project": "kitchen",
+        "finish": "mid-range",
+        "sqft": 250,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": "full",
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 63100,
+        "priceHigh": 69900
+      }
+    },
+    {
+      "name": "kitchen-partial",
+      "input": {
+        "project": "kitchen",
+        "finish": "mid-range",
+        "sqft": 250,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": "partial",
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 59500,
+        "priceHigh": 65900
+      }
+    },
+    {
+      "name": "bathroom-three",
+      "input": {
+        "project": "bathroom",
+        "finish": "mid-range",
+        "sqft": 80,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": 3,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 71900,
+        "priceHigh": 79600
+      }
+    },
+    {
+      "name": "addition-two-story-kitchen",
+      "input": {
+        "project": "addition",
+        "finish": "mid-range",
+        "sqft": 400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": 2,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": true,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 337000,
+        "priceHigh": 392000
+      }
+    },
+    {
+      "name": "basement-wetbar",
+      "input": {
+        "project": "basement",
+        "finish": "mid-range",
+        "sqft": 900,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": true,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 81000,
+        "priceHigh": 89700
+      }
+    },
+    {
+      "name": "adu-attached",
+      "input": {
+        "project": "adu",
+        "finish": "mid-range",
+        "sqft": 600,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": "attached",
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 204000,
+        "priceHigh": 237000
+      }
+    },
+    {
+      "name": "custom-garage-stated",
+      "input": {
+        "project": "custom-home",
+        "finish": "mid-range",
+        "sqft": 2400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": "two",
+          "garageSqft": 1000,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 857000,
+        "priceHigh": 997000
+      }
+    },
+    {
+      "name": "shop-garage-shop",
+      "input": {
+        "project": "shop-home",
+        "finish": "mid-range",
+        "sqft": 1700,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": "two",
+          "garageSqft": 480,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": null,
+          "shopSize": 1200,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 674000,
+        "priceHigh": 784000
+      }
+    },
+    {
+      "name": "covered-outdoor",
+      "input": {
+        "project": "custom-home",
+        "finish": "mid-range",
+        "sqft": 2400,
+        "refinements": {
+          "layoutChanges": null,
+          "plumbingElectrical": null,
+          "cabinetTier": null,
+          "fixtureCount": null,
+          "stories": null,
+          "roomCount": null,
+          "bathroomCount": null,
+          "kitchenIncluded": null,
+          "aduConfig": null,
+          "upgradeScope": null,
+          "garageBays": null,
+          "garageSqft": null,
+          "basementType": null,
+          "basementSqft": null,
+          "lotServices": null,
+          "siteDifficulty": null,
+          "utilitiesAtLot": null,
+          "drivewayLength": null,
+          "coveredOutdoor": 300,
+          "shopSize": null,
+          "planningStage": null,
+          "accessoryStructures": null
+        }
+      },
+      "expected": {
+        "priceLow": 772000,
+        "priceHigh": 898000
+      }
+    }
+  ]
+}

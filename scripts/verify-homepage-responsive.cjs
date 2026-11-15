@@ -28,7 +28,13 @@ const pause = page => page.evaluate(() => new Promise(resolve => requestAnimatio
     const asset = /\.(?:png|webp|jpe?g|svg|ico|woff2?|ttf|css|js|map)$/.test(u.pathname);
     const nextAsset = u.pathname.startsWith('/_next/static/') || u.pathname === '/_next/webpack-hmr';
     const image = u.pathname === '/_next/image' && (u.searchParams.get('url') || '').startsWith('/') && !(u.searchParams.get('url') || '').startsWith('//');
-    const allowed = u.origin === base.origin && req.method() === 'GET' && !u.pathname.startsWith('/api/') && (u.pathname === '/' || asset || nextAsset || image);
+    // Only this explicitly pure, bounded price calculation may reach the local
+    // server. Every business API, provider and lead submission remains blocked.
+    let planning = false;
+    if (u.origin === base.origin && u.pathname === '/api/planning-range' && req.method() === 'POST') {
+      try {const body = req.postDataJSON(); planning = req.postDataBuffer().length <= 512 && Object.keys(body).sort().join('|') === 'project|sqft' && ['custom-home','semi-custom-home','build-on-your-lot','shop-home'].includes(body.project) && Number.isInteger(body.sqft) && body.sqft >= 800 && body.sqft <= 7000;} catch {}
+    }
+    const allowed = planning || (u.origin === base.origin && req.method() === 'GET' && !u.pathname.startsWith('/api/') && (u.pathname === '/' || asset || nextAsset || image));
     if (!allowed) {
       const category = u.origin !== base.origin ? 'external' : u.pathname.startsWith('/api/') ? 'api' : 'other';
       blocked[category] = (blocked[category] || 0) + 1;
@@ -123,10 +129,12 @@ const pause = page => page.evaluate(() => new Promise(resolve => requestAnimatio
         await slider.focus(); await page.keyboard.press('End');
         const maxValue=await slider.inputValue();
         check(maxValue===await slider.getAttribute('max'),`${key}: max slider ${id}`);
+        await page.locator('[data-planning-state=ready]').waitFor();
         const maxResult=await page.getByTestId('proof-range-value').innerText();
         await page.keyboard.press('Home');
         const minValue=await slider.inputValue();
         check(minValue===await slider.getAttribute('min'),`${key}: min slider ${id}`);
+        await page.locator('[data-planning-state=ready]').waitFor();
         const minResult=await page.getByTestId('proof-range-value').innerText();
         check(minResult.includes('From') && minResult!==maxResult,`${key}: result did not update ${id}`);
         await page.keyboard.press('ArrowRight');
