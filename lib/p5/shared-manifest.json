@@ -289,7 +289,7 @@
     "scripts/p5-cli-acceptance.mts": "ed5b8fc80231c03b3c2b54de486fb6db7f259947e855ecf4985a9caf6f4ea6b8",
     "scripts/p5-component-review.mjs": "7035921690a6dc0648b1c3142b054ad09d67535c706e108817369e9e6de6ab26",
     "scripts/p5-contact-first-browser.mjs": "92f3646a7736ddf0169e8d700134ae1f4789c6eb01f6d28394deebaa792564f2",
-    "scripts/p5-estimator-browser.mjs": "0f4206a44f72ae8236dd0d5146ee870e8d9c0be0ed0bf2f80b4b296bd840c43a",
+    "scripts/p5-estimator-browser.mjs": "c770b2f0018e9043b215ea700f84a910197c3b89ff439e4639958327f9d7b2fa",
     "scripts/p5-exit-browser.mjs": "6b0556f4c8b17cd5f314f60d84246363b60e4dc54e191f91010e78374cf44a97",
     "scripts/p5-host-build.mjs": "2ac9f40425e0c279d930a54b56b47dda3b15e3841933a076ddc751e8275c9967",
     "scripts/p5-hub-notification-check.mjs": "e2d4216777feeb2e4099b93986ca257e4760f671312a6b343014ef7677148f06",
@@ -315,7 +315,7 @@
     "scripts/p5-storage-check.ts": "87dcfbb0b77f53b08e220c51729323a06851837232c30a8b179ec0aed2807e4b",
     "scripts/p5-sync-patch.mjs": "13c7a5a1b81fa0a1839d11c7852ae01892737cd18856a2dd682636e0485c5317",
     "scripts/p5-sync-selected.mjs": "3cc8a68b927c2ae44de95e36fde7f5d567cf9760d0eac22d5b49f236309c9753",
-    "scripts/p5-sync.mjs": "a1234ae85965fe0f81367f26fee81cb47d788430c7e9e3690b5bfbe222aead57",
+    "scripts/p5-sync.mjs": "cc210ceba1075f1d54e3517243044ddac4ae3a18b4f2d9ace0ee79c796b2fe6e",
     "scripts/p5-verify-visual.mjs": "67363630ae7fb0ef3748a377a193495ff1427dfca34e0c9c655e1a02c71ca61d",
     "scripts/p5-visual-review.mjs": "9918874379624da97ddb3b6bff056ddd5f27242c3dbf58c5dea84a077a66a12f",
     "scripts/p5-visual-routes.json": "670468cb7925d2b5b049e0b52f4e05f911b72474e76d376b5492b69ba51cf8bc",
@@ -478,8 +478,6 @@
     "tests/p5-pricing-ledger.test.ts": "8134de19d94dd66974c928626eff3d93b963b2087e1509c4294096681bd837c6",
     "tests/p5-pricing-source-history.test.ts": "7a2696abb429e65555da6b1bb43289e785661a05cdfdc258883ff7bdf8379be0",
     "tests/p5-pricing.test.ts": "463caa4e7397b4e9de94a80183c9ac06a79244a77fa974275753d2e90fa5baa8",
-    "tests/p5-privacy-ads-disclosure.test.ts": "d6717d39a632f6e9fc57e5ed7fc60288996b0c0b80fb0488f9ced0bb9135a7c0",
-    "tests/p5-privacy-section-5.test.ts": "68231bca2823fd2adf4383a88fdac1ec3a54ca525e7295697972f1f4f30d4ac4",
     "tests/p5-processing-budget.test.ts": "a74f86228dbfff9579ce58a28973887de8a2d99e530759b32d5eb1e636e71c1c",
     "tests/p5-processing-status.test.ts": "3b29c5e2fba43b1e9b03993ee8386b6f6f568e3f0da5cf92048694e28f180c83",
     "tests/p5-project-diagnostics.test.ts": "05a50933b927c78c5dc7640c866ab8fbea66a28c8e983b63e7d0e663f65ecba4",
@@ -538,8 +536,9 @@
     "lib/leadAttribution.ts": "aec4191c4984d381ede0fbb585bd29cc1b4b7eeb4270a553a377b0074a4eee35",
     "lib/leadAttributionBrowser.ts": "06514c0dd38cf186ffbec763c2ab47df1085e3991a1e7a7ad73ec657e80f4780",
     "lib/p5/browserAttribution.ts": "0bd946602e2c18f98a5b4b77b7752980efa9ceb0218100f4fa650355a6459c6e",
-    "tests/p5-estimator-conversion-acceptance.test.ts": "4b2a17b72ab49ae5cd8dd47e3010ba4fd140ee9e013466290e37c4dec38ac949",
-    "tests/p5-outbox-routing.test.ts": "f58f3828419ab4541b431bf08509ccdbc2f5b6008907fc5d003c9731ddea92bc"
+    "tests/p5-outbox-routing.test.ts": "f58f3828419ab4541b431bf08509ccdbc2f5b6008907fc5d003c9731ddea92bc",
+    "scripts/lib/browserSaveFaults.mjs": "682d1040701fb36c910797f1ba029f7485952624fa751d65ed0cfdd15683e603",
+    "tests/p5-browser-save-faults.test.ts": "8ad2b32d8adade6cf3d557bf84187b0a5161c60aa6205dc9c47a3333616a3ac1"
   },
   "intentionalDrift": [
     {
