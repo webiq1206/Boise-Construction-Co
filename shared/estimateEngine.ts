@@ -9,6 +9,8 @@
  * carry a large calibrated invariant suite that is worth keeping rather than
  * deleting. They are not offered on the public calculator.
  */
+import { bookQuote } from "./costBookQuote";
+
 export type NewConstructionProjectType =
   | "custom-home"
   | "semi-custom-home"
@@ -1320,9 +1322,9 @@ export const PROJECT_LABELS: Record<ProjectType, { label: string; sub: string }>
 };
 
 export const FINISH_LABELS: Record<FinishLevel, { label: string; sub: string }> = {
-  refresh: { label: "Refresh", sub: "Cosmetic upgrades, repaint" },
-  "mid-range": { label: "Mid-Range", sub: "Replace and upgrade" },
-  "high-end": { label: "High-End", sub: "Premium finishes" },
+  refresh: { label: "Essential", sub: "Cosmetic upgrades, repaint" },
+  "mid-range": { label: "Signature", sub: "Replace and upgrade" },
+  "high-end": { label: "Premium", sub: "Premium finishes" },
   luxury: { label: "Luxury", sub: "No constraints" },
 };
 
@@ -1342,7 +1344,7 @@ export const NEW_CONSTRUCTION_FINISH_LABELS: Record<FinishLevel, { label: string
   refresh: { label: "Essential", sub: "Well built, value finishes: laminate counters, LVP and carpet, painted trim" },
   "mid-range": { label: "Signature", sub: "Our standard spec: quartz counters, tile showers, solid-core doors" },
   "high-end": { label: "Premium", sub: "Custom cabinetry, stone and hardwood, tall ceilings, upgraded windows" },
-  luxury: { label: "Bespoke", sub: "Specified room by room with your designer, no allowances" },
+  luxury: { label: "Luxury", sub: "Specified room by room with your designer, no allowances" },
 };
 
 export function getFinishLabels(project: ProjectType): Record<FinishLevel, { label: string; sub: string }> {
@@ -1442,7 +1444,7 @@ export const PLANNING_STAGE_RANGE_LABELS: Record<PlanningStage, string> = {
  * behaves and is consistent with the guide's own rates falling as project size
  * rises across categories.
  */
-export const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, PriceData>>> = {
+export const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, { roi: number; included: string[] }>>> = {
   /*
    * Kitchen is calibrated 2026-07 against two issued estimates, not the guide.
    *
@@ -1496,55 +1498,55 @@ export const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, Price
    */
   "custom-home": {
     refresh: {
-      low: 560000, high: 840000, roi: 0,
+      roi: 0,
       included: ["Custom plan drawn for your lot", "Production-grade specification", "Permits and inspections", "Front-yard landscaping and irrigation"],
     },
     "mid-range": {
-      low: 680000, high: 1020000, roi: 0,
+      roi: 0,
       included: ["Custom plan and engineering", "Semi-custom cabinetry and quartz throughout", "Mixed siding and stone elevation", "Gas fireplace and covered patio"],
     },
     "high-end": {
-      low: 980000, high: 1500000, roi: 0,
+      roi: 0,
       included: ["Fully bespoke plan with steel for open spans", "Custom cabinetry and built-ins", "Stone-forward elevation with timber", "Designer lighting and custom closets"],
     },
     luxury: {
-      low: 1450000, high: 2240000, roi: 0,
+      roi: 0,
       included: ["Architect-led design", "Stone, hardwood and specialty metals", "Fully custom millwork", "Every room specified individually"],
     },
   },
   "semi-custom-home": {
     refresh: {
-      low: 520000, high: 800000, roi: 0,
+      roi: 0,
       included: ["An existing plan built as drawn", "Production-grade specification", "Permits and inspections", "Front-yard landscaping and irrigation"],
     },
     "mid-range": {
-      low: 640000, high: 980000, roi: 0,
+      roi: 0,
       included: ["An existing plan with your options", "Semi-custom cabinetry and quartz throughout", "Mixed siding and stone elevation", "Gas fireplace and covered patio"],
     },
     "high-end": {
-      low: 930000, high: 1440000, roi: 0,
+      roi: 0,
       included: ["An existing plan at custom specification", "Custom cabinetry and built-ins", "Stone-forward elevation", "Designer lighting and custom closets"],
     },
     luxury: {
-      low: 1380000, high: 2150000, roi: 0,
+      roi: 0,
       included: ["An existing plan finished bespoke", "Stone and hardwood throughout", "Fully custom millwork", "Specified room by room"],
     },
   },
   "build-on-your-lot": {
     refresh: {
-      low: 560000, high: 850000, roi: 0,
+      roi: 0,
       included: ["Built on land you already own", "Lot feasibility and siting", "Production-grade specification", "Permits and inspections"],
     },
     "mid-range": {
-      low: 690000, high: 1040000, roi: 0,
+      roi: 0,
       included: ["Sited for views, sun and drainage", "Semi-custom cabinetry and quartz throughout", "Mixed siding and stone elevation", "Well and septic coordination where needed"],
     },
     "high-end": {
-      low: 990000, high: 1530000, roi: 0,
+      roi: 0,
       included: ["Designed specifically for your parcel", "Custom cabinetry and built-ins", "Stone-forward elevation with timber", "Designer lighting and custom closets"],
     },
     luxury: {
-      low: 1470000, high: 2280000, roi: 0,
+      roi: 0,
       included: ["Architect-led design responding to the site", "Stone, hardwood and specialty metals", "Fully custom millwork", "Every room specified individually"],
     },
   },
@@ -1560,55 +1562,55 @@ export const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, Price
    */
   "shop-home": {
     refresh: {
-      low: 470000, high: 760000, roi: 0,
+      roi: 0,
       included: ["Living space and a working shop under one roof", "Insulated shop with an overhead door and 240V power", "Production-grade specification", "Permits and inspections"],
     },
     "mid-range": {
-      low: 590000, high: 950000, roi: 0,
+      roi: 0,
       included: ["Living space and a working shop under one roof", "Insulated shop with an overhead door and 240V power", "Semi-custom cabinetry and quartz throughout", "Mixed siding and stone on the living elevation"],
     },
     "high-end": {
-      low: 850000, high: 1370000, roi: 0,
+      roi: 0,
       included: ["Living space at a custom specification", "Insulated shop with an overhead door and 240V power", "Custom cabinetry and built-ins", "Stone-forward living elevation"],
     },
     luxury: {
-      low: 1200000, high: 1950000, roi: 0,
+      roi: 0,
       included: ["Living space specified room by room", "Insulated shop with an overhead door and 240V power", "Fully custom millwork", "Timber, stone and standing-seam on the living elevation"],
     },
   },
   kitchen: {
     refresh: {
-      low: 15900, high: 26600, roi: 72,
+      roi: 72,
       included: ["New countertops (laminate/entry quartz)", "Cabinet repaints or door replacement", "New plumbing fixtures", "LVP or tile flooring"],
     },
     "mid-range": {
-      low: 37200, high: 58400, roi: 74,
+      roi: 74,
       included: ["Semi-custom cabinetry", "Quartz or granite countertops", "Tile backsplash", "Updated plumbing and electrical"],
     },
     "high-end": {
-      low: 85000, high: 138100, roi: 70,
+      roi: 70,
       included: ["Custom or semi-custom cabinetry", "Premium stone countertops", "Island addition or expansion", "Custom tile work and lighting redesign"],
     },
     luxury: {
-      low: 148800, high: 191300, roi: 62,
+      roi: 62,
       included: ["Fully custom cabinetry", "Exotic stone countertops", "Structural layout changes", "Smart home integration"],
     },
   },
   bathroom: {
     refresh: {
-      low: 12000, high: 20000, roi: 70,
+      roi: 70,
       included: ["New vanity and mirror", "Tile shower refresh", "Updated fixtures and hardware", "New toilet if needed", "Lighting update"],
     },
     "mid-range": {
-      low: 22000, high: 36000, roi: 71,
+      roi: 71,
       included: ["Custom tile shower", "Semi-custom vanity", "Plumbing fixtures updated in place", "Existing layout kept"],
     },
     "high-end": {
-      low: 44000, high: 64000, roi: 65,
+      roi: 65,
       included: ["Wet room or custom walk-in shower", "Freestanding soaking tub", "Custom built-ins", "High-end plumbing fixtures"],
     },
     luxury: {
-      low: 72000, high: 112000, roi: 58,
+      roi: 58,
       included: ["Steam shower system", "Spa soaking tub", "Full layout reconfiguration", "Designer fixtures throughout"],
     },
   },
@@ -1635,19 +1637,19 @@ export const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, Price
    */
   "whole-home": {
     refresh: {
-      low: 72000, high: 120000, roi: 65,
+      roi: 65,
       included: ["Kitchen and bath cosmetic refresh", "New flooring throughout", "Fresh interior paint", "Updated light fixtures"],
     },
     "mid-range": {
-      low: 180000, high: 300000, roi: 68,
+      roi: 68,
       included: ["Kitchen and bath mid-range renovation", "Open-concept conversion", "New flooring throughout", "Updated HVAC and windows"],
     },
     "high-end": {
-      low: 360000, high: 516000, roi: 62,
+      roi: 62,
       included: ["Custom kitchen and bath renovation", "Structural modifications", "New windows and doors", "High-end finishes throughout"],
     },
     luxury: {
-      low: 600000, high: 1020000, roi: 55,
+      roi: 55,
       included: ["Full gut renovation", "Structural engineering", "Smart home system", "Premium finishes throughout", "New HVAC, electrical and plumbing"],
     },
   },
@@ -1675,15 +1677,15 @@ export const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, Price
    */
   addition: {
     "mid-range": {
-      low: 97000, high: 138000, roi: 63,
+      roi: 63,
       included: ["Bedroom or family room addition", "Full HVAC integration", "Updated electrical panel", "Mid-range finishes"],
     },
     "high-end": {
-      low: 162000, high: 227000, roi: 58,
+      roi: 58,
       included: ["400 to 600 sqft addition", "High-end finishes", "Full integration with existing layout", "Custom windows and doors"],
     },
     luxury: {
-      low: 276000, high: 373000, roi: 50,
+      roi: 50,
       included: ["600+ sqft addition", "Structural engineering", "Premium finishes throughout", "Custom design integration"],
     },
   },
@@ -1702,29 +1704,29 @@ export const PRICE_MATRIX: Record<ProjectType, Partial<Record<FinishLevel, Price
    */
   adu: {
     "mid-range": {
-      low: 155000, high: 221000, roi: 70,
+      roi: 70,
       included: ["Full design-build ADU", "Mid-range kitchen and bath finishes", "Separate HVAC system", "Permit coordination through CO"],
     },
     "high-end": {
-      low: 221000, high: 309000, roi: 65,
+      roi: 65,
       included: ["600+ sqft ADU or guest house", "High-end finishes throughout", "Custom kitchen and bath", "Engineered foundation and structural plans"],
     },
     luxury: {
-      low: 309000, high: 442000, roi: 58,
+      roi: 58,
       included: ["Large detached guest house", "Premium finishes and fixtures", "Smart home integration", "Structural engineering and custom design"],
     },
   },
   basement: {
     "mid-range": {
-      low: 45000, high: 76500, roi: 68,
+      roi: 68,
       included: ["Framing, insulation, and drywall", "Egress window and code compliance", "LVP or carpet flooring throughout", "Recessed lighting and updated electrical", "Optional bedroom and full bathroom"],
     },
     "high-end": {
-      low: 90000, high: 144000, roi: 62,
+      roi: 62,
       included: ["Full basement suite build-out", "Wet bar or kitchenette rough-in", "Premium flooring and custom tile", "Custom lighting and built-ins", "Full bathroom with tile shower"],
     },
     luxury: {
-      low: 157500, high: 225000, roi: 55,
+      roi: 55,
       included: ["Luxury finishes throughout", "Home theater or wine room", "Full kitchenette or bar", "Spa-style bathroom", "Smart home integration"],
     },
   },
@@ -1766,10 +1768,17 @@ export function getPriceData(project: ProjectType, finish: FinishLevel): PriceDa
     // Unreachable as long as getAvailableFinishLevels matches PRICE_MATRIX keys.
     throw new Error(`No price data for ${project}/${normalized}`);
   }
+  const quoted = bookQuote({
+    project,
+    finish: normalized,
+    sqft: PROJECT_SIZE_CONFIG[project].baselineSqft,
+    refinements: {},
+  });
   return {
-    ...data,
-    low: data.low * PLANNING_RANGE_ADJUSTMENT_LOW,
-    high: data.high * PLANNING_RANGE_ADJUSTMENT_HIGH,
+    roi: data.roi,
+    included: data.included,
+    low: quoted.priceLow,
+    high: quoted.priceHigh,
   };
 }
 
@@ -2274,73 +2283,6 @@ export function getKitchenQuestion(
 }
 
 /**
- * Prices a deviation from the assumed bathroom count, and for whole-home the
- * presence of the kitchen, ADDITIVELY using the guide's own figures at the
- * matching finish level.
- *
- * Additive rather than a multiplier, because a bathroom costs what a bathroom
- * costs; it does not scale with the size of the house. And because the
- * adjustment is zero at the assumed baseline, a typical project still
- * reproduces the published rate exactly, which the source-fidelity check
- * enforces.
- *
- * The bathroom figure used is the guide's standalone bathroom remodel. For a
- * basement or an addition the true incremental cost differs somewhat (no
- * demolition, but slab or new plumbing runs instead), so this is a reasoned
- * approximation rather than a derived number, unlike the whole-home baseline.
- */
-function getModuleAdjustment(
-  project: ProjectType,
-  ref: EstimateRefinements,
-  finish: FinishLevel,
-  sqft: number,
-): { low: number; high: number } {
-  let low = 0;
-  let high = 0;
-
-  // The bathroom project scales by count instead; see bathroomInstances.
-  // Whole-home's reference scales with house size; every other project's is
-  // fixed, because a basement or addition does not gain baths as it grows.
-  const assumed =
-    project === "bathroom"
-      ? undefined
-      : (getAssumedBathroomsForSize(project, sqft) ?? undefined);
-  if (assumed !== undefined && ref.bathroomCount !== null) {
-    const bath = PRICE_MATRIX.bathroom[normalizeFinishLevel("bathroom", finish)];
-    if (bath) {
-      const delta = ref.bathroomCount - assumed;
-      low += bath.low * delta;
-      high += bath.high * delta;
-    }
-  }
-
-  const kitchenCfg = ASSUMED_KITCHENS[project];
-  if (kitchenCfg && ref.kitchenIncluded !== null) {
-    const tier =
-      kitchenCfg.tier === "match" ? normalizeFinishLevel("kitchen", finish) : kitchenCfg.tier;
-    const kitchen = PRICE_MATRIX.kitchen[tier];
-
-    if (kitchen && kitchenCfg.lesserTier && !ref.kitchenIncluded) {
-      // Downgrade rather than removal: deduct only the gap between the kitchen
-      // the rate assumes and the smaller one actually going in.
-      const lesser = PRICE_MATRIX.kitchen[kitchenCfg.lesserTier];
-      if (lesser) {
-        low -= kitchen.low - lesser.low;
-        high -= kitchen.high - lesser.high;
-      }
-    } else if (kitchen) {
-      // +1 when they have one the rate does not cover, -1 when the rate covers
-      // one they are not doing, 0 when the two agree.
-      const delta = (ref.kitchenIncluded ? 1 : 0) - (kitchenCfg.covered ? 1 : 0);
-      low += kitchen.low * delta;
-      high += kitchen.high * delta;
-    }
-  }
-
-  return { low, high };
-}
-
-/**
  * How much of a full kitchen or bathroom each upgrade chip accounts for.
  *
  * These are the "what are you upgrading" chips. A homeowner redoing only some
@@ -2388,94 +2330,26 @@ export function getUpgradeScopeMultiplier(
 export function calculateEstimate(input: EstimateInput, userRefinementCount = 0): EstimateResult {
   const finish = normalizeFinishLevel(input.project, input.finish);
   const safeInput: EstimateInput = finish === input.finish ? input : { ...input, finish };
-  const base = getPriceData(safeInput.project, safeInput.finish);
-  const sizeMult = getSizeMultiplier(input.sqft, input.project);
-  const refMult = getRefinementMultipliers(input.refinements, input.project);
+  const notes = PRICE_MATRIX[safeInput.project][safeInput.finish];
+  if (!notes) throw new Error(`No price data for ${safeInput.project}/${safeInput.finish}`);
   const maxFields = getMaxRefinementFields(input.project);
   const { level, percent } = getPlanningDetail(userRefinementCount, maxFields);
-
-  // The estimate is a central figure with an uncertainty band around it.
-  //
-  // The CENTER is a pure, monotonic function of the cost drivers (project,
-  // finish, size, refinements): a more intensive selection always moves the
-  // center up, so two configurations remain directly comparable.
-  // Center = expected cost; the band below carries the uncertainty. Keeping
-  // those two jobs separate matters: the previous form took the mean of
-  // (lowest base x lowest multipliers) and (highest base x highest
-  // multipliers), so every selection compounded worst-case against worst-case
-  // and dragged the center upward. Scaling the midpoints instead keeps the
-  // center a fair expected value while staying monotonic - a more intensive
-  // selection still always moves it up.
-  const baseMid = (base.low + base.high) / 2;
-  const refMid = (refMult.low + refMult.high) / 2;
-
-  // Whole-home kitchen and bathroom counts are priced as modules added to or
-  // removed from the scaled base, not as multipliers. The adjustment is applied
-  // after size scaling because a bathroom costs what a bathroom costs whatever
-  // the size of the house, and is scaled by the planning adjustment so it stays
-  // consistent with every other figure the estimator shows.
-  const modules = getModuleAdjustment(
-    safeInput.project,
-    input.refinements,
-    safeInput.finish,
-    safeInput.sqft,
-  );
-  const moduleMid =
-    ((modules.low + modules.high) / 2) * PLANNING_RANGE_ADJUSTMENT;
-
-  // On a bathroom project the count multiplies rather than adds: three
-  // bathrooms is three of the thing being priced, not one large one. Reading it
-  // as a single big room and scaling sublinearly understated a three-bathroom
-  // project by roughly 43%, which is the direction that sets an expectation a
-  // proposal cannot meet.
-  const bathroomInstances =
-    safeInput.project === "bathroom" && input.refinements.bathroomCount !== null
-      ? Math.max(1, input.refinements.bathroomCount)
-      : 1;
-
-  // Partial-scope discount for kitchen and bathroom: doing only some of the
-  // upgrade components costs less than a full remodel. 1.0 when the scope is
-  // unspecified or complete, so a typical estimate is unchanged.
-  const scopeMult = getUpgradeScopeMultiplier(
-    safeInput.project,
-    input.refinements.upgradeScope,
-  );
-
-  const center = Math.max(
-    1000,
-    (baseMid * sizeMult * refMid + moduleMid) * bathroomInstances * scopeMult,
-  );
-
-  // The BAND starts at the category's own natural spread and TIGHTENS as the
-  // user supplies more detail, so a fully-specified estimate is genuinely more
-  // precise - not just a higher "detail" score. This is what makes "improve
-  // estimate accuracy" real: fewer unknowns, a narrower range.
-  const rawBand = (base.high - base.low) / (base.high + base.low);
-  // Compress the category's natural spread so even a bare estimate reads as a
-  // confident, personalized range - not guesswork. A too-wide range erodes
-  // trust, and an inflated high end scares qualified homeowners off before we
-  // get to talk value. Clamp the starting spread to a sensible maximum.
-  // The base range now comes from the owner's own cost guide, so it IS the
-  // honest spread for a typical project. Compressing it (this previously
-  // multiplied by 0.82 to make ranges read as more confident) would quote a
-  // narrower range than our own published guidance, claiming precision the
-  // source does not support. The starting band therefore reproduces the guide
-  // exactly, and only real detail from the visitor tightens it below that.
-  const MAX_START_BAND = 0.28; // safety cap; no current category reaches it
-  const startBand = Math.min(MAX_START_BAND, rawBand);
-
-  const detailRatio = maxFields > 0 ? Math.min(1, userRefinementCount / maxFields) : 0;
-  const BAND_TIGHTENING = 0.6; // remove up to 60% of the band at full detail
-  const MIN_BAND = 0.1; // keep an honest band (~1.2x); never a false single number
-  const band = Math.max(MIN_BAND, startBand * (1 - BAND_TIGHTENING * detailRatio));
-
-  const priceLow = Math.round((center * (1 - band)) / 1000) * 1000;
-  const priceHigh = Math.round((center * (1 + band)) / 1000) * 1000;
+  const garageSqft =
+    safeInput.refinements.garageBays && safeInput.refinements.garageBays !== "none"
+      ? GARAGE_BAY_SQFT[safeInput.refinements.garageBays]
+      : 0;
+  const quoted = bookQuote({
+    project: safeInput.project,
+    finish: safeInput.finish,
+    sqft: safeInput.sqft,
+    garageSqft,
+    refinements: safeInput.refinements,
+  });
 
   return {
-    priceLow,
-    priceHigh,
-    roi: base.roi,
+    priceLow: quoted.priceLow,
+    priceHigh: quoted.priceHigh,
+    roi: notes.roi,
     included: buildDynamicScope(safeInput),
     confidence: level,
     /* Stage first: it is what sets the band, and the label has to agree with the

@@ -103,7 +103,7 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
     {
       question: 'What does a shop home or barndominium cost in Idaho?',
       answer:
-        'Shop homes cost less per square foot than a conventional house, because the shop side costs far less per foot than the house side. For 1,600 square feet of living space with a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. The blend depends heavily on how finished the shop is.',
+        'Shop homes cost less per square foot than a conventional house, because the shop side costs far less per foot than the house side. For 1,600 square feet of living space with a 1,200 square foot shop, our estimator returns $375,000 to $505,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. The blend depends heavily on how finished the shop is.',
     },
   ],
   content: `
@@ -128,7 +128,7 @@ export const boiseHomeBuildingCostGuide: GuidePageData = {
 <tr><td>Vertical construction on a lot you already own</td><td>$225 to $400 per finished square foot</td></tr>
 <tr><td>High-performance home</td><td>$275 to $425 per finished square foot</td></tr>
 <tr><td>Foothills site, steep grade, high detail</td><td>Regularly above $450 per square foot</td></tr>
-<tr><td>Shop home, 1,600 sq ft living plus 1,200 sq ft shop</td><td>$385,000 to $520,000 at Essential finish, $465,000 to $630,000 at Signature finish (our estimator, simple lot with city services)</td></tr>
+<tr><td>Shop home, 1,600 sq ft living plus 1,200 sq ft shop</td><td>$375,000 to $505,000 at Essential finish, $465,000 to $630,000 at Signature finish (our estimator, simple lot with city services)</td></tr>
 </tbody>
 </table>
 <p>The semi-custom band is lower than the custom band for one reason, and it is not construction quality. The design and engineering work on a semi-custom plan is already done and already proven, so you are not paying to draw and stamp a house from scratch, and the plan has already been built enough times that the pricing has fewer unknowns in it. That is the whole saving. Read how we handle each in <a href="/services/custom-home-builder">custom home building</a> and <a href="/services/semi-custom-homes">semi-custom homes</a>. The shop home figure is a worked example rather than a per square foot band, because shop space costs far less per square foot than living space, so the ratio between the two moves the number as much as anything else does. There is more on that format in <a href="/services/shop-homes-barndominiums">shop homes and barndominiums</a>.</p>

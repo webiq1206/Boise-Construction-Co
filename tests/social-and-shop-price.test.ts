@@ -90,7 +90,7 @@ const SHOP_FILES = [
 test('the published shop home example is the estimator output, per finish level', () => {
   const essential = shopExample('refresh');
   const signature = shopExample('mid-range');
-  assert.equal(essential, '$385,000 to $520,000');
+  assert.equal(essential, '$375,000 to $505,000');
   assert.equal(signature, '$465,000 to $630,000');
   const pair = new RegExp(
     `${essential.replaceAll('$', '\\$')} (at|with|for|in) Essential finish(es)?,? (and|or) ${signature.replaceAll('$', '\\$')} (at|with|for|in) Signature finish`,
