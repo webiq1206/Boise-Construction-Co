@@ -18,7 +18,6 @@ import {analysisMessage,projectMaterials,type ProcessingStatus} from '@/lib/p5/p
 import {customerChoiceLabel,selectCustomerAnswer,contextualCustomerAnswer,exactCustomerChoice,customerQuestionKey} from '@/lib/p5/customerAnswers';
 import {useCallback,useEffect,useId,useLayoutEffect,useMemo,useRef,useState} from 'react';
 import {ESTIMATOR_BRAND as brand} from '@/lib/p5/brand';
-import {phoneHref} from '@/lib/p5/phoneHref';
 import {estimatorTheme,estimatorThemeStyle} from '@/lib/p5/theme';
 import {SCOPE_FIELDS,SCOPE_FILE_LIMIT,SCOPE_MAX_PAGES,SCOPE_BATCH_LIMIT,SCOPE_FILE_COUNT,SCOPE_UPLOAD_HELP,type ScopeField,type ScopeAnswers,type ScopeUpload} from '@/lib/p5/scope';
 import {questionContext,scopeFieldApplies} from '@/lib/p5/dynamicQuestions';
