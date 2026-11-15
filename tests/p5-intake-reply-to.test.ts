@@ -11,10 +11,11 @@ import {prepareIntakeEmail} from '../lib/p5/intakeEmailDelivery.ts';
 import {emptyIntakeDetails,type IntakeSnapshot} from '../lib/p5/intakeContract.ts';
 import {INTAKE_RECIPIENTS,routeIntake,type IntakeSite} from '../lib/p5/intakePolicy.ts';
 const site=brand.id as IntakeSite,mailbox=INTAKE_RECIPIENTS[site];
+const from='P5 Home Co <hello@p5homeco.com>';
 const snapshot=(email='customer+project@example.invalid'):IntakeSnapshot=>({schema:1,projectId:'p5:12345678-1234-4234-8234-123456789abc',draftId:'12345678-1234-4234-8234-123456789abc',originSite:site,currentSite:site,revision:1,contextVersion:0,savedAt:'2099-01-02T12:00:00Z',contact:{name:'Fictional Customer',email,phone:'2085550100',preferredContact:'either'},details:emptyIntakeDetails(),scope:{text:'Fictional scope',answers:{service:'handyman'},extraction:null,uploads:[]},routing:routeIntake(site,'handyman'),unresolved:[]});
-function adapter(){
- const calls:any[]=[],exports:any={};const from=`${brand.name} <${mailbox}>`;
- const send=async(body:any,options:any)=>{calls.push({body,options});return {data:{id:'mock-accepted'}};};
+function adapter(sendImpl?:(body:any,options:any,calls:any[])=>Promise<any>){
+ const calls:any[]=[],exports:any={};
+ const send=sendImpl?(body:any,options:any)=>sendImpl(body,options,calls):async(body:any,options:any)=>{calls.push({body,options});return {data:{id:'mock-accepted'}};};
  const deps:Record<string,unknown>={
   './brand':{ESTIMATOR_BRAND:brand},'./brand.ts':{ESTIMATOR_BRAND:brand},'./emailReplyTo.ts':{safeEmailReplyTo},
   'nodemailer':{createTransport:()=>({sendMail:async(body:any)=>{calls.push({body});return {accepted:[body.to],rejected:[],messageId:body.messageId};}})},
@@ -51,4 +52,13 @@ test('legacy frozen envelopes without Reply-To retain their prior brand fallback
  const a=adapter(),email=intakeDeliveryEnvelope(snapshot(),'team','digest').email!;delete email.replyTo;
  for(let attempt=0;attempt<2;attempt++)await a.sendEmail({...JSON.parse(JSON.stringify(email)),attachments:[],key:'same-frozen-key'});
  assert.equal(a.calls[0].body.replyTo,mailbox);assert.deepEqual(a.calls[0],a.calls[1]);
+});
+test('estimator send retries a dropped connection once and does not retry a permanent refusal',async()=>{
+ let attempts=0;
+ const recovered=adapter(async(body,options,log)=>{attempts+=1;log.push({body,options});if(attempts===1)throw Object.assign(new Error('socket hang up'),{code:'ECONNRESET'});return {data:{id:'mock-accepted'}};});
+ await recovered.sendEmail({to:mailbox,subject:'Retry',text:'Hello',attachments:[],key:'retry-key'});
+ assert.equal(recovered.calls.length,2);assert.equal(recovered.calls[1].body.from,from);
+ const refused=adapter(async(body,options,log)=>{log.push({body,options});throw new Error('550 mailbox unavailable');});
+ await assert.rejects(()=>refused.sendEmail({to:mailbox,subject:'No',text:'Hello',attachments:[],key:'no-key'}));
+ assert.equal(refused.calls.length,1);
 });
