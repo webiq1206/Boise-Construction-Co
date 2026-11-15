@@ -84,7 +84,7 @@ test('the footer renders the family row, NAP, hours and one registration link, w
   assert.match(html, /Hours: Mon to Fri 9 to 6, Sat 9 to 4 Mountain\. Closed Sunday\./);
   assert.match(html, /mailto:hello@boiseconstruction\.co/);
   assert.match(html, /href="\/contact\.vcf"/);
-  assert.match(html, /is a DBA of <a href="https:\/\/p5homeco\.com" rel="noopener">P5 Home Co LLC<\/a>/);
+  assert.match(html, /is a DBA of <a href="https:\/\/p5homeco\.com" rel="noopener">P5 Home Co<\/a>/);
   assert.match(html, /<a href="\/api\/login" rel="nofollow">Subcontractor login<\/a>/);
   assert.match(html, /<a href="https:\/\/www\.google\.com\/search\?kgmid=\/g\/11ntl1t7dc" rel="noopener" target="_blank" data-testid="link-footer-google">P5 Home Co on Google<\/a>/);
   assert.equal((html.match(/data-testid="link-footer-google"/g) ?? []).length, 1);

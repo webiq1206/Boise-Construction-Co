@@ -48,6 +48,8 @@ export const SITE_CONFIG = {
    * records, so the two are deliberately different values.
    */
   legalName: "P5 Home Co LLC",
+  /** The parent company as customers know it. legalName stays the registered entity. */
+  parentName: "P5 Home Co",
   phone: process.env.NEXT_PUBLIC_PHONE ?? DEFAULT_PHONE,
   phoneTel: PHONE_TEL,
   /** Schema.org telephone, E.164 with hyphens, matching the sibling sites. */
@@ -56,11 +58,12 @@ export const SITE_CONFIG = {
   phoneSmsHref: `sms:${toE164Digits(PHONE_TEL)}`,
   email: process.env.NEXT_PUBLIC_EMAIL ?? DEFAULT_EMAIL,
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL,
-  // Public geography only. Verification addresses belong in the owner's
-  // business-profile records, never in website markup, downloads or bundles.
+  // Public geography is the city, state and postal code. The street address
+  // stays in the owner's business-profile records and is not published here.
   address: {
     city: "Meridian",
     state: "ID",
+    postalCode: "83646",
     cityState: "Meridian, ID",
     serviceArea: SERVICE_AREA_LINE,
   },

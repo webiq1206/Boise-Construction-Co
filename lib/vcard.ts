@@ -43,7 +43,7 @@ export function buildBusinessVCard(): string {
   const note = [
     "Treasure Valley design-build home builder.",
     `${CONTRACTOR_REGISTRATION_LABEL}.`,
-    `${SITE_CONFIG.name} is a DBA of ${SITE_CONFIG.legalName}.`,
+    `${SITE_CONFIG.name} is a DBA of ${SITE_CONFIG.parentName}.`,
     SITE_CONFIG.address.serviceArea,
     `Hours: ${hoursSummary}`,
   ].join("\n");
@@ -51,11 +51,16 @@ export function buildBusinessVCard(): string {
   const lines = [
     "BEGIN:VCARD",
     "VERSION:3.0",
-    foldLine(`FN:${escapeVCard(SITE_CONFIG.name)}`),
-    foldLine(`ORG:${escapeVCard(SITE_CONFIG.legalName)}`),
+    foldLine("N:Perkins;Nick;;;"),
+    foldLine("FN:Nick Perkins"),
+    foldLine(`ORG:${escapeVCard(SITE_CONFIG.name)}`),
+    foldLine("TITLE:Founder"),
     foldLine(`TEL;TYPE=WORK,VOICE:${tel}`),
     foldLine(`EMAIL;TYPE=WORK:${escapeVCard(SITE_CONFIG.email)}`),
     foldLine(`URL:${escapeVCard(SITE_CONFIG.siteUrl)}`),
+    foldLine(
+      `ADR;TYPE=WORK:;;;${SITE_CONFIG.address.city};${SITE_CONFIG.address.state};${SITE_CONFIG.address.postalCode};USA`,
+    ),
     foldLine(`NOTE:${escapeVCard(note)}`),
     "END:VCARD",
   ];

@@ -117,6 +117,18 @@ const CITY_WIKIPEDIA: Record<string, string> = {
 };
 
 /**
+ * Public postal address for LocalBusiness and Organization. City, state and
+ * ZIP only. No streetAddress.
+ */
+export const PUBLIC_POSTAL_ADDRESS = {
+  '@type': 'PostalAddress',
+  addressLocality: SITE_CONFIG.address.city,
+  addressRegion: SITE_CONFIG.address.state,
+  postalCode: SITE_CONFIG.address.postalCode,
+  addressCountry: 'US',
+} as const;
+
+/**
  * LocalBusiness and Organization areaServed: the seven profile cities, then
  * Ada County and Canyon County. No street address.
  */
@@ -136,8 +148,8 @@ export function businessAreaServed() {
 }
 
 export function generateLocalBusinessSchema(city?: string): SchemaContext {
-  // Public geography is expressed through areaServed. The optional city
-  // customizes the description without implying a customer-facing location.
+  // The optional city customizes the description. The postal address is the
+  // Meridian locality and ZIP, with no street.
   return {
     '@context': 'https://schema.org',
     '@type': [...BUSINESS_TYPES],
@@ -154,6 +166,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     parentOrganization: P5_PARENT_ORGANIZATION,
     telephone: SCHEMA_TELEPHONE,
     email: BUSINESS_INFO.email,
+    address: PUBLIC_POSTAL_ADDRESS,
     hasCredential: CONTRACTOR_CREDENTIAL,
     contactPoint: PUBLIC_CONTACT_POINT,
     openingHoursSpecification: Object.entries(BUSINESS_INFO.hours).map(([day, hours]) => ({
@@ -304,6 +317,7 @@ export function generateOrganizationSchema(): SchemaContext {
       : {}),
     telephone: SCHEMA_TELEPHONE,
     email: BUSINESS_INFO.email,
+    address: PUBLIC_POSTAL_ADDRESS,
     areaServed: businessAreaServed(),
     knowsAbout: [
       'custom home building',
