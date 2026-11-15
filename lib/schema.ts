@@ -4,11 +4,10 @@ import {schemaTime} from './schemaTime';
  * Creates structured data for Google rich snippets and search features
  */
 
-import { BUSINESS_INFO, getBaseUrl } from './seo';
-import { SERVICES } from '@/shared/contentData';
+import { BUSINESS_INFO, getBaseUrl, P5_SAME_AS } from './seo';
+import { CITIES, SERVICES } from '@/shared/contentData';
 import { FOUNDING, PUBLIC_MARK_PATH, SHOW_FOUNDING_YEAR } from '@/shared/publicFlags';
 import { CONTRACTOR_REGISTRATION_NUMBER } from '@/shared/contractorRegistration';
-import { P5_SOCIAL } from '@/shared/gbpProfile';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 
 /** Idaho registers contractors. The same credential is on LocalBusiness, Organization, and Service. */
@@ -40,32 +39,24 @@ const baseUrl = getBaseUrl();
  * every per-city LocalBusiness reused `baseUrl` with different coordinates.
  */
 export const ORG_ID = `${baseUrl}/#organization`;
-export const LOCALBUSINESS_ID = `${baseUrl}/#localbusiness`;
+export const BUSINESS_ID = `${baseUrl}/#business`;
+export const LOCALBUSINESS_ID = BUSINESS_ID;
 export const WEBSITE_ID = `${baseUrl}/#website`;
 
 /**
- * The parent entity. Every brand in this family is a DBA of P5 Home Co LLC,
- * not a separate company, and the P5 site already declares this site as one of
- * its `subOrganization` nodes using exactly this `@id` scheme
- * (`{childOrigin}/#organization`). Asserting `parentOrganization` back at P5
- * from this side closes the loop, so the two graphs join into one entity
- * instead of sitting on their domains as strangers.
- *
- * Hardcoded rather than derived: this is a fixed external origin, and the
- * `@id` must match the P5 graph byte for byte or the nodes will not merge.
+ * Parent entity. Boise Construction Co is a brand of P5 Home Co LLC.
+ * The @id is the P5 business node. Directory listings live on this parent
+ * (one listing per directory) and stay out of this brand's sameAs.
  */
 const P5_ORIGIN = 'https://p5homeco.com';
-export const P5_ORG_ID = `${P5_ORIGIN}/#organization`;
+export const P5_BUSINESS_ID = `${P5_ORIGIN}/#business`;
 export const P5_PARENT_ORGANIZATION = {
-  '@type': 'Organization',
-  '@id': P5_ORG_ID,
+  '@type': 'Organization' as const,
+  '@id': P5_BUSINESS_ID,
   name: 'P5 Home Co',
   url: P5_ORIGIN,
-  // The owner's Facebook page and Google Business Profile both belong to
-  // P5 Home Co, so they are asserted here on the parent and kept out of this
-  // brand's own sameAs.
-  sameAs: [P5_SOCIAL.facebook, P5_SOCIAL.google],
-} as const;
+  sameAs: P5_SAME_AS,
+};
 
 /**
  * Public business type. HomeAndConstructionBusiness is the primary type;
@@ -99,6 +90,13 @@ const LOGO_URL = `${baseUrl}${PUBLIC_MARK_PATH}`;
 const LOGO_SIZE = 512;
 
 /**
+ * Organization JSON-LD only. Visible pages and meta descriptions do not read
+ * this sentence. FOUNDING.schemaDescription stays the gated source text.
+ */
+export const ORGANIZATION_DESCRIPTION =
+  'Design-build home builder serving the Treasure Valley. Custom homes, semi-custom homes, builds on client-owned land, and shop homes. Insured, with written line-item budgets before construction.';
+
+/**
  * Generate LocalBusiness schema for homepage and location pages
  */
 /**
@@ -114,7 +112,37 @@ const CITY_WIKIPEDIA: Record<string, string> = {
   Star: 'https://en.wikipedia.org/wiki/Star,_Idaho',
   Middleton: 'https://en.wikipedia.org/wiki/Middleton,_Idaho',
   Caldwell: 'https://en.wikipedia.org/wiki/Caldwell,_Idaho',
+  'Garden City': 'https://en.wikipedia.org/wiki/Garden_City,_Idaho',
 };
+
+/**
+ * Cities the site already lists, then the two counties those cities sit in.
+ * Counties are AdministrativeArea nodes, not extra cities.
+ */
+function areaServedPlaces() {
+  return [
+    ...CITIES.map((city) => ({
+      '@type': 'City' as const,
+      name: city.name,
+      ...(CITY_WIKIPEDIA[city.name] ? { sameAs: CITY_WIKIPEDIA[city.name] } : {}),
+    })),
+    { '@type': 'AdministrativeArea' as const, name: 'Ada County' },
+    { '@type': 'AdministrativeArea' as const, name: 'Canyon County' },
+  ];
+}
+
+/**
+ * Service-area business. Public locality only.
+ * streetAddress pending owner approval. No postalCode until that decision.
+ */
+function publicPostalAddress() {
+  return {
+    '@type': 'PostalAddress' as const,
+    addressLocality: SITE_CONFIG.address.city,
+    addressRegion: SITE_CONFIG.address.state,
+    addressCountry: 'US' as const,
+  };
+}
 
 export function generateLocalBusinessSchema(city?: string): SchemaContext {
   // Public geography is expressed through areaServed. The optional city
@@ -137,29 +165,14 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     email: BUSINESS_INFO.email,
     hasCredential: CONTRACTOR_CREDENTIAL,
     contactPoint: PUBLIC_CONTACT_POINT,
+    address: publicPostalAddress(),
     openingHoursSpecification: Object.entries(BUSINESS_INFO.hours).map(([day, hours]) => ({
       '@type': 'OpeningHoursSpecification',
       dayOfWeek: day.charAt(0).toUpperCase() + day.slice(1),
       opens: hours === 'Closed' ? undefined : schemaTime(hours.split(' - ')[0]),
       closes: hours === 'Closed' ? undefined : schemaTime(hours.split(' - ')[1]),
     })).filter(spec => spec.opens),
-    priceRange: '$$',
-    areaServed: BUSINESS_INFO.serviceArea.map(area => ({
-      '@type': 'City',
-      name: area,
-      ...(CITY_WIKIPEDIA[area] ? { sameAs: CITY_WIKIPEDIA[area] } : {}),
-    })),
-    ...(BUSINESS_INFO.reviewCount > 0
-      ? {
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: BUSINESS_INFO.rating,
-            reviewCount: BUSINESS_INFO.reviewCount,
-            bestRating: 5,
-            worstRating: 1,
-          },
-        }
-      : {}),
+    areaServed: areaServedPlaces(),
     ...(SHOW_FOUNDING_YEAR ? { foundingDate: BUSINESS_INFO.founded } : {}),
     slogan: 'Boise\'s Design-Build Home Builder',
     paymentAccepted: 'Cash, Credit Card, Check, Financing',
@@ -167,6 +180,7 @@ export function generateLocalBusinessSchema(city?: string): SchemaContext {
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Home Building Services',
+      // Existing service pages only, including ADUs. No prices on the offers.
       itemListElement: SERVICES.map((s) => ({
         '@type': 'Offer',
         url: `${baseUrl}/services/${s.slug}`,
@@ -217,7 +231,6 @@ export function generateServiceSchema(serviceName: string, serviceDescription: s
       telephone: SCHEMA_TELEPHONE,
       email: BUSINESS_INFO.email,
       hasCredential: CONTRACTOR_CREDENTIAL,
-      priceRange: '$$',
       contactPoint: PUBLIC_CONTACT_POINT,
     },
     // The page city is the area served, not a second PostalAddress.
@@ -226,10 +239,7 @@ export function generateServiceSchema(serviceName: string, serviceDescription: s
       name: city,
       addressCountry: 'US',
       addressRegion: 'ID',
-    } : BUSINESS_INFO.serviceArea.map(area => ({
-      '@type': 'City',
-      name: area,
-    })),
+    } : areaServedPlaces(),
     serviceType: serviceName,
     offers: {
       '@type': 'Offer',
@@ -265,7 +275,9 @@ export function generateOrganizationSchema(): SchemaContext {
     '@id': ORG_ID,
     name: BUSINESS_INFO.name,
     legalName: BUSINESS_INFO.legalName,
-    parentOrganization: P5_PARENT_ORGANIZATION,
+    // The full parent node, including its @id, is on the sitewide business.
+    // A second copy here would duplicate that @id on the homepage.
+    parentOrganization: { '@id': P5_BUSINESS_ID },
     ...(BUSINESS_INFO.alternateName.length
       ? { alternateName: BUSINESS_INFO.alternateName }
       : {}),
@@ -276,7 +288,7 @@ export function generateOrganizationSchema(): SchemaContext {
       width: LOGO_SIZE,
       height: LOGO_SIZE,
     },
-    description: FOUNDING.schemaDescription,
+    description: ORGANIZATION_DESCRIPTION,
     hasCredential: CONTRACTOR_CREDENTIAL,
     ...(SHOW_FOUNDING_YEAR ? { foundingDate: BUSINESS_INFO.founded } : {}),
     // founder is gated: only emitted once a real named founder is supplied in
@@ -313,47 +325,19 @@ export function generateOrganizationSchema(): SchemaContext {
 /**
  * Generate Review schema for testimonials
  */
-export function generateReviewSchema(reviews: Array<{
+export function generateReviewSchema(_reviews: Array<{
   author: string;
   rating: number;
   text: string;
   /** Optional ISO date. Omitted from output when not provided. */
   date?: string;
 }>): SchemaContext {
+  // There are no first-party reviews. Do not emit Review or AggregateRating.
   return {
     '@context': 'https://schema.org',
     '@type': [...BUSINESS_TYPES],
     '@id': LOCALBUSINESS_ID,
     name: BUSINESS_INFO.name,
-    // AggregateRating is gated on a real, populated review count. Emitting a
-    // zero/empty rating would publish a misleading 0-star signal, so it is only
-    // included once BUSINESS_INFO.rating/reviewCount reflect genuine reviews.
-    ...(BUSINESS_INFO.reviewCount > 0
-      ? {
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: BUSINESS_INFO.rating,
-            reviewCount: BUSINESS_INFO.reviewCount,
-            bestRating: 5,
-            worstRating: 1,
-          },
-        }
-      : {}),
-    review: reviews.map(review => ({
-      '@type': 'Review',
-      author: {
-        '@type': 'Person',
-        name: review.author,
-      },
-      ...(review.date ? { datePublished: review.date } : {}),
-      reviewRating: {
-        '@type': 'Rating',
-        ratingValue: review.rating,
-        bestRating: 5,
-        worstRating: 1,
-      },
-      reviewBody: review.text,
-    })),
   };
 }
 
@@ -535,11 +519,11 @@ function stripSchemaContext(schema: SchemaContext): Record<string, unknown> {
 }
 
 /**
- * Consolidated @graph for the homepage. LocalBusiness is NOT in this graph:
+ * Consolidated @graph for the homepage. The business node is NOT in this graph:
  * the root layout already emits it on every page (including /), and a second
- * copy under the same `#localbusiness` @id made the homepage carry two
- * LocalBusiness nodes. The Organization and WebSite nodes here reference it by
- * @id, which resolves to the layout's node.
+ * copy under the same `#business` @id would put two business nodes on the
+ * homepage. Organization and WebSite reference the parent and the publisher
+ * by @id, which resolves to the layout node.
  */
 export function generateHomePageSchemaGraph(
   faqs: Array<{ question: string; answer: string }>,

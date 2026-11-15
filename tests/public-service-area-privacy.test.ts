@@ -29,9 +29,20 @@ test('public entity schema preserves service identity without exporting a privat
     assert.match(text, /\+1-208-477-1169/);
   }
   const local = generateLocalBusinessSchema();
-  assert.equal('address' in local, false);
+  const address = local.address as {
+    '@type': string;
+    addressLocality: string;
+    addressRegion: string;
+    addressCountry: string;
+  };
+  assert.equal(address['@type'], 'PostalAddress');
+  assert.equal(address.addressLocality, 'Meridian');
+  assert.equal(address.addressRegion, 'ID');
+  assert.equal(address.addressCountry, 'US');
+  assert.equal('streetAddress' in address, false);
+  assert.equal('postalCode' in address, false);
   assert.equal('geo' in local, false);
-  assert.equal((local.areaServed as unknown[]).length, CITIES.length);
+  assert.equal((local.areaServed as unknown[]).length, CITIES.length + 2);
   assert.equal((local.openingHoursSpecification as unknown[]).length, 6);
   assert.equal((generateOrganizationSchema().contactPoint as unknown[]).length, 1);
 });

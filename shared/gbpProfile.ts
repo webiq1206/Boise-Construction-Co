@@ -521,7 +521,11 @@ export function getGbpProfileUrl(): string | undefined {
   return url || undefined;
 }
 
-/** Optional third-party profile URLs for schema sameAs (set via env after listings go live). */
+/**
+ * Optional third-party profile URLs. Schema sameAs does not read these.
+ * P5 directory listings live in P5_SAME_AS (lib/seo.ts). This brand's sameAs
+ * is BRAND_SAME_AS. BBB, Houzz, and BuildZoom stay unverified.
+ */
 export function getExternalProfileUrls(): string[] {
   const keys = [
     'NEXT_PUBLIC_GBP_URL',

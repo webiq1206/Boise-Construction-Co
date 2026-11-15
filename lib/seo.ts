@@ -11,7 +11,7 @@ import {
   CITY_SERVICE_META_DESCRIPTIONS,
   SERVICE_META_DESCRIPTIONS,
 } from '@/shared/metaDescriptions';
-import { GBP_SOCIAL, getExternalProfileUrls } from '@/shared/gbpProfile';
+import { P5_SOCIAL } from '@/shared/gbpProfile';
 
 interface SEOMetaData {
   title: string;
@@ -577,6 +577,32 @@ export function indianCreekDescription(cityName: string): string {
 }
 
 /**
+ * Verified P5 Home Co profiles. These belong on the parent organization,
+ * not on this brand: directory listings are P5-only, one listing per directory.
+ * BBB, Houzz, and BuildZoom are unverified and stay off the list. BuildZoom
+ * was declined. The existing kgmid entry stays beside the Maps CID.
+ */
+export const P5_SAME_AS = [
+  'https://www.facebook.com/p5homeco',
+  'https://nextdoor.com/pages/boise-remodeling-co-meridian-id/',
+  'https://ezlocal.com/id/meridian/home-remodeling/0919899218',
+  'https://www.cylex.us.com/company/p5-home-co--llc-40749871.html',
+  'https://www.google.com/maps?cid=11869148461693849141',
+  P5_SOCIAL.google,
+] as const;
+
+/**
+ * sameAs for Boise Construction Co only.
+ * This brand has no social profile of its own, so the confirmed URL is the
+ * parent site. Do not copy P5 directory listings onto this array.
+ * TODO(Quinn): GBP Maps URL and Yelp, and only when the listing belongs to
+ * this brand rather than to P5 Home Co.
+ */
+export const BRAND_SAME_AS = [
+  'https://p5homeco.com',
+] as const;
+
+/**
  * Business information for NAP consistency
  */
 export const BUSINESS_INFO = {
@@ -616,13 +642,8 @@ export const BUSINESS_INFO = {
   rating: 0,
   reviewCount: 0,
   yearlyServicesCompleted: 0,
-  // This brand has no social profile of its own. The owner's Facebook page
-  // belongs to P5 Home Co, so it sits on the parentOrganization node in
-  // lib/schema.ts, not here. GBP_SOCIAL stays the slot for a brand profile.
-  sameAs: [
-    ...(GBP_SOCIAL.facebook ? [GBP_SOCIAL.facebook] : []),
-    ...getExternalProfileUrls(),
-  ],
+  // Brand-owned URLs only. P5 directory listings live on P5_SAME_AS.
+  sameAs: [...BRAND_SAME_AS],
 };
 
 export type { SEOMetaData, ServiceSEOParams };
