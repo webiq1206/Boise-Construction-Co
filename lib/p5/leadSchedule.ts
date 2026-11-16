@@ -36,6 +36,19 @@ export const ESTIMATE_DISCLAIMER =
 export const SHARED_DISCLAIMER =
   "We work hard to make any estimate we share as realistic as we can, but we can't give you a true bid until we walk the property. Depending on the scope and what we find, the bid may come in higher or lower than that first estimate. Either way, we'll work with you to get you what you want, within your budget.";
 
+/**
+ * Estimate emails only (owner request, 16 November 2026, matching the family's
+ * central estimator). The adjust paragraph sits before the estimate
+ * disclaimer; the P.S. is the last paragraph, after the sign-off. A plain
+ * "we have your request" confirmation and every team email carry neither.
+ * These two strings live here and nowhere else on this site.
+ */
+export const ESTIMATE_ADJUST_NOTE =
+  "If something is missing, or you'd like to change the scope, the finishes or the timing, tell us. It's easy to adjust, and we'd rather get it right than have you guessing.";
+
+export const ESTIMATE_FAMILY_PS =
+  "P.S. Anything else on your list? Boise Construction Co is part of P5 Home Co, the company behind Boise Remodeling Co, Boise Cabinet Co and Boise Handyman Co. So whether it's a few repairs, new cabinets, a full kitchen or bath remodel, an addition or a new home, tell us and we'll plan it alongside this project.";
+
 export function scheduleIntentFor(input: { requestKind?: string | null; form?: string | null }): ScheduleIntent {
   const kind = (input.requestKind ?? "").trim().toLowerCase();
   const form = (input.form ?? "").trim().toLowerCase();
@@ -135,6 +148,19 @@ function paragraph(text: string): string {
   return `<p style="margin:0 0 16px;color:${BUTTON_CHARCOAL};font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;">${esc(text)}</p>`;
 }
 
+/**
+ * The P.S. that closes an estimate email, as text and as one HTML paragraph.
+ * Callers append it after their sign-off so it is the last thing read. Pass
+ * the email's own text color when the email is not on a light background.
+ */
+export function estimatePostscript(options: { color?: string } = {}): { text: string; html: string } {
+  const color = /^#[0-9a-fA-F]{6}$/.test(options.color ?? "") ? (options.color as string) : BUTTON_CHARCOAL;
+  return {
+    text: ESTIMATE_FAMILY_PS,
+    html: `<p style="margin:16px 0 0;color:${color};font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;">${esc(ESTIMATE_FAMILY_PS)}</p>`,
+  };
+}
+
 /** Light paper behind the charcoal button, so it stays prominent on a dark email. */
 export function paperScheduleCard(inner: string): string {
   return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;margin:0 0 20px;">
@@ -156,19 +182,24 @@ export type EmbeddedScheduleInput = {
  * The scheduling sentence, button and disclaimer, without a greeting.
  * Estimate emails already introduce the project. Request emails already
  * thank the lead. This block is what both of them were missing.
+ *
+ * The estimate walkthrough block also invites the customer to adjust the
+ * estimate, just before the disclaimer. The email that embeds it appends
+ * estimatePostscript() after its own sign-off.
  */
 export function embeddedSchedule(input: EmbeddedScheduleInput): { html: string; text: string } {
   const accent = input.accent;
   const disclaimer = input.kind === "estimate" ? ESTIMATE_DISCLAIMER : SHARED_DISCLAIMER;
-  const next =
-    input.kind === "estimate" && input.intent === "walkthrough"
-      ? "The next step is a home walkthrough, so we can see the property and turn this estimate into a true bid. On the scheduling page, choose the 1 hour option."
-      : `If you would like to get on the calendar now, use the button below and choose ${durationChoice(input.intent)}.`;
-  const text = [next, "", `Schedule now: ${SCHEDULE_URL}`, "", disclaimer].join("\n");
+  const aboutEstimate = input.kind === "estimate" && input.intent === "walkthrough";
+  const next = aboutEstimate
+    ? "The next step is a home walkthrough, so we can see the property and turn this estimate into a true bid. On the scheduling page, choose the 1 hour option."
+    : `If you would like to get on the calendar now, use the button below and choose ${durationChoice(input.intent)}.`;
+  const text = [next, "", `Schedule now: ${SCHEDULE_URL}`, "", ...(aboutEstimate ? [ESTIMATE_ADJUST_NOTE, ""] : []), disclaimer].join("\n");
   const html = [
     paragraph(next),
     bulletproofButton({ href: SCHEDULE_URL, label: "Schedule now", variant: "primary", accent }),
     `<div style="height:16px;line-height:16px;font-size:0;">&nbsp;</div>`,
+    ...(aboutEstimate ? [paragraph(ESTIMATE_ADJUST_NOTE)] : []),
     paragraph(disclaimer),
   ].join("");
   return { html, text };
@@ -199,8 +230,9 @@ export function estimatorConfirmation(input: EstimatorConfirmationInput): { subj
   const thanks = `Thanks for thinking of ${brandName} for your ${project}. Your estimate is saved, and you can pull it up any time.`;
   const schedule = embeddedSchedule({ kind: "estimate", intent: "walkthrough", accent: input.accent });
   const signoff = `The ${brandName} team`;
+  const postscript = estimatePostscript();
   const text = [
-    `Hi ${first},`,
+    `Hey ${first},`,
     "",
     thanks,
     "",
@@ -210,10 +242,12 @@ export function estimatorConfirmation(input: EstimatorConfirmationInput): { subj
     phone,
     "",
     signoff,
+    "",
+    postscript.text,
   ].join("\n");
   const html = wrapHtml(
     [
-      paragraph(`Hi ${first},`),
+      paragraph(`Hey ${first},`),
       paragraph(thanks),
       schedule.html,
       ...(viewUrl
@@ -221,6 +255,7 @@ export function estimatorConfirmation(input: EstimatorConfirmationInput): { subj
         : []),
       paragraph(phone),
       paragraph(signoff),
+      postscript.html,
     ].join(""),
   );
   return { subject, text, html };
@@ -239,6 +274,12 @@ export type RequestConfirmationInput = {
  * scheduling button and the disclaimer sit on paper. The range and the
  * sign-off are added by the caller, so the sign-off is not stranded above
  * the numbers.
+ *
+ * `aboutEstimate` is true for the estimate opening ("Your estimate is
+ * saved"), which greets with "Hey" and invites changes. The caller then
+ * closes the email with estimatePostscript() after its sign-off. The phone
+ * consult opening ("We have your request") is a request confirmation and
+ * keeps its wording.
  */
 export function estimateLeadCard(input: {
   firstName: string | null;
@@ -246,20 +287,21 @@ export function estimateLeadCard(input: {
   project: string;
   intent: ScheduleIntent;
   accent?: string;
-}): { text: string; html: string } {
+}): { text: string; html: string; aboutEstimate: boolean } {
   const first = greetingName(input.firstName);
   const brandName = input.brandName.trim() || DEFAULT_BRAND;
   const project = input.project.trim().toLowerCase() || "project";
-  const thanks =
-    input.intent === "consult"
-      ? `Thanks for reaching out to ${brandName}. We have your request, and someone from the team will follow up shortly.`
-      : `Thanks for thinking of ${brandName} for your ${project}. Your estimate is saved, and you can pull it up any time.`;
+  const aboutEstimate = input.intent !== "consult";
+  const thanks = aboutEstimate
+    ? `Thanks for thinking of ${brandName} for your ${project}. Your estimate is saved, and you can pull it up any time.`
+    : `Thanks for reaching out to ${brandName}. We have your request, and someone from the team will follow up shortly.`;
+  const greeting = aboutEstimate ? `Hey ${first},` : `Hi ${first},`;
   const schedule = embeddedSchedule({ kind: "estimate", intent: input.intent, accent: input.accent });
-  const text = [`Hi ${first},`, "", thanks, "", schedule.text].join("\n");
+  const text = [greeting, "", thanks, "", schedule.text].join("\n");
   const html = paperScheduleCard(
-    [paragraph(`Hi ${first},`), paragraph(thanks), schedule.html].join(""),
+    [paragraph(greeting), paragraph(thanks), schedule.html].join(""),
   );
-  return { text, html };
+  return { text, html, aboutEstimate };
 }
 
 /** Short request, quote form, and the same note when an email arrives later. */

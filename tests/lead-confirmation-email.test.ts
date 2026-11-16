@@ -13,7 +13,12 @@ import { renderIntakeEmail } from "../lib/p5/intakeEmail.ts";
 import { emptyIntakeDetails, type IntakeSnapshot } from "../lib/p5/intakeContract.ts";
 import { routeIntake } from "../lib/p5/intakePolicy.ts";
 import {
+  ESTIMATE_ADJUST_NOTE,
+  ESTIMATE_DISCLAIMER,
+  ESTIMATE_FAMILY_PS,
   SCHEDULE_URL,
+  estimateLeadCard,
+  estimatePostscript,
   estimatorConfirmation,
   requestConfirmation,
   scheduleIntentFor,
@@ -26,6 +31,49 @@ const BANNED = new RegExp(`${String.fromCharCode(0x2014)}|Perkins 5|showroom|\\b
 function visible(html: string): string {
   return html.replace(/<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
 }
+
+/** The owner's wording for estimate emails (16 November 2026), spelled out so a change to the constants is a decision. */
+const ADJUST =
+  "If something is missing, or you'd like to change the scope, the finishes or the timing, tell us. It's easy to adjust, and we'd rather get it right than have you guessing.";
+const FAMILY_PS =
+  "P.S. Anything else on your list? Boise Construction Co is part of P5 Home Co, the company behind Boise Remodeling Co, Boise Cabinet Co and Boise Handyman Co. So whether it's a few repairs, new cabinets, a full kitchen or bath remodel, an addition or a new home, tell us and we'll plan it alongside this project.";
+
+/** The P.S. appears once, and nothing follows it inside the message: its paragraph closes, then its container does. */
+function assertPostscriptClosesHtml(html: string, label: string): void {
+  assert.equal(html.split(FAMILY_PS).length - 1, 1, `${label}: the P.S. appears once`);
+  assert.match(html.slice(html.indexOf(FAMILY_PS) + FAMILY_PS.length), /^<\/p>\s*<\/(?:div|td)>/, `${label}: the P.S. is the last paragraph`);
+}
+
+/** The invitation to adjust comes before the estimate disclaimer, once the walkthrough sentence has been read. */
+function assertAdjustBeforeDisclaimer(body: string, label: string): void {
+  const adjust = body.indexOf(ADJUST);
+  assert.ok(adjust > -1, `${label}: the adjust paragraph is present`);
+  assert.ok(adjust > body.indexOf("turn this estimate into a true bid"), `${label}: the adjust paragraph follows the walkthrough sentence`);
+  assert.ok(adjust < body.indexOf(ESTIMATE_DISCLAIMER), `${label}: the adjust paragraph comes before the disclaimer`);
+}
+
+function assertNoEstimateWording(body: string, label: string): void {
+  assert.ok(!body.includes("P.S."), `${label}: no P.S.`);
+  assert.ok(!body.includes("Anything else on your list"), `${label}: no family question`);
+  assert.ok(!body.includes("It's easy to adjust"), `${label}: no adjust paragraph`);
+  assert.doesNotMatch(body, /\bHey\b/, `${label}: the greeting is unchanged`);
+}
+
+test("the estimate wording is the approved text, kept in one place", () => {
+  assert.equal(ESTIMATE_ADJUST_NOTE, ADJUST);
+  assert.equal(ESTIMATE_FAMILY_PS, FAMILY_PS);
+  assert.equal(estimatePostscript().text, FAMILY_PS);
+  assert.doesNotMatch(`${ADJUST} ${FAMILY_PS}`, BANNED);
+  assert.doesNotMatch(`${ADJUST} ${FAMILY_PS}`, /\bquote\b|\bbid\b|near me|\bminutes?\b|\bhours?\b/i);
+  for (const file of ["lib/p5/estimateEmail.ts", "server/services/consultationEmail.ts", "server/services/re10Email.ts", "server/services/re10Lead.ts", "server/services/scheduleEmail.ts"]) {
+    const source = readFileSync(file, "utf8");
+    assert.ok(!source.includes("Anything else on your list"), `${file} reuses the P.S. from lib/p5/leadSchedule.ts`);
+    assert.ok(!source.includes("It's easy to adjust"), `${file} reuses the adjust paragraph from lib/p5/leadSchedule.ts`);
+  }
+  // A text color that is not a plain hex value never reaches the markup.
+  assert.match(estimatePostscript({ color: "#F7F5F3" }).html, /color:#F7F5F3;/);
+  assert.match(estimatePostscript({ color: 'red"><script>' }).html, /color:#383837;/);
+});
 
 const lead = (overrides: Partial<LeadContact> = {}): LeadContact => ({
   name: "Ada Example",
@@ -47,7 +95,17 @@ test("the estimator confirmation uses the approved copy and a primary schedule b
     accent: "#C48D3F",
   });
   assert.equal(message.subject, "Your custom home estimate from Boise Construction Co");
-  assert.match(message.text, /^Hi Ada,/);
+  assert.match(message.text, /^Hey Ada,\n/);
+  assert.match(visible(message.html), /^\s*Hey Ada,/);
+  assert.doesNotMatch(`${message.text}\n${visible(message.html)}`, /\bHi Ada\b/);
+  assertAdjustBeforeDisclaimer(message.text, "estimator confirmation text");
+  assertAdjustBeforeDisclaimer(message.html, "estimator confirmation html");
+  assert.ok(message.text.endsWith(`\n\nThe Boise Construction Co team\n\n${FAMILY_PS}`), "the P.S. is the last paragraph of the text, after the sign-off");
+  assertPostscriptClosesHtml(message.html, "estimator confirmation");
+  assert.ok(message.html.indexOf("The Boise Construction Co team") < message.html.indexOf(FAMILY_PS));
+  assert.equal(message.html.split(">Schedule now<").length - 1, 2, "one Schedule now button (Outlook and standard markup)");
+  assert.equal(message.text.split(SCHEDULE_URL).length - 1, 1, "the schedule link is written once");
+  assert.match(message.html, /href="https:\/\/meetings-na2\.hubspot\.com\/client3"/);
   assert.match(message.text, /Thanks for thinking of Boise Construction Co for your custom home\. Your estimate is saved, and you can pull it up any time\./);
   assert.match(message.text, /The next step is a home walkthrough, so we can see the property and turn this estimate into a true bid\. On the scheduling page, choose the 1 hour option\./);
   assert.match(message.text, /We work hard to make that estimate as realistic as we can, but we can't give you a true bid until we walk the property\./);
@@ -80,6 +138,8 @@ test("a short request names the 1 hour walkthrough, and a callback names the 15 
   assert.equal(scheduleIntentFor({ requestKind: "quote" }), "walkthrough");
   assert.equal(scheduleIntentFor({ form: "Site Chat" }), "consult");
   for (const message of [project, callback]) {
+    assert.match(message.text, /^Hi Ada,\n/);
+    assertNoEstimateWording(`${message.text}\n${message.html}`, "request confirmation");
     assert.doesNotMatch(`${message.subject}\n${message.text}\n${visible(message.html)}`, BANNED);
     assert.ok(message.text.includes(SCHEDULE_URL));
     assert.match(message.html, /role="presentation"/);
@@ -99,7 +159,11 @@ test("consultation emails keep the range, and the button follows the request", (
     assert.match(html, /background-color:#383837/);
     assert.match(html, /color:#ffffff/);
     assert.doesNotMatch(visible(html), BANNED);
+    assert.match(visible(html), /Hi Ada,/);
+    assertNoEstimateWording(html, "request confirmation in the brand shell");
   }
+  assertNoEstimateWording(buildCustomerEmailText(lead(), null), "request confirmation text");
+  assertNoEstimateWording(buildCustomerEmailText(lead({ requestKind: "callback" }), null), "callback confirmation text");
 
   const estimate = {
     project: "custom-home",
@@ -119,13 +183,38 @@ test("consultation emails keep the range, and the button follows the request", (
   assert.match(withRange, /1 hour option/);
   assert.match(withRangeText, /Schedule now: https:\/\/meetings-na2\.hubspot\.com\/client3/);
   assert.match(visible(withRange), /Foundation/);
+
+  // An estimate email: "Hey", the invitation to adjust, one schedule link, and the family P.S. last.
+  assert.match(visible(withRange), /Hey Ada,/);
+  assert.match(withRangeText, /^Hey Ada,\n/);
+  assert.doesNotMatch(`${withRangeText}\n${visible(withRange)}`, /\bHi Ada\b/);
+  assertAdjustBeforeDisclaimer(withRange, "estimate email html");
+  assertAdjustBeforeDisclaimer(withRangeText, "estimate email text");
+  assertPostscriptClosesHtml(withRange, "estimate email");
+  assert.ok(withRange.indexOf("The Boise Construction Co team") < withRange.indexOf(FAMILY_PS), "the P.S. follows the sign-off");
+  assert.match(withRange, new RegExp(`<p style="[^"]*color:#F7F5F3;[^"]*">${FAMILY_PS.replace(/[.?]/g, "\\$&")}</p>`), "the P.S. is readable on the dark shell");
+  assert.ok(withRangeText.endsWith(`\n\nThe Boise Construction Co team\n\n${FAMILY_PS}`), "the P.S. is the last paragraph of the text, after the sign-off");
+  assert.equal(withRange.split(">Schedule now<").length - 1, 2, "one Schedule now button (Outlook and standard markup)");
+  assert.equal(withRangeText.split(SCHEDULE_URL).length - 1, 1, "the schedule link is written once");
+
+  // A phone consult request that carries a saved range opens as a request confirmation and keeps that wording.
   const callbackRange = buildCustomerEmailHtml(lead({ requestKind: "callback" }), estimate);
+  const callbackRangeText = buildCustomerEmailText(lead({ requestKind: "callback" }), estimate);
   assert.match(callbackRange, /15 minute option for a phone consult/);
   assert.doesNotMatch(visible(callbackRange), /1 hour option/);
+  assert.match(visible(callbackRange), /Hi Ada, Thanks for reaching out to Boise Construction Co\. We have your request/);
+  assert.match(callbackRangeText, /^Hi Ada,\n/);
+  assertNoEstimateWording(`${callbackRange}\n${callbackRangeText}`, "callback with a saved range");
+  assert.equal(estimateLeadCard({ firstName: "Ada", brandName: "Boise Construction Co", project: "Custom Home", intent: "consult" }).aboutEstimate, false);
+  assert.equal(estimateLeadCard({ firstName: "Ada", brandName: "Boise Construction Co", project: "Custom Home", intent: "walkthrough" }).aboutEstimate, true);
 
   const admin = buildAdminEmailHtml(lead(), null, null);
-  assert.doesNotMatch(admin, /Schedule now/);
-  assert.doesNotMatch(admin, /meetings-na2\.hubspot\.com/);
+  const adminWithRange = buildAdminEmailHtml(lead(), estimate, null);
+  for (const html of [admin, adminWithRange]) {
+    assert.doesNotMatch(html, /Schedule now/);
+    assert.doesNotMatch(html, /meetings-na2\.hubspot\.com/);
+    assertNoEstimateWording(html, "team email");
+  }
 });
 
 test("the RE-10 customer email keeps its firm-price terms and adds the walkthrough button", () => {
@@ -154,12 +243,26 @@ test("the RE-10 customer email keeps its firm-price terms and adds the walkthrou
   assert.match(text, /firm for the repairs listed/i);
   assert.match(text, /can't give you a true bid until we walk the property/);
   assert.doesNotMatch(text, BANNED);
+
+  // It tells the customer about an estimate, so it carries the estimate wording.
+  // Its opening line is its own ("Thanks, Ada. Here is the price"), not a greeting to change.
+  assert.match(text, /Thanks, Ada\. Here is the price for the repairs on the RE-10 you sent\./);
+  assert.doesNotMatch(text, /\bHey\b/);
+  assertAdjustBeforeDisclaimer(html, "RE-10 customer email");
+  assertPostscriptClosesHtml(html, "RE-10 customer email");
+  assert.ok(html.indexOf("The Boise Construction Co team") < html.indexOf(FAMILY_PS), "the P.S. follows the sign-off");
+  assert.match(html, /href="https:\/\/meetings-na2\.hubspot\.com\/client3"/);
+  assert.equal(html.split(">Schedule now<").length - 1, 2, "one Schedule now button (Outlook and standard markup)");
 });
 
 test("a missing first name still reads as a sentence", () => {
   const message = requestConfirmation({ firstName: "  ", brandName: "Boise Construction Co", intent: "walkthrough" });
   assert.match(message.text, /^Hi there,/);
   assert.equal(message.subject, "We have your request, there");
+  const estimate = estimatorConfirmation({ firstName: "  ", brandName: "Boise Construction Co", project: "Addition" });
+  assert.match(estimate.text, /^Hey there,\n/);
+  assert.ok(estimate.text.includes(`Schedule now: ${SCHEDULE_URL}`));
+  assert.ok(estimate.text.endsWith(FAMILY_PS));
 });
 
 test("shared estimator and intake customer mail carry the button, and team mail does not", () => {
@@ -170,6 +273,24 @@ test("shared estimator and intake customer mail carry the button, and team mail 
   assert.match(customer.html, /background-color:#383837/);
   assert.doesNotMatch(admin.html, /Schedule now/);
   assert.doesNotMatch(admin.text, /meetings-na2\.hubspot\.com/);
+
+  // The estimate email: "Hey", the invitation to adjust, one schedule link, and the family P.S. last.
+  assert.match(visible(customer.html), /Hey Ada,/);
+  assert.doesNotMatch(visible(customer.html), /\bHi Ada\b/);
+  assertAdjustBeforeDisclaimer(customer.html, "document estimate html");
+  assertAdjustBeforeDisclaimer(customer.text, "document estimate text");
+  assertPostscriptClosesHtml(customer.html, "document estimate");
+  assert.ok(customer.text.endsWith(`\n\n${FAMILY_PS}`), "the P.S. is the last paragraph of the text");
+  assert.equal(customer.text.split(FAMILY_PS).length - 1, 1);
+  assert.equal(customer.html.split(">Schedule now<").length - 1, 2, "one Schedule now button (Outlook and standard markup)");
+  assert.equal(customer.text.split(SCHEDULE_URL).length - 1, 1, "the schedule link is written once");
+  assert.doesNotMatch(`${customer.text}\n${visible(customer.html)}`, BANNED);
+  // With no name on file the greeting stays "Hello,".
+  const unnamed = estimateEmail("synthetic", { customer: { summary: "Paint a room", lineItems: [], assumptions: [], exclusions: [] }, contact: { name: "" } }, false);
+  assert.match(visible(unnamed.html), /Hello,/);
+  assert.doesNotMatch(visible(unnamed.html), /\bHey\b/);
+  assertPostscriptClosesHtml(unnamed.html, "document estimate without a name");
+  assertNoEstimateWording(`${admin.html}\n${admin.text}`, "internal estimate record");
 
   const snapshot = {
     schema: 1,
@@ -194,6 +315,9 @@ test("shared estimator and intake customer mail carry the button, and team mail 
   assert.doesNotMatch(visible(toCustomer.html), BANNED);
   assert.doesNotMatch(toTeam.html, /Schedule now/);
   assert.doesNotMatch(toTeam.text, /meetings-na2\.hubspot\.com/);
+  // A project request is not an estimate: neither copy carries the estimate wording.
+  assertNoEstimateWording(`${toCustomer.html}\n${toCustomer.text}`, "project request confirmation");
+  assertNoEstimateWording(`${toTeam.html}\n${toTeam.text}`, "project request team email");
 });
 
 test("a later email address sends one confirmation, and forms still require a real address when one is collected", () => {
