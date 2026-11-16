@@ -9,6 +9,7 @@ import {
   BRAND_ACCENT,
   contactLine,
   estimateLeadCard,
+  estimatePostscript,
   estimatorConfirmation,
   paperScheduleCard,
   requestConfirmation,
@@ -902,8 +903,12 @@ export function buildCustomerEmailHtml(
       ? `<p style="margin:16px 0;color:${EMAIL_BRAND.text};line-height:1.6;">Your stated project budget is <strong>${escapeHtml(lead.budget)}</strong>. We will do everything we can to recommend solutions that fit within that budget while helping you achieve the goals you have shared. If your ideal scope runs beyond it, we will focus on the rooms and features that matter most to you, look at where a simpler footprint or a different plan buys back real money, and show you what is worth spending on now versus finishing later. Our job is to find the best path forward for your home, never to tell you your budget is not enough.</p>`
       : "";
 
+  // An estimate email ends with the family P.S., after the sign-off. A phone
+  // consult request is a request confirmation and does not carry it.
+  const postscript = opening.aboutEstimate ? estimatePostscript({ color: EMAIL_BRAND.text }).html : "";
   const closing = `<p style="color:${EMAIL_BRAND.text};line-height:1.6;">${escapeHtml(contactLine(SITE_CONFIG.phone))}</p>
-      <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The ${escapeHtml(SITE_CONFIG.name)} team</p>`;
+      <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The ${escapeHtml(SITE_CONFIG.name)} team</p>
+      ${postscript}`;
 
   return wrapEmailHtml({
     title: `Your ${projectLabel} estimate`,
@@ -947,7 +952,8 @@ export function buildCustomerEmailText(
     lead.budget && !estimate.statedBudget
       ? `Your stated project budget is ${lead.budget}. We will do everything we can to recommend solutions that fit within that budget.`
       : "";
-  return [opening.text, "", range, budget, contactLine(SITE_CONFIG.phone), "", `The ${SITE_CONFIG.name} team`]
+  const postscript = opening.aboutEstimate ? estimatePostscript().text : "";
+  return [opening.text, "", range, budget, contactLine(SITE_CONFIG.phone), "", `The ${SITE_CONFIG.name} team`, postscript]
     .filter(Boolean)
     .join("\n\n");
 }

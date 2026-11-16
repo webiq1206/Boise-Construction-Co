@@ -1,6 +1,6 @@
 import { escapeHtml, wrapEmailHtml, EMAIL_BRAND } from "@/server/services/emailLayout";
 import { SITE_CONFIG } from "@/shared/siteConfig";
-import { BRAND_ACCENT, contactLine, embeddedSchedule, paperScheduleCard } from "@/server/services/scheduleEmail";
+import { BRAND_ACCENT, contactLine, embeddedSchedule, estimatePostscript, paperScheduleCard } from "@/server/services/scheduleEmail";
 import { TRADE_LABELS, type Re10Estimate } from "@/shared/costs/re10Repairs";
 import { RE10_PRICING_DISCLAIMER } from "@/shared/content/re10Content";
 
@@ -153,6 +153,7 @@ export function buildRe10CustomerEmail(
 
     <p style="color:${EMAIL_BRAND.text};line-height:1.6;">${escapeHtml(contactLine(SITE_CONFIG.phone))}</p>
     <p style="margin-top:24px;color:${EMAIL_BRAND.text};">The ${SITE_CONFIG.name} team</p>
+    ${estimatePostscript({ color: EMAIL_BRAND.text }).html}
   `;
 
   return wrapEmailHtml({
