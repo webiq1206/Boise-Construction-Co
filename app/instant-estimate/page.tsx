@@ -46,7 +46,7 @@ const STEPS: { title: string; text: string }[] = [
   },
   {
     title: 'See your range on screen',
-    text: 'Tell us where to reach you, then see your preliminary range with a breakdown by division.',
+    text: 'Tell us where to reach you, then see your preliminary range with the full scope of work, organized by division.',
   },
 ];
 
