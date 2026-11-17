@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
+  P5_ESTIMATE_MAX_LINES,
   P5_INTAKE_TIMEOUT_MS,
   P5_TEAM_INTERNAL_NOTES_MAX_LINES,
   P5_TEAM_NOTES_MAX_LINES,
@@ -20,6 +21,7 @@ import {
 } from "../server/services/siteTeamEmail.ts";
 import {
   INTERNAL_FIGURE_WORDS,
+  buildConsultationEstimate,
   buildConsultationInternalNotes,
   buildConsultationTeamNotes,
   buildDetailsTeamNotes,
@@ -705,7 +707,7 @@ test("the bridge sends team_internal_notes beside team_notes, and only for a req
   // Step 1 builds the list from the verified estimate. Step 2 ("Details added") sends none.
   const route = readFileSync(new URL("../app/api/consultation/route.ts", import.meta.url), "utf8");
   assert.match(route, /teamInternalNotes = buildConsultationInternalNotes\(\{ estimate \}\);/);
-  assert.match(route, /forwardConsultationToP5Intake\(\{[\s\S]*?teamNotes,\s*teamInternalNotes,\s*\}\)/);
+  assert.match(route, /forwardConsultationToP5Intake\(\{[\s\S]*?teamNotes,\s*teamInternalNotes,/);
   const details = readFileSync(new URL("../server/services/consultationDetailsDelivery.ts", import.meta.url), "utf8");
   assert.equal(/teamInternalNotes|buildConsultationInternalNotes|team_internal_notes/.test(details), false);
 });
@@ -737,4 +739,177 @@ test("team_internal_notes keep their own cap of 60 lines and never lose a line t
   assert.deepEqual(fitTeamNotes(["Total internal cost: $1", "Margin: 28% gross margin (38.9% markup)", "Parcel: R1"]), ["Parcel: R1"]);
   assert.equal(sanitizeTeamNotes(many).length, 40);
   assert.equal(sanitizeTeamNotes(many, P5_TEAM_INTERNAL_NOTES_MAX_LINES).length, 60);
+});
+
+/**
+ * The planning range as figures (owner decision, 13 and 17 November 2026):
+ * P5 creates the QuickBooks customer and an UNSENT estimate from `estimate`.
+ * This site's server recomputes the range, so it sends `verified: true` and
+ * one line per trade with the CUSTOMER amount, from the same source as the
+ * "Customer" column of its own team email. Never an internal figure.
+ */
+
+const ESTIMATE_KEYS = new Set(["kind", "low", "high", "label", "verified", "lines"]);
+const LINE_KEYS = new Set(["title", "division", "amount", "description", "quantity", "unit"]);
+const cents = (amount: number) => Math.round(amount * 100);
+
+function stringsIn(value: unknown): string[] {
+  if (typeof value === "string") return [value];
+  if (Array.isArray(value)) return value.flatMap(stringsIn);
+  if (value && typeof value === "object") return Object.values(value).flatMap(stringsIn);
+  return [];
+}
+
+test("the structured estimate carries the shown range and the customer price by trade, to the cent, and nothing internal", () => {
+  const FINISHES: FinishLevel[] = ["refresh", "mid-range", "high-end", "luxury"];
+  let estimates = 0;
+  let overHalfMillion = 0;
+  let largest = 0;
+  for (const project of Object.keys(PROJECT_LABELS) as ProjectType[]) {
+    const size = getProjectSizeConfig(project);
+    for (const finish of FINISHES) {
+      for (const sqft of [size.min, Math.round((size.min + size.max) / 2), size.max]) {
+        let estimate: VerifiedEstimate;
+        try {
+          estimate = estimateFor(project, finish, sqft, Math.round(sqft * 180));
+        } catch {
+          continue; // not every finish level exists for every project
+        }
+        const where = `${project} ${finish} ${sqft}`;
+        const { admin } = resolveInternalEstimate(project, finish, sqft, estimate.refinements)!;
+        const sent = buildConsultationEstimate({ estimate, requestKind: "quote" });
+        assert.ok(sent, where);
+        estimates += 1;
+
+        // Shape: exactly the contract's fields, the range the customer was shown, verified by this server.
+        for (const key of Object.keys(sent!)) assert.ok(ESTIMATE_KEYS.has(key), `${where}: unexpected field ${key}`);
+        assert.equal(sent!.kind, "planning-range");
+        assert.equal(sent!.low, estimate.priceLow, where);
+        assert.equal(sent!.high, estimate.priceHigh, where);
+        assert.equal(sent!.verified, true);
+        assert.equal("base" in sent!, false, "with lines, P5 uses their sum");
+        assert.match(sent!.label ?? "", /^.+, .+ finish, [\d,]+ sq ft$/, where);
+        assert.ok(sent!.label!.startsWith(`${PROJECT_LABELS[project].label}, `), where);
+
+        const lines = sent!.lines ?? [];
+        assert.ok(lines.length > 0 && lines.length <= P5_ESTIMATE_MAX_LINES, `${where}: ${lines.length} lines`);
+        assert.equal(lines.length, admin.trades.filter((trade) => cents(trade.customerAmount) > 0).length, `${where}: one line per trade`);
+
+        // The lines add up to the customer price this site's team email shows, to the cent.
+        const total = lines.reduce((sum, line) => sum + cents(line.amount), 0);
+        assert.equal(total, Math.round(admin.customerPrice) * 100, `${where}: lines do not sum to the customer price`);
+        const adminHtml = buildAdminEmailHtml({ name: "Avery Sample", phone: "2085550142", email: "", address: "", projectType: project }, estimate, PROFILE, {});
+        assert.ok(adminHtml.includes(`of ${usd(total / 100)}`), `${where}: the email shows a different customer price`);
+        // P5 refuses a total under half of low or over twice high. This one sits inside the range itself.
+        assert.ok(total >= cents(estimate.priceLow) && total <= cents(estimate.priceHigh), `${where}: ${total / 100} is outside the shown range`);
+        largest = Math.max(largest, total / 100);
+        if (total / 100 > 500_000) overHalfMillion += 1;
+
+        const top = Math.max(...lines.map((line) => line.amount));
+        for (const line of lines) {
+          for (const key of Object.keys(line)) assert.ok(LINE_KEYS.has(key), `${where}: unexpected line field ${key}`);
+          assert.ok(Number.isFinite(line.amount) && line.amount > 0, `${where}: ${line.title}`);
+          assert.equal(cents(line.amount) / 100, line.amount, `${where}: ${line.title} is not rounded to cents`);
+          assert.equal(line.division, line.title);
+          const trade = admin.trades.find((candidate) => candidate.division === line.title);
+          assert.ok(trade, `${where}: ${line.title} is not a trade`);
+          // The CUSTOMER amount of that trade (the email's "Customer" column), never our cost for it.
+          // Only the largest line absorbs what rounding leaves over, and that is under a dollar.
+          assert.ok(Math.abs(line.amount - trade!.customerAmount) < (line.amount === top ? 1 : 0.006), `${where}: ${line.title} is not the customer amount`);
+          assert.ok(line.amount > trade!.internalCost, `${where}: ${line.title} is at or under our cost`);
+          assert.equal(line.description, trade!.scopeSummary || undefined);
+          const single = /^([\d,]+(?:\.\d+)?) ([A-Za-z]+)$/.exec(trade!.scopeSummary ?? "");
+          // One clear, positive quantity or none at all.
+          const quantity = single ? Number(single[1].replace(/,/g, "")) : 0;
+          assert.equal(line.quantity, quantity > 0 ? quantity : undefined, `${where}: ${line.title} quantity`);
+          assert.equal(line.unit, quantity > 0 ? single![2] : undefined, `${where}: ${line.title} unit`);
+        }
+
+        // No word and no figure from the internal side, anywhere in the field.
+        for (const text of stringsIn(sent)) assert.equal(mentionsInternalFigure(text), false, `${where}: "${text}"`);
+        const customerDollars = new Set(admin.trades.map((trade) => Math.round(trade.customerAmount)));
+        const internalDollars = [admin.directCost, admin.contingency, admin.totalInternalCost, admin.grossProfit, ...admin.trades.map((trade) => trade.internalCost)]
+          .map((figure) => Math.round(figure))
+          .filter((figure) => !customerDollars.has(figure)); // a coincidence with a customer amount is not a leak
+        const sentDollars = new Set([sent!.low, sent!.high, ...lines.map((line) => Math.round(line.amount))]);
+        for (const figure of internalDollars) assert.equal(sentDollars.has(figure), false, `${where}: internal figure ${figure} is in the estimate`);
+      }
+    }
+  }
+  assert.ok(estimates >= 30, `only ${estimates} estimates were checked`);
+  // P5 ignores an unverified total above 500,000 and any total above 5,000,000.
+  // Large new builds pass the first line here, which is why verified matters.
+  assert.ok(overHalfMillion > 0, "some ranges on this site are above 500,000");
+  assert.ok(largest <= 5_000_000, `the largest customer price is ${largest}`);
+});
+
+test("the bridge sends estimate only for a Step 1 request with a planning range, and the builder never throws", async () => {
+  const estimate = estimateFor("adu", "mid-range", 300);
+  const sent = buildConsultationEstimate({ estimate, requestKind: "quote" });
+  assert.ok(sent);
+  let posted: Record<string, unknown> = {};
+  await forwardConsultationToP5Intake(
+    { ...LEAD, submissionKind: "initial", requestKind: "quote", teamNotes: buildConsultationTeamNotes({ estimate }), teamInternalNotes: buildConsultationInternalNotes({ estimate }), estimate: sent },
+    async (_url, init) => {
+      posted = JSON.parse(String(init.body));
+      return new Response(JSON.stringify({ ok: true, alert: "sent" }), { status: 201 });
+    },
+  );
+  assert.deepEqual(posted.estimate, JSON.parse(JSON.stringify(sent)));
+  const wire = posted.estimate as { kind: string; low: number; high: number; verified: boolean; label: string; lines: Array<{ title: string; amount: number }> };
+  assert.equal(wire.kind, "planning-range");
+  assert.equal(wire.low, 90_000);
+  assert.equal(wire.high, 120_000);
+  assert.equal(wire.verified, true);
+  assert.equal(wire.label, "ADU / Guest House, Mid-Range finish, 300 sq ft");
+  assert.equal(wire.lines.reduce((sum, line) => sum + cents(line.amount), 0), 103_950 * 100);
+  assert.deepEqual(wire.lines[0], { title: "FOUNDATION", division: "FOUNDATION", amount: wire.lines[0].amount, description: "300 SF, 71 LF" });
+  // The notes are untouched by the new field.
+  assert.ok(Array.isArray(posted.team_notes) && Array.isArray(posted.team_internal_notes));
+
+  // Nothing without a range, nothing for a callback, nothing for Step 2.
+  assert.equal(buildConsultationEstimate({}), undefined);
+  assert.equal(buildConsultationEstimate({ estimate: null, requestKind: "quote" }), undefined);
+  assert.equal(buildConsultationEstimate({ estimate, requestKind: "callback" }), undefined);
+  for (const input of [
+    LEAD,
+    { ...LEAD, estimate: null },
+    { ...LEAD, estimate: buildConsultationEstimate({}) },
+    { ...LEAD, requestKind: "callback" as const, preferredContact: "phone" as const, estimate: sent },
+    { ...LEAD, submissionKind: "details" as const, estimate: sent },
+  ]) {
+    assert.equal("estimate" in buildP5IntakePayload(input), false);
+  }
+  assert.deepEqual(buildP5IntakePayload({ ...LEAD, estimate: sent }).estimate, sent);
+
+  // Figures that cannot be a range send no estimate at all; the request itself still goes.
+  for (const bad of [
+    { priceLow: Number.NaN },
+    { priceHigh: Number.POSITIVE_INFINITY },
+    { priceLow: 0 },
+    { priceLow: -5 },
+    { priceLow: 200_000, priceHigh: 100_000 },
+    { priceLow: "90000" as unknown as number },
+  ]) {
+    assert.equal(buildConsultationEstimate({ estimate: { ...estimate, ...bad } }), undefined, JSON.stringify(bad));
+  }
+  // A range the trade split does not belong to (P5 would refuse the total) goes without lines.
+  for (const mismatch of [{ priceLow: 300_000, priceHigh: 400_000 }, { priceLow: 20_000, priceHigh: 30_000 }]) {
+    const withoutLines = buildConsultationEstimate({ estimate: { ...estimate, ...mismatch } });
+    assert.deepEqual(withoutLines, { kind: "planning-range", low: mismatch.priceLow, high: mismatch.priceHigh, verified: true, label: "ADU / Guest House, Mid-Range finish, 300 sq ft" });
+  }
+  // Anything unreadable is answered with nothing or with the bare range, never with a throw.
+  assert.doesNotThrow(() => buildConsultationEstimate({ estimate: { ...estimate, project: "not-a-project" as never } }));
+  assert.doesNotThrow(() => buildConsultationEstimate({ estimate: { ...estimate, refinements: null as never, sqft: Number.NaN } }));
+  assert.doesNotThrow(() => buildConsultationEstimate({ estimate: "nonsense" as never }));
+  assert.doesNotThrow(() => buildConsultationEstimate(null as never));
+  const unknownProject = buildConsultationEstimate({ estimate: { ...estimate, project: "not-a-project" as never } });
+  assert.deepEqual(unknownProject, { kind: "planning-range", low: 90_000, high: 120_000, verified: true });
+
+  // Step 1 builds it from the verified estimate. Step 2 ("Details added") never sends one.
+  const route = readFileSync(new URL("../app/api/consultation/route.ts", import.meta.url), "utf8");
+  assert.match(route, /estimate: buildConsultationEstimate\(\{ estimate, requestKind: data\.requestKind \}\),/);
+  assert.ok(route.indexOf("const estimate = data.estimate ? verifyEstimate(data.estimate) : null;") > 0, "the range is recomputed on the server before it is called verified");
+  const details = readFileSync(new URL("../server/services/consultationDetailsDelivery.ts", import.meta.url), "utf8");
+  assert.equal(/buildConsultationEstimate|\bestimate:/.test(details), false);
 });

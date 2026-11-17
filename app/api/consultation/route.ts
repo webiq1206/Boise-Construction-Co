@@ -42,7 +42,11 @@ import { readUnitCostOverrides } from "@/server/services/unitCostOverrides";
 import { createDrizzleInquiryIntake } from "@/server/services/inquiryIntake";
 import { deliverInquiryChannel, type InquiryDeliveryResult } from "@/server/services/inquiryDelivery";
 import { forwardConsultationToP5Intake, type P5BridgeResult } from "@/server/services/p5IntakeBridge";
-import { buildConsultationInternalNotes, buildConsultationTeamNotes } from "@/server/services/consultationTeamNotes";
+import {
+  buildConsultationEstimate,
+  buildConsultationInternalNotes,
+  buildConsultationTeamNotes,
+} from "@/server/services/consultationTeamNotes";
 import { sendSiteTeamEmail } from "@/server/services/siteTeamEmail";
 import { issueDetailsToken } from "@/server/services/consultationDetails";
 import { inspectLeadTrap, LeadRequestError, readBoundedJson } from "@/server/services/leadRequestGuard";
@@ -306,6 +310,10 @@ export async function POST(request: NextRequest) {
         bestTime: data.requestKind === "callback" ? data.bestTimeToCall : undefined,
         teamNotes,
         teamInternalNotes,
+        // The planning range as figures, customer amounts only, so P5 can
+        // create the QuickBooks customer and an unsent estimate. Never throws,
+        // and is nothing for a callback or a request without a range.
+        estimate: buildConsultationEstimate({ estimate, requestKind: data.requestKind }),
       });
       bridge = forwarding;
       try {

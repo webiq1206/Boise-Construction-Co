@@ -151,7 +151,42 @@ export type ConsultationBridgeInput = {
    * teamNotes.
    */
   teamInternalNotes?: ReadonlyArray<string>;
+  /**
+   * The planning range as figures, so P5 can create the QuickBooks customer
+   * and an UNSENT estimate (owner decision, 13 and 17 November 2026). Step 1
+   * with a planning range only: never for a callback, never for Step 2.
+   * CUSTOMER amounts only, in every field. Build it with
+   * buildConsultationEstimate() in server/services/consultationTeamNotes.ts.
+   */
+  estimate?: P5PlanningEstimate | null;
 };
+
+/** One line of the customer price. Never a cost, margin or other internal figure. */
+export type P5EstimateLine = {
+  title: string;
+  description?: string;
+  quantity?: number;
+  unit?: string;
+  /** The CUSTOMER amount for this line, in dollars, rounded to cents. */
+  amount: number;
+  division?: string;
+};
+
+/** The P5 intake contract for `estimate` (its docs/lead-intake-contract.md). */
+export type P5PlanningEstimate = {
+  kind: "planning-range";
+  /** The range the customer was shown. */
+  low: number;
+  high: number;
+  label?: string;
+  /** Only ever the boolean true, and only because this site's server recomputed the range itself. */
+  verified?: true;
+  /** The one figure for QuickBooks when there are no lines. With lines P5 uses their sum. */
+  base?: number;
+  lines?: P5EstimateLine[];
+};
+
+export const P5_ESTIMATE_MAX_LINES = 60;
 
 /** P5 sends its team email before it answers and reports the outcome as `alert`. */
 export const P5_TEAM_ALERT_MODE = "confirm";
@@ -315,8 +350,8 @@ export function buildP5IntakeBody(input: ConsultationBridgeInput): Record<string
 
 /**
  * The posted JSON: the string fields above, the file links when there are any,
- * the request for a confirmed team email, and the two kinds of team notes when
- * there are any (an older P5 ignores a field it does not know).
+ * the request for a confirmed team email, the two kinds of team notes when
+ * there are any, and the structured planning range when the request has one.
  */
 export function buildP5IntakePayload(input: ConsultationBridgeInput): Record<string, unknown> {
   const body: Record<string, unknown> = buildP5IntakeBody(input);
@@ -328,6 +363,10 @@ export function buildP5IntakePayload(input: ConsultationBridgeInput): Record<str
   if (teamNotes.length) body.team_notes = teamNotes;
   const teamInternalNotes = sanitizeTeamNotes(input.teamInternalNotes, P5_TEAM_INTERNAL_NOTES_MAX_LINES);
   if (teamInternalNotes.length) body.team_internal_notes = teamInternalNotes;
+  // A callback and the details step never carry an estimate, whatever a caller passes.
+  if (input.estimate && input.submissionKind !== "details" && input.requestKind !== "callback") {
+    body.estimate = input.estimate;
+  }
   return body;
 }
 

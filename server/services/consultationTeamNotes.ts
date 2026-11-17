@@ -7,13 +7,16 @@ import {
   type VerifiedEstimate,
 } from "@/server/services/consultationEmail";
 import {
+  P5_ESTIMATE_MAX_LINES,
   P5_TEAM_INTERNAL_NOTES_MAX_LINES,
   P5_TEAM_NOTE_MAX_LENGTH,
   P5_TEAM_NOTES_MAX_LINES,
   sanitizeTeamNotes,
+  type P5EstimateLine,
+  type P5PlanningEstimate,
 } from "@/server/services/p5IntakeBridge";
 import { resolveInternalEstimate } from "@/shared/costs/resolve";
-import { isNewConstructionProject } from "@/shared/estimateEngine";
+import { PROJECT_LABELS, getFinishLabel, isNewConstructionProject } from "@/shared/estimateEngine";
 import type { AttributionTouch, LeadAttribution } from "@/lib/leadAttribution";
 
 /**
@@ -44,6 +47,10 @@ import type { AttributionTouch, LeadAttribution } from "@/lib/leadAttribution";
  * project type, message, timing, files). Every line is "Label: value". Lines
  * are in the order the team needs them, because each contract keeps only its
  * first lines (40 and 60).
+ *
+ * estimate (buildConsultationEstimate) is not a note: it is the same planning
+ * range as figures, so P5 can create the QuickBooks customer and an unsent
+ * estimate. Customer amounts only, like team_notes.
  */
 
 /**
@@ -262,6 +269,111 @@ export function fitInternalNotes(lines: string[]): string[] {
     [...all.slice(0, kept), `Not shown: ${all.length - kept} more lines of the internal breakdown`],
     P5_TEAM_INTERNAL_NOTES_MAX_LINES,
   );
+}
+
+const toCents = (amount: number) => Math.round(amount * 100);
+
+/**
+ * The customer price of a priced range, one line per trade. Same
+ * source as the "Customer" column of this site's team email. The lines add up
+ * to the customer price that email shows, to the cent: each is rounded to
+ * cents and what rounding leaves over (under a dollar) is settled on the
+ * largest line. Returns nothing when there is no rule set, when a trade name
+ * would name an internal figure, or when the split does not plausibly belong
+ * to the range the customer was shown.
+ */
+function customerPriceLines(estimate: VerifiedEstimate): P5EstimateLine[] {
+  const resolved = resolveInternalEstimate(estimate.project, estimate.finish, estimate.sqft, estimate.refinements);
+  if (!resolved) return [];
+  const { admin } = resolved;
+  const totalCents = Math.round(admin.customerPrice) * 100;
+  if (!Number.isFinite(totalCents) || totalCents <= 0) return [];
+  // P5 refuses a total under half of low or over twice high. A split that far
+  // from the shown range is not this range's split, so it is not sent.
+  if (totalCents < toCents(estimate.priceLow) / 2 || totalCents > toCents(estimate.priceHigh) * 2) return [];
+
+  const rows = admin.trades
+    .map((trade) => ({ trade, cents: toCents(trade.customerAmount) }))
+    .filter((row) => Number.isFinite(row.cents) && row.cents > 0)
+    .sort((a, b) => b.cents - a.cents);
+  if (!rows.length || rows.some((row) => mentionsInternalFigure(row.trade.division))) return [];
+
+  const lines: Array<P5EstimateLine & { cents: number }> = rows.slice(0, P5_ESTIMATE_MAX_LINES).map(({ trade, cents }) => {
+    const line: P5EstimateLine & { cents: number } = { title: trade.division, division: trade.division, amount: 0, cents };
+    const summary = trade.scopeSummary?.trim() ?? "";
+    if (summary && !mentionsInternalFigure(summary)) line.description = summary;
+    // "300 SF" is one clear quantity. "300 SF, 71 LF" is not.
+    const single = /^([\d,]+(?:\.\d+)?) ([A-Za-z]+)$/.exec(summary);
+    const quantity = single ? Number(single[1].replace(/,/g, "")) : NaN;
+    if (single && Number.isFinite(quantity) && quantity > 0) {
+      line.quantity = quantity;
+      line.unit = single[2];
+    }
+    return line;
+  });
+  // More trades than the contract carries: the smallest share one line, so the sum is unchanged.
+  if (rows.length > P5_ESTIMATE_MAX_LINES) {
+    const kept = lines.slice(0, P5_ESTIMATE_MAX_LINES - 1);
+    const rest = rows.slice(P5_ESTIMATE_MAX_LINES - 1).reduce((sum, row) => sum + row.cents, 0);
+    lines.length = 0;
+    lines.push(...kept, { title: "Other trades", amount: 0, cents: rest });
+  }
+  lines[0].cents += totalCents - lines.reduce((sum, line) => sum + line.cents, 0);
+  if (lines[0].cents <= 0) return [];
+  return lines.map(({ cents, ...line }) => ({ ...line, amount: cents / 100 }));
+}
+
+/**
+ * Step 1 with a planning range: the range as figures (the `estimate` field on
+ * the intake bridge), so P5 can create the QuickBooks customer and an UNSENT
+ * estimate. `low` and `high` are the range the customer was shown, and
+ * `verified` is true because the route recomputed that range on the server
+ * (verifyEstimate) before anything else used it.
+ *
+ * CUSTOMER amounts only, in every field: never a cost, margin, markup, profit,
+ * contingency or overhead figure, and no such word in a title, a description
+ * or the label. The internal breakdown has its own field
+ * (buildConsultationInternalNotes) and must not be copied here.
+ *
+ * Never throws. On any problem it returns nothing and the request goes
+ * without the field. Nothing for a callback and nothing without a range.
+ */
+export function buildConsultationEstimate(input: {
+  estimate?: VerifiedEstimate | null;
+  requestKind?: "quote" | "callback" | null;
+}): P5PlanningEstimate | undefined {
+  try {
+    const estimate = input.estimate ?? null;
+    if (!estimate || input.requestKind === "callback") return undefined;
+    if (typeof estimate.priceLow !== "number" || typeof estimate.priceHigh !== "number") return undefined;
+    const low = Math.round(estimate.priceLow * 100) / 100;
+    const high = Math.round(estimate.priceHigh * 100) / 100;
+    if (!Number.isFinite(low) || !Number.isFinite(high) || low <= 0 || high < low) return undefined;
+
+    const result: P5PlanningEstimate = { kind: "planning-range", low, high, verified: true };
+    try {
+      const label = [
+        PROJECT_LABELS[estimate.project].label,
+        `${getFinishLabel(estimate.project, estimate.finish).label} finish`,
+        `${estimate.sqft.toLocaleString("en-US")} sq ft`,
+      ].join(", ");
+      if (!mentionsInternalFigure(label)) result.label = label.slice(0, 200);
+    } catch {
+      // The label is a convenience. The figures go without it.
+    }
+    let lines: P5EstimateLine[] = [];
+    try {
+      lines = customerPriceLines(estimate);
+    } catch (error) {
+      console.error("[p5-intake] Estimate lines skipped:", error instanceof Error ? error.message : error);
+    }
+    // Without lines P5 uses the midpoint of the range, which is what `base` would say.
+    if (lines.length) result.lines = lines;
+    return result;
+  } catch (error) {
+    console.error("[p5-intake] Structured estimate skipped:", error instanceof Error ? error.message : error);
+    return undefined;
+  }
 }
 
 /**
