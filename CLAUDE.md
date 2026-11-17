@@ -59,7 +59,8 @@ request is forwarded to its intake. The P5 email is the one that stays. This
 site's team email is the FALLBACK.
 
 * `server/services/p5IntakeBridge.ts` posts `team_alert: "confirm"`,
-  `team_notes` and `team_internal_notes`, waits up to 30 seconds, and returns
+  `team_notes`, `team_internal_notes` and `estimate`, waits up to 30 seconds,
+  and returns
   `{ forwarded, alert }`. `alert` is `sent`, `failed`, `none` or `unknown`
   (anything that is not exactly one of the first three, an HTTP error, a thrown
   fetch, a timeout). It never throws.
@@ -101,6 +102,23 @@ site's team email is the FALLBACK.
     into HubSpot. Nothing for a request without a range, nothing for Step 2.
   * Never move a line from the second list into the first, and do not repeat
     fields the bridge already sends.
+* `estimate` (`buildConsultationEstimate` in the same file; owner decision, 13
+  and 17 November 2026) is the planning range as figures, so P5 creates the
+  QuickBooks customer and an UNSENT estimate. Step 1 with a planning range
+  only: nothing for a callback, a request without a range, or Step 2 (the
+  bridge refuses those too). `low` and `high` are the range the customer was
+  shown; `verified: true` because the route recomputes the range on the server
+  (`verifyEstimate`); `label` is project, finish and size; `lines` is one per
+  trade with the CUSTOMER amount, from the same `resolveInternalEstimate` admin
+  view as the team email's "Customer" column, adding up to the customer price
+  that email shows, to the cent (the largest line takes what rounding leaves).
+  CUSTOMER AMOUNTS ONLY: never our cost, a margin, markup, profit, contingency
+  or overhead figure, and no such word in a title, description or label. The
+  builder never throws: on bad figures it sends nothing, and when the trade
+  split does not fit the shown range it sends the range without lines (P5 then
+  uses the midpoint). P5 ignores an unverified total above 500,000 and any
+  total above 5,000,000; large new builds here pass the first because they are
+  verified.
 * Other team emails do not go through this bridge and are unchanged: RE-10
   (`re10Lead.ts`), the estimator recovery and callback notices
   (`estimatorSessions.ts`) and the shared estimator in `lib/p5`.
