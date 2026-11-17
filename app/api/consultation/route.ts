@@ -41,7 +41,9 @@ import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import { readUnitCostOverrides } from "@/server/services/unitCostOverrides";
 import { createDrizzleInquiryIntake } from "@/server/services/inquiryIntake";
 import { deliverInquiryChannel, type InquiryDeliveryResult } from "@/server/services/inquiryDelivery";
-import { forwardConsultationToP5Intake } from "@/server/services/p5IntakeBridge";
+import { forwardConsultationToP5Intake, type P5BridgeResult } from "@/server/services/p5IntakeBridge";
+import { buildConsultationTeamNotes } from "@/server/services/consultationTeamNotes";
+import { sendSiteTeamEmail } from "@/server/services/siteTeamEmail";
 import { issueDetailsToken } from "@/server/services/consultationDetails";
 import { inspectLeadTrap, LeadRequestError, readBoundedJson } from "@/server/services/leadRequestGuard";
 import { clientKeyFrom, rateLimit } from "@/lib/rateLimit";
@@ -261,32 +263,48 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // HubSpot contact, mapped deal, and lead_created mail live on p5 intake.
+    const crmProfile = (data.propertyProfile as PropertyEnrichment | null) ?? null;
+
+    // HubSpot contact, mapped deal, and the P5 team email live on p5 intake.
     // Only a newly inserted consultation reaches this block. Honeypot,
     // too-fast, intake failure, and the followup-only return above do not.
+    let bridge: Promise<P5BridgeResult> | null = null;
     if (intakeResult.inserted) {
-      // Started before Resend and the lead-dashboard forward so it overlaps
-      // them, and kept alive with after() so the visitor response does not
-      // wait on it. Failures stay inside the bridge and cannot change this
-      // status or gate those deliveries.
+      // Started before the deliveries so it overlaps them, and kept alive with
+      // after(). The visitor response, the local save, the customer email and
+      // the lead-dashboard forward never wait on it and cannot be changed by
+      // it. Only this site's own team email waits for its result, further
+      // down, and that wait is inside after() too.
       const location = (data.propertyProfile as { city?: string; zip?: string } | null) ?? null;
+      // What this site's team email shows and the fields below do not: the P5
+      // team email prints these lines under "From the website". Never a cost,
+      // margin or other internal figure (see consultationTeamNotes.ts): that
+      // email is copied into HubSpot.
+      let teamNotes: string[] = [];
       try {
-        const bridge = forwardConsultationToP5Intake({
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          address: data.address,
-          city: location?.city,
-          zip: data.zip || location?.zip,
-          projectType: data.projectType,
-          message: data.message,
-          inquiryKey: intakeResult.inquiryKey,
-          submissionKind: "initial",
-          requestKind: data.requestKind,
-          preferredContact: data.preferredContact,
-          bestTime: data.requestKind === "callback" ? data.bestTimeToCall : undefined,
-        });
-        after(() => bridge);
+        teamNotes = buildConsultationTeamNotes({ estimate, profile: crmProfile, attribution: data.attribution });
+      } catch (notesErr) {
+        console.error("[p5-intake] Team notes could not be built:", notesErr);
+      }
+      const forwarding = forwardConsultationToP5Intake({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        address: data.address,
+        city: location?.city,
+        zip: data.zip || location?.zip,
+        projectType: data.projectType,
+        message: data.message,
+        inquiryKey: intakeResult.inquiryKey,
+        submissionKind: "initial",
+        requestKind: data.requestKind,
+        preferredContact: data.preferredContact,
+        bestTime: data.requestKind === "callback" ? data.bestTimeToCall : undefined,
+        teamNotes,
+      });
+      bridge = forwarding;
+      try {
+        after(() => forwarding);
       } catch (bridgeErr) {
         console.error("[p5-intake] Could not schedule HubSpot bridge:", bridgeErr);
       }
@@ -306,7 +324,6 @@ export async function POST(request: NextRequest) {
       preferredContact: data.preferredContact,
       requestKind: data.requestKind,
     };
-    const crmProfile = (data.propertyProfile as PropertyEnrichment | null) ?? null;
     // Share this between the claimed channels so every destination uses the
     // same current pricing. A failure is persisted on each claimed channel.
     const unitCostOverrides = readUnitCostOverrides();
@@ -317,6 +334,56 @@ export async function POST(request: NextRequest) {
     };
     const claimedRevisionKey =
       data.submissionKind === "followup" ? null : revisionKey;
+
+    // One team email per request (owner decision, 17 November 2026). The P5
+    // team email is the one that stays; this site's own team email is the
+    // fallback. Its channel is claimed here, so a repeated submission cannot
+    // send a second copy, but nothing is sent until the bridge result is known:
+    // sendSiteTeamEmail waits for it, and that wait is kept alive with after()
+    // so the visitor response never waits on P5. "sent" leaves the shared
+    // family inbox to the P5 email; anything else, or no bridge at all, sends
+    // this email to every recipient exactly as before.
+    const teamEmail: Promise<InquiryDeliveryResult | null> = deliverInquiryChannel(intake, {
+      inquiryKey: intakeResult.inquiryKey, revisionKey: claimedRevisionKey, channel: "adminEmail",
+      deliver: async () => {
+        const costs = await unitCostOverrides;
+        const { client, fromEmail } = await getUncachableEmailClient();
+        const from = formatFromAddress(fromEmail);
+        const enrichment = (data.propertyProfile as PropertyEnrichment | null) ?? null;
+        const adminHtml = buildAdminEmailHtml(lead, estimate, enrichment, costs);
+        await sendSiteTeamEmail({
+          bridge,
+          label: "consultation",
+          recipients: () => getAdminRecipientEmails(SITE_CONFIG.email),
+          send: async (adminEmail) => {
+            const adminResult = await client.emails.send({
+              from,
+              // No reply-to-the-lead shortcut when they didn't leave an email -
+              // the admin email body still shows their preferred contact method.
+              replyTo: data.email ? formatLeadReplyTo(data.name, data.email) : undefined,
+              to: adminEmail,
+              subject: buildAdminSubject(lead, estimate),
+              html: adminHtml,
+              text: htmlToPlainText(adminHtml),
+            }, { idempotencyKey: resendIdempotencyKey(intakeResult.inquiryKey, revisionKey, "admin", adminEmail) });
+            if (adminResult?.error) {
+              throw new Error(`Admin email failed: ${adminResult.error.message}`);
+            }
+          },
+        });
+      },
+    }).catch((teamEmailErr) => {
+      console.error("[consultation] Team email channel failed:", teamEmailErr);
+      return null;
+    });
+    try {
+      after(() => teamEmail);
+    } catch (teamEmailErr) {
+      console.error("[consultation] Could not schedule the team email:", teamEmailErr);
+    }
+
+    // The visitor waits for these only: the lead dashboard forward and the
+    // customer's confirmation. Neither depends on the bridge.
     const delivery: InquiryDeliveryResult[] = await Promise.all([
       deliverInquiryChannel(intake, {
         inquiryKey: intakeResult.inquiryKey, revisionKey: claimedRevisionKey, channel: "crm",
@@ -359,32 +426,6 @@ export async function POST(request: NextRequest) {
           if (!result.delivered) throw new Error(result.error || "CRM delivery failed");
         },
       }),
-      deliverInquiryChannel(intake, {
-        inquiryKey: intakeResult.inquiryKey, revisionKey: claimedRevisionKey, channel: "adminEmail",
-        deliver: async () => {
-          const costs = await unitCostOverrides;
-        const { client, fromEmail } = await getUncachableEmailClient();
-        const from = formatFromAddress(fromEmail);
-        const enrichment = (data.propertyProfile as PropertyEnrichment | null) ?? null;
-        const adminHtml = buildAdminEmailHtml(lead, estimate, enrichment, costs);
-        const adminEmails = await getAdminRecipientEmails(SITE_CONFIG.email);
-        for (const adminEmail of adminEmails) {
-          const adminResult = await client.emails.send({
-            from,
-            // No reply-to-the-lead shortcut when they didn't leave an email -
-            // the admin email body still shows their preferred contact method.
-            replyTo: data.email ? formatLeadReplyTo(data.name, data.email) : undefined,
-            to: adminEmail,
-            subject: buildAdminSubject(lead, estimate),
-            html: adminHtml,
-            text: htmlToPlainText(adminHtml),
-          }, { idempotencyKey: resendIdempotencyKey(intakeResult.inquiryKey, revisionKey, "admin", adminEmail) });
-          if (adminResult?.error) {
-            throw new Error(`Admin email failed: ${adminResult.error.message}`);
-          }
-        }
-        },
-      }),
       ...(data.email ? [deliverInquiryChannel(intake, {
         inquiryKey: intakeResult.inquiryKey, revisionKey: claimedRevisionKey, channel: "customerEmail",
         deliver: async () => {
@@ -416,7 +457,12 @@ export async function POST(request: NextRequest) {
       // Lets this visitor add details and files to the same request
       // (/api/consultation/details, /api/consultation/files) for two hours.
       detailsToken: detailsTokenFor(intakeResult.inquiryKey),
-      delivery: delivery.map(({ channel, attempted, delivered }) => ({ channel, attempted, delivered })),
+      // The team email is decided after this response (see teamEmail above), so
+      // it is reported as deferred, not as delivered or failed.
+      delivery: [
+        ...delivery.map(({ channel, attempted, delivered }) => ({ channel, attempted, delivered })),
+        { channel: "adminEmail" as const, attempted: false, delivered: false, deferred: true },
+      ],
     });
   } catch (err) {
     if (err instanceof LeadRequestError) {

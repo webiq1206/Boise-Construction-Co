@@ -58,6 +58,8 @@ export async function POST(request: NextRequest) {
       repository,
       destinations: detailsDestinations,
     });
+    // The P5 forward and this site's team email ("Details added"), which waits
+    // for what P5 says about its own email. Never on the visitor's path.
     if (background) after(() => background);
     if (outcome.status === "not-found") {
       return NextResponse.json({ message: "Invalid request", reason: "invalid" }, { status: 401 });

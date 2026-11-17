@@ -186,14 +186,19 @@ function memoryRepository(row: StoredLead): DetailsRepository & { row: StoredLea
 function recordingDestinations() {
   const sent: Array<{ channel: string; block: string | null; files: number }> = [];
   const destinations: DetailsDestinations = {
-    async email(_l, merge) {
+    async email(_l, merge, bridge) {
+      await bridge;
       sent.push({ channel: "email", block: merge.block, files: merge.files.length });
+    },
+    async customerEmail(_l, merge) {
+      sent.push({ channel: "customer", block: merge.block, files: merge.files.length });
     },
     async crm(_l, merge) {
       sent.push({ channel: "crm", block: merge.block, files: merge.files.length });
     },
     async p5(_l, merge) {
       sent.push({ channel: "p5", block: merge.block, files: merge.files.length });
+      return { forwarded: true, alert: "unknown" as const };
     },
   };
   return { sent, destinations };
@@ -208,14 +213,14 @@ test("applying details is idempotent: the same post twice saves and sends once",
   const first = await applyConsultationDetails(input, files, { repository, destinations });
   await first.background;
   assert.equal(first.outcome.status, "saved");
-  assert.deepEqual(sent.map((s) => s.channel).sort(), ["crm", "email", "p5"]);
+  assert.deepEqual(sent.map((s) => s.channel).sort(), ["crm", "customer", "email", "p5"]);
   assert.equal(repository.row.address, "123 Main St, Star, ID 83669");
   assert.match(repository.row.message ?? "", /^Custom home on land we own near Star\.\n\nDETAILS ADDED\nBuild site: /);
 
   const again = await applyConsultationDetails(input, files, { repository, destinations });
   await again.background;
   assert.equal(again.outcome.status, "unchanged");
-  assert.equal(sent.length, 3, "a repeated post sends nothing");
+  assert.equal(sent.length, 4, "a repeated post sends nothing");
   assert.equal(repository.applies, 1);
 
   const unknown = await applyConsultationDetails(details({ inquiryKey: "inq_notarequestweknowabout" }), [], { repository, destinations });
@@ -225,11 +230,17 @@ test("applying details is idempotent: the same post twice saves and sends once",
 test("a failing destination does not undo the save or stop the others", async () => {
   const repository = memoryRepository(lead());
   const calls: string[] = [];
+  let seenByEmail: unknown;
   const result = await applyConsultationDetails(details({ timing: "Soon" }), [], {
     repository,
     destinations: {
-      async email() {
+      async email(_l, _m, bridge) {
+        seenByEmail = await bridge;
         calls.push("email");
+        throw new Error("Resend down");
+      },
+      async customerEmail() {
+        calls.push("customer");
         throw new Error("Resend down");
       },
       async crm() {
@@ -241,15 +252,92 @@ test("a failing destination does not undo the save or stop the others", async ()
       },
     },
   });
-  await result.background;
+  await assert.doesNotReject(async () => result.background, "a failed team email or bridge never rejects the background work");
   assert.equal(result.outcome.status, "saved");
   if (result.outcome.status === "saved") {
+    // The team email is decided after the visitor is answered, so the response
+    // reports it as deferred. It used to report the awaited send here.
     assert.deepEqual(result.outcome.delivery, [
-      { channel: "adminEmail", delivered: false },
+      { channel: "adminEmail", delivered: false, deferred: true },
       { channel: "crm", delivered: true },
     ]);
   }
-  assert.deepEqual(calls.sort(), ["crm", "email", "p5"]);
+  assert.deepEqual(calls.sort(), ["crm", "customer", "email", "p5"]);
+  // A bridge that throws reaches the team email as "could not confirm".
+  assert.deepEqual(seenByEmail, { forwarded: false, alert: "unknown" });
+});
+
+test("details: the visitor is answered while P5 is still working, and only the team email waits for it", async () => {
+  const repository = memoryRepository(lead());
+  const order: string[] = [];
+  let answerP5: (result: { forwarded: boolean; alert: "sent" | "failed" | "none" | "unknown" }) => void = () => undefined;
+  let seenByEmail: unknown;
+  const result = await applyConsultationDetails(details({ timing: "Soon", email: "avery@example.com" }), [], {
+    repository,
+    destinations: {
+      async email(_l, _m, bridge) {
+        order.push("team email asked");
+        seenByEmail = await bridge;
+        order.push("team email decided");
+      },
+      async customerEmail() {
+        order.push("customer email");
+      },
+      async crm() {
+        order.push("crm");
+      },
+      p5() {
+        order.push("p5 started");
+        return new Promise((resolve) => {
+          answerP5 = resolve;
+        });
+      },
+    },
+  });
+
+  // applyConsultationDetails has returned: this is the moment the route answers
+  // the visitor. P5 has not answered and the team email has not been decided.
+  assert.equal(result.outcome.status, "saved");
+  assert.deepEqual([...order].sort(), ["crm", "customer email", "p5 started", "team email asked"]);
+  assert.equal(order.includes("team email decided"), false, "the team email waits for the bridge result");
+  assert.ok(result.background, "the bridge and the team email are handed to after()");
+  const settled = await Promise.race([
+    result.background!.then(() => "settled"),
+    new Promise((resolve) => setTimeout(() => resolve("pending"), 25)),
+  ]);
+  assert.equal(settled, "pending", "the background work is still waiting on P5");
+
+  answerP5({ forwarded: true, alert: "sent" });
+  await result.background;
+  assert.deepEqual(seenByEmail, { forwarded: true, alert: "sent" });
+  assert.equal(order.at(-1), "team email decided");
+});
+
+test("details delivery: the team email is decided from the bridge and the customer email is not", () => {
+  const source = readFileSync(new URL("../server/services/consultationDetailsDelivery.ts", import.meta.url), "utf8");
+  const email = source.indexOf("async email(lead, merge, bridge)");
+  const customer = source.indexOf("async customerEmail(lead, merge)");
+  const crm = source.indexOf("async crm(lead, merge)");
+  const p5 = source.indexOf("async p5(lead, merge, details)");
+  assert.ok(email > 0 && customer > email && crm > customer && p5 > crm);
+  const teamBlock = source.slice(email, customer);
+  assert.match(teamBlock, /sendSiteTeamEmail\(\{\s*bridge,/);
+  assert.match(teamBlock, /recipients: \(\) => getAdminRecipientEmails\(SITE_CONFIG\.email\)/);
+  assert.equal(source.split("getAdminRecipientEmails(").length - 1, 1, "the team is emailed from one place only");
+  const customerBlock = source.slice(customer, crm);
+  assert.equal(customerBlock.includes("bridge"), false);
+  assert.equal(customerBlock.includes("sendSiteTeamEmail"), false);
+  assert.match(source.slice(p5), /return forwardConsultationToP5Intake\(/);
+  assert.match(source.slice(p5), /teamNotes: buildDetailsTeamNotes\(/);
+
+  const service = readFileSync(new URL("../server/services/consultationDetails.ts", import.meta.url), "utf8");
+  const apply = service.slice(service.indexOf("export async function applyConsultationDetails"));
+  const awaited = apply.slice(apply.indexOf("await Promise.all(["), apply.indexOf("const delivery: DetailsDelivery[]"));
+  assert.match(awaited, /destinations\.crm\(/);
+  assert.match(awaited, /destinations\.customerEmail\(/);
+  assert.equal(awaited.includes("destinations.email("), false, "the visitor never waits for the team email");
+  assert.equal(awaited.includes("bridge"), false, "the visitor never waits for the bridge");
+  assert.doesNotMatch(apply, /await\s+deps\.destinations\.p5\(/);
 });
 
 test("details schema refuses a bad email, an unknown timing and foreign file ids", () => {
