@@ -42,7 +42,7 @@ import { readUnitCostOverrides } from "@/server/services/unitCostOverrides";
 import { createDrizzleInquiryIntake } from "@/server/services/inquiryIntake";
 import { deliverInquiryChannel, type InquiryDeliveryResult } from "@/server/services/inquiryDelivery";
 import { forwardConsultationToP5Intake, type P5BridgeResult } from "@/server/services/p5IntakeBridge";
-import { buildConsultationTeamNotes } from "@/server/services/consultationTeamNotes";
+import { buildConsultationInternalNotes, buildConsultationTeamNotes } from "@/server/services/consultationTeamNotes";
 import { sendSiteTeamEmail } from "@/server/services/siteTeamEmail";
 import { issueDetailsToken } from "@/server/services/consultationDetails";
 import { inspectLeadTrap, LeadRequestError, readBoundedJson } from "@/server/services/leadRequestGuard";
@@ -276,13 +276,17 @@ export async function POST(request: NextRequest) {
       // it. Only this site's own team email waits for its result, further
       // down, and that wait is inside after() too.
       const location = (data.propertyProfile as { city?: string; zip?: string } | null) ?? null;
-      // What this site's team email shows and the fields below do not: the P5
-      // team email prints these lines under "From the website". Never a cost,
-      // margin or other internal figure (see consultationTeamNotes.ts): that
-      // email is copied into HubSpot.
+      // What this site's team email shows and the fields below do not, in two
+      // lists (see consultationTeamNotes.ts). teamNotes is printed under "From
+      // the website" and never carries a cost, margin or other internal
+      // figure: a "New lead" email is copied into HubSpot. teamInternalNotes
+      // is the internal breakdown for a request with a planning range,
+      // printed under "Internal pricing" in an email P5 does not copy there.
       let teamNotes: string[] = [];
+      let teamInternalNotes: string[] = [];
       try {
         teamNotes = buildConsultationTeamNotes({ estimate, profile: crmProfile, attribution: data.attribution });
+        teamInternalNotes = buildConsultationInternalNotes({ estimate });
       } catch (notesErr) {
         console.error("[p5-intake] Team notes could not be built:", notesErr);
       }
@@ -301,6 +305,7 @@ export async function POST(request: NextRequest) {
         preferredContact: data.preferredContact,
         bestTime: data.requestKind === "callback" ? data.bestTimeToCall : undefined,
         teamNotes,
+        teamInternalNotes,
       });
       bridge = forwarding;
       try {

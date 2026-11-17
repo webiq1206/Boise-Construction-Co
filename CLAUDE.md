@@ -58,8 +58,8 @@ this site's own team email and the "New lead" email p5homeco.com sends when the
 request is forwarded to its intake. The P5 email is the one that stays. This
 site's team email is the FALLBACK.
 
-* `server/services/p5IntakeBridge.ts` posts `team_alert: "confirm"` and
-  `team_notes`, waits up to 30 seconds, and returns
+* `server/services/p5IntakeBridge.ts` posts `team_alert: "confirm"`,
+  `team_notes` and `team_internal_notes`, waits up to 30 seconds, and returns
   `{ forwarded, alert }`. `alert` is `sent`, `failed`, `none` or `unknown`
   (anything that is not exactly one of the first three, an HTTP error, a thrown
   fetch, a timeout). It never throws.
@@ -78,14 +78,29 @@ site's team email is the FALLBACK.
   The visitor response, the local save, the lead dashboard forward and the
   customer's confirmation never wait on the bridge. Both responses report the
   team email as `deferred: true`.
-* `server/services/consultationTeamNotes.ts` builds `team_notes` ("From the
-  website" in the P5 email): the lead dashboard link, the planning range the
-  customer was shown, their selections, the county parcel record, how they
-  found the site. NEVER a cost, margin, markup, profit, contingency or overhead
-  number, and never pricing check text (a count at most): P5's inbox sync copies
-  that email into HubSpot, and those figures stay out of HubSpot. The internal
-  breakdown therefore exists only in this site's own team email. Do not repeat
-  fields the bridge already sends. At most 40 lines of 300 characters.
+* `server/services/consultationTeamNotes.ts` builds both lists of notes. The
+  split between them is the rule: a "New lead" email is copied into HubSpot by
+  P5's inbox sync, and costs and margins stay out of HubSpot.
+  * `team_notes` (`buildConsultationTeamNotes`, `buildDetailsTeamNotes`;
+    "From the website" in the P5 email): the lead dashboard link, the planning
+    range the customer was shown, their selections, the county parcel record,
+    how they found the site. NEVER a cost, margin, markup, profit, contingency
+    or overhead number, and never pricing check text: a count that points at
+    "Internal pricing". `fitTeamNotes()` leaves out any line naming one, and P5
+    withholds such lines too. At most 40 lines of 300 characters.
+  * `team_internal_notes` (`buildConsultationInternalNotes`; "Internal
+    pricing" in the P5 email; owner decision, 17 November 2026): the "Internal
+    breakdown (not shown to the lead)" block of this site's own team email, for
+    a Step 1 request with a planning range only. Pricing checks in full first,
+    then direct cost, contingency, total internal cost, gross profit, the
+    margin label and the quoted range, then each trade's "our cost" and
+    "customer" amounts, then the assumptions. Same source as the email
+    (`resolveInternalEstimate`), so the two agree to the dollar. At most 60
+    lines of 300 characters. When this list is present P5 sends "Lead and
+    pricing: ..." and not "New lead: ...", and only "New lead" mail is copied
+    into HubSpot. Nothing for a request without a range, nothing for Step 2.
+  * Never move a line from the second list into the first, and do not repeat
+    fields the bridge already sends.
 * Other team emails do not go through this bridge and are unchanged: RE-10
   (`re10Lead.ts`), the estimator recovery and callback notices
   (`estimatorSessions.ts`) and the shared estimator in `lib/p5`.

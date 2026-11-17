@@ -1,7 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import {
   P5_INTAKE_TIMEOUT_MS,
+  P5_TEAM_INTERNAL_NOTES_MAX_LINES,
   P5_TEAM_NOTES_MAX_LINES,
   P5_TEAM_NOTE_MAX_LENGTH,
   buildP5IntakePayload,
@@ -18,8 +20,10 @@ import {
 } from "../server/services/siteTeamEmail.ts";
 import {
   INTERNAL_FIGURE_WORDS,
+  buildConsultationInternalNotes,
   buildConsultationTeamNotes,
   buildDetailsTeamNotes,
+  fitInternalNotes,
   fitTeamNotes,
   mentionsInternalFigure,
 } from "../server/services/consultationTeamNotes.ts";
@@ -426,7 +430,7 @@ test("team notes for a request with a planning range never carry an internal fig
         if (checks.length) {
           withChecks += 1;
           assert.equal(checkLines.length, 1, where);
-          assert.match(checkLines[0], new RegExp(`^Pricing checks on this range: ${checks.length}(, \\d+ to review before quoting)? \\(not listed in this email\\)$`));
+          assert.match(checkLines[0], new RegExp(`^Pricing checks on this range: ${checks.length}(, \\d+ to review before quoting)? \\(see Internal pricing below\\)$`));
           for (const check of checks) {
             assert.equal(notes.some((line) => line.includes(check.message.slice(0, 20))), false, `${where}: check text leaked`);
           }
@@ -516,4 +520,221 @@ test("team notes are forced into the contract whatever a caller passes", () => {
   assert.equal(sanitizeTeamNotes(Array.from({ length: 90 }, (_, i) => `Line ${i}: value`)).length, P5_TEAM_NOTES_MAX_LINES);
   assert.deepEqual(sanitizeTeamNotes(undefined), []);
   assert.deepEqual(sanitizeTeamNotes(null), []);
+});
+
+/**
+ * Internal pricing in the one team email (owner decision, 17 November 2026).
+ *
+ * The "Internal breakdown (not shown to the lead)" block of this site's own
+ * team email travels to P5 as team_internal_notes. P5 prints it under
+ * "Internal pricing" and sends that email as "Lead and pricing: ...", which
+ * its inbox sync does not copy into HubSpot. team_notes is unchanged and still
+ * never carries a cost or a margin.
+ */
+
+const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
+const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const escapeHtml = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+
+function assertInternalWellFormed(notes: unknown) {
+  assert.ok(Array.isArray(notes), "team_internal_notes is an array");
+  const lines = notes as unknown[];
+  assert.ok(lines.length > 0 && lines.length <= P5_TEAM_INTERNAL_NOTES_MAX_LINES, `${lines.length} lines`);
+  for (const line of lines) {
+    assert.equal(typeof line, "string");
+    const text = line as string;
+    assert.ok(text.length <= P5_TEAM_NOTE_MAX_LENGTH, `too long: ${text}`);
+    assert.doesNotMatch(text, /[\r\n\t\u0000-\u001f]/, `not a single line: ${JSON.stringify(text)}`);
+    assert.match(text, /^[^:]{1,80}: \S/, `not "Label: value": ${text}`);
+    assert.equal(text, text.trim());
+  }
+}
+
+/** A check or an assumption may run over one line; put the continuation lines back together. */
+function joined(notes: string[], label: string): string[] {
+  const out: string[] = [];
+  for (const line of notes) {
+    if (line.startsWith(`${label}: `)) out.push(line.slice(label.length + 2));
+    else if (line.startsWith(`${label} (continued): `)) out[out.length - 1] += ` ${line.slice(label.length + 14)}`;
+  }
+  return out;
+}
+
+test("internal pricing travels in team_internal_notes, matches the site's own team email, and never enters team_notes", () => {
+  const FINISHES: FinishLevel[] = ["refresh", "mid-range", "high-end", "luxury"];
+  let estimates = 0;
+  let withChecks = 0;
+  let longest = 0;
+  for (const project of Object.keys(PROJECT_LABELS) as ProjectType[]) {
+    const size = getProjectSizeConfig(project);
+    for (const finish of FINISHES) {
+      for (const sqft of [size.min, Math.round((size.min + size.max) / 2), size.max]) {
+        let estimate: VerifiedEstimate;
+        try {
+          estimate = estimateFor(project, finish, sqft, Math.round(sqft * 180));
+        } catch {
+          continue; // not every finish level exists for every project
+        }
+        const resolved = resolveInternalEstimate(project, finish, sqft, estimate.refinements);
+        const where = `${project} ${finish} ${sqft}`;
+        assert.ok(resolved, `${where}: every project the form can price has an internal breakdown`);
+        const { admin } = resolved!;
+        estimates += 1;
+
+        const internal = buildConsultationInternalNotes({ estimate });
+        assertInternalWellFormed(internal);
+        longest = Math.max(longest, internal.length);
+
+        // The totals are the ones this site's own team email prints, to the dollar.
+        const adminHtml = buildAdminEmailHtml({ name: "Avery Sample", phone: "2085550142", email: "", address: "", projectType: project }, estimate, PROFILE, {});
+        for (const [label, amount] of [
+          ["Direct cost", admin.directCost],
+          ["Contingency", admin.contingency],
+          ["Total internal cost", admin.totalInternalCost],
+          ["Gross profit", admin.grossProfit],
+        ] as const) {
+          assert.ok(internal.includes(`${label}: ${usd(amount)}`), `${where}: ${label} is missing`);
+          assert.match(adminHtml, new RegExp(`${label}</td><td[^>]*>${escapeRegExp(usd(amount))}</td>`), `${where}: ${label} differs from the email`);
+        }
+        assert.ok(internal.includes(`Margin: ${admin.marginLabel}`), `${where}: margin label`);
+        assert.ok(adminHtml.includes(escapeHtml(admin.marginLabel)), `${where}: margin label differs from the email`);
+        assert.ok(internal.includes(`Quoted range: ${admin.rangeLabel}`), `${where}: quoted range`);
+        assert.ok(adminHtml.includes(`Quoted range ${escapeHtml(admin.rangeLabel)}`), `${where}: quoted range differs from the email`);
+
+        // Every trade, with the same "our cost" and "customer" amounts as the email's table.
+        assert.ok(admin.trades.length > 0, where);
+        for (const trade of admin.trades) {
+          const line = internal.find((entry) => entry.startsWith(`${trade.division}: our cost `));
+          assert.ok(line, `${where}: trade ${trade.division} is missing`);
+          assert.ok(line!.startsWith(`${trade.division}: our cost ${usd(trade.internalCost)}, customer ${usd(trade.customerAmount)}`), `${where}: ${line}`);
+          assert.match(
+            adminHtml,
+            new RegExp(`${escapeRegExp(escapeHtml(trade.division))}<br>.*?</span></td><td[^>]*>${escapeRegExp(usd(trade.internalCost))}</td><td[^>]*>${escapeRegExp(usd(trade.customerAmount))}</td></tr>`),
+            `${where}: trade ${trade.division} differs from the email`,
+          );
+        }
+
+        // The wording of every pricing check arrives in full, and the email carries the same words.
+        const review = joined(internal, "Needs review");
+        const notes = joined(internal, "Pricing note");
+        assert.deepEqual(review, admin.warnings.filter((w) => w.severity === "warn").map((w) => w.message), where);
+        assert.deepEqual(notes, admin.warnings.filter((w) => w.severity !== "warn").map((w) => w.message), where);
+        for (const warning of admin.warnings) assert.ok(adminHtml.includes(escapeHtml(warning.message)), `${where}: check differs from the email`);
+        if (admin.warnings.length) withChecks += 1;
+        assert.deepEqual(joined(internal, "Assumption"), admin.assumptions.slice(0, 8), `${where}: assumptions`);
+
+        // Checks first, then the totals, then the trades, then the assumptions:
+        // what matters most is never what a cap would cut.
+        const firstTotal = internal.indexOf(`Direct cost: ${usd(admin.directCost)}`);
+        const firstTrade = internal.findIndex((entry) => / our cost \$/.test(entry));
+        const firstAssumption = internal.findIndex((entry) => entry.startsWith("Assumption"));
+        const lastCheck = internal.findLastIndex((entry) => /^(Needs review|Pricing note)/.test(entry));
+        assert.ok(lastCheck < firstTotal, `${where}: the pricing checks come first`);
+        assert.equal(internal[firstTotal + 5], `Quoted range: ${admin.rangeLabel}`);
+        assert.ok(firstTotal + 5 < firstTrade, `${where}: the totals come before the trades`);
+        assert.ok(firstAssumption === -1 || firstAssumption > internal.findLastIndex((entry) => / our cost \$/.test(entry)), where);
+
+        // The same request's team_notes share nothing with the internal list and stay clean.
+        const teamNotes = buildConsultationTeamNotes({ estimate, profile: PROFILE, attribution: ATTRIBUTION });
+        for (const line of teamNotes) {
+          assert.equal(internal.includes(line), false, `${where}: "${line}" is in both lists`);
+          assert.equal(mentionsInternalFigure(line), false, `${where}: ${line}`);
+        }
+        const amountsInTeamNotes = new Set(teamNotes.flatMap((line) => [...line.matchAll(/\$[\d,]*\d/g)].map((match) => match[0])));
+        const shownToCustomer = [estimate.priceLow, estimate.priceHigh, estimate.statedBudget, PROFILE.assessedValue].map((n) => usd(n ?? -1));
+        for (const figure of [admin.directCost, admin.contingency, admin.totalInternalCost, admin.grossProfit, ...admin.trades.flatMap((t) => [t.internalCost, t.customerAmount])]) {
+          const text = usd(figure);
+          if (shownToCustomer.includes(text)) continue; // a coincidence with a figure the customer or the county gave
+          assert.equal(amountsInTeamNotes.has(text), false, `${where}: ${text} leaked into team_notes`);
+        }
+      }
+    }
+  }
+  assert.ok(estimates >= 30, `only ${estimates} estimates were checked`);
+  assert.ok(withChecks > 0, "at least one range raised a pricing check, so its wording was compared");
+  assert.ok(longest <= P5_TEAM_INTERNAL_NOTES_MAX_LINES, `the longest real breakdown is ${longest} lines`);
+});
+
+test("the bridge sends team_internal_notes beside team_notes, and only for a request with a planning range", async () => {
+  const estimate = estimateFor("adu", "mid-range", 300);
+  const teamNotes = buildConsultationTeamNotes({ estimate, profile: PROFILE, attribution: ATTRIBUTION });
+  const teamInternalNotes = buildConsultationInternalNotes({ estimate });
+  let posted: Record<string, unknown> = {};
+  await forwardConsultationToP5Intake(
+    { ...LEAD, submissionKind: "initial", requestKind: "quote", teamNotes, teamInternalNotes },
+    async (_url, init) => {
+      posted = JSON.parse(String(init.body));
+      return new Response(JSON.stringify({ ok: true, alert: "sent" }), { status: 201 });
+    },
+  );
+  assert.equal(posted.team_alert, "confirm");
+  assertWellFormed(posted.team_notes);
+  assertInternalWellFormed(posted.team_internal_notes);
+  assert.deepEqual(posted.team_internal_notes, teamInternalNotes);
+  assert.deepEqual(posted.team_notes, teamNotes);
+  const internal = posted.team_internal_notes as string[];
+  const notes = posted.team_notes as string[];
+
+  // This ADU range raises a check: its wording is internal, its count is not.
+  assert.match(internal[0], /^Needs review: Scope prices above the market ceiling even at the \d+% margin floor/);
+  assert.ok(internal.some((line) => /^Total internal cost: \$[\d,]+$/.test(line)));
+  assert.ok(internal.some((line) => /^Gross profit: \$[\d,]+$/.test(line)));
+  assert.ok(internal.some((line) => /^Margin: [\d.]+% gross margin \([\d.]+% markup\)/.test(line)));
+  assert.ok(internal.some((line) => /^FRAMING: our cost \$[\d,]+, customer \$[\d,]+/.test(line)));
+  assert.ok(notes.includes("Pricing checks on this range: 1, 1 to review before quoting (see Internal pricing below)"));
+  assert.equal(notes.some((line) => /not listed in this email/.test(line)), false);
+  for (const line of notes) assert.equal(mentionsInternalFigure(line), false, line);
+  for (const line of internal) assert.equal(notes.includes(line), false, `"${line}" is in team_notes`);
+  assert.ok(internal.filter((line) => mentionsInternalFigure(line)).length >= 6, "the internal list is where those words belong");
+
+  // No planning range: no internal list at all, in the builder or on the wire.
+  assert.deepEqual(buildConsultationInternalNotes({}), []);
+  assert.deepEqual(buildConsultationInternalNotes({ estimate: null }), []);
+  for (const input of [
+    { ...LEAD, teamNotes: buildConsultationTeamNotes({}), teamInternalNotes: buildConsultationInternalNotes({}) },
+    { ...LEAD, requestKind: "callback" as const, preferredContact: "phone" as const, teamNotes: buildConsultationTeamNotes({}) },
+    { ...LEAD, teamInternalNotes: [] },
+    { ...LEAD, teamInternalNotes: ["", "   "] },
+    LEAD,
+  ]) {
+    const body = buildP5IntakePayload(input);
+    assert.equal("team_internal_notes" in body, false);
+    assert.equal(body.team_alert, "confirm");
+  }
+
+  // Step 1 builds the list from the verified estimate. Step 2 ("Details added") sends none.
+  const route = readFileSync(new URL("../app/api/consultation/route.ts", import.meta.url), "utf8");
+  assert.match(route, /teamInternalNotes = buildConsultationInternalNotes\(\{ estimate \}\);/);
+  assert.match(route, /forwardConsultationToP5Intake\(\{[\s\S]*?teamNotes,\s*teamInternalNotes,\s*\}\)/);
+  const details = readFileSync(new URL("../server/services/consultationDetailsDelivery.ts", import.meta.url), "utf8");
+  assert.equal(/teamInternalNotes|buildConsultationInternalNotes|team_internal_notes/.test(details), false);
+});
+
+test("team_internal_notes keep their own cap of 60 lines and never lose a line to the cost-word filter", () => {
+  assert.equal(P5_TEAM_INTERNAL_NOTES_MAX_LINES, 60);
+  assert.equal(P5_TEAM_NOTES_MAX_LINES, 40);
+  const many = Array.from({ length: 90 }, (_, i) => `Trade ${i}: our cost $${i}, customer $${i + 1}`);
+
+  // On the wire: 60 internal lines at most, 40 team notes at most, each cut to 300 characters.
+  const body = buildP5IntakePayload({ ...LEAD, teamNotes: many, teamInternalNotes: [...many, `Margin: ${"x".repeat(400)}`] });
+  assert.deepEqual(body.team_internal_notes, many.slice(0, 60));
+  assert.equal((body.team_notes as string[]).length, 40, "the bridge only shapes; the builder is what keeps internal lines out of team_notes");
+  const long = buildP5IntakePayload({ ...LEAD, teamInternalNotes: [`Margin: ${"x".repeat(400)}`, "Two\nlines:\tone value", 7 as unknown as string] });
+  assert.deepEqual((long.team_internal_notes as string[]).map((line) => line.length), [P5_TEAM_NOTE_MAX_LENGTH, 20]);
+  assert.equal((long.team_internal_notes as string[])[1], "Two lines: one value");
+
+  // The builder's own fit names what it left out, and keeps cost and margin lines.
+  const fitted = fitInternalNotes(many.slice(0, 75));
+  assert.equal(fitted.length, 60);
+  assert.deepEqual(fitted.slice(0, 59), many.slice(0, 59));
+  assert.equal(fitted.at(-1), "Not shown: 16 more lines of the internal breakdown");
+  assert.deepEqual(fitInternalNotes(many.slice(0, 60)), many.slice(0, 60));
+  assert.deepEqual(fitInternalNotes(["Total internal cost: $1", "  ", "Margin: 28% gross margin (38.9% markup)"]), [
+    "Total internal cost: $1",
+    "Margin: 28% gross margin (38.9% markup)",
+  ]);
+  // The same two lines offered as team notes are left out, exactly as before.
+  assert.deepEqual(fitTeamNotes(["Total internal cost: $1", "Margin: 28% gross margin (38.9% markup)", "Parcel: R1"]), ["Parcel: R1"]);
+  assert.equal(sanitizeTeamNotes(many).length, 40);
+  assert.equal(sanitizeTeamNotes(many, P5_TEAM_INTERNAL_NOTES_MAX_LINES).length, 60);
 });

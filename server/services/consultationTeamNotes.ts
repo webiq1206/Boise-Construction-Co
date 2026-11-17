@@ -6,33 +6,44 @@ import {
   type PropertyEnrichment,
   type VerifiedEstimate,
 } from "@/server/services/consultationEmail";
-import { P5_TEAM_NOTES_MAX_LINES, sanitizeTeamNotes } from "@/server/services/p5IntakeBridge";
+import {
+  P5_TEAM_INTERNAL_NOTES_MAX_LINES,
+  P5_TEAM_NOTE_MAX_LENGTH,
+  P5_TEAM_NOTES_MAX_LINES,
+  sanitizeTeamNotes,
+} from "@/server/services/p5IntakeBridge";
 import { resolveInternalEstimate } from "@/shared/costs/resolve";
 import { isNewConstructionProject } from "@/shared/estimateEngine";
 import type { AttributionTouch, LeadAttribution } from "@/lib/leadAttribution";
 
 /**
- * The "From the website" lines P5 prints in its team email (team_notes on the
- * intake bridge). One team email per request means the P5 email is usually the
- * only one the team reads, so what this site's own team email shows and the
- * bridge fields do not goes here: the lead dashboard link, the planning range
- * the customer was shown with the selections behind it, the county parcel
- * record, and how the visitor found the site.
+ * What this site adds to the one team email P5 sends. One team email per
+ * request means the P5 email is usually the only one the team reads, so what
+ * this site's own team email shows and the bridge fields do not travels in two
+ * lists, and the split between them is the whole point.
  *
- * NEVER an internal figure. The P5 team email is copied into HubSpot with its
- * full body by the P5 inbox sync, and the owner's rule is that those numbers
- * stay out of HubSpot. So no line here may carry what a job costs us, a margin,
- * a markup, a profit, a contingency or an overhead number, and no pricing check
- * text (it names margins): a count of the checks at most. The internal
- * breakdown this site's own team email shows is therefore NOT sent to P5. It
- * stays in this site's email, which only goes out when P5 did not confirm its
- * own. P5 also drops any line that mentions those words. Do not word around
- * that: leave the figure out.
+ * team_notes ("From the website", buildConsultationTeamNotes): the lead
+ * dashboard link, the planning range the customer was shown with the
+ * selections behind it, the county parcel record, and how the visitor found
+ * the site. NEVER an internal figure. A "New lead" email is copied into
+ * HubSpot with its full body by the P5 inbox sync, and the owner's rule is
+ * that those numbers stay out of HubSpot. So no line there may carry what a
+ * job costs us, a margin, a markup, a profit, a contingency or an overhead
+ * number, and no pricing check text (it names margins): a count of the checks
+ * at most. P5 also withholds any team_notes line that mentions those words. Do
+ * not word around that: the figure belongs in the other list.
+ *
+ * team_internal_notes ("Internal pricing", buildConsultationInternalNotes):
+ * the internal breakdown this site's own team email shows for a request with
+ * a planning range (owner decision, 17 November 2026). When that list is
+ * present P5 sends the email as "Lead and pricing: ..." and its inbox sync
+ * copies only "New lead" mail, so these lines never reach HubSpot. Step 1
+ * with a range only: nothing for a request without one, nothing for Step 2.
  *
  * Never repeat what the bridge already sends (name, phone, email, address,
  * project type, message, timing, files). Every line is "Label: value". Lines
- * are in the order the team needs them, because the contract keeps the first
- * 40.
+ * are in the order the team needs them, because each contract keeps only its
+ * first lines (40 and 60).
  */
 
 /**
@@ -129,9 +140,9 @@ function selectionLines(estimate: VerifiedEstimate): string[] {
 }
 
 /**
- * The pricing checks name margins, so their text never leaves this site. The
- * team is told only that there are some, and reads them in this site's own
- * records.
+ * The pricing checks name margins, so their text is never a team_notes line.
+ * This line gives the count and points at the "Internal pricing" section of
+ * the same email, where buildConsultationInternalNotes puts the wording.
  */
 function pricingCheckLines(estimate: VerifiedEstimate): string[] {
   const resolved = resolveInternalEstimate(estimate.project, estimate.finish, estimate.sqft, estimate.refinements);
@@ -139,7 +150,7 @@ function pricingCheckLines(estimate: VerifiedEstimate): string[] {
   if (!checks.length) return [];
   const review = checks.filter((check) => check.severity === "warn").length;
   return [
-    `Pricing checks on this range: ${checks.length}${review ? `, ${review} to review before quoting` : ""} (not listed in this email)`,
+    `Pricing checks on this range: ${checks.length}${review ? `, ${review} to review before quoting` : ""} (see Internal pricing below)`,
   ];
 }
 
@@ -173,6 +184,84 @@ export function buildConsultationTeamNotes(input: {
     ...section(() => propertyLines(input.profile)),
     ...section(() => attributionLines(input.attribution)),
   ]);
+}
+
+/**
+ * Step 1 with a planning range: the "Internal breakdown (not shown to the
+ * lead)" block of this site's own team email, as team_internal_notes. Same
+ * source and same rounding as renderTradeRollupHtml in consultationEmail.ts,
+ * so the two emails can never disagree.
+ *
+ * Order matters, because the contract keeps the first 60 lines: the pricing
+ * checks (read before the numbers, as in the email), then the totals and the
+ * margin, then one line per trade, then the assumptions. Returns nothing for a
+ * request without a range, and nothing when the project has no rule set.
+ *
+ * These lines name costs and margins on purpose. They must only ever be sent
+ * as teamInternalNotes, never as teamNotes.
+ */
+export function buildConsultationInternalNotes(input: { estimate?: VerifiedEstimate | null }): string[] {
+  const estimate = input.estimate ?? null;
+  if (!estimate) return [];
+  try {
+    const resolved = resolveInternalEstimate(estimate.project, estimate.finish, estimate.sqft, estimate.refinements);
+    if (!resolved) return [];
+    const { admin } = resolved;
+    const checks = [
+      ...admin.warnings.filter((check) => check.severity === "warn").flatMap((check) => wrapNote("Needs review", check.message)),
+      ...admin.warnings.filter((check) => check.severity !== "warn").flatMap((check) => wrapNote("Pricing note", check.message)),
+    ];
+    const totals = [
+      `Direct cost: ${formatUsd(admin.directCost)}`,
+      `Contingency: ${formatUsd(admin.contingency)}`,
+      `Total internal cost: ${formatUsd(admin.totalInternalCost)}`,
+      `Gross profit: ${formatUsd(admin.grossProfit)}`,
+      `Margin: ${admin.marginLabel}`,
+      `Quoted range: ${admin.rangeLabel}`,
+    ];
+    const trades = admin.trades.map(
+      (trade) =>
+        `${trade.division}: our cost ${formatUsd(trade.internalCost)}, customer ${formatUsd(trade.customerAmount)}${trade.scopeSummary ? ` (${trade.scopeSummary})` : ""}`,
+    );
+    const assumptions = admin.assumptions.slice(0, 8).flatMap((assumption) => wrapNote("Assumption", assumption));
+    return fitInternalNotes([...checks, ...totals, ...trades, ...assumptions]);
+  } catch (error) {
+    console.error("[p5-intake] Internal pricing notes skipped:", error instanceof Error ? error.message : error);
+    return [];
+  }
+}
+
+/**
+ * A sentence longer than one line allows continues on the next line under the
+ * same label, so the wording of a pricing check is never cut short.
+ */
+function wrapNote(label: string, text: string): string[] {
+  const words = text.replace(/\s+/g, " ").trim().split(" ");
+  const lines: string[] = [];
+  let prefix = `${label}: `;
+  let current = "";
+  for (const word of words) {
+    if (current && prefix.length + current.length + 1 + word.length > P5_TEAM_NOTE_MAX_LENGTH) {
+      lines.push(prefix + current);
+      prefix = `${label} (continued): `;
+      current = word;
+    } else {
+      current = current ? `${current} ${word}` : word;
+    }
+  }
+  if (current) lines.push(prefix + current);
+  return lines;
+}
+
+/** Keeps the first lines and says how many were left out, so the tail is never lost silently. */
+export function fitInternalNotes(lines: string[]): string[] {
+  const all = lines.map((line) => line.trim()).filter(Boolean);
+  if (all.length <= P5_TEAM_INTERNAL_NOTES_MAX_LINES) return sanitizeTeamNotes(all, P5_TEAM_INTERNAL_NOTES_MAX_LINES);
+  const kept = P5_TEAM_INTERNAL_NOTES_MAX_LINES - 1;
+  return sanitizeTeamNotes(
+    [...all.slice(0, kept), `Not shown: ${all.length - kept} more lines of the internal breakdown`],
+    P5_TEAM_INTERNAL_NOTES_MAX_LINES,
+  );
 }
 
 /**

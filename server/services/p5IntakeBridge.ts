@@ -141,13 +141,24 @@ export type ConsultationBridgeInput = {
    * which enforces that.
    */
   teamNotes?: ReadonlyArray<string>;
+  /**
+   * Plain "Label: value" lines P5 prints in its team email under "Internal
+   * pricing". This is where cost, margin, markup, gross profit, contingency,
+   * overhead, per-trade amounts and the wording of pricing checks go. When any
+   * are present P5 sends the email as "Lead and pricing: ..." and not as "New
+   * lead: ...", and its inbox sync copies only "New lead" mail into HubSpot, so
+   * these figures never reach HubSpot. Never move one of these lines into
+   * teamNotes.
+   */
+  teamInternalNotes?: ReadonlyArray<string>;
 };
 
 /** P5 sends its team email before it answers and reports the outcome as `alert`. */
 export const P5_TEAM_ALERT_MODE = "confirm";
 
-/** The P5 contract for team_notes. */
+/** The P5 contract for team_notes and team_internal_notes. */
 export const P5_TEAM_NOTES_MAX_LINES = 40;
+export const P5_TEAM_INTERNAL_NOTES_MAX_LINES = 60;
 export const P5_TEAM_NOTE_MAX_LENGTH = 300;
 
 /**
@@ -183,10 +194,16 @@ export function parseP5TeamAlert(answer: unknown): P5TeamAlert {
 /**
  * Makes any list of lines fit the P5 contract: single lines, no control
  * characters, at most P5_TEAM_NOTE_MAX_LENGTH characters each and at most
- * P5_TEAM_NOTES_MAX_LINES of them. Order is kept, so callers put the lines the
- * team needs most first.
+ * maxLines of them (40 for team_notes, 60 for team_internal_notes). Order is
+ * kept, so callers put the lines the team needs most first.
+ *
+ * This is only the shape. What may be said in team_notes (never an internal
+ * figure) is decided in server/services/consultationTeamNotes.ts.
  */
-export function sanitizeTeamNotes(lines: ReadonlyArray<unknown> | null | undefined): string[] {
+export function sanitizeTeamNotes(
+  lines: ReadonlyArray<unknown> | null | undefined,
+  maxLines: number = P5_TEAM_NOTES_MAX_LINES,
+): string[] {
   const out: string[] = [];
   for (const raw of lines ?? []) {
     if (typeof raw !== "string") continue;
@@ -195,7 +212,7 @@ export function sanitizeTeamNotes(lines: ReadonlyArray<unknown> | null | undefin
     out.push(
       line.length > P5_TEAM_NOTE_MAX_LENGTH ? `${line.slice(0, P5_TEAM_NOTE_MAX_LENGTH - 3).trimEnd()}...` : line,
     );
-    if (out.length === P5_TEAM_NOTES_MAX_LINES) break;
+    if (out.length >= maxLines) break;
   }
   return out;
 }
@@ -298,7 +315,8 @@ export function buildP5IntakeBody(input: ConsultationBridgeInput): Record<string
 
 /**
  * The posted JSON: the string fields above, the file links when there are any,
- * the request for a confirmed team email, and the team notes when there are any.
+ * the request for a confirmed team email, and the two kinds of team notes when
+ * there are any (an older P5 ignores a field it does not know).
  */
 export function buildP5IntakePayload(input: ConsultationBridgeInput): Record<string, unknown> {
   const body: Record<string, unknown> = buildP5IntakeBody(input);
@@ -308,6 +326,8 @@ export function buildP5IntakePayload(input: ConsultationBridgeInput): Record<str
   body.team_alert = P5_TEAM_ALERT_MODE;
   const teamNotes = sanitizeTeamNotes(input.teamNotes);
   if (teamNotes.length) body.team_notes = teamNotes;
+  const teamInternalNotes = sanitizeTeamNotes(input.teamInternalNotes, P5_TEAM_INTERNAL_NOTES_MAX_LINES);
+  if (teamInternalNotes.length) body.team_internal_notes = teamInternalNotes;
   return body;
 }
 
