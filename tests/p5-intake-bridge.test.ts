@@ -158,16 +158,17 @@ test("construction-only types map to accepted p5 values and a phone-only lead om
   assert.match(body.summary, /A house and a shop under one roof\./);
 });
 
-test("bridge posts once and swallows transport and HTTP failures", async () => {
+test("bridge posts once, reports what P5 said, and swallows transport and HTTP failures", async () => {
   const calls: Array<{ url: string; init: RequestInit }> = [];
   const ok = async (url: string, init: RequestInit) => {
     calls.push({ url, init });
-    return new Response(JSON.stringify({ ok: true, accepted: true }), { status: 201 });
+    return new Response(JSON.stringify({ ok: true, accepted: true, alert: "sent" }), { status: 201 });
   };
-  await forwardConsultationToP5Intake(
+  const sentResult = await forwardConsultationToP5Intake(
     { name: "Ada Example", email: "ada@example.com", projectType: "basement" },
     ok,
   );
+  assert.deepEqual(sentResult, { forwarded: true, alert: "sent" });
   assert.equal(calls.length, 1);
   assert.equal(calls[0].url, P5_INTAKE_URL);
   assert.equal(calls[0].init.method, "POST");
@@ -177,24 +178,43 @@ test("bridge posts once and swallows transport and HTTP failures", async () => {
   assert.equal(sent.form, "Construction consultation");
   assert.equal(sent.source, "Organic Website");
   assert.equal(sent.sourceDetail, "boiseconstruction.co consultation");
+  assert.equal(sent.team_alert, "confirm", "P5 is asked to confirm its team email");
 
-  await assert.doesNotReject(() =>
-    forwardConsultationToP5Intake(
+  // An older P5 that does not know the contract answers without `alert`.
+  assert.deepEqual(
+    await forwardConsultationToP5Intake(
+      { name: "Ada Example", email: "ada@example.com", projectType: "other" },
+      async () => new Response(JSON.stringify({ ok: true, accepted: true }), { status: 201 }),
+    ),
+    { forwarded: true, alert: "unknown" },
+  );
+  assert.deepEqual(
+    await forwardConsultationToP5Intake(
       { name: "Ada Example", email: "ada@example.com", projectType: "other" },
       async () => {
         throw new Error("network down");
       },
     ),
+    { forwarded: false, alert: "unknown" },
   );
-  await assert.doesNotReject(() =>
-    forwardConsultationToP5Intake(
+  assert.deepEqual(
+    await forwardConsultationToP5Intake(
       { name: "Ada Example", email: "ada@example.com", projectType: "other" },
       async () => new Response("no", { status: 500 }),
     ),
+    { forwarded: false, alert: "unknown" },
   );
 });
 
-test("consultation success path schedules the bridge without awaiting it", () => {
+/**
+ * One team email per request (owner decision, 17 November 2026).
+ *
+ * The old rule here was "the bridge is never awaited and Resend is not gated
+ * on it". The rule now: the VISITOR RESPONSE, the lead dashboard forward and
+ * the CUSTOMER email are never gated on the bridge; this site's TEAM email
+ * waits for the bridge result, and that wait happens inside after().
+ */
+test("consultation route: only the team email waits for the bridge, and it waits inside after()", () => {
   const source = readFileSync(new URL("../app/api/consultation/route.ts", import.meta.url), "utf8");
   const intake = source.indexOf("intakeResult = await intake.intake(");
   const honeypot = source.indexOf('if (trap === "honeypot")');
@@ -202,11 +222,14 @@ test("consultation success path schedules the bridge without awaiting it", () =>
   const intakeFailed = source.indexOf("Inquiry service is temporarily unavailable");
   const followup = source.indexOf('if (data.submissionKind === "followup" && !intakeResult.inserted)');
   const insertedGate = source.indexOf("if (intakeResult.inserted)");
-  const bridge = source.indexOf("forwardConsultationToP5Intake(");
-  const keptAlive = source.indexOf("after(() => bridge)");
-  const delivery = source.indexOf("const delivery: InquiryDeliveryResult[]");
-  const resend = source.indexOf("await getUncachableEmailClient");
-  const dashboard = source.indexOf("forwardToLeadDashboard(");
+  const bridge = source.indexOf("forwardConsultationToP5Intake({");
+  const bridgeKeptAlive = source.indexOf("after(() => forwarding");
+  const teamEmail = source.indexOf("const teamEmail");
+  const teamEmailKeptAlive = source.indexOf("after(() => teamEmail)");
+  const delivery = source.indexOf("const delivery: InquiryDeliveryResult[] = await Promise.all([");
+  const response = source.indexOf("return NextResponse.json({", delivery);
+
+  // Who reaches the bridge at all (unchanged).
   assert.ok(honeypot >= 0 && honeypot < intake, "honeypot returns before durable intake");
   assert.ok(tooFast > honeypot && tooFast < intake, "too-fast trap returns before durable intake");
   assert.equal(source.slice(honeypot, intake).includes("forwardConsultationToP5Intake"), false);
@@ -215,11 +238,35 @@ test("consultation success path schedules the bridge without awaiting it", () =>
   assert.match(source.slice(followup, insertedGate), /return NextResponse\.json/);
   assert.equal(source.slice(followup, insertedGate).includes("forwardConsultationToP5Intake"), false);
   assert.equal(source.slice(followup, insertedGate).includes("after("), false);
-  assert.ok(keptAlive > bridge && keptAlive < delivery, "bridge is kept alive with after(), not awaited");
-  assert.ok(delivery > keptAlive, "Resend and the lead dashboard still run after the bridge is scheduled");
-  assert.ok(dashboard > delivery, "BRC dashboard forward still runs and is not the bridge");
-  assert.ok(resend > delivery, "Resend still runs and is not gated on the bridge");
-  assert.equal(source.slice(bridge, delivery).includes("deliverInquiryChannel"), false);
+
+  // The bridge is started, kept alive with after(), and never awaited by the route.
+  assert.ok(bridgeKeptAlive > bridge && bridgeKeptAlive < delivery, "bridge is kept alive with after(), not awaited");
   assert.doesNotMatch(source, /await\s+forwardConsultationToP5Intake/);
+  assert.doesNotMatch(source, /await\s+(?:bridge|forwarding|teamEmail)\b/);
   assert.doesNotMatch(source, /HUBSPOT_TOKEN|@hubspot/);
+
+  // The team email: its channel is claimed, the send waits for the bridge
+  // result in sendSiteTeamEmail, and the whole thing lives in after().
+  assert.ok(teamEmail > bridge && teamEmailKeptAlive > teamEmail && teamEmailKeptAlive < delivery, "team email is scheduled with after() before the awaited deliveries");
+  const teamBlock = source.slice(teamEmail, teamEmailKeptAlive);
+  assert.match(teamBlock, /channel: "adminEmail"/);
+  assert.match(teamBlock, /sendSiteTeamEmail\(\{\s*bridge,/, "the team email is decided from the bridge result");
+  assert.match(teamBlock, /recipients: \(\) => getAdminRecipientEmails\(SITE_CONFIG\.email\)/);
+  assert.equal(source.split("getAdminRecipientEmails(").length - 1, 1, "the team is emailed from one place only");
+  assert.equal(source.split('channel: "adminEmail"').length - 1, 2, "one claimed channel and one deferred line in the response");
+
+  // What the visitor waits for: the lead dashboard and the customer email,
+  // neither of which knows about the bridge or the team email.
+  assert.ok(delivery > teamEmailKeptAlive && response > delivery);
+  const awaited = source.slice(delivery, response);
+  assert.match(awaited, /channel: "crm"/);
+  assert.match(awaited, /channel: "customerEmail"/);
+  assert.match(awaited, /forwardToLeadDashboard\(/, "BRC dashboard forward still runs and is not the bridge");
+  assert.match(awaited, /await getUncachableEmailClient/, "the customer email still goes through Resend on the visitor's path");
+  for (const forbidden of ['channel: "adminEmail"', "bridge", "forwarding", "teamEmail", "sendSiteTeamEmail", "buildAdminEmailHtml", "getAdminRecipientEmails"]) {
+    assert.equal(awaited.includes(forbidden), false, `the awaited deliveries must not mention ${forbidden}`);
+  }
+
+  // The response says the team email is still to come instead of guessing.
+  assert.match(source.slice(response), /\{ channel: "adminEmail" as const, attempted: false, delivered: false, deferred: true \}/);
 });

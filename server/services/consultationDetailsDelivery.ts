@@ -21,6 +21,8 @@ import {
 import { getUncachableEmailClient } from "@/server/services/emailTransport";
 import { forwardToLeadDashboard } from "@/server/services/leadDashboardForward";
 import { forwardConsultationToP5Intake } from "@/server/services/p5IntakeBridge";
+import { buildDetailsTeamNotes } from "@/server/services/consultationTeamNotes";
+import { sendSiteTeamEmail } from "@/server/services/siteTeamEmail";
 import { buildLeadPropertyRecord } from "@/server/services/leadRecord";
 import type { PropertyEnrichment } from "@/server/services/consultationEmail";
 import { formatFileSize } from "@/shared/leadFiles";
@@ -35,9 +37,10 @@ import {
 } from "@/server/services/consultationDetails";
 
 /**
- * The real destinations for "Help us prepare" details: the same three places
- * the request itself went (internal email, lead dashboard, P5 intake for
- * HubSpot), each told plainly that this is an addition to an existing request.
+ * The real destinations for "Help us prepare" details: the same places the
+ * request itself went (lead dashboard, P5 intake for HubSpot and the P5 team
+ * email, and this site's internal email as the fallback for that one), each
+ * told plainly that this is an addition to an existing request.
  */
 
 function affectedRowCount(result: unknown): number {
@@ -149,59 +152,68 @@ export function buildDetailsCrmPayload(lead: StoredLead, merge: DetailsMerge) {
 }
 
 export const detailsDestinations: DetailsDestinations = {
-  async email(lead, merge) {
+  // One team email per request: P5 sends "Details added" too. This one goes to
+  // the shared family inbox only when P5 did not confirm its own.
+  async email(lead, merge, bridge) {
     const { client } = await getUncachableEmailClient();
     const html = buildDetailsEmailHtml(lead, merge);
-    for (const to of await getAdminRecipientEmails(SITE_CONFIG.email)) {
-      const result = await client.emails.send(
-        {
-          from: formatFromAddress(),
-          replyTo: lead.email ? formatLeadReplyTo(lead.name, lead.email) : undefined,
-          to,
-          subject: buildDetailsSubject(lead),
-          html,
-          text: htmlToPlainText(html),
-        },
-        { idempotencyKey: `consultation-details-${detailsFingerprint(lead.inquiryKey, merge.block ?? "")}-${to}` },
-      );
-      if (result?.error) throw new Error(`Details email failed: ${result.error.message}`);
-    }
-    // The confirmation goes out once, when this step is what first records an
-    // address. A stored callback stays a phone consult. Anything else is a
-    // home walkthrough. A send failure is logged and does not fail the
-    // internal notice, which already went out above.
-    const addedEmail = merge.lines.some((line) => line.startsWith("Email: "));
-    if (addedEmail && lead.email.trim()) {
-      try {
-        const contact: LeadContact = {
-          name: lead.name,
-          phone: lead.phone,
-          email: lead.email,
-          address: lead.address ?? "",
-          zip: lead.zip,
-          projectType: lead.projectType,
-          message: lead.message ?? "",
-          requestKind: (lead.message ?? "").includes(CALLBACK_MARKER) ? "callback" : "quote",
-        };
-        const html = buildCustomerEmailHtml(contact, null);
-        const sent = await client.emails.send(
+    await sendSiteTeamEmail({
+      bridge,
+      label: "consultation-details",
+      recipients: () => getAdminRecipientEmails(SITE_CONFIG.email),
+      send: async (to) => {
+        const result = await client.emails.send(
           {
             from: formatFromAddress(),
-            replyTo: getReplyToAddress(),
-            to: lead.email,
-            subject: buildCustomerSubject(contact, null),
+            replyTo: lead.email ? formatLeadReplyTo(lead.name, lead.email) : undefined,
+            to,
+            subject: buildDetailsSubject(lead),
             html,
-            text: buildCustomerEmailText(contact, null),
+            text: htmlToPlainText(html),
           },
-          { idempotencyKey: `consultation-customer-${lead.inquiryKey}` },
+          { idempotencyKey: `consultation-details-${detailsFingerprint(lead.inquiryKey, merge.block ?? "")}-${to}` },
         );
-        if (sent?.error) console.error("[consultation-details] customer confirmation not sent:", sent.error.message);
-      } catch (error) {
-        console.error(
-          "[consultation-details] customer confirmation failed:",
-          error instanceof Error ? error.message : error,
-        );
-      }
+        if (result?.error) throw new Error(`Details email failed: ${result.error.message}`);
+      },
+    });
+  },
+  // The confirmation goes out once, when this step is what first records an
+  // address. A stored callback stays a phone consult. Anything else is a
+  // home walkthrough. It does not wait for the team email or for P5, and a
+  // send failure is logged without failing anything else.
+  async customerEmail(lead, merge) {
+    const addedEmail = merge.lines.some((line) => line.startsWith("Email: "));
+    if (!addedEmail || !lead.email.trim()) return;
+    try {
+      const { client } = await getUncachableEmailClient();
+      const contact: LeadContact = {
+        name: lead.name,
+        phone: lead.phone,
+        email: lead.email,
+        address: lead.address ?? "",
+        zip: lead.zip,
+        projectType: lead.projectType,
+        message: lead.message ?? "",
+        requestKind: (lead.message ?? "").includes(CALLBACK_MARKER) ? "callback" : "quote",
+      };
+      const html = buildCustomerEmailHtml(contact, null);
+      const sent = await client.emails.send(
+        {
+          from: formatFromAddress(),
+          replyTo: getReplyToAddress(),
+          to: lead.email,
+          subject: buildCustomerSubject(contact, null),
+          html,
+          text: buildCustomerEmailText(contact, null),
+        },
+        { idempotencyKey: `consultation-customer-${lead.inquiryKey}` },
+      );
+      if (sent?.error) console.error("[consultation-details] customer confirmation not sent:", sent.error.message);
+    } catch (error) {
+      console.error(
+        "[consultation-details] customer confirmation failed:",
+        error instanceof Error ? error.message : error,
+      );
     }
   },
   async crm(lead, merge) {
@@ -211,7 +223,7 @@ export const detailsDestinations: DetailsDestinations = {
     if (!result.delivered) throw new Error(result.error || "CRM delivery failed");
   },
   async p5(lead, merge, details) {
-    await forwardConsultationToP5Intake({
+    return forwardConsultationToP5Intake({
       name: lead.name,
       email: lead.email,
       phone: lead.phone,
@@ -225,6 +237,11 @@ export const detailsDestinations: DetailsDestinations = {
       bestTime: details.bestTime ?? null,
       timeline: details.timing ?? null,
       files: merge.files,
+      // The details themselves are in the fields above. The parcel record
+      // looked up for the address given in this step is not.
+      teamNotes: buildDetailsTeamNotes({
+        profile: (details.propertyProfile as PropertyEnrichment | null | undefined) ?? null,
+      }),
     });
   },
 };

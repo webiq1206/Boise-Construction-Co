@@ -1,6 +1,7 @@
 import { createHash, createHmac, timingSafeEqual } from "crypto";
 import { z } from "zod";
 import { propertyProfileSchema } from "@/server/services/consultationRequest";
+import type { P5BridgeResult } from "@/server/services/p5IntakeBridge";
 import { MAX_LEAD_FILES, formatFileSize, type LeadFileLink } from "@/shared/leadFiles";
 import { PROJECT_LABEL_LOOKUP, TIMING_CHOICES } from "@/shared/quoteFormChoices";
 
@@ -198,23 +199,40 @@ export interface DetailsRepository {
 }
 
 export interface DetailsDestinations {
-  /** Internal email "Details added: {name}". */
-  email(lead: StoredLead, merge: DetailsMerge): Promise<void>;
+  /**
+   * This site's internal email "Details added: {name}". It is the fallback
+   * for the P5 team email (one team email per request): it waits for the
+   * bridge result and leaves the shared family inbox to P5 only when P5
+   * confirmed its own email. See server/services/siteTeamEmail.ts.
+   */
+  email(lead: StoredLead, merge: DetailsMerge, bridge: Promise<P5BridgeResult> | null): Promise<void>;
+  /**
+   * The customer's confirmation, sent only when this step is what first
+   * records an email address. Never waits on P5 and never throws.
+   */
+  customerEmail(lead: StoredLead, merge: DetailsMerge): Promise<void>;
   /** Lead dashboard (CRM) update. */
   crm(lead: StoredLead, merge: DetailsMerge): Promise<void>;
-  /** P5 intake (HubSpot), submission_kind "details". Never throws. */
-  p5(lead: StoredLead, merge: DetailsMerge, details: DetailsBody): Promise<void>;
+  /** P5 intake (HubSpot and the P5 team email), submission_kind "details". Never throws. */
+  p5(lead: StoredLead, merge: DetailsMerge, details: DetailsBody): Promise<P5BridgeResult>;
 }
 
+export type DetailsDelivery = { channel: string; delivered: boolean; deferred?: true };
+
 export type DetailsOutcome =
-  | { status: "saved"; lead: StoredLead; merge: DetailsMerge; delivery: Array<{ channel: string; delivered: boolean }> }
+  | { status: "saved"; lead: StoredLead; merge: DetailsMerge; delivery: DetailsDelivery[] }
   | { status: "unchanged" }
   | { status: "not-found" };
 
 /**
  * Apply details to a request that the caller has already authorised (token
- * checked). The P5 forward is returned as a promise for the route to keep
- * alive with after(), so the visitor never waits on it.
+ * checked).
+ *
+ * The visitor waits for the save, the lead dashboard update and their own
+ * confirmation. The P5 forward and this site's team email are returned as one
+ * promise for the route to keep alive with after(): the team email is decided
+ * from what P5 says about its own email, which can take about 25 seconds, so
+ * it must never be on the visitor's path.
  */
 export async function applyConsultationDetails(
   details: DetailsBody,
@@ -242,10 +260,28 @@ export async function applyConsultationDetails(
       return { channel, delivered: false };
     }
   };
-  const delivery = await Promise.all([
-    run("adminEmail", () => deps.destinations.email(merged, merge)),
+  // Started first so it overlaps everything else. A bridge that throws is the
+  // same as one that could not confirm: the site's team email goes to everyone.
+  const bridge: Promise<P5BridgeResult> = (async () => deps.destinations.p5(merged, merge, details))().catch(
+    (): P5BridgeResult => ({ forwarded: false, alert: "unknown" }),
+  );
+  // Decided after the bridge result, off the visitor's path. A failure is
+  // logged by run() and never rejects.
+  const background = (async () => {
+    await run("adminEmail", () => deps.destinations.email(merged, merge, bridge));
+    await bridge;
+  })();
+  const [crm] = await Promise.all([
     run("crm", () => deps.destinations.crm(merged, merge)),
+    (async () => deps.destinations.customerEmail(merged, merge))().catch((error) => {
+      console.error(
+        "[consultation-details] customer confirmation failed:",
+        error instanceof Error ? error.message : error,
+      );
+    }),
   ]);
-  const background = deps.destinations.p5(merged, merge, details).catch(() => undefined);
+  // The team email is still waiting for P5 when the visitor is answered, so it
+  // is reported as deferred, not as delivered or failed.
+  const delivery: DetailsDelivery[] = [{ channel: "adminEmail", delivered: false, deferred: true }, crm];
   return { outcome: { status: "saved", lead: merged, merge, delivery }, background };
 }

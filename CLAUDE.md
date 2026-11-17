@@ -51,6 +51,49 @@ Wording (this is advertising, accuracy matters):
   and stated-minutes rules, and still enforces every reply-time, bonded, one
   contract or invoice and financing rule.
 
+## One team email per request (owner decision, 17 November 2026)
+
+A request form submission used to put two emails in the shared family inbox:
+this site's own team email and the "New lead" email p5homeco.com sends when the
+request is forwarded to its intake. The P5 email is the one that stays. This
+site's team email is the FALLBACK.
+
+* `server/services/p5IntakeBridge.ts` posts `team_alert: "confirm"` and
+  `team_notes`, waits up to 30 seconds, and returns
+  `{ forwarded, alert }`. `alert` is `sent`, `failed`, `none` or `unknown`
+  (anything that is not exactly one of the first three, an HTTP error, a thrown
+  fetch, a timeout). It never throws.
+* `server/services/siteTeamEmail.ts` decides. `isSharedFamilyInbox()` is the
+  one test for the shared mailbox (`hello@` at p5homeco.com, boisecabinet.co,
+  boiseconstruction.co, boiseremodeling.co, boisehandyman.co, boiseadu.co, any
+  letter case). `sendSiteTeamEmail()` waits for the bridge result: only `sent`
+  leaves the shared inbox to P5, and any OTHER admin recipient still gets this
+  site's email. Everything else, and a request that was never forwarded, sends
+  it to every recipient as before. A lead must never end with zero team emails:
+  when in doubt, send.
+* Where it runs: Step 1 in `app/api/consultation/route.ts` (request, callback,
+  request with a planning range), Step 2 in
+  `server/services/consultationDetails.ts` and `consultationDetailsDelivery.ts`
+  ("Details added"). The team email waits for the bridge inside `after()`.
+  The visitor response, the local save, the lead dashboard forward and the
+  customer's confirmation never wait on the bridge. Both responses report the
+  team email as `deferred: true`.
+* `server/services/consultationTeamNotes.ts` builds `team_notes` ("From the
+  website" in the P5 email): the lead dashboard link, the planning range the
+  customer was shown, their selections, the county parcel record, how they
+  found the site. NEVER a cost, margin, markup, profit, contingency or overhead
+  number, and never pricing check text (a count at most): P5's inbox sync copies
+  that email into HubSpot, and those figures stay out of HubSpot. The internal
+  breakdown therefore exists only in this site's own team email. Do not repeat
+  fields the bridge already sends. At most 40 lines of 300 characters.
+* Other team emails do not go through this bridge and are unchanged: RE-10
+  (`re10Lead.ts`), the estimator recovery and callback notices
+  (`estimatorSessions.ts`) and the shared estimator in `lib/p5`.
+* Guards: `npm run verify:p5-intake` (in prebuild):
+  `tests/p5-one-team-email.test.ts`, `tests/p5-intake-bridge.test.ts`,
+  `tests/p5-consultation-details.test.ts`. Tests use a fake fetch; never call
+  the live intake.
+
 ## Scope and one total for customers (owner decision, 16 November 2026)
 
 Every customer-facing estimate shows the full scope of work and ONE price (the
