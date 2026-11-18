@@ -120,12 +120,66 @@ site's team email is the FALLBACK.
   total above 5,000,000; large new builds here pass the first because they are
   verified.
 * Other team emails do not go through this bridge and are unchanged: RE-10
-  (`re10Lead.ts`), the estimator recovery and callback notices
-  (`estimatorSessions.ts`) and the shared estimator in `lib/p5`.
+  (`re10Lead.ts`) and the estimator recovery and callback notices
+  (`estimatorSessions.ts`). The shared document estimator in `lib/p5` also
+  emails the team itself, and its leads reach P5 by their own path, with
+  `team_alert: "site"` so P5 sends no second email: see "The document
+  estimator's leads go to P5".
 * Guards: `npm run verify:p5-intake` (in prebuild):
   `tests/p5-one-team-email.test.ts`, `tests/p5-intake-bridge.test.ts`,
   `tests/p5-consultation-details.test.ts`. Tests use a fake fetch; never call
   the live intake.
+
+## The document estimator's leads go to P5 (owner decisions, 13, 17 and 18 November 2026)
+
+Every project request and every estimate the shared document estimator
+(`lib/p5`, `/estimate/scope`) takes on this site becomes a P5 lead and a
+HubSpot deal, and a priced estimate becomes a QuickBooks customer with an
+UNSENT estimate, with ONE team email. P5 creates all of it; this site only
+posts to P5's public lead intake (`https://p5homeco.com/api/leads/intake`).
+The contract belongs to p5homeco.com (`docs/lead-intake-contract.md` there).
+
+* The switch is the site's existing setting, `P5_CRM_DELIVERY=on`, already set
+  in production (owner, 18 November 2026). There is no second switch: with the
+  code live, both paths below are active. Off means nothing is posted.
+* Project request (unpriced, "Send project request"): the `crm` channel in
+  `lib/p5/intakeDeliveryRuntime.ts` (brand-owned) is the shared
+  `p5LeadIntakeTransport()`. It posts form `p5-project-request`, the brand of
+  the PRIMARY TEAM the request was routed to (an addition is "Boise
+  Construction Co", a kitchen taken here is "Boise Remodeling Co"), the
+  request's lead key as `external_id`, and `team_alert: "site"` because this
+  site's own `team` channel has already emailed the team. Never a price.
+  Without the variable the channel reports `crm-disabled`. Only requests saved
+  since 18 November 2026 are sent (`PROJECT_REQUEST_LEADS_SINCE`);
+  `P5_REQUEST_LEADS_SINCE` (an ISO moment) brings older ones in on purpose.
+* Published estimate (staff price the request and publish): `syncCrm()` in
+  `lib/p5/deliveryAdapter.ts` (brand-owned) calls the shared
+  `forwardEstimateToP5()` with `brand: "Boise Construction Co"`. It posts form
+  `p5-estimator`, `team_alert: "site"`, `request_external_id` (the lead key of
+  the request it answers, so request and estimate are ONE lead) and `estimate`
+  of kind `document`: the range the customer was shown, the contract price,
+  and one line per priced line. CUSTOMER AMOUNTS ONLY: never a cost, margin,
+  markup, profit, contingency or overhead figure. It throws a short error when
+  P5 refuses, so the outbox marks the job for review. The forwarder is loaded
+  with `await import()`, never a static import: the shared
+  `tests/p5-intake-reply-to.test.ts` runs the adapter in a VM with a fixed
+  dependency list.
+* The old lead dashboard (`LEAD_DASHBOARD_API_URL`, `brand.crmUrl`) is no
+  longer called for a published estimate. The request form's own forward in
+  `server/services/leadDashboardForward.ts` is a different path and is
+  unchanged. The canonical review receiver (`canonicalReviewTransport.ts`) is
+  not used and stays gated; do not activate it.
+* A synthetic QA record is never posted. A repeat is safe: P5 keeps one lead
+  per brand and `external_id`.
+* Shared files, edited in p5-home-co only and hash-checked here
+  (`lib/p5/shared-manifest.json`): `lib/p5/p5LeadIntake.ts`,
+  `lib/p5/documentEstimateFigures.ts`, `lib/p5/manualReview.ts`,
+  `lib/p5/submitEndpoint.ts` (the last two stamp the record's `projectId`),
+  `tests/p5-lead-intake.test.ts`. `lib/p5/intakeCrmValidation.ts` is
+  brand-owned: its check is the transport's own `projectRequestHold()`.
+* Guards: `tests/p5-intake-local-crm.test.ts` (brand-owned: this site's runtime
+  and adapter) and `tests/p5-lead-intake.test.ts` (shared builders). Both use
+  a fake fetch; never post a test to the live intake.
 
 ## Scope and one total for customers (owner decision, 16 November 2026)
 
