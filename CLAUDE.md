@@ -267,3 +267,32 @@ layout is untouched.
 * Stand-alone text links on interior pages are at least 44px tall below 1024px
   (`app/interior-refinement.css`). A link inside a sentence is exempt. Never
   apply the rule to a link that wraps a whole card.
+
+## A replaced photograph gets a new URL (19 November 2026)
+
+The image optimizer answers with `Cache-Control: public, max-age=31536000`
+in production (`minimumCacheTTL` in `next.config.js`) and keys its disk cache
+by the image URL. A photograph replaced under the same file name keeps its URL,
+so returning visitors could keep seeing the old picture for up to a year.
+
+* `components/VersionedImage.tsx` wraps `next/image` and adds
+  `?v=<content hash>` to every replaced file (`lib/imageVersion.ts`). Import it
+  instead of `next/image`; `tests/image-versions.test.ts` fails on a direct
+  import outside `components/family`.
+* The list is `shared/generated/imageVersions.ts`, written by
+  `npm run images:versions` (`scripts/build-image-versions.mjs`), seeded with
+  the 60 images replaced since 1 November 2026. `shared/generated/imageHashes.json`
+  remembers every file's content; a file that later differs joins the list and
+  stays on it. Run the script after adding or replacing an image. A file never
+  replaced keeps its plain URL.
+* Page URLs, sitemaps, structured data, alt text (`shared/imageAlts.ts`) and
+  picture identity keep the plain path. The version exists only where the
+  image is handed to `next/image`.
+* `images.localPatterns` is `[{ pathname: '/**' }]` with no `search`, which
+  allows the query string; Next 15 warns without it and Next 16 refuses.
+  Never set a custom `images.loader`: it turns the `/_next/image` route off.
+* The shared `components/family/HeroPhoto.tsx` imports `next/image` directly
+  and is not edited here; nothing in this site calls it. The approved homepage
+  photographs under `public/family` are plain `<img>` tags, which are not
+  cached this way; they are in the list all the same.
+* Guard: `npm run verify:image-versions` (in prebuild).

@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from '@/components/VersionedImage';
 
 interface BlogHeroBannerProps {src:string;alt:string;priority?:boolean}
 

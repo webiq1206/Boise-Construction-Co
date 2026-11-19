@@ -35,7 +35,7 @@ import { CONSULT_BULLETS,HERO_STATS } from '@/shared/siteContent';
 import { contentImageAlt } from '@/shared/imageAlts';
 import { SITE_IMAGES } from '@/shared/siteImages';
 import { ArrowRight,Check,ChevronRight,Mail,MapPin,MessageSquare,Phone } from 'lucide-react';
-import Image from 'next/image';
+import Image from '@/components/VersionedImage';
 import Link from 'next/link';
 
 const CONTACT_FAQS = [
