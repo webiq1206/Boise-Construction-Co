@@ -4,34 +4,36 @@ import fs from 'node:fs';
 import path from 'path';
 import { fileURLToPath } from 'node:url';
 import { getBlogImageAlt } from '../shared/blogImages.ts';
-import { contentImageAlt } from '../shared/imageAlts.ts';
+import { contentImageAlt, imageDescription } from '../shared/imageAlts.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (file: string) => fs.readFileSync(path.join(root, file), 'utf8');
 
 test('architectural images keep descriptive alt text without presentation disclaimers', () => {
-  const framing = contentImageAlt('/images/framing-in-progress-branded.webp');
+  const framing = imageDescription('/images/framing-in-progress-branded.webp');
   assert.equal(
     framing,
     'A worker kneeling beside interior wall framing on a plywood subfloor, with a drill and tape measure nearby',
   );
   assert.equal(
-    contentImageAlt('/images/construction/great-room-evening.webp'),
+    imageDescription('/images/construction/great-room-evening.webp'),
     'Living room with a gray sofa, a low fireplace in a pale stone wall, large windows onto a back yard and a kitchen island behind',
   );
-  assert.equal(contentImageAlt('/family/p5-p5-construction-branded.webp'), framing);
+  assert.equal(imageDescription('/family/p5-p5-construction-branded.webp'), framing);
   const roughIn = 'Mechanical rough-in with pipes and wiring inside framed walls';
-  assert.equal(contentImageAlt('/images/construction/mechanical-rough-in.webp'), roughIn);
-  assert.equal(contentImageAlt('/family/construction-mechanical-rough-in.webp'), roughIn);
+  assert.equal(imageDescription('/images/construction/mechanical-rough-in.webp'), roughIn);
+  assert.equal(imageDescription('/family/construction-mechanical-rough-in.webp'), roughIn);
   assert.equal(
-    contentImageAlt('/images/budget-kitchen-detail.webp'),
-    contentImageAlt('/family/construction-budget-kitchen-detail.webp'),
+    imageDescription('/images/budget-kitchen-detail.webp'),
+    imageDescription('/family/construction-budget-kitchen-detail.webp'),
   );
-  assert.match(contentImageAlt('/images/construction/rural-site-work.webp'), /well-drilling rig/);
+  assert.match(imageDescription('/images/construction/rural-site-work.webp'), /well-drilling rig/);
+  // Rendered alts lead with the work and the place (shared/localAlt.ts), then the same description.
   assert.equal(
-    getBlogImageAlt('how-long-does-it-take-to-build-a-house-boise'),
-    roughIn,
+    contentImageAlt('/images/construction/mechanical-rough-in.webp'),
+    'New home construction in Boise, Idaho: mechanical rough-in with pipes and wiring inside framed walls',
   );
+  assert.match(getBlogImageAlt('how-long-does-it-take-to-build-a-house-boise'), /in Boise, Idaho: mechanical rough-in with pipes and wiring inside framed walls$/);
 
   for (const file of [
     'components/sections/ValueOverheadSection.tsx',

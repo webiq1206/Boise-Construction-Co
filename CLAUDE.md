@@ -214,3 +214,46 @@ Every time, in this order, in the Replit workspace:
 This applies whoever does the pull: a person, Replit's assistant or Claude.
 Never run a schema command against the live database. The same checklist is in
 `replit.md`, which Replit's assistant reads.
+
+## Interior page refinement (owner approval, 19 November 2026)
+
+Service, city and area landing pages, blog articles and guides were refined to
+the homepage standard, matching boise-remodeling-co. Styles live in
+`app/interior-refinement.css` (imported last in `app/layout.tsx`); the homepage
+layout is untouched.
+
+* Landing template (`components/seo/LandingPageTemplate.tsx`): a fact row under
+  the hero (`.lx-facts`, wording already used elsewhere on the page), benefits
+  two across on phones, process steps that swipe on phones, and questions as
+  native `<details>` so every answer stays in the HTML.
+* The page ends with ONE onward-links block, "Keep exploring"
+  (`components/seo/RelatedLinks.tsx`): places and services as photo cards (a
+  swipe row on phones, balanced rows from tablet up) that keep their full
+  anchor text for search, guides and articles as one list with thumbnails, and
+  no link shown twice. Do not stack separate link lists under it again.
+  `.lx-cell` stays `position: relative`: without it the hidden anchor text
+  escapes the swipe row and widens the page on phones.
+* Phones keep copy before the photograph in the landing hero (the earlier
+  hero budget decision); do not put the image first.
+* Articles and guides: quiet header and date line, one "On this page" row on
+  phones, downloads and the guide note after the article, one estimate prompt
+  at the end on phones, related pages with their photographs. On desktop the
+  reading column and the sticky rail fill the container.
+* `.guide-section-details[open] .guide-section-summary > span` keeps the child
+  combinator: without it the rule hid the last two words of every article
+  heading (`.m-keep`).
+* City page photographs: `SERVICE_ROTATION` in `shared/cityServiceImages.ts`
+  was widened with photographs from the owner's Photo Dump (Drive, "2026-11
+  Instant estimate and website photos") so the nine city pages of a service
+  show nine pictures where the service has that many, and ADU city pages no
+  longer share one photograph. A new file needs a description in
+  `shared/imageAlts.ts`.
+* Image alt text is local. Every content image's alt is "<work> in <city>,
+  Idaho: <what the picture shows>", built by `localAlt()` in
+  `shared/localAlt.ts`. `contentImageAlt()` and `getBlogImageAlt()` apply it; a
+  page passes its own service and city, a post's topic tags supply them
+  otherwise, and Boise is the default place. `imageDescription()` returns the
+  plain description. Owner direction: no qualifier ("idea", "concept",
+  "representative", "inspiration") in or beside an image description. Brand
+  lockups in the shared header and footer keep an empty alt because their link
+  carries the company name. Guard: `tests/local-alt.test.ts`.

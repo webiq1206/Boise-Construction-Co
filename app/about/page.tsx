@@ -158,7 +158,7 @@ export default function AboutPage() {
                 <img
                   className="people-safe-photo h-auto w-full"
                   src="/images/about/perkins-family-meridian-idaho.webp"
-                  alt="Nick Perkins with his wife and five children at a pumpkin patch"
+                  alt="Nick Perkins with his wife and five children at a pumpkin patch in Meridian, Idaho"
                   width={2560}
                   height={1920}
                   style={{ objectFit: 'contain' }}
