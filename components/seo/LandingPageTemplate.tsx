@@ -15,7 +15,7 @@ import { SITE_CONFIG } from '@/shared/siteConfig';
 import type { GalleryProject } from '@/shared/galleryData';
 import type { FAQItem } from '@/shared/seoContent';
 import { ArrowRight,ChevronRight,Star } from 'lucide-react';
-import Image from 'next/image';
+import Image from '@/components/VersionedImage';
 import Link from 'next/link';
 import { Fragment, type ReactNode } from 'react';
 import { RelatedLinks } from './RelatedLinks';

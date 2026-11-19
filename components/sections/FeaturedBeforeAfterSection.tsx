@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from '@/components/VersionedImage';
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/marketing/Section";
 import { SectionHeader } from "@/components/marketing/SectionHeader";
