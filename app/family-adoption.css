@@ -277,13 +277,20 @@ html .approved-shell main :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm) :is(em, .b
 html .approved-shell main .interior-statement em {
   color: var(--color-heading-accent);
 }
-/* Preserve the existing H2 and statement treatment. The November 5 owner
-   direction removes H1 glyph shadows, including H1s with display classes. */
+/* Owner, 19 November 2026: no dark outline around the accent word. The logo
+   ochre reads 2.78:1 on paper and 2.49:1 on bone, so H2 and statement emphasis
+   on light surfaces takes an ochre one step deeper (3.45:1 and 3.08:1). H1s and
+   dark surfaces keep the exact logo ochre. Do not bring the outline back. */
+:root { --color-heading-accent-on-light: #b07d36; }
 html .approved-shell main :is(h2, .ed-display, .ed-h2, .ed-h2-sm):not(h1) :is(em, .brc-accent, .text-accent, .text-accent-legible),
 html .approved-shell main .interior-statement:not(h1) em {
-  text-shadow: -1px -1px 0 var(--color-charcoal), 0 -1px 0 var(--color-charcoal), 1px -1px 0 var(--color-charcoal), -1px 0 0 var(--color-charcoal), 1px 0 0 var(--color-charcoal), -1px 1px 0 var(--color-charcoal), 0 1px 0 var(--color-charcoal), 1px 1px 0 var(--color-charcoal);
+  --ed-accent: var(--color-heading-accent-on-light);
+  color: var(--color-heading-accent-on-light);
+  text-shadow: none;
 }
 html .approved-shell main :is(.fr-band, .f-value, .f-contact, .interior-hero-contact, .ed-on-gradient, .bg-inverse, #budget) :is(h1, h2, .ed-display, .ed-h2, .ed-h2-sm, .interior-statement) :is(em, .brc-accent, .text-accent, .text-accent-legible) {
+  --ed-accent: var(--color-heading-accent);
+  color: var(--color-heading-accent);
   text-shadow: none;
 }
 
