@@ -46,31 +46,28 @@ interface GuideJumpChipsProps {
   headings: TocHeading[];
 }
 
-/** Mobile-friendly jump links for top-level sections. */
+/** Phone and tablet contents: one closed row that opens to every section, in place of a wall of chips. */
 export function GuideJumpChips({ headings }: GuideJumpChipsProps) {
-  const h2s = headings.filter((h) => h.level === 2).slice(0, 5);
+  const h2s = headings.filter((h) => h.level === 2);
   if (h2s.length < 2) return null;
 
   return (
-    <nav className="lg:hidden mb-6" aria-label="Jump to section" data-testid="guide-jump-chips">
-      <p className="text-xs font-normal uppercase tracking-wider text-muted-foreground mb-2">
-        Jump to
-      </p>
-      <div className="flex flex-wrap gap-2">
-        {h2s.map((h) => (
-          <Link
-            key={h.id}
-            href={`#${h.id}`}
-            className="inline-flex min-h-10 items-center border px-3.5 text-[0.8125rem] text-foreground transition-colors hover:[color:var(--ed-accent)] [border-color:var(--ed-line)]"
-          >
-            {h.text}
-          </Link>
-        ))}
-      </div>
-    </nav>
+    <details className="lx-toc lg:hidden" data-testid="guide-jump-chips">
+      <summary>
+        <span>On this page</span>
+        <span className="lx-toc-count">{h2s.length} sections</span>
+      </summary>
+      <nav aria-label="Jump to section">
+        <ol>
+          {h2s.map((h) => (
+            <li key={h.id}>
+              <Link href={`#${h.id}`}>{h.text}</Link>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </details>
   );
 }
 
-/* The sidebar TOC now lives in its own client component (scroll-spy needs an
-   IntersectionObserver); re-exported here so existing imports keep working. */
 export { GuideSidebarToc } from './GuideSidebarToc';

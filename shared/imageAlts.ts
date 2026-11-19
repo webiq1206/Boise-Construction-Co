@@ -1,3 +1,5 @@
+import { localAlt, type LocalAltContext } from './localAlt';
+
 /**
  * Alt text for content photographs, written from what each file shows.
  * Decorative backgrounds and brand marks are intentionally absent: those stay
@@ -9,6 +11,54 @@
  * Paths that are byte-identical share one description.
  */
 const ALTS: Record<string, string> = {
+  "/images/construction/foothills-two-story-home.webp":
+    "Two-story house with dark vertical siding and a covered wood entry on a sagebrush hillside",
+  "/images/construction/gable-entry-single-story-home.webp":
+    "Single-story house with a wood-clad gable entry, a dark metal roof and a lawn, with dry foothills behind",
+  "/images/construction/single-story-home-at-dusk.webp":
+    "Single-story white stucco house with a dark metal roof and lit windows at dusk",
+  "/images/construction/hillside-two-story-home-at-dusk.webp":
+    "Two-story house with dark siding, a wood-clad entry and lit windows at dusk, with dry foothills behind",
+  "/images/construction/two-story-home-street-view.webp":
+    "Two-story house with gray siding, a wood accent bay and an attached garage, with dry foothills behind",
+  "/images/construction/rear-covered-patio.webp":
+    "Covered rear patio with a wood ceiling on steel posts, opening from a living room onto a lawn",
+  "/images/construction/kitchen-with-dark-island.webp":
+    "White kitchen with a dark island, three stools and stainless steel appliances",
+  "/images/construction/oak-kitchen-with-pendants.webp":
+    "Kitchen with oak cabinets, a dark island with four wood stools and black pendant lights",
+  "/images/construction/living-room-linear-fireplace.webp":
+    "Living room with a linear fireplace, a light sofa and two tall windows facing the foothills",
+  "/images/construction/primary-bath-freestanding-tub.webp":
+    "Bathroom with a freestanding tub, a glass shower and a long oak vanity beside a window onto dry hills",
+  "/images/construction/shop-building-rural-lot.webp":
+    "Dark metal shop building with two overhead doors and a covered entry on a rural gravel lot",
+  "/images/construction/detached-two-bay-garage.webp":
+    "Detached dark metal garage with two overhead doors and a side entry door",
+  "/images/construction/rear-room-addition.webp":
+    "Single-story addition with dark siding, sliding glass doors and a small patio",
+  "/images/construction/second-story-addition-framing.webp":
+    "Second-story addition being framed above a single-story house, with scaffolding at one end",
+  "/images/construction/attached-garage-addition.webp":
+    "Attached garage addition with dark siding and a concrete driveway below dry hills",
+  "/images/construction/sunroom-addition.webp":
+    "Sunroom addition with black-framed glass walls, two armchairs and a view of the foothills",
+  "/images/construction/room-addition-under-construction.webp":
+    "Room addition under construction with exposed framing beside a house with gray siding",
+  "/images/construction/white-backyard-adu.webp":
+    "White backyard cottage with a dark metal roof, a wood entry and a cedar fence",
+  "/images/construction/dark-sided-adu.webp":
+    "Small dark-sided cottage with a metal roof, a wood door and a stone path through dry grasses",
+  "/images/construction/backyard-studio-adu.webp":
+    "Backyard studio with gray vertical siding, a wood-clad entry and a stepping-stone path",
+  "/images/construction/detached-adu-wood-entry.webp":
+    "Detached backyard unit with dark vertical siding and a wood-clad entry",
+  "/images/construction/attached-adu-covered-entry.webp":
+    "Attached unit with dark lap siding, a covered entry and concrete steps",
+  "/images/construction/stucco-adu-cottage.webp":
+    "Small stucco cottage with a dark metal roof beside a cedar fence",
+  "/images/construction/garage-conversion-window-wall.webp":
+    "Garage converted to living space with a large black-framed window wall",
   "/images/construction/custom-home-exterior.webp":
     "Two-story house with dark vertical siding, a wood-clad entry and a three-car garage, with dry foothills behind",
   // Not the same picture as /images/construction/custom-home-exterior.webp above.
@@ -109,11 +159,11 @@ const ALTS: Record<string, string> = {
   "/images/projects/eagle-mountain-modern/eagle-custom-home-lot-before.webp":
     "Open foothills lot with sage slope and survey stakes",
   "/images/about/perkins-family-meridian-idaho.webp":
-    "Nick Perkins with his wife and five children at a pumpkin patch",
+    "Nick Perkins with his wife and five children at a pumpkin patch in Meridian, Idaho",
   "/images/about/perkins-family-meridian-idaho-1x1.webp":
-    "Nick Perkins with his wife and five children at a pumpkin patch",
+    "Nick Perkins with his wife and five children at a pumpkin patch in Meridian, Idaho",
   "/images/about/perkins-family-meridian-idaho-4x3.webp":
-    "Nick Perkins with his wife and five children at a pumpkin patch",
+    "Nick Perkins with his wife and five children at a pumpkin patch in Meridian, Idaho",
   "/images/about/perkins-family-portrait.webp":
     "The Perkins family, Nick, his wife and their five children, on a beach",
   "/images/projects/treasure-valley-adu-finished.webp":
@@ -130,10 +180,33 @@ const ALTS: Record<string, string> = {
     "Family room with a linear fireplace in a white wall, a sofa and armchair, and tall windows onto trees",
 };
 
-export function contentImageAlt(src: string | undefined | null): string {
+/** What the picture shows, with no local wording. Empty for a file with no description. */
+export function imageDescription(src: string | undefined | null): string {
   if (!src) return "";
   const path = src.split("?")[0].split("#")[0];
-  const description = ALTS[path] ?? "";
+  return ALTS[path] ?? "";
+}
+
+const CITY_BY_SLUG: Record<string, string> = {
+  boise: "Boise", meridian: "Meridian", eagle: "Eagle", nampa: "Nampa", kuna: "Kuna", star: "Star",
+  middleton: "Middleton", caldwell: "Caldwell", "garden-city": "Garden City",
+};
+
+/** The city an area photograph belongs to, read from its path. */
+function cityFromPath(path: string): string | undefined {
+  const area = path.match(/\/areas\/([^./]+)\.webp$/);
+  return area ? CITY_BY_SLUG[area[1]] : undefined;
+}
+
+/**
+ * The alt for a content photograph: the work and the place, then what the
+ * picture shows (shared/localAlt.ts). Pass the page's own service and city;
+ * without them an area photograph names its own city and Boise is the place.
+ * Empty when the file has no description, so a call site can fall back.
+ */
+export function contentImageAlt(src: string | undefined | null, context?: LocalAltContext): string {
+  const description = imageDescription(src);
   if (!description) return "";
-  return description;
+  const path = (src as string).split("?")[0].split("#")[0];
+  return localAlt(description, { subject: context?.subject, city: context?.city ?? cityFromPath(path) });
 }

@@ -42,6 +42,8 @@ import './contractor-registration.css'
 import '@/styles/family-tokens.css'
 import '@/styles/family-chrome.css'
 import './family-adoption.css'
+// Interior page refinement (19 November 2026): landing, article and guide layouts.
+import './interior-refinement.css'
 
 // P5 family typefaces, self-hosted. These are the same two files P5 Home Co
 // serves (Manrope and Cormorant Garamond, both variable-weight, both SIL Open

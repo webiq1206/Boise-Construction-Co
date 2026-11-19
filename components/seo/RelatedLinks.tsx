@@ -1,4 +1,12 @@
+import Image from 'next/image';
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import { getManifestLinks } from '@/lib/internal-links';
+import { getBlogHeroImage, getBlogImageAlt } from '@/shared/blogImages';
+import { getCityServiceImage } from '@/shared/cityServiceImages';
+import { contentImageAlt } from '@/shared/imageAlts';
+import { subjectForService } from '@/shared/localAlt';
+import { CONSTRUCTION_IMAGES } from '@/shared/siteImages';
 import { CITIES, SERVICES, serviceLabel } from '@/shared/contentData';
 import { CONTENT_HUBS, guidePath } from '@/shared/contentHubs';
 import { GUIDE_PAGES } from '@/shared/guideContent';
@@ -10,6 +18,10 @@ interface RelatedLinksProps {
   serviceSlug?: string;
   citySlug?: string;
   variant: 'service' | 'area' | 'city-service';
+  /** Page path whose related pages (data/internal-links.json) join the reading list. */
+  manifestPath?: string;
+  /** Links the page already shows in its body. They are not repeated here. */
+  exclude?: readonly string[];
 }
 
 /** The master guide is the fallback, never a service's own pillar. */
@@ -46,17 +58,105 @@ function isIndexableCombo(serviceSlug: string, citySlug: string): boolean {
 }
 
 /**
- * Shared cross-link block rendered on every landing page. Links "up" to the most
- * relevant pillar guide and feeds the two least-linked pages (testimonials,
- * resources) contextual internal links across the whole landing-page network.
+ * One closing block of onward links for every landing page (owner, 19 November
+ * 2026: the stacked link lists read as clutter). Places and services are photo
+ * cards (a swipe row on phones, balanced rows from tablet up), each with the
+ * photograph of the page it opens; guides and related pages are one list with
+ * thumbnails. Every photograph carries a local alt: the work and the place,
+ * then what the picture shows. A link appears once: nothing already in a card
+ * or in the page body is repeated in the list. Cards keep the full anchor text
+ * for search and screen readers and show only the part that differs.
  */
-function ExploreFurther({ serviceSlug }: { serviceSlug?: string }) {
+interface Cell { href: string; label: string; context?: string }
+
+/** The photograph that belongs to the page a link opens, with its alt. */
+function pageImage(href: string): { src: string; alt: string } | undefined {
+  const [section, a, b] = href.split('?')[0].split('/').filter(Boolean);
+  if ((section === 'blog' || section === 'guides') && a) {
+    const src = getBlogHeroImage(a);
+    return src ? { src, alt: getBlogImageAlt(a) } : undefined;
+  }
+  let src: string | undefined;
+  let context: { subject?: string; city?: string } = {};
+  if (section === 'services' && a) {
+    src = getCityServiceImage(href);
+    context = { subject: subjectForService(a), city: CITIES.find((c) => c.slug === b)?.name };
+  } else if (section === 'areas' && a) {
+    src = getCityServiceImage(href);
+    context = { city: CITIES.find((c) => c.slug === a)?.name };
+  } else if (section === 'services') {
+    src = CONSTRUCTION_IMAGES.customHome;
+  } else if (section === 'resources') {
+    src = CONSTRUCTION_IMAGES.plans;
+  } else if (section === 'instant-estimate' || section === 'estimate') {
+    src = CONSTRUCTION_IMAGES.budget;
+  }
+  if (!src) return undefined;
+  const alt = contentImageAlt(src, context);
+  return alt ? { src, alt } : undefined;
+}
+
+function Cells({ cells }: { cells: Cell[] }) {
+  return (
+    <ul
+      className="lx-cells"
+      style={{
+        // One full row on desktop for up to six cards; otherwise rows of four. Tablets take rows of three or four.
+        ['--lx-cols' as string]: cells.length <= 6 ? cells.length : cells.length % 5 === 0 ? 5 : 4,
+        ['--lx-cols-tablet' as string]: cells.length % 4 === 0 ? 4 : 3,
+      }}
+    >
+      {cells.map((cell) => {
+        const image = pageImage(cell.href);
+        return (
+          <li key={cell.href + cell.label}>
+            <Link href={cell.href} className="lx-cell">
+              {image ? (
+                <span className="lx-cell-photo">
+                  <Image src={image.src} alt={image.alt} fill sizes="(max-width: 700px) 46vw, 300px" className="object-cover img-brand-grade" />
+                </span>
+              ) : null}
+              <span className="lx-cell-label">
+                <span>
+                  {cell.context ? <span className="sr-only">{cell.context} </span> : null}
+                  {cell.label}
+                </span>
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </span>
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function Group({ label, action, children }: { label: string; action?: { href: string; label: string; context?: string }; children: React.ReactNode }) {
+  return (
+    <div className="lx-explore-group">
+      <div className="lx-explore-head">
+        <h3 className="lx-explore-label">{label}</h3>
+        {action ? (
+          <Link href={action.href} className="lx-explore-all">
+            {action.context ? <span className="sr-only">{action.context} </span> : null}
+            {action.label}
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        ) : null}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+const MAX_READING = 6;
+
+/** Pillar guide, planning pages and the page's related pages, each once. */
+function readingLinks(serviceSlug: string | undefined, manifestPath: string | undefined, taken: Set<string>, readingOnly: boolean) {
   const guide = serviceSlug ? SERVICE_GUIDE[serviceSlug] : undefined;
-  /* Points at the canonical guide slug, not the legacy one. The old href still
-     resolved, but only through a 308, so every landing page on the site spent
-     an internal link on a redirect hop - which is what scripts/internal-links
-     audits for. */
-  const links: { href: string; label: string }[] = [
+  /* Points at the canonical guide slug, not the legacy one, so no landing page
+     spends an internal link on a redirect hop (scripts/internal-links audits it). */
+  const fixed = [
     guide ?? { href: guidePath(MASTER_GUIDE_SLUG), label: 'Treasure Valley building guide' },
     { href: '/services', label: 'Compare how we build' },
     { href: '/resources', label: 'Free home building planning worksheets' },
@@ -64,131 +164,99 @@ function ExploreFurther({ serviceSlug }: { serviceSlug?: string }) {
     // not price keeps the quote request this link has always opened (shared/instantEstimate.ts).
     { href: serviceSlug ? servicePrimaryAction(serviceSlug).href : INSTANT_ESTIMATE_PATH, label: 'Estimate your build cost' },
   ];
+  // Beside cards of places and services, the list holds guides and articles only.
+  const related = (manifestPath ? getManifestLinks(manifestPath) : [])
+    .filter((link) => !readingOnly || !/^\/(services|areas)\//.test(link.url))
+    .map((link) => ({ href: link.url, label: link.anchor }));
+  const out: { href: string; label: string }[] = [];
+  for (const link of [...fixed, ...related]) {
+    if (taken.has(link.href)) continue;
+    taken.add(link.href);
+    out.push(link);
+    if (out.length === MAX_READING) break;
+  }
+  return out;
+}
+
+function Reading({ links }: { links: { href: string; label: string }[] }) {
+  if (links.length === 0) return null;
   return (
-    <div className="border-t pt-10" style={{ borderColor: "var(--ed-line)" }}>
-      <h2 className="ed-h4 mb-6">Explore further</h2>
-      <ul className="grid sm:grid-cols-2 gap-2">
-        {links.map((link) => (
-          <li key={link.href} className="list-none">
-            <Link
-              href={link.href}
-              className="ed-body flex min-h-11 items-center text-[0.9375rem] transition-colors hover:[color:var(--ed-accent)] lg:min-h-0"
-            >
-              {link.label} →
-            </Link>
-          </li>
-        ))}
+    <Group label="Guides and planning">
+      <ul className="lx-reading">
+        {links.map((link) => {
+          const image = pageImage(link.href);
+          return (
+            <li key={link.href}>
+              <Link href={link.href} className="lx-reading-link">
+                {image ? (
+                  <span className="lx-reading-photo">
+                    <Image src={image.src} alt={image.alt} fill sizes="72px" className="object-cover img-brand-grade" />
+                  </span>
+                ) : null}
+                <span className="lx-reading-title">{link.label}</span>
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </li>
+          );
+        })}
       </ul>
-    </div>
+    </Group>
   );
 }
 
-export function RelatedLinks({ serviceSlug, citySlug, variant }: RelatedLinksProps) {
-  if (variant === 'service' && serviceSlug) {
-    return (
-      <div className="space-y-10">
-        <ExploreFurther serviceSlug={serviceSlug} />
-      </div>
-    );
+export function RelatedLinks({ serviceSlug, citySlug, variant, manifestPath, exclude = [] }: RelatedLinksProps) {
+  const taken = new Set<string>(exclude);
+  const service = SERVICES.find((s) => s.slug === serviceSlug);
+  const city = CITIES.find((c) => c.slug === citySlug);
+  const groups: React.ReactNode[] = [];
+
+  if (variant === 'area' && citySlug && city) {
+    // Same index rule as the sitemap: noindexed combos are never linked.
+    const cells = SERVICES.filter((s) => isIndexableCombo(s.slug, citySlug)).map((s) => ({
+      href: cityServicePath(s.slug, citySlug),
+      label: serviceLabel(s),
+      context: `${city.name}:`,
+    }));
+    if (cells.length > 0) {
+      cells.forEach((cell) => taken.add(cell.href));
+      groups.push(<Group key="services" label={`Home building services in ${city.name}`}><Cells cells={cells} /></Group>);
+    }
   }
 
-  if (variant === 'area' && citySlug) {
-    const city = CITIES.find((c) => c.slug === citySlug);
-    const indexableServices = SERVICES.filter((service) => isIndexableCombo(service.slug, citySlug));
-    if (indexableServices.length === 0) {
-      return (
-        <div className="space-y-10">
-          <ExploreFurther />
-        </div>
+  if (variant === 'city-service' && serviceSlug && citySlug && service && city) {
+    const cityCells: Cell[] = CITIES.filter(
+      (c) => c.slug !== citySlug && isIndexableCombo(serviceSlug, c.slug),
+    ).map((c) => ({ href: cityServicePath(serviceSlug, c.slug), label: c.name, context: `${service.name} in` }));
+    const serviceCells: Cell[] = SERVICES.filter(
+      (s) => s.slug !== serviceSlug && isIndexableCombo(s.slug, citySlug),
+    ).slice(0, 4).map((s) => ({ href: cityServicePath(s.slug, citySlug), label: serviceLabel(s), context: `${city.name}:` }));
+    [...cityCells, ...serviceCells].forEach((cell) => taken.add(cell.href));
+    taken.add(servicePath(serviceSlug));
+    taken.add(areaPath(citySlug));
+    if (cityCells.length > 0) {
+      groups.push(
+        <Group key="cities" label={`${serviceLabel(service)} in nearby cities`} action={{ href: servicePath(serviceSlug), label: 'All areas', context: `${service.name}:` }}>
+          <Cells cells={cityCells} />
+        </Group>,
       );
     }
-    return (
-      <div className="space-y-10">
-        <div>
-          {/* Distinct from the page body's "Home building services in {city}"
-              H2, which this block used to repeat word for word. */}
-          <h2 className="ed-h2-sm ed-statement-wide mb-8">
-            Choose a service page for {city?.name}
-          </h2>
-          <div className="ed-grid-balance grid sm:grid-cols-2 gap-4">
-            {indexableServices.map((service) => (
-              <Link key={service.slug} href={cityServicePath(service.slug, citySlug)}>
-                <div className="ed-card ed-card-link h-full">
-                  <h3 className="ed-h4">{serviceLabel(service)}</h3>
-                  <p className="ed-body mt-2 text-[0.875rem]">{service.shortDescription}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-        <ExploreFurther />
-      </div>
+    groups.push(
+      <Group key="services" label={`More services in ${city.name}`} action={{ href: areaPath(citySlug), label: `Home building in ${city.name}` }}>
+        {serviceCells.length > 0 ? <Cells cells={serviceCells} /> : null}
+      </Group>,
     );
   }
 
-  if (variant === 'city-service' && serviceSlug && citySlug) {
-    const otherCities = CITIES.filter(
-      (c) => c.slug !== citySlug && isIndexableCombo(serviceSlug, c.slug),
-    ).slice(0, 4);
-    const otherServices = SERVICES.filter(
-      (s) => s.slug !== serviceSlug && isIndexableCombo(s.slug, citySlug),
-    ).slice(0, 3);
-    return (
-      <div className="space-y-10">
-      <div className="grid md:grid-cols-2 gap-10">
-        {otherCities.length > 0 && (
-        <div>
-          <h2 className="ed-h4 mb-6">
-            Same service, nearby cities
-          </h2>
-          <ul className="space-y-2">
-            {otherCities.map((city) => (
-              <li key={city.slug}>
-                <Link
-                  href={cityServicePath(serviceSlug, city.slug)}
-                  className="ed-body text-[0.9375rem] transition-colors hover:[color:var(--ed-accent)]"
-                >
-                  {SERVICES.find((s) => s.slug === serviceSlug)?.name} in {city.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        )}
-        <div>
-          {otherServices.length > 0 && (
-          <>
-          <h2 className="ed-h4 mb-6">
-            More services in {CITIES.find((c) => c.slug === citySlug)?.name}
-          </h2>
-          <ul className="space-y-2">
-            {otherServices.map((service) => (
-              <li key={service.slug}>
-                <Link
-                  href={cityServicePath(service.slug, citySlug)}
-                  className="ed-body text-[0.9375rem] transition-colors hover:[color:var(--ed-accent)]"
-                >
-                  {serviceLabel(service)}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          </>
-          )}
-          <div className={`${otherServices.length > 0 ? 'mt-8 border-t pt-6 ' : ''}flex flex-wrap gap-x-10 gap-y-4`} style={{ borderColor: "var(--ed-line)" }}>
-            <Link href={servicePath(serviceSlug)} className="ed-link">
-              All {SERVICES.find((s) => s.slug === serviceSlug)?.name} areas →
-            </Link>
-            <Link href={areaPath(citySlug)} className="ed-link">
-              Home building in {CITIES.find((c) => c.slug === citySlug)?.name} →
-            </Link>
-          </div>
-        </div>
-      </div>
-        <ExploreFurther serviceSlug={serviceSlug} />
-      </div>
-    );
-  }
+  const reading = readingLinks(serviceSlug, manifestPath, taken, groups.length > 0);
+  if (groups.length === 0 && reading.length === 0) return null;
 
-  return null;
+  return (
+    <div className="lx-explore">
+      <h2 className="ed-h2-sm ed-statement-wide">Keep exploring</h2>
+      <div className="lx-explore-grid">
+        {groups}
+        <Reading links={reading} />
+      </div>
+    </div>
+  );
 }

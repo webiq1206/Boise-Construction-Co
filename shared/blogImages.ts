@@ -3,7 +3,8 @@ import {
   HUB_HERO_IMAGES,
   type BlogImageEntry,
 } from './blogImageRegistry';
-import { contentImageAlt } from './imageAlts';
+import { imageDescription } from './imageAlts';
+import { cityFromTags, localAlt, subjectFromTags } from './localAlt';
 import { SITE_IMAGES } from './siteImages';
 
 const DEFAULT_BLOG_IMAGE = SITE_IMAGES.hero;
@@ -26,8 +27,12 @@ export function getBlogImageForSlug(
 
 export function getBlogImageAlt(slug: string): string {
   const entry = BLOG_IMAGE_REGISTRY[slug];
-  if (!entry) return 'Boise Construction Co new home construction';
-  return contentImageAlt(entry.hero) || entry.alt;
+  if (!entry) return localAlt('Boise Construction Co new home construction');
+  // The work and the place first (from the post's topic tags), then what the picture shows.
+  return localAlt(imageDescription(entry.hero) || entry.alt, {
+    subject: subjectFromTags(entry.topicTags),
+    city: cityFromTags(entry.topicTags),
+  });
 }
 
 export function getBlogHeroImage(
@@ -101,10 +106,10 @@ export function getArticleInlineFigures(
       figures.push({
         afterSectionIndex: Math.floor(sectionCount / 2),
         src: hubHero,
-        alt: contentImageAlt(hubHero)
+        alt: localAlt(imageDescription(hubHero)
           || Object.values(BLOG_IMAGE_REGISTRY).find((image) => image.hero === hubHero)?.alt
           || INLINE_HUB_ALTS[hubSlug]
-          || `${hubSlug.replace(/-/g, ' ')} imagery`,
+          || `${hubSlug.replace(/-/g, ' ')} imagery`),
       });
     }
   }

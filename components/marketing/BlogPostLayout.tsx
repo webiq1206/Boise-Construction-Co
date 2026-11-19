@@ -23,9 +23,9 @@ guidePath,
 isCategoryHubIndexable,
 } from '@/shared/contentHubs';
 import { getResourcesForBlog } from '@/shared/guideResources';
-import { ArrowRight,BookOpen,Calendar,Tag,User } from 'lucide-react';
+import { ArrowRight,BookOpen,Tag } from 'lucide-react';
 import Link from 'next/link';
-import { ArticleSidebar,ArticleSidebarCta } from './ArticleSidebar';
+import { ArticleSidebar } from './ArticleSidebar';
 import { BlogEndCta } from './BlogEndCta';
 import { BlogHeroBanner } from './BlogHeroBanner';
 import { Chip } from './Chip';
@@ -75,27 +75,17 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
             ]}
           />
 
-          <header className="interior-article-header">
-            <Chip className="mb-4">{hub?.categoryLabel ?? post.category}</Chip>
+          <header className="interior-article-header lx-article-header">
+            <p className="lx-cat">{hub?.categoryLabel ?? post.category}</p>
             <h1 className="text-3xl md:text-4xl lg:text-[2.75rem] font-serif tracking-tight text-foreground mb-4">
               {post.title}
             </h1>
             <p className="text-lg text-muted-foreground mb-5 max-w-2xl">{post.excerpt}</p>
-            <div role="presentation" className="border-t border-border/60 mb-5" />
-            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-              <span className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                {formatDate(post.publishedAt)}
-              </span>
+            <p className="lx-meta">
+              <span>{formatDate(post.publishedAt)}</span>
               <span>{readingTime} min read</span>
-              <Link
-                href={CONTENT_AUTHOR.url}
-                className="flex items-center gap-2 hover:text-foreground transition-colors"
-              >
-                <User className="h-4 w-4" />
-                {CONTENT_AUTHOR.name}
-              </Link>
-            </div>
+              <Link href={CONTENT_AUTHOR.url}>{CONTENT_AUTHOR.name}</Link>
+            </p>
           </header><BlogHeroBanner src={heroImage} alt={heroAlt}/>
 
           <GuideJumpChips headings={tocHeadings} />
@@ -103,10 +93,18 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
           <div className="interior-article-grid">
             <div className="flex-1 min-w-0 w-full">
               <GuideContentBlocks quickAnswer={post.quickAnswer} keyTakeaways={post.keyTakeaways}>
+                <SectionedArticle
+                  html={contentWithIds}
+                  testId="blog-content"
+                  inlineFigures={inlineFigures}
+                />
+
+                {showInlineEstimate && <InlineEstimateCTA />}
+
                 <GuideResourceDownloads resources={resources} />
 
                 {hub && pillarSlug && (
-                  <div className="rounded-lg border border-accent/20 bg-accent/5 p-5 md:p-6 mb-8">
+                  <div className="rounded-lg border border-accent/20 bg-accent/5 p-5 md:p-6 mt-10">
                     <div className="flex items-center gap-2 mb-2">
                       <BookOpen className="h-5 w-5 text-accent-legible" />
                       <p className="text-sm font-normal">Part of a larger guide</p>
@@ -136,13 +134,6 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                   </div>
                 )}
 
-                <SectionedArticle
-                  html={contentWithIds}
-                  testId="blog-content"
-                  inlineFigures={inlineFigures}
-                />
-
-                {showInlineEstimate && <InlineEstimateCTA />}
               </GuideContentBlocks>
 
               {post.faqs && post.faqs.length > 0 && (
@@ -192,9 +183,6 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                 </div>
               )}
 
-              <div className="lg:hidden mt-10">
-                <ArticleSidebarCta description="See what your project might cost with a preliminary Treasure Valley planning range." />
-              </div>
             </div>
 
             <aside className="article-rail hidden lg:block w-72 xl:w-80 flex-shrink-0 sticky top-24 self-start">

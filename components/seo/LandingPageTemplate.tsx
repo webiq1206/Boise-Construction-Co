@@ -1,18 +1,13 @@
 import { InteriorHero,InteriorProjectAside } from '@/components/approved/InteriorLayout';
 import { HeroTextLink,PrimaryCta } from '@/components/approved/PrimaryCta';
 import { Section } from '@/components/marketing';
-import { RelatedPostCards } from '@/components/marketing/RelatedPostCards';
 import { ConsultCTA } from '@/components/modals/ConsultCTA';
 import { Reveal } from '@/components/Reveal';
 import { FeaturedBeforeAfterSection } from '@/components/sections/FeaturedBeforeAfterSection';
-import {
-Accordion,
-AccordionContent,
-AccordionItem,
-AccordionTrigger,
-} from '@/components/ui/accordion';
 import { GRAIN_URL } from '@/lib/grain';
 import { contentImageAlt } from '@/shared/imageAlts';
+import { localAlt, subjectForService } from '@/shared/localAlt';
+import { CITIES } from '@/shared/contentData';
 import { CTA_QUOTE } from '@/shared/ctaCopy';
 import { INSTANT_ESTIMATE_ACTION, QUOTE_REQUEST_PATH, type PrimaryAction } from '@/shared/instantEstimate';
 import { hasPlanningFigure } from '@/shared/contentData';
@@ -301,6 +296,9 @@ export function LandingPageTemplate({
   const lead = splitHeroLead(overviewParagraphs && overviewParagraphs.length > 0 ? overviewParagraphs : [overview], heroLine);
   const emphasisInHero = !!overviewEmphasis && lead.line.includes(overviewEmphasis);
   const planningFigure = planningFrom && hasPlanningFigure(planningFrom) ? planningFrom : undefined;
+  // Every photograph names this page's work and place before it describes the picture.
+  const altContext = { subject: subjectForService(related.serviceSlug), city: CITIES.find((c) => c.slug === related.citySlug)?.name };
+  const pageAlt = (src: string | undefined) => contentImageAlt(src, altContext);
 
   return (
     <div className={`flex flex-col${priorityPlanning ? ` ${priorityStyles.page}` : ''}`}>
@@ -309,7 +307,7 @@ export function LandingPageTemplate({
           eyebrow, H1, ONE support line, the planning figure as a chip, one
           primary action and the phone as a text link. The rest of the overview
           opens the section directly below, unchanged. */}
-      <InteriorHero imageSrc={heroImageUrl} imageAlt={heroImageAlt ?? contentImageAlt(heroImageUrl)} layout="split">
+      <InteriorHero imageSrc={heroImageUrl} imageAlt={heroImageAlt ? localAlt(heroImageAlt, altContext) : pageAlt(heroImageUrl)} layout="split">
           {!priorityPlanning && <HeroBreadcrumbs items={breadcrumbs} />}
           <p data-speakable="summary" className="sr-only">{speakableSummary}</p>
           {!priorityPlanning && eyebrow && <p className="ed-eyebrow interior-hero-eyebrow">{eyebrow}</p>}
@@ -329,6 +327,17 @@ export function LandingPageTemplate({
             {!priorityPlanning && <HeroTextLink href={SITE_CONFIG.phoneHref}>Call {SITE_CONFIG.phone}</HeroTextLink>}
           </div>
         </InteriorHero>
+
+      {/* Three facts a visitor can check, each already stated elsewhere on the page. */}
+      {!priorityPlanning && (
+        <ul className="lx-facts" aria-label="At a glance">
+          {planningFigure && (
+            <li><strong>From {planningFigure}</strong><span>Planning figure, confirmed at the free in-home visit</span></li>
+          )}
+          <li><strong>Free in-home visit</strong><span>60 to 90 minutes, with planning guidance and no obligation</span></li>
+          <li><strong>Line-item budget</strong><span>Documented selections and written change orders</span></li>
+        </ul>
+      )}
 
       {(priorityPlanning || lead.rest.length > 0 || planningFigure) && (
         <section className="interior-hero-more" aria-label="Overview">
@@ -409,7 +418,7 @@ export function LandingPageTemplate({
             </Reveal>
             <Reveal delay={60}>
               <ul
-                className="ed-matrix mt-[clamp(40px,5vw,72px)] list-none p-0"
+                className="ed-matrix lx-benefits mt-[clamp(40px,5vw,72px)] list-none p-0"
                 style={{ ['--ed-cols' as string]: benefits.length === 4 ? 4 : Math.min(benefits.length, 3), ['--ed-cell-h' as string]: '0' }}
               >
                 {/* Each benefit is one sentence and renders whole. Splitting it at a
@@ -429,7 +438,7 @@ export function LandingPageTemplate({
       {/* ─── Full-bleed image breather ─── */}
       {breatherImage && (
         <section className="relative h-[clamp(220px,28vw,360px)] overflow-hidden">
-          <Image src={breatherImage} alt={contentImageAlt(breatherImage)} fill sizes="100vw" className="object-cover img-brand-grade" />
+          <Image src={breatherImage} alt={pageAlt(breatherImage)} fill sizes="100vw" className="object-cover img-brand-grade" />
           <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: GRAIN_URL, backgroundRepeat: 'repeat', opacity: 0.03 }} />
         </section>
       )}
@@ -446,7 +455,7 @@ export function LandingPageTemplate({
           <div className="ed-panel ed-panel-reverse">
             <div className="ed-panel-media">
               {processImage && (
-                <Image src={processImage} alt={contentImageAlt(processImage)} fill className="object-cover img-brand-grade" sizes="(max-width: 820px) 100vw, (max-width: 1100px) 48vw, 57vw" />
+                <Image src={processImage} alt={pageAlt(processImage)} fill className="object-cover img-brand-grade" sizes="(max-width: 820px) 100vw, (max-width: 1100px) 48vw, 57vw" />
               )}
               <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: GRAIN_URL, backgroundRepeat: 'repeat', opacity: 0.03 }} />
             </div>
@@ -457,7 +466,7 @@ export function LandingPageTemplate({
                   Our <em className="not-italic" style={accent}>process</em>, step by step
                 </h2>
               </Reveal>
-              <div className="ed-steps mt-[clamp(32px,4vw,56px)]">
+              <div className="ed-steps lx-steps mt-[clamp(32px,4vw,56px)]">
                 {processSteps.map((step, i) => (
                   <Reveal key={step.title} delay={Math.min(i, 5) * 60}>
                     <div className="ed-step">
@@ -588,7 +597,7 @@ export function LandingPageTemplate({
                         <div className="relative aspect-[16/10] overflow-hidden" style={{ border: '1px solid var(--ed-line)' }}>
                           <Image
                             src={section.figure.src}
-                            alt={contentImageAlt(section.figure.src)}
+                            alt={pageAlt(section.figure.src)}
                             fill
                             sizes="(max-width: 768px) 100vw, 720px"
                             className="object-cover img-brand-grade"
@@ -626,10 +635,10 @@ export function LandingPageTemplate({
                     <article className="flex h-full flex-col" style={{ border: '1px solid var(--ed-line)' }}>
                       <div className="grid grid-cols-2">
                         <div className="relative aspect-[4/3]">
-                          <Image src={project.exteriorImageUrl} alt={contentImageAlt(project.exteriorImageUrl) || 'Exterior view'} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
+                          <Image src={project.exteriorImageUrl} alt={pageAlt(project.exteriorImageUrl) || localAlt('Exterior view', altContext)} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                         </div>
                         <div className="relative aspect-[4/3]">
-                          <Image src={project.interiorImageUrl} alt={contentImageAlt(project.interiorImageUrl) || 'Interior view'} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
+                          <Image src={project.interiorImageUrl} alt={pageAlt(project.interiorImageUrl) || localAlt('Interior view', altContext)} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                         </div>
                       </div>
                       <div className="p-6">
@@ -675,27 +684,24 @@ export function LandingPageTemplate({
                 Frequently asked <em className="not-italic" style={accent}>questions</em>
               </h2>
             </div>
-            <Accordion type="single" collapsible className="w-full border-t" style={line}>
+            {/* Native disclosure: every answer stays in the HTML for search and
+                assistive technology, and one question is open at a time. */}
+            <div className="lx-faq w-full border-t" style={line}>
               {faqs.map((faq, i) => (
-                <AccordionItem key={i} value={`faq-${i}`} className="border-0 border-b" style={line}>
-                  <AccordionTrigger className="ed-h4 py-6 text-left hover:no-underline [&[data-state=open]]:underline [&[data-state=open]]:underline-offset-4">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="ed-body pb-7 text-[0.9375rem]">
-                    <InlineLinks text={faq.answer} links={faq.links} />
-                  </AccordionContent>
-                </AccordionItem>
+                <details key={faq.question} name="landing-faq" open={i === 0} className="border-b" style={line}>
+                  <summary><h3 className="ed-h4 text-left">{faq.question}</h3></summary>
+                  <p className="ed-body text-[0.9375rem]"><InlineLinks text={faq.answer} links={faq.links} /></p>
+                </details>
               ))}
-            </Accordion>
+            </div>
           </div>
         </div>
       </Section>
 
       {/* ─── Related links & posts ─── */}
       <Section surface="deep" spacing="lg" edge>
-        <div className="ed-shell space-y-12">
-          <Reveal><RelatedLinks {...related} /></Reveal>
-          {manifestPath && (<Reveal><RelatedPostCards path={manifestPath} /></Reveal>)}
+        <div className="ed-shell">
+          <RelatedLinks {...related} manifestPath={manifestPath} exclude={(sections ?? []).flatMap((section) => section.links?.map((link) => link.href) ?? [])} />
         </div>
       </Section>
 

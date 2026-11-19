@@ -79,7 +79,7 @@ export default function AreasHubPage() {
               description="Custom homes, semi-custom homes, and builds on your own lot in Ada County and Canyon County."
               align="left"
             />
-            <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
+            <div className="ed-cards-3 gap-5">
               {SERVICE_AREA_CITIES.map((city, i) => (
                 <Reveal key={city.slug} delay={i * 40}>
                   <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />

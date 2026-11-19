@@ -108,7 +108,7 @@ test('the homepage video preserves family content, technical poster fallback and
   assert.match(cta[0], /fam-btn--hero fam-btn--lg/);
   assert.equal(cta[1], 'Get an instant estimate');
   assert.match(html, /<a href="tel:\+12084771169" class="fam-hero-link">Call or text \(208\) 477-1169<\/a>/);
-  assert.match(html, /<img data-hero-poster="" src="\/images\/construction\/boise-construction-co-poster.jpg" alt=""/);
+  assert.match(html, /<img data-hero-poster="" src="\/images\/construction\/boise-construction-co-poster.jpg" alt="Custom home building in Boise, Idaho by Boise Construction Co"/);
   assert.match(html, /<video[^>]*muted=""[^>]*loop=""[^>]*playsinline=""[^>]*preload="none"/);
   const video = html.match(/<video\b[^>]*>/)?.[0];
   assert.ok(video, 'decorative background video');

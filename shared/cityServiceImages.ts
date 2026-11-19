@@ -7,7 +7,10 @@
  * public/images/construction.
  *
  * Each service has a primary image that matches what the service actually is.
- * City variants rotate through relevant construction stages and outcomes.
+ * City variants rotate through relevant construction stages and outcomes. The
+ * rotations were widened on 19 November 2026 with photographs from the
+ * owner's Photo Dump so the nine city pages of a service show nine pictures
+ * wherever the service has that many relevant ones.
  * Lot evaluation and shop-home pages use narrower shortlists so unrelated
  * completed houses do not substitute for the advertised service. Related
  * city pages may reuse appropriate representative imagery.
@@ -38,33 +41,36 @@ const CITY_SLUGS = [
 const SERVICE_ROTATION: Record<string, readonly string[]> = {
   "custom-home-builder": [
     CONSTRUCTION_IMAGES.customHome,
+    CONSTRUCTION_IMAGES.foothillsHome,
+    CONSTRUCTION_IMAGES.gableEntryHome,
+    CONSTRUCTION_IMAGES.hillsideHomeDusk,
     CONSTRUCTION_IMAGES.interior,
-    CONSTRUCTION_IMAGES.framing,
-    CONSTRUCTION_IMAGES.kitchen,
-    CONSTRUCTION_IMAGES.foundation,
-    CONSTRUCTION_IMAGES.outdoor,
-    CONSTRUCTION_IMAGES.meeting,
-    CONSTRUCTION_IMAGES.foothills,
+    CONSTRUCTION_IMAGES.oakKitchen,
+    CONSTRUCTION_IMAGES.fireplaceRoom,
+    CONSTRUCTION_IMAGES.rearPatio,
+    CONSTRUCTION_IMAGES.twoStoryStreet,
   ],
   "semi-custom-homes": [
     CONSTRUCTION_IMAGES.semiCustom,
+    CONSTRUCTION_IMAGES.islandKitchen,
+    CONSTRUCTION_IMAGES.homeAtDusk,
     CONSTRUCTION_IMAGES.kitchen,
     CONSTRUCTION_IMAGES.framing,
     CONSTRUCTION_IMAGES.interior,
     CONSTRUCTION_IMAGES.plans,
-    CONSTRUCTION_IMAGES.foundation,
-    CONSTRUCTION_IMAGES.customHome,
-    CONSTRUCTION_IMAGES.meeting,
+    CONSTRUCTION_IMAGES.primaryBath,
+    CONSTRUCTION_IMAGES.twoStoryStreet,
   ],
   "build-on-your-lot": [
     CONSTRUCTION_IMAGES.lot,
     CONSTRUCTION_IMAGES.foundation,
     CONSTRUCTION_IMAGES.ruralSite,
     CONSTRUCTION_IMAGES.framing,
-    CONSTRUCTION_IMAGES.customHome,
+    CONSTRUCTION_IMAGES.gableEntryHome,
     CONSTRUCTION_IMAGES.foothills,
-    CONSTRUCTION_IMAGES.semiCustom,
+    CONSTRUCTION_IMAGES.homeAtDusk,
     CONSTRUCTION_IMAGES.meeting,
+    CONSTRUCTION_IMAGES.foothillsHome,
   ],
   "design-build": [
     CONSTRUCTION_IMAGES.meeting,
@@ -73,8 +79,9 @@ const SERVICE_ROTATION: Record<string, readonly string[]> = {
     CONSTRUCTION_IMAGES.budget,
     CONSTRUCTION_IMAGES.roughIn,
     CONSTRUCTION_IMAGES.interior,
-    CONSTRUCTION_IMAGES.customHome,
+    CONSTRUCTION_IMAGES.oakKitchen,
     CONSTRUCTION_IMAGES.foundation,
+    CONSTRUCTION_IMAGES.hillsideHomeDusk,
   ],
   "home-plans-design": [
     CONSTRUCTION_IMAGES.plans,
@@ -82,20 +89,21 @@ const SERVICE_ROTATION: Record<string, readonly string[]> = {
     CONSTRUCTION_IMAGES.kitchen,
     CONSTRUCTION_IMAGES.meeting,
     CONSTRUCTION_IMAGES.outdoor,
-    CONSTRUCTION_IMAGES.customHome,
-    CONSTRUCTION_IMAGES.semiCustom,
-    CONSTRUCTION_IMAGES.framing,
+    CONSTRUCTION_IMAGES.fireplaceRoom,
+    CONSTRUCTION_IMAGES.primaryBath,
+    CONSTRUCTION_IMAGES.islandKitchen,
+    CONSTRUCTION_IMAGES.rearPatio,
   ],
   "home-additions": [
     CONSTRUCTION_IMAGES.framing,
+    CONSTRUCTION_IMAGES.additionRear,
+    CONSTRUCTION_IMAGES.additionSecondStory,
+    CONSTRUCTION_IMAGES.additionSunroom,
+    CONSTRUCTION_IMAGES.additionGarage,
+    CONSTRUCTION_IMAGES.additionFraming,
     CONSTRUCTION_IMAGES.interior,
-    CONSTRUCTION_IMAGES.meeting,
     CONSTRUCTION_IMAGES.foundation,
-    CONSTRUCTION_IMAGES.kitchen,
-    CONSTRUCTION_IMAGES.customHome,
-    CONSTRUCTION_IMAGES.roughIn,
     CONSTRUCTION_IMAGES.plans,
-    CONSTRUCTION_IMAGES.outdoor,
   ],
   "lot-evaluation": [
     CONSTRUCTION_IMAGES.lot,
@@ -105,8 +113,20 @@ const SERVICE_ROTATION: Record<string, readonly string[]> = {
     CONSTRUCTION_IMAGES.plans,
     CONSTRUCTION_IMAGES.meeting,
   ],
+  adu: [
+    CONSTRUCTION_IMAGES.adu,
+    CONSTRUCTION_IMAGES.aduBackyard,
+    CONSTRUCTION_IMAGES.aduFoothills,
+    CONSTRUCTION_IMAGES.aduStudio,
+    CONSTRUCTION_IMAGES.aduDetached,
+    CONSTRUCTION_IMAGES.aduAttached,
+    CONSTRUCTION_IMAGES.aduStucco,
+    CONSTRUCTION_IMAGES.aduGarageConversion,
+  ],
   "shop-homes-barndominiums": [
     CONSTRUCTION_IMAGES.shopHome,
+    CONSTRUCTION_IMAGES.shopBuilding,
+    CONSTRUCTION_IMAGES.detachedGarage,
     CONSTRUCTION_IMAGES.framing,
     CONSTRUCTION_IMAGES.foundation,
     CONSTRUCTION_IMAGES.ruralSite,

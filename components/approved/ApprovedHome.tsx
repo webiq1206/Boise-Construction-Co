@@ -5,6 +5,7 @@ import {familyButtonClass} from '@/components/family/Button';
 import {Accordion,AccordionItem,AccordionTrigger,AccordionContent} from '@/components/ui/accordion';
 import {FAQSection} from '@/components/FAQSection';
 import {contentImageAlt} from '@/shared/imageAlts';
+import {localAlt} from '@/shared/localAlt';
 import {CTA_PRIMARY,CTA_QUOTE} from '@/shared/ctaCopy';
 import {INSTANT_ESTIMATE_PATH} from '@/shared/instantEstimate';
 import {PlanningRangeExplorer} from '@/components/PlanningRangeExplorer';
@@ -110,7 +111,7 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
  {/* 7. Who you are hiring. Full family photograph, never cropped. */}
  <section className="f-section f-container" id="who-you-are-hiring" aria-labelledby="who-hiring-title">
   <div className="fr-founder">
-   <img className="family-people-photo" src="/images/about/perkins-family-meridian-idaho-1x1.webp" alt="Nick Perkins with his wife and five children at a pumpkin patch" width="2048" height="2048" loading="lazy" style={{objectFit:'contain'}}/>
+   <img className="family-people-photo" src="/images/about/perkins-family-meridian-idaho-1x1.webp" alt="Nick Perkins with his wife and five children at a pumpkin patch in Meridian, Idaho" width="2048" height="2048" loading="lazy" style={{objectFit:'contain'}}/>
    <div>
     <p className="f-eyebrow">WHO YOU ARE HIRING</p>
     <h2 id="who-hiring-title">Nick Perkins, founder.</h2>
@@ -136,7 +137,7 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
  </section>
 
  {/* 9. Where we build. */}
- <ServiceArea image={{src:'/family/drive/square-2-stone-entry-with-oak-front-door.webp',alt:'Oak front door, stone entry and covered eaves',width:1200,height:1200}}><p className="f-eyebrow">AT HOME IN IDAHO</p><h2>Local people.<br/><em>Valley-wide reach.</em></h2><p>Serving Ada County and Canyon County.</p><nav className="fr-cities" aria-label="Service area cities">{cities.map(city=><a key={city} href={`/areas/${city.toLowerCase().replaceAll(" ","-")}`} aria-label={`Home builders in ${city}`}>{city}</a>)}</nav></ServiceArea>
+ <ServiceArea image={{src:'/family/drive/square-2-stone-entry-with-oak-front-door.webp',alt:localAlt('Oak front door, stone entry and covered eaves',{subject:'custom home building'}),width:1200,height:1200}}><p className="f-eyebrow">AT HOME IN IDAHO</p><h2>Local people.<br/><em>Valley-wide reach.</em></h2><p>Serving Ada County and Canyon County.</p><nav className="fr-cities" aria-label="Service area cities">{cities.map(city=><a key={city} href={`/areas/${city.toLowerCase().replaceAll(" ","-")}`} aria-label={`Home builders in ${city}`}>{city}</a>)}</nav></ServiceArea>
 
  <FAQSection/>
  </div>;}
