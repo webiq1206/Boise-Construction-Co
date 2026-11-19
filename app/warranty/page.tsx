@@ -217,11 +217,11 @@ export default function WarrantyPage() {
                 <h2 className="ed-h2 ed-statement">Common questions</h2>
               </div>
               <div>
-                <div className="divide-y divide-border border-y border-border">
-                  {FAQS.map((faq) => (
-                    <details key={faq.question} className="group py-4">
-                      <summary className="cursor-pointer ed-h4 py-2">{faq.question}</summary>
-                      <p className="ed-body mt-3 pb-2">{faq.answer}</p>
+                <div className="lx-faq divide-y divide-border border-y border-border">
+                  {FAQS.map((faq, i) => (
+                    <details key={faq.question} name="warranty-faq" open={i === 0}>
+                      <summary><h3 className="ed-h4 text-left">{faq.question}</h3></summary>
+                      <p className="ed-body">{faq.answer}</p>
                     </details>
                   ))}
                 </div>

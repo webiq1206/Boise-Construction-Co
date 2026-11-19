@@ -8,7 +8,9 @@ import { buildCanonical,FEED_ALTERNATES } from '@/lib/page-metadata';
 import { generateBreadcrumbSchema,generateCollectionPageSchema } from '@/lib/schema';
 import { getBaseUrl } from '@/lib/seo';
 import { BLOG_POSTS } from '@/shared/blogContent';
-import { getAbsoluteImageUrl,getBlogImageAlt,getHubHeroImage } from '@/shared/blogImages';
+import { getAbsoluteImageUrl,getBlogHeroImage,getBlogImageAlt,getHubHeroImage } from '@/shared/blogImages';
+import { freePicture } from '@/shared/pictureKey';
+import { CONSTRUCTION_IMAGES } from '@/shared/siteImages';
 import { contentImageAlt } from '@/shared/imageAlts';
 import {
 categoryHubPath,
@@ -90,7 +92,12 @@ export default async function BlogCategoryHubPage(
     redirect(hub.hubSlug === 'treasure-valley-locations' ? '/areas' : '/blog');
   }
 
-  const hubHero = getHubHeroImage(params.hubSlug);
+  // The topic photograph never repeats a card photograph below it.
+  const preferredHubHero = getHubHeroImage(params.hubSlug);
+  const hubHero = freePicture(
+    [preferredHubHero, ...Object.values(CONSTRUCTION_IMAGES)],
+    posts.map((post) => getBlogHeroImage(post.slug, post.heroImage)),
+  );
   const pillarSlug = hub.pillarSlug;
   const hubAlt = contentImageAlt(hubHero) || (pillarSlug ? getBlogImageAlt(pillarSlug) : `${hub.title} articles`);
 

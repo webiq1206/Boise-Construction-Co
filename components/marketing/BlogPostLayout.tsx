@@ -176,7 +176,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                 <div className="mt-10 pt-8 border-t border-border lg:hidden">
                   <div className="flex items-center gap-2 flex-wrap">
                     <Tag className="h-4 w-4 text-muted-foreground" />
-                    {post.tags.map((tag) => (
+                    {Array.from(new Set(post.tags)).map((tag) => (
                       <Chip key={tag}>{tag}</Chip>
                     ))}
                   </div>
@@ -197,7 +197,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                     <h3 className="font-normal text-sm">Topics</h3>
                   </div>
                   <div className="flex flex-wrap gap-1.5">
-                    {post.tags.map((tag) => (
+                    {Array.from(new Set(post.tags)).map((tag) => (
                       <Chip key={tag}>{tag}</Chip>
                     ))}
                   </div>
@@ -210,7 +210,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
 
       <Section spacing="sm" divider>
         <div className="container px-4 max-w-6xl mx-auto">
-          <RelatedPostCards path={blogPath} />
+          <RelatedPostCards path={blogPath} pageImages={[heroImage, ...inlineFigures.map((figure) => figure.src)]} />
         </div>
       </Section>
 

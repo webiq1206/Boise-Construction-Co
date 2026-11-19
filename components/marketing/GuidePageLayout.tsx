@@ -30,6 +30,7 @@ import { GuideContentBlocks,GuideJumpChips } from './GuideContentBlocks';
 import { GuideResourceDownloads } from './GuideResourceDownloads';
 import { InlineEstimateCTA } from './InlineEstimateCTA';
 import { RelatedPostCards } from './RelatedPostCards';
+import { anchorCase } from '@/lib/anchorCase';
 import { Section } from './Section';
 import { SectionedArticle } from './SectionedArticle';
 
@@ -118,7 +119,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                             href={`/blog/${c.slug}`}
                             className="text-sm text-accent-legible hover:underline inline-flex items-center"
                           >
-                            {c.title}
+                            {anchorCase(c.title)}
                             <ArrowRight className="ml-1 h-3 w-3 shrink-0" />
                           </Link>
                         </li>
@@ -170,7 +171,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                 <div className="mt-10 pt-8 border-t border-border">
                   <div className="flex items-center gap-2 flex-wrap">
                     <Tag className="h-4 w-4 text-muted-foreground" />
-                    {guide.tags.map((tag) => (
+                    {Array.from(new Set(guide.tags)).map((tag) => (
                       <Chip key={tag}>{tag}</Chip>
                     ))}
                   </div>
@@ -188,7 +189,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
 
       <Section spacing="sm" divider>
         <div className="container px-4 max-w-6xl mx-auto">
-          <RelatedPostCards path={guideUrl} limit={8} />
+          <RelatedPostCards path={guideUrl} limit={8} pageImages={[heroImage, ...inlineFigures.map((figure) => figure.src)]} />
         </div>
       </Section>
 
