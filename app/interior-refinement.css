@@ -343,3 +343,10 @@
   .approved-shell .lx-reading { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (prefers-reduced-motion: reduce) { .approved-shell .lx-cell, .approved-shell .lx-cell-photo img { transition: none; } }
+
+/* Project aside: its supporting sentences are body copy. They were set at the
+   H1 size, so a two-line timeline note ran to a dozen display lines on a phone. */
+.approved-shell .interior-project-aside > p:not(.interior-eyebrow):not(.interior-statement) {
+  font: 400 var(--fs-body)/var(--lh-body) var(--font-sans);
+  letter-spacing: 0;
+}
