@@ -350,3 +350,23 @@
   font: 400 var(--fs-body)/var(--lh-body) var(--font-sans);
   letter-spacing: 0;
 }
+
+/* Blog and guide index on phones: after the lead article, each post is one
+   compact row (photograph, topic, title) so the list reads like an app list
+   and a visitor sees four or five posts per screen, not one. The whole row is
+   the link; date and excerpt return from tablet up. */
+@media (max-width: 700px) {
+  .approved-shell .lx-blog-card {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    align-items: stretch;
+    min-height: 112px;
+  }
+  .approved-shell .lx-blog-card .lx-blog-photo { aspect-ratio: auto; height: 100%; min-height: 112px; }
+  /* Favour the top of the frame so a square crop never cuts off a person's head. */
+  .approved-shell .lx-blog-card .lx-blog-photo img { object-position: 50% 20%; }
+  .approved-shell .lx-blog-card .lx-blog-body { justify-content: center; padding: var(--space-3, 12px) var(--space-4, 16px); }
+  .approved-shell .lx-blog-card .lx-blog-body > div { margin-bottom: var(--space-2, 8px); }
+  .approved-shell .lx-blog-card :is(.lx-blog-date, .lx-blog-excerpt, .lx-blog-more) { display: none; }
+  .approved-shell .lx-blog-card h3 { margin: 0; font-size: 18px; line-height: 1.25; }
+}
