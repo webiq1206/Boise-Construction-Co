@@ -103,8 +103,8 @@ export default function GuidesIndexPage() {
           </h2>
           <div className="ed-cards-3 gap-6">
             {pillarGuides.map((guide) => (
-              <MarketingCard key={guide.slug} padding="none" className="flex flex-col h-full overflow-hidden">
-                <div className="relative aspect-[16/9] overflow-hidden">
+              <MarketingCard key={guide.slug} padding="none" className="lx-blog-card lx-guide-card flex flex-col h-full overflow-hidden">
+                <div className="lx-blog-photo relative aspect-[16/9] overflow-hidden">
                   <Image
                     src={getBlogHeroImage(guide.slug, guide.heroImage)}
                     alt={getBlogImageAlt(guide.slug)}
@@ -113,14 +113,15 @@ export default function GuidesIndexPage() {
                     className="object-cover img-brand-grade"
                   />
                 </div>
-                <div className="p-6 flex flex-col flex-1">
+                <div className="lx-blog-body p-6 flex flex-col flex-1">
                   <BookOpen className="h-5 w-5 text-accent-legible mb-3" />
                   <h3 className="font-normal text-lg mb-2">{guide.title}</h3>
                   <p className="text-sm text-muted-foreground flex-1 mb-3">{guide.excerpt}</p>
                   <GuideCardStats guide={guide} />
                   <Link
                     href={guidePath(guide.slug)}
-                    className="inline-flex items-center text-sm text-accent-legible hover:underline"
+                    aria-label={`Read guide: ${guide.title}`}
+                    className="lx-guide-link inline-flex items-center text-sm text-accent-legible hover:underline"
                   >
                     Read guide
                     <ArrowRight className="ml-1 h-4 w-4" />
@@ -137,8 +138,8 @@ export default function GuidesIndexPage() {
           </h2>
           <div className="ed-cards-3 gap-4">
             {locationGuides.map((guide) => (
-              <MarketingCard key={guide.slug} padding="none" className="flex flex-col h-full overflow-hidden">
-                <div className="relative aspect-[4/3] overflow-hidden">
+              <MarketingCard key={guide.slug} padding="none" className="lx-blog-card lx-guide-card flex flex-col h-full overflow-hidden">
+                <div className="lx-blog-photo relative aspect-[4/3] overflow-hidden">
                   <Image
                     src={getBlogHeroImage(guide.slug, guide.heroImage)}
                     alt={getBlogImageAlt(guide.slug)}
@@ -147,7 +148,7 @@ export default function GuidesIndexPage() {
                     className="object-cover img-brand-grade"
                   />
                 </div>
-                <div className="p-5 flex flex-col flex-1">
+                <div className="lx-blog-body p-5 flex flex-col flex-1">
                   <MapPin className="h-4 w-4 text-accent-legible mb-2" />
                   <h3 className="font-normal text-base mb-1">{guide.title}</h3>
                   <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
@@ -156,7 +157,8 @@ export default function GuidesIndexPage() {
                   <GuideCardStats guide={guide} />
                   <Link
                     href={guidePath(guide.slug)}
-                    className="mt-auto text-sm text-accent-legible hover:underline inline-flex items-center"
+                    aria-label={`Read guide: ${guide.title}`}
+                    className="lx-guide-link mt-auto text-sm text-accent-legible hover:underline inline-flex items-center"
                   >
                     Read
                     <ArrowRight className="ml-1 h-3 w-3" />

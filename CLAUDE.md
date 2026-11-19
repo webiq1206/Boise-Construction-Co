@@ -257,3 +257,13 @@ layout is untouched.
   "representative", "inspiration") in or beside an image description. Brand
   lockups in the shared header and footer keep an empty alt because their link
   carries the company name. Guard: `tests/local-alt.test.ts`.
+* Index cards are compact rows on phones (19 November 2026). Blog, guide, area
+  and service index cards carry `lx-blog-card` (photo `lx-blog-photo`, body
+  `lx-blog-body`) and collapse at 700px and under to a thumbnail beside the
+  title. A guide card has no whole-card link, so its "Read guide" link
+  (`lx-guide-link`, named by `aria-label`) is stretched over the row. The
+  seven area cards sit in `ed-cards-3`, which balances them 2+2+3; do not put
+  them back in a plain three-column grid, which leaves one card alone.
+* Stand-alone text links on interior pages are at least 44px tall below 1024px
+  (`app/interior-refinement.css`). A link inside a sentence is exempt. Never
+  apply the rule to a link that wraps a whole card.

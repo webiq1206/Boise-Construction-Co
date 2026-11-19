@@ -268,7 +268,7 @@ export default function AboutPage() {
                 description={`We serve homeowners in ${SERVICE_AREA_LINE}.`}
                 className="max-w-3xl"
               />
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="ed-cards-3 gap-4">
                 {SERVICE_AREA_CITIES.map((city, i) => (
                   <Reveal key={city.slug} delay={Math.min(i, 7) * 50}>
                     <AreaCard city={city} imageSrc={CITY_HERO_IMAGES[city.slug]} />

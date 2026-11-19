@@ -159,10 +159,10 @@ function ContactChannel({
 
   if (href) {
     return (
-      <div className="h-full">
+      <div className="flex h-full flex-col">
         <a
           href={href}
-          className="block h-full group"
+          className="block flex-1 group"
           {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
         >
           {inner}

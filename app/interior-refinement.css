@@ -370,3 +370,52 @@
   .approved-shell .lx-blog-card :is(.lx-blog-date, .lx-blog-excerpt, .lx-blog-more) { display: none; }
   .approved-shell .lx-blog-card h3 { margin: 0; font-size: 18px; line-height: 1.25; }
 }
+
+/* Guide, area and service index cards on phones: the same compact row as the
+   blog index. Guide cards have no whole-card link, so their "Read guide" link
+   is stretched over the row; the title is its accessible name. */
+.approved-shell .lx-guide-card { position: relative; }
+.approved-shell .lx-guide-card .lx-guide-link { min-height: var(--touch-min, 44px); }
+@media (max-width: 700px) {
+  .approved-shell .lx-blog-card h2 { margin: 0; font-size: 18px; line-height: 1.25; }
+  .approved-shell .lx-guide-card .lx-blog-body > :not(h3):not(.lx-guide-link) { display: none; }
+  .approved-shell .lx-guide-card .lx-guide-link { position: absolute; inset: 0; min-height: 0; overflow: hidden; color: transparent; font-size: 0; }
+  .approved-shell .lx-guide-card .lx-guide-link svg { display: none; }
+  .approved-shell .lx-guide-card .lx-guide-link:focus-visible { outline: 2px solid var(--color-charcoal); outline-offset: -2px; }
+  .approved-shell .ed-cards-3:has(> .lx-blog-card) { gap: var(--space-3, 12px); }
+
+  /* Service directory: photograph, name and planning figure in one row. */
+  .approved-shell .approved-interior .interior-service-grid { gap: 0; }
+  .approved-shell .approved-interior .interior-service-card {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    column-gap: var(--space-4, 16px);
+    align-content: center;
+    padding-block: var(--space-3, 12px);
+    border-bottom: 1px solid var(--ed-line);
+  }
+  .approved-shell .approved-interior .interior-service-card > img { grid-row: 1 / span 2; align-self: center; aspect-ratio: 1; }
+  .approved-shell .approved-interior .interior-service-card > div { align-self: end; margin-top: 0; gap: var(--space-3, 12px); }
+  .approved-shell .approved-interior .interior-service-card h2 { font-size: 20px; line-height: 1.2; }
+  .approved-shell .approved-interior .interior-service-card > p:not(.interior-price) { display: none; }
+  .approved-shell .approved-interior .interior-service-card > .interior-price { align-self: start; margin-top: var(--space-1, 4px); font-size: 14px; }
+}
+
+/* Touch targets on interior index, contact and resource pages: stand-alone text
+   links (not links inside a sentence) are at least 44px tall below desktop. */
+@media (max-width: 1023px) {
+  .approved-shell :is(.interior-guides, .interior-contact, .interior-resources, .interior-areas, .interior-about, .interior-services) :is(a.ed-link, a.inline-flex, a[href^="sms:"], a[href^="tel:"], a[href$=".vcf"], .lx-blog-more, button.inline-flex):not(.fam-btn):not([class*="min-h-"]):not(.block):not(p a):not(li a):not(fieldset a):not(.lx-guide-link) {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-min, 44px);
+  }
+  .approved-shell .approved-interior .interior-service-card > img { object-position: 50% 20%; }
+}
+@media (max-width: 1023px) {
+  .approved-shell .interior-contact :is([data-testid="link-contact-text"], [data-testid="link-closing-text"]) {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    min-height: var(--touch-min, 44px);
+  }
+}
