@@ -153,6 +153,8 @@ export const FAMILY_BRAND: FamilyBrand = {
   },
   // P5 Home Co's Facebook page (shared/gbpProfile); nothing renders until its URL exists.
   parentFacebook: { href: P5_SOCIAL.facebook, label: 'P5 Home Co on Facebook' },
+  // The one Instagram for every family site (owner, 20 November 2026).
+  parentInstagram: { href: P5_SOCIAL.instagram, label: 'P5 Home Co on Instagram' },
   // P5 Home Co's Google Business Profile (owner decision A, 1 November 2026): the owner's one
   // profile, category General contractor, knowledge graph id /g/11ntl1t7dc. It belongs to the
   // parent, so the footer lists it beside the parent's Facebook page and it never joins this
