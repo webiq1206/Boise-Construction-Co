@@ -114,6 +114,7 @@ const CITY_WIKIPEDIA: Record<string, string> = {
   Star: 'https://en.wikipedia.org/wiki/Star,_Idaho',
   Middleton: 'https://en.wikipedia.org/wiki/Middleton,_Idaho',
   Caldwell: 'https://en.wikipedia.org/wiki/Caldwell,_Idaho',
+  'Garden City': 'https://en.wikipedia.org/wiki/Garden_City,_Idaho',
 };
 
 /**
@@ -129,7 +130,7 @@ export const PUBLIC_POSTAL_ADDRESS = {
 } as const;
 
 /**
- * LocalBusiness and Organization areaServed: the seven profile cities, then
+ * LocalBusiness and Organization areaServed: the nine service area cities, then
  * Ada County and Canyon County. No street address.
  */
 export function businessAreaServed() {

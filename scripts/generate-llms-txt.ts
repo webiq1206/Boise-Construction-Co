@@ -38,6 +38,17 @@ const SUMMARY =
   `precede them. Design-build${FOUNDING.llmsFoundedClause}. Serving ${SERVICE_AREA_LINE}. ` +
   `Phone ${SITE_CONFIG.phone}.`;
 
+/** SEO audit XS-08: name the parent company and the sister companies. */
+const FAMILY =
+  `${SITE_CONFIG.name} is a P5 Home Co company (https://p5homeco.com). Sister companies: ` +
+  `Boise Remodeling Co, Boise Cabinet Co and Boise Handyman Co.`;
+
+/**
+ * SEO audit CON-S8: /re-10-repairs-boise is a referral page whose canonical is
+ * Boise Handyman Co's page, so it is listed under the family, not as a service.
+ */
+const RE10_HANDYMAN_URL = 'https://boisehandyman.co/re-10-repairs-boise';
+
 const POSITIONING =
   `Design-build means one accountable team handles architectural design, engineering, ` +
   `estimating, Ada and Canyon County permitting, and construction, with one point of contact, ` +
@@ -51,6 +62,7 @@ function buildShort(): string {
   const lines: string[] = [];
   lines.push(`# ${SITE_CONFIG.name}`, '');
   lines.push(`> ${SUMMARY}`, '');
+  lines.push(FAMILY, '');
   lines.push(POSITIONING, '');
 
   lines.push('## Services', '');
@@ -58,10 +70,16 @@ function buildShort(): string {
     lines.push(`- [${s.name}](${url(`/services/${s.slug}`)}): ${s.shortDescription}`);
   }
   lines.push(
-    `- [RE-10 / Inspection Repairs](${url('/re-10-repairs-boise')}): repairs from an Idaho RE-10 inspection response, completed and documented before closing, for real estate agents, buyers and sellers.`,
-  );
-  lines.push(
     `- [All Services](${url('/services')}): plus city pages at /services/{service}/{city} and [Service Areas](${url('/areas')}).`,
+    '',
+  );
+
+  lines.push('## Family companies', '');
+  lines.push(`- [P5 Home Co](https://p5homeco.com): the parent company.`);
+  lines.push(`- [Boise Remodeling Co](https://boiseremodeling.co): remodels inside an existing home, including garage, basement and attached ADU conversions.`);
+  lines.push(`- [Boise Cabinet Co](https://boisecabinet.co): cabinets.`);
+  lines.push(
+    `- [Boise Handyman Co](https://boisehandyman.co): home repairs, including [RE-10 / inspection repairs](${RE10_HANDYMAN_URL}) for real estate agents, buyers and sellers.`,
     '',
   );
 
@@ -113,6 +131,7 @@ function buildFull(): string {
   const lines: string[] = [];
   lines.push(`# ${SITE_CONFIG.name} - Full Reference`, '');
   lines.push(`> ${SUMMARY}`, '');
+  lines.push(FAMILY, '');
 
   lines.push('## About', '');
   lines.push(
@@ -154,8 +173,7 @@ function buildFull(): string {
   lines.push(
     '',
     `Each service has a dedicated page per city at /services/{service-slug}/{city-slug}. ` +
-      `Published town pages stay at /areas/{city-slug} for ${CITIES.map((c) => c.slug).join(', ')}. ` +
-      `Middleton and Garden City stay published. They are not part of the service area list above.`,
+      `Town pages are at /areas/{city-slug} for ${CITIES.map((c) => c.slug).join(', ')}.`,
     '',
   );
 
@@ -225,17 +243,9 @@ function buildFull(): string {
 
   lines.push('## RE-10 / Inspection Repairs', '');
   lines.push(
-    `${SITE_CONFIG.name} also completes RE-10 and home inspection repairs for real estate agents, ` +
-      `buyers and sellers across Boise and the Treasure Valley. An RE-10 is the Idaho inspection ` +
-      `response form: after a home inspection the buyer requests specific repairs before closing. ` +
-      `We review the RE-10 and inspection report, provide a written scope and pricing, coordinate ` +
-      `access, complete the approved work across multiple trades, and supply photo documentation, ` +
-      `invoices and receipts for the transaction file. Structural, foundation, mold and asbestos ` +
-      `abatement, main electrical service, sewer and septic, HVAC replacement, gas lines and full ` +
-      `roof replacement are coordinated to licensed specialists rather than performed in house. ` +
-      `We take this work because an inspection repair is a deadline problem rather than a ` +
-      `construction problem, and sequencing trades against a date that will not move is the same ` +
-      `thing we do on every build. Details: ${url('/re-10-repairs-boise')}`,
+    `RE-10 and home inspection repair lists for Boise and the Treasure Valley are handled by ` +
+      `Boise Handyman Co, a sister company. An RE-10 is the Idaho inspection response form: after ` +
+      `a home inspection the buyer requests specific repairs before closing. Details: ${RE10_HANDYMAN_URL}`,
     '',
   );
 

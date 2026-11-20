@@ -1,6 +1,7 @@
 // Content Data for Boise Construction Co
-// Service area (Google Business Profile): Boise, Meridian, Nampa, Eagle, Kuna,
-// Caldwell, Star, plus Ada County and Canyon County. Other town pages stay published.
+// Service area: Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, Middleton
+// and Garden City, plus Ada County and Canyon County (SEO audit CON-S1, owner
+// decision 20 November 2026: the family serves every city it has pages for).
 
 export interface ServiceData {
   slug: string;
@@ -180,16 +181,15 @@ export const CITIES: CityData[] = [
   { slug: 'garden-city', name: 'Garden City', county: 'ada', isPrimary: false },
 ];
 
-/**
- * Published town pages. Middleton and Garden City stay here so their pages and
- * sitemap entries remain. They are not part of the service area list.
- */
+/** Published town pages, all nine of which are in the service area. */
 export const TREASURE_VALLEY_CITIES = CITIES.map((c) => c.name).join(', ');
 
 /**
- * Service area cities, in Google Business Profile order (owner decision,
- * 15 November 2026). Visible town lists and schema City nodes use this.
- * Town pages outside the list stay published.
+ * Service area cities: the seven in Google Business Profile order (owner
+ * decision, 15 November 2026), then Middleton and Garden City, which have
+ * published area and city-service pages (SEO audit CON-S1, owner decision
+ * 20 November 2026; the P5 Google Business Profile lists Middleton). Visible
+ * town lists, the footer and schema City nodes use this.
  */
 export const SERVICE_AREA_SLUGS = [
   'boise',
@@ -199,6 +199,8 @@ export const SERVICE_AREA_SLUGS = [
   'kuna',
   'caldwell',
   'star',
+  'middleton',
+  'garden-city',
 ] as const;
 
 export const SERVICE_AREA_CITIES: CityData[] = SERVICE_AREA_SLUGS.map((slug) => {
@@ -206,6 +208,23 @@ export const SERVICE_AREA_CITIES: CityData[] = SERVICE_AREA_SLUGS.map((slug) => 
   if (!city) throw new Error(`Missing service area city: ${slug}`);
   return city;
 });
+
+/**
+ * Neighbouring service-area towns, nearest first, for the "Nearby areas" cards
+ * on each /areas/{city} page (SEO audit CON-S1: Garden City and Middleton are
+ * linked from the towns beside them, not only from the site map).
+ */
+export const NEARBY_CITY_SLUGS: Record<string, readonly string[]> = {
+  boise: ['garden-city', 'meridian', 'eagle', 'kuna'],
+  meridian: ['boise', 'eagle', 'kuna', 'nampa'],
+  eagle: ['star', 'garden-city', 'boise', 'meridian'],
+  nampa: ['caldwell', 'middleton', 'meridian', 'kuna'],
+  kuna: ['meridian', 'nampa', 'boise'],
+  star: ['eagle', 'middleton', 'meridian', 'nampa'],
+  middleton: ['star', 'caldwell', 'nampa', 'eagle'],
+  caldwell: ['middleton', 'nampa', 'star'],
+  'garden-city': ['boise', 'eagle', 'meridian', 'star'],
+};
 
 /** Counties on the same profile. Administrative areas, not city pages. */
 export const SERVICE_AREA_COUNTIES = [
