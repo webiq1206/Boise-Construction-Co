@@ -135,7 +135,7 @@ const GUIDE_REDIRECTS = {
   '/guides/hidden-springs-remodeling-guide': '/guides/hidden-springs-home-building-guide',
   '/guides/harris-ranch-remodeling-guide': '/guides/harris-ranch-home-building-guide',
 
-  // Neighbourhood guides for inner Boise. These describe established housing
+  // Neighborhood guides for inner Boise. These describe established housing
   // stock on built-out lots, where the work is remodeling, not new
   // construction. There is no honest construction version, so they resolve to
   // the city guide rather than being rewritten into something we do not do.

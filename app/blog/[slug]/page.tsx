@@ -99,6 +99,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
     publishedAt: post.publishedAt,
     updatedAt: post.updatedAt,
     author: CONTENT_AUTHOR.name,
+    authorUrl: CONTENT_AUTHOR.url,
     slug: post.slug,
     image: getAbsoluteImageUrl(getBlogHeroImage(post.slug, post.heroImage), getBaseUrl()),
   });

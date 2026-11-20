@@ -84,6 +84,7 @@ export default async function GuidePage(props: { params: Promise<{ slug: string 
     publishedAt: guide.publishedAt,
     updatedAt: guide.updatedAt,
     author: CONTENT_AUTHOR.name,
+    authorUrl: CONTENT_AUTHOR.url,
     slug: guide.slug,
     pathPrefix: 'guides',
     image: getAbsoluteImageUrl(getBlogHeroImage(guide.slug, guide.heroImage), getBaseUrl()),

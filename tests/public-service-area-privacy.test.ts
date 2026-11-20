@@ -76,8 +76,10 @@ test('public entity schema preserves service identity without exporting a privat
   assert.deepEqual(generateOrganizationSchema().areaServed, local.areaServed);
   assert.equal((local.openingHoursSpecification as unknown[]).length, 6);
   assert.equal((generateOrganizationSchema().contactPoint as unknown[]).length, 1);
-  assert.equal(JSON.stringify(local).includes('Middleton'), false);
-  assert.equal(JSON.stringify(local).includes('Garden City'), false);
+  // SEO audit CON-S1 (owner, 20 November 2026): the two published town pages are in areaServed.
+  assert.equal(JSON.stringify(local).includes('Middleton'), true);
+  assert.equal(JSON.stringify(local).includes('Garden City'), true);
+  assert.equal(JSON.stringify(local).includes('Emmett'), false);
 });
 
 test('saved business contact retains useful contact details, hours and service geography', () => {
@@ -97,7 +99,7 @@ test('saved business contact retains useful contact details, hours and service g
   assert.match(about, /trade name of \{SITE_CONFIG\.parentName\}/);
   assert.equal(about.includes('trade name of P5 Home Co LLC'), false);
   assert.match(card, /https:\/\/boiseconstruction.co/);
-  assert.match(card, /Boise\\, Meridian\\, Nampa\\, Eagle\\, Kuna\\, Caldwell\\, and Star\\, in Ada County and Canyon County/);
+  assert.match(card, /Boise\\, Meridian\\, Nampa\\, Eagle\\, Kuna\\, Caldwell\\, Star\\, Middleton\\, and Garden City\\, in Ada County and Canyon County/);
   assert.match(card, /Hours: Monday 9:00 AM - 6:00 PM/);
   assert.match(card, /Idaho Registered Contractor #8381215/);
 });

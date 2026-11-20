@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { HERO_POSTER, HERO_POSTER_SRCSET } from "./heroPoster";
 
 const MEDIA = "/images/construction/boise-construction-co-";
-export const HERO_POSTER = `${MEDIA}poster.jpg`;
 
 /** Autoplay decorative media while visible; keep the poster on technical failure. */
 export function HeroBackgroundVideo() {
@@ -71,7 +71,7 @@ export function HeroBackgroundVideo() {
     <div ref={rootRef} className="hero-video-media" aria-hidden="true">
       {/* The poster is first-HTML content and needs no JavaScript or video download. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img data-hero-poster="" src={HERO_POSTER} alt="Custom home building in Boise, Idaho by Boise Construction Co" width={1920} height={1080} fetchPriority="high" loading="eager" />
+      <img data-hero-poster="" src={HERO_POSTER} alt="Custom home building in Boise, Idaho by Boise Construction Co" srcSet={HERO_POSTER_SRCSET} sizes="100vw" width={1920} height={1080} fetchPriority="high" loading="eager" />
       <video
         ref={videoRef}
         poster={HERO_POSTER}

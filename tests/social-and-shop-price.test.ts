@@ -22,7 +22,10 @@ import {
 
 (globalThis as typeof globalThis & { React: typeof React }).React = React;
 
-const P5_FACEBOOK = 'https://www.facebook.com/1228704823655951';
+// Owner, 20 November 2026: the vanity URL of the same page.
+const P5_FACEBOOK = 'https://www.facebook.com/p5homeco';
+const P5_INSTAGRAM = 'https://www.instagram.com/p5_home_co';
+const P5_MAPS = 'https://maps.google.com/?cid=11869148461693849141';
 const P5_GOOGLE = 'https://www.google.com/search?kgmid=/g/11ntl1t7dc';
 const RETIRED_FACEBOOK = 'profile.php?id=61592885025074';
 
@@ -31,7 +34,8 @@ test('the owner Facebook page and Google profile describe P5 Home Co, not this b
   assert.equal(P5_SOCIAL.google, P5_GOOGLE);
   // Owner decision A (1 November 2026): the one Google Business Profile is
   // P5 Home Co's, so it joins the Facebook page on the parent node only.
-  assert.deepEqual([...P5_PARENT_ORGANIZATION.sameAs], [P5_FACEBOOK, P5_GOOGLE]);
+  assert.deepEqual([...P5_PARENT_ORGANIZATION.sameAs], [P5_FACEBOOK, P5_INSTAGRAM, P5_GOOGLE, P5_MAPS]);
+  assert.equal(BUSINESS_INFO.sameAs.includes(P5_MAPS), false);
   assert.equal(GBP_SOCIAL.facebook, undefined);
   assert.equal(BUSINESS_INFO.sameAs.includes(P5_FACEBOOK), false);
   assert.equal(BUSINESS_INFO.sameAs.includes(P5_GOOGLE), false);
@@ -47,7 +51,7 @@ test('the retired Facebook profile is gone and the footer labels the parent page
   assert.equal(FAMILY_BRAND.parentFacebook.href, P5_SOCIAL.facebook);
   assert.equal(FAMILY_BRAND.parentFacebook.label, 'P5 Home Co on Facebook');
   const footer = renderToStaticMarkup(React.createElement(Footer));
-  assert.match(footer, /<a href="https:\/\/www\.facebook\.com\/1228704823655951" rel="noopener" target="_blank" data-testid="link-footer-facebook">P5 Home Co on Facebook<\/a>/);
+  assert.match(footer, /<a href="https:\/\/www\.facebook\.com\/p5homeco" rel="noopener" target="_blank" data-testid="link-footer-facebook">P5 Home Co on Facebook<\/a>/);
   // Owner decision A: the parent's Google profile sits beside its Facebook page.
   assert.match(footer, /href="https:\/\/www\.google\.com\/search\?kgmid=\/g\/11ntl1t7dc"/);
   assert.match(footer, />P5 Home Co on Google</);

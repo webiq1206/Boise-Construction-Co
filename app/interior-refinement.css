@@ -473,3 +473,52 @@
   .interior-document-index nav > a:last-child:nth-child(even) { grid-column: 1 / -1; }
   .interior-document-main { max-width: none; }
 }
+
+/* Accent eyebrows on light grounds (SEO audit CON-S6, owner 20 November 2026:
+   accents never carry small text). The words are charcoal on light grounds
+   and paper on the charcoal bands; the accent stays as the short rule beside
+   them. */
+html .ed-eyebrow-accent:not(:is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) *) {
+  color: #383837;
+}
+html .ed-eyebrow-accent:not(:is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) *)::before {
+  background: #c48d3f;
+}
+html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) .ed-eyebrow-accent {
+  color: #fbfaf6;
+}
+html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) .ed-eyebrow-accent::before {
+  background: #c48d3f;
+}
+
+/* Touch targets (SEO audit CON-T12): stand-alone download, guide and related
+   links, contact form fields, and the label-and-link contact lines on legal
+   pages are at least 44px tall on phones and tablets. Links inside a sentence
+   are not touched. */
+@media (max-width: 1023px), (pointer: coarse) {
+  .approved-shell .lx-touch {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-min, 44px);
+  }
+  .approved-shell .interior-contact-form :is(input, select):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="range"]) {
+    min-height: var(--touch-min, 44px);
+  }
+  .approved-shell .interior-legal .interior-document-main li > :is(a[href^="mailto:"], a[href^="tel:"], a[href^="sms:"], a[href$=".vcf"]) {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-min, 44px);
+  }
+}
+
+/* The parent company's reviews link sits under the homepage instant
+   estimate points, quieter than the two calls to action beside them. */
+.fr-parent-reviews { margin-top: 20px; }
+.fr-parent-reviews > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-min, 44px);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}

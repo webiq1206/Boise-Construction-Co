@@ -1603,7 +1603,7 @@
           "anchor": "Treasure Valley home building guide",
           "title": "Treasure Valley home building guide",
           "type": "guide",
-          "score": 0.285
+          "score": 0.288
         }
       ]
     },
@@ -3847,16 +3847,16 @@
           "score": 0.25
         },
         {
-          "url": "/blog/energy-efficient-home-building-boise",
-          "anchor": "Building an energy-efficient home in Boise",
-          "title": "Building an energy-efficient home in Boise",
-          "type": "blog",
-          "score": -0.104
-        },
-        {
           "url": "/blog/single-story-vs-two-story-home",
           "anchor": "Single story vs two story: cost, lot, and livability",
           "title": "Single story vs two story: cost, lot, and livability",
+          "type": "blog",
+          "score": -0.103
+        },
+        {
+          "url": "/blog/energy-efficient-home-building-boise",
+          "anchor": "Building an energy-efficient home in Boise",
+          "title": "Building an energy-efficient home in Boise",
           "type": "blog",
           "score": -0.104
         }
@@ -4562,7 +4562,7 @@
           "anchor": "Single story vs two story: cost, lot, and livability",
           "title": "Single story vs two story: cost, lot, and livability",
           "type": "blog",
-          "score": -0.177
+          "score": -0.176
         }
       ]
     },
@@ -5131,7 +5131,7 @@
           "anchor": "Single story vs two story: cost, lot, and livability",
           "title": "Single story vs two story: cost, lot, and livability",
           "type": "blog",
-          "score": -0.167
+          "score": -0.165
         },
         {
           "url": "/blog/impact-fees-and-utility-connections",
@@ -5707,7 +5707,7 @@
           "anchor": "Single story vs two story: cost, lot, and livability",
           "title": "Single story vs two story: cost, lot, and livability",
           "type": "blog",
-          "score": -0.197
+          "score": -0.194
         },
         {
           "url": "/blog/custom-home-floor-plan-ideas-boise",
@@ -6283,7 +6283,7 @@
           "anchor": "Single story vs two story: cost, lot, and livability",
           "title": "Single story vs two story: cost, lot, and livability",
           "type": "blog",
-          "score": -0.267
+          "score": -0.266
         },
         {
           "url": "/blog/lot-evaluation-checklist",
@@ -7506,7 +7506,7 @@
           "anchor": "Single story vs two story: cost, lot, and livability",
           "title": "Single story vs two story: cost, lot, and livability",
           "type": "blog",
-          "score": -0.312
+          "score": -0.311
         }
       ]
     },

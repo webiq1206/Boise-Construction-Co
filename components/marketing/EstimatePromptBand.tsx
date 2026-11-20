@@ -1,7 +1,8 @@
 import { Section } from "./Section";
 import { Reveal } from "@/components/Reveal";
 import { HeroTextLink, PrimaryCta } from "@/components/approved/PrimaryCta";
-import { CTA_PRIMARY, CTA_QUOTE } from "@/shared/ctaCopy";
+import { CTA_PRIMARY, CTA_QUOTE, PARENT_REVIEWS_LABEL } from "@/shared/ctaCopy";
+import { P5_SOCIAL } from "@/shared/gbpProfile";
 import { INSTANT_ESTIMATE_PATH, QUOTE_REQUEST_PATH } from "@/shared/instantEstimate";
 
 interface EstimatePromptBandProps {
@@ -60,6 +61,9 @@ export function EstimatePromptBand({
                 <HeroTextLink href={QUOTE_REQUEST_PATH}>{CTA_QUOTE}</HeroTextLink>
               </div>
               <p className="ed-small">Free · A preliminary range, not a final price</p>
+              <a className="ed-small underline underline-offset-4" href={P5_SOCIAL.maps} rel="noopener" target="_blank" data-testid="link-parent-reviews">
+                {PARENT_REVIEWS_LABEL}
+              </a>
             </div>
           </Reveal>
         </div>

@@ -64,7 +64,7 @@ export const P5_PARENT_ORGANIZATION = {
   // The owner's Facebook page and Google Business Profile both belong to
   // P5 Home Co, so they are asserted here on the parent and kept out of this
   // brand's own sameAs.
-  sameAs: [P5_SOCIAL.facebook, P5_SOCIAL.google],
+  sameAs: [P5_SOCIAL.facebook, P5_SOCIAL.instagram, P5_SOCIAL.google, P5_SOCIAL.maps],
 } as const;
 
 /**
@@ -114,6 +114,7 @@ const CITY_WIKIPEDIA: Record<string, string> = {
   Star: 'https://en.wikipedia.org/wiki/Star,_Idaho',
   Middleton: 'https://en.wikipedia.org/wiki/Middleton,_Idaho',
   Caldwell: 'https://en.wikipedia.org/wiki/Caldwell,_Idaho',
+  'Garden City': 'https://en.wikipedia.org/wiki/Garden_City,_Idaho',
 };
 
 /**
@@ -129,7 +130,7 @@ export const PUBLIC_POSTAL_ADDRESS = {
 } as const;
 
 /**
- * LocalBusiness and Organization areaServed: the seven profile cities, then
+ * LocalBusiness and Organization areaServed: the nine service area cities, then
  * Ada County and Canyon County. No street address.
  */
 export function businessAreaServed() {
@@ -431,6 +432,10 @@ export function generateArticleSchema(article: {
         '@type': 'Person',
         name: article.author,
         url: article.authorUrl ?? `${baseUrl}/about#team`,
+        // Nick Perkins founded the parent company (owner, 20 November 2026).
+        ...(article.author === 'Nick Perkins'
+          ? { jobTitle: 'Founder', worksFor: { '@id': P5_ORG_ID, '@type': 'Organization', name: 'P5 Home Co' } }
+          : {}),
       }
     : { '@type': 'Organization', '@id': ORG_ID, name: BUSINESS_INFO.name };
 

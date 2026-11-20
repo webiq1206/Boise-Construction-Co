@@ -1,5 +1,5 @@
 import type { ServiceData, CityData } from './contentData';
-import { getCountyLabel, SERVICE_AREA_LINE, serviceLabel } from './contentData';
+import { cityServiceBudgetQuestion, cityServiceCostQuestion, getCountyLabel, SERVICE_AREA_LINE, serviceLabel } from './contentData';
 import { getAreaCityCopy } from './content/areaCopy';
 import { getCityServiceCopy } from './content/cityServiceCopy';
 import { indianCreekDescription } from '../lib/seo';
@@ -873,6 +873,10 @@ export function getAreaIntro(city: CityData): string {
 
 /** Sister company that owns remodeling, conversions and interior additions. */
 export const REMODELING_SITE_URL = 'https://boiseremodeling.co';
+/** Remodeling's ADU conversion page (SEO audit XS-10). */
+export const REMODELING_ADU_URL = `${REMODELING_SITE_URL}/services/adu`;
+/** Remodeling's room addition and bump-out page (portfolio audit 1.5). */
+export const REMODELING_ROOM_ADDITION_URL = `${REMODELING_SITE_URL}/services/room-addition`;
 
 /**
  * The ADU and additions split between the two P5 Home Co sites, stated on the
@@ -884,13 +888,25 @@ export const REMODELING_SITE_URL = 'https://boiseremodeling.co';
 export function getScopeSplitSection(serviceSlug: string, cityName?: string): LandingSection | undefined {
   const where = cityName ? ` in ${cityName}` : '';
   if (serviceSlug === 'adu') {
+    // SEO audit XS-10: the handoff links Remodeling's ADU conversion page,
+    // with the anchor the audit gives for the hub and each indexed city page.
+    const conversionAnchor =
+      cityName === 'Boise'
+        ? 'garage and basement ADU conversions in Boise'
+        : cityName === 'Meridian'
+          ? 'ADU conversions by Boise Remodeling Co'
+          : 'ADU conversions at Boise Remodeling Co';
+    const conversionSentence =
+      cityName === 'Boise'
+        ? 'Converting a garage or a basement into an attached ADU, or remodeling rooms inside the house, is interior work: our sister company Boise Remodeling Co handles garage and basement ADU conversions in Boise.'
+        : `Converting a garage or a basement into an attached ADU, or remodeling rooms inside the house, is interior work: see ${conversionAnchor}, our sister company.`;
     return {
       heading: `New detached ADUs${where}, not conversions`,
       paragraphs: [
         `Boise Construction Co builds new detached ADUs and guest houses${where}: a separate dwelling on the lot you already own, from setbacks and utilities through permits and construction.`,
-        'Converting a garage or a basement into an attached ADU, or remodeling rooms inside the house, is interior work. Our sister company Boise Remodeling Co handles those projects.',
+        conversionSentence,
       ],
-      paragraphLinks: [undefined, [{ phrase: 'Boise Remodeling Co', href: REMODELING_SITE_URL }]],
+      paragraphLinks: [undefined, [{ phrase: conversionAnchor, href: REMODELING_ADU_URL }]],
     };
   }
   if (serviceSlug === 'home-additions') {
@@ -898,9 +914,10 @@ export function getScopeSplitSection(serviceSlug: string, cityName?: string): La
       heading: `Structural additions${where}: new footprint or a second story`,
       paragraphs: [
         `Boise Construction Co builds structural home additions${where}: new footprint on the lot or a second story over the house you already live in, tied into the existing structure, roofline and utilities.`,
-        'Reworking rooms inside the existing footprint, such as a kitchen, a bathroom or a basement finish, is interior remodeling. Our sister company Boise Remodeling Co handles that work.',
+        // One sentence on which brand builds which addition (portfolio audit 1.5).
+        'Bump-outs that extend a kitchen, bathroom or great room a few feet, conversions of existing space into new rooms, and remodels inside the footprint are built by our sister company: see room additions at Boise Remodeling Co.',
       ],
-      paragraphLinks: [undefined, [{ phrase: 'Boise Remodeling Co', href: REMODELING_SITE_URL }]],
+      paragraphLinks: [undefined, [{ phrase: 'room additions at Boise Remodeling Co', href: REMODELING_ROOM_ADDITION_URL }]],
     };
   }
   return undefined;
@@ -933,7 +950,7 @@ export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): 
     ...(costSentence
       ? [
           {
-            question: `How much does ${service.name.toLowerCase()} cost in ${city.name}?`,
+            question: cityServiceCostQuestion(service, city.name),
             answer: `${city.name} pricing tracks the broader Treasure Valley market. ${costSentence} Book a lot walkthrough for a line-item budget specific to your site.`,
           },
         ]
@@ -944,7 +961,7 @@ export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): 
       answer: `Yes. We regularly build in ${city.name} and the surrounding ${county} area, and we are familiar with the local plan review process and impact fees.`,
     },
     {
-      question: `How do I get a budget for ${service.name.toLowerCase()} in ${city.name}?`,
+      question: cityServiceBudgetQuestion(service, city.name),
       answer: `Request a quote for a planning conversation, then book a free planning consultation. If you have a lot under consideration, we will walk it with you and identify what will drive the site costs.`,
     },
   ];

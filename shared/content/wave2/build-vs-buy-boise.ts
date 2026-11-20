@@ -61,7 +61,7 @@ export const buildVsBuyBoise: BlogPostData = {
     {
       question: 'What are the advantages of building over buying?',
       answer:
-        'You choose the lot, the floor plan, the orientation, the storey count, the finish level, and the systems. Everything is new and under warranty. You are not inheriting deferred maintenance, dated wiring, or a layout someone else chose in 1998. For people who have looked at existing homes and kept finding the same compromises, that is worth a great deal.',
+        'You choose the lot, the floor plan, the orientation, the story count, the finish level, and the systems. Everything is new and under warranty. You are not inheriting deferred maintenance, dated wiring, or a layout someone else chose in 1998. For people who have looked at existing homes and kept finding the same compromises, that is worth a great deal.',
     },
     {
       question: 'When is buying the better decision?',

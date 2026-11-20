@@ -38,6 +38,11 @@ export interface ContentHub {
    * mid-sentence with an ellipsis.
    */
   metaDescription: string;
+  /**
+   * Title tag for /blog/category/{hubSlug}, before the brand (SEO audit
+   * CON-T4, 20 November 2026). Without one the route uses "{title} Articles".
+   */
+  metaTitle?: string;
   priorityTier: 1 | 2 | 3 | 4 | 5;
   serviceSlugs: string[];
 }
@@ -56,6 +61,7 @@ export interface ContentManifestEntry {
 export const CONTENT_HUBS: ContentHub[] = [
   {
     hubSlug: 'home-building-costs',
+    metaTitle: 'Boise Home Building Cost Articles',
     title: 'Home building costs',
     categoryLabel: 'Home building costs',
     pillarSlug: 'boise-home-building-cost-guide',
@@ -69,6 +75,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   },
   {
     hubSlug: 'choosing-a-builder',
+    metaTitle: 'Articles on Choosing a Builder',
     title: 'Choosing a builder',
     categoryLabel: 'Choosing a builder',
     pillarSlug: 'choose-home-builder-boise',
@@ -82,6 +89,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   },
   {
     hubSlug: 'home-building-process',
+    metaTitle: 'Home Building Process Articles',
     title: 'The building process',
     categoryLabel: 'The building process',
     pillarSlug: 'boise-home-building-process-guide',
@@ -95,6 +103,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   },
   {
     hubSlug: 'land-and-lots',
+    metaTitle: 'Land and Lots Articles for Idaho',
     title: 'Land & lots',
     categoryLabel: 'Land & lots',
     pillarSlug: 'buying-land-to-build-boise',
@@ -108,6 +117,7 @@ export const CONTENT_HUBS: ContentHub[] = [
   },
   {
     hubSlug: 'home-design-and-plans',
+    metaTitle: 'Design and Floor Plan Articles',
     title: 'Design & floor plans',
     categoryLabel: 'Design & floor plans',
     pillarSlug: 'custom-home-design-guide',
@@ -301,6 +311,19 @@ export function blogPath(slug: string): string {
 
 export function categoryHubPath(hubSlug: string): string {
   return `/blog/category/${hubSlug}`;
+}
+
+/**
+ * Hubs with no articles of their own, and the page their route redirects to
+ * permanently (SEO audit CON-S9). Links go straight to that page.
+ */
+export const EMPTY_HUB_DESTINATIONS: Record<string, string> = {
+  'treasure-valley-locations': '/areas',
+};
+
+/** Where a link to a topic hub should point: the hub, or the page an empty hub redirects to. */
+export function categoryHubHref(hubSlug: string): string {
+  return EMPTY_HUB_DESTINATIONS[hubSlug] ?? categoryHubPath(hubSlug);
 }
 
 /** Minimum published cluster count before category hub is indexable */

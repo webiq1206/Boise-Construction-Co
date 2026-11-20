@@ -13,7 +13,7 @@ injectHeadingIds,
 } from '@/lib/content-utils';
 import { CONTENT_AUTHOR } from '@/shared/authors';
 import { getArticleInlineFigures,getBlogHeroImage,getBlogImageAlt,isCostRelatedContent } from '@/shared/blogImages';
-import { CATEGORY_HUB_MIN_POSTS,categoryHubPath,getClustersForHub,getHubBySlug,guidePath } from '@/shared/contentHubs';
+import { CATEGORY_HUB_MIN_POSTS,categoryHubHref,getClustersForHub,getHubBySlug,guidePath } from '@/shared/contentHubs';
 import type { GuidePageData } from '@/shared/guideContent';
 import { getResourcesForGuide } from '@/shared/guideResources';
 import {
@@ -78,9 +78,9 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
             <p className="lx-meta">
               <span>{formatDate(guide.publishedAt)}</span>
               <span>{readingTime} min read</span>
-              <Link href={CONTENT_AUTHOR.url}>{CONTENT_AUTHOR.name}</Link>
+              <a href={CONTENT_AUTHOR.url} rel="author noopener" data-testid="article-byline">{CONTENT_AUTHOR.byline}</a>
             </p>
-          </header><BlogHeroBanner src={heroImage} alt={heroAlt}/>
+          </header><BlogHeroBanner src={heroImage} alt={heroAlt} priority/>
 
           <GuideJumpChips headings={tocHeadings} />
 
@@ -117,7 +117,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                         <li key={c.slug}>
                           <Link
                             href={`/blog/${c.slug}`}
-                            className="text-sm text-accent-legible hover:underline inline-flex items-center"
+                            className="lx-touch text-sm text-accent-legible hover:underline inline-flex items-center"
                           >
                             {anchorCase(c.title)}
                             <ArrowRight className="ml-1 h-3 w-3 shrink-0" />
@@ -127,8 +127,8 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                     </ul>
                     {publishedClusters.length >= CATEGORY_HUB_MIN_POSTS && hub && (
                       <Link
-                        href={categoryHubPath(guide.hubSlug)}
-                        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mt-4"
+                        href={categoryHubHref(guide.hubSlug)}
+                        className="lx-touch inline-flex items-center text-sm text-muted-foreground hover:text-foreground mt-4"
                       >
                         View all in {hub.title}
                         <ArrowRight className="ml-1 h-4 w-4" />

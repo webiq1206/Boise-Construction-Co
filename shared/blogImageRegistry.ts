@@ -157,7 +157,7 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
   },
   'lot-evaluation-checklist': {
     hero: '/images/construction/rural-acreage-parcel.webp',
-    alt: 'Vacant rural acreage building parcel in Canyon County, Idaho with a survey stake and desert mountains on the horizon',
+    alt: 'Lot evaluation in Canyon County, Idaho: vacant rural acreage parcel with a survey stake and desert mountains on the horizon',
     topicTags: ["land","lots","checklist","due diligence","treasure valley"],
     source: 'construction',
   },
@@ -241,7 +241,7 @@ export const BLOG_IMAGE_REGISTRY: Record<string, BlogImageEntry> = {
   },
   'buying-land-to-build-boise': {
     hero: '/images/construction/rural-acreage-parcel.webp',
-    alt: 'Vacant rural acreage building parcel in Canyon County, Idaho with a survey stake and desert mountains on the horizon',
+    alt: 'Lot evaluation in Canyon County, Idaho: vacant rural acreage parcel with a survey stake and desert mountains on the horizon',
     topicTags: ["land","lots","buildable lot","site work","due diligence"],
     source: 'construction',
   },

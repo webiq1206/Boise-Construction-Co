@@ -2,6 +2,7 @@ import { InteriorPage } from '@/components/approved/InteriorLayout';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { BlogCard } from '@/components/marketing/BlogCard';
 import { HubHeroBanner } from '@/components/marketing/BlogHeroBanner';
+import { EstimatePromptBand } from '@/components/marketing/EstimatePromptBand';
 import { Section } from '@/components/marketing/Section';
 import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildCanonical,FEED_ALTERNATES } from '@/lib/page-metadata';
@@ -15,6 +16,7 @@ import { contentImageAlt } from '@/shared/imageAlts';
 import {
 categoryHubPath,
 CONTENT_HUBS,
+EMPTY_HUB_DESTINATIONS,
 getHubBySlug,
 guidePath,
 isCategoryHubIndexable,
@@ -22,7 +24,7 @@ isCategoryHubIndexable,
 import { ArrowRight } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound,redirect } from 'next/navigation';
+import { notFound,permanentRedirect } from 'next/navigation';
 
 function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString('en-US', {
@@ -47,7 +49,7 @@ export async function generateMetadata(
 
   const posts = BLOG_POSTS.filter((p) => p.hubSlug === params.hubSlug);
   const indexable = isCategoryHubIndexable(params.hubSlug, posts.length);
-  const title = `${hub.title} Articles`;
+  const title = hub.metaTitle ?? `${hub.title} Articles`;
   // Authored per hub (keyword first, 140 to 155 characters); no count phrase
   // and no slicing, so the snippet never ends mid-sentence.
   const description = hub.metaDescription;
@@ -89,7 +91,8 @@ export default async function BlogCategoryHubPage(
   );
 
   if (posts.length === 0) {
-    redirect(hub.hubSlug === 'treasure-valley-locations' ? '/areas' : '/blog');
+    // Permanent (308), so the old hub URL passes to its destination (SEO audit CON-S9).
+    permanentRedirect(EMPTY_HUB_DESTINATIONS[hub.hubSlug] ?? '/blog');
   }
 
   // The topic photograph never repeats a card photograph below it.
@@ -147,14 +150,12 @@ export default async function BlogCategoryHubPage(
           <p className="text-lg text-muted-foreground mb-4 max-w-2xl">{hub.description}</p>
           <p className="text-base text-muted-foreground mb-6 max-w-2xl leading-relaxed">
             Every article below is written by the Boise Construction Co design-build team for
-            families across Boise, Meridian, Eagle, Nampa and the wider Treasure Valley, with
-            real planning ranges, Ada and Canyon County permit context, and lessons from homes
-            we have actually built. Start with the complete guide for the full overview, or jump
-            to a specific article below.
+            Treasure Valley families, with real planning ranges and Ada and Canyon County permit
+            context.
           </p>
           <Link
             href={guidePath(hub.pillarSlug)}
-            className="inline-flex items-center text-accent-legible hover:underline text-sm mb-10"
+            className="lx-touch lx-hub-guide-link inline-flex items-center text-accent-legible hover:underline text-sm mb-10"
           >
             Read the complete guide
             <ArrowRight className="ml-1 h-4 w-4" />
@@ -178,6 +179,20 @@ export default async function BlogCategoryHubPage(
           </div>
         </div>
       </Section>
+
+      {/* SEO audit CON-T4: the blog index's closing band, so a topic page has an
+          in-page estimate and quote action, not only the header's. */}
+      <EstimatePromptBand
+        eyebrow="Ready to plan"
+        title={
+          <>
+            From articles to an actual{' '}
+            <em className="brc-accent">range</em>
+          </>
+        }
+        description="Have a project in mind? Answer a few questions and see a preliminary Treasure Valley price range on screen, then talk it through with our building team when you are ready."
+        variant="greige"
+      />
     </></InteriorPage>
   );
 }

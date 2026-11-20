@@ -27,7 +27,7 @@ export const metadata = withBrandPageMetadata((buildPageMetadata({
   path: "/areas",
   titleOverride: "Treasure Valley Service Areas",
   descriptionOverride:
-    "Custom home building in Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, and Star, across Ada and Canyon County.",
+    "Custom home building in Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, Middleton, and Garden City, across Ada and Canyon County.",
 })), "/areas");
 
 export default function AreasHubPage() {
@@ -58,8 +58,8 @@ export default function AreasHubPage() {
             <em className="brc-accent">areas</em>
           </h1>
           <p className="ed-lede mt-8 max-w-[44ch] text-inverse-foreground/85">
-            We build custom and semi-custom homes in {SERVICE_AREA_LINE}, on lots you own and lots we
-            help you find, under one design-build team.
+            We build custom and semi-custom homes across Ada County and Canyon County, on lots you
+            own and lots we help you find, under one design-build team.
           </p>
           <p className="sr-only" data-speakable="summary">
             Treasure Valley new home construction service areas.
@@ -75,7 +75,7 @@ export default function AreasHubPage() {
           <div className="ed-shell">
             <SectionHeader
               eyebrow="Treasure Valley"
-              title={<>Seven cities, one design-build team</>}
+              title={<>Nine cities, one design-build team</>}
               description="Custom homes, semi-custom homes, and builds on your own lot in Ada County and Canyon County."
               align="left"
             />

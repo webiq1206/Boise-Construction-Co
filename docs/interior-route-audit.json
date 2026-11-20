@@ -12,17 +12,17 @@
   {
     "route": "/areas",
     "file": "app/areas/page.tsx",
-    "seoSignature": "c614dc0472cce58e544d23598ed7e17213c9617cb9a0ca76145921cc9ee53833"
+    "seoSignature": "376a12f0afd384e42f9966ec04f095238fd27baf721d1475bc9e4c9aefccd534"
   },
   {
     "route": "/blog/[slug]",
     "file": "app/blog/[slug]/page.tsx",
-    "seoSignature": "993ec359a78d9f1da5535a72ec8d1119dedf1007f5db3dd19bf11cc09c6250e5"
+    "seoSignature": "fd0c9b59fa268f677aca774f4049009042f41f78e10349e430c71bcde5122bf2"
   },
   {
     "route": "/blog/category/[hubSlug]",
     "file": "app/blog/category/[hubSlug]/page.tsx",
-    "seoSignature": "57a20f4a92be9b4f2593b6a23b87bb2cb22d29f3c61130a0a35072b9715bae8d"
+    "seoSignature": "e9804daf2a205e5e83568b81f31d92008bed0e8fe54cbea83166c214bf9a8b0c"
   },
   {
     "route": "/blog",
@@ -37,7 +37,7 @@
   {
     "route": "/guides/[slug]",
     "file": "app/guides/[slug]/page.tsx",
-    "seoSignature": "1c354162b36e560683195f9b95559d95ff3ceae6b7bd8f21d8af5c36f9534e7e"
+    "seoSignature": "2be3520810a8ae7b9a0ea3ffa799963a68ecb5c34b82167ad7fdba96fff3ff7c"
   },
   {
     "route": "/guides",

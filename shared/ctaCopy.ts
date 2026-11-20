@@ -23,3 +23,10 @@ export const CTA_FORM_CALLBACK = "Request a call";
 export const CTA_FORM_REVIEW = "Review my request";
 /** @deprecated Superseded by the single-step CTA_FORM_SEND. */
 export const CTA_FORM_CONFIRM = "Confirm and send";
+
+/**
+ * The link to the parent company's Google reviews (owner, 20 November 2026).
+ * Neither review is about new construction, so this site quotes none and
+ * links the P5 Home Co profile beside its calls to action instead.
+ */
+export const PARENT_REVIEWS_LABEL = 'Reviews of our parent company, P5 Home Co, on Google';

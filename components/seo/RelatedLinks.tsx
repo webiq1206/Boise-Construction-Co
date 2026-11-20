@@ -9,7 +9,7 @@ import { subjectForService } from '@/shared/localAlt';
 import { CONSTRUCTION_IMAGES } from '@/shared/siteImages';
 import { pictureKey } from '@/shared/pictureKey';
 import { anchorCase } from '@/lib/anchorCase';
-import { CITIES, SERVICES, serviceLabel } from '@/shared/contentData';
+import { CITIES, NEARBY_CITY_SLUGS, SERVICES, serviceLabel } from '@/shared/contentData';
 import { CONTENT_HUBS, guidePath } from '@/shared/contentHubs';
 import { GUIDE_PAGES } from '@/shared/guideContent';
 import { isCityServiceNoindex } from '@/lib/page-metadata';
@@ -299,6 +299,19 @@ export function RelatedLinks({ serviceSlug, citySlug, variant, manifestPath, exc
     } else if (cells.length === 1) {
       // One service card alone in a row reads as a gap: it joins the list instead.
       leadReading.push({ href: cells[0].href, label: `${cells[0].label} in ${city.name}` });
+    }
+    // Neighboring towns (SEO audit CON-S1), each with its own area photograph.
+    const nearby: Cell[] = (NEARBY_CITY_SLUGS[citySlug] ?? [])
+      .map((slug) => CITIES.find((c) => c.slug === slug))
+      .filter((c): c is (typeof CITIES)[number] => Boolean(c))
+      .map((c) => ({ href: areaPath(c.slug), label: c.name, context: 'Home building in' }));
+    if (nearby.length > 1) {
+      nearby.forEach((cell) => taken.add(cell.href));
+      groups.push(
+        <Group key="nearby" label="Nearby areas" action={{ href: '/areas', label: 'All areas' }}>
+          <Cells cells={nearby} used={usedImages} />
+        </Group>,
+      );
     }
   }
 

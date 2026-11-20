@@ -84,9 +84,9 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
             <p className="lx-meta">
               <span>{formatDate(post.publishedAt)}</span>
               <span>{readingTime} min read</span>
-              <Link href={CONTENT_AUTHOR.url}>{CONTENT_AUTHOR.name}</Link>
+              <a href={CONTENT_AUTHOR.url} rel="author noopener" data-testid="article-byline">{CONTENT_AUTHOR.byline}</a>
             </p>
-          </header><BlogHeroBanner src={heroImage} alt={heroAlt}/>
+          </header><BlogHeroBanner src={heroImage} alt={heroAlt} priority/>
 
           <GuideJumpChips headings={tocHeadings} />
 
@@ -115,7 +115,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
                     </p>
                     <Link
                       href={guidePath(pillarSlug)}
-                      className="text-sm text-accent-legible hover:underline inline-flex items-center font-normal"
+                      className="lx-touch text-sm text-accent-legible hover:underline inline-flex items-center font-normal"
                     >
                       {hub.title}
                       <ArrowRight className="ml-1 h-4 w-4" />

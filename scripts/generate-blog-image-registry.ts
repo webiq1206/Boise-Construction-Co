@@ -138,7 +138,7 @@ const LIBRARY = {
   },
   acreage: {
     src: img('rural-acreage-parcel'),
-    alt: 'Vacant rural acreage building parcel in Canyon County, Idaho with a survey stake and desert mountains on the horizon',
+    alt: 'Lot evaluation in Canyon County, Idaho: vacant rural acreage parcel with a survey stake and desert mountains on the horizon',
   },
   buildVsBuy: {
     src: img('build-vs-buy-comparison'),

@@ -106,8 +106,15 @@ export const GBP_SOCIAL: { facebook?: string } = {};
  * It is the parent's profile: never put it in this brand's own sameAs.
  */
 export const P5_SOCIAL = {
-  facebook: 'https://www.facebook.com/1228704823655951',
+  // One Facebook page for every family site (owner, 20 November 2026): the
+  // vanity URL of the page the numeric 1228704823655951 address redirects to.
+  facebook: 'https://www.facebook.com/p5homeco',
+  // The one Instagram for every family site (owner, 20 November 2026).
+  instagram: 'https://www.instagram.com/p5_home_co',
   google: 'https://www.google.com/search?kgmid=/g/11ntl1t7dc',
+  // The same profile on Google Maps, where its reviews are (place ID
+  // ChIJzxMoavs6P6IRNc6i9aOvt6Q); the URL p5homeco.com uses (SEO audit XS-03).
+  maps: 'https://maps.google.com/?cid=11869148461693849141',
 } as const;
 
 export const GBP_ATTRIBUTES = {
