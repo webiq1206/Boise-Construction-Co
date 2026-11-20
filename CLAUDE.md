@@ -296,3 +296,52 @@ so returning visitors could keep seeing the old picture for up to a year.
   photographs under `public/family` are plain `<img>` tags, which are not
   cached this way; they are in the list all the same.
 * Guard: `npm run verify:image-versions` (in prebuild).
+
+## Every-page sweep (19 November 2026)
+
+Every public route was captured at 390, 768 and 1440 and read. What changed:
+
+* **No photograph twice on a landing page.** `LandingPageTemplate` keeps a set
+  of pictures shown: the breather is left out when it would repeat the hero,
+  the process panel takes the first picture not yet shown (a long-form figure
+  gives its picture up to it), and a figure that repeats one is left out. The
+  set goes to `RelatedLinks` as `pageImages`; a card whose own picture is taken
+  uses its city's area photograph when that is free (`cardImage()`), and a
+  "Guides and planning" row whose picture is taken uses the next free general
+  planning picture (`READING_FALLBACK_IMAGES`: new-home photographs only, never
+  an ADU, addition or shop picture). The hub's featured project and local proof
+  photographs count as shown. Pictures are compared by `pictureKey()`
+  (`shared/pictureKey.ts`), the file name without folder, size or version,
+  because the same photograph is served from more than one folder.
+* **Articles and indexes.** "Related resources" under a post or guide drops a
+  card whose picture is the page's hero or an inline figure, or an earlier
+  card's. The blog index and topic pages pick a hero no card below shows
+  (`freePicture()`). The guides list under "Keep exploring" holds six, four or
+  fewer than four links, so its rows are full.
+* **Card rows are balanced.** `balancedColumns()` in `RelatedLinks.tsx` picks
+  the column count that divides the cards or leaves the fullest last row (up to
+  five on desktop, four on tablets), so no row ends with one card.
+* **Odd `.ed-cards-3` counts on tablets** end on a row of three (7 = 2+2+3), in
+  `app/interior-refinement.css`. Odd `.ed-rule-list` link lists give the last
+  link the whole row.
+* **About and warranty questions are tap-to-open** (`lx-faq`, native `details`
+  sharing one `name`, first open), like the landing pages.
+* **Contact**: call and text sit side by side with one "Save our contact"; the
+  city links end on a full row at every width.
+* **Homepage hydration**: the planning slider wrapper carries
+  `data-clarity-mask="True"` in the markup, the value the masking script sets
+  before hydration. Any server-rendered range, checkbox or radio input needs
+  the same attribute on its parent.
+* Tags on posts and guides are shown once each.
+* **Lone cards and odd lists.** "Keep exploring" moves a single service or
+  nearby-city card into the guides list, which holds six, four or fewer than
+  four links. A two-column link list or tablet document contents ends on a
+  full row.
+* **Document pages put the contents above the text below 1024px** (privacy,
+  terms, site map, permit flow), two columns of links on tablets.
+* **Sentence case for generated labels.** `anchorCase()` (`lib/anchorCase.ts`)
+  rewrites a title-case link label from the link manifest, a page title list
+  or the site map ("Design-Build in Boise" becomes "Design-build in Boise").
+  Places, communities and acronyms keep their capitals; a label already in
+  sentence case is untouched. The 404 and subcontractor pages were reworded by
+  hand.

@@ -106,7 +106,7 @@ export function PlanningRangeExplorer() {
           </div>
 
           {project && size && (
-            <div className="planning-range-slider-wrap">
+            <div className="planning-range-slider-wrap" data-clarity-mask="True">
               <label className="planning-range-label" htmlFor="planning-sqft">
                 2. Finished living area
               </label>

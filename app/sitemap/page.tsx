@@ -3,6 +3,7 @@ import { withBrandPageMetadata } from '@/lib/brand-page-metadata';
 import { buildCanonical,FEED_ALTERNATES } from "@/lib/page-metadata";
 import { generateBreadcrumbSchema,generateWebPageSchema } from "@/lib/schema";
 import { getSiteUrlGroups } from "@/lib/siteUrls";
+import { anchorCase } from "@/lib/anchorCase";
 import { SITE_CONFIG } from "@/shared/siteConfig";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -64,7 +65,7 @@ export default function SitemapPage() {
                   <ul>
                     {group.entries.map((e) => (
                       <li key={e.path}>
-                        <Link href={e.path}>{e.label}</Link>
+                        <Link href={e.path}>{anchorCase(e.label)}</Link>
                       </li>
                     ))}
                   </ul>

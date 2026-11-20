@@ -291,13 +291,12 @@ export default function ContactPage() {
               className="max-w-3xl"
             />
             <div className="ed-grid-balance grid sm:grid-cols-2 gap-4">
-              <Reveal className="sm:col-span-2">
+              <Reveal>
                 <ContactChannel
                   icon={<Phone className="h-5 w-5" strokeWidth={1.5} />}
                   label="Call us"
                   href={SITE_CONFIG.phoneHref}
                   subtext="Mon – Fri 9 am – 6 pm · Sat 9 am – 4 pm"
-                  featured
                   companion={
                     <SaveContactLink className="text-sm text-muted-foreground hover:text-foreground transition-colors" />
                   }
@@ -305,15 +304,12 @@ export default function ContactPage() {
                   <span className="brc-display-num tabular-nums">{BUSINESS_INFO.phone}</span>
                 </ContactChannel>
               </Reveal>
-              <Reveal delay={30} className="sm:col-span-2">
+              <Reveal delay={30}>
                 <ContactChannel
                   icon={<MessageSquare className="h-5 w-5" strokeWidth={1.5} />}
                   label="Text us"
                   href={SITE_CONFIG.phoneSmsHref}
                   subtext="Quick questions? Send us a text"
-                  companion={
-                    <SaveContactLink className="text-sm text-muted-foreground hover:text-foreground transition-colors" />
-                  }
                 >
                   <span className="brc-display-num tabular-nums">{BUSINESS_INFO.phone}</span>
                 </ContactChannel>
@@ -456,12 +452,12 @@ export default function ContactPage() {
               description={`We serve homeowners in ${SERVICE_AREA_LINE}.`}
               className="max-w-3xl"
             />
-            <nav aria-label="Service areas" className="grid grid-cols-2 sm:grid-cols-3 border-t border-l border-border">
+            <nav aria-label="Service areas" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 border-t border-l border-border">
               {SERVICE_AREA_CITIES.map((city) => (
                 <Link
                   key={city.slug}
                   href={areaPath(city.slug)}
-                  className="flex min-h-14 items-center justify-between gap-3 border-b border-r border-border px-4 py-3 text-sm text-foreground transition-colors hover:bg-card focus-visible:bg-card last:col-span-2 sm:last:col-span-1"
+                  className="flex min-h-14 items-center justify-between gap-3 border-b border-r border-border px-4 py-3 text-sm text-foreground transition-colors hover:bg-card focus-visible:bg-card last:col-span-2 sm:last:col-span-3 lg:last:col-span-2"
                 >
                   {city.name}
                   <ArrowRight className="h-4 w-4 shrink-0" aria-hidden />

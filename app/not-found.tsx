@@ -41,7 +41,7 @@ export default function NotFound() {
         <Card className="marketing-card mb-8 text-left">
           <CardContent className="pt-6">
             <h3 className="font-normal mb-4 text-foreground">Popular pages</h3>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid gap-2 sm:grid-cols-2">
               {[
                 { href: "/services", label: "Our services" },
                 { href: "/#consult", label: "Free consultation" },
@@ -61,13 +61,13 @@ export default function NotFound() {
           </CardContent>
         </Card>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row sm:items-start gap-4 justify-center">
           <PrimaryCta href="/" trackingLocation="not_found">
             <Home className="h-5 w-5" aria-hidden="true" />
-            Go to Homepage
+            Go to homepage
           </PrimaryCta>
           <div className="flex flex-col items-center gap-1">
-            <FamilyButton href={SITE_CONFIG.phoneHref} variant="secondary" size="lg">
+            <FamilyButton href={SITE_CONFIG.phoneHref} variant="secondary" size="lg" className="w-full sm:w-auto">
               <Phone className="h-5 w-5" aria-hidden="true" />
               Call {SITE_CONFIG.phone}
             </FamilyButton>

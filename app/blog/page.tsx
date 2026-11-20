@@ -13,6 +13,9 @@ generateCollectionPageSchema,
 } from "@/lib/schema";
 import { BLOG_POSTS } from "@/shared/blogContent";
 import { getBlogHeroImage,getBlogImageAlt } from "@/shared/blogImages";
+import { contentImageAlt } from "@/shared/imageAlts";
+import { freePicture } from "@/shared/pictureKey";
+import { CONSTRUCTION_IMAGES } from "@/shared/siteImages";
 import { ArrowRight } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -40,13 +43,21 @@ export default function BlogPage() {
     }),
   ];
 
+  // The hero never repeats a card photograph below it (every post shows its own).
+  const preferredHero = getBlogHeroImage("stages-of-building-a-house");
+  const indexHero = freePicture(
+    [preferredHero, ...Object.values(CONSTRUCTION_IMAGES)],
+    BLOG_POSTS.map((post) => getBlogHeroImage(post.slug, post.heroImage)),
+  );
+  const indexHeroAlt = indexHero === preferredHero ? getBlogImageAlt("stages-of-building-a-house") : contentImageAlt(indexHero);
+
   return (
     <InteriorPage kind="blog"><>
       <JsonLd data={schemas} />
 
       <PageHeroBand
-        imageSrc={getBlogHeroImage("stages-of-building-a-house")}
-        imageAlt={getBlogImageAlt("stages-of-building-a-house")}
+        imageSrc={indexHero}
+        imageAlt={indexHeroAlt}
       >
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Blog" }]} />
         <p className="ed-eyebrow mt-8" style={{ color: "rgb(255 255 255 / 0.72)" }}>Blog</p>

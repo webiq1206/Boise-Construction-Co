@@ -340,7 +340,7 @@
 @media (min-width: 1024px) {
   .approved-shell .lx-explore-grid { gap: var(--space-12, 48px); }
   .approved-shell .lx-cells { grid-template-columns: repeat(var(--lx-cols, 4), minmax(0, 1fr)); }
-  .approved-shell .lx-reading { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .approved-shell .lx-reading { grid-template-columns: repeat(var(--lx-reading-cols, 3), minmax(0, 1fr)); }
 }
 @media (prefers-reduced-motion: reduce) { .approved-shell .lx-cell, .approved-shell .lx-cell-photo img { transition: none; } }
 
@@ -418,4 +418,58 @@
     width: fit-content;
     min-height: var(--touch-min, 44px);
   }
+}
+
+/* ── Every-page sweep (19 November 2026) ── */
+
+/* Tablets: an odd card count in .ed-cards-3 ends on a row of three instead of
+   one card alone in the middle (7 = 2+2+3, 11 = 2+2+2+2+3). */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .ed-cards-3:has(> :nth-child(n + 3):last-child:nth-child(odd)) { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .ed-cards-3:has(> :nth-child(n + 3):last-child:nth-child(odd)) > * { grid-column: span 3; }
+  .ed-cards-3:has(> :nth-child(n + 3):last-child:nth-child(odd)) > :nth-last-child(-n + 3) { grid-column: span 2; }
+}
+
+/* A two-column link list with an odd count: the last link takes the row, so
+   no empty cell sits beside it. */
+@media (min-width: 561px) {
+  .approved-shell .ed-rule-list > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+
+/* Fact row on tablets: three facts at 768 left each figure a narrow column.
+   They stay in a row, with the figure above its line at a size that fits. */
+@media (min-width: 701px) and (max-width: 1023px) {
+  .approved-shell .lx-facts > li { padding: var(--space-6, 24px) var(--space-5, 20px) var(--space-6, 24px) 0; }
+  .approved-shell .lx-facts > li + li { padding-left: var(--space-5, 20px); }
+  .approved-shell .lx-facts strong { font-size: 24px; white-space: normal; }
+  .approved-shell .lx-facts span { font-size: 14px; }
+}
+
+/* Reading list on tablets: an odd last row gives its one link the full width. */
+@media (min-width: 701px) and (max-width: 1023px) {
+  .approved-shell .lx-reading > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+
+/* Scope list numbers never shrink: a long line squeezed "02" onto two lines at 768. */
+.approved-shell .interior-scope-list li > span { flex: none; white-space: nowrap; }
+
+/* Card rows on tablets: five or eight cards in threes end on a pair that
+   shares the row (3+2 with the two at half width), never two cards and a gap. */
+@media (min-width: 701px) and (max-width: 1023px) {
+  .approved-shell .lx-cells.lx-cells-end-pair { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .approved-shell .lx-cells.lx-cells-end-pair > li { grid-column: span 2; }
+  .approved-shell .lx-cells.lx-cells-end-pair > li:nth-last-child(-n + 2) { grid-column: span 3; }
+}
+
+/* Document pages on tablets (privacy, terms, permit flow): the 260px rail
+   beside the text left a narrow reading column at 768. Below 1024 the rail
+   sits above the text, as on phones. */
+@media (min-width: 701px) and (max-width: 1023px) {
+  .interior-document-grid { display: flex; flex-direction: column; gap: 35px; }
+  .interior-document-index { position: static; width: 100%; }
+  .interior-document-index nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-8, 32px); border-bottom: 1px solid #2c302f30; }
+  .interior-document-index .interior-estimate-link { width: auto; }
+  .interior-document-index nav > .interior-eyebrow { grid-column: 1 / -1; }
+  .interior-document-index nav > a:last-child:nth-child(even) { grid-column: 1 / -1; }
+  .interior-document-main { max-width: none; }
 }

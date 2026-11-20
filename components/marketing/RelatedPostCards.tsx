@@ -5,6 +5,8 @@ import { getManifestLinks, type ManifestLink } from "@/lib/internal-links";
 import { getBlogHeroImage, getBlogImageAlt } from "@/shared/blogImages";
 import { getCityServiceImage } from "@/shared/cityServiceImages";
 import { contentImageAlt } from "@/shared/imageAlts";
+import { pictureKey } from "@/shared/pictureKey";
+import { anchorCase } from "@/lib/anchorCase";
 
 interface RelatedPostCardsProps {
   path: string;
@@ -17,6 +19,9 @@ interface RelatedPostCardsProps {
   variant?: "cards" | "list";
   /** Links the page already shows elsewhere. They are not repeated here. */
   exclude?: readonly string[];
+  /** Photographs the page already shows. A card with one of them, or with a
+      picture an earlier card shows, is left out. */
+  pageImages?: readonly string[];
 }
 
 const KIND_LABEL: Record<string, string> = {
@@ -42,9 +47,22 @@ export function RelatedPostCards({
   limit = 6,
   variant = "cards",
   exclude = [],
+  pageImages = [],
 }: RelatedPostCardsProps) {
   const skip = new Set(exclude);
-  const links = getManifestLinks(path).filter((link) => !skip.has(link.url)).slice(0, limit);
+  const usedPictures = new Set(pageImages.map(pictureKey));
+  const links = getManifestLinks(path)
+    .filter((link) => !skip.has(link.url))
+    .filter((link) => {
+      if (variant !== "cards") return true;
+      const image = linkImage(link);
+      if (!image) return true;
+      const key = pictureKey(image.src);
+      if (usedPictures.has(key)) return false;
+      usedPictures.add(key);
+      return true;
+    })
+    .slice(0, limit);
   if (links.length === 0) return null;
 
   if (variant === "list") {
@@ -55,7 +73,7 @@ export function RelatedPostCards({
           {links.map((link) => (
             <li key={link.url}>
               <Link href={link.url} className="ed-rule-link">
-                {link.anchor}
+                {anchorCase(link.anchor)}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </li>
@@ -74,7 +92,7 @@ export function RelatedPostCards({
         {shown.map((link) => {
           const image = linkImage(link);
           return (
-            <Link key={link.url} href={link.url} className="lx-related-card group" aria-label={link.anchor}>
+            <Link key={link.url} href={link.url} className="lx-related-card group" aria-label={anchorCase(link.anchor)}>
               {image && (
                 <span className="lx-related-photo">
                   <Image src={image.src} alt={image.alt} fill sizes="(max-width: 700px) 112px, 400px" className="object-cover img-brand-grade" />
@@ -82,7 +100,7 @@ export function RelatedPostCards({
               )}
               <span className="lx-related-copy">
                 <span className="lx-related-kind">{KIND_LABEL[link.type] ?? "Related"}</span>
-                <span className="ed-h4 group-hover:underline group-hover:underline-offset-4">{link.anchor}</span>
+                <span className="ed-h4 group-hover:underline group-hover:underline-offset-4">{anchorCase(link.anchor)}</span>
               </span>
             </Link>
           );

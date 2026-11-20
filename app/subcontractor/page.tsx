@@ -55,7 +55,7 @@ export default function SubcontractorPage() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h2 className="text-4xl md:text-5xl font-serif tracking-tight text-foreground">
-              Grow Your Construction Business
+              Grow your construction business
             </h2>
             <p className="text-lg text-muted-foreground">
               {SHOW_TRUST
@@ -97,7 +97,7 @@ export default function SubcontractorPage() {
                 <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center mb-2">
                   <Shield className="w-6 h-6 text-primary" />
                 </div>
-                <CardTitle>Verified Leads</CardTitle>
+                <CardTitle>Verified leads</CardTitle>
                 <CardDescription>
                   Every lead goes through our review process before becoming available. We verify contact information and project details so you can focus on winning the job.
                 </CardDescription>
@@ -109,7 +109,7 @@ export default function SubcontractorPage() {
                 <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center mb-2">
                   <Building2 className="w-6 h-6 text-primary" />
                 </div>
-                <CardTitle>Local Service Area</CardTitle>
+                <CardTitle>Local service area</CardTitle>
                 <CardDescription>
                   Leads come from property owners in Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, and Star, in Ada County and Canyon County.
                 </CardDescription>
@@ -122,34 +122,34 @@ export default function SubcontractorPage() {
       {/* How It Works */}
       <section className="section-y-sm section-divider py-16">
         <div className="container px-4">
-          <h3 className="text-2xl font-bold text-center mb-12">How It Works</h3>
+          <h3 className="text-2xl font-bold text-center mb-12">How it works</h3>
           <div className="grid md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="brc-display-num tabular-nums w-12 h-12 rounded-full bg-primary text-primary-foreground text-xl font-light flex items-center justify-center mx-auto mb-4">
                 1
               </div>
-              <h4 className="font-semibold mb-2">Sign Up</h4>
+              <h4 className="font-semibold mb-2">Sign up</h4>
               <p className="text-sm text-muted-foreground">Create your free account and accept the subcontractor agreement</p>
             </div>
             <div className="text-center">
               <div className="brc-display-num tabular-nums w-12 h-12 rounded-full bg-primary text-primary-foreground text-xl font-light flex items-center justify-center mx-auto mb-4">
                 2
               </div>
-              <h4 className="font-semibold mb-2">Browse Leads</h4>
+              <h4 className="font-semibold mb-2">Browse leads</h4>
               <p className="text-sm text-muted-foreground">View available leads with service details, location, and quote estimates</p>
             </div>
             <div className="text-center">
               <div className="brc-display-num tabular-nums w-12 h-12 rounded-full bg-primary text-primary-foreground text-xl font-light flex items-center justify-center mx-auto mb-4">
                 3
               </div>
-              <h4 className="font-semibold mb-2">Purchase Leads</h4>
+              <h4 className="font-semibold mb-2">Purchase leads</h4>
               <p className="text-sm text-muted-foreground">Buy the leads you want. Contact info is revealed after purchase</p>
             </div>
             <div className="text-center">
               <div className="brc-display-num tabular-nums w-12 h-12 rounded-full bg-primary text-primary-foreground text-xl font-light flex items-center justify-center mx-auto mb-4">
                 4
               </div>
-              <h4 className="font-semibold mb-2">Win The Job</h4>
+              <h4 className="font-semibold mb-2">Win the job</h4>
               <p className="text-sm text-muted-foreground">Reach out to the homeowner, provide your quote, and close the deal</p>
             </div>
           </div>
@@ -159,7 +159,7 @@ export default function SubcontractorPage() {
       <section className="container px-4 py-16">
         <Card className="bg-inverse border-0 text-inverse-foreground">
           <CardContent className="py-12 text-center">
-            <h3 className="text-2xl font-serif mb-4">Ready to Grow Your Business?</h3>
+            <h3 className="text-2xl font-serif mb-4">Ready to grow your business?</h3>
             <p className="text-inverse-muted mb-8 max-w-2xl mx-auto">
               Join our network today and start receiving high-quality new-construction leads. No monthly fees, no commitments: only pay for the leads you want.
             </p>

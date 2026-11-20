@@ -19,6 +19,7 @@ import Image from '@/components/VersionedImage';
 import Link from 'next/link';
 import { Fragment, type ReactNode } from 'react';
 import { RelatedLinks } from './RelatedLinks';
+import { pictureKey } from '@/shared/pictureKey';
 import priorityStyles from './PriorityLanding.module.css';
 import { PriorityBarClearance } from './PriorityBarClearance';
 
@@ -290,8 +291,40 @@ export function LandingPageTemplate({
   const eyebrow = breadcrumbs[breadcrumbs.length - 2]?.name;
   const hasProof =
     !!proof && ((proof.testimonials?.length ?? 0) > 0 || (proof.projects?.length ?? 0) > 0);
-  const breatherImage = breatherImageUrl ?? heroImageUrl;
-  const processImage = processImageUrl ?? heroImageUrl;
+  // No photograph twice on a page: the breather is left out when it would repeat
+  // the hero, the process panel takes the first picture not yet shown (a
+  // long-form figure gives its picture up to it), and a figure that repeats an
+  // earlier picture is left out. The cards below avoid all of them.
+  const shownImages = new Set<string>();
+  const shownKeys = new Set<string>();
+  const isShown = (src: string) => shownKeys.has(pictureKey(src));
+  const markShown = (src: string) => {
+    shownImages.add(src);
+    shownKeys.add(pictureKey(src));
+  };
+  if (heroImageUrl) markShown(heroImageUrl);
+  const breatherImage = breatherImageUrl && !isShown(breatherImageUrl) ? breatherImageUrl : undefined;
+  if (breatherImage) markShown(breatherImage);
+  for (const image of featuredProject?.images ?? []) markShown(image.src);
+  const figureSources = (sections ?? []).flatMap((section) => (section.figure ? [section.figure.src] : []));
+  const processImage =
+    processSteps && processSteps.length > 0
+      ? [processImageUrl, ...figureSources].find((src): src is string => !!src && !isShown(src)) ??
+        processImageUrl ??
+        heroImageUrl
+      : undefined;
+  if (processImage) markShown(processImage);
+  // The local proof photographs come later on the page; a figure never repeats them.
+  for (const project of proof?.projects ?? []) {
+    markShown(project.exteriorImageUrl);
+    if (project.interiorImageUrl) markShown(project.interiorImageUrl);
+  }
+  const shownFigures = new Set<string>();
+  for (const src of figureSources) {
+    if (isShown(src)) continue;
+    markShown(src);
+    shownFigures.add(src);
+  }
   const showTimelineBelow = !!timeline && !costGuidance;
   const lead = splitHeroLead(overviewParagraphs && overviewParagraphs.length > 0 ? overviewParagraphs : [overview], heroLine);
   const emphasisInHero = !!overviewEmphasis && lead.line.includes(overviewEmphasis);
@@ -592,7 +625,7 @@ export function LandingPageTemplate({
                         ))}
                       </ul>
                     )}
-                    {section.figure && (
+                    {section.figure && shownFigures.has(section.figure.src) && (
                       <figure className="mt-8">
                         <div className="relative aspect-[16/10] overflow-hidden" style={{ border: '1px solid var(--ed-line)' }}>
                           <Image
@@ -629,7 +662,7 @@ export function LandingPageTemplate({
             </Reveal>
 
             {proof?.projects && proof.projects.length > 0 && (
-              <div className="mt-[clamp(40px,5vw,72px)] grid gap-6 sm:grid-cols-2">
+              <div className={`mt-[clamp(40px,5vw,72px)] grid gap-6 ${proof.projects.length > 1 ? 'sm:grid-cols-2' : 'max-w-3xl'}`}>
                 {proof.projects.map((project) => (
                   <Reveal key={project.title}>
                     <article className="flex h-full flex-col" style={{ border: '1px solid var(--ed-line)' }}>
@@ -701,7 +734,7 @@ export function LandingPageTemplate({
       {/* ─── Related links & posts ─── */}
       <Section surface="deep" spacing="lg" edge>
         <div className="ed-shell">
-          <RelatedLinks {...related} manifestPath={manifestPath} exclude={(sections ?? []).flatMap((section) => section.links?.map((link) => link.href) ?? [])} />
+          <RelatedLinks {...related} manifestPath={manifestPath} pageImages={[...shownImages]} exclude={(sections ?? []).flatMap((section) => section.links?.map((link) => link.href) ?? [])} />
         </div>
       </Section>
 
