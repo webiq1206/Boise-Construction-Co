@@ -78,9 +78,9 @@ test('the footer renders the family row, NAP, hours and one registration link, w
   assert.match(html, /<span class="fam-footer-current" aria-current="true">Boise Construction Co<\/span>/);
   assert.equal(/rel="noopener noreferrer">(P5 Home Co|Boise)/.test(html), false);
   assert.match(html, /data-family-row=""/);
-  assert.match(html, /Serving Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, Middleton, and Garden City, in Ada County and Canyon County/);
-  // SEO audit CON-S1: Middleton and Garden City have pages and are served; Emmett has none.
-  assert.doesNotMatch(html, /Emmett/);
+  assert.match(html, /Serving Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, and Middleton, in Ada County and Canyon County/);
+  // SEO audit CON-S1: Middleton is served; Garden City is a nearby community off the list; Emmett has no page.
+  assert.doesNotMatch(html, /Garden City|Emmett/);
   // The residence street is assembled so this test does not store it.
   assert.doesNotMatch(html, new RegExp(['40' + '31', 'Wa' + 'poot', 'Public representative', 'staffed storefront'].join('|')));
   assert.match(html, /Hours: Mon to Fri 9 to 6, Sat 9 to 4 Mountain\. Closed Sunday\./);

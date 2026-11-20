@@ -1,7 +1,8 @@
 // Content Data for Boise Construction Co
-// Service area: Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, Middleton
-// and Garden City, plus Ada County and Canyon County (SEO audit CON-S1, owner
-// decision 20 November 2026: the family serves every city it has pages for).
+// Service area (the P5 Google Business Profile and every listing, owner
+// 20 November 2026): Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star and
+// Middleton, plus Ada County and Canyon County. Garden City keeps its pages and
+// is linked as a nearby community, but is not in the list or the counts.
 
 export interface ServiceData {
   slug: string;
@@ -181,14 +182,17 @@ export const CITIES: CityData[] = [
   { slug: 'garden-city', name: 'Garden City', county: 'ada', isPrimary: false },
 ];
 
-/** Published town pages, all nine of which are in the service area. */
+/**
+ * Published town pages. Garden City stays here so its pages and sitemap
+ * entries remain; it is not part of the service area list (owner, 20 November
+ * 2026: add it to the profile or noindex it is an open owner question).
+ */
 export const TREASURE_VALLEY_CITIES = CITIES.map((c) => c.name).join(', ');
 
 /**
  * Service area cities: the seven in Google Business Profile order (owner
- * decision, 15 November 2026), then Middleton and Garden City, which have
- * published area and city-service pages (SEO audit CON-S1, owner decision
- * 20 November 2026; the P5 Google Business Profile lists Middleton). Visible
+ * decision, 15 November 2026), then Middleton, which the P5 Business Profile
+ * and every listing name (SEO audit CON-S1, owner 20 November 2026). Visible
  * town lists, the footer and schema City nodes use this.
  */
 export const SERVICE_AREA_SLUGS = [
@@ -200,8 +204,10 @@ export const SERVICE_AREA_SLUGS = [
   'caldwell',
   'star',
   'middleton',
-  'garden-city',
 ] as const;
+
+/** Town pages outside the service area, linked from /areas as nearby communities. */
+export const NEARBY_COMMUNITY_SLUGS = ['garden-city'] as const;
 
 export const SERVICE_AREA_CITIES: CityData[] = SERVICE_AREA_SLUGS.map((slug) => {
   const city = CITIES.find((item) => item.slug === slug);
@@ -211,7 +217,7 @@ export const SERVICE_AREA_CITIES: CityData[] = SERVICE_AREA_SLUGS.map((slug) => 
 
 /**
  * Neighboring service-area towns, nearest first, for the "Nearby areas" cards
- * on each /areas/{city} page (SEO audit CON-S1: Garden City and Middleton are
+ * on each /areas/{city} page (SEO audit CON-S1: Middleton and Garden City are
  * linked from the towns beside them, not only from the site map).
  */
 export const NEARBY_CITY_SLUGS: Record<string, readonly string[]> = {

@@ -173,7 +173,8 @@ function buildFull(): string {
   lines.push(
     '',
     `Each service has a dedicated page per city at /services/{service-slug}/{city-slug}. ` +
-      `Town pages are at /areas/{city-slug} for ${CITIES.map((c) => c.slug).join(', ')}.`,
+      `Town pages are at /areas/{city-slug} for ${CITIES.map((c) => c.slug).join(', ')}. ` +
+      `Garden City has a page as a nearby community; it is not part of the service area list above.`,
     '',
   );
 
