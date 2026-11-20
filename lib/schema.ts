@@ -130,7 +130,7 @@ export const PUBLIC_POSTAL_ADDRESS = {
 } as const;
 
 /**
- * LocalBusiness and Organization areaServed: the eight service area cities, then
+ * LocalBusiness and Organization areaServed: the nine service area cities, then
  * Ada County and Canyon County. No street address.
  */
 export function businessAreaServed() {

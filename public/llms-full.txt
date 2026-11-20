@@ -1,6 +1,6 @@
 # Boise Construction Co - Full Reference
 
-> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build. Serving Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, and Middleton, in Ada County and Canyon County. Phone (208) 477-1169.
+> New residential construction in Boise, Idaho and the Treasure Valley: custom homes, semi-custom homes, build-on-your-lot, shop homes, and the design and permitting that precede them. Design-build. Serving Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, Middleton, and Garden City, in Ada County and Canyon County. Phone (208) 477-1169.
 
 Boise Construction Co is a P5 Home Co company (https://p5homeco.com). Sister companies: Boise Remodeling Co, Boise Cabinet Co and Boise Handyman Co.
 
@@ -16,9 +16,9 @@ Boise Construction Co is a residential design-build home builder serving the Tre
 
 ## Service area
 
-We build in Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, and Middleton, in Ada County and Canyon County:
+We build in Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, Middleton, and Garden City, in Ada County and Canyon County:
 
-- Ada County: Boise, Meridian, Eagle, Kuna, Star
+- Ada County: Boise, Meridian, Eagle, Kuna, Star, Garden City
 - Canyon County: Nampa, Caldwell, Middleton
 
 Permit paths, impact fees, and inspection sequencing differ between Ada County and Canyon County, and again between incorporated city limits and county jurisdiction. We coordinate submissions, fees, and inspections as part of the design-build contract.
@@ -36,7 +36,7 @@ Permit paths, impact fees, and inspection sequencing differ between Ada County a
 - Shop Homes & Barndominiums: /services/shop-homes-barndominiums - Post-frame and steel-framed homes that pair finished living space with real working shop square footage.
 - Energy-Efficient Homes: /services/energy-efficient-homes - High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.
 
-Each service has a dedicated page per city at /services/{service-slug}/{city-slug}. Town pages are at /areas/{city-slug} for boise, meridian, eagle, nampa, kuna, star, middleton, caldwell, garden-city. Garden City has a page as a nearby community; it is not part of the service area list above.
+Each service has a dedicated page per city at /services/{service-slug}/{city-slug}. Town pages are at /areas/{city-slug} for boise, meridian, eagle, nampa, kuna, star, middleton, caldwell, garden-city.
 
 ## Authoritative guides (https://boiseconstruction.co/guides)
 

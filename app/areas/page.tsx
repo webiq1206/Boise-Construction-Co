@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { InteriorPage } from "@/components/approved/InteriorLayout";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { AreaCard } from "@/components/marketing/AreaCard";
@@ -18,7 +17,7 @@ generateBreadcrumbSchema,
 generateWebPageSchema,
 } from "@/lib/schema";
 import { CITY_HERO_IMAGES } from "@/shared/cityServiceImages";
-import { CITIES,NEARBY_COMMUNITY_SLUGS,SERVICE_AREA_CITIES,SERVICE_AREA_LINE } from "@/shared/contentData";
+import { SERVICE_AREA_CITIES,SERVICE_AREA_LINE } from "@/shared/contentData";
 import { CTA_PRIMARY,CTA_SECONDARY } from "@/shared/ctaCopy";
 import { contentImageAlt } from "@/shared/imageAlts";
 import { SITE_IMAGES } from "@/shared/siteImages";
@@ -28,7 +27,7 @@ export const metadata = withBrandPageMetadata((buildPageMetadata({
   path: "/areas",
   titleOverride: "Treasure Valley Service Areas",
   descriptionOverride:
-    "Custom home building in Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, and Middleton, across Ada and Canyon County.",
+    "Custom home building in Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, Middleton, and Garden City, across Ada and Canyon County.",
 })), "/areas");
 
 export default function AreasHubPage() {
@@ -76,7 +75,7 @@ export default function AreasHubPage() {
           <div className="ed-shell">
             <SectionHeader
               eyebrow="Treasure Valley"
-              title={<>Eight cities, one design-build team</>}
+              title={<>Nine cities, one design-build team</>}
               description="Custom homes, semi-custom homes, and builds on your own lot in Ada County and Canyon County."
               align="left"
             />
@@ -87,20 +86,6 @@ export default function AreasHubPage() {
                 </Reveal>
               ))}
             </div>
-            {/* Garden City keeps its pages as a nearby community; it is not in the
-                service area list (owner, 20 November 2026). */}
-            <p className="ed-body mt-8">
-              Nearby community:{" "}
-              {NEARBY_COMMUNITY_SLUGS.map((slug) => {
-                const city = CITIES.find((c) => c.slug === slug)!;
-                return (
-                  <Link key={slug} href={`/areas/${slug}`} className="underline underline-offset-4">
-                    home building in {city.name}
-                  </Link>
-                );
-              })}
-              .
-            </p>
           </div>
         </Section>
 
