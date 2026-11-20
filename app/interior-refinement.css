@@ -473,3 +473,13 @@
   .interior-document-index nav > a:last-child:nth-child(even) { grid-column: 1 / -1; }
   .interior-document-main { max-width: none; }
 }
+
+/* Accent eyebrows on light grounds (SEO audit CON-S6, owner 20 November 2026:
+   accents never carry small text). The words are charcoal; the accent stays
+   as the short rule beside them. Dark bands keep their legible accent. */
+html .ed-eyebrow-accent:not(:is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) *) {
+  color: #383837;
+}
+html .ed-eyebrow-accent:not(:is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) *)::before {
+  background: #c48d3f;
+}
