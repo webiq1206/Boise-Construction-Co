@@ -1,4 +1,5 @@
 import { HeroBackgroundVideo } from "./HeroBackgroundVideo";
+import { HERO_POSTER, HERO_POSTER_SRCSET } from "./heroPoster";
 import { FamilyButton } from "@/components/family/Button";
 import { brandStyle } from "@/components/family/brandStyle";
 import { ProofStrip } from "@/components/family/ProofStrip";
@@ -9,15 +10,13 @@ import {
   CONTRACTOR_REGISTRATION_LABEL,
 } from "@/shared/contractorRegistration";
 
-const HERO_POSTER = "/images/construction/boise-construction-co-poster.jpg";
-
 /** Construction-owned media, preserving the existing family hero content and styles. */
 export function HomeHero() {
   return (
     <>
       <div className="home-hero pt-0" data-p5-hero="">
         <section className="fam-hero" data-family-hero="" data-fit="viewport" data-desktop-from={FAMILY_BRAND.header.desktopFrom} style={brandStyle()} aria-labelledby="family-hero-title">
-          <link rel="preload" as="image" href={HERO_POSTER} fetchPriority="high" />
+          <link rel="preload" as="image" href={HERO_POSTER} imageSrcSet={HERO_POSTER_SRCSET} imageSizes="100vw" fetchPriority="high" />
           <HeroBackgroundVideo />
           <div className="fam-hero-scrim" aria-hidden="true" />
           <div className="fam-hero-inner">

@@ -80,7 +80,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
               <span>{readingTime} min read</span>
               <a href={CONTENT_AUTHOR.url} rel="author noopener" data-testid="article-byline">{CONTENT_AUTHOR.byline}</a>
             </p>
-          </header><BlogHeroBanner src={heroImage} alt={heroAlt}/>
+          </header><BlogHeroBanner src={heroImage} alt={heroAlt} priority/>
 
           <GuideJumpChips headings={tocHeadings} />
 
