@@ -345,3 +345,39 @@ Every public route was captured at 390, 768 and 1440 and read. What changed:
   Places, communities and acronyms keep their capitals; a label already in
   sentence case is untouched. The 404 and subcontractor pages were reworded by
   hand.
+
+## SEO audit fixes (owner, 20 November 2026)
+
+* **Service area is nine cities**: Boise, Meridian, Nampa, Eagle, Kuna,
+  Caldwell, Star, Middleton and Garden City (`SERVICE_AREA_SLUGS` in
+  `shared/contentData.ts`, owner answer round 2). The footer, `areaServed`,
+  `/areas` ("Nine cities"), `/about` and llms.txt all read that list.
+  `GBP_SERVICE_AREAS` is this site's own profile draft and stays the earlier
+  seven. Each `/areas/<city>` page has a "Nearby areas" card row
+  (`NEARBY_CITY_SLUGS`).
+* **City-service FAQ questions** use a noun per service
+  (`SERVICE_FAQ_NOUNS`, `cityServiceCostQuestion()`): "How much does a
+  detached ADU cost in Boise?". The FAQPage JSON-LD reads the same list.
+* **Parent profiles**: Facebook `https://www.facebook.com/p5homeco`,
+  Instagram `https://www.instagram.com/p5_home_co` and the P5 Google Maps
+  profile sit on the parent Organization's `sameAs` (`P5_SOCIAL`), never on
+  this brand's node. Neither P5 Google review is about new construction, so
+  this site quotes none: the homepage instant estimate band and
+  `EstimatePromptBand` link "Reviews of our parent company, P5 Home Co, on
+  Google". Never add a rating, count or review markup.
+* **Author**: articles and guides show "By Nick Perkins, founder of P5 Home
+  Co" (`shared/authors.ts`), linking p5homeco.com/about, and the Article
+  schema names him as a Person with the company as publisher.
+* **Bonds**: say you can ask any contractor for proof of registration and
+  general liability insurance and have the right, at your own expense, to
+  require a surety bond (Idaho Code 45-525). Never imply the company is
+  bonded.
+* **Accent eyebrows** on light grounds are charcoal words beside an ochre
+  rule (end of `app/interior-refinement.css`).
+* **Homepage hero on phones**: the poster has 768 and 1280 pixel copies
+  (`components/approved/heroPoster.ts`), and below 1024px the owner's video
+  loads after the first interaction. Desktop is unchanged.
+* ADU and addition handoffs link `boiseremodeling.co/services/adu` and
+  `/services/room-addition` (`getScopeSplitSection()`); the empty
+  treasure-valley-locations hub redirects permanently to `/areas`
+  (`EMPTY_HUB_DESTINATIONS`).
