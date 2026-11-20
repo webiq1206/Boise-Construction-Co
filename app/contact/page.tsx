@@ -333,7 +333,7 @@ export default function ContactPage() {
                   <p className="leading-relaxed">Home building in {SERVICE_AREA_CITY_LIST}.</p>
                   {/* SEO audit XS-06: the locality the business schema states, in crawlable text. */}
                   <p className="mt-2 leading-relaxed" data-testid="contact-locality">
-                    {SITE_CONFIG.address.cityState} {SITE_CONFIG.address.postalCode}
+                    {`${SITE_CONFIG.address.cityState} ${SITE_CONFIG.address.postalCode}`}
                   </p>
                 </ContactChannel>
               </Reveal>

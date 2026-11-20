@@ -43,8 +43,9 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
      <li><span>02</span>No appointment needed to see your range</li>
      <li><span>03</span>A preliminary range now, a firm written proposal after we visit</li>
     </ul>
+    <p className="fr-parent-reviews"><a className="f-link" href={P5_SOCIAL.maps} rel="noopener" target="_blank" data-testid="link-parent-reviews">{PARENT_REVIEWS_LABEL}</a></p>
    </div>
-   <div className="fr-cta-strip-actions"><a className="f-button f-dark" href={INSTANT_ESTIMATE_PATH} data-cta="primary">{CTA_PRIMARY}</a><a className="f-link" href={primary}>{CTA_QUOTE} <Arrow/></a><a className="f-link fr-parent-reviews" href={P5_SOCIAL.maps} rel="noopener" target="_blank" data-testid="link-parent-reviews">{PARENT_REVIEWS_LABEL}</a></div>
+   <div className="fr-cta-strip-actions"><a className="f-button f-dark" href={INSTANT_ESTIMATE_PATH} data-cta="primary">{CTA_PRIMARY}</a><a className="f-link" href={primary}>{CTA_QUOTE} <Arrow/></a></div>
   </div>
  </section>
 

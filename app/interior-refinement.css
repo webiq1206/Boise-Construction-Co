@@ -475,12 +475,19 @@
 }
 
 /* Accent eyebrows on light grounds (SEO audit CON-S6, owner 20 November 2026:
-   accents never carry small text). The words are charcoal; the accent stays
-   as the short rule beside them. Dark bands keep their legible accent. */
+   accents never carry small text). The words are charcoal on light grounds
+   and paper on the charcoal bands; the accent stays as the short rule beside
+   them. */
 html .ed-eyebrow-accent:not(:is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) *) {
   color: #383837;
 }
 html .ed-eyebrow-accent:not(:is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) *)::before {
+  background: #c48d3f;
+}
+html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) .ed-eyebrow-accent {
+  color: #fbfaf6;
+}
+html :is(.ed-on-gradient, .fr-band, .f-value, .f-contact, #budget) .ed-eyebrow-accent::before {
   background: #c48d3f;
 }
 
@@ -502,4 +509,16 @@ html .ed-eyebrow-accent:not(:is(.ed-on-gradient, .fr-band, .f-value, .f-contact,
     align-items: center;
     min-height: var(--touch-min, 44px);
   }
+}
+
+/* The parent company's reviews link sits under the homepage instant
+   estimate points, quieter than the two calls to action beside them. */
+.fr-parent-reviews { margin-top: 20px; }
+.fr-parent-reviews > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-min, 44px);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
