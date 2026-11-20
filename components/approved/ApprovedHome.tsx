@@ -6,7 +6,8 @@ import {Accordion,AccordionItem,AccordionTrigger,AccordionContent} from '@/compo
 import {FAQSection} from '@/components/FAQSection';
 import {contentImageAlt} from '@/shared/imageAlts';
 import {localAlt} from '@/shared/localAlt';
-import {CTA_PRIMARY,CTA_QUOTE} from '@/shared/ctaCopy';
+import {CTA_PRIMARY,CTA_QUOTE,PARENT_REVIEWS_LABEL} from '@/shared/ctaCopy';
+import {P5_SOCIAL} from '@/shared/gbpProfile';
 import {INSTANT_ESTIMATE_PATH} from '@/shared/instantEstimate';
 import {PlanningRangeExplorer} from '@/components/PlanningRangeExplorer';
 import {brands,cities,serviceExtras} from './family-content';
@@ -43,7 +44,7 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
      <li><span>03</span>A preliminary range now, a firm written proposal after we visit</li>
     </ul>
    </div>
-   <div className="fr-cta-strip-actions"><a className="f-button f-dark" href={INSTANT_ESTIMATE_PATH} data-cta="primary">{CTA_PRIMARY}</a><a className="f-link" href={primary}>{CTA_QUOTE} <Arrow/></a></div>
+   <div className="fr-cta-strip-actions"><a className="f-button f-dark" href={INSTANT_ESTIMATE_PATH} data-cta="primary">{CTA_PRIMARY}</a><a className="f-link" href={primary}>{CTA_QUOTE} <Arrow/></a><a className="f-link fr-parent-reviews" href={P5_SOCIAL.maps} rel="noopener" target="_blank" data-testid="link-parent-reviews">{PARENT_REVIEWS_LABEL}</a></div>
   </div>
  </section>
 
