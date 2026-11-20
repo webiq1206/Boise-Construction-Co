@@ -117,7 +117,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                         <li key={c.slug}>
                           <Link
                             href={`/blog/${c.slug}`}
-                            className="text-sm text-accent-legible hover:underline inline-flex items-center"
+                            className="lx-touch text-sm text-accent-legible hover:underline inline-flex items-center"
                           >
                             {anchorCase(c.title)}
                             <ArrowRight className="ml-1 h-3 w-3 shrink-0" />
@@ -128,7 +128,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                     {publishedClusters.length >= CATEGORY_HUB_MIN_POSTS && hub && (
                       <Link
                         href={categoryHubHref(guide.hubSlug)}
-                        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mt-4"
+                        className="lx-touch inline-flex items-center text-sm text-muted-foreground hover:text-foreground mt-4"
                       >
                         View all in {hub.title}
                         <ArrowRight className="ml-1 h-4 w-4" />

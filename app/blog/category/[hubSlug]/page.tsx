@@ -155,7 +155,7 @@ export default async function BlogCategoryHubPage(
           </p>
           <Link
             href={guidePath(hub.pillarSlug)}
-            className="lx-hub-guide-link inline-flex items-center text-accent-legible hover:underline text-sm mb-10"
+            className="lx-touch lx-hub-guide-link inline-flex items-center text-accent-legible hover:underline text-sm mb-10"
           >
             Read the complete guide
             <ArrowRight className="ml-1 h-4 w-4" />
