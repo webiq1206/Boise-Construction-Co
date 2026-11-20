@@ -23,7 +23,7 @@ export const homeBuilderRedFlags: BlogPostData = {
   featuredSnippetTargets: ['home builder red flags', 'signs of a bad home builder'],
   wordCountTarget: 'cluster',
   quickAnswer:
-    'The warning signs that matter most are a bid far below the others, a scope too vague to argue with, pressure to sign quickly, a large upfront deposit, no written change order process, refusal to name trade partners, and no proof of bond and insurance. Each one predicts a specific later problem.',
+    'The warning signs that matter most are a bid far below the others, a scope too vague to argue with, pressure to sign quickly, a large upfront deposit, no written change order process, refusal to name trade partners, and no proof of registration and insurance. Each one predicts a specific later problem.',
   keyTakeaways: [
     'A bid far below the others is usually a shorter scope, not a better price.',
     'A large deposit funds the builder rather than your house and reduces your leverage from day one.',
@@ -99,8 +99,8 @@ export const homeBuilderRedFlags: BlogPostData = {
 <p><strong>A builder who will not name their framer, electrician or HVAC contractor is either hiding turnover or does not have relationships.</strong> The usual justification is that trade partners are commercially sensitive. They are not. Every builder in Ada and Canyon County knows who the other builders use.</p>
 <p>What the refusal usually conceals is that the builder rebids every trade on every house and takes the cheapest number each time. That model produces crews with no loyalty, no familiarity with the builder's standards, and no reason to come back and fix something. It also produces schedule chaos, because the cheapest available crew is cheap partly because they are available. Long trade relationships are one of the few genuine quality signals in this industry.</p>
 
-<h2 id="bond-insurance">No proof of bond and insurance</h2>
-<p><strong>Ask for certificates, not assurances, and check that general liability and workers compensation are both current.</strong> Idaho registers residential contractors rather than licensing them, so a builder claiming to be "licensed" is either being loose with the word or hoping you will not check what it means here. Ask instead for the contractor registration, the bond, and current insurance certificates from the insurer.</p>
+<h2 id="registration-insurance">No proof of registration and insurance</h2>
+<p><strong>Ask for certificates, not assurances, and check that general liability and workers compensation are both current.</strong> Idaho registers residential contractors rather than licensing them, so a builder claiming to be "licensed" is either being loose with the word or hoping you will not check what it means here. Ask instead for the contractor registration and current insurance certificates from the insurer. In Idaho you can ask any contractor for proof of registration and general liability insurance, and you have the right, at your own expense, to require a surety bond.</p>
 <p>The exposure is real rather than theoretical. If an uninsured worker is hurt on your lot, or an uninsured crew damages a neighboring property, the claim can find its way to you as the property owner. A builder who is slow to produce a certificate is usually slow because the coverage lapsed, and coverage lapses when a company is short of money.</p>
 
 <h2 id="going-quiet">Going quiet</h2>

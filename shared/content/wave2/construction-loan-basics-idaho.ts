@@ -72,7 +72,7 @@ export const constructionLoanBasicsIdaho: BlogPostData = {
     {
       question: 'What does a lender want from the builder?',
       answer:
-        'Typically a signed contract with a defined scope, a detailed cost breakdown, proof of insurance and bonding, an Idaho contractor registration, a draw schedule the lender can work with, and a track record of finishing projects. Some lenders also ask for lien waivers at each draw. We provide this documentation as a matter of course.',
+        'Typically a signed contract with a defined scope, a detailed cost breakdown, proof of insurance, an Idaho contractor registration, a draw schedule the lender can work with, and a track record of finishing projects. Some lenders also ask for lien waivers at each draw. We provide this documentation as a matter of course.',
     },
     {
       question: 'Is this financial advice?',
@@ -121,7 +121,7 @@ export const constructionLoanBasicsIdaho: BlogPostData = {
 <p>There is a planning consequence too. Because interest accrues on what has been drawn, the back half of a build carries more monthly cost than the front half. Homeowners who model their carrying cost using the first month's payment consistently understate it. Ask your lender to show you an illustration across the whole construction period rather than a single figure, and build the total into the budget as its own line alongside land, site work, and construction.</p>
 
 <h2 id="builder-requirements">What the lender needs from your builder</h2>
-<p><strong>Lenders underwrite the builder as well as the borrower, because a half-finished house is poor collateral.</strong> The usual package is a signed contract with a clearly defined scope, a detailed line-item cost breakdown, evidence of insurance and bonding, Idaho contractor registration, a draw schedule the lender can administer, and some demonstration that the builder finishes what they start. Some lenders want to see the allowance schedule in detail, because thin allowances create a real risk of the project running out of money before completion, which is a risk the lender carries too.</p>
+<p><strong>Lenders underwrite the builder as well as the borrower, because a half-finished house is poor collateral.</strong> The usual package is a signed contract with a clearly defined scope, a detailed line-item cost breakdown, evidence of insurance, Idaho contractor registration, a draw schedule the lender can administer, and some demonstration that the builder finishes what they start. Some lenders want to see the allowance schedule in detail, because thin allowances create a real risk of the project running out of money before completion, which is a risk the lender carries too.</p>
 <p>We are insured, our Idaho contractor registration is available on request, and we produce a line-item budget and a published draw schedule as standard. That is not marketing; it is the paperwork this process requires, and a builder who assembles it reluctantly will slow your financing down.</p>
 
 <h2 id="borrower-requirements">What the lender needs from you</h2>
