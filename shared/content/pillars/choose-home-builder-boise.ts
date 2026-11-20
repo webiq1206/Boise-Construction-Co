@@ -5,7 +5,7 @@ export const chooseHomeBuilderBoise: GuidePageData = {
   title: 'How to choose a home builder in Boise',
   seoTitle: 'Choose a Home Builder in Boise',
   metaDescription:
-    'How to choose a home builder in Boise: delivery models, design-build trade-offs, verifying registration and insurance, reading bids, contracts, and red flags.',
+    'How to choose a home builder in Boise: delivery models, design-build trade-offs, checking registration and insurance, reading bids, and red flags.',
   excerpt:
     'Every builder claims quality and communication. This guide covers what actually separates them: scope discipline, allowance honesty, how Idaho registers contractors, how to verify insurance, and what a fair contract contains.',
   hubSlug: 'choosing-a-builder',
