@@ -131,6 +131,40 @@ export function serviceLabel(service: { slug: string; name: string }): string {
   return SERVICE_LABELS[service.slug] ?? service.name;
 }
 
+/**
+ * The noun a city-service FAQ question uses for each service, so the question
+ * reads as English ("How much does a detached ADU cost in Boise?") instead of
+ * the title ("How much does adus & guest houses cost"). SEO audit CON-T1,
+ * 20 November 2026. `plural` takes "do" in the cost question.
+ */
+export const SERVICE_FAQ_NOUNS: Record<string, { noun: string; plural?: boolean }> = {
+  'custom-home-builder': { noun: 'a custom home' },
+  'semi-custom-homes': { noun: 'a semi-custom home' },
+  'build-on-your-lot': { noun: 'building on your own lot' },
+  'design-build': { noun: 'design-build' },
+  'home-plans-design': { noun: 'home design and plans', plural: true },
+  'home-additions': { noun: 'a home addition' },
+  adu: { noun: 'a detached ADU' },
+  'lot-evaluation': { noun: 'a lot evaluation' },
+  'shop-homes-barndominiums': { noun: 'a shop home or barndominium' },
+  'energy-efficient-homes': { noun: 'an energy-efficient home' },
+};
+
+function faqNoun(service: { slug: string; name: string }) {
+  return SERVICE_FAQ_NOUNS[service.slug] ?? { noun: service.name.toLowerCase() };
+}
+
+/** "How much does a custom home cost in Boise?" */
+export function cityServiceCostQuestion(service: { slug: string; name: string }, cityName: string): string {
+  const { noun, plural } = faqNoun(service);
+  return `How much ${plural ? 'do' : 'does'} ${noun} cost in ${cityName}?`;
+}
+
+/** "How do I get a budget for a custom home in Boise?" */
+export function cityServiceBudgetQuestion(service: { slug: string; name: string }, cityName: string): string {
+  return `How do I get a budget for ${faqNoun(service).noun} in ${cityName}?`;
+}
+
 // Alias so existing imports stay compatible
 export const PRIORITY_SERVICES = SERVICES;
 

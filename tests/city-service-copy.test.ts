@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CITIES, SERVICES } from '../shared/contentData.ts';
+import { CITIES, SERVICES, cityServiceBudgetQuestion, cityServiceCostQuestion } from '../shared/contentData.ts';
 import { getCityServiceCopy } from '../shared/content/cityServiceCopy.ts';
 import { getCityServiceFaqs, getCityServiceIntro, SERVICE_SEO_CONTENT } from '../shared/seoContent.ts';
 import { landingFAQSchema } from '../lib/landing-schema.ts';
@@ -37,9 +37,11 @@ test('all 90 service-city pages use the draft intro and six FAQs, and schema mat
       const faqs = getCityServiceFaqs(content, city);
       assert.equal(faqs.length, 6);
       assert.deepEqual(faqs, copy.faqs);
-      assert.equal(faqs[0].question, `How much does ${service.name.toLowerCase()} cost in ${city.name}?`);
+      assert.equal(faqs[0].question, cityServiceCostQuestion(service, city.name));
       assert.equal(faqs[3].question, `Do you build in ${city.name}?`);
-      assert.equal(faqs[4].question, `How do I get a budget for ${service.name.toLowerCase()} in ${city.name}?`);
+      assert.equal(faqs[4].question, cityServiceBudgetQuestion(service, city.name));
+      // SEO audit CON-T1: the questions read as English, never the title case service name.
+      assert.doesNotMatch(faqs[0].question + faqs[4].question, /&|adus|build on your lot cost|homes cost/i);
       const visible = copy.intro + faqs.map((faq) => faq.question + faq.answer).join(' ');
       assert.doesNotMatch(visible, /Jared/);
       const schema = landingFAQSchema(faqs) as {
@@ -52,6 +54,14 @@ test('all 90 service-city pages use the draft intro and six FAQs, and schema mat
       });
     }
   }
+});
+
+test('city-service FAQ questions use a grammatical noun (SEO audit CON-T1)', () => {
+  const svc = (slug: string) => SERVICES.find((s) => s.slug === slug)!;
+  assert.equal(cityServiceCostQuestion(svc('adu'), 'Boise'), 'How much does a detached ADU cost in Boise?');
+  assert.equal(cityServiceCostQuestion(svc('home-plans-design'), 'Meridian'), 'How much do home design and plans cost in Meridian?');
+  assert.equal(cityServiceBudgetQuestion(svc('build-on-your-lot'), 'Eagle'), 'How do I get a budget for building on your own lot in Eagle?');
+  assert.equal(getCityServiceFaqs(SERVICE_SEO_CONTENT.adu, CITIES[0])[0].question, 'How much does a detached ADU cost in Boise?');
 });
 
 test('landmark lists and Indian Creek follow the approved corrections', () => {

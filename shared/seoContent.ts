@@ -1,5 +1,5 @@
 import type { ServiceData, CityData } from './contentData';
-import { getCountyLabel, SERVICE_AREA_LINE, serviceLabel } from './contentData';
+import { cityServiceBudgetQuestion, cityServiceCostQuestion, getCountyLabel, SERVICE_AREA_LINE, serviceLabel } from './contentData';
 import { getAreaCityCopy } from './content/areaCopy';
 import { getCityServiceCopy } from './content/cityServiceCopy';
 import { indianCreekDescription } from '../lib/seo';
@@ -933,7 +933,7 @@ export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): 
     ...(costSentence
       ? [
           {
-            question: `How much does ${service.name.toLowerCase()} cost in ${city.name}?`,
+            question: cityServiceCostQuestion(service, city.name),
             answer: `${city.name} pricing tracks the broader Treasure Valley market. ${costSentence} Book a lot walkthrough for a line-item budget specific to your site.`,
           },
         ]
@@ -944,7 +944,7 @@ export function getCityServiceFaqs(service: ServiceSEOContent, city: CityData): 
       answer: `Yes. We regularly build in ${city.name} and the surrounding ${county} area, and we are familiar with the local plan review process and impact fees.`,
     },
     {
-      question: `How do I get a budget for ${service.name.toLowerCase()} in ${city.name}?`,
+      question: cityServiceBudgetQuestion(service, city.name),
       answer: `Request a quote for a planning conversation, then book a free planning consultation. If you have a lot under consideration, we will walk it with you and identify what will drive the site costs.`,
     },
   ];
