@@ -375,8 +375,10 @@ Every public route was captured at 390, 768 and 1440 and read. What changed:
 * **Accent eyebrows** on light grounds are charcoal words beside an ochre
   rule (end of `app/interior-refinement.css`).
 * **Homepage hero on phones**: the poster has 768 and 1280 pixel copies
-  (`components/approved/heroPoster.ts`), and below 1024px the owner's video
-  loads after the first interaction. Desktop is unchanged.
+  (`components/approved/heroPoster.ts`). The owner's video still autoplays
+  at every width, as the homepage hero checks require: deferring it to the
+  first interaction on phones was tried and reverted (it failed the
+  autoplay, reduced-motion, data-saver and failed-media checks).
 * ADU and addition handoffs link `boiseremodeling.co/services/adu` and
   `/services/room-addition` (`getScopeSplitSection()`); the empty
   treasure-valley-locations hub redirects permanently to `/areas`

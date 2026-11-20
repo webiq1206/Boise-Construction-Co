@@ -5,7 +5,6 @@ import { HERO_POSTER, HERO_POSTER_SRCSET } from "./heroPoster";
 
 const MEDIA = "/images/construction/boise-construction-co-";
 
-
 /** Autoplay decorative media while visible; keep the poster on technical failure. */
 export function HeroBackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -16,11 +15,7 @@ export function HeroBackgroundVideo() {
   const [visible, setVisible] = useState(false);
   const [hasFrame, setHasFrame] = useState(false);
   const [failed, setFailed] = useState(false);
-  // Below 1024px the video waits for the visitor's first interaction, so the
-  // poster is the phone's first view and its largest paint (SEO audit CON-S5).
-  // The owner's video itself is unchanged and still plays.
-  const [interacted, setInteracted] = useState(false);
-  const enabled = ready && !failed && (desktop || interacted);
+  const enabled = ready && !failed;
 
   useEffect(() => {
     const size = matchMedia("(min-width: 1024px)");
@@ -29,9 +24,6 @@ export function HeroBackgroundVideo() {
     resize();
     visibility();
     setReady(true);
-    const first = () => setInteracted(true);
-    const firstEvents = ["pointerdown", "keydown", "touchstart", "scroll"] as const;
-    for (const name of firstEvents) window.addEventListener(name, first, { once: true, passive: true });
     size.addEventListener("change", resize);
     document.addEventListener("visibilitychange", visibility);
     const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.05 });
@@ -40,7 +32,6 @@ export function HeroBackgroundVideo() {
       observer.disconnect();
       size.removeEventListener("change", resize);
       document.removeEventListener("visibilitychange", visibility);
-      for (const name of firstEvents) window.removeEventListener(name, first);
     };
   }, []);
 
@@ -50,7 +41,6 @@ export function HeroBackgroundVideo() {
     setHasFrame(false);
     video.load();
   }, [enabled, desktop]);
-
 
   useEffect(() => {
     const video = videoRef.current;
