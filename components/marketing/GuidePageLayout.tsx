@@ -78,7 +78,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
             <p className="lx-meta">
               <span>{formatDate(guide.publishedAt)}</span>
               <span>{readingTime} min read</span>
-              <Link href={CONTENT_AUTHOR.url}>{CONTENT_AUTHOR.name}</Link>
+              <a href={CONTENT_AUTHOR.url} rel="author noopener" data-testid="article-byline">{CONTENT_AUTHOR.byline}</a>
             </p>
           </header><BlogHeroBanner src={heroImage} alt={heroAlt}/>
 

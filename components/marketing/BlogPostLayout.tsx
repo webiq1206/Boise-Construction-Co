@@ -84,7 +84,7 @@ export function BlogPostLayout({ post, formatDate }: BlogPostLayoutProps) {
             <p className="lx-meta">
               <span>{formatDate(post.publishedAt)}</span>
               <span>{readingTime} min read</span>
-              <Link href={CONTENT_AUTHOR.url}>{CONTENT_AUTHOR.name}</Link>
+              <a href={CONTENT_AUTHOR.url} rel="author noopener" data-testid="article-byline">{CONTENT_AUTHOR.byline}</a>
             </p>
           </header><BlogHeroBanner src={heroImage} alt={heroAlt}/>
 
