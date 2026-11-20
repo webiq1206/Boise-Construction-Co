@@ -12,7 +12,7 @@ estimateReadingTime,
 import { buildPageMetadata } from '@/lib/page-metadata';
 import { generateBreadcrumbSchema,generateWebPageSchema } from '@/lib/schema';
 import { getBlogHeroImage,getBlogImageAlt } from '@/shared/blogImages';
-import { CONTENT_HUBS,guidePath } from '@/shared/contentHubs';
+import { CONTENT_HUBS,categoryHubHref,guidePath } from '@/shared/contentHubs';
 import { GUIDE_PAGES,type GuidePageData } from '@/shared/guideContent';
 import { ArrowRight,BookOpen,MapPin } from 'lucide-react';
 import { Metadata } from 'next';
@@ -187,7 +187,7 @@ export default function GuidesIndexPage() {
                     <ArrowRight className="ml-1 h-3 w-3" />
                   </Link>
                   <Link
-                    href={`/blog/category/${hub.hubSlug}`}
+                    href={categoryHubHref(hub.hubSlug)}
                     className="text-muted-foreground hover:text-accent-legible hover:underline"
                   >
                     Related articles

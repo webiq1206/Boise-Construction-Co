@@ -16,6 +16,7 @@ import { contentImageAlt } from '@/shared/imageAlts';
 import {
 categoryHubPath,
 CONTENT_HUBS,
+EMPTY_HUB_DESTINATIONS,
 getHubBySlug,
 guidePath,
 isCategoryHubIndexable,
@@ -23,7 +24,7 @@ isCategoryHubIndexable,
 import { ArrowRight } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound,redirect } from 'next/navigation';
+import { notFound,permanentRedirect } from 'next/navigation';
 
 function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString('en-US', {
@@ -90,7 +91,8 @@ export default async function BlogCategoryHubPage(
   );
 
   if (posts.length === 0) {
-    redirect(hub.hubSlug === 'treasure-valley-locations' ? '/areas' : '/blog');
+    // Permanent (308), so the old hub URL passes to its destination (SEO audit CON-S9).
+    permanentRedirect(EMPTY_HUB_DESTINATIONS[hub.hubSlug] ?? '/blog');
   }
 
   // The topic photograph never repeats a card photograph below it.

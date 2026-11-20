@@ -313,6 +313,19 @@ export function categoryHubPath(hubSlug: string): string {
   return `/blog/category/${hubSlug}`;
 }
 
+/**
+ * Hubs with no articles of their own, and the page their route redirects to
+ * permanently (SEO audit CON-S9). Links go straight to that page.
+ */
+export const EMPTY_HUB_DESTINATIONS: Record<string, string> = {
+  'treasure-valley-locations': '/areas',
+};
+
+/** Where a link to a topic hub should point: the hub, or the page an empty hub redirects to. */
+export function categoryHubHref(hubSlug: string): string {
+  return EMPTY_HUB_DESTINATIONS[hubSlug] ?? categoryHubPath(hubSlug);
+}
+
 /** Minimum published cluster count before category hub is indexable */
 export const CATEGORY_HUB_MIN_POSTS = 3;
 

@@ -13,7 +13,7 @@ injectHeadingIds,
 } from '@/lib/content-utils';
 import { CONTENT_AUTHOR } from '@/shared/authors';
 import { getArticleInlineFigures,getBlogHeroImage,getBlogImageAlt,isCostRelatedContent } from '@/shared/blogImages';
-import { CATEGORY_HUB_MIN_POSTS,categoryHubPath,getClustersForHub,getHubBySlug,guidePath } from '@/shared/contentHubs';
+import { CATEGORY_HUB_MIN_POSTS,categoryHubHref,getClustersForHub,getHubBySlug,guidePath } from '@/shared/contentHubs';
 import type { GuidePageData } from '@/shared/guideContent';
 import { getResourcesForGuide } from '@/shared/guideResources';
 import {
@@ -127,7 +127,7 @@ export function GuidePageLayout({ guide, formatDate }: GuidePageLayoutProps) {
                     </ul>
                     {publishedClusters.length >= CATEGORY_HUB_MIN_POSTS && hub && (
                       <Link
-                        href={categoryHubPath(guide.hubSlug)}
+                        href={categoryHubHref(guide.hubSlug)}
                         className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mt-4"
                       >
                         View all in {hub.title}
