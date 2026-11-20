@@ -300,7 +300,7 @@ export function RelatedLinks({ serviceSlug, citySlug, variant, manifestPath, exc
       // One service card alone in a row reads as a gap: it joins the list instead.
       leadReading.push({ href: cells[0].href, label: `${cells[0].label} in ${city.name}` });
     }
-    // Neighbouring towns (SEO audit CON-S1), each with its own area photograph.
+    // Neighboring towns (SEO audit CON-S1), each with its own area photograph.
     const nearby: Cell[] = (NEARBY_CITY_SLUGS[citySlug] ?? [])
       .map((slug) => CITIES.find((c) => c.slug === slug))
       .filter((c): c is (typeof CITIES)[number] => Boolean(c))

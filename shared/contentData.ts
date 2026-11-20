@@ -210,7 +210,7 @@ export const SERVICE_AREA_CITIES: CityData[] = SERVICE_AREA_SLUGS.map((slug) => 
 });
 
 /**
- * Neighbouring service-area towns, nearest first, for the "Nearby areas" cards
+ * Neighboring service-area towns, nearest first, for the "Nearby areas" cards
  * on each /areas/{city} page (SEO audit CON-S1: Garden City and Middleton are
  * linked from the towns beside them, not only from the site map).
  */

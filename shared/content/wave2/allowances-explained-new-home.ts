@@ -31,7 +31,7 @@ export const allowancesExplainedNewHome: BlogPostData = {
     'An allowance is a placeholder for a decision, not a prediction of your taste.',
     'Cabinets, counters, tile, flooring, lighting, plumbing fixtures, and hardware usually carry them.',
     'A low allowance makes a bid look cheaper without making the house cheaper.',
-    'Always ask whether an allowance covers installation labour or materials only.',
+    'Always ask whether an allowance covers installation labor or materials only.',
     'Test an allowance by pricing your actual choice at a local supplier before signing.',
     'Credits for coming in under allowance are often capped or excluded, so read the clause.',
   ],
@@ -52,7 +52,7 @@ export const allowancesExplainedNewHome: BlogPostData = {
     {
       question: 'Do allowances include installation?',
       answer:
-        'Sometimes, and this is the question that catches people. A material-only allowance covers the product and nothing else, so labour, underlayment, trim, grout, and fasteners come on top. An installed allowance covers the finished result. The two are not comparable, and two builders using different conventions can appear to differ by thousands when they do not.',
+        'Sometimes, and this is the question that catches people. A material-only allowance covers the product and nothing else, so labor, underlayment, trim, grout, and fasteners come on top. An installed allowance covers the finished result. The two are not comparable, and two builders using different conventions can appear to differ by thousands when they do not.',
     },
     {
       question: 'What happens if I go over an allowance?',
@@ -93,8 +93,8 @@ export const allowancesExplainedNewHome: BlogPostData = {
 <p>This is why we set allowances at what things actually cost here rather than at a figure chosen to win the bid, and it is why our proposals occasionally look higher than a competitor's for the same house. It is a trade we make deliberately. See <a href="/blog/how-to-compare-builder-bids">how to compare home builder bids</a> for the wider comparison problem.</p>
 
 <h2 id="installed">The question that catches everyone: installed or material only</h2>
-<p><strong>Always ask whether an allowance covers installation, because a material-only allowance and an installed allowance are not the same number and cannot be compared.</strong> Take a flooring allowance. A material-only figure covers the product delivered to site. Everything else is separate: underlayment, transition strips, subfloor preparation, trim, adhesive, and the labour to lay it. An installed allowance covers the finished floor you can walk on.</p>
-<p>The gap between the two conventions is large, and it is usually not stated on the front page of a proposal. When two builders' allowance schedules look different, this is the first thing to check. Ask the question in exactly these words: does this allowance include labour, and if not, where is the labour priced. A builder who answers immediately and points to the line has thought about it. A builder who is vague has not, or would prefer you did not ask.</p>
+<p><strong>Always ask whether an allowance covers installation, because a material-only allowance and an installed allowance are not the same number and cannot be compared.</strong> Take a flooring allowance. A material-only figure covers the product delivered to site. Everything else is separate: underlayment, transition strips, subfloor preparation, trim, adhesive, and the labor to lay it. An installed allowance covers the finished floor you can walk on.</p>
+<p>The gap between the two conventions is large, and it is usually not stated on the front page of a proposal. When two builders' allowance schedules look different, this is the first thing to check. Ask the question in exactly these words: does this allowance include labor, and if not, where is the labor priced. A builder who answers immediately and points to the line has thought about it. A builder who is vague has not, or would prefer you did not ask.</p>
 
 <h2 id="testing">How to test whether an allowance is realistic</h2>
 <p><strong>Price your actual intention, at a local supplier, for the actual quantity in your plan.</strong> This takes a weekend and it is the highest-return hour of work in the whole preconstruction process. Work through the schedule category by category.</p>
@@ -116,7 +116,7 @@ export const allowancesExplainedNewHome: BlogPostData = {
 <p>What separates a well-run project from a badly run one is visibility. You should be able to ask at any point what your position is across every allowance, and get a straight answer: this one is over by a certain amount, this one is under, here is the net. When that reporting exists, an overage is a choice you made knowingly, and clients regularly decide to spend more in one category and pull back in another. When it does not exist, the overages accumulate silently and arrive together at the end, which is the version people tell their friends about.</p>
 
 <h2 id="credits">Credits, and why they are not symmetrical</h2>
-<p><strong>Coming in under an allowance does not always put money back in your pocket, and the contract will tell you which convention applies.</strong> Some contracts credit the full difference. Some credit materials but not the labour portion. Some cap the total credit, and some exclude credits entirely on the grounds that the builder has already carried the cost of managing that category.</p>
+<p><strong>Coming in under an allowance does not always put money back in your pocket, and the contract will tell you which convention applies.</strong> Some contracts credit the full difference. Some credit materials but not the labor portion. Some cap the total credit, and some exclude credits entirely on the grounds that the builder has already carried the cost of managing that category.</p>
 <p>We are not going to argue that any one of those is universally wrong. What we will say is that a contract that charges you the full overage and returns nothing on the underage is asymmetric, and you should know that before signing rather than discovering it when you happily choose a simpler tile and hear that it changes nothing. Ask for the clause. Read it. If the answer is that credits are capped, that is a fact you can plan around, and it usually means you should aim your selections close to the allowance rather than deliberately under it.</p>
 
 <h2 id="reduce">The best allowance is the one you replace</h2>
@@ -124,7 +124,7 @@ export const allowancesExplainedNewHome: BlogPostData = {
 <p>Realistically, some allowances will remain open when you sign, and that is normal. The goal is not zero. The goal is that whatever remains is set at what the work costs in the Treasure Valley, and that you know which ones are still open. <a href="/blog/choosing-finishes-for-a-new-home">Choosing finishes for a new home</a> covers how to work through selections without stalling the schedule.</p>
 
 <h2 id="questions">Five questions to ask before you sign</h2>
-<p><strong>Ask these of any builder, and pay as much attention to how readily they answer as to what they say.</strong> Which categories carry allowances, and can I see the full schedule. Does each allowance include installation labour, or materials only. What quantities were used to build each number, and are they taken from my plan. How are overages documented and approved, and when will I see them. What happens if I come in under, and where is that clause in the contract. A builder who has set honest allowances will walk you through all five without hesitating, because the answers make their proposal look better rather than worse.</p>
+<p><strong>Ask these of any builder, and pay as much attention to how readily they answer as to what they say.</strong> Which categories carry allowances, and can I see the full schedule. Does each allowance include installation labor, or materials only. What quantities were used to build each number, and are they taken from my plan. How are overages documented and approved, and when will I see them. What happens if I come in under, and where is that clause in the contract. A builder who has set honest allowances will walk you through all five without hesitating, because the answers make their proposal look better rather than worse.</p>
 
 <h2 id="next">Getting a budget you can plan against</h2>
 <p><strong>An allowance schedule is the fastest way to tell whether a builder's number is real, so read it before you read the total.</strong> A contract price is only as trustworthy as the placeholders inside it, and a total assembled from optimistic allowances is not a lower price, it is a less complete one. We set allowances at what things actually cost here and produce a line-item budget before we break ground, precisely so the number we give you at the start is the number you can plan your life around. Read <a href="/blog/how-to-budget-a-new-home-boise">how to budget for a new home in Boise</a> to see where allowances fit into the wider budget, or <a href="/blog/cost-to-build-a-house-boise">what it costs to build a house in Boise</a> for the full picture. When you want an allowance schedule you can actually test, <a href="/contact">get in touch</a>.</p>

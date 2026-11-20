@@ -7,7 +7,7 @@ export const lotEvaluationChecklist: BlogPostData = {
   metaDescription:
     'A checklist for Treasure Valley land buyers: access, utilities, ground, zoning, and cost. What to check, who checks it, and what a bad answer costs.',
   excerpt:
-    'A usable checklist for buying land in Ada and Canyon County, organised by category, with who does each check and what it costs you to get the answer wrong.',
+    'A usable checklist for buying land in Ada and Canyon County, organized by category, with who does each check and what it costs you to get the answer wrong.',
   category: 'Land & lots',
   hubSlug: 'land-and-lots',
   author: 'Boise Construction Co',
