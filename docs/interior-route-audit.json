@@ -22,7 +22,7 @@
   {
     "route": "/blog/category/[hubSlug]",
     "file": "app/blog/category/[hubSlug]/page.tsx",
-    "seoSignature": "57a20f4a92be9b4f2593b6a23b87bb2cb22d29f3c61130a0a35072b9715bae8d"
+    "seoSignature": "e9804daf2a205e5e83568b81f31d92008bed0e8fe54cbea83166c214bf9a8b0c"
   },
   {
     "route": "/blog",
