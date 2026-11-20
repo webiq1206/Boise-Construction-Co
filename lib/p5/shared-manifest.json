@@ -514,7 +514,7 @@
     "tests/p5-intake-pdf.test.ts": "cb331ce30787d6df4154885531aaa05c2dec4e29e51cea3315392636bb0d1758",
     "lib/leadAttribution.ts": "aec4191c4984d381ede0fbb585bd29cc1b4b7eeb4270a553a377b0074a4eee35",
     "lib/leadAttributionBrowser.ts": "06514c0dd38cf186ffbec763c2ab47df1085e3991a1e7a7ad73ec657e80f4780",
-    "scripts/lib/quoteEntry.mjs": "1785618d7dda15c1af50b287a7de36564dcdcebfd053b382027d761606e4365e",
+    "scripts/lib/quoteEntry.mjs": "8e02afa34c1c58d5953a6af83bad07807f3858394bd3629c85066373982a92a9",
     "scripts/lib/navigationEntry.mjs": "6f9ae022bb7e6df5d86e848b1e2e0da2a402b59522cdb0c1ce3cda15a86a10b4",
     "tests/p5-navigation-entry.test.mjs": "ed9d0d40604f38a89d26375d4cc03b7352a8de2644cde3ab9cf6c52baac5d4cc",
     "lib/p5/documentEstimateFigures.ts": "bcfb00ee4c343c8578bae359258306cdc93f3f34b19ca1870663a558da661793",
@@ -704,6 +704,18 @@
         }
       ],
       "note": "Only explicitly listed files synchronized; other files and provenance retained. Runtime scope is restricted to mobile-action and route-presentation compatibility."
+    },
+    {
+      "source": "p5-home-co",
+      "commit": "4b4a1d5964cbef02c6d756347ffda99b2668e1c0",
+      "files": [
+        {
+          "file": "scripts/lib/quoteEntry.mjs",
+          "before": "1785618d7dda15c1af50b287a7de36564dcdcebfd053b382027d761606e4365e",
+          "after": "8e02afa34c1c58d5953a6af83bad07807f3858394bd3629c85066373982a92a9"
+        }
+      ],
+      "note": "Only explicitly listed files synchronized; other files and provenance retained. The homepage quote link is tapped once React has hydrated it, so the navigation check no longer races hydration."
     }
   ],
   "selectivePresentationBatches": [
