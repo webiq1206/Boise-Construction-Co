@@ -64,7 +64,7 @@ export const P5_PARENT_ORGANIZATION = {
   // The owner's Facebook page and Google Business Profile both belong to
   // P5 Home Co, so they are asserted here on the parent and kept out of this
   // brand's own sameAs.
-  sameAs: [P5_SOCIAL.facebook, P5_SOCIAL.google],
+  sameAs: [P5_SOCIAL.facebook, P5_SOCIAL.instagram, P5_SOCIAL.google, P5_SOCIAL.maps],
 } as const;
 
 /**
@@ -432,6 +432,10 @@ export function generateArticleSchema(article: {
         '@type': 'Person',
         name: article.author,
         url: article.authorUrl ?? `${baseUrl}/about#team`,
+        // Nick Perkins founded the parent company (owner, 20 November 2026).
+        ...(article.author === 'Nick Perkins'
+          ? { jobTitle: 'Founder', worksFor: { '@id': P5_ORG_ID, '@type': 'Organization', name: 'P5 Home Co' } }
+          : {}),
       }
     : { '@type': 'Organization', '@id': ORG_ID, name: BUSINESS_INFO.name };
 
