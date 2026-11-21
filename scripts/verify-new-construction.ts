@@ -312,16 +312,17 @@ const perSf = (s: ScopeSelections, rules = CUSTOM_HOME_RULES, project = "custom-
   t("shop/published-example-low", publishedLow >= 360_000 && publishedLow <= 470_000, usd(publishedLow));
   t("shop/published-example-high", publishedHigh >= 500_000 && publishedHigh <= 660_000, usd(publishedHigh));
 
-  // THE PUBLISHED EXAMPLE IS THE ESTIMATOR'S OWN OUTPUT (since 2026-11-01).
-  // The site prints, for 1,600 SF of living space with a 1,200 SF shop and
-  // every other answer left at the estimator default, "$385,000 to $520,000 at
-  // Essential finish and $465,000 to $630,000 at Signature finish". Those are
-  // the quoted ranges the resolver returns on the same path the assistant and
-  // /api/consultation take. Before this the site published a $150 to $250 per
-  // square foot band and a $420,000 to $700,000 example that the estimator did
-  // not return, so a visitor who read one and ran the tool saw another. If a
-  // rate change moves these, update the copy and
-  // tests/social-and-shop-price.test.ts in the same commit.
+  // THE ENGINE'S WORKED EXAMPLE, HELD STEADY. From 1 to 21 November 2026 the
+  // site printed this engine's quoted ranges for 1,600 SF of living space with
+  // a 1,200 SF shop ("$385,000 to $520,000 at Essential finish and $465,000 to
+  // $630,000 at Signature finish"). Since 21 November 2026 public copy quotes
+  // only the P5 instant estimator (owner: "base everything off of the
+  // engine"): its house and shop ranges, separately, never added together
+  // (tests/p5-published-figures.test.ts, which fails if these engine figures
+  // reappear in copy). This engine still prices shop home requests for the
+  // team email and QuickBooks, so these checks stay as a guard against an
+  // unnoticed repricing of the internal numbers; a deliberate rate change
+  // updates them here and in tests/social-and-shop-price.test.ts.
   {
     const refinements = { ...EMPTY_REFINEMENTS, shopSize: 1200 } as EstimateRefinements;
     const maxFields = getMaxRefinementFields("shop-home");

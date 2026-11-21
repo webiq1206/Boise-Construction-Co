@@ -17,7 +17,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does a shop home or barndominium cost in Boise?",
-          answer: "Shop home prices in Boise move with the wider Treasure Valley. For 1,600 square feet of living space with a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. A lot walkthrough produces a line-item budget for your specific site.",
+          answer: "Shop home prices in Boise move with the wider Treasure Valley. Our instant estimate has no shop home project, so it prices the two halves on their own (preliminary, November 2026): a 1,600 square foot new home with no garage at $316,120 to $717,980 at Essential to Signature finish, with design, engineered plans and permit fees included and the land excluded, and a 1,200 square foot detached garage or shop at $113,770 to $238,450, with design drawings and permit fees included and engineering not yet determined. We don't add the two together; a lot walkthrough produces a line-item budget for your shop home on your specific site.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -46,7 +46,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does a shop home or barndominium cost in Meridian?",
-          answer: "Shop homes in Meridian follow Treasure Valley pricing. Our estimator puts 1,600 square feet of living space with a 1,200 square foot shop at $385,000 to $520,000 with Essential finishes and $465,000 to $630,000 with Signature finishes, land excluded, on a simple lot with city services. A walkthrough of your lot leads to a budget itemized for the site.",
+          answer: "Shop homes in Meridian follow Treasure Valley pricing. The instant estimate prices the house and the shop separately, since it has no shop home project: as of November 2026 it shows a preliminary $316,120 to $717,980 at Essential to Signature finish for a 1,600 square foot new home with no garage, design, engineered plans and permit fees included and land excluded, and $113,770 to $238,450 for a 1,200 square foot detached garage or shop, design drawings and permit fees included and engineering not yet determined. Those ranges are not added together: a walkthrough of your lot leads to a budget itemized for the shop home and the site.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -75,7 +75,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does a shop home or barndominium cost in Nampa?",
-          answer: "Nampa costs track the general Treasure Valley market. Run through our estimator, a 1,600 square foot living area with a 1,200 square foot shop comes to $385,000 to $520,000 at Essential finish or $465,000 to $630,000 at Signature finish, not counting land and assuming a simple lot with city services. A walk of your land then leads to an itemized budget for the site.",
+          answer: "Nampa costs track the general Treasure Valley market. Our instant estimate covers the two halves of a shop home one at a time (preliminary, November 2026): $316,120 to $717,980 at Essential to Signature finish for a 1,600 square foot new home with no garage, design, engineered plans and permit fees included and land not counted, and $113,770 to $238,450 for a 1,200 square foot detached garage or shop, design drawings and permit fees included and engineering not yet determined. It has no shop home project, so a walk of your land leads to an itemized budget for the whole building rather than a sum of the two.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -104,7 +104,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does a shop home or barndominium cost in Eagle?",
-          answer: "Eagle prices run with the wider Treasure Valley market. With 1,600 square feet of living space and a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, before land, on a simple lot with city services. After we walk the lot, we prepare an itemized budget for that site.",
+          answer: "Eagle prices run with the wider Treasure Valley market. For a 1,600 square foot new home with no garage, our instant estimate returns a preliminary $316,120 to $717,980 at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and before land; for a 1,200 square foot detached garage or shop it returns $113,770 to $238,450, with design drawings and permit fees included and engineering not yet determined. The estimator has no shop home project and we don't add the two ranges, so after we walk the lot we prepare an itemized budget for your shop home on that site.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -133,7 +133,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does a shop home or barndominium cost in Kuna?",
-          answer: "Kuna budgets run with the overall Treasure Valley market. Our estimator budgets a 1,600 square foot home with a 1,200 square foot shop at $385,000 to $520,000 for Essential finishes and $465,000 to $630,000 for Signature finishes, without land and on a simple lot with city services; a well and septic add to that. A walk-through of your lot then leads to an itemized budget for it.",
+          answer: "Kuna budgets run with the overall Treasure Valley market. Our instant estimate has no shop home project, so it prices each half separately (preliminary, November 2026): $316,120 to $717,980 at Essential to Signature finish for a 1,600 square foot new home with no garage, design, engineered plans and permit fees included and land excluded, and $113,770 to $238,450 for a 1,200 square foot detached garage or shop, design drawings and permit fees included and engineering not yet determined. A well or septic is site work outside both ranges. A walk-through of your lot then leads to an itemized budget for the shop home and the site, not a sum of the two ranges.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -162,7 +162,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does a shop home or barndominium cost in Caldwell?",
-          answer: "Caldwell costs run with the overall Treasure Valley. For a 1,600 square foot living area plus a 1,200 square foot shop, our estimator gives $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. Once we walk the lot together, we deliver a line-item budget for the property.",
+          answer: "Caldwell costs run with the overall Treasure Valley. As of November 2026, our instant estimate gives a preliminary $316,120 to $717,980 at Essential to Signature finish for a 1,600 square foot new home with no garage, design, engineered plans and permit fees included and land excluded, and $113,770 to $238,450 for a 1,200 square foot detached garage or shop, design drawings and permit fees included and engineering not yet determined. It has no shop home project, so we don't add them up: once we walk the lot together, we deliver a line-item budget for the shop home on the property.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -191,7 +191,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does a shop home or barndominium cost in Star?",
-          answer: "Star costs line up with the wider Treasure Valley picture. Our estimator prices 1,600 square feet of living space with a 1,200 square foot shop at $385,000 to $520,000 in Essential finish and $465,000 to $630,000 in Signature finish, land not included, on a simple lot with city services. After we walk the lot together, we prepare a line-item budget for that site.",
+          answer: "Star costs line up with the wider Treasure Valley picture. The instant estimate prices the two parts of a shop home on their own: a 1,600 square foot new home with no garage at a preliminary $316,120 to $717,980 at Essential to Signature finish (November 2026), design, engineered plans and permit fees included and land not included, and a 1,200 square foot detached garage or shop at $113,770 to $238,450, design drawings and permit fees included and engineering not yet determined. With no shop home project in the estimator, the two are not added; after we walk the lot together, we prepare a line-item budget for that site.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -220,7 +220,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does a shop home or barndominium cost in Middleton?",
-          answer: "Middleton costs track the overall Treasure Valley. A 1,600 square foot home with a 1,200 square foot shop comes out of our estimator at $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, with land excluded and a simple lot with city services assumed; a well, septic or long utility run adds to it. A walk of your land then produces an itemized budget for your site.",
+          answer: "Middleton costs track the overall Treasure Valley. Our instant estimate has no shop home project, so it shows the halves separately (preliminary, November 2026): a 1,600 square foot new home with no garage at $316,120 to $717,980 at Essential to Signature finish, design, engineered plans and permit fees included and land excluded, and a 1,200 square foot detached garage or shop at $113,770 to $238,450, design drawings and permit fees included and engineering not yet determined. A well, septic or long utility run is site work outside both. A walk of your land then produces an itemized budget for your shop home, not a sum of the two ranges.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",
@@ -249,7 +249,7 @@ export const CITY_SERVICE_COPY: Record<string, Record<string, CityServicePageCop
       faqs: [
         {
           question: "How much does a shop home or barndominium cost in Garden City?",
-          answer: "Garden City costs move with the general Treasure Valley picture. Our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish for 1,600 square feet of living space with a 1,200 square foot shop, excluding land, on a simple lot with city services. Arrange a lot walkthrough for an itemized budget for your site.",
+          answer: "Garden City costs move with the general Treasure Valley picture. Our instant estimate returns a preliminary $316,120 to $717,980 at Essential to Signature finish for a 1,600 square foot new home with no garage (November 2026), design, engineered plans and permit fees included and land excluded, and $113,770 to $238,450 for a 1,200 square foot detached garage or shop, design drawings and permit fees included and engineering not yet determined. It has no shop home project, so the two are not added together; arrange a lot walkthrough for an itemized budget for your shop home and site.",
         },
         {
           question: "Why is a shop home cheaper per square foot than a conventional house?",

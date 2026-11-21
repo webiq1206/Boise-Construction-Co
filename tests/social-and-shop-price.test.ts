@@ -58,14 +58,15 @@ test('the retired Facebook profile is gone and the footer labels the parent page
 });
 
 /*
- * Shop home pricing, owner-approved fix of 1 November 2026. The site used to
- * publish a $150 to $250 per square foot band (about $200 average) and a
- * $420,000 to $700,000 example (about $560,000) that the estimator never
- * returned for the same inputs. The published example is now the estimator's
- * own quoted range per finish level, computed here on the same path the
- * assistant and /api/consultation take, and formatted the way the assistant
- * prints it. If a rate change moves these numbers, this fails until the copy
- * moves with it.
+ * Shop home pricing. From 1 November 2026 the site published this site's own
+ * line-item engine's quoted range for 1,600 sq ft of living space with a 1,200
+ * sq ft shop. Since 21 November 2026 (owner: "We should always base everything
+ * off of the engine as long as you're getting the actual numbers from the
+ * engine/cost book. I do not want to mislead people") shop home copy quotes
+ * only the P5 instant estimator, the house and the shop separately
+ * (tests/p5-published-figures.test.ts). The engine still prices shop home
+ * requests for the team, so its example is computed here on the same path the
+ * assistant and /api/consultation take, and must appear in no published copy.
  */
 const usd = (n: number) => `$${Math.round(n).toLocaleString('en-US')}`;
 
@@ -75,7 +76,7 @@ function shopExample(finish: 'refresh' | 'mid-range') {
   const detail = countVisibleUserRefinements('shop-home', getSetRefinementKeys(refinements));
   const range = resolveQuotedRange('shop-home', finish, 1600, refinements, maxFields > 0 ? detail / maxFields : 0);
   assert.ok(range);
-  return `${usd(range.priceLow)} to ${usd(range.priceHigh)}`;
+  return range;
 }
 
 const SHOP_FILES = [
@@ -86,36 +87,31 @@ const SHOP_FILES = [
   'shared/seoContent.ts',
   'shared/gbpProfile.ts',
   'shared/metaDescriptions.ts',
+  'shared/contentData.ts',
   'shared/resourcePdfContent.ts',
   'public/llms.txt',
   'public/llms-full.txt',
 ];
 
-test('the published shop home example is the estimator output, per finish level', () => {
+test('the line-item engine\'s shop home example is published nowhere', () => {
+  // The engine's own numbers, unchanged (scripts/verify-new-construction.ts holds them too).
   const essential = shopExample('refresh');
   const signature = shopExample('mid-range');
-  assert.equal(essential, '$385,000 to $520,000');
-  assert.equal(signature, '$465,000 to $630,000');
-  const pair = new RegExp(
-    `${essential.replaceAll('$', '\\$')} (at|with|for|in) Essential finish(es)?,? (and|or) ${signature.replaceAll('$', '\\$')} (at|with|for|in) Signature finish`,
-  );
-  for (const file of [
-    'shared/content/wave2/shop-homes-and-barndominiums-idaho.ts',
-    'shared/content/pillars/boise-home-building-cost-guide.ts',
-    'shared/content/pillars/custom-home-design-guide.ts',
-    'shared/seoContent.ts',
-    'shared/gbpProfile.ts',
-  ]) {
-    assert.match(readFileSync(file, 'utf8'), pair, file);
+  assert.deepEqual([essential.priceLow, essential.priceHigh], [385_000, 520_000]);
+  assert.deepEqual([signature.priceLow, signature.priceHigh], [465_000, 630_000]);
+  const engineFigures = [essential.priceLow, essential.priceHigh, signature.priceLow, signature.priceHigh].map(usd);
+  for (const file of SHOP_FILES) {
+    const text = readFileSync(file, 'utf8');
+    for (const figure of engineFigures) assert.equal(text.includes(figure), false, `${file} still publishes ${figure}`);
+    assert.doesNotMatch(text, /\$330,000|\$330k|\$55 (to|and|-) \$60/, file);
+    assert.doesNotMatch(text, /our estimator (returns|puts|prices|gives|budgets)/, file);
   }
   const service = SERVICE_SEO_CONTENT['shop-homes-barndominiums'];
-  assert.match(service.faqs[0].answer, pair);
-  assert.match(service.costGuidance!.paragraphs[0], pair);
+  assert.match(service.faqs[0].answer, /instant estimate/);
+  assert.match(service.costGuidance!.paragraphs.join(' '), /instant estimate/);
   for (const [city, page] of Object.entries(CITY_SERVICE_COPY['shop-homes-barndominiums'])) {
     const answer = page.faqs[0].answer;
-    assert.match(answer, pair, city);
-    assert.match(answer, /1,600 square f(oo|ee)t/, city);
-    assert.match(answer, /1,200 square foot shop/, city);
+    assert.match(answer, /instant estimate/, city);
     assert.match(answer, /land/, city);
   }
 });

@@ -12,13 +12,16 @@
  *
  * A dollar range in published copy must be a range in the JSON. Any other
  * dollar figure must be listed below with the reason it is not a price for our
- * work (a city permit fee or valuation bracket), or be a shop home figure from
- * this site's own line-item engine (scripts/verify-new-construction.ts holds
- * those to resolveQuotedRange). Work no engine prices (site work, wells and
+ * work (a city permit fee or valuation bracket). Shop homes follow the same
+ * rule (21 November 2026): the estimator has no shop home project, so their
+ * copy quotes its new home and detached garage or shop ranges separately and
+ * never adds them together; this site's line-item engine figures are retired
+ * from copy and have no allowlist. Work no engine prices (site work, wells and
  * septic, lot evaluations, design-only engagements) carries no figure at all.
  *
  * When the cost book changes: re-run the script, then change the copy until
- * these tests pass. Never allowlist a home, addition or ADU price.
+ * these tests pass. Never allowlist a home, addition, ADU, garage, shop or
+ * shop home price.
  * Set P5_HOME_CO_DIR to a p5-home-co checkout to also check the JSON against
  * the estimator itself.
  */
@@ -129,15 +132,6 @@ const NOT_OUR_PRICE: Record<string, Array<{ text: string; why: string }>> = {
   'components/sections/ProjectGallerySection.tsx': [{ text: '"\\u00A0$1"', why: 'a regular expression replacement token, not a figure' }],
 };
 
-/**
- * Shop home figures are this site's line-item engine (resolveQuotedRange),
- * held there by scripts/verify-new-construction.ts and
- * tests/social-and-shop-price.test.ts. The instant estimator has no shop home
- * project, and the shop home page keeps "Request a quote". They are allowed
- * only in copy that is about a shop home.
- */
-const SHOP_ENGINE_FIGURES = new Set(['$385,000 to $520,000', '$465,000 to $630,000', '$330,000', '$330k', '$385,000', '$55 to $60']);
-
 /** Comments are not published; JSX `{...}` and template `${...}` are not figures. */
 const stripComments = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 const AMOUNT = String.raw`\d{1,3}(?:,\d{3})+|\d+`;
@@ -177,16 +171,13 @@ function inAllowlist(file: string, text: string, at: number): boolean {
   return false;
 }
 
-const isShopFigure = (text: string, at: number, figure: string) =>
-  SHOP_ENGINE_FIGURES.has(figure) && /shop/i.test(text.slice(Math.max(0, at - 400), at + 400));
-
 test('the figures file states its inputs: construction brand, plans none, every finish, November 2026', () => {
   assert.equal(figures.asOf, 'November 2026');
   assert.equal(figures.inputs.brand, 'construction');
   assert.match(figures.about, /scripts\/pricing\/p5-published-figures\.mts/);
   assert.ok(figures.rulesVersion, 'the estimator rules version is recorded');
   assert.deepEqual(figures.inputs.tiers, { builder: 'Essential', mid: 'Signature', high: 'Premium', luxury: 'Luxury' });
-  for (const id of ['home-1600', 'home-2000', 'home-2400', 'home-3000', 'home-2400-complete-plans', 'addition-room-300', 'addition-second', 'adu-detached', 'adu-attached', 'adu-garage', 'garage-shop-576', 'garage-shop-1200']) {
+  for (const id of ['home-1600', 'home-2000', 'home-2400', 'home-3000', 'home-2400-complete-plans', 'addition-room-300', 'addition-second', 'adu-detached', 'adu-attached', 'adu-garage', 'garage-shop-576', 'garage-shop-1200', 'home-1600-no-garage']) {
     assert.ok(figures.cases[id], `the JSON prices ${id}`);
   }
   for (const [id, c] of Object.entries(figures.cases)) {
@@ -217,7 +208,6 @@ test('every dollar range in published copy is an instant estimate range from the
     const { text, found } = figuresIn(file);
     for (const f of found) {
       if (f.isRange && allowedRanges.has(f.text)) continue;
-      if (isShopFigure(text, f.at, f.text)) continue;
       if (inAllowlist(file, text, f.at)) continue;
       problems.push(`${file}: ${f.text}`);
     }
@@ -232,6 +222,8 @@ test('the retired bands and figures no engine prices are gone from published cop
     /\$40,000 to \$65,000/, /\$130,000 to \$205,000/, /\$70,000 to \$95,000/, /\$950 (?:to|and) \$5,500/,
     /\$20,000 to \$55,000/, /\$175,000 to \$280,000/, /\$525,000|\$525k|\$425,000|\$425k|\$475k|\$575,000|\$575k/,
     /(?:near|approach) \$225/, /\$450 per (?:finished )?square foot/, /5 to 12 percent/, /3 to 8 percent/,
+    // This site's own line-item engine for a shop home, retired from copy on 21 November 2026.
+    /\$385,000|\$385k|\$520,000|\$465,000|\$630,000|\$330,000|\$330k/, /\$55 (?:to|and|-) \$60/, /simple lot with city services/,
   ];
   for (const file of COPY_FILES) {
     if (!existsSync(file)) continue;
@@ -290,6 +282,54 @@ test('the cost guide table and the worksheet show the JSON figures', () => {
   for (const [name, t] of [['Essential', 'builder'], ['Signature', 'mid'], ['Premium', 'high'], ['Luxury', 'luxury']] as const) {
     assert.ok(pdf.includes(`['${name}', '${range(c.tiers[t])}', '${range(c.tiers[t].perSqFt!)}', '___________']`), `worksheet row ${name}`);
   }
+});
+
+test('shop home copy quotes the estimator\'s house and shop separately and never adds them', async () => {
+  const house = figures.cases['home-1600-no-garage'];
+  const shop = figures.cases['garage-shop-1200'];
+  assert.deepEqual(house.inputs, { sqft: 1600, garage: 'none' }, 'the house half is a new home with no garage, an answer a visitor can give');
+  assert.deepEqual(shop.inputs, { sqft: 1200 });
+  // The garage or shop has no engineering item in the cost book: copy must not claim it.
+  assert.deepEqual(figures.scope['garage-shop/none'].rangeNotes, ['Includes design drawings and permit fees. Engineering, if your building needs it, is not yet determined.']);
+
+  // No sum of a house range and a shop range appears anywhere: there is no shop home project to quote.
+  const sums = new Set<string>();
+  for (const t of ['builder', 'mid', 'high', 'luxury'] as const) {
+    sums.add(money(house.tiers[t].low + shop.tiers[t].low));
+    sums.add(money(house.tiers[t].high + shop.tiers[t].high));
+  }
+  for (const s of Object.values(house.spans)) for (const o of Object.values(shop.spans)) {
+    sums.add(money(s.low + o.low));
+    sums.add(money(s.high + o.high));
+  }
+  for (const file of COPY_FILES) {
+    if (!existsSync(file)) continue;
+    const text = stripComments(readFileSync(file, 'utf8'));
+    for (const s of sums) assert.equal(text.includes(s), false, `${file} adds the house and shop ranges into ${s}`);
+  }
+
+  const { SERVICE_SEO_CONTENT } = await import('../shared/seoContent.ts');
+  const { CITY_SERVICE_COPY } = await import('../shared/content/cityServiceCopy.ts');
+  const page = SERVICE_SEO_CONTENT['shop-homes-barndominiums'];
+  const perTier = [house.tiers.builder, house.tiers.mid, shop.tiers.builder, shop.tiers.mid].map(range);
+  for (const [where, text] of [['FAQ', page.faqs[0].answer], ['cost guidance', (page.costGuidance?.paragraphs ?? []).join(' ')]] as const) {
+    for (const r of perTier) assert.ok(text.includes(r), `the shop home ${where} quotes ${r}`);
+    assert.match(text, /1,600 square foot new home with no garage/, where);
+    assert.match(text, /1,200 square foot detached garage or shop/, where);
+    assert.match(text, /engineering[^.]*not yet determined/, `${where} says the shop's engineering is not yet determined`);
+    assert.match(text, /line-item budget after a lot walkthrough/, where);
+    assert.match(text, /November 2026/, where);
+  }
+  for (const [city, c] of Object.entries(CITY_SERVICE_COPY['shop-homes-barndominiums'])) {
+    const answer = c.faqs[0].answer;
+    assert.ok(answer.includes(range(house.spans.essentialToSignature)) && answer.includes(range(shop.spans.essentialToSignature)), city);
+    assert.match(answer, /1,600 square foot new home with no garage/, city);
+    assert.match(answer, /1,200 square foot detached garage or shop/, city);
+    assert.match(answer, /engineering not yet determined/, city);
+    assert.match(answer, /preliminary/, city);
+  }
+  const { SERVICES } = await import('../shared/contentData.ts');
+  assert.equal(SERVICES.find((x: { slug: string }) => x.slug === 'shop-homes-barndominiums')?.planningFrom, 'Priced after a lot walkthrough');
 });
 
 test('the JSON matches the estimator when a p5-home-co checkout is given', { skip: !process.env.P5_HOME_CO_DIR }, () => {
