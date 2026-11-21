@@ -239,8 +239,18 @@ function joinWithAnd(names: readonly string[]): string {
   return `${names.slice(0, -1).join(', ')}, and ${names[names.length - 1]}`;
 }
 
-/** "Boise, Meridian, ... and Star" */
+/** "Boise, Meridian, ... and Garden City". Full "we serve" sentences use this. */
 export const SERVICE_AREA_CITY_LIST = joinWithAnd(SERVICE_AREA_CITIES.map((city) => city.name));
+
+/** Ada County cities in service-area order, Garden City included. */
+export const ADA_COUNTY_CITY_LIST = joinWithAnd(
+  SERVICE_AREA_CITIES.filter((city) => city.county === 'ada').map((city) => city.name),
+);
+
+/** Canyon County cities: Nampa, Caldwell, and Middleton. */
+export const CANYON_COUNTY_CITY_LIST = joinWithAnd(
+  SERVICE_AREA_CITIES.filter((city) => city.county === 'canyon').map((city) => city.name),
+);
 
 /** Cities, then the two counties, as one natural phrase. */
 export const SERVICE_AREA_LINE = `${SERVICE_AREA_CITY_LIST}, in Ada County and Canyon County`;

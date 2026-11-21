@@ -24,7 +24,11 @@ import { P5_SOCIAL } from '../shared/gbpProfile';
 
 const BASE = SITE_CONFIG.siteUrl.replace(/\/$/, '');
 const url = (p: string) => `${BASE}${p}`;
-const today = new Date().toISOString().slice(0, 10);
+/** This refresh is dated 21 November 2026. verify:llms ignores the date line. */
+const today = '2026-11-21';
+const PARENT_NAP =
+  'P5 Home Co, Meridian, ID 83646 (service-area business, no public street). Phone (208) 477-1169. Web https://p5homeco.com.';
+const BRAND_SITE_LINE = 'Boise Construction Co: https://boiseconstruction.co.';
 
 const adaCities = SERVICE_AREA_CITIES.filter((c) => c.county === 'ada').map((c) => c.name);
 const canyonCities = SERVICE_AREA_CITIES.filter((c) => c.county === 'canyon').map((c) => c.name);
@@ -64,6 +68,8 @@ function buildShort(): string {
   lines.push(`# ${SITE_CONFIG.name}`, '');
   lines.push(`> ${SUMMARY}`, '');
   lines.push(FAMILY, '');
+  lines.push(PARENT_NAP);
+  lines.push(BRAND_SITE_LINE, '');
   lines.push(POSITIONING, '');
 
   lines.push('## Services', '');
@@ -71,7 +77,7 @@ function buildShort(): string {
     lines.push(`- [${s.name}](${url(`/services/${s.slug}`)}): ${s.shortDescription}`);
   }
   lines.push(
-    `- [All Services](${url('/services')}): plus city pages at /services/{service}/{city} and [Service Areas](${url('/areas')}).`,
+    `- [All Services](${url('/services')}) and [Service Areas](${url('/areas')}).`,
     '',
   );
 
@@ -79,7 +85,7 @@ function buildShort(): string {
   lines.push(
     `- [P5 Home Co](https://p5homeco.com): the parent company. ` +
       `[Facebook](${P5_SOCIAL.facebook}), [Instagram](${P5_SOCIAL.instagram}), ` +
-      `[Google Business Profile](${P5_SOCIAL.maps}).`,
+      `[Google Business Profile](${P5_SOCIAL.maps}), [BBB](${P5_SOCIAL.bbb}).`,
   );
   lines.push(`- [Boise Remodeling Co](https://boiseremodeling.co): remodels inside an existing home, including garage, basement and attached ADU conversions.`);
   lines.push(`- [Boise Cabinet Co](https://boisecabinet.co): cabinets.`);
@@ -137,6 +143,8 @@ function buildFull(): string {
   lines.push(`# ${SITE_CONFIG.name} - Full Reference`, '');
   lines.push(`> ${SUMMARY}`, '');
   lines.push(FAMILY, '');
+  lines.push(PARENT_NAP);
+  lines.push(BRAND_SITE_LINE, '');
 
   lines.push('## About', '');
   lines.push(
@@ -153,7 +161,7 @@ function buildFull(): string {
     '',
   );
   lines.push('- Business type: Residential design-build home builder (new construction)');
-  lines.push(`- Parent company profiles: ${P5_SOCIAL.facebook}, ${P5_SOCIAL.instagram}, ${P5_SOCIAL.maps}`);
+  lines.push(`- Parent company profiles: ${P5_SOCIAL.facebook}, ${P5_SOCIAL.instagram}, ${P5_SOCIAL.maps}, BBB ${P5_SOCIAL.bbb}`);
   if (FOUNDING.foundedLine) lines.push(`- ${FOUNDING.foundedLine}`);
   lines.push('- Service model: One accountable team for design, permits, and construction');
   lines.push(`- Contact: ${url('/contact')}`);
@@ -178,8 +186,7 @@ function buildFull(): string {
   }
   lines.push(
     '',
-    `Each service has a dedicated page per city at /services/{service-slug}/{city-slug}. ` +
-      `Town pages are at /areas/{city-slug} for ${CITIES.map((c) => c.slug).join(', ')}.`,
+    `Town pages are at /areas/{city-slug} for ${CITIES.map((c) => c.slug).join(', ')}.`,
     '',
   );
 

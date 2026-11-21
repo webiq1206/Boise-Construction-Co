@@ -6,6 +6,7 @@ import { getCityServiceFaqs, getCityServiceIntro, SERVICE_SEO_CONTENT } from '..
 import { landingFAQSchema } from '../lib/landing-schema.ts';
 import { CITY_SEO_DATA, indianCreekDescription } from '../lib/seo.ts';
 import { NOINDEX_CITY_SERVICE } from '../lib/page-metadata.ts';
+import { CITY_SERVICE_MERGES } from '../shared/cityServiceRedirects.js';
 
 const NOINDEX = [
   'lot-evaluation/kuna',
@@ -15,14 +16,6 @@ const NOINDEX = [
   'custom-home-builder/kuna',
   'shop-homes-barndominiums/boise',
   'shop-homes-barndominiums/caldwell',
-];
-const INDEXED = [
-  'custom-home-builder/boise',
-  'semi-custom-homes/meridian',
-  'build-on-your-lot/nampa',
-  'design-build/eagle',
-  'home-additions/boise',
-  'shop-homes-barndominiums/eagle',
 ];
 
 test('all 90 service-city pages use the draft intro and six FAQs, and schema matches the visible text', () => {
@@ -97,10 +90,13 @@ test('landmark lists and Indian Creek follow the approved corrections', () => {
   assert.doesNotMatch(kunaIntro, /in Indian Creek/i);
 });
 
-test('only the 28 allowlisted city-service pages are indexable', () => {
-  assert.equal(NOINDEX_CITY_SERVICE.size, SERVICES.length * CITIES.length - 28);
+test('only the ADU city pages stay indexable after the 28 non-ADU merges', () => {
+  assert.equal(CITY_SERVICE_MERGES.length, 28);
+  assert.equal(NOINDEX_CITY_SERVICE.size, SERVICES.length * CITIES.length - 2);
+  assert.equal(NOINDEX_CITY_SERVICE.has('adu/boise'), false);
+  assert.equal(NOINDEX_CITY_SERVICE.has('adu/meridian'), false);
+  for (const row of CITY_SERVICE_MERGES) assert.equal(NOINDEX_CITY_SERVICE.has(row.key), true, row.key);
   for (const key of NOINDEX) assert.equal(NOINDEX_CITY_SERVICE.has(key), true, key);
-  for (const key of INDEXED) assert.equal(NOINDEX_CITY_SERVICE.has(key), false, key);
 });
 
 test('an unlisted service keeps the shared intro and FAQ generator', () => {

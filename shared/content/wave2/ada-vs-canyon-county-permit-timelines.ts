@@ -28,7 +28,7 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
   ],
   wordCountTarget: 'cluster',
   quickAnswer:
-    'Ada County jurisdictions cover Boise, Meridian, Eagle, Kuna, and Star; Canyon County covers Nampa, Caldwell, and Middleton. The building code applied is essentially the same, but the two counties use separate permit portals, review on different cadences, and set impact fees through different structures. Septic permitting goes through Central District Health in Ada County and Southwest District Health in Canyon County.',
+    'Ada County jurisdictions cover Boise, Meridian, Eagle, Kuna, Star, and Garden City; Canyon County covers Nampa, Caldwell, and Middleton. The building code applied is essentially the same, but the two counties use separate permit portals, review on different cadences, and set impact fees through different structures. Septic permitting goes through Central District Health in Ada County and Southwest District Health in Canyon County.',
   keyTakeaways: [
     'The house you can build is essentially the same; the path to permit it is not.',
     'Each county uses its own portal, and city jurisdictions inside them add another layer.',
@@ -55,7 +55,7 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
     {
       question: 'Which cities are in Ada County and which are in Canyon County?',
       answer:
-        'Ada County includes Boise, Meridian, Eagle, Kuna, and Star. Canyon County includes Nampa, Caldwell, and Middleton. Inside each county, an incorporated city usually handles its own building permits while unincorporated parcels go through the county. That distinction matters more day to day than the county line itself.',
+        'Ada County includes Boise, Meridian, Eagle, Kuna, Star, and Garden City. Canyon County includes Nampa, Caldwell, and Middleton. Inside each county, an incorporated city usually handles its own building permits while unincorporated parcels go through the county. That distinction matters more day to day than the county line itself.',
     },
     {
       question: 'Are impact fees higher in one county?',
@@ -80,7 +80,7 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
   ],
   content: `
 <h2 id="short-answer">What changes when you cross the county line</h2>
-<p><strong>The house is the same. The paperwork path, the fee structure, and the list of agencies you deal with are not.</strong> Ada County covers Boise, Meridian, Eagle, Kuna, and Star. Canyon County covers Nampa, Caldwell, and Middleton. A plan approved in one location still needs review for the next property and its applicable requirements. What differs is the submittal portal, the review cadence, how impact fees are assembled, and which outside agencies have a say.</p>
+<p><strong>The house is the same. The paperwork path, the fee structure, and the list of agencies you deal with are not.</strong> Ada County covers Boise, Meridian, Eagle, Kuna, Star, and Garden City. Canyon County covers Nampa, Caldwell, and Middleton. A plan approved in one location still needs review for the next property and its applicable requirements. What differs is the submittal portal, the review cadence, how impact fees are assembled, and which outside agencies have a say.</p>
 <p>We build on both sides of the line and handle permitting in-house for both, so this is a practical comparison rather than a preference. It pairs with our <a href="/blog/boise-building-permit-guide">guide to what a new-home permit contains</a> and sits inside the wider <a href="/guides/boise-home-building-process-guide">Boise home building process guide</a>.</p>
 
 <h2 id="jurisdiction">The county line is not the real dividing line</h2>
@@ -100,7 +100,7 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
 <p>We do not publish fee amounts here for a good reason: they are revised periodically, they vary by house size and valuation, and a number written into an article ages badly. What we do is pull the current published schedules for your parcel during pre-construction and put the real figures in your line-item budget before you sign anything. If a builder gives you a lump allowance for fees without showing you which districts it covers, ask them to itemize it. <a href="/blog/impact-fees-and-utility-connections">Impact fees and utility connections</a> goes deeper on what these charges are for.</p>
 
 <h2 id="roads-and-districts">Highway districts, irrigation, and the other agencies</h2>
-<p><strong>Outside the building department, the agency map differs enough that a Canyon County build can involve a different cast entirely.</strong> Public roads and driveway approaches in Ada County are handled by a single county-wide highway district, which makes that piece consistent across Boise, Meridian, Eagle, Kuna, and Star. In Canyon County, road authority is divided among separate highway districts and city engineering departments, so which office approves your approach depends on where the parcel sits.</p>
+<p><strong>Outside the building department, the agency map differs enough that a Canyon County build can involve a different cast entirely.</strong> Public roads and driveway approaches in Ada County are handled by a single county-wide highway district, which makes that piece consistent across Boise, Meridian, Eagle, Kuna, Star, and Garden City. In Canyon County, road authority is divided among separate highway districts and city engineering departments, so which office approves your approach depends on where the parcel sits.</p>
 <p>Irrigation is the other one people do not see coming. Much of the valley floor in both counties carries irrigation easements, laterals, and delivery obligations from agricultural land that was subdivided. An irrigation district may need to review a site plan, and an easement running through the middle of a parcel can move a house or a driveway. This is a due diligence item, not a permitting surprise, provided somebody looks before you buy.</p>
 
 <h2 id="septic">Septic permitting uses different health districts</h2>
@@ -122,7 +122,7 @@ export const adaVsCanyonCountyPermitTimelines: BlogPostData = {
 
 <h2 id="next-steps">If you are choosing between lots in different counties</h2>
 <p><strong>Choose the lot, not the county, and price the site work before you commit to either.</strong> The permitting differences are real but manageable, and they are not a good reason to prefer one address over another. The site conditions, the utilities, the easements, and the fee stack are the things that will actually change your budget, and all four can be read before you buy.</p>
-<p>We build in Boise, Meridian, Eagle, Kuna, Star, Nampa, Caldwell, and Middleton, and handle permits in-house across both counties. See <a href="/areas">the areas we build in</a>, or bring us a parcel you are considering and we will tell you what it will take to permit and service it. <a href="/contact">Get in touch</a> and we will look at it with you before you write an offer.</p>
+<p>We build in Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, Middleton, and Garden City, and handle permits in-house across both counties. See <a href="/areas">the areas we build in</a>, or bring us a parcel you are considering and we will tell you what it will take to permit and service it. <a href="/contact">Get in touch</a> and we will look at it with you before you write an offer.</p>
 <h2 id="official-sources">Official sources</h2>
 <p>Guidance checked October 1, 2026. Confirm current requirements for the actual property.</p>
 <ul>

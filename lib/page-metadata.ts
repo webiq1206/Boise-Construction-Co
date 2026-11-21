@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { SITE_CONFIG } from '@/shared/siteConfig';
 import { CITIES, SERVICES } from '@/shared/contentData';
+import { isMergedCityService } from '@/shared/cityServiceRedirects';
 import {
   generateCityServiceDescription,
   generateCityServiceTitle,
@@ -57,6 +58,9 @@ const SECONDARY_CITIES = ['boise','meridian'];
 const EXTRA_INDEXABLE = ['shop-homes-barndominiums/meridian','shop-homes-barndominiums/eagle','shop-homes-barndominiums/nampa','shop-homes-barndominiums/kuna'];
 
 function isIndexable(serviceSlug: string, citySlug: string): boolean {
+  // Merged city pages 301 to the parent service, so they are not indexable.
+  // ADU city pages are not in that list and keep the rules below.
+  if (isMergedCityService(serviceSlug, citySlug)) return false;
   if (CORE_SERVICES.includes(serviceSlug) && CORE_CITIES.includes(citySlug)) return true;
   if (SECONDARY_SERVICES.includes(serviceSlug) && SECONDARY_CITIES.includes(citySlug)) return true;
   return EXTRA_INDEXABLE.includes(`${serviceSlug}/${citySlug}`);
