@@ -28,7 +28,7 @@ export const SERVICE_META_DESCRIPTIONS: Record<string, string> = {
     'Structural home additions in Boise and the Treasure Valley: new footprint or a second story, planned around the structure and utilities already in place.',
   adu: 'Detached ADU builder in Boise, Idaho. We plan and build new accessory dwellings and guest houses on your lot, from setbacks and utilities to the handover.',
   'lot-evaluation':
-    'Lot evaluation and feasibility in Idaho before you buy: soils, utilities, access, setbacks and slope reviewed in a written report, starting from $950.',
+    'Lot evaluation and feasibility in Idaho before you buy: soils, utilities, access, setbacks and slope reviewed in a written report priced for the parcel.',
   'shop-homes-barndominiums':
     'Barndominium and shop home builder in Idaho: post-frame and steel homes with living and shop space. 1,600 sq ft with a 1,200 sq ft shop from $385,000.',
   'energy-efficient-homes':
@@ -102,7 +102,7 @@ export const CITY_SERVICE_META_DESCRIPTIONS: Record<string, string> = {
   'adu/meridian':
     'Detached ADU builder in Meridian, Idaho. New backyard dwellings and guest houses planned around setbacks, utilities and city rules by one accountable team.',
   'lot-evaluation/boise':
-    'Building lot evaluation in Boise, Idaho before you buy: setbacks, coverage, utilities, soils and slope on infill or foothills lots, in writing, from $950.',
+    'Building lot evaluation in Boise, Idaho before you buy: setbacks, coverage, utilities, soils and slope on infill or foothills lots, in a written report.',
   'lot-evaluation/meridian':
     'Building lot evaluation in Meridian, Idaho: utilities, access, setbacks, HOA constraints and jurisdiction confirmed in a written report before you buy.',
   'shop-homes-barndominiums/meridian':

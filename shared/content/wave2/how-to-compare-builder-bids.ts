@@ -71,7 +71,7 @@ export const howToCompareBuilderBids: BlogPostData = {
     {
       question: 'How do I compare bids when the plans are different?',
       answer:
-        'You cannot compare them directly, so reduce both to cost per finished square foot and treat the result as a rough sanity check rather than a decision. Most Treasure Valley custom homes plan between $250 and $400 per finished square foot excluding land. If one proposal lands far outside that, the question is what is different about the house or the site, not who is cheaper.',
+        'You cannot compare them directly, so reduce both to cost per finished square foot and treat the result as a rough sanity check rather than a decision. For scale, our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary $502,860 to $1,135,770 at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. If one proposal lands far outside that, the question is what is different about the house or the site, not who is cheaper.',
     },
   ],
   content: `
@@ -97,8 +97,8 @@ export const howToCompareBuilderBids: BlogPostData = {
 <p>Two items go missing more often than any others. The first is the finished driveway and the final grade, which are easy to defer in a proposal and impossible to defer in real life, because you cannot get a certificate of occupancy on a house you cannot drive to. The second is impact and utility connection fees, which differ across Boise, Meridian, Eagle, Star, Kuna, Nampa, Caldwell and Middleton and are frequently listed as owner-paid without a number beside them. Ask each builder to put an estimate against every owner-paid line, even a rough one, so that the total you are comparing is the total you will actually write checks for.</p>
 
 <h2 id="step-four">Step four: find out who is carrying the site work</h2>
-<p><strong>Site work is the single largest swing item between two bids on the same house, and it is routinely carried by one and excluded by the other.</strong> On a serviced subdivision lot in Meridian, Nampa or Kuna, site work commonly runs $40,000 to $65,000. On a rural parcel in Ada or Canyon County needing a well, a septic system and an access drive, it runs $130,000 to $205,000 before a foundation is poured.</p>
-<p>That range is larger than most of the differences people agonize over, so establish early which bid contains it and at what assumption. Ask specifically what soil condition the excavation number assumes, whether over-excavation and import are carried, whether the septic system is designed and permitted through Central District Health inside the price, and whether a power extension is included. If nobody has walked the lot, nobody has priced the lot. A written <a href="/blog/lot-evaluation-checklist">lot evaluation</a> costs $950 to $5,500 and resolves this before you compare anything.</p>
+<p><strong>Site work is the single largest swing item between two bids on the same house, and it is routinely carried by one and excluded by the other.</strong> On a serviced subdivision lot in Meridian, Nampa or Kuna, site work is modest. On a rural parcel in Ada or Canyon County needing a well, a septic system and an access drive, it is far larger before a foundation is poured.</p>
+<p>That range is larger than most of the differences people agonize over, so establish early which bid contains it and at what assumption. Ask specifically what soil condition the excavation number assumes, whether over-excavation and import are carried, whether the septic system is designed and permitted through Central District Health inside the price, and whether a power extension is included. If nobody has walked the lot, nobody has priced the lot. A written <a href="/blog/lot-evaluation-checklist">lot evaluation</a>, priced for the parcel, resolves this before you compare anything.</p>
 
 <h2 id="step-five">Step five: separate the contingency and the fee</h2>
 <p><strong>Find the contingency and the builder fee in each bid, and if you cannot find them, ask.</strong> Every bid contains both. The only question is whether they are shown to you or distributed invisibly across the trade lines.</p>
@@ -111,14 +111,13 @@ export const howToCompareBuilderBids: BlogPostData = {
 <tr><th>Line</th><th>Builder A</th><th>Builder B</th></tr>
 </thead>
 <tbody>
-<tr><td>Headline price</td><td>$640,000</td><td>$705,000</td></tr>
-<tr><td>Site work, serviced lot</td><td>Excluded, add $35,000</td><td>Included</td></tr>
-<tr><td>Design and engineering</td><td>Excluded, add $22,000</td><td>Included</td></tr>
-<tr><td>Normalized total</td><td>$697,000</td><td>$705,000</td></tr>
-<tr><td>Per finished square foot</td><td>$290</td><td>$294</td></tr>
+<tr><td>Headline price</td><td>Lower</td><td>Higher</td></tr>
+<tr><td>Site work, serviced lot</td><td>Excluded, add it back</td><td>Included</td></tr>
+<tr><td>Design and engineering</td><td>Excluded, add it back</td><td>Included</td></tr>
+<tr><td>Normalized total</td><td>Close to Builder B</td><td>Close to Builder A</td></tr>
 </tbody>
 </table>
-<p>A $65,000 gap becomes an $8,000 gap, and an $8,000 gap between two builders on a nine to fourteen month project is not a reason to choose either one. That is the usual outcome of doing this properly. The decision moves off price and onto the things that actually determine how the year goes: who supervises the site, how changes are handled, how the two of them communicated during the bid.</p>
+<p>A large gap becomes a small one, and a small gap between two builders on a nine to fourteen month project is not a reason to choose either one. That is the usual outcome of doing this properly. The decision moves off price and onto the things that actually determine how the year goes: who supervises the site, how changes are handled, how the two of them communicated during the bid.</p>
 <p>Note that the allowance step is not in the table, because allowances have to be repriced against your own selections rather than against a published band. When you do that, the remaining gap either disappears or becomes decisive. Both outcomes are useful.</p>
 
 <h2 id="whats-left">What the remaining difference actually means</h2>
@@ -127,7 +126,7 @@ export const howToCompareBuilderBids: BlogPostData = {
 
 <h2 id="mistakes">Three mistakes to avoid</h2>
 <p><strong>Do not run an auction, do not compare per square foot across different plans, and do not let a bid expire before you have understood it.</strong> Pushing builders to beat each other's totals produces a number someone cannot build to, and the recovery happens on your project through thinner supervision and cheaper subcontractors.</p>
-<p>Cost per square foot is a sanity check, not a comparison. Most Treasure Valley custom homes plan between $250 and $400 per finished square foot excluding land, so a proposal well outside that band is worth a question, but a $20 per square foot difference between two different plans tells you almost nothing about either builder. And if a bid is presented with a short expiry, ask for an extension. A builder who will not give you two weeks to understand a $700,000 decision has told you how the build will feel. That is one of several <a href="/blog/home-builder-red-flags">home builder red flags</a> worth taking seriously.</p>
+<p>Cost per square foot is a sanity check, not a comparison. For a 2,400 square foot home with an attached 2-car garage, our instant estimate gives a preliminary $502,860 to $1,135,770 at Essential to Signature finish (November 2026), so a proposal well outside that range is worth a question, but a small per square foot difference between two different plans tells you almost nothing about either builder. And if a bid is presented with a short expiry, ask for an extension. A builder who will not give you two weeks to understand a decision this size has told you how the build will feel. That is one of several <a href="/blog/home-builder-red-flags">home builder red flags</a> worth taking seriously.</p>
 
 <h2 id="next-steps">Bring us a bid to read</h2>
 <p>We will read a competing proposal with you and tell you what we think it is missing, including when the answer is that it looks solid and the other builder has priced it fairly. That happens reasonably often and we would rather you know. You can <a href="/contact">send it over</a>, check the shape of your budget against the <a href="/instant-estimate?project=custom-home">instant estimate</a> first, or read <a href="/blog/why-home-building-bids-vary">why home building bids vary so much</a> for what is behind the differences you are seeing.</p>

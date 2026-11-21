@@ -33,7 +33,7 @@ export interface ServiceFieldConfig {
 const FINISH_LEVEL_FIELD: FieldConfig = {
   id: "finishLevel",
   label: "Finish level",
-  helpText: "Drives roughly a $150 per square foot spread on a new build",
+  helpText: "Drives a large share of the price spread on a new build",
   type: "select",
   options: [
     { value: "standard", label: "Standard" },

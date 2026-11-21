@@ -36,42 +36,43 @@ export interface CityData {
  * "new home construction {city}" intent is carried by the location pages, which
  * is why there is no separate generic new-construction service page.
  *
- * planningFrom figures are budget floors for a modest build of that type in the
- * Treasure Valley, derived from the 2026 local range of roughly $225 to $400
- * per finished square foot excluding land (checked 2026-11-09 against the owner's
- * P5 price book at P5 margin policy). They are deliberately conservative:
- * the real number comes from the estimator and a site visit.
+ * planningFrom is a sentence unless an engine backs a figure (owner, 21
+ * November 2026: published prices come from the instant estimator). Homes,
+ * design-build and energy-efficient homes open the instant estimate, which
+ * gives a range for the size and finish a visitor enters, so they carry no
+ * floor. The shop home floor is this site's line-item engine for 1,200 sq ft
+ * of living space with a 1,200 sq ft shop at Essential finish.
  */
 export const SERVICES: ServiceData[] = [
   {
     slug: 'custom-home-builder',
     name: 'Custom Home Building',
     shortDescription: 'A home drawn from a blank page around your lot, your budget, and how you actually live.',
-    planningFrom: '$525k',
+    planningFrom: 'Preliminary range in our instant estimate',
   },
   {
     slug: 'semi-custom-homes',
     name: 'Semi-Custom Homes',
     shortDescription: 'Start from a proven floor plan and personalize it, for a shorter timeline and a tighter budget range.',
-    planningFrom: '$425k',
+    planningFrom: 'Preliminary range in our instant estimate',
   },
   {
     slug: 'build-on-your-lot',
     name: 'Build on Your Lot',
     shortDescription: 'You already own the land. We handle feasibility, design, permits, and construction from there.',
-    planningFrom: '$475k',
+    planningFrom: 'Preliminary range in our instant estimate',
   },
   {
     slug: 'design-build',
     name: 'Design-Build',
     shortDescription: 'Design and construction with one accountable company, so the drawings and the budget never drift apart.',
-    planningFrom: '$525k',
+    planningFrom: 'Preliminary range in our instant estimate',
   },
   {
     slug: 'home-plans-design',
     name: 'Home Design & Plans',
     shortDescription: 'Architectural design, engineering, and permit-ready drawings for a home built to your site.',
-    planningFrom: '$9k',
+    planningFrom: 'Priced after a design consultation',
   },
   {
     slug: 'home-additions',
@@ -89,7 +90,7 @@ export const SERVICES: ServiceData[] = [
     slug: 'lot-evaluation',
     name: 'Lot Evaluation & Feasibility',
     shortDescription: 'Soils, utilities, access, setbacks, and slope reviewed before you commit to a parcel.',
-    planningFrom: '$950',
+    planningFrom: 'Priced for the parcel',
     secondary: true,
   },
   {
@@ -103,7 +104,7 @@ export const SERVICES: ServiceData[] = [
     slug: 'energy-efficient-homes',
     name: 'Energy-Efficient Homes',
     shortDescription: 'High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.',
-    planningFrom: '$575k',
+    planningFrom: 'Preliminary range in our instant estimate',
     secondary: true,
   },
 ];

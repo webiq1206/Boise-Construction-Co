@@ -1,0 +1,1835 @@
+{
+  "about": "Preliminary customer ranges from the P5 instant estimator (the tool behind \"Get an instant estimate\"), one estimate per tier per case. Written by scripts/pricing/p5-published-figures.mts; do not edit by hand.",
+  "asOf": "November 2026",
+  "generatedOn": "2026-11-21",
+  "p5Commit": "5ed2ec6e",
+  "rulesVersion": "2026-11-21.1",
+  "inputs": {
+    "brand": "construction",
+    "laborRatePerHour": 120,
+    "costBook": "p5-home-co seed cost book, no database overrides",
+    "address": "100 Example Ave, Boise, ID 83702",
+    "property": null,
+    "defaults": "Any answer a case does not name is the estimator's default: a new home has an attached 2-car garage, no basement and no plans yet.",
+    "tiers": {
+      "builder": "Essential",
+      "mid": "Signature",
+      "high": "Premium",
+      "luxury": "Luxury"
+    }
+  },
+  "cases": {
+    "home-1600": {
+      "project": "custom-home",
+      "label": "New home, 1,600 sq ft of living space, attached 2-car garage, no basement, no plans yet",
+      "inputs": {
+        "sqft": 1600
+      },
+      "sqft": 1600,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 354810,
+          "high": 585230,
+          "perSqFt": {
+            "low": 221,
+            "high": 366
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 481040,
+          "high": 793410,
+          "perSqFt": {
+            "low": 300,
+            "high": 496
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 708490,
+          "high": 1168460,
+          "perSqFt": {
+            "low": 442,
+            "high": 731
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 1028380,
+          "high": 1695970,
+          "perSqFt": {
+            "low": 642,
+            "high": 1060
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 354810,
+          "high": 793410,
+          "perSqFt": {
+            "low": 221,
+            "high": 496
+          }
+        },
+        "premiumToLuxury": {
+          "low": 708490,
+          "high": 1695970,
+          "perSqFt": {
+            "low": 442,
+            "high": 1060
+          }
+        },
+        "allFinishes": {
+          "low": 354810,
+          "high": 1695970,
+          "perSqFt": {
+            "low": 221,
+            "high": 1060
+          }
+        }
+      }
+    },
+    "home-2000": {
+      "project": "custom-home",
+      "label": "New home, 2,000 sq ft of living space, attached 2-car garage, no basement, no plans yet",
+      "inputs": {
+        "sqft": 2000
+      },
+      "sqft": 2000,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 428840,
+          "high": 707290,
+          "perSqFt": {
+            "low": 214,
+            "high": 354
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 584860,
+          "high": 964580,
+          "perSqFt": {
+            "low": 292,
+            "high": 483
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 866540,
+          "high": 1429080,
+          "perSqFt": {
+            "low": 433,
+            "high": 715
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 1262880,
+          "high": 2082660,
+          "perSqFt": {
+            "low": 631,
+            "high": 1042
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 428840,
+          "high": 964580,
+          "perSqFt": {
+            "low": 214,
+            "high": 483
+          }
+        },
+        "premiumToLuxury": {
+          "low": 866540,
+          "high": 2082660,
+          "perSqFt": {
+            "low": 433,
+            "high": 1042
+          }
+        },
+        "allFinishes": {
+          "low": 428840,
+          "high": 2082660,
+          "perSqFt": {
+            "low": 214,
+            "high": 1042
+          }
+        }
+      }
+    },
+    "home-2400": {
+      "project": "custom-home",
+      "label": "New home, 2,400 sq ft of living space, attached 2-car garage, no basement, no plans yet",
+      "inputs": {
+        "sqft": 2400
+      },
+      "sqft": 2400,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 502860,
+          "high": 829330,
+          "perSqFt": {
+            "low": 209,
+            "high": 346
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 688660,
+          "high": 1135770,
+          "perSqFt": {
+            "low": 286,
+            "high": 474
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 1024580,
+          "high": 1689690,
+          "perSqFt": {
+            "low": 426,
+            "high": 705
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 1497390,
+          "high": 2469340,
+          "perSqFt": {
+            "low": 623,
+            "high": 1029
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 502860,
+          "high": 1135770,
+          "perSqFt": {
+            "low": 209,
+            "high": 474
+          }
+        },
+        "premiumToLuxury": {
+          "low": 1024580,
+          "high": 2469340,
+          "perSqFt": {
+            "low": 426,
+            "high": 1029
+          }
+        },
+        "allFinishes": {
+          "low": 502860,
+          "high": 2469340,
+          "perSqFt": {
+            "low": 209,
+            "high": 1029
+          }
+        }
+      }
+    },
+    "home-3000": {
+      "project": "custom-home",
+      "label": "New home, 3,000 sq ft of living space, attached 2-car garage, no basement, no plans yet",
+      "inputs": {
+        "sqft": 3000
+      },
+      "sqft": 3000,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 613860,
+          "high": 1012410,
+          "perSqFt": {
+            "low": 204,
+            "high": 338
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 844400,
+          "high": 1392550,
+          "perSqFt": {
+            "low": 281,
+            "high": 465
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 1261640,
+          "high": 2080590,
+          "perSqFt": {
+            "low": 420,
+            "high": 694
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 1849130,
+          "high": 3049350,
+          "perSqFt": {
+            "low": 616,
+            "high": 1017
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 613860,
+          "high": 1392550,
+          "perSqFt": {
+            "low": 204,
+            "high": 465
+          }
+        },
+        "premiumToLuxury": {
+          "low": 1261640,
+          "high": 3049350,
+          "perSqFt": {
+            "low": 420,
+            "high": 1017
+          }
+        },
+        "allFinishes": {
+          "low": 613860,
+          "high": 3049350,
+          "perSqFt": {
+            "low": 204,
+            "high": 1017
+          }
+        }
+      }
+    },
+    "home-3600": {
+      "project": "custom-home",
+      "label": "New home, 3,600 sq ft of living space, attached 2-car garage, no basement, no plans yet",
+      "inputs": {
+        "sqft": 3600
+      },
+      "sqft": 3600,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 724900,
+          "high": 1195480,
+          "perSqFt": {
+            "low": 201,
+            "high": 333
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 1000120,
+          "high": 1649310,
+          "perSqFt": {
+            "low": 277,
+            "high": 459
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 1498700,
+          "high": 2471510,
+          "perSqFt": {
+            "low": 416,
+            "high": 687
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 2200840,
+          "high": 3629370,
+          "perSqFt": {
+            "low": 611,
+            "high": 1009
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 724900,
+          "high": 1649310,
+          "perSqFt": {
+            "low": 201,
+            "high": 459
+          }
+        },
+        "premiumToLuxury": {
+          "low": 1498700,
+          "high": 3629370,
+          "perSqFt": {
+            "low": 416,
+            "high": 1009
+          }
+        },
+        "allFinishes": {
+          "low": 724900,
+          "high": 3629370,
+          "perSqFt": {
+            "low": 201,
+            "high": 1009
+          }
+        }
+      }
+    },
+    "home-1600-complete-plans": {
+      "project": "custom-home",
+      "label": "New home, 1,600 sq ft of living space, attached 2-car garage, no basement, complete design and engineered plans provided",
+      "inputs": {
+        "sqft": 1600,
+        "plans": "complete"
+      },
+      "sqft": 1600,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 347480,
+          "high": 573130,
+          "perSqFt": {
+            "low": 217,
+            "high": 359
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 471760,
+          "high": 778110,
+          "perSqFt": {
+            "low": 294,
+            "high": 487
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 697260,
+          "high": 1149930,
+          "perSqFt": {
+            "low": 435,
+            "high": 719
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 1014210,
+          "high": 1672600,
+          "perSqFt": {
+            "low": 633,
+            "high": 1046
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 347480,
+          "high": 778110,
+          "perSqFt": {
+            "low": 217,
+            "high": 487
+          }
+        },
+        "premiumToLuxury": {
+          "low": 697260,
+          "high": 1672600,
+          "perSqFt": {
+            "low": 435,
+            "high": 1046
+          }
+        },
+        "allFinishes": {
+          "low": 347480,
+          "high": 1672600,
+          "perSqFt": {
+            "low": 217,
+            "high": 1046
+          }
+        }
+      }
+    },
+    "home-2000-complete-plans": {
+      "project": "custom-home",
+      "label": "New home, 2,000 sq ft of living space, attached 2-car garage, no basement, complete design and engineered plans provided",
+      "inputs": {
+        "sqft": 2000,
+        "plans": "complete"
+      },
+      "sqft": 2000,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 420770,
+          "high": 693980,
+          "perSqFt": {
+            "low": 210,
+            "high": 347
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 574360,
+          "high": 947270,
+          "perSqFt": {
+            "low": 287,
+            "high": 474
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 853600,
+          "high": 1407730,
+          "perSqFt": {
+            "low": 426,
+            "high": 704
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 1246270,
+          "high": 2055260,
+          "perSqFt": {
+            "low": 623,
+            "high": 1028
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 420770,
+          "high": 947270,
+          "perSqFt": {
+            "low": 210,
+            "high": 474
+          }
+        },
+        "premiumToLuxury": {
+          "low": 853600,
+          "high": 2055260,
+          "perSqFt": {
+            "low": 426,
+            "high": 1028
+          }
+        },
+        "allFinishes": {
+          "low": 420770,
+          "high": 2055260,
+          "perSqFt": {
+            "low": 210,
+            "high": 1028
+          }
+        }
+      }
+    },
+    "home-2400-complete-plans": {
+      "project": "custom-home",
+      "label": "New home, 2,400 sq ft of living space, attached 2-car garage, no basement, complete design and engineered plans provided",
+      "inputs": {
+        "sqft": 2400,
+        "plans": "complete"
+      },
+      "sqft": 2400,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 494060,
+          "high": 814810,
+          "perSqFt": {
+            "low": 205,
+            "high": 340
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 676940,
+          "high": 1116440,
+          "perSqFt": {
+            "low": 282,
+            "high": 466
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 1009930,
+          "high": 1665520,
+          "perSqFt": {
+            "low": 420,
+            "high": 694
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 1478330,
+          "high": 2437910,
+          "perSqFt": {
+            "low": 615,
+            "high": 1016
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 494060,
+          "high": 1116440,
+          "perSqFt": {
+            "low": 205,
+            "high": 466
+          }
+        },
+        "premiumToLuxury": {
+          "low": 1009930,
+          "high": 2437910,
+          "perSqFt": {
+            "low": 420,
+            "high": 1016
+          }
+        },
+        "allFinishes": {
+          "low": 494060,
+          "high": 2437910,
+          "perSqFt": {
+            "low": 205,
+            "high": 1016
+          }
+        }
+      }
+    },
+    "home-3000-complete-plans": {
+      "project": "custom-home",
+      "label": "New home, 3,000 sq ft of living space, attached 2-car garage, no basement, complete design and engineered plans provided",
+      "inputs": {
+        "sqft": 3000,
+        "plans": "complete"
+      },
+      "sqft": 3000,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 603960,
+          "high": 996080,
+          "perSqFt": {
+            "low": 201,
+            "high": 333
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 830850,
+          "high": 1370210,
+          "perSqFt": {
+            "low": 276,
+            "high": 457
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 1244420,
+          "high": 2052190,
+          "perSqFt": {
+            "low": 414,
+            "high": 685
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 1826410,
+          "high": 3011880,
+          "perSqFt": {
+            "low": 608,
+            "high": 1004
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 603960,
+          "high": 1370210,
+          "perSqFt": {
+            "low": 201,
+            "high": 457
+          }
+        },
+        "premiumToLuxury": {
+          "low": 1244420,
+          "high": 3011880,
+          "perSqFt": {
+            "low": 414,
+            "high": 1004
+          }
+        },
+        "allFinishes": {
+          "low": 603960,
+          "high": 3011880,
+          "perSqFt": {
+            "low": 201,
+            "high": 1004
+          }
+        }
+      }
+    },
+    "home-3600-complete-plans": {
+      "project": "custom-home",
+      "label": "New home, 3,600 sq ft of living space, attached 2-car garage, no basement, complete design and engineered plans provided",
+      "inputs": {
+        "sqft": 3600,
+        "plans": "complete"
+      },
+      "sqft": 3600,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 713900,
+          "high": 1177330,
+          "perSqFt": {
+            "low": 198,
+            "high": 328
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 984740,
+          "high": 1623950,
+          "perSqFt": {
+            "low": 273,
+            "high": 452
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 1478920,
+          "high": 2438890,
+          "perSqFt": {
+            "low": 410,
+            "high": 678
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 2174460,
+          "high": 3585860,
+          "perSqFt": {
+            "low": 604,
+            "high": 997
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 713900,
+          "high": 1623950,
+          "perSqFt": {
+            "low": 198,
+            "high": 452
+          }
+        },
+        "premiumToLuxury": {
+          "low": 1478920,
+          "high": 3585860,
+          "perSqFt": {
+            "low": 410,
+            "high": 997
+          }
+        },
+        "allFinishes": {
+          "low": 713900,
+          "high": 3585860,
+          "perSqFt": {
+            "low": 198,
+            "high": 997
+          }
+        }
+      }
+    },
+    "addition-room-300": {
+      "project": "addition",
+      "label": "Room addition, 300 sq ft, no plans yet",
+      "inputs": {
+        "type": "room",
+        "sqft": 300
+      },
+      "sqft": 300,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 66510,
+          "high": 113390,
+          "perSqFt": {
+            "low": 221,
+            "high": 378
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 84460,
+          "high": 143940,
+          "perSqFt": {
+            "low": 281,
+            "high": 480
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 102410,
+          "high": 174540,
+          "perSqFt": {
+            "low": 341,
+            "high": 582
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 131150,
+          "high": 223440,
+          "perSqFt": {
+            "low": 437,
+            "high": 745
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 66510,
+          "high": 143940,
+          "perSqFt": {
+            "low": 221,
+            "high": 480
+          }
+        },
+        "premiumToLuxury": {
+          "low": 102410,
+          "high": 223440,
+          "perSqFt": {
+            "low": 341,
+            "high": 745
+          }
+        },
+        "allFinishes": {
+          "low": 66510,
+          "high": 223440,
+          "perSqFt": {
+            "low": 221,
+            "high": 745
+          }
+        }
+      }
+    },
+    "addition-room-400": {
+      "project": "addition",
+      "label": "Room addition, 400 sq ft, no plans yet",
+      "inputs": {
+        "type": "room",
+        "sqft": 400
+      },
+      "sqft": 400,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 85650,
+          "high": 145990,
+          "perSqFt": {
+            "low": 214,
+            "high": 365
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 109600,
+          "high": 186770,
+          "perSqFt": {
+            "low": 274,
+            "high": 467
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 133540,
+          "high": 227530,
+          "perSqFt": {
+            "low": 333,
+            "high": 569
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 171840,
+          "high": 292750,
+          "perSqFt": {
+            "low": 429,
+            "high": 732
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 85650,
+          "high": 186770,
+          "perSqFt": {
+            "low": 214,
+            "high": 467
+          }
+        },
+        "premiumToLuxury": {
+          "low": 133540,
+          "high": 292750,
+          "perSqFt": {
+            "low": 333,
+            "high": 732
+          }
+        },
+        "allFinishes": {
+          "low": 85650,
+          "high": 292750,
+          "perSqFt": {
+            "low": 214,
+            "high": 732
+          }
+        }
+      }
+    },
+    "addition-room-600": {
+      "project": "addition",
+      "label": "Room addition, 600 sq ft, no plans yet",
+      "inputs": {
+        "type": "room",
+        "sqft": 600
+      },
+      "sqft": 600,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 123960,
+          "high": 211220,
+          "perSqFt": {
+            "low": 206,
+            "high": 353
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 159880,
+          "high": 272370,
+          "perSqFt": {
+            "low": 266,
+            "high": 454
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 195780,
+          "high": 333510,
+          "perSqFt": {
+            "low": 326,
+            "high": 556
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 253250,
+          "high": 431340,
+          "perSqFt": {
+            "low": 422,
+            "high": 719
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 123960,
+          "high": 272370,
+          "perSqFt": {
+            "low": 206,
+            "high": 454
+          }
+        },
+        "premiumToLuxury": {
+          "low": 195780,
+          "high": 431340,
+          "perSqFt": {
+            "low": 326,
+            "high": 719
+          }
+        },
+        "allFinishes": {
+          "low": 123960,
+          "high": 431340,
+          "perSqFt": {
+            "low": 206,
+            "high": 719
+          }
+        }
+      }
+    },
+    "addition-suite": {
+      "project": "addition",
+      "label": "Primary suite addition, typical size, no plans yet",
+      "inputs": {
+        "type": "suite"
+      },
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 100170,
+          "high": 170690
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 128900,
+          "high": 219640
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 157630,
+          "high": 268550
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 210290,
+          "high": 358220
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 100170,
+          "high": 219640
+        },
+        "premiumToLuxury": {
+          "low": 157630,
+          "high": 358220
+        },
+        "allFinishes": {
+          "low": 100170,
+          "high": 358220
+        }
+      }
+    },
+    "addition-inlaw": {
+      "project": "addition",
+      "label": "In-law suite addition, typical size, no plans yet",
+      "inputs": {
+        "type": "inlaw"
+      },
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 124100,
+          "high": 211480
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 162410,
+          "high": 276700
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 219880,
+          "high": 374520
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 286920,
+          "high": 488670
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 124100,
+          "high": 276700
+        },
+        "premiumToLuxury": {
+          "low": 219880,
+          "high": 488670
+        },
+        "allFinishes": {
+          "low": 124100,
+          "high": 488670
+        }
+      }
+    },
+    "addition-second": {
+      "project": "addition",
+      "label": "Second-story addition, typical size, no plans yet",
+      "inputs": {
+        "type": "second"
+      },
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 181580,
+          "high": 309290
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 248610,
+          "high": 423430
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 325220,
+          "high": 553880
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 440140,
+          "high": 749570
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 181580,
+          "high": 423430
+        },
+        "premiumToLuxury": {
+          "low": 325220,
+          "high": 749570
+        },
+        "allFinishes": {
+          "low": 181580,
+          "high": 749570
+        }
+      }
+    },
+    "adu-detached": {
+      "project": "adu",
+      "label": "Detached ADU of about 600 sq ft, no plans yet",
+      "inputs": {
+        "type": "detached"
+      },
+      "sqft": 600,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 149110,
+          "high": 246030,
+          "perSqFt": {
+            "low": 248,
+            "high": 411
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 184020,
+          "high": 303620,
+          "perSqFt": {
+            "low": 306,
+            "high": 507
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 223830,
+          "high": 369280,
+          "perSqFt": {
+            "low": 373,
+            "high": 616
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 278690,
+          "high": 459700,
+          "perSqFt": {
+            "low": 464,
+            "high": 767
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 149110,
+          "high": 303620,
+          "perSqFt": {
+            "low": 248,
+            "high": 507
+          }
+        },
+        "premiumToLuxury": {
+          "low": 223830,
+          "high": 459700,
+          "perSqFt": {
+            "low": 373,
+            "high": 767
+          }
+        },
+        "allFinishes": {
+          "low": 149110,
+          "high": 459700,
+          "perSqFt": {
+            "low": 248,
+            "high": 767
+          }
+        }
+      }
+    },
+    "adu-attached": {
+      "project": "adu",
+      "label": "Attached ADU, typical size, no plans yet",
+      "inputs": {
+        "type": "attached"
+      },
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 126630,
+          "high": 208970
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 175460,
+          "high": 289520
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 234110,
+          "high": 386180
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 302500,
+          "high": 498960
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 126630,
+          "high": 289520
+        },
+        "premiumToLuxury": {
+          "low": 234110,
+          "high": 498960
+        },
+        "allFinishes": {
+          "low": 126630,
+          "high": 498960
+        }
+      }
+    },
+    "adu-garage": {
+      "project": "adu",
+      "label": "Garage conversion to an ADU, no plans yet",
+      "inputs": {
+        "type": "garage"
+      },
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 97290,
+          "high": 160540
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 122300,
+          "high": 201790
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 147310,
+          "high": 243040
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 177500,
+          "high": 292830
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 97290,
+          "high": 201790
+        },
+        "premiumToLuxury": {
+          "low": 147310,
+          "high": 292830
+        },
+        "allFinishes": {
+          "low": 97290,
+          "high": 292830
+        }
+      }
+    },
+    "garage-shop-576": {
+      "project": "garage-shop",
+      "label": "Detached garage or shop, 576 sq ft, no plans yet",
+      "inputs": {
+        "sqft": 576
+      },
+      "sqft": 576,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 55450,
+          "high": 91550,
+          "perSqFt": {
+            "low": 96,
+            "high": 159
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 70220,
+          "high": 115910,
+          "perSqFt": {
+            "low": 121,
+            "high": 202
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 92040,
+          "high": 151880,
+          "perSqFt": {
+            "low": 159,
+            "high": 264
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 121230,
+          "high": 200020,
+          "perSqFt": {
+            "low": 210,
+            "high": 348
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 55450,
+          "high": 115910,
+          "perSqFt": {
+            "low": 96,
+            "high": 202
+          }
+        },
+        "premiumToLuxury": {
+          "low": 92040,
+          "high": 200020,
+          "perSqFt": {
+            "low": 159,
+            "high": 348
+          }
+        },
+        "allFinishes": {
+          "low": 55450,
+          "high": 200020,
+          "perSqFt": {
+            "low": 96,
+            "high": 348
+          }
+        }
+      }
+    },
+    "garage-shop-864": {
+      "project": "garage-shop",
+      "label": "Detached garage or shop, 864 sq ft, no plans yet",
+      "inputs": {
+        "sqft": 864
+      },
+      "sqft": 864,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 82360,
+          "high": 135940,
+          "perSqFt": {
+            "low": 95,
+            "high": 158
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 104520,
+          "high": 172460,
+          "perSqFt": {
+            "low": 120,
+            "high": 200
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 137240,
+          "high": 226410,
+          "perSqFt": {
+            "low": 158,
+            "high": 263
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 181020,
+          "high": 298630,
+          "perSqFt": {
+            "low": 209,
+            "high": 346
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 82360,
+          "high": 172460,
+          "perSqFt": {
+            "low": 95,
+            "high": 200
+          }
+        },
+        "premiumToLuxury": {
+          "low": 137240,
+          "high": 298630,
+          "perSqFt": {
+            "low": 158,
+            "high": 346
+          }
+        },
+        "allFinishes": {
+          "low": 82360,
+          "high": 298630,
+          "perSqFt": {
+            "low": 95,
+            "high": 346
+          }
+        }
+      }
+    },
+    "garage-shop-1200": {
+      "project": "garage-shop",
+      "label": "Detached garage or shop, 1,200 sq ft, no plans yet",
+      "inputs": {
+        "sqft": 1200
+      },
+      "sqft": 1200,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 113770,
+          "high": 187690,
+          "perSqFt": {
+            "low": 94,
+            "high": 157
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 144540,
+          "high": 238450,
+          "perSqFt": {
+            "low": 120,
+            "high": 199
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 189970,
+          "high": 313380,
+          "perSqFt": {
+            "low": 158,
+            "high": 262
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 250760,
+          "high": 413670,
+          "perSqFt": {
+            "low": 208,
+            "high": 345
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 113770,
+          "high": 238450,
+          "perSqFt": {
+            "low": 94,
+            "high": 199
+          }
+        },
+        "premiumToLuxury": {
+          "low": 189970,
+          "high": 413670,
+          "perSqFt": {
+            "low": 158,
+            "high": 345
+          }
+        },
+        "allFinishes": {
+          "low": 113770,
+          "high": 413670,
+          "perSqFt": {
+            "low": 94,
+            "high": 345
+          }
+        }
+      }
+    },
+    "garage-shop-2400": {
+      "project": "garage-shop",
+      "label": "Detached garage or shop, 2,400 sq ft, no plans yet",
+      "inputs": {
+        "sqft": 2400
+      },
+      "sqft": 2400,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 225890,
+          "high": 372580,
+          "perSqFt": {
+            "low": 94,
+            "high": 156
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 287430,
+          "high": 474090,
+          "perSqFt": {
+            "low": 119,
+            "high": 198
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 378300,
+          "high": 623920,
+          "perSqFt": {
+            "low": 157,
+            "high": 260
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 499920,
+          "high": 824520,
+          "perSqFt": {
+            "low": 208,
+            "high": 344
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 225890,
+          "high": 474090,
+          "perSqFt": {
+            "low": 94,
+            "high": 198
+          }
+        },
+        "premiumToLuxury": {
+          "low": 378300,
+          "high": 824520,
+          "perSqFt": {
+            "low": 157,
+            "high": 344
+          }
+        },
+        "allFinishes": {
+          "low": 225890,
+          "high": 824520,
+          "perSqFt": {
+            "low": 94,
+            "high": 344
+          }
+        }
+      }
+    }
+  },
+  "designAndEngineering": {
+    "home-1600": {
+      "label": "What design, structural engineering and energy code calculations add to a 1,600 sq ft new home's range (no plans less complete plans)",
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 7330,
+          "high": 12100
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 9280,
+          "high": 15300
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 11230,
+          "high": 18530
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 14170,
+          "high": 23370
+        }
+      },
+      "essentialToSignature": {
+        "low": 7330,
+        "high": 15300
+      }
+    },
+    "home-2000": {
+      "label": "What design, structural engineering and energy code calculations add to a 2,000 sq ft new home's range (no plans less complete plans)",
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 8070,
+          "high": 13310
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 10500,
+          "high": 17310
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 12940,
+          "high": 21350
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 16610,
+          "high": 27400
+        }
+      },
+      "essentialToSignature": {
+        "low": 8070,
+        "high": 17310
+      }
+    },
+    "home-2400": {
+      "label": "What design, structural engineering and energy code calculations add to a 2,400 sq ft new home's range (no plans less complete plans)",
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 8800,
+          "high": 14520
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 11720,
+          "high": 19330
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 14650,
+          "high": 24170
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 19060,
+          "high": 31430
+        }
+      },
+      "essentialToSignature": {
+        "low": 8800,
+        "high": 19330
+      }
+    },
+    "home-3000": {
+      "label": "What design, structural engineering and energy code calculations add to a 3,000 sq ft new home's range (no plans less complete plans)",
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 9900,
+          "high": 16330
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 13550,
+          "high": 22340
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 17220,
+          "high": 28400
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 22720,
+          "high": 37470
+        }
+      },
+      "essentialToSignature": {
+        "low": 9900,
+        "high": 22340
+      }
+    },
+    "home-3600": {
+      "label": "What design, structural engineering and energy code calculations add to a 3,600 sq ft new home's range (no plans less complete plans)",
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 11000,
+          "high": 18150
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 15380,
+          "high": 25360
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 19780,
+          "high": 32620
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 26380,
+          "high": 43510
+        }
+      },
+      "essentialToSignature": {
+        "low": 11000,
+        "high": 25360
+      }
+    }
+  },
+  "scope": {
+    "custom-home/none": {
+      "rangeNotes": [
+        "Includes design, engineered plans and permit fees."
+      ],
+      "excluded": [
+        "The land",
+        "Surveys and soils reports",
+        "Unusual site conditions, such as rock, high groundwater or long utility runs",
+        "Landscaping, fencing and window coverings"
+      ],
+      "undetermined": [
+        "Site work beyond a typical lot, such as rock, poor soils, a steep grade or long utility runs.",
+        "Utility connection and capacity fees, which depend on the services already at your lot."
+      ]
+    },
+    "custom-home/complete": {
+      "rangeNotes": [
+        "Includes permit fees. Assumes you provide complete design and engineered plans."
+      ],
+      "excluded": [
+        "The land",
+        "Surveys and soils reports",
+        "Unusual site conditions, such as rock, high groundwater or long utility runs",
+        "Landscaping, fencing and window coverings"
+      ],
+      "undetermined": [
+        "Site work beyond a typical lot, such as rock, poor soils, a steep grade or long utility runs.",
+        "Utility connection and capacity fees, which depend on the services already at your lot."
+      ]
+    },
+    "garage-shop/none": {
+      "rangeNotes": [
+        "Includes design drawings and permit fees. Engineering, if your building needs it, is not yet determined."
+      ],
+      "excluded": [
+        "Surveys and soils reports",
+        "Unusual site conditions, such as rock, high groundwater or long utility runs",
+        "Driveway, plumbing and heating unless added in design"
+      ],
+      "undetermined": [
+        "Site work beyond a typical lot, such as rock, poor soils, a steep grade or long utility runs.",
+        "Impact fees and utility connection fees, if your jurisdiction charges them for this work.",
+        "Structural engineering, if your building department requires it for this building."
+      ]
+    },
+    "addition/room/none": {
+      "rangeNotes": [
+        "Includes design, engineered plans and permit fees."
+      ],
+      "excluded": [
+        "Surveys and soils reports",
+        "Unusual site conditions, such as rock, high groundwater or long utility runs",
+        "Remodeling of existing rooms beyond the connection to the addition"
+      ],
+      "undetermined": [
+        "Repairs to framing, plumbing or wiring found once walls and floors are opened.",
+        "Site work beyond a typical lot, such as rock, poor soils, a steep grade or long utility runs.",
+        "Impact fees and utility connection fees, if your jurisdiction charges them for this work."
+      ]
+    },
+    "addition/suite/none": {
+      "rangeNotes": [
+        "Includes design, engineered plans and permit fees."
+      ],
+      "excluded": [
+        "Surveys and soils reports",
+        "Unusual site conditions, such as rock, high groundwater or long utility runs",
+        "Remodeling of existing rooms beyond the connection to the addition"
+      ],
+      "undetermined": [
+        "Repairs to framing, plumbing or wiring found once walls and floors are opened.",
+        "Site work beyond a typical lot, such as rock, poor soils, a steep grade or long utility runs.",
+        "Impact fees and utility connection fees, if your jurisdiction charges them for this work."
+      ]
+    },
+    "addition/inlaw/none": {
+      "rangeNotes": [
+        "Includes design, engineered plans and permit fees."
+      ],
+      "excluded": [
+        "Surveys and soils reports",
+        "Unusual site conditions, such as rock, high groundwater or long utility runs",
+        "Remodeling of existing rooms beyond the connection to the addition"
+      ],
+      "undetermined": [
+        "Repairs to framing, plumbing or wiring found once walls and floors are opened.",
+        "Site work beyond a typical lot, such as rock, poor soils, a steep grade or long utility runs.",
+        "Impact fees and utility connection fees, if your jurisdiction charges them for this work."
+      ]
+    },
+    "addition/second/none": {
+      "rangeNotes": [
+        "Includes design, engineered plans and permit fees."
+      ],
+      "excluded": [
+        "Surveys and soils reports",
+        "Unusual site conditions, such as rock, high groundwater or long utility runs",
+        "Remodeling of existing rooms beyond the connection to the addition"
+      ],
+      "undetermined": [
+        "Repairs to framing, plumbing or wiring found once walls and floors are opened.",
+        "Site work beyond a typical lot, such as rock, poor soils, a steep grade or long utility runs.",
+        "Impact fees and utility connection fees, if your jurisdiction charges them for this work."
+      ]
+    },
+    "adu/detached/none": {
+      "rangeNotes": [
+        "Includes design, engineered plans and permit fees."
+      ],
+      "excluded": [
+        "Surveys and soils reports",
+        "Unusual site conditions, such as rock, high groundwater or long utility runs"
+      ],
+      "undetermined": [
+        "Site work beyond a typical lot, such as rock, poor soils, a steep grade or long utility runs.",
+        "Impact fees and utility connection fees, if your jurisdiction charges them for this work."
+      ]
+    },
+    "adu/attached/none": {
+      "rangeNotes": [
+        "Includes design, engineered plans and permit fees."
+      ],
+      "excluded": [
+        "Surveys and soils reports",
+        "Unusual site conditions, such as rock, high groundwater or long utility runs"
+      ],
+      "undetermined": [
+        "Site work beyond a typical lot, such as rock, poor soils, a steep grade or long utility runs.",
+        "Impact fees and utility connection fees, if your jurisdiction charges them for this work."
+      ]
+    },
+    "adu/garage/none": {
+      "rangeNotes": [
+        "Includes design, engineered plans and permit fees."
+      ],
+      "excluded": [
+        "Surveys and soils reports",
+        "Unusual site conditions, such as rock, high groundwater or long utility runs"
+      ],
+      "undetermined": [
+        "Site work beyond a typical lot, such as rock, poor soils, a steep grade or long utility runs.",
+        "Impact fees and utility connection fees, if your jurisdiction charges them for this work."
+      ]
+    }
+  }
+}

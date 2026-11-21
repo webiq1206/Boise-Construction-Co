@@ -19,9 +19,9 @@ export const INITIAL_FAQ_COUNT = 6;
  * Homepage FAQ set. These feed FAQPage schema, so answers lead with the direct
  * response before adding context.
  *
- * Cost figures must stay consistent with the anchors documented in
- * shared/seoContent.ts (roughly $225-$400 per finished square foot for 2026
- * Treasure Valley construction, excluding land) and with the estimator engine.
+ * Price figures come from the P5 instant estimator for the inputs the answer
+ * states (shared/content/p5PublishedFigures.json, pinned by
+ * tests/p5-published-figures.test.ts).
  */
 export const HOMEPAGE_FAQS: HomepageFaq[] = [
   {
@@ -42,7 +42,7 @@ export const HOMEPAGE_FAQS: HomepageFaq[] = [
   },
   {
     q: "How much does it cost to build a house in Boise and the Treasure Valley?",
-    a: "As of 2026, most Treasure Valley custom homes plan between $250 and $400 per finished square foot at Essential to Signature finish, excluding land, which puts a 2,400 square foot home roughly between $600,000 and $960,000. Simpler single-level designs on flat valley lots can approach $225 per square foot, while foothills sites, steep grades, and highly detailed interiors regularly exceed $450. Land, site work, and utility connections are separate and vary more between lots than the house itself does, which is why we price them as their own lines rather than folding them into a square-foot number.",
+    a: "Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Smaller, simpler designs come in lower, while foothills sites, steep grades, and highly detailed interiors cost more. Land, site work beyond a typical lot, and utility connections are separate and vary more between lots than the house itself does, which is why we price them as their own lines rather than folding them into a square-foot number.",
   },
   {
     q: "How are you different from other home builders in the Treasure Valley?",

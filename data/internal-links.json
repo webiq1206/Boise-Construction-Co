@@ -111,7 +111,7 @@
           "anchor": "Boise home building cost guide",
           "title": "Boise home building cost guide",
           "type": "guide",
-          "score": 0.563
+          "score": 0.56
         }
       ]
     },
@@ -368,7 +368,7 @@
           "anchor": "Building a new home in Boise, Idaho",
           "title": "Building a new home in Boise, Idaho",
           "type": "guide",
-          "score": 0.359
+          "score": 0.366
         }
       ]
     },
@@ -525,7 +525,7 @@
           "anchor": "Building a new home in Boise, Idaho",
           "title": "Building a new home in Boise, Idaho",
           "type": "guide",
-          "score": 0.472
+          "score": 0.431
         }
       ]
     },
@@ -1303,7 +1303,7 @@
           "anchor": "Building a new home in Boise, Idaho",
           "title": "Building a new home in Boise, Idaho",
           "type": "guide",
-          "score": 0.228
+          "score": 0.238
         }
       ]
     },
@@ -2443,7 +2443,7 @@
           "anchor": "What a luxury home costs to build in Boise",
           "title": "What a luxury home costs to build in Boise",
           "type": "blog",
-          "score": 0.132
+          "score": 0.136
         },
         {
           "url": "/blog/design-build-vs-general-contractor",
@@ -2510,11 +2510,11 @@
           "score": 0.031
         },
         {
-          "url": "/blog/boise-building-permit-guide",
-          "anchor": "Building permits in Boise: what a new home needs",
-          "title": "Building permits in Boise: what a new home needs",
+          "url": "/blog/luxury-home-building-cost-boise",
+          "anchor": "What a luxury home costs to build in Boise",
+          "title": "What a luxury home costs to build in Boise",
           "type": "blog",
-          "score": -0.009
+          "score": -0.006
         }
       ]
     },
@@ -2574,9 +2574,9 @@
           "score": -0.009
         },
         {
-          "url": "/blog/luxury-home-building-cost-boise",
-          "anchor": "What a luxury home costs to build in Boise",
-          "title": "What a luxury home costs to build in Boise",
+          "url": "/blog/boise-building-permit-guide",
+          "anchor": "Building permits in Boise: what a new home needs",
+          "title": "Building permits in Boise: what a new home needs",
           "type": "blog",
           "score": -0.009
         }
@@ -2766,11 +2766,11 @@
           "score": -0.027
         },
         {
-          "url": "/blog/ada-vs-canyon-county-permit-timelines",
-          "anchor": "Ada vs Canyon County: what differs when you build",
-          "title": "Ada vs Canyon County: what differs when you build",
+          "url": "/blog/luxury-home-building-cost-boise",
+          "anchor": "What a luxury home costs to build in Boise",
+          "title": "What a luxury home costs to build in Boise",
           "type": "blog",
-          "score": -0.049
+          "score": -0.046
         }
       ]
     },
@@ -2823,16 +2823,16 @@
           "score": 0.35
         },
         {
-          "url": "/blog/boise-building-permit-guide",
-          "anchor": "Building permits in Boise: what a new home needs",
-          "title": "Building permits in Boise: what a new home needs",
+          "url": "/blog/ada-vs-canyon-county-permit-timelines",
+          "anchor": "Ada vs Canyon County: what differs when you build",
+          "title": "Ada vs Canyon County: what differs when you build",
           "type": "blog",
           "score": -0.049
         },
         {
-          "url": "/blog/luxury-home-building-cost-boise",
-          "anchor": "What a luxury home costs to build in Boise",
-          "title": "What a luxury home costs to build in Boise",
+          "url": "/blog/boise-building-permit-guide",
+          "anchor": "Building permits in Boise: what a new home needs",
+          "title": "Building permits in Boise: what a new home needs",
           "type": "blog",
           "score": -0.049
         }
@@ -3015,18 +3015,18 @@
           "score": 0.32
         },
         {
+          "url": "/blog/luxury-home-building-cost-boise",
+          "anchor": "What a luxury home costs to build in Boise",
+          "title": "What a luxury home costs to build in Boise",
+          "type": "blog",
+          "score": 0.091
+        },
+        {
           "url": "/blog/custom-home-cost-per-square-foot-boise",
           "anchor": "Custom home cost per square foot in Boise",
           "title": "Custom home cost per square foot in Boise",
           "type": "blog",
           "score": 0.083
-        },
-        {
-          "url": "/blog/luxury-home-building-cost-boise",
-          "anchor": "What a luxury home costs to build in Boise",
-          "title": "What a luxury home costs to build in Boise",
-          "type": "blog",
-          "score": 0.08
         }
       ]
     },
@@ -3335,18 +3335,18 @@
           "score": 0.298
         },
         {
+          "url": "/blog/luxury-home-building-cost-boise",
+          "anchor": "What a luxury home costs to build in Boise",
+          "title": "What a luxury home costs to build in Boise",
+          "type": "blog",
+          "score": -0.053
+        },
+        {
           "url": "/blog/production-vs-custom-home-builder",
           "anchor": "Production builder vs custom builder",
           "title": "Production builder vs custom builder",
           "type": "blog",
           "score": -0.053
-        },
-        {
-          "url": "/blog/new-home-walkthrough-and-warranty",
-          "anchor": "The final walkthrough and what the warranty covers",
-          "title": "The final walkthrough and what the warranty covers",
-          "type": "blog",
-          "score": -0.057
         }
       ]
     },
@@ -3399,18 +3399,18 @@
           "score": 0.297
         },
         {
+          "url": "/blog/new-home-walkthrough-and-warranty",
+          "anchor": "The final walkthrough and what the warranty covers",
+          "title": "The final walkthrough and what the warranty covers",
+          "type": "blog",
+          "score": -0.057
+        },
+        {
           "url": "/blog/custom-home-cost-per-square-foot-boise",
           "anchor": "Custom home cost per square foot in Boise",
           "title": "Custom home cost per square foot in Boise",
           "type": "blog",
           "score": -0.06
-        },
-        {
-          "url": "/blog/construction-loan-basics-idaho",
-          "anchor": "How construction loans work in Idaho",
-          "title": "How construction loans work in Idaho",
-          "type": "blog",
-          "score": -0.063
         }
       ]
     },
@@ -3463,9 +3463,9 @@
           "score": 0.295
         },
         {
-          "url": "/blog/luxury-home-building-cost-boise",
-          "anchor": "What a luxury home costs to build in Boise",
-          "title": "What a luxury home costs to build in Boise",
+          "url": "/blog/construction-loan-basics-idaho",
+          "anchor": "How construction loans work in Idaho",
+          "title": "How construction loans work in Idaho",
           "type": "blog",
           "score": -0.063
         },
@@ -4046,11 +4046,11 @@
           "score": -0.126
         },
         {
-          "url": "/blog/boise-building-permit-guide",
-          "anchor": "Building permits in Boise: what a new home needs",
-          "title": "Building permits in Boise: what a new home needs",
+          "url": "/blog/building-in-the-boise-foothills",
+          "anchor": "What it costs to build in the Boise Foothills",
+          "title": "What it costs to build in the Boise Foothills",
           "type": "blog",
-          "score": -0.129
+          "score": -0.126
         }
       ]
     },
@@ -4103,9 +4103,9 @@
           "score": 0.21
         },
         {
-          "url": "/blog/building-in-the-boise-foothills",
-          "anchor": "What it costs to build in the Boise Foothills",
-          "title": "What it costs to build in the Boise Foothills",
+          "url": "/blog/boise-building-permit-guide",
+          "anchor": "Building permits in Boise: what a new home needs",
+          "title": "Building permits in Boise: what a new home needs",
           "type": "blog",
           "score": -0.129
         },
@@ -4174,9 +4174,9 @@
           "score": -0.068
         },
         {
-          "url": "/blog/production-vs-custom-home-builder",
-          "anchor": "Production builder vs custom builder",
-          "title": "Production builder vs custom builder",
+          "url": "/blog/building-in-the-boise-foothills",
+          "anchor": "What it costs to build in the Boise Foothills",
+          "title": "What it costs to build in the Boise Foothills",
           "type": "blog",
           "score": -0.07
         }
@@ -4359,18 +4359,18 @@
           "score": 0.162
         },
         {
-          "url": "/blog/custom-home-cost-per-square-foot-boise",
-          "anchor": "Custom home cost per square foot in Boise",
-          "title": "Custom home cost per square foot in Boise",
+          "url": "/blog/luxury-home-building-cost-boise",
+          "anchor": "What a luxury home costs to build in Boise",
+          "title": "What a luxury home costs to build in Boise",
           "type": "blog",
-          "score": -0.173
+          "score": -0.171
         },
         {
-          "url": "/blog/building-in-the-boise-foothills",
-          "anchor": "What it costs to build in the Boise Foothills",
-          "title": "What it costs to build in the Boise Foothills",
+          "url": "/blog/production-vs-custom-home-builder",
+          "anchor": "Production builder vs custom builder",
+          "title": "Production builder vs custom builder",
           "type": "blog",
-          "score": -0.174
+          "score": -0.171
         }
       ]
     },
@@ -4423,16 +4423,16 @@
           "score": 0.13
         },
         {
+          "url": "/blog/custom-home-cost-per-square-foot-boise",
+          "anchor": "Custom home cost per square foot in Boise",
+          "title": "Custom home cost per square foot in Boise",
+          "type": "blog",
+          "score": -0.171
+        },
+        {
           "url": "/blog/construction-loan-basics-idaho",
           "anchor": "How construction loans work in Idaho",
           "title": "How construction loans work in Idaho",
-          "type": "blog",
-          "score": -0.172
-        },
-        {
-          "url": "/blog/luxury-home-building-cost-boise",
-          "anchor": "What a luxury home costs to build in Boise",
-          "title": "What a luxury home costs to build in Boise",
           "type": "blog",
           "score": -0.172
         }
@@ -5326,11 +5326,11 @@
           "score": -0.037
         },
         {
-          "url": "/blog/how-to-buy-a-buildable-lot-boise",
-          "anchor": "How to tell if a lot is actually buildable",
-          "title": "How to tell if a lot is actually buildable",
+          "url": "/blog/cost-to-build-a-house-boise",
+          "anchor": "How much does it cost to build a house in Boise?",
+          "title": "How much does it cost to build a house in Boise?",
           "type": "blog",
-          "score": -0.064
+          "score": -0.055
         }
       ]
     },
@@ -5454,11 +5454,11 @@
           "score": -0.165
         },
         {
-          "url": "/blog/covered-outdoor-living-new-home",
-          "anchor": "Designing covered outdoor living into a new home",
-          "title": "Designing covered outdoor living into a new home",
+          "url": "/blog/how-to-buy-a-buildable-lot-boise",
+          "anchor": "How to tell if a lot is actually buildable",
+          "title": "How to tell if a lot is actually buildable",
           "type": "blog",
-          "score": -0.169
+          "score": -0.166
         }
       ]
     },
@@ -5515,14 +5515,14 @@
           "anchor": "What a luxury home costs to build in Boise",
           "title": "What a luxury home costs to build in Boise",
           "type": "blog",
-          "score": -0.177
+          "score": -0.171
         },
         {
-          "url": "/blog/why-home-building-bids-vary",
-          "anchor": "Why home building bids vary so much",
-          "title": "Why home building bids vary so much",
+          "url": "/blog/covered-outdoor-living-new-home",
+          "anchor": "Designing covered outdoor living into a new home",
+          "title": "Designing covered outdoor living into a new home",
           "type": "blog",
-          "score": -0.177
+          "score": -0.172
         }
       ]
     },
@@ -5575,18 +5575,18 @@
           "score": 0.01
         },
         {
+          "url": "/blog/why-home-building-bids-vary",
+          "anchor": "Why home building bids vary so much",
+          "title": "Why home building bids vary so much",
+          "type": "blog",
+          "score": -0.173
+        },
+        {
           "url": "/blog/how-long-does-it-take-to-build-a-house-boise",
           "anchor": "How long does it take to build a house in Boise?",
           "title": "How long does it take to build a house in Boise?",
           "type": "blog",
           "score": -0.177
-        },
-        {
-          "url": "/blog/adu-cost-boise",
-          "anchor": "ADU cost in Boise",
-          "title": "ADU cost in Boise",
-          "type": "blog",
-          "score": -0.183
         }
       ]
     },
@@ -5639,18 +5639,18 @@
           "score": -0.03
         },
         {
+          "url": "/blog/adu-cost-boise",
+          "anchor": "ADU cost in Boise",
+          "title": "ADU cost in Boise",
+          "type": "blog",
+          "score": -0.186
+        },
+        {
           "url": "/blog/multigenerational-home-design",
           "anchor": "Designing a home for multiple generations",
           "title": "Designing a home for multiple generations",
           "type": "blog",
           "score": -0.186
-        },
-        {
-          "url": "/blog/aging-in-place-home-design",
-          "anchor": "Building a home you can age in",
-          "title": "Building a home you can age in",
-          "type": "blog",
-          "score": -0.194
         }
       ]
     },
@@ -5703,18 +5703,18 @@
           "score": -0.03
         },
         {
+          "url": "/blog/aging-in-place-home-design",
+          "anchor": "Building a home you can age in",
+          "title": "Building a home you can age in",
+          "type": "blog",
+          "score": -0.194
+        },
+        {
           "url": "/blog/single-story-vs-two-story-home",
           "anchor": "Single story vs two story: cost, lot, and livability",
           "title": "Single story vs two story: cost, lot, and livability",
           "type": "blog",
           "score": -0.194
-        },
-        {
-          "url": "/blog/custom-home-floor-plan-ideas-boise",
-          "anchor": "Floor plan ideas that work in Treasure Valley homes",
-          "title": "Floor plan ideas that work in Treasure Valley homes",
-          "type": "blog",
-          "score": -0.203
         }
       ]
     },
@@ -5767,18 +5767,18 @@
           "score": -0.07
         },
         {
-          "url": "/blog/well-and-septic-cost-idaho",
-          "anchor": "What a well and septic system costs in Idaho",
-          "title": "What a well and septic system costs in Idaho",
+          "url": "/blog/cost-to-build-a-house-boise",
+          "anchor": "How much does it cost to build a house in Boise?",
+          "title": "How much does it cost to build a house in Boise?",
           "type": "blog",
-          "score": -0.204
+          "score": -0.197
         },
         {
-          "url": "/blog/shop-homes-and-barndominiums-idaho",
-          "anchor": "Barndominium and shop home costs in Idaho, explained",
-          "title": "Barndominium and shop home costs in Idaho, explained",
+          "url": "/blog/custom-home-floor-plan-ideas-boise",
+          "anchor": "Floor plan ideas that work in Treasure Valley homes",
+          "title": "Floor plan ideas that work in Treasure Valley homes",
           "type": "blog",
-          "score": -0.205
+          "score": -0.203
         }
       ]
     },
@@ -5831,18 +5831,18 @@
           "score": -0.07
         },
         {
-          "url": "/blog/build-vs-buy-boise",
-          "anchor": "Building vs buying a home in the Treasure Valley",
-          "title": "Building vs buying a home in the Treasure Valley",
+          "url": "/blog/well-and-septic-cost-idaho",
+          "anchor": "What a well and septic system costs in Idaho",
+          "title": "What a well and septic system costs in Idaho",
           "type": "blog",
-          "score": -0.206
+          "score": -0.204
         },
         {
-          "url": "/blog/how-to-buy-a-buildable-lot-boise",
-          "anchor": "How to tell if a lot is actually buildable",
-          "title": "How to tell if a lot is actually buildable",
+          "url": "/blog/shop-homes-and-barndominiums-idaho",
+          "anchor": "Barndominium and shop home costs in Idaho, explained",
+          "title": "Barndominium and shop home costs in Idaho, explained",
           "type": "blog",
-          "score": -0.206
+          "score": -0.205
         }
       ]
     },
@@ -5895,18 +5895,18 @@
           "score": -0.03
         },
         {
-          "url": "/blog/production-vs-custom-home-builder",
-          "anchor": "Production builder vs custom builder",
-          "title": "Production builder vs custom builder",
+          "url": "/blog/how-to-buy-a-buildable-lot-boise",
+          "anchor": "How to tell if a lot is actually buildable",
+          "title": "How to tell if a lot is actually buildable",
           "type": "blog",
-          "score": -0.106
+          "score": -0.069
         },
         {
           "url": "/blog/building-in-the-boise-foothills",
           "anchor": "What it costs to build in the Boise Foothills",
           "title": "What it costs to build in the Boise Foothills",
           "type": "blog",
-          "score": -0.109
+          "score": -0.106
         }
       ]
     },
@@ -6030,11 +6030,11 @@
           "score": -0.206
         },
         {
-          "url": "/blog/how-to-buy-a-buildable-lot-boise",
-          "anchor": "How to tell if a lot is actually buildable",
-          "title": "How to tell if a lot is actually buildable",
+          "url": "/blog/production-vs-custom-home-builder",
+          "anchor": "Production builder vs custom builder",
+          "title": "Production builder vs custom builder",
           "type": "blog",
-          "score": -0.211
+          "score": -0.207
         }
       ]
     },
@@ -6087,18 +6087,18 @@
           "score": -0.095
         },
         {
+          "url": "/blog/how-to-buy-a-buildable-lot-boise",
+          "anchor": "How to tell if a lot is actually buildable",
+          "title": "How to tell if a lot is actually buildable",
+          "type": "blog",
+          "score": -0.213
+        },
+        {
           "url": "/blog/well-and-septic-cost-idaho",
           "anchor": "What a well and septic system costs in Idaho",
           "title": "What a well and septic system costs in Idaho",
           "type": "blog",
           "score": -0.247
-        },
-        {
-          "url": "/blog/impact-fees-and-utility-connections",
-          "anchor": "Impact fees and utility connections in Ada and Canyon County",
-          "title": "Impact fees and utility connections in Ada and Canyon County",
-          "type": "blog",
-          "score": -0.248
         }
       ]
     },
@@ -6158,9 +6158,9 @@
           "score": -0.243
         },
         {
-          "url": "/blog/production-vs-custom-home-builder",
-          "anchor": "Production builder vs custom builder",
-          "title": "Production builder vs custom builder",
+          "url": "/blog/building-in-the-boise-foothills",
+          "anchor": "What it costs to build in the Boise Foothills",
+          "title": "What it costs to build in the Boise Foothills",
           "type": "blog",
           "score": -0.246
         }
@@ -6215,18 +6215,18 @@
           "score": -0.13
         },
         {
-          "url": "/blog/building-in-the-boise-foothills",
-          "anchor": "What it costs to build in the Boise Foothills",
-          "title": "What it costs to build in the Boise Foothills",
+          "url": "/blog/impact-fees-and-utility-connections",
+          "anchor": "Impact fees and utility connections in Ada and Canyon County",
+          "title": "Impact fees and utility connections in Ada and Canyon County",
           "type": "blog",
-          "score": -0.25
+          "score": -0.247
         },
         {
-          "url": "/blog/how-to-buy-a-buildable-lot-boise",
-          "anchor": "How to tell if a lot is actually buildable",
-          "title": "How to tell if a lot is actually buildable",
+          "url": "/blog/production-vs-custom-home-builder",
+          "anchor": "Production builder vs custom builder",
+          "title": "Production builder vs custom builder",
           "type": "blog",
-          "score": -0.251
+          "score": -0.247
         }
       ]
     },
@@ -6279,18 +6279,18 @@
           "score": -0.15
         },
         {
+          "url": "/blog/how-to-buy-a-buildable-lot-boise",
+          "anchor": "How to tell if a lot is actually buildable",
+          "title": "How to tell if a lot is actually buildable",
+          "type": "blog",
+          "score": -0.251
+        },
+        {
           "url": "/blog/single-story-vs-two-story-home",
           "anchor": "Single story vs two story: cost, lot, and livability",
           "title": "Single story vs two story: cost, lot, and livability",
           "type": "blog",
           "score": -0.266
-        },
-        {
-          "url": "/blog/lot-evaluation-checklist",
-          "anchor": "Lot evaluation checklist: what to check before you buy",
-          "title": "Lot evaluation checklist: what to check before you buy",
-          "type": "blog",
-          "score": -0.286
         }
       ]
     },
@@ -6343,18 +6343,18 @@
           "score": -0.185
         },
         {
+          "url": "/blog/lot-evaluation-checklist",
+          "anchor": "Lot evaluation checklist: what to check before you buy",
+          "title": "Lot evaluation checklist: what to check before you buy",
+          "type": "blog",
+          "score": -0.286
+        },
+        {
           "url": "/blog/well-and-septic-cost-idaho",
           "anchor": "What a well and septic system costs in Idaho",
           "title": "What a well and septic system costs in Idaho",
           "type": "blog",
           "score": -0.286
-        },
-        {
-          "url": "/blog/impact-fees-and-utility-connections",
-          "anchor": "Impact fees and utility connections in Ada and Canyon County",
-          "title": "Impact fees and utility connections in Ada and Canyon County",
-          "type": "blog",
-          "score": -0.287
         }
       ]
     },
@@ -6407,18 +6407,18 @@
           "score": -0.19
         },
         {
-          "url": "/blog/production-vs-custom-home-builder",
-          "anchor": "Production builder vs custom builder",
-          "title": "Production builder vs custom builder",
-          "type": "blog",
-          "score": -0.287
-        },
-        {
           "url": "/blog/building-in-the-boise-foothills",
           "anchor": "What it costs to build in the Boise Foothills",
           "title": "What it costs to build in the Boise Foothills",
           "type": "blog",
-          "score": -0.29
+          "score": -0.287
+        },
+        {
+          "url": "/blog/impact-fees-and-utility-connections",
+          "anchor": "Impact fees and utility connections in Ada and Canyon County",
+          "title": "Impact fees and utility connections in Ada and Canyon County",
+          "type": "blog",
+          "score": -0.287
         }
       ]
     },
@@ -6535,18 +6535,18 @@
           "score": -0.194
         },
         {
-          "url": "/blog/cost-to-build-a-house-boise",
-          "anchor": "How much does it cost to build a house in Boise?",
-          "title": "How much does it cost to build a house in Boise?",
-          "type": "blog",
-          "score": -0.213
-        },
-        {
           "url": "/blog/choosing-finishes-for-a-new-home",
           "anchor": "Choosing finishes for a new home without blowing the budget",
           "title": "Choosing finishes for a new home without blowing the budget",
           "type": "blog",
           "score": -0.214
+        },
+        {
+          "url": "/blog/boise-building-permit-guide",
+          "anchor": "Building permits in Boise: what a new home needs",
+          "title": "Building permits in Boise: what a new home needs",
+          "type": "blog",
+          "score": -0.249
         }
       ]
     },
@@ -6599,16 +6599,16 @@
           "score": -0.194
         },
         {
-          "url": "/blog/boise-building-permit-guide",
-          "anchor": "Building permits in Boise: what a new home needs",
-          "title": "Building permits in Boise: what a new home needs",
+          "url": "/blog/custom-home-floor-plan-ideas-boise",
+          "anchor": "Floor plan ideas that work in Treasure Valley homes",
+          "title": "Floor plan ideas that work in Treasure Valley homes",
           "type": "blog",
           "score": -0.249
         },
         {
-          "url": "/blog/custom-home-floor-plan-ideas-boise",
-          "anchor": "Floor plan ideas that work in Treasure Valley homes",
-          "title": "Floor plan ideas that work in Treasure Valley homes",
+          "url": "/blog/luxury-home-building-cost-boise",
+          "anchor": "What a luxury home costs to build in Boise",
+          "title": "What a luxury home costs to build in Boise",
           "type": "blog",
           "score": -0.249
         }
@@ -6734,9 +6734,9 @@
           "score": -0.251
         },
         {
-          "url": "/blog/luxury-home-building-cost-boise",
-          "anchor": "What a luxury home costs to build in Boise",
-          "title": "What a luxury home costs to build in Boise",
+          "url": "/blog/what-drives-home-building-costs-boise",
+          "anchor": "What actually drives home building costs in Boise",
+          "title": "What actually drives home building costs in Boise",
           "type": "blog",
           "score": -0.251
         }
@@ -6791,18 +6791,18 @@
           "score": 0.147
         },
         {
-          "url": "/blog/what-drives-home-building-costs-boise",
-          "anchor": "What actually drives home building costs in Boise",
-          "title": "What actually drives home building costs in Boise",
+          "url": "/blog/choosing-finishes-for-a-new-home",
+          "anchor": "Choosing finishes for a new home without blowing the budget",
+          "title": "Choosing finishes for a new home without blowing the budget",
           "type": "blog",
-          "score": -0.252
+          "score": -0.254
         },
         {
-          "url": "/blog/cost-to-build-a-house-boise",
-          "anchor": "How much does it cost to build a house in Boise?",
-          "title": "How much does it cost to build a house in Boise?",
+          "url": "/blog/production-vs-custom-home-builder",
+          "anchor": "Production builder vs custom builder",
+          "title": "Production builder vs custom builder",
           "type": "blog",
-          "score": -0.253
+          "score": -0.255
         }
       ]
     },
@@ -6855,18 +6855,18 @@
           "score": 0.113
         },
         {
-          "url": "/blog/choosing-finishes-for-a-new-home",
-          "anchor": "Choosing finishes for a new home without blowing the budget",
-          "title": "Choosing finishes for a new home without blowing the budget",
-          "type": "blog",
-          "score": -0.254
-        },
-        {
           "url": "/blog/multigenerational-home-design",
           "anchor": "Designing a home for multiple generations",
           "title": "Designing a home for multiple generations",
           "type": "blog",
           "score": -0.264
+        },
+        {
+          "url": "/blog/cost-to-build-a-house-boise",
+          "anchor": "How much does it cost to build a house in Boise?",
+          "title": "How much does it cost to build a house in Boise?",
+          "type": "blog",
+          "score": -0.282
         }
       ]
     },
@@ -6983,16 +6983,16 @@
           "score": 0.147
         },
         {
+          "url": "/blog/luxury-home-building-cost-boise",
+          "anchor": "What a luxury home costs to build in Boise",
+          "title": "What a luxury home costs to build in Boise",
+          "type": "blog",
+          "score": -0.289
+        },
+        {
           "url": "/blog/custom-home-cost-per-square-foot-boise",
           "anchor": "Custom home cost per square foot in Boise",
           "title": "Custom home cost per square foot in Boise",
-          "type": "blog",
-          "score": -0.291
-        },
-        {
-          "url": "/blog/how-long-does-it-take-to-build-a-house-boise",
-          "anchor": "How long does it take to build a house in Boise?",
-          "title": "How long does it take to build a house in Boise?",
           "type": "blog",
           "score": -0.291
         }
@@ -7182,11 +7182,11 @@
           "score": -0.137
         },
         {
-          "url": "/blog/cost-to-build-a-house-boise",
-          "anchor": "How much does it cost to build a house in Boise?",
-          "title": "How much does it cost to build a house in Boise?",
+          "url": "/blog/new-home-walkthrough-and-warranty",
+          "anchor": "The final walkthrough and what the warranty covers",
+          "title": "The final walkthrough and what the warranty covers",
           "type": "blog",
-          "score": -0.267
+          "score": -0.291
         }
       ]
     },
@@ -7246,11 +7246,11 @@
           "score": -0.184
         },
         {
-          "url": "/blog/new-home-walkthrough-and-warranty",
-          "anchor": "The final walkthrough and what the warranty covers",
-          "title": "The final walkthrough and what the warranty covers",
+          "url": "/blog/covered-outdoor-living-new-home",
+          "anchor": "Designing covered outdoor living into a new home",
+          "title": "Designing covered outdoor living into a new home",
           "type": "blog",
-          "score": -0.292
+          "score": -0.298
         }
       ]
     },
@@ -7310,11 +7310,11 @@
           "score": -0.21
         },
         {
-          "url": "/blog/luxury-home-building-cost-boise",
-          "anchor": "What a luxury home costs to build in Boise",
-          "title": "What a luxury home costs to build in Boise",
+          "url": "/blog/custom-home-cost-per-square-foot-boise",
+          "anchor": "Custom home cost per square foot in Boise",
+          "title": "Custom home cost per square foot in Boise",
           "type": "blog",
-          "score": -0.292
+          "score": -0.301
         }
       ]
     },
@@ -7374,11 +7374,11 @@
           "score": -0.257
         },
         {
-          "url": "/blog/covered-outdoor-living-new-home",
-          "anchor": "Designing covered outdoor living into a new home",
-          "title": "Designing covered outdoor living into a new home",
+          "url": "/blog/single-story-vs-two-story-home",
+          "anchor": "Single story vs two story: cost, lot, and livability",
+          "title": "Single story vs two story: cost, lot, and livability",
           "type": "blog",
-          "score": -0.297
+          "score": -0.311
         }
       ]
     },
@@ -7438,11 +7438,11 @@
           "score": -0.297
         },
         {
-          "url": "/blog/custom-home-cost-per-square-foot-boise",
-          "anchor": "Custom home cost per square foot in Boise",
-          "title": "Custom home cost per square foot in Boise",
+          "url": "/blog/new-home-walkthrough-and-warranty",
+          "anchor": "The final walkthrough and what the warranty covers",
+          "title": "The final walkthrough and what the warranty covers",
           "type": "blog",
-          "score": -0.303
+          "score": -0.331
         }
       ]
     },
@@ -7495,18 +7495,18 @@
           "score": 0.099
         },
         {
-          "url": "/blog/cost-to-build-a-house-boise",
-          "anchor": "How much does it cost to build a house in Boise?",
-          "title": "How much does it cost to build a house in Boise?",
+          "url": "/blog/production-vs-custom-home-builder",
+          "anchor": "Production builder vs custom builder",
+          "title": "Production builder vs custom builder",
           "type": "blog",
-          "score": -0.307
+          "score": -0.331
         },
         {
-          "url": "/blog/single-story-vs-two-story-home",
-          "anchor": "Single story vs two story: cost, lot, and livability",
-          "title": "Single story vs two story: cost, lot, and livability",
+          "url": "/blog/covered-outdoor-living-new-home",
+          "anchor": "Designing covered outdoor living into a new home",
+          "title": "Designing covered outdoor living into a new home",
           "type": "blog",
-          "score": -0.311
+          "score": -0.337
         }
       ]
     },
@@ -7559,18 +7559,18 @@
           "score": 0.099
         },
         {
-          "url": "/blog/new-home-walkthrough-and-warranty",
-          "anchor": "The final walkthrough and what the warranty covers",
-          "title": "The final walkthrough and what the warranty covers",
+          "url": "/blog/shop-homes-and-barndominiums-idaho",
+          "anchor": "Barndominium and shop home costs in Idaho, explained",
+          "title": "Barndominium and shop home costs in Idaho, explained",
           "type": "blog",
-          "score": -0.331
+          "score": -0.337
         },
         {
-          "url": "/blog/production-vs-custom-home-builder",
-          "anchor": "Production builder vs custom builder",
-          "title": "Production builder vs custom builder",
+          "url": "/blog/cost-to-build-a-house-boise",
+          "anchor": "How much does it cost to build a house in Boise?",
+          "title": "How much does it cost to build a house in Boise?",
           "type": "blog",
-          "score": -0.331
+          "score": -0.342
         }
       ]
     },
@@ -8203,14 +8203,14 @@
           "anchor": "What actually drives home building costs in Boise",
           "title": "What actually drives home building costs in Boise",
           "type": "blog",
-          "score": 0.505
+          "score": 0.501
         },
         {
           "url": "/blog/luxury-home-building-cost-boise",
           "anchor": "What a luxury home costs to build in Boise",
           "title": "What a luxury home costs to build in Boise",
           "type": "blog",
-          "score": 0.501
+          "score": 0.418
         }
       ]
     },
@@ -8594,7 +8594,7 @@
           "anchor": "Designing covered outdoor living into a new home",
           "title": "Designing covered outdoor living into a new home",
           "type": "blog",
-          "score": 0.427
+          "score": 0.387
         }
       ]
     },
@@ -8647,11 +8647,11 @@
           "score": -0.094
         },
         {
-          "url": "/blog/first-meeting-with-a-home-builder",
-          "anchor": "What happens at your first meeting with a builder",
-          "title": "What happens at your first meeting with a builder",
+          "url": "/blog/how-long-does-it-take-to-build-a-house-boise",
+          "anchor": "How long does it take to build a house in Boise?",
+          "title": "How long does it take to build a house in Boise?",
           "type": "blog",
-          "score": -0.109
+          "score": -0.108
         },
         {
           "url": "/services/custom-home-builder/eagle",
@@ -8697,6 +8697,13 @@
           "score": 1.164
         },
         {
+          "url": "/blog/first-meeting-with-a-home-builder",
+          "anchor": "What happens at your first meeting with a builder",
+          "title": "What happens at your first meeting with a builder",
+          "type": "blog",
+          "score": -0.115
+        },
+        {
           "url": "/blog/allowances-explained-new-home",
           "anchor": "How allowances work in a new home contract",
           "title": "How allowances work in a new home contract",
@@ -8709,13 +8716,6 @@
           "title": "Questions to ask a home builder before you sign",
           "type": "blog",
           "score": -0.137
-        },
-        {
-          "url": "/blog/construction-loan-basics-idaho",
-          "anchor": "How construction loans work in Idaho",
-          "title": "How construction loans work in Idaho",
-          "type": "blog",
-          "score": -0.139
         },
         {
           "url": "/services/build-on-your-lot/eagle",
@@ -8889,6 +8889,13 @@
           "score": 1.024
         },
         {
+          "url": "/blog/construction-loan-basics-idaho",
+          "anchor": "How construction loans work in Idaho",
+          "title": "How construction loans work in Idaho",
+          "type": "blog",
+          "score": -0.106
+        },
+        {
           "url": "/blog/allowances-explained-new-home",
           "anchor": "How allowances work in a new home contract",
           "title": "How allowances work in a new home contract",
@@ -8901,13 +8908,6 @@
           "title": "Choosing finishes for a new home without blowing the budget",
           "type": "blog",
           "score": -0.125
-        },
-        {
-          "url": "/blog/aging-in-place-home-design",
-          "anchor": "Building a home you can age in",
-          "title": "Building a home you can age in",
-          "type": "blog",
-          "score": -0.132
         },
         {
           "url": "/services/custom-home-builder/meridian",
@@ -8960,6 +8960,13 @@
           "score": -0.09
         },
         {
+          "url": "/blog/aging-in-place-home-design",
+          "anchor": "Building a home you can age in",
+          "title": "Building a home you can age in",
+          "type": "blog",
+          "score": -0.125
+        },
+        {
           "url": "/blog/questions-to-ask-a-home-builder",
           "anchor": "Questions to ask a home builder before you sign",
           "title": "Questions to ask a home builder before you sign",
@@ -8972,13 +8979,6 @@
           "title": "How construction loans work in Idaho",
           "type": "blog",
           "score": -0.139
-        },
-        {
-          "url": "/blog/how-long-does-it-take-to-build-a-house-boise",
-          "anchor": "How long does it take to build a house in Boise?",
-          "title": "How long does it take to build a house in Boise?",
-          "type": "blog",
-          "score": -0.144
         }
       ]
     },
@@ -9102,11 +9102,11 @@
           "score": -0.175
         },
         {
-          "url": "/blog/fixed-price-vs-cost-plus",
-          "anchor": "Fixed price vs cost plus for a new home build",
-          "title": "Fixed price vs cost plus for a new home build",
+          "url": "/blog/build-vs-buy-boise",
+          "anchor": "Building vs buying a home in the Treasure Valley",
+          "title": "Building vs buying a home in the Treasure Valley",
           "type": "blog",
-          "score": -0.185
+          "score": -0.181
         }
       ]
     },
@@ -9152,18 +9152,18 @@
           "score": -0.186
         },
         {
+          "url": "/blog/fixed-price-vs-cost-plus",
+          "anchor": "Fixed price vs cost plus for a new home build",
+          "title": "Fixed price vs cost plus for a new home build",
+          "type": "blog",
+          "score": -0.187
+        },
+        {
           "url": "/blog/new-home-walkthrough-and-warranty",
           "anchor": "The final walkthrough and what the warranty covers",
           "title": "The final walkthrough and what the warranty covers",
           "type": "blog",
           "score": -0.188
-        },
-        {
-          "url": "/blog/why-home-building-bids-vary",
-          "anchor": "Why home building bids vary so much",
-          "title": "Why home building bids vary so much",
-          "type": "blog",
-          "score": -0.189
         },
         {
           "url": "/services/custom-home-builder/meridian",
@@ -9216,16 +9216,16 @@
           "score": -0.035
         },
         {
+          "url": "/blog/how-long-does-it-take-to-build-a-house-boise",
+          "anchor": "How long does it take to build a house in Boise?",
+          "title": "How long does it take to build a house in Boise?",
+          "type": "blog",
+          "score": -0.069
+        },
+        {
           "url": "/blog/home-builder-red-flags",
           "anchor": "Home builder red flags",
           "title": "Home builder red flags",
-          "type": "blog",
-          "score": -0.105
-        },
-        {
-          "url": "/blog/what-drives-home-building-costs-boise",
-          "anchor": "What actually drives home building costs in Boise",
-          "title": "What actually drives home building costs in Boise",
           "type": "blog",
           "score": -0.105
         },
@@ -9422,11 +9422,11 @@
           "score": -0.26
         },
         {
-          "url": "/blog/choosing-finishes-for-a-new-home",
-          "anchor": "Choosing finishes for a new home without blowing the budget",
-          "title": "Choosing finishes for a new home without blowing the budget",
+          "url": "/blog/what-drives-home-building-costs-boise",
+          "anchor": "What actually drives home building costs in Boise",
+          "title": "What actually drives home building costs in Boise",
           "type": "blog",
-          "score": -0.275
+          "score": -0.267
         }
       ]
     },
@@ -9607,18 +9607,18 @@
           "score": -0.091
         },
         {
-          "url": "/blog/covered-outdoor-living-new-home",
-          "anchor": "Designing covered outdoor living into a new home",
-          "title": "Designing covered outdoor living into a new home",
-          "type": "blog",
-          "score": -0.3
-        },
-        {
           "url": "/blog/fixed-price-vs-cost-plus",
           "anchor": "Fixed price vs cost plus for a new home build",
           "title": "Fixed price vs cost plus for a new home build",
           "type": "blog",
           "score": -0.321
+        },
+        {
+          "url": "/blog/ada-vs-canyon-county-permit-timelines",
+          "anchor": "Ada vs Canyon County: what differs when you build",
+          "title": "Ada vs Canyon County: what differs when you build",
+          "type": "blog",
+          "score": -0.337
         }
       ]
     },
@@ -9867,31 +9867,31 @@
           "anchor": "Barndominium and shop home costs in Idaho, explained",
           "title": "Barndominium and shop home costs in Idaho, explained",
           "type": "blog",
-          "score": -0.33
+          "score": -0.37
         },
         {
-          "url": "/blog/building-in-the-boise-foothills",
-          "anchor": "What it costs to build in the Boise Foothills",
-          "title": "What it costs to build in the Boise Foothills",
+          "url": "/blog/custom-home-cost-per-square-foot-boise",
+          "anchor": "Custom home cost per square foot in Boise",
+          "title": "Custom home cost per square foot in Boise",
           "type": "blog",
-          "score": -0.372
+          "score": -0.381
         }
       ]
     }
   },
   "incoming": {
-    "/blog/ada-vs-canyon-county-permit-timelines": 10,
+    "/blog/ada-vs-canyon-county-permit-timelines": 11,
     "/blog/adu-cost-boise": 11,
     "/blog/aging-in-place-home-design": 11,
     "/blog/allowances-explained-new-home": 11,
     "/blog/boise-building-permit-guide": 11,
     "/blog/build-vs-buy-boise": 10,
-    "/blog/building-in-the-boise-foothills": 11,
-    "/blog/choosing-finishes-for-a-new-home": 11,
+    "/blog/building-in-the-boise-foothills": 10,
+    "/blog/choosing-finishes-for-a-new-home": 10,
     "/blog/construction-loan-basics-idaho": 10,
     "/blog/cost-to-build-a-house-boise": 11,
     "/blog/covered-outdoor-living-new-home": 11,
-    "/blog/custom-home-cost-per-square-foot-boise": 11,
+    "/blog/custom-home-cost-per-square-foot-boise": 12,
     "/blog/custom-home-floor-plan-ideas-boise": 12,
     "/blog/design-build-vs-general-contractor": 11,
     "/blog/energy-efficient-home-building-boise": 11,
@@ -9909,12 +9909,12 @@
     "/blog/new-home-walkthrough-and-warranty": 12,
     "/blog/production-vs-custom-home-builder": 11,
     "/blog/questions-to-ask-a-home-builder": 10,
-    "/blog/shop-homes-and-barndominiums-idaho": 16,
+    "/blog/shop-homes-and-barndominiums-idaho": 17,
     "/blog/single-story-vs-two-story-home": 11,
     "/blog/stages-of-building-a-house": 11,
     "/blog/well-and-septic-cost-idaho": 11,
     "/blog/what-drives-home-building-costs-boise": 11,
-    "/blog/why-home-building-bids-vary": 11,
+    "/blog/why-home-building-bids-vary": 10,
     "/guides/boise-home-building-cost-guide": 18,
     "/guides/boise-home-building-process-guide": 10,
     "/guides/buying-land-to-build-boise": 18,

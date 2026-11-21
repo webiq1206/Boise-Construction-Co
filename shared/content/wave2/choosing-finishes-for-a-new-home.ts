@@ -67,7 +67,7 @@ export const choosingFinishesForANewHome: BlogPostData = {
     {
       question: 'Where should I spend extra on finishes?',
       answer:
-        'On the things that are permanent, structural, or disruptive to change later: windows, insulation and air sealing, cabinet construction, plumbing rough-in quality, and flooring in high-traffic areas. Performance upgrades over code minimum commonly run 3 to 8 percent of construction cost, roughly $20,000 to $55,000, and they keep paying after the finishes have gone out of style.',
+        'On the things that are permanent, structural, or disruptive to change later: windows, insulation and air sealing, cabinet construction, plumbing rough-in quality, and flooring in high-traffic areas. Performance upgrades over code minimum are priced in your line-item budget, and they keep paying after the finishes have gone out of style.',
     },
     {
       question: 'Can I change a selection after I make it?',
@@ -122,7 +122,7 @@ export const choosingFinishesForANewHome: BlogPostData = {
 <tr><td>Roof and exterior envelope</td><td>Protects everything else and is not something you upgrade casually</td></tr>
 </tbody>
 </table>
-<p>Performance upgrades over code minimum commonly run 3 to 8 percent of construction cost, or roughly $20,000 to $55,000, and unlike a finish choice they keep returning value after the style has moved on.</p>
+<p>Performance upgrades over code minimum are priced in your line-item budget, and unlike a finish choice they keep returning value after the style has moved on.</p>
 
 <h2 id="disappears">Where finish money quietly disappears</h2>
 <p><strong>Money vanishes fastest into things that are easy to change later, invisible to daily life, or bought to impress a room you rarely use.</strong> We say this knowing it argues against a bigger contract.</p>
@@ -134,7 +134,7 @@ export const choosingFinishesForANewHome: BlogPostData = {
 <p>Group decisions into scheduled sessions instead of answering them one at a time by text at seven in the evening. Bring the person who shares the house to the sessions that matter, because a selection made alone and revisited later costs the same as any other change. And give yourself permission to make some choices quickly. The interior door style matters less than you think, and the energy you save there is energy available for the kitchen.</p>
 
 <h2 id="next-steps">Getting a realistic finish budget</h2>
-<p><strong>The most useful thing you can do before selections start is to know what your finish level actually costs, in this market, for the house you are planning.</strong> Custom homes here commonly plan at $250 to $400 per finished square foot excluding land, and where you land inside that band is largely a finish and complexity question rather than a size question.</p>
+<p><strong>The most useful thing you can do before selections start is to know what your finish level actually costs, in this market, for the house you are planning.</strong> Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded, and where you land is largely a finish and complexity question rather than a size question.</p>
 <p>Our <a href="/instant-estimate?project=custom-home">instant estimate</a> will give you a preliminary range, and <a href="/blog/how-to-budget-a-new-home-boise">how to budget for a new home</a> covers how to hold that number once the selections start. The <a href="/guides/custom-home-design-guide">custom home design guide</a> explains which of these decisions belong at schematic design rather than at the selections table, and <a href="/blog/allowances-explained-new-home">how allowances work in a new home contract</a> is worth reading before you sign anything with an allowance in it. If you would rather talk it through against a specific plan and a specific lot, <a href="/contact">tell us about the project</a> and we will do that instead.</p>
 `.trim(),
 };

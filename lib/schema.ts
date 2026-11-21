@@ -5,7 +5,7 @@ import {schemaTime} from './schemaTime';
  */
 
 import { BUSINESS_INFO, getBaseUrl } from './seo';
-import { SERVICE_AREA_CITIES, SERVICE_AREA_COUNTIES, SERVICES } from '@/shared/contentData';
+import { SERVICE_AREA_CITIES, SERVICE_AREA_COUNTIES, SERVICE_AREA_LINE, SERVICES } from '@/shared/contentData';
 import { FOUNDING, PUBLIC_MARK_PATH, SHOW_FOUNDING_YEAR } from '@/shared/publicFlags';
 import { CONTRACTOR_REGISTRATION_NUMBER } from '@/shared/contractorRegistration';
 import { P5_SOCIAL } from '@/shared/gbpProfile';
@@ -220,8 +220,7 @@ export function generateWebSiteSchema(): SchemaContext {
     '@id': WEBSITE_ID,
     name: BUSINESS_INFO.name,
     url: baseUrl,
-    description:
-      'Design-build home builder serving Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, and Star, in Ada County and Canyon County, Idaho.',
+    description: `Design-build home builder serving ${SERVICE_AREA_LINE}, Idaho.`,
     publisher: { '@id': ORG_ID },
     // NOTE: SearchAction intentionally omitted. The previous target
     // (/blog?q={search_term_string}) had no search handler, which advertised a
