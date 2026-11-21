@@ -24,6 +24,19 @@ export const INSTANT_ESTIMATE_PROJECTS = ['custom-home', 'addition', 'garage-sho
 export type InstantEstimateProject = (typeof INSTANT_ESTIMATE_PROJECTS)[number];
 
 /**
+ * The estimator's own name for each project (p5-home-co
+ * `app/lib/estimator/flows.ts`). The homepage block that replaced the planning
+ * range explorer (owner, 21 November 2026) links each one to
+ * /instant-estimate?project=<id>, in the order above.
+ */
+export const INSTANT_ESTIMATE_PROJECT_LABELS: Readonly<Record<InstantEstimateProject, string>> = {
+  'custom-home': 'New home',
+  addition: 'Home addition',
+  'garage-shop': 'Detached garage or shop',
+  adu: 'Accessory dwelling unit',
+};
+
+/**
  * Service page slug to estimator project. Not listed, on purpose:
  * home-plans-design and lot-evaluation (design and site services, not a build
  * the estimator prices) and shop-homes-barndominiums (a shop home is a house,

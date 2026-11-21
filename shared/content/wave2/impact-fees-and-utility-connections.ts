@@ -38,7 +38,7 @@ export const impactFeesAndUtilityConnections: BlogPostData = {
     { url: '/blog/building-in-the-boise-foothills', anchor: 'What it costs to build in the Boise Foothills' },
     { url: '/services/lot-evaluation', anchor: 'Lot evaluation' },
     { url: '/services/build-on-your-lot', anchor: 'Build on your lot' },
-    { url: '/#calculator', anchor: 'Cost calculator' },
+    { url: '/instant-estimate?project=custom-home', anchor: 'Instant estimate' },
   ],
   faqs: [
     {
@@ -113,6 +113,6 @@ export const impactFeesAndUtilityConnections: BlogPostData = {
 <p><strong>The farther a parcel sits from established service, the more the cost shifts out of fees and into construction, and construction is the more expensive column.</strong> A foothills lot may sit inside a city and still require long service runs through difficult ground, so you pay both the agency charges and the extended infrastructure. Fire access requirements can add driveway cost, and wildland-urban interface considerations can add to the house itself. Those drivers are covered in <a href="/blog/building-in-the-boise-foothills">what it costs to build in the Boise foothills</a>. The general principle holds across the valley: fees are the visible, quotable part of connecting a home to public systems, and they are usually the smaller part. The physical work of getting service to the house is the number worth investigating hardest.</p>
 
 <h2 id="next-steps">Get the real numbers for your parcel</h2>
-<p>We confirm every applicable fee during feasibility and put it in a line-item budget before we break ground, so nothing arrives at permit that was not planned for. A written <a href="/services/lot-evaluation">lot evaluation</a> runs $950 to $5,500 and includes the fee and utility research along with access, zoning, soils, and septic feasibility. If you already own the land, our <a href="/services/build-on-your-lot">build on your lot</a> service starts from the same research. To get a rough sense of the overall project before that, run your numbers through our <a href="/#calculator">cost calculator</a> and treat fees as a line still to be confirmed.</p>
+<p>We confirm every applicable fee during feasibility and put it in a line-item budget before we break ground, so nothing arrives at permit that was not planned for. A written <a href="/services/lot-evaluation">lot evaluation</a> runs $950 to $5,500 and includes the fee and utility research along with access, zoning, soils, and septic feasibility. If you already own the land, our <a href="/services/build-on-your-lot">build on your lot</a> service starts from the same research. To get a rough sense of the overall project before that, run your numbers through our <a href="/instant-estimate?project=custom-home">instant estimate</a> and treat fees as a line still to be confirmed.</p>
 `.trim(),
 };

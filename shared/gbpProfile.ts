@@ -68,7 +68,7 @@ export const GBP_DESCRIPTION =
 export const GBP_LINKS = {
   website: SITE,
   appointment: `${SITE}/contact`,
-  estimator: `${SITE}/#calculator`,
+  estimator: `${SITE}/instant-estimate`,
   resources: `${SITE}/resources`,
   review: `${SITE}/review`,
 } as const;
@@ -311,11 +311,11 @@ export const GBP_PRODUCTS: GbpProduct[] = [
   },
   {
     category: 'Consultation & Tools',
-    name: 'New Home Construction Estimator',
+    name: 'Instant estimate',
     price: 'Free',
-    url: `${SITE}/#calculator`,
+    url: `${SITE}/instant-estimate`,
     description:
-      'Planning range for a new build from project type and finished living area, land not included. Not a bid, a starting point for conversation.',
+      'A preliminary price range on screen for a new home, a home addition, a detached garage or shop, or an ADU. Not a quote or a bid: a starting point for conversation.',
   },
   {
     category: 'Consultation & Tools',
@@ -343,7 +343,7 @@ export interface GbpQaEntry {
 export const GBP_QA_SEED: GbpQaEntry[] = [
   {
     question: 'Do you provide free estimates?',
-    answer: `Yes. We offer a free planning consultation where we talk through your lot, your program, and a realistic budget band - no pressure, no obligation. Your first conversation and project review are free. Paid planning, design or feasibility work is only started after you approve its scope and price in writing. You can also get a preliminary planning range online at ${SITE}/#calculator`,
+    answer: `Yes. We offer a free planning consultation where we talk through your lot, your program, and a realistic budget band - no pressure, no obligation. Your first conversation and project review are free. Paid planning, design or feasibility work is only started after you approve its scope and price in writing. You can also get an instant estimate, a preliminary price range, online at ${SITE}/instant-estimate`,
   },
   {
     question: 'What areas do you serve?',
@@ -413,10 +413,10 @@ export const GBP_POSTS_STARTER: GbpPost[] = [
   },
   {
     week: 2,
-    headline: '2026 Treasure Valley build costs',
-    body: 'Most new homes plan $225–$400 per finished square foot excluding land. Use our estimator to get a planning range in about a minute.',
-    buttonLabel: 'Get a range',
-    buttonUrl: `${SITE}/#calculator`,
+    headline: 'Price your build on your own schedule',
+    body: 'Answer a few questions about your new home, addition, ADU or shop and see a preliminary price range from our instant estimate.',
+    buttonLabel: 'Get an instant estimate',
+    buttonUrl: `${SITE}/instant-estimate`,
     photoHint: 'Estimator screenshot or budget worksheet',
   },
   {

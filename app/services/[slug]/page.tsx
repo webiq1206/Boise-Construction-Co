@@ -75,9 +75,12 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
         paragraphs: content.costGuidance.paragraphs,
         links: [
           { label: 'Boise home building cost guide', href: '/guides/boise-home-building-cost-guide' },
+          // The planning range explorer this linked to was retired on 21 November 2026:
+          // a service the estimator prices opens it on its project, any other keeps the
+          // quote request (never send a visitor to an estimator that cannot price it).
           {
-            label: isAddition ? 'Start your home addition estimate' : 'Get your build cost range',
-            href: isAddition ? primaryAction.href : '/#calculator',
+            label: isAddition ? 'Start your home addition estimate' : primaryAction.instant ? 'Get your build cost range' : primaryAction.label,
+            href: primaryAction.href,
           },
         ],
       }

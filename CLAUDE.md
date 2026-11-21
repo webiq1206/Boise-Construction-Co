@@ -29,12 +29,26 @@ pricing call to action on this site.
   a visitor to an estimator that cannot price their project.
 * Existing tools stay until the owner retires them: the `/estimate` quote
   request form (now the path to a person), `/estimate/scope` (emailed links),
-  the homepage planning range explorer at `/#calculator`, the consultation
-  forms, the chat assistant, uploads and every API route. Only primary CTAs
-  were re-pointed. Working lead generation is not removed until the
-  replacement is verified live.
-* Guard: `tests/instant-estimate.test.ts` (`npm run verify:instant-estimate`,
-  in prebuild).
+  the consultation forms, the chat assistant, uploads and every API route.
+  Only primary CTAs were re-pointed. Working lead generation is not removed
+  until the replacement is verified live.
+* **The homepage planning range explorer is retired** (owner, 21 November
+  2026: one source of prices). `components/PlanningRangeExplorer.tsx` ran this
+  site's own engine and showed figures that differed from the instant
+  estimator, so the homepage shows `HomeInstantEstimateProjects` in its place
+  (the dark band after "Already own a lot?"): a heading, one sentence, one
+  button per project the estimator prices for this brand
+  (`INSTANT_ESTIMATE_PROJECTS` and `INSTANT_ESTIMATE_PROJECT_LABELS` in
+  `shared/instantEstimate.ts`) to `/instant-estimate?project=<id>`, and
+  "Request a quote" and the phone beside them. No figure. The explorer stays
+  in the repository, unmounted; do not mount it again. The block keeps a
+  zero-size `#calculator` anchor for links from outside the site (ads with
+  prefill, GBP posts); every link on the site goes to `/instant-estimate`
+  (with `?project=` where the page has one). `scripts/verify-homepage-responsive.cjs`
+  (the homepage responsive workflow) checks the block instead of the slider.
+* Guards: `tests/instant-estimate.test.ts` and
+  `tests/home-instant-estimate-block.test.ts` (renders the homepage block;
+  both in `npm run verify:instant-estimate`, in prebuild).
 
 Wording (this is advertising, accuracy matters):
 
