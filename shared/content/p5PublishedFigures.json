@@ -744,6 +744,79 @@
         }
       }
     },
+    "home-1600-no-garage": {
+      "project": "custom-home",
+      "label": "New home, 1,600 sq ft of living space, no garage, no basement, no plans yet",
+      "inputs": {
+        "sqft": 1600,
+        "garage": "none"
+      },
+      "sqft": 1600,
+      "tiers": {
+        "builder": {
+          "finish": "Essential",
+          "low": 316120,
+          "high": 521450,
+          "perSqFt": {
+            "low": 197,
+            "high": 326
+          }
+        },
+        "mid": {
+          "finish": "Signature",
+          "low": 435310,
+          "high": 717980,
+          "perSqFt": {
+            "low": 272,
+            "high": 449
+          }
+        },
+        "high": {
+          "finish": "Premium",
+          "low": 652240,
+          "high": 1075650,
+          "perSqFt": {
+            "low": 407,
+            "high": 673
+          }
+        },
+        "luxury": {
+          "finish": "Luxury",
+          "low": 958040,
+          "high": 1579980,
+          "perSqFt": {
+            "low": 598,
+            "high": 988
+          }
+        }
+      },
+      "spans": {
+        "essentialToSignature": {
+          "low": 316120,
+          "high": 717980,
+          "perSqFt": {
+            "low": 197,
+            "high": 449
+          }
+        },
+        "premiumToLuxury": {
+          "low": 652240,
+          "high": 1579980,
+          "perSqFt": {
+            "low": 407,
+            "high": 988
+          }
+        },
+        "allFinishes": {
+          "low": 316120,
+          "high": 1579980,
+          "perSqFt": {
+            "low": 197,
+            "high": 988
+          }
+        }
+      }
+    },
     "addition-room-300": {
       "project": "addition",
       "label": "Room addition, 300 sq ft, no plans yet",

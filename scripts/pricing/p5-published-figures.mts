@@ -116,6 +116,16 @@ const CASES: Case[] = [
     answers: { sqft, plans: "complete" },
     sqft,
   })),
+  // The house half of a shop home: the estimator has no shop home project, so
+  // the house is a new home with no attached garage (the shop is priced on its
+  // own as a garage-shop case below). Never added to the shop's range.
+  {
+    id: "home-1600-no-garage",
+    project: "custom-home",
+    label: "New home, 1,600 sq ft of living space, no garage, no basement, no plans yet",
+    answers: { sqft: 1600, garage: "none" },
+    sqft: 1600,
+  },
   { id: "addition-room-300", project: "addition", label: "Room addition, 300 sq ft, no plans yet", answers: { type: "room", sqft: 300 }, sqft: 300 },
   { id: "addition-room-400", project: "addition", label: "Room addition, 400 sq ft, no plans yet", answers: { type: "room", sqft: 400 }, sqft: 400 },
   { id: "addition-room-600", project: "addition", label: "Room addition, 600 sq ft, no plans yet", answers: { type: "room", sqft: 600 }, sqft: 600 },

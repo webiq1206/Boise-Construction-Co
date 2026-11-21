@@ -40,8 +40,9 @@ export interface CityData {
  * November 2026: published prices come from the instant estimator). Homes,
  * design-build and energy-efficient homes open the instant estimate, which
  * gives a range for the size and finish a visitor enters, so they carry no
- * floor. The shop home floor is this site's line-item engine for 1,200 sq ft
- * of living space with a 1,200 sq ft shop at Essential finish.
+ * floor. The instant estimate has no shop home project, so shop homes carry
+ * no figure either: they are priced from a line-item budget after a lot
+ * walkthrough.
  */
 export const SERVICES: ServiceData[] = [
   {
@@ -97,7 +98,7 @@ export const SERVICES: ServiceData[] = [
     slug: 'shop-homes-barndominiums',
     name: 'Shop Homes & Barndominiums',
     shortDescription: 'Post-frame and steel-framed homes that pair finished living space with real working shop square footage.',
-    planningFrom: '$330k',
+    planningFrom: 'Priced after a lot walkthrough',
     secondary: true,
   },
   {

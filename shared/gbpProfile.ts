@@ -171,7 +171,6 @@ export const GBP_SERVICES: GbpService[] = [
     name: 'Shop homes and barndominiums',
     description:
       'Post-frame and steel-framed homes pairing finished living space with working shop square footage on rural acreage.',
-    startingPrice: '$330,000',
   },
   {
     name: 'Energy-efficient home building',
@@ -257,7 +256,7 @@ export const GBP_PRODUCTS: GbpProduct[] = [
   {
     category: 'Home Building Services',
     name: 'Shop Homes & Barndominiums',
-    price: 'From $330,000',
+    price: 'Priced after a lot walkthrough',
     url: `${SITE}/services/shop-homes-barndominiums`,
     description:
       'Post-frame and steel-framed homes pairing finished living space with working shop square footage.',
@@ -374,7 +373,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   },
   {
     question: 'Do you build barndominiums or shop homes?',
-    answer: `Yes - post-frame and steel-framed homes pairing finished living space with working shop square footage, mostly on rural Ada and Canyon County acreage. For 1,600 sq ft of living space with a 1,200 sq ft shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land: ${SITE}/services/shop-homes-barndominiums`,
+    answer: `Yes - post-frame and steel-framed homes pairing finished living space with working shop square footage, mostly on rural Ada and Canyon County acreage. Our instant estimate has no shop home project, so it prices the halves separately (preliminary, November 2026): a 1,600 sq ft new home with no garage at $316,120 to $717,980 at Essential to Signature finish, land excluded, and a 1,200 sq ft detached garage or shop at $113,770 to $238,450. A shop home is priced from a line-item budget after a lot walkthrough: ${SITE}/services/shop-homes-barndominiums`,
   },
   {
     question: 'What is design-build?',

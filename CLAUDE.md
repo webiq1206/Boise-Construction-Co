@@ -95,10 +95,25 @@ preliminary customer range for stated inputs.
 * No figure for what no engine prices: site work, wells and septic, lot
   evaluations, design-only work, foothills premiums. Keep the topic and point
   to the lot evaluation or the request form.
-* Shop homes keep this site's line-item engine figures (resolveQuotedRange,
-  held by `scripts/verify-new-construction.ts`); city permit fees and
-  valuation brackets are third-party figures. Both are on the test's
-  allowlist; a home, addition or ADU price never is.
+* Shop homes follow the same rule (21 November 2026). The estimator has no
+  shop home project, so shop home copy quotes its two parts separately, each
+  with its inputs and date: the house as a new home with no garage
+  (`home-1600-no-garage`: design, engineered plans and permit fees included,
+  land excluded) and the shop as a detached garage or shop
+  (`garage-shop-1200`: design drawings and permit fees included; the cost book
+  has no engineering item for it, so engineering is "not yet determined",
+  never claimed). Never add the two into one figure (the test fails on any
+  sum): a shop home is priced from a line-item budget after a lot
+  walkthrough, and its page keeps "Request a quote". `planningFrom` and the
+  GBP price say "Priced after a lot walkthrough". This site's line-item engine
+  figures ($385,000 to $520,000, $465,000 to $630,000, "from $330,000", the
+  "$55 to $60" shop shell) are retired from copy and have no allowlist; the
+  engine still prices shop home requests for the team, and
+  `scripts/verify-new-construction.ts` and `tests/social-and-shop-price.test.ts`
+  hold its numbers steady and keep them out of copy.
+* City permit fees and valuation brackets are third-party figures, the only
+  entries on the test's allowlist; a home, addition, ADU, garage, shop or shop
+  home price never is.
 * Guard: `tests/p5-published-figures.test.ts` (`npm run
   verify:published-prices`, in prebuild). When the cost book changes, re-run
   the script and fix the copy until the test passes.

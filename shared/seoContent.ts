@@ -51,9 +51,10 @@ export interface ServiceSEOContent {
  * Every price figure below for a new home comes from the P5 instant estimator
  * (owner, 21 November 2026), for the inputs the sentence states, and is pinned
  * to shared/content/p5PublishedFigures.json by tests/p5-published-figures.test.ts.
- * Shop home figures are this site's line-item engine (resolveQuotedRange), as
- * scripts/verify-new-construction.ts checks. Work no engine prices (site work,
- * wells and septic, lot evaluations) carries no figure.
+ * The estimator has no shop home project, so shop home copy quotes its new
+ * home and detached garage or shop ranges separately and never adds them
+ * together. Work no engine prices (site work, wells and septic, lot
+ * evaluations) carries no figure.
  */
 export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'custom-home-builder': {
@@ -746,7 +747,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does a barndominium cost to build in Idaho?',
         answer:
-          'Shop homes cost less per square foot than a conventional house because the shop portion costs far less to build than finished living space. For 1,600 square feet of living space with a 1,200 square foot shop, our estimator returns $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio. The shop itself runs about $55 to $60 per square foot insulated, with a slab, an overhead door and power.',
+          'Shop homes cost less per square foot than a conventional house because the shop portion costs far less to build than finished living space. Our instant estimate has no shop home project, so it prices the two halves on their own. Its preliminary range for a 1,600 square foot new home with no garage is $316,120 to $521,450 at Essential finish and $435,310 to $717,980 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. For a 1,200 square foot detached garage or shop it is $113,770 to $187,690 at Essential finish and $144,540 to $238,450 at Signature finish, with design drawings and permit fees included and engineering, if the building needs it, not yet determined. Site work beyond a typical lot and utility connection fees are not yet determined for either. We do not add the two ranges together: a shop home puts both under one structure, so we price it from a line-item budget after a lot walkthrough.',
       },
       {
         question: 'Why is a shop home cheaper per square foot than a conventional house?',
@@ -777,8 +778,8 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Shop home and barndominium cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, our estimator prices 1,600 square feet of living space with a 1,200 square foot shop at $385,000 to $520,000 at Essential finish and $465,000 to $630,000 at Signature finish, excluding land, on a simple lot with city services. Our published planning-from figure of $330,000 reflects a smaller living area with a larger shop-to-house ratio, since the shop portion costs far less per square foot than the house.',
-        'These are planning ranges, not bids. The ratio of finished space to shop space moves the blended cost more than any other variable, which we settle before design begins.',
+        'Our instant estimate prices the two halves of a shop home separately, as preliminary ranges dated November 2026. A 1,600 square foot new home with no garage comes to $316,120 to $521,450 at Essential finish and $435,310 to $717,980 at Signature finish, with design, engineered plans and permit fees included and the land excluded. A 1,200 square foot detached garage or shop comes to $113,770 to $187,690 at Essential finish and $144,540 to $238,450 at Signature finish, with design drawings and permit fees included and engineering not yet determined. Per square foot, that shop runs $94 to $199 at Essential to Signature finish, against $197 to $449 for the house.',
+        'The instant estimate has no shop home project, so we do not add those ranges into one figure. A shop home with both under one roof is priced from a line-item budget after a lot walkthrough, and the ratio of finished space to shop space moves that budget more than any other variable, which we settle before design begins.',
       ],
     },
   },
