@@ -64,7 +64,7 @@ export function BudgetInclusionsSection() {
           </Reveal>
           <Reveal delay={60}>
             <p className="ed-body">
-              A planning range upfront, a line-item budget before we break ground,
+              A preliminary range upfront, a line-item budget before we break ground,
               and the same standard inclusions on every home - so you always know
               where things stand.
             </p>

@@ -41,7 +41,7 @@ export const howToBudgetANewHomeBoise: BlogPostData = {
     { url: '/blog/allowances-explained-new-home', anchor: 'How allowances work' },
     { url: '/blog/construction-loan-basics-idaho', anchor: 'How construction loans work in Idaho' },
     { url: '/blog/what-drives-home-building-costs-boise', anchor: 'What drives home building costs' },
-    { url: '/#calculator', anchor: 'Cost calculator' },
+    { url: '/instant-estimate?project=custom-home', anchor: 'Instant estimate' },
   ],
   faqs: [
     {
@@ -121,6 +121,6 @@ export const howToBudgetANewHomeBoise: BlogPostData = {
 <p>We set allowances at what things actually cost here rather than at a number chosen to win the bid, and it means our proposals sometimes look higher than they need to. That is a trade we make on purpose. A budget is only useful if it survives contact with a showroom.</p>
 
 <h2 id="start">Where to start this week</h2>
-<p><strong>Get a rough total before you get attached to a plan, because the plan is much harder to change than the spreadsheet.</strong> Put your six lines together with the bands above, then test the result against what you can actually finance. If you are using a construction loan, read <a href="/blog/construction-loan-basics-idaho">how construction loans work in Idaho</a>, because the draw structure affects when you need money as much as how much you need. If the total does not fit, adjust size and finish level on paper now rather than adjusting them in change orders later. You can run your scope through our <a href="/#calculator">cost calculator</a> for a starting range, and see <a href="/blog/cost-to-build-a-house-boise">what it costs to build a house in Boise</a> for the full cost breakdown. When you want a line-item budget for a specific lot, <a href="/contact">get in touch</a> and we will build one before you commit to anything.</p>
+<p><strong>Get a rough total before you get attached to a plan, because the plan is much harder to change than the spreadsheet.</strong> Put your six lines together with the bands above, then test the result against what you can actually finance. If you are using a construction loan, read <a href="/blog/construction-loan-basics-idaho">how construction loans work in Idaho</a>, because the draw structure affects when you need money as much as how much you need. If the total does not fit, adjust size and finish level on paper now rather than adjusting them in change orders later. You can run your scope through our <a href="/instant-estimate?project=custom-home">instant estimate</a> for a starting range, and see <a href="/blog/cost-to-build-a-house-boise">what it costs to build a house in Boise</a> for the full cost breakdown. When you want a line-item budget for a specific lot, <a href="/contact">get in touch</a> and we will build one before you commit to anything.</p>
 `.trim(),
 };

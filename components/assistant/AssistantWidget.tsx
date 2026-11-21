@@ -36,7 +36,7 @@ const EXCLUDED_PREFIXES = ["/admin", "/subcontractor"];
 
 /**
  * Replies reference internal pages as bare paths ("/consultation",
- * "/#calculator"). Render those as links; everything else stays plain text.
+ * "/instant-estimate"). Render those as links; everything else stays plain text.
  */
 function renderMessageText(text: string) {
   const parts = text.split(/(\/(?:#[a-z-]+|[a-z][a-z0-9\-/#]*))(?=[\s.,;:!?)]|$)/g);
@@ -149,7 +149,7 @@ export function AssistantWidget() {
       const data = (await res.json().catch(() => null)) as { reply?: string } | null;
       const reply =
         data?.reply ??
-        "I'm having trouble connecting right now. Try the estimator on the homepage, or call (208) 477-1169.";
+        "I'm having trouble connecting right now. Try our instant estimate at /instant-estimate, or call (208) 477-1169.";
       setMessages((cur) => [...cur, { role: "assistant", content: reply }]);
     } catch {
       setMessages((cur) => [
@@ -157,7 +157,7 @@ export function AssistantWidget() {
         {
           role: "assistant",
           content:
-            "I'm having trouble connecting right now. Try the estimator on the homepage, or call (208) 477-1169.",
+            "I'm having trouble connecting right now. Try our instant estimate at /instant-estimate, or call (208) 477-1169.",
         },
       ]);
     } finally {

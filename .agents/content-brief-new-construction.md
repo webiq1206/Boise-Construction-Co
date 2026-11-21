@@ -137,7 +137,7 @@ marketing department. Specifically:
     allowed as plain `<table>` when comparing figures.
 12. **Internal links.** 4 to 8 in the body, all to paths that exist (see the
     route list below). At least one to the hub pillar guide, at least one to
-    another post in the same hub, and one to `/contact` or `/#calculator` in the
+    another post in the same hub, and one to `/contact` or `/instant-estimate` in the
     closing section.
 
 ## Pillar guides
@@ -194,7 +194,7 @@ Services: `/services`, `/services/custom-home-builder`,
 
 Areas: `/areas`, and `/areas/{boise,meridian,eagle,nampa,kuna,star,middleton,caldwell}`.
 
-Other: `/`, `/about`, `/contact`, `/#calculator`, `/estimate`, `/guides`,
+Other: `/`, `/about`, `/contact`, `/instant-estimate`, `/estimate`, `/guides`,
 `/blog`, `/resources`, `/re-10-repairs-boise`.
 
 Blog posts: `/blog/<slug>` for any slug in the manifest in

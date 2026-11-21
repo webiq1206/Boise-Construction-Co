@@ -9,7 +9,7 @@ import {localAlt} from '@/shared/localAlt';
 import {CTA_PRIMARY,CTA_QUOTE,PARENT_REVIEWS_LABEL} from '@/shared/ctaCopy';
 import {P5_SOCIAL} from '@/shared/gbpProfile';
 import {INSTANT_ESTIMATE_PATH} from '@/shared/instantEstimate';
-import {PlanningRangeExplorer} from '@/components/PlanningRangeExplorer';
+import {HomeInstantEstimateProjects} from './HomeInstantEstimateProjects';
 import {brands,cities,serviceExtras} from './family-content';
 import {DesignGallery} from '@/components/sections/DesignGallery';
 import {ServiceArea} from '@/components/family/ServiceArea';
@@ -98,8 +98,11 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
   </div>
  </section>
 
- {/* 3. The number, on its own band. */}
- <PlanningRangeExplorer />
+ {/* 3. The price, on its own band: the instant estimate by project. The
+     planning range explorer that sat here was retired on 21 November 2026
+     (one source of prices); components/PlanningRangeExplorer.tsx stays in the
+     repository, unmounted. */}
+ <HomeInstantEstimateProjects />
 
  {/* 4. The way we work (paper, between the two dark bands). */}
  <section className="f-section f-container f-two" id="why-choose-us"><div className="f-sticky"><p className="f-eyebrow">THE WAY WE WORK</p><h2>Good work.<br/><em>A better experience.</em></h2><p>Clear expectations, thoughtful decisions, and someone accountable for the work. That is the P5 standard.</p></div><Rows items={b.approach}/></section>

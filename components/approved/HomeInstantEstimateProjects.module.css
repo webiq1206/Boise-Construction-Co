@@ -1,0 +1,36 @@
+/* The instant estimate block on the homepage, in the planning band's place
+   (owner, 21 November 2026). The band itself is the planning section's
+   (HomePlanningSections.module.css); this file adds the project buttons and
+   the path to a person. Four buttons: one row from 1024px, two by two on
+   tablets, one per row on phones. */
+:global(.approved-shell) .section { position: relative; }
+.legacyAnchor { position: absolute; top: 0; left: 0; width: 0; height: 0; overflow: hidden; }
+:global(.approved-shell) .section .projects {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+:global(.approved-shell) .section .projects li { display: flex; min-width: 0; margin: 0; padding: 0; }
+:global(.approved-shell) .section .project { justify-content: space-between; gap: var(--icon-gap, 8px); white-space: normal; text-align: left; }
+:global(.approved-shell) .section .person {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(251, 250, 246, 0.2);
+}
+:global(.approved-shell) .section .person > p { margin: 0; color: #d9dbd4; font-size: 16px; line-height: 1.5; }
+:global(.approved-shell) .section .personActions { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 24px; }
+:global(.approved-shell) .section .personActions a { color: var(--fr-paper); gap: var(--icon-gap, 8px); }
+@media (max-width: 1023px) {
+  :global(.approved-shell) .section .projects { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 639px) {
+  :global(.approved-shell) .section .projects { grid-template-columns: 1fr; gap: 8px; }
+  :global(.approved-shell) .section .person { flex-direction: column; align-items: flex-start; }
+}

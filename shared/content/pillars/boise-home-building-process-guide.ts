@@ -221,6 +221,6 @@ export const boiseHomeBuildingProcessGuide: GuidePageData = {
 
 <h2 id="next-steps">Where to start</h2>
 <p><strong>The useful first move is a conversation, not a decision, and it costs nothing.</strong> We will look at your lot or your lot search, put a realistic band around the house you described, tell you what the sequence looks like for your specific parcel and jurisdiction, and be straight with you if the number and the house do not meet.</p>
-<p>If you want a starting figure before you talk to anyone, run a size and finish level through the <a href="/#calculator">estimator</a>. If you want to understand how we work, read about our <a href="/services/design-build">design-build</a> approach and our <a href="/services/custom-home-builder">custom home building</a> service. When you are ready to put dates on a calendar, <a href="/contact">get in touch</a> and we will walk the whole sequence with you, from the first meeting through the day the warranty year ends.</p>
+<p>If you want a starting figure before you talk to anyone, run a size and finish level through the <a href="/instant-estimate?project=custom-home">instant estimate</a>. If you want to understand how we work, read about our <a href="/services/design-build">design-build</a> approach and our <a href="/services/custom-home-builder">custom home building</a> service. When you are ready to put dates on a calendar, <a href="/contact">get in touch</a> and we will walk the whole sequence with you, from the first meeting through the day the warranty year ends.</p>
 `.trim(),
 };
