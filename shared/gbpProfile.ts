@@ -141,37 +141,31 @@ export const GBP_SERVICES: GbpService[] = [
     name: 'Custom home building',
     description:
       'Fully custom homes designed from a blank page around your lot and budget. Line-item budget, permits, and weekly updates included.',
-    startingPrice: '$525,000',
   },
   {
     name: 'Semi-custom home building',
     description:
       'Start from a proven engineered floor plan and personalize it. Shorter timeline and a tighter budget range than fully custom.',
-    startingPrice: '$425,000',
   },
   {
     name: 'Build on your lot',
     description:
       'You own the land. We handle feasibility, site design, permits, and construction, with site costs priced before design begins.',
-    startingPrice: '$475,000',
   },
   {
     name: 'Design-build home construction',
     description:
       'Design and construction with one accountable company, with the design priced continuously so the drawings never outrun the budget.',
-    startingPrice: '$525,000',
   },
   {
     name: 'Custom home design and plans',
     description:
       'Permit-ready architectural drawings with structural engineering and Idaho energy compliance. You own the plans.',
-    startingPrice: '$9,000',
   },
   {
     name: 'Lot evaluation and site feasibility',
     description:
       'Soils, utilities, access, setbacks, and slope reviewed before you buy. Written site cost summary. Credited toward design.',
-    startingPrice: '$950',
   },
   {
     name: 'Shop homes and barndominiums',
@@ -183,7 +177,6 @@ export const GBP_SERVICES: GbpService[] = [
     name: 'Energy-efficient home building',
     description:
       'High-performance envelopes with blower-door verified air tightness and sealed ducts inside conditioned space.',
-    startingPrice: '$575,000',
   },
   {
     name: 'New construction permit management',
@@ -216,7 +209,7 @@ export const GBP_PRODUCTS: GbpProduct[] = [
   {
     category: 'Home Building Services',
     name: 'Custom Home Building',
-    price: 'From $525,000',
+    price: 'Free instant estimate on our site',
     url: `${SITE}/services/custom-home-builder`,
     description:
       'Fully custom homes designed around your lot and budget. Line-item budget before construction. Free planning consultation.',
@@ -224,7 +217,7 @@ export const GBP_PRODUCTS: GbpProduct[] = [
   {
     category: 'Home Building Services',
     name: 'Semi-Custom Homes',
-    price: 'From $425,000',
+    price: 'Free instant estimate on our site',
     url: `${SITE}/services/semi-custom-homes`,
     description:
       'Proven engineered plans adapted to your lot. Shorter timeline and a tighter budget range than fully custom.',
@@ -232,7 +225,7 @@ export const GBP_PRODUCTS: GbpProduct[] = [
   {
     category: 'Home Building Services',
     name: 'Build on Your Lot',
-    price: 'From $475,000',
+    price: 'Free instant estimate on our site',
     url: `${SITE}/services/build-on-your-lot`,
     description:
       'Already own land? We handle feasibility, design, permits, and construction, with site costs priced before design begins.',
@@ -240,7 +233,7 @@ export const GBP_PRODUCTS: GbpProduct[] = [
   {
     category: 'Home Building Services',
     name: 'Design-Build',
-    price: 'From $525,000',
+    price: 'Free instant estimate on our site',
     url: `${SITE}/services/design-build`,
     description:
       'Design and construction with one accountable company and one point of contact. The design is priced as it develops, so it never outruns your budget.',
@@ -248,7 +241,7 @@ export const GBP_PRODUCTS: GbpProduct[] = [
   {
     category: 'Home Building Services',
     name: 'Home Design & Plans',
-    price: 'From $9,000',
+    price: 'Priced after a design consultation',
     url: `${SITE}/services/home-plans-design`,
     description:
       'Permit-ready drawings with structural engineering and Idaho energy compliance. You own the plans.',
@@ -256,7 +249,7 @@ export const GBP_PRODUCTS: GbpProduct[] = [
   {
     category: 'Home Building Services',
     name: 'Lot Evaluation',
-    price: 'From $950',
+    price: 'Priced for the parcel',
     url: `${SITE}/services/lot-evaluation`,
     description:
       'Soils, utilities, access, and setbacks reviewed before you buy. Written site cost summary, credited toward design.',
@@ -352,7 +345,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   },
   {
     question: 'How much does it cost to build a house in Boise?',
-    answer: `As of 2026, most Treasure Valley new homes plan $225–$400 per finished square foot excluding land. A 2,400 square foot custom home commonly runs $600,000–$960,000, with site work budgeted separately. These are planning ranges, not bids.`,
+    answer: `Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Site work beyond a typical lot is budgeted separately. These are preliminary ranges, not bids.`,
   },
   {
     question: 'Do you handle permits?',
@@ -422,7 +415,7 @@ export const GBP_POSTS_STARTER: GbpPost[] = [
   {
     week: 3,
     headline: 'Thinking about a lot? Check it first.',
-    body: 'Soils, utilities, access, and setbacks reviewed before you buy. Written site cost summary from $950, credited toward design.',
+    body: 'Soils, utilities, access, and setbacks reviewed before you buy. Written site cost summary, credited toward design.',
     buttonLabel: 'Lot evaluation',
     buttonUrl: `${SITE}/services/lot-evaluation`,
     photoHint: 'Site walkthrough or raw lot photo',

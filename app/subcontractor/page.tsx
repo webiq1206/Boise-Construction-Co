@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { SHOW_TRUST } from "@/shared/publicFlags";
+import { SERVICE_AREA_LINE } from "@/shared/contentData";
 import { SubcontractorHomeDashboard } from "@/components/subcontractor/SubcontractorHomeDashboard";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -111,7 +112,7 @@ export default function SubcontractorPage() {
                 </div>
                 <CardTitle>Local service area</CardTitle>
                 <CardDescription>
-                  Leads come from property owners in Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, and Star, in Ada County and Canyon County.
+                  Leads come from property owners in {SERVICE_AREA_LINE}.
                 </CardDescription>
               </CardHeader>
             </Card>

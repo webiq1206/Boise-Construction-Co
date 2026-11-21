@@ -6,13 +6,13 @@
  * logic (a second storey is cheaper per square foot, a bigger house is cheaper
  * per square foot, a steep lot costs more than a flat one).
  *
- * Second, and more important: the engine must agree with what the website tells
- * people. shared/seoContent.ts publishes a $250 to $400 per square foot planning
- * band, a "near $225" floor for simple flat-lot builds, and a "regularly exceed
- * $450" ceiling for foothills sites. Those are promises to a prospective client.
- * If a rate or a quantity changes and the engine drifts outside them, this fails
- * and either the engine or the published copy has to move. That check is the
- * reason this file exists.
+ * Second: the engine must stay plausible, and agree with the one figure the
+ * website still publishes from it, the shop home example. Since 21 November
+ * 2026 every other new home price on the site comes from the P5 instant
+ * estimator (tests/p5-published-figures.test.ts). The per square foot bounds
+ * in section 4 are kept as plausibility checks on this engine, at the values
+ * the site used to publish ($250 to $400, a "near $225" simple build, foothills
+ * above $450); they are no longer published claims.
  */
 import {
   buildInternalEstimate,
@@ -220,11 +220,12 @@ const perSf = (s: ScopeSelections, rules = CUSTOM_HOME_RULES, project = "custom-
   t("direction/build-on-lot-between", onLot <= custom && onLot >= semi, usd(onLot));
 }
 
-/* ================================== 4. AGREEMENT WITH PUBLISHED COPY */
+/* ============================ 4. PLAUSIBILITY BOUNDS (FORMER PUBLISHED BANDS) */
 /*
- * These assert against the exact claims in shared/seoContent.ts. Changing a
- * rate or a quantity until one of these fails means the website is now telling
- * people something the estimator does not do.
+ * These held the engine to the bands shared/seoContent.ts published until 21
+ * November 2026. The site now publishes the P5 instant estimator's ranges
+ * instead (tests/p5-published-figures.test.ts); the bounds stay as a guard on
+ * this engine, which still prices the team email and the QuickBooks estimate.
  */
 {
   const low = perSf(base({ quality: "refresh" }));

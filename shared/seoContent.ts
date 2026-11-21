@@ -48,11 +48,12 @@ export interface ServiceSEOContent {
 }
 
 /**
- * Cost figures below are 2026 Treasure Valley planning ranges for new
- * residential construction, quoted per finished square foot and excluding land
- * unless stated. They are anchored to the local market range of roughly $225
- * to $400 per square foot and must stay consistent with the estimator engine
- * and the pillar cost guides.
+ * Every price figure below for a new home comes from the P5 instant estimator
+ * (owner, 21 November 2026), for the inputs the sentence states, and is pinned
+ * to shared/content/p5PublishedFigures.json by tests/p5-published-figures.test.ts.
+ * Shop home figures are this site's line-item engine (resolveQuotedRange), as
+ * scripts/verify-new-construction.ts checks. Work no engine prices (site work,
+ * wells and septic, lot evaluations) carries no figure.
  */
 export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
   'custom-home-builder': {
@@ -99,7 +100,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does it cost to build a custom home in Boise?',
         answer:
-          'Most Treasure Valley custom homes plan between $250 and $400 per finished square foot in 2026 at Essential to Signature finish, for the house with its design, engineering, and permits. Land, site work, impact fees, and utility connections are separate. Our simplest single-level designs start near $525,000. A common 2,400 square foot custom home lands between $600,000 and $960,000. Foothills lots and highly detailed designs run above that range.',
+          'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. That is $209 to $474 per square foot of living space at Essential to Signature finish. Site work beyond a typical lot and utility connection fees are not yet determined in that range, and foothills lots and highly detailed designs run above it.',
       },
       {
         question: 'How long does it take to build a custom home in the Treasure Valley?',
@@ -124,7 +125,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'Do you build on rural acreage outside city limits?',
         answer:
-          'Rural parcels without municipal service may need a well, a septic system, and private road or power extensions. Confirm utility availability for the parcel first. Septic review goes through Central District Health in Ada County or Southwest District Health in Canyon County. Site work commonly adds $130,000 to $205,000 before a foundation is poured, so we price it during feasibility.',
+          'Rural parcels without municipal service may need a well, a septic system, and private road or power extensions. Confirm utility availability for the parcel first. Septic review goes through Central District Health in Ada County or Southwest District Health in Canyon County. That site work can cost more than the foundation and framing, and the instant estimate does not price it, so we price it for the parcel during feasibility.',
       },
       {
         question: 'Can I supply my own plans?',
@@ -135,8 +136,8 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Custom home building cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, most Treasure Valley custom homes plan between $250 and $400 per finished square foot at Essential to Signature finish, excluding land, site work, impact fees, and utility connections. Our published planning-from figure of $525,000 reflects the simplest single-level designs on flat valley lots, near $225 per square foot; a common 2,400 square foot home lands between $600,000 and $960,000, and foothills sites, steep grades, and highly detailed interiors regularly exceed $450 per square foot.',
-        'These are planning ranges, not bids. Lot conditions, home size, roof and wall complexity, and finish level drive the final number, which we confirm with a line-item budget after a lot walkthrough.',
+        'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. That is $209 to $474 per square foot of living space at Essential to Signature finish. The estimate also includes the city impact fees and road impact fee a new home pays. It does not include surveys and soils reports, unusual site conditions such as rock, high groundwater or long utility runs, or landscaping, fencing and window coverings, and utility connection and capacity fees are not yet determined. Foothills sites, steep grades and highly detailed interiors run above it.',
+        'These are preliminary ranges, not bids. Lot conditions, home size, roof and wall complexity, and finish level drive the final number, which we confirm with a line-item budget after a lot walkthrough.',
       ],
     },
   },
@@ -185,7 +186,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does a semi-custom home cost in the Treasure Valley?',
         answer:
-          'Semi-custom homes generally plan between $225 and $300 per finished square foot in 2026, excluding land and site work, with our simplest plans starting near $425,000. A common 2,000 square foot home lands between $450,000 and $600,000.',
+          'Our instant estimate has no separate semi-custom price: it gives a 2,000 square foot home with an attached 2-car garage a preliminary range of $428,840 to $707,290 at Essential finish and $584,860 to $964,580 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. If you bring complete design and engineered plans, the estimate leaves design and engineering out.',
       },
       {
         question: 'What is the difference between semi-custom and fully custom?',
@@ -216,8 +217,8 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Semi-custom home cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, semi-custom homes in the Treasure Valley plan between $225 and $300 per finished square foot, excluding land, site work, impact fees, and utility connections. Our published planning-from figure of $425,000 reflects the simplest plans; a common 2,000 square foot home lands between $450,000 and $600,000. The savings against a fully custom build come from design and engineering work that is already complete, not from cheaper construction.',
-        'These are planning ranges, not bids. Lot conditions, plan modifications, and finish level move the number, which we confirm with a line-item budget once a plan and lot are matched.',
+        'Our instant estimate has no separate semi-custom price: it gives a 2,000 square foot home with an attached 2-car garage a preliminary range of $428,840 to $707,290 at Essential finish and $584,860 to $964,580 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. That is $214 to $483 per square foot of living space. Site work beyond a typical lot and utility connection fees are not yet determined in that range. The savings against a fully custom build come from design and engineering work that is already complete, not from cheaper construction.',
+        'These are preliminary ranges, not bids. Lot conditions, plan modifications, and finish level move the number, which we confirm with a line-item budget once a plan and lot are matched.',
       ],
     },
   },
@@ -266,7 +267,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'What does it cost to build on land I already own?',
         answer:
-          'Vertical construction plans between $225 and $400 per finished square foot in 2026. Site work is separate and varies enormously: a serviced lot in a Meridian subdivision might need $40,000 to $65,000, while rural acreage requiring a well, septic, and access can run $130,000 to $205,000.',
+          'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Site work is separate and varies enormously: a serviced lot in a Meridian subdivision needs far less than rural acreage that requires a well, septic, and access. The instant estimate lists site work beyond a typical lot as not yet determined, so we price it for your parcel.',
       },
       {
         question: 'How do I know if my lot is actually buildable?',
@@ -276,7 +277,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'Do I need a well and septic on rural Ada or Canyon County land?',
         answer:
-          'Confirm municipal connection options before assuming a well or septic system is needed. For septic review, contact Central District Health in Ada County or Southwest District Health in Canyon County. Well requirements are handled through the Idaho Department of Water Resources. Well and septic work commonly adds $70,000 to $95,000, with actual costs depending on site conditions and well depth.',
+          'Confirm municipal connection options before assuming a well or septic system is needed. For septic review, contact Central District Health in Ada County or Southwest District Health in Canyon County. Well requirements are handled through the Idaho Department of Water Resources. The instant estimate does not price a well or septic system, so we price them for the parcel, where site conditions and well depth set the cost.',
       },
       {
         question: 'Can you build in a subdivision with an HOA?',
@@ -291,14 +292,14 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'Can you help before I buy the land?',
         answer:
-          'Yes, and that is the better sequence. Our lot evaluation service reviews a parcel before purchase so you are not discovering a $90,000 access problem after closing.',
+          'Yes, and that is the better sequence. Our lot evaluation service reviews a parcel before purchase so you are not discovering an expensive access problem after closing.',
       },
     ],
     costGuidance: {
       heading: 'Build on your lot cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, vertical construction on an owned lot plans between $225 and $400 per finished square foot, and site work is budgeted separately. Serviced lots inside city limits commonly need $40,000 to $65,000 of site work, while rural parcels requiring a well, septic system, and access improvements run $130,000 to $205,000 before the foundation is poured.',
-        'These are planning ranges, not bids. Because the parcel drives so much of the number, we produce a written feasibility summary for your specific lot before design begins.',
+        'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. The estimate assumes a buildable lot you already own with utilities at the street, so site work beyond a typical lot is not yet determined in it. Serviced lots inside city limits commonly need modest site work, while rural parcels requiring a well, septic system, and access improvements need far more before the foundation is poured.',
+        'These are preliminary ranges, not bids. Because the parcel drives so much of the number, we produce a written feasibility summary for your specific lot before design begins.',
       ],
     },
   },
@@ -367,7 +368,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does the design phase cost?',
         answer:
-          'Design, engineering, and permit-ready documents typically run 5 to 12 percent of construction cost, which is roughly $9,000 to $35,000 for most Treasure Valley homes. On a design-build contract a portion of that credits toward construction.',
+          'In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $8,800 to $19,330 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). Our construction contracts include design, engineering and permits.',
       },
       {
         question: 'What happens if the design comes in over budget anyway?',
@@ -378,8 +379,8 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Design-build cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, design-build homes in the Treasure Valley plan between $250 and $400 per finished square foot excluding land. The design and engineering portion typically represents 5 to 12 percent of construction cost, or about $9,000 to $35,000 for a typical home, and its scope and price are agreed in writing before design work starts.',
-        'These are planning ranges, not bids. The advantage of design-build is that your number gets more precise at every design milestone instead of arriving all at once when drawings go out to bid.',
+        'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Design drawings, structural engineering and energy code calculations account for $8,800 to $19,330 of that, the difference from the same home with complete plans. The design scope and price are agreed in writing before design work starts.',
+        'These are preliminary ranges, not bids. The advantage of design-build is that your number gets more precise at every design milestone instead of arriving all at once when drawings go out to bid.',
       ],
     },
   },
@@ -428,7 +429,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much do custom home plans cost in Idaho?',
         answer:
-          'A permit-ready set with structural engineering typically runs 5 to 12 percent of construction cost, roughly $9,000 to $35,000 for most Treasure Valley homes. Small or simple homes sit at the low end; large or architecturally complex homes sit above it.',
+          'In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $8,800 to $19,330 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). Small or simple homes cost less to design; large or architecturally complex homes cost more, and we price a design-only engagement after a programming session.',
       },
       {
         question: 'Do I own the plans when they are finished?',
@@ -459,8 +460,8 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Home design and plan cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, a permit-ready custom home drawing set with structural engineering and energy compliance runs roughly $9,000 to $35,000 in the Treasure Valley, or about 5 to 12 percent of construction cost. Simple single-level homes sit near the bottom of that range and large or complex designs above it.',
-        'These are planning ranges, not bids. Home size, structural complexity, and the number of design revision rounds drive the final figure, which we fix in writing after a programming session.',
+        'In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $8,800 to $19,330 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). Simple single-level homes cost less to design and large or complex designs more.',
+        'These are preliminary figures, not bids. Home size, structural complexity, and the number of design revision rounds drive the final figure, which we fix in writing after a programming session.',
       ],
     },
   },
@@ -664,7 +665,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does a lot evaluation cost?',
         answer:
-          'A standard Treasure Valley lot evaluation runs $950 to $5,500 depending on parcel size and whether a geotechnical report or septic feasibility test is needed. The fee is credited toward design if you go on to build with us.',
+          'We price a lot evaluation for the parcel, and the fee depends on parcel size and whether a geotechnical report or septic feasibility test is needed. The fee is credited toward design if you go on to build with us.',
       },
       {
         question: 'What makes a lot expensive to build on?',
@@ -695,8 +696,8 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Lot evaluation cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, a written lot evaluation in the Treasure Valley runs $950 to $5,500. A standard review of a serviced subdivision lot sits near the lower end, while rural acreage requiring a geotechnical report, septic feasibility testing through the health district serving the parcel, or a well yield assessment sits at the upper end.',
-        'These are planning ranges, not bids. The fee is credited toward design if you build with us, and it routinely surfaces site costs that dwarf it.',
+        'A written lot evaluation is priced for the parcel. A standard review of a serviced subdivision lot costs less, while rural acreage requiring a geotechnical report, septic feasibility testing through the health district serving the parcel, or a well yield assessment costs more.',
+        'The fee is credited toward design if you build with us, and it routinely surfaces site costs that dwarf it.',
       ],
     },
   },
@@ -826,7 +827,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much more does an energy-efficient home cost to build?',
         answer:
-          'A well-executed high-performance envelope typically adds 3 to 8 percent to construction cost, roughly $20,000 to $55,000 on a mid-size Treasure Valley home. Much of that is offset by being able to install smaller heating and cooling equipment.',
+          'A well-executed high-performance envelope adds to construction cost, and the instant estimate has no option for it, so we price the envelope and mechanical upgrades in your line-item budget. Much of that is offset by being able to install smaller heating and cooling equipment.',
       },
       {
         question: 'How much will I actually save on utility bills?',
@@ -857,8 +858,8 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Energy-efficient home cost in the Treasure Valley',
       paragraphs: [
-        'As of 2026, high-performance homes in the Treasure Valley plan between $275 and $425 per finished square foot excluding land. Our published planning-from figure of $575,000 reflects a smaller or simpler high-performance home; the envelope and mechanical upgrades that separate it from a code-minimum build typically add 3 to 8 percent on top of your base home cost, or about $20,000 to $55,000 on a mid-size home.',
-        'These are planning ranges, not bids. Part of the premium is recovered immediately through smaller heating and cooling equipment, and the rest through operating costs over the life of the home.',
+        'Our instant estimate has no separate high-performance option: it gives a 2,400 square foot home with an attached 2-car garage a preliminary $502,860 to $1,135,770 at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded, and the envelope and mechanical upgrades are priced in your line-item budget.',
+        'These are preliminary ranges, not bids. Part of the premium is recovered immediately through smaller heating and cooling equipment, and the rest through operating costs over the life of the home.',
       ],
     },
   },
@@ -1082,7 +1083,7 @@ export const HOMEPAGE_FAQS_FOR_SCHEMA: FAQItem[] = [
   {
     question: 'How much does it cost to build a house in the Treasure Valley?',
     answer:
-      'Most Treasure Valley new homes plan between $225 and $400 per finished square foot in 2026, excluding land. A 2,400 square foot custom home commonly lands between $600,000 and $960,000, with site work budgeted separately.',
+      'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Site work beyond a typical lot is budgeted separately.',
   },
   {
     question: 'How are you different from other home builders in the Treasure Valley?',

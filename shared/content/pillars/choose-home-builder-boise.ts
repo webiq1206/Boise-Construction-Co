@@ -26,7 +26,7 @@ export const chooseHomeBuilderBoise: GuidePageData = {
   keyTakeaways: [
     'Idaho registers residential contractors rather than licensing them, so verifying registration, insurance and references is your job rather than the state\u2019s.',
     'Builders differ in scope discipline, allowance honesty, communication cadence and subcontractor relationships, not in the quality claims they all make identically.',
-    'The exclusions page is the most informative page in any bid, and site work alone swings from $40,000 to $65,000 on a serviced lot to $130,000 to $205,000 on a rural parcel.',
+    'The exclusions page is the most informative page in any bid, and site work alone swings widely between a serviced lot and a rural parcel.',
     'An allowance set to win the bid is the most common reason a fixed price stops being fixed.',
     'A production builder is the right answer for plenty of households, and design-build is genuinely the wrong answer for some.',
     'Ask every builder for a reference whose build went badly; the ones who give you one are telling you something the good references cannot.',
@@ -102,7 +102,7 @@ export const chooseHomeBuilderBoise: GuidePageData = {
     {
       question: 'How much should design and engineering cost on a custom home?',
       answer:
-        'Plan on 5 to 12 percent of construction cost, roughly $9,000 to $35,000 for most Treasure Valley custom homes. Whether that sits inside a builder proposal or outside it is one of the two biggest reasons bids look different from each other. Ask each builder in writing whether their number includes design, structural engineering, and the drawings needed for plan review.',
+        'In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $8,800 to $19,330 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). Whether that sits inside a builder proposal or outside it is one of the two biggest reasons bids look different from each other. Ask each builder in writing whether their number includes design, structural engineering, and the drawings needed for plan review.',
     },
     {
       question: 'When is design-build the wrong choice?',
@@ -112,7 +112,7 @@ export const chooseHomeBuilderBoise: GuidePageData = {
     {
       question: 'How much does it cost to build a custom home in Boise?',
       answer:
-        'Most Treasure Valley custom homes plan between $250 and $400 per finished square foot excluding land, so a 2,400 square foot house typically lands between $600,000 and $960,000. A simple single-level plan on a flat valley lot can come in near $225 per square foot, while foothills sites with steep grade and high detail regularly run above $450 per square foot.',
+        'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Smaller, simpler plans come in lower, and foothills sites with steep grade and high detail cost more.',
     },
   ],
   content: `
@@ -128,14 +128,14 @@ export const chooseHomeBuilderBoise: GuidePageData = {
 <h2 id="three-delivery-models">Production, semi-custom, and full custom</h2>
 <p><strong>There are three residential delivery models in this market, and choosing the wrong one is a more expensive mistake than choosing the wrong company inside the right one.</strong> They are not tiers of quality but different products for different situations.</p>
 <p>A production builder builds a set catalog of plans, usually in subdivisions they or a developer control, with a defined options list. The process is fast and the price is firm because the plan has been built many times before. What you give up is plan freedom, finish freedom, and often the choice of lot.</p>
-<p>A semi-custom builder starts from a plan library and modifies it, commonly $225 to $300 per finished square foot excluding land, or roughly $450,000 to $600,000 for a 2,000 square foot house. A full custom builder starts from your site and your requirements instead of a plan, commonly $250 to $400 per finished square foot excluding land, so a 2,400 square foot house typically lands between $600,000 and $960,000. A simple single-level plan on a flat valley lot can come in near $225 per square foot, while a foothills site with steep grade and high detail regularly runs above $450 per square foot.</p>
+<p>A semi-custom builder starts from a plan library and modifies it, and the design work is already done, which is where it saves. A full custom builder starts from your site and your requirements instead of a plan, and our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary $502,860 to $1,135,770 at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Smaller, simpler plans come in lower, and a foothills site with steep grade and high detail costs more.</p>
 <table>
 <thead><tr><th></th><th>Production</th><th>Semi-custom</th><th>Full custom</th></tr></thead>
 <tbody>
 <tr><td>Starting point</td><td>Fixed plan catalog</td><td>Plan library, modified</td><td>Your site and brief</td></tr>
-<tr><td>Cost per finished sq ft</td><td>Base plus options</td><td>$225 to $300</td><td>$250 to $400</td></tr>
+<tr><td>How the price is set</td><td>Base plus options</td><td>Existing plan, adapted</td><td>Designed and priced from scratch</td></tr>
 <tr><td>Lot</td><td>Usually theirs</td><td>Theirs or yours</td><td>Usually yours</td></tr>
-<tr><td>Design cost</td><td>In the base price</td><td>Modest</td><td>5 to 12 percent of construction</td></tr>
+<tr><td>Design cost</td><td>In the base price</td><td>Modest</td><td>A separate line in the budget</td></tr>
 <tr><td>Best for</td><td>Proven plan, firm price</td><td>Some control, contained cost</td><td>Unusual site or requirements</td></tr>
 </tbody>
 </table>
@@ -165,7 +165,7 @@ export const chooseHomeBuilderBoise: GuidePageData = {
 
 <h2 id="reading-a-bid">Reading a bid, and why the exclusions page matters most</h2>
 <p><strong>Read the exclusions page before the price page, because that is where the real scope lives.</strong> Legitimate exclusions are normal: land, the well and septic on a rural parcel, impact and utility connection fees, appliances, window coverings, and landscape beyond a basic package. What you are looking for is an exclusion that contradicts something said in the sales meeting, and a list that is suspiciously short for the complexity of the project. A bid on a sloped foothills lot with three exclusions has not thought about the site, and that missing thought arrives later as a change order rather than as a discount. Two items vanish more often than any others: the finished driveway with final grade, and impact and utility connection fees, which differ across Boise, Meridian, Eagle, Nampa and the rest of Ada and Canyon County.</p>
-<p>Site work is the largest swing between two bids. It commonly runs $40,000 to $65,000 on a serviced subdivision lot, and $130,000 to $205,000 on a rural parcel needing a well, a septic system permitted through Central District Health, and an access drive. Design and engineering is the second largest at 5 to 12 percent of construction cost, roughly $9,000 to $35,000, and it sits inside some proposals and outside others. The method for putting proposals on the same footing is in <a href="/blog/how-to-compare-builder-bids">how to compare home builder bids</a>, and the underlying causes are in <a href="/blog/why-home-building-bids-vary">why home building bids vary so much</a>. If nobody has walked the lot, nobody has priced the lot, which is what a written <a href="/services/lot-evaluation">lot evaluation</a> at $950 to $5,500 is for.</p>
+<p>Site work is the largest swing between two bids. It is modest on a serviced subdivision lot and far larger on a rural parcel needing a well, a septic system permitted through Central District Health, and an access drive. Design and engineering is the second, adding a preliminary $8,800 to $19,330 to our instant estimate for a 2,400 square foot home (November 2026), and it sits inside some proposals and outside others. The method for putting proposals on the same footing is in <a href="/blog/how-to-compare-builder-bids">how to compare home builder bids</a>, and the underlying causes are in <a href="/blog/why-home-building-bids-vary">why home building bids vary so much</a>. If nobody has walked the lot, nobody has priced the lot, which is what a written <a href="/services/lot-evaluation">lot evaluation</a> is for.</p>
 
 <h2 id="allowances">How allowances are used to win bids</h2>
 <p><strong>An allowance set below what the material actually costs is the most effective way to win a bid without lying, and it is why two honest-looking proposals can differ by tens of thousands of dollars.</strong> An allowance is a placeholder figure for something you have not selected yet: flooring, cabinetry, countertops, tile, lighting, plumbing fixtures, hardware, appliances, landscape.</p>
@@ -189,7 +189,7 @@ export const chooseHomeBuilderBoise: GuidePageData = {
 
 <h2 id="red-flags">Red flags worth walking away from</h2>
 <p><strong>The warning signs that matter are about process and paperwork, not personality.</strong> A builder can be likeable and still run a project badly, and a blunt one can run it beautifully, so judge the documents.</p>
-<p>A large deposit demanded before a contract exists is the clearest signal, particularly when it is framed as holding a spot in the schedule. Pressure to sign quickly, or a bid with a short expiry and no willingness to extend it, tells you how the build will feel; a builder who will not give you two weeks to understand a $700,000 decision has already answered several of your questions. A proposal with no exclusions list, or a refusal to put in writing an answer that was given happily in conversation, is the same signal in another form.</p>
+<p>A large deposit demanded before a contract exists is the clearest signal, particularly when it is framed as holding a spot in the schedule. Pressure to sign quickly, or a bid with a short expiry and no willingness to extend it, tells you how the build will feel; a builder who will not give you two weeks to understand a decision this size has already answered several of your questions. A proposal with no exclusions list, or a refusal to put in writing an answer that was given happily in conversation, is the same signal in another form.</p>
 <p>Others to weigh: no written change order process, or one that lets work proceed before you approve it. References who all completed years ago. A company describing itself as licensed in a state that registers contractors. And a price dramatically below the others, which almost always means the proposal carries less rather than that the builder is more efficient. Each of these is examined in <a href="/blog/home-builder-red-flags">home builder red flags</a>.</p>
 
 <h2 id="reference-checks">How to check references properly</h2>

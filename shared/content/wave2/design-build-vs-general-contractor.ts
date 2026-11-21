@@ -32,7 +32,7 @@ export const designBuildVsGeneralContractor: BlogPostData = {
     'Design-build prices during drawing; architect plus GC prices after the drawings are done.',
     'The budget gap opens when a finished set of plans meets construction pricing for the first time.',
     'An independent architect is genuinely the better route for an unusual site or a design-led house.',
-    'Design and engineering cost 5 to 12 percent of construction cost under either model.',
+    'Design, engineering and energy code work add a preliminary $8,800 to $19,330 to our instant estimate for a 2,400 square foot home under either model.',
   ],
   relatedLinks: [
     { url: '/guides/choose-home-builder-boise', anchor: 'How to choose a home builder in Boise' },
@@ -56,7 +56,7 @@ export const designBuildVsGeneralContractor: BlogPostData = {
     {
       question: 'Is design-build cheaper than hiring an architect and a builder separately?',
       answer:
-        'Not automatically cheaper, but usually more predictable. Design and engineering cost roughly 5 to 12 percent of construction cost either way, about $9,000 to $35,000. What design-build tends to avoid is the redesign cycle that follows a set of finished plans coming in over budget, which costs both fees and months.',
+        'Not automatically cheaper, but usually more predictable. Design, engineering and energy code work add a preliminary $8,800 to $19,330 to our instant estimate for a 2,400 square foot home either way (November 2026). What design-build tends to avoid is the redesign cycle that follows a set of finished plans coming in over budget, which costs both fees and months.',
     },
     {
       question: 'Who pulls the building permit for a new house?',
@@ -112,7 +112,7 @@ export const designBuildVsGeneralContractor: BlogPostData = {
 
 <h2 id="the-gap">Where the gap between the drawing and the budget opens</h2>
 <p><strong>The gap opens at the moment a finished design meets construction pricing for the first time.</strong> That moment exists in both models. Design-build spreads it over dozens of small moments during design, where each one is a decision. Design-bid-build concentrates it into a single event after the drawings are done, where it is a verdict.</p>
-<p>A concrete version: a client wants a 2,800 square foot single level with a heavy timber entry, a large window package facing the Boise foothills, and a walkout on a sloped lot. Drawn without pricing, that house can easily land above $450 per finished square foot when the excavation, the retaining, the glazing and the structure are all counted. Drawn with pricing alongside, the same client sees at week three that the walkout is adding a significant excavation and foundation cost, and gets to decide whether the walkout or the window package matters more while both are still lines on paper. Neither model makes the house cheaper. One of them tells you earlier. See <a href="/blog/why-home-building-bids-vary">why home building bids vary so much</a> for how much of that gap is scope rather than price.</p>
+<p>A concrete version: a client wants a 2,800 square foot single level with a heavy timber entry, a large window package facing the Boise foothills, and a walkout on a sloped lot. Drawn without pricing, that house can easily land far above its budget when the excavation, the retaining, the glazing and the structure are all counted. Drawn with pricing alongside, the same client sees at week three that the walkout is adding a significant excavation and foundation cost, and gets to decide whether the walkout or the window package matters more while both are still lines on paper. Neither model makes the house cheaper. One of them tells you earlier. See <a href="/blog/why-home-building-bids-vary">why home building bids vary so much</a> for how much of that gap is scope rather than price.</p>
 
 <h2 id="accountability">What happens when something goes wrong</h2>
 <p><strong>With one accountable company, a problem is a problem. With two, a problem is first a question about whose problem it is.</strong> Something on your build will not go as drawn. A detail will not assemble the way it was shown, a specified product will be discontinued, an inspector will read a condition differently than expected.</p>
@@ -123,8 +123,8 @@ export const designBuildVsGeneralContractor: BlogPostData = {
 <p>The same applies if you have a difficult or unusual site where the design problem is the hard part, if you already have a relationship with an architect whose work you want, or if you specifically want the independence of a designer with no financial interest in the construction cost. That independence is real. A design-build firm pricing its own design has an inherent tension in it, and the honest answer is that you manage that tension by asking for a line-item budget and checking the allowances rather than by pretending it does not exist. If competitive bidding on identical drawings is important to you, the separate route is the only one that provides it.</p>
 
 <h2 id="what-it-costs">What it costs either way</h2>
-<p><strong>Design and engineering run about 5 to 12 percent of construction cost under both models, commonly $9,000 to $35,000 depending on the complexity of the house.</strong> Design-build does not make design free; it usually structures it as a paid design phase that flows into a construction agreement.</p>
-<p>Construction itself sits in the same band regardless of who drew it. Most Treasure Valley custom homes plan between $250 and $400 per finished square foot excluding land, which puts a 2,400 square foot house between $600,000 and $960,000. Simple single-level designs on flat valley lots can come in near $225 per square foot. Foothills sites with steep grade and high interior detail regularly run above $450. The delivery model affects how confidently you can predict where in that band you will land, not the band itself.</p>
+<p><strong>In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $8,800 to $19,330 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). The cost rises with the complexity of the house under both models.</strong> Design-build does not make design free; it usually structures it as a paid design phase that flows into a construction agreement.</p>
+<p>Construction itself sits in the same band regardless of who drew it. Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Smaller, simpler homes come in lower, and foothills sites with steep grade and high interior detail cost more. The delivery model affects how confidently you can predict where in that band you will land, not the band itself.</p>
 
 <h2 id="how-to-choose">How to choose between them</h2>
 <p><strong>Choose based on which risk bothers you more.</strong> If the risk that keeps you up is a beautiful set of plans you cannot afford to build, design-build removes it by pricing continuously. If the risk that bothers you is a builder who both designs and prices with nobody independent checking either, hire an architect and bid the drawings.</p>

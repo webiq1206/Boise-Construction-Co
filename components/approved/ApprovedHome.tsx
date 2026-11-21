@@ -88,7 +88,7 @@ export function ApprovedHome(){const b=brands['construction'];const primary='/es
   <div className={`fr-panel-body ${styles.lotBody}`}>
    <p className="f-eyebrow">BEFORE YOU COMMIT TO A PLAN</p>
    <h2 id="own-a-lot-title">Already own<br/><em>a lot?</em></h2>
-   <p>A $950 lot evaluation answers the site questions that change the budget before design starts.</p>
+   <p>A written lot evaluation answers the site questions that change the budget before design starts.</p>
    <ul className={`fr-panel-list ${styles.lotList}`}>
     <li><span>01</span>Utilities: power, water, sewer or septic and well options on the parcel</li>
     <li><span>02</span>Septic and well feasibility when the lot is not on municipal service</li>

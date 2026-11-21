@@ -65,6 +65,44 @@ Wording (this is advertising, accuracy matters):
   and stated-minutes rules, and still enforces every reply-time, bonded, one
   contract or invoice and financing rule.
 
+## Published prices come from the instant estimator (owner, 21 November 2026)
+
+Owner: "We should always base everything off of the engine as long as you're
+getting the actual numbers from the engine/cost book. I do not want to mislead
+people." Every new home, addition, ADU and garage or shop price on a public
+page (service and city pages, guides, posts, FAQs and their FAQPage data, the
+homepage FAQ, GBP copy, the budget worksheet) is the P5 instant estimator's
+preliminary customer range for stated inputs.
+
+* `scripts/pricing/p5-published-figures.mts` (`npm run pricing:p5-figures`,
+  needs p5-home-co beside this repository or `P5_HOME_CO_DIR`) runs
+  `priceEstimate()` then `customerEstimate()` with brand `construction`, the
+  seed cost book, every finish tier and only answers a visitor can give
+  (`flows.ts`; plans `none`, the default, unless a case says complete plans),
+  and writes `shared/content/p5PublishedFigures.json` with the inputs, the
+  rules version, each range, per square foot of living space, and the notes
+  under the range. The site never imports p5-home-co; the JSON is committed.
+* Copy states the inputs ("a 2,400 square foot home with an attached 2-car
+  garage"), the finish, "preliminary", "instant estimate" and November 2026,
+  and says what the range includes in the estimator's own words: design,
+  engineered plans and permit fees included, the land excluded; site work
+  beyond a typical lot and utility connection fees not yet determined. Use the
+  full band; never narrow it.
+* The estimator has no semi-custom, build-on-your-lot or high-performance
+  option: those pages quote the new home figure for a stated size and say so.
+  Design and engineering are quoted as the difference between no plans and
+  complete plans at a stated size.
+* No figure for what no engine prices: site work, wells and septic, lot
+  evaluations, design-only work, foothills premiums. Keep the topic and point
+  to the lot evaluation or the request form.
+* Shop homes keep this site's line-item engine figures (resolveQuotedRange,
+  held by `scripts/verify-new-construction.ts`); city permit fees and
+  valuation brackets are third-party figures. Both are on the test's
+  allowlist; a home, addition or ADU price never is.
+* Guard: `tests/p5-published-figures.test.ts` (`npm run
+  verify:published-prices`, in prebuild). When the cost book changes, re-run
+  the script and fix the copy until the test passes.
+
 ## One team email per request (owner decision, 17 November 2026)
 
 A request form submission used to put two emails in the shared family inbox:
