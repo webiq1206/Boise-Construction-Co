@@ -1,14 +1,9 @@
 /**
- * The 28 redirected city URLs, added to the IndexNow manifest.
- *
- * scripts/prepare-indexnow.mjs writes public/indexnow-deploy.json at build
- * time, and scripts/submit-indexnow.mjs posts that file after a deploy and
- * logs `[IndexNow] sha=<sha> submitted=<n> status=<http>`. This step adds the
- * redirect sources and their parent-service targets to that same file, so the
- * post-deploy submit includes them. It never calls api.indexnow.org.
+ * The 28 redirected city URLs for the post-deploy IndexNow submit.
+ * scripts/submit-indexnow-redirects.mjs adds these to the manifest and posts
+ * them when the server starts. Nothing here calls api.indexnow.org, and the
+ * build does not load this file.
  */
-const { existsSync, mkdirSync, readFileSync, writeFileSync } = require('node:fs');
-const path = require('node:path');
 const { CITY_SERVICE_MERGES } = require('../shared/cityServiceRedirects');
 
 const HOST = 'https://boiseconstruction.co';
@@ -39,24 +34,7 @@ function addRedirectsToIndexNowManifest(manifest) {
   return { sha: (manifest && manifest.sha) || 'unknown', urls };
 }
 
-function applyIndexNowRedirects(root) {
-  const target = path.join(root, 'public', 'indexnow-deploy.json');
-  let current = { sha: 'unknown', urls: [] };
-  if (existsSync(target)) {
-    try {
-      current = JSON.parse(readFileSync(target, 'utf8'));
-    } catch {
-      current = { sha: 'unknown', urls: [] };
-    }
-  }
-  const next = addRedirectsToIndexNowManifest(current);
-  mkdirSync(path.dirname(target), { recursive: true });
-  writeFileSync(target, `${JSON.stringify(next, null, 2)}\n`);
-  return next;
-}
-
 module.exports = {
   redirectIndexNowUrls,
   addRedirectsToIndexNowManifest,
-  applyIndexNowRedirects,
 };

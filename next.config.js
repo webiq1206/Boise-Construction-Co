@@ -6,11 +6,6 @@ const {
   SERVICE_SLUG_REDIRECTS,
 } = require('./shared/content/contentRedirects');
 const { CITY_SERVICE_MERGES } = require('./shared/cityServiceRedirects');
-// After prepare-indexnow.mjs writes the deploy manifest, add the 28 redirected
-// URLs to that same file. The post-deploy submit then pings them.
-if (process.env.NEXT_PHASE === 'phase-production-build') {
-  require('./scripts/indexnow-redirects').applyIndexNowRedirects(__dirname);
-}
 
 process.env.WS_NO_BUFFER_UTIL = '1';
 process.env.WS_NO_UTF_8_VALIDATE = '1';
