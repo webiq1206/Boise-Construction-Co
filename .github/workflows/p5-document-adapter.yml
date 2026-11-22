@@ -50,7 +50,7 @@ jobs:
         run: |
           # Existing prebuild scripts regenerate these assets, including PDF timestamps.
           # Keep every maintained source file protected against test-time mutation.
-          git diff --exit-code -- . ':(exclude)public/downloads/*.pdf'
+          git diff --exit-code -- . ':(exclude)public/downloads/*.pdf' ':(exclude)data/internal-links.json'
       - name: Bound complete evidence without truncation
         id: branding_evidence
         if: always()

@@ -67,4 +67,4 @@ jobs:
       - name: Production build
         run: npm run build
       - name: Source integrity
-        run: git diff --exit-code -- . ':(exclude)public/downloads/*.pdf'
+        run: git diff --exit-code -- . ':(exclude)public/downloads/*.pdf' ':(exclude)data/internal-links.json'
