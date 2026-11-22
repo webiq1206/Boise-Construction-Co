@@ -189,7 +189,11 @@ const nextConfig = {
       // A city whose new page 301s must land on the parent in one hop.
       for (const row of CITY_SERVICE_MERGES) {
         if (row.service !== newSlug) continue;
-        redirects.push(...r(`/services/${oldSlug}/${row.city}`, row.destination));
+        const source = `/services/${oldSlug}/${row.city}`;
+        redirects.push(
+          { source, destination: row.destination, statusCode: 301 },
+          { source: source + '/', destination: row.destination, statusCode: 301 },
+        );
       }
       redirects.push({
         source: `/services/${oldSlug}/:city`,
@@ -200,7 +204,10 @@ const nextConfig = {
 
     // The 28 non-ADU city pages. ADU city URLs are not in CITY_SERVICE_MERGES.
     for (const row of CITY_SERVICE_MERGES) {
-      redirects.push(...r(row.source, row.destination));
+      redirects.push(
+        { source: row.source, destination: row.destination, statusCode: 301 },
+        { source: row.source + '/', destination: row.destination, statusCode: 301 },
+      );
     }
 
     return redirects;

@@ -14,17 +14,21 @@ test('the 28 non-ADU city pages 301 to the parent service in one hop', async () 
   const redirects = await nextConfig.redirects();
   for (const row of CITY_SERVICE_MERGES) {
     assert.equal(row.source.includes('/adu/'), false, row.source);
-    const rule = redirects.find((entry: { source: string }) => entry.source === row.source);
-    assert.ok(rule, row.source);
-    assert.equal(rule.destination, row.destination);
-    assert.equal(rule.permanent, true);
-    assert.equal(rule.destination.includes('/adu'), false);
+    for (const source of [row.source, row.source + '/']) {
+      const rule = redirects.find((entry: { source: string }) => entry.source === source);
+      assert.ok(rule, source);
+      assert.equal(rule.destination, row.destination);
+      assert.equal(rule.statusCode, 301);
+      assert.equal(Object.hasOwn(rule, 'permanent'), false);
+      assert.equal(rule.destination.includes('/adu'), false);
+    }
   }
   assert.equal(redirects.some((entry: { source: string }) => entry.source === '/services/adu/boise'), false);
   assert.equal(redirects.some((entry: { source: string }) => entry.source === '/services/adu/meridian'), false);
   const legacy = redirects.find((entry: { source: string }) => entry.source === '/services/kitchen-remodel/boise');
   assert.equal(legacy?.destination, '/services/custom-home-builder');
-  assert.equal(legacy?.permanent, true);
+  assert.equal(legacy?.statusCode, 301);
+  assert.equal(legacy ? Object.hasOwn(legacy, 'permanent') : false, false);
   const aduLegacy = redirects.find((entry: { source: string }) => entry.source === '/services/adu-builder/:city');
   assert.equal(aduLegacy?.destination, '/services/adu/:city');
 });
