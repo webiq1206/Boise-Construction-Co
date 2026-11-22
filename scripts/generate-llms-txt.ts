@@ -85,7 +85,7 @@ function buildShort(): string {
   lines.push(
     `- [P5 Home Co](https://p5homeco.com): the parent company. ` +
       `[Facebook](${P5_SOCIAL.facebook}), [Instagram](${P5_SOCIAL.instagram}), ` +
-      `[Google Business Profile](${P5_SOCIAL.maps}), [BBB](${P5_SOCIAL.bbb}).`,
+      `[Google Business Profile](${P5_SOCIAL.maps}).`,
   );
   lines.push(`- [Boise Remodeling Co](https://boiseremodeling.co): remodels inside an existing home, including garage, basement and attached ADU conversions.`);
   lines.push(`- [Boise Cabinet Co](https://boisecabinet.co): cabinets.`);
@@ -161,7 +161,7 @@ function buildFull(): string {
     '',
   );
   lines.push('- Business type: Residential design-build home builder (new construction)');
-  lines.push(`- Parent company profiles: ${P5_SOCIAL.facebook}, ${P5_SOCIAL.instagram}, ${P5_SOCIAL.maps}, BBB ${P5_SOCIAL.bbb}`);
+  lines.push(`- Parent company profiles: ${P5_SOCIAL.facebook}, ${P5_SOCIAL.instagram}, ${P5_SOCIAL.maps}`);
   if (FOUNDING.foundedLine) lines.push(`- ${FOUNDING.foundedLine}`);
   lines.push('- Service model: One accountable team for design, permits, and construction');
   lines.push(`- Contact: ${url('/contact')}`);

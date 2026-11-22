@@ -63,7 +63,7 @@ export const P5_PARENT_ORGANIZATION = {
   url: P5_ORIGIN,
   // Parent profiles only. This brand's own sameAs stays empty of them.
   // Link only: no rating, grade, or accreditation claim.
-  sameAs: [P5_SOCIAL.facebook, P5_SOCIAL.instagram, P5_SOCIAL.google, P5_SOCIAL.maps, P5_SOCIAL.bbb],
+  sameAs: [P5_SOCIAL.facebook, P5_SOCIAL.instagram, P5_SOCIAL.google, P5_SOCIAL.maps],
 } as const;
 
 /**

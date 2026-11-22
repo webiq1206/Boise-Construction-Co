@@ -27,7 +27,6 @@ const P5_FACEBOOK = 'https://www.facebook.com/p5homeco';
 const P5_INSTAGRAM = 'https://www.instagram.com/p5_home_co';
 const P5_MAPS = 'https://maps.google.com/?cid=11869148461693849141';
 const P5_GOOGLE = 'https://www.google.com/search?kgmid=/g/11ntl1t7dc';
-const P5_BBB = 'https://www.bbb.org/us/id/meridian/profile/general-contractor/p5-home-co-llc-1296-1000203624';
 const RETIRED_FACEBOOK = 'profile.php?id=61592885025074';
 
 test('the owner Facebook page and Google profile describe P5 Home Co, not this brand', () => {
@@ -35,15 +34,12 @@ test('the owner Facebook page and Google profile describe P5 Home Co, not this b
   assert.equal(P5_SOCIAL.google, P5_GOOGLE);
   // Owner decision A (1 November 2026): the one Google Business Profile is
   // P5 Home Co's, so it joins the Facebook page on the parent node only.
-  assert.equal(P5_SOCIAL.bbb, P5_BBB);
-  assert.deepEqual([...P5_PARENT_ORGANIZATION.sameAs], [P5_FACEBOOK, P5_INSTAGRAM, P5_GOOGLE, P5_MAPS, P5_BBB]);
-  assert.doesNotMatch(JSON.stringify(P5_PARENT_ORGANIZATION), /rating|accreditation|grade/i);
+  assert.deepEqual([...P5_PARENT_ORGANIZATION.sameAs], [P5_FACEBOOK, P5_INSTAGRAM, P5_GOOGLE, P5_MAPS]);
   assert.equal(BUSINESS_INFO.sameAs.includes(P5_MAPS), false);
   assert.equal(GBP_SOCIAL.facebook, undefined);
   assert.equal(BUSINESS_INFO.sameAs.includes(P5_FACEBOOK), false);
   assert.equal(BUSINESS_INFO.sameAs.includes(P5_GOOGLE), false);
-  assert.equal(BUSINESS_INFO.sameAs.includes(P5_BBB), false);
-  for (const url of BUSINESS_INFO.sameAs) assert.doesNotMatch(url, /facebook\.com|kgmid|bbb\.org/);
+  for (const url of BUSINESS_INFO.sameAs) assert.doesNotMatch(url, /facebook\.com|kgmid/);
 });
 
 test('the retired Facebook profile is gone and the footer labels the parent page', () => {

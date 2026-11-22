@@ -7,7 +7,6 @@ import { SITE_CONFIG } from '../shared/siteConfig.ts';
 
 const PARENT_NAP =
   'P5 Home Co, Meridian, ID 83646 (service-area business, no public street). Phone (208) 477-1169. Web https://p5homeco.com.';
-const BBB = 'https://www.bbb.org/us/id/meridian/profile/general-contractor/p5-home-co-llc-1296-1000203624';
 const ADU_SHORT =
   '- [ADUs & Guest Houses](https://boiseconstruction.co/services/adu): New detached accessory dwellings and guest houses on the lot you already own, planned around setbacks, utilities, and how you will use the space.';
 const ADU_FULL =
@@ -24,12 +23,12 @@ const LEGAL_FILES = [
   'shared/content/areaCopy.ts',
 ];
 
-test('llms files carry the shared NAP, BBB, nine cities, and the unchanged ADU lines', () => {
+test('llms files carry the shared NAP, nine cities, and the unchanged ADU lines', () => {
   for (const name of ['public/llms.txt', 'public/llms-full.txt']) {
     const text = readFileSync(name, 'utf8');
     assert.ok(text.includes(PARENT_NAP), name);
     assert.ok(text.includes('Boise Construction Co: https://boiseconstruction.co.'), name);
-    assert.ok(text.includes(BBB), name);
+    assert.equal(text.includes('bbb.org'), false, name);
     assert.match(text, /Serving Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, Middleton, and Garden City/);
     assert.match(text, /Last updated: 2026-11-21/);
     assert.equal(text.includes('/services/general-contractor'), false, name);
@@ -38,8 +37,6 @@ test('llms files carry the shared NAP, BBB, nine cities, and the unchanged ADU l
   }
   assert.ok(readFileSync('public/llms.txt', 'utf8').includes(ADU_SHORT));
   assert.ok(readFileSync('public/llms-full.txt', 'utf8').includes(ADU_FULL));
-  assert.ok(readFileSync('public/llms.txt', 'utf8').includes(`[BBB](${BBB})`));
-  assert.ok(readFileSync('public/llms-full.txt', 'utf8').includes(`BBB ${BBB}`));
 });
 
 test('schema, registration, FAQs and terms use P5 Home Co LLC, and the brand email stays', () => {

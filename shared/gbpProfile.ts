@@ -114,8 +114,6 @@ export const P5_SOCIAL = {
   google: 'https://www.google.com/search?kgmid=/g/11ntl1t7dc',
   // The same profile on Google Maps (cid and place id are one listing).
   maps: 'https://maps.google.com/?cid=11869148461693849141',
-  // Parent profile only. Link, with no rating, grade, or accreditation claim.
-  bbb: 'https://www.bbb.org/us/id/meridian/profile/general-contractor/p5-home-co-llc-1296-1000203624',
 } as const;
 
 export const GBP_ATTRIBUTES = {
