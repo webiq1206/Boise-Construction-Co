@@ -32,7 +32,7 @@ test('a published deploy submits once per SHA', () => {
   assert.equal(formatLog('abc123', 3, 202), '[IndexNow] sha=abc123 submitted=3 status=202');
 });
 
-test('the build manifest lists changed URLs plus redirect sources and targets, not ADU', () => {
+test('the build manifest lists changed URLs and skips ADU paths', () => {
   assert.deepEqual(pathsForFile('shared/content/wave2/adu-cost-boise.ts'), []);
   const built = buildManifest('def456', [
     'shared/content/wave2/adu-cost-boise.ts',
@@ -43,7 +43,5 @@ test('the build manifest lists changed URLs plus redirect sources and targets, n
   assert.equal(built.urls.includes('https://boiseconstruction.co/blog/adu-cost-boise'), false);
   assert.equal(built.urls.includes('https://boiseconstruction.co/services/adu/boise'), false);
   assert.equal(built.urls.includes('https://boiseconstruction.co/guides/choose-home-builder-boise'), true);
-  assert.equal(built.urls.includes('https://boiseconstruction.co/services/custom-home-builder/boise'), true);
-  assert.equal(built.urls.includes('https://boiseconstruction.co/services/custom-home-builder'), true);
-  assert.equal(built.urls.filter((url) => url.endsWith('/services/custom-home-builder/boise')).length, 1);
+  assert.equal(built.urls.includes('https://boiseconstruction.co/'), true);
 });

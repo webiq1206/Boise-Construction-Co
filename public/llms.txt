@@ -21,7 +21,7 @@ Design-build means one accountable team handles architectural design, engineerin
 - [Lot Evaluation & Feasibility](https://boiseconstruction.co/services/lot-evaluation): Soils, utilities, access, setbacks, and slope reviewed before you commit to a parcel.
 - [Shop Homes & Barndominiums](https://boiseconstruction.co/services/shop-homes-barndominiums): Post-frame and steel-framed homes that pair finished living space with real working shop square footage.
 - [Energy-Efficient Homes](https://boiseconstruction.co/services/energy-efficient-homes): High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.
-- [All Services](https://boiseconstruction.co/services) and [Service Areas](https://boiseconstruction.co/areas).
+- [All Services](https://boiseconstruction.co/services): plus city pages at /services/{service}/{city} and [Service Areas](https://boiseconstruction.co/areas).
 
 ## Family companies
 

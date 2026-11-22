@@ -7,11 +7,7 @@
 import { execSync } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
-
-const require = createRequire(import.meta.url);
-const { CITY_SERVICE_MERGES } = require('../shared/cityServiceRedirects.js');
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOST = 'https://boiseconstruction.co';
@@ -46,10 +42,6 @@ export function buildManifest(sha, files) {
   const paths = new Set(['/']);
   for (const file of files) {
     for (const route of pathsForFile(file)) paths.add(route);
-  }
-  for (const row of CITY_SERVICE_MERGES) {
-    paths.add(row.source);
-    paths.add(row.destination);
   }
   const urls = [...paths].filter((route) => !route.includes('/adu')).map((route) => `${HOST}${route}`);
   return { sha: sha || 'unknown', urls };

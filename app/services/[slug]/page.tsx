@@ -139,18 +139,12 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
       heading: 'Structural home additions in Ada County and Canyon County',
       paragraphs: [
         `We plan structural home additions in ${SERVICE_AREA_LINE}. Local permit paths and the details of an existing home vary, so every project begins with the home itself.`,
-        indexableCities.length
-          ? 'Choose a city below for local home addition guidance, or schedule an in-home planning conversation to talk through the space you need.'
-          : 'Schedule an in-home planning conversation to talk through the space you need.',
+        'Choose a city below for local home addition guidance, or schedule an in-home planning conversation to talk through the space you need.',
       ],
-      ...(indexableCities.length
-        ? {
-            links: indexableCities.map((c) => ({
-              label: `Structural home additions in ${c.name}`,
-              href: `/services/${service.slug}/${c.slug}`,
-            })),
-          }
-        : {}),
+      links: indexableCities.map((c) => ({
+        label: `Structural home additions in ${c.name}`,
+        href: `/services/${service.slug}/${c.slug}`,
+      })),
       figure: longFormFigure,
     },
     {
@@ -168,12 +162,8 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
     {
       heading: `${cityPageName} in Ada County and Canyon County`,
       paragraphs: [
-        indexableCities.length
-          ? `We provide ${serviceLC} services in ${SERVICE_AREA_LINE}, with local pages for the cities listed below. Lot availability, permit paths, impact fees, and HOA design review differ between Ada County and Canyon County, so each city page covers the details that matter where you plan to build.`
-          : `We provide ${serviceLC} services in ${SERVICE_AREA_LINE}. Lot availability, permit paths, impact fees, and HOA design review differ between Ada County and Canyon County.`,
-        indexableCities.length
-          ? `Choose a city below to see local ${serviceLC} guidance, or schedule a free planning consultation to discuss your build directly.`
-          : 'Schedule a free planning consultation to discuss your build directly.',
+        `We provide ${serviceLC} services in ${SERVICE_AREA_LINE}, with local pages for the cities listed below. Lot availability, permit paths, impact fees, and HOA design review differ between Ada County and Canyon County, so each city page covers the details that matter where you plan to build.`,
+        `Choose a city below to see local ${serviceLC} guidance, or schedule a free planning consultation to discuss your build directly.`,
         ...(service.slug === 'custom-home-builder'
           ? [
               'Middleton (Canyon County) has its own city vs county permit path - see the area page.',
@@ -188,14 +178,10 @@ export default async function ServicePage(props: { params: Promise<{ slug: strin
               [{ phrase: 'area page', href: '/areas/middleton' }],
             ]
           : undefined,
-      ...(indexableCities.length
-        ? {
-            links: indexableCities.map((c) => ({
-              label: `${cityPageName} in ${c.name}`,
-              href: `/services/${service.slug}/${c.slug}`,
-            })),
-          }
-        : {}),
+      links: indexableCities.map((c) => ({
+        label: `${cityPageName} in ${c.name}`,
+        href: `/services/${service.slug}/${c.slug}`,
+      })),
       figure: longFormFigure,
     },
     {

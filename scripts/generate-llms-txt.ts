@@ -77,7 +77,7 @@ function buildShort(): string {
     lines.push(`- [${s.name}](${url(`/services/${s.slug}`)}): ${s.shortDescription}`);
   }
   lines.push(
-    `- [All Services](${url('/services')}) and [Service Areas](${url('/areas')}).`,
+    `- [All Services](${url('/services')}): plus city pages at /services/{service}/{city} and [Service Areas](${url('/areas')}).`,
     '',
   );
 
@@ -186,7 +186,8 @@ function buildFull(): string {
   }
   lines.push(
     '',
-    `Town pages are at /areas/{city-slug} for ${CITIES.map((c) => c.slug).join(', ')}.`,
+    `Each service has a dedicated page per city at /services/{service-slug}/{city-slug}. ` +
+      `Town pages are at /areas/{city-slug} for ${CITIES.map((c) => c.slug).join(', ')}.`,
     '',
   );
 
