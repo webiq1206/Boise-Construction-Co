@@ -978,11 +978,11 @@
           "score": 999
         },
         {
-          "url": "/guides/treasure-valley-home-building-guide",
-          "anchor": "Treasure Valley home building guide",
-          "title": "Treasure Valley home building guide",
+          "url": "/guides/harris-ranch-home-building-guide",
+          "anchor": "Building in Harris Ranch",
+          "title": "Building in Harris Ranch",
           "type": "guide",
-          "score": 0.371
+          "score": 0.358
         }
       ]
     },
@@ -1196,7 +1196,7 @@
           "anchor": "Treasure Valley home building guide",
           "title": "Treasure Valley home building guide",
           "type": "guide",
-          "score": 0.247
+          "score": 0.263
         }
       ]
     },
@@ -1449,11 +1449,11 @@
           "score": 999
         },
         {
-          "url": "/guides/harris-ranch-home-building-guide",
-          "anchor": "Building in Harris Ranch",
-          "title": "Building in Harris Ranch",
+          "url": "/guides/hidden-springs-home-building-guide",
+          "anchor": "Building in Hidden Springs",
+          "title": "Building in Hidden Springs",
           "type": "guide",
-          "score": 0.301
+          "score": 0.299
         }
       ]
     },
@@ -1603,7 +1603,7 @@
           "anchor": "Treasure Valley home building guide",
           "title": "Treasure Valley home building guide",
           "type": "guide",
-          "score": 0.288
+          "score": 0.328
         }
       ]
     },
@@ -1656,11 +1656,11 @@
           "score": 999
         },
         {
-          "url": "/guides/hidden-springs-home-building-guide",
-          "anchor": "Building in Hidden Springs",
-          "title": "Building in Hidden Springs",
+          "url": "/guides/kuna-home-building-guide",
+          "anchor": "Building a new home in Kuna, Idaho",
+          "title": "Building a new home in Kuna, Idaho",
           "type": "guide",
-          "score": 0.331
+          "score": 0.305
         }
       ]
     },
@@ -1756,11 +1756,11 @@
           "score": 999
         },
         {
-          "url": "/guides/kuna-home-building-guide",
-          "anchor": "Building a new home in Kuna, Idaho",
-          "title": "Building a new home in Kuna, Idaho",
+          "url": "/guides/boise-home-building-guide",
+          "anchor": "Building a new home in Boise, Idaho",
+          "title": "Building a new home in Boise, Idaho",
           "type": "guide",
-          "score": 0.323
+          "score": 0.315
         }
       ]
     },
@@ -8758,7 +8758,7 @@
           "anchor": "Building a new home in Boise, Idaho",
           "title": "Building a new home in Boise, Idaho",
           "type": "guide",
-          "score": 1.097
+          "score": 1.057
         },
         {
           "url": "/blog/adu-cost-boise",
@@ -8822,7 +8822,7 @@
           "anchor": "Building a new home in Boise, Idaho",
           "title": "Building a new home in Boise, Idaho",
           "type": "guide",
-          "score": 1.015
+          "score": 0.975
         },
         {
           "url": "/blog/boise-building-permit-guide",
@@ -9220,12 +9220,12 @@
           "anchor": "How long does it take to build a house in Boise?",
           "title": "How long does it take to build a house in Boise?",
           "type": "blog",
-          "score": -0.069
+          "score": -0.1
         },
         {
-          "url": "/blog/home-builder-red-flags",
-          "anchor": "Home builder red flags",
-          "title": "Home builder red flags",
+          "url": "/blog/what-drives-home-building-costs-boise",
+          "anchor": "What actually drives home building costs in Boise",
+          "title": "What actually drives home building costs in Boise",
           "type": "blog",
           "score": -0.105
         },
@@ -9422,9 +9422,9 @@
           "score": -0.26
         },
         {
-          "url": "/blog/what-drives-home-building-costs-boise",
-          "anchor": "What actually drives home building costs in Boise",
-          "title": "What actually drives home building costs in Boise",
+          "url": "/blog/home-builder-red-flags",
+          "anchor": "Home builder red flags",
+          "title": "Home builder red flags",
           "type": "blog",
           "score": -0.267
         }
@@ -9664,11 +9664,11 @@
           "score": -0.123
         },
         {
-          "url": "/guides/boise-home-building-guide",
-          "anchor": "Building a new home in Boise, Idaho",
-          "title": "Building a new home in Boise, Idaho",
+          "url": "/guides/caldwell-home-building-guide",
+          "anchor": "Building a new home in Caldwell, Idaho",
+          "title": "Building a new home in Caldwell, Idaho",
           "type": "guide",
-          "score": -0.126
+          "score": -0.135
         },
         {
           "url": "/blog/multigenerational-home-design",
@@ -9714,13 +9714,6 @@
           "score": -0.122
         },
         {
-          "url": "/guides/caldwell-home-building-guide",
-          "anchor": "Building a new home in Caldwell, Idaho",
-          "title": "Building a new home in Caldwell, Idaho",
-          "type": "guide",
-          "score": -0.2
-        },
-        {
           "url": "/guides/eagle-home-building-guide",
           "anchor": "Building a new home in Eagle, Idaho",
           "title": "Building a new home in Eagle, Idaho",
@@ -9731,6 +9724,13 @@
           "url": "/guides/harris-ranch-home-building-guide",
           "anchor": "Building in Harris Ranch",
           "title": "Building in Harris Ranch",
+          "type": "guide",
+          "score": -0.2
+        },
+        {
+          "url": "/guides/hidden-springs-home-building-guide",
+          "anchor": "Building in Hidden Springs",
+          "title": "Building in Hidden Springs",
           "type": "guide",
           "score": -0.2
         },
@@ -9785,18 +9785,18 @@
           "score": 1.389
         },
         {
-          "url": "/guides/hidden-springs-home-building-guide",
-          "anchor": "Building in Hidden Springs",
-          "title": "Building in Hidden Springs",
-          "type": "guide",
-          "score": -0.166
-        },
-        {
           "url": "/guides/nampa-home-building-guide",
           "anchor": "Building a new home in Nampa, Idaho",
           "title": "Building a new home in Nampa, Idaho",
           "type": "guide",
           "score": -0.166
+        },
+        {
+          "url": "/guides/eagle-foothills-home-building-guide",
+          "anchor": "Building in the Eagle Foothills",
+          "title": "Building in the Eagle Foothills",
+          "type": "guide",
+          "score": -0.2
         },
         {
           "url": "/blog/production-vs-custom-home-builder",
@@ -9856,9 +9856,9 @@
           "score": -0.169
         },
         {
-          "url": "/guides/eagle-foothills-home-building-guide",
-          "anchor": "Building in the Eagle Foothills",
-          "title": "Building in the Eagle Foothills",
+          "url": "/guides/meridian-home-building-guide",
+          "anchor": "Building a new home in Meridian, Idaho",
+          "title": "Building a new home in Meridian, Idaho",
           "type": "guide",
           "score": -0.2
         },
@@ -9920,9 +9920,9 @@
     "/guides/buying-land-to-build-boise": 18,
     "/guides/choose-home-builder-boise": 12,
     "/guides/custom-home-design-guide": 10,
-    "/guides/treasure-valley-home-building-guide": 16,
+    "/guides/treasure-valley-home-building-guide": 15,
     "/guides/boise-home-building-guide": 9,
-    "/guides/meridian-home-building-guide": 8,
+    "/guides/meridian-home-building-guide": 9,
     "/guides/eagle-home-building-guide": 9,
     "/guides/kuna-home-building-guide": 9,
     "/guides/star-home-building-guide": 9,
