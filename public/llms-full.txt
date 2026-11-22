@@ -37,7 +37,7 @@ Permit paths, impact fees, and inspection sequencing differ between Ada County a
 - Shop Homes & Barndominiums: /services/shop-homes-barndominiums - Post-frame and steel-framed homes that pair finished living space with real working shop square footage.
 - Energy-Efficient Homes: /services/energy-efficient-homes - High-performance envelopes, tight ducts, and low operating costs verified by blower-door testing.
 
-Each service has a dedicated page per city at /services/{service-slug}/{city-slug}. Town pages are at /areas/{city-slug} for boise, meridian, eagle, nampa, kuna, star, middleton, caldwell, garden-city.
+Town pages are at /areas/{city-slug} for boise, meridian, eagle, nampa, kuna, star, middleton, caldwell, garden-city.
 
 ## Authoritative guides (https://boiseconstruction.co/guides)
 

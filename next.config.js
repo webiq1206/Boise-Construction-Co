@@ -5,6 +5,7 @@ const {
   HUB_REDIRECTS,
   SERVICE_SLUG_REDIRECTS,
 } = require('./shared/content/contentRedirects');
+const { CITY_SERVICE_MERGES } = require('./shared/cityServiceRedirects');
 
 process.env.WS_NO_BUFFER_UTIL = '1';
 process.env.WS_NO_UTF_8_VALIDATE = '1';
@@ -185,11 +186,28 @@ const nextConfig = {
     // made the URL worth ranking.
     for (const [oldSlug, newSlug] of Object.entries(SERVICE_SLUG_REDIRECTS)) {
       redirects.push(...r(`/services/${oldSlug}`, `/services/${newSlug}`));
+      // A city whose new page 301s must land on the parent in one hop.
+      for (const row of CITY_SERVICE_MERGES) {
+        if (row.service !== newSlug) continue;
+        const source = `/services/${oldSlug}/${row.city}`;
+        redirects.push(
+          { source, destination: row.destination, statusCode: 301 },
+          { source: source + '/', destination: row.destination, statusCode: 301 },
+        );
+      }
       redirects.push({
         source: `/services/${oldSlug}/:city`,
         destination: `/services/${newSlug}/:city`,
         permanent: true,
       });
+    }
+
+    // The 28 non-ADU city pages. ADU city URLs are not in CITY_SERVICE_MERGES.
+    for (const row of CITY_SERVICE_MERGES) {
+      redirects.push(
+        { source: row.source, destination: row.destination, statusCode: 301 },
+        { source: row.source + '/', destination: row.destination, statusCode: 301 },
+      );
     }
 
     return redirects;

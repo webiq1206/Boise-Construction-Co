@@ -75,7 +75,7 @@ export function getSiteUrlGroups(): SiteUrlGroup[] {
     priority: 0.8,
   }));
 
-  // Noindexed doorway-risk combos are excluded, exactly as in the XML sitemap.
+  // Noindexed combos and the 28 merged city pages are excluded from both sitemaps.
   const cityServices: SiteUrlEntry[] = SERVICES.flatMap((s) =>
     CITIES.filter((c) => !isCityServiceNoindex(s.slug, c.slug)).map((c) => ({
       path: `/services/${s.slug}/${c.slug}`,
@@ -123,7 +123,15 @@ export function getSiteUrlGroups(): SiteUrlGroup[] {
   ];
 }
 
-/** Flat list, for the XML sitemap. */
+/** Flat list. The HTML sitemap uses this, including /sitemap and /instant-estimate. */
 export function getAllSiteUrls(): SiteUrlEntry[] {
   return getSiteUrlGroups().flatMap((g) => g.entries);
+}
+
+/** Dropped from sitemap.xml only. The pages stay, and the HTML sitemap keeps them. */
+export const XML_SITEMAP_OMIT = new Set(['/sitemap', '/instant-estimate']);
+
+/** URLs for sitemap.xml. */
+export function getXmlSitemapEntries(): SiteUrlEntry[] {
+  return getAllSiteUrls().filter((entry) => !XML_SITEMAP_OMIT.has(entry.path));
 }

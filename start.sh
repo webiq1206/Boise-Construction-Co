@@ -5,4 +5,5 @@
 # the deploy failed with "built successfully but failed to start". Submission
 # now runs in the background once the server is already accepting requests.
 (sleep 5 && node scripts/submit-indexnow.mjs) &
+(sleep 1 && node scripts/submit-indexnow-redirects.mjs) &
 HOSTNAME=0.0.0.0 node .next/standalone/server.js
