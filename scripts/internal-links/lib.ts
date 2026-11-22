@@ -484,7 +484,7 @@ export function buildManifest(pages: PageNode[]): Manifest {
       guide: GUIDE_PAGES.length,
       service: PRIORITY_SERVICES.length,
       city: CITIES.length,
-      cityService: PRIORITY_SERVICES.length * CITIES.length,
+      cityService: Object.values(out).filter((page) => page.type === "city-service").length,
     },
     pages: out,
     incoming,

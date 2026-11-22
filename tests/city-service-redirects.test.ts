@@ -3,6 +3,7 @@ import { createRequire } from 'node:module';
 import test from 'node:test';
 import { NOINDEX_CITY_SERVICE } from '../lib/page-metadata.ts';
 import { getAllSiteUrls, getXmlSitemapEntries } from '../lib/siteUrls.ts';
+import { buildManifest, buildPages } from '../scripts/internal-links/lib.ts';
 import { CITY_SERVICE_MERGES } from '../shared/cityServiceRedirects.js';
 
 const require = createRequire(import.meta.url);
@@ -44,4 +45,13 @@ test('merged city URLs leave both sitemaps, and the XML sitemap drops two utilit
   assert.equal(html.has('/sitemap'), true);
   assert.equal(xml.has('/instant-estimate'), false);
   assert.equal(xml.has('/sitemap'), false);
+});
+
+test('the link manifest counts the city pages that remain', () => {
+  const pages = buildPages().filter((page) => page.type === 'city-service');
+  const manifest = buildManifest(buildPages());
+  const listed = Object.values(manifest.pages).filter((page) => page.type === 'city-service');
+  assert.equal(pages.length, 62);
+  assert.equal(manifest.counts.cityService, pages.length);
+  assert.equal(listed.length, pages.length);
 });
