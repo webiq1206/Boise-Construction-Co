@@ -56,6 +56,9 @@ function harness({authorized = true, saved = historical, brandId = "remodeling",
     selectReusableAnalysis: (candidates, input) => candidates.length
       ? {reusable: {analysis: {provider: "fixture", model: "fixture-model", analyzedAt: "2026-09-19T00:00:00Z"}}, input}
       : {reusable: null, reason: "No completed analysis is saved."},
+    // The route restores a saved customer summary before it answers. These
+    // fixtures have no scope provenance, so the saved summary stays exact.
+    restoreSavedCustomerCopy: customer => customer,
     json: value => Response.json(value),
     failed: error => Response.json({error: error.message}, {status: error.status || 500}),
   };
