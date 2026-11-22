@@ -128,7 +128,7 @@ export const firstMeetingWithAHomeBuilder: BlogPostData = {
 <p>If you move forward, design begins and the sequence in <a href="/blog/stages-of-building-a-house">the stages of building a house</a> starts running. If you do not, nothing has been lost on either side. We meet plenty of people who come back a year or two later, having bought a lot in Meridian or Star in the meantime, and that is a perfectly good outcome.</p>
 
 <h2 id="next-steps">Booking the conversation</h2>
-<p><strong>The meeting is most useful when you come with a real number and real questions, and least useful when you come hoping to be told what you want to hear.</strong> We build in Boise, Meridian, Eagle, Kuna, Star, Nampa, Caldwell, and Middleton, and we are happy to meet at our office or on a property anywhere in that footprint.</p>
+<p><strong>The meeting is most useful when you come with a real number and real questions, and least useful when you come hoping to be told what you want to hear.</strong> We build in Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, Middleton, and Garden City, and we are happy to meet at our office or on a property anywhere in that footprint.</p>
 <p>If you want a rough range before you talk to anyone, our <a href="/instant-estimate?project=custom-home">instant estimate</a> will give you a preliminary range. When you are ready for the conversation itself, <a href="/contact">get in touch</a> and we will find an hour that works.</p>
 `.trim(),
 };

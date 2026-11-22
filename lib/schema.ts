@@ -61,9 +61,8 @@ export const P5_PARENT_ORGANIZATION = {
   '@id': P5_ORG_ID,
   name: 'P5 Home Co',
   url: P5_ORIGIN,
-  // The owner's Facebook page and Google Business Profile both belong to
-  // P5 Home Co, so they are asserted here on the parent and kept out of this
-  // brand's own sameAs.
+  // Parent profiles only. This brand's own sameAs stays empty of them.
+  // Link only: no rating, grade, or accreditation claim.
   sameAs: [P5_SOCIAL.facebook, P5_SOCIAL.instagram, P5_SOCIAL.google, P5_SOCIAL.maps],
 } as const;
 

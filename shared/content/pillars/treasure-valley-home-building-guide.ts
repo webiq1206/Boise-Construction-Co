@@ -7,7 +7,7 @@ export const treasureValleyHomeBuildingGuide: GuidePageData = {
   metaDescription:
     'What changes as you build a new home across the Treasure Valley: Ada and Canyon permits, valley floor versus foothills cost, serviced lots and acreage.',
   excerpt:
-    'The parcel sets your budget more than the city name does. Here is what actually changes as you move across the Treasure Valley, from Ada and Canyon County permitting to the foothills, irrigation ditches, and rural site work, with a guide for each of the eight cities we build in.',
+    'The parcel sets your budget more than the city name does. Here is what actually changes as you move across the Treasure Valley, from Ada and Canyon County permitting to the foothills, irrigation ditches, and rural site work, with a guide for eight of the nine cities we build in.',
   hubSlug: 'treasure-valley-locations',
   guideType: 'master',
   author: 'Boise Construction Co',
@@ -24,7 +24,7 @@ export const treasureValleyHomeBuildingGuide: GuidePageData = {
     'What it costs to build a new home in the Treasure Valley depends mostly on the parcel, not the city name. On a flat, serviced valley lot, our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary $502,860 to $1,135,770 at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded, while steep foothills sites cost more because their site conditions are not in that range. Ada and Canyon County permit separately.',
   keyTakeaways: [
     'Four things change as you move across the valley: which county reviews the permit, whether the ground is flat or foothills, whether the lot is serviced or rural, and what irrigation infrastructure crosses it.',
-    'Ada County covers Boise, Meridian, Eagle, Kuna, and Star; Canyon County covers Nampa, Caldwell, and Middleton, on a different portal with a different review cadence.',
+    'Ada County covers Boise, Meridian, Eagle, Kuna, Star, and Garden City; Canyon County covers Nampa, Caldwell, and Middleton, on a different portal with a different review cadence.',
     'Flat valley floor versus foothills is the biggest geographic cost divide here, because the earthwork, retaining and engineered foundations a steep site needs are priced on top of the house.',
     'Site work costs far more on a rural parcel needing a well, septic, and access than on a serviced subdivision lot, and we price it for the parcel.',
     'Irrigation district ditches and laterals cross a great many parcels here, and the district decides what may happen near them, on its own calendar.',
@@ -32,7 +32,7 @@ export const treasureValleyHomeBuildingGuide: GuidePageData = {
     'Every one of the eight cities has its own guide, because the honest answer to what a build costs there depends on which kind of parcel you buy.',
   ],
   linkedServices: ['custom-home-builder', 'semi-custom-homes', 'build-on-your-lot'],
-  linkedCities: ['boise', 'meridian', 'eagle', 'kuna', 'star', 'middleton', 'nampa', 'caldwell'],
+  linkedCities: ['boise', 'meridian', 'eagle', 'kuna', 'star', 'middleton', 'nampa', 'caldwell', 'garden-city'],
   relatedLinks: [
     { url: '/guides/boise-home-building-cost-guide', anchor: 'What it costs to build a home in Boise' },
     { url: '/guides/buying-land-to-build-boise', anchor: 'Buying land to build on in the Treasure Valley' },
@@ -52,7 +52,7 @@ export const treasureValleyHomeBuildingGuide: GuidePageData = {
     {
       question: 'Do Ada County and Canyon County permit new homes differently?',
       answer:
-        'Yes. Boise, Meridian, Eagle, Kuna, and Star route through Ada County, and Nampa, Caldwell, and Middleton route through Canyon County. The two use different portals, different submittal conventions, and different review cadences, and their fee structures are set separately. We handle permits, plan review, engineering, and utility applications in-house for both, so the difference shows up in our schedule rather than in yours.',
+        'Yes. Boise, Meridian, Eagle, Kuna, Star, and Garden City route through Ada County, and Nampa, Caldwell, and Middleton route through Canyon County. The two use different portals, different submittal conventions, and different review cadences, and their fee structures are set separately. We handle permits, plan review, engineering, and utility applications in-house for both, so the difference shows up in our schedule rather than in yours.',
     },
     {
       question: 'How much more does it cost to build in the Boise foothills?',
@@ -92,7 +92,7 @@ export const treasureValleyHomeBuildingGuide: GuidePageData = {
     {
       question: 'Do you build in all eight Treasure Valley cities?',
       answer:
-        'Yes. We build in Boise, Meridian, Eagle, Kuna, Star, Middleton, Nampa, and Caldwell, across Ada and Canyon County, on lots you already own and on lots we help you evaluate before you buy. Each city has its own guide on this site, and each has a service area page with the specific services we offer there.',
+        'Yes. We build in Boise, Meridian, Nampa, Eagle, Kuna, Caldwell, Star, Middleton, and Garden City, across Ada and Canyon County, on lots you already own and on lots we help you evaluate before you buy. Eight of those cities have their own guide on this site, and each city has a service area page.',
     },
   ],
   content: `
@@ -100,7 +100,7 @@ export const treasureValleyHomeBuildingGuide: GuidePageData = {
 <p><strong>Across the Treasure Valley, the parcel decides your budget far more than the city on the mailing address does.</strong> Two houses with identical plans and identical finishes can differ by hundreds of thousands of dollars because one sits on a flat, serviced lot with water and sewer at the property line and the other sits on a steep foothills site with a well, a septic system, and a switchback driveway. Four variables explain most of the difference: which county reviews the permit, whether the ground is valley floor or foothills, whether the lot is serviced or rural, and what irrigation infrastructure crosses it. This guide walks through all four, then hands you off to the guide for the specific city or neighborhood you are looking at. If you want the cost picture first, start with <a href="/guides/boise-home-building-cost-guide">what it costs to build a home in Boise</a>, and if you have not bought the ground yet, read <a href="/guides/buying-land-to-build-boise">buying land to build on in the Treasure Valley</a> before you write an offer.</p>
 
 <h2 id="ada-county-vs-canyon-county">Ada County or Canyon County, and why it matters</h2>
-<p><strong>Boise, Meridian, Eagle, Kuna, and Star permit through Ada County; Nampa, Caldwell, and Middleton permit through Canyon County; the two use different portals and different review cadences.</strong> That is not a trivia point. It means two different submittal systems, two sets of document conventions, two ways of handling a resubmittal, and fee structures that are set separately and change on their own schedules. A drawing package assembled for one is not automatically the package the other expects.</p>
+<p><strong>Boise, Meridian, Eagle, Kuna, Star, and Garden City permit through Ada County; Nampa, Caldwell, and Middleton permit through Canyon County; the two use different portals and different review cadences.</strong> That is not a trivia point. It means two different submittal systems, two sets of document conventions, two ways of handling a resubmittal, and fee structures that are set separately and change on their own schedules. A drawing package assembled for one is not automatically the package the other expects.</p>
 <p>There is a second layer underneath the county question, and it catches people out more often. Being inside city limits is different from being in unincorporated county ground, even when the mailing address says the same town. Inside the city you generally get municipal water and sewer, city zoning and setbacks, and city-level review. Outside it you may be on a well and a septic system with county zoning, and the answer to what you are allowed to build changes with it. Confirm which jurisdiction the parcel number actually falls under before you assume anything about services or setbacks.</p>
 <p>We handle permits, plan review, engineering, and utility applications in-house for both counties, which is deliberate. The difference between the two systems is a scheduling problem for us rather than a homework assignment for you. We do not publish review turnaround times, because they move with workload and any number we printed would be wrong within a season. What we do instead is build realistic review and inspection windows into the master schedule, which is covered in <a href="/guides/boise-home-building-process-guide">the Boise home building process guide</a>.</p>
 

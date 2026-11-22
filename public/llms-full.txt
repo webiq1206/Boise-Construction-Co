@@ -4,6 +4,9 @@
 
 Boise Construction Co is a P5 Home Co company (https://p5homeco.com). Sister companies: Boise Remodeling Co, Boise Cabinet Co and Boise Handyman Co.
 
+P5 Home Co, Meridian, ID 83646 (service-area business, no public street). Phone (208) 477-1169. Web https://p5homeco.com.
+Boise Construction Co: https://boiseconstruction.co.
+
 ## About
 
 Boise Construction Co is a residential design-build home builder serving the Treasure Valley. We build new homes: custom homes drawn from a blank page, semi-custom homes personalized from a proven plan, and build-on-your-lot projects for families who already own land. Design-build means design, engineering, permitting, and construction are delivered by one accountable company, which removes the handoff between an architect and a general contractor and keeps the drawings and the budget on the same schedule. Every project includes a written line-item scope before construction, named allowances for selections, and a one-year workmanship warranty from documented Final Completion on work performed by our own team. Subcontractor work is covered by that subcontractor's own warranty, and at the end of every project we provide a complete list of the subcontractors who worked on it, with their contact information.
@@ -110,4 +113,4 @@ Neighborhood guides:
 
 RE-10 and home inspection repair lists for Boise and the Treasure Valley are handled by Boise Handyman Co, a sister company. An RE-10 is the Idaho inspection response form: after a home inspection the buyer requests specific repairs before closing. Details: https://boisehandyman.co/re-10-repairs-boise
 
-Last updated: 2026-11-20. Full sitemap: https://boiseconstruction.co/sitemap.xml
+Last updated: 2026-11-21. Full sitemap: https://boiseconstruction.co/sitemap.xml

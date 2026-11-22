@@ -24,7 +24,11 @@ import { P5_SOCIAL } from '../shared/gbpProfile';
 
 const BASE = SITE_CONFIG.siteUrl.replace(/\/$/, '');
 const url = (p: string) => `${BASE}${p}`;
-const today = new Date().toISOString().slice(0, 10);
+/** This refresh is dated 21 November 2026. verify:llms ignores the date line. */
+const today = '2026-11-21';
+const PARENT_NAP =
+  'P5 Home Co, Meridian, ID 83646 (service-area business, no public street). Phone (208) 477-1169. Web https://p5homeco.com.';
+const BRAND_SITE_LINE = 'Boise Construction Co: https://boiseconstruction.co.';
 
 const adaCities = SERVICE_AREA_CITIES.filter((c) => c.county === 'ada').map((c) => c.name);
 const canyonCities = SERVICE_AREA_CITIES.filter((c) => c.county === 'canyon').map((c) => c.name);
@@ -64,6 +68,8 @@ function buildShort(): string {
   lines.push(`# ${SITE_CONFIG.name}`, '');
   lines.push(`> ${SUMMARY}`, '');
   lines.push(FAMILY, '');
+  lines.push(PARENT_NAP);
+  lines.push(BRAND_SITE_LINE, '');
   lines.push(POSITIONING, '');
 
   lines.push('## Services', '');
@@ -137,6 +143,8 @@ function buildFull(): string {
   lines.push(`# ${SITE_CONFIG.name} - Full Reference`, '');
   lines.push(`> ${SUMMARY}`, '');
   lines.push(FAMILY, '');
+  lines.push(PARENT_NAP);
+  lines.push(BRAND_SITE_LINE, '');
 
   lines.push('## About', '');
   lines.push(

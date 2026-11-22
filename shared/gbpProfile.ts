@@ -112,8 +112,7 @@ export const P5_SOCIAL = {
   // The one Instagram for every family site (owner, 20 November 2026).
   instagram: 'https://www.instagram.com/p5_home_co',
   google: 'https://www.google.com/search?kgmid=/g/11ntl1t7dc',
-  // The same profile on Google Maps, where its reviews are (place ID
-  // ChIJzxMoavs6P6IRNc6i9aOvt6Q); the URL p5homeco.com uses (SEO audit XS-03).
+  // The same profile on Google Maps (cid and place id are one listing).
   maps: 'https://maps.google.com/?cid=11869148461693849141',
 } as const;
 
