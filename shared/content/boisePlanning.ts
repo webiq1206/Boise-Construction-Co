@@ -25,7 +25,7 @@ export const BOISE_LOT_PLANNING: LandingSection = {
   links: [
     { label: 'City of Boise permit and application records', href: 'https://permits.cityofboise.org/citizenaccess/Default.aspx' },
     { label: 'Lot evaluation and feasibility', href: '/services/lot-evaluation' },
-    { label: 'Custom home building in Boise', href: '/services/custom-home-builder/boise' },
+    { label: 'Custom home building in Boise', href: '/services/custom-home-builder' },
     { label: 'Boise home building guide', href: '/guides/boise-home-building-guide' },
   ],
 };
