@@ -92,7 +92,7 @@ const COPY_FILES = [
   'public/llms-full.txt',
   ...walk('app').filter((f) => !/[\\/](admin|api|subcontractor|portal)[\\/]/.test(f)),
   // P5*.tsx is the shared document estimator's code, not page copy.
-  ...walk('components').filter((f) => !/[\\/](admin|subcontractor|portal)[\\/]/.test(f) && !/[\\/]P5[^\\/]*$/.test(f)),
+  ...walk('components').filter((f) => !/[\\/](admin|subcontractor|portal)[\\/]/.test(f) && !/[\\/]P5[^\\/]*$/.test(f) && !/[\\/]ProjectService[^\\/]*$/.test(f)),
 ].map((f) => f.split(path.sep).join('/'));
 
 /**
