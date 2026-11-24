@@ -231,7 +231,11 @@ export function buildConsultationInternalNotes(input: { estimate?: VerifiedEstim
         `${trade.division}: our cost ${formatUsd(trade.internalCost)}, customer ${formatUsd(trade.customerAmount)}${trade.scopeSummary ? ` (${trade.scopeSummary})` : ""}`,
     );
     const assumptions = admin.assumptions.slice(0, 8).flatMap((assumption) => wrapNote("Assumption", assumption));
-    return fitInternalNotes([...checks, ...totals, ...trades, ...assumptions]);
+    const ownerLines = admin.ownerServices?.lines.map(line =>
+      `${line.sku} ${line.description}: ${line.hours} hours at $120/hour = ${formatUsd(line.amount)}; QBO ${line.qboItemId}`,
+    ) || [];
+    if (admin.ownerServices) ownerLines.push(`Owner labor recovery credited once: ${formatUsd(admin.ownerServices.credit)}`);
+    return fitInternalNotes([...checks, ...totals, ...ownerLines, ...trades, ...assumptions]);
   } catch (error) {
     console.error("[p5-intake] Internal pricing notes skipped:", error instanceof Error ? error.message : error);
     return [];

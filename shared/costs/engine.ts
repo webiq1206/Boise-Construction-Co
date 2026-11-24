@@ -437,7 +437,10 @@ export interface EstimateWarning {
   message: string;
 }
 
+import { calculateOwnerServices, ownerServiceBase, isOwnerServiceCode } from "../ownerServices";
+
 export interface InternalEstimate {
+  ownerServices?: ReturnType<typeof import("../ownerServices").calculateOwnerServices>;
   lines: CostLine[];
   trades: TradeRollup[];
   directCost: number;
@@ -712,15 +715,24 @@ export function buildInternalEstimate(
   const directCost = lines.reduce((s, l) => s + l.cost, 0);
   const contingency = directCost * CONTINGENCY_RATE;
   const totalInternalCost = directCost + contingency;
+  const ownerServices = calculateOwnerServices(ownerServiceBase(lines.map(line => ({
+    code: line.code, amount: line.cost,
+  }))), {
+    overlappingOwnerRecovery: lines.filter(line => isOwnerServiceCode(line.code)).reduce((sum, line) => sum + priceAtMargin(line.cost * (1 + CONTINGENCY_RATE), TARGET_GROSS_MARGIN), 0),
+    // The legacy margin includes the approved salary-inclusive 20% overhead.
+    // Conservatively reallocate that recovery before adding owner labor again.
+    salaryOverheadRecovery: priceAtMargin(totalInternalCost, TARGET_GROSS_MARGIN) * .20,
+  });
 
   return {
+    ownerServices,
     lines,
     trades: rollUpByTrade(lines, dims, TARGET_GROSS_MARGIN),
     directCost,
     contingency,
     totalInternalCost,
     appliedMargin: TARGET_GROSS_MARGIN,
-    customerPrice: priceAtMargin(totalInternalCost, TARGET_GROSS_MARGIN),
+    customerPrice: priceAtMargin(totalInternalCost, TARGET_GROSS_MARGIN) + ownerServices.additionalCustomerAmount,
     assumptions,
     warnings,
   };

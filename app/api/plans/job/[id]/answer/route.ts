@@ -90,7 +90,10 @@ export async function POST(request: NextRequest, props: { params: Promise<{ id: 
   }
 
   const takeoff = refined.result.takeoff;
-  const pricing = priceMillworkTakeoff(takeoff);
+  const pricing = priceMillworkTakeoff(takeoff, {
+    preserveOriginal: Boolean(stored.pricing && !stored.pricing.ownerServices),
+    ...stored.pricing?.ownerServices?.options,
+  });
   const nextQuestion = selectNextQuestion(takeoff.questions, next);
 
   await updateJob(job.id, {

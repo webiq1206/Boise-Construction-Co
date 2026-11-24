@@ -28,6 +28,7 @@
  * the result bid-ready.
  */
 import { installedCost } from "@/shared/costs/lineItemCatalog";
+import { calculateOwnerServices, type OwnerServiceOptions } from "@/shared/ownerServices";
 import { TARGET_GROSS_MARGIN, priceAtMargin } from "@/shared/costs/engine";
 import {
   MILLWORK_CATEGORY_LABELS,
@@ -106,6 +107,7 @@ export interface UnpricedMillworkLine {
 }
 
 export interface MillworkPricing {
+  ownerServices?: ReturnType<typeof calculateOwnerServices>;
   priced: PricedMillworkLine[];
   unpriced: UnpricedMillworkLine[];
   /** Sum of line midpoints. */
@@ -135,7 +137,7 @@ function unitMatches(itemUnit: MillworkUnit | null, cardUnit: MillworkUnit): boo
   return itemUnit === cardUnit;
 }
 
-export function priceMillworkTakeoff(takeoff: MillworkTakeoff): MillworkPricing {
+export function priceMillworkTakeoff(takeoff: MillworkTakeoff, ownerOptions: OwnerServiceOptions = {}): MillworkPricing {
   const priced: PricedMillworkLine[] = [];
   const unpriced: UnpricedMillworkLine[] = [];
 
@@ -250,5 +252,7 @@ export function priceMillworkTakeoff(takeoff: MillworkTakeoff): MillworkPricing 
     takeoff.confidence === "high" &&
     scaledCount === 0;
 
-  return { priced, unpriced, total, totalLow, totalHigh, bidReady, assumptions, warnings };
+  const ownerServices = priced.length ? calculateOwnerServices(priced.reduce((sum, line) => sum + line.unitCost * line.quantity, 0), ownerOptions) : undefined;
+  const ownerAmount = ownerServices?.additionalCustomerAmount ?? 0;
+  return { priced, unpriced, total: total + ownerAmount, totalLow: totalLow + ownerAmount, totalHigh: totalHigh + ownerAmount, ownerServices, bidReady, assumptions, warnings };
 }

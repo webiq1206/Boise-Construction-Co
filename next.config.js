@@ -69,6 +69,13 @@ const nextConfig = {
     ],
   },
   trailingSlash: false,
+  async rewrites() {
+    // Brand-owned response adapters; canonical engine files and hash checks stay intact.
+    return { beforeFiles: [
+      { source: '/api/p5-estimator/submit', destination: '/api/brand-estimator/submit' },
+      { source: '/api/admin/p5-estimators', destination: '/api/brand-estimator/admin' },
+    ] };
+  },
   output: 'standalone',
   webpack: (config) => {
     config.resolve.alias = {

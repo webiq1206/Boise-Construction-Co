@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import { boundedStatement } from "./databaseTimeout.ts";
+import { ownerServiceWriteValues } from "../pricing/ownerDocumentAdapter";
 type Query = (statement:string,values?:unknown[])=>Promise<Record<string,any>[]>;
 type SiteDatabase = NonNullable<typeof import("../db").db>;
 type InjectedPool = {query:(statement:string,values:unknown[])=>Promise<{rows:Record<string,any>[]}>};
@@ -12,6 +13,9 @@ let site: Promise<SiteDatabase|null> | null = null;
 const database = () => (site ??= import("../db").then(module => module.db as SiteDatabase|null));
 /** Uses this site's existing database driver with parameterized values. */
 export async function query(statement: string, values: unknown[] = []): Promise<Record<string, any>[]> {
+  return rawQuery(statement, await ownerServiceWriteValues(statement, values, rawQuery));
+}
+async function rawQuery(statement: string, values: unknown[] = []): Promise<Record<string, any>[]> {
   const injected = injectedPool();
   if (injected) return (await boundedStatement(()=>injected.query(statement,values),statement)).rows;
   const db = await database();

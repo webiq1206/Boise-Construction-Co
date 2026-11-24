@@ -277,10 +277,12 @@ export function buildPlanningRange(
       ? decision.price + priceAtMargin(accessoryCost, decision.appliedMargin)
       : decision.price;
   const step = stepFor(centre);
+  // Final owner-service rates sit outside margin, contingency and uncertainty multipliers.
+  const ownerAmount = estimate.ownerServices?.additionalCustomerAmount ?? 0;
   return {
-    centre,
-    low: roundTo(centre * (1 - band), step),
-    high: roundTo(centre * (1 + band), step),
+    centre: centre + ownerAmount,
+    low: roundTo(centre * (1 - band), step) + ownerAmount,
+    high: roundTo(centre * (1 + band), step) + ownerAmount,
     band,
     appliedMargin: decision.appliedMargin,
     marginTrimmed: decision.trimmed,

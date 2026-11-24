@@ -30,6 +30,10 @@ export async function POST(_request: NextRequest, props: { params: Promise<{ id:
   if (!job) {
     return NextResponse.json({ error: "failed", message: "That review has expired." }, { status: 404 });
   }
+  // Finalization retries read their saved result; they never reprice a historical quote.
+  if (job.status === "complete" && job.result) {
+    return NextResponse.json({ status: "complete", scope: job.scope, result: job.result, duplicate: true });
+  }
 
   const refs = await listPageRefs(job.uploadId);
   const ranges = planChunkRanges(refs.map((r) => r.byteLength));

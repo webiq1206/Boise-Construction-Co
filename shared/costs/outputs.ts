@@ -78,6 +78,9 @@ export function buildLeadView(range: PlanningRange, selections: LeadSelectionRow
 /* ------------------------------------------------------------ admin view */
 
 export interface AdminTradeRow {
+  sku?: string;
+  qboItemId?: string;
+  hours?: number;
   division: string;
   /** e.g. "250 SF, 28 LF" - what drove the quantity. */
   scopeSummary: string;
@@ -88,6 +91,7 @@ export interface AdminTradeRow {
 }
 
 export interface AdminView {
+  ownerServices?: InternalEstimate["ownerServices"];
   trades: AdminTradeRow[];
   directCost: number;
   contingency: number;
@@ -125,11 +129,26 @@ export function buildAdminView(estimate: InternalEstimate, range: PlanningRange)
     customerAmount: t.internalCost * scale * (estimate.totalInternalCost / estimate.directCost),
     children: t.lines,
   }));
+  if (estimate.ownerServices && !estimate.ownerServices.bypass) {
+    const services = estimate.ownerServices;
+    // Range centre already includes the net service charge. Reallocate the gross
+    // amount out of the old aggregate rows, then show the three fixed-rate lines.
+    const oldTotal = trades.reduce((sum, trade) => sum + trade.customerAmount, 0);
+    const factor = oldTotal > 0 ? Math.max(0, oldTotal - services.gross) / oldTotal : 0;
+    for (const trade of trades) trade.customerAmount *= factor;
+    for (const line of services.lines) trades.push({
+      division: line.description, scopeSummary: `${line.hours} hour`, internalCost: 0,
+      customerAmount: line.amount,
+      children: [{ code: line.sku, division: line.description, description: line.description, type: "Labor", uom: "HR", quantity: line.hours, unitCost: 0, cost: 0, assumption: `Final customer rate $120/hour; QuickBooks item ${line.qboItemId}; credited against prior recovery once.` }],
+      sku: line.sku, qboItemId: line.qboItemId, hours: line.hours,
+    });
+  }
 
   const marginPct = Math.round(range.appliedMargin * 1000) / 10;
   const markupPct = Math.round(marginToMarkup(range.appliedMargin) * 1000) / 10;
 
   return {
+    ownerServices: estimate.ownerServices,
     trades,
     directCost: estimate.directCost,
     contingency: estimate.contingency,

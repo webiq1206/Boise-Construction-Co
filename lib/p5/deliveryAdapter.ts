@@ -41,7 +41,21 @@ export function crmTransportCode(error:unknown):string{
  */
 export async function syncCrm(record:any,key:string,options?:{fetch?:typeof fetch;url?:string}){
  const {forwardEstimateToP5}=await import('./p5LeadIntake.ts');
- return forwardEstimateToP5(record,key,{fetch:options?.fetch,url:options?.url,brand:brand.name});
+ const transport=options?.fetch||fetch;
+ const withOwnerItems:typeof fetch=async (url,init)=>{
+   if(record.internal?.ownerServices&&typeof init?.body==="string"){
+     const body=JSON.parse(init.body);
+     if(Array.isArray(body.estimate?.lines)){
+       for(const line of body.estimate.lines){
+         const owner=record.internal.ownerServices.lines.find((item:any)=>item.description===line.title);
+         if(owner)Object.assign(line,{description:`${line.description||owner.description}; SKU ${owner.sku}; QuickBooks item ${owner.qboItemId}`,quantity:owner.hours,unit:"hour"});
+       }
+       init={...init,body:JSON.stringify(body)};
+     }
+   }
+   return transport(url,init);
+ };
+ return forwardEstimateToP5(record,key,{fetch:withOwnerItems,url:options?.url,brand:brand.name});
 }
 /** Synchronous readiness only: the Resend key or the Replit connector identity must be present before an intake notification is attempted. */
 export function emailTransportReady(){return Boolean(process.env.RESEND_API_KEY||(process.env.REPLIT_CONNECTORS_HOSTNAME&&(process.env.REPL_IDENTITY||process.env.WEB_REPL_RENEWAL)));}
