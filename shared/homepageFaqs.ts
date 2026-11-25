@@ -42,7 +42,7 @@ export const HOMEPAGE_FAQS: HomepageFaq[] = [
   },
   {
     q: "How much does it cost to build a house in Boise and the Treasure Valley?",
-    a: "Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Smaller, simpler designs come in lower, while foothills sites, steep grades, and highly detailed interiors cost more. Land, site work beyond a typical lot, and utility connections are separate and vary more between lots than the house itself does, which is why we price them as their own lines rather than folding them into a square-foot number.",
+    a: "Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $758,597 to $944,520 at Essential finish and $993,557 to $1,237,040 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Smaller, simpler designs come in lower, while foothills sites, steep grades, and highly detailed interiors cost more. Land, site work beyond a typical lot, and utility connections are separate and vary more between lots than the house itself does, which is why we price them as their own lines rather than folding them into a square-foot number.",
   },
   {
     q: "How are you different from other home builders in the Treasure Valley?",

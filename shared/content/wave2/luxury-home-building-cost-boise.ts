@@ -5,7 +5,7 @@ export const luxuryHomeBuildingCostBoise: BlogPostData = {
   title: 'What a luxury home costs to build in Boise',
   seoTitle: 'Luxury Home Building Cost in Boise',
   metaDescription:
-    'Luxury homes in Boise: our instant estimate gives a 2,400 sq ft home $1,497,390 to $2,469,340 at Luxury finish. What separates it, and what you notice.',
+    'Luxury homes in Boise: our instant estimate gives a 2,400 sq ft home $1,503,517 to $1,871,930 at Luxury finish. What separates it, and what you notice.',
   excerpt:
     'The gap between a Signature home and a Premium or Luxury one is glazing, roof geometry, millwork, stone, mechanical systems, and site. Some of it shows. Some of it does not.',
   category: 'Home building costs',
@@ -26,9 +26,9 @@ export const luxuryHomeBuildingCostBoise: BlogPostData = {
   ],
   wordCountTarget: 'cluster',
   quickAnswer:
-    'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary $1,024,580 to $1,689,690 at Premium finish and $1,497,390 to $2,469,340 at Luxury finish (November 2026), against $502,860 to $1,135,770 at Essential to Signature finish, with design, engineered plans and permit fees included and the land excluded. The difference is concentrated in glazing, roof and structural geometry, custom millwork, stone and tile, mechanical systems, and the difficulty of the site.',
+    'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary $1,321,797 to $1,645,700 at Premium finish and $1,503,517 to $1,871,930 at Luxury finish (November 2026), against $758,597 to $1,237,040 at Essential to Signature finish, with design, engineered plans and permit fees included and the land excluded. The difference is concentrated in glazing, roof and structural geometry, custom millwork, stone and tile, mechanical systems, and the difficulty of the site.',
   keyTakeaways: [
-    'For a 2,400 square foot home, our instant estimate works out to $426 to $705 per square foot at Premium finish and $623 to $1,029 at Luxury finish, excluding land.',
+    'For a 2,400 square foot home, our instant estimate works out to $551 to $686 per square foot at Premium finish and $627 to $780 at Luxury finish, excluding land.',
     'Glazing and structural geometry usually account for more of the gap than finishes do.',
     'Custom millwork is the most visible luxury spend and one of the largest.',
     'Foothills sites add cost before a single luxury decision is made.',
@@ -46,7 +46,7 @@ export const luxuryHomeBuildingCostBoise: BlogPostData = {
     {
       question: 'How much does a luxury home cost to build in Boise?',
       answer:
-        'For a 2,400 square foot home with an attached 2-car garage, our instant estimate gives a preliminary $1,024,580 to $1,689,690 at Premium finish and $1,497,390 to $2,469,340 at Luxury finish (November 2026), with design, engineered plans and permit fees included and the land excluded, against $502,860 to $1,135,770 at Essential to Signature finish. Foothills sites with steep grade and highly detailed interiors are where those numbers concentrate. Land is separate. There is no ceiling worth quoting, because at the top of the market the specification stops resembling anything standard.',
+        'For a 2,400 square foot home with an attached 2-car garage, our instant estimate gives a preliminary $1,321,797 to $1,645,700 at Premium finish and $1,503,517 to $1,871,930 at Luxury finish (November 2026), with design, engineered plans and permit fees included and the land excluded, against $758,597 to $1,237,040 at Essential to Signature finish. Foothills sites with steep grade and highly detailed interiors are where those numbers concentrate. Land is separate. There is no ceiling worth quoting, because at the top of the market the specification stops resembling anything standard.',
     },
     {
       question: 'What is the difference between a custom home and a luxury home?',
@@ -76,7 +76,7 @@ export const luxuryHomeBuildingCostBoise: BlogPostData = {
   ],
   content: `
 <h2 id="the-number">What a luxury build costs here</h2>
-<p><strong>Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary $1,024,580 to $1,689,690 at Premium finish and $1,497,390 to $2,469,340 at Luxury finish (November 2026), against $502,860 to $1,135,770 at Essential to Signature finish, with design, engineered plans and permit fees included and the land excluded.</strong> Beyond that there is no useful upper figure. Past a certain specification the house stops being a variation on a standard build and becomes a collection of individually engineered decisions, and quoting an average across those would be dishonest. What is worth doing is explaining exactly where the extra money goes, because it is not distributed evenly and it is not mostly in the places people expect. This article sits inside our <a href="/guides/boise-home-building-cost-guide">Boise home building cost guide</a>.</p>
+<p><strong>Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary $1,321,797 to $1,645,700 at Premium finish and $1,503,517 to $1,871,930 at Luxury finish (November 2026), against $758,597 to $1,237,040 at Essential to Signature finish, with design, engineered plans and permit fees included and the land excluded.</strong> Beyond that there is no useful upper figure. Past a certain specification the house stops being a variation on a standard build and becomes a collection of individually engineered decisions, and quoting an average across those would be dishonest. What is worth doing is explaining exactly where the extra money goes, because it is not distributed evenly and it is not mostly in the places people expect. This article sits inside our <a href="/guides/boise-home-building-cost-guide">Boise home building cost guide</a>.</p>
 
 <h2 id="not-a-tier">Luxury is not a tier, it is a set of decisions</h2>
 <p><strong>Nobody builds a "luxury home" as a category; they make forty decisions, and about six of them move the number a long way.</strong> Homeowners often assume the gap between a Signature house and a Premium one is finishes, in the sense of faucets and light fittings and cabinet hardware. Those matter, but they are a smaller share than you would think. The bigger money is structural and geometric, decided during design, invisible on a finish schedule, and impossible to reverse once framing starts. Below are the six that move it most, roughly in order.</p>

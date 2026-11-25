@@ -344,7 +344,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   },
   {
     question: 'How much does it cost to build a house in Boise?',
-    answer: `Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Site work beyond a typical lot is budgeted separately. These are preliminary ranges, not bids.`,
+    answer: `Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $758,597 to $944,520 at Essential finish and $993,557 to $1,237,040 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Site work beyond a typical lot is budgeted separately. These are preliminary ranges, not bids.`,
   },
   {
     question: 'Do you handle permits?',
@@ -373,7 +373,7 @@ export const GBP_QA_SEED: GbpQaEntry[] = [
   },
   {
     question: 'Do you build barndominiums or shop homes?',
-    answer: `Yes - post-frame and steel-framed homes pairing finished living space with working shop square footage, mostly on rural Ada and Canyon County acreage. Our instant estimate has no shop home project, so it prices the halves separately (preliminary, November 2026): a 1,600 sq ft new home with no garage at $316,120 to $717,980 at Essential to Signature finish, land excluded, and a 1,200 sq ft detached garage or shop at $113,770 to $238,450. A shop home is priced from a line-item budget after a lot walkthrough: ${SITE}/services/shop-homes-barndominiums`,
+    answer: `Yes - post-frame and steel-framed homes pairing finished living space with working shop square footage, mostly on rural Ada and Canyon County acreage. Our instant estimate has no shop home project, so it prices the halves separately (preliminary, November 2026): a 1,600 sq ft new home with no garage at $478,317 to $781,820 at Essential to Signature finish, land excluded, and a 1,200 sq ft detached garage or shop at $87,359 to $141,670. A shop home is priced from a line-item budget after a lot walkthrough: ${SITE}/services/shop-homes-barndominiums`,
   },
   {
     question: 'What is design-build?',

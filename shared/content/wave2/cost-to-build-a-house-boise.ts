@@ -5,9 +5,9 @@ export const costToBuildAHouseBoise: BlogPostData = {
   title: 'How much does it cost to build a house in Boise?',
   seoTitle: 'Cost to Build a House in Boise, 2026',
   metaDescription:
-    'Cost to build a house in Boise in 2026: our instant estimate gives a 2,400 sq ft home $502,860 to $1,135,770, with design and permits, before land.',
+    'Cost to build a house in Boise in 2026: our instant estimate gives a 2,400 sq ft home $758,597 to $1,237,040, with design and permits, before land.',
   excerpt:
-    'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary $502,860 to $1,135,770 at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Here is where that money goes and why the range is so wide.',
+    'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary $758,597 to $1,237,040 at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Here is where that money goes and why the range is so wide.',
   category: 'Home building costs',
   hubSlug: 'home-building-costs',
   author: 'Boise Construction Co',
@@ -26,10 +26,10 @@ export const costToBuildAHouseBoise: BlogPostData = {
   ],
   wordCountTarget: 'cluster',
   quickAnswer:
-    'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. That is $209 to $474 per square foot of living space at Essential to Signature finish. Smaller, simpler homes come in lower, and steep foothills sites cost more.',
+    'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $758,597 to $944,520 at Essential finish and $993,557 to $1,237,040 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. That is $317 to $516 per square foot of living space at Essential to Signature finish. Smaller, simpler homes come in lower, and steep foothills sites cost more.',
   keyTakeaways: [
-    'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary $502,860 to $1,135,770 at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded.',
-    'That is $209 to $474 per square foot of living space, before any site work beyond a typical lot.',
+    'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary $758,597 to $1,237,040 at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded.',
+    'That is $317 to $516 per square foot of living space, before any site work beyond a typical lot.',
     'Interior finishes and the structural shell together account for about half the build.',
     'Site work costs far more on a rural parcel than on a serviced lot, and we price it for the parcel.',
     'Land is a separate purchase and is never included in a per-square-foot build figure.',
@@ -48,7 +48,7 @@ export const costToBuildAHouseBoise: BlogPostData = {
     {
       question: 'How much does it cost to build a house in Boise in 2026?',
       answer:
-        'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. For a 2,000 square foot home with an attached 2-car garage it gives $428,840 to $707,290 at Essential finish and $584,860 to $964,580 at Signature finish.',
+        'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $758,597 to $944,520 at Essential finish and $993,557 to $1,237,040 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. For a 2,000 square foot home with an attached 2-car garage it gives $647,497 to $806,200 at Essential finish and $845,057 to $1,052,160 at Signature finish.',
     },
     {
       question: 'Does the cost per square foot include the land?',
@@ -73,7 +73,7 @@ export const costToBuildAHouseBoise: BlogPostData = {
     {
       question: 'What do design and engineering cost on a new home?',
       answer:
-        'In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $8,800 to $19,330 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). The percentage falls as the house gets bigger and rises with structural complexity, unusual spans, steep sites, and heavy custom detailing that has to be drawn rather than specified from a catalog.',
+        'In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $13,200 to $21,910 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). The percentage falls as the house gets bigger and rises with structural complexity, unusual spans, steep sites, and heavy custom detailing that has to be drawn rather than specified from a catalog.',
     },
     {
       question: 'Can I get a fixed price before design is finished?',
@@ -83,7 +83,7 @@ export const costToBuildAHouseBoise: BlogPostData = {
   ],
   content: `
 <h2 id="the-number">What it costs to build a house in Boise</h2>
-<p><strong>Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded.</strong> That is $209 to $474 per square foot of living space at Essential to Signature finish. For a 2,000 square foot home with an attached 2-car garage it gives $428,840 to $707,290 at Essential finish and $584,860 to $964,580 at Signature finish, and for a 1,600 square foot home $354,810 to $585,230 at Essential finish. A steep foothills site with a high level of interior detail costs more, because its site conditions are priced on top. Those are the planning bands we use, and the rest of this article breaks them apart so you can work out where your own project is likely to sit. It is part of our <a href="/guides/boise-home-building-cost-guide">Boise home building cost guide</a>.</p>
+<p><strong>Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $758,597 to $944,520 at Essential finish and $993,557 to $1,237,040 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded.</strong> That is $317 to $516 per square foot of living space at Essential to Signature finish. For a 2,000 square foot home with an attached 2-car garage it gives $647,497 to $806,200 at Essential finish and $845,057 to $1,052,160 at Signature finish, and for a 1,600 square foot home $536,397 to $667,860 at Essential finish. A steep foothills site with a high level of interior detail costs more, because its site conditions are priced on top. Those are the planning bands we use, and the rest of this article breaks them apart so you can work out where your own project is likely to sit. It is part of our <a href="/guides/boise-home-building-cost-guide">Boise home building cost guide</a>.</p>
 
 <h2 id="why-so-wide">Why the range is so wide</h2>
 <p><strong>The spread between the low end and the high end is not uncertainty about the market, it is the difference between two genuinely different houses.</strong> At 2,400 square feet, the low end buys a rectangular single-story with a simple gable roof, standard-sized windows, a straightforward kitchen, and quality but unexceptional finishes on a flat lot with city water and sewer at the property line. At the high end you are looking at a house with a broken footprint, multiple roof planes, large glazing, custom cabinetry throughout, stone and tile in place of laminate and vinyl, and probably a site that needed more than a bulldozer and an afternoon. Almost all of the gap comes from decisions you control. That is the useful part: the range is wide because your choices matter, not because nobody can price the work.</p>
@@ -120,7 +120,7 @@ export const costToBuildAHouseBoise: BlogPostData = {
 <p>The advice we give clients here is to spend unevenly. Put money into the kitchen, the primary bathroom, the flooring, and anything that would require demolition to change later. Take the standard option in a guest bedroom, in a closet, and anywhere the upgrade is preference rather than durability. Spreading a finish budget evenly across every room is how people spend a great deal and feel afterwards that nothing in particular improved.</p>
 
 <h2 id="soft-costs">Soft costs</h2>
-<p><strong>Design, engineering, permits, plan review, utility applications, insurance, and construction supervision are real costs that produce no visible square footage.</strong> Design, engineering and energy code work alone add a preliminary $8,800 to $19,330 to our instant estimate for a 2,400 square foot home at Essential to Signature finish (November 2026). Permits route through Ada County for Boise, Meridian, Eagle, Kuna, and Star, and through Canyon County for Nampa, Caldwell, and Middleton, and the two use different portals with different review cadences. We handle plan review, engineering coordination, and utility applications in-house for both counties. When a builder's number looks well below everyone else's, soft costs are one of the first places to check, because they are easy to leave off a proposal and impossible to leave out of a project.</p>
+<p><strong>Design, engineering, permits, plan review, utility applications, insurance, and construction supervision are real costs that produce no visible square footage.</strong> Design, engineering and energy code work alone add a preliminary $13,200 to $21,910 to our instant estimate for a 2,400 square foot home at Essential to Signature finish (November 2026). Permits route through Ada County for Boise, Meridian, Eagle, Kuna, and Star, and through Canyon County for Nampa, Caldwell, and Middleton, and the two use different portals with different review cadences. We handle plan review, engineering coordination, and utility applications in-house for both counties. When a builder's number looks well below everyone else's, soft costs are one of the first places to check, because they are easy to leave off a proposal and impossible to leave out of a project.</p>
 
 <h2 id="land">Land is separate, and it changes the build number too</h2>
 <p><strong>Every figure in this article excludes land, and the lot you buy also moves the construction cost, not just the purchase price.</strong> Two buyers with the same land budget can end up in very different places: one buys a flat serviced lot in Meridian and spends a modest amount on site work, the other buys acreage outside Star and spends far more getting water, power, and septic to a building pad. The second buyer has effectively paid much more for the same house. Judge land on the total of purchase price plus site work plus the design compromises the lot forces on you. Our <a href="/services/lot-evaluation">lot evaluation</a> exists for exactly that arithmetic.</p>

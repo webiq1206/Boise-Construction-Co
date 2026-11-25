@@ -332,10 +332,10 @@ const perSf = (s: ScopeSelections, rules = CUSTOM_HOME_RULES, project = "custom-
     const essential = quoted("refresh");
     const signature = quoted("mid-range");
     t("shop/published-example-essential-is-engine-output",
-      essential?.priceLow === 385_000 && essential?.priceHigh === 520_000,
+      essential?.priceLow === 527_104 && essential?.priceHigh === 605_000,
       `${usd(essential?.priceLow ?? 0)} to ${usd(essential?.priceHigh ?? 0)}`);
     t("shop/published-example-signature-is-engine-output",
-      signature?.priceLow === 465_000 && signature?.priceHigh === 630_000,
+      signature?.priceLow === 638_567 && signature?.priceHigh === 735_000,
       `${usd(signature?.priceLow ?? 0)} to ${usd(signature?.priceHigh ?? 0)}`);
   }
 

@@ -101,7 +101,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does it cost to build a custom home in Boise?',
         answer:
-          'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. That is $209 to $474 per square foot of living space at Essential to Signature finish. Site work beyond a typical lot and utility connection fees are not yet determined in that range, and foothills lots and highly detailed designs run above it.',
+          'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $758,597 to $944,520 at Essential finish and $993,557 to $1,237,040 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. That is $317 to $516 per square foot of living space at Essential to Signature finish. Site work beyond a typical lot and utility connection fees are not yet determined in that range, and foothills lots and highly detailed designs run above it.',
       },
       {
         question: 'How long does it take to build a custom home in the Treasure Valley?',
@@ -137,7 +137,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Custom home building cost in the Treasure Valley',
       paragraphs: [
-        'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. That is $209 to $474 per square foot of living space at Essential to Signature finish. The estimate also includes the city impact fees and road impact fee a new home pays. It does not include surveys and soils reports, unusual site conditions such as rock, high groundwater or long utility runs, or landscaping, fencing and window coverings, and utility connection and capacity fees are not yet determined. Foothills sites, steep grades and highly detailed interiors run above it.',
+        'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $758,597 to $944,520 at Essential finish and $993,557 to $1,237,040 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. That is $317 to $516 per square foot of living space at Essential to Signature finish. The estimate also includes the city impact fees and road impact fee a new home pays. It does not include surveys and soils reports, unusual site conditions such as rock, high groundwater or long utility runs, or landscaping, fencing and window coverings, and utility connection and capacity fees are not yet determined. Foothills sites, steep grades and highly detailed interiors run above it.',
         'These are preliminary ranges, not bids. Lot conditions, home size, roof and wall complexity, and finish level drive the final number, which we confirm with a line-item budget after a lot walkthrough.',
       ],
     },
@@ -187,7 +187,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does a semi-custom home cost in the Treasure Valley?',
         answer:
-          'Our instant estimate has no separate semi-custom price: it gives a 2,000 square foot home with an attached 2-car garage a preliminary range of $428,840 to $707,290 at Essential finish and $584,860 to $964,580 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. If you bring complete design and engineered plans, the estimate leaves design and engineering out.',
+          'Our instant estimate has no separate semi-custom price: it gives a 2,000 square foot home with an attached 2-car garage a preliminary range of $647,497 to $806,200 at Essential finish and $845,057 to $1,052,160 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. If you bring complete design and engineered plans, the estimate leaves design and engineering out.',
       },
       {
         question: 'What is the difference between semi-custom and fully custom?',
@@ -218,7 +218,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Semi-custom home cost in the Treasure Valley',
       paragraphs: [
-        'Our instant estimate has no separate semi-custom price: it gives a 2,000 square foot home with an attached 2-car garage a preliminary range of $428,840 to $707,290 at Essential finish and $584,860 to $964,580 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. That is $214 to $483 per square foot of living space. Site work beyond a typical lot and utility connection fees are not yet determined in that range. The savings against a fully custom build come from design and engineering work that is already complete, not from cheaper construction.',
+        'Our instant estimate has no separate semi-custom price: it gives a 2,000 square foot home with an attached 2-car garage a preliminary range of $647,497 to $806,200 at Essential finish and $845,057 to $1,052,160 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. That is $324 to $527 per square foot of living space. Site work beyond a typical lot and utility connection fees are not yet determined in that range. The savings against a fully custom build come from design and engineering work that is already complete, not from cheaper construction.',
         'These are preliminary ranges, not bids. Lot conditions, plan modifications, and finish level move the number, which we confirm with a line-item budget once a plan and lot are matched.',
       ],
     },
@@ -268,7 +268,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'What does it cost to build on land I already own?',
         answer:
-          'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Site work is separate and varies enormously: a serviced lot in a Meridian subdivision needs far less than rural acreage that requires a well, septic, and access. The instant estimate lists site work beyond a typical lot as not yet determined, so we price it for your parcel.',
+          'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $758,597 to $944,520 at Essential finish and $993,557 to $1,237,040 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Site work is separate and varies enormously: a serviced lot in a Meridian subdivision needs far less than rural acreage that requires a well, septic, and access. The instant estimate lists site work beyond a typical lot as not yet determined, so we price it for your parcel.',
       },
       {
         question: 'How do I know if my lot is actually buildable?',
@@ -299,7 +299,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Build on your lot cost in the Treasure Valley',
       paragraphs: [
-        'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. The estimate assumes a buildable lot you already own with utilities at the street, so site work beyond a typical lot is not yet determined in it. Serviced lots inside city limits commonly need modest site work, while rural parcels requiring a well, septic system, and access improvements need far more before the foundation is poured.',
+        'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $758,597 to $944,520 at Essential finish and $993,557 to $1,237,040 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. The estimate assumes a buildable lot you already own with utilities at the street, so site work beyond a typical lot is not yet determined in it. Serviced lots inside city limits commonly need modest site work, while rural parcels requiring a well, septic system, and access improvements need far more before the foundation is poured.',
         'These are preliminary ranges, not bids. Because the parcel drives so much of the number, we produce a written feasibility summary for your specific lot before design begins.',
       ],
     },
@@ -369,7 +369,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does the design phase cost?',
         answer:
-          'In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $8,800 to $19,330 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). Our construction contracts include design, engineering and permits.',
+          'In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $13,200 to $21,910 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). Our construction contracts include design, engineering and permits.',
       },
       {
         question: 'What happens if the design comes in over budget anyway?',
@@ -380,7 +380,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Design-build cost in the Treasure Valley',
       paragraphs: [
-        'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Design drawings, structural engineering and energy code calculations account for $8,800 to $19,330 of that, the difference from the same home with complete plans. The design scope and price are agreed in writing before design work starts.',
+        'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $758,597 to $944,520 at Essential finish and $993,557 to $1,237,040 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Design drawings, structural engineering and energy code calculations account for $13,200 to $21,910 of that, the difference from the same home with complete plans. The design scope and price are agreed in writing before design work starts.',
         'These are preliminary ranges, not bids. The advantage of design-build is that your number gets more precise at every design milestone instead of arriving all at once when drawings go out to bid.',
       ],
     },
@@ -430,7 +430,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much do custom home plans cost in Idaho?',
         answer:
-          'In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $8,800 to $19,330 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). Small or simple homes cost less to design; large or architecturally complex homes cost more, and we price a design-only engagement after a programming session.',
+          'In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $13,200 to $21,910 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). Small or simple homes cost less to design; large or architecturally complex homes cost more, and we price a design-only engagement after a programming session.',
       },
       {
         question: 'Do I own the plans when they are finished?',
@@ -461,7 +461,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Home design and plan cost in the Treasure Valley',
       paragraphs: [
-        'In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $8,800 to $19,330 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). Simple single-level homes cost less to design and large or complex designs more.',
+        'In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $13,200 to $21,910 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). Simple single-level homes cost less to design and large or complex designs more.',
         'These are preliminary figures, not bids. Home size, structural complexity, and the number of design revision rounds drive the final figure, which we fix in writing after a programming session.',
       ],
     },
@@ -747,7 +747,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
       {
         question: 'How much does a barndominium cost to build in Idaho?',
         answer:
-          'Shop homes cost less per square foot than a conventional house because the shop portion costs far less to build than finished living space. Our instant estimate has no shop home project, so it prices the two halves on their own. Its preliminary range for a 1,600 square foot new home with no garage is $316,120 to $521,450 at Essential finish and $435,310 to $717,980 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. For a 1,200 square foot detached garage or shop it is $113,770 to $187,690 at Essential finish and $144,540 to $238,450 at Signature finish, with design drawings and permit fees included and engineering, if the building needs it, not yet determined. Site work beyond a typical lot and utility connection fees are not yet determined for either. We do not add the two ranges together: a shop home puts both under one structure, so we price it from a line-item budget after a lot walkthrough.',
+          'Shop homes cost less per square foot than a conventional house because the shop portion costs far less to build than finished living space. Our instant estimate has no shop home project, so it prices the two halves on their own. Its preliminary range for a 1,600 square foot new home with no garage is $478,317 to $595,570 at Essential finish and $627,917 to $781,820 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. For a 1,200 square foot detached garage or shop it is $87,359 to $108,800 at Essential finish and $113,759 to $141,670 at Signature finish, with design drawings and permit fees included and engineering, if the building needs it, not yet determined. Site work beyond a typical lot and utility connection fees are not yet determined for either. We do not add the two ranges together: a shop home puts both under one structure, so we price it from a line-item budget after a lot walkthrough.',
       },
       {
         question: 'Why is a shop home cheaper per square foot than a conventional house?',
@@ -778,7 +778,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Shop home and barndominium cost in the Treasure Valley',
       paragraphs: [
-        'Our instant estimate prices the two halves of a shop home separately, as preliminary ranges dated November 2026. A 1,600 square foot new home with no garage comes to $316,120 to $521,450 at Essential finish and $435,310 to $717,980 at Signature finish, with design, engineered plans and permit fees included and the land excluded. A 1,200 square foot detached garage or shop comes to $113,770 to $187,690 at Essential finish and $144,540 to $238,450 at Signature finish, with design drawings and permit fees included and engineering not yet determined. Per square foot, that shop runs $94 to $199 at Essential to Signature finish, against $197 to $449 for the house.',
+        'Our instant estimate prices the two halves of a shop home separately, as preliminary ranges dated November 2026. A 1,600 square foot new home with no garage comes to $478,317 to $595,570 at Essential finish and $627,917 to $781,820 at Signature finish, with design, engineered plans and permit fees included and the land excluded. A 1,200 square foot detached garage or shop comes to $87,359 to $108,800 at Essential finish and $113,759 to $141,670 at Signature finish, with design drawings and permit fees included and engineering not yet determined. Per square foot, that shop runs $73 to $119 at Essential to Signature finish, against $299 to $489 for the house.',
         'The instant estimate has no shop home project, so we do not add those ranges into one figure. A shop home with both under one roof is priced from a line-item budget after a lot walkthrough, and the ratio of finished space to shop space moves that budget more than any other variable, which we settle before design begins.',
       ],
     },
@@ -859,7 +859,7 @@ export const SERVICE_SEO_CONTENT: Record<string, ServiceSEOContent> = {
     costGuidance: {
       heading: 'Energy-efficient home cost in the Treasure Valley',
       paragraphs: [
-        'Our instant estimate has no separate high-performance option: it gives a 2,400 square foot home with an attached 2-car garage a preliminary $502,860 to $1,135,770 at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded, and the envelope and mechanical upgrades are priced in your line-item budget.',
+        'Our instant estimate has no separate high-performance option: it gives a 2,400 square foot home with an attached 2-car garage a preliminary $758,597 to $1,237,040 at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded, and the envelope and mechanical upgrades are priced in your line-item budget.',
         'These are preliminary ranges, not bids. Part of the premium is recovered immediately through smaller heating and cooling equipment, and the rest through operating costs over the life of the home.',
       ],
     },
@@ -1084,7 +1084,7 @@ export const HOMEPAGE_FAQS_FOR_SCHEMA: FAQItem[] = [
   {
     question: 'How much does it cost to build a house in the Treasure Valley?',
     answer:
-      'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $502,860 to $829,330 at Essential finish and $688,660 to $1,135,770 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Site work beyond a typical lot is budgeted separately.',
+      'Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary range of $758,597 to $944,520 at Essential finish and $993,557 to $1,237,040 at Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. Site work beyond a typical lot is budgeted separately.',
   },
   {
     question: 'How are you different from other home builders in the Treasure Valley?',

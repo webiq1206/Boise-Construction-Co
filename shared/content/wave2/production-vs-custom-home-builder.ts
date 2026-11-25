@@ -51,7 +51,7 @@ export const productionVsCustomHomeBuilder: BlogPostData = {
     {
       question: 'Is a custom home always more expensive than a production home?',
       answer:
-        'Usually, yes, and not always by as much as people assume. Production builders buy in volume and repeat the same plan, which genuinely lowers cost. Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary $502,860 to $1,135,770 at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded, and for a 2,000 square foot home with an attached 2-car garage it gives $428,840 to $707,290 at Essential finish and $584,860 to $964,580 at Signature finish, and it has no separate semi-custom price. The larger difference is often the lot rather than the house.',
+        'Usually, yes, and not always by as much as people assume. Production builders buy in volume and repeat the same plan, which genuinely lowers cost. Our instant estimate gives a 2,400 square foot home with an attached 2-car garage a preliminary $758,597 to $1,237,040 at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded, and for a 2,000 square foot home with an attached 2-car garage it gives $647,497 to $806,200 at Essential finish and $845,057 to $1,052,160 at Signature finish, and it has no separate semi-custom price. The larger difference is often the lot rather than the house.',
     },
     {
       question: 'Can I change the floor plan with a production builder?',
@@ -61,7 +61,7 @@ export const productionVsCustomHomeBuilder: BlogPostData = {
     {
       question: 'What is a semi-custom home?',
       answer:
-        'A semi-custom home starts from an existing plan and modifies it for your lot and your family, rather than designing from a blank page. It keeps most of the cost and schedule advantages of a proven plan while allowing real changes. Our instant estimate gives a 2,000 square foot home with an attached 2-car garage $428,840 to $707,290 at Essential finish and $584,860 to $964,580 at Signature finish, and it has no separate semi-custom price (November 2026), with design, engineered plans and permit fees included and the land excluded.',
+        'A semi-custom home starts from an existing plan and modifies it for your lot and your family, rather than designing from a blank page. It keeps most of the cost and schedule advantages of a proven plan while allowing real changes. Our instant estimate gives a 2,000 square foot home with an attached 2-car garage $647,497 to $806,200 at Essential finish and $845,057 to $1,052,160 at Signature finish, and it has no separate semi-custom price (November 2026), with design, engineered plans and permit fees included and the land excluded.',
     },
     {
       question: 'Do production builders build on my land?',
@@ -89,7 +89,7 @@ export const productionVsCustomHomeBuilder: BlogPostData = {
 
 <h2 id="semi-custom">Semi-custom: the middle most people actually want</h2>
 <p><strong>Semi-custom starts from an existing plan and changes it for your lot and your family, and it is the right answer more often than either extreme.</strong> You keep the advantages of a plan that has been drawn, engineered and built before, and you spend your design effort on the handful of things that genuinely matter to you.</p>
-<p>The pricing reflects that. Our instant estimate gives a 2,000 square foot home with an attached 2-car garage $428,840 to $707,290 at Essential finish and $584,860 to $964,580 at Signature finish, and it has no separate semi-custom price, against $502,860 to $1,135,770 for a 2,400 square foot home at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. The saving is mostly design and engineering, not construction, because the house still gets built the same way by the same trades. If your list of changes is five items long rather than fifty, <a href="/services/semi-custom-homes">semi-custom</a> will get you there faster and cheaper than starting from a blank page.</p>
+<p>The pricing reflects that. Our instant estimate gives a 2,000 square foot home with an attached 2-car garage $647,497 to $806,200 at Essential finish and $845,057 to $1,052,160 at Signature finish, and it has no separate semi-custom price, against $758,597 to $1,237,040 for a 2,400 square foot home at Essential to Signature finish (November 2026), with design, engineered plans and permit fees included and the land excluded. The saving is mostly design and engineering, not construction, because the house still gets built the same way by the same trades. If your list of changes is five items long rather than fifty, <a href="/services/semi-custom-homes">semi-custom</a> will get you there faster and cheaper than starting from a blank page.</p>
 
 <h2 id="plan-flexibility">Plan flexibility</h2>
 <p><strong>Production offers options; custom offers changes.</strong> The distinction sounds like semantics and is not.</p>
