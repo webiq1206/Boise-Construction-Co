@@ -43,7 +43,7 @@ const p5Dir = path.resolve(process.env.P5_HOME_CO_DIR ?? path.join(repo, "..", "
 const outFile = path.join(repo, "shared", "content", "p5PublishedFigures.json");
 
 const LABOR_RATE = 125;
-const NOW = new Date("2026-11-24T12:00:00Z");
+const NOW = new Date("2026-11-25T12:00:00Z");
 const ADDRESS = "100 Example Ave, Boise, ID 83702";
 const BRAND = "construction";
 
