@@ -184,7 +184,7 @@ export function priceMillworkTakeoff(takeoff: MillworkTakeoff): MillworkPricing 
     const cabinetScope = it.category === "cabinetry" || it.category === "vanity" || it.category === "built-in";
     const riskAdjustedCost = cost * 1.10;
     const floor = cabinetScope
-      ? Math.ceil(riskAdjustedCost / (1 - 0.20 - 0.30) - 1e-9)
+      ? jobCostFloor(riskAdjustedCost,false,"installed-cabinets")
       : jobCostFloor(riskAdjustedCost, false);
     const price = Math.max(floor,priceAtMargin(cost, TARGET_GROSS_MARGIN));
 
