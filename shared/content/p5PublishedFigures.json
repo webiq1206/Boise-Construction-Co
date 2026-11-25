@@ -1,9 +1,9 @@
 {
   "about": "Preliminary customer ranges from the P5 instant estimator (the tool behind \"Get an instant estimate\"), one estimate per tier per case. Written by scripts/pricing/p5-published-figures.mts; do not edit by hand.",
   "asOf": "November 2026",
-  "generatedOn": "2026-11-24",
-  "p5Commit": "5aca025154",
-  "rulesVersion": "P5-NET15-2026-11-24",
+  "generatedOn": "2026-11-25",
+  "p5Commit": "6ba36b66b0",
+  "rulesVersion": "P5-STANDING-2026-11-25",
   "inputs": {
     "brand": "construction",
     "laborRatePerHour": 125,
