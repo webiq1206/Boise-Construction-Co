@@ -1,3 +1,4 @@
+import {jobCostFloor} from "../../p5PlanningSellRates";
 /**
  * Pricing a millwork takeoff against the owner's own rate card.
  *
@@ -180,7 +181,8 @@ export function priceMillworkTakeoff(takeoff: MillworkTakeoff): MillworkPricing 
 
     const unitCost = installedCost(rate.code);
     const cost = unitCost * it.quantity;
-    const price = priceAtMargin(cost, TARGET_GROSS_MARGIN);
+    const floor = jobCostFloor(cost*1.10,false);
+    const price = Math.max(floor,priceAtMargin(cost, TARGET_GROSS_MARGIN));
 
     priced.push({
       ...base,
@@ -188,9 +190,9 @@ export function priceMillworkTakeoff(takeoff: MillworkTakeoff): MillworkPricing 
       unit: rate.unit,
       quantityBasis: it.quantityBasis,
       unitCost,
-      price: round(price),
-      low: round(price * (1 - spread)),
-      high: round(price * (1 + spread)),
+      price: Math.max(floor,round(price)),
+      low: Math.max(floor,round(price * (1 - spread))),
+      high: Math.max(floor,round(price * (1 + spread))),
     });
   }
 

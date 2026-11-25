@@ -1,3 +1,4 @@
+import {jobCostFloor} from "../p5PlanningSellRates";
 /**
  * RE-10 REPAIR TAXONOMY: what each repair request actually costs to do properly.
  *
@@ -1195,8 +1196,9 @@ export function estimateRe10(
   // cost minimum was $1,505 and does not win the job. The floor is what the
   // visit is worth, and it binds only when the work itself does not reach it.
   const minimumPrice = activeCrews.reduce((s, c) => s + CREW_MINIMUM_PRICE[c], 0);
-  const sellingPrice = Math.max(pricedAtMargin, minimumPrice);
-  const minimumPriceApplied = sellingPrice - pricedAtMargin;
+  const required=Math.max(jobCostFloor(totalInternalCost,false),Math.ceil(totalInternalCost/.6));
+  const sellingPrice = Math.max(required,pricedAtMargin,minimumPrice);
+  const minimumPriceApplied = Math.max(0, minimumPrice - Math.max(required,pricedAtMargin));
   const grossProfit = sellingPrice - totalInternalCost;
   // The floor can only raise the price, so the realised margin is at or above
   // the applied one. Report what actually happened rather than the target.
@@ -1212,7 +1214,7 @@ export function estimateRe10(
 
   const { band, confidence, uncertainty } = resolveBand(priced, ctx);
   const step = stepFor(sellingPrice);
-  const low = sellingPrice > 0 ? roundTo(sellingPrice * (1 - band), step) : 0;
+  const low = sellingPrice > 0 ? Math.max(Math.ceil(required/step)*step,roundTo(sellingPrice * (1 - band), step)) : 0;
   const high = sellingPrice > 0 ? roundTo(sellingPrice * (1 + band), step) : 0;
 
   const assumptions: string[] = [];
@@ -1315,7 +1317,7 @@ export function estimateRe10(
      * protection belongs in the stated assumptions rather than in padding that
      * would push us out of the market bands.
      */
-    quotedPrice: roundTo(sellingPrice, stepFor(sellingPrice)),
+    quotedPrice: Math.ceil(sellingPrice/stepFor(sellingPrice))*stepFor(sellingPrice),
     /** Held this long, so the quote bounds our exposure and their deadline. */
     quoteValidDays: QUOTE_VALID_DAYS,
     low,
