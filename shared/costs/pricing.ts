@@ -26,7 +26,7 @@ import {
   type QualityLevel,
 } from "./engine";
 import {
-  calculateEstimate,
+  calculateMarketGuide,
   normalizeFinishLevel,
   PLANNING_STAGE_BAND,
   type FinishLevel,
@@ -59,7 +59,7 @@ export function marketCeiling(
 ): number | null {
   try {
     const finish = normalizeFinishLevel(project, quality as FinishLevel);
-    const r = calculateEstimate({ project, finish, sqft, refinements: EMPTY_REFINEMENTS });
+    const r = calculateMarketGuide({ project, finish, sqft, refinements: EMPTY_REFINEMENTS });
     return r.priceHigh;
   } catch {
     return null;
@@ -277,19 +277,24 @@ export function buildPlanningRange(
     accessoryCost > 0
       ? decision.price + priceAtMargin(accessoryCost, decision.appliedMargin)
       : decision.price;
-  const elevated=!["kitchen","bathroom","basement"].includes(project);
-  const floor=Math.max(jobCostFloor(estimate.totalInternalCost,elevated),elevated?previousCentre:0);
-  const centre=Math.max(floor,previousCentre);
+  const elevated = !["kitchen", "bathroom", "basement"].includes(project);
+  const minimum = Math.max(
+    jobCostFloor(estimate.totalInternalCost, elevated),
+    elevated ? previousCentre : 0,
+  );
+  const centre = Math.max(minimum, previousCentre);
   const step = stepFor(centre);
+  const appliedMargin = centre > 0 ? (centre - estimate.totalInternalCost) / centre : 0;
   return {
     centre,
-    low: Math.max(Math.ceil(floor/step)*step,roundTo(centre * (1 - band), step)),
-    high: Math.max(Math.ceil(floor/step)*step,roundTo(centre * (1 + band), step)),
+    low: Math.max(minimum, roundTo(centre * (1 - band), step)),
+    high: Math.max(centre, roundTo(centre * (1 + band), step)),
     band,
-    appliedMargin: decision.appliedMargin,
-    marginTrimmed: decision.trimmed,
-    accessoryCustomerAmount:
-      accessoryCost > 0 ? priceAtMargin(accessoryCost, decision.appliedMargin) : 0,
+    appliedMargin,
+    marginTrimmed: decision.trimmed && centre === previousCentre,
+    accessoryCustomerAmount: estimate.totalInternalCost > 0
+      ? centre * accessoryCost / estimate.totalInternalCost
+      : 0,
     planningStage,
     warnings: [...estimate.warnings, ...decision.warnings],
   };

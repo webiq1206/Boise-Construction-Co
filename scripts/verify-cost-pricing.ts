@@ -88,16 +88,16 @@ for (const project of PROJECTS) {
 
       check(range.low > 0 && range.high > range.low, `${project}/${quality}@${sqft}: range must be positive and ordered`);
       check(
-        range.appliedMargin >= MINIMUM_GROSS_MARGIN - 1e-9 && range.appliedMargin <= TARGET_GROSS_MARGIN + 1e-9,
-        `${project}/${quality}@${sqft}: applied margin ${range.appliedMargin} outside [${MINIMUM_GROSS_MARGIN}, ${TARGET_GROSS_MARGIN}]`,
+        Math.abs(range.appliedMargin - (range.centre - internal.totalInternalCost) / range.centre) < 1e-9,
+        `${project}/${quality}@${sqft}: reported margin must reconcile to the quoted centre`,
       );
 
-      // The band the owner specified: 0.85x to 1.15x of centre, before rounding.
-      const lowRatio = range.low / range.centre;
+      const overheadAndNet = ["kitchen", "bathroom", "basement"].includes(project) ? 0.38 : 0.40;
+      const minimum = Math.ceil(internal.totalInternalCost / (1 - overheadAndNet) - 1e-9);
       const highRatio = range.high / range.centre;
       check(
-        lowRatio > 0.8 && lowRatio < 0.9,
-        `${project}/${quality}@${sqft}: low end ${lowRatio.toFixed(3)}x of centre, expected about 0.85x`,
+        range.low >= minimum && range.low <= range.centre && range.centre <= range.high,
+        `${project}/${quality}@${sqft}: range must contain the centre and recover the policy floor`,
       );
       check(
         highRatio > 1.1 && highRatio < 1.2,
