@@ -66,7 +66,7 @@ export const questionsToAskAHomeBuilder: BlogPostData = {
     {
       question: 'How much should design and engineering cost?',
       answer:
-        'In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $8,800 to $19,330 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). It rises with the complexity of the house and how heavy the structural engineering is. Ask whether that is inside the quoted price or billed separately, because builders differ on this and it is a common reason two bids are not comparable.',
+        'In our instant estimate, design drawings, structural engineering and energy code calculations add a preliminary $13,200 to $21,910 to the range for a 2,400 square foot home with an attached 2-car garage at Essential to Signature finish, compared with bringing complete plans (November 2026). It rises with the complexity of the house and how heavy the structural engineering is. Ask whether that is inside the quoted price or billed separately, because builders differ on this and it is a common reason two bids are not comparable.',
     },
     {
       question: 'What questions should I ask about the schedule?',

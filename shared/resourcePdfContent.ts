@@ -33,10 +33,10 @@ export const BUDGET_WORKSHEET_BLOCKS: PdfBlock[] = [
     type: 'table',
     headers: ['Finish level', 'Preliminary range', 'Per sq ft of living space', 'Your target'],
     rows: [
-      ['Essential', '$502,860 to $829,330', '$209 to $346', '___________'],
-      ['Signature', '$688,660 to $1,135,770', '$286 to $474', '___________'],
-      ['Premium', '$1,024,580 to $1,689,690', '$426 to $705', '___________'],
-      ['Luxury', '$1,497,390 to $2,469,340', '$623 to $1,029', '___________'],
+      ['Essential', '$758,597 to $944,520', '$317 to $394', '___________'],
+      ['Signature', '$993,557 to $1,237,040', '$414 to $516', '___________'],
+      ['Premium', '$1,321,797 to $1,645,700', '$551 to $686', '___________'],
+      ['Luxury', '$1,503,517 to $1,871,930', '$627 to $780', '___________'],
     ],
   },
   {

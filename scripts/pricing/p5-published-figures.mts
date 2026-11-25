@@ -25,8 +25,7 @@
  *     basement and no plans yet
  *   - plans "none" unless a case says otherwise, so design, engineering and
  *     permit fees are priced from the cost book (owner, 21 November 2026)
- *   - the seed cost book in p5-home-co (no database), labor at $120 an hour
- *     (the live rate; budgetary projects do not move with it)
+ *   - the November 24 P5 cost book and current brand labor rate
  *   - a Boise address and no property record
  *   - the customer range is customerEstimate().range, exactly what a visitor
  *     is shown on screen, with the note under it (rangeNotes) and the lists
@@ -43,8 +42,8 @@ const repo = path.resolve(here, "..", "..");
 const p5Dir = path.resolve(process.env.P5_HOME_CO_DIR ?? path.join(repo, "..", "p5-home-co"));
 const outFile = path.join(repo, "shared", "content", "p5PublishedFigures.json");
 
-const LABOR_RATE = 120;
-const NOW = new Date("2026-11-21T12:00:00Z");
+const LABOR_RATE = 125;
+const NOW = new Date("2026-11-24T12:00:00Z");
 const ADDRESS = "100 Example Ave, Boise, ID 83702";
 const BRAND = "construction";
 
@@ -96,7 +95,7 @@ function run(project: string, tier: Tier, answers: Answers): View {
 }
 
 /** Per square foot, rounded outward so a stated band is never narrower than the range it came from. */
-const perSqFt = (r: Range, sqft: number): Range => ({ low: Math.floor(r.low / sqft), high: Math.ceil(r.high / sqft) });
+const perSqFt = (r: Range, sqft: number): Range => ({ low: Math.ceil(r.low / sqft), high: Math.ceil(r.high / sqft) });
 
 type Case = { id: string; project: string; label: string; answers: Answers; sqft?: number };
 
@@ -211,7 +210,7 @@ for (const sqft of HOME_SIZES) {
 
 let p5Commit = "unknown";
 try {
-  p5Commit = execSync("git rev-parse --short HEAD", { cwd: p5Dir }).toString().trim();
+  p5Commit = process.env.P5_SOURCE_REVISION || execSync("git rev-parse --short HEAD", { cwd: p5Dir }).toString().trim();
 } catch {}
 
 const figures = {

@@ -52,7 +52,7 @@ function scope(text:string,laborOnly=false):ReviewedScope{
 }
 
 async function price(reviewed:ReviewedScope,tasks:Task[],rates=catalog.rates,allowResearch=false){
-  const configuration=createPlanningConfiguration({...catalog,rates},['change-order'],snapshot.finance);
+  const configuration=createPlanningConfiguration({...catalog,rates},['change-order'],{...snapshot.finance,interestRate:0,companyTaxRate:0,netCostSource:'Verified synthetic overhead includes all remaining expenses'});
   const before=JSON.stringify(configuration);
   const stages:string[]=[];
   // Only semantic provider replies are simulated. All inventory validation,
@@ -128,7 +128,7 @@ test('ordinary framing genuinely extends material and labor once at approved rat
   assert.equal(internal.contingency,1600*internal.contingencyRate);
   assert.equal(internal.riskAdjustedDirectCost,1600+internal.contingency);
   const expectedPrice=(1600+internal.contingency)/(1-0.2-internal.targetOperatingProfit);
-  assert.ok(Math.abs(internal.contractPrice-expectedPrice)<1e-8,'margin uses division rather than markup');
+  assert.ok(internal.contractPrice === Math.ceil(expectedPrice - 1e-8),'margin uses division rather than markup');
   assert.deepEqual(result.customer.range,internal.planningRange);
 });
 

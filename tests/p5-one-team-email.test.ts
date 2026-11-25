@@ -858,11 +858,11 @@ test("the bridge sends estimate only for a Step 1 request with a planning range,
   assert.deepEqual(posted.estimate, JSON.parse(JSON.stringify(sent)));
   const wire = posted.estimate as { kind: string; low: number; high: number; verified: boolean; label: string; lines: Array<{ title: string; amount: number }> };
   assert.equal(wire.kind, "planning-range");
-  assert.equal(wire.low, 90_000);
-  assert.equal(wire.high, 120_000);
+  assert.equal(wire.low, estimate.priceLow);
+  assert.equal(wire.high, estimate.priceHigh);
   assert.equal(wire.verified, true);
   assert.equal(wire.label, "ADU / Guest House, Mid-Range finish, 300 sq ft");
-  assert.equal(wire.lines.reduce((sum, line) => sum + cents(line.amount), 0), 103_950 * 100);
+  assert.equal(wire.lines.reduce((sum, line) => sum + cents(line.amount), 0), Math.round(resolveInternalEstimate("adu", "mid-range", 300, estimate.refinements)!.admin.customerPrice * 100));
   assert.deepEqual(wire.lines[0], { title: "FOUNDATION", division: "FOUNDATION", amount: wire.lines[0].amount, description: "300 SF, 71 LF" });
   // The notes are untouched by the new field.
   assert.ok(Array.isArray(posted.team_notes) && Array.isArray(posted.team_internal_notes));
@@ -904,7 +904,7 @@ test("the bridge sends estimate only for a Step 1 request with a planning range,
   assert.doesNotThrow(() => buildConsultationEstimate({ estimate: "nonsense" as never }));
   assert.doesNotThrow(() => buildConsultationEstimate(null as never));
   const unknownProject = buildConsultationEstimate({ estimate: { ...estimate, project: "not-a-project" as never } });
-  assert.deepEqual(unknownProject, { kind: "planning-range", low: 90_000, high: 120_000, verified: true });
+  assert.deepEqual(unknownProject, { kind: "planning-range", low: estimate.priceLow, high: estimate.priceHigh, verified: true });
 
   // Step 1 builds it from the verified estimate. Step 2 ("Details added") never sends one.
   const route = readFileSync(new URL("../app/api/consultation/route.ts", import.meta.url), "utf8");

@@ -811,6 +811,17 @@ export const ADU_RULES: ScopeRule[] = [
 export const BASEMENT_RULES: ScopeRule[] = [
   ...commonRules("basement"),
   {
+    code: "03-17-01",
+    qty: () => 6,
+    when: (s) => s.kitchenIncluded === true,
+    assumption: "A requested basement wet bar includes a six-foot cabinet run.",
+  },
+  {
+    code: "03-17-02",
+    qty: () => 5,
+    when: (s) => s.kitchenIncluded === true,
+  },
+  {
     code: "03-05-02", // Framing, per SF of project
     qty: (d) => d.floorArea * 0.35,
     assumption:

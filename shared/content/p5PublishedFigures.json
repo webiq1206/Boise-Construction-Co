@@ -1,12 +1,12 @@
 {
   "about": "Preliminary customer ranges from the P5 instant estimator (the tool behind \"Get an instant estimate\"), one estimate per tier per case. Written by scripts/pricing/p5-published-figures.mts; do not edit by hand.",
   "asOf": "November 2026",
-  "generatedOn": "2026-11-21",
-  "p5Commit": "5ed2ec6e",
-  "rulesVersion": "2026-11-21.1",
+  "generatedOn": "2026-11-24",
+  "p5Commit": "5aca025154",
+  "rulesVersion": "P5-NET15-2026-11-24",
   "inputs": {
     "brand": "construction",
-    "laborRatePerHour": 120,
+    "laborRatePerHour": 125,
     "costBook": "p5-home-co seed cost book, no database overrides",
     "address": "100 Example Ave, Boise, ID 83702",
     "property": null,
@@ -29,64 +29,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 354810,
-          "high": 585230,
+          "low": 536397,
+          "high": 667860,
           "perSqFt": {
-            "low": 221,
-            "high": 366
+            "low": 336,
+            "high": 418
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 481040,
-          "high": 793410,
+          "low": 696557,
+          "high": 867270,
           "perSqFt": {
-            "low": 300,
-            "high": 496
+            "low": 436,
+            "high": 543
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 708490,
-          "high": 1168460,
+          "low": 920664,
+          "high": 1146290,
           "perSqFt": {
-            "low": 442,
-            "high": 731
+            "low": 576,
+            "high": 717
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 1028380,
-          "high": 1695970,
+          "low": 1048850,
+          "high": 1305880,
           "perSqFt": {
-            "low": 642,
-            "high": 1060
+            "low": 656,
+            "high": 817
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 354810,
-          "high": 793410,
+          "low": 536397,
+          "high": 867270,
           "perSqFt": {
-            "low": 221,
-            "high": 496
+            "low": 336,
+            "high": 543
           }
         },
         "premiumToLuxury": {
-          "low": 708490,
-          "high": 1695970,
+          "low": 920664,
+          "high": 1305880,
           "perSqFt": {
-            "low": 442,
-            "high": 1060
+            "low": 576,
+            "high": 817
           }
         },
         "allFinishes": {
-          "low": 354810,
-          "high": 1695970,
+          "low": 536397,
+          "high": 1305880,
           "perSqFt": {
-            "low": 221,
-            "high": 1060
+            "low": 336,
+            "high": 817
           }
         }
       }
@@ -101,64 +101,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 428840,
-          "high": 707290,
+          "low": 647497,
+          "high": 806200,
           "perSqFt": {
-            "low": 214,
-            "high": 354
+            "low": 324,
+            "high": 404
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 584860,
-          "high": 964580,
+          "low": 845057,
+          "high": 1052160,
           "perSqFt": {
-            "low": 292,
-            "high": 483
+            "low": 423,
+            "high": 527
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 866540,
-          "high": 1429080,
+          "low": 1121230,
+          "high": 1395990,
           "perSqFt": {
-            "low": 433,
-            "high": 715
+            "low": 561,
+            "high": 698
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 1262880,
-          "high": 2082660,
+          "low": 1276184,
+          "high": 1588900,
           "perSqFt": {
-            "low": 631,
-            "high": 1042
+            "low": 639,
+            "high": 795
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 428840,
-          "high": 964580,
+          "low": 647497,
+          "high": 1052160,
           "perSqFt": {
-            "low": 214,
-            "high": 483
+            "low": 324,
+            "high": 527
           }
         },
         "premiumToLuxury": {
-          "low": 866540,
-          "high": 2082660,
+          "low": 1121230,
+          "high": 1588900,
           "perSqFt": {
-            "low": 433,
-            "high": 1042
+            "low": 561,
+            "high": 795
           }
         },
         "allFinishes": {
-          "low": 428840,
-          "high": 2082660,
+          "low": 647497,
+          "high": 1588900,
           "perSqFt": {
-            "low": 214,
-            "high": 1042
+            "low": 324,
+            "high": 795
           }
         }
       }
@@ -173,64 +173,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 502860,
-          "high": 829330,
+          "low": 758597,
+          "high": 944520,
           "perSqFt": {
-            "low": 209,
-            "high": 346
+            "low": 317,
+            "high": 394
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 688660,
-          "high": 1135770,
+          "low": 993557,
+          "high": 1237040,
           "perSqFt": {
-            "low": 286,
-            "high": 474
+            "low": 414,
+            "high": 516
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 1024580,
-          "high": 1689690,
+          "low": 1321797,
+          "high": 1645700,
           "perSqFt": {
-            "low": 426,
-            "high": 705
+            "low": 551,
+            "high": 686
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 1497390,
-          "high": 2469340,
+          "low": 1503517,
+          "high": 1871930,
           "perSqFt": {
-            "low": 623,
-            "high": 1029
+            "low": 627,
+            "high": 780
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 502860,
-          "high": 1135770,
+          "low": 758597,
+          "high": 1237040,
           "perSqFt": {
-            "low": 209,
-            "high": 474
+            "low": 317,
+            "high": 516
           }
         },
         "premiumToLuxury": {
-          "low": 1024580,
-          "high": 2469340,
+          "low": 1321797,
+          "high": 1871930,
           "perSqFt": {
-            "low": 426,
-            "high": 1029
+            "low": 551,
+            "high": 780
           }
         },
         "allFinishes": {
-          "low": 502860,
-          "high": 2469340,
+          "low": 758597,
+          "high": 1871930,
           "perSqFt": {
-            "low": 209,
-            "high": 1029
+            "low": 317,
+            "high": 780
           }
         }
       }
@@ -245,64 +245,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 613860,
-          "high": 1012410,
+          "low": 925247,
+          "high": 1152000,
           "perSqFt": {
-            "low": 204,
-            "high": 338
+            "low": 309,
+            "high": 384
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 844400,
-          "high": 1392550,
+          "low": 1216307,
+          "high": 1514360,
           "perSqFt": {
-            "low": 281,
-            "high": 465
+            "low": 406,
+            "high": 505
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 1261640,
-          "high": 2080590,
+          "low": 1622647,
+          "high": 2020260,
           "perSqFt": {
-            "low": 420,
-            "high": 694
+            "low": 541,
+            "high": 674
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 1849130,
-          "high": 3049350,
+          "low": 1844517,
+          "high": 2296500,
           "perSqFt": {
-            "low": 616,
-            "high": 1017
+            "low": 615,
+            "high": 766
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 613860,
-          "high": 1392550,
+          "low": 925247,
+          "high": 1514360,
           "perSqFt": {
-            "low": 204,
-            "high": 465
+            "low": 309,
+            "high": 505
           }
         },
         "premiumToLuxury": {
-          "low": 1261640,
-          "high": 3049350,
+          "low": 1622647,
+          "high": 2296500,
           "perSqFt": {
-            "low": 420,
-            "high": 1017
+            "low": 541,
+            "high": 766
           }
         },
         "allFinishes": {
-          "low": 613860,
-          "high": 3049350,
+          "low": 925247,
+          "high": 2296500,
           "perSqFt": {
-            "low": 204,
-            "high": 1017
+            "low": 309,
+            "high": 766
           }
         }
       }
@@ -317,64 +317,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 724900,
-          "high": 1195480,
+          "low": 1091897,
+          "high": 1359470,
           "perSqFt": {
-            "low": 201,
-            "high": 333
+            "low": 304,
+            "high": 378
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 1000120,
-          "high": 1649310,
+          "low": 1439057,
+          "high": 1791670,
           "perSqFt": {
-            "low": 277,
-            "high": 459
+            "low": 400,
+            "high": 498
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 1498700,
-          "high": 2471510,
+          "low": 1923497,
+          "high": 2394810,
           "perSqFt": {
-            "low": 416,
-            "high": 687
+            "low": 535,
+            "high": 666
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 2200840,
-          "high": 3629370,
+          "low": 2185517,
+          "high": 2721020,
           "perSqFt": {
-            "low": 611,
-            "high": 1009
+            "low": 608,
+            "high": 756
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 724900,
-          "high": 1649310,
+          "low": 1091897,
+          "high": 1791670,
           "perSqFt": {
-            "low": 201,
-            "high": 459
+            "low": 304,
+            "high": 498
           }
         },
         "premiumToLuxury": {
-          "low": 1498700,
-          "high": 3629370,
+          "low": 1923497,
+          "high": 2721020,
           "perSqFt": {
-            "low": 416,
-            "high": 1009
+            "low": 535,
+            "high": 756
           }
         },
         "allFinishes": {
-          "low": 724900,
-          "high": 3629370,
+          "low": 1091897,
+          "high": 2721020,
           "perSqFt": {
-            "low": 201,
-            "high": 1009
+            "low": 304,
+            "high": 756
           }
         }
       }
@@ -390,64 +390,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 347480,
-          "high": 573130,
+          "low": 525397,
+          "high": 654170,
           "perSqFt": {
-            "low": 217,
-            "high": 359
+            "low": 329,
+            "high": 409
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 471760,
-          "high": 778110,
+          "low": 682624,
+          "high": 849920,
           "perSqFt": {
-            "low": 294,
-            "high": 487
+            "low": 427,
+            "high": 532
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 697260,
-          "high": 1149930,
+          "low": 903797,
+          "high": 1125290,
           "perSqFt": {
-            "low": 435,
-            "high": 719
+            "low": 565,
+            "high": 704
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 1014210,
-          "high": 1672600,
+          "low": 1027584,
+          "high": 1279410,
           "perSqFt": {
-            "low": 633,
-            "high": 1046
+            "low": 643,
+            "high": 800
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 347480,
-          "high": 778110,
+          "low": 525397,
+          "high": 849920,
           "perSqFt": {
-            "low": 217,
-            "high": 487
+            "low": 329,
+            "high": 532
           }
         },
         "premiumToLuxury": {
-          "low": 697260,
-          "high": 1672600,
+          "low": 903797,
+          "high": 1279410,
           "perSqFt": {
-            "low": 435,
-            "high": 1046
+            "low": 565,
+            "high": 800
           }
         },
         "allFinishes": {
-          "low": 347480,
-          "high": 1672600,
+          "low": 525397,
+          "high": 1279410,
           "perSqFt": {
-            "low": 217,
-            "high": 1046
+            "low": 329,
+            "high": 800
           }
         }
       }
@@ -463,64 +463,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 420770,
-          "high": 693980,
+          "low": 635397,
+          "high": 791130,
           "perSqFt": {
-            "low": 210,
-            "high": 347
+            "low": 318,
+            "high": 396
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 574360,
-          "high": 947270,
+          "low": 829290,
+          "high": 1032530,
           "perSqFt": {
-            "low": 287,
-            "high": 474
+            "low": 415,
+            "high": 517
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 853600,
-          "high": 1407730,
+          "low": 1101797,
+          "high": 1371800,
           "perSqFt": {
-            "low": 426,
-            "high": 704
+            "low": 551,
+            "high": 686
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 1246270,
-          "high": 2055260,
+          "low": 1251250,
+          "high": 1557870,
           "perSqFt": {
-            "low": 623,
-            "high": 1028
+            "low": 626,
+            "high": 779
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 420770,
-          "high": 947270,
+          "low": 635397,
+          "high": 1032530,
           "perSqFt": {
-            "low": 210,
-            "high": 474
+            "low": 318,
+            "high": 517
           }
         },
         "premiumToLuxury": {
-          "low": 853600,
-          "high": 2055260,
+          "low": 1101797,
+          "high": 1557870,
           "perSqFt": {
-            "low": 426,
-            "high": 1028
+            "low": 551,
+            "high": 779
           }
         },
         "allFinishes": {
-          "low": 420770,
-          "high": 2055260,
+          "low": 635397,
+          "high": 1557870,
           "perSqFt": {
-            "low": 210,
-            "high": 1028
+            "low": 318,
+            "high": 779
           }
         }
       }
@@ -536,64 +536,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 494060,
-          "high": 814810,
+          "low": 745397,
+          "high": 928090,
           "perSqFt": {
-            "low": 205,
-            "high": 340
+            "low": 311,
+            "high": 387
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 676940,
-          "high": 1116440,
+          "low": 975957,
+          "high": 1215130,
           "perSqFt": {
-            "low": 282,
-            "high": 466
+            "low": 407,
+            "high": 507
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 1009930,
-          "high": 1665520,
+          "low": 1299797,
+          "high": 1618310,
           "perSqFt": {
-            "low": 420,
-            "high": 694
+            "low": 542,
+            "high": 675
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 1478330,
-          "high": 2437910,
+          "low": 1474917,
+          "high": 1836330,
           "perSqFt": {
             "low": 615,
-            "high": 1016
+            "high": 766
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 494060,
-          "high": 1116440,
+          "low": 745397,
+          "high": 1215130,
           "perSqFt": {
-            "low": 205,
-            "high": 466
+            "low": 311,
+            "high": 507
           }
         },
         "premiumToLuxury": {
-          "low": 1009930,
-          "high": 2437910,
+          "low": 1299797,
+          "high": 1836330,
           "perSqFt": {
-            "low": 420,
-            "high": 1016
+            "low": 542,
+            "high": 766
           }
         },
         "allFinishes": {
-          "low": 494060,
-          "high": 2437910,
+          "low": 745397,
+          "high": 1836330,
           "perSqFt": {
-            "low": 205,
-            "high": 1016
+            "low": 311,
+            "high": 766
           }
         }
       }
@@ -609,64 +609,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 603960,
-          "high": 996080,
+          "low": 910397,
+          "high": 1133520,
           "perSqFt": {
-            "low": 201,
-            "high": 333
+            "low": 304,
+            "high": 378
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 830850,
-          "high": 1370210,
+          "low": 1195957,
+          "high": 1489040,
           "perSqFt": {
-            "low": 276,
-            "high": 457
+            "low": 399,
+            "high": 497
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 1244420,
-          "high": 2052190,
+          "low": 1596797,
+          "high": 1988080,
           "perSqFt": {
-            "low": 414,
-            "high": 685
+            "low": 533,
+            "high": 663
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 1826410,
-          "high": 3011880,
+          "low": 1810417,
+          "high": 2254040,
           "perSqFt": {
-            "low": 608,
-            "high": 1004
+            "low": 604,
+            "high": 752
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 603960,
-          "high": 1370210,
+          "low": 910397,
+          "high": 1489040,
           "perSqFt": {
-            "low": 201,
-            "high": 457
+            "low": 304,
+            "high": 497
           }
         },
         "premiumToLuxury": {
-          "low": 1244420,
-          "high": 3011880,
+          "low": 1596797,
+          "high": 2254040,
           "perSqFt": {
-            "low": 414,
-            "high": 1004
+            "low": 533,
+            "high": 752
           }
         },
         "allFinishes": {
-          "low": 603960,
-          "high": 3011880,
+          "low": 910397,
+          "high": 2254040,
           "perSqFt": {
-            "low": 201,
-            "high": 1004
+            "low": 304,
+            "high": 752
           }
         }
       }
@@ -682,64 +682,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 713900,
-          "high": 1177330,
+          "low": 1075397,
+          "high": 1338940,
           "perSqFt": {
-            "low": 198,
-            "high": 328
+            "low": 299,
+            "high": 372
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 984740,
-          "high": 1623950,
+          "low": 1415957,
+          "high": 1762930,
           "perSqFt": {
-            "low": 273,
-            "high": 452
+            "low": 394,
+            "high": 490
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 1478920,
-          "high": 2438890,
+          "low": 1893797,
+          "high": 2357830,
           "perSqFt": {
-            "low": 410,
-            "high": 678
+            "low": 527,
+            "high": 655
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 2174460,
-          "high": 3585860,
+          "low": 2145917,
+          "high": 2671730,
           "perSqFt": {
-            "low": 604,
-            "high": 997
+            "low": 597,
+            "high": 743
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 713900,
-          "high": 1623950,
+          "low": 1075397,
+          "high": 1762930,
           "perSqFt": {
-            "low": 198,
-            "high": 452
+            "low": 299,
+            "high": 490
           }
         },
         "premiumToLuxury": {
-          "low": 1478920,
-          "high": 3585860,
+          "low": 1893797,
+          "high": 2671730,
           "perSqFt": {
-            "low": 410,
-            "high": 997
+            "low": 527,
+            "high": 743
           }
         },
         "allFinishes": {
-          "low": 713900,
-          "high": 3585860,
+          "low": 1075397,
+          "high": 2671730,
           "perSqFt": {
-            "low": 198,
-            "high": 997
+            "low": 299,
+            "high": 743
           }
         }
       }
@@ -755,64 +755,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 316120,
-          "high": 521450,
+          "low": 478317,
+          "high": 595570,
           "perSqFt": {
-            "low": 197,
-            "high": 326
+            "low": 299,
+            "high": 373
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 435310,
-          "high": 717980,
+          "low": 627917,
+          "high": 781820,
           "perSqFt": {
-            "low": 272,
-            "high": 449
+            "low": 393,
+            "high": 489
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 652240,
-          "high": 1075650,
+          "low": 836184,
+          "high": 1041100,
           "perSqFt": {
-            "low": 407,
-            "high": 673
+            "low": 523,
+            "high": 651
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 958040,
-          "high": 1579980,
+          "low": 943250,
+          "high": 1174410,
           "perSqFt": {
-            "low": 598,
-            "high": 988
+            "low": 590,
+            "high": 735
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 316120,
-          "high": 717980,
+          "low": 478317,
+          "high": 781820,
           "perSqFt": {
-            "low": 197,
-            "high": 449
+            "low": 299,
+            "high": 489
           }
         },
         "premiumToLuxury": {
-          "low": 652240,
-          "high": 1579980,
+          "low": 836184,
+          "high": 1174410,
           "perSqFt": {
-            "low": 407,
-            "high": 988
+            "low": 523,
+            "high": 735
           }
         },
         "allFinishes": {
-          "low": 316120,
-          "high": 1579980,
+          "low": 478317,
+          "high": 1174410,
           "perSqFt": {
-            "low": 197,
-            "high": 988
+            "low": 299,
+            "high": 735
           }
         }
       }
@@ -828,64 +828,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 66510,
-          "high": 113390,
+          "low": 69209,
+          "high": 87260,
           "perSqFt": {
-            "low": 221,
-            "high": 378
+            "low": 231,
+            "high": 291
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 84460,
-          "high": 143940,
+          "low": 88459,
+          "high": 111510,
           "perSqFt": {
-            "low": 281,
-            "high": 480
+            "low": 295,
+            "high": 372
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 102410,
-          "high": 174540,
+          "low": 107709,
+          "high": 135790,
           "perSqFt": {
-            "low": 341,
-            "high": 582
+            "low": 360,
+            "high": 453
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 131150,
-          "high": 223440,
+          "low": 135209,
+          "high": 170420,
           "perSqFt": {
-            "low": 437,
-            "high": 745
+            "low": 451,
+            "high": 569
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 66510,
-          "high": 143940,
+          "low": 69209,
+          "high": 111510,
           "perSqFt": {
-            "low": 221,
-            "high": 480
+            "low": 231,
+            "high": 372
           }
         },
         "premiumToLuxury": {
-          "low": 102410,
-          "high": 223440,
+          "low": 107709,
+          "high": 170420,
           "perSqFt": {
-            "low": 341,
-            "high": 745
+            "low": 360,
+            "high": 569
           }
         },
         "allFinishes": {
-          "low": 66510,
-          "high": 223440,
+          "low": 69209,
+          "high": 170420,
           "perSqFt": {
-            "low": 221,
-            "high": 745
+            "low": 231,
+            "high": 569
           }
         }
       }
@@ -901,64 +901,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 85650,
-          "high": 145990,
+          "low": 87542,
+          "high": 110360,
           "perSqFt": {
-            "low": 214,
-            "high": 365
+            "low": 219,
+            "high": 276
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 109600,
-          "high": 186770,
+          "low": 113209,
+          "high": 142710,
           "perSqFt": {
-            "low": 274,
-            "high": 467
+            "low": 284,
+            "high": 357
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 133540,
-          "high": 227530,
+          "low": 138875,
+          "high": 175050,
           "perSqFt": {
-            "low": 333,
-            "high": 569
+            "low": 348,
+            "high": 438
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 171840,
-          "high": 292750,
+          "low": 175542,
+          "high": 221250,
           "perSqFt": {
-            "low": 429,
-            "high": 732
+            "low": 439,
+            "high": 554
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 85650,
-          "high": 186770,
+          "low": 87542,
+          "high": 142710,
           "perSqFt": {
-            "low": 214,
-            "high": 467
+            "low": 219,
+            "high": 357
           }
         },
         "premiumToLuxury": {
-          "low": 133540,
-          "high": 292750,
+          "low": 138875,
+          "high": 221250,
           "perSqFt": {
-            "low": 333,
-            "high": 732
+            "low": 348,
+            "high": 554
           }
         },
         "allFinishes": {
-          "low": 85650,
-          "high": 292750,
+          "low": 87542,
+          "high": 221250,
           "perSqFt": {
-            "low": 214,
-            "high": 732
+            "low": 219,
+            "high": 554
           }
         }
       }
@@ -974,64 +974,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 123960,
-          "high": 211220,
+          "low": 124209,
+          "high": 156550,
           "perSqFt": {
-            "low": 206,
-            "high": 353
+            "low": 208,
+            "high": 261
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 159880,
-          "high": 272370,
+          "low": 162709,
+          "high": 205070,
           "perSqFt": {
-            "low": 266,
-            "high": 454
+            "low": 272,
+            "high": 342
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 195780,
-          "high": 333510,
+          "low": 201209,
+          "high": 253570,
           "perSqFt": {
-            "low": 326,
-            "high": 556
+            "low": 336,
+            "high": 423
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 253250,
-          "high": 431340,
+          "low": 256209,
+          "high": 322880,
           "perSqFt": {
-            "low": 422,
-            "high": 719
+            "low": 428,
+            "high": 539
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 123960,
-          "high": 272370,
+          "low": 124209,
+          "high": 205070,
           "perSqFt": {
-            "low": 206,
-            "high": 454
+            "low": 208,
+            "high": 342
           }
         },
         "premiumToLuxury": {
-          "low": 195780,
-          "high": 431340,
+          "low": 201209,
+          "high": 322880,
           "perSqFt": {
-            "low": 326,
-            "high": 719
+            "low": 336,
+            "high": 539
           }
         },
         "allFinishes": {
-          "low": 123960,
-          "high": 431340,
+          "low": 124209,
+          "high": 322880,
           "perSqFt": {
-            "low": 206,
-            "high": 719
+            "low": 208,
+            "high": 539
           }
         }
       }
@@ -1045,37 +1045,37 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 100170,
-          "high": 170690
+          "low": 153909,
+          "high": 194000
         },
         "mid": {
           "finish": "Signature",
-          "low": 128900,
-          "high": 219640
+          "low": 197909,
+          "high": 249430
         },
         "high": {
           "finish": "Premium",
-          "low": 157630,
-          "high": 268550
+          "low": 241909,
+          "high": 304880
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 210290,
-          "high": 358220
+          "low": 322575,
+          "high": 406500
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 100170,
-          "high": 219640
+          "low": 153909,
+          "high": 249430
         },
         "premiumToLuxury": {
-          "low": 157630,
-          "high": 358220
+          "low": 241909,
+          "high": 406500
         },
         "allFinishes": {
-          "low": 100170,
-          "high": 358220
+          "low": 153909,
+          "high": 406500
         }
       }
     },
@@ -1088,37 +1088,37 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 124100,
-          "high": 211480
+          "low": 140800,
+          "high": 177470
         },
         "mid": {
           "finish": "Signature",
-          "low": 162410,
-          "high": 276700
+          "low": 182875,
+          "high": 230470
         },
         "high": {
           "finish": "Premium",
-          "low": 219880,
-          "high": 374520
+          "low": 245979,
+          "high": 310010
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 286920,
-          "high": 488670
+          "low": 319624,
+          "high": 402780
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 124100,
-          "high": 276700
+          "low": 140800,
+          "high": 230470
         },
         "premiumToLuxury": {
-          "low": 219880,
-          "high": 488670
+          "low": 245979,
+          "high": 402780
         },
         "allFinishes": {
-          "low": 124100,
-          "high": 488670
+          "low": 140800,
+          "high": 402780
         }
       }
     },
@@ -1131,37 +1131,37 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 181580,
-          "high": 309290
+          "low": 229992,
+          "high": 289830
         },
         "mid": {
           "finish": "Signature",
-          "low": 248610,
-          "high": 423430
+          "low": 313775,
+          "high": 395410
         },
         "high": {
           "finish": "Premium",
-          "low": 325220,
-          "high": 553880
+          "low": 409530,
+          "high": 516050
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 440140,
-          "high": 749570
+          "low": 553135,
+          "high": 697000
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 181580,
-          "high": 423430
+          "low": 229992,
+          "high": 395410
         },
         "premiumToLuxury": {
-          "low": 325220,
-          "high": 749570
+          "low": 409530,
+          "high": 697000
         },
         "allFinishes": {
-          "low": 181580,
-          "high": 749570
+          "low": 229992,
+          "high": 697000
         }
       }
     },
@@ -1175,64 +1175,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 149110,
-          "high": 246030,
+          "low": 194920,
+          "high": 242730,
           "perSqFt": {
-            "low": 248,
-            "high": 411
+            "low": 325,
+            "high": 405
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 184020,
-          "high": 303620,
+          "low": 240259,
+          "high": 299170,
           "perSqFt": {
-            "low": 306,
-            "high": 507
+            "low": 401,
+            "high": 499
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 223830,
-          "high": 369280,
+          "low": 291922,
+          "high": 363490,
           "perSqFt": {
-            "low": 373,
-            "high": 616
+            "low": 487,
+            "high": 606
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 278690,
-          "high": 459700,
+          "low": 363092,
+          "high": 452120,
           "perSqFt": {
-            "low": 464,
-            "high": 767
+            "low": 606,
+            "high": 754
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 149110,
-          "high": 303620,
+          "low": 194920,
+          "high": 299170,
           "perSqFt": {
-            "low": 248,
-            "high": 507
+            "low": 325,
+            "high": 499
           }
         },
         "premiumToLuxury": {
-          "low": 223830,
-          "high": 459700,
+          "low": 291922,
+          "high": 452120,
           "perSqFt": {
-            "low": 373,
-            "high": 767
+            "low": 487,
+            "high": 754
           }
         },
         "allFinishes": {
-          "low": 149110,
-          "high": 459700,
+          "low": 194920,
+          "high": 452120,
           "perSqFt": {
-            "low": 248,
-            "high": 767
+            "low": 325,
+            "high": 754
           }
         }
       }
@@ -1246,37 +1246,37 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 126630,
-          "high": 208970
+          "low": 181775,
+          "high": 226370
         },
         "mid": {
           "finish": "Signature",
-          "low": 175460,
-          "high": 289520
+          "low": 251442,
+          "high": 313110
         },
         "high": {
           "finish": "Premium",
-          "low": 234110,
-          "high": 386180
+          "low": 335042,
+          "high": 417210
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 302500,
-          "high": 498960
+          "low": 432575,
+          "high": 538620
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 126630,
-          "high": 289520
+          "low": 181775,
+          "high": 313110
         },
         "premiumToLuxury": {
-          "low": 234110,
-          "high": 498960
+          "low": 335042,
+          "high": 538620
         },
         "allFinishes": {
-          "low": 126630,
-          "high": 498960
+          "low": 181775,
+          "high": 538620
         }
       }
     },
@@ -1289,37 +1289,37 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 97290,
-          "high": 160540
+          "low": 128508,
+          "high": 160050
         },
         "mid": {
           "finish": "Signature",
-          "low": 122300,
-          "high": 201790
+          "low": 160555,
+          "high": 199940
         },
         "high": {
           "finish": "Premium",
-          "low": 147310,
-          "high": 243040
+          "low": 192601,
+          "high": 239840
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 177500,
-          "high": 292830
+          "low": 231321,
+          "high": 288020
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 97290,
-          "high": 201790
+          "low": 128508,
+          "high": 199940
         },
         "premiumToLuxury": {
-          "low": 147310,
-          "high": 292830
+          "low": 192601,
+          "high": 288020
         },
         "allFinishes": {
-          "low": 97290,
-          "high": 292830
+          "low": 128508,
+          "high": 288020
         }
       }
     },
@@ -1333,64 +1333,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 55450,
-          "high": 91550,
+          "low": 43315,
+          "high": 53980,
           "perSqFt": {
-            "low": 96,
-            "high": 159
+            "low": 76,
+            "high": 94
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 70220,
-          "high": 115910,
+          "low": 55987,
+          "high": 69750,
           "perSqFt": {
-            "low": 121,
-            "high": 202
+            "low": 98,
+            "high": 122
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 92040,
-          "high": 151880,
+          "low": 70771,
+          "high": 88160,
           "perSqFt": {
-            "low": 159,
-            "high": 264
+            "low": 123,
+            "high": 154
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 121230,
-          "high": 200020,
+          "low": 86083,
+          "high": 107210,
           "perSqFt": {
-            "low": 210,
-            "high": 348
+            "low": 150,
+            "high": 187
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 55450,
-          "high": 115910,
+          "low": 43315,
+          "high": 69750,
           "perSqFt": {
-            "low": 96,
-            "high": 202
+            "low": 76,
+            "high": 122
           }
         },
         "premiumToLuxury": {
-          "low": 92040,
-          "high": 200020,
+          "low": 70771,
+          "high": 107210,
           "perSqFt": {
-            "low": 159,
-            "high": 348
+            "low": 123,
+            "high": 187
           }
         },
         "allFinishes": {
-          "low": 55450,
-          "high": 200020,
+          "low": 43315,
+          "high": 107210,
           "perSqFt": {
-            "low": 96,
-            "high": 348
+            "low": 76,
+            "high": 187
           }
         }
       }
@@ -1405,64 +1405,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 82360,
-          "high": 135940,
+          "low": 63643,
+          "high": 79270,
           "perSqFt": {
-            "low": 95,
-            "high": 158
+            "low": 74,
+            "high": 92
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 104520,
-          "high": 172460,
+          "low": 82651,
+          "high": 102950,
           "perSqFt": {
-            "low": 120,
-            "high": 200
+            "low": 96,
+            "high": 120
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 137240,
-          "high": 226410,
+          "low": 104827,
+          "high": 130540,
           "perSqFt": {
-            "low": 158,
-            "high": 263
+            "low": 122,
+            "high": 152
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 181020,
-          "high": 298630,
+          "low": 127795,
+          "high": 159150,
           "perSqFt": {
-            "low": 209,
-            "high": 346
+            "low": 148,
+            "high": 185
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 82360,
-          "high": 172460,
+          "low": 63643,
+          "high": 102950,
           "perSqFt": {
-            "low": 95,
-            "high": 200
+            "low": 74,
+            "high": 120
           }
         },
         "premiumToLuxury": {
-          "low": 137240,
-          "high": 298630,
+          "low": 104827,
+          "high": 159150,
           "perSqFt": {
-            "low": 158,
-            "high": 346
+            "low": 122,
+            "high": 185
           }
         },
         "allFinishes": {
-          "low": 82360,
-          "high": 298630,
+          "low": 63643,
+          "high": 159150,
           "perSqFt": {
-            "low": 95,
-            "high": 346
+            "low": 74,
+            "high": 185
           }
         }
       }
@@ -1477,64 +1477,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 113770,
-          "high": 187690,
+          "low": 87359,
+          "high": 108800,
           "perSqFt": {
-            "low": 94,
-            "high": 157
+            "low": 73,
+            "high": 91
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 144540,
-          "high": 238450,
+          "low": 113759,
+          "high": 141670,
           "perSqFt": {
-            "low": 120,
-            "high": 199
+            "low": 95,
+            "high": 119
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 189970,
-          "high": 313380,
+          "low": 144559,
+          "high": 180010,
           "perSqFt": {
-            "low": 158,
-            "high": 262
+            "low": 121,
+            "high": 151
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 250760,
-          "high": 413670,
+          "low": 176459,
+          "high": 219740,
           "perSqFt": {
-            "low": 208,
-            "high": 345
+            "low": 148,
+            "high": 184
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 113770,
-          "high": 238450,
+          "low": 87359,
+          "high": 141670,
           "perSqFt": {
-            "low": 94,
-            "high": 199
+            "low": 73,
+            "high": 119
           }
         },
         "premiumToLuxury": {
-          "low": 189970,
-          "high": 413670,
+          "low": 144559,
+          "high": 219740,
           "perSqFt": {
-            "low": 158,
-            "high": 345
+            "low": 121,
+            "high": 184
           }
         },
         "allFinishes": {
-          "low": 113770,
-          "high": 413670,
+          "low": 87359,
+          "high": 219740,
           "perSqFt": {
-            "low": 94,
-            "high": 345
+            "low": 73,
+            "high": 184
           }
         }
       }
@@ -1549,64 +1549,64 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 225890,
-          "high": 372580,
+          "low": 172059,
+          "high": 214260,
           "perSqFt": {
-            "low": 94,
-            "high": 156
+            "low": 72,
+            "high": 90
           }
         },
         "mid": {
           "finish": "Signature",
-          "low": 287430,
-          "high": 474090,
+          "low": 224859,
+          "high": 279990,
           "perSqFt": {
-            "low": 119,
-            "high": 198
+            "low": 94,
+            "high": 117
           }
         },
         "high": {
           "finish": "Premium",
-          "low": 378300,
-          "high": 623920,
+          "low": 286459,
+          "high": 356690,
           "perSqFt": {
-            "low": 157,
-            "high": 260
+            "low": 120,
+            "high": 149
           }
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 499920,
-          "high": 824520,
+          "low": 350259,
+          "high": 436120,
           "perSqFt": {
-            "low": 208,
-            "high": 344
+            "low": 146,
+            "high": 182
           }
         }
       },
       "spans": {
         "essentialToSignature": {
-          "low": 225890,
-          "high": 474090,
+          "low": 172059,
+          "high": 279990,
           "perSqFt": {
-            "low": 94,
-            "high": 198
+            "low": 72,
+            "high": 117
           }
         },
         "premiumToLuxury": {
-          "low": 378300,
-          "high": 824520,
+          "low": 286459,
+          "high": 436120,
           "perSqFt": {
-            "low": 157,
-            "high": 344
+            "low": 120,
+            "high": 182
           }
         },
         "allFinishes": {
-          "low": 225890,
-          "high": 824520,
+          "low": 172059,
+          "high": 436120,
           "perSqFt": {
-            "low": 94,
-            "high": 344
+            "low": 72,
+            "high": 182
           }
         }
       }
@@ -1618,28 +1618,28 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 7330,
-          "high": 12100
+          "low": 11000,
+          "high": 13690
         },
         "mid": {
           "finish": "Signature",
-          "low": 9280,
-          "high": 15300
+          "low": 13933,
+          "high": 17350
         },
         "high": {
           "finish": "Premium",
-          "low": 11230,
-          "high": 18530
+          "low": 16867,
+          "high": 21000
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 14170,
-          "high": 23370
+          "low": 21266,
+          "high": 26470
         }
       },
       "essentialToSignature": {
-        "low": 7330,
-        "high": 15300
+        "low": 11000,
+        "high": 17350
       }
     },
     "home-2000": {
@@ -1647,28 +1647,28 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 8070,
-          "high": 13310
+          "low": 12100,
+          "high": 15070
         },
         "mid": {
           "finish": "Signature",
-          "low": 10500,
-          "high": 17310
+          "low": 15767,
+          "high": 19630
         },
         "high": {
           "finish": "Premium",
-          "low": 12940,
-          "high": 21350
+          "low": 19433,
+          "high": 24190
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 16610,
-          "high": 27400
+          "low": 24934,
+          "high": 31030
         }
       },
       "essentialToSignature": {
-        "low": 8070,
-        "high": 17310
+        "low": 12100,
+        "high": 19630
       }
     },
     "home-2400": {
@@ -1676,28 +1676,28 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 8800,
-          "high": 14520
+          "low": 13200,
+          "high": 16430
         },
         "mid": {
           "finish": "Signature",
-          "low": 11720,
-          "high": 19330
+          "low": 17600,
+          "high": 21910
         },
         "high": {
           "finish": "Premium",
-          "low": 14650,
-          "high": 24170
+          "low": 22000,
+          "high": 27390
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 19060,
-          "high": 31430
+          "low": 28600,
+          "high": 35600
         }
       },
       "essentialToSignature": {
-        "low": 8800,
-        "high": 19330
+        "low": 13200,
+        "high": 21910
       }
     },
     "home-3000": {
@@ -1705,28 +1705,28 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 9900,
-          "high": 16330
+          "low": 14850,
+          "high": 18480
         },
         "mid": {
           "finish": "Signature",
-          "low": 13550,
-          "high": 22340
+          "low": 20350,
+          "high": 25320
         },
         "high": {
           "finish": "Premium",
-          "low": 17220,
-          "high": 28400
+          "low": 25850,
+          "high": 32180
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 22720,
-          "high": 37470
+          "low": 34100,
+          "high": 42460
         }
       },
       "essentialToSignature": {
-        "low": 9900,
-        "high": 22340
+        "low": 14850,
+        "high": 25320
       }
     },
     "home-3600": {
@@ -1734,28 +1734,28 @@
       "tiers": {
         "builder": {
           "finish": "Essential",
-          "low": 11000,
-          "high": 18150
+          "low": 16500,
+          "high": 20530
         },
         "mid": {
           "finish": "Signature",
-          "low": 15380,
-          "high": 25360
+          "low": 23100,
+          "high": 28740
         },
         "high": {
           "finish": "Premium",
-          "low": 19780,
-          "high": 32620
+          "low": 29700,
+          "high": 36980
         },
         "luxury": {
           "finish": "Luxury",
-          "low": 26380,
-          "high": 43510
+          "low": 39600,
+          "high": 49290
         }
       },
       "essentialToSignature": {
-        "low": 11000,
-        "high": 25360
+        "low": 16500,
+        "high": 28740
       }
     }
   },

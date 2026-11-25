@@ -57,7 +57,7 @@ const NC_SCENARIOS: NcScenario[] = [
     finish: "essential",
     sqft: 1400,
     refinements: { planningStage: "exploring" },
-    golden: { low: 410000, high: 695000 },
+    golden: { low: 715894, high: 900000 },
   },
   {
     id: "custom-baseline-mid-have-plans",
@@ -65,7 +65,7 @@ const NC_SCENARIOS: NcScenario[] = [
     finish: "mid-range",
     sqft: 2400,
     refinements: { planningStage: "have-plans", stories: 1 },
-    golden: { low: 550000, high: 700000 },
+    golden: { low: 730936, high: 820000 },
   },
   {
     id: "custom-large-luxury-loaded",
@@ -81,7 +81,7 @@ const NC_SCENARIOS: NcScenario[] = [
       bathroomCount: 4,
     },
     detailRatio: 1,
-    golden: { low: 2500000, high: 3055000 },
+    golden: { low: 3240639, high: 3565000 },
   },
   {
     id: "semi-custom-baseline-mid",
@@ -89,7 +89,7 @@ const NC_SCENARIOS: NcScenario[] = [
     finish: "mid-range",
     sqft: 2000,
     refinements: { planningStage: "plans-in-progress" },
-    golden: { low: 450000, high: 620000 },
+    golden: { low: 622062, high: 720000 },
   },
   {
     id: "shop-home-baseline-mid",
@@ -97,7 +97,7 @@ const NC_SCENARIOS: NcScenario[] = [
     finish: "mid-range",
     sqft: 1600,
     refinements: { planningStage: "need-plans" },
-    golden: { low: 370000, high: 565000 },
+    golden: { low: 543406, high: 660000 },
   },
   {
     id: "byol-baseline-mid-steep-site",
@@ -105,7 +105,7 @@ const NC_SCENARIOS: NcScenario[] = [
     finish: "mid-range",
     sqft: 2400,
     refinements: { planningStage: "have-plans", siteDifficulty: "steep" },
-    golden: { low: 590000, high: 755000 },
+    golden: { low: 785140, high: 880000 },
   },
 ];
 
@@ -138,7 +138,7 @@ const RE10_SCENARIOS: Re10Scenario[] = [
       { id: "1", description: "Replace broken outlet in kitchen", kind: "outlet-switch-replace", quantity: 1 },
     ],
     ctx: { occupancy: "vacant", access: "standard", hasInspectionReport: true },
-    golden: { low: 200, high: 300, quotedPrice: 300, reviewCount: 0 },
+    golden: { low: 255, high: 300, quotedPrice: 300, reviewCount: 0 },
   },
   {
     id: "re10-multi-trade-typical",
@@ -159,7 +159,7 @@ const RE10_SCENARIOS: Re10Scenario[] = [
       { id: "2", description: "Patch drywall", kind: "drywall-patch", quantity: 1 },
     ],
     ctx: { occupancy: "occupied", access: "difficult", daysToDeadline: 5, hasInspectionReport: false },
-    golden: { low: 300, high: 600, quotedPrice: 500, reviewCount: 1 },
+    golden: { low: 306, high: 600, quotedPrice: 500, reviewCount: 1 },
   },
   {
     id: "re10-unpriceable-goes-to-review",
@@ -169,7 +169,7 @@ const RE10_SCENARIOS: Re10Scenario[] = [
       { id: "2", description: "Rebuild retaining wall", kind: "not-a-real-kind" as never },
     ],
     ctx: { occupancy: "vacant", access: "standard" },
-    golden: { low: 200, high: 400, quotedPrice: 300, reviewCount: 1 },
+    golden: { low: 275, high: 400, quotedPrice: 400, reviewCount: 1 },
   },
 ];
 
